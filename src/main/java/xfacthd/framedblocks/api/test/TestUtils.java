@@ -97,7 +97,7 @@ public final class TestUtils
             );
             count++;
 
-            if (!result.shouldAwardStats())
+            if (result != ItemInteractionResult.SUCCESS)
             {
                 helper.fail(String.format(
                         "Camo application on side '%s' of block '%s' failed", side, helper.getBlockState(pos)
@@ -125,19 +125,21 @@ public final class TestUtils
     {
         BlockPos absPos = helper.absolutePos(pos);
 
-        Player player = helper.makeMockPlayer();
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
         player.setPos(absPos.relative(side).getCenter());
         player.setShiftKeyDown(sneak);
+        ItemStack stack = new ItemStack(item);
         player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(item));
 
-        InteractionResult result = helper.getBlockState(pos).use(
+        ItemInteractionResult result = helper.getBlockState(pos).useItemOn(
+                stack,
                 helper.getLevel(),
                 player,
                 InteractionHand.MAIN_HAND,
                 new BlockHitResult(Vec3.atCenterOf(absPos), side, absPos, true)
         );
 
-        if (!result.shouldAwardStats())
+        if (result != ItemInteractionResult.SUCCESS)
         {
             helper.fail(String.format("Interaction with block %s failed", helper.getBlockState(pos)), pos);
         }
@@ -145,7 +147,7 @@ public final class TestUtils
 
     public static void attackWithItem(GameTestHelper helper, BlockPos pos, ItemLike item)
     {
-        Player player = helper.makeMockPlayer();
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(item));
 
         CommonHooks.onLeftClickBlock(player, helper.absolutePos(pos), Direction.UP, ServerboundPlayerActionPacket.Action.START_DESTROY_BLOCK);
@@ -448,7 +450,7 @@ public final class TestUtils
                             () -> String.format("Block '%s' does not return an empty shape when intangible", state.getBlock())
                     );
 
-                    Player player = helper.makeMockPlayer();
+                    Player player = helper.makeMockPlayer(GameType.SURVIVAL);
                     CollisionContext ctx = CollisionContext.of(player);
                     BuiltInRegistries.ITEM.getTag(Utils.DISABLE_INTANGIBLE)
                             .stream()

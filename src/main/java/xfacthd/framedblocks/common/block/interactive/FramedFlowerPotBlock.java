@@ -7,6 +7,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
@@ -86,19 +87,18 @@ public class FramedFlowerPotBlock extends FramedBlock
     }
 
     @Override
-    public InteractionResult use(
-            BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit
+    public ItemInteractionResult useItemOn(
+            ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit
     )
     {
-        InteractionResult result = super.use(state, level, pos, player, hand, hit);
-        if (result != InteractionResult.PASS)
+        ItemInteractionResult result = super.useItemOn(stack, state, level, pos, player, hand, hit);
+        if (result != ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION)
         {
             return result;
         }
 
         if (level.getBlockEntity(pos) instanceof FramedFlowerPotBlockEntity be)
         {
-            ItemStack stack = player.getItemInHand(hand);
             boolean isFlower = stack.getItem() instanceof BlockItem item && !getFlowerPotState(item.getBlock()).isAir();
 
             if (isFlower != be.hasFlowerBlock())
@@ -132,15 +132,15 @@ public class FramedFlowerPotBlock extends FramedBlock
                 }
 
                 level.gameEvent(player, GameEvent.BLOCK_CHANGE, pos);
-                return InteractionResult.sidedSuccess(level.isClientSide());
+                return ItemInteractionResult.sidedSuccess(level.isClientSide());
             }
             else
             {
-                return InteractionResult.CONSUME;
+                return ItemInteractionResult.CONSUME;
             }
         }
 
-        return InteractionResult.PASS;
+        return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
     }
 
     @Override

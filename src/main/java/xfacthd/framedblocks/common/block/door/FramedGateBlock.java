@@ -105,11 +105,11 @@ public class FramedGateBlock extends FramedBlock
     }
 
     @Override
-    public final InteractionResult use(
-            BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit
+    public final InteractionResult useWithoutItem(
+            BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit
     )
     {
-        InteractionResult result = super.use(state, level, pos, player, hand, hit);
+        InteractionResult result = super.useWithoutItem(state, level, pos, player, hit);
         if (result.consumesAction())
         {
             return result;
@@ -169,7 +169,7 @@ public class FramedGateBlock extends FramedBlock
     }
 
     @Override
-    public boolean isPathfindable(BlockState state, BlockGetter level, BlockPos pos, PathComputationType type)
+    public boolean isPathfindable(BlockState state, PathComputationType type)
     {
         return switch (type)
         {

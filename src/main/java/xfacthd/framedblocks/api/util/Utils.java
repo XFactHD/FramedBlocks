@@ -6,6 +6,7 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.*;
+import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.*;
@@ -529,10 +530,10 @@ public final class Utils
         }
 
         String result = stack.getCount() + "x " + stack.getItem() + "[";
-        CompoundTag tag = stack.getTag();
-        if (tag != null)
+        DataComponentPatch patch = stack.getComponentsPatch();
+        if (patch != DataComponentPatch.EMPTY)
         {
-            result += tag;
+            result += patch;
         }
         return result + "]";
     }

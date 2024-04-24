@@ -1,6 +1,7 @@
 package xfacthd.framedblocks.common.blockentity.special;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
@@ -324,26 +325,26 @@ public class PoweredFramingSawBlockEntity extends BlockEntity
     }
 
     @Override
-    protected void saveAdditional(CompoundTag tag)
+    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider provider)
     {
-        super.saveAdditional(tag);
+        super.saveAdditional(tag, provider);
         if (selectedRecipe != null)
         {
             tag.putString("recipe", selectedRecipe.id().toString());
         }
-        tag.put("inventory", itemHandler.serializeNBT());
-        tag.put("energy", energyStorage.serializeNBT());
+        tag.put("inventory", itemHandler.serializeNBT(provider));
+        tag.put("energy", energyStorage.serializeNBT(provider));
     }
 
     @Override
-    public void load(CompoundTag tag)
+    public void loadAdditional(CompoundTag tag, HolderLookup.Provider provider)
     {
-        super.load(tag);
+        super.loadAdditional(tag, provider);
         if (tag.contains("recipe"))
         {
             selectedRecipeId = new ResourceLocation(tag.getString("recipe"));
         }
-        itemHandler.deserializeNBT(tag.getCompound("inventory"));
-        energyStorage.deserializeNBT(tag.getCompound("energy"));
+        itemHandler.deserializeNBT(provider, tag.getCompound("inventory"));
+        energyStorage.deserializeNBT(provider, tag.getCompound("energy"));
     }
 }

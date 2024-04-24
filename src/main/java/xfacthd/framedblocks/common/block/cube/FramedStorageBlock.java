@@ -36,11 +36,11 @@ public class FramedStorageBlock extends FramedBlock
     }
 
     @Override
-    public InteractionResult use(
-            BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit
+    public InteractionResult useWithoutItem(
+            BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit
     )
     {
-        InteractionResult result = super.use(state, level, pos, player, hand, hit);
+        InteractionResult result = super.useWithoutItem(state, level, pos, player, hit);
         if (result != InteractionResult.PASS)
         {
             return result;

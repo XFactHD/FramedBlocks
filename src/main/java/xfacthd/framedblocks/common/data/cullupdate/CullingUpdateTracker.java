@@ -4,6 +4,7 @@ import it.unimi.dsi.fastutil.longs.LongArraySet;
 import it.unimi.dsi.fastutil.longs.LongSet;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.event.TickEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
@@ -28,7 +29,7 @@ public final class CullingUpdateTracker
         LongSet positions = UPDATED_POSITIONS.get(dim);
         if (positions != null && !positions.isEmpty())
         {
-            PacketDistributor.DIMENSION.with(dim).send(new CullingUpdatePayload(new LongArraySet(positions)));
+            PacketDistributor.sendToPlayersInDimension((ServerLevel)event.level, new CullingUpdatePayload(new LongArraySet(positions)));
             positions.clear();
         }
     }
