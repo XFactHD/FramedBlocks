@@ -1,6 +1,7 @@
 package xfacthd.framedblocks.common.blockentity.special;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.world.level.block.Block;
@@ -63,9 +64,9 @@ public class FramedOwnableBlockEntity extends FramedBlockEntity
     }
 
     @Override
-    public CompoundTag getUpdateTag()
+    public CompoundTag getUpdateTag(HolderLookup.Provider provider)
     {
-        CompoundTag tag = super.getUpdateTag();
+        CompoundTag tag = super.getUpdateTag(provider);
         if (owner != null)
         {
             tag.putUUID("owner", owner);
@@ -74,9 +75,9 @@ public class FramedOwnableBlockEntity extends FramedBlockEntity
     }
 
     @Override
-    public void handleUpdateTag(CompoundTag nbt)
+    public void handleUpdateTag(CompoundTag nbt, HolderLookup.Provider provider)
     {
-        super.handleUpdateTag(nbt);
+        super.handleUpdateTag(nbt, provider);
         if (nbt.contains("owner"))
         {
             owner = nbt.getUUID("owner");
@@ -84,9 +85,9 @@ public class FramedOwnableBlockEntity extends FramedBlockEntity
     }
 
     @Override
-    public void saveAdditional(CompoundTag tag)
+    public void saveAdditional(CompoundTag tag, HolderLookup.Provider provider)
     {
-        super.saveAdditional(tag);
+        super.saveAdditional(tag, provider);
         if (owner != null)
         {
             tag.putUUID("owner", owner);
@@ -94,9 +95,9 @@ public class FramedOwnableBlockEntity extends FramedBlockEntity
     }
 
     @Override
-    public void load(CompoundTag tag)
+    public void loadAdditional(CompoundTag tag, HolderLookup.Provider provider)
     {
-        super.load(tag);
+        super.loadAdditional(tag, provider);
         if (tag.contains("owner"))
         {
             owner = tag.getUUID("owner");

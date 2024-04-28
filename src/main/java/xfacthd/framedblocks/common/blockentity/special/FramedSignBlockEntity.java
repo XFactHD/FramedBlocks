@@ -4,6 +4,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.commands.CommandSource;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.chat.*;
@@ -246,17 +247,17 @@ public class FramedSignBlockEntity extends FramedBlockEntity
     }
 
     @Override
-    public CompoundTag getUpdateTag()
+    public CompoundTag getUpdateTag(HolderLookup.Provider provider)
     {
-        CompoundTag nbt = super.getUpdateTag();
+        CompoundTag nbt = super.getUpdateTag(provider);
         writeToNbt(nbt);
         return nbt;
     }
 
     @Override
-    public void handleUpdateTag(CompoundTag nbt)
+    public void handleUpdateTag(CompoundTag nbt, HolderLookup.Provider provider)
     {
-        super.handleUpdateTag(nbt);
+        super.handleUpdateTag(nbt, provider);
         readFromNbt(nbt);
     }
 
@@ -318,9 +319,9 @@ public class FramedSignBlockEntity extends FramedBlockEntity
     }
 
     @Override //Prevent writing sign data
-    public CompoundTag writeToBlueprint()
+    public CompoundTag writeToBlueprint(HolderLookup.Provider provider)
     {
-        CompoundTag tag = saveWithoutMetadata();
+        CompoundTag tag = saveWithoutMetadata(provider);
         tag.remove("front_text");
         tag.remove("back_text");
         tag.remove("waxed");
@@ -328,16 +329,16 @@ public class FramedSignBlockEntity extends FramedBlockEntity
     }
 
     @Override
-    public void saveAdditional(CompoundTag nbt)
+    public void saveAdditional(CompoundTag nbt, HolderLookup.Provider provider)
     {
         writeToNbt(nbt);
-        super.saveAdditional(nbt);
+        super.saveAdditional(nbt, provider);
     }
 
     @Override
-    public void load(CompoundTag nbt)
+    public void loadAdditional(CompoundTag nbt, HolderLookup.Provider provider)
     {
-        super.load(nbt);
+        super.loadAdditional(nbt, provider);
         readFromNbt(nbt);
     }
 

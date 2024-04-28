@@ -46,9 +46,9 @@ public class FramedSlabEdgeBlock extends FramedBlock
     }
 
     @Override
-    public boolean isPathfindable(BlockState state, BlockGetter level, BlockPos pos, PathComputationType type)
+    public boolean isPathfindable(BlockState state, PathComputationType type)
     {
-        return type == PathComputationType.WATER && level.getFluidState(pos).is(FluidTags.WATER);
+        return type == PathComputationType.WATER && state.getFluidState().is(FluidTags.WATER);
     }
 
     @Override

@@ -42,7 +42,7 @@ public interface BlueprintCopyBehaviour
      * @param be The {@link FramedBlockEntity} of the Block to store
      * @param blueprintData The {@link CompoundTag} the camo data is stored in
      * @return true if the default handling should not be executed
-     * @implNote The main blueprint data ({@link FramedBlockEntity#writeToBlueprint()}) must be stored in the tag with the key "camo_data"
+     * @implNote The main blueprint data ({@link FramedBlockEntity#writeToBlueprint(net.minecraft.core.HolderLookup.Provider)}) must be stored in the tag with the key "camo_data"
      */
     default boolean writeToBlueprint(
             Level level, BlockPos pos, BlockState state, FramedBlockEntity be, CompoundTag blueprintData
@@ -66,7 +66,7 @@ public interface BlueprintCopyBehaviour
      * to provide two camo containers
      *
      * @param blueprintData The {@link CompoundTag} containing the full blueprint data (block to place, camo data as
-     *                      written from {@link FramedBlockEntity#writeToBlueprint()}, any custom data added in
+     *                      written from {@link FramedBlockEntity#writeToBlueprint(net.minecraft.core.HolderLookup.Provider)}, any custom data added in
      *                      {@link BlueprintCopyBehaviour#writeToBlueprint(Level, BlockPos, BlockState, FramedBlockEntity, CompoundTag)})
      * @return The Set of CamoContainers to consume when the {@link Block} is placed. The set must contain at least one
      *         entry when a non-empty optional is returned. The returned set should retain insertion order.
@@ -81,7 +81,7 @@ public interface BlueprintCopyBehaviour
      * glowstone used on the second half of the door
      *
      * @param blueprintData The {@link CompoundTag} containing the full blueprint data (block to place, camo data as
-     *                      written from {@link FramedBlockEntity#writeToBlueprint()}, any custom data added in
+     *                      written from {@link FramedBlockEntity#writeToBlueprint(net.minecraft.core.HolderLookup.Provider)}, any custom data added in
      *                      {@link BlueprintCopyBehaviour#writeToBlueprint(Level, BlockPos, BlockState, FramedBlockEntity, CompoundTag)})
      * @return The amount of items to consume
      */
@@ -94,7 +94,7 @@ public interface BlueprintCopyBehaviour
      * Provide a custom amount of the intangibility marker item to consume when placing the block
      *
      * @param blueprintData The {@link CompoundTag} containing the full blueprint data (block to place, camo data as
-     *                      written from {@link FramedBlockEntity#writeToBlueprint()}, any custom data added in
+     *                      written from {@link FramedBlockEntity#writeToBlueprint(net.minecraft.core.HolderLookup.Provider)}, any custom data added in
      *                      {@link BlueprintCopyBehaviour#writeToBlueprint(Level, BlockPos, BlockState, FramedBlockEntity, CompoundTag)})
      * @return The amount of items to consume
      */
@@ -107,7 +107,7 @@ public interface BlueprintCopyBehaviour
      * Provide a custom amount of the reinforcement item when placing the block
      *
      * @param blueprintData The {@link CompoundTag} containing the full blueprint data (block to place, camo data as
-     *                      written from {@link FramedBlockEntity#writeToBlueprint()}, any custom data added in
+     *                      written from {@link FramedBlockEntity#writeToBlueprint(net.minecraft.core.HolderLookup.Provider)}, any custom data added in
      *                      {@link BlueprintCopyBehaviour#writeToBlueprint(Level, BlockPos, BlockState, FramedBlockEntity, CompoundTag)})
      * @return The amount of items to consume
      */

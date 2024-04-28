@@ -1,9 +1,12 @@
 package xfacthd.framedblocks.client.screen.overlay;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.LayeredDraw;
 import net.minecraft.client.gui.screens.inventory.tooltip.TooltipRenderUtil;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -16,14 +19,12 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
-import net.neoforged.neoforge.client.gui.overlay.ExtendedGui;
-import net.neoforged.neoforge.client.gui.overlay.IGuiOverlay;
 import net.neoforged.neoforge.common.util.ConcatenatedListView;
 
 import java.util.*;
 import java.util.function.Supplier;
 
-public abstract class BlockInteractOverlay implements IGuiOverlay
+public abstract class BlockInteractOverlay implements LayeredDraw.Layer
 {
     private static final int LINE_DIST = 3;
     private static final Target NO_TARGET = new Target(BlockPos.ZERO, Blocks.AIR.defaultBlockState(), Direction.NORTH);
@@ -54,7 +55,7 @@ public abstract class BlockInteractOverlay implements IGuiOverlay
     }
 
     @Override
-    public void render(ExtendedGui gui, GuiGraphics graphics, float partialTick, int screenWidth, int screenHeight)
+    public void render(GuiGraphics graphics, float partialTick)
     {
         Mode mode = modeGetter.get();
         if (mode == Mode.HIDDEN)
@@ -75,24 +76,25 @@ public abstract class BlockInteractOverlay implements IGuiOverlay
         }
 
         boolean state = getState(target);
+        int screenWidth = graphics.guiWidth();
+        int screenHeight = graphics.guiHeight();
         int centerX = screenWidth / 2;
         int centerY = screenHeight / 2;
 
         Texture tex = getTexture(target, state, textureFalse, textureTrue);
         int texX = centerX + 20;
         int texY = centerY - (tex.height / 2);
-        tex.draw(gui, graphics, texX, texY);
-        renderAfterIcon(gui, graphics, tex, texX, texY, target);
+        tex.draw(graphics, texX, texY);
+        renderAfterIcon(graphics, tex, texX, texY, target);
 
         if (mode == Mode.DETAILED)
         {
             List<Component> lines = getLines(target, state, linesFalse, linesTrue);
-            renderDetailed(gui, graphics, tex, lines, centerX, screenHeight, target);
+            renderDetailed(graphics, tex, lines, centerX, screenHeight, target);
         }
     }
 
     private void renderDetailed(
-            ExtendedGui gui,
             GuiGraphics graphics,
             Texture tex,
             List<Component> lines,
@@ -101,7 +103,7 @@ public abstract class BlockInteractOverlay implements IGuiOverlay
             Target target
     )
     {
-        Font font = gui.getFont();
+        Font font = Minecraft.getInstance().font;
         if (!textWidthValid)
         {
             updateTextWidth(font);
@@ -127,8 +129,8 @@ public abstract class BlockInteractOverlay implements IGuiOverlay
         }
 
         int texY = y + (height / 2) - (tex.height / 2);
-        tex.draw(gui, graphics, x, texY);
-        renderAfterIcon(gui, graphics, tex, x, texY, target);
+        tex.draw(graphics, x, texY);
+        renderAfterIcon(graphics, tex, x, texY, target);
     }
 
     protected abstract boolean isValidTool(ItemStack stack);
@@ -147,7 +149,7 @@ public abstract class BlockInteractOverlay implements IGuiOverlay
         return state ? linesTrue : linesFalse;
     }
 
-    protected void renderAfterIcon(ExtendedGui gui, GuiGraphics graphics, Texture tex, int texX, int texY, Target target) { }
+    protected void renderAfterIcon(GuiGraphics graphics, Texture tex, int texX, int texY, Target target) { }
 
     private void updateTextWidth(Font font)
     {
@@ -200,9 +202,13 @@ public abstract class BlockInteractOverlay implements IGuiOverlay
             ResourceLocation location, int xOff, int yOff, int width, int height, int texWidth, int texHeight
     )
     {
-        public void draw(ExtendedGui gui, GuiGraphics graphics, int x, int y)
+        public void draw(GuiGraphics graphics, int x, int y)
         {
-            gui.setupOverlayRenderState(true, false);
+            RenderSystem.enableBlend();
+            RenderSystem.defaultBlendFunc();
+            RenderSystem.disableDepthTest();
+            RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+            RenderSystem.setShader(GameRenderer::getPositionTexShader);
             graphics.blit(location, x, y, 0, xOff, yOff, width, height, texWidth, texHeight);
         }
     }

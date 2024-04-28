@@ -1,6 +1,7 @@
 package xfacthd.framedblocks.client.data.ghost;
 
 import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.state.BlockState;
@@ -26,10 +27,11 @@ public final class CollapsibleBlockGhostRenderBehaviour implements GhostRenderBe
     )
     {
         BlockState state = GhostRenderBehaviour.super.getRenderState(stack, proxiedStack, hit, ctx, hitState, renderPass);
+        var data = stack.get(DataComponents.BLOCK_ENTITY_DATA);
         //noinspection ConstantConditions
-        if (state != null && stack.hasTag() && stack.getTag().contains("BlockEntityTag"))
+        if (state != null && data != null)
         {
-            int faceIdx = stack.getTag().getCompound("BlockEntityTag").getInt("face");
+            int faceIdx = data.getUnsafe().getInt("face");
             Direction face = faceIdx == -1 ? null : Direction.from3DDataValue(faceIdx);
             state = state.setValue(PropertyHolder.NULLABLE_FACE, NullableDirection.fromDirection(face));
         }
@@ -46,10 +48,11 @@ public final class CollapsibleBlockGhostRenderBehaviour implements GhostRenderBe
             ModelData data
     )
     {
+        var beData = stack.get(DataComponents.BLOCK_ENTITY_DATA);
         //noinspection ConstantConditions
-        if (stack.hasTag() && stack.getTag().contains("BlockEntityTag"))
+        if (beData != null)
         {
-            int offsets = stack.getTag().getCompound("BlockEntityTag").getInt("offsets");
+            int offsets = beData.getUnsafe().getInt("offsets");
             return data.derive().with(FramedCollapsibleBlockEntity.OFFSETS, offsets).build();
         }
         return data;

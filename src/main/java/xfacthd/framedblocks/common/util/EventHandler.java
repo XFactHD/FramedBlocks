@@ -4,6 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.bus.api.Event;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.fml.loading.FMLEnvironment;
 import xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
@@ -24,7 +25,8 @@ public final class EventHandler
             if (block.handleBlockLeftClick(state, level, pos, event.getEntity()))
             {
                 event.setCanceled(true);
-                event.setCancellationResult(InteractionResult.CONSUME);
+                event.setUseBlock(Event.Result.DENY);
+                event.setUseItem(Event.Result.DENY);
 
                 if (FMLEnvironment.dist.isClient() && level.isClientSide())
                 {
@@ -37,7 +39,8 @@ public final class EventHandler
                 if (level.getBlockEntity(pos) instanceof FramedBlockEntity be && be.isIntangible(null))
                 {
                     event.setCanceled(true);
-                    event.setCancellationResult(InteractionResult.FAIL);
+                    event.setUseBlock(Event.Result.DENY);
+                    event.setUseItem(Event.Result.DENY);
                 }
             }
         }

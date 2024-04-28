@@ -2,12 +2,15 @@ package xfacthd.framedblocks.common.blockentity.special;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.*;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.MapItem;
@@ -15,6 +18,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.saveddata.maps.MapFrame;
+import net.minecraft.world.level.saveddata.maps.MapId;
 import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
 import xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import xfacthd.framedblocks.api.util.FramedConstants;
@@ -56,7 +60,7 @@ public class FramedItemFrameBlockEntity extends FramedBlockEntity
             MapItemSavedData mapData = MapItem.getSavedData(heldItem, level());
             if (mapData != null)
             {
-                int mapId = Objects.requireNonNull(MapItem.getMapId(heldItem));
+                MapId mapId = Objects.requireNonNull(heldItem.get(DataComponents.MAP_ID));
                 for (Player player : level().players())
                 {
                     mapData.tickCarriedBy(player, heldItem);
@@ -71,7 +75,7 @@ public class FramedItemFrameBlockEntity extends FramedBlockEntity
         mapTickCount++;
     }
 
-    public InteractionResult handleFrameInteraction(Player player, InteractionHand hand)
+    public ItemInteractionResult handleFrameInteraction(Player player, InteractionHand hand)
     {
         ItemStack stack = player.getItemInHand(hand);
         if (hasItem())
@@ -85,7 +89,7 @@ public class FramedItemFrameBlockEntity extends FramedBlockEntity
                 setChangedWithoutSignalUpdate();
                 level().sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
             }
-            return InteractionResult.sidedSuccess(level().isClientSide());
+            return ItemInteractionResult.sidedSuccess(level().isClientSide());
         }
         else if (!stack.isEmpty() && !hasItem())
         {
@@ -100,9 +104,9 @@ public class FramedItemFrameBlockEntity extends FramedBlockEntity
 
                 playSound(glowing ? SoundEvents.GLOW_ITEM_FRAME_ADD_ITEM : SoundEvents.ITEM_FRAME_ADD_ITEM);
             }
-            return InteractionResult.sidedSuccess(level().isClientSide());
+            return ItemInteractionResult.sidedSuccess(level().isClientSide());
         }
-        return InteractionResult.PASS;
+        return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
     }
 
     public void removeItem(Player player)
@@ -246,16 +250,16 @@ public class FramedItemFrameBlockEntity extends FramedBlockEntity
     }
 
     @Override
-    public void handleUpdateTag(CompoundTag tag)
+    public void handleUpdateTag(CompoundTag tag, HolderLookup.Provider provider)
     {
-        super.handleUpdateTag(tag);
+        super.handleUpdateTag(tag, provider);
         readFromNetwork(tag);
     }
 
     @Override
-    public CompoundTag getUpdateTag()
+    public CompoundTag getUpdateTag(HolderLookup.Provider provider)
     {
-        CompoundTag tag = super.getUpdateTag();
+        CompoundTag tag = super.getUpdateTag(provider);
         writeToNetwork(tag);
         return tag;
     }
@@ -263,9 +267,9 @@ public class FramedItemFrameBlockEntity extends FramedBlockEntity
     // NBT
 
     @Override
-    public void load(CompoundTag tag)
+    public void loadAdditional(CompoundTag tag, HolderLookup.Provider provider)
     {
-        super.load(tag);
+        super.loadAdditional(tag, provider);
 
         heldItem = ItemStack.of(tag.getCompound("item"));
         rotation = tag.getByte("rotation");
@@ -273,9 +277,9 @@ public class FramedItemFrameBlockEntity extends FramedBlockEntity
     }
 
     @Override
-    public void saveAdditional(CompoundTag tag)
+    public void saveAdditional(CompoundTag tag, HolderLookup.Provider provider)
     {
-        super.saveAdditional(tag);
+        super.saveAdditional(tag, provider);
 
         tag.put("item", heldItem.save(new CompoundTag()));
         tag.putByte("rotation", (byte) rotation);

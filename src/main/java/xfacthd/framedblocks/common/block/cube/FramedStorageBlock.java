@@ -1,6 +1,7 @@
 package xfacthd.framedblocks.common.block.cube;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -35,11 +36,11 @@ public class FramedStorageBlock extends FramedBlock
     }
 
     @Override
-    public InteractionResult use(
-            BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit
+    public InteractionResult useWithoutItem(
+            BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit
     )
     {
-        InteractionResult result = super.use(state, level, pos, player, hand, hit);
+        InteractionResult result = super.useWithoutItem(state, level, pos, player, hit);
         if (result != InteractionResult.PASS)
         {
             return result;
@@ -74,9 +75,10 @@ public class FramedStorageBlock extends FramedBlock
     {
         super.setPlacedBy(level, pos, state, placer, stack);
 
-        if (stack.hasCustomHoverName() && level.getBlockEntity(pos) instanceof FramedStorageBlockEntity be)
+        var customName = stack.get(DataComponents.CUSTOM_NAME);
+        if (customName != null && level.getBlockEntity(pos) instanceof FramedStorageBlockEntity be)
         {
-            be.setCustomName(stack.getHoverName());
+            be.setCustomName(customName);
         }
     }
 

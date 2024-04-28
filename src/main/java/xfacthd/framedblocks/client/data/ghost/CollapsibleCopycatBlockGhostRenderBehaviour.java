@@ -1,5 +1,6 @@
 package xfacthd.framedblocks.client.data.ghost;
 
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.state.BlockState;
@@ -24,10 +25,11 @@ public final class CollapsibleCopycatBlockGhostRenderBehaviour implements GhostR
     )
     {
         BlockState state = GhostRenderBehaviour.super.getRenderState(stack, proxiedStack, hit, ctx, hitState, renderPass);
+        var beData = stack.get(DataComponents.BLOCK_ENTITY_DATA);
         //noinspection ConstantConditions
-        if (state != null && stack.hasTag() && stack.getTag().contains("BlockEntityTag"))
+        if (state != null && beData != null)
         {
-            int offsets = stack.getTag().getCompound("BlockEntityTag").getInt("offsets");
+            int offsets = beData.getUnsafe().getInt("offsets");
             int solidFaces = FramedCollapsibleCopycatBlockEntity.computeSolidFaces(offsets);
             state = state.setValue(PropertyHolder.SOLID_FACES, solidFaces);
         }
@@ -44,10 +46,11 @@ public final class CollapsibleCopycatBlockGhostRenderBehaviour implements GhostR
             ModelData data
     )
     {
+        var beData = stack.get(DataComponents.BLOCK_ENTITY_DATA);
         //noinspection ConstantConditions
-        if (stack.hasTag() && stack.getTag().contains("BlockEntityTag"))
+        if (beData != null)
         {
-            int offsets = stack.getTag().getCompound("BlockEntityTag").getInt("offsets");
+            int offsets = beData.getUnsafe().getInt("offsets");
             return data.derive().with(FramedCollapsibleCopycatBlockEntity.OFFSETS, offsets).build();
         }
         return data;

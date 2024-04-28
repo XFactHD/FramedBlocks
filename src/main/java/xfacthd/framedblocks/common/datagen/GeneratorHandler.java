@@ -9,11 +9,11 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.metadata.pack.PackMetadataSection;
 import net.minecraft.util.InclusiveRange;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.data.BlockTagsProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforgespi.language.IModInfo;
 import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.common.datagen.providers.*;
@@ -21,7 +21,7 @@ import xfacthd.framedblocks.common.datagen.providers.*;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
-@Mod.EventBusSubscriber(modid = FramedConstants.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = FramedConstants.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public final class GeneratorHandler
 {
     @SubscribeEvent
@@ -36,9 +36,9 @@ public final class GeneratorHandler
         gen.addProvider(event.includeClient(), new FramedSpriteSourceProvider(output, lookupProvider, fileHelper));
         gen.addProvider(event.includeClient(), new FramedBlockStateProvider(output, fileHelper));
         gen.addProvider(event.includeClient(), new FramedItemModelProvider(output, fileHelper));
-        gen.addProvider(event.includeServer(), new FramedLootTableProvider(output));
-        gen.addProvider(event.includeServer(), new FramedRecipeProvider(output));
-        gen.addProvider(event.includeServer(), new FramingSawRecipeProvider(output));
+        gen.addProvider(event.includeServer(), new FramedLootTableProvider(output, lookupProvider));
+        gen.addProvider(event.includeServer(), new FramedRecipeProvider(output, lookupProvider));
+        gen.addProvider(event.includeServer(), new FramingSawRecipeProvider(output, lookupProvider));
         BlockTagsProvider tagProvider = new FramedBlockTagProvider(output, lookupProvider, fileHelper);
         gen.addProvider(event.includeServer(), tagProvider);
         gen.addProvider(event.includeServer(), new FramedItemTagProvider(output, lookupProvider, tagProvider.contentsGetter(), fileHelper));

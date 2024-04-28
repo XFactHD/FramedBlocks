@@ -2,6 +2,7 @@ package xfacthd.framedblocks.common.blockentity.special;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.Block;
@@ -138,35 +139,35 @@ public class FramedCollapsibleCopycatBlockEntity extends FramedBlockEntity
     }
 
     @Override
-    public CompoundTag getUpdateTag()
+    public CompoundTag getUpdateTag(HolderLookup.Provider provider)
     {
-        CompoundTag nbt = super.getUpdateTag();
+        CompoundTag nbt = super.getUpdateTag(provider);
         nbt.putInt("offsets", packedOffsets);
         nbt.putBoolean("occludesBeacon", occludesBeacon);
         return nbt;
     }
 
     @Override
-    public void handleUpdateTag(CompoundTag nbt)
+    public void handleUpdateTag(CompoundTag nbt, HolderLookup.Provider provider)
     {
         packedOffsets = nbt.getInt("offsets");
         faceOffsets = unpackOffsets(packedOffsets);
         occludesBeacon = nbt.getBoolean("occludesBeacon");
 
-        super.handleUpdateTag(nbt);
+        super.handleUpdateTag(nbt, provider);
     }
 
     @Override
-    public void saveAdditional(CompoundTag nbt)
+    public void saveAdditional(CompoundTag nbt, HolderLookup.Provider provider)
     {
-        super.saveAdditional(nbt);
+        super.saveAdditional(nbt, provider);
         nbt.putInt("offsets", packedOffsets);
     }
 
     @Override
-    public void load(CompoundTag nbt)
+    public void loadAdditional(CompoundTag nbt, HolderLookup.Provider provider)
     {
-        super.load(nbt);
+        super.loadAdditional(nbt, provider);
         packedOffsets = nbt.getInt("offsets");
         faceOffsets = unpackOffsets(packedOffsets);
         updateBeaconOcclusion();

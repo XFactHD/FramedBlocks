@@ -3,6 +3,7 @@ package xfacthd.framedblocks.client.render.util;
 import com.google.common.base.Preconditions;
 import com.mojang.blaze3d.platform.NativeImage;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
 import net.minecraft.client.renderer.texture.SpriteContents;
@@ -25,7 +26,7 @@ public sealed class AnimationSplitterSource implements SpriteSource permits Anim
 {
     private static final boolean AV_LOADED = ModList.get().isLoaded("atlasviewer");
     private static SpriteSourceType TYPE = null;
-    private static final Codec<AnimationSplitterSource> CODEC = RecordCodecBuilder.create(inst -> inst.group(
+    private static final MapCodec<AnimationSplitterSource> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
             ResourceLocation.CODEC.fieldOf("resource").forGetter(s -> s.resource),
             ExtraCodecs.nonEmptyList(Frame.CODEC.listOf()).fieldOf("frames").forGetter(s -> s.frames)
     ).apply(inst, AV_LOADED ? AnimationSplitterSourceAV::new : AnimationSplitterSource::new));
@@ -173,7 +174,7 @@ public sealed class AnimationSplitterSource implements SpriteSource permits Anim
 
 
 
-    public static void register(BiFunction<ResourceLocation, Codec<? extends SpriteSource>, SpriteSourceType> registrar)
+    public static void register(BiFunction<ResourceLocation, MapCodec<? extends SpriteSource>, SpriteSourceType> registrar)
     {
         TYPE = registrar.apply(Utils.rl("anim_splitter"), CODEC);
     }

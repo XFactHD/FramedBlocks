@@ -11,6 +11,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.*;
 import net.neoforged.neoforge.client.model.data.ModelProperty;
 import net.neoforged.bus.api.*;
@@ -78,7 +79,7 @@ import xfacthd.framedblocks.common.data.doubleblock.NullCullPredicate;
 import java.util.*;
 import java.util.function.Supplier;
 
-@Mod.EventBusSubscriber(modid = FramedConstants.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+@EventBusSubscriber(modid = FramedConstants.MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public final class FBClient
 {
     @SubscribeEvent
@@ -177,7 +178,7 @@ public final class FBClient
     }
 
     @SubscribeEvent
-    public static void onOverlayRegister(final RegisterGuiOverlaysEvent event)
+    public static void onOverlayRegister(final RegisterGuiLayersEvent event)
     {
         event.registerAboveAll(Utils.rl("state_lock"), new StateLockOverlay());
         event.registerAboveAll(Utils.rl("toggle_waterloggable"), new ToggleWaterloggableOverlay());

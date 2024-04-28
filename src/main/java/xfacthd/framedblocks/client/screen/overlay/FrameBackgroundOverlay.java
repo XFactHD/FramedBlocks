@@ -4,7 +4,6 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.client.gui.overlay.ExtendedGui;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.config.ClientConfig;
 import xfacthd.framedblocks.common.FBContent;
@@ -57,12 +56,12 @@ public final class FrameBackgroundOverlay extends BlockInteractOverlay
     }
 
     @Override
-    protected void renderAfterIcon(ExtendedGui gui, GuiGraphics graphics, Texture tex, int texX, int texY, Target target)
+    protected void renderAfterIcon(GuiGraphics graphics, Texture tex, int texX, int texY, Target target)
     {
-        TEXTURE_LEATHER.draw(gui, graphics, texX + 3, texY + 3);
+        TEXTURE_LEATHER.draw(graphics, texX + 3, texY + 3);
         if (!target.state().getValue(PropertyHolder.LEATHER))
         {
-            TEXTURE_CROSS.draw(gui, graphics, texX + 3, texY + 3);
+            TEXTURE_CROSS.draw(graphics, texX + 3, texY + 3);
         }
     }
 }

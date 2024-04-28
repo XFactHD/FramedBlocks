@@ -545,7 +545,7 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu> im
             if (menu.clickMenuButton(minecraft.player, idx))
             {
                 Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_STONECUTTER_SELECT_RECIPE, 1.0F));
-                PacketDistributor.SERVER.noArg().send(new SelectFramingSawRecipePayload(menu.containerId, idx));
+                PacketDistributor.sendToServer(new SelectFramingSawRecipePayload(menu.containerId, idx));
                 return true;
             }
         }

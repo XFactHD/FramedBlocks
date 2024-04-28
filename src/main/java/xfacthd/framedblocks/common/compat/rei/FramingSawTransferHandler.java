@@ -29,7 +29,7 @@ public final class FramingSawTransferHandler implements TransferHandler
             //noinspection ConstantConditions
             if (ctx.isActuallyCrafting() && menu.clickMenuButton(minecraft.player, idx))
             {
-                PacketDistributor.SERVER.noArg().send(new SelectFramingSawRecipePayload(menu.containerId, idx));
+                PacketDistributor.sendToServer(new SelectFramingSawRecipePayload(menu.containerId, idx));
                 minecraft.setScreen(ctx.getContainerScreen());
             }
             return Result.createSuccessful().tooltip(JeiCompat.MSG_TRANSFER_NOT_IMPLEMENTED).color(0x80FFA500);

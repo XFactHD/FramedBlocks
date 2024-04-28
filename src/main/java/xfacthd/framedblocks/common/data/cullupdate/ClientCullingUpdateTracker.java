@@ -6,7 +6,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.SectionPos;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.network.handling.PlayPayloadContext;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 import xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import xfacthd.framedblocks.client.util.ClientTaskQueue;
 import xfacthd.framedblocks.common.net.payload.CullingUpdatePayload;
@@ -16,7 +16,7 @@ import java.util.Objects;
 
 public final class ClientCullingUpdateTracker
 {
-    public static void handleCullingUpdates(CullingUpdatePayload payload, PlayPayloadContext ctx)
+    public static void handleCullingUpdates(CullingUpdatePayload payload, IPayloadContext ctx)
     {
         Long2ObjectMap<CullingUpdateChunk> chunks = new Long2ObjectArrayMap<>();
 
@@ -32,7 +32,7 @@ public final class ClientCullingUpdateTracker
             chunk.positions().add(pos);
         });
 
-        ctx.workHandler().submitAsync(() -> handleCullingUpdates(chunks.values()));
+        ctx.enqueueWork(() -> handleCullingUpdates(chunks.values()));
     }
 
     private static void handleCullingUpdates(Collection<CullingUpdateChunk> chunks)

@@ -1,6 +1,7 @@
 package xfacthd.framedblocks.common.datagen.providers;
 
 import net.minecraft.core.Holder;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.data.loot.LootTableProvider;
@@ -14,15 +15,16 @@ import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import xfacthd.framedblocks.common.FBContent;
 
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 public final class FramedLootTableProvider extends LootTableProvider
 {
-    public FramedLootTableProvider(PackOutput output)
+    public FramedLootTableProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> providerFuture)
     {
         super(output, Set.of(), List.of(
                 new LootTableProvider.SubProviderEntry(BlockLootTable::new, LootContextParamSets.BLOCK)
-        ));
+        ), providerFuture);
     }
 
     private static class BlockLootTable extends BlockLootSubProvider

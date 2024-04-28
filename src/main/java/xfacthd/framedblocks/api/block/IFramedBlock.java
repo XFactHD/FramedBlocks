@@ -3,12 +3,14 @@ package xfacthd.framedblocks.api.block;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -103,7 +105,7 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension
         }
 
         //noinspection ConstantConditions
-        if (stack.hasTag() && stack.getTag().contains("BlockEntityTag"))
+        if (stack.get(DataComponents.BLOCK_ENTITY_DATA) != null)
         {
             if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
             {
@@ -135,13 +137,13 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension
         }
     }
 
-    default InteractionResult handleUse(
+    default ItemInteractionResult handleUse(
             BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit
     )
     {
         if (getBlockType().canLockState() && hand == InteractionHand.MAIN_HAND && lockState(level, pos, player, player.getItemInHand(hand)))
         {
-            return InteractionResult.sidedSuccess(level.isClientSide());
+            return ItemInteractionResult.sidedSuccess(level.isClientSide());
         }
 
         if (player.getItemInHand(hand).is(Utils.WRENCH))
@@ -154,17 +156,17 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension
                 {
                     level.setBlockAndUpdate(pos, newState);
                 }
-                return InteractionResult.sidedSuccess(level.isClientSide());
+                return ItemInteractionResult.sidedSuccess(level.isClientSide());
             }
 
-            return InteractionResult.FAIL;
+            return ItemInteractionResult.FAIL;
         }
 
         if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
         {
             return be.handleInteraction(player, hand, hit);
         }
-        return InteractionResult.FAIL;
+        return ItemInteractionResult.FAIL;
     }
 
     @Override

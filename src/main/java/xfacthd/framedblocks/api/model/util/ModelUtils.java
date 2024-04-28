@@ -48,7 +48,7 @@ public final class ModelUtils
             data.normal(vert, v2);
         }
 
-        return Direction.getNearestStable(v2.x, v2.y, v2.z);
+        return Direction.getNearest(v2.x, v2.y, v2.z);
     }
 
     /**

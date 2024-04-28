@@ -9,8 +9,10 @@ import net.minecraft.gametest.framework.*;
 import net.minecraft.network.protocol.game.ServerboundPlayerActionPacket;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
+import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -68,7 +70,7 @@ public final class TestUtils
     public static void applyCamo(GameTestHelper helper, BlockPos pos, Map<Direction, Block> camos)
     {
         BlockPos absPos = helper.absolutePos(pos);
-        Player player = helper.makeMockPlayer();
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
 
         int count = 0;
         for (Map.Entry<Direction, Block> entry : camos.entrySet())
@@ -77,7 +79,8 @@ public final class TestUtils
             Block camo = entry.getValue();
 
             Item item = camo == Blocks.AIR ? Utils.FRAMED_HAMMER.value() : camo.asItem();
-            player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(item));
+            ItemStack stack = new ItemStack(item);
+            player.setItemInHand(InteractionHand.MAIN_HAND, stack);
 
             Vec3 hitVec = switch (count)
             {
@@ -85,7 +88,8 @@ public final class TestUtils
                 case 1 -> Vec3.atCenterOf(absPos).add(.1, .1, .1);
                 default -> Vec3.atCenterOf(absPos);
             };
-            InteractionResult result = helper.getBlockState(pos).use(
+            ItemInteractionResult result = helper.getBlockState(pos).useItemOn(
+                    stack,
                     helper.getLevel(),
                     player,
                     InteractionHand.MAIN_HAND,
@@ -93,7 +97,7 @@ public final class TestUtils
             );
             count++;
 
-            if (!result.shouldAwardStats())
+            if (result != ItemInteractionResult.SUCCESS)
             {
                 helper.fail(String.format(
                         "Camo application on side '%s' of block '%s' failed", side, helper.getBlockState(pos)
@@ -121,19 +125,21 @@ public final class TestUtils
     {
         BlockPos absPos = helper.absolutePos(pos);
 
-        Player player = helper.makeMockPlayer();
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
         player.setPos(absPos.relative(side).getCenter());
         player.setShiftKeyDown(sneak);
+        ItemStack stack = new ItemStack(item);
         player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(item));
 
-        InteractionResult result = helper.getBlockState(pos).use(
+        ItemInteractionResult result = helper.getBlockState(pos).useItemOn(
+                stack,
                 helper.getLevel(),
                 player,
                 InteractionHand.MAIN_HAND,
                 new BlockHitResult(Vec3.atCenterOf(absPos), side, absPos, true)
         );
 
-        if (!result.shouldAwardStats())
+        if (result != ItemInteractionResult.SUCCESS)
         {
             helper.fail(String.format("Interaction with block %s failed", helper.getBlockState(pos)), pos);
         }
@@ -141,7 +147,7 @@ public final class TestUtils
 
     public static void attackWithItem(GameTestHelper helper, BlockPos pos, ItemLike item)
     {
-        Player player = helper.makeMockPlayer();
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(item));
 
         CommonHooks.onLeftClickBlock(player, helper.absolutePos(pos), Direction.UP, ServerboundPlayerActionPacket.Action.START_DESTROY_BLOCK);
@@ -444,7 +450,7 @@ public final class TestUtils
                             () -> String.format("Block '%s' does not return an empty shape when intangible", state.getBlock())
                     );
 
-                    Player player = helper.makeMockPlayer();
+                    Player player = helper.makeMockPlayer(GameType.SURVIVAL);
                     CollisionContext ctx = CollisionContext.of(player);
                     BuiltInRegistries.ITEM.getTag(Utils.DISABLE_INTANGIBLE)
                             .stream()

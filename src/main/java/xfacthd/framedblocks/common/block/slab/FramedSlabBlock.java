@@ -6,6 +6,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -50,11 +51,10 @@ public class FramedSlabBlock extends FramedBlock
     }
 
     @Override
-    public InteractionResult use(
-            BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit
+    public ItemInteractionResult useItemOn(
+            ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit
     )
     {
-        ItemStack stack = player.getItemInHand(hand);
         if (stack.getItem() == FBContent.BLOCK_FRAMED_SLAB.value().asItem())
         {
             boolean top = state.getValue(FramedProperties.TOP);
@@ -67,19 +67,19 @@ public class FramedSlabBlock extends FramedBlock
                             level.setBlockAndUpdate(pos, FBContent.BLOCK_FRAMED_DOUBLE_SLAB.value().defaultBlockState())
                     );
 
-                    SoundType sound = FBContent.BLOCK_FRAMED_CUBE.value().getSoundType(FBContent.BLOCK_FRAMED_CUBE.value().defaultBlockState());
+                    SoundType sound = FBContent.BLOCK_FRAMED_CUBE.value().defaultBlockState().getSoundType();
                     level.playSound(null, pos, sound.getPlaceSound(), SoundSource.BLOCKS, (sound.getVolume() + 1.0F) / 2.0F, sound.getPitch() * 0.8F);
                 }
-                return InteractionResult.sidedSuccess(level.isClientSide());
+                return ItemInteractionResult.sidedSuccess(level.isClientSide());
             }
         }
-        return super.use(state, level, pos, player, hand, hit);
+        return super.useItemOn(stack, state, level, pos, player, hand, hit);
     }
 
     @Override
-    public boolean isPathfindable(BlockState state, BlockGetter level, BlockPos pos, PathComputationType type)
+    public boolean isPathfindable(BlockState state, PathComputationType type)
     {
-        return type == PathComputationType.WATER && level.getFluidState(pos).is(FluidTags.WATER);
+        return type == PathComputationType.WATER && state.getFluidState().is(FluidTags.WATER);
     }
 
     @Override

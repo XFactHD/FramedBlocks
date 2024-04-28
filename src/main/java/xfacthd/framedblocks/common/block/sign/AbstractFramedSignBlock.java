@@ -11,6 +11,7 @@ import net.minecraft.stats.Stats;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.*;
@@ -54,19 +55,19 @@ public abstract class AbstractFramedSignBlock extends FramedBlock
         builder.add(BlockStateProperties.WATERLOGGED);
     }
 
+    // TODO check sign editing
     @Override
-    public InteractionResult use(
-            BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit
+    public ItemInteractionResult useItemOn(
+            ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit
     )
     {
         //Makes sure the block can have a camo applied, even when the sign can execute a command
-        InteractionResult result = super.use(state, level, pos, player, hand, hit);
-        if (result != InteractionResult.PASS || preventUse(state, level, pos, player, hand, hit))
+        ItemInteractionResult result = super.useItemOn(stack, state, level, pos, player, hand, hit);
+        if (result != ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION || preventUse(state, level, pos, player, hand, hit))
         {
             return result;
         }
 
-        ItemStack stack = player.getItemInHand(hand);
         SignInteraction interaction = SignInteraction.from(stack);
         boolean canInteract = interaction != null && player.getAbilities().mayBuild;
 
@@ -74,7 +75,7 @@ public abstract class AbstractFramedSignBlock extends FramedBlock
         {
             if (level.isClientSide())
             {
-                return canInteract || sign.isWaxed() ? InteractionResult.SUCCESS : InteractionResult.CONSUME;
+                return canInteract || sign.isWaxed() ? ItemInteractionResult.SUCCESS : ItemInteractionResult.CONSUME;
             }
 
             boolean front = sign.isFacingFrontText(player);
@@ -82,9 +83,9 @@ public abstract class AbstractFramedSignBlock extends FramedBlock
             {
                 if (sign.canExecuteCommands(front, player) && sign.tryExecuteCommands(player, level, pos, front))
                 {
-                    return InteractionResult.SUCCESS;
+                    return ItemInteractionResult.SUCCESS;
                 }
-                return InteractionResult.PASS;
+                return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
             }
             else if (canInteract && notBlockedByOtherPlayer(player, sign) && interaction.interact(level, pos, player, stack, front, sign))
             {
@@ -95,16 +96,16 @@ public abstract class AbstractFramedSignBlock extends FramedBlock
                 }
                 player.awardStat(Stats.ITEM_USED.get(stack.getItem()));
 
-                return InteractionResult.SUCCESS;
+                return ItemInteractionResult.SUCCESS;
             }
             else if (notBlockedByOtherPlayer(player, sign) && canEdit(player, sign, front))
             {
                 openEditScreen(player, sign, front);
-                return InteractionResult.SUCCESS;
+                return ItemInteractionResult.SUCCESS;
             }
         }
 
-        return InteractionResult.PASS;
+        return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
     }
 
     protected boolean preventUse(
@@ -125,9 +126,9 @@ public abstract class AbstractFramedSignBlock extends FramedBlock
     }
 
     @Override
-    public boolean isPathfindable(BlockState state, BlockGetter level, BlockPos pos, PathComputationType type)
+    public boolean isPathfindable(BlockState state, PathComputationType type)
     {
-        return type != PathComputationType.WATER || level.getFluidState(pos).is(FluidTags.WATER);
+        return type != PathComputationType.WATER || state.getFluidState().is(FluidTags.WATER);
     }
 
     @Override
@@ -184,7 +185,7 @@ public abstract class AbstractFramedSignBlock extends FramedBlock
     public static void openEditScreen(Player player, FramedSignBlockEntity sign, boolean frontText)
     {
         sign.setEditingPlayer(player.getUUID());
-        PacketDistributor.PLAYER.with((ServerPlayer) player).send(new OpenSignScreenPayload(sign.getBlockPos(), frontText));
+        PacketDistributor.sendToPlayer((ServerPlayer)player, new OpenSignScreenPayload(sign.getBlockPos(), frontText));
     }
 
 

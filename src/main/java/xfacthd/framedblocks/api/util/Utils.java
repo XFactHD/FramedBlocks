@@ -6,11 +6,13 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.*;
+import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.*;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.*;
@@ -509,6 +511,10 @@ public final class Utils
         return RL_TEMPLATE.withPath(path);
     }
 
+    public static <T extends CustomPacketPayload> CustomPacketPayload.Type<T> payloadType(String path) {
+        return new CustomPacketPayload.Type<>(rl(path));
+    }
+
     public static <T> ResourceKey<T> getKeyOrThrow(Holder<T> holder)
     {
         return holder.unwrapKey().orElseThrow(
@@ -524,10 +530,10 @@ public final class Utils
         }
 
         String result = stack.getCount() + "x " + stack.getItem() + "[";
-        CompoundTag tag = stack.getTag();
-        if (tag != null)
+        DataComponentPatch patch = stack.getComponentsPatch();
+        if (patch != DataComponentPatch.EMPTY)
         {
-            result += tag;
+            result += patch;
         }
         return result + "]";
     }

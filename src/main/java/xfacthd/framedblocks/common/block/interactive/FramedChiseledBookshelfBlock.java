@@ -2,6 +2,7 @@ package xfacthd.framedblocks.common.block.interactive;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.sounds.*;
 import net.minecraft.stats.Stats;
 import net.minecraft.tags.ItemTags;
@@ -65,7 +66,7 @@ public class FramedChiseledBookshelfBlock extends FramedBlock
         super.setPlacedBy(level, pos, state, placer, stack);
 
         //noinspection ConstantConditions
-        if (level.isClientSide() || !stack.hasTag() || !stack.getTag().contains("BlockEntityTag"))
+        if (level.isClientSide() || stack.get(DataComponents.BLOCK_ENTITY_DATA) == null)
         {
             return;
         }
@@ -76,6 +77,8 @@ public class FramedChiseledBookshelfBlock extends FramedBlock
         }
     }
 
+    // TODO port
+    /*
     @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
     {
@@ -112,6 +115,8 @@ public class FramedChiseledBookshelfBlock extends FramedBlock
         }
         return InteractionResult.PASS;
     }
+
+     */
 
     private static void placeBook(
             Level level, BlockPos pos, Player player, FramedChiseledBookshelfBlockEntity be, ItemStack stack, int slot

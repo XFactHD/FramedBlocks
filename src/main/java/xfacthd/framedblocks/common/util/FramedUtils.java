@@ -150,7 +150,7 @@ public final class FramedUtils
 
     public static Ingredient.Value getSingleIngredientValue(Ingredient ing)
     {
-        Ingredient.Value[] values = ((AccessorIngredient) ing).framedblocks$getValues();
+        Ingredient.Value[] values = ((AccessorIngredient)(Object)ing).framedblocks$getValues();
         return values.length == 1 ? values[0] : null;
     }
 

@@ -1,12 +1,13 @@
 package xfacthd.framedblocks.client.screen.overlay;
 
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.client.gui.overlay.ExtendedGui;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.config.ClientConfig;
 import xfacthd.framedblocks.common.FBContent;
@@ -81,24 +82,25 @@ public final class OneWayWindowOverlay extends BlockInteractOverlay
     }
 
     @Override
-    protected void renderAfterIcon(ExtendedGui gui, GuiGraphics graphics, Texture tex, int texX, int texY, Target target)
+    protected void renderAfterIcon(GuiGraphics graphics, Texture tex, int texX, int texY, Target target)
     {
         NullableDirection face = target.state().getValue(PropertyHolder.NULLABLE_FACE);
 
         graphics.pose().pushPose();
         graphics.pose().translate(-.5, -.5, 0);
 
-        TEXTURE_EYE.draw(gui, graphics, texX + 3, texY + 3);
+        TEXTURE_EYE.draw(graphics, texX + 3, texY + 3);
         if (face == NullableDirection.NONE)
         {
-            TEXTURE_CROSS.draw(gui, graphics, texX + 4, texY + 4);
+            TEXTURE_CROSS.draw(graphics, texX + 4, texY + 4);
         }
 
         graphics.pose().popPose();
 
+        Font font = Minecraft.getInstance().font;
         int x = texX + (tex.width() / 2);
-        int y = texY + (tex.height() * 3 / 4) - (gui.getFont().lineHeight / 2);
-        graphics.drawCenteredString(gui.getFont(), FACE_VALUE_ABBRS[face.ordinal()], x, y, -1/*0x555555*/);
+        int y = texY + (tex.height() * 3 / 4) - (font.lineHeight / 2);
+        graphics.drawCenteredString(font, FACE_VALUE_ABBRS[face.ordinal()], x, y, -1/*0x555555*/);
     }
 
 
