@@ -6,7 +6,6 @@ import fuzs.diagonalblocks.neoforge.api.v2.impl.NeoForgeDiagonalFenceBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -30,7 +29,6 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.Consumer;
 
-@SuppressWarnings("deprecation")
 public final class FramedDiagonalFenceBlock extends NeoForgeDiagonalFenceBlock implements IFramedBlock
 {
     public FramedDiagonalFenceBlock(Block block)
@@ -56,9 +54,7 @@ public final class FramedDiagonalFenceBlock extends NeoForgeDiagonalFenceBlock i
     )
     {
         ItemInteractionResult result = handleUse(state, level, pos, player, hand, hit);
-        if (result.consumesAction()) { return result; }
-
-        return super.useItemOn(stack, state, level, pos, player, hand, hit);
+        return result.consumesAction() ? result : super.useItemOn(stack, state, level, pos, player, hand, hit);
     }
 
     @Override

@@ -3,7 +3,6 @@ package xfacthd.framedblocks.common.block;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerLevel;
@@ -20,8 +19,8 @@ import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.block.cache.StateCache;
 import xfacthd.framedblocks.api.block.render.ParticleHelper;
+import xfacthd.framedblocks.api.blueprint.BlueprintData;
 import xfacthd.framedblocks.api.camo.CamoContainer;
-import xfacthd.framedblocks.api.camo.CamoContainerHelper;
 import xfacthd.framedblocks.api.predicate.cull.SideSkipPredicate;
 import xfacthd.framedblocks.common.blockentity.doubled.FramedDoubleBlockEntity;
 import xfacthd.framedblocks.common.data.doubleblock.*;
@@ -33,6 +32,7 @@ import java.util.Optional;
 public interface IFramedDoubleBlock extends IFramedBlock
 {
     @Override
+    @SuppressWarnings("deprecation")
     default SoundType getSoundType(BlockState state, LevelReader level, BlockPos pos, @Nullable Entity entity)
     {
         if (level.getBlockEntity(pos) instanceof FramedDoubleBlockEntity be)
@@ -209,10 +209,10 @@ public interface IFramedDoubleBlock extends IFramedBlock
     }
 
     @Override
-    default Optional<MutableComponent> printCamoBlock(CompoundTag beTag)
+    default Optional<MutableComponent> printCamoBlock(BlueprintData blueprintData)
     {
-        CamoContainer<?, ?> camoContainer = CamoContainerHelper.readFromDisk(beTag.getCompound("camo"));
-        CamoContainer<?, ?> camoContainerTwo = CamoContainerHelper.readFromDisk(beTag.getCompound("camo_two"));
+        CamoContainer<?, ?> camoContainer = blueprintData.camos().getCamo(0);
+        CamoContainer<?, ?> camoContainerTwo = blueprintData.camos().getCamo(1);
 
         MutableComponent component = getCamoComponent(camoContainer);
         component.append(Component.literal(" | ").withStyle(ChatFormatting.GOLD));
@@ -221,7 +221,7 @@ public interface IFramedDoubleBlock extends IFramedBlock
         return Optional.of(component);
     }
 
-    private static MutableComponent getCamoComponent(CamoContainer<?, ?> camoContainer)
+    static MutableComponent getCamoComponent(CamoContainer<?, ?> camoContainer)
     {
         if (!camoContainer.isEmpty())
         {

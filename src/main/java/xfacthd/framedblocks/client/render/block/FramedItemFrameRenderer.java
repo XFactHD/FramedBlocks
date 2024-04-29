@@ -11,9 +11,11 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.saveddata.maps.MapId;
 import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -79,8 +81,8 @@ public class FramedItemFrameRenderer implements BlockEntityRenderer<FramedItemFr
             poseStack.translate(-64.0D, -64.0D, -1.0D);
 
             int mapLight = be.isGlowingFrame() ? 0x00F000D2 : packedLight;
+            MapId mapId = item.get(DataComponents.MAP_ID);
             //noinspection ConstantConditions
-            int mapId = MapItem.getMapId(item);
             Minecraft.getInstance().gameRenderer.getMapRenderer().render(poseStack, buffer, mapId, mapData, true, mapLight);
         }
         else
@@ -100,7 +102,7 @@ public class FramedItemFrameRenderer implements BlockEntityRenderer<FramedItemFr
     {
         ItemStack stack = be.getItem();
 
-        if (!Minecraft.renderNames() || stack.isEmpty() || !stack.hasCustomHoverName()) return;
+        if (!Minecraft.renderNames() || stack.isEmpty() || !stack.has(DataComponents.CUSTOM_NAME)) return;
         if (!(Minecraft.getInstance().hitResult instanceof BlockHitResult hitResult)) return;
         if (!be.getBlockPos().equals(hitResult.getBlockPos())) return;
 

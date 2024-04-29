@@ -148,9 +148,10 @@ public final class FramedUtils
         return handler;
     }
 
+    @SuppressWarnings("UnreachableCode") // The cast is considered invalid due to Ingredient being final
     public static Ingredient.Value getSingleIngredientValue(Ingredient ing)
     {
-        Ingredient.Value[] values = ((AccessorIngredient)(Object)ing).framedblocks$getValues();
+        Ingredient.Value[] values = ((AccessorIngredient)(Object) ing).framedblocks$getValues();
         return values.length == 1 ? values[0] : null;
     }
 

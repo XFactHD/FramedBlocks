@@ -1,15 +1,17 @@
 package xfacthd.framedblocks.common.block.door;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.*;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.*;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.DoorBlock;
+import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.*;
@@ -20,10 +22,15 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.neoforge.client.extensions.common.IClientBlockExtensions;
 import xfacthd.framedblocks.api.block.*;
 import xfacthd.framedblocks.api.block.render.FramedBlockRenderProperties;
+import xfacthd.framedblocks.api.blueprint.BlueprintData;
+import xfacthd.framedblocks.api.camo.CamoContainer;
 import xfacthd.framedblocks.api.model.wrapping.WrapHelper;
 import xfacthd.framedblocks.api.model.wrapping.statemerger.StateMerger;
 import xfacthd.framedblocks.api.util.Utils;
+import xfacthd.framedblocks.common.block.IFramedDoubleBlock;
+import xfacthd.framedblocks.common.blockentity.special.FramedDoorBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
+import xfacthd.framedblocks.common.data.blueprint.DoorCopyBehaviour;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -53,7 +60,7 @@ public class FramedDoorBlock extends DoorBlock implements IFramedBlock
     }
 
     @Override
-    public final ItemInteractionResult useItemOn(
+    public ItemInteractionResult useItemOn(
             ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit
     )
     {
@@ -66,25 +73,27 @@ public class FramedDoorBlock extends DoorBlock implements IFramedBlock
     {
         //noinspection ConstantConditions
         super.setPlacedBy(level, pos, state, placer, stack);
+        if (level.getBlockEntity(pos.above()) instanceof FramedDoorBlockEntity be)
+        {
+            be.applyComponentsFromItemStack(stack);
+        }
 
         tryApplyCamoImmediately(level, pos, placer, stack);
         tryApplyCamoImmediately(level, pos.above(), placer, stack); //Apply to upper half as well
     }
 
     @Override
-    public BlockState updateShape(
-            BlockState state,
-            Direction facing,
-            BlockState facingState,
-            LevelAccessor level,
-            BlockPos currentPos,
-            BlockPos facingPos
-    )
+    public BlockState updateShape(BlockState state, Direction side, BlockState adjState, LevelAccessor level, BlockPos pos, BlockPos adjPos)
     {
-        BlockState newState = super.updateShape(state, facing, facingState, level, currentPos, facingPos);
+        BlockState newState = super.updateShape(state, side, adjState, level, pos, adjPos);
+        if (newState.getBlock() == this)
+        {
+            newState = newState.setValue(FramedProperties.SOLID, state.getValue(FramedProperties.SOLID));
+            newState = Utils.copyRequiredProperties(state, newState);
+        }
         if (newState == state)
         {
-            updateCulling(level, currentPos);
+            updateCulling(level, pos);
         }
         return newState;
     }
@@ -141,9 +150,28 @@ public class FramedDoorBlock extends DoorBlock implements IFramedBlock
     }
 
     @Override
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
+    {
+        return new FramedDoorBlockEntity(pos, state);
+    }
+
+    @Override
     public void initializeClient(Consumer<IClientBlockExtensions> consumer)
     {
         consumer.accept(FramedBlockRenderProperties.INSTANCE);
+    }
+
+    @Override
+    public Optional<MutableComponent> printCamoBlock(BlueprintData blueprintData)
+    {
+        CamoContainer<?, ?> camoContainer = blueprintData.camos().getCamo(0);
+        CamoContainer<?, ?> camoContainerTwo = DoorCopyBehaviour.getSecondData(blueprintData).camos().getCamo(0);
+
+        MutableComponent component = IFramedDoubleBlock.getCamoComponent(camoContainer);
+        component.append(Component.literal(" | ").withStyle(ChatFormatting.GOLD));
+        component.append(IFramedDoubleBlock.getCamoComponent(camoContainerTwo));
+
+        return Optional.of(component);
     }
 
     @Override

@@ -19,23 +19,7 @@ public final class GhostRenderBehaviours
                 .map(Holder::value)
                 .filter(IFramedBlock.class::isInstance)
                 .filter(b -> ((IFramedBlock) b).getBlockType().isDoubleBlock())
-                .forEach(block ->
-                {
-                    if (block == FBContent.BLOCK_FRAMED_DOUBLE_PANEL.value())
-                    {
-                        GhostBlockRenderer.registerBehaviour(
-                                new DoublePanelGhostRenderBehaviour(),
-                                block
-                        );
-                    }
-                    else
-                    {
-                        GhostBlockRenderer.registerBehaviour(
-                                doubleBlockBehaviour,
-                                block
-                        );
-                    }
-                });
+                .forEach(block -> GhostBlockRenderer.registerBehaviour(doubleBlockBehaviour, block));
 
         GhostBlockRenderer.registerBehaviour(
                 new DoorGhostRenderBehaviour(),
@@ -109,6 +93,11 @@ public final class GhostRenderBehaviours
         GhostBlockRenderer.registerBehaviour(
                 new BlueprintGhostRenderBehaviour(),
                 FBContent.ITEM_FRAMED_BLUEPRINT.value()
+        );
+
+        GhostBlockRenderer.registerBehaviour(
+                new FlowerPotGhostRenderBehaviour(),
+                FBContent.BLOCK_FRAMED_FLOWER_POT.value()
         );
     }
 

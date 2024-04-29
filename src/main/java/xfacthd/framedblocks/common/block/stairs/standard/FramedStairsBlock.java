@@ -2,7 +2,6 @@ package xfacthd.framedblocks.common.block.stairs.standard;
 
 import net.minecraft.core.*;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -37,7 +36,7 @@ public class FramedStairsBlock extends StairBlock implements IFramedBlock
 {
     public FramedStairsBlock()
     {
-        super(() -> FBContent.BLOCK_FRAMED_CUBE.value().defaultBlockState(), IFramedBlock.createProperties(BlockType.FRAMED_STAIRS));
+        super(FBContent.BLOCK_FRAMED_CUBE.value().defaultBlockState(), IFramedBlock.createProperties(BlockType.FRAMED_STAIRS));
         registerDefaultState(defaultBlockState()
                 .setValue(FramedProperties.SOLID, false)
                 .setValue(FramedProperties.GLOWING, false)

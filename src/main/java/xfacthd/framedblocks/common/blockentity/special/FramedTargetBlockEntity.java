@@ -2,16 +2,23 @@ package xfacthd.framedblocks.common.blockentity.special;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
+import xfacthd.framedblocks.api.blueprint.AuxBlueprintData;
 import xfacthd.framedblocks.common.FBContent;
+import xfacthd.framedblocks.common.data.component.TargetColor;
+
+import java.util.Optional;
 
 public class FramedTargetBlockEntity extends FramedBlockEntity
 {
-    private DyeColor overlayColor = DyeColor.RED;
+    public static final DyeColor DEFAULT_COLOR = DyeColor.RED;
+
+    private DyeColor overlayColor = DEFAULT_COLOR;
 
     public FramedTargetBlockEntity(BlockPos pos, BlockState state)
     {
@@ -59,14 +66,14 @@ public class FramedTargetBlockEntity extends FramedBlockEntity
     }
 
     @Override
-    protected void writeToDataPacket(CompoundTag tag)
+    protected void writeToDataPacket(CompoundTag tag, HolderLookup.Provider lookupProvider)
     {
-        super.writeToDataPacket(tag);
+        super.writeToDataPacket(tag, lookupProvider);
         tag.putInt("overlay_color", overlayColor.getId());
     }
 
     @Override
-    protected boolean readFromDataPacket(CompoundTag nbt)
+    protected boolean readFromDataPacket(CompoundTag nbt, HolderLookup.Provider lookupProvider)
     {
         boolean colored = false;
         if (nbt.contains("overlay_color"))
@@ -78,7 +85,35 @@ public class FramedTargetBlockEntity extends FramedBlockEntity
                 colored = true;
             }
         }
-        return super.readFromDataPacket(nbt) || colored;
+        return super.readFromDataPacket(nbt, lookupProvider) || colored;
+    }
+
+    @Override
+    protected Optional<AuxBlueprintData<?>> collectAuxBlueprintData()
+    {
+        return Optional.of(new TargetColor(overlayColor));
+    }
+
+    @Override
+    protected void applyAuxDataFromBlueprint(AuxBlueprintData<?> auxData)
+    {
+        if (auxData instanceof TargetColor color)
+        {
+            overlayColor = color.color();
+        }
+    }
+
+    @Override
+    protected void collectMiscComponents(DataComponentMap.Builder builder)
+    {
+        builder.set(FBContent.DC_TYPE_TARGET_COLOR, new TargetColor(overlayColor));
+    }
+
+    @Override
+    protected void applyMiscComponents(DataComponentInput input)
+    {
+        TargetColor color = input.getOrDefault(FBContent.DC_TYPE_TARGET_COLOR, TargetColor.DEFAULT);
+        overlayColor = color.color();
     }
 
     @Override

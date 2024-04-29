@@ -25,7 +25,7 @@ public final class FallbackLoader implements IGeometryLoader<FallbackGeometry>
     {
         JsonArray conditionArray = GsonHelper.getAsJsonArray(json, "conditions");
         List<ICondition> conditions = ICondition.LIST_CODEC.decode(JsonOps.INSTANCE, conditionArray).getOrThrow(
-                err -> { throw new JsonParseException("Failed to parse conditions: " + err); }
+                err -> new JsonParseException("Failed to parse conditions: " + err)
         ).getFirst();
 
         if (conditions.stream().allMatch(cond -> cond.test(ICondition.IContext.EMPTY)))

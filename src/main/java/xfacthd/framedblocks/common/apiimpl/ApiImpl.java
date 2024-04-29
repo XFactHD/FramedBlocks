@@ -5,6 +5,7 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import xfacthd.framedblocks.api.FramedBlocksAPI;
+import xfacthd.framedblocks.api.blueprint.AuxBlueprintData;
 import xfacthd.framedblocks.api.blueprint.BlueprintCopyBehaviour;
 import xfacthd.framedblocks.api.camo.CamoContainerFactory;
 import xfacthd.framedblocks.common.FBContent;
@@ -35,5 +36,11 @@ public final class ApiImpl implements FramedBlocksAPI
     public void registerBlueprintCopyBehaviour(BlueprintCopyBehaviour behaviour, Block... blocks)
     {
         FramedBlueprintItem.registerBehaviour(behaviour, blocks);
+    }
+
+    @Override
+    public Registry<AuxBlueprintData.Type<?>> getAuxBlueprintDataTypeRegistry()
+    {
+        return FBContent.AUX_BLUEPRINT_DATA_TYPE_REGISTRY;
     }
 }

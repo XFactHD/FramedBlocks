@@ -2,7 +2,6 @@ package xfacthd.framedblocks.common.block.sign;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -63,13 +62,12 @@ public class FramedWallHangingSignBlock extends AbstractFramedHangingSignBlock
     }
 
     @Override
-    protected boolean preventUse(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
+    protected boolean preventUse(BlockState state, Level level, BlockPos pos, Player player, ItemStack stack, BlockHitResult hit)
     {
         if (level.getBlockEntity(pos) instanceof FramedSignBlockEntity sign)
         {
             boolean front = sign.isFacingFrontText(player);
-            ItemStack stack = player.getItemInHand(hand);
-            if (!sign.canExecuteCommands(front, player) && stack.getItem() == asItem())
+            if (sign.cannotExecuteCommands(front, player) && stack.getItem() == asItem())
             {
                 return hit.getDirection().getAxis() == state.getValue(FramedProperties.FACING_HOR).getAxis();
             }

@@ -62,16 +62,6 @@ public class FramedSignBlockEntity extends FramedBlockEntity
         return front ? frontText : backText;
     }
 
-    public SignText getFrontText()
-    {
-        return frontText;
-    }
-
-    public SignText getBackText()
-    {
-        return backText;
-    }
-
     public void updateTextFromPacket(Player player, boolean front, List<FilteredText> filteredText)
     {
         if (level == null)
@@ -102,7 +92,6 @@ public class FramedSignBlockEntity extends FramedBlockEntity
             return text;
         }, front);
         setEditingPlayer(null);
-        level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), Block.UPDATE_ALL);
     }
 
     public boolean updateText(UnaryOperator<SignText> modifier, boolean front)
@@ -112,31 +101,12 @@ public class FramedSignBlockEntity extends FramedBlockEntity
 
     public boolean setText(SignText text, boolean front)
     {
-        return front ? setFrontText(text) : setBackText(text);
-    }
-
-    public boolean setFrontText(SignText text)
-    {
-        if (text != this.frontText) {
-            frontText = text;
-
-            level().sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), Block.UPDATE_ALL);
-            setChangedWithoutSignalUpdate();
-
-            return true;
-        }
-        return false;
-    }
-
-    public boolean setBackText(SignText text)
-    {
-        if (text != backText)
+        if (text != getText(front))
         {
-            backText = text;
+            if (front) frontText = text;
+            else backText = text;
 
-            level().sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), Block.UPDATE_ALL);
-            setChangedWithoutSignalUpdate();
-
+            markDirty();
             return true;
         }
         return false;
@@ -153,17 +123,15 @@ public class FramedSignBlockEntity extends FramedBlockEntity
         {
             this.waxed = waxed;
 
-            level().sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), Block.UPDATE_ALL);
-            setChangedWithoutSignalUpdate();
-
+            markDirty();
             return true;
         }
         return false;
     }
 
-    public boolean canExecuteCommands(boolean front, Player pPlayer)
+    public boolean cannotExecuteCommands(boolean front, Player pPlayer)
     {
-        return isWaxed() && getText(front).hasAnyClickCommands(pPlayer);
+        return !waxed || !getText(front).hasAnyClickCommands(pPlayer);
     }
 
     public boolean tryExecuteCommands(Player player, Level level, BlockPos pos, boolean front)
@@ -232,18 +200,24 @@ public class FramedSignBlockEntity extends FramedBlockEntity
         return player == null || player.distanceToSqr(worldPosition.getX(), worldPosition.getY(), worldPosition.getZ()) > 64.0D;
     }
 
-    @Override
-    protected void writeToDataPacket(CompoundTag nbt)
+    private void markDirty()
     {
-        super.writeToDataPacket(nbt);
+        level().sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), Block.UPDATE_ALL);
+        setChangedWithoutSignalUpdate();
+    }
+
+    @Override
+    protected void writeToDataPacket(CompoundTag nbt, HolderLookup.Provider lookupProvider)
+    {
+        super.writeToDataPacket(nbt, lookupProvider);
         writeToNbt(nbt);
     }
 
     @Override
-    protected boolean readFromDataPacket(CompoundTag nbt)
+    protected boolean readFromDataPacket(CompoundTag nbt, HolderLookup.Provider lookupProvider)
     {
         readFromNbt(nbt);
-        return super.readFromDataPacket(nbt);
+        return super.readFromDataPacket(nbt, lookupProvider);
     }
 
     @Override
@@ -316,16 +290,6 @@ public class FramedSignBlockEntity extends FramedBlockEntity
         }
 
         return line;
-    }
-
-    @Override //Prevent writing sign data
-    public CompoundTag writeToBlueprint(HolderLookup.Provider provider)
-    {
-        CompoundTag tag = saveWithoutMetadata(provider);
-        tag.remove("front_text");
-        tag.remove("back_text");
-        tag.remove("waxed");
-        return tag;
     }
 
     @Override

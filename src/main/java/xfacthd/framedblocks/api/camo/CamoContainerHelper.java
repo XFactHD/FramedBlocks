@@ -1,14 +1,16 @@
 package xfacthd.framedblocks.api.camo;
 
 import com.google.common.base.Preconditions;
+import com.mojang.datafixers.util.Pair;
 import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.MapCodec;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.nbt.*;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -21,34 +23,27 @@ import xfacthd.framedblocks.api.FramedBlocksAPI;
 import xfacthd.framedblocks.api.camo.empty.EmptyCamoContainer;
 import xfacthd.framedblocks.api.internal.InternalAPI;
 
-import java.util.function.Function;
-
 public final class CamoContainerHelper
 {
     private static final Logger LOGGER = LogUtils.getLogger();
     private static final Registry<CamoContainerFactory<?>> REGISTRY = FramedBlocksAPI.INSTANCE.getCamoContainerFactoryRegistry();
-    public static final Codec<CamoContainer<?, ?>> CODEC = REGISTRY.byNameCodec().dispatch(CamoContainer::getFactory, f -> f.codec().fieldOf("container"));
-    //public static final StreamCodec<RegistryFriendlyByteBuf, CamoContainer<?, ?>> STREAM_CODEC = ...;
+    public static final Codec<CamoContainer<?, ?>> CODEC = REGISTRY.byNameCodec()
+            .dispatch(CamoContainer::getFactory, CamoContainerFactory::codec);
+    public static final StreamCodec<RegistryFriendlyByteBuf, CamoContainer<?, ?>> STREAM_CODEC = ByteBufCodecs.registry(REGISTRY.key())
+            .dispatch(CamoContainer::getFactory, CamoContainerFactory::streamCodec);
 
     /**
      * Save the given {@link CamoContainer} to a {@link CompoundTag} for saving to disk
      */
-    @SuppressWarnings({ "rawtypes", "unchecked" })
-    public static CompoundTag writeToDisk(CamoContainer<?, ?> camo)
+    public static Tag writeToDisk(CamoContainer<?, ?> camo)
     {
-        CamoContainerFactory factory = camo.getFactory();
-        ResourceLocation id = REGISTRY.getKey(factory);
-        Preconditions.checkNotNull(id, "Attempted to get registry ID for unregistered CamoContainerFactory");
-
-        CompoundTag tag = new CompoundTag();
-        tag.putString("type", id.toString());
-        factory.writeToDisk(tag, camo);
-        return tag;
+        return CODEC.encodeStart(NbtOps.INSTANCE, camo).result().orElseGet(CompoundTag::new);
     }
 
     /**
      * Reconstruct a {@link CamoContainer} from the given {@link CompoundTag} from disk
      */
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     public static CamoContainer<?, ?> readFromDisk(CompoundTag tag)
     {
         if (tag.isEmpty())
@@ -56,14 +51,11 @@ public final class CamoContainerHelper
             return EmptyCamoContainer.EMPTY;
         }
 
-        ResourceLocation id = ResourceLocation.tryParse(tag.getString("type"));
-        CamoContainerFactory<?> factory = REGISTRY.get(id);
-        if (factory == null)
-        {
-            LOGGER.error("Read unknown CamoContainer with ID {} from disk, dropping!", id);
-            return EmptyCamoContainer.EMPTY;
-        }
-        return factory.readFromDisk(tag);
+        return CODEC.decode(NbtOps.INSTANCE, tag)
+                .ifError(err -> LOGGER.error(err.message()))
+                .result()
+                .map(Pair::getFirst)
+                .orElse((CamoContainer) EmptyCamoContainer.EMPTY);
     }
 
     /**

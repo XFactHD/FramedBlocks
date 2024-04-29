@@ -13,7 +13,12 @@ public class FramedToolItem extends Item
 
     public FramedToolItem(FramedToolType type)
     {
-        super(new Properties().stacksTo(1));
+        this(type, new Properties());
+    }
+
+    public FramedToolItem(FramedToolType type, Properties props)
+    {
+        super(props.stacksTo(1));
         this.type = type;
     }
 

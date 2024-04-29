@@ -1,8 +1,7 @@
 package xfacthd.framedblocks.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Holder;
+import net.minecraft.core.*;
 import net.minecraft.nbt.*;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
@@ -14,17 +13,18 @@ import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import xfacthd.framedblocks.common.blockentity.special.FramedItemFrameBlockEntity;
+import xfacthd.framedblocks.common.FBContent;
+import xfacthd.framedblocks.common.data.component.FramedMap;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @Mixin(MapItemSavedData.class)
 @SuppressWarnings("MethodMayBeStatic")
-public abstract class MixinMapItemSavedData implements FramedItemFrameBlockEntity.MapMarkerRemover
+public abstract class MixinMapItemSavedData implements FramedMap.MarkerRemover
 {
     @Unique
-    private final Map<String, FramedItemFrameBlockEntity.FramedMap> framedblocks$frameMarkers = new HashMap<>();
+    private final Map<String, FramedMap> framedblocks$frameMarkers = new HashMap<>();
 
     @Shadow @Final private boolean trackingPosition;
 
@@ -34,55 +34,56 @@ public abstract class MixinMapItemSavedData implements FramedItemFrameBlockEntit
     @ModifyExpressionValue(method = "tickCarriedBy", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;isFramed()Z", ordinal = 0))
     private boolean framedblocks$checkVanillaFramedOrCustomFramed(boolean isFramed, Player player, ItemStack stack)
     {
-        //noinspection ConstantConditions
-        return isFramed || (stack.hasTag() && stack.getTag().contains(FramedItemFrameBlockEntity.NBT_KEY_FRAMED_MAP));
+        return isFramed || stack.get(FBContent.DC_TYPE_FRAMED_MAP) != null;
     }
 
     @ModifyExpressionValue(method = "tickCarriedBy", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;isFramed()Z", ordinal = 1))
     private boolean framedblocks$checkNotVanillaFramedAndNotCustomFramed(boolean isFramed, Player player, ItemStack stack)
     {
-        //noinspection ConstantConditions
-        return isFramed || (stack.hasTag() && stack.getTag().contains(FramedItemFrameBlockEntity.NBT_KEY_FRAMED_MAP));
+        return isFramed || stack.get(FBContent.DC_TYPE_FRAMED_MAP) != null;
     }
 
-    @Inject(method = "tickCarriedBy", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;getTag()Lnet/minecraft/nbt/CompoundTag;"))
+    @Inject(method = "tickCarriedBy", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;getOrDefault(Lnet/minecraft/core/component/DataComponentType;Ljava/lang/Object;)Ljava/lang/Object;"))
     private void framedblocks$updateFramedItemFrameMarker(Player player, ItemStack mapStack, CallbackInfo ci)
     {
-        CompoundTag tag;
+        FramedMap framedMap;
         //noinspection ConstantConditions
-        if (trackingPosition && mapStack.hasTag() && (tag = mapStack.getTag().getCompound(FramedItemFrameBlockEntity.NBT_KEY_FRAMED_MAP)) != null)
+        if (trackingPosition && (framedMap = mapStack.get(FBContent.DC_TYPE_FRAMED_MAP)) != null)
         {
-            BlockPos pos = BlockPos.of(tag.getLong("pos"));
-            String frameId = FramedItemFrameBlockEntity.FramedMap.makeFrameId(pos);
+            String frameId = FramedMap.makeFrameId(framedMap.pos());
             if (!framedblocks$frameMarkers.containsKey(frameId))
             {
-                int rot = tag.getByte("y_rot") * 90;
-                FramedItemFrameBlockEntity.FramedMap framedMap = new FramedItemFrameBlockEntity.FramedMap(pos, rot);
                 framedblocks$addMapMarker(player.level(), frameId, framedMap);
             }
         }
     }
 
     @Inject(method = "load", at = @At("TAIL"))
-    private static void framedblocks$loadCustomMapMarkers(CompoundTag tag, CallbackInfoReturnable<MapItemSavedData> cir)
+    private static void framedblocks$loadCustomMapMarkers(CompoundTag tag, HolderLookup.Provider lookupProvider, CallbackInfoReturnable<MapItemSavedData> cir)
     {
         ListTag frames = tag.getList("framedblocks:frames", Tag.TAG_COMPOUND);
         for (int i = 0; i < frames.size(); i++)
         {
             CompoundTag frameTag = frames.getCompound(i);
-            FramedItemFrameBlockEntity.FramedMap map = FramedItemFrameBlockEntity.FramedMap.load(frameTag);
-            String frameId = FramedItemFrameBlockEntity.FramedMap.makeFrameId(map.pos());
-            ((MixinMapItemSavedData)(Object) cir.getReturnValue()).framedblocks$addMapMarker(null, frameId, map);
+            FramedMap.CODEC.decode(NbtOps.INSTANCE, frameTag).ifSuccess(pair ->
+            {
+                FramedMap map = pair.getFirst();
+                String frameId = FramedMap.makeFrameId(map.pos());
+                ((MixinMapItemSavedData)(Object) cir.getReturnValue()).framedblocks$addMapMarker(null, frameId, map);
+            });
         }
     }
 
     @Inject(method = "save", at = @At("TAIL"))
-    private void framedblocks$saveCustomMapMarkers(CompoundTag tag, CallbackInfoReturnable<CompoundTag> cir)
+    private void framedblocks$saveCustomMapMarkers(CompoundTag tag, HolderLookup.Provider lookupProvider, CallbackInfoReturnable<CompoundTag> cir)
     {
         if (!framedblocks$frameMarkers.isEmpty())
         {
             ListTag frames = new ListTag();
-            framedblocks$frameMarkers.forEach((id, marker) -> frames.add(marker.save()));
+            for (FramedMap map : framedblocks$frameMarkers.values())
+            {
+                FramedMap.CODEC.encodeStart(NbtOps.INSTANCE, map).ifSuccess(frames::add);
+            }
             tag.put("framedblocks:frames", frames);
         }
     }
@@ -90,14 +91,14 @@ public abstract class MixinMapItemSavedData implements FramedItemFrameBlockEntit
     @Override
     public void framedblocks$removeMapMarker(BlockPos pos)
     {
-        String frameId = FramedItemFrameBlockEntity.FramedMap.makeFrameId(pos);
+        String frameId = FramedMap.makeFrameId(pos);
         removeDecoration(frameId);
         framedblocks$frameMarkers.remove(frameId);
     }
 
     @Unique
     private void framedblocks$addMapMarker(
-            LevelAccessor level, String frameId, FramedItemFrameBlockEntity.FramedMap framedMap
+            LevelAccessor level, String frameId, FramedMap framedMap
     )
     {
         BlockPos pos = framedMap.pos();

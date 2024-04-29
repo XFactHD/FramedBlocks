@@ -4,6 +4,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import xfacthd.framedblocks.api.blueprint.AuxBlueprintData;
 import xfacthd.framedblocks.api.blueprint.BlueprintCopyBehaviour;
 import xfacthd.framedblocks.api.camo.CamoContainerFactory;
 import xfacthd.framedblocks.api.util.Utils;
@@ -34,4 +35,6 @@ public interface FramedBlocksAPI
      * Register a custom {@link BlueprintCopyBehaviour} for the given {@link Block}s
      */
     void registerBlueprintCopyBehaviour(BlueprintCopyBehaviour behaviour, Block... blocks);
+
+    Registry<AuxBlueprintData.Type<?>> getAuxBlueprintDataTypeRegistry();
 }

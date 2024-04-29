@@ -1,8 +1,8 @@
 package xfacthd.framedblocks.client.render.item;
 
 import net.minecraft.client.renderer.item.ItemProperties;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
+import xfacthd.framedblocks.api.blueprint.BlueprintData;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 
@@ -19,8 +19,8 @@ public final class BlueprintPropertyOverride
                 HAS_DATA,
                 (stack, level, entity, seed) ->
                 {
-                    CompoundTag tag = stack.getTagElement("blueprint_data");
-                    return tag != null && !tag.isEmpty() ? 1 : 0;
+                    BlueprintData blueprintData = stack.getOrDefault(FBContent.DC_TYPE_BLUEPRINT_DATA, BlueprintData.EMPTY);
+                    return blueprintData.isEmpty() ? 0 : 1;
                 }
         );
     }

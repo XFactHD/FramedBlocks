@@ -11,7 +11,7 @@ public final class DoublePanelConnectionPredicate extends NonDetailedConnectionP
     @Override
     public boolean canConnectFullEdge(BlockState state, Direction side, @Nullable Direction edge)
     {
-        Direction facing = state.getValue(FramedProperties.FACING_NE);
+        Direction facing = state.getValue(FramedProperties.FACING_HOR);
         if (side.getAxis() == facing.getAxis())
         {
             return true;

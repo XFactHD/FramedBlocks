@@ -12,8 +12,12 @@ import net.minecraft.world.phys.HitResult;
 import net.neoforged.neoforge.client.model.data.ModelData;
 import net.neoforged.neoforge.client.model.data.ModelProperty;
 import xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
+import xfacthd.framedblocks.api.blueprint.AuxBlueprintData;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.PropertyHolder;
+import xfacthd.framedblocks.common.data.component.CollapsibleCopycatBlockData;
+
+import java.util.Optional;
 
 public class FramedCollapsibleCopycatBlockEntity extends FramedBlockEntity
 {
@@ -111,17 +115,17 @@ public class FramedCollapsibleCopycatBlockEntity extends FramedBlockEntity
     }
 
     @Override
-    protected void writeToDataPacket(CompoundTag nbt)
+    protected void writeToDataPacket(CompoundTag nbt, HolderLookup.Provider lookupProvider)
     {
-        super.writeToDataPacket(nbt);
+        super.writeToDataPacket(nbt, lookupProvider);
         nbt.putInt("offsets", packOffsets(faceOffsets));
         nbt.putBoolean("occludesBeacon", occludesBeacon);
     }
 
     @Override
-    protected boolean readFromDataPacket(CompoundTag nbt)
+    protected boolean readFromDataPacket(CompoundTag nbt, HolderLookup.Provider lookupProvider)
     {
-        boolean needUpdate = super.readFromDataPacket(nbt);
+        boolean needUpdate = super.readFromDataPacket(nbt, lookupProvider);
 
         int packed = nbt.getInt("offsets");
         if (packed != packedOffsets)
@@ -155,6 +159,22 @@ public class FramedCollapsibleCopycatBlockEntity extends FramedBlockEntity
         occludesBeacon = nbt.getBoolean("occludesBeacon");
 
         super.handleUpdateTag(nbt, provider);
+    }
+
+    @Override
+    protected Optional<AuxBlueprintData<?>> collectAuxBlueprintData()
+    {
+        return Optional.of(new CollapsibleCopycatBlockData(packedOffsets));
+    }
+
+    @Override
+    protected void applyAuxDataFromBlueprint(AuxBlueprintData<?> auxData)
+    {
+        if (auxData instanceof CollapsibleCopycatBlockData blockData)
+        {
+            packedOffsets = blockData.offsets();
+            faceOffsets = unpackOffsets(packedOffsets);
+        }
     }
 
     @Override

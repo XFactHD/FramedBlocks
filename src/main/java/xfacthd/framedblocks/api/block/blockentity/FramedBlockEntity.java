@@ -4,13 +4,13 @@ import com.mojang.logging.LogUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -32,19 +32,21 @@ import net.neoforged.neoforge.common.world.AuxiliaryLightManager;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
+import xfacthd.framedblocks.api.FramedBlocksAPI;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.block.cache.StateCache;
 import xfacthd.framedblocks.api.block.render.CullingHelper;
+import xfacthd.framedblocks.api.blueprint.AuxBlueprintData;
 import xfacthd.framedblocks.api.camo.*;
 import xfacthd.framedblocks.api.camo.empty.EmptyCamoContainer;
 import xfacthd.framedblocks.api.internal.InternalAPI;
 import xfacthd.framedblocks.api.model.data.FramedBlockData;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.*;
+import xfacthd.framedblocks.api.blueprint.BlueprintData;
 
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @SuppressWarnings("deprecation")
 public class FramedBlockEntity extends BlockEntity
@@ -255,7 +257,10 @@ public class FramedBlockEntity extends BlockEntity
         {
             setReinforced(false);
 
-            stack.hurtAndBreak(1, player.getRandom(), player, () -> player.broadcastBreakEvent(LivingEntity.getSlotForHand(hand)));
+            if (!player.isCreative())
+            {
+                stack.hurtAndBreak(1, player, LivingEntity.getSlotForHand(hand));
+            }
 
             ItemStack result = new ItemStack(Utils.FRAMED_REINFORCEMENT.value());
             if (!player.getInventory().add(result))
@@ -696,7 +701,7 @@ public class FramedBlockEntity extends BlockEntity
         return ClientboundBlockEntityDataPacket.create(this, (be, registryAccess) ->
         {
             CompoundTag tag = new CompoundTag();
-            ((FramedBlockEntity) be).writeToDataPacket(tag);
+            ((FramedBlockEntity) be).writeToDataPacket(tag, registryAccess);
             return tag;
         });
     }
@@ -705,20 +710,20 @@ public class FramedBlockEntity extends BlockEntity
     public final void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt, HolderLookup.Provider lookupProvider)
     {
         CompoundTag nbt = pkt.getTag();
-        if (nbt != null && readFromDataPacket(nbt))
+        if (!nbt.isEmpty() && readFromDataPacket(nbt, lookupProvider))
         {
             level().sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
             requestModelDataUpdate();
         }
     }
 
-    protected void writeToDataPacket(CompoundTag nbt)
+    protected void writeToDataPacket(CompoundTag nbt, HolderLookup.Provider lookupProvider)
     {
         nbt.put("camo", CamoContainerHelper.writeToNetwork(camoContainer));
         nbt.putByte("flags", writeFlags());
     }
 
-    protected boolean readFromDataPacket(CompoundTag nbt)
+    protected boolean readFromDataPacket(CompoundTag nbt, HolderLookup.Provider lookupProvider)
     {
         boolean needUpdate = false;
         boolean needCullingUpdate = false;
@@ -844,13 +849,88 @@ public class FramedBlockEntity extends BlockEntity
     protected void attachAdditionalModelData(ModelData.Builder builder) { }
 
     /*
-     * NBT stuff
+     * Blueprint handling
      */
 
-    public CompoundTag writeToBlueprint(HolderLookup.Provider provider)
+    public final BlueprintData writeToBlueprint()
     {
-        return saveWithoutMetadata(provider);
+        return new BlueprintData(
+                getBlockState().getBlock(),
+                collectCamosForBlueprint(),
+                glowing,
+                intangible,
+                reinforced,
+                collectAuxBlueprintData()
+        );
     }
+
+    protected CamoList collectCamosForBlueprint()
+    {
+        return CamoList.of(camoContainer);
+    }
+
+    protected Optional<AuxBlueprintData<?>> collectAuxBlueprintData()
+    {
+        return Optional.empty();
+    }
+
+    public final void applyBlueprintData(BlueprintData blueprintData)
+    {
+        applyCamosFromBlueprint(blueprintData);
+        setGlowing(blueprintData.glowing());
+        setIntangible(blueprintData.intangible());
+        setReinforced(blueprintData.reinforced());
+        blueprintData.auxData().ifPresent(this::applyAuxDataFromBlueprint);
+    }
+
+    protected void applyCamosFromBlueprint(BlueprintData blueprintData)
+    {
+        setCamo(blueprintData.camos().getCamo(0), false);
+    }
+
+    protected void applyAuxDataFromBlueprint(AuxBlueprintData<?> auxData) { }
+
+    /*
+     * DataComponent handling
+     */
+
+    @Override
+    public void removeComponentsFromTag(CompoundTag tag)
+    {
+        tag.remove("camo");
+    }
+
+    @Override
+    protected final void collectImplicitComponents(DataComponentMap.Builder builder)
+    {
+        collectCamoComponents(builder);
+        collectMiscComponents(builder);
+    }
+
+    protected void collectCamoComponents(DataComponentMap.Builder builder)
+    {
+        builder.set(Utils.DC_TYPE_CAMO_LIST, CamoList.of(camoContainer));
+    }
+
+    protected void collectMiscComponents(DataComponentMap.Builder builder) { }
+
+    @Override
+    protected final void applyImplicitComponents(DataComponentInput input)
+    {
+        applyCamoComponents(input);
+        applyMiscComponents(input);
+    }
+
+    protected void applyCamoComponents(DataComponentInput input)
+    {
+        setCamo(input.getOrDefault(Utils.DC_TYPE_CAMO_LIST, CamoList.EMPTY).getCamo(0), false);
+    }
+
+    protected void applyMiscComponents(DataComponentInput input) { }
+
+    /*
+     * NBT stuff
+     */
 
     @Override
     public void saveAdditional(CompoundTag nbt, HolderLookup.Provider provider)
@@ -864,6 +944,7 @@ public class FramedBlockEntity extends BlockEntity
         super.saveAdditional(nbt, provider);
     }
 
+    @Override
     public void loadAdditional(CompoundTag nbt, HolderLookup.Provider provider)
     {
         super.loadAdditional(nbt, provider);
@@ -874,21 +955,22 @@ public class FramedBlockEntity extends BlockEntity
         reinforced = nbt.getBoolean("reinforced");
     }
 
-    protected CamoContainer<?, ?> loadAndValidateCamo(CompoundTag tag, String key)
+    protected final CamoContainer<?, ?> loadAndValidateCamo(CompoundTag tag, String key)
     {
         CamoContainer<?, ?> camo = CamoContainerHelper.readFromDisk(tag.getCompound(key));
         if (!CamoContainerHelper.validateCamo(camo))
         {
             recheckStates = true;
             LOGGER.warn(
-                    "Framed Block of type \"{}\" at position {} contains an invalid camo of type \"\" containing \"{}\", removing camo! This might be caused by a config or tag change!",
+                    "Framed Block of type \"{}\" at position {} contains an invalid camo of type \"{}\" containing \"{}\", removing camo! This might be caused by a config or tag change!",
                     BuiltInRegistries.BLOCK.getKey(getBlockState().getBlock()),
                     worldPosition,
+                    FramedBlocksAPI.INSTANCE.getCamoContainerFactoryRegistry().getKey(camo.getFactory()),
                     camo.getContent().getCamoId()
             );
             return EmptyCamoContainer.EMPTY;
         }
-        recheckStates = tag.getByte("updated") < DATA_VERSION;
+        recheckStates |= tag.getByte("updated") < DATA_VERSION;
         return camo;
     }
 }

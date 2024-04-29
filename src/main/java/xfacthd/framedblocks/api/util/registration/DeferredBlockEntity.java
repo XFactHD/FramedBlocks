@@ -1,4 +1,4 @@
-package xfacthd.framedblocks.common.util.registration;
+package xfacthd.framedblocks.api.util.registration;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;

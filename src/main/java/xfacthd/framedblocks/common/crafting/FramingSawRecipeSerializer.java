@@ -1,9 +1,10 @@
 package xfacthd.framedblocks.common.crafting;
 
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.DataResult;
+import com.mojang.serialization.*;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 
@@ -11,59 +12,39 @@ import java.util.*;
 
 public final class FramingSawRecipeSerializer implements RecipeSerializer<FramingSawRecipe>
 {
-    private static final Codec<FramingSawRecipe> CODEC = RecordCodecBuilder.create(inst -> inst.group(
+    private static final MapCodec<FramingSawRecipe> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
             Codec.intRange(0, Integer.MAX_VALUE).fieldOf("material").forGetter(FramingSawRecipe::getMaterialAmount),
             FramingSawRecipeAdditive.CODEC.listOf().optionalFieldOf("additives").flatXmap(
                     FramingSawRecipeSerializer::verifyAndMapAdditivesDecode,
                     FramingSawRecipeSerializer::verifyAndMapAdditivesEncode
             ).forGetter(FramingSawRecipe::getAdditives),
-            ItemStack.ITEM_WITH_COUNT_CODEC.fieldOf("result").forGetter(FramingSawRecipe::getResult),
+            ItemStack.STRICT_CODEC.fieldOf("result").forGetter(FramingSawRecipe::getResult),
             Codec.BOOL.optionalFieldOf("disabled").xmap(
                     opt -> opt.orElse(false), flag -> flag ? Optional.of(true) : Optional.empty()
             ).forGetter(FramingSawRecipe::isDisabled)
     ).apply(inst, FramingSawRecipe::new));
+    private static final StreamCodec<RegistryFriendlyByteBuf, FramingSawRecipe> STREAM_CODEC = StreamCodec.composite(
+            ByteBufCodecs.VAR_INT,
+            FramingSawRecipe::getMaterialAmount,
+            FramingSawRecipeAdditive.STREAM_CODEC.apply(ByteBufCodecs.list()),
+            FramingSawRecipe::getAdditives,
+            ItemStack.STREAM_CODEC,
+            FramingSawRecipe::getResult,
+            ByteBufCodecs.BOOL,
+            FramingSawRecipe::isDisabled,
+            FramingSawRecipe::new
+    );
 
     @Override
-    public Codec<FramingSawRecipe> codec()
+    public MapCodec<FramingSawRecipe> codec()
     {
         return CODEC;
     }
 
     @Override
-    public FramingSawRecipe fromNetwork(FriendlyByteBuf buffer)
+    public StreamCodec<RegistryFriendlyByteBuf, FramingSawRecipe> streamCodec()
     {
-        int material = buffer.readInt();
-
-        int count = buffer.readInt();
-        List<FramingSawRecipeAdditive> additives = new ArrayList<>(count);
-        for (int i = 0; i < count; i++)
-        {
-            Ingredient additive = Ingredient.fromNetwork(buffer);
-            int additiveCount = buffer.readInt();
-            additives.add(new FramingSawRecipeAdditive(additive, additiveCount));
-        }
-
-        ItemStack result = buffer.readItem();
-        boolean disabled = buffer.readBoolean();
-
-        return new FramingSawRecipe(material, additives, result, disabled);
-    }
-
-    @Override
-    public void toNetwork(FriendlyByteBuf buffer, FramingSawRecipe recipe)
-    {
-        buffer.writeInt(recipe.getMaterialAmount());
-
-        List<FramingSawRecipeAdditive> additives = recipe.getAdditives();
-        buffer.writeInt(additives.size());
-        for (FramingSawRecipeAdditive additive : additives)
-        {
-            additive.ingredient().toNetwork(buffer);
-            buffer.writeInt(additive.count());
-        }
-
-        buffer.writeItem(recipe.getResult());
-        buffer.writeBoolean(recipe.isDisabled());
+        return STREAM_CODEC;
     }
 
     @SuppressWarnings("OptionalUsedAsFieldOrParameterType")

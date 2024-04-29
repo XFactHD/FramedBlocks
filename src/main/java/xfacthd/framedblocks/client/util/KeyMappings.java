@@ -7,8 +7,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
+import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.common.util.Lazy;
-import net.neoforged.neoforge.event.TickEvent;
 import org.lwjgl.glfw.GLFW;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
@@ -28,10 +28,10 @@ public final class KeyMappings
         );
     }
 
-    public static void onClientTick(final TickEvent.ClientTickEvent event)
+    public static void onClientTick(@SuppressWarnings("unused") final ClientTickEvent.Pre event)
     {
         Level level = Minecraft.getInstance().level;
-        if (event.phase != TickEvent.Phase.START || level == null || Minecraft.getInstance().screen != null)
+        if (level == null || Minecraft.getInstance().screen != null)
         {
             return;
         }
@@ -48,7 +48,8 @@ public final class KeyMappings
                 catch (Throwable throwable)
                 {
                     FramedBlocks.LOGGER.error(
-                            "Encountered unexpected exception while updating culling of " + be.getBlockState().getBlock(),
+                            "Encountered unexpected exception while updating culling of '{}'",
+                            be.getBlockState().getBlock(),
                             throwable
                     );
                 }

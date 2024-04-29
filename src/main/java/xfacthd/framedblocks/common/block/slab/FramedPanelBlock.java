@@ -4,12 +4,10 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.EmptyBlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
@@ -57,11 +55,10 @@ public class FramedPanelBlock extends FramedBlock
             {
                 if (!level.isClientSide())
                 {
-                    Direction newFacing = (facing == Direction.NORTH || facing == Direction.EAST) ? facing : facing.getOpposite();
                     BlockState newState = FBContent.BLOCK_FRAMED_DOUBLE_PANEL.value().defaultBlockState();
 
-                    Utils.wrapInStateCopy(level, pos, player, stack, facing != newFacing, true, () ->
-                            level.setBlockAndUpdate(pos, newState.setValue(FramedProperties.FACING_NE, newFacing))
+                    Utils.wrapInStateCopy(level, pos, player, stack, false, true, () ->
+                            level.setBlockAndUpdate(pos, newState.setValue(FramedProperties.FACING_HOR, facing))
                     );
 
                     SoundType sound = FBContent.BLOCK_FRAMED_CUBE.value().defaultBlockState().getSoundType();

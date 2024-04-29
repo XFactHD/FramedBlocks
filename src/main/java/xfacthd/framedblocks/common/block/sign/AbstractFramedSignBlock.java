@@ -5,13 +5,10 @@ import net.minecraft.core.*;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.contents.PlainTextContents;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
+import net.minecraft.sounds.*;
 import net.minecraft.stats.Stats;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.*;
@@ -22,6 +19,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.Property;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.BlockHitResult;
@@ -55,7 +53,6 @@ public abstract class AbstractFramedSignBlock extends FramedBlock
         builder.add(BlockStateProperties.WATERLOGGED);
     }
 
-    // TODO check sign editing
     @Override
     public ItemInteractionResult useItemOn(
             ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit
@@ -63,13 +60,13 @@ public abstract class AbstractFramedSignBlock extends FramedBlock
     {
         //Makes sure the block can have a camo applied, even when the sign can execute a command
         ItemInteractionResult result = super.useItemOn(stack, state, level, pos, player, hand, hit);
-        if (result != ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION || preventUse(state, level, pos, player, hand, hit))
+        if (result.consumesAction() || preventUse(state, level, pos, player, stack, hit))
         {
             return result;
         }
 
         SignInteraction interaction = SignInteraction.from(stack);
-        boolean canInteract = interaction != null && player.getAbilities().mayBuild;
+        boolean canInteract = interaction != null && player.mayBuild();
 
         if (level.getBlockEntity(pos) instanceof FramedSignBlockEntity sign)
         {
@@ -78,39 +75,55 @@ public abstract class AbstractFramedSignBlock extends FramedBlock
                 return canInteract || sign.isWaxed() ? ItemInteractionResult.SUCCESS : ItemInteractionResult.CONSUME;
             }
 
-            boolean front = sign.isFacingFrontText(player);
-            if (sign.isWaxed() && interaction != SignInteraction.REMOVE_WAX)
+            if (!canInteract || sign.isWaxed() || isBlockedByOtherPlayer(player, sign))
             {
-                if (sign.canExecuteCommands(front, player) && sign.tryExecuteCommands(player, level, pos, front))
-                {
-                    return ItemInteractionResult.SUCCESS;
-                }
                 return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
             }
-            else if (canInteract && notBlockedByOtherPlayer(player, sign) && interaction.interact(level, pos, player, stack, front, sign))
+
+            boolean front = sign.isFacingFrontText(player);
+            if (interaction.interact(level, pos, player, stack, front, sign))
             {
+                player.awardStat(Stats.ITEM_USED.get(stack.getItem()));
+                level.gameEvent(GameEvent.BLOCK_CHANGE, sign.getBlockPos(), GameEvent.Context.of(player, sign.getBlockState()));
                 if (!player.isCreative())
                 {
                     stack.shrink(1);
-                    player.getInventory().setChanged();
                 }
-                player.awardStat(Stats.ITEM_USED.get(stack.getItem()));
 
                 return ItemInteractionResult.SUCCESS;
             }
-            else if (notBlockedByOtherPlayer(player, sign) && canEdit(player, sign, front))
-            {
-                openEditScreen(player, sign, front);
-                return ItemInteractionResult.SUCCESS;
-            }
+
+            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
         }
 
-        return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+        return ItemInteractionResult.SKIP_DEFAULT_BLOCK_INTERACTION;
     }
 
-    protected boolean preventUse(
-            BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit
-    )
+    @Override
+    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit)
+    {
+        if (level.getBlockEntity(pos) instanceof FramedSignBlockEntity sign)
+        {
+            boolean front = sign.isFacingFrontText(player);
+            if (sign.isWaxed())
+            {
+                if (sign.cannotExecuteCommands(front, player) || !sign.tryExecuteCommands(player, level, pos, front))
+                {
+                    level.playSound(null, pos, getSignInteractionFailedSoundEvent(), SoundSource.BLOCKS);
+                }
+                return InteractionResult.SUCCESS;
+            }
+
+            if (!isBlockedByOtherPlayer(player, sign) && canEdit(player, sign, front))
+            {
+                openEditScreen(player, sign, front);
+                return InteractionResult.SUCCESS;
+            }
+        }
+        return InteractionResult.PASS;
+    }
+
+    protected boolean preventUse(BlockState state, Level level, BlockPos pos, Player player, ItemStack stack, BlockHitResult hit)
     {
         return false;
     }
@@ -154,6 +167,11 @@ public abstract class AbstractFramedSignBlock extends FramedBlock
         return 90;
     }
 
+    protected SoundEvent getSignInteractionFailedSoundEvent()
+    {
+        return SoundEvents.WAXED_SIGN_INTERACT_FAIL;
+    }
+
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
     {
@@ -168,10 +186,10 @@ public abstract class AbstractFramedSignBlock extends FramedBlock
 
 
 
-    private static boolean notBlockedByOtherPlayer(Player player, FramedSignBlockEntity sign)
+    private static boolean isBlockedByOtherPlayer(Player player, FramedSignBlockEntity sign)
     {
         UUID uuid = sign.getEditingPlayer();
-        return uuid == null || uuid.equals(player.getUUID());
+        return uuid != null && !uuid.equals(player.getUUID());
     }
 
     private static boolean canEdit(Player player, FramedSignBlockEntity sign, boolean frontText)
@@ -192,17 +210,17 @@ public abstract class AbstractFramedSignBlock extends FramedBlock
 
     private enum SignInteraction
     {
-        APPLY_DYE((level, pos, player, stack, front, sign) ->
+        APPLY_DYE(SignText::hasMessage, (level, pos, player, stack, front, sign) ->
         {
             level.playSound(null, pos, SoundEvents.DYE_USE, SoundSource.BLOCKS, 1.0F, 1.0F);
             return sign.updateText(text -> text.setColor(((DyeItem) stack.getItem()).getDyeColor()), front);
         }),
-        APPLY_INK((level, pos, player, stack, front, sign) ->
+        APPLY_INK(SignText::hasMessage, (level, pos, player, stack, front, sign) ->
         {
             level.playSound(null, pos, SoundEvents.INK_SAC_USE, SoundSource.BLOCKS, 1.0F, 1.0F);
             return sign.updateText(text -> text.setHasGlowingText(false), front);
         }),
-        APPLY_GLOW_INK((level, pos, player, stack, front, sign) ->
+        APPLY_GLOW_INK(SignText::hasMessage, (level, pos, player, stack, front, sign) ->
         {
             level.playSound(null, pos, SoundEvents.GLOW_INK_SAC_USE, SoundSource.BLOCKS, 1.0F, 1.0F);
             if (player instanceof ServerPlayer)
@@ -211,7 +229,7 @@ public abstract class AbstractFramedSignBlock extends FramedBlock
             }
             return sign.updateText(text -> text.setHasGlowingText(true), front);
         }),
-        APPLY_WAX((level, pos, player, stack, front, sign) ->
+        APPLY_WAX((text, player) -> true, (level, pos, player, stack, front, sign) ->
         {
             if (sign.setWaxed(true))
             {
@@ -220,7 +238,7 @@ public abstract class AbstractFramedSignBlock extends FramedBlock
             }
             return false;
         }),
-        REMOVE_WAX((level, pos, player, stack, front, sign) ->
+        REMOVE_WAX(SignText::hasMessage, (level, pos, player, stack, front, sign) ->
         {
             if (sign.setWaxed(false))
             {
@@ -230,10 +248,12 @@ public abstract class AbstractFramedSignBlock extends FramedBlock
             return false;
         });
 
+        private final InteractionPredicate predicate;
         private final Action action;
 
-        SignInteraction(Action action)
+        SignInteraction(InteractionPredicate predicate, Action action)
         {
+            this.predicate = predicate;
             this.action = action;
         }
 
@@ -241,40 +261,32 @@ public abstract class AbstractFramedSignBlock extends FramedBlock
                 Level level, BlockPos pos, Player player, ItemStack stack, boolean front, FramedSignBlockEntity sign
         )
         {
-            return action.apply(level, pos, player, stack, front, sign);
+            return predicate.canInteract(sign.getText(front), player) && action.apply(level, pos, player, stack, front, sign);
         }
 
 
 
         public static SignInteraction from(ItemStack stack)
         {
-            if (stack.getItem() instanceof DyeItem)
+            return switch (stack.getItem())
             {
-                return APPLY_DYE;
-            }
-            else if (stack.is(Items.INK_SAC))
-            {
-                return APPLY_INK;
-            }
-            else if (stack.is(Items.GLOW_INK_SAC))
-            {
-                return APPLY_GLOW_INK;
-            }
-            else if (stack.is(Items.HONEYCOMB))
-            {
-                return APPLY_WAX;
-            }
-            else if (stack.canPerformAction(ToolActions.AXE_WAX_OFF))
-            {
-                return REMOVE_WAX;
-            }
-            return null;
+                case DyeItem ignored -> APPLY_DYE;
+                case InkSacItem ignored -> APPLY_INK;
+                case GlowInkSacItem ignored -> APPLY_GLOW_INK;
+                case HoneycombItem ignored -> APPLY_WAX;
+                default -> stack.canPerformAction(ToolActions.AXE_WAX_OFF) ? REMOVE_WAX : null;
+            };
         }
     }
 
     private interface Action
     {
         boolean apply(Level level, BlockPos pos, Player player, ItemStack stack, boolean front, FramedSignBlockEntity sign);
+    }
+
+    private interface InteractionPredicate
+    {
+        boolean canInteract(SignText text, Player player);
     }
 
     public static final class RotatingSignStateMerger implements StateMerger

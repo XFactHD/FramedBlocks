@@ -9,8 +9,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.Nullable;
-import xfacthd.framedblocks.api.ghost.CamoPair;
 import xfacthd.framedblocks.api.ghost.GhostRenderBehaviour;
+import xfacthd.framedblocks.api.util.CamoList;
 
 public final class DoorGhostRenderBehaviour implements GhostRenderBehaviour
 {
@@ -69,22 +69,15 @@ public final class DoorGhostRenderBehaviour implements GhostRenderBehaviour
     }
 
     @Override
-    public CamoPair readCamo(ItemStack stack, @Nullable ItemStack proxiedStack, int renderPass)
-    {
-        CamoPair pair = GhostRenderBehaviour.super.readCamo(stack, proxiedStack, renderPass);
-        return renderPass == 1 ? pair.swap() : pair;
-    }
-
-    @Override
-    public CamoPair postProcessCamo(
+    public CamoList postProcessCamo(
             ItemStack stack,
             @Nullable ItemStack proxiedStack,
             BlockPlaceContext ctx,
             BlockState renderState,
             int renderPass,
-            CamoPair camo
+            CamoList camo
     )
     {
-        return renderPass == 1 ? camo.swap() : camo;
+        return camo.subList(renderPass, renderPass + 1);
     }
 }

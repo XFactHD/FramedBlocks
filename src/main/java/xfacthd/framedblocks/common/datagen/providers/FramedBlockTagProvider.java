@@ -66,7 +66,6 @@ public final class FramedBlockTagProvider extends BlockTagsProvider
 
         TagsProvider.TagAppender<Block> frameable = tag(Utils.FRAMEABLE).addTags(
                 Tags.Blocks.GLASS_BLOCKS,
-                Tags.Blocks.GLASS_BLOCKS_COLORLESS,
                 BlockTags.ICE,
                 BlockTags.LEAVES
         );

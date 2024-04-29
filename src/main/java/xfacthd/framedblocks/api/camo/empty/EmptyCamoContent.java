@@ -65,6 +65,7 @@ public final class EmptyCamoContent extends CamoContent<EmptyCamoContent>
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public SoundType getSoundType()
     {
         return FramedBlocksAPI.INSTANCE.getDefaultModelState().getSoundType();

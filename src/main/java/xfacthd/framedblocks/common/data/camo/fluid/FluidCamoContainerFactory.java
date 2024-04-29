@@ -1,15 +1,17 @@
 package xfacthd.framedblocks.common.data.camo.fluid;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtUtils;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraft.world.level.material.FluidState;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.FluidType;
@@ -24,22 +26,10 @@ import xfacthd.framedblocks.common.config.ServerConfig;
 
 public final class FluidCamoContainerFactory extends CamoContainerFactory<FluidCamoContainer>
 {
-    private static final Codec<FluidCamoContainer> CODEC = BuiltInRegistries.FLUID.byNameCodec()
-            .xmap(FluidCamoContainer::new, FluidCamoContainer::getFluid);
-
-    @Override // TODO 1.20.5: write raw fluid instead of fluidstate
-    protected void writeToDisk(CompoundTag tag, FluidCamoContainer container)
-    {
-        FluidState fluidState = container.getFluid().defaultFluidState();
-        tag.put("fluid", NbtUtils.writeFluidState(fluidState));
-    }
-
-    @Override // TODO 1.20.5: read raw fluid instead of fluidstate
-    protected FluidCamoContainer readFromDisk(CompoundTag tag)
-    {
-        FluidState fluidState = Utils.readFluidStateFromNbt(tag.getCompound("fluid"));
-        return new FluidCamoContainer(fluidState.getType());
-    }
+    private static final MapCodec<FluidCamoContainer> CODEC = BuiltInRegistries.FLUID.byNameCodec()
+            .xmap(FluidCamoContainer::new, FluidCamoContainer::getFluid).fieldOf("fluid");
+    private static final StreamCodec<RegistryFriendlyByteBuf, FluidCamoContainer> STREAM_CODEC = ByteBufCodecs.registry(Registries.FLUID)
+            .map(FluidCamoContainer::new, FluidCamoContainer::getFluid);
 
     @Override
     protected void writeToNetwork(CompoundTag tag, FluidCamoContainer container)
@@ -164,9 +154,15 @@ public final class FluidCamoContainerFactory extends CamoContainerFactory<FluidC
     }
 
     @Override
-    public Codec<FluidCamoContainer> codec()
+    public MapCodec<FluidCamoContainer> codec()
     {
         return CODEC;
+    }
+
+    @Override
+    public StreamCodec<? super RegistryFriendlyByteBuf, FluidCamoContainer> streamCodec()
+    {
+        return STREAM_CODEC;
     }
 
     @Override

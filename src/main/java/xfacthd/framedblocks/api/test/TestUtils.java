@@ -8,7 +8,6 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.gametest.framework.*;
 import net.minecraft.network.protocol.game.ServerboundPlayerActionPacket;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
@@ -97,7 +96,7 @@ public final class TestUtils
             );
             count++;
 
-            if (result != ItemInteractionResult.SUCCESS)
+            if (!result.consumesAction())
             {
                 helper.fail(String.format(
                         "Camo application on side '%s' of block '%s' failed", side, helper.getBlockState(pos)

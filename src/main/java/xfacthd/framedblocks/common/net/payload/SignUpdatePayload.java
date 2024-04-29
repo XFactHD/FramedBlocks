@@ -3,53 +3,37 @@ package xfacthd.framedblocks.common.net.payload;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.blockentity.special.FramedSignBlockEntity;
+import xfacthd.framedblocks.common.net.FramedByteBufCodecs;
 
 import java.util.List;
 import java.util.stream.Stream;
 
 public record SignUpdatePayload(BlockPos pos, boolean front, String[] lines) implements CustomPacketPayload
 {
-    public static final CustomPacketPayload.Type<SignUpdatePayload> ID = Utils.payloadType("sign_update");
-
-    public static SignUpdatePayload decode(FriendlyByteBuf buffer)
-    {
-        BlockPos pos = buffer.readBlockPos();
-        boolean front = buffer.readBoolean();
-
-        int count = buffer.readByte();
-        String[] lines = new String[count];
-        for (int i = 0; i < count; i++)
-        {
-            lines[i] = buffer.readUtf(384);
-        }
-
-        return new SignUpdatePayload(pos, front, lines);
-    }
-
-    public void write(FriendlyByteBuf buffer)
-    {
-        buffer.writeBlockPos(pos);
-        buffer.writeBoolean(front);
-
-        buffer.writeByte(lines.length);
-        for (String line : lines)
-        {
-            buffer.writeUtf(line);
-        }
-    }
+    public static final CustomPacketPayload.Type<SignUpdatePayload> TYPE = Utils.payloadType("sign_update");
+    public static final StreamCodec<FriendlyByteBuf, SignUpdatePayload> CODEC = StreamCodec.composite(
+            BlockPos.STREAM_CODEC,
+            SignUpdatePayload::pos,
+            ByteBufCodecs.BOOL,
+            SignUpdatePayload::front,
+            FramedByteBufCodecs.array(ByteBufCodecs.stringUtf8(384), String[]::new, 4),
+            SignUpdatePayload::lines,
+            SignUpdatePayload::new
+    );
 
     @Override
     public CustomPacketPayload.Type<SignUpdatePayload> type()
     {
-        return ID;
+        return TYPE;
     }
 
     public void handle(IPayloadContext ctx)

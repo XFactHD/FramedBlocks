@@ -1,6 +1,5 @@
 package xfacthd.framedblocks.common.net.payload;
 
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -13,32 +12,25 @@ import net.neoforged.neoforge.network.handling.IPayloadContext;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.crafting.FramingSawRecipe;
 import xfacthd.framedblocks.common.menu.FramingSawWithEncoderMenu;
-
-import java.util.Arrays;
-import java.util.List;
+import xfacthd.framedblocks.common.net.FramedByteBufCodecs;
 
 public record EncodeFramingSawPatternPayload(int containerId, ResourceLocation recipeId, ItemStack[] inputs) implements CustomPacketPayload
 {
-    public static final CustomPacketPayload.Type<EncodeFramingSawPatternPayload> ID = Utils.payloadType("encode_saw_pattern");
-
-    private static final StreamCodec<RegistryFriendlyByteBuf, List<ItemStack>> STACK_LIST_CODEC = ItemStack.STREAM_CODEC.apply(ByteBufCodecs.list());
-
-    public EncodeFramingSawPatternPayload(RegistryFriendlyByteBuf buf)
-    {
-        this(buf.readInt(), buf.readResourceLocation(), STACK_LIST_CODEC.decode(buf).toArray(new ItemStack[0]));
-    }
-
-    public void write(RegistryFriendlyByteBuf buf)
-    {
-        buf.writeInt(containerId);
-        buf.writeResourceLocation(recipeId);
-        STACK_LIST_CODEC.encode(buf, Arrays.asList(inputs));
-    }
+    public static final CustomPacketPayload.Type<EncodeFramingSawPatternPayload> TYPE = Utils.payloadType("encode_saw_pattern");
+    public static final StreamCodec<RegistryFriendlyByteBuf, EncodeFramingSawPatternPayload> CODEC = StreamCodec.composite(
+            ByteBufCodecs.VAR_INT,
+            EncodeFramingSawPatternPayload::containerId,
+            ResourceLocation.STREAM_CODEC,
+            EncodeFramingSawPatternPayload::recipeId,
+            FramedByteBufCodecs.array(ItemStack.STREAM_CODEC, ItemStack[]::new, FramingSawRecipe.MAX_ADDITIVE_COUNT + 1),
+            EncodeFramingSawPatternPayload::inputs,
+            EncodeFramingSawPatternPayload::new
+    );
 
     @Override
     public CustomPacketPayload.Type<EncodeFramingSawPatternPayload> type()
     {
-        return ID;
+        return TYPE;
     }
 
     public void handle(IPayloadContext ctx)

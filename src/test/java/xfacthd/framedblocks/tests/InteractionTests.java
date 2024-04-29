@@ -35,13 +35,13 @@ public final class InteractionTests
                     TestUtils.assertTrue(
                             helper,
                             POS_ABOVE_FLOOR,
-                            be.getFrontText().getColor() == DyeColor.BLACK,
-                            () -> String.format("Expected sign text color to be 'black', got '%s'", be.getFrontText().getColor())
+                            be.getText(true).getColor() == DyeColor.BLACK,
+                            () -> String.format("Expected sign text color to be 'black', got '%s'", be.getText(true).getColor())
                     );
                     TestUtils.assertTrue(
                             helper,
                             POS_ABOVE_FLOOR,
-                            !be.getFrontText().hasGlowingText(),
+                            !be.getText(true).hasGlowingText(),
                             () -> "Sign text should not be glowing"
                     );
                     TestUtils.assertTrue(
@@ -58,13 +58,13 @@ public final class InteractionTests
                     TestUtils.assertTrue(
                             helper,
                             POS_ABOVE_FLOOR,
-                            be.getFrontText().getColor() == DyeColor.RED,
-                            () -> String.format("Expected sign text color to be 'red', got '%s'", be.getFrontText().getColor())
+                            be.getText(true).getColor() == DyeColor.RED,
+                            () -> String.format("Expected sign text color to be 'red', got '%s'", be.getText(true).getColor())
                     );
                     TestUtils.assertTrue(
                             helper,
                             POS_ABOVE_FLOOR,
-                            !be.getFrontText().hasGlowingText(),
+                            !be.getText(true).hasGlowingText(),
                             () -> "Sign text should not be glowing"
                     );
                     TestUtils.assertTrue(
@@ -81,13 +81,13 @@ public final class InteractionTests
                     TestUtils.assertTrue(
                             helper,
                             POS_ABOVE_FLOOR,
-                            be.getFrontText().getColor() == DyeColor.RED,
-                            () -> String.format("Expected sign text color to be 'red', got '%s'", be.getFrontText().getColor())
+                            be.getText(true).getColor() == DyeColor.RED,
+                            () -> String.format("Expected sign text color to be 'red', got '%s'", be.getText(true).getColor())
                     );
                     TestUtils.assertTrue(
                             helper,
                             POS_ABOVE_FLOOR,
-                            be.getFrontText().hasGlowingText(),
+                            be.getText(true).hasGlowingText(),
                             () -> "Sign text should be glowing"
                     );
                     TestUtils.assertTrue(
@@ -104,13 +104,13 @@ public final class InteractionTests
                     TestUtils.assertTrue(
                             helper,
                             POS_ABOVE_FLOOR,
-                            be.getFrontText().getColor() == DyeColor.RED,
-                            () -> String.format("Expected sign text color to be 'red', got '%s'", be.getFrontText().getColor())
+                            be.getText(true).getColor() == DyeColor.RED,
+                            () -> String.format("Expected sign text color to be 'red', got '%s'", be.getText(true).getColor())
                     );
                     TestUtils.assertTrue(
                             helper,
                             POS_ABOVE_FLOOR,
-                            be.getFrontText().hasGlowingText(),
+                            be.getText(true).hasGlowingText(),
                             () -> "Sign text should be glowing"
                     );
                     TestUtils.assertTrue(
@@ -127,13 +127,13 @@ public final class InteractionTests
                     TestUtils.assertTrue(
                             helper,
                             POS_ABOVE_FLOOR,
-                            be.getFrontText().getColor() == DyeColor.RED,
-                            () -> String.format("Expected sign text color to be 'red', got '%s'", be.getFrontText().getColor())
+                            be.getText(true).getColor() == DyeColor.RED,
+                            () -> String.format("Expected sign text color to be 'red', got '%s'", be.getText(true).getColor())
                     );
                     TestUtils.assertTrue(
                             helper,
                             POS_ABOVE_FLOOR,
-                            be.getFrontText().hasGlowingText(),
+                            be.getText(true).hasGlowingText(),
                             () -> "Sign text should be glowing"
                     );
                     TestUtils.assertTrue(
@@ -263,7 +263,7 @@ public final class InteractionTests
                 () -> helper.setBlock(POS_ABOVE_FLOOR, FBContent.BLOCK_FRAMED_PANEL.value()),
                 () -> TestUtils.clickWithItem(helper, POS_ABOVE_FLOOR, FBContent.BLOCK_FRAMED_PANEL.value(), Direction.SOUTH),
                 () -> helper.assertBlockPresent(FBContent.BLOCK_FRAMED_DOUBLE_PANEL.value(), POS_ABOVE_FLOOR),
-                () -> helper.assertBlockProperty(POS_ABOVE_FLOOR, FramedProperties.FACING_NE, Direction.NORTH),
+                () -> helper.assertBlockProperty(POS_ABOVE_FLOOR, FramedProperties.FACING_HOR, Direction.NORTH),
                 helper::succeed
         ));
     }
@@ -279,7 +279,7 @@ public final class InteractionTests
                 () -> helper.setBlock(POS_ABOVE_FLOOR, state),
                 () -> TestUtils.clickWithItem(helper, POS_ABOVE_FLOOR, FBContent.BLOCK_FRAMED_PANEL.value(), Direction.WEST),
                 () -> helper.assertBlockPresent(FBContent.BLOCK_FRAMED_DOUBLE_PANEL.value(), POS_ABOVE_FLOOR),
-                () -> helper.assertBlockProperty(POS_ABOVE_FLOOR, FramedProperties.FACING_NE, Direction.EAST),
+                () -> helper.assertBlockProperty(POS_ABOVE_FLOOR, FramedProperties.FACING_HOR, Direction.EAST),
                 helper::succeed
         ));
     }

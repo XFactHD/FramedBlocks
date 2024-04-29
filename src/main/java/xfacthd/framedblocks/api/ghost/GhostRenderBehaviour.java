@@ -3,9 +3,6 @@ package xfacthd.framedblocks.api.ghost;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.component.DataComponentType;
-import net.minecraft.core.component.DataComponents;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -21,10 +18,9 @@ import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.FramedBlocksClientAPI;
 import xfacthd.framedblocks.api.block.IFramedBlock;
-import xfacthd.framedblocks.api.camo.CamoContainer;
-import xfacthd.framedblocks.api.camo.CamoContainerHelper;
-import xfacthd.framedblocks.api.camo.empty.EmptyCamoContent;
 import xfacthd.framedblocks.api.model.data.FramedBlockData;
+import xfacthd.framedblocks.api.util.CamoList;
+import xfacthd.framedblocks.api.util.Utils;
 
 import java.util.Objects;
 
@@ -161,46 +157,38 @@ public interface GhostRenderBehaviour
     }
 
     /**
-     * Read and return the camo(s) stored in the given {@link ItemStack} or return {@link CamoPair#EMPTY} if no camos are present.
+     * Read and return the camo(s) stored in the given {@link ItemStack} or return {@link CamoList#EMPTY} if no camos are present.
      *
-     * @param stack The {@link ItemStack} in the players main hand
+     * @param stack        The {@link ItemStack} in the players main hand
      * @param proxiedStack The proxied {@code ItemStack} as returned from {@link GhostRenderBehaviour#getProxiedStack(ItemStack)}
-     * @param renderPass The current render pass index
+     * @param renderPass   The current render pass index
      * @return The camo(s) stored to apply to the rendered block
      */
-    default CamoPair readCamo(ItemStack stack, @Nullable ItemStack proxiedStack, int renderPass)
+    default CamoList readCamo(ItemStack stack, @Nullable ItemStack proxiedStack, int renderPass)
     {
-        //noinspection ConstantConditions
-        var data = stack.get(DataComponents.BLOCK_ENTITY_DATA);
-        if (data != null)
-        {
-            CompoundTag tag = data.getUnsafe().getCompound("camo");
-            CamoContainer<?, ?> camo = CamoContainerHelper.readFromDisk(tag);
-            return new CamoPair(camo.getContent(), EmptyCamoContent.EMPTY);
-        }
-        return CamoPair.EMPTY;
+        return stack.getOrDefault(Utils.DC_TYPE_CAMO_LIST, CamoList.EMPTY);
     }
 
     /**
-     * Post-process the {@link CamoPair} that was previously read from the {@link ItemStack} with the given context.
+     * Post-process the {@link CamoList} that was previously read from the {@link ItemStack} with the given context.
      * Separated from {@link GhostRenderBehaviour#readCamo(ItemStack, ItemStack, int)} to allow the camo to be read
      * by a proxying item while allowing the proxied item to manipulate it according to the context.
      *
-     * @param stack The {@link ItemStack} in the players main hand
+     * @param stack        The {@link ItemStack} in the players main hand
      * @param proxiedStack The proxied {@code ItemStack} as returned from {@link GhostRenderBehaviour#getProxiedStack(ItemStack)}
-     * @param ctx The {@link BlockPlaceContext} to use for determining the resulting
-     * @param renderState The {@code BlockState} to render
-     * @param renderPass The current render pass index
-     * @param camo The {@code CamoPair} previously read by {@link GhostRenderBehaviour#readCamo(ItemStack, ItemStack, int)}
+     * @param ctx          The {@link BlockPlaceContext} to use for determining the resulting
+     * @param renderState  The {@code BlockState} to render
+     * @param renderPass   The current render pass index
+     * @param camo         The {@code CamoPair} previously read by {@link GhostRenderBehaviour#readCamo(ItemStack, ItemStack, int)}
      * @return The {@code CamoPair} with any necessary modifications applied to it
      */
-    default CamoPair postProcessCamo(
+    default CamoList postProcessCamo(
             ItemStack stack,
             @Nullable ItemStack proxiedStack,
             BlockPlaceContext ctx,
             BlockState renderState,
             int renderPass,
-            CamoPair camo
+            CamoList camo
     )
     {
         return camo;
@@ -224,10 +212,10 @@ public interface GhostRenderBehaviour
             BlockPlaceContext ctx,
             BlockState renderState,
             int renderPass,
-            CamoPair camo
+            CamoList camo
     )
     {
-        return ModelData.builder().with(FramedBlockData.PROPERTY, new FramedBlockData(camo.getCamoOne(), false)).build();
+        return ModelData.builder().with(FramedBlockData.PROPERTY, new FramedBlockData(camo.getCamo(0).getContent(), false)).build();
     }
 
     /**

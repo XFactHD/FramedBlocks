@@ -60,8 +60,8 @@ public class FramedSignRenderer implements BlockEntityRenderer<FramedSignBlockEn
 
         poseStack.pushPose();
         applyTransforms(poseStack, -signBlock.getYRotationDegrees(state), state);
-        renderText(pos, signBlock, sign.getFrontText(), poseStack, buffer, light, lineHeight, lineWidth, true);
-        renderText(pos, signBlock, sign.getBackText(), poseStack, buffer, light, lineHeight, lineWidth, false);
+        renderText(pos, signBlock, sign.getText(true), poseStack, buffer, light, lineHeight, lineWidth, true);
+        renderText(pos, signBlock, sign.getText(false), poseStack, buffer, light, lineHeight, lineWidth, false);
         poseStack.popPose();
     }
 
@@ -146,7 +146,7 @@ public class FramedSignRenderer implements BlockEntityRenderer<FramedSignBlockEn
         FormattedCharSequence[] lines = text.getRenderMessages(filter, line ->
         {
             List<FormattedCharSequence> parts = font.split(line, lineWidth);
-            return parts.isEmpty() ? FormattedCharSequence.EMPTY : parts.get(0);
+            return parts.isEmpty() ? FormattedCharSequence.EMPTY : parts.getFirst();
         });
 
         int centerY = 4 * lineHeight / 2;

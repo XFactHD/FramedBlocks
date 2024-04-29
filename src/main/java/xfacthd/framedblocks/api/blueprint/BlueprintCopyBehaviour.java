@@ -1,22 +1,18 @@
 package xfacthd.framedblocks.api.blueprint;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import xfacthd.framedblocks.api.FramedBlocksAPI;
-import xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import xfacthd.framedblocks.api.block.IFramedBlock;
-import xfacthd.framedblocks.api.camo.CamoContainer;
+import xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
+import xfacthd.framedblocks.api.util.CamoList;
 
-import java.util.Optional;
-import java.util.Set;
+import java.util.List;
 
 /**
  * Provide custom behaviours when an {@link IFramedBlock} is copied and/or pasted with the Framed Blueprint
@@ -27,12 +23,6 @@ import java.util.Set;
  */
 public interface BlueprintCopyBehaviour
 {
-    String MAIN_CAMO_KEY = "camo_data";
-    String CAMO_CONTAINER_KEY = "camo";
-    String GLOWSTONE_KEY = "glowing";
-    String INTANGIBLE_KEY = "intangible";
-    String REINFORCEMENT_KEY = "reinforced";
-
     /**
      * Allows semi-custom storage of blueprint data, i.e. storing camo data from a second block like the Framed Door does
      *
@@ -40,15 +30,11 @@ public interface BlueprintCopyBehaviour
      * @param pos The {@link BlockPos} at which the Block to store is placed
      * @param state The {@link BlockState} of the Block to store
      * @param be The {@link FramedBlockEntity} of the Block to store
-     * @param blueprintData The {@link CompoundTag} the camo data is stored in
-     * @return true if the default handling should not be executed
-     * @implNote The main blueprint data ({@link FramedBlockEntity#writeToBlueprint(net.minecraft.core.HolderLookup.Provider)}) must be stored in the tag with the key "camo_data"
+     * @return the {@link BlueprintData} to be stored on the blueprint stack
      */
-    default boolean writeToBlueprint(
-            Level level, BlockPos pos, BlockState state, FramedBlockEntity be, CompoundTag blueprintData
-    )
+    default BlueprintData writeToBlueprint(Level level, BlockPos pos, BlockState state, FramedBlockEntity be)
     {
-        return false;
+        return be.writeToBlueprint();
     }
 
     /**
@@ -56,64 +42,68 @@ public interface BlueprintCopyBehaviour
      * used to place the block. Used by Framed Double Slabs and Framed Double Panels to consume two of the single
      * blocks instead of one double block
      */
-    default Optional<ItemStack> getBlockItem()
+    default ItemStack getBlockItem(BlueprintData data)
     {
-        return Optional.empty();
+        return new ItemStack(data.block());
     }
 
     /**
-     * Provide a custom {@link Set} of {@link CamoContainer}s for item consumption. Used by double blocks and the Framed Door
+     * Provide a custom {@link CamoList} for item consumption. Used by double blocks and the Framed Door
      * to provide two camo containers
      *
-     * @param blueprintData The {@link CompoundTag} containing the full blueprint data (block to place, camo data as
-     *                      written from {@link FramedBlockEntity#writeToBlueprint(net.minecraft.core.HolderLookup.Provider)}, any custom data added in
-     *                      {@link BlueprintCopyBehaviour#writeToBlueprint(Level, BlockPos, BlockState, FramedBlockEntity, CompoundTag)})
-     * @return The Set of CamoContainers to consume when the {@link Block} is placed. The set must contain at least one
-     *         entry when a non-empty optional is returned. The returned set should retain insertion order.
+     * @param data The {@link BlueprintData} stored on the held blueprint stack
+     * @return The List of CamoContainers to consume when the {@link Block} is placed
      */
-    default Optional<Set<CamoContainer<?, ?>>> getCamos(CompoundTag blueprintData)
+    default CamoList getCamos(BlueprintData data)
     {
-        return Optional.empty();
+        return data.camos();
     }
 
     /**
-     * Provide a custom amount of Glowstone to consume when placing the block. Used by Framed Doors to consume the
-     * glowstone used on the second half of the door
+     * Provide a custom amount of Glowstone to consume when placing the block,
+     * i.e. when placing a "multi-block" like doors
      *
-     * @param blueprintData The {@link CompoundTag} containing the full blueprint data (block to place, camo data as
-     *                      written from {@link FramedBlockEntity#writeToBlueprint(net.minecraft.core.HolderLookup.Provider)}, any custom data added in
-     *                      {@link BlueprintCopyBehaviour#writeToBlueprint(Level, BlockPos, BlockState, FramedBlockEntity, CompoundTag)})
+     * @param data The {@link BlueprintData} stored on the held blueprint stack
      * @return The amount of items to consume
      */
-    default int getGlowstoneCount(CompoundTag blueprintData)
+    default int getGlowstoneCount(BlueprintData data)
     {
-        return blueprintData.getCompound(MAIN_CAMO_KEY).getBoolean(GLOWSTONE_KEY) ? 1 : 0;
+        return data.glowing() ? 1 : 0;
     }
 
     /**
-     * Provide a custom amount of the intangibility marker item to consume when placing the block
+     * Provide a custom amount of the intangibility marker item to consume when placing the block,
+     * i.e. when placing a "multi-block" like doors
      *
-     * @param blueprintData The {@link CompoundTag} containing the full blueprint data (block to place, camo data as
-     *                      written from {@link FramedBlockEntity#writeToBlueprint(net.minecraft.core.HolderLookup.Provider)}, any custom data added in
-     *                      {@link BlueprintCopyBehaviour#writeToBlueprint(Level, BlockPos, BlockState, FramedBlockEntity, CompoundTag)})
+     * @param data The {@link BlueprintData} stored on the held blueprint stack
      * @return The amount of items to consume
      */
-    default int getIntangibleCount(CompoundTag blueprintData)
+    default int getIntangibleCount(BlueprintData data)
     {
-        return blueprintData.getCompound(MAIN_CAMO_KEY).getBoolean(INTANGIBLE_KEY) ? 1 : 0;
+        return data.intangible() ? 1 : 0;
     }
 
     /**
-     * Provide a custom amount of the reinforcement item when placing the block
+     * Provide a custom amount of the reinforcement item when placing the block,
+     * i.e. when placing a "multi-block" like doors
      *
-     * @param blueprintData The {@link CompoundTag} containing the full blueprint data (block to place, camo data as
-     *                      written from {@link FramedBlockEntity#writeToBlueprint(net.minecraft.core.HolderLookup.Provider)}, any custom data added in
-     *                      {@link BlueprintCopyBehaviour#writeToBlueprint(Level, BlockPos, BlockState, FramedBlockEntity, CompoundTag)})
+     * @param data The {@link BlueprintData} stored on the held blueprint stack
      * @return The amount of items to consume
      */
-    default int getReinforcementCount(CompoundTag blueprintData)
+    default int getReinforcementCount(BlueprintData data)
     {
-        return blueprintData.getCompound(MAIN_CAMO_KEY).getBoolean(REINFORCEMENT_KEY) ? 1 : 0;
+        return data.reinforced() ? 1 : 0;
+    }
+
+    /**
+     * Add additional materials to be consumed when placing the block
+     *
+     * @param data The {@link BlueprintData} stored on the held blueprint stack
+     * @return The list of additional materials to consume
+     */
+    default List<ItemStack> getAdditionalConsumedMaterials(BlueprintData data)
+    {
+        return List.of();
     }
 
     /**
@@ -123,11 +113,17 @@ public interface BlueprintCopyBehaviour
      * @param level The {@link Level} in which the {@link Block} was placed
      * @param pos The {@link BlockPos} at which the Block was placed
      * @param player The {@link Player} that placed the Block
-     * @param blueprintData The {@link CompoundTag} containing the full blueprint data
+     * @param data The {@link BlueprintData} stored on the held blueprint stack
      * @param dummyStack The dummy {@link ItemStack} used to place the Block
      */
-    default void postProcessPaste(
-            Level level, BlockPos pos, Player player, CompoundTag blueprintData, ItemStack dummyStack
-    )
-    { }
+    default void postProcessPaste(Level level, BlockPos pos, Player player, BlueprintData data, ItemStack dummyStack) { }
+
+    /**
+     * Attach additional data stored in the given {@link BlueprintData} to the given {@link ItemStack}
+     * to be used during placement preview rendering of the blueprint
+     *
+     * @param stack The dummy stack used for preview rendering
+     * @param data The {@link BlueprintData} stored on the held blueprint stack
+     */
+    default void attachDataToDummyRenderStack(ItemStack stack, BlueprintData data) { }
 }

@@ -3,6 +3,9 @@ package xfacthd.framedblocks.common.crafting;
 import com.google.common.base.Preconditions;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -14,6 +17,13 @@ public record FramingSawRecipeAdditive(Ingredient ingredient, int count)
             Ingredient.CODEC_NONEMPTY.fieldOf("ingredient").forGetter(FramingSawRecipeAdditive::ingredient),
             Codec.intRange(0, Integer.MAX_VALUE).fieldOf("count").forGetter(FramingSawRecipeAdditive::count)
     ).apply(inst, FramingSawRecipeAdditive::new));
+    public static final StreamCodec<RegistryFriendlyByteBuf, FramingSawRecipeAdditive> STREAM_CODEC = StreamCodec.composite(
+            Ingredient.CONTENTS_STREAM_CODEC,
+            FramingSawRecipeAdditive::ingredient,
+            ByteBufCodecs.VAR_INT,
+            FramingSawRecipeAdditive::count,
+            FramingSawRecipeAdditive::new
+    );
 
     public FramingSawRecipeAdditive
     {

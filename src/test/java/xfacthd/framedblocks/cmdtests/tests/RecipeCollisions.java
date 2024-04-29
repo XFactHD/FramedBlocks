@@ -66,13 +66,13 @@ public final class RecipeCollisions
                     int srcIdx = destIdx;
                     if (recipe instanceof ShapedRecipe shaped)
                     {
-                        if (x >= shaped.getRecipeWidth())
+                        if (x >= shaped.getWidth())
                         {
                             items.set(destIdx, ItemStack.EMPTY);
                             continue;
                         }
 
-                        srcIdx = x + (y * shaped.getRecipeWidth());
+                        srcIdx = x + (y * shaped.getWidth());
                     }
 
                     if (srcIdx < ingredients.size() && !ingredients.get(srcIdx).isEmpty())

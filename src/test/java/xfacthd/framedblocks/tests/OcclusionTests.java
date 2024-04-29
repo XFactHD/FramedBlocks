@@ -798,7 +798,7 @@ public final class OcclusionTests
     {
         BlockState state = FBContent.BLOCK_FRAMED_DOUBLE_PANEL.value()
                 .defaultBlockState()
-                .setValue(FramedProperties.FACING_NE, Direction.EAST);
+                .setValue(FramedProperties.FACING_HOR, Direction.EAST);
         TestUtils.testDoubleBlockOccludesLightBelow(helper, state, List.of(Direction.EAST, Direction.WEST));
     }
 

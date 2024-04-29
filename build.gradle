@@ -3,7 +3,7 @@ plugins {
     id 'eclipse'
     id 'idea'
     id 'maven-publish'
-    id 'net.neoforged.gradle.userdev' version '7.0.105'
+    id 'net.neoforged.gradle.userdev' version '7.0.107'
 }
 
 version = mod_version
@@ -180,7 +180,7 @@ dependencies {
     compileOnly("me.shedaniel:REIPluginCompatibilities-forge-annotations:${reipcanno_version}")
 
     compileOnly("dev.emi:emi-neoforge:${emi_version}+${emi_mc_version}:api")
-    runtimeOnly("dev.emi:emi-neoforge:${emi_version}+${emi_mc_version}")
+    //runtimeOnly("dev.emi:emi-neoforge:${emi_version}+${emi_mc_version}")
 
     compileOnly("curse.maven:modernfix-790626:5077296")
     //runtimeOnly("org.embeddedt:embeddium-${embeddium_mc_version}:${embeddium_version}")
@@ -236,7 +236,7 @@ tasks.withType(ProcessResources).configureEach {
     ]
     inputs.properties replaceProperties
 
-    filesMatching(['META-INF/mods.toml', 'pack.mcmeta']) {
+    filesMatching(['META-INF/neoforge.mods.toml', 'pack.mcmeta']) {
         expand replaceProperties + [project: project]
     }
 }

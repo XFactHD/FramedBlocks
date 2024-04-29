@@ -1,6 +1,8 @@
 package xfacthd.framedblocks.common.block.sign;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import xfacthd.framedblocks.common.blockentity.special.FramedSignBlockEntity;
@@ -23,6 +25,12 @@ public abstract class AbstractFramedHangingSignBlock extends AbstractFramedSignB
     public int getMaxTextLineWidth()
     {
         return 60;
+    }
+
+    @Override
+    public SoundEvent getSignInteractionFailedSoundEvent()
+    {
+        return SoundEvents.WAXED_HANGING_SIGN_INTERACT_FAIL;
     }
 
     @Override

@@ -1,6 +1,5 @@
 package xfacthd.framedblocks.client.data.ghost;
 
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.state.BlockState;
@@ -8,8 +7,10 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.neoforged.neoforge.client.model.data.ModelData;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.ghost.GhostRenderBehaviour;
+import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.blockentity.special.FramedCollapsibleCopycatBlockEntity;
 import xfacthd.framedblocks.common.data.PropertyHolder;
+import xfacthd.framedblocks.common.data.component.CollapsibleCopycatBlockData;
 
 public final class CollapsibleCopycatBlockGhostRenderBehaviour implements GhostRenderBehaviour
 {
@@ -25,12 +26,10 @@ public final class CollapsibleCopycatBlockGhostRenderBehaviour implements GhostR
     )
     {
         BlockState state = GhostRenderBehaviour.super.getRenderState(stack, proxiedStack, hit, ctx, hitState, renderPass);
-        var beData = stack.get(DataComponents.BLOCK_ENTITY_DATA);
-        //noinspection ConstantConditions
-        if (state != null && beData != null)
+        CollapsibleCopycatBlockData blockData = stack.get(FBContent.DC_TYPE_COLLAPSIBLE_COPYCAT_BLOCK_DATA);
+        if (state != null && blockData != null)
         {
-            int offsets = beData.getUnsafe().getInt("offsets");
-            int solidFaces = FramedCollapsibleCopycatBlockEntity.computeSolidFaces(offsets);
+            int solidFaces = FramedCollapsibleCopycatBlockEntity.computeSolidFaces(blockData.offsets());
             state = state.setValue(PropertyHolder.SOLID_FACES, solidFaces);
         }
         return state;
@@ -46,12 +45,10 @@ public final class CollapsibleCopycatBlockGhostRenderBehaviour implements GhostR
             ModelData data
     )
     {
-        var beData = stack.get(DataComponents.BLOCK_ENTITY_DATA);
-        //noinspection ConstantConditions
-        if (beData != null)
+        CollapsibleCopycatBlockData blockData = stack.get(FBContent.DC_TYPE_COLLAPSIBLE_COPYCAT_BLOCK_DATA);
+        if (blockData != null)
         {
-            int offsets = beData.getUnsafe().getInt("offsets");
-            return data.derive().with(FramedCollapsibleCopycatBlockEntity.OFFSETS, offsets).build();
+            return data.derive().with(FramedCollapsibleCopycatBlockEntity.OFFSETS, blockData.offsets()).build();
         }
         return data;
     }

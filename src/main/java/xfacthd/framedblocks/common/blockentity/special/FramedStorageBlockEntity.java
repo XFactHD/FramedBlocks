@@ -128,17 +128,6 @@ public class FramedStorageBlockEntity extends FramedBlockEntity implements MenuP
         return customName;
     }
 
-
-
-    @Override //Prevent writing inventory contents
-    public CompoundTag writeToBlueprint(HolderLookup.Provider provider)
-    {
-        CompoundTag tag = saveWithoutMetadata(provider);
-        tag.remove("inventory");
-        tag.remove("custom_name");
-        return tag;
-    }
-
     @Override
     public void saveAdditional(CompoundTag nbt, HolderLookup.Provider provider)
     {

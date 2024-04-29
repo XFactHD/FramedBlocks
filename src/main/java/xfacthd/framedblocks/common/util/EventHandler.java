@@ -25,8 +25,6 @@ public final class EventHandler
             if (block.handleBlockLeftClick(state, level, pos, event.getEntity()))
             {
                 event.setCanceled(true);
-                event.setUseBlock(Event.Result.DENY);
-                event.setUseItem(Event.Result.DENY);
 
                 if (FMLEnvironment.dist.isClient() && level.isClientSide())
                 {
@@ -39,8 +37,6 @@ public final class EventHandler
                 if (level.getBlockEntity(pos) instanceof FramedBlockEntity be && be.isIntangible(null))
                 {
                     event.setCanceled(true);
-                    event.setUseBlock(Event.Result.DENY);
-                    event.setUseItem(Event.Result.DENY);
                 }
             }
         }

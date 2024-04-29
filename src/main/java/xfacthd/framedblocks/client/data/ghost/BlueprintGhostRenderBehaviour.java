@@ -1,23 +1,18 @@
 package xfacthd.framedblocks.client.data.ghost;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.neoforged.neoforge.client.model.data.ModelData;
 import org.jetbrains.annotations.Nullable;
-import xfacthd.framedblocks.api.camo.CamoContainer;
-import xfacthd.framedblocks.api.camo.CamoContent;
-import xfacthd.framedblocks.api.camo.empty.EmptyCamoContent;
-import xfacthd.framedblocks.api.ghost.CamoPair;
+import xfacthd.framedblocks.api.blueprint.BlueprintData;
 import xfacthd.framedblocks.api.ghost.GhostRenderBehaviour;
+import xfacthd.framedblocks.api.util.CamoList;
 import xfacthd.framedblocks.client.render.special.GhostBlockRenderer;
+import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.item.FramedBlueprintItem;
-
-import java.util.Iterator;
-import java.util.Set;
 
 public final class BlueprintGhostRenderBehaviour implements GhostRenderBehaviour
 {
@@ -25,18 +20,11 @@ public final class BlueprintGhostRenderBehaviour implements GhostRenderBehaviour
     @Nullable
     public ItemStack getProxiedStack(ItemStack stack)
     {
-        Item item = FramedBlueprintItem.getTargetBlock(stack).asItem();
-        if (item instanceof BlockItem)
+        BlueprintData blueprintData = stack.getOrDefault(FBContent.DC_TYPE_BLUEPRINT_DATA, BlueprintData.EMPTY);
+        if (!blueprintData.isEmpty())
         {
-            ItemStack proxied = new ItemStack(item);
-            //noinspection ConstantConditions
-            if (stack.hasTag() && stack.getTag().contains("blueprint_data"))
-            {
-                proxied.getOrCreateTag().put(
-                        "BlockEntityTag",
-                        stack.getTag().getCompound("blueprint_data").getCompound("camo_data")
-                );
-            }
+            ItemStack proxied = new ItemStack(blueprintData.block());
+            FramedBlueprintItem.getBehaviour(blueprintData.block()).attachDataToDummyRenderStack(proxied, blueprintData);
             return proxied;
         }
         return null;
@@ -109,45 +97,37 @@ public final class BlueprintGhostRenderBehaviour implements GhostRenderBehaviour
     }
 
     @Override
-    public CamoPair readCamo(ItemStack stack, @Nullable ItemStack proxiedStack, int renderPass)
+    public CamoList readCamo(ItemStack stack, @Nullable ItemStack proxiedStack, int renderPass)
     {
-        //noinspection ConstantConditions
-        if (proxiedStack != null && stack.hasTag() && stack.getTag().contains("blueprint_data"))
-        {
-            CompoundTag tag = stack.getOrCreateTagElement("blueprint_data");
-            Set<CamoContainer<?, ?>> camos = FramedBlueprintItem.getCamoContainers((BlockItem) proxiedStack.getItem(), tag);
+        if (proxiedStack == null) return CamoList.EMPTY;
 
-            Iterator<CamoContainer<?, ?>> it = camos.iterator();
-            CamoContent<?> camoState = it.next().getContent();
-            CamoContent<?> camoStateTwo = EmptyCamoContent.EMPTY;
-            if (it.hasNext())
-            {
-                camoStateTwo = it.next().getContent();
-            }
-            return new CamoPair(camoState, camoStateTwo);
+        BlueprintData blueprintData = stack.getOrDefault(FBContent.DC_TYPE_BLUEPRINT_DATA, BlueprintData.EMPTY);
+        if (!blueprintData.isEmpty())
+        {
+            return FramedBlueprintItem.getCamoContainers(blueprintData);
         }
-        return CamoPair.EMPTY;
+        return CamoList.EMPTY;
     }
 
     @Override
-    public CamoPair postProcessCamo(
+    public CamoList postProcessCamo(
             ItemStack stack,
             @Nullable ItemStack proxiedStack,
             BlockPlaceContext ctx,
             BlockState renderState,
             int renderPass,
-            CamoPair camo
+            CamoList camo
     )
     {
         if (proxiedStack == null)
         {
-            return CamoPair.EMPTY;
+            return CamoList.EMPTY;
         }
         return proxyBehaviour(proxiedStack).postProcessCamo(proxiedStack, null, ctx, renderState, renderPass, camo);
     }
 
     @Override
-    public ModelData buildModelData(ItemStack stack, ItemStack proxiedStack, BlockPlaceContext ctx, BlockState renderState, int renderPass, CamoPair camo)
+    public ModelData buildModelData(ItemStack stack, ItemStack proxiedStack, BlockPlaceContext ctx, BlockState renderState, int renderPass, CamoList camo)
     {
         if (proxiedStack == null)
         {

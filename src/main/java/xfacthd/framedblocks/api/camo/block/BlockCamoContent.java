@@ -79,6 +79,7 @@ public final class BlockCamoContent extends CamoContent<BlockCamoContent>
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public SoundType getSoundType()
     {
         return state.getSoundType();

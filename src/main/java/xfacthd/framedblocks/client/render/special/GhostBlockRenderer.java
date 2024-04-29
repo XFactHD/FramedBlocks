@@ -20,7 +20,6 @@ import net.minecraft.world.phys.*;
 import net.neoforged.neoforge.client.NeoForgeRenderTypes;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 import net.neoforged.neoforge.client.model.data.ModelData;
-import xfacthd.framedblocks.api.ghost.CamoPair;
 import xfacthd.framedblocks.api.ghost.GhostRenderBehaviour;
 import xfacthd.framedblocks.api.model.util.ModelUtils;
 import xfacthd.framedblocks.api.util.*;
@@ -148,7 +147,7 @@ public final class GhostBlockRenderer
         profiler.pop(); //can_render
 
         profiler.push("get_camo");
-        CamoPair camo = behaviour.readCamo(stack, proxiedStack, renderPass);
+        CamoList camo = behaviour.readCamo(stack, proxiedStack, renderPass);
         camo = behaviour.postProcessCamo(stack, proxiedStack, context, renderState, renderPass, camo);
         profiler.popPush("build_modeldata"); //get_camo
         ModelData modelData = behaviour.buildModelData(stack, proxiedStack, context, renderState, renderPass, camo);

@@ -20,7 +20,7 @@ public class FramedDoublePanelBlockEntity extends FramedDoubleBlockEntity
     @Override
     protected boolean hitSecondary(BlockHitResult hit)
     {
-        Direction facing = getBlockState().getValue(FramedProperties.FACING_NE);
+        Direction facing = getBlockState().getValue(FramedProperties.FACING_HOR);
         Direction side = hit.getDirection();
         Vec3 vec = Utils.fraction(hit.getLocation());
 

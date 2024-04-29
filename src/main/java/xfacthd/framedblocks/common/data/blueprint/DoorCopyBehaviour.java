@@ -1,58 +1,52 @@
 package xfacthd.framedblocks.common.data.blueprint;
 
-import it.unimi.dsi.fastutil.objects.ObjectArraySet;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import xfacthd.framedblocks.api.blueprint.BlueprintCopyBehaviour;
-import xfacthd.framedblocks.api.camo.CamoContainer;
-import xfacthd.framedblocks.api.camo.CamoContainerHelper;
-
-import java.util.*;
+import xfacthd.framedblocks.api.blueprint.BlueprintData;
+import xfacthd.framedblocks.api.util.CamoList;
+import xfacthd.framedblocks.common.block.door.FramedDoorBlock;
+import xfacthd.framedblocks.common.data.blueprint.auxdata.DoorAuxBlueprintData;
 
 public final class DoorCopyBehaviour implements BlueprintCopyBehaviour
 {
-    private static final String SECOND_CAMO_KEY = "camo_data_two";
-
     @Override
-    public boolean writeToBlueprint(
-            Level level, BlockPos pos, BlockState state, FramedBlockEntity be, CompoundTag blueprintData
-    )
+    public BlueprintData writeToBlueprint(Level level, BlockPos pos, BlockState state, FramedBlockEntity be)
     {
         boolean top = state.getValue(BlockStateProperties.DOUBLE_BLOCK_HALF) == DoubleBlockHalf.UPPER;
         BlockPos posTwo = top ? pos.below() : pos.above();
 
-        CompoundTag nbtOne = be.writeToBlueprint();
-        CompoundTag nbtTwo = level.getBlockEntity(posTwo) instanceof FramedBlockEntity beTwo ? beTwo.writeToBlueprint() : new CompoundTag();
+        BlueprintData dataOne = be.writeToBlueprint();
+        BlueprintData dataTwo = BlueprintData.EMPTY;
+        if (getSecondBlockEntity(level, posTwo) instanceof FramedBlockEntity beTwo)
+        {
+            dataTwo = beTwo.writeToBlueprint();
+        }
 
-        blueprintData.put(MAIN_CAMO_KEY, top ? nbtTwo : nbtOne);
-        blueprintData.put(SECOND_CAMO_KEY, top ? nbtOne : nbtTwo);
-
-        return true;
+        BlueprintData mainData = top ? dataTwo : dataOne;
+        BlueprintData secData = top ? dataOne : dataTwo;
+        return mainData.withAuxData(new DoorAuxBlueprintData(secData));
     }
 
     @Override
-    public Optional<Set<CamoContainer<?, ?>>> getCamos(CompoundTag blueprintData)
+    public CamoList getCamos(BlueprintData data)
     {
-        Set<CamoContainer<?, ?>> camos = new ObjectArraySet<>(2);
-        camos.add(CamoContainerHelper.readFromDisk(blueprintData.getCompound(MAIN_CAMO_KEY).getCompound(CAMO_CONTAINER_KEY)));
-        camos.add(CamoContainerHelper.readFromDisk(blueprintData.getCompound(SECOND_CAMO_KEY).getCompound(CAMO_CONTAINER_KEY)));
-        return Optional.of(camos);
+        BlueprintData secData = getSecondData(data);
+        return data.camos().concat(secData.camos());
     }
 
     @Override
-    public int getGlowstoneCount(CompoundTag blueprintData)
+    public int getGlowstoneCount(BlueprintData data)
     {
-        int count = BlueprintCopyBehaviour.super.getGlowstoneCount(blueprintData);
-        if (blueprintData.getCompound(SECOND_CAMO_KEY).getBoolean(GLOWSTONE_KEY))
+        int count = BlueprintCopyBehaviour.super.getGlowstoneCount(data);
+        if (getSecondData(data).glowing())
         {
             count++;
         }
@@ -60,25 +54,47 @@ public final class DoorCopyBehaviour implements BlueprintCopyBehaviour
     }
 
     @Override
-    public int getIntangibleCount(CompoundTag blueprintData)
+    public int getIntangibleCount(BlueprintData data)
     {
         // Doors don't support intangibility
         return 0;
     }
 
     @Override
-    public void postProcessPaste(
-            Level level, BlockPos pos, Player player, CompoundTag blueprintData, ItemStack dummyStack
-    )
+    public int getReinforcementCount(BlueprintData data)
     {
-        if (!blueprintData.contains(SECOND_CAMO_KEY, Tag.TAG_COMPOUND)) { return; }
+        int count = BlueprintCopyBehaviour.super.getReinforcementCount(data);
+        if (getSecondData(data).reinforced())
+        {
+            count++;
+        }
+        return count;
+    }
+
+    @Override
+    public void postProcessPaste(Level level, BlockPos pos, Player player, BlueprintData data, ItemStack dummyStack)
+    {
+        BlueprintData secData = getSecondData(data);
+        if (secData.isEmpty()) return;
 
         BlockPos topPos = pos.above();
-        if (level.getBlockEntity(topPos) instanceof FramedBlockEntity)
+        if (getSecondBlockEntity(level, topPos) instanceof FramedBlockEntity be)
         {
-            //noinspection ConstantConditions
-            dummyStack.getOrCreateTag().put("BlockEntityTag", blueprintData.get(SECOND_CAMO_KEY));
-            BlockItem.updateCustomBlockEntityTag(level, player, topPos, dummyStack);
+            be.applyBlueprintData(secData);
         }
+    }
+
+    private static BlockEntity getSecondBlockEntity(Level level, BlockPos pos)
+    {
+        if (level.getBlockState(pos).getBlock() instanceof FramedDoorBlock)
+        {
+            return level.getBlockEntity(pos);
+        }
+        return null;
+    }
+
+    public static BlueprintData getSecondData(BlueprintData blueprintData)
+    {
+        return blueprintData.getAuxDataOrDefault(DoorAuxBlueprintData.EMPTY).data();
     }
 }

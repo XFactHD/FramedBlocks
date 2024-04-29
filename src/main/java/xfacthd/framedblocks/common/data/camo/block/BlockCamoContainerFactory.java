@@ -1,10 +1,13 @@
 package xfacthd.framedblocks.common.data.camo.block;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+import io.netty.buffer.ByteBuf;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtUtils;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.*;
@@ -18,22 +21,13 @@ import xfacthd.framedblocks.api.util.*;
 
 public final class BlockCamoContainerFactory extends AbstractBlockCamoContainerFactory<BlockCamoContainer>
 {
-    private static final Codec<BlockCamoContainer> CODEC = BlockState.CODEC.xmap(BlockCamoContainer::new, BlockCamoContainer::getState);
+    private static final MapCodec<BlockCamoContainer> CODEC = BlockState.CODEC
+            .xmap(BlockCamoContainer::new, BlockCamoContainer::getState).fieldOf("state");
+    @SuppressWarnings("deprecation")
+    private static final StreamCodec<ByteBuf, BlockCamoContainer> STREAM_CODEC = ByteBufCodecs.idMapper(Block.BLOCK_STATE_REGISTRY)
+            .map(BlockCamoContainer::new, BlockCamoContainer::getState);
     public static final Component MSG_BLOCK_ENTITY = Utils.translate("msg", "camo.block_entity");
     public static final Component MSG_NON_SOLID = Utils.translate("msg", "camo.non_solid");
-
-    @Override
-    protected void writeToDisk(CompoundTag tag, BlockCamoContainer container)
-    {
-        tag.put("state", NbtUtils.writeBlockState(container.getState()));
-    }
-
-    @Override
-    protected BlockCamoContainer readFromDisk(CompoundTag tag)
-    {
-        BlockState state = NbtUtils.readBlockState(Utils.getBlockHolderLookup(null), tag.getCompound("state"));
-        return new BlockCamoContainer(state);
-    }
 
     @Override
     protected void writeToNetwork(CompoundTag tag, BlockCamoContainer container)
@@ -106,9 +100,15 @@ public final class BlockCamoContainerFactory extends AbstractBlockCamoContainerF
     }
 
     @Override
-    public Codec<BlockCamoContainer> codec()
+    public MapCodec<BlockCamoContainer> codec()
     {
         return CODEC;
+    }
+
+    @Override
+    public StreamCodec<? super RegistryFriendlyByteBuf, BlockCamoContainer> streamCodec()
+    {
+        return STREAM_CODEC;
     }
 
     @Override

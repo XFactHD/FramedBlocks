@@ -92,15 +92,6 @@ public class FramedChiseledBookshelfBlockEntity extends FramedBlockEntity
         return lastInteractedSlot + 1;
     }
 
-    @Override //Prevent writing inventory contents
-    public CompoundTag writeToBlueprint(HolderLookup.Provider provider)
-    {
-        CompoundTag tag = saveWithoutMetadata(provider);
-        tag.remove("inventory");
-        tag.remove("last_slot");
-        return tag;
-    }
-
     @Override
     public void saveAdditional(CompoundTag nbt, HolderLookup.Provider provider)
     {

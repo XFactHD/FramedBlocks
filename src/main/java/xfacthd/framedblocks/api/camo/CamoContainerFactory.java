@@ -1,10 +1,11 @@
 package xfacthd.framedblocks.api.camo;
 
-import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -15,22 +16,6 @@ import xfacthd.framedblocks.api.util.*;
 public abstract class CamoContainerFactory<T extends CamoContainer<?, T>>
 {
     public static final Component MSG_BLACKLISTED = Utils.translate("msg", "camo.blacklisted");
-
-    /**
-     * Save the given {@link CamoContainer} to the given {@link CompoundTag} for saving to disk.
-     *
-     * @apiNote Must be called via {@link CamoContainerHelper#writeToDisk(CamoContainer)}
-     */
-    @ApiStatus.OverrideOnly
-    protected abstract void writeToDisk(CompoundTag tag, T container);
-
-    /**
-     * Reconstruct the {@link CamoContainer} from the given {@link CompoundTag} from disk
-     *
-     * @apiNote Must be called via {@link CamoContainerHelper#readFromDisk(CompoundTag)}
-     */
-    @ApiStatus.OverrideOnly
-    protected abstract T readFromDisk(CompoundTag tag);
 
     /**
      * Save the given the {@link CamoContainer} to the given {@link CompoundTag} for sync over the network
@@ -101,14 +86,14 @@ public abstract class CamoContainerFactory<T extends CamoContainer<?, T>>
     }
 
     /**
-     * {@return A {@link Codec} for reading and writing the {@link CamoContainer}}
+     * {@return A {@link MapCodec} for reading and writing the {@link CamoContainer}}
      */
-    public abstract Codec<T> codec();
+    public abstract MapCodec<T> codec();
 
-    /* *
+    /**
      * {@return A {@link StreamCodec} for reading and writing the {@link CamoContainer} from and to network packets}
      */
-    //public abstract StreamCodec<RegistryFriendlyByteBuf, T> streamCodec();
+    public abstract StreamCodec<? super RegistryFriendlyByteBuf, T> streamCodec();
 
     /**
      * Called at startup to capture all items for which this factory should be used to apply and remove

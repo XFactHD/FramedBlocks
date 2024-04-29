@@ -1,11 +1,10 @@
 package xfacthd.framedblocks;
 
 import com.mojang.logging.LogUtils;
+import net.neoforged.fml.*;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.AddReloadListenerEvent;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.fml.CrashReportCallables;
-import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -37,11 +36,11 @@ public final class FramedBlocks
 {
     public static final Logger LOGGER = LogUtils.getLogger();
 
-    public FramedBlocks(IEventBus modBus)
+    public FramedBlocks(IEventBus modBus, ModContainer modContainer)
     {
         FBContent.init(modBus);
-        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ClientConfig.create(modBus));
-        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, ServerConfig.create(modBus));
+        modContainer.registerConfig(ModConfig.Type.CLIENT, ClientConfig.create(modBus));
+        modContainer.registerConfig(ModConfig.Type.SERVER, ServerConfig.create(modBus));
 
         modBus.addListener(CapabilitySetup::onRegisterCapabilities);
         modBus.addListener(FramedBlocks::onCommonSetup);

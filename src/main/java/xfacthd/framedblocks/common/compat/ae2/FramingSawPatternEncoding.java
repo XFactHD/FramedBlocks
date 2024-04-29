@@ -6,6 +6,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.*;
+import net.minecraft.world.level.Level;
 import xfacthd.framedblocks.api.util.Utils;
 
 import java.util.function.BiConsumer;
@@ -44,7 +45,8 @@ final class FramingSawPatternEncoding
         ItemStack[] additives = new ItemStack[count];
         for (int i = 0; i < additives.length; i++)
         {
-            additives[i] = ItemStack.of(list.getCompound(i));
+            // FIXME: adapt to whatever AE2 uses to store encoded patterns
+            //additives[i] = ItemStack.of(list.getCompound(i));
         }
         return additives;
     }
@@ -58,16 +60,18 @@ final class FramingSawPatternEncoding
 
         for (int i = 0; i < list.size(); i++)
         {
-            ItemStack stack = ItemStack.of(list.getCompound(i));
+            // FIXME: adapt to whatever AE2 uses to store encoded patterns
+            /*ItemStack stack = ItemStack.of(list.getCompound(i));
             if (stack.isEmpty()) continue;
 
-            tooltip.accept(AEItemKey.of(stack), (long) stack.getCount());
+            tooltip.accept(AEItemKey.of(stack), (long) stack.getCount());*/
         }
     }
 
-    public static void encodeFramingSawPattern(CompoundTag tag, ItemStack input, ItemStack[] additives, ItemStack output)
+    public static void encodeFramingSawPattern(Level level, ItemStack stack, ItemStack input, ItemStack[] additives, ItemStack output)
     {
-        tag.putString(KEY_INPUT, Utils.getKeyOrThrow(input.getItemHolder()).location().toString());
+        // FIXME: adapt to whatever AE2 uses to store encoded patterns
+        /*tag.putString(KEY_INPUT, Utils.getKeyOrThrow(input.getItemHolder()).location().toString());
         if (additives.length > 0)
         {
             ListTag list = new ListTag();
@@ -77,7 +81,7 @@ final class FramingSawPatternEncoding
             }
             tag.put(KEY_ADDITIVES, list);
         }
-        tag.putString(KEY_RESULT, Utils.getKeyOrThrow(output.getItemHolder()).location().toString());
+        tag.putString(KEY_RESULT, Utils.getKeyOrThrow(output.getItemHolder()).location().toString());*/
     }
 
 

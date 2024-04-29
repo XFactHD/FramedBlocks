@@ -10,7 +10,7 @@ public final class DoublePanelFullFacePredicate implements FullFacePredicate
     @Override
     public boolean test(BlockState state, Direction side)
     {
-        Direction facing = state.getValue(FramedProperties.FACING_NE);
+        Direction facing = state.getValue(FramedProperties.FACING_HOR);
         return side == facing || side == facing.getOpposite();
     }
 }

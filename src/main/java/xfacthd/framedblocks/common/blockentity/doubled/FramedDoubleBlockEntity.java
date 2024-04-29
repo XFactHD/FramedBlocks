@@ -2,6 +2,7 @@ package xfacthd.framedblocks.common.blockentity.doubled;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.util.Tuple;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -20,11 +21,12 @@ import net.neoforged.fml.loading.FMLEnvironment;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import xfacthd.framedblocks.api.block.blockentity.IFramedDoubleBlockEntity;
+import xfacthd.framedblocks.api.blueprint.BlueprintData;
 import xfacthd.framedblocks.api.camo.*;
 import xfacthd.framedblocks.api.camo.empty.EmptyCamoContainer;
 import xfacthd.framedblocks.api.model.data.FramedBlockData;
-import xfacthd.framedblocks.api.util.ClientUtils;
-import xfacthd.framedblocks.api.util.TestProperties;
+import xfacthd.framedblocks.api.util.*;
+import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.*;
 import xfacthd.framedblocks.common.data.doubleblock.DoubleBlockStateCache;
 import xfacthd.framedblocks.common.data.doubleblock.DoubleBlockSoundType;
@@ -354,15 +356,15 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity implemen
      */
 
     @Override
-    protected void writeToDataPacket(CompoundTag nbt)
+    protected void writeToDataPacket(CompoundTag nbt, HolderLookup.Provider lookupProvider)
     {
-        super.writeToDataPacket(nbt);
+        super.writeToDataPacket(nbt, lookupProvider);
 
         nbt.put("camo_two", CamoContainerHelper.writeToNetwork(camoContainer));
     }
 
     @Override
-    protected boolean readFromDataPacket(CompoundTag nbt)
+    protected boolean readFromDataPacket(CompoundTag nbt, HolderLookup.Provider lookupProvider)
     {
         boolean needUpdate = false;
         CamoContainer<?, ?> newCamo = CamoContainerHelper.readFromNetwork(nbt.getCompound("camo_two"));
@@ -379,7 +381,7 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity implemen
             updateCulling(true, false);
         }
 
-        return super.readFromDataPacket(nbt) || needUpdate;
+        return super.readFromDataPacket(nbt, lookupProvider) || needUpdate;
     }
 
     @Override
@@ -418,6 +420,47 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity implemen
                 .with(DATA_LEFT, super.getModelData(includeCullInfo))
                 .with(DATA_RIGHT, ModelData.builder().with(FramedBlockData.PROPERTY, modelData).build())
                 .build();
+    }
+
+    /*
+     * Blueprint handling
+     */
+
+    @Override
+    protected CamoList collectCamosForBlueprint()
+    {
+        return CamoList.of(getCamo(), camoContainer);
+    }
+
+    @Override
+    protected void applyCamosFromBlueprint(BlueprintData blueprintData)
+    {
+        super.applyCamosFromBlueprint(blueprintData);
+        setCamo(blueprintData.camos().getCamo(1), true);
+    }
+
+    /*
+     * DataComponent handling
+     */
+
+    @Override
+    public void removeComponentsFromTag(CompoundTag tag)
+    {
+        super.removeComponentsFromTag(tag);
+        tag.remove("camo_two");
+    }
+
+    @Override
+    protected void collectCamoComponents(DataComponentMap.Builder builder)
+    {
+        builder.set(FBContent.DC_TYPE_CAMO_LIST, CamoList.of(getCamo(), camoContainer));
+    }
+
+    @Override
+    protected void applyCamoComponents(DataComponentInput input)
+    {
+        super.applyCamoComponents(input);
+        setCamo(input.getOrDefault(Utils.DC_TYPE_CAMO_LIST, CamoList.EMPTY).getCamo(1), true);
     }
 
     /*

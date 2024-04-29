@@ -4,12 +4,10 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -38,6 +36,7 @@ import xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import xfacthd.framedblocks.api.block.cache.IStateCacheAccessor;
 import xfacthd.framedblocks.api.block.cache.StateCache;
 import xfacthd.framedblocks.api.block.render.*;
+import xfacthd.framedblocks.api.blueprint.BlueprintData;
 import xfacthd.framedblocks.api.camo.*;
 import xfacthd.framedblocks.api.internal.InternalAPI;
 import xfacthd.framedblocks.api.predicate.cull.SideSkipPredicate;
@@ -616,9 +615,9 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension
         return new FramedBlockEntity(pos, state);
     }
 
-    default Optional<MutableComponent> printCamoBlock(CompoundTag beTag)
+    default Optional<MutableComponent> printCamoBlock(BlueprintData blueprintData)
     {
-        CamoContainer<?, ?> camoContent = CamoContainerHelper.readFromDisk(beTag.getCompound("camo"));
+        CamoContainer<?, ?> camoContent = blueprintData.camos().getCamo(0);
 
         if (camoContent.isEmpty())
         {

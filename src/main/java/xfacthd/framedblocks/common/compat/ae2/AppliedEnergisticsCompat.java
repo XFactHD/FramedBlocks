@@ -6,6 +6,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModList;
 import net.neoforged.neoforge.attachment.AttachmentType;
@@ -59,11 +60,11 @@ public final class AppliedEnergisticsCompat
         return false;
     }
 
-    public static ItemStack tryEncodePattern(ItemStack input, ItemStack[] additives, ItemStack output)
+    public static ItemStack tryEncodePattern(Level level, ItemStack input, ItemStack[] additives, ItemStack output)
     {
         if (loaded)
         {
-            return GuardedAccess.tryEncodePattern(input, additives, output);
+            return GuardedAccess.tryEncodePattern(level, input, additives, output);
         }
         return null;
     }
@@ -117,10 +118,10 @@ public final class AppliedEnergisticsCompat
             return stack.is(encoded ? ITEM_FRAMING_SAW_PATTERN : ITEM_BLANK_PATTERN);
         }
 
-        public static ItemStack tryEncodePattern(ItemStack input, ItemStack[] additives, ItemStack output)
+        public static ItemStack tryEncodePattern(Level level, ItemStack input, ItemStack[] additives, ItemStack output)
         {
             ItemStack stack = new ItemStack(AppliedEnergisticsCompat.GuardedAccess.ITEM_FRAMING_SAW_PATTERN);
-            FramingSawPatternEncoding.encodeFramingSawPattern(stack.getOrCreateTag(), input, additives, output);
+            FramingSawPatternEncoding.encodeFramingSawPattern(level, stack, input, additives, output);
             return stack;
         }
 

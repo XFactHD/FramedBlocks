@@ -14,6 +14,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.phys.HitResult;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedProperties;
+import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
 import xfacthd.framedblocks.common.data.BlockType;
@@ -33,15 +34,14 @@ public class FramedDoublePanelBlock extends AbstractFramedDoubleBlock
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        builder.add(FramedProperties.FACING_NE);
+        builder.add(FramedProperties.FACING_HOR);
     }
 
     @Override //Used by the blueprint
     public BlockState getStateForPlacement(BlockPlaceContext context)
     {
         Direction dir = context.getHorizontalDirection();
-        if (dir == Direction.SOUTH || dir == Direction.WEST) { dir = dir.getOpposite(); }
-        return defaultBlockState().setValue(FramedProperties.FACING_NE, dir);
+        return defaultBlockState().setValue(FramedProperties.FACING_HOR, dir);
     }
 
     @Override
@@ -54,19 +54,21 @@ public class FramedDoublePanelBlock extends AbstractFramedDoubleBlock
     @SuppressWarnings("deprecation")
     public BlockState rotate(BlockState state, Rotation rot)
     {
-        if (rot == Rotation.NONE || rot == Rotation.CLOCKWISE_180)
-        {
-            return state;
-        }
-        Direction dir = state.getValue(FramedProperties.FACING_NE);
-        dir = dir == Direction.NORTH ? Direction.EAST : Direction.NORTH;
-        return state.setValue(FramedProperties.FACING_NE, dir);
+        Direction dir = state.getValue(FramedProperties.FACING_HOR);
+        return state.setValue(FramedProperties.FACING_HOR, rot.rotate(dir));
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    protected BlockState mirror(BlockState state, Mirror mirror)
+    {
+        return Utils.mirrorFaceBlock(state, mirror);
     }
 
     @Override
     public Tuple<BlockState, BlockState> calculateBlockPair(BlockState state)
     {
-        Direction facing = state.getValue(FramedProperties.FACING_NE);
+        Direction facing = state.getValue(FramedProperties.FACING_HOR);
 
         BlockState defState = FBContent.BLOCK_FRAMED_PANEL.value().defaultBlockState();
         return new Tuple<>(
@@ -84,7 +86,7 @@ public class FramedDoublePanelBlock extends AbstractFramedDoubleBlock
     @Override
     public CamoGetter calculateCamoGetter(BlockState state, Direction side, @Nullable Direction edge)
     {
-        Direction facing = state.getValue(FramedProperties.FACING_NE);
+        Direction facing = state.getValue(FramedProperties.FACING_HOR);
         boolean notFacingAxis = side.getAxis() != facing.getAxis();
         if (side == facing || (notFacingAxis && edge == facing))
         {
@@ -100,7 +102,7 @@ public class FramedDoublePanelBlock extends AbstractFramedDoubleBlock
     @Override
     public SolidityCheck calculateSolidityCheck(BlockState state, Direction side)
     {
-        Direction facing = state.getValue(FramedProperties.FACING_NE);
+        Direction facing = state.getValue(FramedProperties.FACING_HOR);
         if (side == facing)
         {
             return SolidityCheck.FIRST;

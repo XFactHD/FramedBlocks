@@ -1,6 +1,7 @@
 package xfacthd.framedblocks.common.blockentity.special;
 
 import net.minecraft.core.*;
+import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
@@ -11,10 +12,14 @@ import net.neoforged.neoforge.client.model.data.ModelData;
 import net.neoforged.neoforge.client.model.data.ModelProperty;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
+import xfacthd.framedblocks.api.blueprint.AuxBlueprintData;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
+import xfacthd.framedblocks.common.data.component.CollapsibleBlockData;
 import xfacthd.framedblocks.common.data.property.NullableDirection;
 import xfacthd.framedblocks.common.data.PropertyHolder;
+
+import java.util.Optional;
 
 public class FramedCollapsibleBlockEntity extends FramedBlockEntity
 {
@@ -211,17 +216,17 @@ public class FramedCollapsibleBlockEntity extends FramedBlockEntity
     }
 
     @Override
-    protected void writeToDataPacket(CompoundTag nbt)
+    protected void writeToDataPacket(CompoundTag nbt, HolderLookup.Provider lookupProvider)
     {
-        super.writeToDataPacket(nbt);
+        super.writeToDataPacket(nbt, lookupProvider);
         nbt.putInt("offsets", packOffsets(vertexOffsets));
         nbt.putByte("face", (byte) (collapsedFace == null ? -1 : collapsedFace.get3DDataValue()));
     }
 
     @Override
-    protected boolean readFromDataPacket(CompoundTag nbt)
+    protected boolean readFromDataPacket(CompoundTag nbt, HolderLookup.Provider lookupProvider)
     {
-        boolean needUpdate = super.readFromDataPacket(nbt);
+        boolean needUpdate = super.readFromDataPacket(nbt, lookupProvider);
 
         int packed = nbt.getInt("offsets");
         if (packed != packedOffsets)
@@ -263,6 +268,41 @@ public class FramedCollapsibleBlockEntity extends FramedBlockEntity
         collapsedFace = face == -1 ? null : Direction.from3DDataValue(face);
 
         super.handleUpdateTag(nbt, provider);
+    }
+
+    @Override
+    protected Optional<AuxBlueprintData<?>> collectAuxBlueprintData()
+    {
+        return Optional.of(new CollapsibleBlockData(collapsedFace, packedOffsets));
+    }
+
+    @Override
+    protected void applyAuxDataFromBlueprint(AuxBlueprintData<?> auxData)
+    {
+        if (auxData instanceof CollapsibleBlockData blockData)
+        {
+            collapsedFace = blockData.collapsedFace().toDirection();
+            packedOffsets = blockData.offsets();
+            vertexOffsets = unpackOffsets(packedOffsets);
+        }
+    }
+
+    @Override
+    protected void collectMiscComponents(DataComponentMap.Builder builder)
+    {
+        builder.set(FBContent.DC_TYPE_COLLAPSIBLE_BLOCK_DATA, new CollapsibleBlockData(collapsedFace, packedOffsets));
+    }
+
+    @Override
+    protected void applyMiscComponents(DataComponentInput input)
+    {
+        CollapsibleBlockData blockData = input.get(FBContent.DC_TYPE_COLLAPSIBLE_BLOCK_DATA);
+        if (blockData != null)
+        {
+            collapsedFace = blockData.collapsedFace().toDirection();
+            packedOffsets = blockData.offsets();
+            vertexOffsets = unpackOffsets(packedOffsets);
+        }
     }
 
     @Override

@@ -9,7 +9,6 @@ import net.minecraft.network.protocol.Packet;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.*;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -17,14 +16,12 @@ import net.minecraft.world.item.MapItem;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.saveddata.maps.MapFrame;
 import net.minecraft.world.level.saveddata.maps.MapId;
 import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
 import xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
-import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.common.FBContent;
-import xfacthd.framedblocks.common.data.BlockType;
-import xfacthd.framedblocks.common.data.PropertyHolder;
+import xfacthd.framedblocks.common.data.*;
+import xfacthd.framedblocks.common.data.component.FramedMap;
 
 import java.util.List;
 import java.util.Objects;
@@ -33,7 +30,6 @@ public class FramedItemFrameBlockEntity extends FramedBlockEntity
 {
     public static final int ROTATION_STEPS = 8;
     private static final int MAP_UPDATE_INTERVAL = 10;
-    public static final String NBT_KEY_FRAMED_MAP = FramedConstants.MOD_ID + ":framed";
 
     private final boolean glowing;
     private ItemStack heldItem = ItemStack.EMPTY;
@@ -111,14 +107,16 @@ public class FramedItemFrameBlockEntity extends FramedBlockEntity
 
     public void removeItem(Player player)
     {
-        if (heldItem.getItem() instanceof MapItem && heldItem.hasTag())
+        if (heldItem.getItem() instanceof MapItem)
         {
-            //noinspection ConstantConditions
-            heldItem.getTag().remove(NBT_KEY_FRAMED_MAP);
-            MapItemSavedData mapData = MapItem.getSavedData(heldItem, level());
-            if (mapData instanceof MapMarkerRemover remover)
+            FramedMap map = heldItem.remove(FBContent.DC_TYPE_FRAMED_MAP);
+            if (map != null)
             {
-                remover.framedblocks$removeMapMarker(worldPosition);
+                MapItemSavedData mapData = MapItem.getSavedData(heldItem, level());
+                if (mapData instanceof FramedMap.MarkerRemover remover)
+                {
+                    remover.framedblocks$removeMapMarker(worldPosition);
+                }
             }
         }
 
@@ -147,10 +145,7 @@ public class FramedItemFrameBlockEntity extends FramedBlockEntity
             if (heldItem.getItem() instanceof MapItem)
             {
                 Direction dir = getBlockState().getValue(BlockStateProperties.FACING).getOpposite();
-                CompoundTag tag = new CompoundTag();
-                tag.putLong("pos", worldPosition.asLong());
-                tag.putByte("y_rot", (byte) dir.get2DDataValue());
-                heldItem.getOrCreateTag().put(NBT_KEY_FRAMED_MAP, tag);
+                heldItem.set(FBContent.DC_TYPE_FRAMED_MAP, new FramedMap(worldPosition, dir));
             }
         }
 
@@ -174,11 +169,7 @@ public class FramedItemFrameBlockEntity extends FramedBlockEntity
     public ItemStack getCloneItem()
     {
         ItemStack stack = heldItem.copy();
-        if (stack.hasTag())
-        {
-            //noinspection ConstantConditions
-            stack.getTag().remove(NBT_KEY_FRAMED_MAP);
-        }
+        stack.remove(FBContent.DC_TYPE_FRAMED_MAP);
         return stack;
     }
 
@@ -223,44 +214,44 @@ public class FramedItemFrameBlockEntity extends FramedBlockEntity
 
     // Network
 
-    private void readFromNetwork(CompoundTag tag)
+    private void readFromNetwork(CompoundTag tag, HolderLookup.Provider provider)
     {
-        heldItem = ItemStack.of(tag.getCompound("item"));
+        heldItem = ItemStack.parseOptional(provider, tag.getCompound("item"));
         rotation = tag.getByte("rotation");
     }
 
-    private void writeToNetwork(CompoundTag tag)
+    private void writeToNetwork(CompoundTag tag, HolderLookup.Provider provider)
     {
-        tag.put("item", heldItem.save(new CompoundTag()));
+        tag.put("item", heldItem.saveOptional(provider));
         tag.putByte("rotation", (byte) rotation);
     }
 
     @Override
-    protected boolean readFromDataPacket(CompoundTag tag)
+    protected boolean readFromDataPacket(CompoundTag tag, HolderLookup.Provider lookupProvider)
     {
-        readFromNetwork(tag);
-        return super.readFromDataPacket(tag);
+        readFromNetwork(tag, lookupProvider);
+        return super.readFromDataPacket(tag, lookupProvider);
     }
 
     @Override
-    protected void writeToDataPacket(CompoundTag tag)
+    protected void writeToDataPacket(CompoundTag tag, HolderLookup.Provider lookupProvider)
     {
-        super.writeToDataPacket(tag);
-        writeToNetwork(tag);
+        super.writeToDataPacket(tag, lookupProvider);
+        writeToNetwork(tag, lookupProvider);
     }
 
     @Override
     public void handleUpdateTag(CompoundTag tag, HolderLookup.Provider provider)
     {
         super.handleUpdateTag(tag, provider);
-        readFromNetwork(tag);
+        readFromNetwork(tag, provider);
     }
 
     @Override
     public CompoundTag getUpdateTag(HolderLookup.Provider provider)
     {
         CompoundTag tag = super.getUpdateTag(provider);
-        writeToNetwork(tag);
+        writeToNetwork(tag, provider);
         return tag;
     }
 
@@ -271,7 +262,7 @@ public class FramedItemFrameBlockEntity extends FramedBlockEntity
     {
         super.loadAdditional(tag, provider);
 
-        heldItem = ItemStack.of(tag.getCompound("item"));
+        heldItem = ItemStack.parseOptional(provider, tag.getCompound("item"));
         rotation = tag.getByte("rotation");
         mapTickOffset = tag.getInt("map_tick_offset");
     }
@@ -281,39 +272,8 @@ public class FramedItemFrameBlockEntity extends FramedBlockEntity
     {
         super.saveAdditional(tag, provider);
 
-        tag.put("item", heldItem.save(new CompoundTag()));
+        tag.put("item", heldItem.saveOptional(provider));
         tag.putByte("rotation", (byte) rotation);
         tag.putInt("map_tick_offset", mapTickOffset);
-    }
-
-
-
-    public record FramedMap(BlockPos pos, int yRot)
-    {
-        public static FramedMap load(CompoundTag tag)
-        {
-            return new FramedMap(
-                    BlockPos.of(tag.getLong("pos")),
-                    tag.getInt("y_rot")
-            );
-        }
-
-        public CompoundTag save()
-        {
-            CompoundTag tag = new CompoundTag();
-            tag.putLong("pos", pos.asLong());
-            tag.putInt("y_rot", yRot);
-            return tag;
-        }
-
-        public static String makeFrameId(BlockPos pos)
-        {
-            return FramedConstants.MOD_ID + ":" + MapFrame.frameId(pos);
-        }
-    }
-
-    public interface MapMarkerRemover
-    {
-        void framedblocks$removeMapMarker(BlockPos pos);
     }
 }

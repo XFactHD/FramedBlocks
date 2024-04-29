@@ -3,10 +3,7 @@ package xfacthd.framedblocks.common.item;
 import com.google.common.base.Preconditions;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.*;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.*;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -21,14 +18,15 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import xfacthd.framedblocks.api.blueprint.BlueprintCopyBehaviour;
 import xfacthd.framedblocks.api.camo.*;
+import xfacthd.framedblocks.api.util.CamoList;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import xfacthd.framedblocks.common.config.ServerConfig;
+import xfacthd.framedblocks.api.blueprint.BlueprintData;
 
-import javax.annotation.Nullable;
 import java.util.*;
 
 public class FramedBlueprintItem extends FramedToolItem
@@ -53,7 +51,7 @@ public class FramedBlueprintItem extends FramedToolItem
 
     public FramedBlueprintItem(FramedToolType type)
     {
-        super(type);
+        super(type, new Properties().component(FBContent.DC_TYPE_BLUEPRINT_DATA, BlueprintData.EMPTY));
     }
 
     @Override
@@ -70,10 +68,7 @@ public class FramedBlueprintItem extends FramedToolItem
         {
             if (!level.isClientSide())
             {
-                CompoundTag tag = stack.getOrCreateTagElement("blueprint_data");
-                tag.remove("framed_block");
-                tag.remove("camo_data");
-                tag.remove("camo_data_two");
+                stack.set(FBContent.DC_TYPE_BLUEPRINT_DATA, BlueprintData.EMPTY);
             }
             return InteractionResultHolder.sidedSuccess(stack, level.isClientSide());
         }
@@ -92,20 +87,19 @@ public class FramedBlueprintItem extends FramedToolItem
         Level level = context.getLevel();
         BlockPos pos = context.getClickedPos();
 
-        CompoundTag tag = context.getItemInHand().getOrCreateTagElement("blueprint_data");
-
         if (player.isShiftKeyDown())
         {
-            return writeBlueprint(level, pos, tag);
+            return writeBlueprint(level, pos, context.getItemInHand());
         }
-        else if (!tag.isEmpty())
+        BlueprintData data = context.getItemInHand().getOrDefault(FBContent.DC_TYPE_BLUEPRINT_DATA, BlueprintData.EMPTY);
+        if (!data.isEmpty())
         {
-            return readBlueprint(context, player, tag);
+            return readBlueprint(context, player, data);
         }
         return super.useOn(context);
     }
 
-    private static InteractionResult writeBlueprint(Level level, BlockPos pos, CompoundTag tag)
+    private static InteractionResult writeBlueprint(Level level, BlockPos pos, ItemStack stack)
     {
         if (!(level.getBlockEntity(pos) instanceof FramedBlockEntity be))
         {
@@ -114,23 +108,16 @@ public class FramedBlueprintItem extends FramedToolItem
 
         if (!level.isClientSide())
         {
-            BlockState state = level.getBlockState(pos);
-            String blockName = BuiltInRegistries.BLOCK.getKey(state.getBlock()).toString();
-            tag.putString("framed_block", blockName);
-
-            Block block = state.getBlock();
-            if (!getBehaviour(block).writeToBlueprint(level, pos, state, be, tag))
-            {
-                tag.put("camo_data", be.writeToBlueprint());
-            }
+            BlockState state = be.getBlockState();
+            BlueprintData data = getBehaviour(state.getBlock()).writeToBlueprint(level, pos, state, be);
+            stack.set(FBContent.DC_TYPE_BLUEPRINT_DATA, data);
         }
         return InteractionResult.sidedSuccess(level.isClientSide());
     }
 
-    private static InteractionResult readBlueprint(UseOnContext context, Player player, CompoundTag tag)
+    private static InteractionResult readBlueprint(UseOnContext context, Player player, BlueprintData data)
     {
-        Block block = getTargetBlock(context.getItemInHand());
-
+        Block block = data.block();
         if (block.defaultBlockState().isAir())
         {
             return InteractionResult.FAIL;
@@ -142,15 +129,15 @@ public class FramedBlueprintItem extends FramedToolItem
             return InteractionResult.FAIL;
         }
 
-        if (checkMissingMaterials(player, blockItem, tag))
+        if (checkMissingMaterials(player, data))
         {
             return InteractionResult.FAIL;
         }
 
-        return tryPlace(context, player, blockItem, tag);
+        return tryPlace(context, player, blockItem, data);
     }
 
-    private static boolean checkMissingMaterials(Player player, BlockItem item, CompoundTag tag)
+    private static boolean checkMissingMaterials(Player player, BlueprintData data)
     {
         if (player.getAbilities().instabuild)
         {
@@ -158,7 +145,7 @@ public class FramedBlueprintItem extends FramedToolItem
             return false;
         }
 
-        Set<CamoContainer<?, ?>> camos = getCamoContainers(item, tag);
+        CamoList camos = getCamoContainers(data);
 
         if (!canCopyAllCamos(camos))
         {
@@ -170,29 +157,30 @@ public class FramedBlueprintItem extends FramedToolItem
         }
 
         List<ItemStack> materials = new ArrayList<>();
-        materials.add(getBlockItem(item));
+        materials.add(getBlockItem(data));
         if (ServerConfig.VIEW.shouldConsumeCamoItem())
         {
             materials.addAll(getCamoStacksMerged(camos));
         }
 
-        BlueprintCopyBehaviour behaviour = getBehaviour(item.getBlock());
+        BlueprintCopyBehaviour behaviour = getBehaviour(data.block());
 
-        int glowstone = behaviour.getGlowstoneCount(tag);
+        int glowstone = behaviour.getGlowstoneCount(data);
         if (glowstone > 0)
         {
             materials.add(new ItemStack(Items.GLOWSTONE_DUST, glowstone));
         }
-        int intangible = behaviour.getIntangibleCount(tag);
+        int intangible = behaviour.getIntangibleCount(data);
         if (intangible > 0)
         {
             materials.add(new ItemStack(ServerConfig.VIEW.getIntangibilityMarkerItem(), glowstone));
         }
-        int reinforcement = behaviour.getReinforcementCount(tag);
+        int reinforcement = behaviour.getReinforcementCount(data);
         if (reinforcement > 0)
         {
             materials.add(new ItemStack(FBContent.ITEM_FRAMED_REINFORCEMENT.value(), reinforcement));
         }
+        materials.addAll(behaviour.getAdditionalConsumedMaterials(data));
 
         List<ItemStack> missingMaterials = new ArrayList<>();
         for (ItemStack stack : materials)
@@ -224,10 +212,9 @@ public class FramedBlueprintItem extends FramedToolItem
         return false;
     }
 
-    private static InteractionResult tryPlace(UseOnContext context, Player player, BlockItem item, CompoundTag tag)
+    private static InteractionResult tryPlace(UseOnContext context, Player player, BlockItem item, BlueprintData data)
     {
         ItemStack dummyStack = new ItemStack(item, 1);
-        dummyStack.getOrCreateTag().put("BlockEntityTag", tag.getCompound("camo_data").copy());
 
         UseOnContext placeContext = new UseOnContext(
                 context.getLevel(),
@@ -242,43 +229,47 @@ public class FramedBlueprintItem extends FramedToolItem
 
         if (!context.getLevel().isClientSide() && result.consumesAction())
         {
-            getBehaviour(item.getBlock()).postProcessPaste(context.getLevel(), pos, context.getPlayer(), tag, dummyStack);
+            if (context.getLevel().getBlockEntity(pos) instanceof FramedBlockEntity be)
+            {
+                be.applyBlueprintData(data);
+            }
+            getBehaviour(data.block()).postProcessPaste(context.getLevel(), pos, context.getPlayer(), data, dummyStack);
 
             if (!player.getAbilities().instabuild)
             {
-                consumeItems(player, item, tag);
+                consumeItems(player, data);
             }
         }
 
         return result;
     }
 
-    private static void consumeItems(Player player, BlockItem item, CompoundTag tag)
+    private static void consumeItems(Player player, BlueprintData data)
     {
-        Set<CamoContainer<?, ?>> camos = getCamoContainers(item, tag);
+        CamoList camos = getCamoContainers(data);
 
         if (!canCopyAllCamos(camos)) return;
 
         List<ItemStack> materials = new ArrayList<>();
-        materials.add(getBlockItem(item));
+        materials.add(getBlockItem(data));
         if (ServerConfig.VIEW.shouldConsumeCamoItem())
         {
             materials.addAll(getCamoStacksMerged(camos));
         }
 
-        BlueprintCopyBehaviour behaviour = getBehaviour(item.getBlock());
+        BlueprintCopyBehaviour behaviour = getBehaviour(data.block());
 
-        int glowstone = behaviour.getGlowstoneCount(tag);
+        int glowstone = behaviour.getGlowstoneCount(data);
         if (glowstone > 0)
         {
             materials.add(new ItemStack(Items.GLOWSTONE_DUST, glowstone));
         }
-        int intangible = behaviour.getIntangibleCount(tag);
+        int intangible = behaviour.getIntangibleCount(data);
         if (intangible > 0)
         {
             materials.add(new ItemStack(ServerConfig.VIEW.getIntangibilityMarkerItem(), glowstone));
         }
-        int reinforcement = behaviour.getReinforcementCount(tag);
+        int reinforcement = behaviour.getReinforcementCount(data);
         if (reinforcement > 0)
         {
             materials.add(new ItemStack(FBContent.ITEM_FRAMED_REINFORCEMENT.value(), reinforcement));
@@ -309,7 +300,7 @@ public class FramedBlueprintItem extends FramedToolItem
     }
 
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    private static boolean canCopyAllCamos(Set<CamoContainer<?, ?>> camos)
+    private static boolean canCopyAllCamos(CamoList camos)
     {
         if (!ServerConfig.VIEW.shouldConsumeCamoItem()) return true;
 
@@ -319,28 +310,22 @@ public class FramedBlueprintItem extends FramedToolItem
                 .allMatch(CamoContainerFactory::canTriviallyConvertToItemStack);
     }
 
-    private static BlueprintCopyBehaviour getBehaviour(Block block)
+    public static BlueprintCopyBehaviour getBehaviour(Block block)
     {
         return COPY_BEHAVIOURS.getOrDefault(block, NO_OP_BEHAVIOUR);
     }
 
-    public static Set<CamoContainer<?, ?>> getCamoContainers(BlockItem item, CompoundTag tag)
+    public static CamoList getCamoContainers(BlueprintData data)
     {
-        return getBehaviour(item.getBlock())
-                .getCamos(tag)
-                .orElseGet(() ->
-                        Set.of(CamoContainerHelper.readFromDisk(tag.getCompound("camo_data").getCompound("camo")))
-                );
+        return getBehaviour(data.block()).getCamos(data);
     }
 
-    private static ItemStack getBlockItem(BlockItem item)
+    private static ItemStack getBlockItem(BlueprintData data)
     {
-        return getBehaviour(item.getBlock())
-                .getBlockItem()
-                .orElse(new ItemStack(item));
+        return getBehaviour(data.block()).getBlockItem(data);
     }
 
-    private static List<ItemStack> getCamoStacksMerged(Set<CamoContainer<?, ?>> camos)
+    private static List<ItemStack> getCamoStacksMerged(CamoList camos)
     {
         List<ItemStack> camoStacks = new ArrayList<>();
         for (CamoContainer<?, ?> camo : camos)
@@ -374,32 +359,23 @@ public class FramedBlueprintItem extends FramedToolItem
         return camoStacks;
     }
 
-    public static Block getTargetBlock(ItemStack stack)
-    {
-        CompoundTag tag = stack.getOrCreateTagElement("blueprint_data");
-        Block block = BuiltInRegistries.BLOCK.get(new ResourceLocation(tag.getString("framed_block")));
-        Objects.requireNonNull(block);
-        return block;
-    }
-
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> components, TooltipFlag flag)
+    public void appendHoverText(ItemStack stack, TooltipContext ctx, List<Component> components, TooltipFlag flag)
     {
-        CompoundTag tag = stack.getOrCreateTagElement("blueprint_data");
-        if (tag.isEmpty())
+        BlueprintData blueprintData = stack.getOrDefault(FBContent.DC_TYPE_BLUEPRINT_DATA, BlueprintData.EMPTY);
+        if (blueprintData.isEmpty())
         {
             components.add(Component.translatable(CONTAINED_BLOCK, BLOCK_NONE).withStyle(ChatFormatting.GOLD));
         }
         else
         {
-            Block block = BuiltInRegistries.BLOCK.get(new ResourceLocation(tag.getString("framed_block")));
+            Block block = blueprintData.block();
             Component blockName = block == Blocks.AIR ? BLOCK_INVALID : block.getName().withStyle(ChatFormatting.WHITE);
 
-            CompoundTag beTag = tag.getCompound("camo_data");
-            Component camoName = !(block instanceof IFramedBlock fb) ? BLOCK_NONE : fb.printCamoBlock(beTag).orElse(BLOCK_NONE);
-            Component illuminated = beTag.getBoolean("glowing") ? TRUE : FALSE;
-            Component intangible = beTag.getBoolean("intangible") ? TRUE : FALSE;
-            Component reinforced = beTag.getBoolean("reinforced") ? TRUE : FALSE;
+            Component camoName = !(block instanceof IFramedBlock fb) ? BLOCK_NONE : fb.printCamoBlock(blueprintData).orElse(BLOCK_NONE);
+            Component illuminated = blueprintData.glowing() ? TRUE : FALSE;
+            Component intangible = blueprintData.intangible() ? TRUE : FALSE;
+            Component reinforced = blueprintData.reinforced() ? TRUE : FALSE;
 
             Component lineOne = Component.translatable(CONTAINED_BLOCK, blockName).withStyle(ChatFormatting.GOLD);
             Component lineTwo = Component.translatable(CAMO_BLOCK, camoName).withStyle(ChatFormatting.GOLD);

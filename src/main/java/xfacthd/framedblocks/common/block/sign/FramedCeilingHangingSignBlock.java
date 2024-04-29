@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
@@ -97,14 +96,13 @@ public class FramedCeilingHangingSignBlock extends AbstractFramedHangingSignBloc
 
     @Override
     protected boolean preventUse(
-            BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit
+            BlockState state, Level level, BlockPos pos, Player player, ItemStack stack, BlockHitResult hit
     )
     {
         if (level.getBlockEntity(pos) instanceof FramedSignBlockEntity sign)
         {
             boolean front = sign.isFacingFrontText(player);
-            ItemStack stack = player.getItemInHand(hand);
-            return !sign.canExecuteCommands(front, player) && stack.getItem() == asItem() && hit.getDirection() == Direction.DOWN;
+            return sign.cannotExecuteCommands(front, player) && stack.getItem() == asItem() && hit.getDirection() == Direction.DOWN;
         }
         return false;
     }

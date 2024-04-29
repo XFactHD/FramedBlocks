@@ -19,10 +19,11 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import xfacthd.framedblocks.api.block.IFramedBlock;
+import xfacthd.framedblocks.api.blueprint.AuxBlueprintData;
 import xfacthd.framedblocks.api.camo.*;
 import xfacthd.framedblocks.api.camo.empty.EmptyCamoContainerFactory;
-import xfacthd.framedblocks.api.util.FramedConstants;
-import xfacthd.framedblocks.api.util.Utils;
+import xfacthd.framedblocks.api.util.*;
+import xfacthd.framedblocks.api.util.registration.*;
 import xfacthd.framedblocks.common.block.interactive.button.*;
 import xfacthd.framedblocks.common.block.interactive.pressureplate.*;
 import xfacthd.framedblocks.common.block.rail.fancy.*;
@@ -59,16 +60,17 @@ import xfacthd.framedblocks.common.blockentity.doubled.stairs.*;
 import xfacthd.framedblocks.common.blockentity.special.*;
 import xfacthd.framedblocks.common.crafting.FramingSawRecipe;
 import xfacthd.framedblocks.common.crafting.FramingSawRecipeSerializer;
+import xfacthd.framedblocks.common.data.*;
+import xfacthd.framedblocks.common.data.blueprint.auxdata.DoorAuxBlueprintData;
 import xfacthd.framedblocks.common.data.camo.block.BlockCamoContainerFactory;
 import xfacthd.framedblocks.common.data.camo.fluid.FluidCamoContainerFactory;
+import xfacthd.framedblocks.api.blueprint.BlueprintData;
+import xfacthd.framedblocks.common.data.component.*;
 import xfacthd.framedblocks.common.menu.*;
-import xfacthd.framedblocks.common.data.BlockType;
-import xfacthd.framedblocks.common.data.FramedToolType;
 import xfacthd.framedblocks.common.item.FramedBlueprintItem;
 import xfacthd.framedblocks.common.item.FramedToolItem;
 import xfacthd.framedblocks.common.util.FramedCreativeTab;
-import xfacthd.framedblocks.common.util.registration.DeferredBlockEntity;
-import xfacthd.framedblocks.common.util.registration.DeferredBlockEntityRegister;
+import xfacthd.framedblocks.common.util.registration.*;
 
 import java.util.*;
 import java.util.function.Function;
@@ -77,6 +79,7 @@ import java.util.function.Supplier;
 public final class FBContent
 {
     private static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(FramedConstants.MOD_ID);
+    private static final DeferredDataComponentTypeRegister DATA_COMPONENTS = DeferredDataComponentTypeRegister.create(FramedConstants.MOD_ID);
     private static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(FramedConstants.MOD_ID);
     private static final DeferredBlockEntityRegister BE_TYPES = DeferredBlockEntityRegister.create(FramedConstants.MOD_ID);
     private static final DeferredRegister<MenuType<?>> CONTAINER_TYPES = DeferredRegister.create(BuiltInRegistries.MENU, FramedConstants.MOD_ID);
@@ -89,6 +92,11 @@ public final class FBContent
             FramedConstants.MOD_ID
     );
     public static final Registry<CamoContainerFactory<?>> CAMO_CONTAINER_FACTORY_REGISTRY = CAMO_CONTAINER_FACTORIES.makeRegistry(
+            builder -> builder.sync(true)
+    );
+
+    private static final DeferredAuxDataTypeRegister AUX_BLUEPRINT_DATA_TYPES = DeferredAuxDataTypeRegister.create(FramedConstants.MOD_ID);
+    public static final Registry<AuxBlueprintData.Type<?>> AUX_BLUEPRINT_DATA_TYPE_REGISTRY = AUX_BLUEPRINT_DATA_TYPES.makeRegistry(
             builder -> builder.sync(true)
     );
 
@@ -304,6 +312,37 @@ public final class FBContent
     public static final Holder<Block> BLOCK_POWERED_FRAMING_SAW = registerBlock("powered_framing_saw", PoweredFramingSawBlock::new);
     // endregion
 
+    // region DataComponentTypes
+    public static final DeferredDataComponentType<CamoList> DC_TYPE_CAMO_LIST = DATA_COMPONENTS.registerComponentType(
+            "camo_list",
+            builder -> builder.persistent(CamoList.CODEC).networkSynchronized(CamoList.STREAM_CODEC).cacheEncoding()
+    );
+    public static final DeferredDataComponentType<BlueprintData> DC_TYPE_BLUEPRINT_DATA = DATA_COMPONENTS.registerComponentType(
+            "blueprint_data",
+            builder -> builder.persistent(BlueprintData.CODEC).networkSynchronized(BlueprintData.STREAM_CODEC).cacheEncoding()
+    );
+    public static final DeferredDataComponentType<FramedMap> DC_TYPE_FRAMED_MAP = DATA_COMPONENTS.registerComponentType(
+            "framed_map",
+            builder -> builder.persistent(FramedMap.CODEC).networkSynchronized(FramedMap.STREAM_CODEC)
+    );
+    public static final DeferredDataComponentType<CollapsibleBlockData> DC_TYPE_COLLAPSIBLE_BLOCK_DATA = DATA_COMPONENTS.registerComponentType(
+            "collapsible_block",
+            builder -> builder.persistent(CollapsibleBlockData.CODEC).networkSynchronized(CollapsibleBlockData.STREAM_CODEC)
+    );
+    public static final DeferredDataComponentType<CollapsibleCopycatBlockData> DC_TYPE_COLLAPSIBLE_COPYCAT_BLOCK_DATA = DATA_COMPONENTS.registerComponentType(
+            "collapsible_copycat_block",
+            builder -> builder.persistent(CollapsibleCopycatBlockData.CODEC).networkSynchronized(CollapsibleCopycatBlockData.STREAM_CODEC)
+    );
+    public static final DeferredDataComponentType<PottedFlower> DC_TYPE_POTTED_FLOWER = DATA_COMPONENTS.registerComponentType(
+            "potted_flower",
+            builder -> builder.persistent(PottedFlower.CODEC).networkSynchronized(PottedFlower.STREAM_CODEC)
+    );
+    public static final DeferredDataComponentType<TargetColor> DC_TYPE_TARGET_COLOR = DATA_COMPONENTS.registerComponentType(
+            "target_color",
+            builder -> builder.persistent(TargetColor.CODEC).networkSynchronized(TargetColor.STREAM_CODEC)
+    );
+    // endregion
+
     // region Items
     public static final Holder<Item> ITEM_FRAMED_HAMMER = registerToolItem(FramedToolItem::new, FramedToolType.HAMMER);
     public static final Holder<Item> ITEM_FRAMED_WRENCH = registerToolItem(FramedToolItem::new, FramedToolType.WRENCH);
@@ -409,6 +448,10 @@ public final class FBContent
     public static final Holder<BlockEntityType<?>> BE_TYPE_FRAMED_DOUBLE_THREEWAY_CORNER_PILLAR = registerBlockEntity(
             FramedDoubleThreewayCornerPillarBlockEntity::new,
             BlockType.FRAMED_DOUBLE_THREEWAY_CORNER_PILLAR
+    );
+    public static final Holder<BlockEntityType<?>> BE_TYPE_FRAMED_DOOR = registerBlockEntity(
+            FramedDoorBlockEntity::new,
+            BlockType.FRAMED_DOOR, BlockType.FRAMED_IRON_DOOR
     );
     public static final DeferredBlockEntity<FramedSignBlockEntity> BE_TYPE_FRAMED_SIGN = registerBlockEntity(
             FramedSignBlockEntity::normalSign,
@@ -651,11 +694,30 @@ public final class FBContent
     );
     // endregion
 
+    // region AuxBlueprintData.Types
+    public static final DeferredAuxDataType<DoorAuxBlueprintData> AUX_TYPE_DOOR_DATA = AUX_BLUEPRINT_DATA_TYPES.registerAuxDataType(
+            "door", DoorAuxBlueprintData.CODEC, DoorAuxBlueprintData.STREAM_CODEC
+    );
+    public static final DeferredAuxDataType<CollapsibleBlockData> AUX_TYPE_COLLAPSIBLE_BLOCK_DATA = AUX_BLUEPRINT_DATA_TYPES.registerAuxDataType(
+            "collapsible_block", CollapsibleBlockData.MAP_CODEC, CollapsibleBlockData.STREAM_CODEC
+    );
+    public static final DeferredAuxDataType<CollapsibleCopycatBlockData> AUX_TYPE_COLLAPSIBLE_COPYCAT_BLOCK_DATA = AUX_BLUEPRINT_DATA_TYPES.registerAuxDataType(
+            "collapsible_copycat_block", CollapsibleCopycatBlockData.MAP_CODEC, CollapsibleCopycatBlockData.STREAM_CODEC
+    );
+    public static final DeferredAuxDataType<PottedFlower> AUX_TYPE_POTTED_FLOWER = AUX_BLUEPRINT_DATA_TYPES.registerAuxDataType(
+            "potted_flower", PottedFlower.MAP_CODEC, PottedFlower.STREAM_CODEC
+    );
+    public static final DeferredAuxDataType<TargetColor> AUX_TYPE_TARGET_COLOR = AUX_BLUEPRINT_DATA_TYPES.registerAuxDataType(
+            "target_color", TargetColor.MAP_CODEC, TargetColor.STREAM_CODEC
+    );
+    // endregion
+
 
 
     public static void init(IEventBus modBus)
     {
         BLOCKS.register(modBus);
+        DATA_COMPONENTS.register(modBus);
         ITEMS.register(modBus);
         BE_TYPES.register(modBus);
         CONTAINER_TYPES.register(modBus);
@@ -663,6 +725,7 @@ public final class FBContent
         RECIPE_SERIALIZERS.register(modBus);
         CREATIVE_TABS.register(modBus);
         CAMO_CONTAINER_FACTORIES.register(modBus);
+        AUX_BLUEPRINT_DATA_TYPES.register(modBus);
     }
 
     public static Collection<DeferredHolder<Block, ? extends Block>> getRegisteredBlocks()

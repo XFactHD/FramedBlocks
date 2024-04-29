@@ -43,9 +43,9 @@ public class FramedOwnableBlockEntity extends FramedBlockEntity
     }
 
     @Override
-    protected void writeToDataPacket(CompoundTag nbt)
+    protected void writeToDataPacket(CompoundTag nbt, HolderLookup.Provider lookupProvider)
     {
-        super.writeToDataPacket(nbt);
+        super.writeToDataPacket(nbt, lookupProvider);
         if (owner != null)
         {
             nbt.put("owner", NbtUtils.createUUID(owner));
@@ -53,14 +53,14 @@ public class FramedOwnableBlockEntity extends FramedBlockEntity
     }
 
     @Override
-    protected boolean readFromDataPacket(CompoundTag nbt)
+    protected boolean readFromDataPacket(CompoundTag nbt, HolderLookup.Provider lookupProvider)
     {
         if (nbt.contains("owner"))
         {
             //noinspection ConstantConditions
             owner = NbtUtils.loadUUID(nbt.get("owner"));
         }
-        return super.readFromDataPacket(nbt);
+        return super.readFromDataPacket(nbt, lookupProvider);
     }
 
     @Override
