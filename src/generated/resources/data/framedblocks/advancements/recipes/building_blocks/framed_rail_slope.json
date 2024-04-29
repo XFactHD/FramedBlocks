@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "framedblocks:framed_slope"
-            ]
+            "items": "framedblocks:framed_slope"
           }
         ]
       },

@@ -2,6 +2,7 @@
   "type": "framedblocks:frame",
   "material": 1536,
   "result": {
-    "item": "framedblocks:framed_large_button"
+    "count": 1,
+    "id": "framedblocks:framed_large_button"
   }
 }

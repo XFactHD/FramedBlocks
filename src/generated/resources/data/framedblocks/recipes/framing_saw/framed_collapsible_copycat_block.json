@@ -4,12 +4,13 @@
     {
       "count": 1,
       "ingredient": {
-        "tag": "forge:ingots/copper"
+        "tag": "c:ingots/copper"
       }
     }
   ],
   "material": 6144,
   "result": {
-    "item": "framedblocks:framed_collapsible_copycat_block"
+    "count": 1,
+    "id": "framedblocks:framed_collapsible_copycat_block"
   }
 }

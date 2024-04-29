@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "framedblocks:framed_vertical_stairs"
-            ]
+            "items": "framedblocks:framed_vertical_stairs"
           }
         ]
       },

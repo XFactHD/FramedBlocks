@@ -3,7 +3,7 @@
   "category": "building",
   "key": {
     "C": {
-      "tag": "forge:ingots/copper"
+      "tag": "c:ingots/copper"
     },
     "F": {
       "item": "framedblocks:framed_cube"
@@ -16,6 +16,6 @@
   ],
   "result": {
     "count": 4,
-    "item": "framedblocks:framed_collapsible_copycat_block"
+    "id": "framedblocks:framed_collapsible_copycat_block"
   }
 }

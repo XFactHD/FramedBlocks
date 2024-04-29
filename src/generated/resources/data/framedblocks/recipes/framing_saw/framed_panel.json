@@ -2,6 +2,7 @@
   "type": "framedblocks:frame",
   "material": 3072,
   "result": {
-    "item": "framedblocks:framed_panel"
+    "count": 1,
+    "id": "framedblocks:framed_panel"
   }
 }

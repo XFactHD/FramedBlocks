@@ -6,7 +6,7 @@
       "item": "framedblocks:framed_cube"
     },
     "L": {
-      "tag": "forge:leather"
+      "tag": "c:leather"
     }
   },
   "pattern": [
@@ -15,6 +15,7 @@
     "FFF"
   ],
   "result": {
-    "item": "framedblocks:framed_item_frame"
+    "count": 1,
+    "id": "framedblocks:framed_item_frame"
   }
 }

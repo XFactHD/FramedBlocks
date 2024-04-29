@@ -4,12 +4,13 @@
     {
       "count": 1,
       "ingredient": {
-        "tag": "forge:ingots/iron"
+        "tag": "c:ingots/iron"
       }
     }
   ],
   "material": 1536,
   "result": {
-    "item": "framedblocks:framed_iron_trapdoor"
+    "count": 1,
+    "id": "framedblocks:framed_iron_trapdoor"
   }
 }

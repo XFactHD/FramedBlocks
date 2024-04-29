@@ -4,7 +4,7 @@
     {
       "count": 1,
       "ingredient": {
-        "tag": "forge:leather"
+        "tag": "c:leather"
       }
     },
     {
@@ -16,6 +16,7 @@
   ],
   "material": 1536,
   "result": {
-    "item": "framedblocks:framed_glowing_item_frame"
+    "count": 1,
+    "id": "framedblocks:framed_glowing_item_frame"
   }
 }

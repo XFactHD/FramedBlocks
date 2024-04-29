@@ -10,6 +10,7 @@
   ],
   "material": 6144,
   "result": {
-    "item": "framedblocks:framed_one_way_window"
+    "count": 1,
+    "id": "framedblocks:framed_one_way_window"
   }
 }

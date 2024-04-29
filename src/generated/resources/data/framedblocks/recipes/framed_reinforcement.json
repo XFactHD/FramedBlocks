@@ -6,7 +6,7 @@
       "item": "framedblocks:framed_cube"
     },
     "O": {
-      "tag": "forge:obsidian"
+      "tag": "c:obsidians"
     },
     "S": {
       "item": "minecraft:stick"
@@ -19,6 +19,6 @@
   ],
   "result": {
     "count": 16,
-    "item": "framedblocks:framed_reinforcement"
+    "id": "framedblocks:framed_reinforcement"
   }
 }

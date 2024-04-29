@@ -1,7 +1,6 @@
 {
   "values": [
-    "#forge:glass",
-    "#forge:stained_glass",
+    "#c:glass_blocks",
     "#minecraft:ice",
     "#minecraft:leaves",
     {

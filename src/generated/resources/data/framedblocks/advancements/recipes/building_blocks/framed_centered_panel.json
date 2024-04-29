@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "framedblocks:framed_panel"
-            ]
+            "items": "framedblocks:framed_panel"
           }
         ]
       },

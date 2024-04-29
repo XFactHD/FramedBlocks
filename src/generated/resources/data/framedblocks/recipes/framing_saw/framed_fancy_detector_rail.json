@@ -4,13 +4,13 @@
     {
       "count": 6,
       "ingredient": {
-        "tag": "forge:ingots/iron"
+        "tag": "c:ingots/iron"
       }
     },
     {
       "count": 1,
       "ingredient": {
-        "tag": "forge:dusts/redstone"
+        "tag": "c:dusts/redstone"
       }
     },
     {
@@ -23,6 +23,6 @@
   "material": 6144,
   "result": {
     "count": 6,
-    "item": "framedblocks:framed_fancy_detector_rail"
+    "id": "framedblocks:framed_fancy_detector_rail"
   }
 }

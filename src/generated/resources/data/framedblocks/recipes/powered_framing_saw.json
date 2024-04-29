@@ -6,10 +6,10 @@
       "item": "framedblocks:framed_cube"
     },
     "I": {
-      "tag": "forge:ingots/iron"
+      "tag": "c:ingots/iron"
     },
     "R": {
-      "tag": "forge:dusts/redstone"
+      "tag": "c:dusts/redstone"
     }
   },
   "pattern": [
@@ -17,6 +17,7 @@
     "FFF"
   ],
   "result": {
-    "item": "framedblocks:powered_framing_saw"
+    "count": 1,
+    "id": "framedblocks:powered_framing_saw"
   }
 }

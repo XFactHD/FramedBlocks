@@ -2,6 +2,7 @@
   "type": "framedblocks:frame",
   "material": 18432,
   "result": {
-    "item": "framedblocks:framed_chiseled_bookshelf"
+    "count": 1,
+    "id": "framedblocks:framed_chiseled_bookshelf"
   }
 }

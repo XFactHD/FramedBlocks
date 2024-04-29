@@ -4,12 +4,13 @@
     {
       "count": 1,
       "ingredient": {
-        "tag": "forge:cobblestone"
+        "tag": "c:cobblestones"
       }
     }
   ],
   "material": 1536,
   "result": {
-    "item": "framedblocks:framed_lever"
+    "count": 1,
+    "id": "framedblocks:framed_lever"
   }
 }

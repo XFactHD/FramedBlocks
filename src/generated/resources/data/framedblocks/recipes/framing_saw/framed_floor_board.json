@@ -2,6 +2,7 @@
   "type": "framedblocks:frame",
   "material": 384,
   "result": {
-    "item": "framedblocks:framed_floor_board"
+    "count": 1,
+    "id": "framedblocks:framed_floor_board"
   }
 }

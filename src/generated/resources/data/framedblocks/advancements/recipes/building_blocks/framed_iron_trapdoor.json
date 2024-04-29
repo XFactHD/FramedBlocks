@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "framedblocks:framed_trapdoor"
-            ]
+            "items": "framedblocks:framed_trapdoor"
           }
         ]
       },

@@ -6,10 +6,10 @@
       "item": "framedblocks:framed_cube"
     },
     "N": {
-      "tag": "forge:nuggets/iron"
+      "tag": "c:nuggets/iron"
     },
     "S": {
-      "tag": "forge:rods/wooden"
+      "tag": "c:rods/wooden"
     }
   },
   "pattern": [
@@ -17,6 +17,7 @@
     "NN "
   ],
   "result": {
-    "item": "framedblocks:framed_key"
+    "count": 1,
+    "id": "framedblocks:framed_key"
   }
 }

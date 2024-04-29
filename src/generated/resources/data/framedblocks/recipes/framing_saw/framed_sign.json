@@ -2,6 +2,7 @@
   "type": "framedblocks:frame",
   "material": 1536,
   "result": {
-    "item": "framedblocks:framed_sign"
+    "count": 1,
+    "id": "framedblocks:framed_sign"
   }
 }

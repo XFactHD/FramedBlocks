@@ -4,12 +4,13 @@
     {
       "count": 1,
       "ingredient": {
-        "tag": "forge:ingots/gold"
+        "tag": "c:ingots/gold"
       }
     }
   ],
   "material": 1536,
   "result": {
-    "item": "framedblocks:framed_gold_pressure_plate"
+    "count": 1,
+    "id": "framedblocks:framed_gold_pressure_plate"
   }
 }

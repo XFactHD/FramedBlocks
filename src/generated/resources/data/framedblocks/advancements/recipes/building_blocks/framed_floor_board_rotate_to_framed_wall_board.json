@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "framedblocks:framed_floor_board"
-            ]
+            "items": "framedblocks:framed_floor_board"
           }
         ]
       },

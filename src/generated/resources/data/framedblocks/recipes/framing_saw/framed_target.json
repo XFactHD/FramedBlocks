@@ -10,12 +10,13 @@
     {
       "count": 4,
       "ingredient": {
-        "tag": "forge:dusts/redstone"
+        "tag": "c:dusts/redstone"
       }
     }
   ],
   "material": 6144,
   "result": {
-    "item": "framedblocks:framed_target"
+    "count": 1,
+    "id": "framedblocks:framed_target"
   }
 }

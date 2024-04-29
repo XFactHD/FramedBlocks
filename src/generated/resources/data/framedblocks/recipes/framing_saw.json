@@ -6,7 +6,7 @@
       "item": "framedblocks:framed_cube"
     },
     "I": {
-      "tag": "forge:ingots/iron"
+      "tag": "c:ingots/iron"
     }
   },
   "pattern": [
@@ -14,6 +14,7 @@
     "FFF"
   ],
   "result": {
-    "item": "framedblocks:framing_saw"
+    "count": 1,
+    "id": "framedblocks:framing_saw"
   }
 }

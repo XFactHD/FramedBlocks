@@ -4,12 +4,13 @@
     {
       "count": 1,
       "ingredient": {
-        "tag": "forge:stone"
+        "tag": "c:stones"
       }
     }
   ],
   "material": 1536,
   "result": {
-    "item": "framedblocks:framed_large_stone_button"
+    "count": 1,
+    "id": "framedblocks:framed_large_stone_button"
   }
 }

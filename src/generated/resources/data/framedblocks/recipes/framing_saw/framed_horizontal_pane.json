@@ -2,6 +2,7 @@
   "type": "framedblocks:frame",
   "material": 768,
   "result": {
-    "item": "framedblocks:framed_horizontal_pane"
+    "count": 1,
+    "id": "framedblocks:framed_horizontal_pane"
   }
 }

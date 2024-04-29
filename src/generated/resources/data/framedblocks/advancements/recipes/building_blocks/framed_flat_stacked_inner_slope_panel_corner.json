@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "framedblocks:framed_flat_inner_slope_panel_corner"
-            ]
+            "items": "framedblocks:framed_flat_inner_slope_panel_corner"
           }
         ]
       },

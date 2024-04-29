@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "framedblocks:framed_sloped_prism"
-            ]
+            "items": "framedblocks:framed_sloped_prism"
           }
         ]
       },

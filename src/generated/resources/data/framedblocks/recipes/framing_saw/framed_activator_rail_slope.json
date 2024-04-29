@@ -10,6 +10,7 @@
   ],
   "material": 3072,
   "result": {
-    "item": "framedblocks:framed_activator_rail_slope"
+    "count": 1,
+    "id": "framedblocks:framed_activator_rail_slope"
   }
 }

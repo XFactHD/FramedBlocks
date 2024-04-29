@@ -2,6 +2,7 @@
   "type": "framedblocks:frame",
   "material": 3072,
   "result": {
-    "item": "framedblocks:framed_divided_slope"
+    "count": 1,
+    "id": "framedblocks:framed_divided_slope"
   }
 }

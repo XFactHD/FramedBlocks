@@ -10,6 +10,7 @@
     }
   ],
   "result": {
-    "item": "framedblocks:framed_glowing_item_frame"
+    "count": 1,
+    "id": "framedblocks:framed_glowing_item_frame"
   }
 }

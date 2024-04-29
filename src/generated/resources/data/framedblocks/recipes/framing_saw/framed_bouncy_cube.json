@@ -4,12 +4,13 @@
     {
       "count": 4,
       "ingredient": {
-        "tag": "forge:slimeballs"
+        "tag": "c:slimeballs"
       }
     }
   ],
   "material": 6144,
   "result": {
-    "item": "framedblocks:framed_bouncy_cube"
+    "count": 1,
+    "id": "framedblocks:framed_bouncy_cube"
   }
 }

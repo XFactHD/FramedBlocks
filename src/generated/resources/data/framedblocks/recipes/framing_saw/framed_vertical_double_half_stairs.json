@@ -2,6 +2,7 @@
   "type": "framedblocks:frame",
   "material": 3072,
   "result": {
-    "item": "framedblocks:framed_vertical_double_half_stairs"
+    "count": 1,
+    "id": "framedblocks:framed_vertical_double_half_stairs"
   }
 }

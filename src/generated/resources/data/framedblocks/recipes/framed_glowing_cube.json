@@ -6,7 +6,7 @@
       "item": "framedblocks:framed_cube"
     },
     "G": {
-      "tag": "forge:dusts/glowstone"
+      "tag": "c:dusts/glowstone"
     }
   },
   "pattern": [
@@ -15,6 +15,7 @@
     " G "
   ],
   "result": {
-    "item": "framedblocks:framed_glowing_cube"
+    "count": 1,
+    "id": "framedblocks:framed_glowing_cube"
   }
 }

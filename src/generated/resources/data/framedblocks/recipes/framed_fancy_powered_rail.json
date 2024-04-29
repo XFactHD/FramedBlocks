@@ -6,10 +6,10 @@
       "item": "framedblocks:framed_cube"
     },
     "G": {
-      "tag": "forge:ingots/gold"
+      "tag": "c:ingots/gold"
     },
     "R": {
-      "tag": "forge:dusts/redstone"
+      "tag": "c:dusts/redstone"
     }
   },
   "pattern": [
@@ -19,6 +19,6 @@
   ],
   "result": {
     "count": 6,
-    "item": "framedblocks:framed_fancy_powered_rail"
+    "id": "framedblocks:framed_fancy_powered_rail"
   }
 }
