@@ -36,21 +36,19 @@ public class PoweredFramingSawBlock extends FramingSawBlock implements EntityBlo
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
+    protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
     {
         return Shapes.block();
     }
 
     @Override
-    @SuppressWarnings("deprecation")
-    public VoxelShape getOcclusionShape(BlockState state, BlockGetter level, BlockPos pos)
+    protected VoxelShape getOcclusionShape(BlockState state, BlockGetter level, BlockPos pos)
     {
         return FramingSawBlock.SHAPE;
     }
 
     @Override
-    @SuppressWarnings("deprecation")
-    public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean moved)
+    protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean moved)
     {
         if (newState.getBlock() != state.getBlock() && level.getBlockEntity(pos) instanceof PoweredFramingSawBlockEntity be)
         {

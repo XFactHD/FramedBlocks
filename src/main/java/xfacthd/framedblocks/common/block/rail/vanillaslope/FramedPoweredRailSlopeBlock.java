@@ -3,7 +3,6 @@ package xfacthd.framedblocks.common.block.rail.vanillaslope;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -37,7 +36,6 @@ import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
-@SuppressWarnings("deprecation")
 public class FramedPoweredRailSlopeBlock extends PoweredRailBlock implements IFramedBlock, ISlopeBlock.IRailSlopeBlock
 {
     private final BlockType type;
@@ -86,7 +84,7 @@ public class FramedPoweredRailSlopeBlock extends PoweredRailBlock implements IFr
     }
 
     @Override
-    public BlockState updateShape(
+    protected BlockState updateShape(
             BlockState state,
             Direction direction,
             BlockState neighborState,
@@ -104,13 +102,13 @@ public class FramedPoweredRailSlopeBlock extends PoweredRailBlock implements IFr
     }
 
     @Override
-    public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos)
+    protected boolean canSurvive(BlockState state, LevelReader level, BlockPos pos)
     {
         return true;
     }
 
     @Override //Copy of AbstractRailBlock#neighborChanged() to disable removal
-    public void neighborChanged(
+    protected void neighborChanged(
             BlockState state, Level level, BlockPos pos, Block block, BlockPos pFromPos, boolean isMoving
     )
     {
@@ -149,7 +147,7 @@ public class FramedPoweredRailSlopeBlock extends PoweredRailBlock implements IFr
     }
 
     @Override
-    public final ItemInteractionResult useItemOn(
+    protected ItemInteractionResult useItemOn(
             ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit
     )
     {
@@ -163,49 +161,49 @@ public class FramedPoweredRailSlopeBlock extends PoweredRailBlock implements IFr
     }
 
     @Override
-    public boolean useShapeForLightOcclusion(BlockState state)
+    protected boolean useShapeForLightOcclusion(BlockState state)
     {
         return useCamoOcclusionShapeForLightOcclusion(state);
     }
 
     @Override
-    public VoxelShape getOcclusionShape(BlockState state, BlockGetter level, BlockPos pos)
+    protected VoxelShape getOcclusionShape(BlockState state, BlockGetter level, BlockPos pos)
     {
         return getCamoOcclusionShape(state, level, pos);
     }
 
     @Override
-    public VoxelShape getVisualShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext ctx)
+    protected VoxelShape getVisualShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext ctx)
     {
         return getCamoVisualShape(state, level, pos, ctx);
     }
 
     @Override
-    public float getShadeBrightness(BlockState state, BlockGetter level, BlockPos pos)
+    protected float getShadeBrightness(BlockState state, BlockGetter level, BlockPos pos)
     {
         return getCamoShadeBrightness(state, level, pos, super.getShadeBrightness(state, level, pos));
     }
 
     @Override
-    public boolean propagatesSkylightDown(BlockState state, BlockGetter level, BlockPos pos)
+    protected boolean propagatesSkylightDown(BlockState state, BlockGetter level, BlockPos pos)
     {
         return state.getValue(FramedProperties.PROPAGATES_SKYLIGHT);
     }
 
     @Override
-    public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder)
+    protected List<ItemStack> getDrops(BlockState state, LootParams.Builder builder)
     {
         return getCamoDrops(super.getDrops(state, builder), builder);
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext ctx)
+    protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext ctx)
     {
         return shapes.get(state);
     }
 
     @Override //The default implementation defers to the AbstractBlock#getShape() overload without ISelectionContext argument
-    public VoxelShape getCollisionShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context)
+    protected VoxelShape getCollisionShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context)
     {
         if (context instanceof EntityCollisionContext ctx && ctx.getEntity() instanceof AbstractMinecart)
         {
@@ -221,7 +219,8 @@ public class FramedPoweredRailSlopeBlock extends PoweredRailBlock implements IFr
     }
 
     @Override
-    public BlockState rotate(BlockState state, Rotation rot)
+    @SuppressWarnings("deprecation")
+    protected BlockState rotate(BlockState state, Rotation rot)
     {
         Direction dir = FramedUtils.getDirectionFromAscendingRailShape(state.getValue(PropertyHolder.ASCENDING_RAIL_SHAPE));
         dir = rot.rotate(dir);
@@ -229,7 +228,8 @@ public class FramedPoweredRailSlopeBlock extends PoweredRailBlock implements IFr
     }
 
     @Override
-    public BlockState mirror(BlockState state, Mirror mirror)
+    @SuppressWarnings("deprecation")
+    protected BlockState mirror(BlockState state, Mirror mirror)
     {
         if (mirror == Mirror.NONE) { return state; }
 

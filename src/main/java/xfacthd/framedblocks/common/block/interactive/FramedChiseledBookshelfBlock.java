@@ -30,7 +30,6 @@ import xfacthd.framedblocks.common.data.BlockType;
 
 import java.util.OptionalInt;
 
-@SuppressWarnings("deprecation")
 public class FramedChiseledBookshelfBlock extends FramedBlock
 {
     public FramedChiseledBookshelfBlock()
@@ -76,7 +75,7 @@ public class FramedChiseledBookshelfBlock extends FramedBlock
     }
 
     @Override
-    public ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
+    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
     {
         ItemInteractionResult result = super.useItemOn(stack, state, level, pos, player, hand, hit);
         if (result.consumesAction()) return result;
@@ -167,7 +166,7 @@ public class FramedChiseledBookshelfBlock extends FramedBlock
     }
 
     @Override
-    public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving)
+    protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving)
     {
         if (newState.getBlock() != state.getBlock() && level.getBlockEntity(pos) instanceof FramedChiseledBookshelfBlockEntity be)
         {
@@ -180,15 +179,13 @@ public class FramedChiseledBookshelfBlock extends FramedBlock
     }
 
     @Override
-    @SuppressWarnings("deprecation")
-    public boolean hasAnalogOutputSignal(BlockState state)
+    protected boolean hasAnalogOutputSignal(BlockState state)
     {
         return true;
     }
 
     @Override
-    @SuppressWarnings("deprecation")
-    public int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos)
+    protected int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos)
     {
         if (level.getBlockEntity(pos) instanceof FramedChiseledBookshelfBlockEntity be)
         {
@@ -198,14 +195,16 @@ public class FramedChiseledBookshelfBlock extends FramedBlock
     }
 
     @Override
-    public BlockState rotate(BlockState state, Rotation rot)
+    @SuppressWarnings("deprecation")
+    protected BlockState rotate(BlockState state, Rotation rot)
     {
         Direction dir = state.getValue(FramedProperties.FACING_HOR);
         return state.setValue(FramedProperties.FACING_HOR, rot.rotate(dir));
     }
 
     @Override
-    public BlockState mirror(BlockState state, Mirror mirror)
+    @SuppressWarnings("deprecation")
+    protected BlockState mirror(BlockState state, Mirror mirror)
     {
         return Utils.mirrorFaceBlock(state, mirror);
     }

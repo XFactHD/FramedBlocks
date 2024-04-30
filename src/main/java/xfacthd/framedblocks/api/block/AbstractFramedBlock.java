@@ -30,7 +30,6 @@ import xfacthd.framedblocks.api.type.IBlockType;
 import java.util.List;
 import java.util.function.Consumer;
 
-@SuppressWarnings("deprecation")
 public abstract class AbstractFramedBlock extends Block implements IFramedBlock, SimpleWaterloggedBlock
 {
     private static final VoxelShape BEACON_BEAM_SHAPE = box(5, 0, 5, 11, 16, 11);
@@ -69,7 +68,7 @@ public abstract class AbstractFramedBlock extends Block implements IFramedBlock,
     }
 
     @Override
-    public ItemInteractionResult useItemOn(
+    protected ItemInteractionResult useItemOn(
             ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit
     )
     {
@@ -83,7 +82,7 @@ public abstract class AbstractFramedBlock extends Block implements IFramedBlock,
     }
 
     @Override
-    public BlockState updateShape(
+    protected BlockState updateShape(
             BlockState state,
             Direction facing,
             BlockState facingState,
@@ -102,15 +101,13 @@ public abstract class AbstractFramedBlock extends Block implements IFramedBlock,
     }
 
     @Override
-    public void neighborChanged(
-            BlockState state, Level level, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving
-    )
+    protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving)
     {
         updateCulling(level, pos);
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext ctx)
+    protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext ctx)
     {
         if (isIntangible(state, level, pos, ctx))
         {
@@ -120,37 +117,37 @@ public abstract class AbstractFramedBlock extends Block implements IFramedBlock,
     }
 
     @Override
-    public boolean useShapeForLightOcclusion(BlockState state)
+    protected boolean useShapeForLightOcclusion(BlockState state)
     {
         return useCamoOcclusionShapeForLightOcclusion(state);
     }
 
     @Override
-    public VoxelShape getOcclusionShape(BlockState state, BlockGetter level, BlockPos pos)
+    protected VoxelShape getOcclusionShape(BlockState state, BlockGetter level, BlockPos pos)
     {
         return getCamoOcclusionShape(state, level, pos);
     }
 
     @Override
-    public VoxelShape getVisualShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext ctx)
+    protected VoxelShape getVisualShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext ctx)
     {
         return getCamoVisualShape(state, level, pos, ctx);
     }
 
     @Override
-    public float getShadeBrightness(BlockState state, BlockGetter level, BlockPos pos)
+    protected float getShadeBrightness(BlockState state, BlockGetter level, BlockPos pos)
     {
         return getCamoShadeBrightness(state, level, pos, super.getShadeBrightness(state, level, pos));
     }
 
     @Override
-    public boolean propagatesSkylightDown(BlockState state, BlockGetter level, BlockPos pos)
+    protected boolean propagatesSkylightDown(BlockState state, BlockGetter level, BlockPos pos)
     {
         return state.getValue(FramedProperties.PROPAGATES_SKYLIGHT);
     }
 
     @Override
-    public FluidState getFluidState(BlockState state)
+    protected FluidState getFluidState(BlockState state)
     {
         if (isWaterLoggable() && state.getValue(BlockStateProperties.WATERLOGGED))
         {
@@ -182,7 +179,7 @@ public abstract class AbstractFramedBlock extends Block implements IFramedBlock,
     }
 
     @Override
-    public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder)
+    protected List<ItemStack> getDrops(BlockState state, LootParams.Builder builder)
     {
         return getCamoDrops(super.getDrops(state, builder), builder);
     }

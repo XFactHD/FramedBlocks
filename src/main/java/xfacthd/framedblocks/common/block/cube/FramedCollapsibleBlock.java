@@ -80,7 +80,7 @@ public class FramedCollapsibleBlock extends FramedBlock
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext ctx)
+    protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext ctx)
     {
         if (isIntangible(state, level, pos, ctx))
         {

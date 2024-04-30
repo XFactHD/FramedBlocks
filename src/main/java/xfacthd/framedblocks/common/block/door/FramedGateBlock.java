@@ -5,7 +5,6 @@ import com.google.common.collect.ImmutableMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.*;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -30,7 +29,6 @@ import xfacthd.framedblocks.common.data.BlockType;
 
 import javax.annotation.Nullable;
 
-@SuppressWarnings("deprecation")
 public class FramedGateBlock extends FramedBlock
 {
     private final SoundEvent closeSound;
@@ -105,9 +103,7 @@ public class FramedGateBlock extends FramedBlock
     }
 
     @Override
-    public final InteractionResult useWithoutItem(
-            BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit
-    )
+    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit)
     {
         InteractionResult result = super.useWithoutItem(state, level, pos, player, hit);
         if (result.consumesAction())
@@ -131,9 +127,7 @@ public class FramedGateBlock extends FramedBlock
     }
 
     @Override
-    public void neighborChanged(
-            BlockState state, Level level, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving
-    )
+    protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving)
     {
         boolean powered = level.hasNeighborSignal(pos);
         if (!defaultBlockState().is(block) && powered != state.getValue(BlockStateProperties.POWERED))
@@ -153,13 +147,15 @@ public class FramedGateBlock extends FramedBlock
     }
 
     @Override
-    public BlockState rotate(BlockState state, Rotation rotation)
+    @SuppressWarnings("deprecation")
+    protected BlockState rotate(BlockState state, Rotation rotation)
     {
         return state.setValue(BlockStateProperties.HORIZONTAL_FACING, rotation.rotate(state.getValue(BlockStateProperties.HORIZONTAL_FACING)));
     }
 
     @Override
-    public BlockState mirror(BlockState state, Mirror mirror)
+    @SuppressWarnings("deprecation")
+    protected BlockState mirror(BlockState state, Mirror mirror)
     {
         if (mirror == Mirror.NONE)
         {
@@ -169,7 +165,7 @@ public class FramedGateBlock extends FramedBlock
     }
 
     @Override
-    public boolean isPathfindable(BlockState state, PathComputationType type)
+    protected boolean isPathfindable(BlockState state, PathComputationType type)
     {
         return switch (type)
         {

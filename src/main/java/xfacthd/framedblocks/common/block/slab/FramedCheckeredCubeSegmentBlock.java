@@ -17,7 +17,6 @@ import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 
-@SuppressWarnings("deprecation")
 public class FramedCheckeredCubeSegmentBlock extends FramedBlock
 {
     public FramedCheckeredCubeSegmentBlock()
@@ -45,7 +44,8 @@ public class FramedCheckeredCubeSegmentBlock extends FramedBlock
     }
 
     @Override
-    public BlockState rotate(BlockState state, Rotation rot)
+    @SuppressWarnings("deprecation")
+    protected BlockState rotate(BlockState state, Rotation rot)
     {
         if (rot != Rotation.NONE && rot != Rotation.CLOCKWISE_180)
         {
@@ -55,7 +55,8 @@ public class FramedCheckeredCubeSegmentBlock extends FramedBlock
     }
 
     @Override
-    public BlockState mirror(BlockState state, Mirror mirror)
+    @SuppressWarnings("deprecation")
+    protected BlockState mirror(BlockState state, Mirror mirror)
     {
         if (mirror != Mirror.NONE)
         {

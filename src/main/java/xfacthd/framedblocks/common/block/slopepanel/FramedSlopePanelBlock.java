@@ -86,7 +86,7 @@ public class FramedSlopePanelBlock extends FramedBlock
 
     @Override
     @SuppressWarnings("deprecation")
-    public BlockState rotate(BlockState state, Rotation rot)
+    protected BlockState rotate(BlockState state, Rotation rot)
     {
         Direction side = Direction.UP;
         if (state.getValue(PropertyHolder.ROTATION) == HorizontalRotation.UP)
@@ -98,7 +98,7 @@ public class FramedSlopePanelBlock extends FramedBlock
 
     @Override
     @SuppressWarnings("deprecation")
-    public BlockState mirror(BlockState state, Mirror mirror)
+    protected BlockState mirror(BlockState state, Mirror mirror)
     {
         return mirrorPanel(state, mirror);
     }

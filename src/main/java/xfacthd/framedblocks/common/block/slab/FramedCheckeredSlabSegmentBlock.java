@@ -18,7 +18,6 @@ import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 
-@SuppressWarnings("deprecation")
 public class FramedCheckeredSlabSegmentBlock extends FramedBlock
 {
     public FramedCheckeredSlabSegmentBlock()
@@ -50,6 +49,7 @@ public class FramedCheckeredSlabSegmentBlock extends FramedBlock
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public BlockState rotate(BlockState state, Direction side, Rotation rot)
     {
         if (Utils.isY(side))
@@ -70,13 +70,15 @@ public class FramedCheckeredSlabSegmentBlock extends FramedBlock
     }
 
     @Override
-    public BlockState rotate(BlockState state, Rotation rot)
+    @SuppressWarnings("deprecation")
+    protected BlockState rotate(BlockState state, Rotation rot)
     {
         return rotate(state, Direction.UP, rot);
     }
 
     @Override
-    public BlockState mirror(BlockState state, Mirror mirror)
+    @SuppressWarnings("deprecation")
+    protected BlockState mirror(BlockState state, Mirror mirror)
     {
         if (mirror != Mirror.NONE)
         {

@@ -16,7 +16,6 @@ import xfacthd.framedblocks.api.block.*;
 import xfacthd.framedblocks.common.blockentity.special.FramedSignBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
 
-@SuppressWarnings("deprecation")
 public class FramedWallHangingSignBlock extends AbstractFramedHangingSignBlock
 {
     public FramedWallHangingSignBlock()
@@ -76,7 +75,7 @@ public class FramedWallHangingSignBlock extends AbstractFramedHangingSignBlock
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext ctx)
+    protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext ctx)
     {
         return switch (state.getValue(FramedProperties.FACING_HOR))
         {
@@ -87,13 +86,13 @@ public class FramedWallHangingSignBlock extends AbstractFramedHangingSignBlock
     }
 
     @Override
-    public VoxelShape getBlockSupportShape(BlockState state, BlockGetter level, BlockPos pos)
+    protected VoxelShape getBlockSupportShape(BlockState state, BlockGetter level, BlockPos pos)
     {
         return getShape(state, level, pos, CollisionContext.empty());
     }
 
     @Override
-    public VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext ctx)
+    protected VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext ctx)
     {
         return switch (state.getValue(FramedProperties.FACING_HOR))
         {
@@ -117,13 +116,15 @@ public class FramedWallHangingSignBlock extends AbstractFramedHangingSignBlock
     }
 
     @Override
-    public BlockState rotate(BlockState state, Rotation rot)
+    @SuppressWarnings("deprecation")
+    protected BlockState rotate(BlockState state, Rotation rot)
     {
         return state.setValue(FramedProperties.FACING_HOR, rot.rotate(state.getValue(FramedProperties.FACING_HOR)));
     }
 
     @Override
-    public BlockState mirror(BlockState state, Mirror mirror)
+    @SuppressWarnings("deprecation")
+    protected BlockState mirror(BlockState state, Mirror mirror)
     {
         return state.rotate(mirror.getRotation(state.getValue(FramedProperties.FACING_HOR)));
     }

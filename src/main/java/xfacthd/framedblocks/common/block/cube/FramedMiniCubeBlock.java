@@ -16,7 +16,6 @@ import xfacthd.framedblocks.common.data.BlockType;
 
 import java.util.Set;
 
-@SuppressWarnings("deprecation")
 public class FramedMiniCubeBlock extends FramedBlock
 {
     public FramedMiniCubeBlock()
@@ -59,14 +58,16 @@ public class FramedMiniCubeBlock extends FramedBlock
     }
 
     @Override
-    public BlockState rotate(BlockState state, Rotation rotation)
+    @SuppressWarnings("deprecation")
+    protected BlockState rotate(BlockState state, Rotation rotation)
     {
         int rot = state.getValue(BlockStateProperties.ROTATION_16);
         return state.setValue(BlockStateProperties.ROTATION_16, rotation.rotate(rot, 16));
     }
 
     @Override
-    public BlockState mirror(BlockState state, Mirror mirror)
+    @SuppressWarnings("deprecation")
+    protected BlockState mirror(BlockState state, Mirror mirror)
     {
         int rot = state.getValue(BlockStateProperties.ROTATION_16);
         return state.setValue(BlockStateProperties.ROTATION_16, mirror.mirror(rot, 16));

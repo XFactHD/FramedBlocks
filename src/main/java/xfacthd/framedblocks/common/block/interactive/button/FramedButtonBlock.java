@@ -2,11 +2,9 @@ package xfacthd.framedblocks.common.block.interactive.button;
 
 import net.minecraft.core.*;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -31,7 +29,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
 
-@SuppressWarnings("deprecation")
 public class FramedButtonBlock extends ButtonBlock implements IFramedBlock
 {
     private final BlockType type;
@@ -62,7 +59,7 @@ public class FramedButtonBlock extends ButtonBlock implements IFramedBlock
     }
 
     @Override
-    public final ItemInteractionResult useItemOn(
+    protected ItemInteractionResult useItemOn(
             ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit
     )
     {
@@ -77,24 +74,25 @@ public class FramedButtonBlock extends ButtonBlock implements IFramedBlock
     }
 
     @Override
-    public float getShadeBrightness(BlockState state, BlockGetter level, BlockPos pos)
+    protected float getShadeBrightness(BlockState state, BlockGetter level, BlockPos pos)
     {
         return getCamoShadeBrightness(state, level, pos, super.getShadeBrightness(state, level, pos));
     }
 
     @Override
-    public boolean propagatesSkylightDown(BlockState state, BlockGetter level, BlockPos pos)
+    protected boolean propagatesSkylightDown(BlockState state, BlockGetter level, BlockPos pos)
     {
         return state.getValue(FramedProperties.PROPAGATES_SKYLIGHT);
     }
 
     @Override
-    public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder)
+    protected List<ItemStack> getDrops(BlockState state, LootParams.Builder builder)
     {
         return getCamoDrops(super.getDrops(state, builder), builder);
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public BlockState rotate(BlockState state, Direction face, Rotation rot)
     {
         if (state.getValue(FACE) != AttachFace.WALL)

@@ -18,7 +18,6 @@ import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 
-@SuppressWarnings("deprecation")
 public class FramedCheckeredPanelSegmentBlock extends FramedBlock
 {
     public FramedCheckeredPanelSegmentBlock()
@@ -48,7 +47,7 @@ public class FramedCheckeredPanelSegmentBlock extends FramedBlock
 
     @Override
     @SuppressWarnings("deprecation")
-    public BlockState rotate(BlockState state, Rotation rot)
+    protected BlockState rotate(BlockState state, Rotation rot)
     {
         if (rot != Rotation.CLOCKWISE_180)
         {
@@ -60,7 +59,7 @@ public class FramedCheckeredPanelSegmentBlock extends FramedBlock
 
     @Override
     @SuppressWarnings("deprecation")
-    public BlockState mirror(BlockState state, Mirror mirror)
+    protected BlockState mirror(BlockState state, Mirror mirror)
     {
         return Utils.mirrorFaceBlock(state, mirror).cycle(PropertyHolder.SECOND);
     }

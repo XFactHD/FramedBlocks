@@ -57,7 +57,7 @@ public class FramedElevatedDoublePrismBlock extends AbstractFramedDoubleBlock im
 
     @Override
     @SuppressWarnings("deprecation")
-    public BlockState rotate(BlockState state, Rotation rot)
+    protected BlockState rotate(BlockState state, Rotation rot)
     {
         DirectionAxis dirAxis = state.getValue(PropertyHolder.FACING_AXIS);
         return state.setValue(PropertyHolder.FACING_AXIS, dirAxis.rotate(rot));
@@ -65,7 +65,7 @@ public class FramedElevatedDoublePrismBlock extends AbstractFramedDoubleBlock im
 
     @Override
     @SuppressWarnings("deprecation")
-    public BlockState mirror(BlockState state, Mirror mirror)
+    protected BlockState mirror(BlockState state, Mirror mirror)
     {
         DirectionAxis dirAxis = state.getValue(PropertyHolder.FACING_AXIS);
         return state.setValue(PropertyHolder.FACING_AXIS, dirAxis.mirror(mirror));

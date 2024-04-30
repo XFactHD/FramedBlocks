@@ -1,7 +1,5 @@
 package xfacthd.framedblocks.common.block;
 
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import xfacthd.framedblocks.api.block.AbstractFramedBlock;
@@ -21,8 +19,7 @@ public abstract class FramedBlock extends AbstractFramedBlock
     }
 
     @Override
-    @SuppressWarnings("deprecation")
-    public boolean isPathfindable(BlockState state, PathComputationType type)
+    protected boolean isPathfindable(BlockState state, PathComputationType type)
     {
         if (getBlockType() != BlockType.FRAMED_CUBE)
         {

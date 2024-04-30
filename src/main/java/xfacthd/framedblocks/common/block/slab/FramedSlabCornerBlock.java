@@ -2,11 +2,9 @@ package xfacthd.framedblocks.common.block.slab;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -47,7 +45,7 @@ public class FramedSlabCornerBlock extends FramedBlock
     }
 
     @Override
-    public boolean isPathfindable(BlockState state, PathComputationType type)
+    protected boolean isPathfindable(BlockState state, PathComputationType type)
     {
         return type == PathComputationType.WATER && state.getFluidState().is(FluidTags.WATER);
     }
@@ -69,14 +67,14 @@ public class FramedSlabCornerBlock extends FramedBlock
 
     @Override
     @SuppressWarnings("deprecation")
-    public BlockState rotate(BlockState state, Rotation rot)
+    protected BlockState rotate(BlockState state, Rotation rot)
     {
         return rotate(state, Direction.UP, rot);
     }
 
     @Override
     @SuppressWarnings("deprecation")
-    public BlockState mirror(BlockState state, Mirror mirror)
+    protected BlockState mirror(BlockState state, Mirror mirror)
     {
         return Utils.mirrorCornerBlock(state, mirror);
     }

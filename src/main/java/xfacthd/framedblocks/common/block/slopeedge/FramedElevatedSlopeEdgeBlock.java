@@ -25,7 +25,6 @@ import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.property.SlopeType;
 import xfacthd.framedblocks.common.data.property.StairsType;
 
-@SuppressWarnings("deprecation")
 public class FramedElevatedSlopeEdgeBlock extends FramedBlock implements IComplexSlopeSource
 {
     public FramedElevatedSlopeEdgeBlock()
@@ -97,13 +96,15 @@ public class FramedElevatedSlopeEdgeBlock extends FramedBlock implements IComple
     }
 
     @Override
-    public BlockState rotate(BlockState state, Rotation rot)
+    @SuppressWarnings("deprecation")
+    protected BlockState rotate(BlockState state, Rotation rot)
     {
         return rotate(state, Direction.UP, rot);
     }
 
     @Override
-    public BlockState mirror(BlockState state, Mirror mirror)
+    @SuppressWarnings("deprecation")
+    protected BlockState mirror(BlockState state, Mirror mirror)
     {
         if (state.getValue(PropertyHolder.SLOPE_TYPE) == SlopeType.HORIZONTAL)
         {

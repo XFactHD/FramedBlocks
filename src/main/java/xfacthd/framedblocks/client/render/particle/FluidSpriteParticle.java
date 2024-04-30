@@ -12,13 +12,13 @@ import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 import xfacthd.framedblocks.api.util.ClientUtils;
 
-@SuppressWarnings("deprecation")
 public final class FluidSpriteParticle extends TextureSheetParticle
 {
     private final BlockPos pos;
     private final float uo;
     private final float vo;
 
+    @SuppressWarnings("deprecation")
     public FluidSpriteParticle(ClientLevel level, double x, double y, double z, double sx, double sy, double sz, Fluid fluid, BlockPos pos)
     {
         super(level, x, y, z, sx, sy, sz);
@@ -68,6 +68,7 @@ public final class FluidSpriteParticle extends TextureSheetParticle
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public int getLightColor(float partialTick)
     {
         int light = super.getLightColor(partialTick);

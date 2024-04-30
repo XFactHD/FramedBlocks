@@ -8,7 +8,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -40,12 +39,13 @@ import xfacthd.framedblocks.common.data.PropertyHolder;
 
 import java.util.function.Consumer;
 
-@SuppressWarnings("deprecation")
 public class FramedItemFrameBlock extends FramedBlock
 {
+    @SuppressWarnings("deprecation")
     private static final SoundType NORMAL_SOUND = new SoundType(
             1F, 1F, SoundEvents.ITEM_FRAME_BREAK, SoundEvents.EMPTY, SoundEvents.ITEM_FRAME_PLACE, SoundEvents.SCAFFOLDING_HIT, SoundEvents.EMPTY
     );
+    @SuppressWarnings("deprecation")
     private static final SoundType GLOWING_SOUND = new SoundType(
             1F, 1F, SoundEvents.GLOW_ITEM_FRAME_BREAK, SoundEvents.EMPTY, SoundEvents.GLOW_ITEM_FRAME_PLACE, SoundEvents.SCAFFOLDING_HIT, SoundEvents.EMPTY
     );
@@ -82,7 +82,7 @@ public class FramedItemFrameBlock extends FramedBlock
     }
 
     @Override
-    public BlockState updateShape(
+    protected BlockState updateShape(
             BlockState state,
             Direction direction,
             BlockState neighborState,
@@ -99,14 +99,14 @@ public class FramedItemFrameBlock extends FramedBlock
     }
 
     @Override
-    public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos)
+    protected boolean canSurvive(BlockState state, LevelReader level, BlockPos pos)
     {
         Direction dir = state.getValue(BlockStateProperties.FACING);
         return Block.canSupportRigidBlock(level, pos.relative(dir));
     }
 
     @Override
-    public ItemInteractionResult useItemOn(
+    protected ItemInteractionResult useItemOn(
             ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit
     )
     {
@@ -143,6 +143,7 @@ public class FramedItemFrameBlock extends FramedBlock
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public SoundType getSoundType(BlockState state, LevelReader level, BlockPos pos, Entity entity)
     {
         //No camo sounds here
@@ -188,7 +189,8 @@ public class FramedItemFrameBlock extends FramedBlock
     }
 
     @Override
-    public BlockState rotate(BlockState state, Rotation rot)
+    @SuppressWarnings("deprecation")
+    protected BlockState rotate(BlockState state, Rotation rot)
     {
         Direction dir = state.getValue(BlockStateProperties.FACING);
         return state.setValue(BlockStateProperties.FACING, rot.rotate(dir));
@@ -196,7 +198,7 @@ public class FramedItemFrameBlock extends FramedBlock
 
     @Override
     @SuppressWarnings("deprecation")
-    public BlockState mirror(BlockState state, Mirror mirror)
+    protected BlockState mirror(BlockState state, Mirror mirror)
     {
         return Utils.mirrorFaceBlock(state, BlockStateProperties.FACING, mirror);
     }

@@ -3,7 +3,6 @@ package xfacthd.framedblocks.common.block.cube;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -36,9 +35,7 @@ public class FramedStorageBlock extends FramedBlock
     }
 
     @Override
-    public InteractionResult useWithoutItem(
-            BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit
-    )
+    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit)
     {
         InteractionResult result = super.useWithoutItem(state, level, pos, player, hit);
         if (result != InteractionResult.PASS)
@@ -57,8 +54,7 @@ public class FramedStorageBlock extends FramedBlock
     }
 
     @Override
-    @SuppressWarnings("deprecation")
-    public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving)
+    protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving)
     {
         if (newState.getBlock() != state.getBlock() && level.getBlockEntity(pos) instanceof FramedStorageBlockEntity be)
         {
@@ -83,15 +79,13 @@ public class FramedStorageBlock extends FramedBlock
     }
 
     @Override
-    @SuppressWarnings("deprecation")
-    public boolean hasAnalogOutputSignal(BlockState state)
+    protected boolean hasAnalogOutputSignal(BlockState state)
     {
         return true;
     }
 
     @Override
-    @SuppressWarnings("deprecation")
-    public int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos)
+    protected int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos)
     {
         if (level.getBlockEntity(pos) instanceof FramedStorageBlockEntity be)
         {

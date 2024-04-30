@@ -54,7 +54,7 @@ public abstract class AbstractFramedSignBlock extends FramedBlock
     }
 
     @Override
-    public ItemInteractionResult useItemOn(
+    protected ItemInteractionResult useItemOn(
             ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit
     )
     {
@@ -129,7 +129,7 @@ public abstract class AbstractFramedSignBlock extends FramedBlock
     }
 
     @Override
-    public BlockState updateShape(BlockState state, Direction dir, BlockState facingState, LevelAccessor level, BlockPos pos, BlockPos facingPos)
+    protected BlockState updateShape(BlockState state, Direction dir, BlockState facingState, LevelAccessor level, BlockPos pos, BlockPos facingPos)
     {
         if (state.getValue(BlockStateProperties.WATERLOGGED))
         {
@@ -139,7 +139,7 @@ public abstract class AbstractFramedSignBlock extends FramedBlock
     }
 
     @Override
-    public boolean isPathfindable(BlockState state, PathComputationType type)
+    protected boolean isPathfindable(BlockState state, PathComputationType type)
     {
         return type != PathComputationType.WATER || state.getFluidState().is(FluidTags.WATER);
     }

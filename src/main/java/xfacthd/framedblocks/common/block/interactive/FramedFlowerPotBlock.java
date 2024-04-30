@@ -58,7 +58,7 @@ public class FramedFlowerPotBlock extends FramedBlock
     }
 
     @Override
-    public BlockState updateShape(
+    protected BlockState updateShape(
             BlockState state,
             Direction side,
             BlockState sideState,
@@ -75,8 +75,7 @@ public class FramedFlowerPotBlock extends FramedBlock
     }
 
     @Override
-    @SuppressWarnings("deprecation")
-    public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos)
+    protected boolean canSurvive(BlockState state, LevelReader level, BlockPos pos)
     {
         if (state.getValue(PropertyHolder.HANGING))
         {
@@ -86,7 +85,7 @@ public class FramedFlowerPotBlock extends FramedBlock
     }
 
     @Override
-    public ItemInteractionResult useItemOn(
+    protected ItemInteractionResult useItemOn(
             ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit
     )
     {
@@ -143,7 +142,7 @@ public class FramedFlowerPotBlock extends FramedBlock
     }
 
     @Override
-    public boolean isPathfindable(BlockState state, PathComputationType type)
+    protected boolean isPathfindable(BlockState state, PathComputationType type)
     {
         return false;
     }

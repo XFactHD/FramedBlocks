@@ -90,7 +90,7 @@ public class FramedOneWayWindowBlock extends FramedBlock
     }
 
     @Override
-    public VoxelShape getOcclusionShape(BlockState state, BlockGetter level, BlockPos pos)
+    protected VoxelShape getOcclusionShape(BlockState state, BlockGetter level, BlockPos pos)
     {
         if (state.getValue(PropertyHolder.NULLABLE_FACE) != NullableDirection.NONE)
         {
@@ -137,7 +137,7 @@ public class FramedOneWayWindowBlock extends FramedBlock
 
     @Override
     @SuppressWarnings("deprecation")
-    public BlockState rotate(BlockState state, Rotation rotation)
+    protected BlockState rotate(BlockState state, Rotation rotation)
     {
         Direction dir = state.getValue(PropertyHolder.NULLABLE_FACE).toDirection();
         if (dir != null && !Utils.isY(dir))
@@ -150,7 +150,7 @@ public class FramedOneWayWindowBlock extends FramedBlock
 
     @Override
     @SuppressWarnings("deprecation")
-    public BlockState mirror(BlockState state, Mirror mirror)
+    protected BlockState mirror(BlockState state, Mirror mirror)
     {
         Direction dir = state.getValue(PropertyHolder.NULLABLE_FACE).toDirection();
         if (dir != null && !Utils.isY(dir))

@@ -87,7 +87,7 @@ public class FramedLatticeBlock extends FramedBlock
     }
 
     @Override
-    public BlockState updateShape(
+    protected BlockState updateShape(
             BlockState state,
             Direction facing,
             BlockState facingState,
@@ -128,7 +128,7 @@ public class FramedLatticeBlock extends FramedBlock
 
     @Override
     @SuppressWarnings("deprecation")
-    public BlockState rotate(BlockState state, Rotation rot)
+    protected BlockState rotate(BlockState state, Rotation rot)
     {
         if (rot != Rotation.NONE && rot != Rotation.CLOCKWISE_180)
         {

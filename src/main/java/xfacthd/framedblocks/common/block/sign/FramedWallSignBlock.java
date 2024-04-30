@@ -17,7 +17,6 @@ import xfacthd.framedblocks.api.block.*;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.common.data.BlockType;
 
-@SuppressWarnings("deprecation")
 public class FramedWallSignBlock extends AbstractFramedSignBlock
 {
     private static final Vec3[] HITBOX_CENTERS = Util.make(new Vec3[4], arr ->
@@ -70,7 +69,7 @@ public class FramedWallSignBlock extends AbstractFramedSignBlock
     }
 
     @Override
-    public BlockState updateShape(
+    protected BlockState updateShape(
             BlockState state,
             Direction dir,
             BlockState facingState,
@@ -87,7 +86,8 @@ public class FramedWallSignBlock extends AbstractFramedSignBlock
     }
 
     @Override
-    public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos)
+    @SuppressWarnings("deprecation")
+    protected boolean canSurvive(BlockState state, LevelReader level, BlockPos pos)
     {
         Direction dir = state.getValue(FramedProperties.FACING_HOR).getOpposite();
         return level.getBlockState(pos.relative(dir)).isSolid();
@@ -101,7 +101,8 @@ public class FramedWallSignBlock extends AbstractFramedSignBlock
     }
 
     @Override
-    public BlockState rotate(BlockState state, Rotation rot)
+    @SuppressWarnings("deprecation")
+    protected BlockState rotate(BlockState state, Rotation rot)
     {
         Direction dir = state.getValue(FramedProperties.FACING_HOR);
         return state.setValue(FramedProperties.FACING_HOR, rot.rotate(dir));

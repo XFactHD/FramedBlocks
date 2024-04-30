@@ -23,7 +23,6 @@ import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
 
-@SuppressWarnings("deprecation")
 public class FramedSlabBlock extends FramedBlock
 {
     public FramedSlabBlock()
@@ -49,7 +48,7 @@ public class FramedSlabBlock extends FramedBlock
     }
 
     @Override
-    public ItemInteractionResult useItemOn(
+    protected ItemInteractionResult useItemOn(
             ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit
     )
     {
@@ -65,6 +64,7 @@ public class FramedSlabBlock extends FramedBlock
                             level.setBlockAndUpdate(pos, FBContent.BLOCK_FRAMED_DOUBLE_SLAB.value().defaultBlockState())
                     );
 
+                    //noinspection deprecation
                     SoundType sound = FBContent.BLOCK_FRAMED_CUBE.value().defaultBlockState().getSoundType();
                     level.playSound(null, pos, sound.getPlaceSound(), SoundSource.BLOCKS, (sound.getVolume() + 1.0F) / 2.0F, sound.getPitch() * 0.8F);
                 }
@@ -75,7 +75,7 @@ public class FramedSlabBlock extends FramedBlock
     }
 
     @Override
-    public boolean isPathfindable(BlockState state, PathComputationType type)
+    protected boolean isPathfindable(BlockState state, PathComputationType type)
     {
         return type == PathComputationType.WATER && state.getFluidState().is(FluidTags.WATER);
     }

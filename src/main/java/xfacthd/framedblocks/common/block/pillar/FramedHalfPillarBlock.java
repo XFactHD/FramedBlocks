@@ -50,7 +50,7 @@ public class FramedHalfPillarBlock extends FramedBlock
 
     @Override
     @SuppressWarnings("deprecation")
-    public BlockState rotate(BlockState state, Rotation rot)
+    protected BlockState rotate(BlockState state, Rotation rot)
     {
         Direction dir = state.getValue(BlockStateProperties.FACING);
         return state.setValue(BlockStateProperties.FACING, rot.rotate(dir));
@@ -58,7 +58,7 @@ public class FramedHalfPillarBlock extends FramedBlock
 
     @Override
     @SuppressWarnings("deprecation")
-    public BlockState mirror(BlockState state, Mirror mirror)
+    protected BlockState mirror(BlockState state, Mirror mirror)
     {
         return Utils.mirrorFaceBlock(state, BlockStateProperties.FACING, mirror);
     }

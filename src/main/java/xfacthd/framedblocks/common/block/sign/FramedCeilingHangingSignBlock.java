@@ -28,7 +28,6 @@ import xfacthd.framedblocks.common.item.FramedHangingSignItem;
 
 import java.util.Optional;
 
-@SuppressWarnings("deprecation")
 public class FramedCeilingHangingSignBlock extends AbstractFramedHangingSignBlock
 {
     public FramedCeilingHangingSignBlock()
@@ -108,7 +107,7 @@ public class FramedCeilingHangingSignBlock extends AbstractFramedHangingSignBloc
     }
 
     @Override
-    public BlockState updateShape(
+    protected BlockState updateShape(
             BlockState state,
             Direction dir,
             BlockState facingState,
@@ -125,14 +124,14 @@ public class FramedCeilingHangingSignBlock extends AbstractFramedHangingSignBloc
     }
 
     @Override
-    public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos)
+    protected boolean canSurvive(BlockState state, LevelReader level, BlockPos pos)
     {
         BlockPos above = pos.above();
         return level.getBlockState(above).isFaceSturdy(level, above, Direction.DOWN, SupportType.CENTER);
     }
 
     @Override
-    public VoxelShape getBlockSupportShape(BlockState state, BlockGetter level, BlockPos pos)
+    protected VoxelShape getBlockSupportShape(BlockState state, BlockGetter level, BlockPos pos)
     {
         return getShape(state, level, pos, CollisionContext.empty());
     }
@@ -159,14 +158,16 @@ public class FramedCeilingHangingSignBlock extends AbstractFramedHangingSignBloc
     }
 
     @Override
-    public BlockState rotate(BlockState state, Rotation rot)
+    @SuppressWarnings("deprecation")
+    protected BlockState rotate(BlockState state, Rotation rot)
     {
         int rotation = state.getValue(BlockStateProperties.ROTATION_16);
         return state.setValue(BlockStateProperties.ROTATION_16, rot.rotate(rotation, 16));
     }
 
     @Override
-    public BlockState mirror(BlockState state, Mirror mirror)
+    @SuppressWarnings("deprecation")
+    protected BlockState mirror(BlockState state, Mirror mirror)
     {
         int rotation = state.getValue(BlockStateProperties.ROTATION_16);
         return state.setValue(BlockStateProperties.ROTATION_16, mirror.mirror(rotation, 16));

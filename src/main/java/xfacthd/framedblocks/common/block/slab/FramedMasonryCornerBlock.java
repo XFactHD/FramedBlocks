@@ -18,7 +18,6 @@ import xfacthd.framedblocks.common.blockentity.doubled.slab.FramedMasonryCornerB
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.doubleblock.*;
 
-@SuppressWarnings("deprecation")
 public class FramedMasonryCornerBlock extends AbstractFramedDoubleBlock
 {
     public FramedMasonryCornerBlock()
@@ -40,14 +39,16 @@ public class FramedMasonryCornerBlock extends AbstractFramedDoubleBlock
     }
 
     @Override
-    public BlockState rotate(BlockState state, Rotation rot)
+    @SuppressWarnings("deprecation")
+    protected BlockState rotate(BlockState state, Rotation rot)
     {
         Direction dir = state.getValue(FramedProperties.FACING_HOR);
         return state.setValue(FramedProperties.FACING_HOR, rot.rotate(dir));
     }
 
     @Override
-    public BlockState mirror(BlockState state, Mirror mirror)
+    @SuppressWarnings("deprecation")
+    protected BlockState mirror(BlockState state, Mirror mirror)
     {
         return Utils.mirrorCornerBlock(state, mirror);
     }

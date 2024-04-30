@@ -32,7 +32,6 @@ import xfacthd.framedblocks.common.data.doubleblock.SolidityCheck;
 import xfacthd.framedblocks.common.item.VerticalAndWallBlockItem;
 import xfacthd.framedblocks.common.data.doubleblock.DoubleBlockTopInteractionMode;
 
-@SuppressWarnings("deprecation")
 public class FramedDoubleCornerSlopePanelBlock extends AbstractFramedDoubleBlock
 {
     public FramedDoubleCornerSlopePanelBlock(BlockType blockType)
@@ -80,13 +79,15 @@ public class FramedDoubleCornerSlopePanelBlock extends AbstractFramedDoubleBlock
     }
 
     @Override
-    public BlockState rotate(BlockState state, Rotation rot)
+    @SuppressWarnings("deprecation")
+    protected BlockState rotate(BlockState state, Rotation rot)
     {
         return rotate(state, Direction.UP, rot);
     }
 
     @Override
-    public BlockState mirror(BlockState state, Mirror mirror)
+    @SuppressWarnings("deprecation")
+    protected BlockState mirror(BlockState state, Mirror mirror)
     {
         return Utils.mirrorCornerBlock(state, mirror);
     }

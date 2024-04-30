@@ -25,7 +25,6 @@ import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.property.HorizontalRotation;
 
-@SuppressWarnings("deprecation")
 public class FramedExtendedCornerSlopePanelWallBlock extends FramedBlock
 {
     private final Holder<Block> nonWallBlock;
@@ -118,13 +117,15 @@ public class FramedExtendedCornerSlopePanelWallBlock extends FramedBlock
     }
 
     @Override
-    public BlockState rotate(BlockState state, Rotation rot)
+    @SuppressWarnings("deprecation")
+    protected BlockState rotate(BlockState state, Rotation rot)
     {
         return rotate(state, state.getValue(FramedProperties.FACING_HOR), rot);
     }
 
     @Override
-    public BlockState mirror(BlockState state, Mirror mirror)
+    @SuppressWarnings("deprecation")
+    protected BlockState mirror(BlockState state, Mirror mirror)
     {
         return FramedCornerSlopePanelWallBlock.mirrorCornerPanel(state, mirror);
     }

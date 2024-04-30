@@ -39,7 +39,6 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
 
-@SuppressWarnings("deprecation")
 public final class FramedBlockModel extends BakedModelProxy
 {
     private static final FramedBlockData DEFAULT_DATA = new FramedBlockData(EmptyCamoContent.EMPTY, false);
@@ -387,6 +386,7 @@ public final class FramedBlockModel extends BakedModelProxy
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public TextureAtlasSprite getParticleIcon(ModelData data)
     {
         FramedBlockData fbdata = data.get(FramedBlockData.PROPERTY);

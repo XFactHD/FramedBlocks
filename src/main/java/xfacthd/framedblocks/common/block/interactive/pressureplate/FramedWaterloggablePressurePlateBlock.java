@@ -40,7 +40,7 @@ public class FramedWaterloggablePressurePlateBlock extends FramedPressurePlateBl
     }
 
     @Override
-    public BlockState updateShape(
+    protected BlockState updateShape(
             BlockState state,
             Direction facing,
             BlockState facingState,
@@ -58,8 +58,7 @@ public class FramedWaterloggablePressurePlateBlock extends FramedPressurePlateBl
     }
 
     @Override
-    @SuppressWarnings("deprecation")
-    public FluidState getFluidState(BlockState state)
+    protected FluidState getFluidState(BlockState state)
     {
         if (state.getValue(BlockStateProperties.WATERLOGGED))
         {

@@ -21,7 +21,6 @@ import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
 
-@SuppressWarnings("deprecation")
 public class FramedPanelBlock extends FramedBlock
 {
     public FramedPanelBlock()
@@ -46,7 +45,7 @@ public class FramedPanelBlock extends FramedBlock
     }
 
     @Override
-    public ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
+    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
     {
         if (stack.getItem() == FBContent.BLOCK_FRAMED_PANEL.value().asItem())
         {
@@ -61,6 +60,7 @@ public class FramedPanelBlock extends FramedBlock
                             level.setBlockAndUpdate(pos, newState.setValue(FramedProperties.FACING_HOR, facing))
                     );
 
+                    //noinspection deprecation
                     SoundType sound = FBContent.BLOCK_FRAMED_CUBE.value().defaultBlockState().getSoundType();
                     level.playSound(null, pos, sound.getPlaceSound(), SoundSource.BLOCKS, (sound.getVolume() + 1.0F) / 2.0F, sound.getPitch() * 0.8F);
                 }
@@ -71,7 +71,8 @@ public class FramedPanelBlock extends FramedBlock
     }
 
     @Override
-    public BlockState rotate(BlockState state, Rotation rot)
+    @SuppressWarnings("deprecation")
+    protected BlockState rotate(BlockState state, Rotation rot)
     {
         Direction dir = state.getValue(FramedProperties.FACING_HOR);
         return state.setValue(FramedProperties.FACING_HOR, rot.rotate(dir));
@@ -79,7 +80,7 @@ public class FramedPanelBlock extends FramedBlock
 
     @Override
     @SuppressWarnings("deprecation")
-    public BlockState mirror(BlockState state, Mirror mirror)
+    protected BlockState mirror(BlockState state, Mirror mirror)
     {
         return Utils.mirrorFaceBlock(state, mirror);
     }

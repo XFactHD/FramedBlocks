@@ -67,7 +67,7 @@ public class FramedChestBlock extends FramedStorageBlock
 
     @Override
     @SuppressWarnings("deprecation")
-    public BlockState rotate(BlockState state, Rotation rot)
+    protected BlockState rotate(BlockState state, Rotation rot)
     {
         Direction dir = rot.rotate(state.getValue(FramedProperties.FACING_HOR));
         return state.setValue(FramedProperties.FACING_HOR, dir);
@@ -75,7 +75,7 @@ public class FramedChestBlock extends FramedStorageBlock
 
     @Override
     @SuppressWarnings("deprecation")
-    public BlockState mirror(BlockState state, Mirror mirror)
+    protected BlockState mirror(BlockState state, Mirror mirror)
     {
         return state.rotate(mirror.getRotation(state.getValue(FramedProperties.FACING_HOR)));
     }

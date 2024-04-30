@@ -30,7 +30,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class FramedDiagonalGlassPaneBlock extends NeoForgeDiagonalGlassPaneBlock implements IFramedBlock
+public final class FramedDiagonalGlassPaneBlock extends NeoForgeDiagonalGlassPaneBlock implements IFramedBlock
 {
     public FramedDiagonalGlassPaneBlock(Block block)
     {
@@ -50,7 +50,7 @@ public class FramedDiagonalGlassPaneBlock extends NeoForgeDiagonalGlassPaneBlock
     }
 
     @Override
-    public final ItemInteractionResult useItemOn(
+    protected ItemInteractionResult useItemOn(
             ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit
     )
     {
@@ -125,21 +125,19 @@ public class FramedDiagonalGlassPaneBlock extends NeoForgeDiagonalGlassPaneBlock
     }
 
     @Override
-    public void neighborChanged(
-            BlockState state, Level level, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving
-    )
+    protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving)
     {
         updateCulling(level, pos);
     }
 
     @Override
-    public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder)
+    protected List<ItemStack> getDrops(BlockState state, LootParams.Builder builder)
     {
         return getCamoDrops(super.getDrops(state, builder), builder);
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext ctx)
+    protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext ctx)
     {
         if (isIntangible(state, level, pos, ctx))
         {
@@ -149,7 +147,7 @@ public class FramedDiagonalGlassPaneBlock extends NeoForgeDiagonalGlassPaneBlock
     }
 
     @Override
-    public VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext ctx)
+    protected VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext ctx)
     {
         if (isIntangible(state, level, pos, null))
         {
@@ -159,19 +157,19 @@ public class FramedDiagonalGlassPaneBlock extends NeoForgeDiagonalGlassPaneBlock
     }
 
     @Override
-    public float getShadeBrightness(BlockState state, BlockGetter level, BlockPos pos)
+    protected float getShadeBrightness(BlockState state, BlockGetter level, BlockPos pos)
     {
         return getCamoShadeBrightness(state, level, pos, super.getShadeBrightness(state, level, pos));
     }
 
     @Override
-    public boolean propagatesSkylightDown(BlockState state, BlockGetter level, BlockPos pos)
+    protected boolean propagatesSkylightDown(BlockState state, BlockGetter level, BlockPos pos)
     {
         return state.getValue(FramedProperties.PROPAGATES_SKYLIGHT);
     }
 
     @Override //The pane handles this through the SideSkipPredicate instead
-    public boolean skipRendering(BlockState state, BlockState adjacentState, Direction side)
+    protected boolean skipRendering(BlockState state, BlockState adjacentState, Direction side)
     {
         return this == FBContent.BLOCK_FRAMED_BARS.value() && super.skipRendering(state, adjacentState, side);
     }
