@@ -65,6 +65,12 @@ public final class EmptyCamoContent extends CamoContent<EmptyCamoContent>
     }
 
     @Override
+    public boolean isEmissive()
+    {
+        return false;
+    }
+
+    @Override
     @SuppressWarnings("deprecation")
     public SoundType getSoundType()
     {

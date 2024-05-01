@@ -39,6 +39,7 @@ import xfacthd.framedblocks.api.block.render.*;
 import xfacthd.framedblocks.api.blueprint.BlueprintData;
 import xfacthd.framedblocks.api.camo.*;
 import xfacthd.framedblocks.api.internal.InternalAPI;
+import xfacthd.framedblocks.api.model.data.FramedBlockData;
 import xfacthd.framedblocks.api.predicate.cull.SideSkipPredicate;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.*;
@@ -47,7 +48,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-@SuppressWarnings({ "deprecation", "unused" })
 public interface IFramedBlock extends EntityBlock, IBlockExtension
 {
     String LOCK_MESSAGE = Utils.translationKey("msg", "lock_state");
@@ -64,6 +64,7 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension
                 .instrument(NoteBlockInstrument.BASS)
                 .strength(2F)
                 .sound(SoundType.WOOD)
+                .emissiveRendering(IFramedBlock::isEmissiveRendering)
                 .isViewBlocking(IFramedBlock::isBlockSuffocating)
                 .isSuffocating(IFramedBlock::isBlockSuffocating);
 
@@ -73,6 +74,11 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension
         }
 
         return props;
+    }
+
+    private static boolean isEmissiveRendering(BlockState state, BlockGetter level, BlockPos pos)
+    {
+        return ((IFramedBlock) state.getBlock()).isCamoEmissiveRendering(state, level, pos);
     }
 
     private static boolean isBlockSuffocating(BlockState state, BlockGetter level, BlockPos pos)
@@ -190,6 +196,7 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     default SoundType getSoundType(BlockState state, LevelReader level, BlockPos pos, @Nullable Entity entity)
     {
         if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
@@ -304,6 +311,7 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     default float getExplosionResistance(BlockState state, BlockGetter level, BlockPos pos, Explosion explosion)
     {
         if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
@@ -375,7 +383,7 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension
         return false;
     }
 
-    default boolean isIntangible(BlockState state, BlockGetter level, BlockPos pos, @Nullable CollisionContext ctx)
+    default boolean isIntangible(@SuppressWarnings("unused") BlockState state, BlockGetter level, BlockPos pos, @Nullable CollisionContext ctx)
     {
         if (!ConfigView.Server.INSTANCE.enableIntangibility() || !getBlockType().allowMakingIntangible())
         {
@@ -384,6 +392,25 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension
         return level.getBlockEntity(pos) instanceof FramedBlockEntity be && be.isIntangible(ctx);
     }
 
+    default boolean isCamoEmissiveRendering(@SuppressWarnings("unused") BlockState state, BlockGetter level, BlockPos pos)
+    {
+        ModelData modelData = level.getModelData(pos);
+        return isCamoEmissiveRendering(modelData);
+    }
+
+    static boolean isCamoEmissiveRendering(@Nullable ModelData modelData)
+    {
+        if (modelData == ModelData.EMPTY || modelData == null) return false;
+
+        FramedBlockData fbData = modelData.get(FramedBlockData.PROPERTY);
+        if (fbData != null)
+        {
+            return fbData.getCamoContent().isEmissive();
+        }
+        return false;
+    }
+
+    @SuppressWarnings("deprecation")
     default boolean isSuffocating(BlockState state, BlockGetter level, BlockPos pos)
     {
         if (ConfigView.Server.INSTANCE.enableIntangibility() && getBlockType().allowMakingIntangible())
@@ -427,7 +454,7 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension
         return state.getCollisionShape(level, pos, ctx);
     }
 
-    default float getCamoShadeBrightness(BlockState state, BlockGetter level, BlockPos pos, float ownShade)
+    default float getCamoShadeBrightness(@SuppressWarnings("unused") BlockState state, BlockGetter level, BlockPos pos, float ownShade)
     {
         if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
         {
@@ -535,6 +562,7 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension
         return rotate(state, hit.getDirection(), rot);
     }
 
+    @SuppressWarnings("deprecation")
     default BlockState rotate(BlockState state, Direction face, Rotation rot)
     {
         return state.rotate(rot);

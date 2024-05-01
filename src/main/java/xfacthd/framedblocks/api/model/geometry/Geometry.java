@@ -172,9 +172,13 @@ public abstract class Geometry
         {
             BakedModel model = CamoContainerHelper.Client.getOrCreateModel(camoContent);
             TriState camoAO = model.useAmbientOcclusion(camoContent.getAppearanceState(), ModelData.EMPTY, renderType);
-            if (camoAO != TriState.DEFAULT || camoContent.getLightEmission() != 0)
+            if (camoAO != TriState.DEFAULT)
             {
                 return camoAO;
+            }
+            if (camoContent.getLightEmission() != 0 || camoContent.isEmissive())
+            {
+                return TriState.FALSE;
             }
         }
         if (ConfigView.Client.INSTANCE.shouldForceAmbientOcclusionOnGlowingBlocks())

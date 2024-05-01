@@ -43,6 +43,16 @@ public interface IFramedDoubleBlock extends IFramedBlock
     }
 
     @Override
+    default boolean isCamoEmissiveRendering(BlockState state, BlockGetter level, BlockPos pos)
+    {
+        ModelData modelData = level.getModelData(pos);
+        if (modelData == ModelData.EMPTY) return false;
+
+        return IFramedBlock.isCamoEmissiveRendering(modelData.get(FramedDoubleBlockEntity.DATA_LEFT)) ||
+               IFramedBlock.isCamoEmissiveRendering(modelData.get(FramedDoubleBlockEntity.DATA_RIGHT));
+    }
+
+    @Override
     BlockEntity newBlockEntity(BlockPos pos, BlockState state);
 
     @ApiStatus.OverrideOnly

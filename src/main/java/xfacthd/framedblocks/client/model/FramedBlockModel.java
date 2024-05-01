@@ -13,6 +13,7 @@ import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.client.ChunkRenderTypeSet;
+import net.neoforged.neoforge.client.model.QuadTransformers;
 import net.neoforged.neoforge.client.model.data.ModelData;
 import net.neoforged.neoforge.common.util.TriState;
 import org.jetbrains.annotations.Nullable;
@@ -38,6 +39,7 @@ import xfacthd.framedblocks.common.data.PropertyHolder;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
+import java.util.function.UnaryOperator;
 
 public final class FramedBlockModel extends BakedModelProxy
 {
@@ -47,6 +49,7 @@ public final class FramedBlockModel extends BakedModelProxy
     private static final int FLAG_NO_CAMO_REINFORCED = 0b010;
     private static final int FLAG_NO_CAMO_SOLID_BG = 0b100;
     private static final BlockCamoContent[] DEFAULT_NO_CAMO_CONTENTS = makeNoCamoContents(FBContent.BLOCK_FRAMED_CUBE.value().defaultBlockState());
+    private static final UnaryOperator<BakedQuad> EMISSIVE_PROCESSOR = QuadTransformers.settingMaxEmissivity()::process;
 
     private final Map<QuadCacheKey, QuadTable> quadCache = new ConcurrentHashMap<>();
     private final Map<QuadCacheKey, CachedRenderTypes> renderTypeCache = new ConcurrentHashMap<>();
@@ -220,7 +223,15 @@ public final class FramedBlockModel extends BakedModelProxy
             ArrayList<BakedQuad> quads = new ArrayList<>();
             if (camoInRenderType)
             {
-                Utils.copyAll(camoModel.getQuads(camoContent.getAppearanceState(), side, rand, camoData, renderType), quads);
+                List<BakedQuad> camoQuads = camoModel.getQuads(camoContent.getAppearanceState(), side, rand, camoData, renderType);
+                if (camoContent.isEmissive())
+                {
+                    Utils.copyAllWithModifier(camoQuads, quads, EMISSIVE_PROCESSOR);
+                }
+                else
+                {
+                    Utils.copyAll(camoQuads, quads);
+                }
             }
             if (additionalQuads)
             {
@@ -271,6 +282,7 @@ public final class FramedBlockModel extends BakedModelProxy
     )
     {
         QuadTable quadTable = new QuadTable();
+        UnaryOperator<BakedQuad> preprocessor = camoContent.isEmissive() ? EMISSIVE_PROCESSOR : UnaryOperator.identity();
 
         for (RenderType renderType : renderTypes.camoTypes)
         {
@@ -283,6 +295,7 @@ public final class FramedBlockModel extends BakedModelProxy
             }
             for (BakedQuad quad : quads)
             {
+                quad = preprocessor.apply(quad);
                 geometry.transformQuad(quadTable, quad, data);
             }
         }

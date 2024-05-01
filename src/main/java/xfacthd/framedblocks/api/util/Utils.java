@@ -364,6 +364,16 @@ public final class Utils
         }
     }
 
+    @SuppressWarnings("ForLoopReplaceableByForEach")
+    public static <T> void copyAllWithModifier(List<T> src, ArrayList<T> dest, UnaryOperator<T> modifier)
+    {
+        dest.ensureCapacity(dest.size() + src.size());
+        for (int i = 0; i < src.size(); i++)
+        {
+            dest.add(modifier.apply(src.get(i)));
+        }
+    }
+
     public static TagKey<Block> blockTag(String name)
     {
         return blockTag(FramedConstants.MOD_ID, name);

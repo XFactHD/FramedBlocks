@@ -79,6 +79,12 @@ public final class BlockCamoContent extends CamoContent<BlockCamoContent>
     }
 
     @Override
+    public boolean isEmissive()
+    {
+        return state.emissiveRendering(EmptyBlockGetter.INSTANCE, BlockPos.ZERO);
+    }
+
+    @Override
     @SuppressWarnings("deprecation")
     public SoundType getSoundType()
     {

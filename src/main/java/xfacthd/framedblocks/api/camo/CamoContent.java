@@ -63,6 +63,12 @@ public abstract class CamoContent<C extends CamoContent<C>> implements QuadCache
     public abstract int getLightEmission();
 
     /**
+     * {@return whether this camo is emissive}
+     * @see BlockBehaviour.BlockStateBase#emissiveRendering(BlockGetter, BlockPos)
+     */
+    public abstract boolean isEmissive();
+
+    /**
      * {@return the sound type of this camo}
      * @see IBlockStateExtension#getSoundType(LevelReader, BlockPos, Entity)
      */
