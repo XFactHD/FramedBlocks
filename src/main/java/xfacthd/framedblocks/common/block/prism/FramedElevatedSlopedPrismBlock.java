@@ -51,7 +51,7 @@ public class FramedElevatedSlopedPrismBlock extends FramedBlock implements IFram
     @Override
     public boolean handleBlockLeftClick(BlockState state, Level level, BlockPos pos, Player player)
     {
-        if (player.getMainHandItem().is(Utils.WRENCH))
+        if (player.getMainHandItem().canPerformAction(Utils.ACTION_WRENCH))
         {
             level.setBlockAndUpdate(pos, state.setValue(FramedProperties.Y_SLOPE, !state.getValue(FramedProperties.Y_SLOPE)));
             return true;

@@ -151,7 +151,7 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension
             return ItemInteractionResult.sidedSuccess(level.isClientSide());
         }
 
-        if (player.getItemInHand(hand).is(Utils.WRENCH))
+        if (player.getItemInHand(hand).canPerformAction(Utils.ACTION_WRENCH))
         {
             Rotation rot = player.isShiftKeyDown() ? Rotation.COUNTERCLOCKWISE_90 : Rotation.CLOCKWISE_90;
             BlockState newState = rotate(state, hit, rot);
