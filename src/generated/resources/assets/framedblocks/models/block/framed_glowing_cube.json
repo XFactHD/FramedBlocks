@@ -34,6 +34,11 @@
         0,
         0
       ],
+      "neoforge_data": {
+        "block_light": 15,
+        "sky_light": 15
+      },
+      "shade": false,
       "to": [
         16,
         16,
@@ -72,6 +77,11 @@
         0,
         0
       ],
+      "neoforge_data": {
+        "block_light": 15,
+        "sky_light": 15
+      },
+      "shade": false,
       "to": [
         16,
         16,
