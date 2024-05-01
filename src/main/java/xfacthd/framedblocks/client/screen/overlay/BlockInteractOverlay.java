@@ -58,7 +58,7 @@ public abstract class BlockInteractOverlay implements LayeredDraw.Layer
     public void render(GuiGraphics graphics, float partialTick)
     {
         Mode mode = modeGetter.get();
-        if (mode == Mode.HIDDEN)
+        if (mode == Mode.HIDDEN || player().isSpectator() || Minecraft.getInstance().options.hideGui)
         {
             return;
         }
