@@ -12,7 +12,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedProperties;
-import xfacthd.framedblocks.api.util.Utils;
+import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
 import xfacthd.framedblocks.common.blockentity.doubled.prism.FramedElevatedDoublePrismBlockEntity;
@@ -47,12 +47,7 @@ public class FramedElevatedDoublePrismBlock extends AbstractFramedDoubleBlock im
     @Override
     public boolean handleBlockLeftClick(BlockState state, Level level, BlockPos pos, Player player)
     {
-        if (player.getMainHandItem().canPerformAction(Utils.ACTION_WRENCH))
-        {
-            level.setBlockAndUpdate(pos, state.setValue(FramedProperties.Y_SLOPE, !state.getValue(FramedProperties.Y_SLOPE)));
-            return true;
-        }
-        return false;
+        return IFramedBlock.toggleYSlope(state, level, pos, player);
     }
 
     @Override
