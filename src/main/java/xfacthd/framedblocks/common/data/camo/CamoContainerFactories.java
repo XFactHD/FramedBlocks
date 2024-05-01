@@ -1,5 +1,6 @@
 package xfacthd.framedblocks.common.data.camo;
 
+import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
 import net.minecraft.world.item.*;
 import net.neoforged.neoforge.capabilities.Capabilities;
@@ -14,7 +15,7 @@ public final class CamoContainerFactories
 {
     private static final Map<Item, CamoContainerFactory<?>> APPLICATION_ITEMS = new IdentityHashMap<>();
     private static final List<FactoryPredicatePair> APPLICATION_PREDICATES = new ArrayList<>();
-    private static final Map<Item, Set<CamoContainerFactory<?>>> REMOVAL_ITEMS = new IdentityHashMap<>();
+    private static final Map<Item, Set<CamoContainerFactory<?>>> REMOVAL_ITEMS = new Reference2ObjectOpenHashMap<>();
     private static final List<FactoryPredicatePair> REMOVAL_PREDICATES = new ArrayList<>();
 
     public static void registerCamoFactories()
@@ -57,7 +58,7 @@ public final class CamoContainerFactories
     public static boolean isValidRemovalTool(CamoContainer<?, ?> container, ItemStack stack)
     {
         Set<CamoContainerFactory<?>> factories = REMOVAL_ITEMS.get(stack.getItem());
-        if (factories.contains(container.getFactory()))
+        if (factories != null && factories.contains(container.getFactory()))
         {
             return true;
         }
