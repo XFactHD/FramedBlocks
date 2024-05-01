@@ -37,21 +37,21 @@ public class FramedSlopeSlabGeometry extends Geometry
 
         if (!ySlope && face == facing.getOpposite())
         {
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.makeVerticalSlope(!top, SLOPE_ANGLE))
                     .applyIf(Modifiers.offset(top ? Direction.DOWN : Direction.UP, .5F), offset)
                     .export(quadMap.get(null));
         }
         else if (ySlope && ((!top && face == Direction.UP) || (top && face == Direction.DOWN)))
         {
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.makeVerticalSlope(facing.getOpposite(), SLOPE_ANGLE_VERT))
                     .applyIf(Modifiers.offset(top ? Direction.UP : Direction.DOWN, .5F), !offset)
                     .export(quadMap.get(null));
         }
         else if (face == facing)
         {
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutSideUpDown(topHalf, .5F))
                     .export(quadMap.get(face));
         }
@@ -61,14 +61,14 @@ public class FramedSlopeSlabGeometry extends Geometry
             float right = rightFace ? (offset ? .5F : 0) : (offset ? 1 : .5F);
             float left =  rightFace ? (offset ? 1 : .5F) : (offset ? .5F : 0);
 
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutSideUpDown(top, right, left))
                     .applyIf(Modifiers.cutSideUpDown(!top, .5F), offset)
                     .export(quadMap.get(face));
         }
         else if ((top && !topHalf && face == Direction.UP) || (!top && topHalf && face == Direction.DOWN))
         {
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.setPosition(.5F))
                     .export(quadMap.get(null));
         }

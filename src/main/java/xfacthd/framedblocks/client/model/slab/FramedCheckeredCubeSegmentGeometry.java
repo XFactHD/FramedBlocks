@@ -28,23 +28,23 @@ public class FramedCheckeredCubeSegmentGeometry extends Geometry
             boolean up = quadDir == Direction.UP;
             Direction xDir = (second ^ up) ? Direction.WEST : Direction.EAST;
 
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutTopBottom(Direction.SOUTH, .5F))
                     .apply(Modifiers.cutTopBottom(xDir, .5F))
                     .export(quadMap.get(quadDir));
 
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutTopBottom(Direction.NORTH, .5F))
                     .apply(Modifiers.cutTopBottom(xDir.getOpposite(), .5F))
                     .export(quadMap.get(quadDir));
 
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutTopBottom(Direction.SOUTH, .5F))
                     .apply(Modifiers.cutTopBottom(xDir.getOpposite(), .5F))
                     .apply(Modifiers.setPosition(.5F))
                     .export(quadMap.get(null));
 
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutTopBottom(Direction.NORTH, .5F))
                     .apply(Modifiers.cutTopBottom(xDir, .5F))
                     .apply(Modifiers.setPosition(.5F))
@@ -54,23 +54,23 @@ public class FramedCheckeredCubeSegmentGeometry extends Geometry
         {
             Direction horDir = Utils.isX(quadDir) ^ second ? quadDir.getCounterClockWise() : quadDir.getClockWise();
 
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutSideUpDown(false, .5F))
                     .apply(Modifiers.cutSideLeftRight(horDir, .5F))
                     .export(quadMap.get(quadDir));
 
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutSideUpDown(true, .5F))
                     .apply(Modifiers.cutSideLeftRight(horDir.getOpposite(), .5F))
                     .export(quadMap.get(quadDir));
 
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutSideUpDown(false, .5F))
                     .apply(Modifiers.cutSideLeftRight(horDir.getOpposite(), .5F))
                     .apply(Modifiers.setPosition(.5F))
                     .export(quadMap.get(null));
 
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutSideUpDown(true, .5F))
                     .apply(Modifiers.cutSideLeftRight(horDir, .5F))
                     .apply(Modifiers.setPosition(.5F))

@@ -40,7 +40,7 @@ public class FramedPyramidGeometry extends Geometry
             boolean up = facing == Direction.UP;
             if (!ySlope && quadDir.getAxis() != facing.getAxis())
             {
-                QuadModifier.geometry(quad)
+                QuadModifier.of(quad)
                         .apply(Modifiers.cutSideLeftRight(false, up ? .5F : 1, up ? 1 : .5F))
                         .apply(Modifiers.cutSideLeftRight(true, up ? .5F : 1, up ? 1 : .5F))
                         .apply(Modifiers.makeVerticalSlope(up, FramedSlopePanelGeometry.SLOPE_ANGLE))
@@ -56,7 +56,7 @@ public class FramedPyramidGeometry extends Geometry
 
                     Vector3f origin = up ? TOP_CENTER : BOTTOM_CENTER;
 
-                    QuadModifier.geometry(quad)
+                    QuadModifier.of(quad)
                             .apply(Modifiers.cutTopBottom(dir.getCounterClockWise(), .5F, 1))
                             .apply(Modifiers.cutTopBottom(dir.getClockWise(), 1, .5F))
                             .apply(Modifiers.offset(dir.getOpposite(), .5F))
@@ -69,14 +69,14 @@ public class FramedPyramidGeometry extends Geometry
         {
             if (!ySlope && quadDir.getAxis() == facing.getAxis())
             {
-                QuadModifier.geometry(quad)
+                QuadModifier.of(quad)
                         .apply(Modifiers.cutSideLeftRight(facing.getClockWise(), 1, .5F))
                         .apply(Modifiers.cutSideLeftRight(facing.getCounterClockWise(), 1, .5F))
                         .apply(Modifiers.makeVerticalSlope(true, FramedSlopeSlabGeometry.SLOPE_ANGLE))
                         .apply(Modifiers.offset(Direction.UP, .5F))
                         .export(quadMap.get(null));
 
-                QuadModifier.geometry(quad)
+                QuadModifier.of(quad)
                         .apply(Modifiers.cutSideLeftRight(facing.getClockWise(), .5F, 1))
                         .apply(Modifiers.cutSideLeftRight(facing.getCounterClockWise(), .5F, 1))
                         .apply(Modifiers.makeVerticalSlope(false, FramedSlopeSlabGeometry.SLOPE_ANGLE))
@@ -99,7 +99,7 @@ public class FramedPyramidGeometry extends Geometry
                     origin.add(0, 1, 0);
                 }
 
-                QuadModifier.geometry(quad)
+                QuadModifier.of(quad)
                         .apply(Modifiers.cutTopBottom(facing.getCounterClockWise(), .5F, 1))
                         .apply(Modifiers.cutTopBottom(facing.getClockWise(), 1, .5F))
                         .apply(Modifiers.rotate(facing.getClockWise().getAxis(), origin, angle, true))
@@ -108,7 +108,7 @@ public class FramedPyramidGeometry extends Geometry
             else if (quadDir.getAxis() == facing.getClockWise().getAxis())
             {
                 boolean right = quadDir == facing.getClockWise();
-                QuadModifier.geometry(quad)
+                QuadModifier.of(quad)
                         .apply(Modifiers.cutSideUpDown(true, right ? 1 : .5F, right ? .5F : 1))
                         .apply(Modifiers.cutSideUpDown(false, right ? 1 : .5F, right ? .5F : 1))
                         .apply(Modifiers.makeHorizontalSlope(!right, FramedSlopePanelGeometry.SLOPE_ANGLE))

@@ -42,19 +42,19 @@ public class FramedLatticeGeometry extends Geometry
         Direction quadDir = quad.getDirection();
         if (Utils.isY(quadDir))
         {
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutTopBottom(minCoord, minCoord, maxCoord, maxCoord))
                     .applyIf(Modifiers.setPosition(maxCoord), !yAxis)
                     .export(quadMap.get(yAxis ? quadDir : null));
 
             if (xAxis)
             {
-                QuadModifier.geometry(quad)
+                QuadModifier.of(quad)
                         .apply(Modifiers.cutTopBottom(0F, minCoord, minCoord, maxCoord))
                         .apply(Modifiers.setPosition(maxCoord))
                         .export(quadMap.get(null));
 
-                QuadModifier.geometry(quad)
+                QuadModifier.of(quad)
                         .apply(Modifiers.cutTopBottom(maxCoord, minCoord, 1F, maxCoord))
                         .apply(Modifiers.setPosition(maxCoord))
                         .export(quadMap.get(null));
@@ -62,12 +62,12 @@ public class FramedLatticeGeometry extends Geometry
 
             if (zAxis)
             {
-                QuadModifier.geometry(quad)
+                QuadModifier.of(quad)
                         .apply(Modifiers.cutTopBottom(minCoord, 0F, maxCoord, minCoord))
                         .apply(Modifiers.setPosition(maxCoord))
                         .export(quadMap.get(null));
 
-                QuadModifier.geometry(quad)
+                QuadModifier.of(quad)
                         .apply(Modifiers.cutTopBottom(minCoord, maxCoord, maxCoord, 1F))
                         .apply(Modifiers.setPosition(maxCoord))
                         .export(quadMap.get(null));
@@ -84,12 +84,12 @@ public class FramedLatticeGeometry extends Geometry
 
         if (!Utils.isY(quadDir) && yAxis)
         {
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutSide(minCoord, 0F, maxCoord, minCoord))
                     .apply(Modifiers.setPosition(maxCoord))
                     .export(quadMap.get(null));
 
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutSide(minCoord, maxCoord, maxCoord, 1F))
                     .apply(Modifiers.setPosition(maxCoord))
                     .export(quadMap.get(null));
@@ -98,19 +98,19 @@ public class FramedLatticeGeometry extends Geometry
 
     private void createHorizontalStrutSideQuads(QuadMap quadMap, BakedQuad quad, boolean frontAxis, boolean sideAxis)
     {
-        QuadModifier.geometry(quad)
+        QuadModifier.of(quad)
                 .apply(Modifiers.cutSide(minCoord, minCoord, maxCoord, maxCoord))
                 .applyIf(Modifiers.setPosition(maxCoord), !frontAxis)
                 .export(quadMap.get(frontAxis ? quad.getDirection() : null));
 
         if (sideAxis)
         {
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutSide(0F, minCoord, minCoord, maxCoord))
                     .apply(Modifiers.setPosition(maxCoord))
                     .export(quadMap.get(null));
 
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutSide(maxCoord, minCoord, 1F, maxCoord))
                     .apply(Modifiers.setPosition(maxCoord))
                     .export(quadMap.get(null));

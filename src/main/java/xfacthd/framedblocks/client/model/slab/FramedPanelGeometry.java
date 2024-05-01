@@ -25,19 +25,19 @@ public class FramedPanelGeometry extends Geometry
         Direction quadDir = quad.getDirection();
         if (quadDir == dir.getOpposite())
         {
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.setPosition(.5F))
                     .export(quadMap.get(null));
         }
         else if (Utils.isY(quad.getDirection()))
         {
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutTopBottom(dir.getOpposite(), .5F))
                     .export(quadMap.get(quadDir));
         }
         else
         {
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutSideLeftRight(dir.getOpposite(), .5F))
                     .export(quadMap.get(quadDir));
         }

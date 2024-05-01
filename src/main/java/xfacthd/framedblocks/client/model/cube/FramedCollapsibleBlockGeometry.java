@@ -74,24 +74,24 @@ public class FramedCollapsibleBlockGeometry extends Geometry
                 float left = rotate ? 0F : 1F;
                 float right = rotate ? 1F : 0F;
 
-                QuadModifier.geometry(quad)
+                QuadModifier.of(quad)
                         .apply(Modifiers.cutTopBottom(Direction.EAST, left, right))
                         .apply(Modifiers.setPosition(vertexPos))
                         .export(quadMap.get(null));
 
-                QuadModifier.geometry(quad)
+                QuadModifier.of(quad)
                         .apply(Modifiers.cutTopBottom(Direction.WEST, left, right))
                         .apply(Modifiers.setPosition(vertexPosTwo))
                         .export(quadMap.get(null));
             }
             else
             {
-                QuadModifier.geometry(quad)
+                QuadModifier.of(quad)
                         .apply(Modifiers.cutSideLeftRight(quadDir.getCounterClockWise(), rotate ? 1F : 0F, rotate ? 0F : 1F))
                         .apply(Modifiers.setPosition(vertexPos))
                         .export(quadMap.get(null));
 
-                QuadModifier.geometry(quad)
+                QuadModifier.of(quad)
                         .apply(Modifiers.cutSideLeftRight(quadDir.getClockWise(), rotate ? 0F : 1F, rotate ? 1F : 0F))
                         .apply(Modifiers.setPosition(vertexPosTwo))
                         .export(quadMap.get(null));
@@ -107,7 +107,7 @@ public class FramedCollapsibleBlockGeometry extends Geometry
                 float posOne = vertexPos[idxOne];
                 float posTwo = vertexPos[idxTwo];
 
-                QuadModifier.geometry(quad)
+                QuadModifier.of(quad)
                         .apply(Modifiers.cutSideUpDown(!top, posOne, posTwo))
                         .export(quadMap.get(quadDir));
             }
@@ -117,7 +117,7 @@ public class FramedCollapsibleBlockGeometry extends Geometry
                 float posOne = vertexPos[top ? 0 : 1];
                 float posTwo = vertexPos[top ? 3 : 2];
 
-                QuadModifier.geometry(quad)
+                QuadModifier.of(quad)
                         .apply(Modifiers.cutTopBottom(collapsedFace, posOne, posTwo))
                         .export(quadMap.get(quadDir));
             }
@@ -127,7 +127,7 @@ public class FramedCollapsibleBlockGeometry extends Geometry
                 float posTop = vertexPos[right ? 3 : 0];
                 float posBot = vertexPos[right ? 2 : 1];
 
-                QuadModifier.geometry(quad)
+                QuadModifier.of(quad)
                         .apply(Modifiers.cutSideLeftRight(collapsedFace, posTop, posBot))
                         .export(quadMap.get(quadDir));
             }

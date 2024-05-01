@@ -34,14 +34,14 @@ public class FramedFenceGateGeometry extends Geometry
         {
             float quadInset = quadDir == Direction.UP ? 1F - yOff : 11F/16F + yOff;
 
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutTopBottom(dir.getClockWise(), 2F/16F))
                     .apply(Modifiers.cutTopBottom(dir, 9F/16F))
                     .apply(Modifiers.cutTopBottom(dir.getOpposite(), 9F/16F))
                     .apply(Modifiers.setPosition(quadInset))
                     .export(quadMap.get(inWall || quadDir == Direction.DOWN ? null : quadDir));
 
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutTopBottom(dir.getCounterClockWise(), 2F/16F))
                     .apply(Modifiers.cutTopBottom(dir, 9F/16F))
                     .apply(Modifiers.cutTopBottom(dir.getOpposite(), 9F/16F))
@@ -50,14 +50,14 @@ public class FramedFenceGateGeometry extends Geometry
         }
         else if (quadDir == dir || quadDir == dir.getOpposite())
         {
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutSideLeftRight(dir.getClockWise(), 2F/16F))
                     .apply(Modifiers.cutSideUpDown(true, 11F/16F + yOff))
                     .apply(Modifiers.cutSideUpDown(false, 1F - yOff))
                     .apply(Modifiers.setPosition(9F/16F))
                     .export(quadMap.get(null));
 
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutSideLeftRight(dir.getCounterClockWise(), 2F/16F))
                     .apply(Modifiers.cutSideUpDown(true, 11F/16F + yOff))
                     .apply(Modifiers.cutSideUpDown(false, 1F - yOff))
@@ -66,7 +66,7 @@ public class FramedFenceGateGeometry extends Geometry
         }
         else if (quadDir == dir.getClockWise() || quadDir == dir.getCounterClockWise())
         {
-            QuadModifier mod = QuadModifier.geometry(quad)
+            QuadModifier mod = QuadModifier.of(quad)
                     .apply(Modifiers.cutSide(7F/16F, 5F/16F - yOff, 9F/16F, 1F - yOff));
 
             mod.export(quadMap.get(quadDir));
@@ -91,24 +91,24 @@ public class FramedFenceGateGeometry extends Geometry
         Direction quadDir = quad.getDirection();
         if (quadDir == dir || quadDir == dir.getOpposite())
         {
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutSide(2F/16F, 12F/16F - yOff, 14F/16F, 15F/16F - yOff))
                     .apply(Modifiers.setPosition(9F/16F))
                     .export(quadList);
 
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutSide(2F/16F, 6F/16F - yOff, 14F/16F, 9F/16F - yOff))
                     .apply(Modifiers.setPosition(9F/16F))
                     .export(quadList);
 
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutSide(6F/16F, 9F/16F - yOff, 10F/16F, 12F/16F - yOff))
                     .apply(Modifiers.setPosition(9F/16F))
                     .export(quadList);
         }
         else if (Utils.isY(quadDir))
         {
-            QuadModifier mod = QuadModifier.geometry(quad)
+            QuadModifier mod = QuadModifier.of(quad)
                     .apply(Modifiers.cutTopBottom(dir, 9F/16F))
                     .apply(Modifiers.cutTopBottom(dir.getOpposite(), 9F/16F))
                     .apply(Modifiers.cutTopBottom(dir.getClockWise(), 14F/16F))
@@ -135,7 +135,7 @@ public class FramedFenceGateGeometry extends Geometry
         }
         else if (quadDir == dir.getClockWise() || quadDir == dir.getCounterClockWise())
         {
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutSide(7F/16F, 9F/16F - yOff, 9F/16F, 12F/16F - yOff))
                     .apply(Modifiers.setPosition(10F/16F))
                     .export(quadList);
@@ -147,7 +147,7 @@ public class FramedFenceGateGeometry extends Geometry
         Direction quadDir = quad.getDirection();
         if (quadDir == dir.getClockWise() || quadDir == dir.getCounterClockWise())
         {
-            QuadModifier mod = QuadModifier.geometry(quad)
+            QuadModifier mod = QuadModifier.of(quad)
                     .apply(Modifiers.cutSideLeftRight(dir.getOpposite(), 7F/16F))
                     .apply(Modifiers.cutSideLeftRight(dir, 15F/16F))
                     .apply(Modifiers.cutSideUpDown(false, 15F/16F - yOff))
@@ -182,7 +182,7 @@ public class FramedFenceGateGeometry extends Geometry
             float heightOuter = up ? 15F/16F - yOff : 10F/16F + yOff;
             float heightInner = up ? 9F/16F - yOff : 4F/16F + yOff;
 
-            QuadModifier mod = QuadModifier.geometry(quad)
+            QuadModifier mod = QuadModifier.of(quad)
                     .apply(Modifiers.cutTopBottom(dir, 15F/16F))
                     .apply(Modifiers.cutTopBottom(dir.getOpposite(), 7F/16F));
 
@@ -206,24 +206,24 @@ public class FramedFenceGateGeometry extends Geometry
         }
         else if (quadDir == dir)
         {
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutSide(0F, 6F/16F - yOff, 2F/16F, 15F/16F - yOff))
                     .apply(Modifiers.setPosition(15F/16F))
                     .export(quadMap.get(null));
 
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutSide(14F/16F, 6F/16F - yOff, 1F, 15F/16F - yOff))
                     .apply(Modifiers.setPosition(15F/16F))
                     .export(quadMap.get(null));
         }
         else if (quadDir == dir.getOpposite())
         {
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutSide(0F, 9F/16F - yOff, 2F/16F, 12F/16F - yOff))
                     .apply(Modifiers.setPosition(3F/16F))
                     .export(quadMap.get(null));
 
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutSide(14F/16F, 9F/16F - yOff, 1F, 12F/16F - yOff))
                     .apply(Modifiers.setPosition(3F/16F))
                     .export(quadMap.get(null));

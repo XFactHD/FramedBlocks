@@ -33,13 +33,13 @@ public class FramedSlopeGeometry extends Geometry
         {
             if (quad.getDirection() == dir.getOpposite())
             {
-                QuadModifier.geometry(quad)
+                QuadModifier.of(quad)
                         .apply(Modifiers.makeHorizontalSlope(false, 45))
                         .export(quadMap.get(null));
             }
             else if (Utils.isY(quadDir))
             {
-                QuadModifier.geometry(quad)
+                QuadModifier.of(quad)
                         .apply(Modifiers.cutTopBottom(dir.getOpposite(), 1, 0))
                         .export(quadMap.get(quadDir));
             }
@@ -49,19 +49,19 @@ public class FramedSlopeGeometry extends Geometry
             boolean top = type == SlopeType.TOP;
             if (!ySlope && quadDir == dir.getOpposite())
             {
-                QuadModifier.geometry(quad)
+                QuadModifier.of(quad)
                         .apply(Modifiers.makeVerticalSlope(!top, 45))
                         .export(quadMap.get(null));
             }
             else if (ySlope && Utils.isY(quadDir))
             {
-                QuadModifier.geometry(quad)
+                QuadModifier.of(quad)
                         .apply(Modifiers.makeVerticalSlope(dir.getOpposite(), 45))
                         .export(quadMap.get(null));
             }
             else if (quadDir == dir.getClockWise() || quadDir == dir.getCounterClockWise())
             {
-                QuadModifier.geometry(quad)
+                QuadModifier.of(quad)
                         .apply(Modifiers.cutSideLeftRight(dir.getOpposite(), top ? 1 : 0, top ? 0 : 1))
                         .export(quadMap.get(quadDir));
             }

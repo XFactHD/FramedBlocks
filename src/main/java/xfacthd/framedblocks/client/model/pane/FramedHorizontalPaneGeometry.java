@@ -19,13 +19,13 @@ public class FramedHorizontalPaneGeometry extends Geometry
         Direction quadDir = quad.getDirection();
         if (Utils.isY(quadDir))
         {
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.setPosition(9F/16F))
                     .export(quadMap.get(null));
         }
         else
         {
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutSideUpDown(9F/16F))
                     .export(quadMap.get(quadDir));
         }

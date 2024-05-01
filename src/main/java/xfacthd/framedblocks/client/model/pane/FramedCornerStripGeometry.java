@@ -34,7 +34,7 @@ public class FramedCornerStripGeometry extends Geometry
         {
             if (Utils.isY(quadDir))
             {
-                QuadModifier.geometry(quad)
+                QuadModifier.of(quad)
                         .apply(Modifiers.cutTopBottom(dir.getOpposite(), 1F/16F))
                         .apply(Modifiers.cutTopBottom(dir.getClockWise(), 1F/16F))
                         .export(quadMap.get(quadDir));
@@ -42,7 +42,7 @@ public class FramedCornerStripGeometry extends Geometry
             else if (quadDir.getAxis() == dir.getAxis())
             {
                 boolean onFace = quadDir == dir;
-                QuadModifier.geometry(quad)
+                QuadModifier.of(quad)
                         .apply(Modifiers.cutSideLeftRight(dir.getClockWise(), 1F/16F))
                         .applyIf(Modifiers.setPosition(1F/16F), !onFace)
                         .export(quadMap.get(onFace ? quadDir : null));
@@ -50,7 +50,7 @@ public class FramedCornerStripGeometry extends Geometry
             else if (quadDir.getAxis() == dir.getClockWise().getAxis())
             {
                 boolean onFace = quadDir == dir.getCounterClockWise();
-                QuadModifier.geometry(quad)
+                QuadModifier.of(quad)
                         .apply(Modifiers.cutSideLeftRight(dir.getOpposite(), 1F/16F))
                         .applyIf(Modifiers.setPosition(1F/16F), !onFace)
                         .export(quadMap.get(onFace ? quadDir : null));
@@ -61,7 +61,7 @@ public class FramedCornerStripGeometry extends Geometry
             boolean top = type == SlopeType.TOP;
             if (quadDir.getAxis() == dir.getClockWise().getAxis())
             {
-                QuadModifier.geometry(quad)
+                QuadModifier.of(quad)
                         .apply(Modifiers.cutSideLeftRight(dir.getOpposite(), 1F/16F))
                         .apply(Modifiers.cutSideUpDown(top, 1F/16F))
                         .export(quadMap.get(quadDir));
@@ -69,7 +69,7 @@ public class FramedCornerStripGeometry extends Geometry
             else if (quadDir.getAxis() == dir.getAxis())
             {
                 boolean onFace = quadDir == dir;
-                QuadModifier.geometry(quad)
+                QuadModifier.of(quad)
                         .apply(Modifiers.cutSideUpDown(top, 1F/16F))
                         .applyIf(Modifiers.setPosition(1F/16F), !onFace)
                         .export(quadMap.get(onFace ? quadDir : null));
@@ -77,7 +77,7 @@ public class FramedCornerStripGeometry extends Geometry
             else if (Utils.isY(quadDir))
             {
                 boolean onFace = top ? quadDir == Direction.UP : quadDir == Direction.DOWN;
-                QuadModifier.geometry(quad)
+                QuadModifier.of(quad)
                         .apply(Modifiers.cutTopBottom(dir.getOpposite(), 1F/16F))
                         .applyIf(Modifiers.setPosition(1F/16F), !onFace)
                         .export(quadMap.get(onFace ? quadDir : null));

@@ -24,13 +24,13 @@ public class FramedSlabGeometry extends Geometry
     {
         if ((top && quad.getDirection() == Direction.DOWN) || (!top && quad.getDirection() == Direction.UP))
         {
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.setPosition(.5F))
                     .export(quadMap.get(null));
         }
         else if (!Utils.isY(quad.getDirection()))
         {
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutSideUpDown(top, .5F))
                     .export(quadMap.get(quad.getDirection()));
         }

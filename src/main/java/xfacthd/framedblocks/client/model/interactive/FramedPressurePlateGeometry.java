@@ -35,14 +35,14 @@ public class FramedPressurePlateGeometry extends Geometry
         if (Utils.isY(quadDir))
         {
             boolean up = quadDir == Direction.UP;
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutTopBottom(1F/16F, 1F/16F, 15F/16F, 15F/16F))
                     .applyIf(Modifiers.setPosition(height), up)
                     .export(quadMap.get(up ? null : Direction.DOWN));
         }
         else
         {
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutSide(1F/16F, 0F, 15F/16F, height))
                     .apply(Modifiers.setPosition(15F/16F))
                     .export(quadMap.get(null));

@@ -30,7 +30,7 @@ public class FramedVerticalHalfSlopeGeometry extends Geometry
 
         if (quadDir == dir.getOpposite())
         {
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.makeHorizontalSlope(false, 45))
                     .apply(Modifiers.cutSideUpDown(top, .5F))
                     .export(quadMap.get(null));
@@ -39,14 +39,14 @@ public class FramedVerticalHalfSlopeGeometry extends Geometry
         {
             boolean needOffset = top == (quadDir == Direction.DOWN);
 
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutTopBottom(dir.getOpposite(), 1, 0))
                     .applyIf(Modifiers.setPosition(.5F), needOffset)
                     .export(quadMap.get(needOffset ? null : quadDir));
         }
         else if (quadDir == dir || quadDir == dir.getCounterClockWise())
         {
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutSideUpDown(top, .5F))
                     .export(quadMap.get(quadDir));
         }

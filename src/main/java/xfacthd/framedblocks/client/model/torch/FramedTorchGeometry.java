@@ -61,14 +61,14 @@ public class FramedTorchGeometry extends Geometry
         if (Utils.isY(quadDir))
         {
             boolean top = quadDir == Direction.UP;
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutTopBottom(MIN, MIN, MAX, MAX))
                     .applyIf(Modifiers.setPosition(TOP), top)
                     .export(quadMap.get(top ? null : quadDir));
         }
         else
         {
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutSide(MIN, 0, MAX, TOP))
                     .apply(Modifiers.setPosition(MAX))
                     .export(quadMap.get(null));

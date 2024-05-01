@@ -75,7 +75,7 @@ final class OverlayModel extends BakedModelWrapper<BakedModel>
 
         for (BakedQuad quad : quads)
         {
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.offset(Direction.WEST, offset.x() * (1F / scale.x())))
                     .apply(Modifiers.offset(Direction.DOWN, offset.y() * (1F / scale.y())))
                     .apply(Modifiers.offset(Direction.NORTH, offset.z() * (1F / scale.z())))

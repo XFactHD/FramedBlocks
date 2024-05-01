@@ -27,13 +27,13 @@ public class FramedCompoundSlopeSlabGeometry extends Geometry
         Direction quadDir = quad.getDirection();
         if (quadDir == dir)
         {
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutSideUpDown(true, .5F))
                     .export(quadMap.get(quadDir));
 
             if (!ySlope)
             {
-                QuadModifier.geometry(quad)
+                QuadModifier.of(quad)
                         .apply(Modifiers.makeVerticalSlope(false, FramedSlopeSlabGeometry.SLOPE_ANGLE))
                         .apply(Modifiers.offset(Direction.DOWN, .5F))
                         .export(quadMap.get(null));
@@ -41,13 +41,13 @@ public class FramedCompoundSlopeSlabGeometry extends Geometry
         }
         else if (quadDir == dir.getOpposite())
         {
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutSideUpDown(false, .5F))
                     .export(quadMap.get(quadDir));
 
             if (!ySlope)
             {
-                QuadModifier.geometry(quad)
+                QuadModifier.of(quad)
                         .apply(Modifiers.makeVerticalSlope(true, FramedSlopeSlabGeometry.SLOPE_ANGLE))
                         .apply(Modifiers.offset(Direction.UP, .5F))
                         .export(quadMap.get(null));
@@ -56,14 +56,14 @@ public class FramedCompoundSlopeSlabGeometry extends Geometry
         else if (ySlope && Utils.isY(quadDir))
         {
             Direction edge = quadDir == Direction.UP ? dir.getOpposite() : dir;
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.makeVerticalSlope(edge, FramedSlopeSlabGeometry.SLOPE_ANGLE_VERT))
                     .export(quadMap.get(null));
         }
         else if (quadDir.getAxis() == dir.getClockWise().getAxis())
         {
             boolean cw = quadDir == dir.getClockWise();
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutSideUpDown(false, cw ? .5F : 1F, cw ? 1F : .5F))
                     .apply(Modifiers.cutSideUpDown(true, cw ? 1F : .5F, cw ? .5F : 1F))
                     .export(quadMap.get(null));

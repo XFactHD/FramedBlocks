@@ -28,24 +28,24 @@ public class FramedSlopedStairsGeometry extends Geometry
 
         if (Utils.isY(quadDir))
         {
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutTopBottom(dir.getOpposite(), 1, 0))
                     .export(quadMap.get(quadDir));
 
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutTopBottom(dir, 1, 0))
                     .apply(Modifiers.setPosition(.5F))
                     .export(quadMap.get(null));
         }
         else
         {
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutSideUpDown(top, .5F))
                     .export(quadMap.get(quadDir));
 
             if (quadDir == dir.getOpposite())
             {
-                QuadModifier.geometry(quad)
+                QuadModifier.of(quad)
                         .apply(Modifiers.makeHorizontalSlope(false, 45))
                         .apply(Modifiers.cutSideUpDown(!top, .5F))
                         .export(quadMap.get(null));

@@ -44,14 +44,14 @@ public class FramedChestLidGeometry extends Geometry
         Direction quadDir = quad.getDirection();
         if (Utils.isY(quad.getDirection()))
         {
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutTopBottom(1F/16F, 1F/16F, 15F/16F, 15F/16F))
                     .apply(Modifiers.setPosition(quadDir == Direction.UP ? 14F/16F : 7F/16F))
                     .export(quadMap.get(null));
         }
         else
         {
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutSide(1F/16F, 9F/16F, 15F/16F, 14F/16F))
                     .apply(Modifiers.setPosition(15F/16F))
                     .export(quadMap.get(null));

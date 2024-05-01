@@ -30,14 +30,14 @@ public class FramedInnerPrismCornerGeometry extends Geometry
         Direction quadDir = quad.getDirection();
         if ((quadDir == Direction.DOWN && top) || (quadDir == Direction.UP && !top))
         {
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutTopBottom(dir.getOpposite(), 1, 0))
                     .export(quadMap.get(quadDir));
         }
         else if (quadDir == dir.getOpposite() || quadDir == dir.getClockWise())
         {
             Direction cutDir = quadDir == dir.getOpposite() ? dir.getClockWise() : dir.getOpposite();
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutSideLeftRight(cutDir, top ? 1 : 0, top ? 0 : 1))
                     .export(quadMap.get(quadDir));
         }
@@ -46,13 +46,13 @@ public class FramedInnerPrismCornerGeometry extends Geometry
         {
             if (offset)
             {
-                QuadModifier.geometry(quad)
+                QuadModifier.of(quad)
                         .apply(Modifiers.cutSideLeftRight(dir.getClockWise(), .5F))
                         .apply(Modifiers.offset(dir.getClockWise(), .5F))
                         .apply(Modifiers.cutPrismTriangle(top, false))
                         .export(quadMap.get(null));
 
-                QuadModifier.geometry(quad)
+                QuadModifier.of(quad)
                         .apply(Modifiers.cutSideLeftRight(dir.getCounterClockWise(), .5F))
                         .apply(Modifiers.offset(dir.getCounterClockWise(), .5F))
                         .apply(Modifiers.cutPrismTriangle(top, false))
@@ -60,7 +60,7 @@ public class FramedInnerPrismCornerGeometry extends Geometry
             }
             else
             {
-                QuadModifier.geometry(quad)
+                QuadModifier.of(quad)
                         .apply(Modifiers.cutPrismTriangle(top, false))
                         .export(quadMap.get(null));
             }
@@ -69,13 +69,13 @@ public class FramedInnerPrismCornerGeometry extends Geometry
         {
             if (offset)
             {
-                QuadModifier.geometry(quad)
+                QuadModifier.of(quad)
                         .apply(Modifiers.cutTopBottom(dir.getClockWise(), .5F))
                         .apply(Modifiers.offset(dir.getClockWise(), .5F))
                         .apply(Modifiers.cutPrismTriangle(dir.getOpposite(), false))
                         .export(quadMap.get(null));
 
-                QuadModifier.geometry(quad)
+                QuadModifier.of(quad)
                         .apply(Modifiers.cutTopBottom(dir.getCounterClockWise(), .5F))
                         .apply(Modifiers.offset(dir.getCounterClockWise(), .5F))
                         .apply(Modifiers.cutPrismTriangle(dir.getOpposite(), false))
@@ -83,7 +83,7 @@ public class FramedInnerPrismCornerGeometry extends Geometry
             }
             else
             {
-                QuadModifier.geometry(quad)
+                QuadModifier.of(quad)
                         .apply(Modifiers.cutPrismTriangle(dir.getOpposite(), false))
                         .export(quadMap.get(null));
             }

@@ -35,7 +35,7 @@ public class FramedLadderGeometry extends Geometry
         Direction quadDir = quad.getDirection();
         if (Utils.isY(quadDir))
         {
-            QuadModifier capMod = QuadModifier.geometry(quad)
+            QuadModifier capMod = QuadModifier.of(quad)
                     .apply(Modifiers.cutTopBottom(dir.getOpposite(), LEG_DEPTH));
 
             capMod.derive().apply(Modifiers.cutTopBottom(dir.getClockWise(), LEG_DEPTH))
@@ -44,7 +44,7 @@ public class FramedLadderGeometry extends Geometry
             capMod.apply(Modifiers.cutTopBottom(dir.getCounterClockWise(), LEG_DEPTH))
                     .export(quadMap.get(quadDir));
 
-            QuadModifier rungMod = QuadModifier.geometry(quad)
+            QuadModifier rungMod = QuadModifier.of(quad)
                     .apply(Modifiers.cutTopBottom(dir, 1F - RUNG_OFFSET))
                     .apply(Modifiers.cutTopBottom(dir.getOpposite(), RUNG_DEPTH + RUNG_OFFSET))
                     .apply(Modifiers.cutTopBottom(dir.getClockWise(), 1F - LEG_DEPTH))
@@ -61,12 +61,12 @@ public class FramedLadderGeometry extends Geometry
         {
             boolean opposite = quadDir == dir.getOpposite();
 
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutSideLeftRight(dir.getClockWise(), LEG_DEPTH))
                     .applyIf(Modifiers.setPosition(LEG_DEPTH), opposite)
                     .export(quadMap.get(opposite ? null : quadDir));
 
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutSideLeftRight(dir.getCounterClockWise(), LEG_DEPTH))
                     .applyIf(Modifiers.setPosition(LEG_DEPTH), opposite)
                     .export(quadMap.get(opposite ? null : quadDir));
@@ -75,7 +75,7 @@ public class FramedLadderGeometry extends Geometry
 
             for (int i = 0; i < 4; i++)
             {
-                QuadModifier.geometry(quad)
+                QuadModifier.of(quad)
                         .apply(Modifiers.cutSide(LEG_DEPTH, RUNGS[i], 1F - LEG_DEPTH, RUNGS[i] + RUNG_DEPTH))
                         .apply(Modifiers.setPosition(pos))
                         .export(quadMap.get(null));
@@ -83,7 +83,7 @@ public class FramedLadderGeometry extends Geometry
         }
         else
         {
-            QuadModifier mod = QuadModifier.geometry(quad)
+            QuadModifier mod = QuadModifier.of(quad)
                     .apply(Modifiers.cutSideLeftRight(dir.getOpposite(), RUNG_DEPTH * 2F));
 
             mod.export(quadMap.get(quadDir));

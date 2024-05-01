@@ -41,7 +41,7 @@ public class FramedFlatInnerSlopeSlabCornerGeometry extends Geometry
                 float lenTop = top ? 0F : 1F;
                 float lenBot = top ? 1F : 0F;
 
-                QuadModifier.geometry(quad)
+                QuadModifier.of(quad)
                         .apply(Modifiers.cutSideLeftRight(right, lenTop, lenBot))
                         .apply(Modifiers.makeVerticalSlope(!top, FramedSlopeSlabGeometry.SLOPE_ANGLE))
                         .applyIf(Modifiers.offset(top ? Direction.DOWN : Direction.UP, .5F), offset)
@@ -52,20 +52,20 @@ public class FramedFlatInnerSlopeSlabCornerGeometry extends Geometry
             float lenRight = rightFace ? (offset ? .5F : 0) : (offset ? 1 : .5F);
             float lenLeft =  rightFace ? (offset ? 1 : .5F) : (offset ? .5F : 0);
 
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutSideUpDown(top, lenRight, lenLeft))
                     .applyIf(Modifiers.cutSideUpDown(!top, .5F), offset)
                     .export(quadMap.get(face));
         }
         else if (ySlope && ((!top && face == Direction.UP) || (top && face == Direction.DOWN)))
         {
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutTopBottom(facing.getCounterClockWise(), 1, 0))
                     .apply(Modifiers.makeVerticalSlope(facing.getOpposite(), FramedSlopeSlabGeometry.SLOPE_ANGLE_VERT))
                     .applyIf(Modifiers.offset(top ? Direction.UP : Direction.DOWN, .5F), !offset)
                     .export(quadMap.get(null));
 
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutTopBottom(facing, 0, 1))
                     .apply(Modifiers.makeVerticalSlope(facing.getClockWise(), FramedSlopeSlabGeometry.SLOPE_ANGLE_VERT))
                     .applyIf(Modifiers.offset(top ? Direction.UP : Direction.DOWN, .5F), !offset)
@@ -73,13 +73,13 @@ public class FramedFlatInnerSlopeSlabCornerGeometry extends Geometry
         }
         else if (face == facing || face == facing.getCounterClockWise())
         {
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutSideUpDown(topHalf, .5F))
                     .export(quadMap.get(face));
         }
         else if ((top && !topHalf && face == Direction.UP) || (!top && topHalf && face == Direction.DOWN))
         {
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.setPosition(.5F))
                     .export(quadMap.get(null));
         }

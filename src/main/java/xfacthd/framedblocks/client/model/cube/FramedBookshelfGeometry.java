@@ -44,25 +44,25 @@ public class FramedBookshelfGeometry extends Geometry
 
         List<BakedQuad> quads = quadMap.get(quadDir);
 
-        QuadModifier.geometry(quad)
+        QuadModifier.of(quad)
                 .apply(Modifiers.cutSideUpDown(true, 1F/16F))
                 .export(quads);
 
-        QuadModifier.geometry(quad)
+        QuadModifier.of(quad)
                 .apply(Modifiers.cutSideUpDown(false, 1F/16F))
                 .export(quads);
 
-        QuadModifier.geometry(quad)
+        QuadModifier.of(quad)
                 .apply(Modifiers.cutSideLeftRight(true, 1F/16F))
                 .apply(Modifiers.cutSideUpDown(15F/16F))
                 .export(quads);
 
-        QuadModifier.geometry(quad)
+        QuadModifier.of(quad)
                 .apply(Modifiers.cutSideLeftRight(false, 1F/16F))
                 .apply(Modifiers.cutSideUpDown(15F/16F))
                 .export(quads);
 
-        QuadModifier.geometry(quad)
+        QuadModifier.of(quad)
                 .apply(Modifiers.cutSideUpDown(9F/16F))
                 .apply(Modifiers.cutSideLeftRight(15F/16F))
                 .export(quads);

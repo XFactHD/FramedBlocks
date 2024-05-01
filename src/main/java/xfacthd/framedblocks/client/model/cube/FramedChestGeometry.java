@@ -47,14 +47,14 @@ public class FramedChestGeometry extends Geometry
         Direction quadDir = quad.getDirection();
         if (Utils.isY(quad.getDirection()))
         {
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutTopBottom(1F/16F, 1F/16F, 15F/16F, 15F/16F))
                     .applyIf(Modifiers.setPosition(closed ? 14F/16F : 10F/16F), quadDir == Direction.UP)
                     .export(quadMap.get(quadDir == Direction.UP ? null : quadDir));
         }
         else
         {
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutSide(1F/16F, 0, 15F/16F, closed ? 14F/16F : 10F/16F))
                     .apply(Modifiers.setPosition(15F/16F))
                     .export(quadMap.get(null));
@@ -72,14 +72,14 @@ public class FramedChestGeometry extends Geometry
 
         if (face == facing || face == facing.getOpposite())
         {
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutSide(7F/16F, 7F/16F, 9F/16F, 11F/16F))
                     .applyIf(Modifiers.setPosition(1F/16F), face != facing)
                     .export(quadMap.get(face == facing ? facing : null));
         }
         else if (Utils.isY(face))
         {
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutTopBottom(facing.getOpposite(), 1F/16F))
                     .apply(Modifiers.cutTopBottom(facing.getClockWise(), 9F/16F))
                     .apply(Modifiers.cutTopBottom(facing.getCounterClockWise(), 9F/16F))
@@ -88,7 +88,7 @@ public class FramedChestGeometry extends Geometry
         }
         else
         {
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutSide(0, 7F/16F, 1, 11F/16F))
                     .apply(Modifiers.cutSideLeftRight(facing.getOpposite(), 1F/16F))
                     .apply(Modifiers.setPosition(9F/16F))

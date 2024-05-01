@@ -30,26 +30,26 @@ public class FramedElevatedSlopeSlabGeometry extends Geometry
         {
             if (!ySlope)
             {
-                QuadModifier.geometry(quad)
+                QuadModifier.of(quad)
                         .apply(Modifiers.makeVerticalSlope(!top, FramedSlopeSlabGeometry.SLOPE_ANGLE))
                         .apply(Modifiers.offset(top ? Direction.DOWN : Direction.UP, .5F))
                         .export(quadMap.get(null));
             }
 
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutSideUpDown(top, .5F))
                     .export(quadMap.get(face));
         }
         else if (ySlope && ((!top && face == Direction.UP) || (top && face == Direction.DOWN)))
         {
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.makeVerticalSlope(facing.getOpposite(), FramedSlopeSlabGeometry.SLOPE_ANGLE_VERT))
                     .export(quadMap.get(null));
         }
         else if (face == facing.getClockWise() || face == facing.getCounterClockWise())
         {
             boolean rightFace = face == facing.getClockWise();
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutSideUpDown(top, rightFace ? .5F : 1, rightFace ? 1 : .5F))
                     .export(quadMap.get(face));
         }

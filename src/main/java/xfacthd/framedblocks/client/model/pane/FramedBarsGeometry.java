@@ -132,7 +132,7 @@ public class FramedBarsGeometry extends FramedPaneGeometry
             }
         }
 
-        QuadModifier.geometry(quad)
+        QuadModifier.of(quad)
                 .apply(Modifiers.cutSide(minXZ, 0, maxXZ, 1))
                 .apply(Modifiers.setPosition(offset))
                 .export(quadList);
@@ -149,7 +149,7 @@ public class FramedBarsGeometry extends FramedPaneGeometry
         float minXZ = positive ? 12F/16F : 2F/16F;
         float maxXZ = positive ? 14F/16F : 4F/16F;
 
-        QuadModifier.geometry(quad)
+        QuadModifier.of(quad)
                 .apply(Modifiers.cutSide(minXZ, 0, maxXZ, 1))
                 .apply(Modifiers.setPosition(.5F))
                 .export(quadList);
@@ -170,7 +170,7 @@ public class FramedBarsGeometry extends FramedPaneGeometry
         float minY = northeast ? 2F/16F : 12F/16F;
         float maxY = northeast ? 4F/16F : 14F/16F;
 
-        QuadModifier.geometry(quad)
+        QuadModifier.of(quad)
                 .apply(Modifiers.cutSide(minXZ, minY, maxXZ, maxY))
                 .apply(Modifiers.setPosition(.5F))
                 .export(quadList);
@@ -178,7 +178,7 @@ public class FramedBarsGeometry extends FramedPaneGeometry
         minXZ = positive ? 14F/16F : 0;
         maxXZ = positive ? 1 :  2F/16F;
 
-        QuadModifier.geometry(quad)
+        QuadModifier.of(quad)
                 .apply(Modifiers.cutSide(minXZ, 7F/16F, maxXZ, 9F/16F))
                 .apply(Modifiers.setPosition(.5F))
                 .export(quadList);

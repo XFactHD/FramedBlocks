@@ -52,7 +52,7 @@ public class FramedFlatSlopePanelCornerGeometry extends Geometry
         {
             if (!ySlope || !Utils.isY(orientation))
             {
-                QuadModifier.geometry(quad)
+                QuadModifier.of(quad)
                         .apply(createSlopeTriangle(facing, orientation, false))
                         .apply(FramedSlopePanelGeometry.createSlope(facing, orientation))
                         .applyIf(Modifiers.offset(facing, .5F), !front)
@@ -61,7 +61,7 @@ public class FramedFlatSlopePanelCornerGeometry extends Geometry
 
             if (!ySlope || !Utils.isY(rotOrientation))
             {
-                QuadModifier.geometry(quad)
+                QuadModifier.of(quad)
                         .apply(createSlopeTriangle(facing, rotOrientation, true))
                         .apply(FramedSlopePanelGeometry.createSlope(facing, rotOrientation))
                         .applyIf(Modifiers.offset(facing, .5F), !front)
@@ -70,7 +70,7 @@ public class FramedFlatSlopePanelCornerGeometry extends Geometry
         }
         else if (ySlope && Utils.isY(orientation) && face == orientation)
         {
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(createVerticalSlopeTriangle(facing, orientation, false))
                     .apply(FramedSlopePanelGeometry.createVerticalSlope(facing, orientation))
                     .applyIf(Modifiers.offset(facing.getOpposite(), .5F), front)
@@ -78,7 +78,7 @@ public class FramedFlatSlopePanelCornerGeometry extends Geometry
         }
         else if (ySlope && Utils.isY(rotOrientation) && face == rotOrientation)
         {
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(createVerticalSlopeTriangle(facing, rotOrientation, true))
                     .apply(FramedSlopePanelGeometry.createVerticalSlope(facing, rotOrientation))
                     .applyIf(Modifiers.offset(facing.getOpposite(), .5F), front)
@@ -86,7 +86,7 @@ public class FramedFlatSlopePanelCornerGeometry extends Geometry
         }
         else if (face == facing && front)
         {
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.setPosition(.5F))
                     .export(quadMap.get(null));
         }
@@ -138,7 +138,7 @@ public class FramedFlatSlopePanelCornerGeometry extends Geometry
             boolean up = orientation == Direction.UP;
             float top =    up ? (front ? .5F :  0F) : (front ?  1F : .5F);
             float bottom = up ? (front ?  1F : .5F) : (front ? .5F :  0F);
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutSideLeftRight(facing.getOpposite(), top, bottom))
                     .applyIf(Modifiers.cutSideLeftRight(facing, .5F), front && !extended)
                     .export(quadMap.get(face));
@@ -148,7 +148,7 @@ public class FramedFlatSlopePanelCornerGeometry extends Geometry
             boolean rightRot = rotation == HorizontalRotation.RIGHT;
             float right = rightRot ? (front ?  1F : .5F) : (front ? .5F :  0F);
             float left =  rightRot ? (front ? .5F :  0F) : (front ?  1F : .5F);
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutTopBottom(facing.getOpposite(), right, left))
                     .applyIf(Modifiers.cutTopBottom(facing, .5F), front && !extended)
                     .export(quadMap.get(face));

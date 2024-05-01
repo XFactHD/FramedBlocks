@@ -101,7 +101,7 @@ class FramedDiagonalPaneGeometry extends FramedPaneGeometry
     {
         Preconditions.checkArgument(!Utils.isY(dir), String.format("Invalid direction: %s!", dir));
 
-        QuadModifier.geometry(quad)
+        QuadModifier.of(quad)
                 .apply(Modifiers.cutTopBottom(dir.getOpposite(), noPillar ? 8F/16F : 7F/16F))
                 .apply(Modifiers.cutTopBottom(dir.getClockWise().getAxis(), 9F/16F))
                 .apply(rotate(dir))
@@ -110,7 +110,7 @@ class FramedDiagonalPaneGeometry extends FramedPaneGeometry
 
     protected static void createDiagonalSideEdgeQuad(QuadMap quadMap, BakedQuad quad)
     {
-        QuadModifier.geometry(quad)
+        QuadModifier.of(quad)
                 .apply(Modifiers.cutSideLeftRight(9F/16F))
                 .apply(rotate(quad.getDirection()))
                 .export(quadMap.get(null));
@@ -118,7 +118,7 @@ class FramedDiagonalPaneGeometry extends FramedPaneGeometry
 
     private static void createDiagonalSideQuad(List<BakedQuad> quadList, BakedQuad quad, Direction dir, boolean noPillar)
     {
-        QuadModifier.geometry(quad)
+        QuadModifier.of(quad)
                 .apply(Modifiers.cutSideLeftRight(dir.getOpposite(), noPillar ? 8F/16F : 7F/16F))
                 .apply(Modifiers.setPosition(9F/16F))
                 .apply(rotate(dir))

@@ -31,12 +31,12 @@ public class FramedLargeCornerSlopePanelGeometry extends Geometry
         {
             Direction cutDir = quadDir == dir ? dir.getClockWise() : dir.getOpposite();
 
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutSideLeftRight(cutDir, top ? 1F : .5F, top ? .5F : 1F))
                     .apply(Modifiers.cutSideLeftRight(cutDir.getOpposite(), .5F))
                     .export(quadMap.get(quadDir));
 
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutSideLeftRight(cutDir, .5F))
                     .apply(Modifiers.setPosition(.5F))
                     .export(quadMap.get(null));
@@ -44,20 +44,20 @@ public class FramedLargeCornerSlopePanelGeometry extends Geometry
         else if (!ySlope && (quadDir == dir.getOpposite() || quadDir == dir.getClockWise()))
         {
             Direction cutDir = quadDir == dir.getOpposite() ? dir.getClockWise() : dir.getOpposite();
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutSideLeftRight(cutDir, top ? 1F : .5F, top ? .5F : 1F))
                     .apply(Modifiers.makeVerticalSlope(!top, FramedSlopePanelGeometry.SLOPE_ANGLE))
                     .export(quadMap.get(null));
         }
         else if (ySlope && ((!top && quadDir == Direction.UP) || (top && quadDir == Direction.DOWN)))
         {
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutTopBottom(dir.getOpposite(), .5F, 1))
                     .apply(Modifiers.makeVerticalSlope(dir.getClockWise(), FramedSlopePanelGeometry.SLOPE_ANGLE_VERT))
                     .apply(Modifiers.offset(dir.getClockWise(), .5F))
                     .export(quadMap.get(null));
 
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutTopBottom(dir.getClockWise(), 1, .5F))
                     .apply(Modifiers.makeVerticalSlope(dir.getOpposite(), FramedSlopePanelGeometry.SLOPE_ANGLE_VERT))
                     .apply(Modifiers.offset(dir.getOpposite(), .5F))
@@ -65,11 +65,11 @@ public class FramedLargeCornerSlopePanelGeometry extends Geometry
         }
         else if ((!top && quadDir == Direction.DOWN) || (top && quadDir == Direction.UP))
         {
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutTopBottom(dir.getCounterClockWise(), .5F))
                     .export(quadMap.get(quadDir));
 
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutTopBottom(dir, .5F))
                     .apply(Modifiers.cutTopBottom(dir.getClockWise(), .5F))
                     .export(quadMap.get(quadDir));

@@ -33,14 +33,14 @@ public class FramedSmallInnerCornerSlopePanelGeometry extends Geometry
         if (quadDir == dir || quadDir == dir.getCounterClockWise())
         {
             Direction cutDir = quadDir == dir ? dir.getClockWise() : dir.getOpposite();
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutSideLeftRight(cutDir.getOpposite(), top ? 1F : .5F, top ? .5F : 1F))
                     .apply(Modifiers.cutSideLeftRight(cutDir, .5F))
                     .export(quadMap.get(quadDir));
 
             if (!ySlope)
             {
-                QuadModifier.geometry(quad)
+                QuadModifier.of(quad)
                         .apply(Modifiers.cutSideLeftRight(cutDir, top ? 0F : .5F, top ? .5F : 0F))
                         .apply(Modifiers.makeVerticalSlope(!top, FramedSlopePanelGeometry.SLOPE_ANGLE))
                         .export(quadMap.get(null));
@@ -49,20 +49,20 @@ public class FramedSmallInnerCornerSlopePanelGeometry extends Geometry
         else if (quadDir == dir.getOpposite() || quadDir == dir.getClockWise())
         {
             Direction cutDir = quadDir == dir.getOpposite() ? dir.getClockWise() : dir.getOpposite();
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutSideLeftRight(cutDir, .5F))
                     .apply(Modifiers.setPosition(.5F))
                     .export(quadMap.get(null));
         }
         else if (ySlope && ((!top && quadDir == Direction.UP) || (top && quadDir == Direction.DOWN)))
         {
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutTopBottom(dir.getOpposite(), 0, .5F))
                     .apply(Modifiers.makeVerticalSlope(dir.getCounterClockWise(), FramedSlopePanelGeometry.SLOPE_ANGLE_VERT))
                     .apply(Modifiers.offset(dir.getCounterClockWise(), .5F))
                     .export(quadMap.get(null));
 
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutTopBottom(dir.getClockWise(), .5F, 0))
                     .apply(Modifiers.makeVerticalSlope(dir, FramedSlopePanelGeometry.SLOPE_ANGLE_VERT))
                     .apply(Modifiers.offset(dir, .5F))
@@ -70,7 +70,7 @@ public class FramedSmallInnerCornerSlopePanelGeometry extends Geometry
         }
         else if ((!top && quadDir == Direction.DOWN) || (top && quadDir == Direction.UP))
         {
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutTopBottom(dir.getOpposite(), .5F))
                     .apply(Modifiers.cutTopBottom(dir.getClockWise(), .5F))
                     .export(quadMap.get(quadDir));

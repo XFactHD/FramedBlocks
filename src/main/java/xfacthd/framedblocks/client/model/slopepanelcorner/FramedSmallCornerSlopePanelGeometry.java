@@ -36,7 +36,7 @@ public class FramedSmallCornerSlopePanelGeometry extends Geometry
         if (quadDir == dir || quadDir == dir.getCounterClockWise())
         {
             Direction cutDir = quadDir == dir ? dir.getClockWise() : dir.getOpposite();
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutSideLeftRight(cutDir, top ? .5F : 0F, top ? 0F : .5F))
                     .export(quadMap.get(quadDir));
         }
@@ -49,7 +49,7 @@ public class FramedSmallCornerSlopePanelGeometry extends Geometry
                 angle *= -1F;
             }
 
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutSideLeftRight(cutDir, top ? .5F : 0F, top ? 0F : .5F))
                     .apply(Modifiers.setPosition(.5F))
                     .apply(Modifiers.rotate(cutDir.getAxis(), top ? ORIGIN_TOP : ORIGIN_BOTTOM, angle, true))
@@ -57,19 +57,19 @@ public class FramedSmallCornerSlopePanelGeometry extends Geometry
         }
         else if (ySlope && ((!top && quadDir == Direction.UP) || (top && quadDir == Direction.DOWN)))
         {
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutTopBottom(dir.getOpposite(), 0, .5F))
                     .apply(Modifiers.makeVerticalSlope(dir.getClockWise(), FramedSlopePanelGeometry.SLOPE_ANGLE_VERT))
                     .export(quadMap.get(null));
 
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutTopBottom(dir.getClockWise(), .5F, 0))
                     .apply(Modifiers.makeVerticalSlope(dir.getOpposite(), FramedSlopePanelGeometry.SLOPE_ANGLE_VERT))
                     .export(quadMap.get(null));
         }
         else if ((!top && quadDir == Direction.DOWN) || (top && quadDir == Direction.UP))
         {
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutTopBottom(dir.getOpposite(), .5F))
                     .apply(Modifiers.cutTopBottom(dir.getClockWise(), .5F))
                     .export(quadMap.get(quadDir));

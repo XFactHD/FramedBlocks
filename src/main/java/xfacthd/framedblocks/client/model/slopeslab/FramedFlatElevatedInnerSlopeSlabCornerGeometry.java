@@ -35,7 +35,7 @@ public class FramedFlatElevatedInnerSlopeSlabCornerGeometry extends Geometry
                 float lenTop = top ? 0F : 1F;
                 float lenBot = top ? 1F : 0F;
 
-                QuadModifier.geometry(quad)
+                QuadModifier.of(quad)
                         .apply(Modifiers.cutSideLeftRight(right, lenTop, lenBot))
                         .apply(Modifiers.makeVerticalSlope(!top, FramedSlopeSlabGeometry.SLOPE_ANGLE))
                         .apply(Modifiers.offset(top ? Direction.DOWN : Direction.UP, .5F))
@@ -46,18 +46,18 @@ public class FramedFlatElevatedInnerSlopeSlabCornerGeometry extends Geometry
             float lenRight = rightFace ? 1 : .5F;
             float lenLeft =  rightFace ? .5F : 1;
 
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutSideUpDown(top, lenRight, lenLeft))
                     .export(quadMap.get(face));
         }
         else if (ySlope && ((!top && face == Direction.UP) || (top && face == Direction.DOWN)))
         {
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutTopBottom(facing.getCounterClockWise(), 1, 0))
                     .apply(Modifiers.makeVerticalSlope(facing.getOpposite(), FramedSlopeSlabGeometry.SLOPE_ANGLE_VERT))
                     .export(quadMap.get(null));
 
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutTopBottom(facing, 0, 1))
                     .apply(Modifiers.makeVerticalSlope(facing.getClockWise(), FramedSlopeSlabGeometry.SLOPE_ANGLE_VERT))
                     .export(quadMap.get(null));

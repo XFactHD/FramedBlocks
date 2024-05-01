@@ -8,39 +8,30 @@ import java.util.List;
 
 public final class QuadModifier
 {
-    private static final QuadModifier FAILED = new QuadModifier(null, true, -1, false, false, true);
-    private static final QuadModifier FAILED_FULL = new QuadModifier(null, false, -1, false, false, true);
+    private static final QuadModifier FAILED = new QuadModifier(null, -1, false, false, false, true);
 
     private final QuadData data;
-    private final boolean limited;
     private int tintIndex;
-    private boolean noShade;
+    private boolean shade;
+    private boolean ao;
     private boolean modified;
     private boolean failed;
     private boolean exported;
 
     /**
-     * @return a {@code QuadModifier} for the given {@link BakedQuad} that can only modify vertex position, texture and normals
+     * @return a {@code QuadModifier} for the given {@link BakedQuad}
      */
-    public static QuadModifier geometry(BakedQuad quad)
+    public static QuadModifier of(BakedQuad quad)
     {
-        return new QuadModifier(new QuadData(quad), true, -1, false, false, false);
+        return new QuadModifier(new QuadData(quad), -1, quad.isShade(), quad.hasAmbientOcclusion(), false, false);
     }
 
-    /**
-     * @return a {@code QuadModifier} for the given {@link BakedQuad} that can modify all vertex elements
-     */
-    public static QuadModifier full(BakedQuad quad)
-    {
-        return new QuadModifier(new QuadData(quad), false, -1, false, false, false);
-    }
-
-    private QuadModifier(QuadData data, boolean limited, int tintIndex, boolean noShade, boolean modified, boolean failed)
+    private QuadModifier(QuadData data, int tintIndex, boolean shade, boolean ao, boolean modified, boolean failed)
     {
         this.data = data;
-        this.limited = limited;
         this.tintIndex = tintIndex;
-        this.noShade = noShade;
+        this.shade = shade;
+        this.ao = ao;
         this.modified = modified;
         this.failed = failed;
     }
@@ -83,10 +74,23 @@ public final class QuadModifier
         return this;
     }
 
-    public QuadModifier noShade()
+    public QuadModifier shade(boolean shade)
     {
-        noShade = true;
-        modified = true;
+        if (shade != data.quad.isShade())
+        {
+            this.shade = shade;
+            modified = true;
+        }
+        return this;
+    }
+
+    public QuadModifier ambientOcclusion(boolean ao)
+    {
+        if (ao != data.quad.hasAmbientOcclusion())
+        {
+            this.ao = ao;
+            modified = true;
+        }
         return this;
     }
 
@@ -112,8 +116,8 @@ public final class QuadModifier
                 tintIndex == -1 ? data.quad.getTintIndex() : tintIndex,
                 ModelUtils.fillNormal(data),
                 data.quad.getSprite(),
-                !noShade && data.quad.isShade(),
-                data.quad.hasAmbientOcclusion()
+                shade,
+                ao
         );
         quadList.add(newQuad);
         exported = true;
@@ -126,7 +130,8 @@ public final class QuadModifier
     public void modifyInPlace()
     {
         Preconditions.checkState(tintIndex == -1, "In-place modification can't change tintIndex but a tintIndex has been set");
-        Preconditions.checkState(!noShade, "In-place modification can't change shading but noShade has been set");
+        Preconditions.checkState(shade == data.quad.isShade(), "In-place modification can't change shading but shade has been modified");
+        Preconditions.checkState(ao == data.quad.hasAmbientOcclusion(), "In-place modification can't change AO but AO has been modified");
 
         if (failed)
         {
@@ -148,9 +153,9 @@ public final class QuadModifier
     {
         if (failed)
         {
-            return limited ? FAILED : FAILED_FULL;
+            return FAILED;
         }
-        return new QuadModifier(new QuadData(data), limited, tintIndex, noShade, modified, false);
+        return new QuadModifier(new QuadData(data), tintIndex, shade, ao, modified, false);
     }
 
     public boolean hasFailed()

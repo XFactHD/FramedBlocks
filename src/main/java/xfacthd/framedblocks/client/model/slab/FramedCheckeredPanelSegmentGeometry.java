@@ -33,7 +33,7 @@ public class FramedCheckeredPanelSegmentGeometry extends Geometry
 
             if (dir == Direction.NORTH || dir == xDir.getOpposite())
             {
-                QuadModifier.geometry(quad)
+                QuadModifier.of(quad)
                         .apply(Modifiers.cutTopBottom(Direction.SOUTH, .5F))
                         .apply(Modifiers.cutTopBottom(xDir, .5F))
                         .export(quadMap.get(quadDir));
@@ -41,7 +41,7 @@ public class FramedCheckeredPanelSegmentGeometry extends Geometry
 
             if (dir == Direction.SOUTH || dir == xDir)
             {
-                QuadModifier.geometry(quad)
+                QuadModifier.of(quad)
                         .apply(Modifiers.cutTopBottom(Direction.NORTH, .5F))
                         .apply(Modifiers.cutTopBottom(xDir.getOpposite(), .5F))
                         .export(quadMap.get(quadDir));
@@ -49,7 +49,7 @@ public class FramedCheckeredPanelSegmentGeometry extends Geometry
 
             if (dir == Direction.NORTH || dir == xDir)
             {
-                QuadModifier.geometry(quad)
+                QuadModifier.of(quad)
                         .apply(Modifiers.cutTopBottom(Direction.SOUTH, .5F))
                         .apply(Modifiers.cutTopBottom(xDir.getOpposite(), .5F))
                         .apply(Modifiers.setPosition(.5F))
@@ -58,7 +58,7 @@ public class FramedCheckeredPanelSegmentGeometry extends Geometry
 
             if (dir == Direction.SOUTH || dir == xDir.getOpposite())
             {
-                QuadModifier.geometry(quad)
+                QuadModifier.of(quad)
                         .apply(Modifiers.cutTopBottom(Direction.NORTH, .5F))
                         .apply(Modifiers.cutTopBottom(xDir, .5F))
                         .apply(Modifiers.setPosition(.5F))
@@ -73,7 +73,7 @@ public class FramedCheckeredPanelSegmentGeometry extends Geometry
             {
                 if (quadDir == dir || horDir.getOpposite() == dir)
                 {
-                    QuadModifier.geometry(quad)
+                    QuadModifier.of(quad)
                             .apply(Modifiers.cutSideUpDown(false, .5F))
                             .apply(Modifiers.cutSideLeftRight(horDir, .5F))
                             .export(quadMap.get(quadDir));
@@ -81,7 +81,7 @@ public class FramedCheckeredPanelSegmentGeometry extends Geometry
 
                 if (quadDir == dir || horDir == dir)
                 {
-                    QuadModifier.geometry(quad)
+                    QuadModifier.of(quad)
                             .apply(Modifiers.cutSideUpDown(true, .5F))
                             .apply(Modifiers.cutSideLeftRight(horDir.getOpposite(), .5F))
                             .export(quadMap.get(quadDir));
@@ -92,7 +92,7 @@ public class FramedCheckeredPanelSegmentGeometry extends Geometry
             {
                 if (quadDir == dir.getOpposite() || horDir == dir)
                 {
-                    QuadModifier.geometry(quad)
+                    QuadModifier.of(quad)
                             .apply(Modifiers.cutSideUpDown(false, .5F))
                             .apply(Modifiers.cutSideLeftRight(horDir.getOpposite(), .5F))
                             .apply(Modifiers.setPosition(.5F))
@@ -101,7 +101,7 @@ public class FramedCheckeredPanelSegmentGeometry extends Geometry
 
                 if (quadDir == dir.getOpposite() || horDir.getOpposite() == dir)
                 {
-                    QuadModifier.geometry(quad)
+                    QuadModifier.of(quad)
                             .apply(Modifiers.cutSideUpDown(true, .5F))
                             .apply(Modifiers.cutSideLeftRight(horDir, .5F))
                             .apply(Modifiers.setPosition(.5F))

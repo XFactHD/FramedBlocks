@@ -25,13 +25,13 @@ public class FramedFloorBoardGeometry extends Geometry
         Direction face = quad.getDirection();
         if ((!top && face == Direction.UP) || (top && face == Direction.DOWN))
         {
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.setPosition(1F/16F))
                     .export(quadMap.get(null));
         }
         else if (!Utils.isY(quad.getDirection()))
         {
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutSideUpDown(top, 1F/16F))
                     .export(quadMap.get(quad.getDirection()));
         }

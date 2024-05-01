@@ -29,7 +29,7 @@ public class FramedSlabCornerGeometry extends Geometry
         {
             boolean inset = (!top && quadDir == Direction.UP) || (top && quadDir == Direction.DOWN);
 
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutTopBottom(dir.getOpposite(), .5F))
                     .apply(Modifiers.cutTopBottom(dir.getClockWise(), .5F))
                     .applyIf(Modifiers.setPosition(.5F), inset)
@@ -40,7 +40,7 @@ public class FramedSlabCornerGeometry extends Geometry
             Direction cutDir = quadDir.getAxis() == dir.getAxis() ? dir.getClockWise() : dir.getOpposite();
             boolean inset = quadDir == dir.getOpposite() || quadDir == dir.getClockWise();
 
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutSideLeftRight(cutDir, .5F))
                     .apply(Modifiers.cutSideUpDown(top, .5F))
                     .applyIf(Modifiers.setPosition(.5F), inset)

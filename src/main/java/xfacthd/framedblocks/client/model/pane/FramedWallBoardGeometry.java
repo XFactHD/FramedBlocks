@@ -27,20 +27,20 @@ public class FramedWallBoardGeometry extends Geometry
         Direction quadDir = quad.getDirection();
         if (quadDir == dir.getOpposite())
         {
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.setPosition(DEPTH))
                     .export(quadMap.get(null));
 
         }
         else if (Utils.isY(quadDir))
         {
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutTopBottom(dir.getOpposite(), DEPTH))
                     .export(quadMap.get(quadDir));
         }
         else if (quadDir != dir)
         {
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutSideLeftRight(dir.getOpposite(), DEPTH))
                     .export(quadMap.get(quadDir));
         }

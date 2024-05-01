@@ -40,14 +40,14 @@ public class FramedSlopedPrismGeometry extends Geometry
         {
             if (!yFacing) // Triangle for horizontal facing and horizontal orientation
             {
-                QuadModifier.geometry(quad)
+                QuadModifier.of(quad)
                         .apply(Modifiers.cutSmallTriangle(facing))
                         .apply(Modifiers.makeHorizontalSlope(orientation == facing.getClockWise(), 45))
                         .export(quadMap.get(null));
             }
             else if (!ySlope)  // Triangle for horizontal facing and vertical orientation without Y_SLOPE
             {
-                QuadModifier.geometry(quad)
+                QuadModifier.of(quad)
                         .apply(Modifiers.cutSmallTriangle(facing))
                         .apply(Modifiers.makeVerticalSlope(facing == Direction.UP, 45))
                         .export(quadMap.get(null));
@@ -55,7 +55,7 @@ public class FramedSlopedPrismGeometry extends Geometry
         }
         else if (ySlope && yFacing && Utils.isY(quadFace)) // Triangle and slopes for vertical facing with Y_SLOPE
         {
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutSmallTriangle(orientation))
                     .apply(Modifiers.makeVerticalSlope(orientOpp, 45))
                     .export(quadMap.get(null));
@@ -63,13 +63,13 @@ public class FramedSlopedPrismGeometry extends Geometry
             Direction offAxisCW = orientation.getClockWise();
             Direction offAxisCCW = orientation.getCounterClockWise();
 
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutTopBottom(offAxisCW, .5F))
                     .apply(Modifiers.cutTopBottom(orientOpp, 1, 0))
                     .apply(Modifiers.makeVerticalSlope(offAxisCCW, 45))
                     .export(quadMap.get(null));
 
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutTopBottom(offAxisCCW, .5F))
                     .apply(Modifiers.cutTopBottom(orientOpp, 0, 1))
                     .apply(Modifiers.makeVerticalSlope(offAxisCW, 45))
@@ -77,28 +77,28 @@ public class FramedSlopedPrismGeometry extends Geometry
         }
         else if (!ySlope && yOrient && quadFace == facing) // Tilted triangle for horizontal facing and vertical orientation without Y_SLOPE
         {
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutSmallTriangle(orientation))
                     .apply(Modifiers.makeVerticalSlope(orientation == Direction.DOWN, 45))
                     .export(quadMap.get(null));
         }
         else if (ySlope && yOrient && quadFace == orientOpp) // Tilted triangle for horizontal facing and vertical orientation with Y_SLOPE
         {
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutSmallTriangle(facing))
                     .apply(Modifiers.makeVerticalSlope(facing, 45))
                     .export(quadMap.get(null));
         }
         else if (quadFace == orientation) // Triangle
         {
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutSmallTriangle(facing))
                     .export(quadMap.get(quadFace));
         }
         else if (!ySlope && yFacing && quadFace.getAxis() == orientation.getClockWise().getAxis()) // Slopes for Y facing without Y_SLOPE
         {
             boolean up = facing == Direction.UP;
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutSideUpDown(facing == Direction.DOWN, .5F))
                     .apply(Modifiers.cutSideLeftRight(orientation.getOpposite(), up ? 0 : 1, up ? 1 : 0))
                     .apply(Modifiers.makeVerticalSlope(up, 45))
@@ -107,7 +107,7 @@ public class FramedSlopedPrismGeometry extends Geometry
         else if (yOrient && quadFace.getAxis() == facing.getClockWise().getAxis()) // Slopes for horizontal facing and vertical orientation
         {
             boolean right = quadFace == facing.getClockWise();
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutSideLeftRight(facing, .5F))
                     .apply(Modifiers.cutSideUpDown(orientation == Direction.UP, right ? 1 : 0, right ? 0 : 1))
                     .apply(Modifiers.makeHorizontalSlope(quadFace == facing.getCounterClockWise(), 45))
@@ -115,13 +115,13 @@ public class FramedSlopedPrismGeometry extends Geometry
         }
         else if (!ySlope && !yOrient && !yFacing && quadFace == facing) // Slopes for horizontal facing and horizontal orientation without Y_SLOPE
         {
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutSideUpDown(false, .5F))
                     .apply(Modifiers.cutSideLeftRight(orientation.getOpposite(), 0, 1))
                     .apply(Modifiers.makeVerticalSlope(false, 45))
                     .export(quadMap.get(null));
 
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutSideUpDown(true, .5F))
                     .apply(Modifiers.cutSideLeftRight(orientation.getOpposite(), 1, 0))
                     .apply(Modifiers.makeVerticalSlope(true, 45))
@@ -130,7 +130,7 @@ public class FramedSlopedPrismGeometry extends Geometry
         else if (ySlope && !yOrient && !yFacing && Utils.isY(quadFace)) // Slopes for horizontal facing and horizontal orientation with Y_SLOPE
         {
             boolean right = orientation == facing.getClockWise();
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutTopBottom(facing, .5F))
                     .apply(Modifiers.cutTopBottom(orientOpp, right ? 0 : 1, right ? 1 : 0))
                     .apply(Modifiers.makeVerticalSlope(facing, 45))

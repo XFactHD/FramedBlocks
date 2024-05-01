@@ -49,7 +49,7 @@ class FramedDiagonalFenceGeometry extends FramedFenceGeometry
 
         if (Utils.isY(quadDir))
         {
-            QuadModifier mod = QuadModifier.geometry(quad)
+            QuadModifier mod = QuadModifier.of(quad)
                     .apply(Modifiers.cutTopBottom(dir.getOpposite(), 7F/16F))
                     .apply(Modifiers.cutTopBottom(dir.getClockWise(), 9F/16F))
                     .apply(Modifiers.cutTopBottom(dir.getCounterClockWise(), 9F/16F))
@@ -65,13 +65,13 @@ class FramedDiagonalFenceGeometry extends FramedFenceGeometry
         {
             boolean neg = !Utils.isPositive(dir);
 
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutSide(neg ? 0F : 9F/16F, 6F/16F, neg ? 7F/16F : 1F, 9F/16F))
                     .apply(Modifiers.setPosition(9F/16F))
                     .apply(rotate(dir))
                     .export(quadMap.get(null));
 
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutSide(neg ? 0F : 9F/16F, 12F/16F, neg ? 7F/16F : 1F, 15F/16F))
                     .apply(Modifiers.setPosition(9F/16F))
                     .apply(rotate(dir))
@@ -79,12 +79,12 @@ class FramedDiagonalFenceGeometry extends FramedFenceGeometry
         }
         else if (quadDir == dir)
         {
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutSide(7F/16F, 6F/16F, 9F/16F, 9F/16F))
                     .apply(rotate(dir))
                     .export(quadMap.get(null));
 
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutSide(7F/16F, 12F/16F, 9F/16F, 15F/16F))
                     .apply(rotate(dir))
                     .export(quadMap.get(null));

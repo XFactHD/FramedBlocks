@@ -67,7 +67,7 @@ public class FramedRedstoneWallTorchGeometry extends Geometry
         if (Utils.isY(quadDir))
         {
             float top = lit ? (TOP - (1F/16F)) : TOP;
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutTopBottom(MIN, MIN, MAX, MAX))
                     .apply(Modifiers.setPosition(quadDir == Direction.UP ? top : BOTTOM))
                     .apply(Modifiers.offset(Direction.WEST, .5F))
@@ -78,7 +78,7 @@ public class FramedRedstoneWallTorchGeometry extends Geometry
         {
             boolean xAxis = Utils.isX(quadDir);
             boolean east = quadDir == Direction.EAST;
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutSide(MIN, 0, MAX, lit ? (7F/16F) : .5F))
                     .applyIf(Modifiers.setPosition(east ? 1F/16F : 17F/16F), xAxis)
                     .applyIf(Modifiers.setPosition(MAX), !xAxis)

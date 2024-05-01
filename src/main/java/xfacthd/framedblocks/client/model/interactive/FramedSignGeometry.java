@@ -30,7 +30,7 @@ public class FramedSignGeometry extends Geometry
         Direction quadDir = quad.getDirection();
         if (quadDir.getAxis() == dir.getAxis())
         {
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutSideUpDown(true, .5F))
                     .apply(Modifiers.setPosition(POS))
                     .apply(Modifiers.offset(Direction.UP, Y_OFF))
@@ -39,7 +39,7 @@ public class FramedSignGeometry extends Geometry
         }
         else if (Utils.isY(quadDir))
         {
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutTopBottom(dir.getAxis(), 9F/16F))
                     .applyIf(Modifiers.setPosition(.5F), quadDir == Direction.DOWN)
                     .apply(Modifiers.offset(Direction.UP, Y_OFF))
@@ -48,7 +48,7 @@ public class FramedSignGeometry extends Geometry
         }
         else
         {
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutSide(7F/16F, .5F, 9F/16F, 1F))
                     .apply(Modifiers.offset(Direction.UP, Y_OFF))
                     .apply(Modifiers.rotateCentered(Direction.Axis.Y, rotDegrees, false))
@@ -57,7 +57,7 @@ public class FramedSignGeometry extends Geometry
 
         if (!Utils.isY(quadDir))
         {
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutSide(7F/16F, 0F, 9F/16F, 9.75F/16F))
                     .apply(Modifiers.setPosition(POS))
                     .apply(Modifiers.rotateCentered(Direction.Axis.Y, rotDegrees, false))
@@ -65,7 +65,7 @@ public class FramedSignGeometry extends Geometry
         }
         else if (quadDir == Direction.DOWN)
         {
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutTopBottom(7F/16F, 7F/16F, 9F/16F, 9F/16F))
                     .apply(Modifiers.rotateCentered(Direction.Axis.Y, rotDegrees, false))
                     .export(quadMap.get(Direction.DOWN));

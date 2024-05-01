@@ -36,7 +36,7 @@ public class FramedPyramidSlabGeometry extends Geometry
             boolean up = facing == Direction.UP;
             if (!ySlope && quadDir.getAxis() != facing.getAxis())
             {
-                QuadModifier.geometry(quad)
+                QuadModifier.of(quad)
                         .apply(Modifiers.cutSideUpDown(!up, .5F))
                         .apply(Modifiers.cutSideLeftRight(false, up ? 0 : 1, up ? 1 : 0))
                         .apply(Modifiers.cutSideLeftRight(true, up ? 0 : 1, up ? 1 : 0))
@@ -50,7 +50,7 @@ public class FramedPyramidSlabGeometry extends Geometry
                     boolean northeast = dir == Direction.NORTH || dir == Direction.EAST;
                     float angle = up ? -45 : 45;
                     if (northeast) { angle *= -1F; }
-                    QuadModifier.geometry(quad)
+                    QuadModifier.of(quad)
                             .apply(Modifiers.cutTopBottom(dir, .5F))
                             .apply(Modifiers.cutTopBottom(dir.getCounterClockWise(), 0, 1))
                             .apply(Modifiers.cutTopBottom(dir.getClockWise(), 1, 0))
@@ -64,14 +64,14 @@ public class FramedPyramidSlabGeometry extends Geometry
         {
             if (!ySlope && quadDir.getAxis() == facing.getAxis())
             {
-                QuadModifier.geometry(quad)
+                QuadModifier.of(quad)
                         .apply(Modifiers.cutSideUpDown(true, .5F))
                         .apply(Modifiers.cutSideLeftRight(facing.getClockWise(), 1, 0))
                         .apply(Modifiers.cutSideLeftRight(facing.getCounterClockWise(), 1, 0))
                         .apply(Modifiers.makeVerticalSlope(true, 45))
                         .export(quadMap.get(null));
 
-                QuadModifier.geometry(quad)
+                QuadModifier.of(quad)
                         .apply(Modifiers.cutSideUpDown(false, .5F))
                         .apply(Modifiers.cutSideLeftRight(facing.getClockWise(), 0, 1))
                         .apply(Modifiers.cutSideLeftRight(facing.getCounterClockWise(), 0, 1))
@@ -94,7 +94,7 @@ public class FramedPyramidSlabGeometry extends Geometry
                     origin.add(0, 1, 0);
                 }
 
-                QuadModifier.geometry(quad)
+                QuadModifier.of(quad)
                         .apply(Modifiers.cutTopBottom(facing, .5F))
                         .apply(Modifiers.cutTopBottom(facing.getCounterClockWise(), 0, 1))
                         .apply(Modifiers.cutTopBottom(facing.getClockWise(), 1, 0))
@@ -104,7 +104,7 @@ public class FramedPyramidSlabGeometry extends Geometry
             else if (quadDir.getAxis() == facing.getClockWise().getAxis())
             {
                 boolean right = quadDir == facing.getClockWise();
-                QuadModifier.geometry(quad)
+                QuadModifier.of(quad)
                         .apply(Modifiers.cutSideLeftRight(facing, .5F))
                         .apply(Modifiers.cutSideUpDown(true, right ? 1 : 0, right ? 0 : 1))
                         .apply(Modifiers.cutSideUpDown(false, right ? 1 : 0, right ? 0 : 1))

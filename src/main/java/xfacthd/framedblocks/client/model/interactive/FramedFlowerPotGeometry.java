@@ -48,40 +48,40 @@ public class FramedFlowerPotGeometry extends Geometry
     {
         if (quad.getDirection() == Direction.DOWN)
         {
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutTopBottom(5F/16F, 5F/16F, 11F/16F, 11F/16F))
                     .export(quadMap.get(Direction.DOWN));
         }
         else if (quad.getDirection() == Direction.UP)
         {
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutTopBottom(5F/16F, 5F/16F, 11F/16F, 6F/16F))
                     .apply(Modifiers.setPosition(6F/16F))
                     .export(quadMap.get(null));
 
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutTopBottom(5F/16F, 10F/16F, 11F/16F, 11F/16F))
                     .apply(Modifiers.setPosition(6F/16F))
                     .export(quadMap.get(null));
 
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutTopBottom(5F/16F, 6F/16F, 6F/16F, 10F/16F))
                     .apply(Modifiers.setPosition(6F/16F))
                     .export(quadMap.get(null));
 
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutTopBottom(10F/16F, 6F/16F, 11F/16F, 10F/16F))
                     .apply(Modifiers.setPosition(6F/16F))
                     .export(quadMap.get(null));
         }
         else if (!Utils.isY(quad.getDirection()))
         {
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutSide(5F/16F, 0, 11F/16F, 6F/16F))
                     .apply(Modifiers.setPosition(11F/16F))
                     .export(quadMap.get(null));
 
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutSide(6F/16F, 1F/16F, 10F/16F, 6F/16F))
                     .apply(Modifiers.setPosition(6F/16F))
                     .export(quadMap.get(null));
@@ -155,7 +155,7 @@ public class FramedFlowerPotGeometry extends Geometry
         if (dirtModel.getRenderTypes(Blocks.DIRT.defaultBlockState(), rand, ModelData.EMPTY).contains(layer))
         {
             dirtModel.getQuads(Blocks.DIRT.defaultBlockState(), Direction.UP, rand, ModelData.EMPTY, layer).forEach(q ->
-                    QuadModifier.geometry(q)
+                    QuadModifier.of(q)
                             .apply(Modifiers.cutTopBottom(6F/16F, 6F/16F, 10F/16F, 10F/16F))
                             .apply(Modifiers.setPosition(4F/16F))
                             .export(quadMap.get(null))
@@ -166,7 +166,7 @@ public class FramedFlowerPotGeometry extends Geometry
             {
                 for (BakedQuad quad : dirtModel.getQuads(Blocks.DIRT.defaultBlockState(), Direction.DOWN, rand, ModelData.EMPTY, layer))
                 {
-                    QuadModifier.geometry(quad)
+                    QuadModifier.of(quad)
                             .apply(Modifiers.cutTopBottom(6F / 16F, 6F / 16F, 10F / 16F, 10F / 16F))
                             .apply(Modifiers.setPosition(15F / 16F))
                             .export(quadMap.get(null));
@@ -176,7 +176,7 @@ public class FramedFlowerPotGeometry extends Geometry
                 {
                     for (BakedQuad quad : dirtModel.getQuads(Blocks.AIR.defaultBlockState(), dir, rand, ModelData.EMPTY, layer))
                     {
-                        QuadModifier.geometry(quad)
+                        QuadModifier.of(quad)
                                 .apply(Modifiers.cutSide(6F / 16F, 1F / 16F, 10F / 16F, 4F / 16F))
                                 .apply(Modifiers.setPosition(10F / 16F))
                                 .export(quadMap.get(null));

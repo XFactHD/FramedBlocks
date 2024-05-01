@@ -37,24 +37,24 @@ public class FramedVerticalSlopedStairsGeometry extends Geometry
         {
             if (Utils.isY(quadDir))
             {
-                QuadModifier.geometry(quad)
+                QuadModifier.of(quad)
                         .apply(Modifiers.cutTopBottom(facing.getOpposite(), .5F))
                         .export(quadMap.get(quadDir));
             }
             else
             {
-                QuadModifier.geometry(quad)
+                QuadModifier.of(quad)
                         .apply(Modifiers.cutSideLeftRight(facing.getOpposite(), .5F))
                         .export(quadMap.get(quadDir));
             }
         }
         else if (quadDir == facing.getOpposite())
         {
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutSide(rotDir, 1F, 0F))
                     .export(quadMap.get(quadDir));
 
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutSide(rotDir.getOpposite(), 1F, 0F))
                     .apply(Modifiers.setPosition(.5F))
                     .export(quadMap.get(null));
@@ -68,14 +68,14 @@ public class FramedVerticalSlopedStairsGeometry extends Geometry
         {
             if (Utils.isY(slopeQuadDir))
             {
-                QuadModifier.geometry(quad)
+                QuadModifier.of(quad)
                         .apply(Modifiers.cutTopBottom(facing, .5F))
                         .apply(Modifiers.makeVerticalSlope(slopeRotDir, 45F))
                         .export(quadMap.get(null));
             }
             else
             {
-                QuadModifier.geometry(quad)
+                QuadModifier.of(quad)
                         .apply(Modifiers.cutSideLeftRight(facing, .5F))
                         .apply(Modifiers.makeVerticalSlope(slopeRotDir == Direction.UP, 45F))
                         .export(quadMap.get(null));

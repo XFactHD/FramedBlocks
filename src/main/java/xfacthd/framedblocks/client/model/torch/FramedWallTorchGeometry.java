@@ -72,7 +72,7 @@ public class FramedWallTorchGeometry extends Geometry
         Direction quadDir = quad.getDirection();
         if (Utils.isY(quadDir))
         {
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutTopBottom(MIN, MIN, MAX, MAX))
                     .apply(Modifiers.setPosition(quadDir == Direction.UP ? TOP : BOTTOM))
                     .apply(Modifiers.offset(Direction.WEST, .5F))
@@ -83,7 +83,7 @@ public class FramedWallTorchGeometry extends Geometry
         {
             boolean xAxis = Utils.isX(quadDir);
             boolean east = quadDir == Direction.EAST;
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutSide(MIN, 0, MAX, .5F))
                     .applyIf(Modifiers.setPosition(east ? 1F/16F : 17F/16F), xAxis)
                     .applyIf(Modifiers.setPosition(MAX), !xAxis)

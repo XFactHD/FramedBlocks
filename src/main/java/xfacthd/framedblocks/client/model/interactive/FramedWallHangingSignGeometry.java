@@ -36,26 +36,26 @@ public class FramedWallHangingSignGeometry extends Geometry
         Direction quadDir = quad.getDirection();
         if (quadDir.getAxis() == dir.getAxis())
         {
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutSideUpDown(false, 10F/16F))
                     .apply(Modifiers.cutSideLeftRight(15F/16F))
                     .apply(Modifiers.setPosition(9F/16F))
                     .export(quadMap.get(null));
 
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutSideUpDown(true, 2F/16F))
                     .apply(Modifiers.setPosition(10F/16F))
                     .export(quadMap.get(null));
         }
         else if (quadDir.getAxis() == dir.getClockWise().getAxis())
         {
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutSideUpDown(false, 10F/16F))
                     .apply(Modifiers.cutSideLeftRight(9F/16F))
                     .apply(Modifiers.setPosition(15F/16F))
                     .export(quadMap.get(null));
 
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutSideUpDown(true, 2F/16F))
                     .apply(Modifiers.cutSideLeftRight(10F/16F))
                     .export(quadMap.get(quadDir));
@@ -63,13 +63,13 @@ public class FramedWallHangingSignGeometry extends Geometry
         else
         {
             boolean up = quadDir == Direction.UP;
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutTopBottom(dir.getAxis(), 9F/16F))
                     .apply(Modifiers.cutTopBottom(dir.getClockWise().getAxis(), 15F/16F))
                     .applyIf(Modifiers.setPosition(10F/16F), up)
                     .export(quadMap.get(up ? null : quadDir));
 
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutTopBottom(dir.getAxis(), 10F/16F))
                     .applyIf(Modifiers.setPosition(2F/16F), !up)
                     .export(quadMap.get(up ? quadDir : null));

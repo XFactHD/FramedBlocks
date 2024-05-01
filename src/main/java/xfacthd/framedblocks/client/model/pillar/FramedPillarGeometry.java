@@ -47,32 +47,32 @@ public class FramedPillarGeometry extends Geometry
         {
             if (axis == Direction.Axis.Y)
             {
-                return QuadModifier.geometry(quad).apply(Modifiers.cutTopBottom(capStart, capStart, capEnd, capEnd));
+                return QuadModifier.of(quad).apply(Modifiers.cutTopBottom(capStart, capStart, capEnd, capEnd));
             }
             else
             {
-                return QuadModifier.geometry(quad).apply(Modifiers.cutSide(capStart, capStart, capEnd, capEnd));
+                return QuadModifier.of(quad).apply(Modifiers.cutSide(capStart, capStart, capEnd, capEnd));
             }
         }
         else
         {
             if (axis == Direction.Axis.Y)
             {
-                return QuadModifier.geometry(quad)
+                return QuadModifier.of(quad)
                         .apply(Modifiers.cutSideLeftRight(quadDir.getClockWise(), sideCut))
                         .apply(Modifiers.cutSideLeftRight(quadDir.getCounterClockWise(), sideCut))
                         .apply(Modifiers.setPosition(sideCut));
             }
             else if (Utils.isY(quadDir))
             {
-                return QuadModifier.geometry(quad)
+                return QuadModifier.of(quad)
                         .apply(Modifiers.cutTopBottom(axisToDir(axis, true).getClockWise(), sideCut))
                         .apply(Modifiers.cutTopBottom(axisToDir(axis, false).getClockWise(), sideCut))
                         .apply(Modifiers.setPosition(sideCut));
             }
             else
             {
-                return QuadModifier.geometry(quad)
+                return QuadModifier.of(quad)
                         .apply(Modifiers.cutSideUpDown(true, sideCut))
                         .apply(Modifiers.cutSideUpDown(false, sideCut))
                         .apply(Modifiers.setPosition(sideCut));

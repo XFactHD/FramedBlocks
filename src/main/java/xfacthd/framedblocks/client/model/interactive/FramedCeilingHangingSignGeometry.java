@@ -43,7 +43,7 @@ public class FramedCeilingHangingSignGeometry extends Geometry
         Direction quadDir = quad.getDirection();
         if (quadDir.getAxis() == dir.getAxis())
         {
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutSideUpDown(false, 10F/16F))
                     .apply(Modifiers.cutSideLeftRight(15F/16F))
                     .apply(Modifiers.setPosition(9F/16F))
@@ -52,7 +52,7 @@ public class FramedCeilingHangingSignGeometry extends Geometry
         }
         else if (quadDir.getAxis() == dir.getClockWise().getAxis())
         {
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutSideUpDown(false, 10F/16F))
                     .apply(Modifiers.cutSideLeftRight(9F/16F))
                     .apply(Modifiers.setPosition(15F/16F))
@@ -62,7 +62,7 @@ public class FramedCeilingHangingSignGeometry extends Geometry
         else
         {
             boolean up = quadDir == Direction.UP;
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutTopBottom(dir.getAxis(), 9F/16F))
                     .apply(Modifiers.cutTopBottom(dir.getClockWise().getAxis(), 15F/16F))
                     .applyIf(Modifiers.setPosition(10F/16F), up)
@@ -87,7 +87,7 @@ public class FramedCeilingHangingSignGeometry extends Geometry
                 List<BakedQuad> quads = quadMap.get(dir);
                 for (BakedQuad quad : baseModel.getQuads(state, dir, rand, data, renderType))
                 {
-                    QuadModifier.geometry(quad)
+                    QuadModifier.of(quad)
                             .applyIf(Modifiers.rotateCentered(Direction.Axis.Y, rotDegrees, false), attached)
                             .export(quads);
                 }

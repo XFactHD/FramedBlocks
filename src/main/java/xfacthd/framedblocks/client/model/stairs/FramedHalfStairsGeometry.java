@@ -32,13 +32,13 @@ public class FramedHalfStairsGeometry extends Geometry
 
         if (face == dir)
         {
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutSideLeftRight(vertCut, .5F))
                     .export(quadMap.get(face));
         }
         else if (face == dir.getOpposite())
         {
-            QuadModifier mod = QuadModifier.geometry(quad)
+            QuadModifier mod = QuadModifier.of(quad)
                     .apply(Modifiers.cutSideLeftRight(vertCut, .5F));
 
             mod.derive().apply(Modifiers.cutSideUpDown(!top, .5F))
@@ -50,12 +50,12 @@ public class FramedHalfStairsGeometry extends Geometry
         }
         else if (!Utils.isY(face) && face.getAxis() != dir.getAxis())
         {
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutSideLeftRight(dir.getOpposite(), .5F))
                     .applyIf(Modifiers.setPosition(.5F), face == vertCut)
                     .export(quadMap.get(face == vertCut ? null : face));
 
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutSideLeftRight(dir, .5F))
                     .apply(Modifiers.cutSideUpDown(top, .5F))
                     .applyIf(Modifiers.setPosition(.5F), face == vertCut)
@@ -65,7 +65,7 @@ public class FramedHalfStairsGeometry extends Geometry
         {
             boolean base = (face == Direction.UP && top) || (face == Direction.DOWN && !top);
 
-            QuadModifier mod = QuadModifier.geometry(quad)
+            QuadModifier mod = QuadModifier.of(quad)
                     .apply(Modifiers.cutTopBottom(vertCut, .5F));
 
             if (!base)

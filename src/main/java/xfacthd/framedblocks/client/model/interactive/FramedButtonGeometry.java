@@ -47,7 +47,7 @@ public class FramedButtonGeometry extends Geometry
     {
         if (quadDir.getAxis() == facing.getAxis())
         {
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutTopBottom(dir.getAxis(), 10F/16F))
                     .apply(Modifiers.cutTopBottom(dir.getClockWise().getAxis(), 11F/16F))
                     .applyIf(Modifiers.setPosition(pressed ? 1F/16F : 2F/16F), quadDir == facing)
@@ -57,7 +57,7 @@ public class FramedButtonGeometry extends Geometry
         {
             boolean largeSide = dir.getAxis() == quadDir.getAxis();
 
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutSideUpDown(facing == Direction.DOWN, pressed ? 1F/16F : 2F/16F))
                     .apply(Modifiers.cutSideLeftRight(largeSide ? 11F/16F : 10F/16F))
                     .apply(Modifiers.setPosition(largeSide ? 10F/16F : 11F/16F))
@@ -70,14 +70,14 @@ public class FramedButtonGeometry extends Geometry
         float height = pressed ? 1F/16F : 2F/16F;
         if (quadDir.getAxis() == facing.getAxis())
         {
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutSide(5F/16F, 6F/16F, 11F/16F, 10F/16F))
                     .applyIf(Modifiers.setPosition(height), quadDir == facing)
                     .export(quadMap.get(quadDir == facing ? null : quadDir));
         }
         else if (Utils.isY(quadDir))
         {
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutTopBottom(dir, height))
                     .apply(Modifiers.cutTopBottom(dir.getClockWise().getAxis(), 11F/16F))
                     .apply(Modifiers.setPosition(10F / 16F))
@@ -85,7 +85,7 @@ public class FramedButtonGeometry extends Geometry
         }
         else
         {
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutSideLeftRight(dir, height))
                     .apply(Modifiers.cutSideUpDown(10F/16F))
                     .apply(Modifiers.setPosition(11F / 16F))

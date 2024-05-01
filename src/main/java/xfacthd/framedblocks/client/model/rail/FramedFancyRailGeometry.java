@@ -86,7 +86,7 @@ public class FramedFancyRailGeometry extends Geometry
             targetDir = quadDir == Direction.UP ? null : quadDir;
 
             forAllSleepers((i, distDir, distOpp) ->
-                    QuadModifier.geometry(quad)
+                    QuadModifier.of(quad)
                             .apply(Modifiers.cutTopBottom(dir, distDir))
                             .apply(Modifiers.cutTopBottom(dir.getOpposite(), distOpp))
                             .applyIf(Modifiers.setPosition(SLEEPER_HEIGHT), quadDir == Direction.UP)
@@ -98,7 +98,7 @@ public class FramedFancyRailGeometry extends Geometry
             targetDir = null;
 
             forAllSleepers((i, distDir, distOpp) ->
-                    QuadModifier.geometry(quad)
+                    QuadModifier.of(quad)
                             .apply(Modifiers.cutSideUpDown(false, SLEEPER_HEIGHT))
                             .apply(Modifiers.setPosition(distDir))
                             .export(result)
@@ -109,7 +109,7 @@ public class FramedFancyRailGeometry extends Geometry
             targetDir = quadDir;
 
             forAllSleepers((i, distDir, distOpp) ->
-                    QuadModifier.geometry(quad)
+                    QuadModifier.of(quad)
                             .apply(Modifiers.cutSideUpDown(false, SLEEPER_HEIGHT))
                             .apply(Modifiers.cutSideLeftRight(dir, distDir))
                             .apply(Modifiers.cutSideLeftRight(dir.getOpposite(), distOpp))
@@ -132,7 +132,7 @@ public class FramedFancyRailGeometry extends Geometry
         List<BakedQuad> quads = result.getFirst();
         for (BakedQuad resultQuad : quads)
         {
-            QuadModifier.geometry(resultQuad)
+            QuadModifier.of(resultQuad)
                     .apply(Modifiers.rotate(axis, origin, angle, true, scaleVec))
                     .modifyInPlace();
         }
@@ -155,7 +155,7 @@ public class FramedFancyRailGeometry extends Geometry
             {
                 boolean nonDiagUp = quadDir == Direction.UP && i != 1;
                 float height = nonDiagUp ? (SLEEPER_HEIGHT - .001F) : SLEEPER_HEIGHT;
-                QuadModifier.geometry(quad)
+                QuadModifier.of(quad)
                         .apply(Modifiers.cutTopBottom(dir, distDir))
                         .apply(Modifiers.cutTopBottom(dir.getOpposite(), distOpp))
                         .applyIf(Modifiers.setPosition(height), quadDir == Direction.UP)
@@ -171,7 +171,7 @@ public class FramedFancyRailGeometry extends Geometry
 
             boolean inDir = quadDir == dir;
             forAllSleepersCurve((i, distDir, distOpp) ->
-                    QuadModifier.geometry(quad)
+                    QuadModifier.of(quad)
                             .apply(Modifiers.cutSideUpDown(false, SLEEPER_HEIGHT))
                             .apply(Modifiers.setPosition(inDir ? distDir : distOpp))
                             .applyIf(rotateCurveSleeper(dir, secDir, i), i < 2)
@@ -185,7 +185,7 @@ public class FramedFancyRailGeometry extends Geometry
             targetDir = quadDir;
 
             forAllSleepersCurve((i, distDir, distOpp) ->
-                    QuadModifier.geometry(quad)
+                    QuadModifier.of(quad)
                             .apply(Modifiers.cutSideUpDown(false, SLEEPER_HEIGHT))
                             .apply(Modifiers.cutSideLeftRight(dir, distDir))
                             .apply(Modifiers.cutSideLeftRight(dir.getOpposite(), distOpp))

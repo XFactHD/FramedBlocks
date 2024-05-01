@@ -25,19 +25,19 @@ public class FramedCenteredPanelGeometry extends Geometry
         Direction quadDir = quad.getDirection();
         if (quadDir.getAxis() == dir.getAxis())
         {
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.setPosition(12F/16F))
                     .export(quadMap.get(null));
         }
         else if (Utils.isY(quadDir))
         {
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutTopBottom(dir.getAxis(), 12F/16F))
                     .export(quadMap.get(quadDir));
         }
         else
         {
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutSideLeftRight(12F/16F))
                     .export(quadMap.get(quadDir));
         }

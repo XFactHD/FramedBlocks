@@ -33,25 +33,25 @@ public class FramedCheckeredSlabSegmentGeometry extends Geometry
 
             if (up == top)
             {
-                QuadModifier.geometry(quad)
+                QuadModifier.of(quad)
                         .apply(Modifiers.cutTopBottom(Direction.SOUTH, .5F))
                         .apply(Modifiers.cutTopBottom(xDir, .5F))
                         .export(quadMap.get(quadDir));
 
-                QuadModifier.geometry(quad)
+                QuadModifier.of(quad)
                         .apply(Modifiers.cutTopBottom(Direction.NORTH, .5F))
                         .apply(Modifiers.cutTopBottom(xDir.getOpposite(), .5F))
                         .export(quadMap.get(quadDir));
             }
             else
             {
-                QuadModifier.geometry(quad)
+                QuadModifier.of(quad)
                         .apply(Modifiers.cutTopBottom(Direction.SOUTH, .5F))
                         .apply(Modifiers.cutTopBottom(xDir.getOpposite(), .5F))
                         .apply(Modifiers.setPosition(.5F))
                         .export(quadMap.get(null));
 
-                QuadModifier.geometry(quad)
+                QuadModifier.of(quad)
                         .apply(Modifiers.cutTopBottom(Direction.NORTH, .5F))
                         .apply(Modifiers.cutTopBottom(xDir, .5F))
                         .apply(Modifiers.setPosition(.5F))
@@ -64,12 +64,12 @@ public class FramedCheckeredSlabSegmentGeometry extends Geometry
 
             if (!top)
             {
-                QuadModifier.geometry(quad)
+                QuadModifier.of(quad)
                         .apply(Modifiers.cutSideUpDown(false, .5F))
                         .apply(Modifiers.cutSideLeftRight(horDir, .5F))
                         .export(quadMap.get(quadDir));
 
-                QuadModifier.geometry(quad)
+                QuadModifier.of(quad)
                         .apply(Modifiers.cutSideUpDown(false, .5F))
                         .apply(Modifiers.cutSideLeftRight(horDir.getOpposite(), .5F))
                         .apply(Modifiers.setPosition(.5F))
@@ -77,12 +77,12 @@ public class FramedCheckeredSlabSegmentGeometry extends Geometry
             }
             else
             {
-                QuadModifier.geometry(quad)
+                QuadModifier.of(quad)
                         .apply(Modifiers.cutSideUpDown(true, .5F))
                         .apply(Modifiers.cutSideLeftRight(horDir.getOpposite(), .5F))
                         .export(quadMap.get(quadDir));
 
-                QuadModifier.geometry(quad)
+                QuadModifier.of(quad)
                         .apply(Modifiers.cutSideUpDown(true, .5F))
                         .apply(Modifiers.cutSideLeftRight(horDir, .5F))
                         .apply(Modifiers.setPosition(.5F))

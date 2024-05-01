@@ -85,14 +85,14 @@ public class FramedWallGeometry extends Geometry
             {
                 Vector4f rect = rects[dir.ordinal() - 2 + (center ? 4 : 0)];
                 boolean inset = height != WallSide.TALL && quadDir != Direction.DOWN;
-                QuadModifier.geometry(quad)
+                QuadModifier.of(quad)
                         .apply(Modifiers.cutTopBottom(rect.x(), rect.y(), rect.z(), rect.w()))
                         .applyIf(Modifiers.setPosition(LOW_HEIGHT), inset)
                         .export(quadMap.get(inset ? null : quadDir));
             }
             else if (quadDir.getAxis() != dir.getAxis())
             {
-                QuadModifier.geometry(quad)
+                QuadModifier.of(quad)
                         .apply(Modifiers.cutSideLeftRight(dir.getOpposite(), center ? LARGE_MIN : SMALL_MIN))
                         .applyIf(Modifiers.cutSideUpDown(false, LOW_HEIGHT), height != WallSide.TALL)
                         .apply(Modifiers.setPosition(SMALL_MAX))
@@ -105,7 +105,7 @@ public class FramedWallGeometry extends Geometry
     {
         if (quad.getDirection() == dir && height != WallSide.NONE)
         {
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutSide(SMALL_MIN, 0, SMALL_MAX, height == WallSide.TALL ? 1F : LOW_HEIGHT))
                     .export(quadMap.get(dir));
         }
@@ -118,13 +118,13 @@ public class FramedWallGeometry extends Geometry
         {
             if (Utils.isY(quadDir))
             {
-                QuadModifier.geometry(quad)
+                QuadModifier.of(quad)
                         .apply(Modifiers.cutTopBottom(LARGE_MIN, LARGE_MIN, LARGE_MAX, LARGE_MAX))
                         .export(quadMap.get(quadDir));
             }
             else
             {
-                QuadModifier.geometry(quad)
+                QuadModifier.of(quad)
                         .apply(Modifiers.cutSide(LARGE_MIN, 0, LARGE_MAX, 1))
                         .apply(Modifiers.setPosition(LARGE_MAX))
                         .export(quadMap.get(null));
@@ -139,7 +139,7 @@ public class FramedWallGeometry extends Geometry
                 case UP, DOWN ->
                 {
                     boolean inset = !tall && quadDir == Direction.UP;
-                    QuadModifier.geometry(quad)
+                    QuadModifier.of(quad)
                             .apply(Modifiers.cutTopBottom(SMALL_MIN, SMALL_MIN, SMALL_MAX, SMALL_MAX))
                             .applyIf(Modifiers.setPosition(LOW_HEIGHT), inset)
                             .export(quadMap.get(inset ? null : quadDir));
@@ -156,14 +156,14 @@ public class FramedWallGeometry extends Geometry
     {
         if (height == WallSide.NONE)
         {
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutSide(SMALL_MIN, 0, SMALL_MAX, tall ? 1 : LOW_HEIGHT))
                     .apply(Modifiers.setPosition(SMALL_MAX))
                     .export(quadList);
         }
         else if (tall && height == WallSide.LOW)
         {
-            QuadModifier.geometry(quad)
+            QuadModifier.of(quad)
                     .apply(Modifiers.cutSide(SMALL_MIN, LOW_HEIGHT, SMALL_MAX, 1))
                     .apply(Modifiers.setPosition(SMALL_MAX))
                     .export(quadList);

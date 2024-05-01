@@ -27,7 +27,7 @@ public class FramedMiniCubeGeometry extends Geometry
     public void transformQuad(QuadMap quadMap, BakedQuad quad)
     {
         Direction quadDir = quad.getDirection();
-        QuadModifier.geometry(quad)
+        QuadModifier.of(quad)
                 .apply(Modifiers.scaleFace(.5F, ORIGIN))
                 .applyIf(Modifiers.setPosition(.5F), quadDir == Direction.UP)
                 .applyIf(Modifiers.setPosition(.75F), !Utils.isY(quadDir))

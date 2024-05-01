@@ -73,7 +73,7 @@ public class FramedLeverGeometry extends Geometry
         {
             if (quadDir.getAxis() == facing.getAxis())
             {
-                QuadModifier.geometry(quad)
+                QuadModifier.of(quad)
                         .apply(Modifiers.cutTopBottom(dir.getAxis(), MAX_LARGE))
                         .apply(Modifiers.cutTopBottom(dir.getClockWise().getAxis(), MAX_SMALL))
                         .applyIf(Modifiers.setPosition(HEIGHT), quadInDir)
@@ -83,7 +83,7 @@ public class FramedLeverGeometry extends Geometry
             {
                 boolean smallSide = dir.getAxis() == quadDir.getAxis();
 
-                QuadModifier.geometry(quad)
+                QuadModifier.of(quad)
                         .apply(Modifiers.cutSideUpDown(facing == Direction.DOWN, HEIGHT))
                         .apply(Modifiers.cutSideLeftRight(smallSide ? MAX_SMALL : MAX_LARGE))
                         .apply(Modifiers.setPosition(smallSide ? MAX_LARGE : MAX_SMALL))
@@ -94,14 +94,14 @@ public class FramedLeverGeometry extends Geometry
         {
             if (quadDir.getAxis() == facing.getAxis())
             {
-                QuadModifier.geometry(quad)
+                QuadModifier.of(quad)
                         .apply(Modifiers.cutSide(MIN_SMALL, MIN_LARGE, MAX_SMALL, MAX_LARGE))
                         .applyIf(Modifiers.setPosition(HEIGHT), quadInDir)
                         .export(quadMap.get(quadInDir ? null : quadDir));
             }
             else if (Utils.isY(quadDir))
             {
-                QuadModifier.geometry(quad)
+                QuadModifier.of(quad)
                         .apply(Modifiers.cutTopBottom(dir, HEIGHT))
                         .apply(Modifiers.cutTopBottom(dir.getClockWise().getAxis(), MAX_SMALL))
                         .apply(Modifiers.setPosition(MAX_LARGE))
@@ -109,7 +109,7 @@ public class FramedLeverGeometry extends Geometry
             }
             else
             {
-                QuadModifier.geometry(quad)
+                QuadModifier.of(quad)
                         .apply(Modifiers.cutSideLeftRight(dir, HEIGHT))
                         .apply(Modifiers.cutSideUpDown(MAX_LARGE))
                         .apply(Modifiers.setPosition(MAX_SMALL))

@@ -47,7 +47,7 @@ public class FramedCollapsibleCopycatBlockGeometry extends Geometry
         byte[] offsets = FramedCollapsibleCopycatBlockEntity.unpackOffsets(packedOffsets);
         boolean solid = (solidFaces & (1 << quadDir.ordinal())) != 0;
         List<QuadModifier> mods = new ArrayList<>(2);
-        QuadModifier initialModifier = QuadModifier.geometry(quad).apply(Modifiers.setPosition((16F - offsets[quadDir.ordinal()]) / 16F));
+        QuadModifier initialModifier = QuadModifier.of(quad).apply(Modifiers.setPosition((16F - offsets[quadDir.ordinal()]) / 16F));
         if (Utils.isY(quadDir))
         {
             if (offsets[NORTH] > 0 || offsets[SOUTH] > 0)
