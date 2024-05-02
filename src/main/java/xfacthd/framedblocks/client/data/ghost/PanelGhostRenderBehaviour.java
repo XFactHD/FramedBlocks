@@ -24,13 +24,11 @@ public final class PanelGhostRenderBehaviour implements GhostRenderBehaviour
             int renderPass
     )
     {
-        if (hitState.getBlock() == FBContent.BLOCK_FRAMED_PANEL.value())
+        BlockState state = ctx.getLevel().getBlockState(ctx.getClickedPos());
+        if (state.getBlock() == FBContent.BLOCK_FRAMED_PANEL.value())
         {
-            Direction dir = hitState.getValue(FramedProperties.FACING_HOR);
-            if (dir.getOpposite() == hit.getDirection())
-            {
-                return hitState.setValue(FramedProperties.FACING_HOR, dir.getOpposite());
-            }
+            Direction dir = state.getValue(FramedProperties.FACING_HOR);
+            return state.setValue(FramedProperties.FACING_HOR, dir.getOpposite());
         }
         return GhostRenderBehaviour.super.getRenderState(stack, proxiedStack, hit, ctx, hitState, renderPass);
     }
@@ -46,13 +44,10 @@ public final class PanelGhostRenderBehaviour implements GhostRenderBehaviour
             int renderPass
     )
     {
-        if (hitState.getBlock() == FBContent.BLOCK_FRAMED_PANEL.value())
+        BlockState state = ctx.getLevel().getBlockState(ctx.getClickedPos());
+        if (state.getBlock() == FBContent.BLOCK_FRAMED_PANEL.value())
         {
-            Direction dir = hitState.getValue(FramedProperties.FACING_HOR);
-            if (dir.getOpposite() == hit.getDirection())
-            {
-                return hit.getBlockPos();
-            }
+            return ctx.getClickedPos();
         }
         return defaultPos;
     }

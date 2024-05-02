@@ -1,25 +1,19 @@
 package xfacthd.framedblocks.common.block.slab;
 
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.ItemInteractionResult;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.*;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.phys.BlockHitResult;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.PlacementStateBuilder;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
+import xfacthd.framedblocks.common.item.FramedSpecialDoubleBlockItem;
 
 public class FramedPanelBlock extends FramedBlock
 {
@@ -45,29 +39,41 @@ public class FramedPanelBlock extends FramedBlock
     }
 
     @Override
-    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
+    protected boolean canBeReplaced(BlockState state, BlockPlaceContext ctx)
     {
-        if (stack.getItem() == FBContent.BLOCK_FRAMED_PANEL.value().asItem())
+        if (ctx.getPlayer() != null && !ctx.getPlayer().isShiftKeyDown() && ctx.getItemInHand().is(asItem()))
         {
-            Direction facing = state.getValue(FramedProperties.FACING_HOR);
-            if (hit.getDirection() == facing.getOpposite())
+            if (!ctx.replacingClickedOnBlock())
             {
-                if (!level.isClientSide())
-                {
-                    BlockState newState = FBContent.BLOCK_FRAMED_DOUBLE_PANEL.value().defaultBlockState();
-
-                    Utils.wrapInStateCopy(level, pos, player, stack, false, true, () ->
-                            level.setBlockAndUpdate(pos, newState.setValue(FramedProperties.FACING_HOR, facing))
-                    );
-
-                    //noinspection deprecation
-                    SoundType sound = FBContent.BLOCK_FRAMED_CUBE.value().defaultBlockState().getSoundType();
-                    level.playSound(null, pos, sound.getPlaceSound(), SoundSource.BLOCKS, (sound.getVolume() + 1.0F) / 2.0F, sound.getPitch() * 0.8F);
-                }
-                return ItemInteractionResult.sidedSuccess(level.isClientSide());
+                return true;
             }
+
+            Direction innerFace = state.getValue(FramedProperties.FACING_HOR).getOpposite();
+            return ctx.getClickedFace() == innerFace || Utils.fractionInDir(ctx.getClickLocation(), innerFace) > .5D;
         }
-        return super.useItemOn(stack, state, level, pos, player, hand, hit);
+        return false;
+    }
+
+    @Override
+    public BlockItem createBlockItem()
+    {
+        return new FramedSpecialDoubleBlockItem(this, new Item.Properties())
+        {
+            @Override
+            protected BlockState getReplacementState(BlockPlaceContext ctx, BlockState originalState)
+            {
+                Direction facing = originalState.getValue(FramedProperties.FACING_HOR);
+                return FBContent.BLOCK_FRAMED_DOUBLE_PANEL.value()
+                        .defaultBlockState()
+                        .setValue(FramedProperties.FACING_HOR, facing);
+            }
+
+            @Override
+            protected boolean shouldWriteToCamoTwo(BlockPlaceContext ctx, BlockState originalState)
+            {
+                return false;
+            }
+        };
     }
 
     @Override

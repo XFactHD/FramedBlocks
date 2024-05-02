@@ -1,7 +1,6 @@
 package xfacthd.framedblocks.client.data.ghost;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.state.BlockState;
@@ -24,13 +23,11 @@ public final class SlabGhostRenderBehaviour implements GhostRenderBehaviour
             int renderPass
     )
     {
-        if (hitState.getBlock() == FBContent.BLOCK_FRAMED_SLAB.value())
+        BlockState state = ctx.getLevel().getBlockState(ctx.getClickedPos());
+        if (state.getBlock() == FBContent.BLOCK_FRAMED_SLAB.value())
         {
-            boolean top = hitState.getValue(FramedProperties.TOP);
-            if ((top && hit.getDirection() == Direction.DOWN) || (!top && hit.getDirection() == Direction.UP))
-            {
-                return hitState.setValue(FramedProperties.TOP, !top);
-            }
+            boolean top = state.getValue(FramedProperties.TOP);
+            return state.setValue(FramedProperties.TOP, !top);
         }
         return GhostRenderBehaviour.super.getRenderState(stack, proxiedStack, hit, ctx, hitState, renderPass);
     }
@@ -46,13 +43,10 @@ public final class SlabGhostRenderBehaviour implements GhostRenderBehaviour
             int renderPass
     )
     {
-        if (hitState.getBlock() == FBContent.BLOCK_FRAMED_SLAB.value())
+        BlockState state = ctx.getLevel().getBlockState(ctx.getClickedPos());
+        if (state.getBlock() == FBContent.BLOCK_FRAMED_SLAB.value())
         {
-            boolean top = hitState.getValue(FramedProperties.TOP);
-            if ((top && hit.getDirection() == Direction.DOWN) || (!top && hit.getDirection() == Direction.UP))
-            {
-                return hit.getBlockPos();
-            }
+            return ctx.getClickedPos();
         }
         return defaultPos;
     }
