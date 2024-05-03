@@ -157,7 +157,7 @@ dependencies {
 
     //compileOnly("curse.maven:buildinggadgets-298187:3829297")
 
-    //runtimeOnly("xfacthd.contex:ConnectedTextures:${contex_version}")
+    runtimeOnly("xfacthd.contex:ConnectedTextures:${contex_version}")
 
     compileOnly("earth.terrarium.athena:athena-neoforge-${athena_mc_version}:${athena_version}")
     //runtimeOnly("com.teamresourceful.resourcefullib:resourcefullib-neoforge-${resful_lib_mc_version}:${resful_lib_version}")
@@ -208,7 +208,7 @@ dependencies {
 
     compileOnly("curse.maven:jade-324717:5109393")
 
-    implementation("curse.maven:atlasviewer-633577:5024183")
+    compileOnly("curse.maven:atlasviewer-633577:5024183")
 }
 
 tasks.withType(ProcessResources).configureEach {

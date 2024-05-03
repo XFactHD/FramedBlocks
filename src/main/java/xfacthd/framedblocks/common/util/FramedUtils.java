@@ -28,7 +28,7 @@ import java.util.function.Consumer;
 
 public final class FramedUtils
 {
-    private static final Lazy<Set<Item>> RAIL_ITEMS = Lazy.concurrentOf(() ->
+    private static final Lazy<Set<Item>> RAIL_ITEMS = Lazy.of(() ->
     {
         Set<Item> items = Collections.newSetFromMap(new IdentityHashMap<>());
         items.addAll(Set.of(
@@ -43,7 +43,7 @@ public final class FramedUtils
         ));
         return items;
     });
-    private static final Lazy<Map<Item, Block>> RAIL_SLOPE_BLOCKS = Lazy.concurrentOf(() -> new IdentityHashMap<>(Map.of(
+    private static final Lazy<Map<Item, Block>> RAIL_SLOPE_BLOCKS = Lazy.of(() -> new IdentityHashMap<>(Map.of(
             Items.RAIL, FBContent.BLOCK_FRAMED_RAIL_SLOPE.value(),
             Items.POWERED_RAIL, FBContent.BLOCK_FRAMED_POWERED_RAIL_SLOPE.value(),
             Items.DETECTOR_RAIL, FBContent.BLOCK_FRAMED_DETECTOR_RAIL_SLOPE.value(),
