@@ -200,7 +200,7 @@ public class FramedInverseDoubleSlopePanelBlock extends AbstractFramedDoubleBloc
             HorizontalRotation rotOne = rot.isVertical() ? rot.getOpposite() : rot;
             VoxelShape shapeOne = FramedSlopePanelBlock.SHAPES.get(SlopePanelShape.get(rotOne, true));
             VoxelShape preShape = ShapeUtils.orUnoptimized(
-                    ShapeUtils.rotateShapeUnoptimized(Direction.NORTH, Direction.SOUTH, shapeOne),
+                    ShapeUtils.rotateShapeUnoptimizedAroundY(Direction.NORTH, Direction.SOUTH, shapeOne),
                     FramedSlopePanelBlock.SHAPES.get(SlopePanelShape.get(rot, true))
             );
             ShapeUtils.makeHorizontalRotations(preShape, Direction.NORTH, map, rot, ShapeKey::new);

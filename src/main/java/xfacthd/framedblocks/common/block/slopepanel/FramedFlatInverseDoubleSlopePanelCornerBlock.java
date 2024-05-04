@@ -230,7 +230,7 @@ public class FramedFlatInverseDoubleSlopePanelCornerBlock extends AbstractFramed
             VoxelShape backShape = FramedFlatSlopePanelCornerBlock.INNER_SHAPES.get(
                     new FramedFlatSlopePanelCornerBlock.ShapeKey(backRot, true)
             );
-            backShape = ShapeUtils.rotateShapeUnoptimized(Direction.NORTH, Direction.SOUTH, backShape);
+            backShape = ShapeUtils.rotateShapeUnoptimizedAroundY(Direction.NORTH, Direction.SOUTH, backShape);
 
             VoxelShape preShape = ShapeUtils.orUnoptimized(frontShape, backShape);
             ShapeUtils.makeHorizontalRotations(preShape, Direction.NORTH, shapes, rot.ordinal() << 2);

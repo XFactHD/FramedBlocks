@@ -154,13 +154,13 @@ public class FramedExtendedCornerSlopePanelBlock extends FramedBlock
         VoxelShape bottomSlopeShape = FramedExtendedSlopePanelBlock.SHAPES.get(HorizontalRotation.UP);
         VoxelShape bottomShape = ShapeUtils.andUnoptimized(
                 bottomSlopeShape,
-                ShapeUtils.rotateShapeUnoptimized(Direction.NORTH, Direction.WEST, bottomSlopeShape)
+                ShapeUtils.rotateShapeUnoptimizedAroundY(Direction.NORTH, Direction.WEST, bottomSlopeShape)
         );
 
         VoxelShape topSlopeShape = FramedExtendedSlopePanelBlock.SHAPES.get(HorizontalRotation.DOWN);
         VoxelShape topShape = ShapeUtils.andUnoptimized(
                 topSlopeShape,
-                ShapeUtils.rotateShapeUnoptimized(Direction.NORTH, Direction.WEST, topSlopeShape)
+                ShapeUtils.rotateShapeUnoptimizedAroundY(Direction.NORTH, Direction.WEST, topSlopeShape)
         );
 
         VoxelShape[] shapes = ShapeUtils.makeHorizontalRotationsWithFlag(bottomShape, topShape, Direction.NORTH);
@@ -182,13 +182,13 @@ public class FramedExtendedCornerSlopePanelBlock extends FramedBlock
         VoxelShape bottomSlopeShape = FramedExtendedSlopePanelBlock.SHAPES.get(HorizontalRotation.UP);
         VoxelShape bottomShape = ShapeUtils.orUnoptimized(
                 bottomSlopeShape,
-                ShapeUtils.rotateShapeUnoptimized(Direction.NORTH, Direction.WEST, bottomSlopeShape)
+                ShapeUtils.rotateShapeUnoptimizedAroundY(Direction.NORTH, Direction.WEST, bottomSlopeShape)
         );
 
         VoxelShape topSlopeShape = FramedExtendedSlopePanelBlock.SHAPES.get(HorizontalRotation.DOWN);
         VoxelShape topShape = ShapeUtils.orUnoptimized(
                 topSlopeShape,
-                ShapeUtils.rotateShapeUnoptimized(Direction.NORTH, Direction.WEST, topSlopeShape)
+                ShapeUtils.rotateShapeUnoptimizedAroundY(Direction.NORTH, Direction.WEST, topSlopeShape)
         );
 
         VoxelShape[] shapes = ShapeUtils.makeHorizontalRotationsWithFlag(bottomShape, topShape, Direction.SOUTH);

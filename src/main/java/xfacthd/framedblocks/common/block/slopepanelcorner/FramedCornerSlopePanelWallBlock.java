@@ -170,12 +170,12 @@ public class FramedCornerSlopePanelWallBlock extends FramedBlock
     {
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
 
-        VoxelShape shapeOneUpLeft = ShapeUtils.rotateShapeUnoptimized(
+        VoxelShape shapeOneUpLeft = ShapeUtils.rotateShapeUnoptimizedAroundY(
                 Direction.NORTH,
                 Direction.WEST,
                 FramedSlopePanelBlock.SHAPES.get(SlopePanelShape.LEFT_BACK)
         );
-        VoxelShape shapeOneDownRight = ShapeUtils.rotateShapeUnoptimized(
+        VoxelShape shapeOneDownRight = ShapeUtils.rotateShapeUnoptimizedAroundY(
                 Direction.NORTH,
                 Direction.EAST,
                 FramedSlopePanelBlock.SHAPES.get(SlopePanelShape.RIGHT_BACK)
@@ -280,12 +280,12 @@ public class FramedCornerSlopePanelWallBlock extends FramedBlock
     {
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
 
-        VoxelShape shapeOneUpLeft = ShapeUtils.rotateShapeUnoptimized(
+        VoxelShape shapeOneUpLeft = ShapeUtils.rotateShapeUnoptimizedAroundY(
                 Direction.NORTH,
                 Direction.EAST,
                 FramedSlopePanelBlock.SHAPES.get(SlopePanelShape.RIGHT_BACK)
         );
-        VoxelShape shapeOneDownRight = ShapeUtils.rotateShapeUnoptimized(
+        VoxelShape shapeOneDownRight = ShapeUtils.rotateShapeUnoptimizedAroundY(
                 Direction.NORTH,
                 Direction.WEST,
                 FramedSlopePanelBlock.SHAPES.get(SlopePanelShape.LEFT_BACK)

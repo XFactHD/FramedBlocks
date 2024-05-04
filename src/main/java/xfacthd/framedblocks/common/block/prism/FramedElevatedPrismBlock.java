@@ -193,7 +193,7 @@ public class FramedElevatedPrismBlock extends FramedBlock implements IFramedPris
 
             if (Utils.isY(facing))
             {
-                shapes[dirAxis.ordinal()] = ShapeUtils.rotateShape(
+                shapes[dirAxis.ordinal()] = ShapeUtils.rotateShapeAroundY(
                         Direction.NORTH,
                         Direction.fromAxisAndDirection(axis, Direction.AxisDirection.NEGATIVE),
                         facing == Direction.UP ? shapeBottom : shapeTop
@@ -201,7 +201,7 @@ public class FramedElevatedPrismBlock extends FramedBlock implements IFramedPris
             }
             else
             {
-                shapes[dirAxis.ordinal()] = ShapeUtils.rotateShape(
+                shapes[dirAxis.ordinal()] = ShapeUtils.rotateShapeAroundY(
                         Direction.NORTH,
                         facing.getOpposite(),
                         axis == Direction.Axis.Y ? shapeY : shapeXZ

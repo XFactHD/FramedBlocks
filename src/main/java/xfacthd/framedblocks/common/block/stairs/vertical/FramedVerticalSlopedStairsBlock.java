@@ -156,7 +156,7 @@ public class FramedVerticalSlopedStairsBlock extends FramedBlock
 
         VoxelShape shapeUp = ShapeUtils.orUnoptimized(
                 panelShape,
-                ShapeUtils.rotateShapeUnoptimized(
+                ShapeUtils.rotateShapeUnoptimizedAroundY(
                         Direction.NORTH,
                         Direction.EAST,
                         FramedHalfSlopeBlock.SHAPES.get(new FramedHalfSlopeBlock.ShapeKey(false, true))
@@ -165,7 +165,7 @@ public class FramedVerticalSlopedStairsBlock extends FramedBlock
 
         VoxelShape shapeDown = ShapeUtils.orUnoptimized(
                 panelShape,
-                ShapeUtils.rotateShapeUnoptimized(
+                ShapeUtils.rotateShapeUnoptimizedAroundY(
                         Direction.NORTH,
                         Direction.WEST,
                         FramedHalfSlopeBlock.SHAPES.get(new FramedHalfSlopeBlock.ShapeKey(true, false))
@@ -174,7 +174,7 @@ public class FramedVerticalSlopedStairsBlock extends FramedBlock
 
         VoxelShape shapeRight =  ShapeUtils.orUnoptimized(
                 panelShape,
-                ShapeUtils.rotateShapeUnoptimized(
+                ShapeUtils.rotateShapeUnoptimizedAroundY(
                         Direction.NORTH,
                         Direction.WEST,
                         FramedHalfSlopeBlock.SHAPES.get(new FramedHalfSlopeBlock.ShapeKey(false, false))
@@ -183,7 +183,7 @@ public class FramedVerticalSlopedStairsBlock extends FramedBlock
 
         VoxelShape shapeLeft =  ShapeUtils.orUnoptimized(
                 panelShape,
-                ShapeUtils.rotateShapeUnoptimized(
+                ShapeUtils.rotateShapeUnoptimizedAroundY(
                         Direction.NORTH,
                         Direction.EAST,
                         FramedHalfSlopeBlock.SHAPES.get(new FramedHalfSlopeBlock.ShapeKey(true, true))

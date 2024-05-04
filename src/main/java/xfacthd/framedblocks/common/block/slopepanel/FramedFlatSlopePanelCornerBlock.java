@@ -252,9 +252,9 @@ public class FramedFlatSlopePanelCornerBlock extends FramedBlock
             for (Direction dir : Direction.Plane.HORIZONTAL)
             {
                 int idx = dir.get2DDataValue() | (rot.ordinal() << 3);
-                shapes[idx] = ShapeUtils.rotateShape(Direction.NORTH, dir, preShape);
+                shapes[idx] = ShapeUtils.rotateShapeAroundY(Direction.NORTH, dir, preShape);
                 idx = dir.get2DDataValue() | maskFront | (rot.ordinal() << 3);
-                shapes[idx] = ShapeUtils.rotateShape(Direction.NORTH, dir, preShapeFront);
+                shapes[idx] = ShapeUtils.rotateShapeAroundY(Direction.NORTH, dir, preShapeFront);
             }
         }
 

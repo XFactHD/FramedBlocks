@@ -195,7 +195,7 @@ public class FramedInverseDoubleCornerSlopePanelWallBlock extends AbstractFramed
             HorizontalRotation backRot = rot.rotate(rot.isVertical() ? Rotation.CLOCKWISE_90 : Rotation.COUNTERCLOCKWISE_90);
             VoxelShape preShape = ShapeUtils.orUnoptimized(
                     FramedCornerSlopePanelWallBlock.SHAPES_LARGE.get(rot),
-                    ShapeUtils.rotateShapeUnoptimized(
+                    ShapeUtils.rotateShapeUnoptimizedAroundY(
                             Direction.NORTH,
                             Direction.SOUTH,
                             FramedCornerSlopePanelWallBlock.SHAPES_SMALL_INNER.get(backRot)

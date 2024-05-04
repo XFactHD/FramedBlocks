@@ -140,12 +140,12 @@ public class FramedExtendedCornerSlopePanelWallBlock extends FramedBlock
 
     public static ShapeCache<HorizontalRotation> SHAPES = ShapeCache.createEnum(HorizontalRotation.class, map ->
     {
-        VoxelShape shapeOneUpLeft = ShapeUtils.rotateShapeUnoptimized(
+        VoxelShape shapeOneUpLeft = ShapeUtils.rotateShapeUnoptimizedAroundY(
                 Direction.NORTH,
                 Direction.WEST,
                 FramedExtendedSlopePanelBlock.SHAPES.get(HorizontalRotation.LEFT)
         );
-        VoxelShape shapeOneDownRight = ShapeUtils.rotateShapeUnoptimized(
+        VoxelShape shapeOneDownRight = ShapeUtils.rotateShapeUnoptimizedAroundY(
                 Direction.NORTH,
                 Direction.EAST,
                 FramedExtendedSlopePanelBlock.SHAPES.get(HorizontalRotation.RIGHT)
@@ -193,12 +193,12 @@ public class FramedExtendedCornerSlopePanelWallBlock extends FramedBlock
 
     public static final ShapeCache<HorizontalRotation> INNER_SHAPES = ShapeCache.createEnum(HorizontalRotation.class, map ->
     {
-        VoxelShape shapeOneUpLeft = ShapeUtils.rotateShapeUnoptimized(
+        VoxelShape shapeOneUpLeft = ShapeUtils.rotateShapeUnoptimizedAroundY(
                 Direction.NORTH,
                 Direction.EAST,
                 FramedExtendedSlopePanelBlock.SHAPES.get(HorizontalRotation.RIGHT)
         );
-        VoxelShape shapeOneDownRight = ShapeUtils.rotateShapeUnoptimized(
+        VoxelShape shapeOneDownRight = ShapeUtils.rotateShapeUnoptimizedAroundY(
                 Direction.NORTH,
                 Direction.WEST,
                 FramedExtendedSlopePanelBlock.SHAPES.get(HorizontalRotation.LEFT)

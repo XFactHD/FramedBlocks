@@ -223,7 +223,7 @@ public class FramedFlatInverseDoubleSlopeSlabCornerBlock extends AbstractFramedD
 
         VoxelShape shapeBot = ShapeUtils.orUnoptimized(
                 FramedFlatSlopeSlabCornerBlock.SHAPES.get(SlopeSlabShape.BOTTOM_TOP_HALF),
-                ShapeUtils.rotateShapeUnoptimized(
+                ShapeUtils.rotateShapeUnoptimizedAroundY(
                         Direction.NORTH,
                         Direction.SOUTH,
                         FramedFlatSlopeSlabCornerBlock.INNER_SHAPES.get(SlopeSlabShape.TOP_BOTTOM_HALF)
@@ -231,7 +231,7 @@ public class FramedFlatInverseDoubleSlopeSlabCornerBlock extends AbstractFramedD
         );
         VoxelShape shapeTop = ShapeUtils.orUnoptimized(
                 FramedFlatSlopeSlabCornerBlock.SHAPES.get(SlopeSlabShape.TOP_BOTTOM_HALF),
-                ShapeUtils.rotateShapeUnoptimized(
+                ShapeUtils.rotateShapeUnoptimizedAroundY(
                         Direction.NORTH,
                         Direction.SOUTH,
                         FramedFlatSlopeSlabCornerBlock.INNER_SHAPES.get(SlopeSlabShape.BOTTOM_TOP_HALF)

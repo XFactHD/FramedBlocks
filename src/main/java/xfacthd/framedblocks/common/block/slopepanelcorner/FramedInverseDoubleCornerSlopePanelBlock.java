@@ -196,14 +196,14 @@ public class FramedInverseDoubleCornerSlopePanelBlock extends AbstractFramedDoub
 
         VoxelShape shapeBottom = ShapeUtils.orUnoptimized(
                 FramedCornerSlopePanelBlock.SHAPES.get(CornerSlopePanelShape.LARGE_BOTTOM),
-                ShapeUtils.rotateShapeUnoptimized(
+                ShapeUtils.rotateShapeUnoptimizedAroundY(
                         Direction.NORTH,
                         Direction.SOUTH,
                         FramedCornerSlopePanelBlock.SHAPES.get(CornerSlopePanelShape.SMALL_INNER_TOP))
         );
         VoxelShape shapeTop = ShapeUtils.orUnoptimized(
                 FramedCornerSlopePanelBlock.SHAPES.get(CornerSlopePanelShape.LARGE_TOP),
-                ShapeUtils.rotateShapeUnoptimized(
+                ShapeUtils.rotateShapeUnoptimizedAroundY(
                         Direction.NORTH,
                         Direction.SOUTH,
                         FramedCornerSlopePanelBlock.SHAPES.get(CornerSlopePanelShape.SMALL_INNER_BOTTOM)

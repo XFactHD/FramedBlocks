@@ -154,7 +154,7 @@ public class FramedPrismBlock extends FramedBlock implements IFramedPrismBlock
 
             if (Utils.isY(facing))
             {
-                shapes[dirAxis.ordinal()] = ShapeUtils.rotateShape(
+                shapes[dirAxis.ordinal()] = ShapeUtils.rotateShapeAroundY(
                         Direction.NORTH,
                         Direction.fromAxisAndDirection(axis, Direction.AxisDirection.NEGATIVE),
                         facing == Direction.UP ? shapeBottom : shapeTop
@@ -162,7 +162,7 @@ public class FramedPrismBlock extends FramedBlock implements IFramedPrismBlock
             }
             else
             {
-                shapes[dirAxis.ordinal()] = ShapeUtils.rotateShape(
+                shapes[dirAxis.ordinal()] = ShapeUtils.rotateShapeAroundY(
                         Direction.NORTH,
                         facing,
                         axis == Direction.Axis.Y ? shapeY : shapeXZ

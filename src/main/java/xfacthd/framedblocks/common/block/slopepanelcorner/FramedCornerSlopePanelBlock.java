@@ -186,7 +186,7 @@ public class FramedCornerSlopePanelBlock extends FramedBlock
             VoxelShape panelShapeBottom = FramedSlopePanelBlock.SHAPES.get(SlopePanelShape.UP_BACK);
             map.put(CornerSlopePanelShape.SMALL_BOTTOM, ShapeUtils.andUnoptimized(
                     panelShapeBottom,
-                    ShapeUtils.rotateShapeUnoptimized(Direction.NORTH, Direction.WEST, panelShapeBottom)
+                    ShapeUtils.rotateShapeUnoptimizedAroundY(Direction.NORTH, Direction.WEST, panelShapeBottom)
             ));
         }
 
@@ -194,13 +194,13 @@ public class FramedCornerSlopePanelBlock extends FramedBlock
             VoxelShape panelShapeTop = FramedSlopePanelBlock.SHAPES.get(SlopePanelShape.DOWN_BACK);
             map.put(CornerSlopePanelShape.SMALL_TOP, ShapeUtils.andUnoptimized(
                     panelShapeTop,
-                    ShapeUtils.rotateShapeUnoptimized(Direction.NORTH, Direction.WEST, panelShapeTop)
+                    ShapeUtils.rotateShapeUnoptimizedAroundY(Direction.NORTH, Direction.WEST, panelShapeTop)
             ));
         }
 
         {
             VoxelShape panelShapeBot = FramedSlopePanelBlock.SHAPES.get(SlopePanelShape.UP_FRONT);
-            VoxelShape panelShapeBotRot = ShapeUtils.rotateShapeUnoptimized(Direction.NORTH, Direction.WEST, panelShapeBot);
+            VoxelShape panelShapeBotRot = ShapeUtils.rotateShapeUnoptimizedAroundY(Direction.NORTH, Direction.WEST, panelShapeBot);
             map.put(CornerSlopePanelShape.LARGE_BOTTOM, ShapeUtils.orUnoptimized(
                     ShapeUtils.andUnoptimized(panelShapeBot, panelShapeBotRot),
                     ShapeUtils.orUnoptimized(
@@ -212,7 +212,7 @@ public class FramedCornerSlopePanelBlock extends FramedBlock
 
         {
             VoxelShape panelShapeTop = FramedSlopePanelBlock.SHAPES.get(SlopePanelShape.DOWN_FRONT);
-            VoxelShape panelShapeTopRot = ShapeUtils.rotateShapeUnoptimized(Direction.NORTH, Direction.WEST, panelShapeTop);
+            VoxelShape panelShapeTopRot = ShapeUtils.rotateShapeUnoptimizedAroundY(Direction.NORTH, Direction.WEST, panelShapeTop);
             map.put(CornerSlopePanelShape.LARGE_TOP, ShapeUtils.orUnoptimized(
                     ShapeUtils.andUnoptimized(panelShapeTop, panelShapeTopRot),
                     ShapeUtils.orUnoptimized(
@@ -228,7 +228,7 @@ public class FramedCornerSlopePanelBlock extends FramedBlock
                     box(8, 0, 8, 16, 16, 16),
                     ShapeUtils.orUnoptimized(
                             panelShapeBottom,
-                            ShapeUtils.rotateShapeUnoptimized(Direction.NORTH, Direction.WEST, panelShapeBottom)
+                            ShapeUtils.rotateShapeUnoptimizedAroundY(Direction.NORTH, Direction.WEST, panelShapeBottom)
                     )
             ));
         }
@@ -239,7 +239,7 @@ public class FramedCornerSlopePanelBlock extends FramedBlock
                     box(8, 0, 8, 16, 16, 16),
                     ShapeUtils.orUnoptimized(
                             panelShapeTop,
-                            ShapeUtils.rotateShapeUnoptimized(Direction.NORTH, Direction.WEST, panelShapeTop)
+                            ShapeUtils.rotateShapeUnoptimizedAroundY(Direction.NORTH, Direction.WEST, panelShapeTop)
                     )
             ));
         }
@@ -248,7 +248,7 @@ public class FramedCornerSlopePanelBlock extends FramedBlock
             VoxelShape panelShapeBottom = FramedSlopePanelBlock.SHAPES.get(SlopePanelShape.UP_BACK);
             map.put(CornerSlopePanelShape.LARGE_INNER_BOTTOM, ShapeUtils.orUnoptimized(
                     panelShapeBottom,
-                    ShapeUtils.rotateShapeUnoptimized(Direction.NORTH, Direction.WEST, panelShapeBottom)
+                    ShapeUtils.rotateShapeUnoptimizedAroundY(Direction.NORTH, Direction.WEST, panelShapeBottom)
             ));
         }
 
@@ -256,7 +256,7 @@ public class FramedCornerSlopePanelBlock extends FramedBlock
             VoxelShape panelShapeTop = FramedSlopePanelBlock.SHAPES.get(SlopePanelShape.DOWN_BACK);
             map.put(CornerSlopePanelShape.LARGE_INNER_TOP, ShapeUtils.orUnoptimized(
                     panelShapeTop,
-                    ShapeUtils.rotateShapeUnoptimized(Direction.NORTH, Direction.WEST, panelShapeTop)
+                    ShapeUtils.rotateShapeUnoptimizedAroundY(Direction.NORTH, Direction.WEST, panelShapeTop)
             ));
         }
     });

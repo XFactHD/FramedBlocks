@@ -105,8 +105,8 @@ public class FramedCheckeredSlabSegmentBlock extends FramedBlock
                 box(8, 8, 0, 16, 16,  8),
                 box(0, 8, 8,  8, 16, 16)
         );
-        VoxelShape shapeBotSecond = ShapeUtils.rotateShape(Direction.NORTH, Direction.EAST, shapeBotFirst);
-        VoxelShape shapeTopSecond = ShapeUtils.rotateShape(Direction.NORTH, Direction.EAST, shapeTopFirst);
+        VoxelShape shapeBotSecond = ShapeUtils.rotateShapeAroundY(Direction.NORTH, Direction.EAST, shapeBotFirst);
+        VoxelShape shapeTopSecond = ShapeUtils.rotateShapeAroundY(Direction.NORTH, Direction.EAST, shapeTopFirst);
 
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
         for (BlockState state : states)

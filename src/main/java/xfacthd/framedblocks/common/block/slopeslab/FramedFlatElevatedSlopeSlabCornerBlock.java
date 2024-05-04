@@ -153,14 +153,14 @@ public class FramedFlatElevatedSlopeSlabCornerBlock extends FramedBlock
         VoxelShape shapeBottom = ShapeUtils.orUnoptimized(
                 ShapeUtils.andUnoptimized(
                         shapeSlopeBottom,
-                        ShapeUtils.rotateShapeUnoptimized(Direction.NORTH, Direction.WEST, shapeSlopeBottom)
+                        ShapeUtils.rotateShapeUnoptimizedAroundY(Direction.NORTH, Direction.WEST, shapeSlopeBottom)
                 ),
                 box(0, 0, 0, 16, 8, 16)
         );
         VoxelShape shapeTop = ShapeUtils.orUnoptimized(
                 ShapeUtils.andUnoptimized(
                         shapeSlopeTop,
-                        ShapeUtils.rotateShapeUnoptimized(Direction.NORTH, Direction.WEST, shapeSlopeTop)
+                        ShapeUtils.rotateShapeUnoptimizedAroundY(Direction.NORTH, Direction.WEST, shapeSlopeTop)
                 ),
                 box(0, 8, 0, 16, 16, 16)
         );
@@ -190,14 +190,14 @@ public class FramedFlatElevatedSlopeSlabCornerBlock extends FramedBlock
         VoxelShape shapeBottom = ShapeUtils.orUnoptimized(
                 ShapeUtils.orUnoptimized(
                         shapeSlopeBottom,
-                        ShapeUtils.rotateShapeUnoptimized(Direction.NORTH, Direction.WEST, shapeSlopeBottom)
+                        ShapeUtils.rotateShapeUnoptimizedAroundY(Direction.NORTH, Direction.WEST, shapeSlopeBottom)
                 ),
                 box(0, 0, 0, 16, 8, 16)
         );
         VoxelShape shapeTop = ShapeUtils.orUnoptimized(
                 ShapeUtils.orUnoptimized(
                         shapeSlopeTop,
-                        ShapeUtils.rotateShapeUnoptimized(Direction.NORTH, Direction.WEST, shapeSlopeTop)
+                        ShapeUtils.rotateShapeUnoptimizedAroundY(Direction.NORTH, Direction.WEST, shapeSlopeTop)
                 ),
                 box(0, 8, 0, 16, 16, 16)
         );

@@ -120,17 +120,17 @@ public class FramedCornerSlopeBlock extends FramedBlock
         VoxelShape shapeSlopeBottom = FramedSlopeBlock.SHAPES.get(SlopeType.BOTTOM);
         VoxelShape shapeSlopeTop = FramedSlopeBlock.SHAPES.get(SlopeType.TOP);
         VoxelShape shapeSlopeHorizontal = FramedSlopeBlock.SHAPES.get(SlopeType.HORIZONTAL);
-        VoxelShape shapeSlopeHorizontalEast = ShapeUtils.rotateShapeUnoptimized(
+        VoxelShape shapeSlopeHorizontalEast = ShapeUtils.rotateShapeUnoptimizedAroundY(
                 Direction.NORTH, Direction.EAST, shapeSlopeHorizontal
         );
 
         VoxelShape shapeTop = ShapeUtils.andUnoptimized(
                 shapeSlopeTop,
-                ShapeUtils.rotateShapeUnoptimized(Direction.NORTH, Direction.WEST, shapeSlopeTop)
+                ShapeUtils.rotateShapeUnoptimizedAroundY(Direction.NORTH, Direction.WEST, shapeSlopeTop)
         );
         VoxelShape shapeBottom = ShapeUtils.andUnoptimized(
                 shapeSlopeBottom,
-                ShapeUtils.rotateShapeUnoptimized(Direction.NORTH, Direction.WEST, shapeSlopeBottom)
+                ShapeUtils.rotateShapeUnoptimizedAroundY(Direction.NORTH, Direction.WEST, shapeSlopeBottom)
         );
 
         VoxelShape shapeBottomLeft = ShapeUtils.andUnoptimized(shapeSlopeBottom, shapeSlopeHorizontal);
@@ -172,17 +172,17 @@ public class FramedCornerSlopeBlock extends FramedBlock
         VoxelShape shapeSlopeBottom = FramedSlopeBlock.SHAPES.get(SlopeType.BOTTOM);
         VoxelShape shapeSlopeTop = FramedSlopeBlock.SHAPES.get(SlopeType.TOP);
         VoxelShape shapeSlopeHorizontal = FramedSlopeBlock.SHAPES.get(SlopeType.HORIZONTAL);
-        VoxelShape shapeSlopeHorizontalEast = ShapeUtils.rotateShapeUnoptimized(
+        VoxelShape shapeSlopeHorizontalEast = ShapeUtils.rotateShapeUnoptimizedAroundY(
                 Direction.NORTH, Direction.EAST, shapeSlopeHorizontal
         );
 
         VoxelShape shapeTop = ShapeUtils.orUnoptimized(
                 shapeSlopeTop,
-                ShapeUtils.rotateShapeUnoptimized(Direction.NORTH, Direction.WEST, shapeSlopeTop)
+                ShapeUtils.rotateShapeUnoptimizedAroundY(Direction.NORTH, Direction.WEST, shapeSlopeTop)
         );
         VoxelShape shapeBottom = ShapeUtils.orUnoptimized(
                 shapeSlopeBottom,
-                ShapeUtils.rotateShapeUnoptimized(Direction.NORTH, Direction.WEST, shapeSlopeBottom)
+                ShapeUtils.rotateShapeUnoptimizedAroundY(Direction.NORTH, Direction.WEST, shapeSlopeBottom)
         );
 
         VoxelShape shapeBottomLeft = ShapeUtils.orUnoptimized(shapeSlopeBottom, shapeSlopeHorizontal);

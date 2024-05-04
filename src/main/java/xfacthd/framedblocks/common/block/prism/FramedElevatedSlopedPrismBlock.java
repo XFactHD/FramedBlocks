@@ -256,7 +256,7 @@ public class FramedElevatedSlopedPrismBlock extends FramedBlock implements IFram
 
             if (Utils.isY(facing))
             {
-                shapes[cmpDir.ordinal()] = ShapeUtils.rotateShape(
+                shapes[cmpDir.ordinal()] = ShapeUtils.rotateShapeAroundY(
                         Direction.NORTH,
                         orientation,
                         facing == Direction.UP ? shapeBottom : shapeTop
@@ -286,7 +286,7 @@ public class FramedElevatedSlopedPrismBlock extends FramedBlock implements IFram
                     throw new IllegalArgumentException("Invalid orientation for direction!");
                 }
 
-                shapes[cmpDir.ordinal()] = ShapeUtils.rotateShape(Direction.NORTH, facing, shape);
+                shapes[cmpDir.ordinal()] = ShapeUtils.rotateShapeAroundY(Direction.NORTH, facing, shape);
             }
         }
 

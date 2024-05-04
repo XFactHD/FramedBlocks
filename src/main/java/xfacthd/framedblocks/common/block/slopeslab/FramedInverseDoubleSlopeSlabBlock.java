@@ -144,7 +144,7 @@ public class FramedInverseDoubleSlopeSlabBlock extends AbstractFramedDoubleBlock
     {
         VoxelShape shape = ShapeUtils.orUnoptimized(
                 FramedSlopeSlabBlock.SHAPES.get(SlopeSlabShape.BOTTOM_TOP_HALF),
-                ShapeUtils.rotateShapeUnoptimized(
+                ShapeUtils.rotateShapeUnoptimizedAroundY(
                         Direction.NORTH,
                         Direction.SOUTH,
                         FramedSlopeSlabBlock.SHAPES.get(SlopeSlabShape.TOP_BOTTOM_HALF)

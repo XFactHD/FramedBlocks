@@ -154,14 +154,14 @@ public class FramedFlatSlopeSlabCornerBlock extends FramedBlock
 
         VoxelShape shapeBottomBottomHalf = ShapeUtils.andUnoptimized(
                 shapeSlopeBottom,
-                ShapeUtils.rotateShapeUnoptimized(Direction.NORTH, Direction.WEST, shapeSlopeBottom)
+                ShapeUtils.rotateShapeUnoptimizedAroundY(Direction.NORTH, Direction.WEST, shapeSlopeBottom)
         );
         map.put(SlopeSlabShape.BOTTOM_BOTTOM_HALF, shapeBottomBottomHalf);
         map.put(SlopeSlabShape.BOTTOM_TOP_HALF, shapeBottomBottomHalf.move(0, .5, 0));
 
         VoxelShape shapeTopBottomHalf = ShapeUtils.andUnoptimized(
                 shapeSlopeTop,
-                ShapeUtils.rotateShapeUnoptimized(Direction.NORTH, Direction.WEST, shapeSlopeTop)
+                ShapeUtils.rotateShapeUnoptimizedAroundY(Direction.NORTH, Direction.WEST, shapeSlopeTop)
         );
         map.put(SlopeSlabShape.TOP_BOTTOM_HALF, shapeTopBottomHalf);
         map.put(SlopeSlabShape.TOP_TOP_HALF, shapeTopBottomHalf.move(0, .5, 0));
@@ -198,14 +198,14 @@ public class FramedFlatSlopeSlabCornerBlock extends FramedBlock
 
         VoxelShape shapeBottomBottomHalf = ShapeUtils.orUnoptimized(
                 shapeSlopeBottom,
-                ShapeUtils.rotateShapeUnoptimized(Direction.NORTH, Direction.WEST, shapeSlopeBottom)
+                ShapeUtils.rotateShapeUnoptimizedAroundY(Direction.NORTH, Direction.WEST, shapeSlopeBottom)
         );
         map.put(SlopeSlabShape.BOTTOM_BOTTOM_HALF, shapeBottomBottomHalf);
         map.put(SlopeSlabShape.BOTTOM_TOP_HALF, shapeBottomBottomHalf.move(0, .5, 0));
 
         VoxelShape shapeTopBottomHalf = ShapeUtils.orUnoptimized(
                 shapeSlopeTop,
-                ShapeUtils.rotateShapeUnoptimized(Direction.NORTH, Direction.WEST, shapeSlopeTop)
+                ShapeUtils.rotateShapeUnoptimizedAroundY(Direction.NORTH, Direction.WEST, shapeSlopeTop)
         );
         map.put(SlopeSlabShape.TOP_BOTTOM_HALF, shapeTopBottomHalf);
         map.put(SlopeSlabShape.TOP_TOP_HALF, shapeTopBottomHalf.move(0, .5, 0));

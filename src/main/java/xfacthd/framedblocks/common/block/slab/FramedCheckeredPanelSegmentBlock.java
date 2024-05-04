@@ -88,8 +88,8 @@ public class FramedCheckeredPanelSegmentBlock extends FramedBlock
         {
             int idx = dir.get2DDataValue();
             boolean x = Utils.isX(dir);
-            shapes[idx] = ShapeUtils.rotateShape(Direction.NORTH, dir, x ? shapeSecond : shapeFirst);
-            shapes[idx + 4] = ShapeUtils.rotateShape(Direction.NORTH, dir, x ? shapeFirst : shapeSecond);
+            shapes[idx] = ShapeUtils.rotateShapeAroundY(Direction.NORTH, dir, x ? shapeSecond : shapeFirst);
+            shapes[idx + 4] = ShapeUtils.rotateShapeAroundY(Direction.NORTH, dir, x ? shapeFirst : shapeSecond);
         }
 
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
