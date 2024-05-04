@@ -217,7 +217,7 @@ public final class FramedBlockModel extends BakedModelProxy
         {
             boolean camoInRenderType = nullLayer || renderTypes.camoTypes.contains(renderType);
             boolean additionalQuads = !nullLayer && renderTypes.additionalTypes.contains(renderType);
-            if (!camoInRenderType && !additionalQuads)
+            if (!camoInRenderType && !additionalQuads && !reinforce)
             {
                 return List.of();
             }
