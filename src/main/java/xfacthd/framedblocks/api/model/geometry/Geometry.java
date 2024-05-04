@@ -53,13 +53,19 @@ public abstract class Geometry
     public abstract void transformQuad(QuadMap quadMap, BakedQuad quad);
 
     /**
-     * Post-process quads on faces that return {@code false} from {@link FullFacePredicate#test(BlockState, Direction)}<br>
-     * Any additional processing done in this method should be as fast as possible
+     * {@return whether this geometry needs to perform post-processing on uncached quads}
      */
-    public List<BakedQuad> postProcessUncachedQuads(List<BakedQuad> quads)
+    public boolean hasUncachedPostProcessing()
     {
-        return quads;
+        return false;
     }
+
+    /**
+     * Post-process quads on faces that return {@code false} from {@link FullFacePredicate#test(BlockState, Direction)}<br>
+     * Any additional processing done in this method should be as fast as possible and must happen in-place
+     * @apiNote Only called if {@link #hasUncachedPostProcessing()} returns {@code true}
+     */
+    public void postProcessUncachedQuads(List<BakedQuad> quads) { }
 
     /**
      * Return true if the base model loaded from JSON should be used when no camo is applied without going

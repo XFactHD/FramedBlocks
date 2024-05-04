@@ -357,23 +357,25 @@ public final class Utils
      * (Significantly faster than {@link ArrayList#addAll(Collection)} in benchmarks)
      */
     @SuppressWarnings({ "UseBulkOperation", "ForLoopReplaceableByForEach" })
-    public static <T> void copyAll(List<T> src, ArrayList<T> dest)
+    public static <T> ArrayList<T> copyAll(List<T> src, ArrayList<T> dest)
     {
         dest.ensureCapacity(dest.size() + src.size());
         for (int i = 0; i < src.size(); i++)
         {
             dest.add(src.get(i));
         }
+        return dest;
     }
 
     @SuppressWarnings("ForLoopReplaceableByForEach")
-    public static <T> void copyAllWithModifier(List<T> src, ArrayList<T> dest, UnaryOperator<T> modifier)
+    public static <T> ArrayList<T> copyAllWithModifier(List<T> src, ArrayList<T> dest, UnaryOperator<T> modifier)
     {
         dest.ensureCapacity(dest.size() + src.size());
         for (int i = 0; i < src.size(); i++)
         {
             dest.add(modifier.apply(src.get(i)));
         }
+        return dest;
     }
 
     public static TagKey<Block> blockTag(String name)

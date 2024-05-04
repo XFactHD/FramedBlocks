@@ -21,10 +21,9 @@ public class FramedGlowingCubeGeometry extends FramedCubeGeometry
     }
 
     @Override
-    public List<BakedQuad> postProcessUncachedQuads(List<BakedQuad> quads)
+    public void postProcessUncachedQuads(List<BakedQuad> quads)
     {
-        List<BakedQuad> fullbrightQuads = new ArrayList<>(quads.size());
-        for (BakedQuad quad : quads)
+        quads.replaceAll(quad ->
         {
             int[] vertexData = quad.getVertices();
             BakedQuad newQuad = new BakedQuad(
@@ -36,9 +35,14 @@ public class FramedGlowingCubeGeometry extends FramedCubeGeometry
                     false
             );
             FULLBRIGHT_TRANSFORMER.processInPlace(newQuad);
-            fullbrightQuads.add(newQuad);
-        }
-        return fullbrightQuads;
+            return newQuad;
+        });
+    }
+
+    @Override
+    public boolean hasUncachedPostProcessing()
+    {
+        return true;
     }
 
     @Override

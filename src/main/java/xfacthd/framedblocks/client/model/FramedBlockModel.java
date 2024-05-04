@@ -59,6 +59,7 @@ public final class FramedBlockModel extends BakedModelProxy
     private final boolean forceUngeneratedBaseModel;
     private final boolean useBaseModel;
     private final boolean useSolidBase;
+    private final boolean uncachedPostProcess;
     private final StateCache stateCache;
     private final Predicate<Direction> xformDirFilter;
     private final BlockCamoContent[] noCamoContents;
@@ -73,6 +74,7 @@ public final class FramedBlockModel extends BakedModelProxy
         this.forceUngeneratedBaseModel = geometry.forceUngeneratedBaseModel();
         this.useBaseModel = geometry.useBaseModel();
         this.useSolidBase = geometry.useSolidNoCamoModel();
+        this.uncachedPostProcess = geometry.hasUncachedPostProcessing();
         this.stateCache = ((IFramedBlock) state.getBlock()).getCache(state);
         this.xformDirFilter = geometry.transformAllQuads() ? d -> true : d -> !stateCache.isFullFace(d);
         this.noCamoContents = isBaseCube ? makeNoCamoContents(state) : DEFAULT_NO_CAMO_CONTENTS;
@@ -196,7 +198,7 @@ public final class FramedBlockModel extends BakedModelProxy
         {
             needCtCtx = false;
             camoContent = getNoCamoModelSourceContent(fbData);
-            reinforce = useBaseModel && fbData.isReinforced();
+            reinforce = useBaseModel && fbData.isReinforced() && renderType == RenderType.cutout() && side != null;
             noProcessing |= forceUngeneratedBaseModel && (nullLayer || BASE_MODEL_RENDER_TYPES.contains(renderType));
             camoModel = getCamoModel(camoContent, useBaseModel);
             camoData = ModelData.EMPTY;
@@ -220,28 +222,35 @@ public final class FramedBlockModel extends BakedModelProxy
                 return List.of();
             }
 
-            ArrayList<BakedQuad> quads = new ArrayList<>();
+            boolean needCopy = additionalQuads || reinforce || uncachedPostProcess;
+            List<BakedQuad> quads = List.of();
             if (camoInRenderType)
             {
-                List<BakedQuad> camoQuads = camoModel.getQuads(camoContent.getAppearanceState(), side, rand, camoData, renderType);
+                quads = camoModel.getQuads(camoContent.getAppearanceState(), side, rand, camoData, renderType);
                 if (camoContent.isEmissive())
                 {
-                    Utils.copyAllWithModifier(camoQuads, quads, EMISSIVE_PROCESSOR);
+                    quads = Utils.copyAllWithModifier(quads, new ArrayList<>(quads.size()), EMISSIVE_PROCESSOR);
+                    needCopy = false;
                 }
-                else
-                {
-                    Utils.copyAll(camoQuads, quads);
-                }
+            }
+            if (needCopy)
+            {
+                quads = Utils.copyAll(quads, new ArrayList<>(quads.size()));
             }
             if (additionalQuads)
             {
-                geometry.getAdditionalQuads(quads, side, rand, extraData, renderType);
+                // List of quads is guaranteed to be an ArrayList by this point
+                geometry.getAdditionalQuads((ArrayList<BakedQuad>) quads, side, rand, extraData, renderType);
             }
-            if (reinforce && renderType == RenderType.cutout() && side != null)
+            if (reinforce)
             {
                 quads.add(ReinforcementModel.getQuad(side));
             }
-            return geometry.postProcessUncachedQuads(quads);
+            if (uncachedPostProcess)
+            {
+                geometry.postProcessUncachedQuads(quads);
+            }
+            return quads;
         }
         else
         {
