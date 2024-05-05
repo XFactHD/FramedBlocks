@@ -24,6 +24,8 @@ import xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.model.wrapping.*;
 import xfacthd.framedblocks.api.model.wrapping.statemerger.StateMerger;
+import xfacthd.framedblocks.api.render.debug.AttachDebugRenderersEvent;
+import xfacthd.framedblocks.client.render.block.debug.*;
 import xfacthd.framedblocks.common.block.slopepanel.*;
 import xfacthd.framedblocks.common.block.slopeslab.*;
 import xfacthd.framedblocks.common.data.camo.fluid.FluidCamoClientHandler;
@@ -68,7 +70,6 @@ import xfacthd.framedblocks.common.block.interactive.button.FramedLargeButtonBlo
 import xfacthd.framedblocks.common.block.interactive.pressureplate.FramedWeightedPressurePlateBlock;
 import xfacthd.framedblocks.common.block.sign.AbstractFramedSignBlock;
 import xfacthd.framedblocks.common.block.stairs.standard.FramedStairsBlock;
-import xfacthd.framedblocks.common.blockentity.doubled.FramedDoubleBlockEntity;
 import xfacthd.framedblocks.common.compat.modernfix.ModernFixCompat;
 import xfacthd.framedblocks.common.compat.supplementaries.SupplementariesCompat;
 import xfacthd.framedblocks.common.data.BlockType;
@@ -134,22 +135,28 @@ public final class FBClient
     }
 
     @SubscribeEvent
+    public static void onAttachDebugRenderers(final AttachDebugRenderersEvent event)
+    {
+        FBContent.getBlockEntities().forEach(type -> event.attach(type.value(), ConnectionPredicateDebugRenderer.INSTANCE));
+        FBContent.getDoubleBlockEntities().forEach(type -> event.attach(type.value(), DoubleBlockPartDebugRenderer.INSTANCE));
+    }
+
+    @SubscribeEvent
     public static void onRegisterRenderers(final EntityRenderersEvent.RegisterRenderers event)
     {
         event.registerBlockEntityRenderer(FBContent.BE_TYPE_FRAMED_SIGN.value(), FramedSignRenderer::new);
         event.registerBlockEntityRenderer(FBContent.BE_TYPE_FRAMED_HANGING_SIGN.value(), FramedHangingSignRenderer::new);
         event.registerBlockEntityRenderer(FBContent.BE_TYPE_FRAMED_CHEST.value(), FramedChestRenderer::new);
         event.registerBlockEntityRenderer(FBContent.BE_TYPE_FRAMED_ITEM_FRAME.value(), FramedItemFrameRenderer::new);
+    }
 
-        if (!FMLEnvironment.production && TestProperties.ENABLE_DOUBLE_BLOCK_PART_HIT_DEBUG_RENDERER)
+    @SubscribeEvent(priority = EventPriority.LOWEST)
+    public static void onRegisterDebugRenderers(final EntityRenderersEvent.RegisterRenderers event)
+    {
+        if (!FMLEnvironment.production)
         {
-            BlockEntityRendererProvider<FramedDoubleBlockEntity> provider = FramedDoubleBlockDebugRenderer::new;
-            FBContent.getDoubleBlockEntities().forEach(type -> event.registerBlockEntityRenderer(type.value(), provider));
-        }
-        if (!FMLEnvironment.production && TestProperties.ENABLE_CONNECTION_DEBUG_RENDERER)
-        {
-            BlockEntityRendererProvider<FramedBlockEntity> provider = FramedBlockConnectionDebugRenderer::new;
-            FBContent.getBlockEntities().forEach(type -> event.registerBlockEntityRenderer(type.value(), provider));
+            BlockEntityRendererProvider<FramedBlockEntity> provider = FramedBlockDebugRenderer::new;
+            FramedBlockDebugRenderer.getTargetTypes().forEach(type -> event.registerBlockEntityRenderer(type, provider));
         }
     }
 
@@ -449,6 +456,7 @@ public final class FBClient
         event.registerReloadListener((ResourceManagerReloadListener) BlockInteractOverlay::onResourceReload);
         event.registerReloadListener((ResourceManagerReloadListener) OverlayQuadGenerator::onResourceReload);
         ModelWrappingManager.fireRegistration();
+        FramedBlockDebugRenderer.init();
     }
 
     @SubscribeEvent
@@ -463,7 +471,7 @@ public final class FBClient
         //noinspection deprecation
         if (event.getAtlas().location().equals(TextureAtlas.LOCATION_BLOCKS))
         {
-            FramedBlockConnectionDebugRenderer.captureDummySprite(event.getAtlas());
+            ConnectionPredicateDebugRenderer.captureDummySprite(event.getAtlas());
         }
     }
 

@@ -1,11 +1,9 @@
-package xfacthd.framedblocks.client.render.block;
+package xfacthd.framedblocks.client.render.block.debug;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.*;
-import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
-import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.resources.model.BakedModel;
@@ -13,24 +11,27 @@ import net.minecraft.util.Tuple;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.HitResult;
 import net.neoforged.neoforge.client.model.data.ModelData;
 import xfacthd.framedblocks.api.camo.block.BlockCamoContent;
 import xfacthd.framedblocks.api.model.data.FramedBlockData;
+import xfacthd.framedblocks.api.render.debug.BlockDebugRenderer;
+import xfacthd.framedblocks.api.util.TestProperties;
 import xfacthd.framedblocks.common.blockentity.doubled.FramedDoubleBlockEntity;
 
-public class FramedDoubleBlockDebugRenderer implements BlockEntityRenderer<FramedDoubleBlockEntity>
+public class DoubleBlockPartDebugRenderer implements BlockDebugRenderer<FramedDoubleBlockEntity>
 {
+    public static final DoubleBlockPartDebugRenderer INSTANCE = new DoubleBlockPartDebugRenderer();
     private static final ModelData MODEL_DATA = ModelData.builder().with(
             FramedBlockData.PROPERTY,
             new FramedBlockData(new BlockCamoContent(Blocks.STONE.defaultBlockState()), new boolean[6], false, false)
     ).build();
 
-    public FramedDoubleBlockDebugRenderer(@SuppressWarnings("unused") BlockEntityRendererProvider.Context ctx) { }
+    private DoubleBlockPartDebugRenderer() { }
 
     @Override
     public void render(
             FramedDoubleBlockEntity be,
+            BlockHitResult blockHit,
             float partialTick,
             PoseStack poseStack,
             MultiBufferSource buffer,
@@ -38,12 +39,6 @@ public class FramedDoubleBlockDebugRenderer implements BlockEntityRenderer<Frame
             int overlay
     )
     {
-        HitResult hit = Minecraft.getInstance().hitResult;
-        if (!(hit instanceof BlockHitResult blockHit) || !blockHit.getBlockPos().equals(be.getBlockPos()))
-        {
-            return;
-        }
-
         Tuple<BlockState, BlockState> blockPair = be.getBlockPair();
         boolean secondary = be.debugHitSecondary(blockHit);
         BlockState state = secondary ? blockPair.getB() : blockPair.getA();
@@ -70,5 +65,11 @@ public class FramedDoubleBlockDebugRenderer implements BlockEntityRenderer<Frame
                 MODEL_DATA,
                 RenderType.solid()
         );
+    }
+
+    @Override
+    public boolean isEnabled()
+    {
+        return TestProperties.ENABLE_DOUBLE_BLOCK_PART_HIT_DEBUG_RENDERER;
     }
 }

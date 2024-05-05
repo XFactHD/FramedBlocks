@@ -1,37 +1,36 @@
-package xfacthd.framedblocks.client.render.block;
+package xfacthd.framedblocks.client.render.block.debug;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.*;
-import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
-import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.texture.*;
 import net.minecraft.core.Direction;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.HitResult;
-import org.joml.Matrix3f;
-import org.joml.Matrix4f;
 import xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import xfacthd.framedblocks.api.block.cache.StateCache;
 import xfacthd.framedblocks.api.render.Quaternions;
+import xfacthd.framedblocks.api.render.debug.BlockDebugRenderer;
 import xfacthd.framedblocks.api.util.ClientUtils;
+import xfacthd.framedblocks.api.util.TestProperties;
 import xfacthd.framedblocks.common.data.doubleblock.CamoGetter;
 import xfacthd.framedblocks.common.data.doubleblock.DoubleBlockStateCache;
 
-public class FramedBlockConnectionDebugRenderer implements BlockEntityRenderer<FramedBlockEntity>
+public class ConnectionPredicateDebugRenderer implements BlockDebugRenderer<FramedBlockEntity>
 {
+    public static final ConnectionPredicateDebugRenderer INSTANCE = new ConnectionPredicateDebugRenderer();
+
     private static float dummyU0 = 0F;
     private static float dummyU1 = 1F;
     private static float dummyV0 = 0F;
     private static float dummyV1 = 1F;
 
-    public FramedBlockConnectionDebugRenderer(@SuppressWarnings("unused") BlockEntityRendererProvider.Context ctx) { }
+    private ConnectionPredicateDebugRenderer() { }
 
     @Override
     public void render(
             FramedBlockEntity be,
+            BlockHitResult blockHit,
             float partialTick,
             PoseStack poseStack,
             MultiBufferSource buffer,
@@ -39,13 +38,6 @@ public class FramedBlockConnectionDebugRenderer implements BlockEntityRenderer<F
             int overlay
     )
     {
-        HitResult hit = Minecraft.getInstance().hitResult;
-        if (!(hit instanceof BlockHitResult blockHit) || !blockHit.getBlockPos().equals(be.getBlockPos()))
-        {
-            return;
-        }
-
-        poseStack.pushPose();
         poseStack.translate(.5, .5, .5);
 
         Direction face = blockHit.getDirection();
@@ -68,8 +60,6 @@ public class FramedBlockConnectionDebugRenderer implements BlockEntityRenderer<F
                 renderIndicators(buffer, poseStack, cache, face, Direction.UP, Direction.DOWN, face.getCounterClockWise(), face.getClockWise());
             }
         }
-
-        poseStack.popPose();
     }
 
     private static void renderIndicators(
@@ -159,5 +149,11 @@ public class FramedBlockConnectionDebugRenderer implements BlockEntityRenderer<F
         dummyU1 = sprite.getU1();
         dummyV0 = sprite.getV0();
         dummyV1 = sprite.getV1();
+    }
+
+    @Override
+    public boolean isEnabled()
+    {
+        return TestProperties.ENABLE_CONNECTION_DEBUG_RENDERER;
     }
 }

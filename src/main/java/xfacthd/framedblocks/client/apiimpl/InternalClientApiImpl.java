@@ -5,13 +5,16 @@ import net.minecraft.core.Holder;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.Property;
 import xfacthd.framedblocks.FramedBlocks;
+import xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import xfacthd.framedblocks.api.internal.InternalClientAPI;
 import xfacthd.framedblocks.api.model.wrapping.*;
 import xfacthd.framedblocks.api.model.wrapping.statemerger.StateMerger;
+import xfacthd.framedblocks.api.render.debug.BlockDebugRenderer;
 import xfacthd.framedblocks.api.util.TestProperties;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.client.model.FramedBlockModel;
 import xfacthd.framedblocks.client.modelwrapping.*;
+import xfacthd.framedblocks.client.render.block.debug.ConnectionPredicateDebugRenderer;
 
 import java.util.*;
 import java.util.regex.Pattern;
@@ -48,6 +51,12 @@ public final class InternalClientApiImpl implements InternalClientAPI
     public void registerCopyingModelWrapper(Holder<Block> block, Holder<Block> srcBlock, StateMerger stateMerger)
     {
         registerSpecialModelWrapper(block, new CopyingModelFactory(srcBlock), stateMerger);
+    }
+
+    @Override
+    public BlockDebugRenderer<FramedBlockEntity> getConnectionDebugRenderer()
+    {
+        return ConnectionPredicateDebugRenderer.INSTANCE;
     }
 
 
