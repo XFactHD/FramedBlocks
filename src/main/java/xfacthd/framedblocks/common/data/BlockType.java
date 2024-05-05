@@ -14,6 +14,7 @@ import xfacthd.framedblocks.api.predicate.cull.SideSkipPredicate;
 import xfacthd.framedblocks.api.predicate.fullface.FullFacePredicate;
 import xfacthd.framedblocks.api.shapes.*;
 import xfacthd.framedblocks.api.type.IBlockType;
+import xfacthd.framedblocks.common.block.cube.*;
 import xfacthd.framedblocks.common.block.door.*;
 import xfacthd.framedblocks.common.block.interactive.*;
 import xfacthd.framedblocks.common.block.pane.*;
@@ -237,6 +238,7 @@ public enum BlockType implements IBlockType
     FRAMED_CHECKERED_SLAB                           ( true, false,  true,  true,  true,  true,  true, false, ConTexMode.DETAILED, CommonShapes.SLAB_GENERATOR),
     FRAMED_CHECKERED_PANEL_SEGMENT                  (false, false, false,  true, false,  true, false, false, ConTexMode.DETAILED, FramedCheckeredPanelSegmentBlock::generateShapes),
     FRAMED_CHECKERED_PANEL                          ( true, false,  true,  true,  true,  true,  true, false, ConTexMode.DETAILED, CommonShapes.PANEL_GENERATOR),
+    FRAMED_TUBE                                     ( true, false, false,  true,  true, false, false, false, ConTexMode.FULL_FACE, FramedTubeBlock::generateShapes),
     ;
 
     private final String name = toString().toLowerCase(Locale.ROOT);

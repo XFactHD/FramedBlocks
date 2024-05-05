@@ -16,7 +16,6 @@ import net.neoforged.neoforge.client.event.*;
 import net.neoforged.neoforge.client.model.data.ModelProperty;
 import net.neoforged.bus.api.*;
 import net.neoforged.fml.InterModComms;
-import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.*;
 import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.common.NeoForge;
@@ -402,6 +401,7 @@ public final class FBClient
         wrapDoubleModel(FBContent.BLOCK_FRAMED_CHECKERED_SLAB, null, NullCullPredicate.NEVER, WrapHelper.IGNORE_DEFAULT);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_CHECKERED_PANEL_SEGMENT, FramedCheckeredPanelSegmentGeometry::new, WrapHelper.IGNORE_WATERLOGGED);
         wrapDoubleModel(FBContent.BLOCK_FRAMED_CHECKERED_PANEL, null, NullCullPredicate.NEVER, WrapHelper.IGNORE_DEFAULT);
+        WrapHelper.wrap(FBContent.BLOCK_FRAMED_TUBE, FramedTubeGeometry::new, WrapHelper.IGNORE_DEFAULT);
     }
 
     @SubscribeEvent

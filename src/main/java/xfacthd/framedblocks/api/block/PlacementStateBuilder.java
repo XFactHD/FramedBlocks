@@ -231,6 +231,19 @@ public class PlacementStateBuilder<T extends PlacementStateBuilder<T>>
     }
 
     /**
+     * Set the state's {@link BlockStateProperties#AXIS} property to the {@link Direction.Axis} of
+     * the face the player clicked on
+     */
+    public final T withClickedAxis()
+    {
+        if (state != null)
+        {
+            state = state.setValue(BlockStateProperties.AXIS, ctx.getClickedFace().getAxis());
+        }
+        return self();
+    }
+
+    /**
      * Set the state's {@link FramedProperties#TOP} property depending on the face when looking at a vertical face or
      * depending on the targeted vertical half when looking at a horizontal face
      */
