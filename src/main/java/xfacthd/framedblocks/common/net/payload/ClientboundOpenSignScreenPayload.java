@@ -10,19 +10,19 @@ import net.neoforged.neoforge.network.handling.IPayloadContext;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.client.util.ClientAccess;
 
-public record OpenSignScreenPayload(BlockPos pos, boolean frontText) implements CustomPacketPayload
+public record ClientboundOpenSignScreenPayload(BlockPos pos, boolean frontText) implements CustomPacketPayload
 {
-    public static final CustomPacketPayload.Type<OpenSignScreenPayload> TYPE = Utils.payloadType("open_sign_screen");
-    public static final StreamCodec<FriendlyByteBuf, OpenSignScreenPayload> CODEC = StreamCodec.composite(
+    public static final CustomPacketPayload.Type<ClientboundOpenSignScreenPayload> TYPE = Utils.payloadType("open_sign_screen");
+    public static final StreamCodec<FriendlyByteBuf, ClientboundOpenSignScreenPayload> CODEC = StreamCodec.composite(
             BlockPos.STREAM_CODEC,
-            OpenSignScreenPayload::pos,
+            ClientboundOpenSignScreenPayload::pos,
             ByteBufCodecs.BOOL,
-            OpenSignScreenPayload::frontText,
-            OpenSignScreenPayload::new
+            ClientboundOpenSignScreenPayload::frontText,
+            ClientboundOpenSignScreenPayload::new
     );
 
     @Override
-    public CustomPacketPayload.Type<OpenSignScreenPayload> type()
+    public CustomPacketPayload.Type<ClientboundOpenSignScreenPayload> type()
     {
         return TYPE;
     }

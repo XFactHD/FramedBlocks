@@ -14,29 +14,29 @@ public final class NetworkHandler
         event.registrar(PROTOCOL_VERSION)
                 .executesOn(HandlerThread.NETWORK)
                 .playToServer(
-                        SignUpdatePayload.TYPE,
-                        SignUpdatePayload.CODEC,
-                        SignUpdatePayload::handle
+                        ServerboundSignUpdatePayload.TYPE,
+                        ServerboundSignUpdatePayload.CODEC,
+                        ServerboundSignUpdatePayload::handle
                 )
                 .playToClient(
-                        OpenSignScreenPayload.TYPE,
-                        OpenSignScreenPayload.CODEC,
-                        OpenSignScreenPayload::handle
+                        ClientboundOpenSignScreenPayload.TYPE,
+                        ClientboundOpenSignScreenPayload.CODEC,
+                        ClientboundOpenSignScreenPayload::handle
                 )
                 .playToClient(
-                        CullingUpdatePayload.TYPE,
-                        CullingUpdatePayload.CODEC,
+                        ClientboundCullingUpdatePayload.TYPE,
+                        ClientboundCullingUpdatePayload.CODEC,
                         ClientCullingUpdateTracker::handleCullingUpdates
                 )
                 .playToServer(
-                        SelectFramingSawRecipePayload.TYPE,
-                        SelectFramingSawRecipePayload.CODEC,
-                        SelectFramingSawRecipePayload::handle
+                        ServerboundSelectFramingSawRecipePayload.TYPE,
+                        ServerboundSelectFramingSawRecipePayload.CODEC,
+                        ServerboundSelectFramingSawRecipePayload::handle
                 )
                 .playToServer(
-                        EncodeFramingSawPatternPayload.TYPE,
-                        EncodeFramingSawPatternPayload.CODEC,
-                        EncodeFramingSawPatternPayload::handle
+                        ServerboundEncodeFramingSawPatternPayload.TYPE,
+                        ServerboundEncodeFramingSawPatternPayload.CODEC,
+                        ServerboundEncodeFramingSawPatternPayload::handle
                 );
     }
 

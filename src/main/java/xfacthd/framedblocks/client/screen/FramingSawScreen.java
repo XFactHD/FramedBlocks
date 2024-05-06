@@ -34,7 +34,7 @@ import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.compat.ae2.AppliedEnergisticsCompat;
 import xfacthd.framedblocks.common.crafting.*;
 import xfacthd.framedblocks.common.menu.FramingSawMenu;
-import xfacthd.framedblocks.common.net.payload.SelectFramingSawRecipePayload;
+import xfacthd.framedblocks.common.net.payload.ServerboundSelectFramingSawRecipePayload;
 import xfacthd.framedblocks.common.util.FramedUtils;
 
 import java.util.*;
@@ -545,7 +545,7 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu> im
             if (menu.clickMenuButton(minecraft.player, idx))
             {
                 Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_STONECUTTER_SELECT_RECIPE, 1.0F));
-                PacketDistributor.sendToServer(new SelectFramingSawRecipePayload(menu.containerId, idx));
+                PacketDistributor.sendToServer(new ServerboundSelectFramingSawRecipePayload(menu.containerId, idx));
                 return true;
             }
         }

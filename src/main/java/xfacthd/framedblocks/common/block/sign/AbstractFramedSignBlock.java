@@ -33,7 +33,7 @@ import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.blockentity.special.FramedSignBlockEntity;
-import xfacthd.framedblocks.common.net.payload.OpenSignScreenPayload;
+import xfacthd.framedblocks.common.net.payload.ClientboundOpenSignScreenPayload;
 
 import java.util.*;
 
@@ -203,7 +203,7 @@ public abstract class AbstractFramedSignBlock extends FramedBlock
     public static void openEditScreen(Player player, FramedSignBlockEntity sign, boolean frontText)
     {
         sign.setEditingPlayer(player.getUUID());
-        PacketDistributor.sendToPlayer((ServerPlayer)player, new OpenSignScreenPayload(sign.getBlockPos(), frontText));
+        PacketDistributor.sendToPlayer((ServerPlayer)player, new ClientboundOpenSignScreenPayload(sign.getBlockPos(), frontText));
     }
 
 

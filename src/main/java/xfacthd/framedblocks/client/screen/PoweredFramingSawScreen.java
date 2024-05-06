@@ -21,7 +21,7 @@ import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.crafting.*;
 import xfacthd.framedblocks.common.menu.FramingSawMenu;
 import xfacthd.framedblocks.common.menu.PoweredFramingSawMenu;
-import xfacthd.framedblocks.common.net.payload.SelectFramingSawRecipePayload;
+import xfacthd.framedblocks.common.net.payload.ServerboundSelectFramingSawRecipePayload;
 
 import java.util.*;
 
@@ -303,7 +303,7 @@ public class PoweredFramingSawScreen extends AbstractContainerScreen<PoweredFram
             //noinspection ConstantConditions
             if (menu.clickMenuButton(minecraft.player, id))
             {
-                PacketDistributor.sendToServer(new SelectFramingSawRecipePayload(menu.containerId, id));
+                PacketDistributor.sendToServer(new ServerboundSelectFramingSawRecipePayload(menu.containerId, id));
             }
         }
     }

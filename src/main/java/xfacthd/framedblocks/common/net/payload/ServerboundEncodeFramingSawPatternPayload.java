@@ -14,21 +14,21 @@ import xfacthd.framedblocks.common.crafting.FramingSawRecipe;
 import xfacthd.framedblocks.common.menu.FramingSawWithEncoderMenu;
 import xfacthd.framedblocks.common.net.FramedByteBufCodecs;
 
-public record EncodeFramingSawPatternPayload(int containerId, ResourceLocation recipeId, ItemStack[] inputs) implements CustomPacketPayload
+public record ServerboundEncodeFramingSawPatternPayload(int containerId, ResourceLocation recipeId, ItemStack[] inputs) implements CustomPacketPayload
 {
-    public static final CustomPacketPayload.Type<EncodeFramingSawPatternPayload> TYPE = Utils.payloadType("encode_saw_pattern");
-    public static final StreamCodec<RegistryFriendlyByteBuf, EncodeFramingSawPatternPayload> CODEC = StreamCodec.composite(
+    public static final CustomPacketPayload.Type<ServerboundEncodeFramingSawPatternPayload> TYPE = Utils.payloadType("encode_saw_pattern");
+    public static final StreamCodec<RegistryFriendlyByteBuf, ServerboundEncodeFramingSawPatternPayload> CODEC = StreamCodec.composite(
             ByteBufCodecs.VAR_INT,
-            EncodeFramingSawPatternPayload::containerId,
+            ServerboundEncodeFramingSawPatternPayload::containerId,
             ResourceLocation.STREAM_CODEC,
-            EncodeFramingSawPatternPayload::recipeId,
+            ServerboundEncodeFramingSawPatternPayload::recipeId,
             FramedByteBufCodecs.array(ItemStack.STREAM_CODEC, ItemStack[]::new, FramingSawRecipe.MAX_ADDITIVE_COUNT + 1),
-            EncodeFramingSawPatternPayload::inputs,
-            EncodeFramingSawPatternPayload::new
+            ServerboundEncodeFramingSawPatternPayload::inputs,
+            ServerboundEncodeFramingSawPatternPayload::new
     );
 
     @Override
-    public CustomPacketPayload.Type<EncodeFramingSawPatternPayload> type()
+    public CustomPacketPayload.Type<ServerboundEncodeFramingSawPatternPayload> type()
     {
         return TYPE;
     }

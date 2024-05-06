@@ -9,7 +9,7 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import xfacthd.framedblocks.common.crafting.FramingSawRecipe;
 import xfacthd.framedblocks.common.crafting.FramingSawRecipeCache;
 import xfacthd.framedblocks.common.menu.*;
-import xfacthd.framedblocks.common.net.payload.SelectFramingSawRecipePayload;
+import xfacthd.framedblocks.common.net.payload.ServerboundSelectFramingSawRecipePayload;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,7 +69,7 @@ public final class FramedEmiRecipeHandler<T extends AbstractContainerMenu & IFra
             //noinspection ConstantConditions
             if (menu.clickMenuButton(Minecraft.getInstance().player, idx))
             {
-                PacketDistributor.sendToServer(new SelectFramingSawRecipePayload(menu.containerId, idx));
+                PacketDistributor.sendToServer(new ServerboundSelectFramingSawRecipePayload(menu.containerId, idx));
             }
         }
         return true;

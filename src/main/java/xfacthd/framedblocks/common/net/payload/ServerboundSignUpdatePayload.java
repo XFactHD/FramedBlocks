@@ -17,21 +17,21 @@ import xfacthd.framedblocks.common.net.FramedByteBufCodecs;
 import java.util.List;
 import java.util.stream.Stream;
 
-public record SignUpdatePayload(BlockPos pos, boolean front, String[] lines) implements CustomPacketPayload
+public record ServerboundSignUpdatePayload(BlockPos pos, boolean front, String[] lines) implements CustomPacketPayload
 {
-    public static final CustomPacketPayload.Type<SignUpdatePayload> TYPE = Utils.payloadType("sign_update");
-    public static final StreamCodec<FriendlyByteBuf, SignUpdatePayload> CODEC = StreamCodec.composite(
+    public static final CustomPacketPayload.Type<ServerboundSignUpdatePayload> TYPE = Utils.payloadType("sign_update");
+    public static final StreamCodec<FriendlyByteBuf, ServerboundSignUpdatePayload> CODEC = StreamCodec.composite(
             BlockPos.STREAM_CODEC,
-            SignUpdatePayload::pos,
+            ServerboundSignUpdatePayload::pos,
             ByteBufCodecs.BOOL,
-            SignUpdatePayload::front,
+            ServerboundSignUpdatePayload::front,
             FramedByteBufCodecs.array(ByteBufCodecs.stringUtf8(384), String[]::new, 4),
-            SignUpdatePayload::lines,
-            SignUpdatePayload::new
+            ServerboundSignUpdatePayload::lines,
+            ServerboundSignUpdatePayload::new
     );
 
     @Override
-    public CustomPacketPayload.Type<SignUpdatePayload> type()
+    public CustomPacketPayload.Type<ServerboundSignUpdatePayload> type()
     {
         return TYPE;
     }

@@ -13,7 +13,7 @@ import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.crafting.FramingSawRecipe;
 import xfacthd.framedblocks.common.crafting.FramingSawRecipeCache;
 import xfacthd.framedblocks.common.menu.*;
-import xfacthd.framedblocks.common.net.payload.SelectFramingSawRecipePayload;
+import xfacthd.framedblocks.common.net.payload.ServerboundSelectFramingSawRecipePayload;
 
 import java.util.List;
 import java.util.Optional;
@@ -84,7 +84,7 @@ public abstract sealed class FramingSawTransferHandler<C extends AbstractContain
 
             if (doTransfer && menu.clickMenuButton(player, idx))
             {
-                PacketDistributor.sendToServer(new SelectFramingSawRecipePayload(menu.containerId, idx));
+                PacketDistributor.sendToServer(new ServerboundSelectFramingSawRecipePayload(menu.containerId, idx));
             }
             // TODO: return null instead of "transfer not implemented" when the suggestion is implemented
             return new RecipeTransferErrorTransferNotImplemented();

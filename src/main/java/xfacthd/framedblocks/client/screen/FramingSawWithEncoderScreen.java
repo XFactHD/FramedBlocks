@@ -23,7 +23,7 @@ import xfacthd.framedblocks.common.compat.ae2.AppliedEnergisticsCompat;
 import xfacthd.framedblocks.common.crafting.*;
 import xfacthd.framedblocks.common.menu.FramingSawMenu;
 import xfacthd.framedblocks.common.menu.FramingSawWithEncoderMenu;
-import xfacthd.framedblocks.common.net.payload.EncodeFramingSawPatternPayload;
+import xfacthd.framedblocks.common.net.payload.ServerboundEncodeFramingSawPatternPayload;
 
 import java.util.*;
 
@@ -350,7 +350,7 @@ public class FramingSawWithEncoderScreen extends FramingSawScreen
     {
         if (encoderMatchResult == null || !encoderMatchResult.success()) return;
 
-        PacketDistributor.sendToServer(new EncodeFramingSawPatternPayload(
+        PacketDistributor.sendToServer(new ServerboundEncodeFramingSawPatternPayload(
                 menu.containerId,
                 cache.getRecipes().get(menu.getSelectedRecipeIndex()).id(),
                 encodingInputs

@@ -10,19 +10,19 @@ import net.neoforged.neoforge.network.handling.IPayloadContext;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.menu.IFramingSawMenu;
 
-public record SelectFramingSawRecipePayload(int containerId, int recipeIdx) implements CustomPacketPayload
+public record ServerboundSelectFramingSawRecipePayload(int containerId, int recipeIdx) implements CustomPacketPayload
 {
-    public static final CustomPacketPayload.Type<SelectFramingSawRecipePayload> TYPE = Utils.payloadType("select_framing_saw_recipe");
-    public static final StreamCodec<FriendlyByteBuf, SelectFramingSawRecipePayload> CODEC = StreamCodec.composite(
+    public static final CustomPacketPayload.Type<ServerboundSelectFramingSawRecipePayload> TYPE = Utils.payloadType("select_framing_saw_recipe");
+    public static final StreamCodec<FriendlyByteBuf, ServerboundSelectFramingSawRecipePayload> CODEC = StreamCodec.composite(
             ByteBufCodecs.VAR_INT,
-            SelectFramingSawRecipePayload::containerId,
+            ServerboundSelectFramingSawRecipePayload::containerId,
             ByteBufCodecs.VAR_INT,
-            SelectFramingSawRecipePayload::recipeIdx,
-            SelectFramingSawRecipePayload::new
+            ServerboundSelectFramingSawRecipePayload::recipeIdx,
+            ServerboundSelectFramingSawRecipePayload::new
     );
 
     @Override
-    public CustomPacketPayload.Type<SelectFramingSawRecipePayload> type()
+    public CustomPacketPayload.Type<ServerboundSelectFramingSawRecipePayload> type()
     {
         return TYPE;
     }
