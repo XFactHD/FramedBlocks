@@ -11,10 +11,11 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
-import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.client.event.*;
 import net.neoforged.neoforge.client.model.data.ModelProperty;
-import net.neoforged.bus.api.*;
+import net.neoforged.bus.api.EventPriority;
+import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.InterModComms;
 import net.neoforged.fml.event.lifecycle.*;
 import net.neoforged.fml.loading.FMLEnvironment;
@@ -79,11 +80,33 @@ import xfacthd.framedblocks.common.data.doubleblock.NullCullPredicate;
 import java.util.*;
 import java.util.function.Supplier;
 
-@EventBusSubscriber(modid = FramedConstants.MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+@Mod(value = FramedConstants.MOD_ID, dist = Dist.CLIENT)
 public final class FBClient
 {
-    @SubscribeEvent
-    public static void onClientSetup(final FMLClientSetupEvent event)
+    public FBClient(IEventBus modBus)
+    {
+        modBus.addListener(FBClient::onClientSetup);
+        modBus.addListener(FBClient::onRegisterMenuScreens);
+        modBus.addListener(FBClient::onImcMessageReceived);
+        modBus.addListener(FBClient::onLoadComplete);
+        modBus.addListener(FBClient::onRegisterKeyMappings);
+        modBus.addListener(FBClient::onAttachDebugRenderers);
+        modBus.addListener(FBClient::onRegisterRenderers);
+        modBus.addListener(FBClient::onRegisterDebugRenderers);
+        modBus.addListener(FBClient::onBlockColors);
+        modBus.addListener(FBClient::onItemColors);
+        modBus.addListener(FBClient::onOverlayRegister);
+        modBus.addListener(FBClient::onGeometryLoaderRegister);
+        modBus.addListener(FBClient::onRegisterModelWrappers);
+        modBus.addListener(FBClient::onModelRegister);
+        modBus.addListener(FBClient::onModifyBakingResult);
+        modBus.addListener(FBClient::onModelsLoaded);
+        modBus.addListener(FBClient::onRegisterReloadListener);
+        modBus.addListener(FBClient::onRegisterSpriteSources);
+        modBus.addListener(FBClient::onTexturesStitched);
+    }
+
+    private static void onClientSetup(final FMLClientSetupEvent event)
     {
         event.enqueueWork(BlueprintPropertyOverride::register);
 
@@ -99,16 +122,14 @@ public final class FBClient
         NeoForge.EVENT_BUS.addListener(EventPriority.LOW, true, CollapsibleBlockIndicatorRenderer::onRenderBlockHighlight);
     }
 
-    @SubscribeEvent
-    public static void onRegisterMenuScreens(final RegisterMenuScreensEvent event)
+    private static void onRegisterMenuScreens(final RegisterMenuScreensEvent event)
     {
         event.register(FBContent.MENU_TYPE_FRAMED_STORAGE.value(), FramedStorageScreen::new);
         event.register(FBContent.MENU_TYPE_FRAMING_SAW.value(), FramingSawScreen::create);
         event.register(FBContent.MENU_TYPE_POWERED_FRAMING_SAW.value(), PoweredFramingSawScreen::new);
     }
 
-    @SubscribeEvent
-    public static void onImcMessageReceived(final InterModProcessEvent event)
+    private static void onImcMessageReceived(final InterModProcessEvent event)
     {
         event.getIMCStream()
                 .filter(msg -> msg.method().equals(FramedConstants.IMC_METHOD_ADD_PROPERTY))
@@ -119,30 +140,26 @@ public final class FBClient
                 .forEach(ConTexDataHandler::addConTexProperty);
     }
 
-    @SubscribeEvent
-    public static void onLoadComplete(final FMLLoadCompleteEvent event)
+    private static void onLoadComplete(final FMLLoadCompleteEvent event)
     {
         GhostBlockRenderer.lockRegistration();
         BlockOutlineRenderer.lockRegistration();
         ConTexDataHandler.lockRegistration();
     }
 
-    @SubscribeEvent
-    public static void onRegisterKeyMappings(final RegisterKeyMappingsEvent event)
+    private static void onRegisterKeyMappings(final RegisterKeyMappingsEvent event)
     {
         event.register(KeyMappings.KEYMAPPING_UPDATE_CULLING.get());
         event.register(KeyMappings.KEYMAPPING_WIPE_CACHE.get());
     }
 
-    @SubscribeEvent
-    public static void onAttachDebugRenderers(final AttachDebugRenderersEvent event)
+    private static void onAttachDebugRenderers(final AttachDebugRenderersEvent event)
     {
         FBContent.getBlockEntities().forEach(type -> event.attach(type.value(), ConnectionPredicateDebugRenderer.INSTANCE));
         FBContent.getDoubleBlockEntities().forEach(type -> event.attach(type.value(), DoubleBlockPartDebugRenderer.INSTANCE));
     }
 
-    @SubscribeEvent
-    public static void onRegisterRenderers(final EntityRenderersEvent.RegisterRenderers event)
+    private static void onRegisterRenderers(final EntityRenderersEvent.RegisterRenderers event)
     {
         event.registerBlockEntityRenderer(FBContent.BE_TYPE_FRAMED_SIGN.value(), FramedSignRenderer::new);
         event.registerBlockEntityRenderer(FBContent.BE_TYPE_FRAMED_HANGING_SIGN.value(), FramedHangingSignRenderer::new);
@@ -150,8 +167,7 @@ public final class FBClient
         event.registerBlockEntityRenderer(FBContent.BE_TYPE_FRAMED_ITEM_FRAME.value(), FramedItemFrameRenderer::new);
     }
 
-    @SubscribeEvent(priority = EventPriority.LOWEST)
-    public static void onRegisterDebugRenderers(final EntityRenderersEvent.RegisterRenderers event)
+    private static void onRegisterDebugRenderers(final EntityRenderersEvent.RegisterRenderers event)
     {
         if (!FMLEnvironment.production)
         {
@@ -160,8 +176,7 @@ public final class FBClient
         }
     }
 
-    @SubscribeEvent
-    public static void onBlockColors(final RegisterColorHandlersEvent.Block event)
+    private static void onBlockColors(final RegisterColorHandlersEvent.Block event)
     {
         //noinspection SuspiciousToArrayCall
         Block[] blocks = FBContent.getRegisteredBlocks()
@@ -177,14 +192,12 @@ public final class FBClient
         event.register(FramedTargetBlockColor.INSTANCE, FBContent.BLOCK_FRAMED_TARGET.value());
     }
 
-    @SubscribeEvent
-    public static void onItemColors(final RegisterColorHandlersEvent.Item event)
+    private static void onItemColors(final RegisterColorHandlersEvent.Item event)
     {
         event.register(FramedTargetBlockColor.INSTANCE, FBContent.BLOCK_FRAMED_TARGET.value());
     }
 
-    @SubscribeEvent
-    public static void onOverlayRegister(final RegisterGuiLayersEvent event)
+    private static void onOverlayRegister(final RegisterGuiLayersEvent event)
     {
         event.registerAboveAll(Utils.rl("state_lock"), new StateLockOverlay());
         event.registerAboveAll(Utils.rl("toggle_waterloggable"), new ToggleWaterloggableOverlay());
@@ -197,15 +210,13 @@ public final class FBClient
         event.registerAboveAll(Utils.rl("camo_rotation"), new CamoRotationOverlay());
     }
 
-    @SubscribeEvent
-    public static void onGeometryLoaderRegister(final ModelEvent.RegisterGeometryLoaders event)
+    private static void onGeometryLoaderRegister(final ModelEvent.RegisterGeometryLoaders event)
     {
         event.register(OverlayLoader.ID, new OverlayLoader());
         event.register(FallbackLoader.ID, new FallbackLoader());
     }
 
-    @SubscribeEvent
-    public static void onRegisterModelWrappers(final RegisterModelWrappersEvent event)
+    private static void onRegisterModelWrappers(final RegisterModelWrappersEvent event)
     {
         Vec3 yHalfUp = new Vec3(0, .5, 0);
 
@@ -411,8 +422,7 @@ public final class FBClient
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_TUBE, FramedTubeGeometry::new, WrapHelper.IGNORE_DEFAULT);
     }
 
-    @SubscribeEvent
-    public static void onModelRegister(final ModelEvent.RegisterAdditional event)
+    private static void onModelRegister(final ModelEvent.RegisterAdditional event)
     {
         event.register(FluidModel.BARE_MODEL);
         event.register(ReinforcementModel.LOCATION);
@@ -428,8 +438,7 @@ public final class FBClient
         ModelWrappingManager.reset();
     }
 
-    @SubscribeEvent
-    public static void onModifyBakingResult(final ModelEvent.ModifyBakingResult event)
+    private static void onModifyBakingResult(final ModelEvent.ModifyBakingResult event)
     {
         StateCacheBuilder.ensureStateCachesInitialized();
 
@@ -442,16 +451,14 @@ public final class FBClient
         }
     }
 
-    @SubscribeEvent
-    public static void onModelsLoaded(final ModelEvent.BakingCompleted event)
+    private static void onModelsLoaded(final ModelEvent.BakingCompleted event)
     {
         FluidCamoClientHandler.clearModelCache();
         FramedChestRenderer.onModelsLoaded(event.getModels());
         ReinforcementModel.reload(event.getModels());
     }
 
-    @SubscribeEvent
-    public static void onRegisterReloadListener(final RegisterClientReloadListenersEvent event)
+    private static void onRegisterReloadListener(final RegisterClientReloadListenersEvent event)
     {
         event.registerReloadListener((ResourceManagerReloadListener) BlockInteractOverlay::onResourceReload);
         event.registerReloadListener((ResourceManagerReloadListener) OverlayQuadGenerator::onResourceReload);
@@ -459,14 +466,12 @@ public final class FBClient
         FramedBlockDebugRenderer.init();
     }
 
-    @SubscribeEvent
-    public static void onRegisterSpriteSources(final RegisterSpriteSourceTypesEvent event)
+    private static void onRegisterSpriteSources(final RegisterSpriteSourceTypesEvent event)
     {
         AnimationSplitterSource.register(event::register);
     }
 
-    @SubscribeEvent
-    public static void onTexturesStitched(final TextureAtlasStitchedEvent event)
+    private static void onTexturesStitched(final TextureAtlasStitchedEvent event)
     {
         //noinspection deprecation
         if (event.getAtlas().location().equals(TextureAtlas.LOCATION_BLOCKS))
@@ -496,8 +501,4 @@ public final class FBClient
         IBlockType type = block.getBlockType();
         return type != BlockType.FRAMED_TARGET;
     }
-
-
-
-    private FBClient() { }
 }
