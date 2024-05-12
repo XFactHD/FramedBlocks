@@ -162,9 +162,9 @@ dependencies {
 
     implementation fg.deobf("xfacthd.contex:ConnectedTextures:2.1:slim") { transitive = false }
 
-    implementation fg.deobf("curse.maven:athena-841890:4764357")
-    //runtimeOnly fg.deobf("curse.maven:resfullib-570073:4681831")
-    //runtimeOnly fg.deobf("curse.maven:chipped-456956:4634856")
+    implementation fg.deobf("curse.maven:athena-841890:5176879")
+    //runtimeOnly fg.deobf("curse.maven:resfullib-570073:5210240")
+    //runtimeOnly fg.deobf("curse.maven:chipped-456956:5270039")
 
     compileOnly fg.deobf("curse.maven:xycraft_core-653786:4788862")
     compileOnly fg.deobf("curse.maven:xycraft_world-653789:4788863")
