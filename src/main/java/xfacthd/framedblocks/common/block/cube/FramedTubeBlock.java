@@ -2,8 +2,11 @@ package xfacthd.framedblocks.common.block.cube;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -37,6 +40,12 @@ public class FramedTubeBlock extends FramedBlock
                 .withClickedAxis()
                 .withWater()
                 .build();
+    }
+
+    @Override
+    public boolean isLadder(BlockState state, LevelReader level, BlockPos pos, LivingEntity entity)
+    {
+        return state.getValue(BlockStateProperties.AXIS) == Direction.Axis.Y;
     }
 
     @Override
