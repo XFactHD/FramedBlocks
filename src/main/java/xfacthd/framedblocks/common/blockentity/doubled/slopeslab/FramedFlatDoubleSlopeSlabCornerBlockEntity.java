@@ -2,6 +2,7 @@ package xfacthd.framedblocks.common.blockentity.doubled.slopeslab;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -19,7 +20,7 @@ public class FramedFlatDoubleSlopeSlabCornerBlockEntity extends FramedDoubleBloc
     }
 
     @Override
-    protected boolean hitSecondary(BlockHitResult hit)
+    protected boolean hitSecondary(BlockHitResult hit, Player player)
     {
         Direction facing = getBlockState().getValue(FramedProperties.FACING_HOR);
         boolean top = getBlockState().getValue(FramedProperties.TOP);

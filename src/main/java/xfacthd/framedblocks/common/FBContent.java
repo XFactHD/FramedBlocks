@@ -47,16 +47,13 @@ import xfacthd.framedblocks.common.block.stairs.standard.*;
 import xfacthd.framedblocks.common.block.stairs.vertical.*;
 import xfacthd.framedblocks.common.block.torch.*;
 import xfacthd.framedblocks.common.blockentity.doubled.FramedDoubleBlockEntity;
-import xfacthd.framedblocks.common.blockentity.doubled.pillar.*;
 import xfacthd.framedblocks.common.blockentity.doubled.prism.*;
 import xfacthd.framedblocks.common.blockentity.doubled.rail.*;
-import xfacthd.framedblocks.common.blockentity.doubled.slab.*;
 import xfacthd.framedblocks.common.blockentity.doubled.slope.*;
 import xfacthd.framedblocks.common.blockentity.doubled.slopeedge.*;
 import xfacthd.framedblocks.common.blockentity.doubled.slopepanel.*;
 import xfacthd.framedblocks.common.blockentity.doubled.slopepanelcorner.*;
 import xfacthd.framedblocks.common.blockentity.doubled.slopeslab.*;
-import xfacthd.framedblocks.common.blockentity.doubled.stairs.*;
 import xfacthd.framedblocks.common.blockentity.special.*;
 import xfacthd.framedblocks.common.crafting.FramingSawRecipe;
 import xfacthd.framedblocks.common.crafting.FramingSawRecipeSerializer;
@@ -361,13 +358,15 @@ public final class FBContent
             getDefaultEntityBlocks(),
             true
     );
+    public static final Holder<BlockEntityType<?>> BE_TYPE_FRAMED_DOUBLE_BLOCK = registerBlockEntity(
+            FramedDoubleBlockEntity::new,
+            "framed_double_tile",
+            getDefaultDoubleEntityBlocks(),
+            true
+    );
     public static final Holder<BlockEntityType<?>> BE_TYPE_DOUBLE_FRAMED_SLOPE = registerBlockEntity(
             FramedDoubleSlopeBlockEntity::new,
             BlockType.FRAMED_DOUBLE_SLOPE
-    );
-    public static final Holder<BlockEntityType<?>> BE_TYPE_FRAMED_DIVIDED_SLOPE = registerBlockEntity(
-            FramedDividedSlopeBlockEntity::new,
-            BlockType.FRAMED_DIVIDED_SLOPE
     );
     public static final Holder<BlockEntityType<?>> BE_TYPE_FRAMED_DOUBLE_HALF_SLOPE = registerBlockEntity(
             FramedDoubleHalfSlopeBlockEntity::new,
@@ -388,66 +387,6 @@ public final class FBContent
     public static final Holder<BlockEntityType<?>> BE_TYPE_FRAMED_ELEVATED_DOUBLE_SLOPE_EDGE = registerBlockEntity(
             FramedElevatedDoubleSlopeEdgeBlockEntity::new,
             BlockType.FRAMED_ELEVATED_DOUBLE_SLOPE_EDGE
-    );
-    public static final Holder<BlockEntityType<?>> BE_TYPE_FRAMED_STACKED_SLOPE_EDGE = registerBlockEntity(
-            FramedStackedSlopeEdgeBlockEntity::new,
-            BlockType.FRAMED_STACKED_SLOPE_EDGE
-    );
-    public static final Holder<BlockEntityType<?>> BE_TYPE_DOUBLE_FRAMED_SLAB = registerBlockEntity(
-            FramedDoubleSlabBlockEntity::new,
-            BlockType.FRAMED_DOUBLE_SLAB
-    );
-    public static final Holder<BlockEntityType<?>> BE_TYPE_FRAMED_DIVIDED_SLAB = registerBlockEntity(
-            FramedDividedSlabBlockEntity::new,
-            BlockType.FRAMED_DIVIDED_SLAB
-    );
-    public static final Holder<BlockEntityType<?>> BE_TYPE_DOUBLE_FRAMED_PANEL = registerBlockEntity(
-            FramedDoublePanelBlockEntity::new,
-            BlockType.FRAMED_DOUBLE_PANEL
-    );
-    public static final Holder<BlockEntityType<?>> BE_TYPE_FRAMED_DIVIDED_PANEL = registerBlockEntity(
-            FramedDividedPanelBlockEntity::new,
-            BlockType.FRAMED_DIVIDED_PANEL_HORIZONTAL, BlockType.FRAMED_DIVIDED_PANEL_VERTICAL
-    );
-    public static final Holder<BlockEntityType<?>> BE_TYPE_FRAMED_MASONRY_CORNER = registerBlockEntity(
-            FramedMasonryCornerBlockEntity::new,
-            BlockType.FRAMED_MASONRY_CORNER
-    );
-    public static final Holder<BlockEntityType<?>> BE_TYPE_FRAMED_DOUBLE_STAIRS = registerBlockEntity(
-            FramedDoubleStairsBlockEntity::new,
-            BlockType.FRAMED_DOUBLE_STAIRS
-    );
-    public static final Holder<BlockEntityType<?>> BE_TYPE_FRAMED_DIVIDED_STAIRS = registerBlockEntity(
-            FramedDividedStairsBlockEntity::new,
-            BlockType.FRAMED_DIVIDED_STAIRS
-    );
-    public static final Holder<BlockEntityType<?>> BE_TYPE_FRAMED_DOUBLE_HALF_STAIRS = registerBlockEntity(
-            FramedDoubleHalfStairsBlockEntity::new,
-            BlockType.FRAMED_DOUBLE_HALF_STAIRS
-    );
-    public static final Holder<BlockEntityType<?>> BE_TYPE_FRAMED_SLICED_STAIRS = registerBlockEntity(
-            FramedSlicedStairsBlockEntity::new,
-            BlockType.FRAMED_SLICED_STAIRS_SLAB, BlockType.FRAMED_SLICED_STAIRS_PANEL
-    );
-    public static final Holder<BlockEntityType<?>> BE_TYPE_FRAMED_VERTICAL_DOUBLE_STAIRS = registerBlockEntity(
-            FramedVerticalDoubleStairsBlockEntity::new,
-            BlockType.FRAMED_VERTICAL_DOUBLE_STAIRS
-    );
-    public static final Holder<BlockEntityType<?>> BE_TYPE_FRAMED_VERTICAL_DIVIDED_STAIRS = registerBlockEntity(
-            FramedVerticalDividedStairsBlockEntity::new,
-            BlockType.FRAMED_VERTICAL_DIVIDED_STAIRS
-    );
-    public static final Holder<BlockEntityType<?>> BE_TYPE_FRAMED_VERTICAL_DOUBLE_HALF_STAIRS = registerBlockEntity(
-            FramedVerticalDoubleHalfStairsBlockEntity::new,
-            BlockType.FRAMED_VERTICAL_DOUBLE_HALF_STAIRS
-    );
-    public static final Holder<BlockEntityType<?>> BE_TYPE_FRAMED_VERTICAL_SLICED_STAIRS = registerBlockEntity(
-            FramedVerticalSlicedStairsBlockEntity::new,
-            BlockType.FRAMED_VERTICAL_SLICED_STAIRS
-    );
-    public static final Holder<BlockEntityType<?>> BE_TYPE_FRAMED_DOUBLE_THREEWAY_CORNER_PILLAR = registerBlockEntity(
-            FramedDoubleThreewayCornerPillarBlockEntity::new,
-            BlockType.FRAMED_DOUBLE_THREEWAY_CORNER_PILLAR
     );
     public static final Holder<BlockEntityType<?>> BE_TYPE_FRAMED_DOOR = registerBlockEntity(
             FramedDoorBlockEntity::new,
@@ -500,25 +439,13 @@ public final class FBContent
             FramedDoubleSlopeSlabBlockEntity::new,
             BlockType.FRAMED_DOUBLE_SLOPE_SLAB
     );
-    public static final Holder<BlockEntityType<?>> BE_TYPE_FRAMED_INVERSE_DOUBLE_SLOPE_SLAB = registerBlockEntity(
-            FramedInverseDoubleSlopeSlabBlockEntity::new,
-            BlockType.FRAMED_INV_DOUBLE_SLOPE_SLAB
-    );
     public static final Holder<BlockEntityType<?>> BE_TYPE_FRAMED_ELEVATED_DOUBLE_SLOPE_SLAB = registerBlockEntity(
             FramedElevatedDoubleSlopeSlabBlockEntity::new,
             BlockType.FRAMED_ELEVATED_DOUBLE_SLOPE_SLAB
     );
-    public static final Holder<BlockEntityType<?>> BE_TYPE_FRAMED_STACKED_SLOPE_SLAB = registerBlockEntity(
-            FramedStackedSlopeSlabBlockEntity::new,
-            BlockType.FRAMED_STACKED_SLOPE_SLAB, BlockType.FRAMED_FLAT_STACKED_SLOPE_SLAB_CORNER, BlockType.FRAMED_FLAT_STACKED_INNER_SLOPE_SLAB_CORNER
-    );
     public static final Holder<BlockEntityType<?>> BE_TYPE_FRAMED_FLAT_DOUBLE_SLOPE_SLAB_CORNER = registerBlockEntity(
             FramedFlatDoubleSlopeSlabCornerBlockEntity::new,
             BlockType.FRAMED_FLAT_DOUBLE_SLOPE_SLAB_CORNER
-    );
-    public static final Holder<BlockEntityType<?>> BE_TYPE_FRAMED_FLAT_INVERSE_DOUBLE_SLOPE_SLAB_CORNER = registerBlockEntity(
-            FramedFlatInverseDoubleSlopeSlabCornerBlockEntity::new,
-            BlockType.FRAMED_FLAT_INV_DOUBLE_SLOPE_SLAB_CORNER
     );
     public static final Holder<BlockEntityType<?>> BE_TYPE_FRAMED_FLAT_ELEVATED_DOUBLE_SLOPE_SLAB_CORNER = registerBlockEntity(
             FramedFlatElevatedDoubleSlopeSlabCornerBlockEntity::new,
@@ -528,25 +455,13 @@ public final class FBContent
             FramedDoubleSlopePanelBlockEntity::new,
             BlockType.FRAMED_DOUBLE_SLOPE_PANEL
     );
-    public static final Holder<BlockEntityType<?>> BE_TYPE_FRAMED_INVERSE_DOUBLE_SLOPE_PANEL = registerBlockEntity(
-            FramedInverseDoubleSlopePanelBlockEntity::new,
-            BlockType.FRAMED_INV_DOUBLE_SLOPE_PANEL
-    );
     public static final Holder<BlockEntityType<?>> BE_TYPE_FRAMED_EXTENDED_DOUBLE_SLOPE_PANEL = registerBlockEntity(
             FramedExtendedDoubleSlopePanelBlockEntity::new,
             BlockType.FRAMED_EXTENDED_DOUBLE_SLOPE_PANEL
     );
-    public static final Holder<BlockEntityType<?>> BE_TYPE_FRAMED_STACKED_SLOPE_PANEL = registerBlockEntity(
-            FramedStackedSlopePanelBlockEntity::new,
-            BlockType.FRAMED_STACKED_SLOPE_PANEL, BlockType.FRAMED_FLAT_STACKED_SLOPE_PANEL_CORNER, BlockType.FRAMED_FLAT_STACKED_INNER_SLOPE_PANEL_CORNER
-    );
     public static final Holder<BlockEntityType<?>> BE_TYPE_FRAMED_FLAT_DOUBLE_SLOPE_PANEL_CORNER = registerBlockEntity(
             FramedFlatDoubleSlopePanelCornerBlockEntity::new,
             BlockType.FRAMED_FLAT_DOUBLE_SLOPE_PANEL_CORNER
-    );
-    public static final Holder<BlockEntityType<?>> BE_TYPE_FRAMED_FLAT_INVERSE_DOUBLE_SLOPE_PANEL_CORNER = registerBlockEntity(
-            FramedFlatInverseDoubleSlopePanelCornerBlockEntity::new,
-            BlockType.FRAMED_FLAT_INV_DOUBLE_SLOPE_PANEL_CORNER
     );
     public static final Holder<BlockEntityType<?>> BE_TYPE_FRAMED_FLAT_EXTENDED_DOUBLE_SLOPE_PANEL_CORNER = registerBlockEntity(
             FramedFlatExtendedDoubleSlopePanelCornerBlockEntity::new,
@@ -568,14 +483,6 @@ public final class FBContent
             FramedLargeDoubleCornerSlopePanelWallBlockEntity::new,
             BlockType.FRAMED_LARGE_DOUBLE_CORNER_SLOPE_PANEL_W
     );
-    public static final Holder<BlockEntityType<?>> BE_TYPE_FRAMED_INVERSE_DOUBLE_CORNER_SLOPE_PANEL = registerBlockEntity(
-            FramedInverseDoubleCornerSlopePanelBlockEntity::new,
-            BlockType.FRAMED_INV_DOUBLE_CORNER_SLOPE_PANEL
-    );
-    public static final Holder<BlockEntityType<?>> BE_TYPE_FRAMED_INVERSE_DOUBLE_CORNER_SLOPE_PANEL_WALL = registerBlockEntity(
-            FramedInverseDoubleCornerSlopePanelWallBlockEntity::new,
-            BlockType.FRAMED_INV_DOUBLE_CORNER_SLOPE_PANEL_W
-    );
     public static final Holder<BlockEntityType<?>> BE_TYPE_FRAMED_EXTENDED_DOUBLE_CORNER_SLOPE_PANEL = registerBlockEntity(
             FramedExtendedDoubleCornerSlopePanelBlockEntity::new,
             BlockType.FRAMED_EXT_DOUBLE_CORNER_SLOPE_PANEL
@@ -592,22 +499,6 @@ public final class FBContent
             FramedExtendedInnerDoubleCornerSlopePanelWallBlockEntity::new,
             BlockType.FRAMED_EXT_INNER_DOUBLE_CORNER_SLOPE_PANEL_W
     );
-    public static final Holder<BlockEntityType<?>> BE_TYPE_FRAMED_STACKED_CORNER_SLOPE_PANEL = registerBlockEntity(
-            FramedStackedCornerSlopePanelBlockEntity::new,
-            BlockType.FRAMED_STACKED_CORNER_SLOPE_PANEL
-    );
-    public static final Holder<BlockEntityType<?>> BE_TYPE_FRAMED_STACKED_CORNER_SLOPE_PANEL_WALL = registerBlockEntity(
-            FramedStackedCornerSlopePanelWallBlockEntity::new,
-            BlockType.FRAMED_STACKED_CORNER_SLOPE_PANEL_W
-    );
-    public static final Holder<BlockEntityType<?>> BE_TYPE_FRAMED_STACKED_INNER_CORNER_SLOPE_PANEL = registerBlockEntity(
-            FramedStackedInnerCornerSlopePanelBlockEntity::new,
-            BlockType.FRAMED_STACKED_INNER_CORNER_SLOPE_PANEL
-    );
-    public static final Holder<BlockEntityType<?>> BE_TYPE_FRAMED_STACKED_INNER_CORNER_SLOPE_PANEL_WALL = registerBlockEntity(
-            FramedStackedInnerCornerSlopePanelWallBlockEntity::new,
-            BlockType.FRAMED_STACKED_INNER_CORNER_SLOPE_PANEL_W
-    );
     public static final Holder<BlockEntityType<?>> BE_TYPE_FRAMED_TARGET = registerBlockEntity(
             FramedTargetBlockEntity::new,
             BlockType.FRAMED_TARGET
@@ -623,18 +514,6 @@ public final class FBContent
     public static final DeferredBlockEntity<FramedChiseledBookshelfBlockEntity> BE_TYPE_FRAMED_CHISELED_BOOKSHELF = registerBlockEntity(
             FramedChiseledBookshelfBlockEntity::new,
             BlockType.FRAMED_CHISELED_BOOKSHELF
-    );
-    public static final Holder<BlockEntityType<?>> BE_TYPE_FRAMED_CHECKERED_CUBE = registerBlockEntity(
-            FramedCheckeredCubeBlockEntity::new,
-            BlockType.FRAMED_CHECKERED_CUBE
-    );
-    public static final Holder<BlockEntityType<?>> BE_TYPE_FRAMED_CHECKERED_SLAB = registerBlockEntity(
-            FramedCheckeredSlabBlockEntity::new,
-            BlockType.FRAMED_CHECKERED_SLAB
-    );
-    public static final Holder<BlockEntityType<?>> BE_TYPE_FRAMED_CHECKERED_PANEL = registerBlockEntity(
-            FramedCheckeredPanelBlockEntity::new,
-            BlockType.FRAMED_CHECKERED_PANEL
     );
     // endregion
 
@@ -726,6 +605,8 @@ public final class FBContent
         CREATIVE_TABS.register(modBus);
         CAMO_CONTAINER_FACTORIES.register(modBus);
         AUX_BLUEPRINT_DATA_TYPES.register(modBus);
+
+        DOUBLE_BLOCK_ENTITIES.add((DeferredBlockEntity<? extends FramedDoubleBlockEntity>) BE_TYPE_FRAMED_DOUBLE_BLOCK);
     }
 
     public static Collection<DeferredHolder<Block, ? extends Block>> getRegisteredBlocks()
@@ -761,6 +642,20 @@ public final class FBContent
                 .map(Holder::value)
                 .filter(block -> block instanceof IFramedBlock)
                 .map(IFramedBlock.class::cast)
+                .filter(block -> !block.getBlockType().isDoubleBlock())
+                .filter(block -> !block.getBlockType().hasSpecialTile())
+                .toArray(Block[]::new);
+    }
+
+    private static Supplier<Block[]> getDefaultDoubleEntityBlocks()
+    {
+        //noinspection SuspiciousToArrayCall
+        return () -> BLOCKS.getEntries()
+                .stream()
+                .map(Holder::value)
+                .filter(block -> block instanceof IFramedBlock)
+                .map(IFramedBlock.class::cast)
+                .filter(block -> block.getBlockType().isDoubleBlock())
                 .filter(block -> !block.getBlockType().hasSpecialTile())
                 .toArray(Block[]::new);
     }

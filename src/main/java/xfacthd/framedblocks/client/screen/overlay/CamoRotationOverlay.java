@@ -48,7 +48,7 @@ public final class CamoRotationOverlay extends BlockInteractOverlay
             HitResult hit = Minecraft.getInstance().hitResult;
             if (hit instanceof BlockHitResult blockHit)
             {
-                return be.getCamo(blockHit).canRotateCamo();
+                return be.getCamo(blockHit, player()).canRotateCamo();
             }
         }
         return false;

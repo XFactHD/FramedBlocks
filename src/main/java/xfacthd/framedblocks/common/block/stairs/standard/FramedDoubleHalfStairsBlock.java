@@ -20,7 +20,7 @@ import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
 import xfacthd.framedblocks.common.block.ExtPlacementStateBuilder;
-import xfacthd.framedblocks.common.blockentity.doubled.stairs.FramedDoubleHalfStairsBlockEntity;
+import xfacthd.framedblocks.common.blockentity.doubled.FramedDoubleBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.doubleblock.*;
@@ -102,7 +102,7 @@ public class FramedDoubleHalfStairsBlock extends AbstractFramedDoubleBlock
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
     {
-        return new FramedDoubleHalfStairsBlockEntity(pos, state);
+        return new FramedDoubleBlockEntity(pos, state);
     }
 
     @Override

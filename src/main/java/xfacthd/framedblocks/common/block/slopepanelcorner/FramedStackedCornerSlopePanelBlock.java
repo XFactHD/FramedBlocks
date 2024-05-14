@@ -21,8 +21,7 @@ import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
-import xfacthd.framedblocks.common.blockentity.doubled.slopepanelcorner.FramedStackedCornerSlopePanelBlockEntity;
-import xfacthd.framedblocks.common.blockentity.doubled.slopepanelcorner.FramedStackedInnerCornerSlopePanelBlockEntity;
+import xfacthd.framedblocks.common.blockentity.doubled.FramedDoubleBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.doubleblock.CamoGetter;
 import xfacthd.framedblocks.common.data.doubleblock.SolidityCheck;
@@ -124,12 +123,7 @@ public class FramedStackedCornerSlopePanelBlock extends AbstractFramedDoubleBloc
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
     {
-        return switch (getBlockType())
-        {
-            case FRAMED_STACKED_CORNER_SLOPE_PANEL -> new FramedStackedCornerSlopePanelBlockEntity(pos, state);
-            case FRAMED_STACKED_INNER_CORNER_SLOPE_PANEL -> new FramedStackedInnerCornerSlopePanelBlockEntity(pos, state);
-            default -> throw new IllegalStateException("Unexpected type: " + getBlockType());
-        };
+        return new FramedDoubleBlockEntity(pos, state);
     }
 
     @Override

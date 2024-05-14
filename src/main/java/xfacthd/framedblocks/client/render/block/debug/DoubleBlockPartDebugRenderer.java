@@ -8,6 +8,7 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.util.Tuple;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
@@ -17,6 +18,8 @@ import xfacthd.framedblocks.api.model.data.FramedBlockData;
 import xfacthd.framedblocks.api.render.debug.BlockDebugRenderer;
 import xfacthd.framedblocks.api.util.TestProperties;
 import xfacthd.framedblocks.common.blockentity.doubled.FramedDoubleBlockEntity;
+
+import java.util.Objects;
 
 public class DoubleBlockPartDebugRenderer implements BlockDebugRenderer<FramedDoubleBlockEntity>
 {
@@ -40,7 +43,8 @@ public class DoubleBlockPartDebugRenderer implements BlockDebugRenderer<FramedDo
     )
     {
         Tuple<BlockState, BlockState> blockPair = be.getBlockPair();
-        boolean secondary = be.debugHitSecondary(blockHit);
+        Player player = Objects.requireNonNull(Minecraft.getInstance().player);
+        boolean secondary = be.debugHitSecondary(blockHit, player);
         BlockState state = secondary ? blockPair.getB() : blockPair.getA();
         BakedModel model = Minecraft.getInstance().getBlockRenderer().getBlockModel(state);
 

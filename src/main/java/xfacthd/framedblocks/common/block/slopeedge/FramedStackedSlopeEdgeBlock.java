@@ -19,7 +19,7 @@ import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.*;
-import xfacthd.framedblocks.common.blockentity.doubled.slopeedge.FramedStackedSlopeEdgeBlockEntity;
+import xfacthd.framedblocks.common.blockentity.doubled.FramedDoubleBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.doubleblock.*;
@@ -119,7 +119,7 @@ public class FramedStackedSlopeEdgeBlock extends AbstractFramedDoubleBlock imple
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
     {
-        return new FramedStackedSlopeEdgeBlockEntity(pos, state);
+        return new FramedDoubleBlockEntity(pos, state);
     }
 
     @Override

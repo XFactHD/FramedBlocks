@@ -23,7 +23,7 @@ import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
 import xfacthd.framedblocks.common.block.ExtPlacementStateBuilder;
-import xfacthd.framedblocks.common.blockentity.doubled.slopepanel.FramedInverseDoubleSlopePanelBlockEntity;
+import xfacthd.framedblocks.common.blockentity.doubled.FramedDoubleBlockEntity;
 import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.common.data.doubleblock.CamoGetter;
 import xfacthd.framedblocks.common.data.doubleblock.SolidityCheck;
@@ -174,7 +174,7 @@ public class FramedInverseDoubleSlopePanelBlock extends AbstractFramedDoubleBloc
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
     {
-        return new FramedInverseDoubleSlopePanelBlockEntity(pos, state);
+        return new FramedDoubleBlockEntity(pos, state);
     }
 
     @Override

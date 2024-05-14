@@ -21,6 +21,10 @@ public final class SpecialShapeRendererPresence
             {
                 FramedBlocks.LOGGER.warn("    Block '{}' requests custom outline rendering but no OutlineRender was registered", block);
             }
+            else if (!type.hasSpecialHitbox() && BlockOutlineRenderer.hasOutlineRenderer(type))
+            {
+                FramedBlocks.LOGGER.warn("    Block '{}' requests standard outline rendering but an OutlineRender was registered", block);
+            }
         });
     }
 

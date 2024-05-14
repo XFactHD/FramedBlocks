@@ -15,6 +15,8 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.neoforge.client.model.data.*;
 import net.neoforged.neoforge.common.IPlantable;
 import net.neoforged.fml.loading.FMLEnvironment;
@@ -34,7 +36,7 @@ import xfacthd.framedblocks.common.data.doubleblock.DoubleBlockTopInteractionMod
 
 import java.util.List;
 
-public abstract class FramedDoubleBlockEntity extends FramedBlockEntity implements IFramedDoubleBlockEntity
+public class FramedDoubleBlockEntity extends FramedBlockEntity implements IFramedDoubleBlockEntity
 {
     public static final ModelProperty<ModelData> DATA_LEFT = new ModelProperty<>();
     public static final ModelProperty<ModelData> DATA_RIGHT = new ModelProperty<>();
@@ -43,7 +45,12 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity implemen
     private final DoubleBlockSoundType soundType = new DoubleBlockSoundType(this);
     private CamoContainer<?, ?> camoContainer = EmptyCamoContainer.EMPTY;
 
-    public FramedDoubleBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
+    public FramedDoubleBlockEntity(BlockPos pos, BlockState state)
+    {
+        this(FBContent.BE_TYPE_FRAMED_DOUBLE_BLOCK.value(), pos, state);
+    }
+
+    protected FramedDoubleBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
         super(type, pos, state);
     }
@@ -297,7 +304,29 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity implemen
     }
 
     @Override
-    protected abstract boolean hitSecondary(BlockHitResult hit);
+    protected boolean hitSecondary(BlockHitResult hit, Player player)
+    {
+        Vec3 look = player.getLookAngle().normalize().multiply(1D/16D, 1D/16D, 1D/16D);
+        Vec3 vecStart = hit.getLocation().subtract(look);
+        Vec3 vecEnd = hit.getLocation().add(look);
+
+        VoxelShape shapeSec = getBlockPair().getB().getShape(EmptyBlockGetter.INSTANCE, BlockPos.ZERO);
+        BlockHitResult clipSec = shapeSec.clip(vecStart, vecEnd, worldPosition);
+        if (clipSec == null)
+        {
+            return false;
+        }
+
+        VoxelShape shapePri = getBlockPair().getA().getShape(EmptyBlockGetter.INSTANCE, BlockPos.ZERO);
+        BlockHitResult clipPri = shapePri.clip(vecStart, vecEnd, worldPosition);
+        if (clipPri == null)
+        {
+            return true;
+        }
+
+        Vec3 eye = player.getEyePosition();
+        return eye.distanceToSqr(clipSec.getLocation()) < eye.distanceToSqr(clipPri.getLocation());
+    }
 
     public final DoubleBlockTopInteractionMode getTopInteractionMode()
     {
@@ -346,9 +375,9 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity implemen
         return getStateCache().getBlockPair();
     }
 
-    public final boolean debugHitSecondary(BlockHitResult hit)
+    public final boolean debugHitSecondary(BlockHitResult hit, Player player)
     {
-        return hitSecondary(hit);
+        return hitSecondary(hit, player);
     }
 
     /*

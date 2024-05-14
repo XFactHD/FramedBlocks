@@ -87,7 +87,7 @@ public class FramedBlockEntity extends BlockEntity
     public final ItemInteractionResult handleInteraction(Player player, InteractionHand hand, BlockHitResult hit)
     {
         ItemStack stack = player.getItemInHand(hand);
-        boolean secondary = hitSecondary(hit);
+        boolean secondary = hitSecondary(hit, player);
         CamoContainer<?, ?> camo = getCamo(secondary);
 
         CamoContainerFactory<?> camoFactory;
@@ -271,7 +271,7 @@ public class FramedBlockEntity extends BlockEntity
         return ItemInteractionResult.sidedSuccess(level().isClientSide());
     }
 
-    protected boolean hitSecondary(BlockHitResult hit)
+    protected boolean hitSecondary(BlockHitResult hit, Player player)
     {
         return false;
     }
@@ -336,10 +336,20 @@ public class FramedBlockEntity extends BlockEntity
 
     /**
      * Used to return a different camo depending on the exact interaction location
+     * @deprecated Use player-sensitive version instead
      */
-    public CamoContainer<?, ?> getCamo(BlockHitResult hit)
+    @Deprecated(forRemoval = true)
+    public final CamoContainer<?, ?> getCamo(@SuppressWarnings("unused") BlockHitResult hit)
     {
-        return getCamo(hitSecondary(hit));
+        return camoContainer;
+    }
+
+    /**
+     * Used to return a different camo depending on the exact interaction location
+     */
+    public CamoContainer<?, ?> getCamo(BlockHitResult hit, Player player)
+    {
+        return getCamo(hitSecondary(hit, player));
     }
 
     protected CamoContainer<?, ?> getCamo(boolean secondary)
