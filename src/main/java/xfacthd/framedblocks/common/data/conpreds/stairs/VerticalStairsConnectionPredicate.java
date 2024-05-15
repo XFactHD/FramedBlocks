@@ -47,11 +47,19 @@ public final class VerticalStairsConnectionPredicate implements ConnectionPredic
         }
         else if (side == Direction.UP)
         {
-            return !top || (!fwd && edge == facing) || (!ccw && edge == facing.getCounterClockWise());
+            if (!top)
+            {
+                return edge == facing || edge == facing.getCounterClockWise();
+            }
+            return (!fwd && edge == facing) || (!ccw && edge == facing.getCounterClockWise());
         }
         else if (side == Direction.DOWN)
         {
-            return !bottom || (!fwd && edge == facing) || (!ccw && edge == facing.getCounterClockWise());
+            if (!bottom)
+            {
+                return edge == facing || edge == facing.getCounterClockWise();
+            }
+            return (!fwd && edge == facing) || (!ccw && edge == facing.getCounterClockWise());
         }
         return false;
     }
