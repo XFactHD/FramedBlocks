@@ -104,14 +104,8 @@ public final class FBClient
         modBus.addListener(FBClient::onRegisterReloadListener);
         modBus.addListener(FBClient::onRegisterSpriteSources);
         modBus.addListener(FBClient::onTexturesStitched);
-    }
-
-    private static void onClientSetup(final FMLClientSetupEvent event)
-    {
-        event.enqueueWork(BlueprintPropertyOverride::register);
-
-        BlockOutlineRenderers.register();
-        GhostRenderBehaviours.register();
+        modBus.addListener(BlockOutlineRenderers::onRegisterOutlineRenderers);
+        modBus.addListener(GhostRenderBehaviours::onRegisterGhostRenderBehaviours);
 
         NeoForge.EVENT_BUS.addListener(ClientTaskQueue::onClientTick);
         NeoForge.EVENT_BUS.addListener(BlockOutlineRenderer::onRenderBlockHighlight);
@@ -120,6 +114,11 @@ public final class FBClient
         NeoForge.EVENT_BUS.addListener(EventPriority.HIGH, ClientEventHandler::onRecipesUpdated);
         NeoForge.EVENT_BUS.addListener(ClientEventHandler::onClientDisconnect);
         NeoForge.EVENT_BUS.addListener(EventPriority.LOW, true, CollapsibleBlockIndicatorRenderer::onRenderBlockHighlight);
+    }
+
+    private static void onClientSetup(final FMLClientSetupEvent event)
+    {
+        event.enqueueWork(BlueprintPropertyOverride::register);
     }
 
     private static void onRegisterMenuScreens(final RegisterMenuScreensEvent event)
@@ -142,8 +141,6 @@ public final class FBClient
 
     private static void onLoadComplete(final FMLLoadCompleteEvent event)
     {
-        GhostBlockRenderer.lockRegistration();
-        BlockOutlineRenderer.lockRegistration();
         ConTexDataHandler.lockRegistration();
     }
 
@@ -462,8 +459,11 @@ public final class FBClient
     {
         event.registerReloadListener((ResourceManagerReloadListener) BlockInteractOverlay::onResourceReload);
         event.registerReloadListener((ResourceManagerReloadListener) OverlayQuadGenerator::onResourceReload);
+
         ModelWrappingManager.fireRegistration();
         FramedBlockDebugRenderer.init();
+        BlockOutlineRenderer.init();
+        GhostBlockRenderer.init();
     }
 
     private static void onRegisterSpriteSources(final RegisterSpriteSourceTypesEvent event)

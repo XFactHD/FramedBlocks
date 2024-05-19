@@ -16,7 +16,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import xfacthd.framedblocks.api.blueprint.BlueprintCopyBehaviour;
+import net.neoforged.fml.ModLoader;
+import xfacthd.framedblocks.api.blueprint.*;
 import xfacthd.framedblocks.api.camo.*;
 import xfacthd.framedblocks.api.util.CamoList;
 import xfacthd.framedblocks.api.util.Utils;
@@ -25,7 +26,6 @@ import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import xfacthd.framedblocks.common.config.ServerConfig;
-import xfacthd.framedblocks.api.blueprint.BlueprintData;
 
 import java.util.*;
 
@@ -47,7 +47,6 @@ public class FramedBlueprintItem extends FramedToolItem
 
     private static final Map<Block, BlueprintCopyBehaviour> COPY_BEHAVIOURS = new IdentityHashMap<>();
     private static final BlueprintCopyBehaviour NO_OP_BEHAVIOUR = new BlueprintCopyBehaviour(){};
-    private static boolean locked = false;
 
     public FramedBlueprintItem(FramedToolType type)
     {
@@ -389,22 +388,18 @@ public class FramedBlueprintItem extends FramedToolItem
 
 
 
-    public static synchronized void registerBehaviour(BlueprintCopyBehaviour behaviour, Block... blocks)
+    public static void init()
     {
-        Preconditions.checkState(!locked, "BlueprintCopyBehaviour registry is locked!");
-
-        Preconditions.checkNotNull(behaviour, "BlueprintCopyBehaviour must be non-null");
-        Preconditions.checkNotNull(blocks, "Blocks array must be non-null to register a BlueprintCopyBehaviour");
-        Preconditions.checkState(blocks.length > 0, "At least one block must be provided to register a BlueprintCopyBehaviour");
-
-        for (Block block : blocks)
+        ModLoader.postEvent(new RegisterBlueprintCopyBehavioursEvent((behaviour, blocks) ->
         {
-            COPY_BEHAVIOURS.put(block, behaviour);
-        }
-    }
+            Preconditions.checkNotNull(behaviour, "BlueprintCopyBehaviour must be non-null");
+            Preconditions.checkState(blocks.length > 0, "At least one block must be provided to register a BlueprintCopyBehaviour");
 
-    public static void lockRegistration()
-    {
-        locked = true;
+            for (Block block : blocks)
+            {
+                Preconditions.checkNotNull(block);
+                COPY_BEHAVIOURS.put(block, behaviour);
+            }
+        }));
     }
 }

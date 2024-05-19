@@ -12,6 +12,11 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.joml.*;
 import xfacthd.framedblocks.api.block.FramedProperties;
 
+/**
+ * Provide custom outline rendering for blocks with non-axis-aligned edges such as slopes.
+ * <p>
+ * Must be registered in {@link RegisterOutlineRenderersEvent}
+ */
 public interface OutlineRenderer
 {
     /**

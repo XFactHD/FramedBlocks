@@ -14,9 +14,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.neoforged.neoforge.client.model.data.ModelData;
-import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import org.jetbrains.annotations.Nullable;
-import xfacthd.framedblocks.api.FramedBlocksClientAPI;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.model.data.FramedBlockData;
 import xfacthd.framedblocks.api.util.CamoList;
@@ -28,8 +26,7 @@ import java.util.Objects;
  * Provide custom behaviours for ghost block rendering when the player is looking at another block while holding an
  * {@link ItemStack} in the main hand.
  * <p>
- * Must be registered via {@link FramedBlocksClientAPI#registerGhostRenderBehaviour(GhostRenderBehaviour, Item...)} or
- * {@link FramedBlocksClientAPI#registerGhostRenderBehaviour(GhostRenderBehaviour, Block...)} in {@link FMLClientSetupEvent}
+ * Must be registered in {@link RegisterGhostRenderBehavioursEvent}
  * </p>
  */
 public interface GhostRenderBehaviour

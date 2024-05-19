@@ -6,8 +6,6 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
-import xfacthd.framedblocks.api.FramedBlocksAPI;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import xfacthd.framedblocks.api.util.CamoList;
@@ -17,8 +15,7 @@ import java.util.List;
 /**
  * Provide custom behaviours when an {@link IFramedBlock} is copied and/or pasted with the Framed Blueprint
  * <p>
- * Must be registered via {@link FramedBlocksAPI#registerBlueprintCopyBehaviour(BlueprintCopyBehaviour, Block...)}
- * in {@link FMLCommonSetupEvent}
+ * Must be registered in {@link RegisterBlueprintCopyBehavioursEvent}
  * </p>
  */
 public interface BlueprintCopyBehaviour

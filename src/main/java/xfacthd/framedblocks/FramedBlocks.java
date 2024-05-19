@@ -8,11 +8,11 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.neoforged.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.neoforged.fml.loading.FMLEnvironment;
 import org.slf4j.Logger;
 import xfacthd.framedblocks.common.config.ClientConfig;
 import xfacthd.framedblocks.common.config.ServerConfig;
+import xfacthd.framedblocks.common.data.BlueprintBehaviours;
 import xfacthd.framedblocks.common.data.capabilities.CapabilitySetup;
 import xfacthd.framedblocks.common.data.cullupdate.CullingUpdateTracker;
 import xfacthd.framedblocks.common.data.shapes.ShapeReloader;
@@ -20,7 +20,6 @@ import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.compat.CompatHandler;
 import xfacthd.framedblocks.common.crafting.FramingSawRecipeCache;
-import xfacthd.framedblocks.common.data.BlueprintBehaviours;
 import xfacthd.framedblocks.common.data.StateCacheBuilder;
 import xfacthd.framedblocks.common.data.camo.CamoContainerFactories;
 import xfacthd.framedblocks.common.data.conpreds.ConnectionPredicates;
@@ -44,8 +43,8 @@ public final class FramedBlocks
 
         modBus.addListener(CapabilitySetup::onRegisterCapabilities);
         modBus.addListener(FramedBlocks::onCommonSetup);
-        modBus.addListener(FramedBlocks::onLoadComplete);
         modBus.addListener(NetworkHandler::onRegisterPayloads);
+        modBus.addListener(BlueprintBehaviours::onRegisterBlueprintCopyBehaviours);
 
         IEventBus forgeBus = NeoForge.EVENT_BUS;
         forgeBus.addListener(EventHandler::onBlockLeftClick);
@@ -74,14 +73,9 @@ public final class FramedBlocks
     private static void onCommonSetup(final FMLCommonSetupEvent event)
     {
         StateCacheBuilder.ensureStateCachesInitialized();
-        BlueprintBehaviours.register();
+        FramedBlueprintItem.init();
         CompatHandler.commonSetup();
         CamoContainerFactories.registerCamoFactories();
-    }
-
-    private static void onLoadComplete(final FMLLoadCompleteEvent event)
-    {
-        FramedBlueprintItem.lockRegistration();
     }
 
     private static void onAddDebugReloadListener(final AddReloadListenerEvent event)

@@ -1,43 +1,21 @@
 package xfacthd.framedblocks.common.data;
 
+import xfacthd.framedblocks.api.blueprint.RegisterBlueprintCopyBehavioursEvent;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.blueprint.*;
-import xfacthd.framedblocks.common.item.FramedBlueprintItem;
+
+import java.util.List;
 
 public final class BlueprintBehaviours
 {
-    public static void register()
+    public static void onRegisterBlueprintCopyBehaviours(RegisterBlueprintCopyBehavioursEvent event)
     {
-        FramedBlueprintItem.registerBehaviour(
-                new DoubleSlabCopyBehaviour(),
-                FBContent.BLOCK_FRAMED_DOUBLE_SLAB.value()
-        );
-
-        FramedBlueprintItem.registerBehaviour(
-                new DoublePanelCopyBehaviour(),
-                FBContent.BLOCK_FRAMED_DOUBLE_PANEL.value()
-        );
-
-        FramedBlueprintItem.registerBehaviour(
-                new DoorCopyBehaviour(),
-                FBContent.BLOCK_FRAMED_DOOR.value(),
-                FBContent.BLOCK_FRAMED_IRON_DOOR.value()
-        );
-
-        FramedBlueprintItem.registerBehaviour(
-                new CollapsibleBlockCopyBehaviour(),
-                FBContent.BLOCK_FRAMED_COLLAPSIBLE_BLOCK.value()
-        );
-
-        FramedBlueprintItem.registerBehaviour(
-                new CollapsibleCopycatBlockCopyBehaviour(),
-                FBContent.BLOCK_FRAMED_COLLAPSIBLE_COPYCAT_BLOCK.value()
-        );
-
-        FramedBlueprintItem.registerBehaviour(
-                new FlowerPotCopyBehaviour(),
-                FBContent.BLOCK_FRAMED_FLOWER_POT.value()
-        );
+        event.register(new DoubleSlabCopyBehaviour(), FBContent.BLOCK_FRAMED_DOUBLE_SLAB);
+        event.register(new DoublePanelCopyBehaviour(), FBContent.BLOCK_FRAMED_DOUBLE_PANEL);
+        event.register(new DoorCopyBehaviour(), List.of(FBContent.BLOCK_FRAMED_DOOR, FBContent.BLOCK_FRAMED_IRON_DOOR));
+        event.register(new CollapsibleBlockCopyBehaviour(), FBContent.BLOCK_FRAMED_COLLAPSIBLE_BLOCK);
+        event.register(new CollapsibleCopycatBlockCopyBehaviour(), FBContent.BLOCK_FRAMED_COLLAPSIBLE_COPYCAT_BLOCK);
+        event.register(new FlowerPotCopyBehaviour(), FBContent.BLOCK_FRAMED_FLOWER_POT);
     }
 
 

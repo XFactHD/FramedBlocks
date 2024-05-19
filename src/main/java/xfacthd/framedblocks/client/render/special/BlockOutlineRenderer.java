@@ -8,9 +8,11 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.fml.ModLoader;
 import net.neoforged.neoforge.client.event.RenderHighlightEvent;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.block.IFramedBlock;
+import xfacthd.framedblocks.api.render.RegisterOutlineRenderersEvent;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.render.OutlineRenderer;
 import xfacthd.framedblocks.common.config.ClientConfig;
@@ -21,7 +23,6 @@ public final class BlockOutlineRenderer
 {
     private static final Map<IBlockType, OutlineRenderer> OUTLINE_RENDERERS = new IdentityHashMap<>();
     private static final Set<IBlockType> ERRORED_TYPES = new HashSet<>();
-    private static boolean locked = false;
 
     public static void onRenderBlockHighlight(final RenderHighlightEvent.Block event)
     {
@@ -69,23 +70,17 @@ public final class BlockOutlineRenderer
         }
     }
 
-    public static synchronized void registerOutlineRender(IBlockType type, OutlineRenderer render)
+    public static void init()
     {
-        Preconditions.checkState(!locked, "OutlineRenderer registry is locked!");
-
-        if (!type.hasSpecialHitbox())
+        ModLoader.postEvent(new RegisterOutlineRenderersEvent((type, renderer) ->
         {
-            throw new IllegalArgumentException(String.format(
-                    "Type %s doesn't return true from IBlockType#hasSpecialHitbox()", type
-            ));
-        }
-
-        OUTLINE_RENDERERS.put(type, render);
-    }
-
-    public static void lockRegistration()
-    {
-        locked = true;
+            Preconditions.checkArgument(
+                    type.hasSpecialHitbox(),
+                    "IBlockType %s doesn't return true from IBlockType#hasSpecialHitbox()",
+                    type
+            );
+            OUTLINE_RENDERERS.put(type, renderer);
+        }));
     }
 
     public static boolean hasOutlineRenderer(IBlockType type)
