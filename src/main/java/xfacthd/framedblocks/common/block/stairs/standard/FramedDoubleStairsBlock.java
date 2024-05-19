@@ -3,101 +3,151 @@ package xfacthd.framedblocks.common.block.stairs.standard;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Tuple;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.Half;
+import net.minecraft.world.level.block.state.properties.*;
+import net.minecraft.world.level.material.*;
+import net.minecraft.world.phys.shapes.*;
+import net.neoforged.neoforge.client.extensions.common.IClientBlockExtensions;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedProperties;
-import xfacthd.framedblocks.api.block.PlacementStateBuilder;
-import xfacthd.framedblocks.api.util.*;
+import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.IFramedDoubleBlock;
-import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
 import xfacthd.framedblocks.common.blockentity.doubled.FramedDoubleBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
-import xfacthd.framedblocks.common.data.doubleblock.CamoGetter;
-import xfacthd.framedblocks.common.data.doubleblock.SolidityCheck;
-import xfacthd.framedblocks.common.data.doubleblock.DoubleBlockTopInteractionMode;
+import xfacthd.framedblocks.common.data.doubleblock.*;
+import xfacthd.framedblocks.common.util.FramedUtils;
 
-public class FramedDoubleStairsBlock extends AbstractFramedDoubleBlock
+import java.util.function.Consumer;
+
+public class FramedDoubleStairsBlock extends FramedStairsBlock implements IFramedDoubleBlock
 {
     public FramedDoubleStairsBlock()
     {
         super(BlockType.FRAMED_DOUBLE_STAIRS);
-        registerDefaultState(defaultBlockState().setValue(FramedProperties.TOP, false));
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        builder.add(FramedProperties.FACING_HOR, FramedProperties.TOP);
+        FramedUtils.removeProperty(builder, WATERLOGGED);
     }
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext ctx)
     {
-        return PlacementStateBuilder.of(this, ctx)
-                .withHorizontalFacing()
-                .withTop()
-                .build();
-    }
-
-    @Override
-    public BlockState rotate(BlockState state, Direction face, Rotation rot)
-    {
-        if (Utils.isY(face))
+        BlockPos pos = ctx.getClickedPos();
+        Direction side = ctx.getClickedFace();
+        Half half = switch (side)
         {
-            Direction dir = state.getValue(FramedProperties.FACING_HOR);
-            return state.setValue(FramedProperties.FACING_HOR, rot.rotate(dir));
-        }
-        else if (rot != Rotation.NONE)
+            case UP -> Half.BOTTOM;
+            case DOWN -> Half.TOP;
+            default -> Utils.fractionInDir(ctx.getClickLocation(), Direction.UP) > .5D ? Half.TOP : Half.BOTTOM;
+        };
+        BlockState state = defaultBlockState()
+                .setValue(FACING, ctx.getHorizontalDirection())
+                .setValue(HALF, half);
+        return state.setValue(SHAPE, getStairsShape(state, ctx.getLevel(), pos));
+    }
+
+    @Override
+    protected BlockState updateShape(BlockState state, Direction side, BlockState adjState, LevelAccessor level, BlockPos pos, BlockPos adjPos)
+    {
+        BlockState newState = updateShapeLockable(
+                state, level, pos,
+                () -> !Utils.isY(side) ? state.setValue(SHAPE, getStairsShape(state, level, pos)) : state
+        );
+        if (newState == state)
         {
-            return state.cycle(FramedProperties.TOP);
+            updateCulling(level, pos);
         }
-        return state;
+        return newState;
     }
 
     @Override
-    @SuppressWarnings("deprecation")
-    protected BlockState rotate(BlockState state, Rotation rot)
+    protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext ctx)
     {
-        return rotate(state, Direction.UP, rot);
+        return isIntangible(state, level, pos, ctx) ? Shapes.empty() : Shapes.block();
     }
 
     @Override
-    @SuppressWarnings("deprecation")
-    protected BlockState mirror(BlockState state, Mirror mirror)
+    public boolean canPlaceLiquid(@Nullable Player player, BlockGetter level, BlockPos pos, BlockState state, Fluid fluid)
     {
-        return Utils.mirrorFaceBlock(state, mirror);
+        return false;
+    }
+
+    @Override
+    public boolean placeLiquid(LevelAccessor pLevel, BlockPos pPos, BlockState pState, FluidState pFluidState)
+    {
+        return false;
+    }
+
+    @Override
+    public ItemStack pickupBlock(@Nullable Player player, LevelAccessor level, BlockPos pos, BlockState state)
+    {
+        return ItemStack.EMPTY;
+    }
+
+    @Override
+    protected FluidState getFluidState(BlockState state)
+    {
+        return Fluids.EMPTY.defaultFluidState();
     }
 
     @Override
     public Tuple<BlockState, BlockState> calculateBlockPair(BlockState state)
     {
-        Direction facing = state.getValue(FramedProperties.FACING_HOR);
-        boolean top = state.getValue(FramedProperties.TOP);
+        Direction facing = state.getValue(FACING);
+        StairsShape shape = state.getValue(SHAPE);
+        boolean top = state.getValue(BlockStateProperties.HALF) == Half.TOP;
+
+        BlockState partTwo = switch (shape)
+        {
+            case STRAIGHT -> FBContent.BLOCK_FRAMED_SLAB_EDGE.value()
+                    .defaultBlockState()
+                    .setValue(FramedProperties.FACING_HOR, facing.getOpposite())
+                    .setValue(FramedProperties.TOP, !top);
+            case INNER_LEFT -> FBContent.BLOCK_FRAMED_SLAB_CORNER.value()
+                    .defaultBlockState()
+                    .setValue(FramedProperties.FACING_HOR, facing.getOpposite())
+                    .setValue(FramedProperties.TOP, !top);
+            case INNER_RIGHT -> FBContent.BLOCK_FRAMED_SLAB_CORNER.value()
+                    .defaultBlockState()
+                    .setValue(FramedProperties.FACING_HOR, facing.getCounterClockWise())
+                    .setValue(FramedProperties.TOP, !top);
+            case OUTER_LEFT -> FBContent.BLOCK_FRAMED_VERTICAL_HALF_STAIRS.value()
+                    .defaultBlockState()
+                    .setValue(FramedProperties.FACING_HOR, facing.getOpposite())
+                    .setValue(FramedProperties.TOP, !top);
+            case OUTER_RIGHT -> FBContent.BLOCK_FRAMED_VERTICAL_HALF_STAIRS.value()
+                    .defaultBlockState()
+                    .setValue(FramedProperties.FACING_HOR, facing.getCounterClockWise())
+                    .setValue(FramedProperties.TOP, !top);
+        };
 
         return new Tuple<>(
                 FBContent.BLOCK_FRAMED_STAIRS.value()
                         .defaultBlockState()
                         .setValue(BlockStateProperties.HORIZONTAL_FACING, facing)
+                        .setValue(BlockStateProperties.STAIRS_SHAPE, shape)
                         .setValue(BlockStateProperties.HALF, top ? Half.TOP : Half.BOTTOM),
-                FBContent.BLOCK_FRAMED_SLAB_EDGE.value()
-                        .defaultBlockState()
-                        .setValue(FramedProperties.FACING_HOR, facing.getOpposite())
-                        .setValue(FramedProperties.TOP, !top)
+                partTwo
         );
     }
 
     @Override
     public DoubleBlockTopInteractionMode calculateTopInteractionMode(BlockState state)
     {
-        if (state.getValue(FramedProperties.TOP))
+        if (state.getValue(BlockStateProperties.HALF) == Half.TOP)
         {
             return DoubleBlockTopInteractionMode.FIRST;
         }
@@ -107,53 +157,179 @@ public class FramedDoubleStairsBlock extends AbstractFramedDoubleBlock
     @Override
     public CamoGetter calculateCamoGetter(BlockState state, Direction side, @Nullable Direction edge)
     {
-        Direction facing = state.getValue(FramedProperties.FACING_HOR);
-        boolean top = state.getValue(FramedProperties.TOP);
+        Direction facing = state.getValue(FACING);
+        boolean top = state.getValue(BlockStateProperties.HALF) == Half.TOP;
         Direction dirTwo = top ? Direction.UP : Direction.DOWN;
 
-        if (side == facing || side == dirTwo)
+        return switch (state.getValue(SHAPE))
         {
-            return CamoGetter.FIRST;
-        }
-        else if (side == facing.getOpposite())
-        {
-            if (edge == dirTwo)
+            case STRAIGHT ->
             {
-                return CamoGetter.FIRST;
+                if (side == facing || side == dirTwo)
+                {
+                    yield CamoGetter.FIRST;
+                }
+                else if (side == facing.getOpposite())
+                {
+                    if (edge == dirTwo)
+                    {
+                        yield CamoGetter.FIRST;
+                    }
+                    else if (edge == dirTwo.getOpposite())
+                    {
+                        yield CamoGetter.SECOND;
+                    }
+                }
+                else if (side == dirTwo.getOpposite())
+                {
+                    if (edge == facing)
+                    {
+                        yield CamoGetter.FIRST;
+                    }
+                    else if (edge == facing.getOpposite())
+                    {
+                        yield CamoGetter.SECOND;
+                    }
+                }
+                else if (side.getAxis() == facing.getClockWise().getAxis())
+                {
+                    if (edge == facing || edge == dirTwo)
+                    {
+                        yield CamoGetter.FIRST;
+                    }
+                }
+                yield CamoGetter.NONE;
             }
-            else if (edge == dirTwo.getOpposite())
+            case INNER_LEFT ->
             {
-                return CamoGetter.SECOND;
+                if (side == facing || side == facing.getCounterClockWise() || side == dirTwo)
+                {
+                    yield CamoGetter.FIRST;
+                }
+                else if (side == dirTwo.getOpposite())
+                {
+                    if (edge == facing || edge == facing.getCounterClockWise())
+                    {
+                        yield CamoGetter.FIRST;
+                    }
+                }
+                else if (side == facing.getOpposite())
+                {
+                    if (edge == facing.getCounterClockWise() || edge == dirTwo)
+                    {
+                        yield CamoGetter.FIRST;
+                    }
+                }
+                else if (side == facing.getClockWise())
+                {
+                    if (edge == facing || edge == dirTwo)
+                    {
+                        yield CamoGetter.FIRST;
+                    }
+                }
+                yield CamoGetter.NONE;
             }
-        }
-        else if (side == dirTwo.getOpposite())
-        {
-            if (edge == facing)
+            case INNER_RIGHT ->
             {
-                return CamoGetter.FIRST;
+                if (side == facing || side == facing.getClockWise() || side == dirTwo)
+                {
+                    yield CamoGetter.FIRST;
+                }
+                else if (side == dirTwo.getOpposite())
+                {
+                    if (edge == facing || edge == facing.getClockWise())
+                    {
+                        yield CamoGetter.FIRST;
+                    }
+                }
+                else if (side == facing.getOpposite())
+                {
+                    if (edge == facing.getClockWise() || edge == dirTwo)
+                    {
+                        yield CamoGetter.FIRST;
+                    }
+                }
+                else if (side == facing.getCounterClockWise())
+                {
+                    if (edge == facing || edge == dirTwo)
+                    {
+                        yield CamoGetter.FIRST;
+                    }
+                }
+                yield CamoGetter.NONE;
             }
-            else if (edge == facing.getOpposite())
+            case OUTER_LEFT ->
             {
-                return CamoGetter.SECOND;
+                if (side == dirTwo || (side != dirTwo.getOpposite() && edge == dirTwo))
+                {
+                    yield CamoGetter.FIRST;
+                }
+                else if (side == facing && edge == facing.getCounterClockWise())
+                {
+                    yield CamoGetter.FIRST;
+                }
+                else if (side == dirTwo.getOpposite() && (edge == facing.getOpposite() || edge == facing.getClockWise()))
+                {
+                    yield CamoGetter.SECOND;
+                }
+                else if ((side == facing.getOpposite() || side == facing.getClockWise()) && edge == dirTwo.getOpposite())
+                {
+                    yield CamoGetter.SECOND;
+                }
+                else if (side == facing.getCounterClockWise() && edge == facing)
+                {
+                    yield CamoGetter.FIRST;
+                }
+                yield CamoGetter.NONE;
             }
-        }
-        else if (side.getAxis() == facing.getClockWise().getAxis())
-        {
-            if (edge == facing || edge == dirTwo)
+            case OUTER_RIGHT ->
             {
-                return CamoGetter.FIRST;
+                if (side == dirTwo || (side != dirTwo.getOpposite() && edge == dirTwo))
+                {
+                    yield CamoGetter.FIRST;
+                }
+                else if (side == facing && edge == facing.getClockWise())
+                {
+                    yield CamoGetter.FIRST;
+                }
+                else if (side == dirTwo.getOpposite() && (edge == facing.getOpposite() || edge == facing.getCounterClockWise()))
+                {
+                    yield CamoGetter.SECOND;
+                }
+                else if ((side == facing.getOpposite() || side == facing.getCounterClockWise()) && edge == dirTwo.getOpposite())
+                {
+                    yield CamoGetter.SECOND;
+                }
+                else if (side == facing.getClockWise() && edge == facing)
+                {
+                    yield CamoGetter.FIRST;
+                }
+                yield CamoGetter.NONE;
             }
-        }
-        return CamoGetter.NONE;
+        };
     }
 
     @Override
     public SolidityCheck calculateSolidityCheck(BlockState state, Direction side)
     {
-        Direction facing = state.getValue(FramedProperties.FACING_HOR);
-        boolean top = state.getValue(FramedProperties.TOP);
+        Direction facing = state.getValue(FACING);
+        StairsShape shape = state.getValue(SHAPE);
+        boolean top = state.getValue(BlockStateProperties.HALF) == Half.TOP;
+        Direction dirTwo = top ? Direction.UP : Direction.DOWN;
 
-        if (side == facing || (top && side == Direction.UP) || (!top && side == Direction.DOWN))
+        if (side == facing && shape != StairsShape.OUTER_LEFT && shape != StairsShape.OUTER_RIGHT)
+        {
+            return SolidityCheck.FIRST;
+        }
+        else if (side == dirTwo)
+        {
+            return SolidityCheck.FIRST;
+        }
+        else if (shape == StairsShape.INNER_LEFT && side == facing.getCounterClockWise())
+        {
+            return SolidityCheck.FIRST;
+        }
+        else if (shape == StairsShape.INNER_RIGHT && side == facing.getClockWise())
         {
             return SolidityCheck.FIRST;
         }
@@ -167,9 +343,15 @@ public class FramedDoubleStairsBlock extends AbstractFramedDoubleBlock
     }
 
     @Override
+    public void initializeClient(Consumer<IClientBlockExtensions> consumer)
+    {
+        consumer.accept(FramedDoubleBlockRenderProperties.INSTANCE);
+    }
+
+    @Override
     public BlockState getItemModelSource()
     {
-        return defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
+        return defaultBlockState().setValue(FACING, Direction.SOUTH);
     }
 
     @Override

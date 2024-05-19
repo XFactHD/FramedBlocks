@@ -54,4 +54,23 @@ public enum CamoGetter
     public abstract CamoContainer<?, ?> getCamo(FramedDoubleBlockEntity be);
 
     public abstract BlockState getComponent(Tuple<BlockState, BlockState> blockPair);
+
+
+
+    public static CamoGetter get(boolean first, boolean second)
+    {
+        if (first && second)
+        {
+            throw new IllegalArgumentException("Only first or second may be true");
+        }
+        if (first)
+        {
+            return FIRST;
+        }
+        if (second)
+        {
+            return SECOND;
+        }
+        return NONE;
+    }
 }

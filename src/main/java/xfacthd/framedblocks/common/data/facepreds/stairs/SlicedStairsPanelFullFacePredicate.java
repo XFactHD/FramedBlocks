@@ -3,12 +3,10 @@ package xfacthd.framedblocks.common.data.facepreds.stairs;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.StairBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.Half;
 import net.minecraft.world.level.block.state.properties.StairsShape;
 import xfacthd.framedblocks.api.predicate.fullface.FullFacePredicate;
-import xfacthd.framedblocks.api.util.Utils;
 
-public final class DoubleStairsFullFacePredicate implements FullFacePredicate
+public final class SlicedStairsPanelFullFacePredicate implements FullFacePredicate
 {
     @Override
     public boolean test(BlockState state, Direction side)
@@ -19,16 +17,14 @@ public final class DoubleStairsFullFacePredicate implements FullFacePredicate
         {
             return true;
         }
-        if (shape == StairsShape.INNER_RIGHT && side == facing.getClockWise())
+        else if (shape == StairsShape.INNER_LEFT && side == facing.getCounterClockWise())
         {
             return true;
         }
-        if (shape == StairsShape.INNER_LEFT && side == facing.getCounterClockWise())
+        else if (shape == StairsShape.INNER_RIGHT && side == facing.getClockWise())
         {
             return true;
         }
-
-        boolean top = state.getValue(StairBlock.HALF) == Half.TOP;
-        return Utils.isY(side) && top == (side == Direction.UP);
+        return false;
     }
 }

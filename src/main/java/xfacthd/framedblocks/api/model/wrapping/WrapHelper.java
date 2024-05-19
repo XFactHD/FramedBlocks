@@ -21,6 +21,8 @@ public final class WrapHelper
     public static final Set<Property<?>> IGNORE_WATERLOGGED_LOCK = Utils.concat(Set.of(FramedProperties.STATE_LOCKED), IGNORE_WATERLOGGED);
     /** {@link WrapHelper#IGNORE_ALWAYS} + solid */
     public static final Set<Property<?>> IGNORE_SOLID = Utils.concat(Set.of(FramedProperties.SOLID), IGNORE_ALWAYS);
+    /** {@link WrapHelper#IGNORE_ALWAYS} + solid + state-lock */
+    public static final Set<Property<?>> IGNORE_SOLID_LOCK = Utils.concat(Set.of(FramedProperties.STATE_LOCKED), IGNORE_SOLID);
     /** {@link WrapHelper#IGNORE_ALWAYS} + solid + waterlogged */
     public static final Set<Property<?>> IGNORE_DEFAULT = Utils.concat(Set.of(BlockStateProperties.WATERLOGGED), IGNORE_SOLID);
     /** {@link WrapHelper#IGNORE_ALWAYS} + solid + waterlogged + state-lock */

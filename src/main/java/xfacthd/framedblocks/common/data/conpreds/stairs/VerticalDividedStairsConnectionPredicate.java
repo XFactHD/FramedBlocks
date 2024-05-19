@@ -5,7 +5,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.predicate.contex.NonDetailedConnectionPredicate;
-import xfacthd.framedblocks.api.util.Utils;
+import xfacthd.framedblocks.common.data.PropertyHolder;
+import xfacthd.framedblocks.common.data.property.StairsType;
 
 public final class VerticalDividedStairsConnectionPredicate extends NonDetailedConnectionPredicate
 {
@@ -13,14 +14,25 @@ public final class VerticalDividedStairsConnectionPredicate extends NonDetailedC
     public boolean canConnectFullEdge(BlockState state, Direction side, @Nullable Direction edge)
     {
         Direction facing = state.getValue(FramedProperties.FACING_HOR);
+        StairsType type = state.getValue(PropertyHolder.STAIRS_TYPE);
 
-        if (side == facing || side == facing.getCounterClockWise())
+        if ((side == Direction.DOWN && edge == facing) || (side == facing && edge == Direction.DOWN))
         {
-            return edge != null && Utils.isY(edge);
+            return !type.isBottom() || type == StairsType.BOTTOM_CCW;
         }
-        else if (Utils.isY(side))
+        if ((side == Direction.UP && edge == facing) || (side == facing && edge == Direction.UP))
         {
-            return edge == facing || edge == facing.getCounterClockWise();
+            return !type.isTop() || type == StairsType.TOP_CCW;
+        }
+
+        Direction facingCcw = facing.getCounterClockWise();
+        if ((side == Direction.DOWN && edge == facingCcw) || (side == facingCcw && edge == Direction.DOWN))
+        {
+            return !type.isBottom() || type == StairsType.BOTTOM_FWD;
+        }
+        if ((side == Direction.UP && edge == facingCcw) || (side == facingCcw && edge == Direction.UP))
+        {
+            return !type.isTop() || type == StairsType.TOP_FWD;
         }
         return false;
     }

@@ -1,114 +1,83 @@
 package xfacthd.framedblocks.common.block.stairs.standard;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Tuple;
-import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.phys.shapes.*;
+import net.minecraft.world.level.block.state.properties.*;
+import net.neoforged.neoforge.client.extensions.common.IClientBlockExtensions;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedProperties;
-import xfacthd.framedblocks.api.block.PlacementStateBuilder;
-import xfacthd.framedblocks.api.shapes.CommonShapes;
-import xfacthd.framedblocks.api.shapes.ShapeProvider;
-import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
-import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
+import xfacthd.framedblocks.common.block.IFramedDoubleBlock;
 import xfacthd.framedblocks.common.blockentity.doubled.FramedDoubleBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
-import xfacthd.framedblocks.common.data.doubleblock.CamoGetter;
-import xfacthd.framedblocks.common.data.doubleblock.SolidityCheck;
-import xfacthd.framedblocks.common.data.doubleblock.DoubleBlockTopInteractionMode;
+import xfacthd.framedblocks.common.data.doubleblock.*;
 
-public class FramedDividedStairsBlock extends AbstractFramedDoubleBlock
+import java.util.function.Consumer;
+
+public class FramedDividedStairsBlock extends FramedStairsBlock implements IFramedDoubleBlock
 {
     public FramedDividedStairsBlock()
     {
         super(BlockType.FRAMED_DIVIDED_STAIRS);
-        registerDefaultState(defaultBlockState().setValue(FramedProperties.TOP, false));
-    }
-
-    @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
-    {
-        super.createBlockStateDefinition(builder);
-        builder.add(FramedProperties.FACING_HOR, FramedProperties.TOP, BlockStateProperties.WATERLOGGED);
-    }
-
-    @Override
-    public BlockState getStateForPlacement(BlockPlaceContext ctx)
-    {
-        return PlacementStateBuilder.of(this, ctx)
-                .withHorizontalFacing()
-                .withTop()
-                .withWater()
-                .build();
-    }
-
-    @Override
-    public BlockState rotate(BlockState state, Direction face, Rotation rot)
-    {
-        Direction dir = state.getValue(FramedProperties.FACING_HOR);
-        if (Utils.isY(face))
-        {
-            return state.setValue(FramedProperties.FACING_HOR, rot.rotate(dir));
-        }
-        else if (rot != Rotation.NONE && face == dir)
-        {
-            return state.cycle(FramedProperties.TOP);
-        }
-        return state;
-    }
-
-    @Override
-    @SuppressWarnings("deprecation")
-    protected BlockState rotate(BlockState state, Rotation rot)
-    {
-        return rotate(state, Direction.UP, rot);
-    }
-
-    @Override
-    @SuppressWarnings("deprecation")
-    protected BlockState mirror(BlockState state, Mirror mirror)
-    {
-        if (mirror == Mirror.NONE) { return state; }
-
-        Direction dir = state.getValue(FramedProperties.FACING_HOR);
-        if ((mirror == Mirror.FRONT_BACK && Utils.isX(dir)) || (mirror == Mirror.LEFT_RIGHT && Utils.isZ(dir)))
-        {
-            state = state.setValue(FramedProperties.FACING_HOR, dir.getOpposite());
-        }
-        return state;
-    }
-
-    @Override
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
-    {
-        return new FramedDoubleBlockEntity(pos, state);
     }
 
     @Override
     public Tuple<BlockState, BlockState> calculateBlockPair(BlockState state)
     {
-        BlockState defState = FBContent.BLOCK_FRAMED_HALF_STAIRS.value().defaultBlockState();
         Direction facing = state.getValue(FramedProperties.FACING_HOR);
-        boolean top = state.getValue(FramedProperties.TOP);
+        boolean top = state.getValue(BlockStateProperties.HALF) == Half.TOP;
 
-        return new Tuple<>(
-                defState.setValue(FramedProperties.FACING_HOR, facing)
-                        .setValue(FramedProperties.TOP, top)
-                        .setValue(PropertyHolder.RIGHT, false),
-                defState.setValue(FramedProperties.FACING_HOR, facing)
-                        .setValue(FramedProperties.TOP, top)
-                        .setValue(PropertyHolder.RIGHT, true)
-        );
+        return switch (state.getValue(SHAPE))
+        {
+            case STRAIGHT -> new Tuple<>(
+                    FBContent.BLOCK_FRAMED_HALF_STAIRS.value().defaultBlockState()
+                            .setValue(FramedProperties.FACING_HOR, facing)
+                            .setValue(FramedProperties.TOP, top)
+                            .setValue(PropertyHolder.RIGHT, false),
+                    FBContent.BLOCK_FRAMED_HALF_STAIRS.value().defaultBlockState()
+                            .setValue(FramedProperties.FACING_HOR, facing)
+                            .setValue(FramedProperties.TOP, top)
+                            .setValue(PropertyHolder.RIGHT, true)
+            );
+            case INNER_LEFT -> new Tuple<>(
+                    FBContent.BLOCK_FRAMED_PANEL.value().defaultBlockState()
+                            .setValue(FramedProperties.FACING_HOR, facing.getCounterClockWise()),
+                    FBContent.BLOCK_FRAMED_HALF_STAIRS.value().defaultBlockState()
+                            .setValue(FramedProperties.FACING_HOR, facing)
+                            .setValue(FramedProperties.TOP, top)
+                            .setValue(PropertyHolder.RIGHT, true)
+            );
+            case INNER_RIGHT -> new Tuple<>(
+                    FBContent.BLOCK_FRAMED_HALF_STAIRS.value().defaultBlockState()
+                            .setValue(FramedProperties.FACING_HOR, facing)
+                            .setValue(FramedProperties.TOP, top)
+                            .setValue(PropertyHolder.RIGHT, false),
+                    FBContent.BLOCK_FRAMED_PANEL.value().defaultBlockState()
+                            .setValue(FramedProperties.FACING_HOR, facing.getClockWise())
+            );
+            case OUTER_LEFT -> new Tuple<>(
+                    FBContent.BLOCK_FRAMED_HALF_STAIRS.value().defaultBlockState()
+                            .setValue(FramedProperties.FACING_HOR, facing)
+                            .setValue(FramedProperties.TOP, top)
+                            .setValue(PropertyHolder.RIGHT, false),
+                    FBContent.BLOCK_FRAMED_SLAB_EDGE.value().defaultBlockState()
+                            .setValue(FramedProperties.FACING_HOR, facing.getClockWise())
+                            .setValue(FramedProperties.TOP, top)
+            );
+            case OUTER_RIGHT -> new Tuple<>(
+                    FBContent.BLOCK_FRAMED_SLAB_EDGE.value().defaultBlockState()
+                            .setValue(FramedProperties.FACING_HOR, facing.getCounterClockWise())
+                            .setValue(FramedProperties.TOP, top),
+                    FBContent.BLOCK_FRAMED_HALF_STAIRS.value().defaultBlockState()
+                            .setValue(FramedProperties.FACING_HOR, facing)
+                            .setValue(FramedProperties.TOP, top)
+                            .setValue(PropertyHolder.RIGHT, true)
+            );
+        };
     }
 
     @Override
@@ -121,31 +90,69 @@ public class FramedDividedStairsBlock extends AbstractFramedDoubleBlock
     public CamoGetter calculateCamoGetter(BlockState state, Direction side, @Nullable Direction edge)
     {
         Direction facing = state.getValue(FramedProperties.FACING_HOR);
-        Direction dirTwo = state.getValue(FramedProperties.TOP) ? Direction.UP : Direction.DOWN;
-        if (side == facing.getClockWise())
+        StairsShape shape = state.getValue(SHAPE);
+        boolean top = state.getValue(BlockStateProperties.HALF) == Half.TOP;
+        Direction dirTwo = top ? Direction.UP : Direction.DOWN;
+
+        if (side == facing)
         {
-            if (edge == facing || edge == dirTwo)
-            {
-                return CamoGetter.SECOND;
-            }
-        }
-        else if (side == facing.getCounterClockWise())
-        {
-            if (edge == facing || edge == dirTwo)
+            if (edge == facing.getCounterClockWise() && shape != StairsShape.OUTER_RIGHT)
             {
                 return CamoGetter.FIRST;
             }
-        }
-        else if (side == facing || side == dirTwo)
-        {
-            if (edge == facing.getClockWise())
+            if (edge == facing.getClockWise() && shape != StairsShape.OUTER_LEFT)
             {
                 return CamoGetter.SECOND;
             }
+            return CamoGetter.NONE;
+        }
+        if (side == dirTwo)
+        {
             if (edge == facing.getCounterClockWise())
             {
                 return CamoGetter.FIRST;
             }
+            if (edge == facing.getClockWise())
+            {
+                return CamoGetter.SECOND;
+            }
+            return CamoGetter.NONE;
+        }
+        if (side == dirTwo.getOpposite() || side == facing.getOpposite())
+        {
+            if (shape == StairsShape.INNER_LEFT && edge == facing.getCounterClockWise())
+            {
+                return CamoGetter.FIRST;
+            }
+            if (shape == StairsShape.INNER_RIGHT && edge == facing.getClockWise())
+            {
+                return CamoGetter.SECOND;
+            }
+            return CamoGetter.NONE;
+        }
+        if (side == facing.getCounterClockWise())
+        {
+            if (shape == StairsShape.INNER_LEFT)
+            {
+                return CamoGetter.FIRST;
+            }
+            if (shape != StairsShape.OUTER_RIGHT && (edge == facing || edge == dirTwo))
+            {
+                return CamoGetter.FIRST;
+            }
+            return CamoGetter.NONE;
+        }
+        if (side == facing.getClockWise())
+        {
+            if (shape == StairsShape.INNER_RIGHT)
+            {
+                return CamoGetter.SECOND;
+            }
+            if (shape != StairsShape.OUTER_LEFT && (edge == facing || edge == dirTwo))
+            {
+                return CamoGetter.SECOND;
+            }
+            return CamoGetter.NONE;
         }
         return CamoGetter.NONE;
     }
@@ -154,35 +161,44 @@ public class FramedDividedStairsBlock extends AbstractFramedDoubleBlock
     public SolidityCheck calculateSolidityCheck(BlockState state, Direction side)
     {
         Direction facing = state.getValue(FramedProperties.FACING_HOR);
-        boolean top = state.getValue(FramedProperties.TOP);
+        StairsShape shape = state.getValue(SHAPE);
+        boolean top = state.getValue(BlockStateProperties.HALF) == Half.TOP;
+        Direction dirTwo = top ? Direction.UP : Direction.DOWN;
 
-        Direction secDir = top ? Direction.UP : Direction.DOWN;
-        if (side == facing || side == secDir)
+        if (side == facing && shape != StairsShape.OUTER_LEFT && shape != StairsShape.OUTER_RIGHT)
         {
             return SolidityCheck.BOTH;
         }
+        if (side == dirTwo)
+        {
+            return SolidityCheck.BOTH;
+        }
+        if (shape == StairsShape.INNER_LEFT && side == facing.getCounterClockWise())
+        {
+            return SolidityCheck.FIRST;
+        }
+        if (shape == StairsShape.INNER_RIGHT && side == facing.getClockWise())
+        {
+            return SolidityCheck.FIRST;
+        }
         return SolidityCheck.NONE;
+    }
+
+    @Override
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
+    {
+        return new FramedDoubleBlockEntity(pos, state);
+    }
+
+    @Override
+    public void initializeClient(Consumer<IClientBlockExtensions> consumer)
+    {
+        consumer.accept(FramedDoubleBlockRenderProperties.INSTANCE);
     }
 
     @Override
     public BlockState getJadeRenderState(BlockState state)
     {
         return defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
-    }
-
-
-
-    public static ShapeProvider generateShapes(ImmutableList<BlockState> states)
-    {
-        ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
-
-        for (BlockState state : states)
-        {
-            Direction dir = state.getValue(FramedProperties.FACING_HOR);
-            boolean top = state.getValue(FramedProperties.TOP);
-            builder.put(state, CommonShapes.STRAIGHT_STAIRS.get(new CommonShapes.DirBoolKey(dir, top)));
-        }
-
-        return ShapeProvider.of(builder.build());
     }
 }

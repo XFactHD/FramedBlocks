@@ -23,9 +23,9 @@ import xfacthd.framedblocks.common.data.property.StairsType;
 
 public class FramedVerticalStairsBlock extends FramedBlock
 {
-    public FramedVerticalStairsBlock()
+    public FramedVerticalStairsBlock(BlockType type)
     {
-        super(BlockType.FRAMED_VERTICAL_STAIRS);
+        super(type);
         registerDefaultState(defaultBlockState().setValue(FramedProperties.STATE_LOCKED, false));
     }
 
@@ -43,8 +43,9 @@ public class FramedVerticalStairsBlock extends FramedBlock
     public BlockState getStateForPlacement(BlockPlaceContext ctx)
     {
         return PlacementStateBuilder.of(this, ctx)
-                .withHalfOrHorizontalFacing()
+                .withHalfFacing()
                 .withCustom((state, modCtx) -> getStateFromContext(state, modCtx.getLevel(), modCtx.getClickedPos()))
+                .tryWithWater() // Vertical double stairs don't support waterlogging
                 .build();
     }
 
@@ -119,7 +120,7 @@ public class FramedVerticalStairsBlock extends FramedBlock
             BlockState below = level.getBlockState(pos.below());
 
             StairsType type = StairsType.VERTICAL;
-            if ((topCornerFront || topCornerLeft) && !above.is(state.getBlock()))
+            if ((topCornerFront || topCornerLeft) && !(above.getBlock() instanceof FramedVerticalStairsBlock))
             {
                 if (!topCornerLeft)
                 {
@@ -134,7 +135,7 @@ public class FramedVerticalStairsBlock extends FramedBlock
                     type = StairsType.TOP_BOTH;
                 }
             }
-            else if ((bottomCornerFront || bottomCornerLeft) && !below.is(state.getBlock()))
+            else if ((bottomCornerFront || bottomCornerLeft) && !(below.getBlock() instanceof FramedVerticalStairsBlock))
             {
                 if (!bottomCornerLeft)
                 {

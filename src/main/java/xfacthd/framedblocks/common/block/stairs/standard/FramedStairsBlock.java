@@ -33,9 +33,12 @@ import java.util.function.Consumer;
 
 public class FramedStairsBlock extends StairBlock implements IFramedBlock
 {
-    public FramedStairsBlock()
+    private final BlockType type;
+
+    public FramedStairsBlock(BlockType type)
     {
-        super(FBContent.BLOCK_FRAMED_CUBE.value().defaultBlockState(), IFramedBlock.createProperties(BlockType.FRAMED_STAIRS));
+        super(FBContent.BLOCK_FRAMED_CUBE.value().defaultBlockState(), IFramedBlock.createProperties(type));
+        this.type = type;
         registerDefaultState(defaultBlockState()
                 .setValue(FramedProperties.SOLID, false)
                 .setValue(FramedProperties.GLOWING, false)
@@ -163,7 +166,7 @@ public class FramedStairsBlock extends StairBlock implements IFramedBlock
     @Override
     public BlockType getBlockType()
     {
-        return BlockType.FRAMED_STAIRS;
+        return type;
     }
 
     @Override
@@ -176,11 +179,15 @@ public class FramedStairsBlock extends StairBlock implements IFramedBlock
 
     public static final class StairStateMerger implements StateMerger
     {
-        public static final StairStateMerger INSTANCE = new StairStateMerger();
+        public static final StairStateMerger INSTANCE = new StairStateMerger(WrapHelper.IGNORE_DEFAULT_LOCK);
+        public static final StairStateMerger INSTANCE_NO_WATER = new StairStateMerger(WrapHelper.IGNORE_SOLID_LOCK);
 
-        private final StateMerger ignoringMerger = StateMerger.ignoring(WrapHelper.IGNORE_DEFAULT_LOCK);
+        private final StateMerger ignoringMerger;
 
-        private StairStateMerger() { }
+        private StairStateMerger(Set<Property<?>> ignoredProperties)
+        {
+            this.ignoringMerger = StateMerger.ignoring(ignoredProperties);
+        }
 
         @Override
         public BlockState apply(BlockState state)

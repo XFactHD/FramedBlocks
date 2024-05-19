@@ -5,7 +5,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.predicate.contex.NonDetailedConnectionPredicate;
-import xfacthd.framedblocks.api.util.Utils;
+import xfacthd.framedblocks.common.data.PropertyHolder;
+import xfacthd.framedblocks.common.data.property.StairsType;
 
 public final class VerticalDoubleStairsConnectionPredicate extends NonDetailedConnectionPredicate
 {
@@ -13,22 +14,63 @@ public final class VerticalDoubleStairsConnectionPredicate extends NonDetailedCo
     public boolean canConnectFullEdge(BlockState state, Direction side, @Nullable Direction edge)
     {
         Direction facing = state.getValue(FramedProperties.FACING_HOR);
+        StairsType type = state.getValue(PropertyHolder.STAIRS_TYPE);
 
-        if (side == facing || side == facing.getCounterClockWise())
+        if (side == facing)
         {
-            return true;
+            return switch (type)
+            {
+                case VERTICAL, TOP_CCW, BOTTOM_CCW -> true;
+                case TOP_FWD, TOP_BOTH -> edge == facing.getCounterClockWise() || edge == Direction.DOWN;
+                case BOTTOM_FWD, BOTTOM_BOTH -> edge == facing.getCounterClockWise() || edge == Direction.UP;
+            };
         }
-        else if (side == facing.getOpposite())
+        if (side == facing.getCounterClockWise())
         {
-            return edge != null && edge.getAxis() == facing.getClockWise().getAxis();
+            return switch (type)
+            {
+                case VERTICAL, TOP_FWD, BOTTOM_FWD -> true;
+                case TOP_CCW, TOP_BOTH -> edge == facing || edge == Direction.DOWN;
+                case BOTTOM_CCW, BOTTOM_BOTH -> edge == facing || edge == Direction.UP;
+            };
         }
-        else if (side == facing.getClockWise())
+        if (side == facing.getOpposite())
         {
-            return edge != null && edge.getAxis() == facing.getAxis();
+            return switch (type)
+            {
+                case VERTICAL, TOP_FWD, BOTTOM_FWD -> edge != null && edge.getAxis() == facing.getClockWise().getAxis();
+                case TOP_CCW, TOP_BOTH -> edge == facing.getClockWise() || edge == Direction.UP;
+                case BOTTOM_CCW, BOTTOM_BOTH -> edge == facing.getClockWise() || edge == Direction.DOWN;
+            };
         }
-        else if (Utils.isY(side))
+        if (side == facing.getClockWise())
         {
-            return edge == facing || edge == facing.getCounterClockWise();
+            return switch (type)
+            {
+                case VERTICAL, TOP_CCW, BOTTOM_CCW -> edge != null && edge.getAxis() == facing.getAxis();
+                case TOP_FWD, TOP_BOTH -> edge == facing.getOpposite() || edge == Direction.UP;
+                case BOTTOM_FWD, BOTTOM_BOTH -> edge == facing.getOpposite() || edge == Direction.DOWN;
+            };
+        }
+        if (side == Direction.UP)
+        {
+            return switch (type)
+            {
+                case VERTICAL, BOTTOM_FWD, BOTTOM_CCW, BOTTOM_BOTH -> edge == facing || edge == facing.getCounterClockWise();
+                case TOP_CCW -> edge != null && edge.getAxis() == facing.getAxis();
+                case TOP_FWD -> edge != null && edge.getAxis() == facing.getClockWise().getAxis();
+                default -> edge == facing.getOpposite() || edge == facing.getClockWise();
+            };
+        }
+        if (side == Direction.DOWN)
+        {
+            return switch (type)
+            {
+                case VERTICAL, TOP_FWD, TOP_CCW, TOP_BOTH -> edge == facing || edge == facing.getCounterClockWise();
+                case BOTTOM_CCW -> edge != null && edge.getAxis() == facing.getAxis();
+                case BOTTOM_FWD -> edge != null && edge.getAxis() == facing.getClockWise().getAxis();
+                default -> edge == facing.getOpposite() || edge == facing.getClockWise();
+            };
         }
         return false;
     }

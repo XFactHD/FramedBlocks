@@ -9,7 +9,8 @@
         "AccessorTransientCraftingContainer",
         "InvokerBlockItem",
         "MixinBlockStateBase",
-        "MixinMapItemSavedData"
+        "MixinMapItemSavedData",
+        "MixinStairBlock"
     ],
     "client": [
         "client.AccessorMultiPlayerGameMode",
