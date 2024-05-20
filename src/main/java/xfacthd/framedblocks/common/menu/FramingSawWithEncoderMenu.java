@@ -169,7 +169,7 @@ public class FramingSawWithEncoderMenu extends FramingSawMenu
         if (!patternInputSlot.hasItem() && !patternOutputSlot.hasItem()) return;
 
         ItemStack[] additives = Arrays.copyOfRange(inputs, 1, inputs.length);
-        ItemStack pattern = AppliedEnergisticsCompat.tryEncodePattern(level, inputs[0], additives, recipe.getResult());
+        ItemStack pattern = AppliedEnergisticsCompat.tryEncodePattern(inputs[0], additives, recipe.getResult());
 
         if (pattern != null)
         {

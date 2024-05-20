@@ -3,7 +3,6 @@ package xfacthd.framedblocks.common.compat.ae2;
 import appeng.api.crafting.IPatternDetails;
 import appeng.api.crafting.PatternDetailsTooltip;
 import appeng.api.stacks.*;
-import net.minecraft.nbt.*;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.ItemStack;
@@ -13,44 +12,54 @@ import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.common.crafting.*;
 
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 final class FramingSawPatternDetails implements IPatternDetails
 {
     private final AEItemKey definition;
     private final RecipeHolder<FramingSawRecipe> recipe;
     private final IInput[] inputs;
-    private final GenericStack[] outputs;
+    private final List<GenericStack> outputs;
 
     FramingSawPatternDetails(AEItemKey definition, Level level)
     {
         this.definition = definition;
 
-        CompoundTag tag = Objects.requireNonNull(definition.getTag());
-        ItemStack input = FramingSawPatternEncoding.getItem(tag, FramingSawPatternEncoding.KEY_INPUT);
-        ItemStack result = FramingSawPatternEncoding.getItem(tag, FramingSawPatternEncoding.KEY_RESULT);
+        EncodedFramingSawPattern pattern = definition.get(AppliedEnergisticsCompat.GuardedAccess.DC_TYPE_ENCODED_SAW_PATTERN.get());
+        if (pattern == null)
+        {
+            throw new IllegalArgumentException("Given item does not encode a processing pattern: " + definition);
+        }
 
-        this.recipe = Objects.requireNonNull(FramingSawRecipeCache.get(level.isClientSide()).findRecipeFor(result));
+        this.recipe = Objects.requireNonNull(FramingSawRecipeCache.get(level.isClientSide()).findRecipeFor(pattern.output()));
         FramingSawRecipe recipe = this.recipe.value();
-        SimpleContainer container = new SimpleContainer(input);
+        SimpleContainer container = new SimpleContainer(pattern.input());
         FramingSawRecipeCalculation calc = recipe.makeCraftingCalculation(container, level.isClientSide());
 
         List<FramingSawRecipeAdditive> additives = recipe.getAdditives();
         this.inputs = new IInput[1 + additives.size()];
-        this.inputs[0] = new Input(input, calc.getInputCount());
-        ItemStack[] loadedAdditives = FramingSawPatternEncoding.getAdditives(tag, additives.size());
+        this.inputs[0] = new Input(pattern.input(), calc.getInputCount());
+        List<ItemStack> loadedAdditives = pattern.additives();
+        if (additives.size() != loadedAdditives.size())
+        {
+            throw new IllegalArgumentException("Additive count does not match. Pattern: %d Recipe: %d".formatted(
+                    loadedAdditives.size(), additives.size()
+            ));
+        }
         for (int i = 0; i < additives.size(); i++)
         {
-            if (!additives.get(i).ingredient().test(loadedAdditives[i]))
+            if (!additives.get(i).ingredient().test(loadedAdditives.get(i)))
             {
                 throw new IllegalArgumentException("Invalid additive '%s' in slot '%d' for recipe '%s'".formatted(
-                        loadedAdditives[i], i, this.recipe.id()
+                        loadedAdditives.get(i), i, this.recipe.id()
                 ));
             }
-            inputs[i + 1] = new Input(loadedAdditives[i], calc.getAdditiveCount(i));
+            inputs[i + 1] = new Input(loadedAdditives.get(i), calc.getAdditiveCount(i));
         }
-        this.outputs = new GenericStack[] { new GenericStack(AEItemKey.of(result), calc.getOutputCount()) };
+        this.outputs = List.of(new GenericStack(
+                Objects.requireNonNull(AEItemKey.of(pattern.output())),
+                calc.getOutputCount()
+        ));
     }
 
     @Override
@@ -66,7 +75,7 @@ final class FramingSawPatternDetails implements IPatternDetails
     }
 
     @Override
-    public GenericStack[] getOutputs()
+    public List<GenericStack> getOutputs()
     {
         return outputs;
     }
@@ -96,22 +105,39 @@ final class FramingSawPatternDetails implements IPatternDetails
 
 
 
+    public static void encode(ItemStack stack, ItemStack input, ItemStack[] additives, ItemStack output)
+    {
+        stack.set(AppliedEnergisticsCompat.GuardedAccess.DC_TYPE_ENCODED_SAW_PATTERN, new EncodedFramingSawPattern(
+                input, Arrays.stream(additives).filter(additive -> !additive.isEmpty()).toList(), output
+        ));
+    }
+
     public static PatternDetailsTooltip makeInvalidPatternTooltip(
-            CompoundTag tag, Level level, @SuppressWarnings("unused") @Nullable Exception cause, TooltipFlag flags
+            ItemStack stack, Level level, @SuppressWarnings("unused") @Nullable Exception cause, TooltipFlag flags
     )
     {
         PatternDetailsTooltip tooltip = new PatternDetailsTooltip(PatternDetailsTooltip.OUTPUT_TEXT_PRODUCES);
-
-        FramingSawPatternEncoding.tryGetItem(tag, FramingSawPatternEncoding.KEY_INPUT, tooltip::addInput);
-        FramingSawPatternEncoding.tryGetAdditives(tag, tooltip::addInput);
-        ItemStack result = FramingSawPatternEncoding.tryGetItem(tag, FramingSawPatternEncoding.KEY_RESULT, tooltip::addOutput);
-
-        if (flags.isAdvanced() && !result.isEmpty())
+        EncodedFramingSawPattern pattern = stack.get(AppliedEnergisticsCompat.GuardedAccess.DC_TYPE_ENCODED_SAW_PATTERN);
+        if (pattern != null)
         {
-            RecipeHolder<FramingSawRecipe> recipe = FramingSawRecipeCache.get(level.isClientSide()).findRecipeFor(result);
-            if (recipe != null)
+            tooltip.addInput(AEItemKey.of(pattern.input()), 1L);
+            pattern.additives().forEach(additive ->
             {
-                tooltip.addProperty(Component.literal("Recipe"), Component.literal(recipe.id().toString()));
+                if (!additive.isEmpty())
+                {
+                    tooltip.addInput(AEItemKey.of(additive), additive.getCount());
+                }
+            });
+            tooltip.addOutput(AEItemKey.of(pattern.output()), 1L);
+
+            if (flags.isAdvanced() && !pattern.output().isEmpty())
+            {
+                RecipeHolder<FramingSawRecipe> recipe = FramingSawRecipeCache.get(level.isClientSide())
+                        .findRecipeFor(pattern.output());
+                if (recipe != null)
+                {
+                    tooltip.addProperty(Component.literal("Recipe"), Component.literal(recipe.id().toString()));
+                }
             }
         }
         return tooltip;
@@ -126,7 +152,7 @@ final class FramingSawPatternDetails implements IPatternDetails
 
         public Input(ItemStack input, int multiplier)
         {
-            this.input[0] = new GenericStack(AEItemKey.of(input), 1);
+            this.input[0] = new GenericStack(Objects.requireNonNull(AEItemKey.of(input)), 1);
             this.multiplier = multiplier;
         }
 

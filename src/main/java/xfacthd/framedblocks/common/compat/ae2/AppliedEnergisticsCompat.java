@@ -6,14 +6,15 @@ import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModList;
 import net.neoforged.neoforge.attachment.AttachmentType;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.registries.*;
 import xfacthd.framedblocks.api.util.FramedConstants;
+import xfacthd.framedblocks.api.util.registration.DeferredDataComponentType;
 import xfacthd.framedblocks.common.FBContent;
+import xfacthd.framedblocks.common.util.registration.DeferredDataComponentTypeRegister;
 
 public final class AppliedEnergisticsCompat
 {
@@ -60,11 +61,11 @@ public final class AppliedEnergisticsCompat
         return false;
     }
 
-    public static ItemStack tryEncodePattern(Level level, ItemStack input, ItemStack[] additives, ItemStack output)
+    public static ItemStack tryEncodePattern(ItemStack input, ItemStack[] additives, ItemStack output)
     {
         if (loaded)
         {
-            return GuardedAccess.tryEncodePattern(level, input, additives, output);
+            return GuardedAccess.tryEncodePattern(input, additives, output);
         }
         return null;
     }
@@ -75,6 +76,7 @@ public final class AppliedEnergisticsCompat
     {
         private static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(FramedConstants.MOD_ID);
         private static final DeferredRegister<AttachmentType<?>> ATTACHMENTS = DeferredRegister.create(NeoForgeRegistries.ATTACHMENT_TYPES, FramedConstants.MOD_ID);
+        private static final DeferredDataComponentTypeRegister DATA_COMPONENTS = DeferredDataComponentTypeRegister.create(FramedConstants.MOD_ID);
 
         static final Holder<Item> ITEM_FRAMING_SAW_PATTERN = ITEMS.register("framing_saw_pattern", () ->
                 PatternDetailsHelper.encodedPatternItemBuilder(FramingSawPatternDetails::new)
@@ -84,6 +86,9 @@ public final class AppliedEnergisticsCompat
         static final DeferredHolder<AttachmentType<?>, AttachmentType<FramingSawCraftingMachine>> ATTACHMENT_SAW_MACHINE = ATTACHMENTS.register(
                 "framing_saw_machine", () -> AttachmentType.builder(FramingSawCraftingMachine::new).build()
         );
+        static final DeferredDataComponentType<EncodedFramingSawPattern> DC_TYPE_ENCODED_SAW_PATTERN = DATA_COMPONENTS.registerComponentType(
+                "framing_saw_pattern", builder -> builder.persistent(EncodedFramingSawPattern.CODEC).networkSynchronized(EncodedFramingSawPattern.STREAM_CODEC)
+        );
 
         static final Holder<Item> ITEM_BLANK_PATTERN = DeferredItem.createItem(new ResourceLocation("ae2", "blank_pattern"));
 
@@ -91,6 +96,7 @@ public final class AppliedEnergisticsCompat
         {
             ITEMS.register(modBus);
             ATTACHMENTS.register(modBus);
+            DATA_COMPONENTS.register(modBus);
             modBus.addListener(GuardedAccess::onRegisterCapabilities);
         }
 
@@ -118,10 +124,10 @@ public final class AppliedEnergisticsCompat
             return stack.is(encoded ? ITEM_FRAMING_SAW_PATTERN : ITEM_BLANK_PATTERN);
         }
 
-        public static ItemStack tryEncodePattern(Level level, ItemStack input, ItemStack[] additives, ItemStack output)
+        public static ItemStack tryEncodePattern(ItemStack input, ItemStack[] additives, ItemStack output)
         {
-            ItemStack stack = new ItemStack(AppliedEnergisticsCompat.GuardedAccess.ITEM_FRAMING_SAW_PATTERN);
-            FramingSawPatternEncoding.encodeFramingSawPattern(level, stack, input, additives, output);
+            ItemStack stack = new ItemStack(ITEM_FRAMING_SAW_PATTERN);
+            FramingSawPatternDetails.encode(stack, input, additives, output);
             return stack;
         }
 

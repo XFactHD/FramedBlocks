@@ -203,8 +203,9 @@ dependencies {
     //runtimeOnly("curse.maven:fusion-854949:5005142")
     //runtimeOnly("curse.maven:conglass-383129:5002616")
 
-    compileOnly("appeng:appliedenergistics2-neoforge:${ae2_version}:api")
+    //compileOnly("appeng:appliedenergistics2-neoforge:${ae2_version}:api")
     //runtimeOnly("appeng:appliedenergistics2-neoforge:${ae2_version}")
+    compileOnly("curse.maven:ae2-223794:5358106") // TODO: replace with proper maven once beta builds are available
 
     compileOnly("curse.maven:jade-324717:5109393")
 

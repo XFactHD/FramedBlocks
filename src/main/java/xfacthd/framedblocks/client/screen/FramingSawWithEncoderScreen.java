@@ -353,7 +353,7 @@ public class FramingSawWithEncoderScreen extends FramingSawScreen
         PacketDistributor.sendToServer(new ServerboundEncodeFramingSawPatternPayload(
                 menu.containerId,
                 cache.getRecipes().get(menu.getSelectedRecipeIndex()).id(),
-                encodingInputs
+                Arrays.stream(encodingInputs).filter(stack -> !stack.isEmpty()).toArray(ItemStack[]::new)
         ));
     }
 

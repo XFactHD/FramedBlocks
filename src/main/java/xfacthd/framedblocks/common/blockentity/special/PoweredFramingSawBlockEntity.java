@@ -146,9 +146,17 @@ public class PoweredFramingSawBlockEntity extends BlockEntity
         if (energyStorage.getEnergyStored() < energyConsumption) return false;
 
         ItemStack output = itemHandler.getStackInSlot(FramingSawMenu.SLOT_RESULT);
-        if (!output.isEmpty() && output.getItem() != selectedRecipe.value().getResult().getItem()) return false;
-        if (output.getCount() + outputCount > output.getMaxStackSize()) return false;
-
+        if (!output.isEmpty())
+        {
+            if (!ItemStack.isSameItemSameComponents(output, selectedRecipe.value().getResult()))
+            {
+                return false;
+            }
+            if (output.getCount() + outputCount > output.getMaxStackSize())
+            {
+                return false;
+            }
+        }
         return true;
     }
 
