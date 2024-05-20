@@ -15,14 +15,12 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.lwjgl.glfw.GLFW;
@@ -35,7 +33,6 @@ import xfacthd.framedblocks.common.compat.ae2.AppliedEnergisticsCompat;
 import xfacthd.framedblocks.common.crafting.*;
 import xfacthd.framedblocks.common.menu.FramingSawMenu;
 import xfacthd.framedblocks.common.net.payload.ServerboundSelectFramingSawRecipePayload;
-import xfacthd.framedblocks.common.util.FramedUtils;
 
 import java.util.*;
 
@@ -44,6 +41,7 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu> im
     public static final String TOOLTIP_MATERIAL = Utils.translationKey("tooltip", "framing_saw.material");
     public static final Component TOOLTIP_LOOSE_ADDITIVE = Utils.translate("tooltip", "framing_saw.loose_additive");
     public static final String TOOLTIP_HAVE_X_BUT_NEED_Y_ITEM = Utils.translationKey("tooltip", "framing_saw.have_x_but_need_y_item");
+    public static final String TOOLTIP_HAVE_X_BUT_NEED_Y_ITEM_MULTI = Utils.translationKey("tooltip", "framing_saw.have_x_but_need_y_item_multi");
     public static final String TOOLTIP_HAVE_X_BUT_NEED_Y_TAG = Utils.translationKey("tooltip", "framing_saw.have_x_but_need_y_tag");
     public static final String TOOLTIP_HAVE_X_BUT_NEED_Y_ITEM_COUNT = Utils.translationKey("tooltip", "framing_saw.have_x_but_need_y_item_count");
     public static final String TOOLTIP_HAVE_X_BUT_NEED_Y_MATERIAL_COUNT = Utils.translationKey("tooltip", "framing_saw.have_x_but_need_y_material_count");
@@ -349,7 +347,7 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu> im
                 case MISSING_ADDITIVE_0, MISSING_ADDITIVE_1, MISSING_ADDITIVE_2 ->
                 {
                     listAdditives = matchResult.additiveSlot();
-                    Ingredient additive = recipe.getAdditives().get(matchResult.additiveSlot()).ingredient();
+                    FramingSawRecipeAdditive additive = recipe.getAdditives().get(matchResult.additiveSlot());
                     yield makeHaveButNeedTooltip(TOOLTIP_HAVE_ITEM_NONE, additive);
                 }
                 case UNEXPECTED_ADDITIVE_0, UNEXPECTED_ADDITIVE_1, UNEXPECTED_ADDITIVE_2 ->
@@ -365,10 +363,9 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu> im
                 {
                     listAdditives = matchResult.additiveSlot();
                     Item itemIn = screen.getAdditiveStack(matchResult.additiveSlot()).getItem();
-                    Ingredient additive = recipe.getAdditives().get(matchResult.additiveSlot()).ingredient();
                     yield makeHaveButNeedTooltip(
                             Component.translatable(itemIn.getDescriptionId()).withStyle(ChatFormatting.GOLD),
-                            additive
+                            recipe.getAdditives().get(matchResult.additiveSlot())
                     );
                 }
                 case INSUFFICIENT_ADDITIVE_0, INSUFFICIENT_ADDITIVE_1, INSUFFICIENT_ADDITIVE_2 ->
@@ -400,15 +397,15 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu> im
 
     private static void appendAdditiveItemOptions(List<Component> components, FramingSawRecipe recipe, int additiveSlot)
     {
-        Ingredient additive = recipe.getAdditives().get(additiveSlot).ingredient();
-        if (additive.getItems().length <= 1)
+        FramingSawRecipeAdditive additive = recipe.getAdditives().get(additiveSlot);
+        if (!additive.isTagBased() && additive.ingredient().getItems().length <= 1)
         {
             return;
         }
 
         if (hasShiftDown())
         {
-            for (ItemStack option : additive.getItems())
+            for (ItemStack option : additive.ingredient().getItems())
             {
                 components.add(Component.literal("- ").append(option.getItem().getDescription()).withStyle(ChatFormatting.GOLD));
             }
@@ -423,26 +420,23 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu> im
         }
     }
 
-    private static MutableComponent makeHaveButNeedTooltip(Component present, Ingredient additive)
+    private static MutableComponent makeHaveButNeedTooltip(Component present, FramingSawRecipeAdditive additive)
     {
-        ItemStack[] options = additive.getItems();
-        if (options.length > 1 && FramedUtils.getSingleIngredientValue(additive) instanceof Ingredient.TagValue value)
+        if (additive.isTagBased())
         {
-            TagKey<Item> tag = value.tag();
             return Component.translatable(
                     TOOLTIP_HAVE_X_BUT_NEED_Y_TAG,
                     present,
-                    Component.literal("#" + tag.location()).withStyle(ChatFormatting.GOLD)
+                    Utils.translateTag(additive.srcTag()).withStyle(ChatFormatting.GOLD)
             );
         }
-        else
-        {
-            return Component.translatable(
-                    TOOLTIP_HAVE_X_BUT_NEED_Y_ITEM,
-                    present,
-                    Component.translatable(options[0].getItem().getDescriptionId()).withStyle(ChatFormatting.GOLD)
-            );
-        }
+
+        ItemStack[] options = additive.ingredient().getItems();
+        return Component.translatable(
+                options.length > 1 ? TOOLTIP_HAVE_X_BUT_NEED_Y_ITEM_MULTI : TOOLTIP_HAVE_X_BUT_NEED_Y_ITEM,
+                present,
+                Component.translatable(options[0].getItem().getDescriptionId()).withStyle(ChatFormatting.GOLD)
+        );
     }
 
     private void renderButtons(GuiGraphics graphics, int mouseX, int mouseY, int x, int y, int lastIdx)

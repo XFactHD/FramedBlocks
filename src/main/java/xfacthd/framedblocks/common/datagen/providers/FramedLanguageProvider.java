@@ -9,6 +9,7 @@ import net.neoforged.neoforge.common.data.LanguageProvider;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.camo.empty.EmptyCamoContainer;
 import xfacthd.framedblocks.api.util.FramedConstants;
+import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.client.screen.*;
 import xfacthd.framedblocks.client.screen.overlay.*;
 import xfacthd.framedblocks.common.compat.atlasviewer.AtlasViewerCompat;
@@ -286,6 +287,9 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(JadeCompat.LABEL_CAMO, "Camo: %s");
         add(JadeCompat.LABEL_CAMO_ONE, "Camo one: %s");
         add(JadeCompat.LABEL_CAMO_TWO, "Camo two: %s");
+
+        add(Utils.TOOL_WRENCH, "Wrenches");
+        add(Utils.DISABLE_INTANGIBLE, "Disable Intangibility");
     }
 
     private void addStatusMessageTranslations()
@@ -309,6 +313,7 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(FramingSawScreen.TOOLTIP_MATERIAL, "Material value: %s");
         add(FramingSawScreen.TOOLTIP_LOOSE_ADDITIVE, "Item was crafted with additive ingredients, these will be lost");
         add(FramingSawScreen.TOOLTIP_HAVE_X_BUT_NEED_Y_ITEM, "Have %s, but need %s");
+        add(FramingSawScreen.TOOLTIP_HAVE_X_BUT_NEED_Y_ITEM_MULTI, "Have %s, but need %s or listed alternatives");
         add(FramingSawScreen.TOOLTIP_HAVE_X_BUT_NEED_Y_TAG, "Have %s, but need any %s");
         add(FramingSawScreen.TOOLTIP_HAVE_X_BUT_NEED_Y_ITEM_COUNT, "Have %s item(s), but need at least %s item(s)");
         add(FramingSawScreen.TOOLTIP_HAVE_X_BUT_NEED_Y_MATERIAL_COUNT, "Have %s material, but need at least %s material");

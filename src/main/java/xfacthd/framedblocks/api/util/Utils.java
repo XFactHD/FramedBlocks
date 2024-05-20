@@ -29,6 +29,7 @@ import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.material.*;
 import net.minecraft.world.phys.*;
+import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.ToolAction;
 import net.neoforged.neoforge.registries.DeferredItem;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -207,6 +208,12 @@ public final class Utils
             components[v.ordinal()] = Component.translatable(key, valueTranslations[v.ordinal()]);
         }
         return components;
+    }
+
+    public static MutableComponent translateTag(TagKey<?> tag)
+    {
+        String key = Tags.getTagTranslationKey(tag);
+        return Component.translatableWithFallback(key, "#" + tag.location());
     }
 
     public static boolean isPositive(Direction dir)
