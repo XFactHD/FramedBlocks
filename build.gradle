@@ -183,7 +183,7 @@ dependencies {
     compileOnly("dev.emi:emi-neoforge:${emi_version}+${emi_mc_version}:api")
     runtimeOnly("dev.emi:emi-neoforge:${emi_version}+${emi_mc_version}")
 
-    compileOnly("curse.maven:modernfix-790626:5077296")
+    compileOnly("curse.maven:modernfix-790626:5323752")
     //runtimeOnly("org.embeddedt:embeddium-${embeddium_mc_version}:${embeddium_version}")
     //runtimeOnly("curse.maven:oculus-581495:4578741")
     //runtimeOnly("curse.maven:starlight-neoforge-951766:4967623")
@@ -210,7 +210,7 @@ dependencies {
 
     compileOnly("curse.maven:jade-324717:5109393")
 
-    compileOnly("curse.maven:atlasviewer-633577:5024183")
+    implementation("curse.maven:atlasviewer-633577:5354463")
 }
 
 tasks.withType(ProcessResources).configureEach {
