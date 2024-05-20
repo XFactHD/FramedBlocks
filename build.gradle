@@ -171,7 +171,8 @@ dependencies {
     //runtimeOnly("mezz.jei:jei-${jei_mc_version}-neoforge:${jei_version}")
 
     // Switch Arch, Cloth and REI-neoforge to impl for runtime testing
-    compileOnly("dev.architectury:architectury-neoforge:${arch_version}")
+    // TODO: remove version hack when Arch versioning is fixed
+    compileOnly("dev.architectury:architectury-neoforge:${arch_version}") { version { strictly("${arch_version}") } }
     compileOnly("me.shedaniel.cloth:cloth-config-neoforge:${cloth_version}")
     compileOnly("me.shedaniel:RoughlyEnoughItems-neoforge:${rei_version}")
     //runtimeOnly("curse.maven:reipc-521393:4723408")
