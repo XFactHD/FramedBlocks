@@ -20,9 +20,9 @@ minecraft.accessTransformers.file project.file('src/main/resources/META-INF/acce
 
 runs {
     configureEach {
-        // systemProperty  'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-        systemProperty  'forge.logging.console.level', 'debug'
-        systemProperty  'forge.enabledGameTestNamespaces', 'framedblocks'
+        // systemProperty  'neoforge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+        systemProperty  'neoforge.logging.console.level', 'debug'
+        systemProperty  'neoforge.enabledGameTestNamespaces', 'framedblocks'
 
         modSources.addAll project.sourceSets.main, project.sourceSets.test
     }
@@ -148,23 +148,18 @@ repositories {
 dependencies {
     implementation("net.neoforged:neoforge:${neoforge_version}")
 
-    //compileOnly("team.chisel.ctm:CTM:${ctm_version}")
-
     // Only needed when DiagonalBlocks is switched to implementation
-    //runtimeOnly("curse.maven:puzzleslib-495476:5233008")
-    //runtimeOnly("curse.maven:forgecfgapi-547434:5051716")
+    //runtimeOnly("curse.maven:puzzleslib-495476:${puzzles_lib_coord}")
+    //runtimeOnly("curse.maven:forgecfgapi-547434:${forge_cfg_api_coord}")
     compileOnly("fuzs.diagonalblocks:diagonalblocks-neoforge:${diag_blocks_version}")
 
-    //compileOnly("curse.maven:buildinggadgets-298187:3829297")
+    //compileOnly("curse.maven:buildinggadgets-298187:${buildinggadgets_coord}")
 
     runtimeOnly("xfacthd.contex:ConnectedTextures:${contex_version}")
 
     compileOnly("earth.terrarium.athena:athena-neoforge-${athena_mc_version}:${athena_version}")
     //runtimeOnly("com.teamresourceful.resourcefullib:resourcefullib-neoforge-${resful_lib_mc_version}:${resful_lib_version}")
     //runtimeOnly("earth.terrarium.chipped:chipped-neoforge-${chipped_mc_version}:${chipped_version}")
-
-    //compileOnly("curse.maven:xycraft_core-653786:4788862")
-    //compileOnly("curse.maven:xycraft_world-653789:4788863")
 
     compileOnly("mezz.jei:jei-${jei_mc_version}-common-api:${jei_version}")
     compileOnly("mezz.jei:jei-${jei_mc_version}-neoforge-api:${jei_version}")
@@ -175,7 +170,7 @@ dependencies {
     compileOnly("dev.architectury:architectury-neoforge:${arch_version}") { version { strictly("${arch_version}") } }
     compileOnly("me.shedaniel.cloth:cloth-config-neoforge:${cloth_version}")
     compileOnly("me.shedaniel:RoughlyEnoughItems-neoforge:${rei_version}")
-    //runtimeOnly("curse.maven:reipc-521393:4723408")
+    //runtimeOnly("curse.maven:reipc-521393:${reipc_coord}")
     compileOnly("me.shedaniel:RoughlyEnoughItems-api-neoforge:${rei_version}")
     compileOnly("me.shedaniel:RoughlyEnoughItems-default-plugin-neoforge:${rei_version}")
     compileOnly("me.shedaniel:REIPluginCompatibilities-forge-annotations:${reipcanno_version}")
@@ -183,34 +178,27 @@ dependencies {
     compileOnly("dev.emi:emi-neoforge:${emi_version}+${emi_mc_version}:api")
     runtimeOnly("dev.emi:emi-neoforge:${emi_version}+${emi_mc_version}")
 
-    compileOnly("curse.maven:modernfix-790626:5323752")
+    compileOnly("curse.maven:modernfix-790626:${modernfix_coord}")
+
     //runtimeOnly("org.embeddedt:embeddium-${embeddium_mc_version}:${embeddium_version}")
-    //runtimeOnly("curse.maven:oculus-581495:4578741")
-    //runtimeOnly("curse.maven:starlight-neoforge-951766:4967623")
 
     //compileOnly("com.simibubi.create:create-${create_mc_version}:${create_version}:slim") { transitive = false }
     //compileOnly("com.jozufozu.flywheel:flywheel-forge-${flywheel_mc_version}:${flywheel_version}")
     // Only needed when Create and/or Flywheel are switched to implementation
     //runtimeOnly("com.tterrag.registrate:Registrate:${registrate_version}")
 
-    //compileOnly("curse.maven:moonlight-499980:4621773")
-    //compileOnly("curse.maven:supplementaries-412082:4622527")
+    //compileOnly("curse.maven:moonlight-499980:${moonlight_coord}")
+    //compileOnly("curse.maven:supplementaries-412082:${supplementaries_coord}")
 
-    //compileOnly("curse.maven:nocubes-309664:3944569")
-
-    //implementation("curse.maven:guidebook-253874:4593765")
-
-    //runtimeOnly("curse.maven:corelib-454372:4976551")
-    //runtimeOnly("curse.maven:fusion-854949:5005142")
-    //runtimeOnly("curse.maven:conglass-383129:5002616")
+    //implementation("curse.maven:guidebook-253874:${guidebook_coord}")
 
     //compileOnly("appeng:appliedenergistics2-neoforge:${ae2_version}:api")
     //runtimeOnly("appeng:appliedenergistics2-neoforge:${ae2_version}")
     compileOnly("curse.maven:ae2-223794:5358106") // TODO: replace with proper maven once beta builds are available
 
-    compileOnly("curse.maven:jade-324717:5109393")
+    compileOnly("curse.maven:jade-324717:${jade_coord}")
 
-    implementation("curse.maven:atlasviewer-633577:5354463")
+    implementation("curse.maven:atlasviewer-633577:${atlasviewer_coord}")
 }
 
 tasks.withType(ProcessResources).configureEach {
@@ -225,20 +213,19 @@ tasks.withType(ProcessResources).configureEach {
             rei_version: rei_version,
             emi_version: emi_version,
             diag_blocks_version: diag_blocks_version,
-            ctm_version: ctm_version,
             buildinggadgets_version: buildinggadgets_version,
-            nocubes_version: nocubes_version,
             atlasviewer_version: atlasviewer_version,
             modernfix_version: modernfix_version,
             supplementaries_version: supplementaries_version,
             athena_version: athena_version,
             contex_version: contex_version,
             create_version: create_version,
+            guidebook_version: guidebook_version,
             ae2_version: ae2_version
     ]
     inputs.properties replaceProperties
 
-    filesMatching(['META-INF/neoforge.mods.toml', 'pack.mcmeta']) {
+    filesMatching(['META-INF/neoforge.mods.toml']) {
         expand replaceProperties + [project: project]
     }
 }

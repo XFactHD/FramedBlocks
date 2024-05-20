@@ -63,18 +63,11 @@ license="LGPL v3"
     side="CLIENT"
 
 [[dependencies.framedblocks]]
-    modId="ctm"
-    type="optional"
-    versionRange="[${ctm_version},)"
-    ordering="AFTER"
-    side="CLIENT"
-
-[[dependencies.framedblocks]]
     modId="create"
     type="optional"
     versionRange="[${create_version},)"
     ordering="AFTER"
-    side="CLIENT"
+    side="BOTH"
 
 [[dependencies.framedblocks]]
     modId="diagonalblocks"
@@ -105,13 +98,6 @@ license="LGPL v3"
     side="CLIENT"
 
 [[dependencies.framedblocks]]
-    modId="nocubes"
-    type="optional"
-    versionRange="[${nocubes_version},)"
-    ordering="NONE"
-    side="CLIENT"
-
-[[dependencies.framedblocks]]
     modId="rei"
     type="optional"
     versionRange="[${rei_version},)"
@@ -122,6 +108,13 @@ license="LGPL v3"
     modId="supplementaries"
     type="optional"
     versionRange="[${supplementaries_version},)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.framedblocks]]
+    modId="guidebook"
+    type="optional"
+    versionRange="[${guidebook_version},)"
     ordering="NONE"
     side="BOTH"
 

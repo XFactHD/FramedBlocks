@@ -17,7 +17,7 @@ import xfacthd.framedblocks.common.net.FramedByteBufCodecs;
 public record ServerboundEncodeFramingSawPatternPayload(int containerId, ResourceLocation recipeId, ItemStack[] inputs) implements CustomPacketPayload
 {
     public static final CustomPacketPayload.Type<ServerboundEncodeFramingSawPatternPayload> TYPE = Utils.payloadType("encode_saw_pattern");
-    public static final StreamCodec<RegistryFriendlyByteBuf, ServerboundEncodeFramingSawPatternPayload> CODEC = StreamCodec.composite(
+    public static final StreamCodec<RegistryFriendlyByteBuf, ServerboundEncodeFramingSawPatternPayload> STREAM_CODEC = StreamCodec.composite(
             ByteBufCodecs.VAR_INT,
             ServerboundEncodeFramingSawPatternPayload::containerId,
             ResourceLocation.STREAM_CODEC,

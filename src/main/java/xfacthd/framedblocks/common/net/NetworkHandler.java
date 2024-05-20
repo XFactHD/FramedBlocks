@@ -35,7 +35,7 @@ public final class NetworkHandler
                 )
                 .playToServer(
                         ServerboundEncodeFramingSawPatternPayload.TYPE,
-                        ServerboundEncodeFramingSawPatternPayload.CODEC,
+                        ServerboundEncodeFramingSawPatternPayload.STREAM_CODEC,
                         ServerboundEncodeFramingSawPatternPayload::handle
                 );
     }

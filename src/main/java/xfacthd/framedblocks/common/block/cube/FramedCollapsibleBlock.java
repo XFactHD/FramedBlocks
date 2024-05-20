@@ -32,6 +32,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class FramedCollapsibleBlock extends FramedBlock
 {
     private static final Map<Integer, VoxelShape> SHAPE_CACHE = new ConcurrentHashMap<>();
+    private static final double MIN_DEPTH = Mth.EPSILON * 2D;
 
     public FramedCollapsibleBlock(BlockType blockType)
     {
@@ -164,9 +165,8 @@ public class FramedCollapsibleBlock extends FramedBlock
                 double y0 = Mth.lerp2(x0, z0, offsets[0], offsets[3], offsets[1], offsets[2]);
                 double y1 = Mth.lerp2(x1, z1, offsets[0], offsets[3], offsets[1], offsets[2]);
 
-                double y = positive ?
-                        Math.max(16D - Math.min(y0, y1), Mth.EPSILON * 2D) :
-                        Math.min(Math.min(y0, y1), 16D - (Mth.EPSILON * 2D));
+                double y = Math.min(y0, y1);
+                y = positive ? Math.max(16D - y, MIN_DEPTH) : Math.min(y, 16D - MIN_DEPTH);
 
                 VoxelShape shape = switch (face)
                 {

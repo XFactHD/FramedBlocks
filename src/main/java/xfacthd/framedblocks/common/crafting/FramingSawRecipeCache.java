@@ -23,6 +23,7 @@ public final class FramingSawRecipeCache
     private static final FramingSawRecipeCache CLIENT_INSTANCE = new FramingSawRecipeCache();
 
     private final List<RecipeHolder<FramingSawRecipe>> recipes = new ArrayList<>();
+    private final List<RecipeHolder<FramingSawRecipe>> recipesView = Collections.unmodifiableList(recipes);
     private final Map<Item, RecipeHolder<FramingSawRecipe>> recipesByResult = new IdentityHashMap<>();
     private final Map<Item, RecipeHolder<FramingSawRecipe>> recipesWithAdditives = new IdentityHashMap<>();
     private final Reference2IntMap<Item> materialValues = new Reference2IntOpenHashMap<>();
@@ -69,7 +70,7 @@ public final class FramingSawRecipeCache
 
     public List<RecipeHolder<FramingSawRecipe>> getRecipes()
     {
-        return Collections.unmodifiableList(recipes);
+        return recipesView;
     }
 
     @Nullable
