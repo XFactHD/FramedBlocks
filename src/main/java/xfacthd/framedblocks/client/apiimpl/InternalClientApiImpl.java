@@ -15,6 +15,7 @@ import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.client.model.FramedBlockModel;
 import xfacthd.framedblocks.client.modelwrapping.*;
 import xfacthd.framedblocks.client.render.block.debug.ConnectionPredicateDebugRenderer;
+import xfacthd.framedblocks.client.render.block.debug.QuadWindingDebugRenderer;
 
 import java.util.*;
 import java.util.regex.Pattern;
@@ -57,6 +58,12 @@ public final class InternalClientApiImpl implements InternalClientAPI
     public BlockDebugRenderer<FramedBlockEntity> getConnectionDebugRenderer()
     {
         return ConnectionPredicateDebugRenderer.INSTANCE;
+    }
+
+    @Override
+    public BlockDebugRenderer<FramedBlockEntity> getQuadWindingDebugRenderer()
+    {
+        return QuadWindingDebugRenderer.INSTANCE;
     }
 
 

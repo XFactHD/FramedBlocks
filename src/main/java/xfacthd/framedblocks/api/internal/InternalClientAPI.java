@@ -23,4 +23,6 @@ public interface InternalClientAPI
     void registerCopyingModelWrapper(Holder<Block> block, Holder<Block> srcBlock, StateMerger stateMerger);
 
     BlockDebugRenderer<FramedBlockEntity> getConnectionDebugRenderer();
+
+    BlockDebugRenderer<FramedBlockEntity> getQuadWindingDebugRenderer();
 }
