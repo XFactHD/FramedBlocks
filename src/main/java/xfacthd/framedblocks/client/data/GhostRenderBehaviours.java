@@ -69,6 +69,14 @@ public final class GhostRenderBehaviours
         ));
         event.registerItem(new BlueprintGhostRenderBehaviour(), FBContent.ITEM_FRAMED_BLUEPRINT);
         event.registerBlock(new FlowerPotGhostRenderBehaviour(), FBContent.BLOCK_FRAMED_FLOWER_POT);
+        event.registerBlocks(AdjustableDoubleBlockGhostRenderBehaviour.standard(), List.of(
+                FBContent.BLOCK_FRAMED_ADJ_DOUBLE_SLAB,
+                FBContent.BLOCK_FRAMED_ADJ_DOUBLE_PANEL
+        ));
+        event.registerBlocks(AdjustableDoubleBlockGhostRenderBehaviour.copycat(), List.of(
+                FBContent.BLOCK_FRAMED_ADJ_DOUBLE_COPYCAT_SLAB,
+                FBContent.BLOCK_FRAMED_ADJ_DOUBLE_COPYCAT_PANEL
+        ));
     }
 
 

@@ -50,12 +50,16 @@ public final class ConnectionPredicates extends BlockTypeMap<ConnectionPredicate
         put(BlockType.FRAMED_ELEVATED_DOUBLE_SLOPE_EDGE, new ElevatedDoubleSlopeEdgeConnectionPredicate());
         put(BlockType.FRAMED_STACKED_SLOPE_EDGE, new StackedSlopeEdgeConnectionPredicate());
         put(BlockType.FRAMED_SLAB, new SlabConnectionPredicate());
-        put(BlockType.FRAMED_DOUBLE_SLAB, new DoubleSlabConnectionPredicate());
+        put(BlockType.FRAMED_DOUBLE_SLAB, DoubleSlabConnectionPredicate.INSTANCE);
+        put(BlockType.FRAMED_ADJ_DOUBLE_SLAB, DoubleSlabConnectionPredicate.INSTANCE);
+        put(BlockType.FRAMED_ADJ_DOUBLE_COPYCAT_SLAB, DoubleSlabConnectionPredicate.INSTANCE);
         put(BlockType.FRAMED_DIVIDED_SLAB, new DividedSlabConnectionPredicate());
         put(BlockType.FRAMED_SLAB_EDGE, new SlabEdgeConnectionPredicate());
         put(BlockType.FRAMED_SLAB_CORNER, new SlabCornerConnectionPredicate());
         put(BlockType.FRAMED_PANEL, new PanelConnectionPredicate());
-        put(BlockType.FRAMED_DOUBLE_PANEL, new DoublePanelConnectionPredicate());
+        put(BlockType.FRAMED_DOUBLE_PANEL, DoublePanelConnectionPredicate.INSTANCE);
+        put(BlockType.FRAMED_ADJ_DOUBLE_PANEL, DoublePanelConnectionPredicate.INSTANCE);
+        put(BlockType.FRAMED_ADJ_DOUBLE_COPYCAT_PANEL, DoublePanelConnectionPredicate.INSTANCE);
         put(BlockType.FRAMED_DIVIDED_PANEL_HORIZONTAL, new DividedPanelHorizontalConnectionPredicate());
         put(BlockType.FRAMED_DIVIDED_PANEL_VERTICAL, new DividedPanelVerticalConnectionPredicate());
         put(BlockType.FRAMED_CORNER_PILLAR, new CornerPillarConnectionPredicate());

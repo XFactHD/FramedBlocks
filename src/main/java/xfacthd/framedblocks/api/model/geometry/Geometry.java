@@ -88,6 +88,15 @@ public abstract class Geometry
     }
 
     /**
+     * {@return the {@link BakedModel} to use as the base model when no camo is applied}
+     * @apiNote Only called if {@link #useBaseModel()} returns {@code true}
+     */
+    public BakedModel getBaseModel(BakedModel baseModel, boolean useAltModel)
+    {
+        return baseModel;
+    }
+
+    /**
      * Return true if all quads should be submitted for transformation, even if their cull-face would be filtered
      * by the {@link FullFacePredicate}
      */

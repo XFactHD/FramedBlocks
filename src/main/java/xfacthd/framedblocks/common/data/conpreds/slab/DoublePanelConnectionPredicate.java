@@ -8,6 +8,10 @@ import xfacthd.framedblocks.api.predicate.contex.NonDetailedConnectionPredicate;
 
 public final class DoublePanelConnectionPredicate extends NonDetailedConnectionPredicate
 {
+    public static final DoublePanelConnectionPredicate INSTANCE = new DoublePanelConnectionPredicate();
+
+    private DoublePanelConnectionPredicate() { }
+
     @Override
     public boolean canConnectFullEdge(BlockState state, Direction side, @Nullable Direction edge)
     {

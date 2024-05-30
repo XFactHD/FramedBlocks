@@ -1,7 +1,9 @@
 package xfacthd.framedblocks.client.model.cube;
 
 import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.client.model.data.ModelData;
 import xfacthd.framedblocks.api.camo.CamoContent;
 import xfacthd.framedblocks.api.model.cache.QuadCacheKey;
@@ -16,15 +18,18 @@ import xfacthd.framedblocks.common.data.PropertyHolder;
 
 public class FramedCollapsibleBlockGeometry extends Geometry
 {
+    public static final ResourceLocation ALT_BASE_MODEL_LOC = Utils.rl("block/framed_collapsible_block_alt");
     private static final float MIN_DEPTH = .001F;
 
     private final Direction collapsedFace;
     private final boolean rotSplitLine;
+    private final BakedModel altBaseModel;
 
     public FramedCollapsibleBlockGeometry(GeometryFactory.Context ctx)
     {
         this.collapsedFace = ctx.state().getValue(PropertyHolder.NULLABLE_FACE).toDirection();
         this.rotSplitLine = ctx.state().getValue(PropertyHolder.ROTATE_SPLIT_LINE);
+        this.altBaseModel = ctx.modelLookup().get(ALT_BASE_MODEL_LOC);
     }
 
     @Override
@@ -141,6 +146,12 @@ public class FramedCollapsibleBlockGeometry extends Geometry
     public boolean useBaseModel()
     {
         return true;
+    }
+
+    @Override
+    public BakedModel getBaseModel(BakedModel baseModel, boolean useAltModel)
+    {
+        return useAltModel ? altBaseModel : baseModel;
     }
 
     @Override

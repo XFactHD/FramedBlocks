@@ -49,11 +49,15 @@ public final class FullFacePredicates extends BlockTypeMap<FullFacePredicate>
         put(BlockType.FRAMED_STACKED_SLOPE_EDGE, ElevatedSlopeEdgeFullFacePredicate.INSTANCE);
         put(BlockType.FRAMED_SLAB, FullFacePredicate.TOP);
         put(BlockType.FRAMED_DOUBLE_SLAB, FullFacePredicate.Y_AXIS);
+        put(BlockType.FRAMED_ADJ_DOUBLE_SLAB, FullFacePredicate.Y_AXIS);
+        put(BlockType.FRAMED_ADJ_DOUBLE_COPYCAT_SLAB, FullFacePredicate.Y_AXIS);
         put(BlockType.FRAMED_DIVIDED_SLAB, FullFacePredicate.FALSE);
         put(BlockType.FRAMED_SLAB_EDGE, FullFacePredicate.FALSE);
         put(BlockType.FRAMED_SLAB_CORNER, FullFacePredicate.FALSE);
         put(BlockType.FRAMED_PANEL, FullFacePredicate.HOR_DIR);
         put(BlockType.FRAMED_DOUBLE_PANEL, new DoublePanelFullFacePredicate());
+        put(BlockType.FRAMED_ADJ_DOUBLE_PANEL, FullFacePredicate.HOR_DIR_AXIS);
+        put(BlockType.FRAMED_ADJ_DOUBLE_COPYCAT_PANEL, FullFacePredicate.HOR_DIR_AXIS);
         put(BlockType.FRAMED_DIVIDED_PANEL_HORIZONTAL, FullFacePredicate.FALSE);
         put(BlockType.FRAMED_DIVIDED_PANEL_VERTICAL, FullFacePredicate.FALSE);
         put(BlockType.FRAMED_CORNER_PILLAR, FullFacePredicate.FALSE);

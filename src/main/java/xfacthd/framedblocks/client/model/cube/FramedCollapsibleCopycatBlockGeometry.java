@@ -1,7 +1,9 @@
 package xfacthd.framedblocks.client.model.cube;
 
 import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.client.model.data.ModelData;
 import xfacthd.framedblocks.api.camo.CamoContent;
 import xfacthd.framedblocks.api.model.cache.QuadCacheKey;
@@ -19,6 +21,7 @@ import java.util.List;
 
 public class FramedCollapsibleCopycatBlockGeometry extends Geometry
 {
+    public static final ResourceLocation ALT_BASE_MODEL_LOC = Utils.rl("block/framed_collapsible_copycat_block_alt");
     private static final int UP = Direction.UP.ordinal();
     private static final int DOWN = Direction.DOWN.ordinal();
     private static final int NORTH = Direction.NORTH.ordinal();
@@ -27,10 +30,12 @@ public class FramedCollapsibleCopycatBlockGeometry extends Geometry
     private static final int WEST = Direction.WEST.ordinal();
 
     private final int solidFaces;
+    private final BakedModel altBaseModel;
 
     public FramedCollapsibleCopycatBlockGeometry(GeometryFactory.Context ctx)
     {
         this.solidFaces = ctx.state().getValue(PropertyHolder.SOLID_FACES);
+        this.altBaseModel = ctx.modelLookup().get(ALT_BASE_MODEL_LOC);
     }
 
     @Override
@@ -179,6 +184,12 @@ public class FramedCollapsibleCopycatBlockGeometry extends Geometry
     public boolean useBaseModel()
     {
         return true;
+    }
+
+    @Override
+    public BakedModel getBaseModel(BakedModel baseModel, boolean useAltModel)
+    {
+        return useAltModel ? altBaseModel : baseModel;
     }
 
     @Override

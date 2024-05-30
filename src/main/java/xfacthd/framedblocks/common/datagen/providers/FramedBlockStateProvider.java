@@ -25,12 +25,14 @@ import java.util.function.Function;
 public final class FramedBlockStateProvider extends BlockStateProvider
 {
     private final ResourceLocation TEXTURE;
+    private final ResourceLocation TEXTURE_ALT;
     private final ResourceLocation TEXTURE_UNDERLAY;
 
     public FramedBlockStateProvider(PackOutput output, ExistingFileHelper fileHelper)
     {
         super(output, FramedConstants.MOD_ID, fileHelper);
         TEXTURE = modLoc("block/framed_block");
+        TEXTURE_ALT = modLoc("block/framed_block_alt");
         TEXTURE_UNDERLAY = mcLoc("block/stripped_dark_oak_log");
     }
 
@@ -64,11 +66,15 @@ public final class FramedBlockStateProvider extends BlockStateProvider
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_ELEVATED_DOUBLE_SLOPE_EDGE, cube, "cutout");
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_STACKED_SLOPE_EDGE, cube, "cutout");
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_DOUBLE_SLAB, cube, "cutout");
+        simpleBlock(FBContent.BLOCK_FRAMED_ADJ_DOUBLE_SLAB.value(), cube);
+        simpleBlock(FBContent.BLOCK_FRAMED_ADJ_DOUBLE_COPYCAT_SLAB.value(), cube);
         simpleBlock(FBContent.BLOCK_FRAMED_DIVIDED_SLAB.value(), cube);
         simpleBlock(FBContent.BLOCK_FRAMED_SLAB_EDGE.value(), cube);
         simpleBlock(FBContent.BLOCK_FRAMED_SLAB_CORNER.value(), cube);
         simpleBlock(FBContent.BLOCK_FRAMED_PANEL.value(), cube);
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_DOUBLE_PANEL, cube, "cutout");
+        simpleBlock(FBContent.BLOCK_FRAMED_ADJ_DOUBLE_PANEL.value(), cube);
+        simpleBlock(FBContent.BLOCK_FRAMED_ADJ_DOUBLE_COPYCAT_PANEL.value(), cube);
         simpleBlock(FBContent.BLOCK_FRAMED_DIVIDED_PANEL_HOR.value(), cube);
         simpleBlock(FBContent.BLOCK_FRAMED_DIVIDED_PANEL_VERT.value(), cube);
         simpleBlock(FBContent.BLOCK_FRAMED_CORNER_PILLAR.value(), cube);
@@ -621,12 +627,14 @@ public final class FramedBlockStateProvider extends BlockStateProvider
     private void registerFramedCollapsibleBlock()
     {
         ModelFile block = makeUnderlayedCube("framed_collapsible_block", mcLoc("block/oak_planks")).renderType("cutout");
+        makeUnderlayedCube("framed_collapsible_block_alt", TEXTURE_ALT, mcLoc("block/spruce_planks")).renderType("cutout");
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_COLLAPSIBLE_BLOCK, block, "cutout");
     }
 
     private void registerFramedCollapsibleCopycatBlock()
     {
         ModelFile block = makeUnderlayedCube("framed_collapsible_copycat_block", mcLoc("block/copper_block")).renderType("cutout");
+        makeUnderlayedCube("framed_collapsible_copycat_block_alt", TEXTURE_ALT, mcLoc("block/copper_block")).renderType("cutout");
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_COLLAPSIBLE_COPYCAT_BLOCK, block, "cutout");
     }
 
@@ -1071,6 +1079,11 @@ public final class FramedBlockStateProvider extends BlockStateProvider
 
     private BlockModelBuilder makeUnderlayedCube(String name, ResourceLocation underlayTex)
     {
+        return makeUnderlayedCube(name, TEXTURE, underlayTex);
+    }
+
+    private BlockModelBuilder makeUnderlayedCube(String name, ResourceLocation frameTex, ResourceLocation underlayTex)
+    {
         return models().withExistingParent(name, "block/block")
                 .element()
                     .cube("#underlay")
@@ -1078,9 +1091,9 @@ public final class FramedBlockStateProvider extends BlockStateProvider
                 .element()
                     .cube("#frame")
                     .end()
-                .texture("frame", TEXTURE)
+                .texture("frame", frameTex)
                 .texture("underlay", underlayTex)
-                .texture("particle", TEXTURE)
+                .texture("particle", frameTex)
                 .renderType("cutout");
     }
 

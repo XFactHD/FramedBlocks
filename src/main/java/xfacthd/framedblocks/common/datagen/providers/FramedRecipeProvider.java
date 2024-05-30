@@ -173,6 +173,18 @@ public final class FramedRecipeProvider extends RecipeProvider
                 .unlockedBy(FBContent.BLOCK_FRAMED_CUBE)
                 .save(consumer);
 
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_ADJ_DOUBLE_SLAB.value(), 2)
+                .pattern("FF")
+                .define('F', FBContent.BLOCK_FRAMED_COLLAPSIBLE_BLOCK.value())
+                .unlockedBy(FBContent.BLOCK_FRAMED_COLLAPSIBLE_BLOCK)
+                .save(consumer);
+
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_ADJ_DOUBLE_COPYCAT_SLAB.value(), 2)
+                .pattern("FF")
+                .define('F', FBContent.BLOCK_FRAMED_COLLAPSIBLE_COPYCAT_BLOCK.value())
+                .unlockedBy(FBContent.BLOCK_FRAMED_COLLAPSIBLE_COPYCAT_BLOCK)
+                .save(consumer);
+
         shapedBuildingBlock(FBContent.BLOCK_FRAMED_DIVIDED_SLAB.value())
                 .pattern("EE")
                 .define('E', FBContent.BLOCK_FRAMED_SLAB_EDGE.value())
@@ -198,6 +210,20 @@ public final class FramedRecipeProvider extends RecipeProvider
                 .pattern("F")
                 .define('F', FBContent.BLOCK_FRAMED_CUBE.value())
                 .unlockedBy(FBContent.BLOCK_FRAMED_CUBE)
+                .save(consumer);
+
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_ADJ_DOUBLE_PANEL.value(), 2)
+                .pattern("F")
+                .pattern("F")
+                .define('F', FBContent.BLOCK_FRAMED_COLLAPSIBLE_BLOCK.value())
+                .unlockedBy(FBContent.BLOCK_FRAMED_COLLAPSIBLE_BLOCK)
+                .save(consumer);
+
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_ADJ_DOUBLE_COPYCAT_PANEL.value(), 2)
+                .pattern("F")
+                .pattern("F")
+                .define('F', FBContent.BLOCK_FRAMED_COLLAPSIBLE_COPYCAT_BLOCK.value())
+                .unlockedBy(FBContent.BLOCK_FRAMED_COLLAPSIBLE_COPYCAT_BLOCK)
                 .save(consumer);
 
         shapedBuildingBlock(FBContent.BLOCK_FRAMED_DIVIDED_PANEL_HOR.value())

@@ -200,14 +200,14 @@ public final class FramedBlockModel extends BakedModelProxy
             camoContent = getNoCamoModelSourceContent(fbData);
             reinforce = useBaseModel && fbData.isReinforced() && renderType == RenderType.cutout() && side != null;
             noProcessing |= forceUngeneratedBaseModel && (nullLayer || BASE_MODEL_RENDER_TYPES.contains(renderType));
-            camoModel = getCamoModel(camoContent, useBaseModel);
+            camoModel = getCamoModel(camoContent, useBaseModel, fbData.useAltModel());
             camoData = ModelData.EMPTY;
             renderTypes = getCachedRenderTypes(EmptyCamoContent.EMPTY, camoContent, rand, extraData);
         }
         else
         {
             needCtCtx = type.supportsConnectedTextures() && needCtContext(noProcessing, type.getMinimumConTexMode());
-            camoModel = getCamoModel(camoContent, false);
+            camoModel = getCamoModel(camoContent, false, false);
             camoData = needCtCtx ? ModelUtils.getCamoModelData(extraData) : ModelData.EMPTY;
             renderTypes = getCachedRenderTypes(camoContent, camoContent, rand, extraData);
             reinforce = false;
@@ -352,17 +352,19 @@ public final class FramedBlockModel extends BakedModelProxy
      *
      * @param camoContent The {@link CamoContent} used as camo
      * @param useBaseModel If true, the {@link BakedModelProxy#baseModel} is requested instead of the model of the given state
+     * @param useAltModel Whether an alternative base model for the second component of a double model should be used
+     *                    (only has an effect if {@code useBaseModel} is true)
      *
      * @apiNote Most models shouldn't need to override this. If the model loaded from JSON should be used when no camo
      * is applied, return true from {@link Geometry#useBaseModel()}. If the model loaded from JSON should be
      * used without applying any quad modifications when no camo is applied, return true from
      * {@link Geometry#forceUngeneratedBaseModel()} as well
      */
-    private BakedModel getCamoModel(CamoContent<?> camoContent, boolean useBaseModel)
+    private BakedModel getCamoModel(CamoContent<?> camoContent, boolean useBaseModel, boolean useAltModel)
     {
         if (useBaseModel)
         {
-            return baseModel;
+            return geometry.getBaseModel(baseModel, useAltModel);
         }
         return CamoContainerHelper.Client.getOrCreateModel(camoContent);
     }
@@ -417,7 +419,7 @@ public final class FramedBlockModel extends BakedModelProxy
             CamoContent<?> camoState = fbdata.getCamoContent();
             if (!camoState.isEmpty())
             {
-                return getCamoModel(camoState, false).getParticleIcon();
+                return getCamoModel(camoState, false, false).getParticleIcon();
             }
         }
         return baseModel.getParticleIcon();

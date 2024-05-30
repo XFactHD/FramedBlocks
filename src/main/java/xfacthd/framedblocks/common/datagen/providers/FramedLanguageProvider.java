@@ -74,11 +74,15 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(FBContent.BLOCK_FRAMED_STACKED_SLOPE_EDGE.value(), "Framed Stacked Slope Edge");
         add(FBContent.BLOCK_FRAMED_SLAB.value(), "Framed Slab");
         add(FBContent.BLOCK_FRAMED_DOUBLE_SLAB.value(), "Framed Double Slab");
+        add(FBContent.BLOCK_FRAMED_ADJ_DOUBLE_SLAB.value(), "Framed Adjustable Double Slab");
+        add(FBContent.BLOCK_FRAMED_ADJ_DOUBLE_COPYCAT_SLAB.value(), "Framed Adjustable Double Copycat Slab");
         add(FBContent.BLOCK_FRAMED_DIVIDED_SLAB.value(), "Framed Divided Slab");
         add(FBContent.BLOCK_FRAMED_SLAB_EDGE.value(), "Framed Slab Edge");
         add(FBContent.BLOCK_FRAMED_SLAB_CORNER.value(), "Framed Slab Corner");
         add(FBContent.BLOCK_FRAMED_PANEL.value(), "Framed Panel");
         add(FBContent.BLOCK_FRAMED_DOUBLE_PANEL.value(), "Framed Double Panel");
+        add(FBContent.BLOCK_FRAMED_ADJ_DOUBLE_PANEL.value(), "Framed Adjustable Double Panel");
+        add(FBContent.BLOCK_FRAMED_ADJ_DOUBLE_COPYCAT_PANEL.value(), "Framed Adjustable Double Copycat Panel");
         add(FBContent.BLOCK_FRAMED_DIVIDED_PANEL_HOR.value(), "Framed Divided Panel (Horizontal)");
         add(FBContent.BLOCK_FRAMED_DIVIDED_PANEL_VERT.value(), "Framed Divided Panel (Vertical)");
         add(FBContent.BLOCK_FRAMED_CORNER_PILLAR.value(), "Framed Corner Pillar");
