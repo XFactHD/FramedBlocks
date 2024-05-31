@@ -152,7 +152,7 @@ public class FramedSignScreen extends Screen
     {
         super.render(graphics, mouseX, mouseY, partialTicks);
 
-        Lighting.setupForEntityInInventory();
+        Lighting.setupLevel();
 
         //noinspection ConstantConditions
         graphics.drawCenteredString(font, title, width / 2, 40, ChatFormatting.WHITE.getColor());

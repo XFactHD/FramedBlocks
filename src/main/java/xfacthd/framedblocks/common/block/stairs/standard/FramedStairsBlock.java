@@ -170,6 +170,12 @@ public class FramedStairsBlock extends StairBlock implements IFramedBlock
     }
 
     @Override
+    public Class<? extends Block> getJadeTargetClass()
+    {
+        return FramedStairsBlock.class;
+    }
+
+    @Override
     public BlockState getJadeRenderState(BlockState state)
     {
         return defaultBlockState().setValue(FACING, Direction.SOUTH);

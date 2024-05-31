@@ -703,4 +703,12 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension
     {
         return 1F;
     }
+
+    /**
+     * {@return whether this block should use the GUI transform from the model or fall back to a default transform}
+     */
+    default boolean shouldApplyGuiTransformFromModel()
+    {
+        return true;
+    }
 }

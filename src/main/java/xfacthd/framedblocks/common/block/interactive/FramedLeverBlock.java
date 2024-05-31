@@ -117,4 +117,10 @@ public class FramedLeverBlock extends LeverBlock implements IFramedBlock
     {
         return 1.6F;
     }
+
+    @Override
+    public boolean shouldApplyGuiTransformFromModel()
+    {
+        return false;
+    }
 }

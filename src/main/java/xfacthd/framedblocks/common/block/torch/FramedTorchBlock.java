@@ -120,6 +120,12 @@ public class FramedTorchBlock extends TorchBlock implements IFramedBlock
     }
 
     @Override
+    public Class<? extends Block> getJadeTargetClass()
+    {
+        return FramedTorchBlock.class;
+    }
+
+    @Override
     public BlockState getJadeRenderState(BlockState state)
     {
         return defaultBlockState();

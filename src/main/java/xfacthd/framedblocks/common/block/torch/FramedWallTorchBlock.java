@@ -108,6 +108,12 @@ public class FramedWallTorchBlock extends WallTorchBlock implements IFramedBlock
     }
 
     @Override
+    public Class<? extends Block> getJadeTargetClass()
+    {
+        return FramedWallTorchBlock.class;
+    }
+
+    @Override
     public BlockState getJadeRenderState(BlockState state)
     {
         return ((IFramedBlock) FBContent.BLOCK_FRAMED_TORCH.value()).getJadeRenderState(state);
