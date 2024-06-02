@@ -56,7 +56,7 @@ public final class Utils
     /** Allow other mods to whitelist their BEs, circumventing the config setting */
     public static final TagKey<Block> BE_WHITELIST = blockTag("blockentity_whitelisted");
     public static final TagKey<Block> CAMO_SUSTAIN_PLANT = blockTag("camo_sustain_plant");
-    public static final TagKey<Item> TOOL_WRENCH = itemTag("c", "tools/wrench");
+    public static final TagKey<Item> TOOL_WRENCH = itemTag("c", "tools/wrenches");
     public static final ToolAction ACTION_WRENCH = ToolAction.get("wrench");
     /** Allow other mods to add items that temporarily disable intangibility to allow interaction with the targeted block */
     public static final TagKey<Item> DISABLE_INTANGIBLE = itemTag("disable_intangible");
