@@ -44,12 +44,9 @@ public final class ModelWrappingManager
                 models.put(location, replacement);
             }
 
-            if (handler.handlesItemModel())
-            {
-                ModelResourceLocation itemId = new ModelResourceLocation(blockId, "inventory");
-                BakedModel itemModel = handler.replaceItemModel(accessor, textureLookup, counter);
-                models.put(itemId, itemModel);
-            }
+            ModelResourceLocation itemId = new ModelResourceLocation(blockId, "inventory");
+            BakedModel itemModel = handler.replaceItemModel(models.get(itemId), accessor, textureLookup, counter);
+            models.put(itemId, itemModel);
         }
 
         stopwatch.stop();
@@ -79,9 +76,9 @@ public final class ModelWrappingManager
                 BlockState state = StateLocationCache.getStateFromLocation(blockId.location(), block, modelId);
                 return handler.wrapBlockModel(model, state, modelLookup, textureLookup, null);
             }
-            else if (handler.handlesItemModel())
+            else
             {
-                return handler.replaceItemModel(modelLookup, textureLookup, null);
+                return handler.replaceItemModel(model, modelLookup, textureLookup, null);
             }
         }
         return model;

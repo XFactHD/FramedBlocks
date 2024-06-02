@@ -10,6 +10,7 @@ import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.model.wrapping.*;
 import xfacthd.framedblocks.api.model.wrapping.statemerger.StateMerger;
 import xfacthd.framedblocks.api.util.Utils;
+import xfacthd.framedblocks.client.model.FramedBlockItemModel;
 
 import java.util.*;
 
@@ -44,14 +45,11 @@ public final class ModelWrappingHandler
         );
     }
 
-    public synchronized BakedModel replaceItemModel(ModelLookup modelLookup, TextureLookup textureLookup, @Nullable ModelCounter counter)
+    public synchronized BakedModel replaceItemModel(BakedModel originalModel, ModelLookup modelLookup, TextureLookup textureLookup, @Nullable ModelCounter counter)
     {
         if (itemModelSource == null)
         {
-            ResourceLocation key = Utils.getKeyOrThrow(block).location();
-            throw new IllegalStateException(
-                    "ModelWrappingHandler for block '" + key + "' does not support item model wrapping"
-            );
+            return new FramedBlockItemModel(originalModel);
         }
 
         BakedModel model = visitedStates.get(itemModelSource);
@@ -64,7 +62,7 @@ public final class ModelWrappingHandler
         {
             counter.incrementItem();
         }
-        return model;
+        return new FramedBlockItemModel(model);
     }
 
     private void updateItemModelSource()
