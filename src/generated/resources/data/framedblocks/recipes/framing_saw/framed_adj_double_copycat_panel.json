@@ -1,0 +1,15 @@
+{
+  "type": "framedblocks:frame",
+  "additives": [
+    {
+      "count": 1,
+      "ingredient": {
+        "tag": "forge:ingots/copper"
+      }
+    }
+  ],
+  "material": 6144,
+  "result": {
+    "item": "framedblocks:framed_adj_double_copycat_panel"
+  }
+}

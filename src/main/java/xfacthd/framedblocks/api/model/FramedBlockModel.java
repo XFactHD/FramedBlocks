@@ -204,25 +204,28 @@ public abstract class FramedBlockModel extends BakedModelProxy
         boolean needCtCtx;
         boolean camoInRenderType;
         boolean addReinforcement;
+        boolean altModel;
 
         if (noCamo)
         {
             needCtCtx = false;
             camoState = getNoCamoModelState(FramedBlocksAPI.getInstance().defaultModelState(), fbData);
             addReinforcement = useBaseModel && fbData.isReinforced();
+            altModel = useBaseModel && fbData.useAltModel();
             camoInRenderType = BASE_MODEL_RENDER_TYPES.contains(renderType);
             noProcessing = (camoInRenderType && forceUngeneratedBaseModel) || stateCache.isFullFace(side);
-            model = getCamoModel(camoState, useBaseModel);
+            model = getCamoModel(camoState, useBaseModel, altModel);
             camoData = ModelData.EMPTY;
         }
         else
         {
             noProcessing = stateCache.isFullFace(side);
             needCtCtx = type.supportsConnectedTextures() && needCtContext(noProcessing, type.getMinimumConTexMode());
-            model = getCamoModel(camoState, false);
+            model = getCamoModel(camoState, false, false);
             camoData = needCtCtx ? ModelUtils.getCamoModelData(extraData) : ModelData.EMPTY;
             camoInRenderType = getCachedRenderTypes(camoState, camoState, rand, camoData).camoTypes.contains(renderType);
             addReinforcement = false;
+            altModel = false;
         }
 
         if (noProcessing)
@@ -258,12 +261,12 @@ public abstract class FramedBlockModel extends BakedModelProxy
             Object ctCtx = needCtCtx ? FramedBlocksClientAPI.getInstance().extractCTContext(camoData) : null;
             if (DISABLE_QUAD_CACHE)
             {
-                return buildQuadCache(state, camoState, rand, extraData, ctCtx != null ? camoData : ModelData.EMPTY, noCamo, addReinforcement)
+                return buildQuadCache(state, camoState, rand, extraData, ctCtx != null ? camoData : ModelData.EMPTY, noCamo, addReinforcement, altModel)
                         .getQuads(renderType, side);
             }
             return quadCache.get(
                     makeCacheKey(camoState, ctCtx, extraData),
-                    key -> buildQuadCache(state, key.state(), rand, extraData, ctCtx != null ? camoData : ModelData.EMPTY, noCamo, addReinforcement)
+                    key -> buildQuadCache(state, key.state(), rand, extraData, ctCtx != null ? camoData : ModelData.EMPTY, noCamo, addReinforcement, altModel)
             ).getQuads(renderType, side);
         }
     }
@@ -288,7 +291,8 @@ public abstract class FramedBlockModel extends BakedModelProxy
             ModelData data,
             ModelData camoData,
             boolean noCamo,
-            boolean addReinforcement
+            boolean addReinforcement,
+            boolean altModel
     )
     {
         QuadTable quadTable = new QuadTable();
@@ -306,7 +310,7 @@ public abstract class FramedBlockModel extends BakedModelProxy
             modelLayers = ChunkRenderTypeSet.union(modelLayers, camoLayers);
         }
 
-        BakedModel camoModel = getCamoModel(camoState, noCamo && useBaseModel);
+        BakedModel camoModel = getCamoModel(camoState, noCamo && useBaseModel, altModel);
 
         for (RenderType renderType : modelLayers)
         {
@@ -475,6 +479,23 @@ public abstract class FramedBlockModel extends BakedModelProxy
      *
      * @param camoState The {@link BlockState} used as camo
      * @param useBaseModel If true, the {@link BakedModelProxy#baseModel} is requested instead of the model of the given state
+     * @param useAltModel If true, an alternate base model is requested such as for use as the second component of a double block
+     *
+     * @apiNote Most models shouldn't need to override this. If the model loaded from JSON should be used when no camo
+     * is applied, return true from {@link FramedBlockModel#useBaseModel()}. If the model loaded from JSON should be
+     * used without applying any quad modifications when no camo is applied, return true from
+     * {@link FramedBlockModel#forceUngeneratedBaseModel()} as well
+     */
+    protected BakedModel getCamoModel(BlockState camoState, boolean useBaseModel, boolean useAltModel)
+    {
+        return getCamoModel(camoState, useBaseModel);
+    }
+
+    /**
+     * Return the {@link BakedModel} to use as the camo model for the given camoState
+     *
+     * @param camoState The {@link BlockState} used as camo
+     * @param useBaseModel If true, the {@link BakedModelProxy#baseModel} is requested instead of the model of the given state
      *
      * @apiNote Most models shouldn't need to override this. If the model loaded from JSON should be used when no camo
      * is applied, return true from {@link FramedBlockModel#useBaseModel()}. If the model loaded from JSON should be
@@ -615,7 +636,7 @@ public abstract class FramedBlockModel extends BakedModelProxy
             BlockState camoState = fbdata.getCamoState();
             if (!camoState.isAir())
             {
-                return getCamoModel(camoState, false).getParticleIcon();
+                return getCamoModel(camoState, false, fbdata.useAltModel()).getParticleIcon();
             }
         }
         return baseModel.getParticleIcon();

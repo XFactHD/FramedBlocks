@@ -3,6 +3,7 @@ package xfacthd.framedblocks.client.model.cube;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.model.data.ModelData;
 import xfacthd.framedblocks.api.model.FramedBlockModel;
@@ -17,7 +18,9 @@ import java.util.Map;
 
 public class FramedCollapsibleBlockModel extends FramedBlockModel
 {
+    public static final ResourceLocation ALT_BASE_MODEL_LOC = Utils.rl("block/framed_collapsible_block_alt");
     private static final float MIN_DEPTH = .001F;
+    private static BakedModel altBaseModel = null;
 
     private final Direction collapsedFace;
     private final boolean rotSplitLine;
@@ -146,6 +149,16 @@ public class FramedCollapsibleBlockModel extends FramedBlockModel
     }
 
     @Override
+    protected BakedModel getCamoModel(BlockState camoState, boolean useBaseModel, boolean useAltModel)
+    {
+        if (useBaseModel && useAltModel)
+        {
+            return altBaseModel;
+        }
+        return super.getCamoModel(camoState, useBaseModel, useAltModel);
+    }
+
+    @Override
     protected QuadCacheKey makeCacheKey(BlockState state, Object ctCtx, ModelData data)
     {
         Integer packedOffsets = data.get(FramedCollapsibleBlockEntity.OFFSETS);
@@ -166,4 +179,11 @@ public class FramedCollapsibleBlockModel extends FramedBlockModel
     }
 
     private record CollapsibleBlockQuadCacheKey(BlockState state, Object ctCtx, Integer packedOffsets) implements QuadCacheKey { }
+
+
+
+    public static void captureAltBaseModel(Map<ResourceLocation, BakedModel> models)
+    {
+        altBaseModel = models.get(ALT_BASE_MODEL_LOC);
+    }
 }

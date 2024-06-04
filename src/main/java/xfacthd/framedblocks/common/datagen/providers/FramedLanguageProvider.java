@@ -96,7 +96,11 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(FBContent.BLOCK_FRAMED_HANGING_SIGN.get(), "Framed Hanging Sign");
         add(FBContent.BLOCK_FRAMED_WALL_HANGING_SIGN.get(), "Framed Hanging Sign");
         add(FBContent.BLOCK_FRAMED_DOUBLE_SLAB.get(), "Framed Double Slab");
+        add(FBContent.BLOCK_FRAMED_ADJ_DOUBLE_SLAB.get(), "Framed Adjustable Double Slab");
+        add(FBContent.BLOCK_FRAMED_ADJ_DOUBLE_COPYCAT_SLAB.get(), "Framed Adjustable Double Copycat Slab");
         add(FBContent.BLOCK_FRAMED_DOUBLE_PANEL.get(), "Framed Double Panel");
+        add(FBContent.BLOCK_FRAMED_ADJ_DOUBLE_PANEL.get(), "Framed Adjustable Double Panel");
+        add(FBContent.BLOCK_FRAMED_ADJ_DOUBLE_COPYCAT_PANEL.get(), "Framed Adjustable Double Copycat Panel");
         add(FBContent.BLOCK_FRAMED_DOUBLE_SLOPE.get(), "Framed Double Slope");
         add(FBContent.BLOCK_FRAMED_DOUBLE_CORNER.get(), "Framed Double Corner");
         add(FBContent.BLOCK_FRAMED_DOUBLE_PRISM_CORNER.get(), "Framed Double Prism Corner");

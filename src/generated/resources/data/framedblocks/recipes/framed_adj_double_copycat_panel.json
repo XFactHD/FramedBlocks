@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "F": {
+      "item": "framedblocks:framed_collapsible_copycat_block"
+    }
+  },
+  "pattern": [
+    "F",
+    "F"
+  ],
+  "result": {
+    "count": 2,
+    "item": "framedblocks:framed_adj_double_copycat_panel"
+  },
+  "show_notification": true
+}

@@ -135,7 +135,11 @@ public final class FBContent
     public static final RegistryObject<Block> BLOCK_FRAMED_HANGING_SIGN = registerBlock(FramedCeilingHangingSignBlock::new, BlockType.FRAMED_HANGING_SIGN);
     public static final RegistryObject<Block> BLOCK_FRAMED_WALL_HANGING_SIGN = registerBlock(FramedWallHangingSignBlock::new, BlockType.FRAMED_WALL_HANGING_SIGN);
     public static final RegistryObject<Block> BLOCK_FRAMED_DOUBLE_SLAB = registerBlock(FramedDoubleSlabBlock::new, BlockType.FRAMED_DOUBLE_SLAB);
+    public static final RegistryObject<Block> BLOCK_FRAMED_ADJ_DOUBLE_SLAB = registerBlock(FramedAdjustableDoubleSlabBlock::standard, BlockType.FRAMED_ADJ_DOUBLE_SLAB);
+    public static final RegistryObject<Block> BLOCK_FRAMED_ADJ_DOUBLE_COPYCAT_SLAB = registerBlock(FramedAdjustableDoubleSlabBlock::copycat, BlockType.FRAMED_ADJ_DOUBLE_COPYCAT_SLAB);
     public static final RegistryObject<Block> BLOCK_FRAMED_DOUBLE_PANEL = registerBlock(FramedDoublePanelBlock::new, BlockType.FRAMED_DOUBLE_PANEL);
+    public static final RegistryObject<Block> BLOCK_FRAMED_ADJ_DOUBLE_PANEL = registerBlock(FramedAdjustableDoublePanelBlock::standard, BlockType.FRAMED_ADJ_DOUBLE_PANEL);
+    public static final RegistryObject<Block> BLOCK_FRAMED_ADJ_DOUBLE_COPYCAT_PANEL = registerBlock(FramedAdjustableDoublePanelBlock::copycat, BlockType.FRAMED_ADJ_DOUBLE_COPYCAT_PANEL);
     public static final RegistryObject<Block> BLOCK_FRAMED_DOUBLE_SLOPE = registerBlock(FramedDoubleSlopeBlock::new, BlockType.FRAMED_DOUBLE_SLOPE);
     public static final RegistryObject<Block> BLOCK_FRAMED_DOUBLE_CORNER = registerBlock(FramedDoubleCornerBlock::new, BlockType.FRAMED_DOUBLE_CORNER);
     public static final RegistryObject<Block> BLOCK_FRAMED_DOUBLE_PRISM_CORNER = registerBlock(FramedDoublePrismCornerBlock::new, BlockType.FRAMED_DOUBLE_PRISM_CORNER);
@@ -343,6 +347,14 @@ public final class FBContent
     public static final RegisteredBE<FramedDoublePanelBlockEntity> BE_TYPE_DOUBLE_FRAMED_PANEL = createBlockEntityType(
             FramedDoublePanelBlockEntity::new,
             BlockType.FRAMED_DOUBLE_PANEL
+    );
+    public static final RegisteredBE<FramedAdjustableDoubleBlockEntity> BE_TYPE_FRAMED_ADJ_DOUBLE_BLOCK = createBlockEntityType(
+            FramedAdjustableDoubleBlockEntity::standard,
+            BlockType.FRAMED_ADJ_DOUBLE_SLAB, BlockType.FRAMED_ADJ_DOUBLE_PANEL
+    );
+    public static final RegisteredBE<FramedAdjustableDoubleBlockEntity> BE_TYPE_FRAMED_ADJ_DOUBLE_COPYCAT_BLOCK = createBlockEntityType(
+            FramedAdjustableDoubleBlockEntity::copycat,
+            BlockType.FRAMED_ADJ_DOUBLE_COPYCAT_SLAB, BlockType.FRAMED_ADJ_DOUBLE_COPYCAT_PANEL
     );
     public static final RegisteredBE<FramedDoubleSlopeBlockEntity> BE_TYPE_DOUBLE_FRAMED_SLOPE = createBlockEntityType(
             FramedDoubleSlopeBlockEntity::new,

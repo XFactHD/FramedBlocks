@@ -216,6 +216,8 @@ public final class FBClient
         FramedStoneButtonModel.registerFrameModels(event);
         FramedLargeStoneButtonModel.registerFrameModels(event);
         event.register(FramedTargetModel.OVERLAY_LOCATION);
+        event.register(FramedCollapsibleBlockModel.ALT_BASE_MODEL_LOC);
+        event.register(FramedCollapsibleCopycatBlockModel.ALT_BASE_MODEL_LOC);
 
         if (SupplementariesCompat.isLoaded())
         {
@@ -289,7 +291,11 @@ public final class FBClient
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_HANGING_SIGN, registry, FramedCeilingHangingSignModel::new, ClientUtils.IGNORE_WATERLOGGED);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_WALL_HANGING_SIGN, registry, FramedWallHangingSignModel::new, ClientUtils.IGNORE_WATERLOGGED);
         replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_DOUBLE_SLAB, registry, null, ClientUtils.IGNORE_SOLID);
+        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_ADJ_DOUBLE_SLAB, registry, null, ClientUtils.IGNORE_SOLID);
+        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_ADJ_DOUBLE_COPYCAT_SLAB, registry, null, ClientUtils.IGNORE_SOLID);
         replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_DOUBLE_PANEL, registry, null, ClientUtils.IGNORE_SOLID);
+        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_ADJ_DOUBLE_PANEL, registry, null, ClientUtils.IGNORE_SOLID);
+        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_ADJ_DOUBLE_COPYCAT_PANEL, registry, null, ClientUtils.IGNORE_SOLID);
         replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_DOUBLE_SLOPE, registry, FramedDoubleSlopeBlock.itemModelSource(), ClientUtils.IGNORE_SOLID);
         replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_DOUBLE_CORNER, registry, FramedDoubleCornerBlock.itemModelSource(), ClientUtils.IGNORE_SOLID);
         replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_DOUBLE_PRISM_CORNER, registry, FramedDoublePrismCornerBlock.itemModelSourcePrism(), ClientUtils.IGNORE_SOLID);
@@ -450,6 +456,8 @@ public final class FBClient
         FramedChestRenderer.onModelsLoaded(event.getModels());
         FramedBlockModel.captureReinforcementModel(event.getModels());
         FramedOneWayWindowModel.captureTintedGlassModel(event.getModels());
+        FramedCollapsibleBlockModel.captureAltBaseModel(event.getModels());
+        FramedCollapsibleCopycatBlockModel.captureAltBaseModel(event.getModels());
     }
 
     @SubscribeEvent

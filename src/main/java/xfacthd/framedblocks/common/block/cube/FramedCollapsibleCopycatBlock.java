@@ -83,7 +83,7 @@ public class FramedCollapsibleCopycatBlock extends FramedBlock
         int solid = state.getValue(PropertyHolder.SOLID_FACES);
         if (solid != ALL_SOLID && level.getBlockEntity(pos) instanceof FramedCollapsibleCopycatBlockEntity be)
         {
-            return SHAPE_CACHE.computeIfAbsent(be.getPackedOffsets(), key ->
+            return SHAPE_CACHE.computeIfAbsent(be.getPackedOffsets(state), key ->
             {
                 byte[] offsets = FramedCollapsibleCopycatBlockEntity.unpackOffsets(key);
                 return box(

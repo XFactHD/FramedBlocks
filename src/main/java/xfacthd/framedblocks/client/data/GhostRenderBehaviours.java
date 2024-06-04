@@ -110,6 +110,18 @@ public final class GhostRenderBehaviours
                 new BlueprintGhostRenderBehaviour(),
                 FBContent.ITEM_FRAMED_BLUEPRINT.get()
         );
+
+        GhostBlockRenderer.registerBehaviour(
+                AdjustableDoubleBlockGhostRenderBehaviour.standard(),
+                FBContent.BLOCK_FRAMED_ADJ_DOUBLE_SLAB.get(),
+                FBContent.BLOCK_FRAMED_ADJ_DOUBLE_PANEL.get()
+        );
+
+        GhostBlockRenderer.registerBehaviour(
+                AdjustableDoubleBlockGhostRenderBehaviour.copycat(),
+                FBContent.BLOCK_FRAMED_ADJ_DOUBLE_COPYCAT_SLAB.get(),
+                FBContent.BLOCK_FRAMED_ADJ_DOUBLE_COPYCAT_PANEL.get()
+        );
     }
 
 

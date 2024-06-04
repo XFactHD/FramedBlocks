@@ -15,7 +15,7 @@ import xfacthd.framedblocks.api.model.data.FramedBlockData;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 
-public class FramedCollapsibleCopycatBlockEntity extends FramedBlockEntity
+public class FramedCollapsibleCopycatBlockEntity extends FramedBlockEntity implements ICollapsibleCopycatBlockEntity
 {
     private static final Direction[] DIRECTIONS = Direction.values();
     private static final Direction[] HORIZONTAL_DIRECTIONS = Direction.Plane.HORIZONTAL.stream().toArray(Direction[]::new);
@@ -23,7 +23,6 @@ public class FramedCollapsibleCopycatBlockEntity extends FramedBlockEntity
     public static final ModelProperty<Integer> OFFSETS = new ModelProperty<>();
 
     private int packedOffsets = 0;
-    private byte[] faceOffsets = new byte[DIRECTIONS.length];
     private boolean occludesBeacon = true;
 
     public FramedCollapsibleCopycatBlockEntity(BlockPos pos, BlockState state)
@@ -42,19 +41,19 @@ public class FramedCollapsibleCopycatBlockEntity extends FramedBlockEntity
         Direction faceHit = blockHit.getDirection();
         boolean sneak = player.isShiftKeyDown();
         boolean changed = false;
-        if (sneak && faceOffsets[faceHit.ordinal()] > 0)
+        int offset = getFaceOffset(faceHit);
+        if (sneak && offset > 0)
         {
-            faceOffsets[faceHit.ordinal()]--;
+            setFaceOffset(faceHit, offset - 1);
             changed = true;
         }
-        else if (!sneak && faceOffsets[faceHit.ordinal()] < 15 - faceOffsets[faceHit.getOpposite().ordinal()])
+        else if (!sneak && offset < 15 - getFaceOffset(faceHit.getOpposite()))
         {
-            faceOffsets[faceHit.ordinal()]++;
+            setFaceOffset(faceHit, offset + 1);
             changed = true;
         }
         if (changed)
         {
-            packedOffsets = packOffsets(faceOffsets);
             updateBeaconOcclusion();
             if (!updateFaceSolidity())
             {
@@ -65,12 +64,27 @@ public class FramedCollapsibleCopycatBlockEntity extends FramedBlockEntity
         }
     }
 
-    public byte[] getFaceOffsets()
+
+    private void setFaceOffset(Direction side, int offset)
     {
-        return faceOffsets;
+        int idx = side.ordinal() * 4;
+        int mask = 0x0F << idx;
+        packedOffsets = (packedOffsets & ~mask) | (offset << idx);
     }
 
-    public int getPackedOffsets()
+    public int getFaceOffset(Direction side)
+    {
+        return (byte) (packedOffsets >> (side.ordinal() * 4) & 0xF);
+    }
+
+    @Override
+    public int getFaceOffset(BlockState state, Direction side)
+    {
+        return getFaceOffset(side);
+    }
+
+    @Override
+    public int getPackedOffsets(BlockState state)
     {
         return packedOffsets;
     }
@@ -98,7 +112,7 @@ public class FramedCollapsibleCopycatBlockEntity extends FramedBlockEntity
         occludesBeacon = true;
         for (Direction face : HORIZONTAL_DIRECTIONS)
         {
-            if (faceOffsets[face.ordinal()] > MAX_OFFSET_BEACON_OCCLUSION)
+            if (getFaceOffset(face) > MAX_OFFSET_BEACON_OCCLUSION)
             {
                 occludesBeacon = false;
                 break;
@@ -111,7 +125,7 @@ public class FramedCollapsibleCopycatBlockEntity extends FramedBlockEntity
     {
         return ModelData.builder()
                 .with(FramedBlockData.PROPERTY, getModelDataInternal())
-                .with(OFFSETS, getPackedOffsets())
+                .with(OFFSETS, getPackedOffsets(getBlockState()))
                 .build();
     }
 
@@ -119,7 +133,7 @@ public class FramedCollapsibleCopycatBlockEntity extends FramedBlockEntity
     protected void writeToDataPacket(CompoundTag nbt)
     {
         super.writeToDataPacket(nbt);
-        nbt.putInt("offsets", packOffsets(faceOffsets));
+        nbt.putInt("offsets", packedOffsets);
         nbt.putBoolean("occludesBeacon", occludesBeacon);
     }
 
@@ -132,7 +146,6 @@ public class FramedCollapsibleCopycatBlockEntity extends FramedBlockEntity
         if (packed != packedOffsets)
         {
             packedOffsets = packed;
-            faceOffsets = unpackOffsets(packedOffsets);
 
             needUpdate = true;
             updateCulling(true, false);
@@ -156,7 +169,6 @@ public class FramedCollapsibleCopycatBlockEntity extends FramedBlockEntity
     public void handleUpdateTag(CompoundTag nbt)
     {
         packedOffsets = nbt.getInt("offsets");
-        faceOffsets = unpackOffsets(packedOffsets);
         occludesBeacon = nbt.getBoolean("occludesBeacon");
 
         super.handleUpdateTag(nbt);
@@ -174,23 +186,10 @@ public class FramedCollapsibleCopycatBlockEntity extends FramedBlockEntity
     {
         super.load(nbt);
         packedOffsets = nbt.getInt("offsets");
-        faceOffsets = unpackOffsets(packedOffsets);
         updateBeaconOcclusion();
     }
 
 
-
-    public static int packOffsets(byte[] offsets)
-    {
-        int result = 0;
-
-        for (int i = 0; i < DIRECTIONS.length; i++)
-        {
-            result |= (offsets[i] << (i * 4));
-        }
-
-        return result;
-    }
 
     public static byte[] unpackOffsets(int packed)
     {

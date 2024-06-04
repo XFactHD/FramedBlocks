@@ -335,6 +335,32 @@ public final class FramedRecipeProvider extends RecipeProvider
                 .unlockedBy(FBContent.BLOCK_FRAMED_CUBE)
                 .save(consumer);
 
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_ADJ_DOUBLE_SLAB.get(), 2)
+                .pattern("FF")
+                .define('F', FBContent.BLOCK_FRAMED_COLLAPSIBLE_BLOCK.get())
+                .unlockedBy(FBContent.BLOCK_FRAMED_COLLAPSIBLE_BLOCK)
+                .save(consumer);
+
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_ADJ_DOUBLE_COPYCAT_SLAB.get(), 2)
+                .pattern("FF")
+                .define('F', FBContent.BLOCK_FRAMED_COLLAPSIBLE_COPYCAT_BLOCK.get())
+                .unlockedBy(FBContent.BLOCK_FRAMED_COLLAPSIBLE_COPYCAT_BLOCK)
+                .save(consumer);
+
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_ADJ_DOUBLE_PANEL.get(), 2)
+                .pattern("F")
+                .pattern("F")
+                .define('F', FBContent.BLOCK_FRAMED_COLLAPSIBLE_BLOCK.get())
+                .unlockedBy(FBContent.BLOCK_FRAMED_COLLAPSIBLE_BLOCK)
+                .save(consumer);
+
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_ADJ_DOUBLE_COPYCAT_PANEL.get(), 2)
+                .pattern("F")
+                .pattern("F")
+                .define('F', FBContent.BLOCK_FRAMED_COLLAPSIBLE_COPYCAT_BLOCK.get())
+                .unlockedBy(FBContent.BLOCK_FRAMED_COLLAPSIBLE_COPYCAT_BLOCK)
+                .save(consumer);
+
         shapedBuildingBlock(FBContent.BLOCK_FRAMED_DOUBLE_SLOPE.get(), 1)
                 .pattern("FF")
                 .define('F', FBContent.BLOCK_FRAMED_SLOPE.get())

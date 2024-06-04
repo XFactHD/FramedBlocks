@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "hasFramedCollapsibleBlock": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "framedblocks:framed_collapsible_block"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "framedblocks:framed_adj_double_panel"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "hasFramedCollapsibleBlock",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "framedblocks:framed_adj_double_panel"
+    ]
+  },
+  "sends_telemetry_event": false
+}

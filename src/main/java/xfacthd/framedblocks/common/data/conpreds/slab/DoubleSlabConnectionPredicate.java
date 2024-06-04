@@ -8,6 +8,10 @@ import xfacthd.framedblocks.api.util.Utils;
 
 public final class DoubleSlabConnectionPredicate extends NonDetailedConnectionPredicate
 {
+    public static final DoubleSlabConnectionPredicate INSTANCE = new DoubleSlabConnectionPredicate();
+
+    private DoubleSlabConnectionPredicate() { }
+
     @Override
     public boolean canConnectFullEdge(BlockState state, Direction side, @Nullable Direction edge)
     {

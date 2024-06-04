@@ -5,7 +5,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import xfacthd.framedblocks.api.predicate.cull.SideSkipPredicate;
-import xfacthd.framedblocks.common.blockentity.special.FramedCollapsibleCopycatBlockEntity;
+import xfacthd.framedblocks.common.blockentity.special.ICollapsibleCopycatBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.skippreds.CullTest;
@@ -13,6 +13,8 @@ import xfacthd.framedblocks.common.data.skippreds.CullTest;
 @CullTest(BlockType.FRAMED_COLLAPSIBLE_COPYCAT_BLOCK)
 public final class CollapsibleCopycatBlockSkipPredicate implements SideSkipPredicate
 {
+    private static final Direction[] DIRECTIONS = Direction.values();
+
     @Override
     @CullTest.TestTarget(BlockType.FRAMED_COLLAPSIBLE_COPYCAT_BLOCK)
     public boolean test(BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side)
@@ -31,24 +33,24 @@ public final class CollapsibleCopycatBlockSkipPredicate implements SideSkipPredi
                 return false;
             }
 
-            if (!(level.getBlockEntity(pos) instanceof FramedCollapsibleCopycatBlockEntity be))
+            if (!(level.getBlockEntity(pos) instanceof ICollapsibleCopycatBlockEntity be))
             {
                 return false;
             }
-            if (!(level.getBlockEntity(pos.relative(side)) instanceof FramedCollapsibleCopycatBlockEntity adjBe))
+            if (!(level.getBlockEntity(pos.relative(side)) instanceof ICollapsibleCopycatBlockEntity adjBe))
             {
                 return false;
             }
 
-            byte[] offsets = be.getFaceOffsets();
-            byte[] adjOffsets = adjBe.getFaceOffsets();
-            for (Direction face : Direction.values())
+            for (Direction face : DIRECTIONS)
             {
                 if (face.getAxis() == side.getAxis())
                 {
                     continue;
                 }
-                if (offsets[face.ordinal()] != adjOffsets[face.ordinal()])
+                int offset = be.getFaceOffset(state, face);
+                int adjOffset = adjBe.getFaceOffset(adjState, face);
+                if (offset != adjOffset)
                 {
                     return false;
                 }
