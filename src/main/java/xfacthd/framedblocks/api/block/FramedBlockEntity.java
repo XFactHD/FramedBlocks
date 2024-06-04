@@ -94,7 +94,7 @@ public class FramedBlockEntity extends BlockEntity
         }
         else if (camo.getType().isFluid() && stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).isPresent())
         {
-            return clearFluidCamo(player, camo, stack, secondary);
+            return clearFluidCamo(player, hand, camo, stack, secondary);
         }
         else if (camo.isEmpty() && stack.getItem() instanceof BlockItem)
         {
@@ -174,7 +174,7 @@ public class FramedBlockEntity extends BlockEntity
         return InteractionResult.sidedSuccess(level.isClientSide());
     }
 
-    private InteractionResult clearFluidCamo(Player player, CamoContainer camo, ItemStack stack, boolean secondary)
+    private InteractionResult clearFluidCamo(Player player, InteractionHand hand, CamoContainer camo, ItemStack stack, boolean secondary)
     {
         ItemStack input = stack.copy();
         input.setCount(1);
@@ -190,7 +190,7 @@ public class FramedBlockEntity extends BlockEntity
                     // Container holds fluid in NBT -> stack doesn't change
                     if (result == input)
                     {
-                        player.setItemInHand(InteractionHand.MAIN_HAND, result);
+                        player.setItemInHand(hand, result);
                     }
                     else // Container holds fluid by type (i.e. bucket) -> got a new stack
                     {
