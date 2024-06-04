@@ -283,6 +283,7 @@ public final class FBContent
     public static final RegistryObject<Block> BLOCK_FRAMED_CHECKERED_SLAB = registerBlock(FramedCheckeredSlabBlock::new, BlockType.FRAMED_CHECKERED_SLAB);
     public static final RegistryObject<Block> BLOCK_FRAMED_CHECKERED_PANEL_SEGMENT = registerBlock(FramedCheckeredPanelSegmentBlock::new, BlockType.FRAMED_CHECKERED_PANEL_SEGMENT);
     public static final RegistryObject<Block> BLOCK_FRAMED_CHECKERED_PANEL = registerBlock(FramedCheckeredPanelBlock::new, BlockType.FRAMED_CHECKERED_PANEL);
+    public static final RegistryObject<Block> BLOCK_FRAMED_TUBE = registerBlock(FramedTubeBlock::new, BlockType.FRAMED_TUBE);
     // endregion
 
     // region Special Blocks

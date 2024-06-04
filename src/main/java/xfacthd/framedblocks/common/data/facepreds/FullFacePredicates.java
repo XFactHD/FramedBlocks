@@ -225,5 +225,6 @@ public final class FullFacePredicates extends BlockTypeMap<FullFacePredicate>
         put(BlockType.FRAMED_CHECKERED_SLAB, FullFacePredicate.FALSE);
         put(BlockType.FRAMED_CHECKERED_PANEL_SEGMENT, FullFacePredicate.FALSE);
         put(BlockType.FRAMED_CHECKERED_PANEL, FullFacePredicate.FALSE);
+        put(BlockType.FRAMED_TUBE, FullFacePredicate.NOT_AXIS);
     }
 }

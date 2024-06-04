@@ -227,5 +227,6 @@ public final class SideSkipPredicates extends BlockTypeMap<SideSkipPredicate>
         put(BlockType.FRAMED_CHECKERED_SLAB, SideSkipPredicate.FALSE);
         put(BlockType.FRAMED_CHECKERED_PANEL_SEGMENT, new CheckeredPanelSegmentSkipPredicate());
         put(BlockType.FRAMED_CHECKERED_PANEL, SideSkipPredicate.FALSE);
+        put(BlockType.FRAMED_TUBE, new TubeSkipPredicate());
     }
 }

@@ -59,6 +59,7 @@ import xfacthd.framedblocks.client.screen.*;
 import xfacthd.framedblocks.client.screen.overlay.*;
 import xfacthd.framedblocks.client.util.*;
 import xfacthd.framedblocks.common.FBContent;
+import xfacthd.framedblocks.common.block.cube.FramedTubeBlock;
 import xfacthd.framedblocks.common.block.door.FramedFenceGateBlock;
 import xfacthd.framedblocks.common.block.interactive.*;
 import xfacthd.framedblocks.common.block.pane.*;
@@ -436,6 +437,7 @@ public final class FBClient
         replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_CHECKERED_SLAB, registry, FramedCheckeredSlabBlock.itemModelSource(), ClientUtils.IGNORE_DEFAULT);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_CHECKERED_PANEL_SEGMENT, registry, FramedCheckeredPanelSegmentModel::new, ClientUtils.IGNORE_WATERLOGGED);
         replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_CHECKERED_PANEL, registry, FramedCheckeredPanelBlock.itemModelSource(), ClientUtils.IGNORE_DEFAULT);
+        ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_TUBE, registry, FramedTubeModel::new, FramedTubeBlock.itemModelSource(), ClientUtils.IGNORE_DEFAULT);
 
         stopwatch.stop();
         FramedBlocks.LOGGER.debug("Replaced models for {} blocks in {}", BlockType.COUNT, stopwatch);

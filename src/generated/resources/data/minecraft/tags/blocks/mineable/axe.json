@@ -193,6 +193,7 @@
     "framedblocks:framed_checkered_slab_segment",
     "framedblocks:framed_checkered_slab",
     "framedblocks:framed_checkered_panel_segment",
-    "framedblocks:framed_checkered_panel"
+    "framedblocks:framed_checkered_panel",
+    "framedblocks:framed_tube"
   ]
 }

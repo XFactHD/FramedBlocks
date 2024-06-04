@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "C": {
+      "item": "framedblocks:framed_cube"
+    }
+  },
+  "pattern": [
+    " C ",
+    "C C",
+    " C "
+  ],
+  "result": {
+    "count": 4,
+    "item": "framedblocks:framed_tube"
+  },
+  "show_notification": true
+}
