@@ -102,6 +102,14 @@ public class FramedFlowerPotBlockEntity extends FramedBlockEntity
     }
 
     @Override
+    public CompoundTag writeToBlueprint()
+    {
+        CompoundTag tag = saveWithoutMetadata();
+        tag.remove("flower");
+        return tag;
+    }
+
+    @Override
     public void handleUpdateTag(CompoundTag nbt)
     {
         super.handleUpdateTag(nbt);
