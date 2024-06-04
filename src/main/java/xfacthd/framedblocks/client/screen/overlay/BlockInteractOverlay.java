@@ -57,7 +57,7 @@ public abstract class BlockInteractOverlay implements IGuiOverlay
     public void render(ForgeGui gui, GuiGraphics graphics, float partialTick, int screenWidth, int screenHeight)
     {
         Mode mode = modeGetter.get();
-        if (mode == Mode.HIDDEN)
+        if (mode == Mode.HIDDEN || player().isSpectator() || Minecraft.getInstance().options.hideGui)
         {
             return;
         }
