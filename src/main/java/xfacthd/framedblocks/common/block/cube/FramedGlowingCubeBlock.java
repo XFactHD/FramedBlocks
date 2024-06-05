@@ -22,6 +22,12 @@ public class FramedGlowingCubeBlock extends FramedBlock
     }
 
     @Override
+    public BlockState getItemModelSource()
+    {
+        return defaultBlockState();
+    }
+
+    @Override
     public BlockState getJadeRenderState(BlockState state)
     {
         return state;

@@ -12,6 +12,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.RotationSegment;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.block.PlacementStateBuilder;
 import xfacthd.framedblocks.common.data.BlockType;
@@ -123,6 +124,13 @@ public class FramedStandingSignBlock extends AbstractFramedSignBlock
     public BlockItem createBlockItem()
     {
         return new FramedSignItem();
+    }
+
+    @Override
+    @Nullable
+    public BlockState getItemModelSource()
+    {
+        return null;
     }
 
     @Override

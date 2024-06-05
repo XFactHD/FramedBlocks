@@ -18,6 +18,7 @@ import net.minecraft.world.level.block.state.properties.RotationSegment;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.*;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.util.Utils;
@@ -183,6 +184,13 @@ public class FramedCeilingHangingSignBlock extends AbstractFramedHangingSignBloc
     public BlockItem createBlockItem()
     {
         return new FramedHangingSignItem();
+    }
+
+    @Override
+    @Nullable
+    public BlockState getItemModelSource()
+    {
+        return null;
     }
 
     @Override

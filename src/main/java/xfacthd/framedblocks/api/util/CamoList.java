@@ -35,6 +35,11 @@ public final class CamoList implements Iterable<CamoContainer<?, ?>>
         return EmptyCamoContainer.EMPTY;
     }
 
+    public boolean isEmpty()
+    {
+        return camos.isEmpty();
+    }
+
     public CamoList concat(CamoList other)
     {
         return new CamoList(Utils.concat(camos, other.camos));

@@ -1,13 +1,11 @@
 package xfacthd.framedblocks.api.model.geometry;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.client.ChunkRenderTypeSet;
 import net.neoforged.neoforge.client.extensions.IBakedModelExtension;
@@ -21,6 +19,7 @@ import xfacthd.framedblocks.api.model.cache.SimpleQuadCacheKey;
 import xfacthd.framedblocks.api.model.data.FramedBlockData;
 import xfacthd.framedblocks.api.model.data.QuadMap;
 import xfacthd.framedblocks.api.model.quad.QuadModifier;
+import xfacthd.framedblocks.api.model.wrapping.itemmodel.ItemModelInfo;
 import xfacthd.framedblocks.api.predicate.fullface.FullFacePredicate;
 import xfacthd.framedblocks.api.util.ConfigView;
 
@@ -162,11 +161,6 @@ public abstract class Geometry
     }
 
     /**
-     * Apply transformations to the item model when it is rendered in hand
-     */
-    public void applyInHandTransformation(PoseStack poseStack, ItemDisplayContext ctx) { }
-
-    /**
      * {@return whether the model should use a solid model when no camo is applied}
      * @apiNote Only has an effect if {@link #useBaseModel()} returns {@code false}
      */
@@ -201,5 +195,13 @@ public abstract class Geometry
             return TriState.TRUE;
         }
         return TriState.DEFAULT;
+    }
+
+    /**
+     * {@return the {@link ItemModelInfo} used to supply camo data and additional transformations to item rendering}
+     */
+    public ItemModelInfo getItemModelInfo()
+    {
+        return ItemModelInfo.DEFAULT;
     }
 }

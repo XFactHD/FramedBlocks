@@ -9,11 +9,15 @@ import xfacthd.framedblocks.api.model.geometry.Geometry;
 import xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
 import xfacthd.framedblocks.api.model.quad.Modifiers;
 import xfacthd.framedblocks.api.model.quad.QuadModifier;
+import xfacthd.framedblocks.api.model.wrapping.itemmodel.ItemModelInfo;
+import xfacthd.framedblocks.api.model.wrapping.itemmodel.TranslatedItemModelInfo;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 
 public class FramedButtonGeometry extends Geometry
 {
+    static final TranslatedItemModelInfo ITEM_MODEL_INFO = TranslatedItemModelInfo.handGuiOrFixed(0F, .5F, 0F);
+
     protected final Direction dir;
     protected final AttachFace face;
     protected final Direction facing;
@@ -97,6 +101,12 @@ public class FramedButtonGeometry extends Geometry
     public boolean useBaseModel()
     {
         return useBaseModel;
+    }
+
+    @Override
+    public ItemModelInfo getItemModelInfo()
+    {
+        return ITEM_MODEL_INFO;
     }
 
 

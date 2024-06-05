@@ -56,6 +56,12 @@ public class FramedWallBoardBlock extends FramedBlock
     }
 
     @Override
+    public BlockState getItemModelSource()
+    {
+        return defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
+    }
+
+    @Override
     public BlockState getJadeRenderState(BlockState state)
     {
         return defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.SOUTH);

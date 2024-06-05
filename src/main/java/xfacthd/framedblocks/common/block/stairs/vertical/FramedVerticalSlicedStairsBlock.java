@@ -360,10 +360,11 @@ public class FramedVerticalSlicedStairsBlock extends FramedVerticalStairsBlock i
     }
 
     @Override
-    @Nullable
     public BlockState getItemModelSource()
     {
-        return defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
+        return defaultBlockState()
+                .setValue(FramedProperties.FACING_HOR, Direction.SOUTH)
+                .setValue(PropertyHolder.RIGHT, true);
     }
 
     @Override

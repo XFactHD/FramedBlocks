@@ -158,6 +158,12 @@ public class FramedPressurePlateBlock extends PressurePlateBlock implements IFra
     }
 
     @Override
+    public BlockState getItemModelSource()
+    {
+        return defaultBlockState();
+    }
+
+    @Override
     public Class<? extends Block> getJadeTargetClass()
     {
         return FramedPressurePlateBlock.class;

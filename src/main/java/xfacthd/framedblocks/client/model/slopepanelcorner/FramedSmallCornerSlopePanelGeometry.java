@@ -1,9 +1,7 @@
 package xfacthd.framedblocks.client.model.slopepanelcorner;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.core.Direction;
-import net.minecraft.world.item.ItemDisplayContext;
 import org.joml.Vector3f;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.model.data.QuadMap;
@@ -11,10 +9,13 @@ import xfacthd.framedblocks.api.model.geometry.Geometry;
 import xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
 import xfacthd.framedblocks.api.model.quad.Modifiers;
 import xfacthd.framedblocks.api.model.quad.QuadModifier;
+import xfacthd.framedblocks.api.model.wrapping.itemmodel.TranslatedItemModelInfo;
+import xfacthd.framedblocks.api.model.wrapping.itemmodel.ItemModelInfo;
 import xfacthd.framedblocks.client.model.slopepanel.FramedSlopePanelGeometry;
 
 public class FramedSmallCornerSlopePanelGeometry extends Geometry
 {
+    private static final TranslatedItemModelInfo ITEM_MODEL_INFO = TranslatedItemModelInfo.hand(0F, .5F, -.5F);
     private static final Vector3f ORIGIN_BOTTOM = new Vector3f(.5F, 0, .5F);
     private static final Vector3f ORIGIN_TOP = new Vector3f(.5F, 1, .5F);
 
@@ -77,8 +78,8 @@ public class FramedSmallCornerSlopePanelGeometry extends Geometry
     }
 
     @Override
-    public void applyInHandTransformation(PoseStack poseStack, ItemDisplayContext ctx)
+    public ItemModelInfo getItemModelInfo()
     {
-        poseStack.translate(0, .5, -.5);
+        return ITEM_MODEL_INFO;
     }
 }

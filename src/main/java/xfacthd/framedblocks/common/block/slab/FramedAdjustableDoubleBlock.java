@@ -73,6 +73,12 @@ public abstract class FramedAdjustableDoubleBlock extends AbstractFramedDoubleBl
         return facingGetter.apply(state);
     }
 
+    @Override
+    public BlockState getItemModelSource()
+    {
+        return defaultBlockState();
+    }
+
 
 
     protected static Tuple<BlockState, BlockState> makeStandardStatePair(BlockState state)

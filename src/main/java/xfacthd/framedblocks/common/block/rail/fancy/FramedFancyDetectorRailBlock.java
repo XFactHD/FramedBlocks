@@ -135,6 +135,12 @@ public class FramedFancyDetectorRailBlock extends DetectorRailBlock implements I
     }
 
     @Override
+    public BlockState getItemModelSource()
+    {
+        return defaultBlockState();
+    }
+
+    @Override
     public BlockState getJadeRenderState(BlockState state)
     {
         return defaultBlockState();

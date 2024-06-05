@@ -1,6 +1,5 @@
 package xfacthd.framedblocks.client.model;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
@@ -11,48 +10,44 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.Tuple;
-import net.minecraft.world.item.ItemDisplayContext;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.EmptyBlockGetter;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.client.ChunkRenderTypeSet;
-import net.neoforged.neoforge.client.model.BakedModelWrapper;
 import net.neoforged.neoforge.client.model.data.*;
 import net.neoforged.neoforge.common.util.ConcatenatedListView;
 import net.neoforged.neoforge.common.util.TriState;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.camo.empty.EmptyCamoContent;
+import xfacthd.framedblocks.api.model.AbstractFramedBlockModel;
 import xfacthd.framedblocks.api.model.data.FramedBlockData;
 import xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
 import xfacthd.framedblocks.api.model.util.ModelUtils;
+import xfacthd.framedblocks.api.model.wrapping.itemmodel.ItemModelInfo;
 import xfacthd.framedblocks.common.data.doubleblock.*;
 import xfacthd.framedblocks.common.block.IFramedDoubleBlock;
 import xfacthd.framedblocks.common.blockentity.doubled.FramedDoubleBlockEntity;
 
 import java.util.*;
 
-public final class FramedDoubleBlockModel extends BakedModelWrapper<BakedModel>
+public final class FramedDoubleBlockModel extends AbstractFramedBlockModel
 {
     private static final ModelData EMPTY_FRAME = makeDefaultData(false);
     private static final ModelData EMPTY_ALT_FRAME = makeDefaultData(true);
 
     private final DoubleBlockTopInteractionMode particleMode;
-    private final Vec3 handTransform;
     private final Tuple<BlockState, BlockState> dummyStates;
     private final boolean canCullLeft;
     private final boolean canCullRight;
     private Tuple<BakedModel, BakedModel> models = null;
 
-    public FramedDoubleBlockModel(GeometryFactory.Context ctx, Vec3 handTransform, NullCullPredicate cullPredicate)
+    public FramedDoubleBlockModel(GeometryFactory.Context ctx, NullCullPredicate cullPredicate, ItemModelInfo itemModelInfo)
     {
-        super(ctx.baseModel());
+        super(ctx.baseModel(), ctx.state(), itemModelInfo);
         BlockState state = ctx.state();
         DoubleBlockStateCache cache = ((IFramedDoubleBlock) state.getBlock()).getCache(state);
         this.dummyStates = cache.getBlockPair();
         this.particleMode = cache.getTopInteractionMode();
-        this.handTransform = handTransform;
         this.canCullLeft = cullPredicate.testLeft(state);
         this.canCullRight = cullPredicate.testRight(state);
     }
@@ -152,20 +147,6 @@ public final class FramedDoubleBlockModel extends BakedModelWrapper<BakedModel>
     }
 
     @Override
-    public BakedModel applyTransform(ItemDisplayContext type, PoseStack poseStack, boolean applyLeftHandTransform)
-    {
-        getTransforms().getTransform(type).apply(applyLeftHandTransform, poseStack);
-        if (type.firstPerson() || type == ItemDisplayContext.THIRD_PERSON_LEFT_HAND || type == ItemDisplayContext.THIRD_PERSON_RIGHT_HAND)
-        {
-            if (handTransform != null)
-            {
-                poseStack.translate(handTransform.x, handTransform.y, handTransform.z);
-            }
-        }
-        return this;
-    }
-
-    @Override
     public TriState useAmbientOcclusion(BlockState state, ModelData data, RenderType renderType)
     {
         Tuple<BakedModel, BakedModel> models = getModels();
@@ -185,12 +166,6 @@ public final class FramedDoubleBlockModel extends BakedModelWrapper<BakedModel>
         }
 
         return TriState.DEFAULT;
-    }
-
-    @Override
-    public List<BakedModel> getRenderPasses(ItemStack itemStack, boolean fabulous)
-    {
-        return List.of(this);
     }
 
     private Tuple<BakedModel, BakedModel> getModels()

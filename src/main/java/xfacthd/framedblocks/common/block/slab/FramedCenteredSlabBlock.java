@@ -31,6 +31,12 @@ public class FramedCenteredSlabBlock extends FramedBlock
     }
 
     @Override
+    public BlockState getItemModelSource()
+    {
+        return defaultBlockState();
+    }
+
+    @Override
     public BlockState getJadeRenderState(BlockState state)
     {
         return defaultBlockState();

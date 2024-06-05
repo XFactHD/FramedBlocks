@@ -13,6 +13,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.*;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.common.data.BlockType;
@@ -118,6 +119,13 @@ public class FramedWallSignBlock extends AbstractFramedSignBlock
     public Vec3 getSignHitboxCenterPosition(BlockState state)
     {
         return HITBOX_CENTERS[state.getValue(FramedProperties.FACING_HOR).get2DDataValue()];
+    }
+
+    @Override
+    @Nullable
+    public BlockState getItemModelSource()
+    {
+        return null;
     }
 
     @Override

@@ -1,15 +1,15 @@
 package xfacthd.framedblocks.client.model.slopeslab;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.core.Direction;
-import net.minecraft.world.item.ItemDisplayContext;
 import xfacthd.framedblocks.api.model.data.QuadMap;
 import xfacthd.framedblocks.api.model.geometry.Geometry;
 import xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
 import xfacthd.framedblocks.api.model.quad.Modifiers;
 import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.block.FramedProperties;
+import xfacthd.framedblocks.api.model.wrapping.itemmodel.TranslatedItemModelInfo;
+import xfacthd.framedblocks.api.model.wrapping.itemmodel.ItemModelInfo;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 
 public class FramedFlatSlopeSlabCornerGeometry extends Geometry
@@ -79,8 +79,8 @@ public class FramedFlatSlopeSlabCornerGeometry extends Geometry
     }
 
     @Override
-    public void applyInHandTransformation(PoseStack poseStack, ItemDisplayContext ctx)
+    public ItemModelInfo getItemModelInfo()
     {
-        poseStack.translate(0, .5, 0);
+        return TranslatedItemModelInfo.HAND_Y_HALF_UP;
     }
 }

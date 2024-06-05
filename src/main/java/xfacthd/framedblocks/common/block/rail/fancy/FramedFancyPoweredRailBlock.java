@@ -139,6 +139,12 @@ public class FramedFancyPoweredRailBlock extends PoweredRailBlock implements IFr
     }
 
     @Override
+    public BlockState getItemModelSource()
+    {
+        return defaultBlockState();
+    }
+
+    @Override
     public BlockState getJadeRenderState(BlockState state)
     {
         return defaultBlockState();

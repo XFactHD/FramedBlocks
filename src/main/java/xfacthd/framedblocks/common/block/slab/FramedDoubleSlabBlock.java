@@ -88,6 +88,13 @@ public class FramedDoubleSlabBlock extends AbstractFramedDoubleBlock
     }
 
     @Override
+    @Nullable
+    public BlockState getItemModelSource()
+    {
+        return null;
+    }
+
+    @Override
     public BlockState getJadeRenderState(BlockState state)
     {
         return defaultBlockState();

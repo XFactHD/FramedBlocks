@@ -178,6 +178,13 @@ public class FramedInverseDoubleCornerSlopePanelWallBlock extends AbstractFramed
     }
 
     @Override
+    @Nullable
+    public BlockState getItemModelSource()
+    {
+        return null;
+    }
+
+    @Override
     public BlockState getJadeRenderState(BlockState state)
     {
         return ((IFramedBlock) FBContent.BLOCK_FRAMED_INVERSE_DOUBLE_CORNER_SLOPE_PANEL.value()).getJadeRenderState(state);

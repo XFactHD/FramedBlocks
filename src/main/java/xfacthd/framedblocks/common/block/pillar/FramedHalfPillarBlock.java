@@ -64,6 +64,12 @@ public class FramedHalfPillarBlock extends FramedBlock
     }
 
     @Override
+    public BlockState getItemModelSource()
+    {
+        return defaultBlockState().setValue(BlockStateProperties.FACING, Direction.DOWN);
+    }
+
+    @Override
     public BlockState getJadeRenderState(BlockState state)
     {
         return state.setValue(BlockStateProperties.FACING, Direction.DOWN);

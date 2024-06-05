@@ -1,7 +1,6 @@
 package xfacthd.framedblocks.client.model;
 
 import com.google.common.base.Preconditions;
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -9,10 +8,10 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.client.ChunkRenderTypeSet;
+import net.neoforged.neoforge.client.model.BakedModelWrapper;
 import net.neoforged.neoforge.client.model.QuadTransformers;
 import net.neoforged.neoforge.client.model.data.ModelData;
 import net.neoforged.neoforge.common.util.TriState;
@@ -22,6 +21,7 @@ import xfacthd.framedblocks.api.camo.CamoContainerHelper;
 import xfacthd.framedblocks.api.camo.CamoContent;
 import xfacthd.framedblocks.api.camo.block.BlockCamoContent;
 import xfacthd.framedblocks.api.camo.empty.EmptyCamoContent;
+import xfacthd.framedblocks.api.model.AbstractFramedBlockModel;
 import xfacthd.framedblocks.api.model.cache.QuadCacheKey;
 import xfacthd.framedblocks.api.model.data.*;
 import xfacthd.framedblocks.api.model.geometry.Geometry;
@@ -41,7 +41,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 
-public final class FramedBlockModel extends BakedModelProxy
+public final class FramedBlockModel extends AbstractFramedBlockModel
 {
     private static final FramedBlockData DEFAULT_DATA = new FramedBlockData(EmptyCamoContent.EMPTY, false);
     private static final ChunkRenderTypeSet BASE_MODEL_RENDER_TYPES = ModelUtils.CUTOUT;
@@ -66,7 +66,7 @@ public final class FramedBlockModel extends BakedModelProxy
 
     public FramedBlockModel(GeometryFactory.Context ctx, Geometry geometry)
     {
-        super(ctx.baseModel());
+        super(ctx.baseModel(), ctx.state(), geometry.getItemModelInfo());
         BlockState state = ctx.state();
         this.geometry = geometry;
         this.type = ((IFramedBlock) state.getBlock()).getBlockType();
@@ -132,7 +132,7 @@ public final class FramedBlockModel extends BakedModelProxy
         FramedBlockData fbData = data.get(FramedBlockData.PROPERTY);
         if (isBaseCube && (fbData == null || fbData.getCamoContent().isEmpty()))
         {
-            return baseModel.getRenderTypes(state, rand, data);
+            return originalModel.getRenderTypes(state, rand, data);
         }
         if (fbData == null)
         {
@@ -351,7 +351,7 @@ public final class FramedBlockModel extends BakedModelProxy
      * Return the {@link BakedModel} to use as the camo model for the given camoState
      *
      * @param camoContent The {@link CamoContent} used as camo
-     * @param useBaseModel If true, the {@link BakedModelProxy#baseModel} is requested instead of the model of the given state
+     * @param useBaseModel If true, the {@link BakedModelWrapper#originalModel} is requested instead of the model of the given state
      * @param useAltModel Whether an alternative base model for the second component of a double model should be used
      *                    (only has an effect if {@code useBaseModel} is true)
      *
@@ -364,7 +364,7 @@ public final class FramedBlockModel extends BakedModelProxy
     {
         if (useBaseModel)
         {
-            return geometry.getBaseModel(baseModel, useAltModel);
+            return geometry.getBaseModel(originalModel, useAltModel);
         }
         return CamoContainerHelper.Client.getOrCreateModel(camoContent);
     }
@@ -422,13 +422,7 @@ public final class FramedBlockModel extends BakedModelProxy
                 return getCamoModel(camoState, false, false).getParticleIcon();
             }
         }
-        return baseModel.getParticleIcon();
-    }
-
-    @Override
-    protected void applyInHandTransformation(PoseStack poseStack, ItemDisplayContext ctx)
-    {
-        geometry.applyInHandTransformation(poseStack, ctx);
+        return originalModel.getParticleIcon();
     }
 
     @Override
@@ -437,8 +431,15 @@ public final class FramedBlockModel extends BakedModelProxy
         return geometry.useAmbientOcclusion(state, data, renderType);
     }
 
+    public BakedModel getBaseModel()
+    {
+        return originalModel;
+    }
+
+    @Override
     public void clearCache()
     {
+        super.clearCache();
         quadCache.clear();
         renderTypeCache.clear();
     }

@@ -23,6 +23,7 @@ public final class ClientConfig
     private static final String KEY_CON_TEX_MODE = "conTexMode";
     private static final String KEY_CAMO_MESSAGE_VERBOSITY = "camoMessageVerbosity";
     private static final String KEY_FORCE_AO_ON_GLOWING_BLOCKS = "forceAoOnGlowingBlocks";
+    private static final String KEY_RENDER_ITEM_MODELS_WITH_CAMO = "renderItemModelsWithCamo";
     private static final String KEY_SHOW_ALL_RECIPE_PERMUTATIONS_IN_EMI = "showAllRecipePermutationsInEmi";
     private static final String KEY_SOLID_FRAME_MODE = "solidFrameMode";
     private static final String KEY_SHOW_BUTTON_PLATE_OVERLAY = "showButtonPlateTypeOverlay";
@@ -47,6 +48,7 @@ public final class ClientConfig
     public static final String TRANSLATION_CON_TEX_MODE = translate(KEY_CON_TEX_MODE);
     public static final String TRANSLATION_CAMO_MESSAGE_VERBOSITY = translate(KEY_CAMO_MESSAGE_VERBOSITY);
     public static final String TRANSLATION_FORCE_AO_ON_GLOWING_BLOCKS = translate(KEY_FORCE_AO_ON_GLOWING_BLOCKS);
+    public static final String TRANSLATION_RENDER_ITEM_MODELS_WITH_CAMO = translate(KEY_RENDER_ITEM_MODELS_WITH_CAMO);
     public static final String TRANSLATION_SHOW_ALL_RECIPE_PERMUTATIONS_IN_EMI = translate(KEY_SHOW_ALL_RECIPE_PERMUTATIONS_IN_EMI);
     public static final String TRANSLATION_SOLID_FRAME_MODE = translate(KEY_SOLID_FRAME_MODE);
     public static final String TRANSLATION_SHOW_BUTTON_PLATE_OVERLAY = translate(KEY_SHOW_BUTTON_PLATE_OVERLAY);
@@ -75,6 +77,7 @@ public final class ClientConfig
     private static ConTexMode conTexMode = ConTexMode.DETAILED;
     private static CamoMessageVerbosity camoMessageVerbosity = CamoMessageVerbosity.DEFAULT;
     private static boolean forceAoOnGlowingBlocks = false;
+    private static boolean renderItemModelsWithCamo = false;
     private static boolean showAllRecipePermutationsInEmi = false;
     private static SolidFrameMode solidFrameMode = SolidFrameMode.DEFAULT;
     private static boolean showButtonPlateOverlay = false;
@@ -99,6 +102,7 @@ public final class ClientConfig
     private static ModConfigSpec.EnumValue<ConTexMode> conTexModeValue;
     private static ModConfigSpec.EnumValue<CamoMessageVerbosity> camoMessageVerbosityValue;
     private static ModConfigSpec.BooleanValue forceAoOnGlowingBlocksValue;
+    private static ModConfigSpec.BooleanValue renderItemModelsWithCamoValue;
     private static ModConfigSpec.BooleanValue showAllRecipePermutationsInEmiValue;
     private static ModConfigSpec.EnumValue<SolidFrameMode> solidFrameModeValue;
     private static ModConfigSpec.BooleanValue showButtonPlateOverlayValue;
@@ -177,6 +181,13 @@ public final class ClientConfig
                 )
                 .translation(TRANSLATION_FORCE_AO_ON_GLOWING_BLOCKS)
                 .define(KEY_FORCE_AO_ON_GLOWING_BLOCKS, true);
+        renderItemModelsWithCamoValue = builder
+                .comment(
+                        "If true, item models will be rendered with their camo, if present.",
+                        "If false, item models will always be rendered without camo"
+                )
+                .translation(TRANSLATION_RENDER_ITEM_MODELS_WITH_CAMO)
+                .define(KEY_RENDER_ITEM_MODELS_WITH_CAMO, true);
         showAllRecipePermutationsInEmiValue = builder
                 .comment("If true, all possible recipes of the Framing Saw will be added to EMI, else only the permutations using the Framed Cube will be added")
                 .comment("This setting only has an effect when EMI is installed")
@@ -289,6 +300,7 @@ public final class ClientConfig
             conTexMode = conTexModeValue.get();
             camoMessageVerbosity = camoMessageVerbosityValue.get();
             forceAoOnGlowingBlocks = forceAoOnGlowingBlocksValue.get();
+            renderItemModelsWithCamo = renderItemModelsWithCamoValue.get();
             showAllRecipePermutationsInEmi = showAllRecipePermutationsInEmiValue.get();
             solidFrameMode = solidFrameModeValue.get();
             showButtonPlateOverlay = showButtonPlateOverlayValue.get();
@@ -365,6 +377,12 @@ public final class ClientConfig
         public boolean shouldForceAmbientOcclusionOnGlowingBlocks()
         {
             return forceAoOnGlowingBlocks;
+        }
+
+        @Override
+        public boolean shouldRenderItemModelsWithCamo()
+        {
+            return renderItemModelsWithCamo;
         }
 
         @Override

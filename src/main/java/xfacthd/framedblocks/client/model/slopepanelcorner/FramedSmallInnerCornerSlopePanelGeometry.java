@@ -1,16 +1,14 @@
 package xfacthd.framedblocks.client.model.slopepanelcorner;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.core.Direction;
-import net.minecraft.world.item.ItemDisplayContext;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.model.data.QuadMap;
 import xfacthd.framedblocks.api.model.geometry.Geometry;
 import xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
 import xfacthd.framedblocks.api.model.quad.Modifiers;
 import xfacthd.framedblocks.api.model.quad.QuadModifier;
-import xfacthd.framedblocks.api.render.Quaternions;
+import xfacthd.framedblocks.api.model.wrapping.itemmodel.ItemModelInfo;
 import xfacthd.framedblocks.client.model.slopepanel.FramedSlopePanelGeometry;
 
 public class FramedSmallInnerCornerSlopePanelGeometry extends Geometry
@@ -78,8 +76,8 @@ public class FramedSmallInnerCornerSlopePanelGeometry extends Geometry
     }
 
     @Override
-    public void applyInHandTransformation(PoseStack poseStack, ItemDisplayContext ctx)
+    public ItemModelInfo getItemModelInfo()
     {
-        poseStack.mulPose(Quaternions.YP_90);
+        return SmallInnerCornerSlopePanelItemModelInfo.INSTANCE;
     }
 }

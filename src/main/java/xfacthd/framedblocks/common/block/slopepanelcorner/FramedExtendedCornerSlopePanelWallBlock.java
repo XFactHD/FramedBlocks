@@ -13,6 +13,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.shapes.*;
@@ -128,6 +129,13 @@ public class FramedExtendedCornerSlopePanelWallBlock extends FramedBlock
     protected BlockState mirror(BlockState state, Mirror mirror)
     {
         return FramedCornerSlopePanelWallBlock.mirrorCornerPanel(state, mirror);
+    }
+
+    @Override
+    @Nullable
+    public BlockState getItemModelSource()
+    {
+        return null;
     }
 
     @Override

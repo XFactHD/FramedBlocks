@@ -66,45 +66,45 @@ public final class FramedBlockStateProvider extends BlockStateProvider
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_ELEVATED_DOUBLE_SLOPE_EDGE, cube, "cutout");
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_STACKED_SLOPE_EDGE, cube, "cutout");
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_DOUBLE_SLAB, cube, "cutout");
-        simpleBlock(FBContent.BLOCK_FRAMED_ADJ_DOUBLE_SLAB.value(), cube);
-        simpleBlock(FBContent.BLOCK_FRAMED_ADJ_DOUBLE_COPYCAT_SLAB.value(), cube);
-        simpleBlock(FBContent.BLOCK_FRAMED_DIVIDED_SLAB.value(), cube);
-        simpleBlock(FBContent.BLOCK_FRAMED_SLAB_EDGE.value(), cube);
-        simpleBlock(FBContent.BLOCK_FRAMED_SLAB_CORNER.value(), cube);
-        simpleBlock(FBContent.BLOCK_FRAMED_PANEL.value(), cube);
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_ADJ_DOUBLE_SLAB, cube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_ADJ_DOUBLE_COPYCAT_SLAB, cube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_DIVIDED_SLAB, cube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_SLAB_EDGE, cube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_SLAB_CORNER, cube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_PANEL, cube, "cutout");
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_DOUBLE_PANEL, cube, "cutout");
-        simpleBlock(FBContent.BLOCK_FRAMED_ADJ_DOUBLE_PANEL.value(), cube);
-        simpleBlock(FBContent.BLOCK_FRAMED_ADJ_DOUBLE_COPYCAT_PANEL.value(), cube);
-        simpleBlock(FBContent.BLOCK_FRAMED_DIVIDED_PANEL_HOR.value(), cube);
-        simpleBlock(FBContent.BLOCK_FRAMED_DIVIDED_PANEL_VERT.value(), cube);
-        simpleBlock(FBContent.BLOCK_FRAMED_CORNER_PILLAR.value(), cube);
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_ADJ_DOUBLE_PANEL, cube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_ADJ_DOUBLE_COPYCAT_PANEL, cube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_DIVIDED_PANEL_HOR, cube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_DIVIDED_PANEL_VERT, cube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_CORNER_PILLAR.value(), cube);
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_DOUBLE_STAIRS, cube, "cutout");
-        simpleBlock(FBContent.BLOCK_FRAMED_HALF_STAIRS.value(), cube);
-        simpleBlock(FBContent.BLOCK_FRAMED_DIVIDED_STAIRS.value(), cube);
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_HALF_STAIRS, cube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_DIVIDED_STAIRS, cube, "cutout");
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_DOUBLE_HALF_STAIRS, cube, "cutout");
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_SLOPED_STAIRS, cube, "cutout");
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_SLICED_STAIRS_SLAB, cube, "cutout");
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_SLICED_STAIRS_PANEL, cube, "cutout");
-        simpleBlock(FBContent.BLOCK_FRAMED_VERTICAL_STAIRS.value(), cube);
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_VERTICAL_STAIRS, cube, "cutout");
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_VERTICAL_DOUBLE_STAIRS, cube, "cutout");
-        simpleBlock(FBContent.BLOCK_FRAMED_VERTICAL_HALF_STAIRS.value(), cube);
-        simpleBlock(FBContent.BLOCK_FRAMED_VERTICAL_DIVIDED_STAIRS.value(), cube);
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_VERTICAL_HALF_STAIRS, cube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_VERTICAL_DIVIDED_STAIRS, cube, "cutout");
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_VERTICAL_DOUBLE_HALF_STAIRS, cube, "cutout");
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_VERTICAL_SLICED_STAIRS, cube, "cutout");
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_VERTICAL_SLOPED_STAIRS, cube, "cutout");
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_THREEWAY_CORNER_PILLAR, cube);
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_DOUBLE_THREEWAY_CORNER_PILLAR, cube);
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_FENCE_GATE, cube, "cutout");
-        simpleBlock(FBContent.BLOCK_FRAMED_IRON_TRAP_DOOR.value(), ironCube);
-        simpleBlock(FBContent.BLOCK_FRAMED_STONE_BUTTON.value(), stoneCube);
-        simpleBlock(FBContent.BLOCK_FRAMED_LARGE_BUTTON.value(), cube);
-        simpleBlock(FBContent.BLOCK_FRAMED_LARGE_STONE_BUTTON.value(), stoneCube);
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_IRON_TRAP_DOOR, ironCube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_STONE_BUTTON, stoneCube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_LARGE_BUTTON, cube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_LARGE_STONE_BUTTON, stoneCube, "cutout");
         simpleBlock(FBContent.BLOCK_FRAMED_WALL_SIGN.value(), cube);
-        simpleBlock(FBContent.BLOCK_FRAMED_WALL_BOARD.value(), cube);
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_WALL_BOARD, cube, "cutout");
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_CORNER_STRIP, cube, "cutout");
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_LATTICE, cube, "cutout");
-        simpleBlock(FBContent.BLOCK_FRAMED_THICK_LATTICE.value(), cube);
-        simpleBlock(FBContent.BLOCK_FRAMED_HORIZONTAL_PANE.value(), cube);
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_THICK_LATTICE, cube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_HORIZONTAL_PANE, cube, "cutout");
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_RAIL_SLOPE, cube, "cutout");
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_POWERED_RAIL_SLOPE, cube, "cutout");
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_DETECTOR_RAIL_SLOPE, cube, "cutout");
@@ -113,8 +113,8 @@ public final class FramedBlockStateProvider extends BlockStateProvider
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_FANCY_POWERED_RAIL_SLOPE, cube, "cutout");
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_FANCY_DETECTOR_RAIL_SLOPE, cube, "cutout");
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_FANCY_ACTIVATOR_RAIL_SLOPE, cube, "cutout");
-        simpleBlock(FBContent.BLOCK_FRAMED_PILLAR.value(), cube);
-        simpleBlock(FBContent.BLOCK_FRAMED_HALF_PILLAR.value(), cube);
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_PILLAR, cube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_HALF_PILLAR, cube, "cutout");
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_POST, cube, "cutout");
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_PRISM, cube, "cutout");
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_ELEVATED_INNER_PRISM, cube, "cutout");
@@ -184,10 +184,11 @@ public final class FramedBlockStateProvider extends BlockStateProvider
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_STACKED_INNER_CORNER_SLOPE_PANEL_WALL, cube, "cutout");
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_PYRAMID, cube);
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_PYRAMID_SLAB, cube);
-        simpleBlock(FBContent.BLOCK_FRAMED_GATE.value(), cube);
-        simpleBlock(FBContent.BLOCK_FRAMED_IRON_GATE.value(), ironCube);
-        simpleBlock(FBContent.BLOCK_FRAMED_CENTERED_SLAB.value(), cube);
-        simpleBlock(FBContent.BLOCK_FRAMED_CENTERED_PANEL.value(), cube);
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_GATE, cube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_IRON_GATE, ironCube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_MINI_CUBE, cube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_CENTERED_SLAB, cube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_CENTERED_PANEL, cube, "cutout");
         simpleBlock(FBContent.BLOCK_FRAMED_MASONRY_CORNER_SEGMENT.value(), cube);
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_MASONRY_CORNER, cube, "cutout");
         simpleBlock(FBContent.BLOCK_FRAMED_CHECKERED_CUBE_SEGMENT.value(), cube);
@@ -236,11 +237,10 @@ public final class FramedBlockStateProvider extends BlockStateProvider
         registerFramedGlowingCube();
         registerFramedTarget(cube);
         registerFramedItemFrame();
-        registerFramedFancyRail();
-        registerFramedFancyPoweredRail();
-        registerFramedFancyDetectorRail();
-        registerFramedFancyActivatorRail();
-        registerFramedMiniCube(cube);
+        registerFramedFancyRail(cube);
+        registerFramedFancyPoweredRail(cube);
+        registerFramedFancyDetectorRail(cube);
+        registerFramedFancyActivatorRail(cube);
         registerFramedOneWayWindow();
         registerFramedBookshelf();
         registerFramedChiseledBookshelf(cube);
@@ -799,7 +799,7 @@ public final class FramedBlockStateProvider extends BlockStateProvider
         };
     }
 
-    private void registerFramedFancyRail()
+    private void registerFramedFancyRail(ModelFile cube)
     {
         ModelFile normalRail = existingBlock(FBContent.BLOCK_FRAMED_FANCY_RAIL);
         ModelFile ascendingRail = existingBlock(FBContent.BLOCK_FRAMED_FANCY_RAIL, "ascending");
@@ -809,9 +809,11 @@ public final class FramedBlockStateProvider extends BlockStateProvider
                 railStates(BlockStateProperties.RAIL_SHAPE, state -> normalRail, state -> ascendingRail, state -> curvedRail),
                 BlockStateProperties.WATERLOGGED, FramedProperties.GLOWING, FramedProperties.PROPAGATES_SKYLIGHT
         );
+
+        simpleBlockItem(FBContent.BLOCK_FRAMED_FANCY_RAIL, cube);
     }
 
-    private void registerFramedFancyPoweredRail()
+    private void registerFramedFancyPoweredRail(ModelFile cube)
     {
         ModelFile normalRail = existingBlock(FBContent.BLOCK_FRAMED_FANCY_POWERED_RAIL);
         ModelFile normalRailOn = block(FBContent.BLOCK_FRAMED_FANCY_POWERED_RAIL, "on")
@@ -833,9 +835,11 @@ public final class FramedBlockStateProvider extends BlockStateProvider
                 ),
                 BlockStateProperties.WATERLOGGED, FramedProperties.GLOWING, FramedProperties.PROPAGATES_SKYLIGHT
         );
+
+        simpleBlockItem(FBContent.BLOCK_FRAMED_FANCY_POWERED_RAIL, cube);
     }
 
-    private void registerFramedFancyDetectorRail()
+    private void registerFramedFancyDetectorRail(ModelFile cube)
     {
         ModelFile normalRail = existingBlock(FBContent.BLOCK_FRAMED_FANCY_DETECTOR_RAIL);
         ModelFile normalRailOn = block(FBContent.BLOCK_FRAMED_FANCY_DETECTOR_RAIL, "on")
@@ -857,9 +861,11 @@ public final class FramedBlockStateProvider extends BlockStateProvider
                 ),
                 BlockStateProperties.WATERLOGGED, FramedProperties.GLOWING, FramedProperties.PROPAGATES_SKYLIGHT
         );
+
+        simpleBlockItem(FBContent.BLOCK_FRAMED_FANCY_DETECTOR_RAIL, cube);
     }
 
-    private void registerFramedFancyActivatorRail()
+    private void registerFramedFancyActivatorRail(ModelFile cube)
     {
         ModelFile normalRail = existingBlock(FBContent.BLOCK_FRAMED_FANCY_ACTIVATOR_RAIL);
         ModelFile normalRailOn = block(FBContent.BLOCK_FRAMED_FANCY_ACTIVATOR_RAIL, "on")
@@ -881,21 +887,8 @@ public final class FramedBlockStateProvider extends BlockStateProvider
                 ),
                 BlockStateProperties.WATERLOGGED, FramedProperties.GLOWING, FramedProperties.PROPAGATES_SKYLIGHT
         );
-    }
 
-    private void registerFramedMiniCube(ModelFile cube)
-    {
-        simpleBlock(FBContent.BLOCK_FRAMED_MINI_CUBE.value(), cube);
-
-        itemModels().withExistingParent("framed_mini_cube", mcLoc("block/block"))
-                .element()
-                .from(4, 0, 4)
-                .to(12, 8, 12)
-                .allFaces((d, f) -> f.uvs(0, 0, 16, 16))
-                .textureAll("#all")
-                .end()
-                .texture("all", TEXTURE)
-                .renderType("cutout");
+        simpleBlockItem(FBContent.BLOCK_FRAMED_FANCY_ACTIVATOR_RAIL, cube);
     }
 
     private void registerFramedOneWayWindow()

@@ -668,10 +668,7 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension
      * {@return the state whose block model to reuse for the item or null if the loaded item model should be used}
      */
     @Nullable
-    default BlockState getItemModelSource()
-    {
-        return null;
-    }
+    BlockState getItemModelSource();
 
     /**
      * {@return the class under which this block should be registered to the Jade BlockComponentProvider to prevent

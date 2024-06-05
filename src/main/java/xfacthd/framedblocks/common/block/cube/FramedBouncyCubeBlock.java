@@ -148,6 +148,12 @@ public class FramedBouncyCubeBlock extends SlimeBlock implements IFramedBlock
     }
 
     @Override
+    public BlockState getItemModelSource()
+    {
+        return defaultBlockState();
+    }
+
+    @Override
     public BlockState getJadeRenderState(BlockState state)
     {
         return state;

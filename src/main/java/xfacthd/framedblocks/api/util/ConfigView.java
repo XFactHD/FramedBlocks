@@ -96,6 +96,11 @@ public final class ConfigView
          * Returns whether ambient occlusion should be forced on framed blocks which glow through applied glowstone dust
          */
         boolean shouldForceAmbientOcclusionOnGlowingBlocks();
+
+        /**
+         * Returns whether item models of framed blocks should render with the camo stored on the stack, if present
+         */
+        boolean shouldRenderItemModelsWithCamo();
     }
 
 

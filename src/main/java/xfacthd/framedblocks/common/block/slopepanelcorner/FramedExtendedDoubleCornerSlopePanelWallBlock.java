@@ -286,6 +286,13 @@ public class FramedExtendedDoubleCornerSlopePanelWallBlock extends AbstractFrame
     }
 
     @Override
+    @Nullable
+    public BlockState getItemModelSource()
+    {
+        return null;
+    }
+
+    @Override
     public BlockState getJadeRenderState(BlockState state)
     {
         return ((IFramedBlock) nonWallBlock.value()).getJadeRenderState(state);

@@ -16,6 +16,7 @@ import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.neoforged.neoforge.client.extensions.common.IClientBlockExtensions;
+import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.block.render.FramedBlockRenderProperties;
@@ -105,6 +106,13 @@ public class FramedWallTorchBlock extends WallTorchBlock implements IFramedBlock
     public void initializeClient(Consumer<IClientBlockExtensions> consumer)
     {
         consumer.accept(FramedBlockRenderProperties.INSTANCE);
+    }
+
+    @Override
+    @Nullable
+    public BlockState getItemModelSource()
+    {
+        return null;
     }
 
     @Override

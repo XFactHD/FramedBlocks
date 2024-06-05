@@ -92,6 +92,7 @@ public final class ModelWrappingHandler
     {
         visitedStates.clear();
         blockModelFactory.reset();
+        updateItemModelSource();
     }
 
     public boolean handlesItemModel()

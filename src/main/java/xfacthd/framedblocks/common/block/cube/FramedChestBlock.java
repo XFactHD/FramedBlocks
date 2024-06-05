@@ -98,12 +98,6 @@ public class FramedChestBlock extends FramedStorageBlock
     }
 
     @Override
-    public BlockState getItemModelSource()
-    {
-        return defaultBlockState();
-    }
-
-    @Override
     public BlockState getJadeRenderState(BlockState state)
     {
         return defaultBlockState().setValue(PropertyHolder.LATCH_TYPE, state.getValue(PropertyHolder.LATCH_TYPE));

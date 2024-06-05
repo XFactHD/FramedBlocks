@@ -166,6 +166,12 @@ public class FramedWallBlock extends WallBlock implements IFramedBlock
     }
 
     @Override
+    public BlockState getItemModelSource()
+    {
+        return defaultBlockState().setValue(EAST_WALL, WallSide.LOW).setValue(WEST_WALL, WallSide.LOW);
+    }
+
+    @Override
     public BlockState getJadeRenderState(BlockState state)
     {
         return defaultBlockState().setValue(EAST_WALL, WallSide.LOW).setValue(WEST_WALL, WallSide.LOW);

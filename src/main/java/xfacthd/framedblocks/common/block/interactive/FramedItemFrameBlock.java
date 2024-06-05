@@ -243,6 +243,13 @@ public class FramedItemFrameBlock extends FramedBlock
     }
 
     @Override
+    @Nullable
+    public BlockState getItemModelSource()
+    {
+        return null;
+    }
+
+    @Override
     public BlockState getJadeRenderState(BlockState state)
     {
         return state.setValue(BlockStateProperties.FACING, Direction.SOUTH);

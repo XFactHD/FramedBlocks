@@ -8,10 +8,13 @@ import xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
 import xfacthd.framedblocks.api.model.quad.Modifiers;
 import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.block.FramedProperties;
+import xfacthd.framedblocks.api.model.wrapping.itemmodel.ItemModelInfo;
+import xfacthd.framedblocks.api.model.wrapping.itemmodel.TranslatedItemModelInfo;
 import xfacthd.framedblocks.api.util.Utils;
 
 public class FramedWallBoardGeometry extends Geometry
 {
+    private static final TranslatedItemModelInfo ITEM_MODEL_INFO = TranslatedItemModelInfo.handOrGui(0F, 0F, -.5F);
     private static final float DEPTH = 1F/16F;
 
     private final Direction dir;
@@ -44,5 +47,11 @@ public class FramedWallBoardGeometry extends Geometry
                     .apply(Modifiers.cutSideLeftRight(dir.getOpposite(), DEPTH))
                     .export(quadMap.get(quadDir));
         }
+    }
+
+    @Override
+    public ItemModelInfo getItemModelInfo()
+    {
+        return ITEM_MODEL_INFO;
     }
 }

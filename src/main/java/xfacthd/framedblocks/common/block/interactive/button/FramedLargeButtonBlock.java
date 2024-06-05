@@ -18,6 +18,7 @@ import java.util.Set;
 
 public class FramedLargeButtonBlock extends FramedButtonBlock
 {
+    public static final LargeButtonStateMerger LARGE_STATE_MERGER = new LargeButtonStateMerger();
     private static final VoxelShape SHAPE_BOTTOM = box(1, 0, 1, 15, 2, 15);
     private static final VoxelShape SHAPE_BOTTOM_PRESSED = box(1, 0, 1, 15, 1, 15);
     private static final VoxelShape SHAPE_TOP = box(1, 14, 1, 15, 16, 15);
@@ -88,8 +89,6 @@ public class FramedLargeButtonBlock extends FramedButtonBlock
 
     public static final class LargeButtonStateMerger implements StateMerger
     {
-        public static final LargeButtonStateMerger INSTANCE = new LargeButtonStateMerger();
-
         private final StateMerger ignoringMerger = StateMerger.ignoring(WrapHelper.IGNORE_ALWAYS);
 
         private LargeButtonStateMerger() { }

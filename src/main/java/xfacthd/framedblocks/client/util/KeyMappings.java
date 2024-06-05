@@ -12,7 +12,7 @@ import net.neoforged.neoforge.common.util.Lazy;
 import org.lwjgl.glfw.GLFW;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
-import xfacthd.framedblocks.client.model.FramedBlockModel;
+import xfacthd.framedblocks.api.model.AbstractFramedBlockModel;
 import xfacthd.framedblocks.api.util.FramedConstants;
 
 public final class KeyMappings
@@ -77,9 +77,9 @@ public final class KeyMappings
                     .getBakedTopLevelModels()
                     .values()
                     .stream()
-                    .filter(FramedBlockModel.class::isInstance)
-                    .map(FramedBlockModel.class::cast)
-                    .forEach(FramedBlockModel::clearCache);
+                    .filter(AbstractFramedBlockModel.class::isInstance)
+                    .map(AbstractFramedBlockModel.class::cast)
+                    .forEach(AbstractFramedBlockModel::clearCache);
 
             //noinspection ConstantConditions
             Minecraft.getInstance().player.displayClientMessage(Component.literal("Model cache cleared"), true);

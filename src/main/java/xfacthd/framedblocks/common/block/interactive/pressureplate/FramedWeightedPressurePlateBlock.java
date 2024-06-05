@@ -31,6 +31,7 @@ import java.util.function.Consumer;
 
 public class FramedWeightedPressurePlateBlock extends WeightedPressurePlateBlock implements IFramedBlock
 {
+    public static final WeightedStateMerger STATE_MERGER = new WeightedStateMerger();
     private static final Map<BlockType, BlockType> WATERLOGGING_SWITCH = Map.of(
             BlockType.FRAMED_GOLD_PRESSURE_PLATE, BlockType.FRAMED_WATERLOGGABLE_GOLD_PRESSURE_PLATE,
             BlockType.FRAMED_WATERLOGGABLE_GOLD_PRESSURE_PLATE, BlockType.FRAMED_GOLD_PRESSURE_PLATE,
@@ -131,6 +132,12 @@ public class FramedWeightedPressurePlateBlock extends WeightedPressurePlateBlock
     }
 
     @Override
+    public BlockState getItemModelSource()
+    {
+        return defaultBlockState();
+    }
+
+    @Override
     public Class<? extends Block> getJadeTargetClass()
     {
         return FramedWeightedPressurePlateBlock.class;
@@ -198,8 +205,6 @@ public class FramedWeightedPressurePlateBlock extends WeightedPressurePlateBlock
 
     public static final class WeightedStateMerger implements StateMerger
     {
-        public static final WeightedStateMerger INSTANCE = new WeightedStateMerger();
-
         private final StateMerger ignoringMerger = StateMerger.ignoring(WrapHelper.IGNORE_ALWAYS);
 
         @Override

@@ -31,6 +31,8 @@ import java.util.function.Consumer;
 
 public class FramedButtonBlock extends ButtonBlock implements IFramedBlock
 {
+    public static final ButtonStateMerger STATE_MERGER = new ButtonStateMerger();
+
     private final BlockType type;
     private final float jadeScale;
 
@@ -115,6 +117,12 @@ public class FramedButtonBlock extends ButtonBlock implements IFramedBlock
     }
 
     @Override
+    public BlockState getItemModelSource()
+    {
+        return defaultBlockState().setValue(FACE, AttachFace.FLOOR);
+    }
+
+    @Override
     public Class<? extends Block> getJadeTargetClass()
     {
         return FramedButtonBlock.class;
@@ -156,8 +164,6 @@ public class FramedButtonBlock extends ButtonBlock implements IFramedBlock
 
     public static final class ButtonStateMerger implements StateMerger
     {
-        public static final ButtonStateMerger INSTANCE = new ButtonStateMerger();
-
         private final StateMerger ignoringMerger = StateMerger.ignoring(WrapHelper.IGNORE_ALWAYS);
 
         private ButtonStateMerger() { }

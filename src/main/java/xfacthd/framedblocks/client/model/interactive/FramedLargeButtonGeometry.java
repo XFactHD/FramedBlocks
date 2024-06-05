@@ -8,6 +8,7 @@ import xfacthd.framedblocks.api.model.geometry.Geometry;
 import xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
 import xfacthd.framedblocks.api.model.quad.Modifiers;
 import xfacthd.framedblocks.api.model.quad.QuadModifier;
+import xfacthd.framedblocks.api.model.wrapping.itemmodel.ItemModelInfo;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 
@@ -93,6 +94,12 @@ public class FramedLargeButtonGeometry extends Geometry
     public boolean useBaseModel()
     {
         return useBaseModel;
+    }
+
+    @Override
+    public ItemModelInfo getItemModelInfo()
+    {
+        return FramedButtonGeometry.ITEM_MODEL_INFO;
     }
 
 
