@@ -41,16 +41,16 @@ public final class GhostRenderBehaviours
                 FBContent.BLOCK_FRAMED_SMALL_INNER_CORNER_SLOPE_PANEL,
                 FBContent.BLOCK_FRAMED_LARGE_INNER_CORNER_SLOPE_PANEL,
                 FBContent.BLOCK_FRAMED_EXTENDED_CORNER_SLOPE_PANEL,
-                FBContent.BLOCK_FRAMED_EXTENDED_INNER_CORNER_SLOPE_PANEL,
-                FBContent.BLOCK_FRAMED_STACKED_CORNER_SLOPE_PANEL,
-                FBContent.BLOCK_FRAMED_STACKED_INNER_CORNER_SLOPE_PANEL
+                FBContent.BLOCK_FRAMED_EXTENDED_INNER_CORNER_SLOPE_PANEL
         ));
         event.registerBlocks(new StandingAndWallDoubleBlockGhostRenderBehaviour(), List.of(
                 FBContent.BLOCK_FRAMED_SMALL_DOUBLE_CORNER_SLOPE_PANEL,
                 FBContent.BLOCK_FRAMED_LARGE_DOUBLE_CORNER_SLOPE_PANEL,
                 FBContent.BLOCK_FRAMED_INVERSE_DOUBLE_CORNER_SLOPE_PANEL,
                 FBContent.BLOCK_FRAMED_EXTENDED_DOUBLE_CORNER_SLOPE_PANEL,
-                FBContent.BLOCK_FRAMED_EXTENDED_INNER_DOUBLE_CORNER_SLOPE_PANEL
+                FBContent.BLOCK_FRAMED_EXTENDED_INNER_DOUBLE_CORNER_SLOPE_PANEL,
+                FBContent.BLOCK_FRAMED_STACKED_CORNER_SLOPE_PANEL,
+                FBContent.BLOCK_FRAMED_STACKED_INNER_CORNER_SLOPE_PANEL
         ));
         event.registerBlock(new CollapsibleBlockGhostRenderBehaviour(), FBContent.BLOCK_FRAMED_COLLAPSIBLE_BLOCK);
         event.registerBlock(new CollapsibleCopycatBlockGhostRenderBehaviour(), FBContent.BLOCK_FRAMED_COLLAPSIBLE_COPYCAT_BLOCK);
