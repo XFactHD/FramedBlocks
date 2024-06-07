@@ -19,6 +19,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.saveddata.maps.MapId;
 import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
 import xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
+import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.common.data.component.FramedMap;
@@ -120,10 +121,7 @@ public class FramedItemFrameBlockEntity extends FramedBlockEntity
             }
         }
 
-        if (!player.isCreative() && !player.getInventory().add(heldItem))
-        {
-            player.drop(heldItem, false);
-        }
+        Utils.giveToPlayer(player, heldItem, true);
 
         // Don't clear rotation
         setItem(ItemStack.EMPTY);

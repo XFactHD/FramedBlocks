@@ -10,6 +10,7 @@ import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.camo.CamoContainerFactory;
 import xfacthd.framedblocks.api.util.ConfigView;
+import xfacthd.framedblocks.api.util.Utils;
 
 public abstract class AbstractBlockCamoContainerFactory<T extends AbstractBlockCamoContainer<T>> extends CamoContainerFactory<T>
 {
@@ -39,18 +40,7 @@ public abstract class AbstractBlockCamoContainerFactory<T extends AbstractBlockC
         if (!level.isClientSide())
         {
             ItemStack result = createItemStack(level, pos, player, stack, container);
-            if (!player.isCreative() && ConfigView.Server.INSTANCE.shouldConsumeCamoItem())
-            {
-                if (!player.getInventory().add(result))
-                {
-                    player.drop(result, false);
-                }
-            }
-            else if (player.isCreative() && !player.getInventory().contains(result))
-            {
-                player.getInventory().add(result);
-            }
-            player.getInventory().setChanged();
+            Utils.giveToPlayer(player, result, ConfigView.Server.INSTANCE.shouldConsumeCamoItem());
         }
         return true;
     }

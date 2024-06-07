@@ -531,6 +531,33 @@ public final class Utils
         return ctx.firstPerson() || ctx == ItemDisplayContext.THIRD_PERSON_LEFT_HAND || ctx == ItemDisplayContext.THIRD_PERSON_RIGHT_HAND;
     }
 
+    /**
+     * Place the given {@link ItemStack} in the given {@link Player}'s inventory or drop it if it doesn't fit if the
+     * player is in survival or place it in the player's inventory if the player is in creative mode and doesn't
+     * already have the item
+     *
+     * @param player The player to give the stack to
+     * @param stack The stack to give to the player
+     * @param giveInSurvival Whether the stack should be given to a player in survival mode
+     */
+    public static void giveToPlayer(Player player, ItemStack stack, boolean giveInSurvival)
+    {
+        if (stack.isEmpty()) return;
+
+        boolean creative = player.isCreative();
+        if (!creative && giveInSurvival)
+        {
+            if (!player.getInventory().add(stack))
+            {
+                player.drop(stack, false);
+            }
+        }
+        else if (creative && !player.getInventory().contains(stack))
+        {
+            player.getInventory().add(stack);
+        }
+    }
+
     public static String formatItemStack(ItemStack stack)
     {
         if (stack.isEmpty())

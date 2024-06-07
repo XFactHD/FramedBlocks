@@ -228,11 +228,7 @@ public class FramedBlockEntity extends BlockEntity
         {
             setIntangible(false);
 
-            ItemStack result = new ItemStack(ConfigView.Server.INSTANCE.getIntangibilityMarkerItem());
-            if (!player.getInventory().add(result))
-            {
-                player.drop(result, false);
-            }
+            Utils.giveToPlayer(player, new ItemStack(ConfigView.Server.INSTANCE.getIntangibilityMarkerItem()), true);
         }
         return ItemInteractionResult.sidedSuccess(level().isClientSide());
     }
@@ -262,11 +258,7 @@ public class FramedBlockEntity extends BlockEntity
                 stack.hurtAndBreak(1, player, LivingEntity.getSlotForHand(hand));
             }
 
-            ItemStack result = new ItemStack(Utils.FRAMED_REINFORCEMENT.value());
-            if (!player.getInventory().add(result))
-            {
-                player.drop(result, false);
-            }
+            Utils.giveToPlayer(player, new ItemStack(Utils.FRAMED_REINFORCEMENT.value()), true);
         }
         return ItemInteractionResult.sidedSuccess(level().isClientSide());
     }

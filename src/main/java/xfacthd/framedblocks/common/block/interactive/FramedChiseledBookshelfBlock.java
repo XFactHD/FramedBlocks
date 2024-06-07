@@ -154,10 +154,7 @@ public class FramedChiseledBookshelfBlock extends FramedBlock
         }
 
         ItemStack stack = be.takeBook(slot);
-        if (!player.getInventory().add(stack))
-        {
-            player.drop(stack, false);
-        }
+        Utils.giveToPlayer(player, stack, true);
 
         SoundEvent sound = stack.is(Items.ENCHANTED_BOOK) ? SoundEvents.CHISELED_BOOKSHELF_PICKUP_ENCHANTED : SoundEvents.CHISELED_BOOKSHELF_PICKUP;
         level.playSound(null, pos, sound, SoundSource.BLOCKS, 1.0F, 1.0F);

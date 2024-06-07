@@ -76,11 +76,7 @@ public final class FluidCamoContainerFactory extends CamoContainerFactory<FluidC
                 if (result != stack) // Container holds fluid by type (i.e. bucket) -> got a new stack
                 {
                     stack.shrink(1);
-                    if (!result.isEmpty() && !player.getInventory().add(result))
-                    {
-                        player.drop(result, false);
-                    }
-                    player.getInventory().setChanged();
+                    Utils.giveToPlayer(player, result, true);
                 }
             }
         }
@@ -112,11 +108,7 @@ public final class FluidCamoContainerFactory extends CamoContainerFactory<FluidC
                 if (result != stack) // Container holds fluid by type (i.e. bucket) -> got a new stack
                 {
                     stack.shrink(1);
-                    if (!result.isEmpty() && !player.getInventory().add(result))
-                    {
-                        player.drop(result, false);
-                    }
-                    player.getInventory().setChanged();
+                    Utils.giveToPlayer(player, result, true);
                 }
             }
             return true;
