@@ -21,6 +21,7 @@ import net.minecraftforge.client.ChunkRenderTypeSet;
 import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraftforge.client.model.*;
 import net.minecraftforge.client.model.data.ModelData;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.util.Utils;
 
@@ -129,7 +130,11 @@ public final class FluidModel implements BakedModel
 
         IClientFluidTypeExtensions props = IClientFluidTypeExtensions.of(fluid);
 
-        ResourceLocation modelName = Utils.rl("fluid/" + fluid.getFluidType().toString().replace(":", "_"));
+        ResourceLocation fluidName = Preconditions.checkNotNull(
+                ForgeRegistries.FLUID_TYPES.get().getKey(fluid.getFluidType()),
+                "Cannot create FluidModel for unregistered FluidType"
+        );
+        ResourceLocation modelName = Utils.rl("fluid/" + fluidName.toString().replace(":", "_"));
         Function<Material, TextureAtlasSprite> spriteGetter = matToSprite(props);
         BakedModel model = bareModel.bake(
                 modelBakery.new ModelBakerImpl(
