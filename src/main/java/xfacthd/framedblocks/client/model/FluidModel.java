@@ -21,6 +21,7 @@ import net.neoforged.neoforge.client.ChunkRenderTypeSet;
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.neoforged.neoforge.client.model.*;
 import net.neoforged.neoforge.client.model.data.ModelData;
+import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.util.Utils;
 
@@ -129,7 +130,11 @@ public final class FluidModel implements BakedModel
 
         IClientFluidTypeExtensions props = IClientFluidTypeExtensions.of(fluid);
 
-        ResourceLocation modelName = Utils.rl("fluid/" + fluid.getFluidType().toString().replace(":", "_"));
+        ResourceLocation fluidName = Preconditions.checkNotNull(
+                NeoForgeRegistries.FLUID_TYPES.getKey(fluid.getFluidType()),
+                "Cannot create FluidModel for unregistered FluidType"
+        );
+        ResourceLocation modelName = Utils.rl("fluid/" + fluidName.toString().replace(":", "_"));
         Function<Material, TextureAtlasSprite> spriteGetter = matToSprite(props);
         BakedModel model = bareModel.bake(
                 modelBakery.new ModelBakerImpl(
