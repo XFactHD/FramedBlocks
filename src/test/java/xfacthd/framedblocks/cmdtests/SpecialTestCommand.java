@@ -10,12 +10,8 @@ import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.blocks.BlockStateArgument;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
-import net.neoforged.bus.api.SubscribeEvent;
 import xfacthd.framedblocks.FramedBlocks;
-import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.cmdtests.tests.*;
 
 import java.io.IOException;
@@ -24,13 +20,11 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.function.Consumer;
 
-@EventBusSubscriber(modid = FramedConstants.MOD_ID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
 public final class SpecialTestCommand
 {
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("uuuu_MM_dd-kk_mm_ss");
     private static final Path EXPORT_DIR = Path.of("./logs/test");
 
-    @SubscribeEvent
     public static void registerCommands(final RegisterCommandsEvent event)
     {
         event.getDispatcher().register(Commands.literal("fbtest")

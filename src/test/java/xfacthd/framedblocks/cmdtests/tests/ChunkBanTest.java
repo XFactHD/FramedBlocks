@@ -15,12 +15,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.util.FakePlayer;
-import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.tick.LevelTickEvent;
 import xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
-import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.blockentity.doubled.FramedDoubleBlockEntity;
 import xfacthd.framedblocks.common.data.camo.block.BlockCamoContainer;
@@ -63,7 +60,6 @@ import java.util.function.Supplier;
 // | Max blocks per chunk:  |     39998 |    57376 |    78523 |    99921 |
 // +------------------------+-----------+----------+----------+----------+
 
-@EventBusSubscriber(modid = FramedConstants.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
 public final class ChunkBanTest
 {
     private static final String CONFIRMATION_KEY = "confirm";
@@ -132,7 +128,6 @@ public final class ChunkBanTest
         return 1;
     }
 
-    @SubscribeEvent
     public static void onLevelTick(final LevelTickEvent.Pre event)
     {
         Level level = event.getLevel();
