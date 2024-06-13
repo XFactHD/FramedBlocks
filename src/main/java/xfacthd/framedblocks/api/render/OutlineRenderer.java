@@ -78,13 +78,11 @@ public interface OutlineRenderer
     /**
      * Draw a line between the two points given by the two sets of 3D coordinates
      */
-    static void drawLine(
-            VertexConsumer builder, PoseStack poseStack, double x1, double y1, double z1, double x2, double y2, double z2
-    )
+    static void drawLine(VertexConsumer builder, PoseStack poseStack, float x1, float y1, float z1, float x2, float y2, float z2)
     {
-        float nX = (float)(x2 - x1);
-        float nY = (float)(y2 - y1);
-        float nZ = (float)(z2 - z1);
+        float nX = x2 - x1;
+        float nY = y2 - y1;
+        float nZ = z2 - z1;
         float nLen = Mth.sqrt(nX * nX + nY * nY + nZ * nZ);
 
         nX = nX / nLen;
@@ -92,8 +90,8 @@ public interface OutlineRenderer
         nZ = nZ / nLen;
 
         var pose = poseStack.last();
-        builder.vertex(pose, (float)x1, (float)y1, (float)z1).color(0.0F, 0.0F, 0.0F, 0.4F).normal(pose, nX, nY, nZ).endVertex();
-        builder.vertex(pose, (float)x2, (float)y2, (float)z2).color(0.0F, 0.0F, 0.0F, 0.4F).normal(pose, nX, nY, nZ).endVertex();
+        builder.addVertex(pose, x1, y1, z1).setColor(0, 0, 0, 102).setNormal(pose, nX, nY, nZ);
+        builder.addVertex(pose, x2, y2, z2).setColor(0, 0, 0, 102).setNormal(pose, nX, nY, nZ);
     }
 
 

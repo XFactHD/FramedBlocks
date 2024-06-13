@@ -22,14 +22,13 @@ record OverlayGeometry(BlockModel wrapped, Vector3f offset, Vector3f scale) impl
             ModelBaker bakery,
             Function<Material, TextureAtlasSprite> spriteGetter,
             ModelState transform,
-            ItemOverrides overrides,
-            ResourceLocation modelLocation
+            ItemOverrides overrides
     )
     {
         Transformation transformation = transform.getRotation().compose(new Transformation(offset, null, scale, null));
         transform = new SimpleModelState(transformation, transform.isUvLocked());
 
-        BakedModel model = wrapped.bake(bakery, wrapped, spriteGetter, transform, modelLocation, true);
+        BakedModel model = wrapped.bake(bakery, wrapped, spriteGetter, transform, true);
         return offset.equals(VEC_ZERO) ? model : new OverlayModel(model, offset, scale);
     }
 

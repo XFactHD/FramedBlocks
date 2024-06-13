@@ -131,15 +131,20 @@ public class ConnectionPredicateDebugRenderer implements BlockDebugRenderer<Fram
     {
         PoseStack.Pose pose = poseStack.last();
 
-        buffer.vertex(pose, minX, maxY, z + .0005F).color(0xFF000000).uv(dummyU0, dummyV0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(LightTexture.FULL_BRIGHT).normal(pose, 0F, 0F, 1F).endVertex();
-        buffer.vertex(pose, minX, minY, z + .0005F).color(0xFF000000).uv(dummyU0, dummyV1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(LightTexture.FULL_BRIGHT).normal(pose, 0F, 0F, 1F).endVertex();
-        buffer.vertex(pose, maxX, minY, z + .0005F).color(0xFF000000).uv(dummyU1, dummyV1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(LightTexture.FULL_BRIGHT).normal(pose, 0F, 0F, 1F).endVertex();
-        buffer.vertex(pose, maxX, maxY, z + .0005F).color(0xFF000000).uv(dummyU1, dummyV0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(LightTexture.FULL_BRIGHT).normal(pose, 0F, 0F, 1F).endVertex();
+        vertex(buffer, pose, minX, maxY, z + .0005F, 0xFF000000, dummyU0, dummyV0);
+        vertex(buffer, pose, minX, minY, z + .0005F, 0xFF000000, dummyU0, dummyV1);
+        vertex(buffer, pose, maxX, minY, z + .0005F, 0xFF000000, dummyU1, dummyV1);
+        vertex(buffer, pose, maxX, maxY, z + .0005F, 0xFF000000, dummyU1, dummyV0);
 
-        buffer.vertex(pose, minX + .01F, maxY - .01F, z + .001F).color(color).uv(dummyU0, dummyV0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(LightTexture.FULL_BRIGHT).normal(pose, 0F, 0F, 1F).endVertex();
-        buffer.vertex(pose, minX + .01F, minY + .01F, z + .001F).color(color).uv(dummyU0, dummyV1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(LightTexture.FULL_BRIGHT).normal(pose, 0F, 0F, 1F).endVertex();
-        buffer.vertex(pose, maxX - .01F, minY + .01F, z + .001F).color(color).uv(dummyU1, dummyV1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(LightTexture.FULL_BRIGHT).normal(pose, 0F, 0F, 1F).endVertex();
-        buffer.vertex(pose, maxX - .01F, maxY - .01F, z + .001F).color(color).uv(dummyU1, dummyV0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(LightTexture.FULL_BRIGHT).normal(pose, 0F, 0F, 1F).endVertex();
+        vertex(buffer, pose, minX + .01F, maxY - .01F, z + .001F, color, dummyU0, dummyV0);
+        vertex(buffer, pose, minX + .01F, minY + .01F, z + .001F, color, dummyU0, dummyV1);
+        vertex(buffer, pose, maxX - .01F, minY + .01F, z + .001F, color, dummyU1, dummyV1);
+        vertex(buffer, pose, maxX - .01F, maxY - .01F, z + .001F, color, dummyU1, dummyV0);
+    }
+
+    private static void vertex(VertexConsumer buffer, PoseStack.Pose pose, float x, float y, float z, int color, float u, float v)
+    {
+        buffer.addVertex(pose, x, y, z).setColor(color).setUv(u, v).setOverlay(OverlayTexture.NO_OVERLAY).setLight(LightTexture.FULL_BRIGHT).setNormal(pose, 0F, 0F, 1F);
     }
 
     public static void captureDummySprite(TextureAtlas atlas)

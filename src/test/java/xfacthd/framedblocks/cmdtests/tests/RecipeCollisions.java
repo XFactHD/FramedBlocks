@@ -90,7 +90,7 @@ public final class RecipeCollisions
                     .filter(other -> other.value() != recipe)
                     .forEach(other ->
                     {
-                        if (other.value().matches(container, level))
+                        if (other.value().matches(container.asCraftInput(), level))
                         {
                             collisions.put(holder.id(), other.id());
                         }

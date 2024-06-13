@@ -31,7 +31,7 @@ public final class FramedSpriteSourceProvider extends SpriteSourceProvider
 
         atlas(BLOCKS_ATLAS)
                 .addSource(new AnimationSplitterSource(
-                        new ResourceLocation("block/stonecutter_saw"),
+                        Utils.rl("minecraft", "block/stonecutter_saw"),
                         List.of(new AnimationSplitterSource.Frame(0, SPRITE_SAW_STILL))
                 ));
     }

@@ -34,7 +34,7 @@ public final class FallbackLoader implements IGeometryLoader<FallbackGeometry>
             return new FallbackGeometry(ctx.deserialize(json, BlockModel.class));
         }
 
-        ResourceLocation fallback = new ResourceLocation(GsonHelper.getAsString(json, "fallback"));
+        ResourceLocation fallback = ResourceLocation.parse(GsonHelper.getAsString(json, "fallback"));
         fallback = ModelBakery.MODEL_LISTER.idToFile(fallback);
         try
         {

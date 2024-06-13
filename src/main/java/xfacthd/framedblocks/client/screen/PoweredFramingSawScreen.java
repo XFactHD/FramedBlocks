@@ -7,12 +7,12 @@ import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.network.chat.*;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.RecipeInput;
 import net.neoforged.neoforge.network.PacketDistributor;
 import xfacthd.framedblocks.api.util.ClientUtils;
 import xfacthd.framedblocks.api.util.Utils;
@@ -215,9 +215,9 @@ public class PoweredFramingSawScreen extends AbstractContainerScreen<PoweredFram
     }
 
     @Override
-    public Container getInputContainer()
+    public RecipeInput getRecipeInput()
     {
-        return menu.getInputContainer();
+        return menu.getRecipeInput();
     }
 
     @Override

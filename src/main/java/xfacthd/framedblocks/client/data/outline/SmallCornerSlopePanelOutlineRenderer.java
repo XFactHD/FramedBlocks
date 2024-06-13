@@ -12,18 +12,18 @@ public final class SmallCornerSlopePanelOutlineRenderer implements OutlineRender
     public void draw(BlockState state, PoseStack poseStack, VertexConsumer builder)
     {
         // Base
-        OutlineRenderer.drawLine(builder, poseStack, .5, 0, .5,  1, 0, .5);
-        OutlineRenderer.drawLine(builder, poseStack, .5, 0, .5, .5, 0,  1);
-        OutlineRenderer.drawLine(builder, poseStack, .5, 0,  1,  1, 0,  1);
-        OutlineRenderer.drawLine(builder, poseStack,  1, 0, .5,  1, 0,  1);
+        OutlineRenderer.drawLine(builder, poseStack, .5F, 0, .5F,   1, 0, .5F);
+        OutlineRenderer.drawLine(builder, poseStack, .5F, 0, .5F, .5F, 0,   1);
+        OutlineRenderer.drawLine(builder, poseStack, .5F, 0,   1,   1, 0,   1);
+        OutlineRenderer.drawLine(builder, poseStack,   1, 0, .5F,   1, 0,   1);
 
         // Back vertical
         OutlineRenderer.drawLine(builder, poseStack, 1, 0, 1, 1, 1, 1);
 
         // Slopes
-        OutlineRenderer.drawLine(builder, poseStack, .5, 0,  1, 1, 1, 1);
-        OutlineRenderer.drawLine(builder, poseStack,  1, 0, .5, 1, 1, 1);
-        OutlineRenderer.drawLine(builder, poseStack, .5, 0, .5, 1, 1, 1);
+        OutlineRenderer.drawLine(builder, poseStack, .5F, 0,   1, 1, 1, 1);
+        OutlineRenderer.drawLine(builder, poseStack,   1, 0, .5F, 1, 1, 1);
+        OutlineRenderer.drawLine(builder, poseStack, .5F, 0, .5F, 1, 1, 1);
     }
 
     @Override

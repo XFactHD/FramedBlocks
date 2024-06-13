@@ -133,8 +133,8 @@ public final class ServerConfig
     {
         if (obj instanceof String name)
         {
-            ResourceLocation key = new ResourceLocation(name);
-            if (BuiltInRegistries.ITEM.containsKey(key))
+            ResourceLocation key = ResourceLocation.tryParse(name);
+            if (key != null && BuiltInRegistries.ITEM.containsKey(key))
             {
                 return BuiltInRegistries.ITEM.get(key) != Items.AIR;
             }
@@ -153,7 +153,7 @@ public final class ServerConfig
         {
             allowBlockEntities = allowBlockEntitiesValue.get();
             enableIntangibleFeature = enableIntangibleFeatureValue.get();
-            intangibleMarkerItem = BuiltInRegistries.ITEM.get(new ResourceLocation(intangibleMarkerItemValue.get()));
+            intangibleMarkerItem = BuiltInRegistries.ITEM.get(ResourceLocation.tryParse(intangibleMarkerItemValue.get()));
             oneWayWindowOwnable = oneWayWindowOwnableValue.get();
             consumeCamoItem = consumeCamoItemValue.get();
             glowstoneLightLevel = glowstoneLightLevelValue.get();

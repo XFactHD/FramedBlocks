@@ -6,9 +6,9 @@ import me.shedaniel.rei.api.common.entry.EntryIngredient;
 import me.shedaniel.rei.api.common.entry.EntryStack;
 import me.shedaniel.rei.api.common.entry.type.VanillaEntryTypes;
 import me.shedaniel.rei.api.common.util.EntryStacks;
-import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.SingleRecipeInput;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.crafting.*;
 
@@ -90,9 +90,7 @@ public final class FramingSawDisplayGenerator implements DynamicDisplayGenerator
         FramingSawRecipe recipe = holder.value();
         List<FramingSawRecipeAdditive> additives = recipe.getAdditives();
         List<EntryIngredient> inputs = new ArrayList<>(additives.size() + 1);
-        FramingSawRecipeCalculation calc = recipe.makeCraftingCalculation(
-                new SimpleContainer(input), true
-        );
+        FramingSawRecipeCalculation calc = recipe.makeCraftingCalculation(new SingleRecipeInput(input), true);
         int outputCount = calc.getOutputCount();
 
         ItemStack inputStack = input.copy();

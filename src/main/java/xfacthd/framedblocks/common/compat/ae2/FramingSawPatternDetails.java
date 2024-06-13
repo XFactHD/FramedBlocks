@@ -4,10 +4,9 @@ import appeng.api.crafting.IPatternDetails;
 import appeng.api.crafting.PatternDetailsTooltip;
 import appeng.api.stacks.*;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.common.crafting.*;
@@ -33,7 +32,7 @@ final class FramingSawPatternDetails implements IPatternDetails
 
         this.recipe = Objects.requireNonNull(FramingSawRecipeCache.get(level.isClientSide()).findRecipeFor(pattern.output()));
         FramingSawRecipe recipe = this.recipe.value();
-        SimpleContainer container = new SimpleContainer(pattern.input());
+        RecipeInput container = new SingleRecipeInput(pattern.input());
         FramingSawRecipeCalculation calc = recipe.makeCraftingCalculation(container, level.isClientSide());
 
         List<FramingSawRecipeAdditive> additives = recipe.getAdditives();

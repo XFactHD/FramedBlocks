@@ -23,7 +23,7 @@ public final class ModelWrappingManager
     private static final Map<ResourceKey<Block>, ModelWrappingHandler> HANDLERS = new IdentityHashMap<>();
     private static boolean locked = true;
 
-    public static void handleAll(Map<ResourceLocation, BakedModel> models, TextureLookup textureLookup)
+    public static void handleAll(Map<ModelResourceLocation, BakedModel> models, TextureLookup textureLookup)
     {
         Stopwatch stopwatch = Stopwatch.createStarted();
 
@@ -38,7 +38,7 @@ public final class ModelWrappingManager
 
             for (BlockState state : block.getStateDefinition().getPossibleStates())
             {
-                ResourceLocation location = StateLocationCache.getLocationFromState(state, blockId);
+                ModelResourceLocation location = StateLocationCache.getLocationFromState(state, blockId);
                 BakedModel baseModel = models.get(location);
                 BakedModel replacement = handler.wrapBlockModel(baseModel, state, accessor, textureLookup, counter);
                 models.put(location, replacement);
@@ -46,7 +46,7 @@ public final class ModelWrappingManager
 
             if (handler.handlesItemModel())
             {
-                ModelResourceLocation itemId = new ModelResourceLocation(blockId, "inventory");
+                ModelResourceLocation itemId = ModelResourceLocation.inventory(blockId);
                 BakedModel itemModel = handler.replaceItemModel(accessor, textureLookup, counter);
                 models.put(itemId, itemModel);
             }
@@ -59,30 +59,24 @@ public final class ModelWrappingManager
         );
     }
 
-    public static BakedModel handle(ResourceLocation id, BakedModel model, ModelLookup modelLookup, TextureLookup textureLookup)
+    public static BakedModel handle(ModelResourceLocation id, BakedModel model, ModelLookup modelLookup, TextureLookup textureLookup)
     {
-        if (id instanceof ModelResourceLocation modelId)
+        ResourceKey<Block> blockId = ResourceKey.create(Registries.BLOCK, id.id());
+        ModelWrappingHandler handler = HANDLERS.get(blockId);
+        if (handler == null)
         {
-            ResourceKey<Block> blockId = ResourceKey.create(
-                    Registries.BLOCK,
-                    new ResourceLocation(modelId.getNamespace(), modelId.getPath())
-            );
-            ModelWrappingHandler handler = HANDLERS.get(blockId);
-            if (handler == null)
-            {
-                return model;
-            }
+            return model;
+        }
 
-            if (!modelId.getVariant().equals("inventory"))
-            {
-                Block block = BuiltInRegistries.BLOCK.get(blockId);
-                BlockState state = StateLocationCache.getStateFromLocation(blockId.location(), block, modelId);
-                return handler.wrapBlockModel(model, state, modelLookup, textureLookup, null);
-            }
-            else if (handler.handlesItemModel())
-            {
-                return handler.replaceItemModel(modelLookup, textureLookup, null);
-            }
+        if (!id.getVariant().equals("inventory"))
+        {
+            Block block = BuiltInRegistries.BLOCK.get(blockId);
+            BlockState state = StateLocationCache.getStateFromLocation(blockId.location(), block, id);
+            return handler.wrapBlockModel(model, state, modelLookup, textureLookup, null);
+        }
+        else if (handler.handlesItemModel())
+        {
+            return handler.replaceItemModel(modelLookup, textureLookup, null);
         }
         return model;
     }

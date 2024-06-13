@@ -21,7 +21,7 @@ import java.util.*;
 public final class GuidebookBuilder extends IncludeHolder<GuidebookBuilder> implements BookRoot, Identifiable
 {
     private static final String STANDARD_INCLUDE = "gbook:xml/standard.xml";
-    private static final ResourceLocation STANDARD_INCLUDE_LOC = new ResourceLocation(STANDARD_INCLUDE);
+    private static final ResourceLocation STANDARD_INCLUDE_LOC = ResourceLocation.parse(STANDARD_INCLUDE);
 
     private final String name;
     private final Map<String, ConditionBuilder> conditions = new LinkedHashMap<>();

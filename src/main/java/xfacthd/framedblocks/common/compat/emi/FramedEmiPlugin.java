@@ -6,10 +6,10 @@ import dev.emi.emi.api.recipe.EmiRecipe;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
-import net.minecraft.world.Container;
-import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeInput;
+import net.minecraft.world.item.crafting.SingleRecipeInput;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.client.screen.*;
 import xfacthd.framedblocks.common.config.ClientConfig;
@@ -51,7 +51,6 @@ public final class FramedEmiPlugin implements EmiPlugin
 
         FramingSawRecipeCache cache = FramingSawRecipeCache.get(true);
         Set<Item> inputItems = ClientConfig.VIEW.showAllRecipePermutationsInEmi() ? cache.getKnownItems() : CUBE_ITEM;
-        Container dummyContainer = new SimpleContainer(1);
         cache.getRecipes().forEach(holder ->
         {
             FramingSawRecipe recipe = holder.value();
@@ -63,8 +62,8 @@ public final class FramedEmiPlugin implements EmiPlugin
                 }
 
                 ItemStack inputStack = new ItemStack(item);
-                dummyContainer.setItem(0, inputStack);
-                FramingSawRecipeCalculation calc = recipe.makeCraftingCalculation(dummyContainer, true);
+                RecipeInput dummyInput = new SingleRecipeInput(inputStack);
+                FramingSawRecipeCalculation calc = recipe.makeCraftingCalculation(dummyInput, true);
                 int outputCount = calc.getOutputCount();
 
                 EmiStack input = EmiStack.of(inputStack, calc.getInputCount());

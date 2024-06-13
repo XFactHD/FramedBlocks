@@ -583,7 +583,7 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension
     }
 
     @Override
-    default float[] getBeaconColorMultiplier(BlockState state, LevelReader level, BlockPos pos, BlockPos beaconPos)
+    default Integer getBeaconColorMultiplier(BlockState state, LevelReader level, BlockPos pos, BlockPos beaconPos)
     {
         if (!doesBlockOccludeBeaconBeam(state, level, pos))
         {

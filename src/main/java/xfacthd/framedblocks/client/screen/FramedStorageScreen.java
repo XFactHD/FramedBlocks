@@ -6,11 +6,12 @@ import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.network.chat.Component;
+import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.menu.FramedStorageMenu;
 
 public class FramedStorageScreen extends AbstractContainerScreen<FramedStorageMenu>
 {
-    private static final ResourceLocation CHEST_GUI_TEXTURE = new ResourceLocation("textures/gui/container/generic_54.png");
+    private static final ResourceLocation CHEST_GUI_TEXTURE = Utils.rl("minecraft", "textures/gui/container/generic_54.png");
 
     public FramedStorageScreen(FramedStorageMenu container, Inventory inv, Component title)
     {

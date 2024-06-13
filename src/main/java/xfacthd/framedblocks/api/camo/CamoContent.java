@@ -113,7 +113,7 @@ public abstract class CamoContent<C extends CamoContent<C>> implements QuadCache
      * {@return the beacon color multiplier of this camo}
      * @see IBlockStateExtension#getBeaconColorMultiplier(LevelReader, BlockPos, BlockPos)
      */
-    public abstract float[] getBeaconColorMultiplier(LevelReader level, BlockPos pos, BlockPos beaconPos);
+    public abstract Integer getBeaconColorMultiplier(LevelReader level, BlockPos pos, BlockPos beaconPos);
 
     /**
      * {@return whether this camo is fully solid}

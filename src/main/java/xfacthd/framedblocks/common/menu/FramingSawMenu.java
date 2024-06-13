@@ -7,6 +7,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.RecipeInput;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 import xfacthd.framedblocks.common.FBContent;
@@ -31,7 +32,7 @@ public class FramingSawMenu extends AbstractContainerMenu implements IFramingSaw
     private final Slot[] additiveSlots;
     private final Slot resultSlot;
     protected final ContainerLevelAccess levelAccess;
-    protected final Container inputContainer = new FrameCrafterContainer(this);
+    protected final FrameCrafterContainer inputContainer = new FrameCrafterContainer(this);
     private final ResultContainer resultContainer = new ResultContainer();
     private final DataSlot selectedRecipeIdx = DataSlot.standalone();
     private final FramingSawRecipeCache cache;
@@ -185,9 +186,7 @@ public class FramingSawMenu extends AbstractContainerMenu implements IFramingSaw
             if (holder.matchResult.success())
             {
                 FramingSawRecipe recipe = holder.getRecipe();
-                FramingSawRecipeCalculation calc = recipe.makeCraftingCalculation(
-                        inputContainer, level.isClientSide()
-                );
+                FramingSawRecipeCalculation calc = recipe.makeCraftingCalculation(inputContainer, level.isClientSide());
 
                 ItemStack result = recipe.assemble(inputContainer, level.registryAccess());
                 result.setCount(calc.getOutputCount());
@@ -226,7 +225,7 @@ public class FramingSawMenu extends AbstractContainerMenu implements IFramingSaw
     }
 
     @Override
-    public Container getInputContainer()
+    public RecipeInput getRecipeInput()
     {
         return inputContainer;
     }
@@ -284,7 +283,7 @@ public class FramingSawMenu extends AbstractContainerMenu implements IFramingSaw
 
 
 
-    private static class FrameCrafterContainer extends SimpleContainer
+    protected static class FrameCrafterContainer extends SimpleContainer implements RecipeInput
     {
         private final FramingSawMenu menu;
 
@@ -299,6 +298,12 @@ public class FramingSawMenu extends AbstractContainerMenu implements IFramingSaw
         {
             super.setChanged();
             menu.slotsChanged(this);
+        }
+
+        @Override
+        public int size()
+        {
+            return getContainerSize();
         }
     }
 

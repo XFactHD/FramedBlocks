@@ -31,7 +31,7 @@ public final class FramedModernFixClientIntegration implements ModernFixClientIn
             Function<Material, TextureAtlasSprite> textureGetter
     )
     {
-        if (ModernFixCompat.dynamicResources)
+        /*if (ModernFixCompat.dynamicResources)
         {
             BakedModel baseModel = originalModel;
             if (originalModel instanceof FramedBlockModel framedModel)
@@ -47,7 +47,7 @@ public final class FramedModernFixClientIntegration implements ModernFixClientIn
 
             // Return incoming original model instead of the potentially unwrapped model if no wrapping was done
             return wrappedModel != baseModel ? wrappedModel : originalModel;
-        }
+        }*/
         return originalModel;
     }
 }

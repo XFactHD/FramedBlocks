@@ -13,8 +13,8 @@ public final class SlopeSlabOutlineRenderer implements OutlineRenderer
     public void draw(BlockState state, PoseStack poseStack, VertexConsumer builder)
     {
         //Back edges
-        OutlineRenderer.drawLine(builder, poseStack, 0, 0, 1, 0, .5, 1);
-        OutlineRenderer.drawLine(builder, poseStack, 1, 0, 1, 1, .5, 1);
+        OutlineRenderer.drawLine(builder, poseStack, 0, 0, 1, 0, .5F, 1);
+        OutlineRenderer.drawLine(builder, poseStack, 1, 0, 1, 1, .5F, 1);
 
         //Bottom face
         OutlineRenderer.drawLine(builder, poseStack, 0, 0, 0, 0, 0, 1);
@@ -23,11 +23,11 @@ public final class SlopeSlabOutlineRenderer implements OutlineRenderer
         OutlineRenderer.drawLine(builder, poseStack, 0, 0, 1, 1, 0, 1);
 
         //Top edge
-        OutlineRenderer.drawLine(builder, poseStack, 0, .5, 1, 1, .5, 1);
+        OutlineRenderer.drawLine(builder, poseStack, 0, .5F, 1, 1, .5F, 1);
 
         //Slope
-        OutlineRenderer.drawLine(builder, poseStack, 0, 0, 0, 0, .5, 1);
-        OutlineRenderer.drawLine(builder, poseStack, 1, 0, 0, 1, .5, 1);
+        OutlineRenderer.drawLine(builder, poseStack, 0, 0, 0, 0, .5F, 1);
+        OutlineRenderer.drawLine(builder, poseStack, 1, 0, 0, 1, .5F, 1);
     }
 
     @Override

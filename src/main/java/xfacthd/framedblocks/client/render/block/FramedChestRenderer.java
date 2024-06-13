@@ -7,6 +7,7 @@ import com.mojang.math.Axis;
 import net.minecraft.client.renderer.block.BlockModelShaper;
 import net.minecraft.client.renderer.block.ModelBlockRenderer;
 import net.minecraft.client.renderer.blockentity.*;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
@@ -15,7 +16,6 @@ import net.minecraft.client.renderer.*;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -158,7 +158,7 @@ public class FramedChestRenderer implements BlockEntityRenderer<FramedChestBlock
 
 
 
-    public static void onModelsLoaded(Map<ResourceLocation, BakedModel> registry)
+    public static void onModelsLoaded(Map<ModelResourceLocation, BakedModel> registry)
     {
         for (Direction dir : Direction.Plane.HORIZONTAL)
         {
@@ -168,7 +168,7 @@ public class FramedChestRenderer implements BlockEntityRenderer<FramedChestBlock
                         .setValue(FramedProperties.FACING_HOR, dir)
                         .setValue(PropertyHolder.LATCH_TYPE, latch);
 
-                ResourceLocation location = BlockModelShaper.stateToModelLocation(state);
+                ModelResourceLocation location = BlockModelShaper.stateToModelLocation(state);
 
                 BakedModel model = registry.get(location);
                 if (model instanceof FramedBlockModel fbModel)

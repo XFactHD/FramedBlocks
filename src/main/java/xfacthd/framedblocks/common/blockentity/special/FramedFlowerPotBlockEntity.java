@@ -78,7 +78,7 @@ public class FramedFlowerPotBlockEntity extends FramedBlockEntity
     @Override
     protected boolean readFromDataPacket(CompoundTag nbt, HolderLookup.Provider lookupProvider)
     {
-        Block flower = BuiltInRegistries.BLOCK.get(new ResourceLocation(nbt.getString("flower")));
+        Block flower = BuiltInRegistries.BLOCK.get(ResourceLocation.parse(nbt.getString("flower")));
 
         boolean update = flower != flowerBlock;
         if (update)
@@ -104,7 +104,7 @@ public class FramedFlowerPotBlockEntity extends FramedBlockEntity
     {
         super.handleUpdateTag(nbt, provider);
 
-        Block flower = BuiltInRegistries.BLOCK.get(new ResourceLocation(nbt.getString("flower")));
+        Block flower = BuiltInRegistries.BLOCK.get(ResourceLocation.parse(nbt.getString("flower")));
         if (flower != flowerBlock)
         {
             flowerBlock = flower;
@@ -156,6 +156,6 @@ public class FramedFlowerPotBlockEntity extends FramedBlockEntity
     public void loadAdditional(CompoundTag nbt, HolderLookup.Provider provider)
     {
         super.loadAdditional(nbt, provider);
-        flowerBlock = BuiltInRegistries.BLOCK.get(new ResourceLocation(nbt.getString("flower")));
+        flowerBlock = BuiltInRegistries.BLOCK.get(ResourceLocation.tryParse(nbt.getString("flower")));
     }
 }

@@ -17,7 +17,7 @@ import java.util.function.*;
 
 public final class ClientUtils
 {
-    public static final ResourceLocation DUMMY_TEXTURE = new ResourceLocation("neoforge", "white");
+    public static final ResourceLocation DUMMY_TEXTURE = Utils.rl("neoforge", "white");
 
     public static final Supplier<Boolean> OPTIFINE_LOADED = Suppliers.memoize(() ->
     {

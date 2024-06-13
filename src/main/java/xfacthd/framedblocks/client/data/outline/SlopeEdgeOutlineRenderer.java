@@ -13,21 +13,21 @@ public class SlopeEdgeOutlineRenderer implements OutlineRenderer
     public void draw(BlockState state, PoseStack poseStack, VertexConsumer builder)
     {
         // Horizontal perpendicular edges
-        OutlineRenderer.drawLine(builder, poseStack, 0D,  0D,  1D, 1D,  0D,  1D);
-        OutlineRenderer.drawLine(builder, poseStack, 0D,  0D, .5D, 1D,  0D, .5D);
-        OutlineRenderer.drawLine(builder, poseStack, 0D, .5D,  1D, 1D, .5D,  1D);
+        OutlineRenderer.drawLine(builder, poseStack, 0F,  0F,  1F, 1F,  0F,  1F);
+        OutlineRenderer.drawLine(builder, poseStack, 0F,  0F, .5F, 1F,  0F, .5F);
+        OutlineRenderer.drawLine(builder, poseStack, 0F, .5F,  1F, 1F, .5F,  1F);
 
         // Vertical edges
-        OutlineRenderer.drawLine(builder, poseStack, 0D, 0D, 1D, 0D, .5D, 1D);
-        OutlineRenderer.drawLine(builder, poseStack, 1D, 0D, 1D, 1D, .5D, 1D);
+        OutlineRenderer.drawLine(builder, poseStack, 0F, 0F, 1F, 0F, .5F, 1F);
+        OutlineRenderer.drawLine(builder, poseStack, 1F, 0F, 1F, 1F, .5F, 1F);
 
         // Horizontal parallel edges
-        OutlineRenderer.drawLine(builder, poseStack, 0D, 0D, .5D, 0D, 0D, 1D);
-        OutlineRenderer.drawLine(builder, poseStack, 1D, 0D, .5D, 1D, 0D, 1D);
+        OutlineRenderer.drawLine(builder, poseStack, 0F, 0F, .5F, 0F, 0F, 1F);
+        OutlineRenderer.drawLine(builder, poseStack, 1F, 0F, .5F, 1F, 0F, 1F);
 
         // Sloped edges
-        OutlineRenderer.drawLine(builder, poseStack, 0D, 0D, .5D, 0D, .5D, 1D);
-        OutlineRenderer.drawLine(builder, poseStack, 1D, 0D, .5D, 1D, .5D, 1D);
+        OutlineRenderer.drawLine(builder, poseStack, 0F, 0F, .5F, 0F, .5F, 1F);
+        OutlineRenderer.drawLine(builder, poseStack, 1F, 0F, .5F, 1F, .5F, 1F);
     }
 
     @Override

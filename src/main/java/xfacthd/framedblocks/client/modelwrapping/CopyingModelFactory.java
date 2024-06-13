@@ -1,8 +1,8 @@
 package xfacthd.framedblocks.client.modelwrapping;
 
 import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.core.Holder;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Property;
@@ -35,7 +35,7 @@ public final class CopyingModelFactory implements ModelFactory
                 srcState = srcState.setValue(prop, state.getValue(prop));
             }
         }
-        ResourceLocation baseLoc = StateLocationCache.getLocationFromState(
+        ModelResourceLocation baseLoc = StateLocationCache.getLocationFromState(
                 srcState, Utils.getKeyOrThrow(srcBlock).location()
         );
         BakedModel baseModel = ctx.modelLookup().get(baseLoc);

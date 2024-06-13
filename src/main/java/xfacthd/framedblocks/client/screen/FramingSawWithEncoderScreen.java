@@ -9,12 +9,11 @@ import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.world.Container;
-import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.RecipeInput;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.lwjgl.glfw.GLFW;
 import xfacthd.framedblocks.api.util.ClientUtils;
@@ -24,6 +23,7 @@ import xfacthd.framedblocks.common.crafting.*;
 import xfacthd.framedblocks.common.menu.FramingSawMenu;
 import xfacthd.framedblocks.common.menu.FramingSawWithEncoderMenu;
 import xfacthd.framedblocks.common.net.payload.ServerboundEncodeFramingSawPatternPayload;
+import xfacthd.framedblocks.common.util.ArrayBackedRecipeInput;
 
 import java.util.*;
 
@@ -32,8 +32,8 @@ public class FramingSawWithEncoderScreen extends FramingSawScreen
     public static final Component TOOLTIP_TAB_CRAFTING = Utils.translate("tooltip", "framing_saw.mode.crafting");
     public static final Component TOOLTIP_TAB_PATTERN = Utils.translate("tooltip", "framing_saw.mode.pattern_encode");
     private static final ResourceLocation BACKGROUND_ENCODER = Utils.rl("textures/gui/framing_saw_encoder.png");
-    private static final ResourceLocation TAB_ICON = new ResourceLocation("advancements/tab_left_middle");
-    private static final ResourceLocation TAB_SELECTED_ICON = new ResourceLocation("advancements/tab_left_middle_selected");
+    private static final ResourceLocation TAB_ICON = Utils.rl("minecraft", "advancements/tab_left_middle");
+    private static final ResourceLocation TAB_SELECTED_ICON = Utils.rl("minecraft", "advancements/tab_left_middle_selected");
     private static final WidgetSprites ENCODE_BTN_SPRITES = new WidgetSprites(
             Utils.rl("button_encode"),
             Utils.rl("button_encode_disabled"),
@@ -53,7 +53,7 @@ public class FramingSawWithEncoderScreen extends FramingSawScreen
     private final ItemStack blankPatternStack = AppliedEnergisticsCompat.makeBlankPatternStack();
     private final ItemStack sawPatternStack = AppliedEnergisticsCompat.makeSawPatternStack();
     private final ItemStack[] encodingInputs = new ItemStack[1 + FramingSawRecipe.MAX_ADDITIVE_COUNT];
-    private final Container encodingInputContainer = new SimpleContainer(encodingInputs);
+    private final RecipeInput encodingRecipeInput = new ArrayBackedRecipeInput(encodingInputs);
     private Button encodeButton = null;
     private boolean encoding = false;
     private FramingSawRecipeCalculation encoderCalculation = null;
@@ -141,9 +141,9 @@ public class FramingSawWithEncoderScreen extends FramingSawScreen
     }
 
     @Override
-    public Container getInputContainer()
+    public RecipeInput getRecipeInput()
     {
-        return encoding ? encodingInputContainer : super.getInputContainer();
+        return encoding ? encodingRecipeInput : super.getRecipeInput();
     }
 
     @Override
@@ -336,14 +336,14 @@ public class FramingSawWithEncoderScreen extends FramingSawScreen
     private void updateEncoderCalculation()
     {
         FramingSawRecipe recipe = cache.getRecipes().get(menu.getSelectedRecipeIndex()).value();
-        encoderCalculation = recipe.makeCraftingCalculation(encodingInputContainer, true);
+        encoderCalculation = recipe.makeCraftingCalculation(encodingRecipeInput, true);
         encodingInputs[0].setCount(encoderCalculation.getInputCount());
         for (int i = 0; i < recipe.getAdditives().size(); i++)
         {
             encodingInputs[i + 1].setCount(encoderCalculation.getAdditiveCount(i));
         }
         //noinspection ConstantConditions
-        encoderMatchResult = recipe.matchWithResult(encodingInputContainer, minecraft.level);
+        encoderMatchResult = recipe.matchWithResult(encodingRecipeInput, minecraft.level);
     }
 
     private void onEncodePressed(Button btn)

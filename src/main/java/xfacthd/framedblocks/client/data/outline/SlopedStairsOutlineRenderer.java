@@ -18,8 +18,8 @@ public final class SlopedStairsOutlineRenderer implements OutlineRenderer
         OutlineRenderer.drawLine(builder, poseStack, 0, 0, 1, 1, 0, 1);
 
         // Center face
-        OutlineRenderer.drawLine(builder, poseStack, 0, .5, 0, 0, .5, 1);
-        OutlineRenderer.drawLine(builder, poseStack, 0, .5, 0, 1, .5, 0);
+        OutlineRenderer.drawLine(builder, poseStack, 0, .5F, 0, 0, .5F, 1);
+        OutlineRenderer.drawLine(builder, poseStack, 0, .5F, 0, 1, .5F, 0);
 
         // Top face
         OutlineRenderer.drawLine(builder, poseStack, 1, 1, 0, 1, 1, 1);
@@ -31,13 +31,13 @@ public final class SlopedStairsOutlineRenderer implements OutlineRenderer
         OutlineRenderer.drawLine(builder, poseStack, 1, 0, 1, 1, 1, 1);
 
         // Front vertical edge
-        OutlineRenderer.drawLine(builder, poseStack, 0, 0, 0, 0, .5, 0);
+        OutlineRenderer.drawLine(builder, poseStack, 0, 0, 0, 0, .5F, 0);
 
         // Top diagonal edge
         OutlineRenderer.drawLine(builder, poseStack, 0, 1, 1, 1, 1, 0);
 
         // Center diagonal edge
-        OutlineRenderer.drawLine(builder, poseStack, 0, .5, 1, 1, .5, 0);
+        OutlineRenderer.drawLine(builder, poseStack, 0, .5F, 1, 1, .5F, 0);
     }
 
     @Override

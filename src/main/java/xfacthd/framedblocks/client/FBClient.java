@@ -3,8 +3,8 @@ package xfacthd.framedblocks.client;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.core.Holder;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -434,7 +434,7 @@ public final class FBClient
 
         if (SupplementariesCompat.isLoaded())
         {
-            event.register(SupplementariesCompat.HANGING_MODEL_LOCATION);
+            event.register(SupplementariesCompat.Client.HANGING_MODEL_LOCATION);
         }
 
         ModelWrappingManager.reset();
@@ -444,7 +444,7 @@ public final class FBClient
     {
         StateCacheBuilder.ensureStateCachesInitialized();
 
-        Map<ResourceLocation, BakedModel> registry = event.getModels();
+        Map<ModelResourceLocation, BakedModel> registry = event.getModels();
         TextureLookup textureLookup = TextureLookup.bindBlockAtlas(event.getTextureGetter());
 
         if (!ModernFixCompat.dynamicResourcesEnabled())

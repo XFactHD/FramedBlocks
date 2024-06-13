@@ -32,9 +32,9 @@ public final class InnerThreewayCornerOutlineRenderer implements OutlineRenderer
         OutlineRenderer.drawLine(builder, poseStack, 0, 1, 1, 1, 1, 0);
 
         //Cross
-        OutlineRenderer.drawLine(builder, poseStack, 0, 0, 0, .5, .5, .5);
-        OutlineRenderer.drawLine(builder, poseStack, .5, .5, .5, 0, 1, 1);
-        OutlineRenderer.drawLine(builder, poseStack, 1, 1, 0, .5, .5, .5);
+        OutlineRenderer.drawLine(builder, poseStack,   0,   0,   0, .5F, .5F, .5F);
+        OutlineRenderer.drawLine(builder, poseStack, .5F, .5F, .5F,   0,   1,   1);
+        OutlineRenderer.drawLine(builder, poseStack,   1,   1,   0, .5F, .5F, .5F);
     }
 
     @Override

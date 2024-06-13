@@ -645,7 +645,7 @@ public final class FramedBlockStateProvider extends BlockStateProvider
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_BOUNCY_CUBE, block, "cutout");
 
         makeOverlayModel(
-                FramedMarkedCubeGeometry.SLIME_FRAME_LOCATION,
+                FramedMarkedCubeGeometry.SLIME_FRAME_LOCATION.id(),
                 mcLoc("block/cube_all"),
                 "all",
                 modLoc("block/slime_frame")
@@ -659,7 +659,7 @@ public final class FramedBlockStateProvider extends BlockStateProvider
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_REDSTONE_BLOCK, block, "cutout");
 
         makeOverlayModel(
-                FramedMarkedCubeGeometry.REDSTONE_FRAME_LOCATION,
+                FramedMarkedCubeGeometry.REDSTONE_FRAME_LOCATION.id(),
                 mcLoc("block/cube_all"),
                 "all",
                 modLoc("block/redstone_frame")
@@ -1022,7 +1022,7 @@ public final class FramedBlockStateProvider extends BlockStateProvider
         {
             path += "_" + suffix;
         }
-        return models().getExistingFile(new ResourceLocation(name.getNamespace(), path));
+        return models().getExistingFile(Utils.rl(name.getNamespace(), path));
     }
 
     @SuppressWarnings({ "UnusedReturnValue", "SameParameterValue" })

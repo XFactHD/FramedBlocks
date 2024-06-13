@@ -3,6 +3,7 @@ package xfacthd.framedblocks.common.blockentity.doubled;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponentMap;
+import net.minecraft.util.FastColor;
 import net.minecraft.util.Tuple;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -153,10 +154,10 @@ public class FramedDoubleBlockEntity extends FramedBlockEntity implements IFrame
     }
 
     @Override
-    public float[] getCamoBeaconColorMultiplier(LevelReader level, BlockPos pos, BlockPos beaconPos)
+    public Integer getCamoBeaconColorMultiplier(LevelReader level, BlockPos pos, BlockPos beaconPos)
     {
-        float[] superMult = super.getCamoBeaconColorMultiplier(level, pos, beaconPos);
-        float[] localMult = camoContainer.getBeaconColorMultiplier(level, pos, beaconPos);
+        Integer superMult = super.getCamoBeaconColorMultiplier(level, pos, beaconPos);
+        Integer localMult = camoContainer.getBeaconColorMultiplier(level, pos, beaconPos);
 
         if (superMult == null)
         {
@@ -166,12 +167,7 @@ public class FramedDoubleBlockEntity extends FramedBlockEntity implements IFrame
         {
             return superMult;
         }
-
-        return new float[] {
-                (superMult[0] + localMult[0]) / 2F,
-                (superMult[1] + localMult[1]) / 2F,
-                (superMult[2] + localMult[2]) / 2F
-        };
+        return FastColor.ARGB32.multiply(superMult, localMult);
     }
 
     @Override

@@ -132,7 +132,7 @@ public final class BlockCamoContent extends CamoContent<BlockCamoContent>
     }
 
     @Override
-    public float[] getBeaconColorMultiplier(LevelReader level, BlockPos pos, BlockPos beaconPos)
+    public Integer getBeaconColorMultiplier(LevelReader level, BlockPos pos, BlockPos beaconPos)
     {
         return state.getBeaconColorMultiplier(level, pos, beaconPos);
     }

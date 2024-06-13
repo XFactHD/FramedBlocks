@@ -31,8 +31,8 @@ import java.util.List;
 
 public class FramedFlowerPotGeometry extends Geometry
 {
-    private static final ResourceLocation POT_TEXTURE = new ResourceLocation("minecraft:block/flower_pot");
-    private static final ResourceLocation DIRT_TEXTURE = new ResourceLocation("minecraft:block/dirt");
+    private static final ResourceLocation POT_TEXTURE = Utils.rl("minecraft", "block/flower_pot");
+    private static final ResourceLocation DIRT_TEXTURE = Utils.rl("minecraft", "block/dirt");
 
     private final boolean hanging;
     private final BakedModel hangingPotModel;
@@ -40,7 +40,7 @@ public class FramedFlowerPotGeometry extends Geometry
     public FramedFlowerPotGeometry(GeometryFactory.Context ctx)
     {
         this.hanging = SupplementariesCompat.isLoaded() && ctx.state().getValue(PropertyHolder.HANGING);
-        this.hangingPotModel = hanging ? ctx.modelLookup().get(SupplementariesCompat.HANGING_MODEL_LOCATION) : null;
+        this.hangingPotModel = hanging ? ctx.modelLookup().get(SupplementariesCompat.Client.HANGING_MODEL_LOCATION) : null;
     }
 
     @Override

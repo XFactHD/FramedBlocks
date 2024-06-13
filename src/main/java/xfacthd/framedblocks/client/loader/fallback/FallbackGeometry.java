@@ -25,11 +25,10 @@ final class FallbackGeometry implements IUnbakedGeometry<FallbackGeometry>
             ModelBaker baker,
             Function<Material, TextureAtlasSprite> spriteGetter,
             ModelState modelState,
-            ItemOverrides overrides,
-            ResourceLocation modelLocation
+            ItemOverrides overrides
     )
     {
-        return model.bake(baker, model, spriteGetter, modelState, modelLocation, true);
+        return model.bake(baker, model, spriteGetter, modelState, true);
     }
 
     @Override

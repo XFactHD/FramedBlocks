@@ -29,9 +29,9 @@ public final class FramedLootTableProvider extends LootTableProvider
 
     private static class BlockLootTable extends BlockLootSubProvider
     {
-        public BlockLootTable()
+        public BlockLootTable(HolderLookup.Provider lookupProvider)
         {
-            super(Set.of(), FeatureFlags.VANILLA_SET);
+            super(Set.of(), FeatureFlags.VANILLA_SET, lookupProvider);
         }
 
         @Override

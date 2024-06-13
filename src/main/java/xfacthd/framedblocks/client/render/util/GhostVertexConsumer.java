@@ -14,8 +14,8 @@ public final class GhostVertexConsumer extends VertexConsumerWrapper
     }
 
     @Override
-    public VertexConsumer color(int red, int green, int blue, int alpha)
+    public VertexConsumer setColor(int red, int green, int blue, int alpha)
     {
-        return parent.color(red, green, blue, (alpha * this.alpha) / 0xFF);
+        return parent.setColor(red, green, blue, (alpha * this.alpha) / 0xFF);
     }
 }

@@ -11,9 +11,9 @@ import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.SingleRecipeInput;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.client.screen.FramingSawScreen;
 import xfacthd.framedblocks.common.FBContent;
@@ -136,7 +136,7 @@ public final class FramingSawRecipeCategory implements IRecipeCategory<FramingSa
     )
     {
         FramingSawRecipeCalculation calc = recipe.makeCraftingCalculation(
-                new SimpleContainer(new ItemStack(input)), true
+                new SingleRecipeInput(new ItemStack(input)), true
         );
 
         ItemStack inputStack = new ItemStack(input, calc.getInputCount());

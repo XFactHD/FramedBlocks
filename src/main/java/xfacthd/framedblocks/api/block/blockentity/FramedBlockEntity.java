@@ -328,16 +328,6 @@ public class FramedBlockEntity extends BlockEntity
 
     /**
      * Used to return a different camo depending on the exact interaction location
-     * @deprecated Use player-sensitive version instead
-     */
-    @Deprecated(forRemoval = true)
-    public final CamoContainer<?, ?> getCamo(@SuppressWarnings("unused") BlockHitResult hit)
-    {
-        return camoContainer;
-    }
-
-    /**
-     * Used to return a different camo depending on the exact interaction location
      */
     public CamoContainer<?, ?> getCamo(BlockHitResult hit, Player player)
     {
@@ -646,7 +636,7 @@ public class FramedBlockEntity extends BlockEntity
         return camoContainer.getMapColor(level(), worldPosition);
     }
 
-    public float[] getCamoBeaconColorMultiplier(LevelReader level, BlockPos pos, BlockPos beaconPos)
+    public Integer getCamoBeaconColorMultiplier(LevelReader level, BlockPos pos, BlockPos beaconPos)
     {
         return camoContainer.getBeaconColorMultiplier(level, pos, beaconPos);
     }

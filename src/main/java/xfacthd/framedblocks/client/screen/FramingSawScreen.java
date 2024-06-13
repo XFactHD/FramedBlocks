@@ -16,12 +16,12 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
-import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.RecipeInput;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.lwjgl.glfw.GLFW;
 import xfacthd.framedblocks.api.util.ClientUtils;
@@ -50,7 +50,7 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu> im
     public static final String TOOLTIP_PRESS_TO_SHOW = Utils.translationKey("tooltip", "framing_saw.press_to_show");
     public static final Component MSG_HINT_SEARCH = Utils.translate("msg", "framing_saw.search");
     private static final ResourceLocation BACKGROUND = Utils.rl("textures/gui/framing_saw.png");
-    public static final ResourceLocation WARNING_ICON = new ResourceLocation("neoforge", "textures/gui/experimental_warning.png");
+    public static final ResourceLocation WARNING_ICON = Utils.rl("neoforge", "textures/gui/experimental_warning.png");
     private static final int IMAGE_WIDTH = 256;
     private static final int IMAGE_HEIGHT = 233;
     private static final int RECIPES_X = 48;
@@ -177,9 +177,9 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu> im
     }
 
     @Override
-    public Container getInputContainer()
+    public RecipeInput getRecipeInput()
     {
-        return menu.getInputContainer();
+        return menu.getRecipeInput();
     }
 
     protected void handleRecipeChange()
@@ -326,7 +326,7 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu> im
                     if (input.isEmpty()) yield Component.empty();
 
                     FramingSawRecipeCalculation calc = recipe.makeCraftingCalculation(
-                            screen.getInputContainer(), true
+                            screen.getRecipeInput(), true
                     );
                     yield Component.translatable(
                             TOOLTIP_HAVE_X_BUT_NEED_Y_ITEM_COUNT,
@@ -339,7 +339,7 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu> im
                     if (input.isEmpty()) yield Component.empty();
 
                     FramingSawRecipeCalculation calc = recipe.makeCraftingCalculation(
-                            screen.getInputContainer(), true
+                            screen.getRecipeInput(), true
                     );
                     int maxSize = recipe.getResult().getMaxStackSize();
                     yield Component.translatable(TOOLTIP_OUTPUT_COUNT, calc.getOutputCount(), maxSize);
@@ -373,7 +373,7 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu> im
                     if (input.isEmpty()) yield Component.empty();
 
                     FramingSawRecipeCalculation calc = recipe.makeCraftingCalculation(
-                            screen.getInputContainer(), true
+                            screen.getRecipeInput(), true
                     );
                     int cntIn = screen.getAdditiveStack(matchResult.additiveSlot()).getCount();
                     int cntReq = calc.getAdditiveCount(matchResult.additiveSlot());

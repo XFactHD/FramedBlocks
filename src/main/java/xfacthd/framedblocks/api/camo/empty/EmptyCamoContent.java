@@ -114,7 +114,7 @@ public final class EmptyCamoContent extends CamoContent<EmptyCamoContent>
     }
 
     @Override
-    public float[] getBeaconColorMultiplier(LevelReader level, BlockPos pos, BlockPos beaconPos)
+    public Integer getBeaconColorMultiplier(LevelReader level, BlockPos pos, BlockPos beaconPos)
     {
         return null;
     }

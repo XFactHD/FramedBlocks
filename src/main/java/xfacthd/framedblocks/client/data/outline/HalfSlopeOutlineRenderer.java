@@ -13,21 +13,21 @@ public final class HalfSlopeOutlineRenderer implements OutlineRenderer
     public void draw(BlockState state, PoseStack poseStack, VertexConsumer builder)
     {
         //Back edges
-        OutlineRenderer.drawLine(builder, poseStack,  0, 0, 1,  0, 1, 1);
-        OutlineRenderer.drawLine(builder, poseStack, .5, 0, 1, .5, 1, 1);
+        OutlineRenderer.drawLine(builder, poseStack,   0, 0, 1,   0, 1, 1);
+        OutlineRenderer.drawLine(builder, poseStack, .5F, 0, 1, .5F, 1, 1);
 
         //Bottom face
-        OutlineRenderer.drawLine(builder, poseStack,  0, 0, 0,  0, 0, 1);
-        OutlineRenderer.drawLine(builder, poseStack,  0, 0, 0, .5, 0, 0);
-        OutlineRenderer.drawLine(builder, poseStack, .5, 0, 0, .5, 0, 1);
-        OutlineRenderer.drawLine(builder, poseStack,  0, 0, 1, .5, 0, 1);
+        OutlineRenderer.drawLine(builder, poseStack,   0, 0, 0,   0, 0, 1);
+        OutlineRenderer.drawLine(builder, poseStack,   0, 0, 0, .5F, 0, 0);
+        OutlineRenderer.drawLine(builder, poseStack, .5F, 0, 0, .5F, 0, 1);
+        OutlineRenderer.drawLine(builder, poseStack,   0, 0, 1, .5F, 0, 1);
 
         //Top edge
-        OutlineRenderer.drawLine(builder, poseStack, 0, 1, 1, .5, 1, 1);
+        OutlineRenderer.drawLine(builder, poseStack, 0, 1, 1, .5F, 1, 1);
 
         //Slope
-        OutlineRenderer.drawLine(builder, poseStack,  0, 0, 0,  0, 1, 1);
-        OutlineRenderer.drawLine(builder, poseStack, .5, 0, 0, .5, 1, 1);
+        OutlineRenderer.drawLine(builder, poseStack,   0, 0, 0,   0, 1, 1);
+        OutlineRenderer.drawLine(builder, poseStack, .5F, 0, 0, .5F, 1, 1);
     }
 
     @Override

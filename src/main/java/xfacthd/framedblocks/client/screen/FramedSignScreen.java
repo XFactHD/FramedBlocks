@@ -279,18 +279,15 @@ public class FramedSignScreen extends Screen
                     int xStart = Math.min(x1, x2);
                     int xEnd = Math.max(x1, x2);
 
-                    Tesselator tessellator = Tesselator.getInstance();
-                    BufferBuilder tessBuffer = tessellator.getBuilder();
-
                     RenderSystem.enableColorLogicOp();
                     RenderSystem.logicOp(GlStateManager.LogicOp.OR_REVERSE);
 
-                    tessBuffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
-                    tessBuffer.vertex(matrix, xStart, y + 9F, 0.0F).color(0, 0, 255, 255).endVertex();
-                    tessBuffer.vertex(matrix,   xEnd, y + 9F, 0.0F).color(0, 0, 255, 255).endVertex();
-                    tessBuffer.vertex(matrix,   xEnd, y - 1F, 0.0F).color(0, 0, 255, 255).endVertex();
-                    tessBuffer.vertex(matrix, xStart, y - 1F, 0.0F).color(0, 0, 255, 255).endVertex();
-                    BufferUploader.drawWithShader(tessBuffer.end());
+                    BufferBuilder tessBuffer = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
+                    tessBuffer.addVertex(matrix, xStart, y + 9F, 0.0F).setColor(0, 0, 255, 255);
+                    tessBuffer.addVertex(matrix,   xEnd, y + 9F, 0.0F).setColor(0, 0, 255, 255);
+                    tessBuffer.addVertex(matrix,   xEnd, y - 1F, 0.0F).setColor(0, 0, 255, 255);
+                    tessBuffer.addVertex(matrix, xStart, y - 1F, 0.0F).setColor(0, 0, 255, 255);
+                    BufferUploader.drawWithShader(tessBuffer.buildOrThrow());
 
                     RenderSystem.disableColorLogicOp();
                 }

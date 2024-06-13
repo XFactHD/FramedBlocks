@@ -30,7 +30,7 @@ public final class FramedItemModelProvider extends ItemModelProvider
 
         simpleItem(FBContent.ITEM_FRAMED_REINFORCEMENT, "cutout");
 
-        ResourceLocation patternTexture = new ResourceLocation("ae2", "item/crafting_pattern");
+        ResourceLocation patternTexture = Utils.rl("ae2", "item/crafting_pattern");
         if (!AppliedEnergisticsCompat.isLoaded())
         {
             // Pretend that the texture exists when AE2 is not present so this doesn't crash

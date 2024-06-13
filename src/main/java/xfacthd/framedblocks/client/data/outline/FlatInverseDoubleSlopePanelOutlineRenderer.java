@@ -13,28 +13,28 @@ public final class FlatInverseDoubleSlopePanelOutlineRenderer implements Outline
     public void draw(BlockState state, PoseStack poseStack, VertexConsumer builder)
     {
         // Back edges
-        OutlineRenderer.drawLine(builder, poseStack, 0, 0, .5, 1, 0, .5);
-        OutlineRenderer.drawLine(builder, poseStack, 0, 0, .5, 0, 1, .5);
+        OutlineRenderer.drawLine(builder, poseStack, 0, 0, .5F, 1, 0, .5F);
+        OutlineRenderer.drawLine(builder, poseStack, 0, 0, .5F, 0, 1, .5F);
 
         // Side edges
-        OutlineRenderer.drawLine(builder, poseStack, 0, 0, 1, 0, 0, .5);
-        OutlineRenderer.drawLine(builder, poseStack, 1, 0, 1, 1, 0, .5);
-        OutlineRenderer.drawLine(builder, poseStack, 0, 1, 1, 0, 1, .5);
-        OutlineRenderer.drawLine(builder, poseStack, 1, 1, 0, 1, 1, .5);
+        OutlineRenderer.drawLine(builder, poseStack, 0, 0, 1, 0, 0, .5F);
+        OutlineRenderer.drawLine(builder, poseStack, 1, 0, 1, 1, 0, .5F);
+        OutlineRenderer.drawLine(builder, poseStack, 0, 1, 1, 0, 1, .5F);
+        OutlineRenderer.drawLine(builder, poseStack, 1, 1, 0, 1, 1, .5F);
 
         // Front edges
         OutlineRenderer.drawLine(builder, poseStack, 0, 0, 1, 1, 0, 1);
         OutlineRenderer.drawLine(builder, poseStack, 0, 0, 1, 0, 1, 1);
 
         // Back slopes
-        OutlineRenderer.drawLine(builder, poseStack, 0, 1, 1, 1, 1, .5);
-        OutlineRenderer.drawLine(builder, poseStack, 0, 0, 1, 1, 1, .5);
-        OutlineRenderer.drawLine(builder, poseStack, 1, 0, 1, 1, 1, .5);
+        OutlineRenderer.drawLine(builder, poseStack, 0, 1, 1, 1, 1, .5F);
+        OutlineRenderer.drawLine(builder, poseStack, 0, 0, 1, 1, 1, .5F);
+        OutlineRenderer.drawLine(builder, poseStack, 1, 0, 1, 1, 1, .5F);
 
         // Front slopes
-        OutlineRenderer.drawLine(builder, poseStack, 0, 1, .5, 1, 1, 0);
-        OutlineRenderer.drawLine(builder, poseStack, 0, 0, .5, 1, 1, 0);
-        OutlineRenderer.drawLine(builder, poseStack, 1, 0, .5, 1, 1, 0);
+        OutlineRenderer.drawLine(builder, poseStack, 0, 1, .5F, 1, 1, 0);
+        OutlineRenderer.drawLine(builder, poseStack, 0, 0, .5F, 1, 1, 0);
+        OutlineRenderer.drawLine(builder, poseStack, 1, 0, .5F, 1, 1, 0);
     }
 
     @Override

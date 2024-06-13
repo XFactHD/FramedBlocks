@@ -19,19 +19,19 @@ public final class FlatExtendedInnerSlopePanelCornerOutlineRenderer implements O
         OutlineRenderer.drawLine(builder, poseStack, 1, 0, 1, 1, 1, 1);
 
         // Side edges
-        OutlineRenderer.drawLine(builder, poseStack, 0, 0,  0, 0, 0, 1);
-        OutlineRenderer.drawLine(builder, poseStack, 1, 0,  0, 1, 0, 1);
-        OutlineRenderer.drawLine(builder, poseStack, 0, 1,  0, 0, 1, 1);
-        OutlineRenderer.drawLine(builder, poseStack, 1, 1, .5, 1, 1, 1);
+        OutlineRenderer.drawLine(builder, poseStack, 0, 0,   0, 0, 0, 1);
+        OutlineRenderer.drawLine(builder, poseStack, 1, 0,   0, 1, 0, 1);
+        OutlineRenderer.drawLine(builder, poseStack, 0, 1,   0, 0, 1, 1);
+        OutlineRenderer.drawLine(builder, poseStack, 1, 1, .5F, 1, 1, 1);
 
         //Front edges
         OutlineRenderer.drawLine(builder, poseStack, 0, 0, 0, 1, 0, 0);
         OutlineRenderer.drawLine(builder, poseStack, 0, 0, 0, 0, 1, 0);
 
         // Slopes
-        OutlineRenderer.drawLine(builder, poseStack, 0, 1, 0, 1, 1, .5);
-        OutlineRenderer.drawLine(builder, poseStack, 0, 0, 0, 1, 1, .5);
-        OutlineRenderer.drawLine(builder, poseStack, 1, 0, 0, 1, 1, .5);
+        OutlineRenderer.drawLine(builder, poseStack, 0, 1, 0, 1, 1, .5F);
+        OutlineRenderer.drawLine(builder, poseStack, 0, 0, 0, 1, 1, .5F);
+        OutlineRenderer.drawLine(builder, poseStack, 1, 0, 0, 1, 1, .5F);
     }
 
     @Override

@@ -19,12 +19,12 @@ public final class FlatSlopeSlabCornerOutlineRenderer implements OutlineRenderer
         OutlineRenderer.drawLine(builder, poseStack, 0, 0, 1, 1, 0, 1);
 
         //Back edge
-        OutlineRenderer.drawLine(builder, poseStack, 1, 0, 1, 1, .5, 1);
+        OutlineRenderer.drawLine(builder, poseStack, 1, 0, 1, 1, .5F, 1);
 
         //Slope
-        OutlineRenderer.drawLine(builder, poseStack, 0, 0, 1, 1, .5, 1);
-        OutlineRenderer.drawLine(builder, poseStack, 0, 0, 0, 1, .5, 1);
-        OutlineRenderer.drawLine(builder, poseStack, 1, 0, 0, 1, .5, 1);
+        OutlineRenderer.drawLine(builder, poseStack, 0, 0, 1, 1, .5F, 1);
+        OutlineRenderer.drawLine(builder, poseStack, 0, 0, 0, 1, .5F, 1);
+        OutlineRenderer.drawLine(builder, poseStack, 1, 0, 0, 1, .5F, 1);
     }
 
     @Override

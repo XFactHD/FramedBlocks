@@ -40,7 +40,7 @@ public final class OverlayQuadGenerator
 
     private static BakedQuad generateOverlayQuad(OverlayCacheKey key)
     {
-        QuadBakingVertexConsumer.Buffered baker = new QuadBakingVertexConsumer.Buffered();
+        QuadBakingVertexConsumer baker = new QuadBakingVertexConsumer();
 
         TextureAtlasSprite sprite = key.sprite();
         float shrinkRatio = sprite.uvShrinkRatio();
@@ -55,7 +55,7 @@ public final class OverlayQuadGenerator
         for (int i = 0; i < 4; i++)
         {
             key.pos(i, scratch);
-            baker.vertex(scratch.x, scratch.y, scratch.z);
+            baker.addVertex(scratch.x, scratch.y, scratch.z);
 
             float uSrc = scratch.get(uvInfo.uIdx());
             float vSrc = scratch.get(uvInfo.vIdx());
@@ -72,13 +72,13 @@ public final class OverlayQuadGenerator
                     v = Math.round(v * ModelUtils.UV_SUBSTEP_COUNT) / ModelUtils.UV_SUBSTEP_COUNT;
                 }
             }
-            baker.uv(sprite.getU(u), sprite.getV(v));
+            baker.setUv(sprite.getU(u), sprite.getV(v));
 
             key.normal(i, scratch);
-            baker.normal(scratch.x, scratch.y, scratch.z).color(1F, 1F, 1F, 1F).endVertex();
+            baker.setNormal(scratch.x, scratch.y, scratch.z).setColor(-1);
         }
 
-        return baker.getQuad();
+        return baker.bakeQuad();
     }
 
     private static OverlayCacheKey buildCacheKey(BakedQuad quad, TextureAtlasSprite sprite)

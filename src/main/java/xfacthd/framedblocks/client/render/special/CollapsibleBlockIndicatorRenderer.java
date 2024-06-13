@@ -12,8 +12,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.client.event.RenderHighlightEvent;
-import org.joml.Matrix3f;
-import org.joml.Matrix4f;
 import xfacthd.framedblocks.api.render.OutlineRenderer;
 import xfacthd.framedblocks.api.render.Quaternions;
 import xfacthd.framedblocks.api.util.Utils;
@@ -25,7 +23,7 @@ import xfacthd.framedblocks.common.data.property.NullableDirection;
 
 public final class CollapsibleBlockIndicatorRenderer
 {
-    private static final double[] VERTEX_NO_OFFSET = new double[] { 1D, 1D, 1D, 1D };
+    private static final float[] VERTEX_NO_OFFSET = new float[] { 1F, 1F, 1F, 1F };
 
     public static void onRenderBlockHighlight(final RenderHighlightEvent.Block event)
     {
@@ -69,7 +67,7 @@ public final class CollapsibleBlockIndicatorRenderer
         }
         poseStack.translate(-.5, -.5, -.5);
 
-        double[] vY = getVertexHeights(level, hit.getBlockPos(), face);
+        float[] vY = getVertexHeights(level, hit.getBlockPos(), face);
         drawSectionOverlay(builder, poseStack, vY);
         drawCornerMarkers(builder, poseStack, faceDir, hit, vY);
 
@@ -78,78 +76,76 @@ public final class CollapsibleBlockIndicatorRenderer
         ((MultiBufferSource.BufferSource) event.getMultiBufferSource()).endBatch(FramedRenderTypes.LINES_NO_DEPTH);
     }
 
-    private static double[] getVertexHeights(Level level, BlockPos pos, NullableDirection face)
+    private static float[] getVertexHeights(Level level, BlockPos pos, NullableDirection face)
     {
         if (face == NullableDirection.NONE || !(level.getBlockEntity(pos) instanceof FramedCollapsibleBlockEntity be))
         {
             return VERTEX_NO_OFFSET;
         }
         byte[] offsets = be.getVertexOffsets();
-        return new double[] {
-                1D - (offsets[0] / 16D),
-                1D - (offsets[1] / 16D),
-                1D - (offsets[2] / 16D),
-                1D - (offsets[3] / 16D)
+        return new float[] {
+                1F - (offsets[0] / 16F),
+                1F - (offsets[1] / 16F),
+                1F - (offsets[2] / 16F),
+                1F - (offsets[3] / 16F)
         };
     }
 
-    private static void drawSectionOverlay(VertexConsumer builder, PoseStack poseStack, double[] vY)
+    private static void drawSectionOverlay(VertexConsumer builder, PoseStack poseStack, float[] vY)
     {
-        double cenx = Mth.lerp(.5, vY[0], vY[1]); // center edge negative X
-        double cepx = Mth.lerp(.5, vY[3], vY[2]); // center edge positive X
-        double cenz = Mth.lerp(.5, vY[0], vY[3]); // center edge negative Z
-        double cepz = Mth.lerp(.5, vY[1], vY[2]); // center edge positive Z
+        float cenx = Mth.lerp(.5F, vY[0], vY[1]); // center edge negative X
+        float cepx = Mth.lerp(.5F, vY[3], vY[2]); // center edge positive X
+        float cenz = Mth.lerp(.5F, vY[0], vY[3]); // center edge negative Z
+        float cepz = Mth.lerp(.5F, vY[1], vY[2]); // center edge positive Z
 
-        double cinx = Mth.lerp(.25, cenx, cepx); // center inset negative X
-        double cipx = Mth.lerp(.75, cenx, cepx); // center inset positive X
-        double cinz = Mth.lerp(.25, cenz, cepz); // center inset negative Z
-        double cipz = Mth.lerp(.75, cenz, cepz); // center inset positive Z
+        float cinx = Mth.lerp(.25F, cenx, cepx); // center inset negative X
+        float cipx = Mth.lerp(.75F, cenx, cepx); // center inset positive X
+        float cinz = Mth.lerp(.25F, cenz, cepz); // center inset negative Z
+        float cipz = Mth.lerp(.75F, cenz, cepz); // center inset positive Z
 
-        drawLine(builder, poseStack,  .5, cenz,   0,  .5, cinz, .25);
-        drawLine(builder, poseStack,  .5, cipz, .75,  .5, cepz,   1);
-        drawLine(builder, poseStack,   0, cenx,  .5, .25, cinx,  .5);
-        drawLine(builder, poseStack, .75, cipx,  .5,   1, cepx,  .5);
+        drawLine(builder, poseStack,  .5F, cenz,   0F,  .5F, cinz, .25F);
+        drawLine(builder, poseStack,  .5F, cipz, .75F,  .5F, cepz,   1F);
+        drawLine(builder, poseStack,   0F, cenx,  .5F, .25F, cinx,  .5F);
+        drawLine(builder, poseStack, .75F, cipx,  .5F,   1F, cepx,  .5F);
 
-        drawLine(builder, poseStack, .5, cinz, .25, .25, cinx, .5);
-        drawLine(builder, poseStack, .5, cinz, .25, .75, cipx, .5);
-        drawLine(builder, poseStack, .5, cipz, .75, .25, cinx, .5);
-        drawLine(builder, poseStack, .5, cipz, .75, .75, cipx, .5);
+        drawLine(builder, poseStack, .5F, cinz, .25F, .25F, cinx, .5F);
+        drawLine(builder, poseStack, .5F, cinz, .25F, .75F, cipx, .5F);
+        drawLine(builder, poseStack, .5F, cipz, .75F, .25F, cinx, .5F);
+        drawLine(builder, poseStack, .5F, cipz, .75F, .75F, cipx, .5F);
     }
 
     private static void drawCornerMarkers(
-            VertexConsumer builder, PoseStack poseStack, Direction faceDir, BlockHitResult hit, double[] vY
+            VertexConsumer builder, PoseStack poseStack, Direction faceDir, BlockHitResult hit, float[] vY
     )
     {
         int vert = FramedCollapsibleBlockEntity.vertexFromHit(faceDir, Utils.fraction(hit.getLocation()));
         if (vert == 0 || vert == 4)
         {
-            drawCubeFrame(builder, poseStack,  0.25/16D,  0.25/16D, vY[0]);
+            drawCubeFrame(builder, poseStack,  0.25F/16F,  0.25F/16F, vY[0]);
         }
         if (vert == 1 || vert == 4)
         {
-            drawCubeFrame(builder, poseStack,  0.25/16D, 15.75/16D, vY[1]);
+            drawCubeFrame(builder, poseStack,  0.25F/16F, 15.75F/16F, vY[1]);
         }
         if (vert == 2 || vert == 4)
         {
-            drawCubeFrame(builder, poseStack, 15.75/16D, 15.75/16D, vY[2]);
+            drawCubeFrame(builder, poseStack, 15.75F/16F, 15.75F/16F, vY[2]);
         }
         if (vert == 3 || vert == 4)
         {
-            drawCubeFrame(builder, poseStack, 15.75/16D,  0.25/16D, vY[3]);
+            drawCubeFrame(builder, poseStack, 15.75F/16F,  0.25F/16F, vY[3]);
         }
     }
 
-    private static void drawCubeFrame(
-            VertexConsumer builder, PoseStack poseStack, double x, double z, double vY
-    )
+    private static void drawCubeFrame(VertexConsumer builder, PoseStack poseStack, float x, float z, float vY)
     {
-        double minX = x - .5D/16D;
-        double maxX = x + .5D/16D;
-        double minZ = z - .5D/16D;
-        double maxZ = z + .5D/16D;
+        float minX = x - .5F/16F;
+        float maxX = x + .5F/16F;
+        float minZ = z - .5F/16F;
+        float maxZ = z + .5F/16F;
 
-        double minY = vY - .75/16D;
-        double maxY = vY + .25/16D;
+        float minY = vY - .75F/16F;
+        float maxY = vY + .25F/16F;
 
         // Bottom
         drawLine(builder, poseStack, minX, minY, minZ, minX, minY, maxZ);
@@ -171,12 +167,12 @@ public final class CollapsibleBlockIndicatorRenderer
     }
 
     private static void drawLine(
-            VertexConsumer builder, PoseStack poseStack, double x1, double y1, double z1, double x2, double y2, double z2
+            VertexConsumer builder, PoseStack poseStack, float x1, float y1, float z1, float x2, float y2, float z2
     )
     {
-        float nX = (float)(x2 - x1);
-        float nY = (float)(y2 - y1);
-        float nZ = (float)(z2 - z1);
+        float nX = x2 - x1;
+        float nY = y2 - y1;
+        float nZ = z2 - z1;
         float nLen = Mth.sqrt(nX * nX + nY * nY + nZ * nZ);
 
         nX = nX / nLen;
@@ -184,8 +180,8 @@ public final class CollapsibleBlockIndicatorRenderer
         nZ = nZ / nLen;
 
         PoseStack.Pose pose = poseStack.last();
-        builder.vertex(pose, (float)x1, (float)y1, (float)z1).color(1f, 0F, 0F, .6F).normal(pose, nX, nY, nZ).endVertex();
-        builder.vertex(pose, (float)x2, (float)y2, (float)z2).color(1f, 0F, 0F, .6F).normal(pose, nX, nY, nZ).endVertex();
+        builder.addVertex(pose, x1, y1, z1).setColor(255, 0, 0, 153).setNormal(pose, nX, nY, nZ);
+        builder.addVertex(pose, x2, y2, z2).setColor(255, 0, 0, 153).setNormal(pose, nX, nY, nZ);
     }
 
 

@@ -15,7 +15,7 @@ import java.util.List;
 public final class FrameBackgroundOverlay extends BlockInteractOverlay
 {
     private static final ResourceLocation SYMBOL_TEXTURE = Utils.rl("textures/overlay/frame_background_symbols.png");
-    private static final ResourceLocation LEATHER_TEXTURE = new ResourceLocation("textures/item/leather.png");
+    private static final ResourceLocation LEATHER_TEXTURE = Utils.rl("minecraft", "textures/item/leather.png");
     private static final Texture TEXTURE_BG = new Texture(SYMBOL_TEXTURE, 0, 0, 22, 22, 38, 22);
     private static final Texture TEXTURE_CROSS = new Texture(SYMBOL_TEXTURE, 22, 0, 16, 16, 38, 22);
     private static final Texture TEXTURE_LEATHER = new Texture(LEATHER_TEXTURE, 0, 0, 16, 16, 16, 16);

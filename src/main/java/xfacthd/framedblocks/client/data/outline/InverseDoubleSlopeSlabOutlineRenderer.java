@@ -15,29 +15,29 @@ public final class InverseDoubleSlopeSlabOutlineRenderer implements OutlineRende
     public void draw(BlockState state, PoseStack poseStack, VertexConsumer builder)
     {
         //Back vertical edges
-        OutlineRenderer.drawLine(builder, poseStack, 0, .5, 1, 0, 1, 1);
-        OutlineRenderer.drawLine(builder, poseStack, 1, .5, 1, 1, 1, 1);
+        OutlineRenderer.drawLine(builder, poseStack, 0, .5F, 1, 0, 1, 1);
+        OutlineRenderer.drawLine(builder, poseStack, 1, .5F, 1, 1, 1, 1);
 
         //Center horizontal edges
-        OutlineRenderer.drawLine(builder, poseStack, 0, .5, 0, 1, .5, 0);
-        OutlineRenderer.drawLine(builder, poseStack, 0, .5, 1, 1, .5, 1);
+        OutlineRenderer.drawLine(builder, poseStack, 0, .5F, 0, 1, .5F, 0);
+        OutlineRenderer.drawLine(builder, poseStack, 0, .5F, 1, 1, .5F, 1);
 
         //Top edge
         OutlineRenderer.drawLine(builder, poseStack, 0, 1, 1, 1, 1, 1);
 
         //Top slope
-        OutlineRenderer.drawLine(builder, poseStack, 0, .5, 0, 0, 1, 1);
-        OutlineRenderer.drawLine(builder, poseStack, 1, .5, 0, 1, 1, 1);
+        OutlineRenderer.drawLine(builder, poseStack, 0, .5F, 0, 0, 1, 1);
+        OutlineRenderer.drawLine(builder, poseStack, 1, .5F, 0, 1, 1, 1);
 
         //Bottom edge
         OutlineRenderer.drawLine(builder, poseStack, 0, 0, 0, 1, 0, 0);
 
         //Bottom slope
-        OutlineRenderer.drawLine(builder, poseStack, 0, 0, 0, 0, .5, 1);
-        OutlineRenderer.drawLine(builder, poseStack, 1, 0, 0, 1, .5, 1);
+        OutlineRenderer.drawLine(builder, poseStack, 0, 0, 0, 0, .5F, 1);
+        OutlineRenderer.drawLine(builder, poseStack, 1, 0, 0, 1, .5F, 1);
 
         //Front vertical edges
-        OutlineRenderer.drawLine(builder, poseStack, 0, 0, 0, 0, .5, 0);
-        OutlineRenderer.drawLine(builder, poseStack, 1, 0, 0, 1, .5, 0);
+        OutlineRenderer.drawLine(builder, poseStack, 0, 0, 0, 0, .5F, 0);
+        OutlineRenderer.drawLine(builder, poseStack, 1, 0, 0, 1, .5F, 0);
     }
 }

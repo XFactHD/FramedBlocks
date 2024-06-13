@@ -21,15 +21,15 @@ public final class ExtendedCornerSlopePanelOutlineRenderer implements OutlineRen
         OutlineRenderer.drawLine(builder, poseStack, 1, 0, 1, 1, 1, 1);
 
         // Top
-        OutlineRenderer.drawLine(builder, poseStack, .5, 1, .5,  1, 1, .5);
-        OutlineRenderer.drawLine(builder, poseStack, .5, 1,  1,  1, 1,  1);
-        OutlineRenderer.drawLine(builder, poseStack, .5, 1, .5, .5, 1,  1);
-        OutlineRenderer.drawLine(builder, poseStack,  1, 1, .5,  1, 1,  1);
+        OutlineRenderer.drawLine(builder, poseStack, .5F, 1, .5F,   1, 1, .5F);
+        OutlineRenderer.drawLine(builder, poseStack, .5F, 1,  1F,   1, 1,   1);
+        OutlineRenderer.drawLine(builder, poseStack, .5F, 1, .5F, .5F, 1,   1);
+        OutlineRenderer.drawLine(builder, poseStack,   1, 1, .5F,   1, 1,   1);
 
         // Slopes
-        OutlineRenderer.drawLine(builder, poseStack, 0, 0, 0, .5, 1, .5);
-        OutlineRenderer.drawLine(builder, poseStack, 1, 0, 0,  1, 1, .5);
-        OutlineRenderer.drawLine(builder, poseStack, 0, 0, 1, .5, 1,  1);
+        OutlineRenderer.drawLine(builder, poseStack, 0, 0, 0, .5F, 1, .5F);
+        OutlineRenderer.drawLine(builder, poseStack, 1, 0, 0,   1, 1, .5F);
+        OutlineRenderer.drawLine(builder, poseStack, 0, 0, 1, .5F, 1,   1);
     }
 
     @Override

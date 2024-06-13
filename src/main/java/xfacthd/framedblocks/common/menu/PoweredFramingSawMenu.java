@@ -3,20 +3,20 @@ package xfacthd.framedblocks.common.menu;
 import com.google.common.base.Preconditions;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.RecipeInput;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.neoforge.items.*;
-import net.neoforged.neoforge.items.wrapper.RecipeWrapper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.blockentity.special.PoweredFramingSawBlockEntity;
+import xfacthd.framedblocks.common.capability.RecipeInputItemStackHandler;
 import xfacthd.framedblocks.common.crafting.*;
 import xfacthd.framedblocks.common.util.FramedUtils;
 
@@ -26,7 +26,7 @@ import java.util.Objects;
 public class PoweredFramingSawMenu extends AbstractContainerMenu implements IFramingSawMenu
 {
     private final PoweredFramingSawBlockEntity blockEntity;
-    private final Container inputContainer;
+    private final RecipeInputItemStackHandler itemHandler;
     private final DataSlot progressSlot;
     private final DataSlot recipeIdxSlot;
     private final DataSlot recipeStatusSlot;
@@ -58,8 +58,7 @@ public class PoweredFramingSawMenu extends AbstractContainerMenu implements IFra
         this.capacitySlot = addDataSlot(DataSlot.standalone());
         this.durationSlot = addDataSlot(DataSlot.standalone());
 
-        IItemHandlerModifiable itemHandler = FramedUtils.makeMenuItemHandler(blockEntity.getItemHandler(), level);
-        this.inputContainer = new RecipeWrapper(itemHandler);
+        this.itemHandler = makeItemHandler(blockEntity.getItemHandler(), level);
         for (int i = 0; i <= FramingSawMenu.SLOT_RESULT; i++)
         {
             int x = switch (i)
@@ -85,6 +84,15 @@ public class PoweredFramingSawMenu extends AbstractContainerMenu implements IFra
             capacitySlot.set(blockEntity.getEnergyCapacity());
             durationSlot.set(blockEntity.getCraftingDuration());
         }
+    }
+
+    private static RecipeInputItemStackHandler makeItemHandler(RecipeInputItemStackHandler handler, Level level)
+    {
+        if (level.isClientSide())
+        {
+            handler = new RecipeInputItemStackHandler(handler.getSlots());
+        }
+        return handler;
     }
 
     @Override
@@ -171,9 +179,9 @@ public class PoweredFramingSawMenu extends AbstractContainerMenu implements IFra
     }
 
     @Override
-    public Container getInputContainer()
+    public RecipeInput getRecipeInput()
     {
-        return inputContainer;
+        return itemHandler;
     }
 
     @Override

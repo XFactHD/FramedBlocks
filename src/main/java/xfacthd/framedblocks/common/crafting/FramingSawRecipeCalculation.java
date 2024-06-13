@@ -1,7 +1,7 @@
 package xfacthd.framedblocks.common.crafting;
 
-import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeInput;
 import xfacthd.framedblocks.api.util.Utils;
 
 public final class FramingSawRecipeCalculation
@@ -10,7 +10,7 @@ public final class FramingSawRecipeCalculation
     private final int inputValue;
     private final long lcm;
 
-    FramingSawRecipeCalculation(FramingSawRecipe recipe, Container container, boolean client)
+    FramingSawRecipeCalculation(FramingSawRecipe recipe, RecipeInput container, boolean client)
     {
         this.recipe = recipe;
         this.inputValue = getInputValue(container.getItem(0), client);

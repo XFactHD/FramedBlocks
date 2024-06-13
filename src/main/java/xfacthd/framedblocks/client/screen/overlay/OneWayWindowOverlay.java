@@ -20,7 +20,7 @@ import java.util.*;
 public final class OneWayWindowOverlay extends BlockInteractOverlay
 {
     private static final ResourceLocation SYMBOL_TEXTURE = Utils.rl("textures/overlay/one_way_window_symbols.png");
-    private static final ResourceLocation EYE_TEXTURE = new ResourceLocation("textures/item/ender_eye.png");
+    private static final ResourceLocation EYE_TEXTURE = Utils.rl("minecraft", "textures/item/ender_eye.png");
     private static final Texture TEXTURE_BG = new Texture(SYMBOL_TEXTURE, 0, 0, 22, 38, 37, 38);
     private static final Texture TEXTURE_CROSS = new Texture(SYMBOL_TEXTURE, 22, 0, 15, 15, 37, 38);
     private static final Texture TEXTURE_EYE = new Texture(EYE_TEXTURE, 0, 0, 16, 16, 16, 16);

@@ -2,8 +2,6 @@ package xfacthd.framedblocks.common.crafting;
 
 import com.google.gson.JsonSyntaxException;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.RegistryAccess;
-import net.minecraft.world.Container;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
@@ -15,7 +13,7 @@ import xfacthd.framedblocks.common.FBContent;
 
 import java.util.*;
 
-public final class FramingSawRecipe implements Recipe<Container>
+public final class FramingSawRecipe implements Recipe<RecipeInput>
 {
     public static final int CUBE_MATERIAL_VALUE = 6144; // Empirically determined value
     public static final int MAX_ADDITIVE_COUNT = 3;
@@ -37,14 +35,14 @@ public final class FramingSawRecipe implements Recipe<Container>
     }
 
     @Override
-    public boolean matches(Container container, Level level)
+    public boolean matches(RecipeInput recipeInput, Level level)
     {
-        return matchWithResult(container, level).success();
+        return matchWithResult(recipeInput, level).success();
     }
 
-    public FramingSawRecipeMatchResult matchWithResult(Container container, Level level)
+    public FramingSawRecipeMatchResult matchWithResult(RecipeInput recipeInput, Level level)
     {
-        ItemStack input = container.getItem(0);
+        ItemStack input = recipeInput.getItem(0);
         if (input.isEmpty())
         {
             return FramingSawRecipeMatchResult.MATERIAL_VALUE;
@@ -70,7 +68,7 @@ public final class FramingSawRecipe implements Recipe<Container>
 
         for (int idx = 0; idx < MAX_ADDITIVE_COUNT; idx++)
         {
-            ItemStack stack = container.getItem(idx + 1);
+            ItemStack stack = recipeInput.getItem(idx + 1);
             FramingSawRecipeAdditive additive = idx < additives.size() ? additives.get(idx) : null;
 
             boolean empty = stack.isEmpty();
@@ -101,13 +99,13 @@ public final class FramingSawRecipe implements Recipe<Container>
         return FramingSawRecipeMatchResult.SUCCESS;
     }
 
-    public FramingSawRecipeCalculation makeCraftingCalculation(Container container, boolean client)
+    public FramingSawRecipeCalculation makeCraftingCalculation(RecipeInput container, boolean client)
     {
         return new FramingSawRecipeCalculation(this, container, client);
     }
 
     @Override
-    public ItemStack assemble(Container container, HolderLookup.Provider access)
+    public ItemStack assemble(RecipeInput container, HolderLookup.Provider access)
     {
         return result.copy();
     }

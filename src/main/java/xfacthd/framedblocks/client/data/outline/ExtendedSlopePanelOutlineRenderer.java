@@ -23,14 +23,14 @@ public final class ExtendedSlopePanelOutlineRenderer implements OutlineRenderer
         OutlineRenderer.drawLine(builder, poseStack, 1, 0,  1, 1, 1,  1);
 
         // Top edges
-        OutlineRenderer.drawLine(builder, poseStack, 0, 1, .5, 0, 1,  1);
-        OutlineRenderer.drawLine(builder, poseStack, 1, 1, .5, 1, 1,  1);
-        OutlineRenderer.drawLine(builder, poseStack, 0, 1, .5, 1, 1, .5);
-        OutlineRenderer.drawLine(builder, poseStack, 0, 1,  1, 1, 1,  1);
+        OutlineRenderer.drawLine(builder, poseStack, 0, 1, .5F, 0, 1,   1);
+        OutlineRenderer.drawLine(builder, poseStack, 1, 1, .5F, 1, 1,   1);
+        OutlineRenderer.drawLine(builder, poseStack, 0, 1, .5F, 1, 1, .5F);
+        OutlineRenderer.drawLine(builder, poseStack, 0, 1,   1, 1, 1,   1);
 
         // Slopes
-        OutlineRenderer.drawLine(builder, poseStack, 0, 0,  0, 0, 1, .5);
-        OutlineRenderer.drawLine(builder, poseStack, 1, 0,  0, 1, 1, .5);
+        OutlineRenderer.drawLine(builder, poseStack, 0, 0,  0, 0, 1, .5F);
+        OutlineRenderer.drawLine(builder, poseStack, 1, 0,  0, 1, 1, .5F);
     }
 
     @Override

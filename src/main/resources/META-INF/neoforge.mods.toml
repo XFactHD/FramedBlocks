@@ -56,13 +56,6 @@ license="LGPL v3"
     side="BOTH"
 
 [[dependencies.framedblocks]]
-    modId="contex"
-    type="optional"
-    versionRange="[${contex_version},)"
-    ordering="NONE"
-    side="CLIENT"
-
-[[dependencies.framedblocks]]
     modId="create"
     type="optional"
     versionRange="[${create_version},)"

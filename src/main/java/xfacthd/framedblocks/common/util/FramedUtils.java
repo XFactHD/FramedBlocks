@@ -9,7 +9,6 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -17,8 +16,6 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.block.state.properties.RailShape;
 import net.neoforged.neoforge.common.util.Lazy;
-import net.neoforged.neoforge.items.IItemHandlerModifiable;
-import net.neoforged.neoforge.items.ItemStackHandler;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.mixin.AccessorIngredient;
 import xfacthd.framedblocks.mixin.AccessorStateDefinitionBuilder;
@@ -139,16 +136,8 @@ public final class FramedUtils
         properties.remove(property.getName());
     }
 
-    public static IItemHandlerModifiable makeMenuItemHandler(IItemHandlerModifiable handler, Level level)
-    {
-        if (level.isClientSide())
-        {
-            handler = new ItemStackHandler(handler.getSlots());
-        }
-        return handler;
-    }
-
-    @SuppressWarnings("UnreachableCode") // The cast is considered invalid due to Ingredient being final
+    // The cast is considered invalid due to Ingredient being final
+    @SuppressWarnings({ "UnreachableCode", "DataFlowIssue" })
     public static Ingredient.Value getSingleIngredientValue(Ingredient ing)
     {
         Ingredient.Value[] values = ((AccessorIngredient)(Object) ing).framedblocks$getValues();

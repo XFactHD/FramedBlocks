@@ -18,19 +18,19 @@ public final class FlatElevatedInnerSlopeSlabCornerOutlineRenderer implements Ou
         OutlineRenderer.drawLine(builder, poseStack, 0, 0, 1, 1, 0, 1);
 
         //Edges
-        OutlineRenderer.drawLine(builder, poseStack, 1, 0, 1, 1, 1, 1);
-        OutlineRenderer.drawLine(builder, poseStack, 0, 0, 0, 0, .5, 0);
-        OutlineRenderer.drawLine(builder, poseStack, 0, 0, 1, 0, 1, 1);
-        OutlineRenderer.drawLine(builder, poseStack, 1, 0, 0, 1, 1, 0);
+        OutlineRenderer.drawLine(builder, poseStack, 1, 0, 1, 1,   1, 1);
+        OutlineRenderer.drawLine(builder, poseStack, 0, 0, 0, 0, .5F, 0);
+        OutlineRenderer.drawLine(builder, poseStack, 0, 0, 1, 0,   1, 1);
+        OutlineRenderer.drawLine(builder, poseStack, 1, 0, 0, 1,   1, 0);
 
         //Top edges
         OutlineRenderer.drawLine(builder, poseStack, 0, 1, 1, 1, 1, 1);
         OutlineRenderer.drawLine(builder, poseStack, 1, 1, 0, 1, 1, 1);
 
         //Slope
-        OutlineRenderer.drawLine(builder, poseStack, 0, .5, 0, 1, 1, 0);
-        OutlineRenderer.drawLine(builder, poseStack, 0, .5, 0, 1, 1, 1);
-        OutlineRenderer.drawLine(builder, poseStack, 0, .5, 0, 0, 1, 1);
+        OutlineRenderer.drawLine(builder, poseStack, 0, .5F, 0, 1, 1, 0);
+        OutlineRenderer.drawLine(builder, poseStack, 0, .5F, 0, 1, 1, 1);
+        OutlineRenderer.drawLine(builder, poseStack, 0, .5F, 0, 0, 1, 1);
     }
 
     @Override

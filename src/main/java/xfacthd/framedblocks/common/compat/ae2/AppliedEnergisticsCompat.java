@@ -3,7 +3,6 @@ package xfacthd.framedblocks.common.compat.ae2;
 import appeng.api.AECapabilities;
 import appeng.api.crafting.PatternDetailsHelper;
 import net.minecraft.core.Holder;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.IEventBus;
@@ -12,6 +11,7 @@ import net.neoforged.neoforge.attachment.AttachmentType;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.registries.*;
 import xfacthd.framedblocks.api.util.FramedConstants;
+import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.api.util.registration.DeferredDataComponentType;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.util.registration.DeferredDataComponentTypeRegister;
@@ -90,7 +90,7 @@ public final class AppliedEnergisticsCompat
                 "framing_saw_pattern", builder -> builder.persistent(EncodedFramingSawPattern.CODEC).networkSynchronized(EncodedFramingSawPattern.STREAM_CODEC)
         );
 
-        static final Holder<Item> ITEM_BLANK_PATTERN = DeferredItem.createItem(new ResourceLocation("ae2", "blank_pattern"));
+        static final Holder<Item> ITEM_BLANK_PATTERN = DeferredItem.createItem(Utils.rl("ae2", "blank_pattern"));
 
         public static void init(IEventBus modBus)
         {

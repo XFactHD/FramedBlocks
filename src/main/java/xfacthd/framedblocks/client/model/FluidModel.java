@@ -32,7 +32,7 @@ import java.util.function.Supplier;
 public final class FluidModel implements BakedModel
 {
     private static final ModelState SIMPLE_STATE = new SimpleModelState(Transformation.identity());
-    public static final ResourceLocation BARE_MODEL = Utils.rl("fluid/bare");
+    public static final ModelResourceLocation BARE_MODEL = ModelResourceLocation.standalone(Utils.rl("fluid/bare"));
     @SuppressWarnings("deprecation")
     private static final Function<ResourceLocation, TextureAtlasSprite> SPRITE_GETTER = (loc ->
             Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(loc)
@@ -125,7 +125,7 @@ public final class FluidModel implements BakedModel
     public static FluidModel create(Fluid fluid)
     {
         ModelBakery modelBakery = Minecraft.getInstance().getModelManager().getModelBakery();
-        UnbakedModel bareModel = modelBakery.getModel(BARE_MODEL);
+        UnbakedModel bareModel = modelBakery.getModel(BARE_MODEL.id());
         Preconditions.checkNotNull(bareModel, "Bare fluid model not loaded!");
 
         IClientFluidTypeExtensions props = IClientFluidTypeExtensions.of(fluid);
@@ -134,7 +134,10 @@ public final class FluidModel implements BakedModel
                 NeoForgeRegistries.FLUID_TYPES.getKey(fluid.getFluidType()),
                 "Cannot create FluidModel for unregistered FluidType"
         );
-        ResourceLocation modelName = Utils.rl("fluid/" + fluidName.toString().replace(":", "_"));
+        ModelResourceLocation modelName = new ModelResourceLocation(
+                Utils.rl("fluid/" + fluidName.toString().replace(":", "_")),
+                "framedblocks_dynamic_fluid"
+        );
         Function<Material, TextureAtlasSprite> spriteGetter = matToSprite(props);
         BakedModel model = bareModel.bake(
                 modelBakery.new ModelBakerImpl(
@@ -142,8 +145,7 @@ public final class FluidModel implements BakedModel
                         modelName
                 ),
                 spriteGetter,
-                SIMPLE_STATE,
-                modelName
+                SIMPLE_STATE
         );
         Preconditions.checkNotNull(model, "Failed to bake fluid model");
 

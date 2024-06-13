@@ -30,8 +30,7 @@ import xfacthd.framedblocks.api.block.render.FramedBlockRenderProperties;
 import xfacthd.framedblocks.api.util.*;
 
 import java.util.*;
-import java.util.function.Predicate;
-import java.util.function.Supplier;
+import java.util.function.*;
 
 public final class TestUtils
 {
@@ -46,8 +45,8 @@ public final class TestUtils
     private static final BlockPos INTANGIBILITY_BLOCK = new BlockPos(0, 2, 0);
     private static final BlockPos BEACON_TINT_BLOCK = new BlockPos(0, 2, 0);
     private static final BlockPos BEACON_TINT_BEACON = new BlockPos(0, 0, 0);
-    private static final Predicate<float[]> BEACON_PREDICATE_RED = arr -> Arrays.equals(arr, DyeColor.RED.getTextureDiffuseColors());
-    private static final String BEACON_COLOR_TEXT_RED = Arrays.toString(DyeColor.RED.getTextureDiffuseColors());
+    private static final Predicate<Integer> BEACON_PREDICATE_RED = color -> Objects.equals(color, DyeColor.RED.getTextureDiffuseColor());
+    private static final String BEACON_COLOR_TEXT_RED = Objects.toString(DyeColor.RED.getTextureDiffuseColor());
 
     public static boolean assertFramedBlock(GameTestHelper helper, Block block)
     {
@@ -184,16 +183,6 @@ public final class TestUtils
     public static <T extends BlockEntity> T getBlockEntity(GameTestHelper helper, BlockPos relPos, Class<T> beClass)
     {
         BlockEntity be = helper.getBlockEntity(relPos);
-        if (be == null)
-        {
-            throw new GameTestAssertPosException(
-                    String.format("Expected %s, got null", beClass.getSimpleName()),
-                    helper.absolutePos(relPos),
-                    relPos,
-                    helper.getTick()
-            );
-        }
-
         if (!beClass.isInstance(be))
         {
             throw new GameTestAssertPosException(
@@ -560,19 +549,19 @@ public final class TestUtils
         ));
     }
 
-    private static void assertBeaconTint(GameTestHelper helper, Block camo, Predicate<float[]> predicate, String expected)
+    private static void assertBeaconTint(GameTestHelper helper, Block camo, Predicate<Integer> predicate, String expected)
     {
         BlockState state = helper.getBlockState(BEACON_TINT_BLOCK);
         assertFramedBlock(helper, state.getBlock());
 
-        float[] tint = state.getBeaconColorMultiplier(
+        Integer tint = state.getBeaconColorMultiplier(
                 helper.getLevel(),
                 helper.absolutePos(BEACON_TINT_BLOCK),
                 helper.absolutePos(BEACON_TINT_BEACON)
         );
         assertTrue(helper, BEACON_TINT_BLOCK, predicate.test(tint), () -> String.format(
                 "Block '%s' applies incorrect beacon color multiplier for camo '%s', expected %s, got %s",
-                state.getBlock(), camo, expected, Arrays.toString(tint)
+                state.getBlock(), camo, expected, tint
         ));
     }
 

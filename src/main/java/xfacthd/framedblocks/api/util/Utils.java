@@ -46,7 +46,7 @@ import java.util.stream.Collectors;
 
 public final class Utils
 {
-    private static final ResourceLocation RL_TEMPLATE = new ResourceLocation(FramedConstants.MOD_ID, "");
+    private static final ResourceLocation RL_TEMPLATE = Utils.rl(FramedConstants.MOD_ID, "");
     private static final Direction[] DIRECTIONS = Direction.values();
     private static final Direction[] HORIZONTAL_DIRECTIONS = Direction.Plane.HORIZONTAL.stream().toArray(Direction[]::new);
     public static final TagKey<Block> FRAMEABLE = blockTag("frameable");
@@ -391,7 +391,7 @@ public final class Utils
 
     public static TagKey<Block> blockTag(String modid, String name)
     {
-        return BlockTags.create(new ResourceLocation(modid, name));
+        return BlockTags.create(Utils.rl(modid, name));
     }
 
     public static TagKey<Item> itemTag(String name)
@@ -401,7 +401,7 @@ public final class Utils
 
     public static TagKey<Item> itemTag(String modid, String name)
     {
-        return ItemTags.create(new ResourceLocation(modid, name));
+        return ItemTags.create(Utils.rl(modid, name));
     }
 
     public static Property<?> getRotatableProperty(BlockState state)
@@ -512,6 +512,11 @@ public final class Utils
     public static ResourceLocation rl(String path)
     {
         return RL_TEMPLATE.withPath(path);
+    }
+
+    public static ResourceLocation rl(String namespace, String path)
+    {
+        return ResourceLocation.fromNamespaceAndPath(namespace, path);
     }
 
     public static <T extends CustomPacketPayload> CustomPacketPayload.Type<T> payloadType(String path)

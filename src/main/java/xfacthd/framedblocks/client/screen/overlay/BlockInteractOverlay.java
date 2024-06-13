@@ -1,6 +1,7 @@
 package xfacthd.framedblocks.client.screen.overlay;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -55,7 +56,7 @@ public abstract class BlockInteractOverlay implements LayeredDraw.Layer
     }
 
     @Override
-    public void render(GuiGraphics graphics, float partialTick)
+    public void render(GuiGraphics graphics, DeltaTracker deltaTracker)
     {
         Mode mode = modeGetter.get();
         if (mode == Mode.HIDDEN || player().isSpectator() || Minecraft.getInstance().options.hideGui)

@@ -1,15 +1,15 @@
 package xfacthd.framedblocks.common.compat.supplementaries;
 
 //import net.mehvahdjukaar.supplementaries.common.block.IRopeConnection;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.LevelReader;
 import net.neoforged.fml.ModList;
 import xfacthd.framedblocks.FramedBlocks;
+import xfacthd.framedblocks.api.util.Utils;
 
 public final class SupplementariesCompat
 {
-    public static final ResourceLocation HANGING_MODEL_LOCATION = new ResourceLocation("supplementaries", "block/hanging_flower_pot_rope");
     private static boolean loaded = false;
 
     public static void init()
@@ -59,6 +59,13 @@ public final class SupplementariesCompat
                 return true;
             }
         }
+    }
+
+    public static class Client
+    {
+        public static final ModelResourceLocation HANGING_MODEL_LOCATION = ModelResourceLocation.standalone(
+                Utils.rl("supplementaries", "block/hanging_flower_pot_rope")
+        );
     }
 
 

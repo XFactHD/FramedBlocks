@@ -3,8 +3,8 @@ package xfacthd.framedblocks.client.model.cube;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.client.ChunkRenderTypeSet;
@@ -19,13 +19,17 @@ import java.util.*;
 
 public class FramedMarkedCubeGeometry extends FramedCubeGeometry
 {
-    public static final ResourceLocation SLIME_FRAME_LOCATION = Utils.rl("block/slime_frame");
-    public static final ResourceLocation REDSTONE_FRAME_LOCATION = Utils.rl("block/redstone_frame");
+    public static final ModelResourceLocation SLIME_FRAME_LOCATION = ModelResourceLocation.standalone(
+            Utils.rl("block/slime_frame")
+    );
+    public static final ModelResourceLocation REDSTONE_FRAME_LOCATION = ModelResourceLocation.standalone(
+            Utils.rl("block/redstone_frame")
+    );
 
     private final BlockState state;
     private final BakedModel frameModel;
 
-    private FramedMarkedCubeGeometry(GeometryFactory.Context ctx, ResourceLocation frameLocation)
+    private FramedMarkedCubeGeometry(GeometryFactory.Context ctx, ModelResourceLocation frameLocation)
     {
         super(ctx);
         this.state = ctx.state();
