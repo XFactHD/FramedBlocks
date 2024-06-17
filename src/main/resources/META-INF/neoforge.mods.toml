@@ -84,13 +84,6 @@ license="LGPL v3"
     side="BOTH"
 
 [[dependencies.framedblocks]]
-    modId="modernfix"
-    type="optional"
-    versionRange="[${modernfix_version},)"
-    ordering="NONE"
-    side="CLIENT"
-
-[[dependencies.framedblocks]]
     modId="rei"
     type="optional"
     versionRange="[${rei_version},)"
@@ -117,8 +110,3 @@ license="LGPL v3"
     versionRange="[${ae2_version},)"
     ordering="NONE"
     side="BOTH"
-
-
-
-[mods."modernfix:integration"]
-    client_entrypoint="xfacthd.framedblocks.common.compat.modernfix.FramedModernFixClientIntegration"

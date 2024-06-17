@@ -71,7 +71,6 @@ import xfacthd.framedblocks.common.block.interactive.button.FramedLargeButtonBlo
 import xfacthd.framedblocks.common.block.interactive.pressureplate.FramedWeightedPressurePlateBlock;
 import xfacthd.framedblocks.common.block.sign.AbstractFramedSignBlock;
 import xfacthd.framedblocks.common.block.stairs.standard.FramedStairsBlock;
-import xfacthd.framedblocks.common.compat.modernfix.ModernFixCompat;
 import xfacthd.framedblocks.common.compat.supplementaries.SupplementariesCompat;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.StateCacheBuilder;
@@ -447,10 +446,7 @@ public final class FBClient
         Map<ModelResourceLocation, BakedModel> registry = event.getModels();
         TextureLookup textureLookup = TextureLookup.bindBlockAtlas(event.getTextureGetter());
 
-        if (!ModernFixCompat.dynamicResourcesEnabled())
-        {
-            ModelWrappingManager.handleAll(registry, textureLookup);
-        }
+        ModelWrappingManager.handleAll(registry, textureLookup);
     }
 
     private static void onModelsLoaded(final ModelEvent.BakingCompleted event)
