@@ -3,7 +3,6 @@ package xfacthd.framedblocks.common.data.camo.fluid;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleOptions;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.Entity;
@@ -18,6 +17,7 @@ import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.camo.CamoClientHandler;
 import xfacthd.framedblocks.api.camo.CamoContent;
 import xfacthd.framedblocks.api.util.ClientUtils;
+import xfacthd.framedblocks.common.particle.FluidParticleOptions;
 
 public final class FluidCamoContent extends CamoContent<FluidCamoContent>
 {
@@ -172,10 +172,9 @@ public final class FluidCamoContent extends CamoContent<FluidCamoContent>
     }
 
     @Override
-    public ParticleOptions makeRunningLandingParticles()
+    public ParticleOptions makeRunningLandingParticles(BlockPos pos)
     {
-        // TODO: make custom particles
-        return ParticleTypes.BUBBLE;
+        return new FluidParticleOptions(fluid);
     }
 
     @Override

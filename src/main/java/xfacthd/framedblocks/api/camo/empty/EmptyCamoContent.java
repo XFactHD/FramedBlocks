@@ -156,7 +156,7 @@ public final class EmptyCamoContent extends CamoContent<EmptyCamoContent>
     }
 
     @Override
-    public ParticleOptions makeRunningLandingParticles()
+    public ParticleOptions makeRunningLandingParticles(BlockPos pos)
     {
         return new BlockParticleOption(ParticleTypes.BLOCK, FramedBlocksAPI.INSTANCE.getDefaultModelState());
     }

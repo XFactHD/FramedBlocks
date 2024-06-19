@@ -186,7 +186,7 @@ public final class BlockCamoContent extends CamoContent<BlockCamoContent>
     }
 
     @Override
-    public ParticleOptions makeRunningLandingParticles()
+    public ParticleOptions makeRunningLandingParticles(BlockPos pos)
     {
         return new BlockParticleOption(ParticleTypes.BLOCK, state);
     }

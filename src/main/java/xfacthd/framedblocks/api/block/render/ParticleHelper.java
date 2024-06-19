@@ -38,7 +38,7 @@ public final class ParticleHelper
             z = (double) pos.getZ() + 0.5D + offZ / maxOff * 0.5D;
         }
 
-        ParticleOptions options = camo.makeRunningLandingParticles();
+        ParticleOptions options = camo.makeRunningLandingParticles(pos);
         level.sendParticles(options, x, y, z, count, 0D, 0D, 0D, 0.15D);
     }
 
@@ -63,7 +63,7 @@ public final class ParticleHelper
             z = Mth.clamp(z, pos.getZ(), pos.getZ() + 1D);
         }
 
-        ParticleOptions options = camo.makeRunningLandingParticles();
+        ParticleOptions options = camo.makeRunningLandingParticles(pos);
         level.addParticle(options, x, entity.getY() + 0.1D, z, delta.x * -4D, 1.5D, delta.z * -4D);
     }
 

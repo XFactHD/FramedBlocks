@@ -27,6 +27,7 @@ import xfacthd.framedblocks.api.model.wrapping.itemmodel.ItemModelInfo;
 import xfacthd.framedblocks.api.model.wrapping.statemerger.StateMerger;
 import xfacthd.framedblocks.api.render.debug.AttachDebugRenderersEvent;
 import xfacthd.framedblocks.client.render.block.debug.*;
+import xfacthd.framedblocks.client.render.particle.FluidSpriteParticle;
 import xfacthd.framedblocks.common.block.slopepanel.*;
 import xfacthd.framedblocks.common.block.slopeslab.*;
 import xfacthd.framedblocks.common.data.camo.fluid.FluidCamoClientHandler;
@@ -103,6 +104,7 @@ public final class FBClient
         modBus.addListener(FBClient::onRegisterReloadListener);
         modBus.addListener(FBClient::onRegisterSpriteSources);
         modBus.addListener(FBClient::onTexturesStitched);
+        modBus.addListener(FBClient::onRegisterParticleProviders);
         modBus.addListener(BlockOutlineRenderers::onRegisterOutlineRenderers);
         modBus.addListener(GhostRenderBehaviours::onRegisterGhostRenderBehaviours);
 
@@ -479,6 +481,11 @@ public final class FBClient
         {
             ConnectionPredicateDebugRenderer.captureDummySprite(event.getAtlas());
         }
+    }
+
+    private static void onRegisterParticleProviders(final RegisterParticleProvidersEvent event)
+    {
+        event.registerSpecial(FBContent.FLUID_PARTICLE.get(), new FluidSpriteParticle.Provider());
     }
 
 

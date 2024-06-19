@@ -152,7 +152,7 @@ public abstract class CamoContent<C extends CamoContent<C>> implements QuadCache
     /**
      * {@return {@link ParticleOptions} to be spawned when an entity runs over or lands on a block with this camo}
      */
-    public abstract ParticleOptions makeRunningLandingParticles();
+    public abstract ParticleOptions makeRunningLandingParticles(BlockPos pos);
 
     /**
      * {@return the registry ID of this camo}

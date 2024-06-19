@@ -40,7 +40,7 @@ public final class FluidCamoClientHandler extends CamoClientHandler<FluidCamoCon
             ClientLevel level, double x, double y, double z, double sx, double sy, double sz, FluidCamoContent camo, BlockPos pos
     )
     {
-        return new FluidSpriteParticle(level, x, y, z, sx, sy, sz, camo.getFluid(), pos);
+        return new FluidSpriteParticle(level, x, y, z, sx, sy, sz, camo.getFluid());
     }
 
     public static void clearModelCache()

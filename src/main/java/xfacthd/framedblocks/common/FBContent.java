@@ -1,10 +1,15 @@
 package xfacthd.framedblocks.common;
 
 import com.google.common.base.Preconditions;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.*;
@@ -66,6 +71,8 @@ import xfacthd.framedblocks.api.blueprint.BlueprintData;
 import xfacthd.framedblocks.common.data.component.*;
 import xfacthd.framedblocks.common.item.*;
 import xfacthd.framedblocks.common.menu.*;
+import xfacthd.framedblocks.common.particle.BasicParticleType;
+import xfacthd.framedblocks.common.particle.FluidParticleOptions;
 import xfacthd.framedblocks.common.util.FramedCreativeTab;
 import xfacthd.framedblocks.common.util.registration.*;
 
@@ -83,6 +90,7 @@ public final class FBContent
     private static final DeferredRegister<RecipeType<?>> RECIPE_TYPES = DeferredRegister.create(BuiltInRegistries.RECIPE_TYPE, FramedConstants.MOD_ID);
     private static final DeferredRegister<RecipeSerializer<?>> RECIPE_SERIALIZERS = DeferredRegister.create(BuiltInRegistries.RECIPE_SERIALIZER, FramedConstants.MOD_ID);
     private static final DeferredRegister<CreativeModeTab> CREATIVE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, FramedConstants.MOD_ID);
+    private static final DeferredRegister<ParticleType<?>> PARTICLE_TYPES = DeferredRegister.create(Registries.PARTICLE_TYPE, FramedConstants.MOD_ID);
 
     private static final DeferredRegister<CamoContainerFactory<?>> CAMO_CONTAINER_FACTORIES = DeferredRegister.create(
             FramedConstants.CAMO_CONTAINER_FACTORY_REGISTRY_NAME,
@@ -575,6 +583,12 @@ public final class FBContent
     );
     // endregion
 
+    // region ParticleTypes
+    public static final DeferredHolder<ParticleType<?>, ParticleType<FluidParticleOptions>> FLUID_PARTICLE = registerParticle(
+            "fluid", false, FluidParticleOptions.CODEC, FluidParticleOptions.STREAM_CODEC
+    );
+    // endregion
+
     // region CamoContainer.Factories
     public static final DeferredHolder<CamoContainerFactory<?>, EmptyCamoContainerFactory> FACTORY_EMPTY = CAMO_CONTAINER_FACTORIES.register(
             "empty",
@@ -623,6 +637,7 @@ public final class FBContent
         RECIPE_TYPES.register(modBus);
         RECIPE_SERIALIZERS.register(modBus);
         CREATIVE_TABS.register(modBus);
+        PARTICLE_TYPES.register(modBus);
         CAMO_CONTAINER_FACTORIES.register(modBus);
         AUX_BLUEPRINT_DATA_TYPES.register(modBus);
 
@@ -766,6 +781,14 @@ public final class FBContent
     private static <T extends Recipe<?>> DeferredHolder<RecipeType<?>, RecipeType<T>> registerRecipeType(String name)
     {
         return RECIPE_TYPES.register(name, () -> RecipeType.simple(Utils.rl(name)));
+    }
+
+    @SuppressWarnings("SameParameterValue")
+    private static <O extends ParticleOptions> DeferredHolder<ParticleType<?>, ParticleType<O>> registerParticle(
+            String name, boolean overrideLimiter, MapCodec<O> codec, StreamCodec<? super RegistryFriendlyByteBuf, O> streamCodec
+    )
+    {
+        return PARTICLE_TYPES.register(name, () -> new BasicParticleType<>(overrideLimiter, codec, streamCodec));
     }
 
 
