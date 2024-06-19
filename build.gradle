@@ -139,11 +139,6 @@ repositories {
             includeGroupByRegex('fuzs.*')
         }
     }
-    mavenLocal() {
-        content {
-            includeGroupByRegex('xfacthd.*')
-        }
-    }
 }
 
 dependencies {
@@ -178,7 +173,7 @@ dependencies {
 
     compileOnly("curse.maven:modernfix-790626:${modernfix_coord}")
 
-    //runtimeOnly("org.embeddedt:embeddium-${embeddium_mc_version}:${embeddium_version}")
+    //runtimeOnly("org.embeddedt:embeddium-${embeddium_mc_version}:${embeddium_version}+mc${embeddium_mc_version}")
 
     //compileOnly("com.simibubi.create:create-${create_mc_version}:${create_version}:slim") { transitive = false }
     //compileOnly("com.jozufozu.flywheel:flywheel-forge-${flywheel_mc_version}:${flywheel_version}")
