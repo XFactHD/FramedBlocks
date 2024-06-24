@@ -2,7 +2,6 @@ package xfacthd.framedblocks.common.blockentity.doubled.slopeedge;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -21,7 +20,7 @@ public class FramedElevatedDoubleSlopeEdgeBlockEntity extends FramedDoubleBlockE
     }
 
     @Override
-    protected boolean hitSecondary(BlockHitResult hit, Player player)
+    protected boolean hitSecondary(BlockHitResult hit, Vec3 lookVec, Vec3 eyePos)
     {
         Direction side = hit.getDirection();
 

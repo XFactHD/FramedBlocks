@@ -300,11 +300,11 @@ public class FramedDoubleBlockEntity extends FramedBlockEntity implements IFrame
     }
 
     @Override
-    protected boolean hitSecondary(BlockHitResult hit, Player player)
+    protected boolean hitSecondary(BlockHitResult hit, Vec3 lookVec, Vec3 eyePos)
     {
-        Vec3 look = player.getLookAngle().normalize().multiply(1D/16D, 1D/16D, 1D/16D);
-        Vec3 vecStart = hit.getLocation().subtract(look);
-        Vec3 vecEnd = hit.getLocation().add(look);
+        lookVec = lookVec.normalize().multiply(1D/16D, 1D/16D, 1D/16D);
+        Vec3 vecStart = hit.getLocation().subtract(lookVec);
+        Vec3 vecEnd = hit.getLocation().add(lookVec);
 
         VoxelShape shapeSec = getBlockPair().getB().getShape(EmptyBlockGetter.INSTANCE, BlockPos.ZERO);
         BlockHitResult clipSec = shapeSec.clip(vecStart, vecEnd, worldPosition);
@@ -320,8 +320,7 @@ public class FramedDoubleBlockEntity extends FramedBlockEntity implements IFrame
             return true;
         }
 
-        Vec3 eye = player.getEyePosition();
-        return eye.distanceToSqr(clipSec.getLocation()) < eye.distanceToSqr(clipPri.getLocation());
+        return eyePos.distanceToSqr(clipSec.getLocation()) < eyePos.distanceToSqr(clipPri.getLocation());
     }
 
     public final DoubleBlockTopInteractionMode getTopInteractionMode()

@@ -1,7 +1,6 @@
 package xfacthd.framedblocks.common.blockentity.doubled.slope;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.core.Direction;
 import net.minecraft.world.phys.BlockHitResult;
@@ -21,7 +20,7 @@ public class FramedDoubleCornerBlockEntity extends FramedDoubleBlockEntity
     }
 
     @Override
-    protected boolean hitSecondary(BlockHitResult hit, Player player)
+    protected boolean hitSecondary(BlockHitResult hit, Vec3 lookVec, Vec3 eyePos)
     {
         CornerType type = getBlockState().getValue(PropertyHolder.CORNER_TYPE);
         Direction facing = getBlockState().getValue(FramedProperties.FACING_HOR);

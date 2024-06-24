@@ -2,10 +2,10 @@ package xfacthd.framedblocks.common.blockentity.doubled.prism;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.blockentity.doubled.FramedDoubleBlockEntity;
@@ -24,7 +24,7 @@ public class FramedElevatedDoublePrismBlockEntity extends FramedDoubleBlockEntit
     }
 
     @Override
-    protected boolean hitSecondary(BlockHitResult hit, Player player)
+    protected boolean hitSecondary(BlockHitResult hit, Vec3 lookVec, Vec3 eyePos)
     {
         Direction side = hit.getDirection();
 

@@ -24,6 +24,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.EntityCollisionContext;
 import net.neoforged.neoforge.client.model.data.ModelData;
@@ -263,7 +264,23 @@ public class FramedBlockEntity extends BlockEntity
         return ItemInteractionResult.sidedSuccess(level().isClientSide());
     }
 
-    protected boolean hitSecondary(BlockHitResult hit, Player player)
+    /**
+     * Check which part of a double block was hit if this is a double block
+     * @param hit The result of the raycast against this block
+     * @param player The player from which the raycast originated
+     */
+    protected final boolean hitSecondary(BlockHitResult hit, Player player)
+    {
+        return hitSecondary(hit, player.getLookAngle(), player.getEyePosition());
+    }
+
+    /**
+     * Check which part of a double block was hit if this is a double block
+     * @param hit The result of the raycast against this block
+     * @param lookVec The look vector used for the raycast (usually {@link Player#getLookAngle()})
+     * @param eyePos The eye position from which the raycast originated (usually {@link Player#getEyePosition()})
+     */
+    protected boolean hitSecondary(BlockHitResult hit, Vec3 lookVec, Vec3 eyePos)
     {
         return false;
     }
@@ -328,10 +345,23 @@ public class FramedBlockEntity extends BlockEntity
 
     /**
      * Used to return a different camo depending on the exact interaction location
+     * @param hit The result of the raycast against this block
+     * @param player The player from which the raycast originated
      */
-    public CamoContainer<?, ?> getCamo(BlockHitResult hit, Player player)
+    public final CamoContainer<?, ?> getCamo(BlockHitResult hit, Player player)
     {
         return getCamo(hitSecondary(hit, player));
+    }
+
+    /**
+     * Used to return a different camo depending on the exact interaction location
+     * @param hit The result of the raycast against this block
+     * @param lookVec The look vector used for the raycast (usually {@link Player#getLookAngle()})
+     * @param eyePos The eye position from which the raycast originated (usually {@link Player#getEyePosition()})
+     */
+    public final CamoContainer<?, ?> getCamo(BlockHitResult hit, Vec3 lookVec, Vec3 eyePos)
+    {
+        return getCamo(hitSecondary(hit, lookVec, eyePos));
     }
 
     protected CamoContainer<?, ?> getCamo(boolean secondary)
