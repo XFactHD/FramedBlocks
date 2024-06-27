@@ -105,15 +105,6 @@ public final class FramedBlockTagProvider extends BlockTagsProvider
 
         tag(Utils.BE_WHITELIST);
 
-        tag(Utils.CAMO_SUSTAIN_PLANT).add(
-                Blocks.SOUL_SAND,
-                Blocks.SOUL_SOIL
-        ).addTags(
-                BlockTags.DIRT,
-                BlockTags.SAND,
-                BlockTags.NYLIUM
-        );
-
         Set<Block> noToolBlocks = Set.of(
                 FBContent.BLOCK_FRAMED_ITEM_FRAME.value(),
                 FBContent.BLOCK_FRAMED_GLOWING_ITEM_FRAME.value()

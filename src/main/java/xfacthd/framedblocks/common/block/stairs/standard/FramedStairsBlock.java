@@ -17,7 +17,6 @@ import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.*;
 import net.neoforged.neoforge.client.extensions.common.IClientBlockExtensions;
-import net.neoforged.neoforge.common.IPlantable;
 import xfacthd.framedblocks.api.block.*;
 import xfacthd.framedblocks.api.block.render.FramedBlockRenderProperties;
 import xfacthd.framedblocks.api.model.wrapping.WrapHelper;
@@ -143,12 +142,6 @@ public class FramedStairsBlock extends StairBlock implements IFramedBlock
             return Shapes.empty();
         }
         return super.getShape(state, level, pos, ctx);
-    }
-
-    @Override
-    public boolean canSustainPlant(BlockState state, BlockGetter level, BlockPos pos, Direction side, IPlantable plant)
-    {
-        return canCamoSustainPlant(state, level, pos, side, plant);
     }
 
     @Override

@@ -12,10 +12,9 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.*;
 import net.neoforged.fml.loading.FMLEnvironment;
-import net.neoforged.neoforge.common.IPlantable;
+import net.neoforged.neoforge.common.util.TriState;
 import org.jetbrains.annotations.Nullable;
-import xfacthd.framedblocks.api.camo.CamoClientHandler;
-import xfacthd.framedblocks.api.camo.CamoContent;
+import xfacthd.framedblocks.api.camo.*;
 import xfacthd.framedblocks.api.util.ClientUtils;
 import xfacthd.framedblocks.common.particle.FluidParticleOptions;
 
@@ -101,9 +100,10 @@ public final class FluidCamoContent extends CamoContent<FluidCamoContent>
     }
 
     @Override
-    public boolean canSustainPlant(BlockGetter level, BlockPos pos, Direction side, IPlantable plant)
+    public TriState canSustainPlant(BlockGetter level, BlockPos pos, Direction side, BlockState plant)
     {
-        return false;
+        BlockState state = fluid.defaultFluidState().createLegacyBlock();
+        return CamoContainerHelper.canPlantSurviveOnCamo(state, level, pos, side, plant);
     }
 
     @Override
@@ -145,6 +145,12 @@ public final class FluidCamoContent extends CamoContent<FluidCamoContent>
     public boolean canOcclude()
     {
         return false;
+    }
+
+    @Override
+    public BlockState getAsBlockState()
+    {
+        return fluid.defaultFluidState().createLegacyBlock();
     }
 
     @Override

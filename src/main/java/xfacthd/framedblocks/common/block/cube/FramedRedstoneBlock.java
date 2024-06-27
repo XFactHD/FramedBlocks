@@ -16,7 +16,6 @@ import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.*;
 import net.neoforged.neoforge.client.extensions.common.IClientBlockExtensions;
-import net.neoforged.neoforge.common.IPlantable;
 import xfacthd.framedblocks.api.block.*;
 import xfacthd.framedblocks.api.block.render.FramedBlockRenderProperties;
 import xfacthd.framedblocks.api.type.IBlockType;
@@ -122,12 +121,6 @@ public class FramedRedstoneBlock extends PoweredBlock implements IFramedBlock
     protected List<ItemStack> getDrops(BlockState state, LootParams.Builder builder)
     {
         return getCamoDrops(super.getDrops(state, builder), builder);
-    }
-
-    @Override
-    public boolean canSustainPlant(BlockState state, BlockGetter level, BlockPos pos, Direction side, IPlantable plant)
-    {
-        return canCamoSustainPlant(state, level, pos, side, plant);
     }
 
     @Override

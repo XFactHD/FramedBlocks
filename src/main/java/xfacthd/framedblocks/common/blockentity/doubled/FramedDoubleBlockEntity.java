@@ -19,8 +19,8 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.neoforge.client.model.data.*;
-import net.neoforged.neoforge.common.IPlantable;
 import net.neoforged.fml.loading.FMLEnvironment;
+import net.neoforged.neoforge.common.util.TriState;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import xfacthd.framedblocks.api.block.blockentity.IFramedDoubleBlockEntity;
@@ -195,7 +195,7 @@ public class FramedDoubleBlockEntity extends FramedBlockEntity implements IFrame
     }
 
     @Override
-    public boolean canCamoSustainPlant(Direction side, IPlantable plant)
+    public TriState canCamoSustainPlant(Direction side, BlockState plant)
     {
         return getStateCache().getSolidityCheck(side).canSustainPlant(this, side, plant);
     }

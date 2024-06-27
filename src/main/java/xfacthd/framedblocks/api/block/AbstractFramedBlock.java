@@ -20,7 +20,6 @@ import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.*;
 import net.neoforged.neoforge.client.extensions.common.IClientBlockExtensions;
-import net.neoforged.neoforge.common.IPlantable;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.render.FramedBlockRenderProperties;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
@@ -197,12 +196,6 @@ public abstract class AbstractFramedBlock extends Block implements IFramedBlock,
                 this
         );
         return beaconBeamOcclusion.getBoolean(state);
-    }
-
-    @Override
-    public boolean canSustainPlant(BlockState state, BlockGetter level, BlockPos pos, Direction side, IPlantable plant)
-    {
-        return canCamoSustainPlant(state, level, pos, side, plant);
     }
 
     @Override

@@ -14,12 +14,10 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.MapColor;
 import net.neoforged.fml.loading.FMLEnvironment;
-import net.neoforged.neoforge.common.IPlantable;
+import net.neoforged.neoforge.common.util.TriState;
 import org.jetbrains.annotations.Nullable;
-import xfacthd.framedblocks.api.camo.CamoClientHandler;
-import xfacthd.framedblocks.api.camo.CamoContent;
+import xfacthd.framedblocks.api.camo.*;
 import xfacthd.framedblocks.api.util.ClientUtils;
-import xfacthd.framedblocks.api.util.Utils;
 
 public final class BlockCamoContent extends CamoContent<BlockCamoContent>
 {
@@ -104,9 +102,9 @@ public final class BlockCamoContent extends CamoContent<BlockCamoContent>
     }
 
     @Override
-    public boolean canSustainPlant(BlockGetter level, BlockPos pos, Direction side, IPlantable plant)
+    public TriState canSustainPlant(BlockGetter level, BlockPos pos, Direction side, BlockState plant)
     {
-        return state.is(Utils.CAMO_SUSTAIN_PLANT) && state.canSustainPlant(level, pos, side, plant);
+        return CamoContainerHelper.canPlantSurviveOnCamo(state, level, pos, side, plant);
     }
 
     @Override
@@ -147,6 +145,12 @@ public final class BlockCamoContent extends CamoContent<BlockCamoContent>
     public boolean canOcclude()
     {
         return state.canOcclude();
+    }
+
+    @Override
+    public BlockState getAsBlockState()
+    {
+        return state;
     }
 
     @Override

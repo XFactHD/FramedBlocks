@@ -11,7 +11,7 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.MapColor;
-import net.neoforged.neoforge.common.IPlantable;
+import net.neoforged.neoforge.common.util.TriState;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.FramedBlocksAPI;
 import xfacthd.framedblocks.api.camo.CamoClientHandler;
@@ -90,9 +90,9 @@ public final class EmptyCamoContent extends CamoContent<EmptyCamoContent>
     }
 
     @Override
-    public boolean canSustainPlant(BlockGetter level, BlockPos pos, Direction side, IPlantable plant)
+    public TriState canSustainPlant(BlockGetter level, BlockPos pos, Direction side, BlockState plant)
     {
-        return false;
+        return TriState.DEFAULT;
     }
 
     @Override
@@ -129,6 +129,12 @@ public final class EmptyCamoContent extends CamoContent<EmptyCamoContent>
     public boolean canOcclude()
     {
         return false;
+    }
+
+    @Override
+    public BlockState getAsBlockState()
+    {
+        return Blocks.AIR.defaultBlockState();
     }
 
     @Override

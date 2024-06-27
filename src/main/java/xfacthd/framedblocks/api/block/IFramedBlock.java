@@ -26,9 +26,9 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.*;
 import net.neoforged.neoforge.client.model.data.ModelData;
-import net.neoforged.neoforge.common.IPlantable;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.extensions.IBlockExtension;
+import net.neoforged.neoforge.common.util.TriState;
 import net.neoforged.neoforge.common.world.AuxiliaryLightManager;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
@@ -601,16 +601,14 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension
         return false;
     }
 
-    // Can't be replaced with an override for the IForgeBlock method due to that being overridden in a Block patch
-    default boolean canCamoSustainPlant(
-            BlockState state, BlockGetter level, BlockPos pos, Direction side, IPlantable plant
-    )
+    @Override
+    default TriState canSustainPlant(BlockState state, BlockGetter level, BlockPos pos, Direction side, BlockState plant)
     {
         if (state.isFaceSturdy(level, pos, side, SupportType.FULL) && level.getBlockEntity(pos) instanceof FramedBlockEntity be)
         {
             return be.canCamoSustainPlant(side, plant);
         }
-        return false;
+        return TriState.DEFAULT;
     }
 
     @Override

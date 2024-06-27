@@ -28,8 +28,8 @@ import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.material.*;
 import net.minecraft.world.phys.*;
+import net.neoforged.neoforge.common.ItemAbility;
 import net.neoforged.neoforge.common.Tags;
-import net.neoforged.neoforge.common.ToolAction;
 import net.neoforged.neoforge.registries.DeferredItem;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.jetbrains.annotations.ApiStatus;
@@ -54,9 +54,8 @@ public final class Utils
     public static final TagKey<Fluid> FLUID_BLACKLIST = TagKey.create(Registries.FLUID, rl("blacklisted"));
     /** Allow other mods to whitelist their BEs, circumventing the config setting */
     public static final TagKey<Block> BE_WHITELIST = blockTag("blockentity_whitelisted");
-    public static final TagKey<Block> CAMO_SUSTAIN_PLANT = blockTag("camo_sustain_plant");
-    public static final TagKey<Item> TOOL_WRENCH = itemTag("c", "tools/wrenches");
-    public static final ToolAction ACTION_WRENCH = ToolAction.get("wrench");
+    public static final TagKey<Item> TOOL_WRENCH = itemTag("c", "tools/wrench");
+    public static final ItemAbility ACTION_WRENCH = ItemAbility.get("wrench");
     /** Allow other mods to add items that temporarily disable intangibility to allow interaction with the targeted block */
     public static final TagKey<Item> DISABLE_INTANGIBLE = itemTag("disable_intangible");
     public static final Set<Property<?>> REQUIRED_STATE_PROPERTIES = Set.of(
@@ -238,6 +237,14 @@ public final class Utils
     public static Direction dirByNormal(int x, int y, int z)
     {
         return DIRECTION_BY_NORMAL.get(BlockPos.asLong(x, y, z));
+    }
+
+    public static Direction dirByNormal(BlockPos from, BlockPos to)
+    {
+        int nx = to.getX() - from.getX();
+        int ny = to.getY() - from.getY();
+        int nz = to.getZ() - from.getZ();
+        return dirByNormal(nx, ny, nz);
     }
 
     public static Direction.Axis nextAxisNotEqualTo(Direction.Axis axis, Direction.Axis except)

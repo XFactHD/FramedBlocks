@@ -29,6 +29,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.EntityCollisionContext;
 import net.neoforged.neoforge.client.model.data.ModelData;
 import net.neoforged.neoforge.common.*;
+import net.neoforged.neoforge.common.util.TriState;
 import net.neoforged.neoforge.common.world.AuxiliaryLightManager;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
@@ -139,7 +140,7 @@ public class FramedBlockEntity extends BlockEntity
 
     private static boolean canRemoveReinforcement(ItemStack stack)
     {
-        if (stack.getItem().canPerformAction(stack, ToolActions.PICKAXE_DIG))
+        if (stack.getItem().canPerformAction(stack, ItemAbilities.PICKAXE_DIG))
         {
             return stack.isCorrectToolForDrops(Blocks.OBSIDIAN.defaultBlockState());
         }
@@ -681,7 +682,7 @@ public class FramedBlockEntity extends BlockEntity
         return camoContainer.getContent().getFriction(level(), worldPosition, entity, frameFriction);
     }
 
-    public boolean canCamoSustainPlant(Direction side, IPlantable plant)
+    public TriState canCamoSustainPlant(Direction side, BlockState plant)
     {
         return camoContainer.getContent().canSustainPlant(level(), worldPosition, side, plant);
     }

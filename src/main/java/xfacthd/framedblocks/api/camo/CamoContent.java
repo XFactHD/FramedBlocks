@@ -12,8 +12,8 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.MapColor;
-import net.neoforged.neoforge.common.IPlantable;
 import net.neoforged.neoforge.common.extensions.IBlockStateExtension;
+import net.neoforged.neoforge.common.util.TriState;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.camo.empty.EmptyCamoContent;
 import xfacthd.framedblocks.api.model.cache.QuadCacheKey;
@@ -88,9 +88,9 @@ public abstract class CamoContent<C extends CamoContent<C>> implements QuadCache
 
     /**
      * {@return whether this camo can sustain the given plan on the given side}
-     * @see IBlockStateExtension#canSustainPlant(BlockGetter, BlockPos, Direction, IPlantable)
+     * @see IBlockStateExtension#canSustainPlant(BlockGetter, BlockPos, Direction, BlockState)
      */
-    public abstract boolean canSustainPlant(BlockGetter level, BlockPos pos, Direction side, IPlantable plant);
+    public abstract TriState canSustainPlant(BlockGetter level, BlockPos pos, Direction side, BlockState plant);
 
     /**
      * {@return whether this camo can be destroyed by the given entity}
@@ -126,6 +126,12 @@ public abstract class CamoContent<C extends CamoContent<C>> implements QuadCache
      * @see BlockBehaviour.BlockStateBase#canOcclude()
      */
     public abstract boolean canOcclude();
+
+    /**
+     * {@return the {@link BlockState} representation for use in plant sustainability and other non-visual checks
+     * if any is available such as for blocks or fluids with an associated block}
+     */
+    public abstract BlockState getAsBlockState();
 
     /**
      * {@return the underlying {@link BlockState} for use with the appearance API or air if this container holds a

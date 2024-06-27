@@ -5,8 +5,7 @@ import com.mojang.datafixers.util.Pair;
 import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Codec;
 import net.minecraft.client.resources.model.BakedModel;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
+import net.minecraft.core.*;
 import net.minecraft.nbt.*;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -14,9 +13,11 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
+import net.minecraft.world.level.*;
+import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.client.ChunkRenderTypeSet;
 import net.neoforged.neoforge.client.model.data.ModelData;
+import net.neoforged.neoforge.common.util.TriState;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import xfacthd.framedblocks.api.FramedBlocksAPI;
@@ -144,6 +145,28 @@ public final class CamoContainerHelper
     public static boolean isValidRemovalTool(CamoContainer<?, ?> container, ItemStack stack)
     {
         return InternalAPI.INSTANCE.isValidRemovalTool(container, stack);
+    }
+
+    /**
+     * {@return whether the given plant can survive on the camo(s) of framed blocks potentially surrounding it}
+     */
+    public static TriState canPlantSurviveOnCamo(BlockState camoState, BlockGetter level, BlockPos pos, Direction side, BlockState plant)
+    {
+        if (!camoState.isAir() && level instanceof LevelReader reader)
+        {
+            BlockPos plantPos = pos.relative(side);
+            if (reader instanceof CamoResolvingLevelReader)
+            {
+                LOGGER.warn("Encountered unexpected recursion in plant sustainability check for plant '{}' at {} on side {} of a framed block", plant, plantPos, side);
+                return TriState.DEFAULT;
+            }
+            LevelReader camoResolvingLevel = new CamoResolvingLevelReader(reader, plantPos);
+            if (plant.canSurvive(camoResolvingLevel, plantPos))
+            {
+                return TriState.TRUE;
+            }
+        }
+        return TriState.DEFAULT;
     }
 
 

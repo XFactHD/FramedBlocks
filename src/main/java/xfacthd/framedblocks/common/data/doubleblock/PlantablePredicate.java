@@ -1,10 +1,11 @@
 package xfacthd.framedblocks.common.data.doubleblock;
 
 import net.minecraft.core.Direction;
-import net.neoforged.neoforge.common.IPlantable;
+import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.common.util.TriState;
 import xfacthd.framedblocks.common.blockentity.doubled.FramedDoubleBlockEntity;
 
 public interface PlantablePredicate
 {
-    boolean test(FramedDoubleBlockEntity be, Direction side, IPlantable plant);
+    TriState test(FramedDoubleBlockEntity be, Direction side, BlockState plant);
 }
