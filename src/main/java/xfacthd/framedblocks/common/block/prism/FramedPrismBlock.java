@@ -14,13 +14,15 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.*;
 import xfacthd.framedblocks.api.block.*;
-import xfacthd.framedblocks.api.shapes.ShapeProvider;
-import xfacthd.framedblocks.api.shapes.ShapeUtils;
+import xfacthd.framedblocks.api.shapes.*;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.block.FramedBlock;
+import xfacthd.framedblocks.common.block.slope.FramedSlopeBlock;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.property.DirectionAxis;
+import xfacthd.framedblocks.common.data.property.SlopeType;
+import xfacthd.framedblocks.common.data.shapes.SplitShapeGenerator;
 
 public class FramedPrismBlock extends FramedBlock implements IFramedPrismBlock
 {
@@ -118,65 +120,73 @@ public class FramedPrismBlock extends FramedBlock implements IFramedPrismBlock
 
 
 
-    public static ShapeProvider generateShapes(ImmutableList<BlockState> states)
+    public static final class ShapeGen implements SplitShapeGenerator
     {
-        ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
-
-        VoxelShape shapeBottom = ShapeUtils.orUnoptimized(
-                box( 0, 0, 0,   16, .5, 16),
-                box(.5, 0, 0, 15.5,  4, 16),
-                box( 4, 0, 0,   12,  8, 16)
-        );
-
-        VoxelShape shapeTop = ShapeUtils.orUnoptimized(
-                box( 0, 15.5, 0,   16, 16, 16),
-                box(.5,   12, 0, 15.5, 16, 16),
-                box( 4,    8, 0,   12, 16, 16)
-        );
-
-        VoxelShape shapeXZ = ShapeUtils.orUnoptimized(
-                box(0,  0, 15.5, 16,   16, 16),
-                box(0, .5,   12, 16, 15.5, 16),
-                box(0,  4,    8, 16,   12, 16)
-        );
-
-        VoxelShape shapeY = ShapeUtils.orUnoptimized(
-                box( 0, 0, 15.5,   16, 16, 16),
-                box(.5, 0,   12, 15.5, 16, 16),
-                box( 4, 0,    8,   12, 16, 16)
-        );
-
-        VoxelShape[] shapes = new VoxelShape[DirectionAxis.COUNT];
-        for (DirectionAxis dirAxis : DirectionAxis.values())
+        @Override
+        public ShapeProvider generate(ImmutableList<BlockState> states)
         {
-            Direction facing = dirAxis.direction();
-            Direction.Axis axis = dirAxis.axis();
-
-            if (Utils.isY(facing))
-            {
-                shapes[dirAxis.ordinal()] = ShapeUtils.rotateShapeAroundY(
-                        Direction.NORTH,
-                        Direction.fromAxisAndDirection(axis, Direction.AxisDirection.NEGATIVE),
-                        facing == Direction.UP ? shapeBottom : shapeTop
-                );
-            }
-            else
-            {
-                shapes[dirAxis.ordinal()] = ShapeUtils.rotateShapeAroundY(
-                        Direction.NORTH,
-                        facing,
-                        axis == Direction.Axis.Y ? shapeY : shapeXZ
-                );
-            }
+            return generateShapes(states, FramedSlopeBlock.SHAPES);
         }
 
-        for (BlockState state : states)
+        @Override
+        public ShapeProvider generateOcclusionShapes(ImmutableList<BlockState> states)
         {
-            DirectionAxis dirAxis = state.getValue(PropertyHolder.FACING_AXIS);
-            builder.put(state, shapes[dirAxis.ordinal()]);
+            return generateShapes(states, FramedSlopeBlock.OCCLUSION_SHAPES);
         }
 
-        return ShapeProvider.of(builder.build());
+        private static ShapeProvider generateShapes(ImmutableList<BlockState> states, ShapeCache<SlopeType> shapeCache)
+        {
+            ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
+
+            VoxelShape shapeBottom = ShapeUtils.andUnoptimized(
+                    shapeCache.get(SlopeType.BOTTOM),
+                    ShapeUtils.rotateShapeUnoptimizedAroundY(Direction.NORTH, Direction.SOUTH, shapeCache.get(SlopeType.BOTTOM))
+            );
+            VoxelShape shapeTop = ShapeUtils.andUnoptimized(
+                    shapeCache.get(SlopeType.TOP),
+                    ShapeUtils.rotateShapeUnoptimizedAroundY(Direction.NORTH, Direction.SOUTH, shapeCache.get(SlopeType.TOP))
+            );
+            VoxelShape shapeXZ = ShapeUtils.andUnoptimized(
+                    shapeCache.get(SlopeType.BOTTOM),
+                    shapeCache.get(SlopeType.TOP)
+            );
+            VoxelShape shapeY = ShapeUtils.andUnoptimized(
+                    shapeCache.get(SlopeType.HORIZONTAL),
+                    ShapeUtils.rotateShapeUnoptimizedAroundY(Direction.NORTH, Direction.EAST, shapeCache.get(SlopeType.HORIZONTAL))
+            );
+
+            VoxelShape[] shapes = new VoxelShape[DirectionAxis.COUNT];
+            for (DirectionAxis dirAxis : DirectionAxis.values())
+            {
+                Direction facing = dirAxis.direction();
+                Direction.Axis axis = dirAxis.axis();
+
+                if (Utils.isY(facing))
+                {
+                    shapes[dirAxis.ordinal()] = ShapeUtils.rotateShapeAroundY(
+                            Direction.EAST,
+                            Direction.fromAxisAndDirection(axis, Direction.AxisDirection.NEGATIVE),
+                            facing == Direction.UP ? shapeBottom : shapeTop
+                    );
+                }
+                else
+                {
+                    shapes[dirAxis.ordinal()] = ShapeUtils.rotateShapeAroundY(
+                            Direction.SOUTH,
+                            facing,
+                            axis == Direction.Axis.Y ? shapeY : shapeXZ
+                    );
+                }
+            }
+
+            for (BlockState state : states)
+            {
+                DirectionAxis dirAxis = state.getValue(PropertyHolder.FACING_AXIS);
+                builder.put(state, shapes[dirAxis.ordinal()]);
+            }
+
+            return ShapeProvider.of(builder.build());
+        }
     }
 
     /*public static ShapeProvider generateInnerShapes(ImmutableList<BlockState> states)

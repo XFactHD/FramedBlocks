@@ -98,7 +98,7 @@ public class FramedTrapDoorBlock extends TrapDoorBlock implements IFramedBlock
     @Override
     protected VoxelShape getOcclusionShape(BlockState state, BlockGetter level, BlockPos pos)
     {
-        return getCamoOcclusionShape(state, level, pos);
+        return getCamoOcclusionShape(state, level, pos, null);
     }
 
     @Override

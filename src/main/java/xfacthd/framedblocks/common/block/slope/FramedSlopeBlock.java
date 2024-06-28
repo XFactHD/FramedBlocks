@@ -23,6 +23,7 @@ import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.block.*;
 import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.common.data.property.SlopeType;
+import xfacthd.framedblocks.common.data.shapes.SplitShapeGenerator;
 import xfacthd.framedblocks.common.util.FramedUtils;
 
 public class FramedSlopeBlock extends FramedBlock implements ISlopeBlock
@@ -161,6 +162,27 @@ public class FramedSlopeBlock extends FramedBlock implements ISlopeBlock
     public static final ShapeCache<SlopeType> SHAPES = ShapeCache.createEnum(SlopeType.class, map ->
     {
         map.put(SlopeType.BOTTOM, ShapeUtils.orUnoptimized(
+                box(0,  0, 0, 16,  4, 16),
+                box(0,  4, 0, 16,  8, 12),
+                box(0,  8, 0, 16, 12,  8),
+                box(0, 12, 0, 16, 16,  4)
+        ));
+        map.put(SlopeType.TOP, ShapeUtils.orUnoptimized(
+                box(0,  0, 0, 16,  4,  4),
+                box(0,  4, 0, 16,  8,  8),
+                box(0,  8, 0, 16, 12, 12),
+                box(0, 12, 0, 16, 16, 16)
+        ));
+        map.put(SlopeType.HORIZONTAL, ShapeUtils.orUnoptimized(
+                box( 0, 0, 0,  4, 16, 16),
+                box( 4, 0, 0,  8, 16, 12),
+                box( 8, 0, 0, 12, 16,  8),
+                box(12, 0, 0, 16, 16,  4)
+        ));
+    });
+    public static final ShapeCache<SlopeType> OCCLUSION_SHAPES = ShapeCache.createEnum(SlopeType.class, map ->
+    {
+        map.put(SlopeType.BOTTOM, ShapeUtils.orUnoptimized(
                 box(0,    0, 0, 16,   .5,   16),
                 box(0,   .5, 0, 16,    4, 15.5),
                 box(0,    4, 0, 16,    8,   12),
@@ -168,7 +190,6 @@ public class FramedSlopeBlock extends FramedBlock implements ISlopeBlock
                 box(0,   12, 0, 16, 15.5,    4),
                 box(0, 15.5, 0, 16,   16,   .5)
         ));
-
         map.put(SlopeType.TOP, ShapeUtils.orUnoptimized(
                 box(0,    0, 0, 16,   .5,   .5),
                 box(0,   .5, 0, 16,    4,    4),
@@ -177,7 +198,6 @@ public class FramedSlopeBlock extends FramedBlock implements ISlopeBlock
                 box(0,   12, 0, 16, 15.5, 15.5),
                 box(0, 15.5, 0, 16,   16,   16)
         ));
-
         map.put(SlopeType.HORIZONTAL, ShapeUtils.orUnoptimized(
                 box(   0, 0, 0,   .5, 16,   16),
                 box(   0, 0, 0,    4, 16, 15.5),
@@ -197,19 +217,43 @@ public class FramedSlopeBlock extends FramedBlock implements ISlopeBlock
             ShapeUtils.makeHorizontalRotations(SHAPES.get(type), Direction.NORTH, map, type, ShapeKey::new);
         }
     });
-
-    public static ShapeProvider generateShapes(ImmutableList<BlockState> states)
+    private static final ShapeCache<ShapeKey> FINAL_OCCLUSION_SHAPES = ShapeCache.create(map ->
     {
-        ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
-
-        for (BlockState state : states)
+        for (SlopeType type : SlopeType.values())
         {
-            ISlopeBlock block = (ISlopeBlock) state.getBlock();
-            SlopeType type = block.getSlopeType(state);
-            Direction dir = block.getFacing(state);
-            builder.put(state, FINAL_SHAPES.get(new ShapeKey(dir, type)));
+            ShapeUtils.makeHorizontalRotations(OCCLUSION_SHAPES.get(type), Direction.NORTH, map, type, ShapeKey::new);
+        }
+    });
+
+    public static final class ShapeGen implements SplitShapeGenerator
+    {
+        public static final ShapeGen INSTANCE = new ShapeGen();
+
+        @Override
+        public ShapeProvider generate(ImmutableList<BlockState> states)
+        {
+            return generate(states, FINAL_SHAPES);
         }
 
-        return ShapeProvider.of(builder.build());
+        @Override
+        public ShapeProvider generateOcclusionShapes(ImmutableList<BlockState> states)
+        {
+            return generate(states, FINAL_OCCLUSION_SHAPES);
+        }
+
+        private static ShapeProvider generate(ImmutableList<BlockState> states, ShapeCache<ShapeKey> shapes)
+        {
+            ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
+
+            for (BlockState state : states)
+            {
+                ISlopeBlock block = (ISlopeBlock) state.getBlock();
+                SlopeType type = block.getSlopeType(state);
+                Direction dir = block.getFacing(state);
+                builder.put(state, shapes.get(new ShapeKey(dir, type)));
+            }
+
+            return ShapeProvider.of(builder.build());
+        }
     }
 }

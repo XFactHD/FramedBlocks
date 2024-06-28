@@ -102,6 +102,12 @@ public class FramedCollapsibleBlock extends FramedBlock
     }
 
     @Override
+    protected VoxelShape getOcclusionShape(BlockState state, BlockGetter level, BlockPos pos)
+    {
+        return getCamoOcclusionShape(state, level, pos, null);
+    }
+
+    @Override
     public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)
     {
         super.setPlacedBy(level, pos, state, placer, stack);

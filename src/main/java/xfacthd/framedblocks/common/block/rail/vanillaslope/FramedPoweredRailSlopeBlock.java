@@ -40,6 +40,7 @@ public class FramedPoweredRailSlopeBlock extends PoweredRailBlock implements IFr
 {
     private final BlockType type;
     private final ShapeProvider shapes;
+    private final ShapeProvider occlusionShapes;
     private final BiFunction<BlockPos, BlockState, FramedBlockEntity> beFactory;
 
     protected FramedPoweredRailSlopeBlock(BlockType type, boolean isPoweredRail, BiFunction<BlockPos, BlockState, FramedBlockEntity> beFactory)
@@ -47,6 +48,7 @@ public class FramedPoweredRailSlopeBlock extends PoweredRailBlock implements IFr
         super(IFramedBlock.createProperties(type), isPoweredRail);
         this.type = type;
         this.shapes = type.generateShapes(getStateDefinition().getPossibleStates());
+        this.occlusionShapes = type.generateOcclusionShapes(getStateDefinition().getPossibleStates(), shapes);
         this.beFactory = beFactory;
         registerDefaultState(defaultBlockState()
                 .setValue(BlockStateProperties.WATERLOGGED, false)
@@ -169,7 +171,7 @@ public class FramedPoweredRailSlopeBlock extends PoweredRailBlock implements IFr
     @Override
     protected VoxelShape getOcclusionShape(BlockState state, BlockGetter level, BlockPos pos)
     {
-        return getCamoOcclusionShape(state, level, pos);
+        return getCamoOcclusionShape(state, level, pos, occlusionShapes);
     }
 
     @Override

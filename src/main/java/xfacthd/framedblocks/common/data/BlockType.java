@@ -31,6 +31,7 @@ import xfacthd.framedblocks.common.block.stairs.standard.*;
 import xfacthd.framedblocks.common.block.stairs.vertical.*;
 import xfacthd.framedblocks.common.data.conpreds.ConnectionPredicates;
 import xfacthd.framedblocks.common.data.facepreds.FullFacePredicates;
+import xfacthd.framedblocks.common.data.shapes.SplitShapeGenerator;
 import xfacthd.framedblocks.common.data.skippreds.SideSkipPredicates;
 
 import java.util.Locale;
@@ -40,21 +41,21 @@ import java.util.Objects;
 public enum BlockType implements IBlockType
 {
     FRAMED_CUBE                                     ( true, false, false, false,  true,  true, false, false, ConTexMode.FULL_FACE, Shapes.block()),
-    FRAMED_SLOPE                                    ( true,  true, false,  true,  true,  true, false, false, ConTexMode.FULL_FACE, FramedSlopeBlock::generateShapes),
+    FRAMED_SLOPE                                    ( true,  true, false,  true,  true,  true, false, false, ConTexMode.FULL_FACE, FramedSlopeBlock.ShapeGen.INSTANCE),
     FRAMED_DOUBLE_SLOPE                             ( true, false,  true, false,  true,  true,  true, false, ConTexMode.FULL_FACE, Shapes.block()),
-    FRAMED_HALF_SLOPE                               (false,  true, false,  true,  true,  true, false, false, ConTexMode.FULL_EDGE, FramedHalfSlopeBlock::generateShapes),
-    FRAMED_VERTICAL_HALF_SLOPE                      (false,  true, false,  true, false,  true, false, false, ConTexMode.FULL_EDGE, FramedVerticalHalfSlopeBlock::generateShapes),
-    FRAMED_DIVIDED_SLOPE                            ( true,  true, false,  true,  true,  true,  true, false, ConTexMode.FULL_EDGE, FramedSlopeBlock::generateShapes),
+    FRAMED_HALF_SLOPE                               (false,  true, false,  true,  true,  true, false, false, ConTexMode.FULL_EDGE, new FramedHalfSlopeBlock.ShapeGen()),
+    FRAMED_VERTICAL_HALF_SLOPE                      (false,  true, false,  true, false,  true, false, false, ConTexMode.FULL_EDGE, new FramedVerticalHalfSlopeBlock.ShapeGen()),
+    FRAMED_DIVIDED_SLOPE                            ( true,  true, false,  true,  true,  true,  true, false, ConTexMode.FULL_EDGE, FramedSlopeBlock.ShapeGen.INSTANCE),
     FRAMED_DOUBLE_HALF_SLOPE                        ( true, false,  true,  true,  true,  true,  true, false, ConTexMode.FULL_EDGE, FramedDoubleHalfSlopeBlock::generateShapes),
     FRAMED_VERTICAL_DOUBLE_HALF_SLOPE               ( true, false,  true,  true, false,  true,  true, false, ConTexMode.FULL_EDGE, CommonShapes.SLAB_GENERATOR),
-    FRAMED_CORNER_SLOPE                             ( true,  true, false,  true,  true,  true, false, false, ConTexMode.FULL_FACE, FramedCornerSlopeBlock::generateCornerShapes),
-    FRAMED_INNER_CORNER_SLOPE                       ( true,  true, false,  true,  true,  true, false, false, ConTexMode.FULL_FACE, FramedCornerSlopeBlock::generateInnerCornerShapes),
+    FRAMED_CORNER_SLOPE                             ( true,  true, false,  true,  true,  true, false, false, ConTexMode.FULL_FACE, new FramedCornerSlopeBlock.CornerShapeGen()),
+    FRAMED_INNER_CORNER_SLOPE                       ( true,  true, false,  true,  true,  true, false, false, ConTexMode.FULL_FACE, new FramedCornerSlopeBlock.InnerCornerShapeGen()),
     FRAMED_DOUBLE_CORNER                            ( true, false,  true, false,  true,  true,  true, false, ConTexMode.FULL_FACE, Shapes.block()),
     FRAMED_PRISM_CORNER                             (false,  true, false,  true,  true,  true, false, false, ConTexMode.FULL_EDGE, FramedPrismCornerBlock::generatePrismShapes),
     FRAMED_INNER_PRISM_CORNER                       ( true,  true, false,  true,  true,  true, false, false, ConTexMode.FULL_FACE, FramedPrismCornerBlock::generateInnerPrismShapes),
     FRAMED_DOUBLE_PRISM_CORNER                      ( true, false,  true, false,  true,  true,  true, false, ConTexMode.FULL_FACE, Shapes.block()),
-    FRAMED_THREEWAY_CORNER                          (false,  true, false,  true,  true,  true, false, false, ConTexMode.FULL_EDGE, FramedThreewayCornerBlock::generateThreewayShapes),
-    FRAMED_INNER_THREEWAY_CORNER                    ( true,  true, false,  true,  true,  true, false, false, ConTexMode.FULL_FACE, FramedThreewayCornerBlock::generateInnerThreewayShapes),
+    FRAMED_THREEWAY_CORNER                          (false,  true, false,  true,  true,  true, false, false, ConTexMode.FULL_EDGE, new FramedThreewayCornerBlock.ThreewayShapeGen()),
+    FRAMED_INNER_THREEWAY_CORNER                    ( true,  true, false,  true,  true,  true, false, false, ConTexMode.FULL_FACE, new FramedThreewayCornerBlock.InnerThreewayShapeGen()),
     FRAMED_DOUBLE_THREEWAY_CORNER                   ( true, false,  true, false,  true,  true,  true, false, ConTexMode.FULL_FACE, Shapes.block()),
     FRAMED_SLOPE_EDGE                               (false,  true, false,  true,  true,  true, false, false, ConTexMode.FULL_EDGE, FramedSlopeEdgeBlock::generateShapes),
     FRAMED_ELEVATED_SLOPE_EDGE                      ( true,  true, false,  true,  true,  true, false, false, ConTexMode.FULL_FACE, FramedElevatedSlopeEdgeBlock::generateShapes),
@@ -81,14 +82,14 @@ public enum BlockType implements IBlockType
     FRAMED_DOUBLE_HALF_STAIRS                       ( true, false, false,  true,  true,  true,  true, false, ConTexMode.FULL_EDGE, FramedDoubleHalfStairsBlock::generateShapes),
     FRAMED_SLICED_STAIRS_SLAB                       ( true, false, false,  true,  true,  true,  true,  true, ConTexMode.FULL_FACE),
     FRAMED_SLICED_STAIRS_PANEL                      ( true, false, false,  true,  true,  true,  true,  true, ConTexMode.FULL_FACE),
-    FRAMED_SLOPED_STAIRS                            ( true,  true, false,  true,  true,  true, false, false, ConTexMode.FULL_FACE, FramedSlopedStairsBlock::generateShapes),
+    FRAMED_SLOPED_STAIRS                            ( true,  true, false,  true,  true,  true, false, false, ConTexMode.FULL_FACE, new FramedSlopedStairsBlock.ShapeGen()),
     FRAMED_VERTICAL_STAIRS                          ( true, false, false,  true,  true,  true, false,  true, ConTexMode.FULL_FACE, FramedVerticalStairsBlock::generateShapes),
     FRAMED_VERTICAL_DOUBLE_STAIRS                   ( true, false, false, false,  true,  true,  true,  true, ConTexMode.FULL_FACE, Shapes.block()),
     FRAMED_VERTICAL_HALF_STAIRS                     (false, false, false,  true,  true, false, false, false, ConTexMode.FULL_EDGE, FramedVerticalHalfStairsBlock::generateShapes),
     FRAMED_VERTICAL_DIVIDED_STAIRS                  ( true, false, false,  true,  true,  true,  true,  true, ConTexMode.FULL_EDGE, FramedVerticalStairsBlock::generateShapes),
     FRAMED_VERTICAL_DOUBLE_HALF_STAIRS              ( true, false, false,  true,  true,  true,  true, false, ConTexMode.FULL_EDGE, CommonShapes.SLAB_GENERATOR),
     FRAMED_VERTICAL_SLICED_STAIRS                   ( true, false, false,  true,  true,  true,  true,  true, ConTexMode.FULL_FACE, FramedVerticalStairsBlock::generateShapes),
-    FRAMED_VERTICAL_SLOPED_STAIRS                   ( true,  true, false,  true,  true,  true, false, false, ConTexMode.FULL_FACE, FramedVerticalSlopedStairsBlock::generateShapes),
+    FRAMED_VERTICAL_SLOPED_STAIRS                   ( true,  true, false,  true,  true,  true, false, false, ConTexMode.FULL_FACE, new FramedVerticalSlopedStairsBlock.ShapeGen()),
     FRAMED_THREEWAY_CORNER_PILLAR                   (false, false, false,  true,  true,  true, false, false, ConTexMode.FULL_EDGE, FramedThreewayCornerPillarBlock::generateShapes),
     FRAMED_DOUBLE_THREEWAY_CORNER_PILLAR            ( true, false, false, false,  true,  true,  true, false, ConTexMode.FULL_EDGE, Shapes.block()),
     FRAMED_WALL                                     (false, false, false,  true,  true, false, false,  true, ConTexMode.DETAILED),
@@ -134,18 +135,18 @@ public enum BlockType implements IBlockType
     FRAMED_BARS                                     (false, false, false,  true,  true,  true, false,  true, null),
     FRAMED_PANE                                     (false, false, false,  true,  true,  true, false,  true, ConTexMode.DETAILED),
     FRAMED_HORIZONTAL_PANE                          ( true, false, false,  true,  true,  true, false, false, ConTexMode.DETAILED, Block.box(0, 7, 0, 16, 9, 16)),
-    FRAMED_RAIL_SLOPE                               ( true,  true, false,  true,  true, false, false, false, ConTexMode.FULL_FACE, FramedSlopeBlock::generateShapes),
-    FRAMED_POWERED_RAIL_SLOPE                       ( true,  true, false,  true,  true, false, false, false, ConTexMode.FULL_FACE, FramedSlopeBlock::generateShapes),
-    FRAMED_DETECTOR_RAIL_SLOPE                      ( true,  true, false,  true,  true, false, false, false, ConTexMode.FULL_FACE, FramedSlopeBlock::generateShapes),
-    FRAMED_ACTIVATOR_RAIL_SLOPE                     ( true,  true, false,  true,  true, false, false, false, ConTexMode.FULL_FACE, FramedSlopeBlock::generateShapes),
+    FRAMED_RAIL_SLOPE                               ( true,  true, false,  true,  true, false, false, false, ConTexMode.FULL_FACE, FramedSlopeBlock.ShapeGen.INSTANCE),
+    FRAMED_POWERED_RAIL_SLOPE                       ( true,  true, false,  true,  true, false, false, false, ConTexMode.FULL_FACE, FramedSlopeBlock.ShapeGen.INSTANCE),
+    FRAMED_DETECTOR_RAIL_SLOPE                      ( true,  true, false,  true,  true, false, false, false, ConTexMode.FULL_FACE, FramedSlopeBlock.ShapeGen.INSTANCE),
+    FRAMED_ACTIVATOR_RAIL_SLOPE                     ( true,  true, false,  true,  true, false, false, false, ConTexMode.FULL_FACE, FramedSlopeBlock.ShapeGen.INSTANCE),
     FRAMED_FANCY_RAIL                               (false, false, false,  true,  true, false, false, false, null),
     FRAMED_FANCY_POWERED_RAIL                       (false, false, false,  true,  true, false, false, false, null),
     FRAMED_FANCY_DETECTOR_RAIL                      (false, false, false,  true,  true, false, false, false, null),
     FRAMED_FANCY_ACTIVATOR_RAIL                     (false, false, false,  true,  true, false, false, false, null),
-    FRAMED_FANCY_RAIL_SLOPE                         ( true,  true,  true,  true,  true, false,  true, false, ConTexMode.FULL_FACE, FramedSlopeBlock::generateShapes),
-    FRAMED_FANCY_POWERED_RAIL_SLOPE                 ( true,  true,  true,  true,  true, false,  true, false, ConTexMode.FULL_FACE, FramedSlopeBlock::generateShapes),
-    FRAMED_FANCY_DETECTOR_RAIL_SLOPE                ( true,  true,  true,  true,  true, false,  true, false, ConTexMode.FULL_FACE, FramedSlopeBlock::generateShapes),
-    FRAMED_FANCY_ACTIVATOR_RAIL_SLOPE               ( true,  true,  true,  true,  true, false,  true, false, ConTexMode.FULL_FACE, FramedSlopeBlock::generateShapes),
+    FRAMED_FANCY_RAIL_SLOPE                         ( true,  true,  true,  true,  true, false,  true, false, ConTexMode.FULL_FACE, FramedSlopeBlock.ShapeGen.INSTANCE),
+    FRAMED_FANCY_POWERED_RAIL_SLOPE                 ( true,  true,  true,  true,  true, false,  true, false, ConTexMode.FULL_FACE, FramedSlopeBlock.ShapeGen.INSTANCE),
+    FRAMED_FANCY_DETECTOR_RAIL_SLOPE                ( true,  true,  true,  true,  true, false,  true, false, ConTexMode.FULL_FACE, FramedSlopeBlock.ShapeGen.INSTANCE),
+    FRAMED_FANCY_ACTIVATOR_RAIL_SLOPE               ( true,  true,  true,  true,  true, false,  true, false, ConTexMode.FULL_FACE, FramedSlopeBlock.ShapeGen.INSTANCE),
     FRAMED_FLOWER_POT                               (false, false,  true, false,  true, false, false, false, null, Block.box(5, 0, 5, 11, 6, 11)),
     FRAMED_PILLAR                                   (false, false, false,  true,  true,  true, false, false, ConTexMode.DETAILED, FramedPillarBlock::generatePillarShapes),
     FRAMED_HALF_PILLAR                              (false, false, false,  true,  true,  true, false, false, ConTexMode.DETAILED, FramedHalfPillarBlock::generateShapes),
@@ -154,8 +155,8 @@ public enum BlockType implements IBlockType
     FRAMED_COLLAPSIBLE_COPYCAT_BLOCK                (false, false,  true,  true,  true,  true, false, false, ConTexMode.FULL_FACE),
     FRAMED_BOUNCY_CUBE                              ( true, false, false, false,  true, false, false, false, ConTexMode.FULL_FACE, Shapes.block()),
     FRAMED_REDSTONE_BLOCK                           ( true, false, false, false,  true,  true, false, false, ConTexMode.FULL_FACE, Shapes.block()),
-    FRAMED_PRISM                                    ( true,  true, false,  true,  true,  true, false, false, ConTexMode.FULL_FACE, FramedPrismBlock::generateShapes),
-    FRAMED_ELEVATED_INNER_PRISM                     ( true,  true, false,  true,  true,  true, false, false, ConTexMode.FULL_FACE, FramedElevatedPrismBlock::generateInnerShapes),
+    FRAMED_PRISM                                    ( true,  true, false,  true,  true,  true, false, false, ConTexMode.FULL_FACE, new FramedPrismBlock.ShapeGen()),
+    FRAMED_ELEVATED_INNER_PRISM                     ( true,  true, false,  true,  true,  true, false, false, ConTexMode.FULL_FACE, new FramedElevatedPrismBlock.InnerShapeGen()),
     FRAMED_ELEVATED_INNER_DOUBLE_PRISM              ( true, false,  true, false,  true,  true,  true, false, ConTexMode.FULL_FACE, Shapes.block()),
     FRAMED_SLOPED_PRISM                             ( true,  true, false,  true,  true,  true, false, false, ConTexMode.FULL_FACE, FramedSlopedPrismBlock::generateShapes),
     FRAMED_ELEVATED_INNER_SLOPED_PRISM              ( true,  true, false,  true,  true,  true, false, false, ConTexMode.FULL_FACE, FramedElevatedSlopedPrismBlock::generateInnerShapes),
@@ -257,6 +258,7 @@ public enum BlockType implements IBlockType
     private final boolean supportsCT;
     private final ConTexMode minCTMode;
     private final ShapeGenerator shapeGen;
+    private final boolean separateOcclusionShapes;
 
     BlockType(boolean canOcclude, boolean specialHitbox, boolean specialTile, boolean waterloggable, boolean blockItem, boolean allowIntangible, boolean doubleBlock, boolean lockable, @Nullable ConTexMode minCTMode)
     {
@@ -282,6 +284,7 @@ public enum BlockType implements IBlockType
         this.supportsCT = minCTMode != null;
         this.minCTMode = Objects.requireNonNullElse(minCTMode, ConTexMode.NONE);
         this.shapeGen = shapeGen;
+        this.separateOcclusionShapes = shapeGen instanceof SplitShapeGenerator;
     }
 
     @Override
@@ -322,6 +325,21 @@ public enum BlockType implements IBlockType
             return new ReloadableShapeProvider(shapeGen, states);
         }
         return shapeGen.generate(states);
+    }
+
+    @Override
+    public ShapeProvider generateOcclusionShapes(ImmutableList<BlockState> states, ShapeProvider shapes)
+    {
+        if (separateOcclusionShapes)
+        {
+            SplitShapeGenerator splitShapeGen = (SplitShapeGenerator) shapeGen;
+            if (!FMLEnvironment.production)
+            {
+                return new ReloadableShapeProvider(splitShapeGen::generateOcclusionShapes, states);
+            }
+            return splitShapeGen.generateOcclusionShapes(states);
+        }
+        return shapes;
     }
 
     @Override

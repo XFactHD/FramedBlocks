@@ -21,6 +21,7 @@ import xfacthd.framedblocks.common.block.slope.FramedHalfSlopeBlock;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.property.HorizontalRotation;
+import xfacthd.framedblocks.common.data.shapes.SplitShapeGenerator;
 
 public class FramedVerticalSlopedStairsBlock extends FramedBlock
 {
@@ -148,62 +149,77 @@ public class FramedVerticalSlopedStairsBlock extends FramedBlock
 
 
 
-    public static ShapeProvider generateShapes(ImmutableList<BlockState> states)
+    public static final class ShapeGen implements SplitShapeGenerator
     {
-        ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
-
-        VoxelShape panelShape = CommonShapes.PANEL.get(Direction.NORTH);
-
-        VoxelShape shapeUp = ShapeUtils.orUnoptimized(
-                panelShape,
-                ShapeUtils.rotateShapeUnoptimizedAroundY(
-                        Direction.NORTH,
-                        Direction.EAST,
-                        FramedHalfSlopeBlock.SHAPES.get(new FramedHalfSlopeBlock.ShapeKey(false, true))
-                )
-        );
-
-        VoxelShape shapeDown = ShapeUtils.orUnoptimized(
-                panelShape,
-                ShapeUtils.rotateShapeUnoptimizedAroundY(
-                        Direction.NORTH,
-                        Direction.WEST,
-                        FramedHalfSlopeBlock.SHAPES.get(new FramedHalfSlopeBlock.ShapeKey(true, false))
-                )
-        );
-
-        VoxelShape shapeRight =  ShapeUtils.orUnoptimized(
-                panelShape,
-                ShapeUtils.rotateShapeUnoptimizedAroundY(
-                        Direction.NORTH,
-                        Direction.WEST,
-                        FramedHalfSlopeBlock.SHAPES.get(new FramedHalfSlopeBlock.ShapeKey(false, false))
-                )
-        );
-
-        VoxelShape shapeLeft =  ShapeUtils.orUnoptimized(
-                panelShape,
-                ShapeUtils.rotateShapeUnoptimizedAroundY(
-                        Direction.NORTH,
-                        Direction.EAST,
-                        FramedHalfSlopeBlock.SHAPES.get(new FramedHalfSlopeBlock.ShapeKey(true, true))
-                )
-        );
-
-        VoxelShape[] shapes = new VoxelShape[4 * 4];
-        ShapeUtils.makeHorizontalRotations(shapeUp, Direction.NORTH, shapes, 0);
-        ShapeUtils.makeHorizontalRotations(shapeDown, Direction.NORTH, shapes, HorizontalRotation.DOWN.ordinal() << 2);
-        ShapeUtils.makeHorizontalRotations(shapeRight, Direction.NORTH, shapes, HorizontalRotation.RIGHT.ordinal() << 2);
-        ShapeUtils.makeHorizontalRotations(shapeLeft, Direction.NORTH, shapes, HorizontalRotation.LEFT.ordinal() << 2);
-
-        for (BlockState state : states)
+        @Override
+        public ShapeProvider generate(ImmutableList<BlockState> states)
         {
-            Direction dir = state.getValue(FramedProperties.FACING_HOR);
-            HorizontalRotation rot = state.getValue(PropertyHolder.ROTATION);
-            int idx = dir.get2DDataValue() | (rot.ordinal() << 2);
-            builder.put(state, shapes[idx]);
+            return generateShapes(states, FramedHalfSlopeBlock.SHAPES);
         }
 
-        return ShapeProvider.of(builder.build());
+        @Override
+        public ShapeProvider generateOcclusionShapes(ImmutableList<BlockState> states)
+        {
+            return generateShapes(states, FramedHalfSlopeBlock.OCCLUSION_SHAPES);
+        }
+
+        private static ShapeProvider generateShapes(ImmutableList<BlockState> states, ShapeCache<FramedHalfSlopeBlock.ShapeKey> shapeCache)
+        {
+            ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
+
+            VoxelShape panelShape = CommonShapes.PANEL.get(Direction.NORTH);
+
+            VoxelShape shapeUp = ShapeUtils.orUnoptimized(
+                    panelShape,
+                    ShapeUtils.rotateShapeUnoptimizedAroundY(
+                            Direction.NORTH,
+                            Direction.EAST,
+                            shapeCache.get(new FramedHalfSlopeBlock.ShapeKey(false, true))
+                    )
+            );
+
+            VoxelShape shapeDown = ShapeUtils.orUnoptimized(
+                    panelShape,
+                    ShapeUtils.rotateShapeUnoptimizedAroundY(
+                            Direction.NORTH,
+                            Direction.WEST,
+                            shapeCache.get(new FramedHalfSlopeBlock.ShapeKey(true, false))
+                    )
+            );
+
+            VoxelShape shapeRight = ShapeUtils.orUnoptimized(
+                    panelShape,
+                    ShapeUtils.rotateShapeUnoptimizedAroundY(
+                            Direction.NORTH,
+                            Direction.WEST,
+                            shapeCache.get(new FramedHalfSlopeBlock.ShapeKey(false, false))
+                    )
+            );
+
+            VoxelShape shapeLeft = ShapeUtils.orUnoptimized(
+                    panelShape,
+                    ShapeUtils.rotateShapeUnoptimizedAroundY(
+                            Direction.NORTH,
+                            Direction.EAST,
+                            shapeCache.get(new FramedHalfSlopeBlock.ShapeKey(true, true))
+                    )
+            );
+
+            VoxelShape[] shapes = new VoxelShape[4 * 4];
+            ShapeUtils.makeHorizontalRotations(shapeUp, Direction.NORTH, shapes, 0);
+            ShapeUtils.makeHorizontalRotations(shapeDown, Direction.NORTH, shapes, HorizontalRotation.DOWN.ordinal() << 2);
+            ShapeUtils.makeHorizontalRotations(shapeRight, Direction.NORTH, shapes, HorizontalRotation.RIGHT.ordinal() << 2);
+            ShapeUtils.makeHorizontalRotations(shapeLeft, Direction.NORTH, shapes, HorizontalRotation.LEFT.ordinal() << 2);
+
+            for (BlockState state : states)
+            {
+                Direction dir = state.getValue(FramedProperties.FACING_HOR);
+                HorizontalRotation rot = state.getValue(PropertyHolder.ROTATION);
+                int idx = dir.get2DDataValue() | (rot.ordinal() << 2);
+                builder.put(state, shapes[idx]);
+            }
+
+            return ShapeProvider.of(builder.build());
+        }
     }
 }

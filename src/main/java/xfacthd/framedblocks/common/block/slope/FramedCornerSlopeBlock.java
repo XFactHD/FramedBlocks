@@ -14,14 +14,14 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.shapes.*;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
-import xfacthd.framedblocks.api.shapes.ShapeProvider;
-import xfacthd.framedblocks.api.shapes.ShapeUtils;
+import xfacthd.framedblocks.api.shapes.*;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.block.ExtPlacementStateBuilder;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.common.data.property.CornerType;
 import xfacthd.framedblocks.common.data.property.SlopeType;
+import xfacthd.framedblocks.common.data.shapes.SplitShapeGenerator;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -115,103 +115,133 @@ public class FramedCornerSlopeBlock extends FramedBlock
 
     private record ShapeKey(Direction dir, CornerType type) { }
 
-    public static ShapeProvider generateCornerShapes(ImmutableList<BlockState> states)
+    public static final class CornerShapeGen implements SplitShapeGenerator
     {
-        VoxelShape shapeSlopeBottom = FramedSlopeBlock.SHAPES.get(SlopeType.BOTTOM);
-        VoxelShape shapeSlopeTop = FramedSlopeBlock.SHAPES.get(SlopeType.TOP);
-        VoxelShape shapeSlopeHorizontal = FramedSlopeBlock.SHAPES.get(SlopeType.HORIZONTAL);
-        VoxelShape shapeSlopeHorizontalEast = ShapeUtils.rotateShapeUnoptimizedAroundY(
-                Direction.NORTH, Direction.EAST, shapeSlopeHorizontal
-        );
-
-        VoxelShape shapeTop = ShapeUtils.andUnoptimized(
-                shapeSlopeTop,
-                ShapeUtils.rotateShapeUnoptimizedAroundY(Direction.NORTH, Direction.WEST, shapeSlopeTop)
-        );
-        VoxelShape shapeBottom = ShapeUtils.andUnoptimized(
-                shapeSlopeBottom,
-                ShapeUtils.rotateShapeUnoptimizedAroundY(Direction.NORTH, Direction.WEST, shapeSlopeBottom)
-        );
-
-        VoxelShape shapeBottomLeft = ShapeUtils.andUnoptimized(shapeSlopeBottom, shapeSlopeHorizontal);
-        VoxelShape shapeBottomRight = ShapeUtils.andUnoptimized(shapeSlopeBottom, shapeSlopeHorizontalEast);
-        VoxelShape shapeTopLeft = ShapeUtils.andUnoptimized(shapeSlopeTop, shapeSlopeHorizontal);
-        VoxelShape shapeTopRight = ShapeUtils.andUnoptimized(shapeSlopeTop, shapeSlopeHorizontalEast);
-
-        Map<ShapeKey, VoxelShape> shapes = new HashMap<>();
-        for (CornerType type : CornerType.values())
+        @Override
+        public ShapeProvider generate(ImmutableList<BlockState> states)
         {
-            VoxelShape shape = switch (type)
+            return generateShapes(states, FramedSlopeBlock.SHAPES);
+        }
+
+        @Override
+        public ShapeProvider generateOcclusionShapes(ImmutableList<BlockState> states)
+        {
+            return generateShapes(states, FramedSlopeBlock.OCCLUSION_SHAPES);
+        }
+
+        private static ShapeProvider generateShapes(ImmutableList<BlockState> states, ShapeCache<SlopeType> shapeCache)
+        {
+            VoxelShape shapeSlopeBottom = shapeCache.get(SlopeType.BOTTOM);
+            VoxelShape shapeSlopeTop = shapeCache.get(SlopeType.TOP);
+            VoxelShape shapeSlopeHorizontal = shapeCache.get(SlopeType.HORIZONTAL);
+            VoxelShape shapeSlopeHorizontalEast = ShapeUtils.rotateShapeUnoptimizedAroundY(
+                    Direction.NORTH, Direction.EAST, shapeSlopeHorizontal
+            );
+
+            VoxelShape shapeTop = ShapeUtils.andUnoptimized(
+                    shapeSlopeTop,
+                    ShapeUtils.rotateShapeUnoptimizedAroundY(Direction.NORTH, Direction.WEST, shapeSlopeTop)
+            );
+            VoxelShape shapeBottom = ShapeUtils.andUnoptimized(
+                    shapeSlopeBottom,
+                    ShapeUtils.rotateShapeUnoptimizedAroundY(Direction.NORTH, Direction.WEST, shapeSlopeBottom)
+            );
+
+            VoxelShape shapeBottomLeft = ShapeUtils.andUnoptimized(shapeSlopeBottom, shapeSlopeHorizontal);
+            VoxelShape shapeBottomRight = ShapeUtils.andUnoptimized(shapeSlopeBottom, shapeSlopeHorizontalEast);
+            VoxelShape shapeTopLeft = ShapeUtils.andUnoptimized(shapeSlopeTop, shapeSlopeHorizontal);
+            VoxelShape shapeTopRight = ShapeUtils.andUnoptimized(shapeSlopeTop, shapeSlopeHorizontalEast);
+
+            Map<ShapeKey, VoxelShape> shapes = new HashMap<>();
+            for (CornerType type : CornerType.values())
             {
-                case BOTTOM -> shapeBottom;
-                case TOP -> shapeTop;
-                case HORIZONTAL_BOTTOM_LEFT -> shapeBottomLeft;
-                case HORIZONTAL_BOTTOM_RIGHT -> shapeBottomRight;
-                case HORIZONTAL_TOP_LEFT -> shapeTopLeft;
-                case HORIZONTAL_TOP_RIGHT -> shapeTopRight;
-            };
-            ShapeUtils.makeHorizontalRotations(shape, Direction.NORTH, shapes, type, ShapeKey::new);
+                VoxelShape shape = switch (type)
+                {
+                    case BOTTOM -> shapeBottom;
+                    case TOP -> shapeTop;
+                    case HORIZONTAL_BOTTOM_LEFT -> shapeBottomLeft;
+                    case HORIZONTAL_BOTTOM_RIGHT -> shapeBottomRight;
+                    case HORIZONTAL_TOP_LEFT -> shapeTopLeft;
+                    case HORIZONTAL_TOP_RIGHT -> shapeTopRight;
+                };
+                ShapeUtils.makeHorizontalRotations(shape, Direction.NORTH, shapes, type, ShapeKey::new);
+            }
+
+            ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
+
+            for (BlockState state : states)
+            {
+                CornerType type = state.getValue(PropertyHolder.CORNER_TYPE);
+                Direction dir = state.getValue(FramedProperties.FACING_HOR);
+                builder.put(state, shapes.get(new ShapeKey(dir, type)));
+            }
+
+            return ShapeProvider.of(builder.build());
         }
-
-        ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
-
-        for (BlockState state : states)
-        {
-            CornerType type = state.getValue(PropertyHolder.CORNER_TYPE);
-            Direction dir = state.getValue(FramedProperties.FACING_HOR);
-            builder.put(state, shapes.get(new ShapeKey(dir, type)));
-        }
-
-        return ShapeProvider.of(builder.build());
     }
 
-    public static ShapeProvider generateInnerCornerShapes(ImmutableList<BlockState> states)
+    public static final class InnerCornerShapeGen implements SplitShapeGenerator
     {
-        ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
-
-        VoxelShape shapeSlopeBottom = FramedSlopeBlock.SHAPES.get(SlopeType.BOTTOM);
-        VoxelShape shapeSlopeTop = FramedSlopeBlock.SHAPES.get(SlopeType.TOP);
-        VoxelShape shapeSlopeHorizontal = FramedSlopeBlock.SHAPES.get(SlopeType.HORIZONTAL);
-        VoxelShape shapeSlopeHorizontalEast = ShapeUtils.rotateShapeUnoptimizedAroundY(
-                Direction.NORTH, Direction.EAST, shapeSlopeHorizontal
-        );
-
-        VoxelShape shapeTop = ShapeUtils.orUnoptimized(
-                shapeSlopeTop,
-                ShapeUtils.rotateShapeUnoptimizedAroundY(Direction.NORTH, Direction.WEST, shapeSlopeTop)
-        );
-        VoxelShape shapeBottom = ShapeUtils.orUnoptimized(
-                shapeSlopeBottom,
-                ShapeUtils.rotateShapeUnoptimizedAroundY(Direction.NORTH, Direction.WEST, shapeSlopeBottom)
-        );
-
-        VoxelShape shapeBottomLeft = ShapeUtils.orUnoptimized(shapeSlopeBottom, shapeSlopeHorizontal);
-        VoxelShape shapeBottomRight = ShapeUtils.orUnoptimized(shapeSlopeBottom, shapeSlopeHorizontalEast);
-        VoxelShape shapeTopLeft = ShapeUtils.orUnoptimized(shapeSlopeTop, shapeSlopeHorizontal);
-        VoxelShape shapeTopRight = ShapeUtils.orUnoptimized(shapeSlopeTop, shapeSlopeHorizontalEast);
-
-        Map<ShapeKey, VoxelShape> shapes = new HashMap<>();
-        for (CornerType type : CornerType.values())
+        @Override
+        public ShapeProvider generate(ImmutableList<BlockState> states)
         {
-            VoxelShape shape = switch (type)
+            return generateShapes(states, FramedSlopeBlock.SHAPES);
+        }
+
+        @Override
+        public ShapeProvider generateOcclusionShapes(ImmutableList<BlockState> states)
+        {
+            return generateShapes(states, FramedSlopeBlock.OCCLUSION_SHAPES);
+        }
+
+        private static ShapeProvider generateShapes(ImmutableList<BlockState> states, ShapeCache<SlopeType> shapeCache)
+        {
+            ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
+
+            VoxelShape shapeSlopeBottom = shapeCache.get(SlopeType.BOTTOM);
+            VoxelShape shapeSlopeTop = shapeCache.get(SlopeType.TOP);
+            VoxelShape shapeSlopeHorizontal = shapeCache.get(SlopeType.HORIZONTAL);
+            VoxelShape shapeSlopeHorizontalEast = ShapeUtils.rotateShapeUnoptimizedAroundY(
+                    Direction.NORTH, Direction.EAST, shapeSlopeHorizontal
+            );
+
+            VoxelShape shapeTop = ShapeUtils.orUnoptimized(
+                    shapeSlopeTop,
+                    ShapeUtils.rotateShapeUnoptimizedAroundY(Direction.NORTH, Direction.WEST, shapeSlopeTop)
+            );
+            VoxelShape shapeBottom = ShapeUtils.orUnoptimized(
+                    shapeSlopeBottom,
+                    ShapeUtils.rotateShapeUnoptimizedAroundY(Direction.NORTH, Direction.WEST, shapeSlopeBottom)
+            );
+
+            VoxelShape shapeBottomLeft = ShapeUtils.orUnoptimized(shapeSlopeBottom, shapeSlopeHorizontal);
+            VoxelShape shapeBottomRight = ShapeUtils.orUnoptimized(shapeSlopeBottom, shapeSlopeHorizontalEast);
+            VoxelShape shapeTopLeft = ShapeUtils.orUnoptimized(shapeSlopeTop, shapeSlopeHorizontal);
+            VoxelShape shapeTopRight = ShapeUtils.orUnoptimized(shapeSlopeTop, shapeSlopeHorizontalEast);
+
+            Map<ShapeKey, VoxelShape> shapes = new HashMap<>();
+            for (CornerType type : CornerType.values())
             {
-                case BOTTOM -> shapeBottom;
-                case TOP -> shapeTop;
-                case HORIZONTAL_BOTTOM_LEFT -> shapeBottomLeft;
-                case HORIZONTAL_BOTTOM_RIGHT -> shapeBottomRight;
-                case HORIZONTAL_TOP_LEFT -> shapeTopLeft;
-                case HORIZONTAL_TOP_RIGHT -> shapeTopRight;
-            };
-            ShapeUtils.makeHorizontalRotations(shape, Direction.NORTH, shapes, type, ShapeKey::new);
-        }
+                VoxelShape shape = switch (type)
+                {
+                    case BOTTOM -> shapeBottom;
+                    case TOP -> shapeTop;
+                    case HORIZONTAL_BOTTOM_LEFT -> shapeBottomLeft;
+                    case HORIZONTAL_BOTTOM_RIGHT -> shapeBottomRight;
+                    case HORIZONTAL_TOP_LEFT -> shapeTopLeft;
+                    case HORIZONTAL_TOP_RIGHT -> shapeTopRight;
+                };
+                ShapeUtils.makeHorizontalRotations(shape, Direction.NORTH, shapes, type, ShapeKey::new);
+            }
 
-        for (BlockState state : states)
-        {
-            CornerType type = state.getValue(PropertyHolder.CORNER_TYPE);
-            Direction dir = state.getValue(FramedProperties.FACING_HOR);
-            builder.put(state, shapes.get(new ShapeKey(dir, type)));
-        }
+            for (BlockState state : states)
+            {
+                CornerType type = state.getValue(PropertyHolder.CORNER_TYPE);
+                Direction dir = state.getValue(FramedProperties.FACING_HOR);
+                builder.put(state, shapes.get(new ShapeKey(dir, type)));
+            }
 
-        return ShapeProvider.of(builder.build());
+            return ShapeProvider.of(builder.build());
+        }
     }
 }
