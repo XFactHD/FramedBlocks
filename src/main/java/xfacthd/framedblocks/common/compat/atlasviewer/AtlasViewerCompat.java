@@ -1,5 +1,6 @@
 package xfacthd.framedblocks.common.compat.atlasviewer;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModList;
@@ -7,7 +8,7 @@ import net.neoforged.fml.loading.FMLEnvironment;
 import xfacthd.atlasviewer.client.api.RegisterSpriteSourceDetailsEvent;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.util.Utils;
-import xfacthd.framedblocks.client.render.util.AnimationSplitterSourceAV;
+import xfacthd.framedblocks.client.render.util.AnimationSplitterSource;
 
 public final class AtlasViewerCompat
 {
@@ -43,10 +44,21 @@ public final class AtlasViewerCompat
 
         private static void onRegisterSpriteSourceDetails(final RegisterSpriteSourceDetailsEvent event)
         {
-            event.registerSourceTooltipAppender(
-                    AnimationSplitterSourceAV.class,
-                    new AnimationSplitterSourceAV.TooltipAppender()
+            event.registerPrimaryResourceGetter(
+                    AnimationSplitterSource.FrameInstance.class,
+                    AnimationSplitterSource.FrameInstance::resource
             );
+            event.registerSourceTooltipAppender(AnimationSplitterSource.class, (src, consumer) ->
+            {
+                consumer.accept(AtlasViewerCompat.LABEL_TEXTURE, Component.literal(src.resource().toString()));
+                consumer.accept(AtlasViewerCompat.LABEL_FRAMES, Component.empty());
+                src.frames().forEach(frame -> consumer.accept(
+                        null, Component.literal("  - ")
+                                .append(Component.literal(Integer.toString(frame.frameIdx())).withStyle(ChatFormatting.ITALIC))
+                                .append(": ")
+                                .append(Component.literal(frame.outLoc().toString()))
+                ));
+            });
         }
 
 

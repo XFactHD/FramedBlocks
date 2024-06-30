@@ -13,7 +13,6 @@ import net.minecraft.client.resources.metadata.animation.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.*;
 import net.minecraft.util.ExtraCodecs;
-import net.neoforged.fml.ModList;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.client.util.NoAnimationResourceMetadata;
@@ -22,23 +21,13 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.BiFunction;
 
-public sealed class AnimationSplitterSource implements SpriteSource permits AnimationSplitterSourceAV
+public record AnimationSplitterSource(ResourceLocation resource, List<Frame> frames) implements SpriteSource
 {
-    private static final boolean AV_LOADED = ModList.get().isLoaded("atlasviewer");
     private static SpriteSourceType TYPE = null;
     private static final MapCodec<AnimationSplitterSource> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
             ResourceLocation.CODEC.fieldOf("resource").forGetter(s -> s.resource),
             ExtraCodecs.nonEmptyList(Frame.CODEC.listOf()).fieldOf("frames").forGetter(s -> s.frames)
-    ).apply(inst, AV_LOADED ? AnimationSplitterSourceAV::new : AnimationSplitterSource::new));
-
-    final ResourceLocation resource;
-    final List<Frame> frames;
-
-    public AnimationSplitterSource(ResourceLocation resource, List<Frame> frames)
-    {
-        this.resource = resource;
-        this.frames = frames;
-    }
+    ).apply(inst, AnimationSplitterSource::new));
 
     @Override
     public void run(ResourceManager mgr, Output out)
@@ -49,17 +38,12 @@ public sealed class AnimationSplitterSource implements SpriteSource permits Anim
         {
             Resource res = optResource.get();
             LazyLoadedImage image = new LazyLoadedImage(texPath, res, frames.size());
-            frames.forEach(frame -> out.add(frame.outLoc, createFrameInstance(res, texPath, image, frame)));
+            frames.forEach(frame -> out.add(frame.outLoc, new FrameInstance(res, texPath, image, frame)));
         }
         else
         {
             FramedBlocks.LOGGER.warn("Missing sprite: {}", texPath);
         }
-    }
-
-    FrameInstance createFrameInstance(Resource res, ResourceLocation texPath, LazyLoadedImage image, Frame frame)
-    {
-        return new FrameInstance(res, texPath, image, frame);
     }
 
     @Override
@@ -79,21 +63,8 @@ public sealed class AnimationSplitterSource implements SpriteSource permits Anim
         ).apply(inst, Frame::new));
     }
 
-    static sealed class FrameInstance implements SpriteSupplier permits AnimationSplitterSourceAV.FrameInstanceAV
+    public record FrameInstance(Resource resource, ResourceLocation texPath, LazyLoadedImage lazyImage, Frame frame) implements SpriteSupplier
     {
-        final Resource resource;
-        private final ResourceLocation texPath;
-        private final LazyLoadedImage lazyImage;
-        private final Frame frame;
-
-        FrameInstance(Resource resource, ResourceLocation texPath, LazyLoadedImage lazyImage, Frame frame)
-        {
-            this.resource = resource;
-            this.texPath = texPath;
-            this.lazyImage = lazyImage;
-            this.frame = frame;
-        }
-
         @Override
         public SpriteContents apply(SpriteResourceLoader loader)
         {
@@ -122,9 +93,7 @@ public sealed class AnimationSplitterSource implements SpriteSource permits Anim
 
                 NativeImage imageOut = new NativeImage(NativeImage.Format.RGBA, frameW, frameH, false);
                 image.copyRect(imageOut, srcX, srcY, 0, 0, frameW, frameH, false, false);
-                return postProcess(new SpriteContents(
-                        frame.outLoc, new FrameSize(frameW, frameH), imageOut, new NoAnimationResourceMetadata(srcMeta)
-                ));
+                return new SpriteContents(frame.outLoc, new FrameSize(frameW, frameH), imageOut, new NoAnimationResourceMetadata(srcMeta));
             }
             catch (Exception e)
             {
@@ -135,11 +104,6 @@ public sealed class AnimationSplitterSource implements SpriteSource permits Anim
                 lazyImage.release();
             }
             return MissingTextureAtlasSprite.create();
-        }
-
-        SpriteContents postProcess(SpriteContents contents)
-        {
-            return contents;
         }
 
         private static void checkFrameExists(
