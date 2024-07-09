@@ -11,7 +11,6 @@ import xfacthd.framedblocks.common.compat.emi.EmiCompat;
 import xfacthd.framedblocks.common.compat.jei.JeiCompat;
 import xfacthd.framedblocks.common.compat.rei.ReiCompat;
 import xfacthd.framedblocks.common.compat.supplementaries.SupplementariesCompat;
-import xfacthd.framedblocks.common.compat.xycraft.XyCraftCompat;
 
 public final class CompatHandler
 {
@@ -27,7 +26,6 @@ public final class CompatHandler
         JeiCompat.init();
         ReiCompat.init();
         SupplementariesCompat.init();
-        XyCraftCompat.init();
     }
 
     public static void commonSetup()
