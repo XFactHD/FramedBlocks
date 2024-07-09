@@ -129,10 +129,21 @@ public final class FluidModel implements BakedModel
         Preconditions.checkNotNull(bareModel, "Bare fluid model not loaded!");
 
         IClientFluidTypeExtensions props = IClientFluidTypeExtensions.of(fluid);
+        Preconditions.checkNotNull(
+                props.getStillTexture(),
+                "Fluid %s returned null from IClientFluidTypeExtensions#getStillTexture()",
+                fluid
+        );
+        Preconditions.checkNotNull(
+                props.getFlowingTexture(),
+                "Fluid %s returned null from IClientFluidTypeExtensions#getFlowingTexture()",
+                fluid
+        );
 
         ResourceLocation fluidName = Preconditions.checkNotNull(
                 NeoForgeRegistries.FLUID_TYPES.getKey(fluid.getFluidType()),
-                "Cannot create FluidModel for unregistered FluidType"
+                "Cannot create FluidModel for unregistered FluidType of fluid %s",
+                fluid
         );
         ModelResourceLocation modelName = new ModelResourceLocation(
                 Utils.rl("fluid/" + fluidName.toString().replace(":", "_")),
@@ -147,7 +158,7 @@ public final class FluidModel implements BakedModel
                 spriteGetter,
                 SIMPLE_STATE
         );
-        Preconditions.checkNotNull(model, "Failed to bake fluid model");
+        Preconditions.checkNotNull(model, "Failed to bake fluid model for fluid %s", fluid);
 
         Map<Direction, List<BakedQuad>> quads = new EnumMap<>(Direction.class);
         BlockState defState = fluid.defaultFluidState().createLegacyBlock();
