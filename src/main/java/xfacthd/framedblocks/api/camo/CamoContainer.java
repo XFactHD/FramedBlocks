@@ -1,10 +1,16 @@
 package xfacthd.framedblocks.api.camo;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponentType;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.material.MapColor;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * Base class for camo containers, holding a {@link CamoContent} as well as any additional metadata needed for
+ * the respective implementation. Additional data stored in this container must be immutable to make it eligible
+ * for use in {@linkplain DataComponentType data components}
+ */
 public abstract class CamoContainer<C extends CamoContent<C>, T extends CamoContainer<C, T>>
 {
     protected final C content;
