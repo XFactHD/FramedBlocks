@@ -286,6 +286,15 @@ public class FramedBlockEntity extends BlockEntity
         return false;
     }
 
+    /**
+     * Update the camo of this block. Whether the primary or secondary camo will be replaced depends
+     * on the given {@link BlockHitResult} and {@link Player}
+     */
+    public final void setCamo(CamoContainer<?, ?> camo, BlockHitResult hit, Player player)
+    {
+        setCamo(camo, hitSecondary(hit, player));
+    }
+
     public final void setCamo(CamoContainer<?, ?> camo, boolean secondary)
     {
         int light = getLightValue();
