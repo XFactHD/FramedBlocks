@@ -19,10 +19,8 @@ import net.minecraft.world.level.block.state.properties.*;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.*;
-import net.neoforged.neoforge.client.extensions.common.IClientBlockExtensions;
 import xfacthd.framedblocks.api.block.*;
 import xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
-import xfacthd.framedblocks.api.block.render.FramedBlockRenderProperties;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.block.ISlopeBlock;
@@ -35,7 +33,6 @@ import xfacthd.framedblocks.common.util.FramedUtils;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.BiFunction;
-import java.util.function.Consumer;
 
 public class FramedRailSlopeBlock extends BaseRailBlock implements IFramedBlock, ISlopeBlock.IRailSlopeBlock
 {
@@ -248,12 +245,6 @@ public class FramedRailSlopeBlock extends BaseRailBlock implements IFramedBlock,
     protected MapCodec<? extends BaseRailBlock> codec()
     {
         throw new UnsupportedOperationException("NO");
-    }
-
-    @Override
-    public void initializeClient(Consumer<IClientBlockExtensions> consumer)
-    {
-        consumer.accept(FramedBlockRenderProperties.INSTANCE);
     }
 
     @Override

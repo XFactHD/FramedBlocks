@@ -15,7 +15,6 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.*;
 import net.minecraft.world.level.material.*;
 import net.minecraft.world.phys.shapes.*;
-import net.neoforged.neoforge.client.extensions.common.IClientBlockExtensions;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.util.Utils;
@@ -25,8 +24,6 @@ import xfacthd.framedblocks.common.blockentity.doubled.FramedDoubleBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.doubleblock.*;
 import xfacthd.framedblocks.common.util.FramedUtils;
-
-import java.util.function.Consumer;
 
 public class FramedDoubleStairsBlock extends FramedStairsBlock implements IFramedDoubleBlock
 {
@@ -340,12 +337,6 @@ public class FramedDoubleStairsBlock extends FramedStairsBlock implements IFrame
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
     {
         return new FramedDoubleBlockEntity(pos, state);
-    }
-
-    @Override
-    public void initializeClient(Consumer<IClientBlockExtensions> consumer)
-    {
-        consumer.accept(FramedDoubleBlockRenderProperties.INSTANCE);
     }
 
     @Override

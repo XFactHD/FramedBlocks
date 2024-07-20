@@ -13,7 +13,9 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
+import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import xfacthd.framedblocks.FramedBlocks;
+import xfacthd.framedblocks.api.block.render.FramedBlockRenderProperties;
 import xfacthd.framedblocks.api.model.wrapping.RegisterModelWrappersEvent;
 import xfacthd.framedblocks.api.model.wrapping.WrapHelper;
 import xfacthd.framedblocks.api.util.Utils;
@@ -97,6 +99,7 @@ public final class DiagonalBlocksCompat
         {
             modBus.addListener(GuardedClientAccess::onRegisterModelWrappers);
             modBus.addListener(GuardedClientAccess::onRegisterBlockColors);
+            modBus.addListener(GuardedClientAccess::onRegisterClientExtensions);
         }
 
         private static void onRegisterModelWrappers(final RegisterModelWrappersEvent event)
@@ -109,13 +112,23 @@ public final class DiagonalBlocksCompat
             );
         }
 
-        public static void onRegisterBlockColors(final RegisterColorHandlersEvent.Block event)
+        private static void onRegisterBlockColors(final RegisterColorHandlersEvent.Block event)
         {
             getBlock(DiagonalBlockTypes.FENCE, FBContent.BLOCK_FRAMED_FENCE).ifPresent(
                     holder -> event.register(FramedBlockColor.INSTANCE, holder.value())
             );
             getBlock(DiagonalBlockTypes.WINDOW, FBContent.BLOCK_FRAMED_PANE).ifPresent(
                     holder -> event.register(FramedBlockColor.INSTANCE, holder.value())
+            );
+        }
+
+        private static void onRegisterClientExtensions(final RegisterClientExtensionsEvent event)
+        {
+            getBlock(DiagonalBlockTypes.FENCE, FBContent.BLOCK_FRAMED_FENCE).ifPresent(
+                    holder -> event.registerBlock(FramedBlockRenderProperties.INSTANCE, holder.value())
+            );
+            getBlock(DiagonalBlockTypes.WINDOW, FBContent.BLOCK_FRAMED_PANE).ifPresent(
+                    holder -> event.registerBlock(FramedBlockRenderProperties.INSTANCE, holder.value())
             );
         }
 

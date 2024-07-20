@@ -14,11 +14,9 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.*;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.BlockHitResult;
-import net.neoforged.neoforge.client.extensions.common.IClientBlockExtensions;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
-import xfacthd.framedblocks.api.block.render.FramedBlockRenderProperties;
 import xfacthd.framedblocks.api.model.wrapping.WrapHelper;
 import xfacthd.framedblocks.api.model.wrapping.statemerger.StateMerger;
 import xfacthd.framedblocks.api.util.Utils;
@@ -26,7 +24,6 @@ import xfacthd.framedblocks.common.data.BlockType;
 
 import java.util.List;
 import java.util.Set;
-import java.util.function.Consumer;
 
 public class FramedFenceGateBlock extends FenceGateBlock implements IFramedBlock
 {
@@ -108,12 +105,6 @@ public class FramedFenceGateBlock extends FenceGateBlock implements IFramedBlock
     public BlockType getBlockType()
     {
         return BlockType.FRAMED_FENCE_GATE;
-    }
-
-    @Override
-    public void initializeClient(Consumer<IClientBlockExtensions> consumer)
-    {
-        consumer.accept(FramedBlockRenderProperties.INSTANCE);
     }
 
     @Override

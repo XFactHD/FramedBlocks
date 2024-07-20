@@ -1,5 +1,6 @@
 package xfacthd.framedblocks.client;
 
+import com.mojang.datafixers.util.Pair;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.resources.model.BakedModel;
@@ -12,6 +13,7 @@ import net.minecraft.world.level.block.state.properties.Property;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.client.event.*;
+import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import net.neoforged.neoforge.client.model.data.ModelProperty;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.IEventBus;
@@ -22,12 +24,18 @@ import net.neoforged.neoforge.common.NeoForge;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import xfacthd.framedblocks.api.block.IFramedBlock;
+import xfacthd.framedblocks.api.block.render.FramedBlockRenderProperties;
 import xfacthd.framedblocks.api.model.wrapping.*;
 import xfacthd.framedblocks.api.model.wrapping.itemmodel.ItemModelInfo;
 import xfacthd.framedblocks.api.model.wrapping.statemerger.StateMerger;
 import xfacthd.framedblocks.api.render.debug.AttachDebugRenderersEvent;
+import xfacthd.framedblocks.client.data.extensions.block.NoEffectsClientBlockExtensions;
+import xfacthd.framedblocks.client.data.extensions.block.OneWayWindowClientBlockExtensions;
 import xfacthd.framedblocks.client.render.block.debug.*;
 import xfacthd.framedblocks.client.render.particle.FluidSpriteParticle;
+import xfacthd.framedblocks.common.block.IFramedDoubleBlock;
+import xfacthd.framedblocks.common.block.cube.FramedOneWayWindowBlock;
+import xfacthd.framedblocks.common.block.interactive.FramedItemFrameBlock;
 import xfacthd.framedblocks.common.block.slopepanel.*;
 import xfacthd.framedblocks.common.block.slopeslab.*;
 import xfacthd.framedblocks.common.data.camo.fluid.FluidCamoClientHandler;
@@ -75,6 +83,7 @@ import xfacthd.framedblocks.common.block.stairs.standard.FramedStairsBlock;
 import xfacthd.framedblocks.common.compat.supplementaries.SupplementariesCompat;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.StateCacheBuilder;
+import xfacthd.framedblocks.common.data.doubleblock.FramedDoubleBlockRenderProperties;
 import xfacthd.framedblocks.common.data.doubleblock.NullCullPredicate;
 
 import java.util.*;
@@ -105,6 +114,7 @@ public final class FBClient
         modBus.addListener(FBClient::onRegisterSpriteSources);
         modBus.addListener(FBClient::onTexturesStitched);
         modBus.addListener(FBClient::onRegisterParticleProviders);
+        modBus.addListener(FBClient::onRegisterClientExtensions);
         modBus.addListener(BlockOutlineRenderers::onRegisterOutlineRenderers);
         modBus.addListener(GhostRenderBehaviours::onRegisterGhostRenderBehaviours);
 
@@ -486,6 +496,22 @@ public final class FBClient
     private static void onRegisterParticleProviders(final RegisterParticleProvidersEvent event)
     {
         event.registerSpecial(FBContent.FLUID_PARTICLE.get(), new FluidSpriteParticle.Provider());
+    }
+
+    private static void onRegisterClientExtensions(final RegisterClientExtensionsEvent event)
+    {
+        FBContent.getRegisteredBlocks()
+                .stream()
+                .map(Holder::value)
+                .filter(IFramedBlock.class::isInstance)
+                .map(block -> Pair.of(block, switch (block)
+                {
+                    case FramedItemFrameBlock ignored -> NoEffectsClientBlockExtensions.INSTANCE;
+                    case FramedOneWayWindowBlock ignored -> new OneWayWindowClientBlockExtensions();
+                    case IFramedDoubleBlock ignored -> FramedDoubleBlockRenderProperties.INSTANCE;
+                    default -> FramedBlockRenderProperties.INSTANCE;
+                }))
+                .forEach(pair -> event.registerBlock(pair.getSecond(), pair.getFirst()));
     }
 
 
