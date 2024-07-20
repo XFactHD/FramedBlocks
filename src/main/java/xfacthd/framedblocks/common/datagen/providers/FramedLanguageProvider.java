@@ -275,6 +275,7 @@ public final class FramedLanguageProvider extends LanguageProvider
     {
         add(KeyMappings.KEY_CATEGORY, "FramedBlocks");
         add(KeyMappings.KEYMAPPING_UPDATE_CULLING.get().getName(), "Update culling cache");
+        add(KeyMappings.KEYMAPPING_WIPE_CACHE.get().getName(), "Clear model cache");
 
         add(FBContent.MAIN_TAB.value().getDisplayName(), "FramedBlocks");
 
@@ -435,6 +436,8 @@ public final class FramedLanguageProvider extends LanguageProvider
 
     private void addConfigTranslations()
     {
+        add("framedblocks.configuration.general", "General");
+        add("framedblocks.configuration.powered_framing_saw", "Powered Framing Saw");
         add(ServerConfig.TRANSLATION_ALLOW_BLOCK_ENTITIES, "Allow BlockEntities");
         add(ServerConfig.TRANSLATION_ENABLE_INTANGIBILITY, "Enable intangibility feature");
         add(ServerConfig.TRANSLATION_INTANGIBLE_MARKER, "Intangibility marker item");
@@ -447,6 +450,8 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(ServerConfig.TRANSLATION_POWERED_SAW_CONSUMPTION, "Consumption");
         add(ServerConfig.TRANSLATION_POWERED_SAW_RECIPE_DURATION, "Crafting Duration");
 
+        //add("framedblocks.configuration.general", "General");
+        add("framedblocks.configuration.overlay", "Overlays");
         add(ClientConfig.TRANSLATION_SHOW_GHOST_BLOCKS, "Show ghost blocks");
         add(ClientConfig.TRANSLATION_ALT_GHOST_RENDERER, "Use alternative placement preview renderer");
         add(ClientConfig.TRANSLATION_GHOST_RENDER_OPACITY, "Placement preview opacity");

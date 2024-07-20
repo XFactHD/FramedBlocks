@@ -12,7 +12,7 @@ import xfacthd.framedblocks.client.screen.overlay.BlockInteractOverlay;
 public final class ClientConfig
 {
     public static final ExtConfigView.Client VIEW = (ExtConfigView.Client) ConfigView.Client.INSTANCE;
-    private static ModConfigSpec spec;
+    private static final ModConfigSpec SPEC;
 
     private static final String KEY_SHOW_GHOST_BLOCKS = "showGhostBlocks";
     private static final String KEY_ALT_GHOST_RENDERER = "altGhostRenderer";
@@ -93,68 +93,69 @@ public final class ClientConfig
     private static BlockInteractOverlay.Mode frameBackgroundMode = BlockInteractOverlay.Mode.DETAILED;
     private static BlockInteractOverlay.Mode camoRotationMode = BlockInteractOverlay.Mode.DETAILED;
 
-    private static ModConfigSpec.BooleanValue showGhostBlocksValue;
-    private static ModConfigSpec.BooleanValue altGhostRendererValue;
-    private static ModConfigSpec.IntValue ghostRenderOpacityValue;
-    private static ModConfigSpec.BooleanValue fancyHitboxesValue;
-    private static ModConfigSpec.BooleanValue detailedCullingValue;
-    private static ModConfigSpec.BooleanValue useDiscreteUVStepsValue;
-    private static ModConfigSpec.EnumValue<ConTexMode> conTexModeValue;
-    private static ModConfigSpec.EnumValue<CamoMessageVerbosity> camoMessageVerbosityValue;
-    private static ModConfigSpec.BooleanValue forceAoOnGlowingBlocksValue;
-    private static ModConfigSpec.BooleanValue renderItemModelsWithCamoValue;
-    private static ModConfigSpec.BooleanValue showAllRecipePermutationsInEmiValue;
-    private static ModConfigSpec.EnumValue<SolidFrameMode> solidFrameModeValue;
-    private static ModConfigSpec.BooleanValue showButtonPlateOverlayValue;
-    private static ModConfigSpec.BooleanValue showSpecialCubeOverlayValue;
-    private static ModConfigSpec.BooleanValue renderCamoInJadeValue;
+    private static final ModConfigSpec.BooleanValue SHOW_GHOST_BLOCKS_VALUE;
+    private static final ModConfigSpec.BooleanValue ALT_GHOST_RENDERER_VALUE;
+    private static final ModConfigSpec.IntValue GHOST_RENDER_OPACITY_VALUE;
+    private static final ModConfigSpec.BooleanValue FANCY_HITBOXES_VALUE;
+    private static final ModConfigSpec.BooleanValue DETAILED_CULLING_VALUE;
+    private static final ModConfigSpec.BooleanValue USE_DISCRETE_UV_STEPS_VALUE;
+    private static final ModConfigSpec.EnumValue<ConTexMode> CON_TEX_MODE_VALUE;
+    private static final ModConfigSpec.EnumValue<CamoMessageVerbosity> CAMO_MESSAGE_VERBOSITY_VALUE;
+    private static final ModConfigSpec.BooleanValue FORCE_AO_ON_GLOWING_BLOCKS_VALUE;
+    private static final ModConfigSpec.BooleanValue RENDER_ITEM_MODELS_WITH_CAMO_VALUE;
+    private static final ModConfigSpec.BooleanValue SHOW_ALL_RECIPE_PERMUTATIONS_IN_EMI_VALUE;
+    private static final ModConfigSpec.EnumValue<SolidFrameMode> SOLID_FRAME_MODE_VALUE;
+    private static final ModConfigSpec.BooleanValue SHOW_BUTTON_PLATE_OVERLAY_VALUE;
+    private static final ModConfigSpec.BooleanValue SHOW_SPECIAL_CUBE_OVERLAY_VALUE;
+    private static final ModConfigSpec.BooleanValue RENDER_CAMO_IN_JADE_VALUE;
 
-    private static ModConfigSpec.EnumValue<BlockInteractOverlay.Mode> stateLockModeValue;
-    private static ModConfigSpec.EnumValue<BlockInteractOverlay.Mode> toggleWaterlogModeValue;
-    private static ModConfigSpec.EnumValue<BlockInteractOverlay.Mode> toggleYSlopeModeValue;
-    private static ModConfigSpec.EnumValue<BlockInteractOverlay.Mode> reinforcementModeValue;
-    private static ModConfigSpec.EnumValue<BlockInteractOverlay.Mode> prismOffsetModeValue;
-    private static ModConfigSpec.EnumValue<BlockInteractOverlay.Mode> splitLineModeValue;
-    private static ModConfigSpec.EnumValue<BlockInteractOverlay.Mode> oneWayWindowModeValue;
-    private static ModConfigSpec.EnumValue<BlockInteractOverlay.Mode> frameBackgroundModeValue;
-    private static ModConfigSpec.EnumValue<BlockInteractOverlay.Mode> camoRotationModeValue;
+    private static final ModConfigSpec.EnumValue<BlockInteractOverlay.Mode> STATE_LOCK_MODE_VALUE;
+    private static final ModConfigSpec.EnumValue<BlockInteractOverlay.Mode> TOGGLE_WATERLOG_MODE_VALUE;
+    private static final ModConfigSpec.EnumValue<BlockInteractOverlay.Mode> TOGGLE_Y_SLOPE_MODE_VALUE;
+    private static final ModConfigSpec.EnumValue<BlockInteractOverlay.Mode> REINFORCEMENT_MODE_VALUE;
+    private static final ModConfigSpec.EnumValue<BlockInteractOverlay.Mode> PRISM_OFFSET_MODE_VALUE;
+    private static final ModConfigSpec.EnumValue<BlockInteractOverlay.Mode> SPLIT_LINE_MODE_VALUE;
+    private static final ModConfigSpec.EnumValue<BlockInteractOverlay.Mode> ONE_WAY_WINDOW_MODE_VALUE;
+    private static final ModConfigSpec.EnumValue<BlockInteractOverlay.Mode> FRAME_BACKGROUND_MODE_VALUE;
+    private static final ModConfigSpec.EnumValue<BlockInteractOverlay.Mode> CAMO_ROTATION_MODE_VALUE;
 
     public static ModConfigSpec create(IEventBus modBus)
     {
         modBus.addListener((ModConfigEvent.Loading event) -> onConfigReloaded(event));
         modBus.addListener((ModConfigEvent.Reloading event) -> onConfigReloaded(event));
-        spec = new ModConfigSpec.Builder().configure(ClientConfig::build).getRight();
-        return spec;
+        return SPEC;
     }
 
-    private static Object build(ModConfigSpec.Builder builder)
+    static
     {
+        ModConfigSpec.Builder builder = new ModConfigSpec.Builder();
+
         builder.push("general");
-        showGhostBlocksValue = builder
+        SHOW_GHOST_BLOCKS_VALUE = builder
                 .comment("Whether ghost blocks are shown when you are holding a framed block")
                 .translation(TRANSLATION_SHOW_GHOST_BLOCKS)
                 .define(KEY_SHOW_GHOST_BLOCKS, true);
-        altGhostRendererValue = builder
+        ALT_GHOST_RENDERER_VALUE = builder
                 .comment("If true, an alternate renderer will be used for the placement preview. May solve issues with certain shaders")
                 .translation(TRANSLATION_ALT_GHOST_RENDERER)
                 .define(KEY_ALT_GHOST_RENDERER, false);
-        ghostRenderOpacityValue = builder
+        GHOST_RENDER_OPACITY_VALUE = builder
                 .comment("Set the opacity of the placement preview. 30 is almost completely transparent, 255 is fully opaque")
                 .translation(TRANSLATION_GHOST_RENDER_OPACITY)
                 .defineInRange(KEY_GHOST_RENDER_OPACITY, 170, 30, 255);
-        fancyHitboxesValue = builder
+        FANCY_HITBOXES_VALUE = builder
                 .comment("Whether certain framed blocks should show fancy hitboxes")
                 .translation(TRANSLATION_FANCY_HITBOXES)
                 .define(KEY_FANCY_HITBOXES, true);
-        detailedCullingValue = builder
+        DETAILED_CULLING_VALUE = builder
                 .comment("If false only full block faces of framed blocks will be culled, if true all outer faces of famed blocks can be culled")
                 .translation(TRANSLATION_DETAILED_CULLING)
                 .define(KEY_DETAILED_CULLING, true);
-        useDiscreteUVStepsValue = builder
+        USE_DISCRETE_UV_STEPS_VALUE = builder
                 .comment("If true, the UV remapping will use discrete steps to avoid floating point errors")
                 .translation(TRANSLATION_USE_DISCRETE_UV_STEPS)
                 .define(KEY_USE_DISCRETE_UV_STEPS, true);
-        conTexModeValue = builder
+        CON_TEX_MODE_VALUE = builder
                 .comment(
                         "Configures how detailed connected textures are supported.",
                         "Use anything above FULL_EDGE at your own risk (performance impact, unexpected behaviour)!",
@@ -165,7 +166,7 @@ public final class ClientConfig
                 )
                 .translation(TRANSLATION_CON_TEX_MODE)
                 .defineEnum(KEY_CON_TEX_MODE, ConTexMode.DETAILED);
-        camoMessageVerbosityValue = builder
+        CAMO_MESSAGE_VERBOSITY_VALUE = builder
                 .comment(
                         "Configures the verbosity of messages displayed when a block cannot be used as a camo",
                         "If NONE, no message will be shown",
@@ -174,26 +175,26 @@ public final class ClientConfig
                 )
                 .translation(TRANSLATION_CAMO_MESSAGE_VERBOSITY)
                 .defineEnum(KEY_CAMO_MESSAGE_VERBOSITY, CamoMessageVerbosity.DEFAULT);
-        forceAoOnGlowingBlocksValue = builder
+        FORCE_AO_ON_GLOWING_BLOCKS_VALUE = builder
                 .comment(
                         "If true, ambient occlusion is applied to framed blocks which glow from applied glowstone dust.",
                         "If false, the vanilla behavior of disabling AO for light-emitting blocks is used"
                 )
                 .translation(TRANSLATION_FORCE_AO_ON_GLOWING_BLOCKS)
                 .define(KEY_FORCE_AO_ON_GLOWING_BLOCKS, true);
-        renderItemModelsWithCamoValue = builder
+        RENDER_ITEM_MODELS_WITH_CAMO_VALUE = builder
                 .comment(
                         "If true, item models will be rendered with their camo, if present.",
                         "If false, item models will always be rendered without camo"
                 )
                 .translation(TRANSLATION_RENDER_ITEM_MODELS_WITH_CAMO)
                 .define(KEY_RENDER_ITEM_MODELS_WITH_CAMO, true);
-        showAllRecipePermutationsInEmiValue = builder
+        SHOW_ALL_RECIPE_PERMUTATIONS_IN_EMI_VALUE = builder
                 .comment("If true, all possible recipes of the Framing Saw will be added to EMI, else only the permutations using the Framed Cube will be added")
                 .comment("This setting only has an effect when EMI is installed")
                 .translation(TRANSLATION_SHOW_ALL_RECIPE_PERMUTATIONS_IN_EMI)
                 .define(KEY_SHOW_ALL_RECIPE_PERMUTATIONS_IN_EMI, true);
-        solidFrameModeValue = builder
+        SOLID_FRAME_MODE_VALUE = builder
                 .comment(
                         "Configures in which cases a framed block without a camo gets a solid model",
                         "If NEVER, the default frame texture will always be used",
@@ -202,76 +203,76 @@ public final class ClientConfig
                 )
                 .translation(TRANSLATION_SOLID_FRAME_MODE)
                 .defineEnum(KEY_SOLID_FRAME_MODE, SolidFrameMode.DEFAULT);
-        showButtonPlateOverlayValue = builder
+        SHOW_BUTTON_PLATE_OVERLAY_VALUE = builder
                 .comment(
                         "If enabled, non-wooden buttons and pressure plates will show a material overlay when a camo is applied",
                         "Requires resource reload to take effect"
                 )
                 .translation(TRANSLATION_SHOW_BUTTON_PLATE_OVERLAY)
                 .define(KEY_SHOW_BUTTON_PLATE_OVERLAY, true);
-        showSpecialCubeOverlayValue = builder
+        SHOW_SPECIAL_CUBE_OVERLAY_VALUE = builder
                 .comment(
                         "If enabled, special cube blocks will show a type overlay when a camo is applied",
                         "Requires resource reload to take effect"
                 )
                 .translation(TRANSLATION_SHOW_SPECIAL_CUBE_OVERLAY)
                 .define(KEY_SHOW_SPECIAL_CUBE_OVERLAY, true);
-        renderCamoInJadeValue = builder
+        RENDER_CAMO_IN_JADE_VALUE = builder
                 .comment("If true, framed blocks will be rendered with their camo in Jade, otherwise they will be rendered blank")
                 .translation(TRANSLATION_RENDER_CAMO_IN_JADE)
                 .define(KEY_RENDER_CAMO_IN_JADE, true);
         builder.pop();
 
         builder.push("overlay");
-        stateLockModeValue = builder
+        STATE_LOCK_MODE_VALUE = builder
                 .comment(COMMENT_OVERLAY_HIDDEN.formatted("State Lock"))
                 .comment(COMMENT_OVERLAY_ICON.formatted("State Lock"))
                 .comment(COMMENT_OVERLAY_DETAILED.formatted("State Lock"))
                 .translation(TRANSLATION_STATE_LOCK_MODE)
                 .defineEnum(KEY_STATE_LOCK_MODE, BlockInteractOverlay.Mode.DETAILED);
-        toggleWaterlogModeValue = builder
+        TOGGLE_WATERLOG_MODE_VALUE = builder
                 .comment(COMMENT_OVERLAY_HIDDEN.formatted("Toggle Waterloggable"))
                 .comment(COMMENT_OVERLAY_ICON.formatted("Toggle Waterloggable"))
                 .comment(COMMENT_OVERLAY_DETAILED.formatted("Toggle Waterloggable"))
                 .translation(TRANSLATION_TOGGLE_WATERLOG_MODE)
                 .defineEnum(KEY_TOGGLE_WATERLOG_MODE, BlockInteractOverlay.Mode.DETAILED);
-        toggleYSlopeModeValue = builder
+        TOGGLE_Y_SLOPE_MODE_VALUE = builder
                 .comment(COMMENT_OVERLAY_HIDDEN.formatted("Toggle Slope Face"))
                 .comment(COMMENT_OVERLAY_ICON.formatted("Toggle Slope Face"))
                 .comment(COMMENT_OVERLAY_DETAILED.formatted("Toggle Slope Face"))
                 .translation(TRANSLATION_TOGGLE_Y_SLOPE_MODE)
                 .defineEnum(KEY_TOGGLE_Y_SLOPE_MODE, BlockInteractOverlay.Mode.DETAILED);
-        reinforcementModeValue = builder
+        REINFORCEMENT_MODE_VALUE = builder
                 .comment(COMMENT_OVERLAY_HIDDEN.formatted("Reinforcement"))
                 .comment(COMMENT_OVERLAY_ICON.formatted("Reinforcement"))
                 .comment(COMMENT_OVERLAY_DETAILED.formatted("Reinforcement"))
                 .translation(TRANSLATION_REINFORCEMENT_MODE)
                 .defineEnum(KEY_REINFORCEMENT_MODE, BlockInteractOverlay.Mode.DETAILED);
-        prismOffsetModeValue = builder
+        PRISM_OFFSET_MODE_VALUE = builder
                 .comment(COMMENT_OVERLAY_HIDDEN.formatted("Prism Offset"))
                 .comment(COMMENT_OVERLAY_ICON.formatted("Prism Offset"))
                 .comment(COMMENT_OVERLAY_DETAILED.formatted("Prism Offset"))
                 .translation(TRANSLATION_PRISM_OFFSET_MODE)
                 .defineEnum(KEY_PRISM_OFFSET_MODE, BlockInteractOverlay.Mode.DETAILED);
-        splitLineModeValue = builder
+        SPLIT_LINE_MODE_VALUE = builder
                 .comment(COMMENT_OVERLAY_HIDDEN.formatted("Collapsible Block Split Line"))
                 .comment(COMMENT_OVERLAY_ICON.formatted("Collapsible Block Split Line"))
                 .comment(COMMENT_OVERLAY_DETAILED.formatted("Collapsible Block Split Line"))
                 .translation(TRANSLATION_SPLIT_LINES_MODE)
                 .defineEnum(KEY_SPLIT_LINES_MODE, BlockInteractOverlay.Mode.DETAILED);
-        oneWayWindowModeValue = builder
+        ONE_WAY_WINDOW_MODE_VALUE = builder
                 .comment(COMMENT_OVERLAY_HIDDEN.formatted("One-Way Window"))
                 .comment(COMMENT_OVERLAY_ICON.formatted("One-Way Window"))
                 .comment(COMMENT_OVERLAY_DETAILED.formatted("One-Way Window"))
                 .translation(TRANSLATION_ONE_WAY_WINDOW_MODE)
                 .defineEnum(KEY_ONE_WAY_WINDOW_MODE, BlockInteractOverlay.Mode.DETAILED);
-        frameBackgroundModeValue = builder
+        FRAME_BACKGROUND_MODE_VALUE = builder
                 .comment(COMMENT_OVERLAY_HIDDEN.formatted("Item Frame Background"))
                 .comment(COMMENT_OVERLAY_ICON.formatted("Item Frame Background"))
                 .comment(COMMENT_OVERLAY_DETAILED.formatted("Item Frame Background"))
                 .translation(TRANSLATION_FRAME_BACKGROUND_MODE)
                 .defineEnum(KEY_FRAME_BACKGROUND_MODE, BlockInteractOverlay.Mode.DETAILED);
-        camoRotationModeValue = builder
+        CAMO_ROTATION_MODE_VALUE = builder
                 .comment(COMMENT_OVERLAY_HIDDEN.formatted("Camo Rotation"))
                 .comment(COMMENT_OVERLAY_ICON.formatted("Camo Rotation"))
                 .comment(COMMENT_OVERLAY_DETAILED.formatted("Camo Rotation"))
@@ -279,7 +280,7 @@ public final class ClientConfig
                 .defineEnum(KEY_CAMO_ROTATION_MODE, BlockInteractOverlay.Mode.DETAILED);
         builder.pop();
 
-        return null;
+        SPEC = builder.build();
     }
 
     private static String translate(String key)
@@ -289,33 +290,33 @@ public final class ClientConfig
 
     private static void onConfigReloaded(ModConfigEvent event)
     {
-        if (event.getConfig().getType() == ModConfig.Type.CLIENT && event.getConfig().getSpec() == spec)
+        if (event.getConfig().getType() == ModConfig.Type.CLIENT && event.getConfig().getSpec() == SPEC)
         {
-            showGhostBlocks = showGhostBlocksValue.get();
-            altGhostRenderer = altGhostRendererValue.get();
-            ghostRenderOpacity = ghostRenderOpacityValue.get();
-            fancyHitboxes = fancyHitboxesValue.get();
-            detailedCulling = detailedCullingValue.get();
-            useDiscreteUVSteps = useDiscreteUVStepsValue.get();
-            conTexMode = conTexModeValue.get();
-            camoMessageVerbosity = camoMessageVerbosityValue.get();
-            forceAoOnGlowingBlocks = forceAoOnGlowingBlocksValue.get();
-            renderItemModelsWithCamo = renderItemModelsWithCamoValue.get();
-            showAllRecipePermutationsInEmi = showAllRecipePermutationsInEmiValue.get();
-            solidFrameMode = solidFrameModeValue.get();
-            showButtonPlateOverlay = showButtonPlateOverlayValue.get();
-            showSpecialCubeOverlay = showSpecialCubeOverlayValue.get();
-            renderCamoInJade = renderCamoInJadeValue.get();
+            showGhostBlocks = SHOW_GHOST_BLOCKS_VALUE.get();
+            altGhostRenderer = ALT_GHOST_RENDERER_VALUE.get();
+            ghostRenderOpacity = GHOST_RENDER_OPACITY_VALUE.get();
+            fancyHitboxes = FANCY_HITBOXES_VALUE.get();
+            detailedCulling = DETAILED_CULLING_VALUE.get();
+            useDiscreteUVSteps = USE_DISCRETE_UV_STEPS_VALUE.get();
+            conTexMode = CON_TEX_MODE_VALUE.get();
+            camoMessageVerbosity = CAMO_MESSAGE_VERBOSITY_VALUE.get();
+            forceAoOnGlowingBlocks = FORCE_AO_ON_GLOWING_BLOCKS_VALUE.get();
+            renderItemModelsWithCamo = RENDER_ITEM_MODELS_WITH_CAMO_VALUE.get();
+            showAllRecipePermutationsInEmi = SHOW_ALL_RECIPE_PERMUTATIONS_IN_EMI_VALUE.get();
+            solidFrameMode = SOLID_FRAME_MODE_VALUE.get();
+            showButtonPlateOverlay = SHOW_BUTTON_PLATE_OVERLAY_VALUE.get();
+            showSpecialCubeOverlay = SHOW_SPECIAL_CUBE_OVERLAY_VALUE.get();
+            renderCamoInJade = RENDER_CAMO_IN_JADE_VALUE.get();
 
-            stateLockMode = stateLockModeValue.get();
-            toggleWaterlogMode = toggleWaterlogModeValue.get();
-            toggleYSlopeMode = toggleYSlopeModeValue.get();
-            reinforcementMode = reinforcementModeValue.get();
-            prismOffsetMode = prismOffsetModeValue.get();
-            splitLineMode = splitLineModeValue.get();
-            oneWayWindowMode = oneWayWindowModeValue.get();
-            frameBackgroundMode = frameBackgroundModeValue.get();
-            camoRotationMode = camoRotationModeValue.get();
+            stateLockMode = STATE_LOCK_MODE_VALUE.get();
+            toggleWaterlogMode = TOGGLE_WATERLOG_MODE_VALUE.get();
+            toggleYSlopeMode = TOGGLE_Y_SLOPE_MODE_VALUE.get();
+            reinforcementMode = REINFORCEMENT_MODE_VALUE.get();
+            prismOffsetMode = PRISM_OFFSET_MODE_VALUE.get();
+            splitLineMode = SPLIT_LINE_MODE_VALUE.get();
+            oneWayWindowMode = ONE_WAY_WINDOW_MODE_VALUE.get();
+            frameBackgroundMode = FRAME_BACKGROUND_MODE_VALUE.get();
+            camoRotationMode = CAMO_ROTATION_MODE_VALUE.get();
         }
     }
 

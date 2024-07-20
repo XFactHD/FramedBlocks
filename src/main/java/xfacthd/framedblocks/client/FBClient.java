@@ -11,9 +11,12 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.neoforged.api.distmarker.Dist;
+import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.client.event.*;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
+import net.neoforged.neoforge.client.gui.ConfigurationScreen;
+import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import net.neoforged.neoforge.client.model.data.ModelProperty;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.IEventBus;
@@ -92,7 +95,7 @@ import java.util.function.Supplier;
 @Mod(value = FramedConstants.MOD_ID, dist = Dist.CLIENT)
 public final class FBClient
 {
-    public FBClient(IEventBus modBus)
+    public FBClient(IEventBus modBus, ModContainer container)
     {
         modBus.addListener(FBClient::onClientSetup);
         modBus.addListener(FBClient::onRegisterMenuScreens);
@@ -125,6 +128,8 @@ public final class FBClient
         NeoForge.EVENT_BUS.addListener(EventPriority.HIGH, ClientEventHandler::onRecipesUpdated);
         NeoForge.EVENT_BUS.addListener(ClientEventHandler::onClientDisconnect);
         NeoForge.EVENT_BUS.addListener(EventPriority.LOW, true, CollapsibleBlockIndicatorRenderer::onRenderBlockHighlight);
+
+        container.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
     }
 
     private static void onClientSetup(final FMLClientSetupEvent event)
