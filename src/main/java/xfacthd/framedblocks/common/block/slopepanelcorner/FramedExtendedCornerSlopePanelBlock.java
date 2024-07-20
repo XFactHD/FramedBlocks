@@ -1,7 +1,5 @@
 package xfacthd.framedblocks.common.block.slopepanelcorner;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.player.Player;
@@ -15,17 +13,12 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
-import xfacthd.framedblocks.api.shapes.ShapeProvider;
-import xfacthd.framedblocks.api.shapes.ShapeUtils;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.FramedBlock;
-import xfacthd.framedblocks.common.block.slopepanel.FramedExtendedSlopePanelBlock;
 import xfacthd.framedblocks.common.data.BlockType;
-import xfacthd.framedblocks.common.data.property.HorizontalRotation;
 import xfacthd.framedblocks.common.item.VerticalAndWallBlockItem;
 
 public class FramedExtendedCornerSlopePanelBlock extends FramedBlock
@@ -143,63 +136,5 @@ public class FramedExtendedCornerSlopePanelBlock extends FramedBlock
     public BlockState getJadeRenderState(BlockState state)
     {
         return getItemModelSource();
-    }
-
-
-
-    public static ShapeProvider generateShapes(ImmutableList<BlockState> states)
-    {
-        ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
-
-        VoxelShape bottomSlopeShape = FramedExtendedSlopePanelBlock.SHAPES.get(HorizontalRotation.UP);
-        VoxelShape bottomShape = ShapeUtils.andUnoptimized(
-                bottomSlopeShape,
-                ShapeUtils.rotateShapeUnoptimizedAroundY(Direction.NORTH, Direction.WEST, bottomSlopeShape)
-        );
-
-        VoxelShape topSlopeShape = FramedExtendedSlopePanelBlock.SHAPES.get(HorizontalRotation.DOWN);
-        VoxelShape topShape = ShapeUtils.andUnoptimized(
-                topSlopeShape,
-                ShapeUtils.rotateShapeUnoptimizedAroundY(Direction.NORTH, Direction.WEST, topSlopeShape)
-        );
-
-        VoxelShape[] shapes = ShapeUtils.makeHorizontalRotationsWithFlag(bottomShape, topShape, Direction.NORTH);
-
-        for (BlockState state : states)
-        {
-            Direction dir = state.getValue(FramedProperties.FACING_HOR);
-            boolean top = state.getValue(FramedProperties.TOP);
-            builder.put(state, shapes[dir.get2DDataValue() + (top ? 4 : 0)]);
-        }
-
-        return ShapeProvider.of(builder.build());
-    }
-
-    public static ShapeProvider generateInnerShapes(ImmutableList<BlockState> states)
-    {
-        ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
-
-        VoxelShape bottomSlopeShape = FramedExtendedSlopePanelBlock.SHAPES.get(HorizontalRotation.UP);
-        VoxelShape bottomShape = ShapeUtils.orUnoptimized(
-                bottomSlopeShape,
-                ShapeUtils.rotateShapeUnoptimizedAroundY(Direction.NORTH, Direction.WEST, bottomSlopeShape)
-        );
-
-        VoxelShape topSlopeShape = FramedExtendedSlopePanelBlock.SHAPES.get(HorizontalRotation.DOWN);
-        VoxelShape topShape = ShapeUtils.orUnoptimized(
-                topSlopeShape,
-                ShapeUtils.rotateShapeUnoptimizedAroundY(Direction.NORTH, Direction.WEST, topSlopeShape)
-        );
-
-        VoxelShape[] shapes = ShapeUtils.makeHorizontalRotationsWithFlag(bottomShape, topShape, Direction.SOUTH);
-
-        for (BlockState state : states)
-        {
-            Direction dir = state.getValue(FramedProperties.FACING_HOR);
-            boolean top = state.getValue(FramedProperties.TOP);
-            builder.put(state, shapes[dir.get2DDataValue() + (top ? 4 : 0)]);
-        }
-
-        return ShapeProvider.of(builder.build());
     }
 }

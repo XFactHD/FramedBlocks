@@ -26,6 +26,9 @@ public final class TestProperties
     public static final String STATE_MERGER_DEBUG_FILTER = System.getProperty(
             "framedblocks.test.state_merger_debug_filter"
     );
+    public static final boolean ENABLE_OCCLUSION_SHAPE_DEBUG_RENDERER = Boolean.getBoolean(
+            "framedblocks.test.enable_occlusion_shape_debug_renderer"
+    );
 
 
 

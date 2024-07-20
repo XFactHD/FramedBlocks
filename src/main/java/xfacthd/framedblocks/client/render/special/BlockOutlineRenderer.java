@@ -4,10 +4,12 @@ import com.google.common.base.Preconditions;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.fml.ModLoader;
 import net.neoforged.neoforge.client.event.RenderHighlightEvent;
 import xfacthd.framedblocks.FramedBlocks;
@@ -15,6 +17,7 @@ import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.render.RegisterOutlineRenderersEvent;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.render.OutlineRenderer;
+import xfacthd.framedblocks.api.util.TestProperties;
 import xfacthd.framedblocks.common.config.ClientConfig;
 
 import java.util.*;
@@ -26,7 +29,7 @@ public final class BlockOutlineRenderer
 
     public static void onRenderBlockHighlight(final RenderHighlightEvent.Block event)
     {
-        if (!ClientConfig.VIEW.useFancySelectionBoxes())
+        if (!ClientConfig.VIEW.useFancySelectionBoxes() && !TestProperties.ENABLE_OCCLUSION_SHAPE_DEBUG_RENDERER)
         {
             return;
         }
@@ -36,6 +39,16 @@ public final class BlockOutlineRenderer
         BlockState state = Minecraft.getInstance().level.getBlockState(result.getBlockPos());
         if (!(state.getBlock() instanceof IFramedBlock block))
         {
+            return;
+        }
+
+        if (TestProperties.ENABLE_OCCLUSION_SHAPE_DEBUG_RENDERER)
+        {
+            VertexConsumer builder = event.getMultiBufferSource().getBuffer(RenderType.lines());
+            VoxelShape shape = state.getOcclusionShape(Minecraft.getInstance().level, result.getBlockPos());
+            Vec3 offset = Vec3.atLowerCornerOf(result.getBlockPos()).subtract(event.getCamera().getPosition());
+            LevelRenderer.renderShape(event.getPoseStack(), builder, shape, offset.x, offset.y, offset.z, 0F, 0F, 0F, .4F);
+            event.setCanceled(true);
             return;
         }
 

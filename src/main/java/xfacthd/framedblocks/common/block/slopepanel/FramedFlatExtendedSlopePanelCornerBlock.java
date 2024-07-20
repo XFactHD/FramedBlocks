@@ -1,7 +1,5 @@
 package xfacthd.framedblocks.common.block.slopepanel;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.player.Player;
@@ -13,10 +11,8 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.phys.shapes.*;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
-import xfacthd.framedblocks.api.shapes.*;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
@@ -141,61 +137,5 @@ public class FramedFlatExtendedSlopePanelCornerBlock extends FramedBlock
     public BlockState getJadeRenderState(BlockState state)
     {
         return defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
-    }
-
-
-
-    private record ShapeKey(Direction dir, HorizontalRotation rot) { }
-
-    private static final ShapeCache<ShapeKey> FINAL_SHAPES = ShapeCache.create(map ->
-    {
-        for (HorizontalRotation rot : HorizontalRotation.values())
-        {
-            VoxelShape shape = ShapeUtils.andUnoptimized(
-                    FramedExtendedSlopePanelBlock.SHAPES.get(rot),
-                    FramedExtendedSlopePanelBlock.SHAPES.get(rot.rotate(Rotation.COUNTERCLOCKWISE_90))
-            );
-            ShapeUtils.makeHorizontalRotations(shape, Direction.NORTH, map, rot, ShapeKey::new);
-        }
-    });
-
-    public static ShapeProvider generateShapes(ImmutableList<BlockState> states)
-    {
-        ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
-
-        for (BlockState state : states)
-        {
-            Direction dir = state.getValue(FramedProperties.FACING_HOR);
-            HorizontalRotation rot = state.getValue(PropertyHolder.ROTATION);
-            builder.put(state, FINAL_SHAPES.get(new ShapeKey(dir, rot)));
-        }
-
-        return ShapeProvider.of(builder.build());
-    }
-
-    private static final ShapeCache<ShapeKey> FINAL_INNER_SHAPES = ShapeCache.create(map ->
-    {
-        for (HorizontalRotation rot : HorizontalRotation.values())
-        {
-            VoxelShape shape = ShapeUtils.orUnoptimized(
-                    FramedExtendedSlopePanelBlock.SHAPES.get(rot),
-                    FramedExtendedSlopePanelBlock.SHAPES.get(rot.rotate(Rotation.COUNTERCLOCKWISE_90))
-            );
-            ShapeUtils.makeHorizontalRotations(shape, Direction.NORTH, map, rot, ShapeKey::new);
-        }
-    });
-
-    public static ShapeProvider generateInnerShapes(ImmutableList<BlockState> states)
-    {
-        ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
-
-        for (BlockState state : states)
-        {
-            Direction dir = state.getValue(FramedProperties.FACING_HOR);
-            HorizontalRotation rot = state.getValue(PropertyHolder.ROTATION);
-            builder.put(state, FINAL_INNER_SHAPES.get(new ShapeKey(dir, rot)));
-        }
-
-        return ShapeProvider.of(builder.build());
     }
 }

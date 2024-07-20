@@ -1,7 +1,5 @@
 package xfacthd.framedblocks.common.block.slopeslab;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.player.Player;
@@ -12,9 +10,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.api.block.*;
-import xfacthd.framedblocks.api.shapes.*;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
@@ -111,46 +107,5 @@ public class FramedElevatedSlopeSlabBlock extends FramedBlock
     public BlockState getJadeRenderState(BlockState state)
     {
         return defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
-    }
-
-
-
-    public static final ShapeCache<Boolean> SHAPES = ShapeCache.createIdentity(map ->
-    {
-        map.put(Boolean.FALSE, ShapeUtils.orUnoptimized(
-                FramedSlopeSlabBlock.SHAPES.get(SlopeSlabShape.BOTTOM_TOP_HALF),
-                box(0, 0, 0, 16, 8, 16)
-        ));
-
-        map.put(Boolean.TRUE, ShapeUtils.orUnoptimized(
-                FramedSlopeSlabBlock.SHAPES.get(SlopeSlabShape.TOP_BOTTOM_HALF),
-                box(0, 8, 0, 16, 16, 16)
-        ));
-    });
-
-    private record ShapeKey(Direction dir, boolean top) { }
-
-    private static final ShapeCache<ShapeKey> FINAL_SHAPES = ShapeCache.create(map ->
-            ShapeUtils.makeHorizontalRotationsWithFlag(
-                    SHAPES.get(Boolean.FALSE),
-                    SHAPES.get(Boolean.TRUE),
-                    Direction.NORTH,
-                    map,
-                    ShapeKey::new
-            )
-    );
-
-    public static ShapeProvider generateShapes(ImmutableList<BlockState> states)
-    {
-        ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
-
-        for (BlockState state : states)
-        {
-            Direction dir = state.getValue(FramedProperties.FACING_HOR);
-            boolean top = state.getValue(FramedProperties.TOP);
-            builder.put(state, FINAL_SHAPES.get(new ShapeKey(dir, top)));
-        }
-
-        return ShapeProvider.of(builder.build());
     }
 }

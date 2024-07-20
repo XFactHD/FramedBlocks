@@ -1,7 +1,5 @@
 package xfacthd.framedblocks.common.block.slopeslab;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Tuple;
@@ -15,11 +13,8 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.phys.shapes.*;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.*;
-import xfacthd.framedblocks.api.shapes.ShapeProvider;
-import xfacthd.framedblocks.api.shapes.ShapeUtils;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
@@ -213,40 +208,5 @@ public class FramedFlatInverseDoubleSlopeSlabCornerBlock extends AbstractFramedD
     public BlockState getJadeRenderState(BlockState state)
     {
         return getItemModelSource();
-    }
-
-
-
-    public static ShapeProvider generateShapes(ImmutableList<BlockState> states)
-    {
-        ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
-
-        VoxelShape shapeBot = ShapeUtils.orUnoptimized(
-                FramedFlatSlopeSlabCornerBlock.SHAPES.get(SlopeSlabShape.BOTTOM_TOP_HALF),
-                ShapeUtils.rotateShapeUnoptimizedAroundY(
-                        Direction.NORTH,
-                        Direction.SOUTH,
-                        FramedFlatSlopeSlabCornerBlock.INNER_SHAPES.get(SlopeSlabShape.TOP_BOTTOM_HALF)
-                )
-        );
-        VoxelShape shapeTop = ShapeUtils.orUnoptimized(
-                FramedFlatSlopeSlabCornerBlock.SHAPES.get(SlopeSlabShape.TOP_BOTTOM_HALF),
-                ShapeUtils.rotateShapeUnoptimizedAroundY(
-                        Direction.NORTH,
-                        Direction.SOUTH,
-                        FramedFlatSlopeSlabCornerBlock.INNER_SHAPES.get(SlopeSlabShape.BOTTOM_TOP_HALF)
-                )
-        );
-
-        VoxelShape[] shapes = ShapeUtils.makeHorizontalRotationsWithFlag(shapeBot, shapeTop, Direction.NORTH);
-
-        for (BlockState state : states)
-        {
-            Direction dir = state.getValue(FramedProperties.FACING_HOR);
-            boolean top = state.getValue(FramedProperties.TOP);
-            builder.put(state, shapes[dir.get2DDataValue() + (top ? 4 : 0)]);
-        }
-
-        return ShapeProvider.of(builder.build());
     }
 }

@@ -1,23 +1,17 @@
 package xfacthd.framedblocks.common.block.slope;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.*;
-import xfacthd.framedblocks.api.shapes.*;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
-import xfacthd.framedblocks.common.data.property.SlopeType;
-import xfacthd.framedblocks.common.data.shapes.SplitShapeGenerator;
 
 public class FramedVerticalHalfSlopeBlock extends FramedBlock
 {
@@ -84,63 +78,5 @@ public class FramedVerticalHalfSlopeBlock extends FramedBlock
     public BlockState getJadeRenderState(BlockState state)
     {
         return ((IFramedBlock) FBContent.BLOCK_FRAMED_HALF_SLOPE.value()).getJadeRenderState(state);
-    }
-
-
-
-    public static final ShapeCache<Boolean> SHAPES = ShapeCache.createIdentity(map ->
-    {
-        map.put(Boolean.FALSE, ShapeUtils.andUnoptimized(
-                FramedSlopeBlock.SHAPES.get(SlopeType.HORIZONTAL),
-                CommonShapes.SLAB.get(Boolean.FALSE)
-        ));
-        map.put(Boolean.TRUE, ShapeUtils.andUnoptimized(
-                FramedSlopeBlock.SHAPES.get(SlopeType.HORIZONTAL),
-                CommonShapes.SLAB.get(Boolean.TRUE)
-        ));
-    });
-    public static final ShapeCache<Boolean> OCCLUSION_SHAPES = ShapeCache.createIdentity(map ->
-    {
-        map.put(Boolean.FALSE, ShapeUtils.andUnoptimized(
-                FramedSlopeBlock.OCCLUSION_SHAPES.get(SlopeType.HORIZONTAL),
-                CommonShapes.SLAB.get(Boolean.FALSE)
-        ));
-        map.put(Boolean.TRUE, ShapeUtils.andUnoptimized(
-                FramedSlopeBlock.OCCLUSION_SHAPES.get(SlopeType.HORIZONTAL),
-                CommonShapes.SLAB.get(Boolean.TRUE)
-        ));
-    });
-
-    public static final class ShapeGen implements SplitShapeGenerator
-    {
-        @Override
-        public ShapeProvider generate(ImmutableList<BlockState> states)
-        {
-            return generateShapes(states, SHAPES);
-        }
-
-        @Override
-        public ShapeProvider generateOcclusionShapes(ImmutableList<BlockState> states)
-        {
-            return generateShapes(states, OCCLUSION_SHAPES);
-        }
-
-        private static ShapeProvider generateShapes(ImmutableList<BlockState> states, ShapeCache<Boolean> shapeCache)
-        {
-            ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
-
-            VoxelShape[] shapes = ShapeUtils.makeHorizontalRotationsWithFlag(
-                    shapeCache.get(Boolean.FALSE), shapeCache.get(Boolean.TRUE), Direction.NORTH
-            );
-
-            for (BlockState state : states)
-            {
-                Direction dir = state.getValue(FramedProperties.FACING_HOR);
-                boolean top = state.getValue(FramedProperties.TOP);
-                builder.put(state, shapes[dir.get2DDataValue() + (top ? 4 : 0)]);
-            }
-
-            return ShapeProvider.of(builder.build());
-        }
     }
 }

@@ -35,6 +35,7 @@ runs {
         //systemProperty 'framedblocks.test.enable_quad_winding_debug_renderer', 'true'
         //systemProperty 'framedblocks.test.enable_state_merger_debug_logging', 'true'
         //systemProperty 'framedblocks.test.state_merger_debug_filter', '.*'
+        //systemProperty 'framedblocks.test.enable_occlusion_shape_debug_renderer', 'true'
     }
 
     server {

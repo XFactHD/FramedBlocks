@@ -1,7 +1,5 @@
 package xfacthd.framedblocks.common.block.slopepanel;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.player.Player;
@@ -12,10 +10,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
-import xfacthd.framedblocks.api.shapes.*;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.block.ExtPlacementStateBuilder;
 import xfacthd.framedblocks.common.block.FramedBlock;
@@ -115,45 +111,5 @@ public class FramedExtendedSlopePanelBlock extends FramedBlock
     public BlockState getJadeRenderState(BlockState state)
     {
         return getItemModelSource();
-    }
-
-
-
-    public static final ShapeCache<HorizontalRotation> SHAPES = ShapeCache.createEnum(HorizontalRotation.class, map ->
-    {
-        VoxelShape shapePanel = CommonShapes.PANEL.get(Direction.NORTH);
-
-        for (HorizontalRotation rot : HorizontalRotation.values())
-        {
-            VoxelShape shape = ShapeUtils.orUnoptimized(
-                    shapePanel,
-                    FramedSlopePanelBlock.SHAPES.get(SlopePanelShape.get(rot, true))
-            );
-            map.put(rot, shape);
-        }
-    });
-
-    private record ShapeKey(Direction dir, HorizontalRotation rot) { }
-
-    private static final ShapeCache<ShapeKey> FINAL_SHAPES = ShapeCache.create(map ->
-    {
-        for (HorizontalRotation rot : HorizontalRotation.values())
-        {
-            ShapeUtils.makeHorizontalRotations(SHAPES.get(rot), Direction.NORTH, map, rot, ShapeKey::new);
-        }
-    });
-
-    public static ShapeProvider generateShapes(ImmutableList<BlockState> states)
-    {
-        ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
-
-        for (BlockState state : states)
-        {
-            Direction dir = state.getValue(FramedProperties.FACING_HOR);
-            HorizontalRotation rot = state.getValue(PropertyHolder.ROTATION);
-            builder.put(state, FINAL_SHAPES.get(new ShapeKey(dir, rot)));
-        }
-
-        return ShapeProvider.of(builder.build());
     }
 }

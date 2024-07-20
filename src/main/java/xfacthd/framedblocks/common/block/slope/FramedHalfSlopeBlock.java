@@ -1,7 +1,5 @@
 package xfacthd.framedblocks.common.block.slope;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.player.Player;
@@ -13,18 +11,14 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.block.FramedProperties;
-import xfacthd.framedblocks.api.shapes.*;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.ExtPlacementStateBuilder;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
-import xfacthd.framedblocks.common.data.property.SlopeType;
-import xfacthd.framedblocks.common.data.shapes.SplitShapeGenerator;
 import xfacthd.framedblocks.common.item.VerticalAndWallBlockItem;
 
 public class FramedHalfSlopeBlock extends FramedBlock
@@ -127,92 +121,5 @@ public class FramedHalfSlopeBlock extends FramedBlock
     public BlockState getJadeRenderState(BlockState state)
     {
         return getItemModelSource();
-    }
-
-
-
-    public record ShapeKey(boolean top, boolean right) { }
-
-    public static final ShapeCache<ShapeKey> SHAPES = ShapeCache.create(map ->
-    {
-        map.put(new ShapeKey(false, false), ShapeUtils.andUnoptimized(
-                FramedSlopeBlock.SHAPES.get(SlopeType.BOTTOM),
-                CommonShapes.PANEL.get(Direction.WEST)
-        ));
-        map.put(new ShapeKey(false, true), ShapeUtils.andUnoptimized(
-                FramedSlopeBlock.SHAPES.get(SlopeType.BOTTOM),
-                CommonShapes.PANEL.get(Direction.EAST)
-        ));
-        map.put(new ShapeKey(true, false), ShapeUtils.andUnoptimized(
-                FramedSlopeBlock.SHAPES.get(SlopeType.TOP),
-                CommonShapes.PANEL.get(Direction.WEST)
-        ));
-        map.put(new ShapeKey(true, true), ShapeUtils.andUnoptimized(
-                FramedSlopeBlock.SHAPES.get(SlopeType.TOP),
-                CommonShapes.PANEL.get(Direction.EAST)
-        ));
-    });
-    public static final ShapeCache<ShapeKey> OCCLUSION_SHAPES = ShapeCache.create(map ->
-    {
-        map.put(new ShapeKey(false, false), ShapeUtils.andUnoptimized(
-                FramedSlopeBlock.OCCLUSION_SHAPES.get(SlopeType.BOTTOM),
-                CommonShapes.PANEL.get(Direction.WEST)
-        ));
-        map.put(new ShapeKey(false, true), ShapeUtils.andUnoptimized(
-                FramedSlopeBlock.OCCLUSION_SHAPES.get(SlopeType.BOTTOM),
-                CommonShapes.PANEL.get(Direction.EAST)
-        ));
-        map.put(new ShapeKey(true, false), ShapeUtils.andUnoptimized(
-                FramedSlopeBlock.OCCLUSION_SHAPES.get(SlopeType.TOP),
-                CommonShapes.PANEL.get(Direction.WEST)
-        ));
-        map.put(new ShapeKey(true, true), ShapeUtils.andUnoptimized(
-                FramedSlopeBlock.OCCLUSION_SHAPES.get(SlopeType.TOP),
-                CommonShapes.PANEL.get(Direction.EAST)
-        ));
-    });
-
-    public static final class ShapeGen implements SplitShapeGenerator
-    {
-        @Override
-        public ShapeProvider generate(ImmutableList<BlockState> states)
-        {
-            return generateShapes(states, SHAPES);
-        }
-
-        @Override
-        public ShapeProvider generateOcclusionShapes(ImmutableList<BlockState> states)
-        {
-            return generateShapes(states, OCCLUSION_SHAPES);
-        }
-
-        private static ShapeProvider generateShapes(ImmutableList<BlockState> states, ShapeCache<ShapeKey> shapeCache)
-        {
-            ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
-
-            int maskTop = 0b0100;
-            int maskRight = 0b1000;
-            VoxelShape[] shapes = new VoxelShape[4 * 4];
-            for (int i = 0; i < 4; i++)
-            {
-                ShapeUtils.makeHorizontalRotations(
-                        shapeCache.get(new ShapeKey((i & 0b01) != 0, (i & 0b10) != 0)),
-                        Direction.NORTH,
-                        shapes,
-                        i << 2
-                );
-            }
-
-            for (BlockState state : states)
-            {
-                Direction dir = state.getValue(FramedProperties.FACING_HOR);
-                int top = state.getValue(FramedProperties.TOP) ? maskTop : 0;
-                int right = state.getValue(PropertyHolder.RIGHT) ? maskRight : 0;
-                int idx = dir.get2DDataValue() | (top | right);
-                builder.put(state, shapes[idx]);
-            }
-
-            return ShapeProvider.of(builder.build());
-        }
     }
 }

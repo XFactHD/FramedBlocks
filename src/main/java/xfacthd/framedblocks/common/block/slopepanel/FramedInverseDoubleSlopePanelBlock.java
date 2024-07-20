@@ -1,7 +1,5 @@
 package xfacthd.framedblocks.common.block.slopepanel;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Tuple;
@@ -14,11 +12,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
-import xfacthd.framedblocks.api.shapes.*;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
@@ -187,37 +183,5 @@ public class FramedInverseDoubleSlopePanelBlock extends AbstractFramedDoubleBloc
     public BlockState getJadeRenderState(BlockState state)
     {
         return defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
-    }
-
-
-
-    private record ShapeKey(Direction dir, HorizontalRotation rot) { }
-
-    private static final ShapeCache<ShapeKey> SHAPES = ShapeCache.create(map ->
-    {
-        for (HorizontalRotation rot : HorizontalRotation.values())
-        {
-            HorizontalRotation rotOne = rot.isVertical() ? rot.getOpposite() : rot;
-            VoxelShape shapeOne = FramedSlopePanelBlock.SHAPES.get(SlopePanelShape.get(rotOne, true));
-            VoxelShape preShape = ShapeUtils.orUnoptimized(
-                    ShapeUtils.rotateShapeUnoptimizedAroundY(Direction.NORTH, Direction.SOUTH, shapeOne),
-                    FramedSlopePanelBlock.SHAPES.get(SlopePanelShape.get(rot, true))
-            );
-            ShapeUtils.makeHorizontalRotations(preShape, Direction.NORTH, map, rot, ShapeKey::new);
-        }
-    });
-
-    public static ShapeProvider generateShapes(ImmutableList<BlockState> states)
-    {
-        ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
-
-        for (BlockState state : states)
-        {
-            Direction dir = state.getValue(FramedProperties.FACING_HOR);
-            HorizontalRotation rot = state.getValue(PropertyHolder.ROTATION);
-            builder.put(state, SHAPES.get(new ShapeKey(dir, rot)));
-        }
-
-        return ShapeProvider.of(builder.build());
     }
 }
