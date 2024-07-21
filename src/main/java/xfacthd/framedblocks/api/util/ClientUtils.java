@@ -2,6 +2,8 @@ package xfacthd.framedblocks.api.util;
 
 import com.google.common.base.Suppliers;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.BlockModelShaper;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.chunk.RenderChunkRegion;
@@ -10,6 +12,7 @@ import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -247,6 +250,12 @@ public final class ClientUtils
     public static boolean isTexture(BakedQuad quad, ResourceLocation texture)
     {
         return quad.getSprite().contents().name().equals(texture);
+    }
+
+    public static void renderTransparentFakeItem(GuiGraphics graphics, ItemStack stack, int x, int y)
+    {
+        graphics.renderFakeItem(stack, x, y);
+        graphics.fill(RenderType.guiGhostRecipeOverlay(), x, y, x + 16, y + 16, 0x80888888);
     }
 
     private static final List<ClientTask> tasks = new ArrayList<>();

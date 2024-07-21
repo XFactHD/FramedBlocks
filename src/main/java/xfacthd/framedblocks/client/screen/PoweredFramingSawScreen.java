@@ -12,8 +12,8 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemStack;
 import xfacthd.framedblocks.FramedBlocks;
+import xfacthd.framedblocks.api.util.ClientUtils;
 import xfacthd.framedblocks.api.util.Utils;
-import xfacthd.framedblocks.client.render.item.ItemRenderHelper;
 import xfacthd.framedblocks.client.util.RecipeViewer;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.blockentity.special.PoweredFramingSawBlockEntity;
@@ -117,13 +117,13 @@ public class PoweredFramingSawScreen extends AbstractContainerScreen<PoweredFram
         {
             int ix = leftPos + inputSlot.x;
             int iy = topPos + inputSlot.y;
-            ItemRenderHelper.renderFakeItemTransparent(graphics.pose(), cubeStack, ix, iy, 127);
+            ClientUtils.renderTransparentFakeItem(graphics, cubeStack, ix, iy);
         }
 
         if (recipe != null)
         {
             ItemStack result = recipe.getResult();
-            ItemRenderHelper.renderFakeItemTransparent(graphics.pose(), result, targetStackX, targetStackY, 127);
+            ClientUtils.renderTransparentFakeItem(graphics, result, targetStackX, targetStackY);
 
             List<FramingSawRecipeAdditive> additives = recipe.getAdditives();
             for (int i = 0; i < FramingSawRecipe.MAX_ADDITIVE_COUNT; i++)
@@ -141,7 +141,7 @@ public class PoweredFramingSawScreen extends AbstractContainerScreen<PoweredFram
                     int t = (int) (System.currentTimeMillis() / 1700) % items.length;
                     int ax = leftPos + additiveSlot.x;
                     int ay = topPos + additiveSlot.y;
-                    ItemRenderHelper.renderFakeItemTransparent(graphics.pose(), items[t], ax, ay, 127);
+                    ClientUtils.renderTransparentFakeItem(graphics, items[t], ax, ay);
                 }
             }
 
