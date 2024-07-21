@@ -14,6 +14,11 @@ public final class StateLocationCache
 {
     private static final BiMap<ModelResourceLocation, BlockState> STATE_LOCATIONS = HashBiMap.create();
 
+    public static void clear()
+    {
+        STATE_LOCATIONS.clear();
+    }
+
     public static BlockState getStateFromLocation(ResourceLocation blockId, Block block, ModelResourceLocation id)
     {
         if (!STATE_LOCATIONS.containsKey(id))

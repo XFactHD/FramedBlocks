@@ -34,6 +34,7 @@ import xfacthd.framedblocks.api.model.wrapping.statemerger.StateMerger;
 import xfacthd.framedblocks.api.render.debug.AttachDebugRenderersEvent;
 import xfacthd.framedblocks.client.data.extensions.block.NoEffectsClientBlockExtensions;
 import xfacthd.framedblocks.client.data.extensions.block.OneWayWindowClientBlockExtensions;
+import xfacthd.framedblocks.client.modelwrapping.StateLocationCache;
 import xfacthd.framedblocks.client.render.block.debug.*;
 import xfacthd.framedblocks.client.render.particle.FluidSpriteParticle;
 import xfacthd.framedblocks.common.block.IFramedDoubleBlock;
@@ -468,6 +469,7 @@ public final class FBClient
 
     private static void onModelsLoaded(final ModelEvent.BakingCompleted event)
     {
+        StateLocationCache.clear();
         FluidCamoClientHandler.clearModelCache();
         FramedChestRenderer.onModelsLoaded(event.getModels());
         ReinforcementModel.reload(event.getModels());
