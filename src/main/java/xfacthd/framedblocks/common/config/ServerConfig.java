@@ -5,6 +5,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.neoforge.common.ModConfigSpec;
@@ -66,11 +67,11 @@ public final class ServerConfig
     private static final ModConfigSpec.IntValue POWERED_SAW_CONSUMPTION_VALUE;
     private static final ModConfigSpec.IntValue POWERED_SAW_RECIPE_DURATION_VALUE;
 
-    public static ModConfigSpec create(IEventBus modBus)
+    public static void init(IEventBus modBus, ModContainer modContainer)
     {
         modBus.addListener((ModConfigEvent.Loading event) -> onConfigReloaded(event));
         modBus.addListener((ModConfigEvent.Reloading event) -> onConfigReloaded(event));
-        return SPEC;
+        modContainer.registerConfig(ModConfig.Type.SERVER, SPEC);
     }
 
     static

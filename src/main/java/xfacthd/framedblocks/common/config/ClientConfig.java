@@ -1,6 +1,7 @@
 package xfacthd.framedblocks.common.config;
 
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.neoforge.common.ModConfigSpec;
@@ -119,11 +120,11 @@ public final class ClientConfig
     private static final ModConfigSpec.EnumValue<BlockInteractOverlay.Mode> FRAME_BACKGROUND_MODE_VALUE;
     private static final ModConfigSpec.EnumValue<BlockInteractOverlay.Mode> CAMO_ROTATION_MODE_VALUE;
 
-    public static ModConfigSpec create(IEventBus modBus)
+    public static void init(IEventBus modBus, ModContainer modContainer)
     {
         modBus.addListener((ModConfigEvent.Loading event) -> onConfigReloaded(event));
         modBus.addListener((ModConfigEvent.Reloading event) -> onConfigReloaded(event));
-        return SPEC;
+        modContainer.registerConfig(ModConfig.Type.CLIENT, SPEC);
     }
 
     static

@@ -18,8 +18,8 @@ import xfacthd.framedblocks.api.camo.block.BlockCamoContent;
 import xfacthd.framedblocks.api.model.data.FramedBlockData;
 import xfacthd.framedblocks.api.model.quad.QuadData;
 import xfacthd.framedblocks.api.render.debug.BlockDebugRenderer;
-import xfacthd.framedblocks.api.util.TestProperties;
 import xfacthd.framedblocks.api.util.Utils;
+import xfacthd.framedblocks.common.config.DevToolsConfig;
 
 import java.util.Objects;
 
@@ -87,6 +87,6 @@ public class QuadWindingDebugRenderer implements BlockDebugRenderer<FramedBlockE
     @Override
     public boolean isEnabled()
     {
-        return TestProperties.ENABLE_QUAD_WINDING_DEBUG_RENDERER;
+        return DevToolsConfig.VIEW.isQuadWindingDebugRendererEnabled();
     }
 }

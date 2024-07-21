@@ -6,12 +6,10 @@ import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.AddReloadListenerEvent;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
-import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.fml.loading.FMLEnvironment;
 import org.slf4j.Logger;
-import xfacthd.framedblocks.common.config.ClientConfig;
-import xfacthd.framedblocks.common.config.ServerConfig;
+import xfacthd.framedblocks.common.config.*;
 import xfacthd.framedblocks.common.data.BlueprintBehaviours;
 import xfacthd.framedblocks.common.data.capabilities.CapabilitySetup;
 import xfacthd.framedblocks.common.data.cullupdate.CullingUpdateTracker;
@@ -38,8 +36,10 @@ public final class FramedBlocks
     public FramedBlocks(IEventBus modBus, ModContainer modContainer)
     {
         FBContent.init(modBus);
-        modContainer.registerConfig(ModConfig.Type.CLIENT, ClientConfig.create(modBus));
-        modContainer.registerConfig(ModConfig.Type.SERVER, ServerConfig.create(modBus));
+
+        ClientConfig.init(modBus, modContainer);
+        ServerConfig.init(modBus, modContainer);
+        DevToolsConfig.init(modBus, modContainer);
 
         modBus.addListener(CapabilitySetup::onRegisterCapabilities);
         modBus.addListener(FramedBlocks::onCommonSetup);

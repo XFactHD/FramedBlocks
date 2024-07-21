@@ -31,6 +31,7 @@ import xfacthd.framedblocks.api.model.data.FramedBlockData;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.*;
+import xfacthd.framedblocks.common.config.DevToolsConfig;
 import xfacthd.framedblocks.common.data.doubleblock.DoubleBlockStateCache;
 import xfacthd.framedblocks.common.data.doubleblock.DoubleBlockSoundType;
 import xfacthd.framedblocks.common.data.doubleblock.DoubleBlockTopInteractionMode;
@@ -362,7 +363,7 @@ public class FramedDoubleBlockEntity extends FramedBlockEntity implements IFrame
     @Override
     public boolean hasCustomOutlineRendering(Player player)
     {
-        return !FMLEnvironment.production && TestProperties.ENABLE_DOUBLE_BLOCK_PART_HIT_DEBUG_RENDERER;
+        return !FMLEnvironment.production && DevToolsConfig.VIEW.isDoubleBlockPartHitDebugRendererEnabled();
     }
 
     public final Tuple<BlockState, BlockState> getBlockPair()

@@ -13,8 +13,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.fml.ModLoader;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.model.wrapping.*;
-import xfacthd.framedblocks.api.util.TestProperties;
 import xfacthd.framedblocks.api.util.Utils;
+import xfacthd.framedblocks.common.config.DevToolsConfig;
 
 import java.util.*;
 
@@ -86,7 +86,8 @@ public final class ModelWrappingManager
         Stopwatch stopwatch = Stopwatch.createStarted();
 
         locked = false;
-        if (TestProperties.ENABLE_STATE_MERGER_DEBUG_LOGGING)
+        boolean debugLogging = DevToolsConfig.VIEW.isStateMergerDebugLoggingEnabled();
+        if (debugLogging)
         {
             FramedBlocks.LOGGER.info("=============== Model Wrapper Registration Start ===============");
             FramedBlocks.LOGGER.info("\"%-70s | %-150s | %-150s\"".formatted(
@@ -94,7 +95,7 @@ public final class ModelWrappingManager
             ));
         }
         ModLoader.postEvent(new RegisterModelWrappersEvent());
-        if (TestProperties.ENABLE_STATE_MERGER_DEBUG_LOGGING)
+        if (debugLogging)
         {
             FramedBlocks.LOGGER.info("=============== Model Wrapper Registration End =================");
         }

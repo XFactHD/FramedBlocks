@@ -103,6 +103,11 @@ public final class ConfigView
         boolean shouldRenderItemModelsWithCamo();
     }
 
+    public interface DevTools
+    {
+        DevTools INSTANCE = Utils.loadService(DevTools.class);
+    }
+
 
 
     private ConfigView() { }

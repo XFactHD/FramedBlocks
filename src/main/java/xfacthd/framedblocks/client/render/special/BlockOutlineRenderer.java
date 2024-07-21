@@ -17,8 +17,8 @@ import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.render.RegisterOutlineRenderersEvent;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.render.OutlineRenderer;
-import xfacthd.framedblocks.api.util.TestProperties;
 import xfacthd.framedblocks.common.config.ClientConfig;
+import xfacthd.framedblocks.common.config.DevToolsConfig;
 
 import java.util.*;
 
@@ -29,7 +29,7 @@ public final class BlockOutlineRenderer
 
     public static void onRenderBlockHighlight(final RenderHighlightEvent.Block event)
     {
-        if (!ClientConfig.VIEW.useFancySelectionBoxes() && !TestProperties.ENABLE_OCCLUSION_SHAPE_DEBUG_RENDERER)
+        if (!ClientConfig.VIEW.useFancySelectionBoxes() && !DevToolsConfig.VIEW.isOcclusionShapeDebugRenderingEnabled())
         {
             return;
         }
@@ -42,7 +42,7 @@ public final class BlockOutlineRenderer
             return;
         }
 
-        if (TestProperties.ENABLE_OCCLUSION_SHAPE_DEBUG_RENDERER)
+        if (DevToolsConfig.VIEW.isOcclusionShapeDebugRenderingEnabled())
         {
             VertexConsumer builder = event.getMultiBufferSource().getBuffer(RenderType.lines());
             VoxelShape shape = state.getOcclusionShape(Minecraft.getInstance().level, result.getBlockPos());
