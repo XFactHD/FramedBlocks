@@ -19,10 +19,8 @@ import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.neoforged.neoforge.client.extensions.common.IClientBlockExtensions;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.*;
-import xfacthd.framedblocks.api.block.render.FramedBlockRenderProperties;
 import xfacthd.framedblocks.api.blueprint.BlueprintData;
 import xfacthd.framedblocks.api.camo.CamoContainer;
 import xfacthd.framedblocks.api.model.wrapping.WrapHelper;
@@ -34,7 +32,6 @@ import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.blueprint.DoorCopyBehaviour;
 
 import java.util.*;
-import java.util.function.Consumer;
 
 public class FramedDoorBlock extends DoorBlock implements IFramedBlock
 {
@@ -150,12 +147,6 @@ public class FramedDoorBlock extends DoorBlock implements IFramedBlock
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
     {
         return new FramedDoorBlockEntity(pos, state);
-    }
-
-    @Override
-    public void initializeClient(Consumer<IClientBlockExtensions> consumer)
-    {
-        consumer.accept(FramedBlockRenderProperties.INSTANCE);
     }
 
     @Override

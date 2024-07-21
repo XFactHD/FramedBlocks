@@ -1,8 +1,5 @@
 package xfacthd.framedblocks.common.block.interactive;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-import net.minecraft.client.particle.ParticleEngine;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -22,22 +19,15 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
-import net.minecraft.world.phys.shapes.VoxelShape;
-import net.neoforged.neoforge.client.extensions.common.IClientBlockExtensions;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.block.PlacementStateBuilder;
-import xfacthd.framedblocks.api.block.render.FramedBlockRenderProperties;
-import xfacthd.framedblocks.api.shapes.ShapeProvider;
-import xfacthd.framedblocks.api.shapes.ShapeUtils;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.blockentity.special.FramedItemFrameBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
-
-import java.util.function.Consumer;
 
 public class FramedItemFrameBlock extends FramedBlock
 {
@@ -223,26 +213,6 @@ public class FramedItemFrameBlock extends FramedBlock
     }
 
     @Override
-    public void initializeClient(Consumer<IClientBlockExtensions> consumer)
-    {
-        //Suppress hit and destroy particles
-        consumer.accept(new FramedBlockRenderProperties()
-        {
-            @Override
-            public boolean addHitEffects(BlockState state, Level level, HitResult target, ParticleEngine manager)
-            {
-                return true;
-            }
-
-            @Override
-            public boolean addDestroyEffects(BlockState state, Level Level, BlockPos pos, ParticleEngine manager)
-            {
-                return true;
-            }
-        });
-    }
-
-    @Override
     @Nullable
     public BlockState getItemModelSource()
     {
@@ -259,34 +229,5 @@ public class FramedItemFrameBlock extends FramedBlock
     public float getJadeRenderScale(BlockState state)
     {
         return 1.3F;
-    }
-
-
-
-    public static ShapeProvider generateShapes(ImmutableList<BlockState> states)
-    {
-        ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
-
-        VoxelShape topShape = box(2, 15, 2, 14, 16, 14);
-        VoxelShape topMapShape = box(0, 15, 0, 16, 16, 16);
-        VoxelShape bottomShape = box(2, 0, 2, 14, 1, 14);
-        VoxelShape bottomMapShape = box(0, 0, 0, 16, 1, 16);
-        VoxelShape northShape = box(2, 2, 0, 14, 14, 1);
-        VoxelShape northMapShape = box(0, 0, 0, 16, 16, 1);
-        VoxelShape[] horShapes = ShapeUtils.makeHorizontalRotationsWithFlag(northShape, northMapShape, Direction.NORTH);
-
-        for (BlockState state : states)
-        {
-            Direction dir = state.getValue(BlockStateProperties.FACING);
-            boolean map = state.getValue(PropertyHolder.MAP_FRAME);
-            builder.put(state, switch (dir)
-            {
-                case UP -> map ? topMapShape : topShape;
-                case DOWN -> map ? bottomMapShape : bottomShape;
-                default -> horShapes[dir.get2DDataValue() + (map ? 4 : 0)];
-            });
-        }
-
-        return ShapeProvider.of(builder.build());
     }
 }

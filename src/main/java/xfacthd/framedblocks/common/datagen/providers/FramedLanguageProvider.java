@@ -14,14 +14,13 @@ import xfacthd.framedblocks.client.screen.*;
 import xfacthd.framedblocks.client.screen.overlay.*;
 import xfacthd.framedblocks.common.compat.atlasviewer.AtlasViewerCompat;
 import xfacthd.framedblocks.common.compat.jade.JadeCompat;
-import xfacthd.framedblocks.common.config.ClientConfig;
+import xfacthd.framedblocks.common.config.*;
 import xfacthd.framedblocks.client.util.KeyMappings;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.special.FramingSawBlock;
 import xfacthd.framedblocks.common.block.special.PoweredFramingSawBlock;
 import xfacthd.framedblocks.common.blockentity.special.FramedStorageBlockEntity;
 import xfacthd.framedblocks.common.compat.jei.JeiCompat;
-import xfacthd.framedblocks.common.config.ServerConfig;
 import xfacthd.framedblocks.common.crafting.FramingSawRecipeMatchResult;
 import xfacthd.framedblocks.common.data.property.NullableDirection;
 import xfacthd.framedblocks.common.item.FramedBlueprintItem;
@@ -275,6 +274,7 @@ public final class FramedLanguageProvider extends LanguageProvider
     {
         add(KeyMappings.KEY_CATEGORY, "FramedBlocks");
         add(KeyMappings.KEYMAPPING_UPDATE_CULLING.get().getName(), "Update culling cache");
+        add(KeyMappings.KEYMAPPING_WIPE_CACHE.get().getName(), "Clear model cache");
 
         add(FBContent.MAIN_TAB.value().getDisplayName(), "FramedBlocks");
 
@@ -435,6 +435,8 @@ public final class FramedLanguageProvider extends LanguageProvider
 
     private void addConfigTranslations()
     {
+        add("framedblocks.configuration.general", "General");
+        add("framedblocks.configuration.powered_framing_saw", "Powered Framing Saw");
         add(ServerConfig.TRANSLATION_ALLOW_BLOCK_ENTITIES, "Allow BlockEntities");
         add(ServerConfig.TRANSLATION_ENABLE_INTANGIBILITY, "Enable intangibility feature");
         add(ServerConfig.TRANSLATION_INTANGIBLE_MARKER, "Intangibility marker item");
@@ -447,6 +449,8 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(ServerConfig.TRANSLATION_POWERED_SAW_CONSUMPTION, "Consumption");
         add(ServerConfig.TRANSLATION_POWERED_SAW_RECIPE_DURATION, "Crafting Duration");
 
+        //add("framedblocks.configuration.general", "General");
+        add("framedblocks.configuration.overlay", "Overlays");
         add(ClientConfig.TRANSLATION_SHOW_GHOST_BLOCKS, "Show ghost blocks");
         add(ClientConfig.TRANSLATION_ALT_GHOST_RENDERER, "Use alternative placement preview renderer");
         add(ClientConfig.TRANSLATION_GHOST_RENDER_OPACITY, "Placement preview opacity");
@@ -471,6 +475,15 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(ClientConfig.TRANSLATION_ONE_WAY_WINDOW_MODE, "One-Way Window overlay: Display mode");
         add(ClientConfig.TRANSLATION_FRAME_BACKGROUND_MODE, "Item Frame Background overlay: Display mode");
         add(ClientConfig.TRANSLATION_CAMO_ROTATION_MODE, "Camo Rotation overlay: Display mode");
+
+        add("framedblocks.configuration.section.framedblocks.devtools.toml", "Dev Tools Settings");
+        add("framedblocks.configuration.section.framedblocks.devtools.toml.title", "FramedBlocks Dev Tools Configuration");
+        add(DevToolsConfig.TRANSLATION_DOUBLE_BLOCK_PART_DEBUG, "Double-block part debug");
+        add(DevToolsConfig.TRANSLATION_CONNECTION_DEBUG, "ConnectionPredicate debug");
+        add(DevToolsConfig.TRANSLATION_QUAD_WINDING_DEBUG, "Quad-winding debug");
+        add(DevToolsConfig.TRANSLATION_STATE_MERGER_DEBUG, "StateMerger debug");
+        add(DevToolsConfig.TRANSLATION_STATE_MERGER_DEBUG_FILTER, "StateMerger debug filter");
+        add(DevToolsConfig.TRANSLATION_OCCLUSION_SHAPE_DEBUG, "Occlusion shape debug");
     }
 
     private void add(Component key, String value)

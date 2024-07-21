@@ -1,7 +1,5 @@
 package xfacthd.framedblocks.common.block.slopeedge;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.player.Player;
@@ -12,18 +10,13 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
-import xfacthd.framedblocks.api.shapes.ShapeProvider;
-import xfacthd.framedblocks.api.shapes.ShapeUtils;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.block.*;
-import xfacthd.framedblocks.common.block.stairs.vertical.FramedVerticalStairsBlock;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.property.SlopeType;
-import xfacthd.framedblocks.common.data.property.StairsType;
 
 public class FramedElevatedSlopeEdgeBlock extends FramedBlock implements IComplexSlopeSource
 {
@@ -132,43 +125,5 @@ public class FramedElevatedSlopeEdgeBlock extends FramedBlock implements IComple
     public boolean isHorizontalSlope(BlockState state)
     {
         return state.getValue(PropertyHolder.SLOPE_TYPE) == SlopeType.HORIZONTAL;
-    }
-
-
-
-    public static ShapeProvider generateShapes(ImmutableList<BlockState> states)
-    {
-        VoxelShape shapeBottom = ShapeUtils.orUnoptimized(
-                ShapeUtils.orUnoptimized(box(0, 0, 0, 16, 8, 16), box(0, 8, 0, 16, 16, 8)),
-                FramedSlopeEdgeBlock.SHAPES.get(new FramedSlopeEdgeBlock.ShapeKey(SlopeType.BOTTOM, true))
-        );
-        VoxelShape shapeHorizontal = ShapeUtils.orUnoptimized(
-                FramedVerticalStairsBlock.SHAPES.get(new FramedVerticalStairsBlock.ShapeKey(
-                        Direction.NORTH, StairsType.VERTICAL
-                )),
-                FramedSlopeEdgeBlock.SHAPES.get(new FramedSlopeEdgeBlock.ShapeKey(SlopeType.HORIZONTAL, true))
-        );
-        VoxelShape shapeTop = ShapeUtils.orUnoptimized(
-                ShapeUtils.orUnoptimized(box(0, 8, 0, 16, 16, 16), box(0, 0, 0, 16, 8, 8)),
-                FramedSlopeEdgeBlock.SHAPES.get(new FramedSlopeEdgeBlock.ShapeKey(SlopeType.TOP, true))
-        );
-
-        VoxelShape[] shapes = new VoxelShape[4 * 3];
-
-        ShapeUtils.makeHorizontalRotations(shapeBottom, Direction.NORTH, shapes, 0);
-        ShapeUtils.makeHorizontalRotations(shapeHorizontal, Direction.NORTH, shapes, SlopeType.HORIZONTAL.ordinal() << 2);
-        ShapeUtils.makeHorizontalRotations(shapeTop, Direction.NORTH, shapes, SlopeType.TOP.ordinal() << 2);
-
-        ImmutableMap.Builder<BlockState, VoxelShape> builder = new ImmutableMap.Builder<>();
-
-        for (BlockState state : states)
-        {
-            SlopeType type = state.getValue(PropertyHolder.SLOPE_TYPE);
-            Direction dir = state.getValue(FramedProperties.FACING_HOR);
-            int idx = (type.ordinal() << 2) + dir.get2DDataValue();
-            builder.put(state, shapes[idx]);
-        }
-
-        return ShapeProvider.of(builder.build());
     }
 }

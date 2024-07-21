@@ -16,8 +16,8 @@ import net.neoforged.neoforge.client.model.data.ModelData;
 import xfacthd.framedblocks.api.camo.block.BlockCamoContent;
 import xfacthd.framedblocks.api.model.data.FramedBlockData;
 import xfacthd.framedblocks.api.render.debug.BlockDebugRenderer;
-import xfacthd.framedblocks.api.util.TestProperties;
 import xfacthd.framedblocks.common.blockentity.doubled.FramedDoubleBlockEntity;
+import xfacthd.framedblocks.common.config.DevToolsConfig;
 
 import java.util.Objects;
 
@@ -74,6 +74,6 @@ public class DoubleBlockPartDebugRenderer implements BlockDebugRenderer<FramedDo
     @Override
     public boolean isEnabled()
     {
-        return TestProperties.ENABLE_DOUBLE_BLOCK_PART_HIT_DEBUG_RENDERER;
+        return DevToolsConfig.VIEW.isDoubleBlockPartHitDebugRendererEnabled();
     }
 }

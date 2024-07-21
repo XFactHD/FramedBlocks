@@ -15,17 +15,14 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.*;
-import net.neoforged.neoforge.client.extensions.common.IClientBlockExtensions;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.*;
-import xfacthd.framedblocks.api.block.render.FramedBlockRenderProperties;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.compat.diagonalblocks.DiagonalBlocksCompat;
 import xfacthd.framedblocks.common.data.BlockType;
 
 import java.util.List;
-import java.util.function.Consumer;
 
 public class FramedPaneBlock extends IronBarsBlock implements IFramedBlock
 {
@@ -148,12 +145,6 @@ public class FramedPaneBlock extends IronBarsBlock implements IFramedBlock
     protected boolean skipRendering(BlockState state, BlockState adjacentState, Direction side)
     {
         return this == FBContent.BLOCK_FRAMED_BARS.value() && super.skipRendering(state, adjacentState, side);
-    }
-
-    @Override
-    public void initializeClient(Consumer<IClientBlockExtensions> consumer)
-    {
-        consumer.accept(FramedBlockRenderProperties.INSTANCE);
     }
 
     @Override

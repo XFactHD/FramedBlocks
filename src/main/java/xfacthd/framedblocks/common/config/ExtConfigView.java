@@ -1,8 +1,11 @@
 package xfacthd.framedblocks.common.config;
 
+import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.util.ConfigView;
 import xfacthd.framedblocks.client.model.SolidFrameMode;
 import xfacthd.framedblocks.client.screen.overlay.BlockInteractOverlay;
+
+import java.util.regex.Pattern;
 
 public final class ExtConfigView
 {
@@ -53,6 +56,22 @@ public final class ExtConfigView
         BlockInteractOverlay.Mode getFrameBackgroundMode();
 
         BlockInteractOverlay.Mode getCamoRotationMode();
+    }
+
+    public interface DevTools extends ConfigView.DevTools
+    {
+        boolean isDoubleBlockPartHitDebugRendererEnabled();
+
+        boolean isConnectionDebugRendererEnabled();
+
+        boolean isQuadWindingDebugRendererEnabled();
+
+        boolean isStateMergerDebugLoggingEnabled();
+
+        @Nullable
+        Pattern getStateMergerDebugFilter();
+
+        boolean isOcclusionShapeDebugRenderingEnabled();
     }
 
 

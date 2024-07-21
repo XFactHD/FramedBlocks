@@ -6,7 +6,6 @@ import net.minecraft.util.Tuple;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.*;
-import net.neoforged.neoforge.client.extensions.common.IClientBlockExtensions;
 import net.neoforged.neoforge.client.model.data.ModelData;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.*;
@@ -25,7 +24,6 @@ import xfacthd.framedblocks.common.util.FramedUtils;
 
 import java.util.Objects;
 import java.util.function.BiFunction;
-import java.util.function.Consumer;
 
 public class FramedFancyRailSlopeBlock extends FramedRailSlopeBlock implements IFramedDoubleBlock, ISlopeBlock.IRailSlopeBlock
 {
@@ -114,11 +112,5 @@ public class FramedFancyRailSlopeBlock extends FramedRailSlopeBlock implements I
             return SolidityCheck.FIRST;
         }
         return SolidityCheck.NONE;
-    }
-
-    @Override
-    public void initializeClient(Consumer<IClientBlockExtensions> consumer)
-    {
-        consumer.accept(FramedDoubleBlockRenderProperties.INSTANCE);
     }
 }

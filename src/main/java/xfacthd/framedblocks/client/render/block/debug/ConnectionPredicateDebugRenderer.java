@@ -12,7 +12,7 @@ import xfacthd.framedblocks.api.block.cache.StateCache;
 import xfacthd.framedblocks.api.render.Quaternions;
 import xfacthd.framedblocks.api.render.debug.BlockDebugRenderer;
 import xfacthd.framedblocks.api.util.ClientUtils;
-import xfacthd.framedblocks.api.util.TestProperties;
+import xfacthd.framedblocks.common.config.DevToolsConfig;
 import xfacthd.framedblocks.common.data.doubleblock.CamoGetter;
 import xfacthd.framedblocks.common.data.doubleblock.DoubleBlockStateCache;
 
@@ -159,6 +159,6 @@ public class ConnectionPredicateDebugRenderer implements BlockDebugRenderer<Fram
     @Override
     public boolean isEnabled()
     {
-        return TestProperties.ENABLE_CONNECTION_DEBUG_RENDERER;
+        return DevToolsConfig.VIEW.isConnectionDebugRendererEnabled();
     }
 }

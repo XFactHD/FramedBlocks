@@ -1,7 +1,5 @@
 package xfacthd.framedblocks.common.block.slopeslab;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.player.Player;
@@ -13,9 +11,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.phys.shapes.*;
 import xfacthd.framedblocks.api.block.*;
-import xfacthd.framedblocks.api.shapes.*;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
@@ -143,95 +139,5 @@ public class FramedFlatSlopeSlabCornerBlock extends FramedBlock
     public BlockState getJadeRenderState(BlockState state)
     {
         return defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.WEST);
-    }
-
-
-
-    public static final ShapeCache<SlopeSlabShape> SHAPES = ShapeCache.createEnum(SlopeSlabShape.class, map ->
-    {
-        VoxelShape shapeSlopeBottom = FramedSlopeSlabBlock.SHAPES.get(SlopeSlabShape.BOTTOM_BOTTOM_HALF);
-        VoxelShape shapeSlopeTop = FramedSlopeSlabBlock.SHAPES.get(SlopeSlabShape.TOP_BOTTOM_HALF);
-
-        VoxelShape shapeBottomBottomHalf = ShapeUtils.andUnoptimized(
-                shapeSlopeBottom,
-                ShapeUtils.rotateShapeUnoptimizedAroundY(Direction.NORTH, Direction.WEST, shapeSlopeBottom)
-        );
-        map.put(SlopeSlabShape.BOTTOM_BOTTOM_HALF, shapeBottomBottomHalf);
-        map.put(SlopeSlabShape.BOTTOM_TOP_HALF, shapeBottomBottomHalf.move(0, .5, 0));
-
-        VoxelShape shapeTopBottomHalf = ShapeUtils.andUnoptimized(
-                shapeSlopeTop,
-                ShapeUtils.rotateShapeUnoptimizedAroundY(Direction.NORTH, Direction.WEST, shapeSlopeTop)
-        );
-        map.put(SlopeSlabShape.TOP_BOTTOM_HALF, shapeTopBottomHalf);
-        map.put(SlopeSlabShape.TOP_TOP_HALF, shapeTopBottomHalf.move(0, .5, 0));
-    });
-
-    public static ShapeProvider generateShapes(ImmutableList<BlockState> states)
-    {
-        ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
-
-        int maskTop = 0b0100;
-        int maskTopHalf = 0b1000;
-        VoxelShape[] shapes = new VoxelShape[16];
-        ShapeUtils.makeHorizontalRotations(SHAPES.get(SlopeSlabShape.BOTTOM_BOTTOM_HALF), Direction.NORTH, shapes, 0);
-        ShapeUtils.makeHorizontalRotations(SHAPES.get(SlopeSlabShape.BOTTOM_TOP_HALF), Direction.NORTH, shapes, maskTopHalf);
-        ShapeUtils.makeHorizontalRotations(SHAPES.get(SlopeSlabShape.TOP_BOTTOM_HALF), Direction.NORTH, shapes, maskTop);
-        ShapeUtils.makeHorizontalRotations(SHAPES.get(SlopeSlabShape.TOP_TOP_HALF), Direction.NORTH, shapes, maskTop | maskTopHalf);
-
-        for (BlockState state : states)
-        {
-            Direction dir = state.getValue(FramedProperties.FACING_HOR);
-            int top = state.getValue(FramedProperties.TOP) ? maskTop : 0;
-            int topHalf = state.getValue(PropertyHolder.TOP_HALF) ? maskTopHalf : 0;
-            int idx = dir.get2DDataValue() | top | topHalf;
-            builder.put(state, shapes[idx]);
-        }
-
-        return ShapeProvider.of(builder.build());
-    }
-
-    public static final ShapeCache<SlopeSlabShape> INNER_SHAPES = ShapeCache.createEnum(SlopeSlabShape.class, map ->
-    {
-        VoxelShape shapeSlopeBottom = FramedSlopeSlabBlock.SHAPES.get(SlopeSlabShape.BOTTOM_BOTTOM_HALF);
-        VoxelShape shapeSlopeTop = FramedSlopeSlabBlock.SHAPES.get(SlopeSlabShape.TOP_BOTTOM_HALF);
-
-        VoxelShape shapeBottomBottomHalf = ShapeUtils.orUnoptimized(
-                shapeSlopeBottom,
-                ShapeUtils.rotateShapeUnoptimizedAroundY(Direction.NORTH, Direction.WEST, shapeSlopeBottom)
-        );
-        map.put(SlopeSlabShape.BOTTOM_BOTTOM_HALF, shapeBottomBottomHalf);
-        map.put(SlopeSlabShape.BOTTOM_TOP_HALF, shapeBottomBottomHalf.move(0, .5, 0));
-
-        VoxelShape shapeTopBottomHalf = ShapeUtils.orUnoptimized(
-                shapeSlopeTop,
-                ShapeUtils.rotateShapeUnoptimizedAroundY(Direction.NORTH, Direction.WEST, shapeSlopeTop)
-        );
-        map.put(SlopeSlabShape.TOP_BOTTOM_HALF, shapeTopBottomHalf);
-        map.put(SlopeSlabShape.TOP_TOP_HALF, shapeTopBottomHalf.move(0, .5, 0));
-    });
-
-    public static ShapeProvider generateInnerShapes(ImmutableList<BlockState> states)
-    {
-        ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
-
-        int maskTop = 0b0100;
-        int maskTopHalf = 0b1000;
-        VoxelShape[] shapes = new VoxelShape[16];
-        ShapeUtils.makeHorizontalRotations(INNER_SHAPES.get(SlopeSlabShape.BOTTOM_BOTTOM_HALF), Direction.NORTH, shapes, 0);
-        ShapeUtils.makeHorizontalRotations(INNER_SHAPES.get(SlopeSlabShape.BOTTOM_TOP_HALF), Direction.NORTH, shapes, maskTopHalf);
-        ShapeUtils.makeHorizontalRotations(INNER_SHAPES.get(SlopeSlabShape.TOP_BOTTOM_HALF), Direction.NORTH, shapes, maskTop);
-        ShapeUtils.makeHorizontalRotations(INNER_SHAPES.get(SlopeSlabShape.TOP_TOP_HALF), Direction.NORTH, shapes, maskTop | maskTopHalf);
-
-        for (BlockState state : states)
-        {
-            Direction dir = state.getValue(FramedProperties.FACING_HOR);
-            int top = state.getValue(FramedProperties.TOP) ? maskTop : 0;
-            int topHalf = state.getValue(PropertyHolder.TOP_HALF) ? maskTopHalf : 0;
-            int idx = dir.get2DDataValue() | top | topHalf;
-            builder.put(state, shapes[idx]);
-        }
-
-        return ShapeProvider.of(builder.build());
     }
 }
