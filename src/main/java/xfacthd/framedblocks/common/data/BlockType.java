@@ -7,7 +7,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.*;
 import net.neoforged.fml.loading.FMLEnvironment;
 import org.jetbrains.annotations.Nullable;
-import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.predicate.contex.ConTexMode;
 import xfacthd.framedblocks.api.predicate.contex.ConnectionPredicate;
 import xfacthd.framedblocks.api.predicate.cull.SideSkipPredicate;
@@ -16,6 +15,7 @@ import xfacthd.framedblocks.api.shapes.*;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.common.data.conpreds.ConnectionPredicates;
 import xfacthd.framedblocks.common.data.facepreds.FullFacePredicates;
+import xfacthd.framedblocks.common.data.shapes.MoreCommonShapes;
 import xfacthd.framedblocks.common.data.shapes.SplitShapeGenerator;
 import xfacthd.framedblocks.common.data.shapes.cube.*;
 import xfacthd.framedblocks.common.data.shapes.door.*;
@@ -164,7 +164,7 @@ public enum BlockType implements IBlockType
     FRAMED_SLOPE_SLAB                               ( true,  true, false,  true,  true,  true, false, false, ConTexMode.FULL_FACE, new SlopeSlabShapes()),
     FRAMED_ELEVATED_SLOPE_SLAB                      ( true,  true, false,  true,  true,  true, false, false, ConTexMode.FULL_FACE, ElevatedSlopeSlabShapes.INSTANCE),
     FRAMED_COMPOUND_SLOPE_SLAB                      ( true,  true, false,  true,  true,  true, false, false, ConTexMode.FULL_EDGE, InverseDoubleSlopeSlabShapes.INSTANCE),
-    FRAMED_DOUBLE_SLOPE_SLAB                        ( true, false,  true,  true,  true,  true,  true, false, ConTexMode.FULL_FACE, CommonShapes.createSlabGenerator(PropertyHolder.TOP_HALF)),
+    FRAMED_DOUBLE_SLOPE_SLAB                        ( true, false,  true,  true,  true,  true,  true, false, ConTexMode.FULL_FACE, MoreCommonShapes.TOP_HALF_SLAB_GENERATOR),
     FRAMED_INV_DOUBLE_SLOPE_SLAB                    ( true,  true, false,  true,  true,  true,  true, false, ConTexMode.FULL_EDGE, InverseDoubleSlopeSlabShapes.INSTANCE),
     FRAMED_ELEVATED_DOUBLE_SLOPE_SLAB               ( true, false,  true, false,  true,  true,  true, false, ConTexMode.FULL_FACE, Shapes.block()),
     FRAMED_STACKED_SLOPE_SLAB                       ( true,  true, false,  true,  true,  true,  true, false, ConTexMode.FULL_FACE, ElevatedSlopeSlabShapes.INSTANCE),
@@ -172,7 +172,7 @@ public enum BlockType implements IBlockType
     FRAMED_FLAT_INNER_SLOPE_SLAB_CORNER             ( true,  true, false,  true,  true,  true, false, false, ConTexMode.FULL_FACE, FlatSlopeSlabCornerShapes.INNER),
     FRAMED_FLAT_ELEV_SLOPE_SLAB_CORNER              ( true,  true, false,  true,  true,  true, false, false, ConTexMode.FULL_FACE, FlatElevatedSlopeSlabCornerShapes.OUTER),
     FRAMED_FLAT_ELEV_INNER_SLOPE_SLAB_CORNER        ( true,  true, false,  true,  true,  true, false, false, ConTexMode.FULL_FACE, FlatElevatedSlopeSlabCornerShapes.INNER),
-    FRAMED_FLAT_DOUBLE_SLOPE_SLAB_CORNER            ( true, false,  true,  true,  true,  true,  true, false, ConTexMode.FULL_FACE, CommonShapes.createSlabGenerator(PropertyHolder.TOP_HALF)),
+    FRAMED_FLAT_DOUBLE_SLOPE_SLAB_CORNER            ( true, false,  true,  true,  true,  true,  true, false, ConTexMode.FULL_FACE, MoreCommonShapes.TOP_HALF_SLAB_GENERATOR),
     FRAMED_FLAT_INV_DOUBLE_SLOPE_SLAB_CORNER        ( true,  true, false,  true,  true,  true,  true, false, ConTexMode.FULL_EDGE, new FlatInverseDoubleSlopeSlabShapes()),
     FRAMED_FLAT_ELEV_DOUBLE_SLOPE_SLAB_CORNER       ( true, false,  true, false,  true,  true,  true, false, ConTexMode.FULL_FACE, Shapes.block()),
     FRAMED_FLAT_ELEV_INNER_DOUBLE_SLOPE_SLAB_CORNER ( true, false,  true, false,  true,  true,  true, false, ConTexMode.FULL_FACE, Shapes.block()),
@@ -181,7 +181,7 @@ public enum BlockType implements IBlockType
     FRAMED_SLOPE_PANEL                              ( true,  true, false,  true,  true,  true, false, false, ConTexMode.FULL_FACE, new SlopePanelShapes()),
     FRAMED_EXTENDED_SLOPE_PANEL                     ( true,  true, false,  true,  true,  true, false, false, ConTexMode.FULL_FACE, ExtendedSlopePanelShapes.INSTANCE),
     FRAMED_COMPOUND_SLOPE_PANEL                     ( true,  true, false,  true,  true,  true, false, false, ConTexMode.FULL_EDGE, InverseDoubleSlopePanelShapes.INSTANCE),
-    FRAMED_DOUBLE_SLOPE_PANEL                       ( true, false,  true,  true,  true,  true,  true, false, ConTexMode.FULL_FACE, CommonShapes.createPanelGenerator(FramedProperties.FACING_HOR, PropertyHolder.FRONT)),
+    FRAMED_DOUBLE_SLOPE_PANEL                       ( true, false,  true,  true,  true,  true,  true, false, ConTexMode.FULL_FACE, MoreCommonShapes.FRONT_INV_PANEL_GENERATOR),
     FRAMED_INV_DOUBLE_SLOPE_PANEL                   ( true,  true, false,  true,  true,  true,  true, false, ConTexMode.FULL_EDGE, InverseDoubleSlopePanelShapes.INSTANCE),
     FRAMED_EXTENDED_DOUBLE_SLOPE_PANEL              ( true, false,  true, false,  true,  true,  true, false, ConTexMode.FULL_FACE, Shapes.block()),
     FRAMED_STACKED_SLOPE_PANEL                      ( true,  true, false,  true,  true,  true,  true, false, ConTexMode.FULL_FACE, ExtendedSlopePanelShapes.INSTANCE),
@@ -189,7 +189,7 @@ public enum BlockType implements IBlockType
     FRAMED_FLAT_INNER_SLOPE_PANEL_CORNER            ( true,  true, false,  true,  true,  true, false, false, ConTexMode.FULL_FACE, FlatSlopePanelCornerShapes.INNER),
     FRAMED_FLAT_EXT_SLOPE_PANEL_CORNER              ( true,  true, false,  true,  true,  true, false, false, ConTexMode.FULL_FACE, FlatExtendedSlopePanelCornerShapes.OUTER),
     FRAMED_FLAT_EXT_INNER_SLOPE_PANEL_CORNER        ( true,  true, false,  true,  true,  true, false, false, ConTexMode.FULL_FACE, FlatExtendedSlopePanelCornerShapes.INNER),
-    FRAMED_FLAT_DOUBLE_SLOPE_PANEL_CORNER           ( true, false,  true,  true,  true,  true,  true, false, ConTexMode.FULL_FACE, CommonShapes.createPanelGenerator(FramedProperties.FACING_HOR, PropertyHolder.FRONT)),
+    FRAMED_FLAT_DOUBLE_SLOPE_PANEL_CORNER           ( true, false,  true,  true,  true,  true,  true, false, ConTexMode.FULL_FACE, MoreCommonShapes.FRONT_INV_PANEL_GENERATOR),
     FRAMED_FLAT_INV_DOUBLE_SLOPE_PANEL_CORNER       ( true,  true, false,  true,  true,  true,  true, false, ConTexMode.FULL_EDGE, new FlatInverseDoubleSlopePanelCornerShapes()),
     FRAMED_FLAT_EXT_DOUBLE_SLOPE_PANEL_CORNER       ( true, false,  true, false,  true,  true,  true, false, ConTexMode.FULL_FACE, Shapes.block()),
     FRAMED_FLAT_EXT_INNER_DOUBLE_SLOPE_PANEL_CORNER ( true, false,  true, false,  true,  true,  true, false, ConTexMode.FULL_FACE, Shapes.block()),
