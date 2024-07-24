@@ -9,6 +9,8 @@ import me.shedaniel.rei.api.client.registry.screen.ScreenRegistry;
 import me.shedaniel.rei.api.client.registry.transfer.TransferHandlerRegistry;
 import me.shedaniel.rei.api.common.util.EntryStacks;
 import me.shedaniel.rei.forge.REIPluginClient;
+import net.minecraft.resources.ResourceLocation;
+import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.client.screen.FramingSawWithEncoderScreen;
 import xfacthd.framedblocks.client.screen.PoweredFramingSawScreen;
 import xfacthd.framedblocks.common.FBContent;
@@ -16,6 +18,8 @@ import xfacthd.framedblocks.common.FBContent;
 @REIPluginClient
 public final class FramedReiPlugin implements REIClientPlugin
 {
+    public static final ResourceLocation SAW_ID = Utils.rl("framing_saw");
+
     @Override
     public void registerCategories(CategoryRegistry registry)
     {
@@ -54,6 +58,7 @@ public final class FramedReiPlugin implements REIClientPlugin
                 PoweredFramingSawScreen.class,
                 FramingSawRecipeCategory.SAW_CATEGORY
         );
+        registry.registerFocusedStack(new FramingSawFocusedStackProvider());
     }
 
     @Override

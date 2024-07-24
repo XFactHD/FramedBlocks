@@ -1,15 +1,14 @@
 package xfacthd.framedblocks.client.screen;
 
 import com.mojang.blaze3d.platform.InputConstants;
-import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.MouseHandler;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -27,7 +26,6 @@ import org.lwjgl.glfw.GLFW;
 import xfacthd.framedblocks.api.util.ClientUtils;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.client.screen.widget.SearchEditBox;
-import xfacthd.framedblocks.client.util.RecipeViewer;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.compat.ae2.AppliedEnergisticsCompat;
 import xfacthd.framedblocks.common.crafting.*;
@@ -72,7 +70,6 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu> im
     private static final int SEARCH_HEIGHT = 14;
     private static final int SEARCH_X = IMAGE_WIDTH - SEARCH_WIDTH - 6;
     private static final int SEARCH_Y = 5;
-    private static final RecipeViewer RECIPE_VIEWER = RecipeViewer.get();
 
     protected final FramingSawRecipeCache cache = FramingSawRecipeCache.get(true);
     protected final ItemStack cubeStack = new ItemStack(FBContent.BLOCK_FRAMED_CUBE.value());
@@ -598,26 +595,10 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu> im
         {
             return true;
         }
-
-        RecipeViewer.LookupTarget target;
-        if (RECIPE_VIEWER != null && (target = RECIPE_VIEWER.isShowRecipePressed(keyCode, scanCode)) != null)
-        {
-            Window window = Objects.requireNonNull(minecraft).getWindow();
-            MouseHandler mouseHandler = minecraft.mouseHandler;
-            double mouseX = mouseHandler.xpos() * (double)window.getGuiScaledWidth() / (double)window.getScreenWidth();
-            double mouseY = mouseHandler.ypos() * (double)window.getGuiScaledHeight() / (double)window.getScreenHeight();
-
-            FramingSawMenu.FramedRecipeHolder recipe = getRecipeAt(mouseX, mouseY);
-            if (recipe != null && RECIPE_VIEWER.handleShowRecipeRequest(recipe.getRecipe().getResult(), target))
-            {
-                return true;
-            }
-        }
-
         return super.keyPressed(keyCode, scanCode, modifiers);
     }
 
-    public FramingSawMenu.FramedRecipeHolder getRecipeAt(double mouseX, double mouseY)
+    public PointedRecipe getRecipeAt(double mouseX, double mouseY)
     {
         double x = leftPos + RECIPES_X;
         double y = topPos + RECIPES_Y;
@@ -630,7 +611,9 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu> im
 
             if (idx > 0 && idx < filteredRecipes.size())
             {
-                return filteredRecipes.get(idx);
+                int rx = (int) x + col * RECIPE_WIDTH;
+                int ry = (int) y + row * RECIPE_HEIGHT;
+                return new PointedRecipe(filteredRecipes.get(idx).toVanilla(), rx, ry);
             }
         }
         return null;
@@ -689,5 +672,13 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu> im
             return new FramingSawWithEncoderScreen(menu, inv, title);
         }
         return new FramingSawScreen(menu, inv, title);
+    }
+
+    public record PointedRecipe(ResourceLocation id, FramingSawRecipe recipe, Rect2i area)
+    {
+        private PointedRecipe(RecipeHolder<FramingSawRecipe> recipe, int x, int y)
+        {
+            this(recipe.id(), recipe.value(), new Rect2i(x, y, RECIPE_WIDTH, RECIPE_HEIGHT));
+        }
     }
 }

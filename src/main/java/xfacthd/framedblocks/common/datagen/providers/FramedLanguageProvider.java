@@ -14,13 +14,13 @@ import xfacthd.framedblocks.client.screen.*;
 import xfacthd.framedblocks.client.screen.overlay.*;
 import xfacthd.framedblocks.common.compat.atlasviewer.AtlasViewerCompat;
 import xfacthd.framedblocks.common.compat.jade.JadeCompat;
+import xfacthd.framedblocks.common.compat.jei.JeiMessages;
 import xfacthd.framedblocks.common.config.*;
 import xfacthd.framedblocks.client.util.KeyMappings;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.special.FramingSawBlock;
 import xfacthd.framedblocks.common.block.special.PoweredFramingSawBlock;
 import xfacthd.framedblocks.common.blockentity.special.FramedStorageBlockEntity;
-import xfacthd.framedblocks.common.compat.jei.JeiCompat;
 import xfacthd.framedblocks.common.crafting.FramingSawRecipeMatchResult;
 import xfacthd.framedblocks.common.data.property.NullableDirection;
 import xfacthd.framedblocks.common.item.FramedBlueprintItem;
@@ -280,8 +280,8 @@ public final class FramedLanguageProvider extends LanguageProvider
 
         add(EmptyCamoContainer.CAMO_NAME, "Empty");
 
-        add(JeiCompat.MSG_INVALID_RECIPE, "Invalid recipe");
-        add(JeiCompat.MSG_TRANSFER_NOT_IMPLEMENTED, "Transfer not implemented, no items will be transferred");
+        add(JeiMessages.MSG_INVALID_RECIPE, "Invalid recipe");
+        add(JeiMessages.MSG_TRANSFER_NOT_IMPLEMENTED, "Transfer not implemented, no items will be transferred");
 
         add(AtlasViewerCompat.LABEL_TEXTURE, "Texture");
         add(AtlasViewerCompat.LABEL_FRAMES, "Frames");

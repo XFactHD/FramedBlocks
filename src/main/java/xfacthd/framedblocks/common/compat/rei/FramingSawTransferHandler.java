@@ -4,7 +4,7 @@ import me.shedaniel.rei.api.client.registry.transfer.TransferHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.neoforged.neoforge.network.PacketDistributor;
-import xfacthd.framedblocks.common.compat.jei.JeiCompat;
+import xfacthd.framedblocks.common.compat.jei.JeiMessages;
 import xfacthd.framedblocks.common.crafting.FramingSawRecipeCache;
 import xfacthd.framedblocks.common.menu.IFramingSawMenu;
 import xfacthd.framedblocks.common.net.payload.ServerboundSelectFramingSawRecipePayload;
@@ -32,8 +32,8 @@ public final class FramingSawTransferHandler implements TransferHandler
                 PacketDistributor.sendToServer(new ServerboundSelectFramingSawRecipePayload(menu.containerId, idx));
                 minecraft.setScreen(ctx.getContainerScreen());
             }
-            return Result.createSuccessful().tooltip(JeiCompat.MSG_TRANSFER_NOT_IMPLEMENTED).color(0x80FFA500);
+            return Result.createSuccessful().tooltip(JeiMessages.MSG_TRANSFER_NOT_IMPLEMENTED).color(0x80FFA500);
         }
-        return Result.createFailed(JeiCompat.MSG_INVALID_RECIPE);
+        return Result.createFailed(JeiMessages.MSG_INVALID_RECIPE);
     }
 }

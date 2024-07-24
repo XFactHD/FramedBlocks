@@ -7,9 +7,6 @@ import xfacthd.framedblocks.common.compat.atlasviewer.AtlasViewerCompat;
 import xfacthd.framedblocks.common.compat.buildinggadgets.BuildingGadgetsCompat;
 import xfacthd.framedblocks.common.compat.create.CreateCompat;
 import xfacthd.framedblocks.common.compat.diagonalblocks.DiagonalBlocksCompat;
-import xfacthd.framedblocks.common.compat.emi.EmiCompat;
-import xfacthd.framedblocks.common.compat.jei.JeiCompat;
-import xfacthd.framedblocks.common.compat.rei.ReiCompat;
 import xfacthd.framedblocks.common.compat.supplementaries.SupplementariesCompat;
 
 public final class CompatHandler
@@ -22,9 +19,6 @@ public final class CompatHandler
         BuildingGadgetsCompat.init(modBus);
         CreateCompat.init();
         DiagonalBlocksCompat.init(modBus);
-        EmiCompat.init();
-        JeiCompat.init();
-        ReiCompat.init();
         SupplementariesCompat.init();
     }
 

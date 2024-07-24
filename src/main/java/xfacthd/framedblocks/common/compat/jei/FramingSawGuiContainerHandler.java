@@ -1,25 +1,30 @@
 package xfacthd.framedblocks.common.compat.jei;
 
 import mezz.jei.api.gui.handlers.IGuiContainerHandler;
-import net.minecraft.client.renderer.Rect2i;
-import xfacthd.framedblocks.client.screen.FramingSawWithEncoderScreen;
+import mezz.jei.api.runtime.IClickableIngredient;
+import mezz.jei.api.runtime.IIngredientManager;
+import xfacthd.framedblocks.client.screen.FramingSawScreen;
 
-import java.util.List;
+import java.util.Optional;
 
-public final class FramingSawGuiContainerHandler implements IGuiContainerHandler<FramingSawWithEncoderScreen>
+public sealed class FramingSawGuiContainerHandler<T extends FramingSawScreen> implements IGuiContainerHandler<T> permits FramingSawWithEncoderGuiContainerHandler
 {
-    @Override
-    public List<Rect2i> getGuiExtraAreas(FramingSawWithEncoderScreen screen)
+    private final IIngredientManager ingredientManager;
+
+    public FramingSawGuiContainerHandler(IIngredientManager ingredientManager)
     {
-        if (screen.getMenu().isInEncoderMode())
+        this.ingredientManager = ingredientManager;
+    }
+
+    @Override
+    public Optional<IClickableIngredient<?>> getClickableIngredientUnderMouse(T screen, double mouseX, double mouseY)
+    {
+        FramingSawScreen.PointedRecipe recipe = screen.getRecipeAt(mouseX, mouseY);
+        if (recipe != null)
         {
-            return List.of(new Rect2i(
-                    screen.getGuiLeft() + FramingSawWithEncoderScreen.TAB_X,
-                    screen.getGuiTop() + FramingSawWithEncoderScreen.TAB_TOP_Y,
-                    FramingSawWithEncoderScreen.TAB_WIDTH,
-                    FramingSawWithEncoderScreen.TAB_HEIGHT * 2
-            ));
+            return ingredientManager.createTypedIngredient(recipe.recipe().getResult())
+                    .map(stack -> new ClickableStack(stack, recipe.area()));
         }
-        return List.of();
+        return Optional.empty();
     }
 }

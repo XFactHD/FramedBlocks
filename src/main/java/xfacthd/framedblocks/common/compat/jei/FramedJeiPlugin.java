@@ -5,7 +5,7 @@ import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.registration.*;
-import mezz.jei.api.runtime.IJeiRuntime;
+import mezz.jei.api.runtime.IIngredientManager;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
@@ -68,13 +68,18 @@ public final class FramedJeiPlugin implements IModPlugin
     @Override
     public void registerGuiHandlers(IGuiHandlerRegistration registration)
     {
+        IIngredientManager ingredientManager = registration.getJeiHelpers().getIngredientManager();
         registration.addGhostIngredientHandler(
                 FramingSawWithEncoderScreen.class,
                 new FramingSawGhostIngredientHandler()
         );
         registration.addGuiContainerHandler(
                 FramingSawWithEncoderScreen.class,
-                new FramingSawGuiContainerHandler()
+                new FramingSawWithEncoderGuiContainerHandler(ingredientManager)
+        );
+        registration.addGuiContainerHandler(
+                FramingSawScreen.class,
+                new FramingSawGuiContainerHandler<>(ingredientManager)
         );
         registration.addGhostIngredientHandler(
                 PoweredFramingSawScreen.class,
@@ -82,20 +87,8 @@ public final class FramedJeiPlugin implements IModPlugin
         );
         registration.addGuiContainerHandler(
                 PoweredFramingSawScreen.class,
-                new PoweredFramingSawGuiContainerHandler()
+                new PoweredFramingSawGuiContainerHandler(ingredientManager)
         );
-    }
-
-    @Override
-    public void onRuntimeAvailable(IJeiRuntime jeiRuntime)
-    {
-        JeiCompat.GuardedAccess.acceptRuntime(jeiRuntime);
-    }
-
-    @Override
-    public void onRuntimeUnavailable()
-    {
-        JeiCompat.GuardedAccess.acceptRuntime(null);
     }
 
     @Override

@@ -1,7 +1,5 @@
 package xfacthd.framedblocks.client.screen;
 
-import com.mojang.blaze3d.platform.Window;
-import net.minecraft.client.MouseHandler;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.Rect2i;
@@ -16,7 +14,6 @@ import net.minecraft.world.item.crafting.RecipeInput;
 import net.neoforged.neoforge.network.PacketDistributor;
 import xfacthd.framedblocks.api.util.ClientUtils;
 import xfacthd.framedblocks.api.util.Utils;
-import xfacthd.framedblocks.client.util.RecipeViewer;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.crafting.*;
 import xfacthd.framedblocks.common.menu.FramingSawMenu;
@@ -60,7 +57,6 @@ public class PoweredFramingSawScreen extends AbstractContainerScreen<PoweredFram
     private static final int CROSS_U = 176;
     private static final int CROSS_V = 64;
     private static final Rect2i EMPTY = new Rect2i(0, 0, 0, 0);
-    private static final RecipeViewer RECIPE_VIEWER = RecipeViewer.get();
 
     private final FramingSawRecipeCache cache = FramingSawRecipeCache.get(true);
     private final ItemStack cubeStack = new ItemStack(FBContent.BLOCK_FRAMED_CUBE.value());
@@ -263,30 +259,9 @@ public class PoweredFramingSawScreen extends AbstractContainerScreen<PoweredFram
         return super.mouseClicked(mouseX, mouseY, btn);
     }
 
-    @Override
-    public boolean keyPressed(int keyCode, int scanCode, int modifiers)
-    {
-        RecipeViewer.LookupTarget target;
-        if (RECIPE_VIEWER != null && (target = RECIPE_VIEWER.isShowRecipePressed(keyCode, scanCode)) != null)
-        {
-            Window window = Objects.requireNonNull(minecraft).getWindow();
-            MouseHandler mouseHandler = minecraft.mouseHandler;
-            double mouseX = mouseHandler.xpos() * (double) window.getGuiScaledWidth() / (double) window.getScreenWidth();
-            double mouseY = mouseHandler.ypos() * (double) window.getGuiScaledHeight() / (double) window.getScreenHeight();
-
-            RecipeHolder<FramingSawRecipe> recipe = menu.getSelectedRecipe();
-            if (recipe != null && isMouseOverRecipeSlot(mouseX, mouseY) && RECIPE_VIEWER.handleShowRecipeRequest(recipe.value().getResult(), target))
-            {
-                return true;
-            }
-        }
-
-        return super.keyPressed(keyCode, scanCode, modifiers);
-    }
-
     public boolean isMouseOverRecipeSlot(double mouseX, double mouseY)
     {
-        return mouseX >= targetStackX && mouseX < targetStackX + 18 && mouseY >= targetStackY && mouseY < targetStackY + 18;
+        return mouseX >= targetStackX && mouseX < targetStackX + 16 && mouseY >= targetStackY && mouseY < targetStackY + 16;
     }
 
     public void selectRecipe(ItemStack cursorStack)
@@ -316,5 +291,10 @@ public class PoweredFramingSawScreen extends AbstractContainerScreen<PoweredFram
     public int getTargetStackY()
     {
         return targetStackY;
+    }
+
+    public Rect2i getTargetStackArea()
+    {
+        return new Rect2i(targetStackX, targetStackY, targetStackX + 16, targetStackY + 16);
     }
 }

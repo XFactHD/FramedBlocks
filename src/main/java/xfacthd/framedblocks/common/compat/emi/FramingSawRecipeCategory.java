@@ -9,7 +9,7 @@ public final class FramingSawRecipeCategory extends EmiRecipeCategory
 {
     public FramingSawRecipeCategory(EmiRenderable icon, EmiRenderable simplified)
     {
-        super(EmiCompat.SAW_ID, icon, simplified, FramedEmiPlugin::compareRecipes);
+        super(FramedEmiPlugin.SAW_ID, icon, simplified, FramedEmiPlugin::compareRecipes);
     }
 
     @Override

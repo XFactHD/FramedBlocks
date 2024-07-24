@@ -6,11 +6,13 @@ import dev.emi.emi.api.recipe.EmiRecipe;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeInput;
 import net.minecraft.world.item.crafting.SingleRecipeInput;
 import xfacthd.framedblocks.FramedBlocks;
+import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.client.screen.*;
 import xfacthd.framedblocks.common.config.ClientConfig;
 import xfacthd.framedblocks.common.FBContent;
@@ -22,6 +24,7 @@ import java.util.Set;
 @EmiEntrypoint
 public final class FramedEmiPlugin implements EmiPlugin
 {
+    public static final ResourceLocation SAW_ID = Utils.rl("framing_saw");
     public static final EmiStack SAW_WORKSTATION = EmiStack.of(FBContent.BLOCK_FRAMING_SAW.value());
     private static final EmiStack POWERED_SAW_WORKSTATION = EmiStack.of(FBContent.BLOCK_POWERED_FRAMING_SAW.value());
     public static final EmiRecipeCategory SAW_CATEGORY = new FramingSawRecipeCategory(SAW_WORKSTATION, SAW_WORKSTATION);

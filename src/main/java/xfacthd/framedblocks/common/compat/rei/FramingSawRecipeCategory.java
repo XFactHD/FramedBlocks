@@ -18,7 +18,7 @@ import java.util.List;
 
 public final class FramingSawRecipeCategory implements DisplayCategory<FramingSawDisplay>
 {
-    public static final CategoryIdentifier<FramingSawDisplay> SAW_CATEGORY = CategoryIdentifier.of(ReiCompat.SAW_ID);
+    public static final CategoryIdentifier<FramingSawDisplay> SAW_CATEGORY = CategoryIdentifier.of(FramedReiPlugin.SAW_ID);
 
     private static final int WIDTH = 124;
     private static final int HEIGHT = 50;
