@@ -113,18 +113,22 @@ public final class ServerConfig
         POWERED_SAW_ENERGY_CAPACITY_VALUE = builder
                 .comment("The amount of power the Powered Framing Saw can store")
                 .translation(TRANSLATION_POWERED_SAW_ENERGY_CAPACITY)
+                .worldRestart()
                 .defineInRange(KEY_POWERED_SAW_ENERGY_CAPACITY, 5000, 100, Short.MAX_VALUE);
         POWERED_SAW_MAX_RECEIVE_VALUE = builder
                 .comment("The amount of power the Powered Framing Saw can receive per tick")
                 .translation(TRANSLATION_POWERED_SAW_MAX_RECEIVE)
+                .worldRestart()
                 .defineInRange(KEY_POWERED_SAW_MAX_RECEIVE, 250, 10, Short.MAX_VALUE);
         POWERED_SAW_CONSUMPTION_VALUE = builder
                 .comment("The amount of power the Powered Framing Saw consumes per tick while crafting")
                 .translation(TRANSLATION_POWERED_SAW_CONSUMPTION)
+                .worldRestart()
                 .defineInRange(KEY_POWERED_SAW_CONSUMPTION, 50, 1, Short.MAX_VALUE);
         POWERED_SAW_RECIPE_DURATION_VALUE = builder
                 .comment("How many ticks the Powered Framing Saw takes per crafting operation")
                 .translation(TRANSLATION_POWERED_SAW_RECIPE_DURATION)
+                .worldRestart()
                 .defineInRange(KEY_POWERED_SAW_RECIPE_DURATION, 30, 5, 200);
         builder.pop();
 

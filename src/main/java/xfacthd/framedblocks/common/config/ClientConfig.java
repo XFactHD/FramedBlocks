@@ -149,8 +149,9 @@ public final class ClientConfig
                 .translation(TRANSLATION_FANCY_HITBOXES)
                 .define(KEY_FANCY_HITBOXES, true);
         DETAILED_CULLING_VALUE = builder
-                .comment("If false only full block faces of framed blocks will be culled, if true all outer faces of famed blocks can be culled")
+                .comment("If false only full block faces of framed blocks will be culled, if true all outer faces of framed blocks can be culled")
                 .translation(TRANSLATION_DETAILED_CULLING)
+                .worldRestart()
                 .define(KEY_DETAILED_CULLING, true);
         USE_DISCRETE_UV_STEPS_VALUE = builder
                 .comment("If true, the UV remapping will use discrete steps to avoid floating point errors")
@@ -194,6 +195,7 @@ public final class ClientConfig
                 .comment("If true, all possible recipes of the Framing Saw will be added to EMI, else only the permutations using the Framed Cube will be added")
                 .comment("This setting only has an effect when EMI is installed")
                 .translation(TRANSLATION_SHOW_ALL_RECIPE_PERMUTATIONS_IN_EMI)
+                .worldRestart()
                 .define(KEY_SHOW_ALL_RECIPE_PERMUTATIONS_IN_EMI, true);
         SOLID_FRAME_MODE_VALUE = builder
                 .comment(
