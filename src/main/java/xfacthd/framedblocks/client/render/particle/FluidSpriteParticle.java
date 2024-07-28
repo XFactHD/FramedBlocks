@@ -5,6 +5,7 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.LightTexture;
+import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
@@ -14,6 +15,8 @@ import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtension
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.util.ClientUtils;
 import xfacthd.framedblocks.common.particle.FluidParticleOptions;
+
+import java.util.Objects;
 
 public final class FluidSpriteParticle extends TextureSheetParticle
 {
@@ -38,7 +41,10 @@ public final class FluidSpriteParticle extends TextureSheetParticle
         this.gCol = .6F * (float)(tint >>  8 & 0xFF) / 255F;
         this.bCol = .6F * (float)(tint       & 0xFF) / 255F;
 
-        ResourceLocation stillTex = IClientFluidTypeExtensions.of(fluid).getStillTexture();
+        ResourceLocation stillTex = Objects.requireNonNullElse(
+                IClientFluidTypeExtensions.of(fluid).getStillTexture(),
+                MissingTextureAtlasSprite.getLocation()
+        );
         setSprite(Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(stillTex));
     }
 

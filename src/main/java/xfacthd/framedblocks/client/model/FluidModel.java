@@ -8,8 +8,7 @@ import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.ItemOverrides;
-import net.minecraft.client.renderer.texture.TextureAtlas;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.*;
 import net.minecraft.client.resources.model.*;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
@@ -43,6 +42,20 @@ public final class FluidModel implements BakedModel
     private static final Supplier<ResourceLocation> WATER_FLOWING = Suppliers.memoize(() ->
             IClientFluidTypeExtensions.of(Fluids.WATER).getFlowingTexture()
     );
+    private static final IClientFluidTypeExtensions DUMMY_FLUID_TYPE_EXTENSIONS = new IClientFluidTypeExtensions()
+    {
+        @Override
+        public ResourceLocation getStillTexture()
+        {
+            return MissingTextureAtlasSprite.getLocation();
+        }
+
+        @Override
+        public ResourceLocation getFlowingTexture()
+        {
+            return MissingTextureAtlasSprite.getLocation();
+        }
+    };
     private final RenderType fluidLayer;
     private final ChunkRenderTypeSet fluidLayerSet;
     private final Map<Direction, List<BakedQuad>> quads;
@@ -128,7 +141,8 @@ public final class FluidModel implements BakedModel
         UnbakedModel bareModel = modelBakery.getModel(BARE_MODEL.id());
         Preconditions.checkNotNull(bareModel, "Bare fluid model not loaded!");
 
-        IClientFluidTypeExtensions props = IClientFluidTypeExtensions.of(fluid);
+        // Use dummy extensions for empty fluid to prevent crashes due to null textures
+        IClientFluidTypeExtensions props = getFluidTypeExtensions(fluid);
         Preconditions.checkNotNull(
                 props.getStillTexture(),
                 "Fluid %s returned null from IClientFluidTypeExtensions#getStillTexture()",
@@ -171,6 +185,15 @@ public final class FluidModel implements BakedModel
         }
 
         return new FluidModel(layer, quads, SPRITE_GETTER.apply(props.getStillTexture()));
+    }
+
+    private static IClientFluidTypeExtensions getFluidTypeExtensions(Fluid fluid)
+    {
+        if (fluid == Fluids.EMPTY)
+        {
+            return DUMMY_FLUID_TYPE_EXTENSIONS;
+        }
+        return IClientFluidTypeExtensions.of(fluid);
     }
 
     private static Function<Material, TextureAtlasSprite> matToSprite(IClientFluidTypeExtensions props)

@@ -12,6 +12,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.FluidType;
@@ -137,6 +138,10 @@ public final class FluidCamoContainerFactory extends CamoContainerFactory<FluidC
 
     private static boolean isValidFluid(Fluid fluid, @Nullable Player player)
     {
+        if (fluid == Fluids.EMPTY)
+        {
+            return false;
+        }
         if (BuiltInRegistries.FLUID.wrapAsHolder(fluid).is(Utils.FLUID_BLACKLIST))
         {
             displayValidationMessage(player, MSG_BLACKLISTED, CamoMessageVerbosity.DEFAULT);
