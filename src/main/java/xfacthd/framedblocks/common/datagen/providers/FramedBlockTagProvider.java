@@ -40,7 +40,6 @@ public final class FramedBlockTagProvider extends BlockTagsProvider
         tag(BlockTags.DOORS).add(FBContent.BLOCK_FRAMED_DOOR.value(), FBContent.BLOCK_FRAMED_IRON_DOOR.value());
         tag(BlockTags.TRAPDOORS).add(FBContent.BLOCK_FRAMED_TRAP_DOOR.value(), FBContent.BLOCK_FRAMED_IRON_TRAP_DOOR.value());
         tag(BlockTags.CLIMBABLE).add(FBContent.BLOCK_FRAMED_LADDER.value());
-        tag(BlockTags.SIGNS).add(FBContent.BLOCK_FRAMED_SIGN.value(), FBContent.BLOCK_FRAMED_WALL_SIGN.value());
         tag(BlockTags.STANDING_SIGNS).add(FBContent.BLOCK_FRAMED_SIGN.value());
         tag(BlockTags.WALL_SIGNS).add(FBContent.BLOCK_FRAMED_WALL_SIGN.value());
         tag(BlockTags.CEILING_HANGING_SIGNS).add(FBContent.BLOCK_FRAMED_HANGING_SIGN.value());
