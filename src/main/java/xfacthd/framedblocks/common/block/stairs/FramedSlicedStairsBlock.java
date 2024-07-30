@@ -1,7 +1,5 @@
 package xfacthd.framedblocks.common.block.stairs;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Tuple;
@@ -11,12 +9,9 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.PlacementStateBuilder;
-import xfacthd.framedblocks.api.shapes.CommonShapes;
-import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
@@ -210,21 +205,5 @@ public class FramedSlicedStairsBlock extends AbstractFramedDoubleBlock
         return FBContent.BLOCK_FRAMED_SLICED_STAIRS_PANEL.get()
                 .defaultBlockState()
                 .setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
-    }
-
-
-
-    public static ShapeProvider generateShapes(ImmutableList<BlockState> states)
-    {
-        ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
-
-        for (BlockState state : states)
-        {
-            Direction dir = state.getValue(FramedProperties.FACING_HOR);
-            boolean top = state.getValue(FramedProperties.TOP);
-            builder.put(state, CommonShapes.STRAIGHT_STAIRS.get(new CommonShapes.DirBoolKey(dir, top)));
-        }
-
-        return ShapeProvider.of(builder.build());
     }
 }

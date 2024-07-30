@@ -1,7 +1,5 @@
 package xfacthd.framedblocks.common.block.slopepanelcorner;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Tuple;
@@ -15,12 +13,9 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
-import xfacthd.framedblocks.api.shapes.ShapeProvider;
-import xfacthd.framedblocks.api.shapes.ShapeUtils;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
@@ -174,37 +169,5 @@ public class FramedInverseDoubleCornerSlopePanelWallBlock extends AbstractFramed
     public SolidityCheck calculateSolidityCheck(BlockState state, Direction side)
     {
         return SolidityCheck.NONE;
-    }
-
-
-
-    public static ShapeProvider generateShapes(ImmutableList<BlockState> states)
-    {
-        ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
-
-        VoxelShape[] shapes = new VoxelShape[4 * 4];
-        for (HorizontalRotation rot : HorizontalRotation.values())
-        {
-            HorizontalRotation backRot = rot.rotate(rot.isVertical() ? Rotation.CLOCKWISE_90 : Rotation.COUNTERCLOCKWISE_90);
-            VoxelShape preShape = ShapeUtils.orUnoptimized(
-                    FramedCornerSlopePanelWallBlock.SHAPES_LARGE.get(rot),
-                    ShapeUtils.rotateShapeUnoptimized(
-                            Direction.NORTH,
-                            Direction.SOUTH,
-                            FramedCornerSlopePanelWallBlock.SHAPES_SMALL_INNER.get(backRot)
-                    )
-            );
-            ShapeUtils.makeHorizontalRotations(preShape, Direction.NORTH, shapes, rot.ordinal() << 2);
-        }
-
-        for (BlockState state : states)
-        {
-            Direction dir = state.getValue(FramedProperties.FACING_HOR);
-            HorizontalRotation rot = state.getValue(PropertyHolder.ROTATION);
-            int idx = dir.get2DDataValue() | (rot.ordinal() << 2);
-            builder.put(state, shapes[idx]);
-        }
-
-        return ShapeProvider.of(builder.build());
     }
 }

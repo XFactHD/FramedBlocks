@@ -1,7 +1,5 @@
 package xfacthd.framedblocks.common.block.slopeedge;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.player.Player;
@@ -11,10 +9,8 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
-import xfacthd.framedblocks.api.shapes.*;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.*;
@@ -105,79 +101,5 @@ public class FramedSlopeEdgeBlock extends FramedBlock implements IComplexSlopeSo
         return FBContent.BLOCK_FRAMED_SLOPE_EDGE.get()
                 .defaultBlockState()
                 .setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
-    }
-
-
-
-    public record ShapeKey(SlopeType type, boolean altType) { }
-
-    public static final ShapeCache<ShapeKey> SHAPES = ShapeCache.create(map ->
-    {
-        VoxelShape shapeBottom = ShapeUtils.orUnoptimized(
-                box(0, 0, 0, 16, 0.25, 8),
-                box(0, 0.25, 0, 16, 4, 7.75),
-                box(0, 4, 0, 16, 7.75, 4),
-                box(0, 7.75, 0, 16, 8, 0.25)
-        );
-        map.put(new ShapeKey(SlopeType.BOTTOM, false), shapeBottom);
-        map.put(new ShapeKey(SlopeType.BOTTOM, true), shapeBottom.move(0, .5, .5));
-
-        VoxelShape shapeTop = ShapeUtils.orUnoptimized(
-                box(0, 15.75, 0, 16, 16, 8),
-                box(0, 12, 0, 16, 15.75, 7.75),
-                box(0, 8.25, 0, 16, 12, 4),
-                box(0, 8, 0, 16, 8.25, 0.25)
-        );
-        map.put(new ShapeKey(SlopeType.TOP, false), shapeTop);
-        map.put(new ShapeKey(SlopeType.TOP, true), shapeTop.move(0, -.5, .5));
-
-        VoxelShape shapeHorizontal = ShapeUtils.orUnoptimized(
-                box(0, 0, 0, 0.25, 16, 8),
-                box(0.25, 0, 0, 4, 16, 7.75),
-                box(4, 0, 0, 7.75, 16, 4),
-                box(7.75, 0, 0, 8, 16, 0.25)
-        );
-        map.put(new ShapeKey(SlopeType.HORIZONTAL, false), shapeHorizontal);
-        map.put(new ShapeKey(SlopeType.HORIZONTAL, true), shapeHorizontal.move(.5, 0, .5));
-    });
-
-    public static ShapeProvider generateShapes(ImmutableList<BlockState> states)
-    {
-        VoxelShape[] shapes = new VoxelShape[3 * 4 * 2];
-
-        for (SlopeType type : SlopeType.values())
-        {
-            ShapeUtils.makeHorizontalRotations(
-                    SHAPES.get(new ShapeKey(type, false)),
-                    Direction.NORTH,
-                    shapes,
-                    type,
-                    (dir, keyType) -> makeShapeIndex(dir, keyType, false)
-            );
-            ShapeUtils.makeHorizontalRotations(
-                    SHAPES.get(new ShapeKey(type, true)),
-                    Direction.NORTH,
-                    shapes,
-                    type,
-                    (dir, keyType) -> makeShapeIndex(dir, keyType, true)
-            );
-        }
-
-        ImmutableMap.Builder<BlockState, VoxelShape> builder = new ImmutableMap.Builder<>();
-
-        for (BlockState state : states)
-        {
-            SlopeType type = state.getValue(PropertyHolder.SLOPE_TYPE);
-            Direction dir = state.getValue(FramedProperties.FACING_HOR);
-            boolean altType = state.getValue(PropertyHolder.ALT_TYPE);
-            builder.put(state, shapes[makeShapeIndex(dir, type, altType)]);
-        }
-
-        return ShapeProvider.of(builder.build());
-    }
-
-    public static int makeShapeIndex(Direction dir, SlopeType type, boolean altType)
-    {
-        return (type.ordinal() << 3) | (dir.get2DDataValue() << 1) | (altType ? 1 : 0);
     }
 }

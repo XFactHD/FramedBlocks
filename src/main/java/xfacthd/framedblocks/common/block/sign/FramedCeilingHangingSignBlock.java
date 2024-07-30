@@ -1,7 +1,5 @@
 package xfacthd.framedblocks.common.block.sign;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
@@ -20,7 +18,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.api.block.*;
-import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.blockentity.special.FramedSignBlockEntity;
@@ -184,29 +181,5 @@ public class FramedCeilingHangingSignBlock extends AbstractFramedHangingSignBloc
     public BlockItem createBlockItem()
     {
         return new FramedHangingSignItem();
-    }
-
-
-
-    public static ShapeProvider generateShapes(ImmutableList<BlockState> states)
-    {
-        ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
-
-        VoxelShape shapeZeroEight = box(1, 0, 7, 15, 10, 9);
-        VoxelShape shapeFourTwelve = box(7, 0, 1, 9, 10, 15);
-        VoxelShape fallbackShape = box(3, 0, 3, 13, 16, 13);
-
-        for (BlockState state : states)
-        {
-            int rot = state.getValue(BlockStateProperties.ROTATION_16);
-            builder.put(state, switch (rot)
-            {
-                case 0, 8 -> shapeZeroEight;
-                case 4, 12 -> shapeFourTwelve;
-                default -> fallbackShape;
-            });
-        }
-
-        return ShapeProvider.of(builder.build());
     }
 }

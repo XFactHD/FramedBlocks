@@ -1,7 +1,5 @@
 package xfacthd.framedblocks.common.block.slab;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundSource;
@@ -16,10 +14,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.PlacementStateBuilder;
-import xfacthd.framedblocks.api.shapes.*;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.FramedBlock;
@@ -88,20 +84,5 @@ public class FramedPanelBlock extends FramedBlock
     public BlockState mirror(BlockState state, Mirror mirror)
     {
         return Utils.mirrorFaceBlock(state, mirror);
-    }
-
-
-
-    public static ShapeProvider generateShapes(ImmutableList<BlockState> states)
-    {
-        ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
-
-        for (BlockState state : states)
-        {
-            Direction dir = state.getValue(FramedProperties.FACING_HOR);
-            builder.put(state, CommonShapes.PANEL.get(dir));
-        }
-
-        return ShapeProvider.of(builder.build());
     }
 }

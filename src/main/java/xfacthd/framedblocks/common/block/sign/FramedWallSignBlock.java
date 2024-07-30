@@ -1,7 +1,5 @@
 package xfacthd.framedblocks.common.block.sign;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -12,9 +10,7 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.api.block.*;
-import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.common.data.BlockType;
 
 @SuppressWarnings("deprecation")
@@ -117,25 +113,5 @@ public class FramedWallSignBlock extends AbstractFramedSignBlock
     public Vec3 getSignHitboxCenterPosition(BlockState state)
     {
         return HITBOX_CENTERS[state.getValue(FramedProperties.FACING_HOR).get2DDataValue()];
-    }
-
-
-
-    public static ShapeProvider generateShapes(ImmutableList<BlockState> states)
-    {
-        ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
-
-        for (BlockState state : states)
-        {
-            switch (state.getValue(FramedProperties.FACING_HOR))
-            {
-                case NORTH -> builder.put(state, box(0.0D, 4.5D, 14.0D, 16.0D, 12.5D, 16.0D));
-                case EAST -> builder.put(state, box(0.0D, 4.5D, 0.0D, 2.0D, 12.5D, 16.0D));
-                case SOUTH -> builder.put(state, box(0.0D, 4.5D, 0.0D, 16.0D, 12.5D, 2.0D));
-                case WEST -> builder.put(state, box(14.0D, 4.5D, 0.0D, 16.0D, 12.5D, 16.0D));
-            }
-        }
-
-        return ShapeProvider.of(builder.build());
     }
 }

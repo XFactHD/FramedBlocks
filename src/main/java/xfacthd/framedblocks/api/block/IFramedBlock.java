@@ -41,6 +41,7 @@ import xfacthd.framedblocks.api.block.update.CullingUpdateTracker;
 import xfacthd.framedblocks.api.camo.CamoContainer;
 import xfacthd.framedblocks.api.internal.InternalAPI;
 import xfacthd.framedblocks.api.predicate.cull.SideSkipPredicate;
+import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.*;
 
@@ -434,11 +435,31 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock
         return Utils.tryGetValue(state, FramedProperties.SOLID, false) && !state.getValue(FramedProperties.GLOWING);
     }
 
+    /**
+     * @deprecated Use overload with {@link ShapeProvider} param instead
+     */
+    @Deprecated(forRemoval = true)
     default VoxelShape getCamoOcclusionShape(BlockState state, BlockGetter level, BlockPos pos)
+    {
+        return getCamoOcclusionShape(state, level, pos, null);
+    }
+
+    /**
+     * {@return the shape to use for occlusion checks}
+     * @param state This block's state
+     * @param level The level this block is in
+     * @param pos The position of this block in the level
+     * @param occlusionShapes The {@link ShapeProvider} to get the shape from if this block uses separate main and occlusion shapes
+     */
+    default VoxelShape getCamoOcclusionShape(BlockState state, BlockGetter level, BlockPos pos, @Nullable ShapeProvider occlusionShapes)
     {
         if (getBlockType().canOccludeWithSolidCamo() && !state.getValue(FramedProperties.SOLID))
         {
             return Shapes.empty();
+        }
+        if (occlusionShapes != null)
+        {
+            return occlusionShapes.get(state);
         }
         return state.getShape(level, pos);
     }

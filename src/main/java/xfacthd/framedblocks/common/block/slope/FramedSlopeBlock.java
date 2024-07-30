@@ -1,7 +1,5 @@
 package xfacthd.framedblocks.common.block.slope;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -16,9 +14,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.core.Direction;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.api.block.*;
-import xfacthd.framedblocks.api.shapes.*;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.block.*;
 import xfacthd.framedblocks.common.data.*;
@@ -143,62 +139,5 @@ public class FramedSlopeBlock extends FramedBlock implements ISlopeBlock
     public SlopeType getSlopeType(BlockState state)
     {
         return state.getValue(PropertyHolder.SLOPE_TYPE);
-    }
-
-
-
-    public static final ShapeCache<SlopeType> SHAPES = ShapeCache.createEnum(SlopeType.class, map ->
-    {
-        map.put(SlopeType.BOTTOM, ShapeUtils.orUnoptimized(
-                box(0,    0, 0, 16,   .5,   16),
-                box(0,   .5, 0, 16,    4, 15.5),
-                box(0,    4, 0, 16,    8,   12),
-                box(0,    8, 0, 16,   12,    8),
-                box(0,   12, 0, 16, 15.5,    4),
-                box(0, 15.5, 0, 16,   16,   .5)
-        ));
-
-        map.put(SlopeType.TOP, ShapeUtils.orUnoptimized(
-                box(0,    0, 0, 16,   .5,   .5),
-                box(0,   .5, 0, 16,    4,    4),
-                box(0,    4, 0, 16,    8,    8),
-                box(0,    8, 0, 16,   12,   12),
-                box(0,   12, 0, 16, 15.5, 15.5),
-                box(0, 15.5, 0, 16,   16,   16)
-        ));
-
-        map.put(SlopeType.HORIZONTAL, ShapeUtils.orUnoptimized(
-                box(   0, 0, 0,   .5, 16,   16),
-                box(   0, 0, 0,    4, 16, 15.5),
-                box(   4, 0, 0,    8, 16,   12),
-                box(   8, 0, 0,   12, 16,    8),
-                box(  12, 0, 0, 15.5, 16,    4),
-                box(15.5, 0, 0,   16, 16,   .5)
-        ));
-    });
-
-    private record ShapeKey(Direction dir, SlopeType type) { }
-
-    private static final ShapeCache<ShapeKey> FINAL_SHAPES = ShapeCache.create(map ->
-    {
-        for (SlopeType type : SlopeType.values())
-        {
-            ShapeUtils.makeHorizontalRotations(SHAPES.get(type), Direction.NORTH, map, type, ShapeKey::new);
-        }
-    });
-
-    public static ShapeProvider generateShapes(ImmutableList<BlockState> states)
-    {
-        ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
-
-        for (BlockState state : states)
-        {
-            ISlopeBlock block = (ISlopeBlock) state.getBlock();
-            SlopeType type = block.getSlopeType(state);
-            Direction dir = block.getFacing(state);
-            builder.put(state, FINAL_SHAPES.get(new ShapeKey(dir, type)));
-        }
-
-        return ShapeProvider.of(builder.build());
     }
 }

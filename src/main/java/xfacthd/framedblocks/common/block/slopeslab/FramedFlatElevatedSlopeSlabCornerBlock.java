@@ -1,7 +1,5 @@
 package xfacthd.framedblocks.common.block.slopeslab;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.player.Player;
@@ -13,9 +11,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.phys.shapes.*;
 import xfacthd.framedblocks.api.block.*;
-import xfacthd.framedblocks.api.shapes.*;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
@@ -127,83 +123,5 @@ public class FramedFlatElevatedSlopeSlabCornerBlock extends FramedBlock
     public BlockState mirror(BlockState state, Mirror mirror)
     {
         return Utils.mirrorCornerBlock(state, mirror);
-    }
-
-
-
-    private record ShapeKey(Direction dir, boolean top) { }
-
-    private static final ShapeCache<ShapeKey> FINAL_SHAPES = ShapeCache.create(map ->
-    {
-        VoxelShape shapeSlopeBottom = FramedSlopeSlabBlock.SHAPES.get(SlopeSlabShape.BOTTOM_TOP_HALF);
-        VoxelShape shapeSlopeTop = FramedSlopeSlabBlock.SHAPES.get(SlopeSlabShape.TOP_BOTTOM_HALF);
-
-        VoxelShape shapeBottom = ShapeUtils.orUnoptimized(
-                ShapeUtils.andUnoptimized(
-                        shapeSlopeBottom,
-                        ShapeUtils.rotateShapeUnoptimized(Direction.NORTH, Direction.WEST, shapeSlopeBottom)
-                ),
-                box(0, 0, 0, 16, 8, 16)
-        );
-        VoxelShape shapeTop = ShapeUtils.orUnoptimized(
-                ShapeUtils.andUnoptimized(
-                        shapeSlopeTop,
-                        ShapeUtils.rotateShapeUnoptimized(Direction.NORTH, Direction.WEST, shapeSlopeTop)
-                ),
-                box(0, 8, 0, 16, 16, 16)
-        );
-
-        ShapeUtils.makeHorizontalRotationsWithFlag(shapeBottom, shapeTop, Direction.NORTH, map, ShapeKey::new);
-    });
-
-    public static ShapeProvider generateShapes(ImmutableList<BlockState> states)
-    {
-        ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
-
-        for (BlockState state : states)
-        {
-            Direction dir = state.getValue(FramedProperties.FACING_HOR);
-            boolean top = state.getValue(FramedProperties.TOP);
-            builder.put(state, FINAL_SHAPES.get(new ShapeKey(dir, top)));
-        }
-
-        return ShapeProvider.of(builder.build());
-    }
-
-    private static final ShapeCache<ShapeKey> FINAL_INNER_SHAPES = ShapeCache.create(map ->
-    {
-        VoxelShape shapeSlopeBottom = FramedSlopeSlabBlock.SHAPES.get(SlopeSlabShape.BOTTOM_TOP_HALF);
-        VoxelShape shapeSlopeTop = FramedSlopeSlabBlock.SHAPES.get(SlopeSlabShape.TOP_BOTTOM_HALF);
-
-        VoxelShape shapeBottom = ShapeUtils.orUnoptimized(
-                ShapeUtils.orUnoptimized(
-                        shapeSlopeBottom,
-                        ShapeUtils.rotateShapeUnoptimized(Direction.NORTH, Direction.WEST, shapeSlopeBottom)
-                ),
-                box(0, 0, 0, 16, 8, 16)
-        );
-        VoxelShape shapeTop = ShapeUtils.orUnoptimized(
-                ShapeUtils.orUnoptimized(
-                        shapeSlopeTop,
-                        ShapeUtils.rotateShapeUnoptimized(Direction.NORTH, Direction.WEST, shapeSlopeTop)
-                ),
-                box(0, 8, 0, 16, 16, 16)
-        );
-
-        ShapeUtils.makeHorizontalRotationsWithFlag(shapeBottom, shapeTop, Direction.NORTH, map, ShapeKey::new);
-    });
-
-    public static ShapeProvider generateInnerShapes(ImmutableList<BlockState> states)
-    {
-        ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
-
-        for (BlockState state : states)
-        {
-            Direction dir = state.getValue(FramedProperties.FACING_HOR);
-            boolean top = state.getValue(FramedProperties.TOP);
-            builder.put(state, FINAL_INNER_SHAPES.get(new ShapeKey(dir, top)));
-        }
-
-        return ShapeProvider.of(builder.build());
     }
 }

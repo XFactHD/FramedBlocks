@@ -90,7 +90,7 @@ public class FramedRedstoneBlock extends PoweredBlock implements IFramedBlock
     @Override
     public VoxelShape getOcclusionShape(BlockState state, BlockGetter level, BlockPos pos)
     {
-        return getCamoOcclusionShape(state, level, pos);
+        return getCamoOcclusionShape(state, level, pos, null);
     }
 
     @Override

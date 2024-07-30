@@ -11,8 +11,7 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.phys.shapes.*;
 import xfacthd.framedblocks.api.block.*;
 import xfacthd.framedblocks.common.blockentity.special.FramedSignBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
@@ -86,6 +85,12 @@ public class FramedWallHangingSignBlock extends AbstractFramedHangingSignBlock
             case EAST, WEST -> WallHangingSignBlock.SHAPE_EASTWEST;
             default -> throw new IncompatibleClassChangeError();
         };
+    }
+
+    @Override
+    public VoxelShape getOcclusionShape(BlockState state, BlockGetter level, BlockPos pos)
+    {
+        return Shapes.empty();
     }
 
     @Override

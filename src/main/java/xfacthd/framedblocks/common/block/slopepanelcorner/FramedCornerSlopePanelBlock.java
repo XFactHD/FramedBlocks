@@ -1,7 +1,5 @@
 package xfacthd.framedblocks.common.block.slopepanelcorner;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.player.Player;
@@ -15,16 +13,11 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.api.block.*;
-import xfacthd.framedblocks.api.shapes.*;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.FramedBlock;
-import xfacthd.framedblocks.common.block.slopepanel.FramedSlopePanelBlock;
-import xfacthd.framedblocks.common.block.slopepanel.SlopePanelShape;
 import xfacthd.framedblocks.common.data.BlockType;
-import xfacthd.framedblocks.common.data.CornerSlopePanelShape;
 import xfacthd.framedblocks.common.item.VerticalAndWallBlockItem;
 
 @SuppressWarnings("deprecation")
@@ -163,168 +156,5 @@ public class FramedCornerSlopePanelBlock extends FramedBlock
             default -> throw new IllegalStateException("Unexpected type: " + getBlockType());
         };
         return new VerticalAndWallBlockItem(this, other, new Item.Properties());
-    }
-
-
-
-    public static final ShapeCache<CornerSlopePanelShape> SHAPES = ShapeCache.createEnum(CornerSlopePanelShape.class, map ->
-    {
-        {
-            VoxelShape panelShapeBottom = FramedSlopePanelBlock.SHAPES.get(SlopePanelShape.UP_BACK);
-            map.put(CornerSlopePanelShape.SMALL_BOTTOM, ShapeUtils.andUnoptimized(
-                    panelShapeBottom,
-                    ShapeUtils.rotateShapeUnoptimized(Direction.NORTH, Direction.WEST, panelShapeBottom)
-            ));
-        }
-
-        {
-            VoxelShape panelShapeTop = FramedSlopePanelBlock.SHAPES.get(SlopePanelShape.DOWN_BACK);
-            map.put(CornerSlopePanelShape.SMALL_TOP, ShapeUtils.andUnoptimized(
-                    panelShapeTop,
-                    ShapeUtils.rotateShapeUnoptimized(Direction.NORTH, Direction.WEST, panelShapeTop)
-            ));
-        }
-
-        {
-            VoxelShape panelShapeBot = FramedSlopePanelBlock.SHAPES.get(SlopePanelShape.UP_FRONT);
-            VoxelShape panelShapeBotRot = ShapeUtils.rotateShapeUnoptimized(Direction.NORTH, Direction.WEST, panelShapeBot);
-            map.put(CornerSlopePanelShape.LARGE_BOTTOM, ShapeUtils.orUnoptimized(
-                    ShapeUtils.andUnoptimized(panelShapeBot, panelShapeBotRot),
-                    ShapeUtils.orUnoptimized(
-                            ShapeUtils.andUnoptimized(panelShapeBot, box(0, 0, 8, 8, 16, 16)),
-                            ShapeUtils.andUnoptimized(panelShapeBotRot, box(8, 0, 0, 16, 16, 8))
-                    )
-            ));
-        }
-
-        {
-            VoxelShape panelShapeTop = FramedSlopePanelBlock.SHAPES.get(SlopePanelShape.DOWN_FRONT);
-            VoxelShape panelShapeTopRot = ShapeUtils.rotateShapeUnoptimized(Direction.NORTH, Direction.WEST, panelShapeTop);
-            map.put(CornerSlopePanelShape.LARGE_TOP, ShapeUtils.orUnoptimized(
-                    ShapeUtils.andUnoptimized(panelShapeTop, panelShapeTopRot),
-                    ShapeUtils.orUnoptimized(
-                            ShapeUtils.andUnoptimized(panelShapeTop, box(0, 0, 8, 8, 16, 16)),
-                            ShapeUtils.andUnoptimized(panelShapeTopRot, box(8, 0, 0, 16, 16, 8))
-                    )
-            ));
-        }
-
-        {
-            VoxelShape panelShapeBottom = FramedSlopePanelBlock.SHAPES.get(SlopePanelShape.UP_FRONT);
-            map.put(CornerSlopePanelShape.SMALL_INNER_BOTTOM, ShapeUtils.andUnoptimized(
-                    box(8, 0, 8, 16, 16, 16),
-                    ShapeUtils.orUnoptimized(
-                            panelShapeBottom,
-                            ShapeUtils.rotateShapeUnoptimized(Direction.NORTH, Direction.WEST, panelShapeBottom)
-                    )
-            ));
-        }
-
-        {
-            VoxelShape panelShapeTop = FramedSlopePanelBlock.SHAPES.get(SlopePanelShape.DOWN_FRONT);
-            map.put(CornerSlopePanelShape.SMALL_INNER_TOP, ShapeUtils.andUnoptimized(
-                    box(8, 0, 8, 16, 16, 16),
-                    ShapeUtils.orUnoptimized(
-                            panelShapeTop,
-                            ShapeUtils.rotateShapeUnoptimized(Direction.NORTH, Direction.WEST, panelShapeTop)
-                    )
-            ));
-        }
-
-        {
-            VoxelShape panelShapeBottom = FramedSlopePanelBlock.SHAPES.get(SlopePanelShape.UP_BACK);
-            map.put(CornerSlopePanelShape.LARGE_INNER_BOTTOM, ShapeUtils.orUnoptimized(
-                    panelShapeBottom,
-                    ShapeUtils.rotateShapeUnoptimized(Direction.NORTH, Direction.WEST, panelShapeBottom)
-            ));
-        }
-
-        {
-            VoxelShape panelShapeTop = FramedSlopePanelBlock.SHAPES.get(SlopePanelShape.DOWN_BACK);
-            map.put(CornerSlopePanelShape.LARGE_INNER_TOP, ShapeUtils.orUnoptimized(
-                    panelShapeTop,
-                    ShapeUtils.rotateShapeUnoptimized(Direction.NORTH, Direction.WEST, panelShapeTop)
-            ));
-        }
-    });
-
-    public static ShapeProvider generateSmallShapes(ImmutableList<BlockState> states)
-    {
-        ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
-
-        VoxelShape[] shapes = ShapeUtils.makeHorizontalRotationsWithFlag(
-                SHAPES.get(CornerSlopePanelShape.SMALL_BOTTOM),
-                SHAPES.get(CornerSlopePanelShape.SMALL_TOP),
-                Direction.NORTH
-        );
-
-        for (BlockState state : states)
-        {
-            Direction dir = state.getValue(FramedProperties.FACING_HOR);
-            boolean top = state.getValue(FramedProperties.TOP);
-            builder.put(state, shapes[dir.get2DDataValue() + (top ? 4 : 0)]);
-        }
-
-        return ShapeProvider.of(builder.build());
-    }
-
-    public static ShapeProvider generateLargeShapes(ImmutableList<BlockState> states)
-    {
-        ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
-
-        VoxelShape[] shapes = ShapeUtils.makeHorizontalRotationsWithFlag(
-                SHAPES.get(CornerSlopePanelShape.LARGE_BOTTOM),
-                SHAPES.get(CornerSlopePanelShape.LARGE_TOP),
-                Direction.NORTH
-        );
-
-        for (BlockState state : states)
-        {
-            Direction dir = state.getValue(FramedProperties.FACING_HOR);
-            boolean top = state.getValue(FramedProperties.TOP);
-            builder.put(state, shapes[dir.get2DDataValue() + (top ? 4 : 0)]);
-        }
-
-        return ShapeProvider.of(builder.build());
-    }
-
-    public static ShapeProvider generateSmallInnerShapes(ImmutableList<BlockState> states)
-    {
-        ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
-
-        VoxelShape[] shapes = ShapeUtils.makeHorizontalRotationsWithFlag(
-                SHAPES.get(CornerSlopePanelShape.SMALL_INNER_BOTTOM),
-                SHAPES.get(CornerSlopePanelShape.SMALL_INNER_TOP),
-                Direction.SOUTH
-        );
-
-        for (BlockState state : states)
-        {
-            Direction dir = state.getValue(FramedProperties.FACING_HOR);
-            boolean top = state.getValue(FramedProperties.TOP);
-            builder.put(state, shapes[dir.get2DDataValue() + (top ? 4 : 0)]);
-        }
-
-        return ShapeProvider.of(builder.build());
-    }
-
-    public static ShapeProvider generateLargeInnerShapes(ImmutableList<BlockState> states)
-    {
-        ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
-
-        VoxelShape[] shapes = ShapeUtils.makeHorizontalRotationsWithFlag(
-                SHAPES.get(CornerSlopePanelShape.LARGE_INNER_BOTTOM),
-                SHAPES.get(CornerSlopePanelShape.LARGE_INNER_TOP),
-                Direction.SOUTH
-        );
-
-        for (BlockState state : states)
-        {
-            Direction dir = state.getValue(FramedProperties.FACING_HOR);
-            boolean top = state.getValue(FramedProperties.TOP);
-            builder.put(state, shapes[dir.get2DDataValue() + (top ? 4 : 0)]);
-        }
-
-        return ShapeProvider.of(builder.build());
     }
 }

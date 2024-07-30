@@ -1,7 +1,5 @@
 package xfacthd.framedblocks.common.block.slopepanelcorner;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Tuple;
@@ -17,18 +15,14 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
-import xfacthd.framedblocks.api.shapes.ShapeProvider;
-import xfacthd.framedblocks.api.shapes.ShapeUtils;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
 import xfacthd.framedblocks.common.blockentity.doubled.FramedInverseDoubleCornerSlopePanelBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
-import xfacthd.framedblocks.common.data.CornerSlopePanelShape;
 import xfacthd.framedblocks.common.data.doubleblock.CamoGetter;
 import xfacthd.framedblocks.common.data.doubleblock.SolidityCheck;
 import xfacthd.framedblocks.common.item.VerticalAndWallBlockItem;
@@ -176,37 +170,6 @@ public class FramedInverseDoubleCornerSlopePanelBlock extends AbstractFramedDoub
     }
 
 
-
-    public static ShapeProvider generateShapes(ImmutableList<BlockState> states)
-    {
-        ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
-
-        VoxelShape shapeBottom = ShapeUtils.orUnoptimized(
-                FramedCornerSlopePanelBlock.SHAPES.get(CornerSlopePanelShape.LARGE_BOTTOM),
-                ShapeUtils.rotateShapeUnoptimized(
-                        Direction.NORTH,
-                        Direction.SOUTH,
-                        FramedCornerSlopePanelBlock.SHAPES.get(CornerSlopePanelShape.SMALL_INNER_TOP))
-        );
-        VoxelShape shapeTop = ShapeUtils.orUnoptimized(
-                FramedCornerSlopePanelBlock.SHAPES.get(CornerSlopePanelShape.LARGE_TOP),
-                ShapeUtils.rotateShapeUnoptimized(
-                        Direction.NORTH,
-                        Direction.SOUTH,
-                        FramedCornerSlopePanelBlock.SHAPES.get(CornerSlopePanelShape.SMALL_INNER_BOTTOM)
-                )
-        );
-        VoxelShape[] shapes = ShapeUtils.makeHorizontalRotationsWithFlag(shapeBottom, shapeTop, Direction.NORTH);
-
-        for (BlockState state : states)
-        {
-            Direction dir = state.getValue(FramedProperties.FACING_HOR);
-            boolean top = state.getValue(FramedProperties.TOP);
-            builder.put(state, shapes[dir.get2DDataValue() + (top ? 4 : 0)]);
-        }
-
-        return ShapeProvider.of(builder.build());
-    }
 
     public static BlockState itemModelSource()
     {

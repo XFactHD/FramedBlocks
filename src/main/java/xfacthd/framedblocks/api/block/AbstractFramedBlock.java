@@ -40,6 +40,7 @@ public abstract class AbstractFramedBlock extends Block implements IFramedBlock,
     private static final VoxelShape BEACON_BEAM_SHAPE = box(5, 0, 5, 11, 16, 11);
     private final IBlockType blockType;
     private final ShapeProvider shapes;
+    private final ShapeProvider occlusionShapes;
     private final Object2BooleanMap<BlockState> beaconBeamOcclusion;
 
     public AbstractFramedBlock(IBlockType blockType, Properties props)
@@ -47,6 +48,7 @@ public abstract class AbstractFramedBlock extends Block implements IFramedBlock,
         super(props);
         this.blockType = blockType;
         this.shapes = blockType.generateShapes(getStateDefinition().getPossibleStates());
+        this.occlusionShapes = blockType.generateOcclusionShapes(getStateDefinition().getPossibleStates(), shapes);
         this.beaconBeamOcclusion = computeBeaconBeamOcclusion(shapes);
 
         registerDefaultState(defaultBlockState()
@@ -132,7 +134,7 @@ public abstract class AbstractFramedBlock extends Block implements IFramedBlock,
     @Override
     public VoxelShape getOcclusionShape(BlockState state, BlockGetter level, BlockPos pos)
     {
-        return getCamoOcclusionShape(state, level, pos);
+        return getCamoOcclusionShape(state, level, pos, occlusionShapes);
     }
 
     @Override

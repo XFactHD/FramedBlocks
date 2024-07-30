@@ -1,7 +1,5 @@
 package xfacthd.framedblocks.common.block.cube;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.LivingEntity;
@@ -11,11 +9,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.PlacementStateBuilder;
-import xfacthd.framedblocks.api.shapes.ShapeProvider;
-import xfacthd.framedblocks.api.shapes.ShapeUtils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
@@ -56,32 +51,5 @@ public class FramedTubeBlock extends FramedBlock
         return FBContent.BLOCK_FRAMED_TUBE.get()
                 .defaultBlockState()
                 .setValue(BlockStateProperties.AXIS, Direction.Axis.Y);
-    }
-
-    public static ShapeProvider generateShapes(ImmutableList<BlockState> states)
-    {
-        VoxelShape shapeY = ShapeUtils.or(
-                box( 0, 0,  0, 16, 16,  2),
-                box( 0, 0, 14, 16, 16, 16),
-                box( 0, 0,  0,  2, 16, 16),
-                box(14, 0,  0, 16, 16, 16)
-        );
-        VoxelShape shapeZ = ShapeUtils.rotateShapeAroundX(Direction.UP, Direction.SOUTH, shapeY);
-        VoxelShape shapeX = ShapeUtils.rotateShapeAroundZ(Direction.UP, Direction.EAST, shapeY);
-
-        ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
-
-        for (BlockState state : states)
-        {
-            VoxelShape shape = switch (state.getValue(BlockStateProperties.AXIS))
-            {
-                case X -> shapeX;
-                case Y -> shapeY;
-                case Z -> shapeZ;
-            };
-            builder.put(state, shape);
-        }
-
-        return ShapeProvider.of(builder.build());
     }
 }

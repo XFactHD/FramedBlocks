@@ -67,6 +67,12 @@ public class FramedLadderBlock extends FramedBlock
     }
 
     @Override
+    public VoxelShape getOcclusionShape(BlockState state, BlockGetter level, BlockPos pos)
+    {
+        return getCamoOcclusionShape(state, level, pos, null);
+    }
+
+    @Override
     public boolean doesBlockOccludeBeaconBeam(BlockState state, LevelReader level, BlockPos pos)
     {
         return false;

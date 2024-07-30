@@ -1,7 +1,5 @@
 package xfacthd.framedblocks.common.block.stairs;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.player.Player;
@@ -12,12 +10,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.api.block.*;
-import xfacthd.framedblocks.api.shapes.*;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.block.FramedBlock;
-import xfacthd.framedblocks.common.block.slope.FramedHalfSlopeBlock;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.property.HorizontalRotation;
@@ -132,66 +127,5 @@ public class FramedVerticalSlopedStairsBlock extends FramedBlock
         state = state.setValue(PropertyHolder.ROTATION, horRot);
 
         return state;
-    }
-
-
-
-    public static ShapeProvider generateShapes(ImmutableList<BlockState> states)
-    {
-        ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
-
-        VoxelShape panelShape = CommonShapes.PANEL.get(Direction.NORTH);
-
-        VoxelShape shapeUp = ShapeUtils.orUnoptimized(
-                panelShape,
-                ShapeUtils.rotateShapeUnoptimized(
-                        Direction.NORTH,
-                        Direction.EAST,
-                        FramedHalfSlopeBlock.SHAPES.get(new FramedHalfSlopeBlock.ShapeKey(false, true))
-                )
-        );
-
-        VoxelShape shapeDown = ShapeUtils.orUnoptimized(
-                panelShape,
-                ShapeUtils.rotateShapeUnoptimized(
-                        Direction.NORTH,
-                        Direction.WEST,
-                        FramedHalfSlopeBlock.SHAPES.get(new FramedHalfSlopeBlock.ShapeKey(true, false))
-                )
-        );
-
-        VoxelShape shapeRight =  ShapeUtils.orUnoptimized(
-                panelShape,
-                ShapeUtils.rotateShapeUnoptimized(
-                        Direction.NORTH,
-                        Direction.WEST,
-                        FramedHalfSlopeBlock.SHAPES.get(new FramedHalfSlopeBlock.ShapeKey(false, false))
-                )
-        );
-
-        VoxelShape shapeLeft =  ShapeUtils.orUnoptimized(
-                panelShape,
-                ShapeUtils.rotateShapeUnoptimized(
-                        Direction.NORTH,
-                        Direction.EAST,
-                        FramedHalfSlopeBlock.SHAPES.get(new FramedHalfSlopeBlock.ShapeKey(true, true))
-                )
-        );
-
-        VoxelShape[] shapes = new VoxelShape[4 * 4];
-        ShapeUtils.makeHorizontalRotations(shapeUp, Direction.NORTH, shapes, 0);
-        ShapeUtils.makeHorizontalRotations(shapeDown, Direction.NORTH, shapes, HorizontalRotation.DOWN.ordinal() << 2);
-        ShapeUtils.makeHorizontalRotations(shapeRight, Direction.NORTH, shapes, HorizontalRotation.RIGHT.ordinal() << 2);
-        ShapeUtils.makeHorizontalRotations(shapeLeft, Direction.NORTH, shapes, HorizontalRotation.LEFT.ordinal() << 2);
-
-        for (BlockState state : states)
-        {
-            Direction dir = state.getValue(FramedProperties.FACING_HOR);
-            HorizontalRotation rot = state.getValue(PropertyHolder.ROTATION);
-            int idx = dir.get2DDataValue() | (rot.ordinal() << 2);
-            builder.put(state, shapes[idx]);
-        }
-
-        return ShapeProvider.of(builder.build());
     }
 }

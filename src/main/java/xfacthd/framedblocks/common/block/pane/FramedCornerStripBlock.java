@@ -1,17 +1,12 @@
 package xfacthd.framedblocks.common.block.pane;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.api.block.FramedProperties;
-import xfacthd.framedblocks.api.shapes.ShapeProvider;
-import xfacthd.framedblocks.api.shapes.ShapeUtils;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.ExtPlacementStateBuilder;
@@ -70,37 +65,5 @@ public class FramedCornerStripBlock extends FramedBlock
         return FBContent.BLOCK_FRAMED_CORNER_STRIP.get()
                 .defaultBlockState()
                 .setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
-    }
-
-
-
-    public static ShapeProvider generateShapes(ImmutableList<BlockState> states)
-    {
-        VoxelShape[] shapes = ShapeUtils.makeHorizontalRotationsWithFlag(
-                box(0,  0, 0, 16,  1, 1),
-                box(0, 15, 0, 16, 16, 1),
-                Direction.NORTH
-        );
-        VoxelShape[] vertShapes = ShapeUtils.makeHorizontalRotations(
-                box(0, 0, 0, 1, 16, 1),
-                Direction.NORTH
-        );
-
-        ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
-        for (BlockState state : states)
-        {
-            Direction dir = state.getValue(FramedProperties.FACING_HOR);
-            SlopeType type = state.getValue(PropertyHolder.SLOPE_TYPE);
-            if (type == SlopeType.HORIZONTAL)
-            {
-                builder.put(state, vertShapes[dir.get2DDataValue()]);
-            }
-            else
-            {
-                int offset = type == SlopeType.TOP ? 4 : 0;
-                builder.put(state, shapes[dir.get2DDataValue() + offset]);
-            }
-        }
-        return ShapeProvider.of(builder.build());
     }
 }
