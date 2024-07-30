@@ -27,4 +27,8 @@ public final class WallBoardShapes
 
         return ShapeProvider.of(builder.build());
     }
+
+
+
+    private WallBoardShapes() { }
 }

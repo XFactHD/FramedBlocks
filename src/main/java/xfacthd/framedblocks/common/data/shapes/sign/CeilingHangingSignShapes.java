@@ -31,4 +31,8 @@ public final class CeilingHangingSignShapes
 
         return ShapeProvider.of(builder.build());
     }
+
+
+
+    private CeilingHangingSignShapes() { }
 }

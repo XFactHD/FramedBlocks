@@ -10,7 +10,7 @@ import xfacthd.framedblocks.api.shapes.*;
 import xfacthd.framedblocks.common.block.slopeslab.SlopeSlabShape;
 import xfacthd.framedblocks.common.data.shapes.SplitShapeGenerator;
 
-public final class FlatInverseDoubleSlopeSlabShapes implements SplitShapeGenerator
+public final class FlatInverseDoubleSlopeSlabCornerShapes implements SplitShapeGenerator
 {
     @Override
     public ShapeProvider generate(ImmutableList<BlockState> states)

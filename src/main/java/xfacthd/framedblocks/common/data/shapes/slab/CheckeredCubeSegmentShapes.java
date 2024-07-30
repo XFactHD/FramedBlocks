@@ -30,4 +30,8 @@ public final class CheckeredCubeSegmentShapes
         }
         return ShapeProvider.of(builder.build());
     }
+
+
+
+    private CheckeredCubeSegmentShapes() { }
 }

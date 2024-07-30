@@ -35,4 +35,8 @@ public final class GateShapes
 
         return ShapeProvider.of(builder.build());
     }
+
+
+
+    private GateShapes() { }
 }

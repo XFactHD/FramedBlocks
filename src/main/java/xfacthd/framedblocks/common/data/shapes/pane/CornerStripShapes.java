@@ -43,4 +43,8 @@ public final class CornerStripShapes
         }
         return ShapeProvider.of(builder.build());
     }
+
+
+
+    private CornerStripShapes() { }
 }

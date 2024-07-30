@@ -24,4 +24,8 @@ public final class SlabEdgeShapes
 
         return ShapeProvider.of(builder.build());
     }
+
+
+
+    private SlabEdgeShapes() { }
 }

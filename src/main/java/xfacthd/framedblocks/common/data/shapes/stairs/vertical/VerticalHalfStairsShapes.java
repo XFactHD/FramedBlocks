@@ -37,4 +37,8 @@ public final class VerticalHalfStairsShapes
 
         return ShapeProvider.of(builder.build());
     }
+
+
+
+    private VerticalHalfStairsShapes() { }
 }

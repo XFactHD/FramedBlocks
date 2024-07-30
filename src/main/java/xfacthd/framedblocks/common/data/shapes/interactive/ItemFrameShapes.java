@@ -41,4 +41,8 @@ public final class ItemFrameShapes
 
 
     private record ShapeKey(Direction dir, boolean map) { }
+
+
+
+    private ItemFrameShapes() { }
 }

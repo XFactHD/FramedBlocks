@@ -76,4 +76,8 @@ public final class VerticalStairsShapes
 
 
     public record ShapeKey(Direction dir, StairsType type) { }
+
+
+
+    private VerticalStairsShapes() { }
 }

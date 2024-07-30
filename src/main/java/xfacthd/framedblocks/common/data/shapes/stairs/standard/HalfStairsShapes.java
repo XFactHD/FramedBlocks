@@ -55,4 +55,8 @@ public final class HalfStairsShapes
 
         return ShapeProvider.of(builder.build());
     }
+
+
+
+    private HalfStairsShapes() { }
 }

@@ -29,4 +29,8 @@ public final class SlabCornerShapes
 
         return ShapeProvider.of(builder.build());
     }
+
+
+
+    private SlabCornerShapes() { }
 }

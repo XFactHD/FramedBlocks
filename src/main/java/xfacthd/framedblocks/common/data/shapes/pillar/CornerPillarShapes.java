@@ -23,4 +23,8 @@ public final class CornerPillarShapes
 
         return ShapeProvider.of(builder.build());
     }
+
+
+
+    private CornerPillarShapes() { }
 }

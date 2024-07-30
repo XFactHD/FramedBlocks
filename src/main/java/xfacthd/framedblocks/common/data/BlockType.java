@@ -173,7 +173,7 @@ public enum BlockType implements IBlockType
     FRAMED_FLAT_ELEV_SLOPE_SLAB_CORNER              ( true,  true, false,  true,  true,  true, false, false, ConTexMode.FULL_FACE, FlatElevatedSlopeSlabCornerShapes.OUTER),
     FRAMED_FLAT_ELEV_INNER_SLOPE_SLAB_CORNER        ( true,  true, false,  true,  true,  true, false, false, ConTexMode.FULL_FACE, FlatElevatedSlopeSlabCornerShapes.INNER),
     FRAMED_FLAT_DOUBLE_SLOPE_SLAB_CORNER            ( true, false,  true,  true,  true,  true,  true, false, ConTexMode.FULL_FACE, MoreCommonShapes.TOP_HALF_SLAB_GENERATOR),
-    FRAMED_FLAT_INV_DOUBLE_SLOPE_SLAB_CORNER        ( true,  true, false,  true,  true,  true,  true, false, ConTexMode.FULL_EDGE, new FlatInverseDoubleSlopeSlabShapes()),
+    FRAMED_FLAT_INV_DOUBLE_SLOPE_SLAB_CORNER        ( true,  true, false,  true,  true,  true,  true, false, ConTexMode.FULL_EDGE, new FlatInverseDoubleSlopeSlabCornerShapes()),
     FRAMED_FLAT_ELEV_DOUBLE_SLOPE_SLAB_CORNER       ( true, false,  true, false,  true,  true,  true, false, ConTexMode.FULL_FACE, Shapes.block()),
     FRAMED_FLAT_ELEV_INNER_DOUBLE_SLOPE_SLAB_CORNER ( true, false,  true, false,  true,  true,  true, false, ConTexMode.FULL_FACE, Shapes.block()),
     FRAMED_FLAT_STACKED_SLOPE_SLAB_CORNER           ( true,  true, false,  true,  true,  true,  true, false, ConTexMode.FULL_FACE, FlatElevatedSlopeSlabCornerShapes.OUTER),

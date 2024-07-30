@@ -25,4 +25,8 @@ public final class FloorBoardShapes
 
         return ShapeProvider.of(builder.build());
     }
+
+
+
+    private FloorBoardShapes() { }
 }

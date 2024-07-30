@@ -35,4 +35,8 @@ public final class CheckeredSlabSegmentShapes
         }
         return ShapeProvider.of(builder.build());
     }
+
+
+
+    private CheckeredSlabSegmentShapes() { }
 }

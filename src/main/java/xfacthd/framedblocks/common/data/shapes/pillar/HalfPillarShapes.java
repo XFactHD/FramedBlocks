@@ -36,4 +36,8 @@ public final class HalfPillarShapes
 
         return ShapeProvider.of(builder.build());
     }
+
+
+
+    private HalfPillarShapes() { }
 }

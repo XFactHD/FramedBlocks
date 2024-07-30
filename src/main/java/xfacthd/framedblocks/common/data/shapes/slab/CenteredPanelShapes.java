@@ -24,4 +24,8 @@ public final class CenteredPanelShapes
         }
         return ShapeProvider.of(shapes.build());
     }
+
+
+
+    private CenteredPanelShapes() { }
 }

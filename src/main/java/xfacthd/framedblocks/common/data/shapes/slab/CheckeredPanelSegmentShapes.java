@@ -44,4 +44,8 @@ public final class CheckeredPanelSegmentShapes
         }
         return ShapeProvider.of(builder.build());
     }
+
+
+
+    private CheckeredPanelSegmentShapes() { }
 }

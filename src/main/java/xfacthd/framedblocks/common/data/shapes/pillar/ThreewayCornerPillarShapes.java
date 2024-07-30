@@ -32,4 +32,8 @@ public final class ThreewayCornerPillarShapes
 
         return ShapeProvider.of(builder.build());
     }
+
+
+
+    private ThreewayCornerPillarShapes() { }
 }

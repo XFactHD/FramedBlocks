@@ -27,4 +27,8 @@ public final class WallSignShapes
 
         return ShapeProvider.of(builder.build());
     }
+
+
+
+    private WallSignShapes() { }
 }

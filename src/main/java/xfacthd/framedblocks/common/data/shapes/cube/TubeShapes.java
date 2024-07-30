@@ -38,4 +38,8 @@ public final class TubeShapes
 
         return ShapeProvider.of(builder.build());
     }
+
+
+
+    private TubeShapes() { }
 }

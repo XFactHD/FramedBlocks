@@ -26,4 +26,8 @@ public final class DoubleHalfStairsShapes
 
         return ShapeProvider.of(builder.build());
     }
+
+
+
+    private DoubleHalfStairsShapes() { }
 }
