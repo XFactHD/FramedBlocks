@@ -5,10 +5,8 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.particles.*;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.*;
-import net.minecraft.world.level.block.HalfTransparentBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
@@ -18,6 +16,7 @@ import net.neoforged.neoforge.common.util.TriState;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.camo.*;
 import xfacthd.framedblocks.api.util.ClientUtils;
+import xfacthd.framedblocks.api.util.Utils;
 
 public final class BlockCamoContent extends CamoContent<BlockCamoContent>
 {
@@ -166,7 +165,7 @@ public final class BlockCamoContent extends CamoContent<BlockCamoContent>
         {
             return true;
         }
-        return adjState.getBlock() == state.getBlock() && !adjState.is(BlockTags.LEAVES);
+        return adjState.getBlock() == state.getBlock() && !adjState.is(Utils.NON_OCCLUDEABLE);
     }
 
     @Override
@@ -182,11 +181,11 @@ public final class BlockCamoContent extends CamoContent<BlockCamoContent>
     @Override
     public boolean occludes(BlockState adjState, BlockGetter level, BlockPos pos, BlockPos adjPos)
     {
-        if (!(adjState.getBlock() instanceof HalfTransparentBlock))
+        if (state.isSolidRender(level, pos))
         {
-            return false;
+            return true;
         }
-        return state.isSolidRender(level, pos) || adjState.getBlock() == state.getBlock();
+        return adjState.getBlock() == state.getBlock() && !adjState.is(Utils.NON_OCCLUDEABLE);
     }
 
     @Override

@@ -108,7 +108,7 @@
       "required": false
     },
     {
-      "id": "#forge:hardened_glass",
+      "id": "#c:hardened_glass",
       "required": false
     }
   ]

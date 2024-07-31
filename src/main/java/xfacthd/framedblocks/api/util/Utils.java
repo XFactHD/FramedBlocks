@@ -54,6 +54,8 @@ public final class Utils
     public static final TagKey<Fluid> FLUID_BLACKLIST = TagKey.create(Registries.FLUID, rl("blacklisted"));
     /** Allow other mods to whitelist their BEs, circumventing the config setting */
     public static final TagKey<Block> BE_WHITELIST = blockTag("blockentity_whitelisted");
+    /** Blocks tagged with this will not be occluded by framed blocks using them as camo, both as camo and directly placed */
+    public static final TagKey<Block> NON_OCCLUDEABLE = blockTag("non_occludeable");
     public static final TagKey<Item> TOOL_WRENCH = itemTag("c", "tools/wrench");
     public static final ItemAbility ACTION_WRENCH = ItemAbility.get("wrench");
     /** Allow other mods to add items that temporarily disable intangibility to allow interaction with the targeted block */

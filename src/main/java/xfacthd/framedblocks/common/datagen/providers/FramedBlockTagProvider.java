@@ -94,7 +94,7 @@ public final class FramedBlockTagProvider extends BlockTagsProvider
                  .addOptionalTag(Utils.rl("chipped", "green_stained_glass"))
                  .addOptionalTag(Utils.rl("chipped", "red_stained_glass"))
                  .addOptionalTag(Utils.rl("chipped", "black_stained_glass"))
-                 .addOptionalTag(Utils.rl("forge", "hardened_glass"));
+                 .addOptionalTag(Utils.rl("c", "hardened_glass"));
 
         tag(Utils.BLOCK_BLACKLIST).add(
                 Blocks.PISTON,
@@ -103,6 +103,9 @@ public final class FramedBlockTagProvider extends BlockTagsProvider
         );
 
         tag(Utils.BE_WHITELIST);
+
+        tag(Utils.NON_OCCLUDEABLE)
+                .addTag(BlockTags.LEAVES);
 
         Set<Block> noToolBlocks = Set.of(
                 FBContent.BLOCK_FRAMED_ITEM_FRAME.value(),
