@@ -25,4 +25,6 @@ public interface InternalClientAPI
     BlockDebugRenderer<FramedBlockEntity> getConnectionDebugRenderer();
 
     BlockDebugRenderer<FramedBlockEntity> getQuadWindingDebugRenderer();
+
+    void enqueueClientTask(int delay, Runnable task);
 }

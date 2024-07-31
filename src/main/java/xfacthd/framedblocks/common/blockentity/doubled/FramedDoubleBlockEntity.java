@@ -420,16 +420,16 @@ public class FramedDoubleBlockEntity extends FramedBlockEntity implements IFrame
     }
 
     @Override
-    public void handleUpdateTag(CompoundTag nbt, HolderLookup.Provider provider)
+    protected boolean readCamoFromUpdateTag(CompoundTag nbt, HolderLookup.Provider provider)
     {
-        super.handleUpdateTag(nbt, provider);
-
+        boolean changed = super.readCamoFromUpdateTag(nbt, provider);
         CamoContainer<?, ?> newCamo = CamoContainerHelper.readFromNetwork(nbt.getCompound("camo_two"));
         if (!newCamo.equals(camoContainer))
         {
             camoContainer = newCamo;
-            ClientUtils.enqueueClientTask(() -> updateCulling(true, true));
+            changed = true;
         }
+        return changed;
     }
 
     /*

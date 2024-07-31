@@ -25,7 +25,7 @@ public final class ClientTaskQueue
         tasks.add(new ClientTask(time, task));
     }
 
-    public static void onClientTick(ClientTickEvent.Post event)
+    public static void onClientTick(@SuppressWarnings("unused") ClientTickEvent.Post event)
     {
         if (tasks.isEmpty()) { return; }
 

@@ -822,11 +822,9 @@ public class FramedBlockEntity extends BlockEntity
     @Override
     public void handleUpdateTag(CompoundTag nbt, HolderLookup.Provider provider)
     {
-        CamoContainer<?, ?> newCamo = CamoContainerHelper.readFromNetwork(nbt.getCompound("camo"));
-        if (!newCamo.equals(camoContainer))
+        if (readCamoFromUpdateTag(nbt, provider))
         {
-            camoContainer = newCamo;
-            ClientUtils.enqueueClientTask(() -> updateCulling(true, true));
+            ClientUtils.enqueueClientTask(2, () -> updateCulling(true, true));
         }
 
         byte flags = nbt.getByte("flags");
@@ -840,6 +838,17 @@ public class FramedBlockEntity extends BlockEntity
         }
 
         requestModelDataUpdate();
+    }
+
+    protected boolean readCamoFromUpdateTag(CompoundTag nbt, HolderLookup.Provider provider)
+    {
+        CamoContainer<?, ?> newCamo = CamoContainerHelper.readFromNetwork(nbt.getCompound("camo"));
+        if (!newCamo.equals(camoContainer))
+        {
+            camoContainer = newCamo;
+            return true;
+        }
+        return false;
     }
 
     private byte writeFlags()

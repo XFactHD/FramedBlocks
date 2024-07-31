@@ -14,6 +14,7 @@ import xfacthd.framedblocks.client.model.FramedBlockModel;
 import xfacthd.framedblocks.client.modelwrapping.*;
 import xfacthd.framedblocks.client.render.block.debug.ConnectionPredicateDebugRenderer;
 import xfacthd.framedblocks.client.render.block.debug.QuadWindingDebugRenderer;
+import xfacthd.framedblocks.client.util.ClientTaskQueue;
 import xfacthd.framedblocks.common.config.DevToolsConfig;
 
 import java.util.*;
@@ -56,6 +57,12 @@ public final class InternalClientApiImpl implements InternalClientAPI
     public BlockDebugRenderer<FramedBlockEntity> getQuadWindingDebugRenderer()
     {
         return QuadWindingDebugRenderer.INSTANCE;
+    }
+
+    @Override
+    public void enqueueClientTask(int delay, Runnable task)
+    {
+        ClientTaskQueue.enqueueClientTask(delay, task);
     }
 
 
