@@ -93,7 +93,7 @@ public class FramedCollapsibleBlock extends FramedBlock
         {
             if (level.getBlockEntity(pos) instanceof FramedCollapsibleBlockEntity be)
             {
-                int offsets = be.getPackedOffsets();
+                int offsets = be.getPackedOffsets(state);
                 offsets |= (face.toDirection().get3DDataValue() << 20);
                 return SHAPE_CACHE.computeIfAbsent(offsets, FramedCollapsibleBlock::buildShape);
             }

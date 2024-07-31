@@ -22,7 +22,7 @@ import xfacthd.framedblocks.common.data.component.AdjustableDoubleBlockData;
 import java.util.Objects;
 import java.util.Optional;
 
-public class FramedAdjustableDoubleBlockEntity extends FramedDoubleBlockEntity implements ICollapsibleCopycatBlockEntity
+public class FramedAdjustableDoubleBlockEntity extends FramedDoubleBlockEntity implements ICollapsibleBlockEntity, ICollapsibleCopycatBlockEntity
 {
     private static final int MIN_PART_HEIGHT = 1;
     private static final int MAX_PART_HEIGHT = 15;
@@ -93,6 +93,21 @@ public class FramedAdjustableDoubleBlockEntity extends FramedDoubleBlockEntity i
             }
         }
         return true;
+    }
+
+    @Override
+    public int getVertexOffset(BlockState state, int vertex)
+    {
+        Tuple<BlockState, BlockState> blockPair = getBlockPair();
+        if (state == blockPair.getA())
+        {
+            return 16 - firstHeight;
+        }
+        if (state == blockPair.getB())
+        {
+            return firstHeight;
+        }
+        return 0;
     }
 
     @Override

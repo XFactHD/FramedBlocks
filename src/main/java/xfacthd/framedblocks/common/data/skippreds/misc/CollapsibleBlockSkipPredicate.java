@@ -6,7 +6,7 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import xfacthd.framedblocks.api.predicate.cull.SideSkipPredicate;
-import xfacthd.framedblocks.common.blockentity.special.FramedCollapsibleBlockEntity;
+import xfacthd.framedblocks.common.blockentity.special.ICollapsibleBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.property.NullableDirection;
 import xfacthd.framedblocks.common.data.PropertyHolder;
@@ -32,16 +32,18 @@ public final class CollapsibleBlockSkipPredicate implements SideSkipPredicate
             BlockEntity be = level.getBlockEntity(pos);
             BlockEntity adjBe = level.getBlockEntity(pos.relative(side));
 
-            if (be instanceof FramedCollapsibleBlockEntity cbe && adjBe instanceof FramedCollapsibleBlockEntity adjCbe)
+            if (be instanceof ICollapsibleBlockEntity cbe && adjBe instanceof ICollapsibleBlockEntity adjCbe)
             {
                 Direction faceDir = face.toDirection();
                 VertexPair verts = EDGE_MAPPING[faceDir.ordinal()][side.ordinal()];
                 VertexPair adjVerts = EDGE_MAPPING[faceDir.ordinal()][side.getOpposite().ordinal()];
 
-                byte[] offsets = cbe.getVertexOffsets();
-                byte[] adjOffsets = adjCbe.getVertexOffsets();
+                int offV1 = cbe.getVertexOffset(state, verts.v1);
+                int offV2 = cbe.getVertexOffset(state, verts.v2);
+                int adjOffV1 = adjCbe.getVertexOffset(adjState, adjVerts.v1);
+                int adjOffV2 = adjCbe.getVertexOffset(adjState, adjVerts.v2);
 
-                return offsets[verts.v1] == adjOffsets[adjVerts.v2] && offsets[verts.v2] == adjOffsets[adjVerts.v1];
+                return offV1 == adjOffV2 && offV2 == adjOffV1;
             }
         }
         return false;

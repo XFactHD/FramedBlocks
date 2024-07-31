@@ -82,12 +82,11 @@ public final class CollapsibleBlockIndicatorRenderer
         {
             return VERTEX_NO_OFFSET;
         }
-        byte[] offsets = be.getVertexOffsets();
         return new float[] {
-                1F - (offsets[0] / 16F),
-                1F - (offsets[1] / 16F),
-                1F - (offsets[2] / 16F),
-                1F - (offsets[3] / 16F)
+                1F - (be.getVertexOffset(0) / 16F),
+                1F - (be.getVertexOffset(1) / 16F),
+                1F - (be.getVertexOffset(2) / 16F),
+                1F - (be.getVertexOffset(3) / 16F)
         };
     }
 
