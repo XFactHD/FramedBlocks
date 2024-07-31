@@ -7,7 +7,6 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.client.model.data.ModelData;
-import net.neoforged.neoforge.client.model.data.ModelDataManager;
 import net.neoforged.fml.loading.FMLEnvironment;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -18,8 +17,6 @@ import xfacthd.framedblocks.api.predicate.contex.ConTexMode;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.config.ClientConfig;
-
-import java.util.function.Predicate;
 
 public final class AppearanceHelper
 {
@@ -70,8 +67,8 @@ public final class AppearanceHelper
             return AIR;
         }
 
-        Direction edge = findFirstSuitableDirectionFromOffset(pos, queryPos, side, $ -> true);
         StateCache stateCache = framedBlock.getCache(state);
+        Direction edge = findPreferredEdge(pos, queryPos, side, type, stateCache);
         if (type.isDoubleBlock())
         {
             if (recursive)
@@ -144,9 +141,7 @@ public final class AppearanceHelper
 
         if (canUseMode(cfgMode, typeMode, ConTexMode.FULL_EDGE))
         {
-            Direction conEdge = findFirstSuitableDirectionFromOffset(pos, queryPos, side, testEdge ->
-                    stateCache.canConnectFullEdge(side, testEdge)
-            );
+            Direction conEdge = findFirstSuitableDirectionFromOffset(pos, queryPos, side, stateCache, StateCache::canConnectFullEdge);
             if (conEdge != null)
             {
                 return modelData.getCamoContent().getAppearanceState();
@@ -155,7 +150,9 @@ public final class AppearanceHelper
 
         if (cfgMode == ConTexMode.DETAILED && !queryPos.equals(pos))
         {
-            Direction detEdge = findFirstSuitableDirectionFromOffset(pos, queryPos, side, modelData::isSideHidden);
+            Direction detEdge = findFirstSuitableDirectionFromOffset(pos, queryPos, side, modelData, (ctx, testSide, testEdge) ->
+                    ctx.isSideHidden(testEdge)
+            );
             if (detEdge != null && stateCache.canConnectDetailed(side, detEdge))
             {
                 return modelData.getCamoContent().getAppearanceState();
@@ -170,11 +167,26 @@ public final class AppearanceHelper
     }
 
     /**
+     * Determine the preferred edge from the difference between the two given positions. Fixes the edge case of diagonal
+     * checks failing on double blocks due to an edge covering both parts being selected
+     */
+    private static Direction findPreferredEdge(BlockPos pos, BlockPos queryPos, Direction side, IBlockType type, StateCache stateCache)
+    {
+        if (type.isDoubleBlock())
+        {
+            Direction edge = findFirstSuitableDirectionFromOffset(pos, queryPos, side, stateCache, StateCache::canConnectFullEdge);
+            if (edge != null)
+            {
+                return edge;
+            }
+        }
+        return findFirstSuitableDirectionFromOffset(pos, queryPos, side, null, ($1, $2, $3) -> true);
+    }
+
+    /**
      * Determine the first direction from the difference between the two given positions which matches the given predicate
      */
-    private static Direction findFirstSuitableDirectionFromOffset(
-            BlockPos pos, BlockPos queryPos, Direction side, Predicate<Direction> pred
-    )
+    private static <T> Direction findFirstSuitableDirectionFromOffset(BlockPos pos, BlockPos queryPos, Direction side, T context, EdgePredicate<T> pred)
     {
         if (pos.equals(queryPos))
         {
@@ -187,12 +199,12 @@ public final class AppearanceHelper
         Direction conFace = Utils.dirByNormal(nx, ny, nz);
         if (conFace != null)
         {
-            return pred.test(conFace) ? conFace : null;
+            return pred.test(context, side, conFace) ? conFace : null;
         }
         if (!Utils.isX(side))
         {
             conFace = Utils.dirByNormal(nx, 0, 0);
-            if (conFace != null && pred.test(conFace))
+            if (conFace != null && pred.test(context, side, conFace))
             {
                 return conFace;
             }
@@ -200,7 +212,7 @@ public final class AppearanceHelper
         if (!Utils.isY(side))
         {
             conFace = Utils.dirByNormal(0, ny, 0);
-            if (conFace != null && pred.test(conFace))
+            if (conFace != null && pred.test(context, side, conFace))
             {
                 return conFace;
             }
@@ -208,7 +220,7 @@ public final class AppearanceHelper
         if (!Utils.isZ(side))
         {
             conFace = Utils.dirByNormal(0, 0, nz);
-            if (conFace != null && pred.test(conFace))
+            if (conFace != null && pred.test(context, side, conFace))
             {
                 return conFace;
             }
@@ -271,9 +283,7 @@ public final class AppearanceHelper
         return true;
     }
 
-    private static FramedBlockData getModelData(
-            BlockGetter level, BlockPos pos, BlockState componentState, boolean mayBeSingle
-    )
+    private static FramedBlockData getModelData(BlockGetter level, BlockPos pos, BlockState componentState, boolean mayBeSingle)
     {
         ModelData data = level.getModelData(pos);
         if (data == ModelData.EMPTY)
@@ -296,6 +306,14 @@ public final class AppearanceHelper
             return block.unpackNestedModelData(data, state, componentState).get(FramedBlockData.PROPERTY);
         }
         return null;
+    }
+
+
+
+    @FunctionalInterface
+    private interface EdgePredicate<T>
+    {
+        boolean test(T context, Direction side, Direction edge);
     }
 
 
