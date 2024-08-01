@@ -70,6 +70,7 @@ public class FramedBlockEntity extends BlockEntity
     private boolean intangible = false;
     private boolean reinforced = false;
     private boolean recheckStates = false;
+    private boolean cullStateDirty = false;
 
     /**
      * @apiNote internal, addons must use their own {@link BlockEntityType} with the three-arg constructor
@@ -824,7 +825,7 @@ public class FramedBlockEntity extends BlockEntity
     {
         if (readCamoFromUpdateTag(nbt, provider))
         {
-            ClientUtils.enqueueClientTask(2, () -> updateCulling(true, true));
+            cullStateDirty = true;
         }
 
         byte flags = nbt.getByte("flags");
@@ -872,6 +873,11 @@ public class FramedBlockEntity extends BlockEntity
     @Override
     public final ModelData getModelData()
     {
+        if (cullStateDirty)
+        {
+            updateCulling(false, false);
+            cullStateDirty = false;
+        }
         return getModelData(true);
     }
 
