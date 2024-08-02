@@ -17,19 +17,16 @@ public abstract class AbstractBlockCamoContainerFactory<T extends AbstractBlockC
     @Override
     public final T applyCamo(Level level, BlockPos pos, Player player, ItemStack stack)
     {
-        if (stack.getItem() instanceof BlockItem item)
+        BlockState state = getStateFromItemStack(level, pos, player, stack);
+        if (state != null && !(state.getBlock() instanceof IFramedBlock) && isValidBlock(state, level, pos, player))
         {
-            BlockState state = item.getBlock().defaultBlockState();
-            if (!(state.getBlock() instanceof IFramedBlock) && isValidBlock(state, level, pos, player))
+            T container = createContainer(state, level, pos, player, stack);
+            if (!level.isClientSide() && !player.isCreative() && ConfigView.Server.INSTANCE.shouldConsumeCamoItem())
             {
-                T container = createContainer(state, level, pos, player, stack);
-                if (!level.isClientSide() && !player.isCreative() && ConfigView.Server.INSTANCE.shouldConsumeCamoItem())
-                {
-                    stack.shrink(1);
-                    player.getInventory().setChanged();
-                }
-                return container;
+                stack.shrink(1);
+                player.getInventory().setChanged();
             }
+            return container;
         }
         return null;
     }
@@ -50,6 +47,19 @@ public abstract class AbstractBlockCamoContainerFactory<T extends AbstractBlockC
     {
         if (container.getState().getBlock() instanceof IFramedBlock) return false;
         return isValidBlock(container.getState(), EmptyBlockGetter.INSTANCE, BlockPos.ZERO, null);
+    }
+
+    /**
+     * {@return the {@linkplain BlockState camo state} resulting from the given {@link ItemStack} and context}
+     */
+    @Nullable
+    protected BlockState getStateFromItemStack(Level level, BlockPos pos, Player player, ItemStack stack)
+    {
+        if (stack.getItem() instanceof BlockItem item)
+        {
+            return item.getBlock().defaultBlockState();
+        }
+        return null;
     }
 
     /**

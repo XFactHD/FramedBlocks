@@ -23,7 +23,6 @@ public final class BlockCamoContainerFactory extends AbstractBlockCamoContainerF
 {
     private static final MapCodec<BlockCamoContainer> CODEC = BlockState.CODEC
             .xmap(BlockCamoContainer::new, BlockCamoContainer::getState).fieldOf("state");
-    @SuppressWarnings("deprecation")
     private static final StreamCodec<ByteBuf, BlockCamoContainer> STREAM_CODEC = ByteBufCodecs.idMapper(Block.BLOCK_STATE_REGISTRY)
             .map(BlockCamoContainer::new, BlockCamoContainer::getState);
     public static final Component MSG_BLOCK_ENTITY = Utils.translate("msg", "camo.block_entity");
