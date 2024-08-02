@@ -26,16 +26,26 @@ public abstract class AbstractBlockCamoContainer<T extends AbstractBlockCamoCont
 
     @Override
     @Nullable
-    @SuppressWarnings("unchecked")
     public T rotateCamo()
     {
         BlockState state = content.getState();
         Property<?> prop = Utils.getRotatableProperty(state);
         if (prop != null)
         {
-            return getFactory().copyContainerWithState((T) this, state.cycle(prop));
+            return copyWithState(state.cycle(prop));
         }
         return null;
+    }
+
+    /**
+     * {@return a copy of this camo container with the camo state replaced by the given state}
+     * To be used when a mod does a similar action to {@link #rotateCamo()} through external means
+     * such as custom item interactions.
+     */
+    @SuppressWarnings("unchecked")
+    public final T copyWithState(BlockState state)
+    {
+        return getFactory().copyContainerWithState((T) this, state);
     }
 
     @Override
