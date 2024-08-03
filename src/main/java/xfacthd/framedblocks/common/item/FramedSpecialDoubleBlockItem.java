@@ -10,8 +10,12 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
+import xfacthd.framedblocks.api.camo.CamoContainer;
+import xfacthd.framedblocks.api.camo.empty.EmptyCamoContainer;
+import xfacthd.framedblocks.api.util.CamoList;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
+import xfacthd.framedblocks.common.blockentity.doubled.FramedDoubleBlockEntity;
 
 public abstract class FramedSpecialDoubleBlockItem extends BlockItem
 {
@@ -34,6 +38,7 @@ public abstract class FramedSpecialDoubleBlockItem extends BlockItem
                 if (!level.isClientSide())
                 {
                     boolean writeToCamoTwo = shouldWriteToCamoTwo(ctx, originalState);
+                    CamoList camos = ctx.getItemInHand().get(FBContent.DC_TYPE_CAMO_LIST);
                     Utils.wrapInStateCopy(
                             level,
                             pos,
@@ -44,8 +49,14 @@ public abstract class FramedSpecialDoubleBlockItem extends BlockItem
                             () -> level.setBlockAndUpdate(pos, newState)
                     );
 
-                    //noinspection deprecation
-                    SoundType sound = FBContent.BLOCK_FRAMED_CUBE.value().defaultBlockState().getSoundType();
+                    CamoContainer<?, ?> camo = EmptyCamoContainer.EMPTY;
+                    if (camos != null && !camos.isEmpty() && level.getBlockEntity(pos) instanceof FramedDoubleBlockEntity be)
+                    {
+                        camo = camos.getCamo(0);
+                        be.setCamo(camo, !writeToCamoTwo);
+                    }
+
+                    SoundType sound = camo.getContent().getSoundType();
                     level.playSound(null, pos, sound.getPlaceSound(), SoundSource.BLOCKS, (sound.getVolume() + 1.0F) / 2.0F, sound.getPitch() * 0.8F);
                 }
                 return InteractionResult.sidedSuccess(level.isClientSide());
