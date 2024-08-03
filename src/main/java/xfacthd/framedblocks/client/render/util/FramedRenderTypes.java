@@ -7,9 +7,9 @@ import net.minecraft.client.renderer.RenderType;
 
 import java.util.OptionalDouble;
 
-public final class FramedRenderTypes extends RenderType
+public final class FramedRenderTypes
 {
-    public static final RenderType LINES_NO_DEPTH = create(
+    public static final RenderType LINES_NO_DEPTH = RenderType.create(
             "lines",
             DefaultVertexFormat.POSITION_COLOR_NORMAL,
             VertexFormat.Mode.LINES,
@@ -17,23 +17,14 @@ public final class FramedRenderTypes extends RenderType
             false,
             false,
             RenderType.CompositeState.builder()
-                    .setShaderState(RENDERTYPE_LINES_SHADER)
+                    .setShaderState(RenderType.RENDERTYPE_LINES_SHADER)
                     .setLineState(new RenderStateShard.LineStateShard(OptionalDouble.empty()))
-                    .setLayeringState(VIEW_OFFSET_Z_LAYERING)
-                    .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
-                    .setOutputState(ITEM_ENTITY_TARGET)
-                    .setWriteMaskState(COLOR_DEPTH_WRITE)
-                    .setCullState(NO_CULL)
-                    .setDepthTestState(NO_DEPTH_TEST)
+                    .setLayeringState(RenderType.VIEW_OFFSET_Z_LAYERING)
+                    .setTransparencyState(RenderType.TRANSLUCENT_TRANSPARENCY)
+                    .setOutputState(RenderType.ITEM_ENTITY_TARGET)
+                    .setWriteMaskState(RenderType.COLOR_DEPTH_WRITE)
+                    .setCullState(RenderType.NO_CULL)
+                    .setDepthTestState(RenderType.NO_DEPTH_TEST)
                     .createCompositeState(false)
     );
-
-
-
-    private FramedRenderTypes()
-    {
-        //noinspection ConstantConditions
-        super("", null, null, 0, false, false, null, null);
-        throw new UnsupportedOperationException();
-    }
 }

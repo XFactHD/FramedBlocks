@@ -113,6 +113,7 @@ public final class FluidCamoContent extends CamoContent<FluidCamoContent>
     }
 
     @Override
+    @Nullable
     public MapColor getMapColor(BlockGetter level, BlockPos pos)
     {
         BlockState state = fluid.defaultFluidState().createLegacyBlock();
@@ -130,6 +131,7 @@ public final class FluidCamoContent extends CamoContent<FluidCamoContent>
     }
 
     @Override
+    @Nullable
     public Integer getBeaconColorMultiplier(LevelReader level, BlockPos pos, BlockPos beaconPos)
     {
         return null;

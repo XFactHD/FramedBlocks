@@ -37,6 +37,7 @@ public final class InternalApiImpl implements InternalAPI
     }
 
     @Override
+    @Nullable
     public CamoContainerFactory<?> findCamoFactory(ItemStack stack)
     {
         return CamoContainerFactories.findCamoFactory(stack);

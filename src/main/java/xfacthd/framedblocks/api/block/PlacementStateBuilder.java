@@ -331,7 +331,7 @@ public class PlacementStateBuilder<T extends PlacementStateBuilder<T>>
      */
     public final T validate(BiPredicate<BlockState, BlockPlaceContext> validator)
     {
-        if (!validator.test(state, ctx))
+        if (state != null && !validator.test(state, ctx))
         {
             state = null;
         }

@@ -447,7 +447,6 @@ public class FramedBlockEntity extends BlockEntity
         return changed;
     }
 
-    @SuppressWarnings("ConstantConditions")
     public final void updateCulling(boolean neighbors, boolean rerender)
     {
         boolean changed = false;

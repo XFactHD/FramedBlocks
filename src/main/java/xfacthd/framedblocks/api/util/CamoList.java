@@ -48,7 +48,7 @@ public final class CamoList implements Iterable<CamoContainer<?, ?>>
     @Override
     public Iterator<CamoContainer<?, ?>> iterator()
     {
-        return camos.listIterator();
+        return camos.iterator();
     }
 
     @Override

@@ -170,6 +170,7 @@ public final class AppearanceHelper
      * Determine the preferred edge from the difference between the two given positions. Fixes the edge case of diagonal
      * checks failing on double blocks due to an edge covering both parts being selected
      */
+    @Nullable
     private static Direction findPreferredEdge(BlockPos pos, BlockPos queryPos, Direction side, IBlockType type, StateCache stateCache)
     {
         if (type.isDoubleBlock())
@@ -186,6 +187,7 @@ public final class AppearanceHelper
     /**
      * Determine the first direction from the difference between the two given positions which matches the given predicate
      */
+    @Nullable
     private static <T> Direction findFirstSuitableDirectionFromOffset(BlockPos pos, BlockPos queryPos, Direction side, T context, EdgePredicate<T> pred)
     {
         if (pos.equals(queryPos))
@@ -238,6 +240,7 @@ public final class AppearanceHelper
      *     or neighbor state is actually air, in which case full-face and full-edge camos need to be returned</li>
      * </ul>
      */
+    @Nullable
     private static BlockState findApplicableNeighbor(BlockGetter level, BlockPos queryPos, @Nullable BlockState queryState)
     {
         if (queryState == null)
@@ -261,7 +264,7 @@ public final class AppearanceHelper
      * of the given side
      */
     private static boolean isNotFramedOrCanConnectFullEdgeTo(
-            BlockPos pos, BlockPos queryPos, BlockState queryState, Direction side, @Nullable Direction edge
+            BlockPos pos, BlockPos queryPos, @Nullable BlockState queryState, Direction side, @Nullable Direction edge
     )
     {
         if (queryState != null && queryState.getBlock() instanceof IFramedBlock queryBlock)
@@ -283,6 +286,7 @@ public final class AppearanceHelper
         return true;
     }
 
+    @Nullable
     private static FramedBlockData getModelData(BlockGetter level, BlockPos pos, BlockState componentState, boolean mayBeSingle)
     {
         ModelData data = level.getModelData(pos);

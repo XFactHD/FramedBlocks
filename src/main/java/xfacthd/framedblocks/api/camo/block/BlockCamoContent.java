@@ -113,6 +113,7 @@ public final class BlockCamoContent extends CamoContent<BlockCamoContent>
     }
 
     @Override
+    @Nullable
     public MapColor getMapColor(BlockGetter level, BlockPos pos)
     {
         return state.getMapColor(level, pos);
@@ -129,6 +130,7 @@ public final class BlockCamoContent extends CamoContent<BlockCamoContent>
     }
 
     @Override
+    @Nullable
     public Integer getBeaconColorMultiplier(LevelReader level, BlockPos pos, BlockPos beaconPos)
     {
         return state.getBeaconColorMultiplier(level, pos, beaconPos);

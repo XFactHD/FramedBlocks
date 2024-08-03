@@ -7,8 +7,8 @@ import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
+import xfacthd.framedblocks.api.block.blockentity.IFramedDoubleBlockEntity;
 import xfacthd.framedblocks.api.model.util.ModelUtils;
-import xfacthd.framedblocks.common.blockentity.doubled.FramedDoubleBlockEntity;
 import xfacthd.framedblocks.common.blockentity.special.FramedFlowerPotBlockEntity;
 
 import javax.annotation.Nullable;
@@ -27,7 +27,7 @@ public class FramedBlockColor implements BlockColor
             {
                 tintIndex = ModelUtils.decodeSecondaryTintIndex(tintIndex);
 
-                if (be instanceof FramedDoubleBlockEntity dbe)
+                if (be instanceof IFramedDoubleBlockEntity dbe)
                 {
                     return dbe.getCamoTwo().getTintColor(level, pos, tintIndex);
                 }

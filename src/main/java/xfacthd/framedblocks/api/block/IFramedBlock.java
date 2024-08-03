@@ -509,9 +509,7 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension
     }
 
     @Override
-    default boolean hidesNeighborFace(
-            BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side
-    )
+    default boolean hidesNeighborFace(BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side)
     {
         return CullingHelper.hidesNeighborFace(this, level, pos, state, adjState, side);
     }
@@ -562,9 +560,7 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension
         return true;
     }
 
-    default BlockState updateShapeLockable(
-            BlockState state, LevelAccessor level, BlockPos pos, Supplier<BlockState> updateShape
-    )
+    default BlockState updateShapeLockable(BlockState state, LevelAccessor level, BlockPos pos, Supplier<BlockState> updateShape)
     {
         if (!state.getValue(FramedProperties.STATE_LOCKED))
         {

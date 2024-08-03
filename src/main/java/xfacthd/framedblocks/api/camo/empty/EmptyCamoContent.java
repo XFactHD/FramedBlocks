@@ -102,6 +102,7 @@ public final class EmptyCamoContent extends CamoContent<EmptyCamoContent>
     }
 
     @Override
+    @Nullable
     public MapColor getMapColor(BlockGetter level, BlockPos pos)
     {
         return null;
@@ -114,6 +115,7 @@ public final class EmptyCamoContent extends CamoContent<EmptyCamoContent>
     }
 
     @Override
+    @Nullable
     public Integer getBeaconColorMultiplier(LevelReader level, BlockPos pos, BlockPos beaconPos)
     {
         return null;

@@ -90,7 +90,7 @@ public final class FramedBlockModel extends AbstractFramedBlockModel
     }
 
     @Override
-    public List<BakedQuad> getQuads(BlockState state, Direction side, RandomSource rand, ModelData extraData, RenderType renderType)
+    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, RandomSource rand, ModelData extraData, @Nullable RenderType renderType)
     {
         CamoContent<?> camoState = EmptyCamoContent.EMPTY;
         FramedBlockData data = extraData.get(FramedBlockData.PROPERTY);
@@ -121,7 +121,7 @@ public final class FramedBlockModel extends AbstractFramedBlockModel
     }
 
     @Override
-    public List<BakedQuad> getQuads(BlockState state, Direction side, RandomSource rand)
+    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, RandomSource rand)
     {
         return getCamoQuads(null, side, rand, ModelData.EMPTY, DEFAULT_DATA, RenderType.cutout());
     }
@@ -178,8 +178,8 @@ public final class FramedBlockModel extends AbstractFramedBlockModel
     }
 
     private List<BakedQuad> getCamoQuads(
-            CamoContent<?> camoContent,
-            Direction side,
+            @Nullable CamoContent<?> camoContent,
+            @Nullable Direction side,
             RandomSource rand,
             ModelData extraData,
             FramedBlockData fbData,

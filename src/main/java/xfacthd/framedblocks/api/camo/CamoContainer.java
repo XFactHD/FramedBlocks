@@ -34,6 +34,7 @@ public abstract class CamoContainer<C extends CamoContent<C>, T extends CamoCont
      * @param pos The position of the framed block
      * @return The map color
      */
+    @Nullable
     public MapColor getMapColor(BlockGetter level, BlockPos pos)
     {
         return content.getMapColor(level, pos);
@@ -58,6 +59,7 @@ public abstract class CamoContainer<C extends CamoContent<C>, T extends CamoCont
      * @param beaconPos The position of the beacon where the beam originates from
      * @return An array of R, G and B values to be used as the color multiplier
      */
+    @Nullable
     public Integer getBeaconColorMultiplier(LevelReader level, BlockPos pos, BlockPos beaconPos)
     {
         return content.getBeaconColorMultiplier(level, pos, beaconPos);

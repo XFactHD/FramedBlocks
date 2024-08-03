@@ -11,7 +11,7 @@ public final class ClientEventHandler
         FramingSawRecipeCache.get(true).update(event.getRecipeManager());
     }
 
-    public static void onClientDisconnect(final ClientPlayerNetworkEvent.LoggingOut event)
+    public static void onClientDisconnect(@SuppressWarnings("unused") final ClientPlayerNetworkEvent.LoggingOut event)
     {
         FramingSawRecipeCache.get(true).clear();
     }

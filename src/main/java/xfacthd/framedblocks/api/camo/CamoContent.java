@@ -102,6 +102,7 @@ public abstract class CamoContent<C extends CamoContent<C>> implements QuadCache
      * {@return the {@link MapColor} of this camo}
      * @see BlockBehaviour.BlockStateBase#getMapColor(BlockGetter, BlockPos)
      */
+    @Nullable
     public abstract MapColor getMapColor(BlockGetter level, BlockPos pos);
 
     /**
@@ -113,6 +114,7 @@ public abstract class CamoContent<C extends CamoContent<C>> implements QuadCache
      * {@return the beacon color multiplier of this camo}
      * @see IBlockStateExtension#getBeaconColorMultiplier(LevelReader, BlockPos, BlockPos)
      */
+    @Nullable
     public abstract Integer getBeaconColorMultiplier(LevelReader level, BlockPos pos, BlockPos beaconPos);
 
     /**
@@ -201,6 +203,7 @@ public abstract class CamoContent<C extends CamoContent<C>> implements QuadCache
     }
 
     @Override
+    @Nullable
     public final Object ctCtx()
     {
         return null;

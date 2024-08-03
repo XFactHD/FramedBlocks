@@ -28,6 +28,7 @@ public interface InternalAPI
 
     CamoContainerFactory<EmptyCamoContainer> getEmptyCamoContainerFactory();
 
+    @Nullable
     CamoContainerFactory<?> findCamoFactory(ItemStack stack);
 
     boolean isValidRemovalTool(CamoContainer<?, ?> container, ItemStack stack);

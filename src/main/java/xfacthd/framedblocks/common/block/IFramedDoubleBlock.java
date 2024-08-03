@@ -151,9 +151,7 @@ public interface IFramedDoubleBlock extends IFramedBlock
         return null;
     }
 
-    static boolean testComponent(
-            BlockGetter ctLevel, BlockPos pos, BlockState component, BlockState neighborState, Direction side
-    )
+    static boolean testComponent(BlockGetter ctLevel, BlockPos pos, BlockState component, BlockState neighborState, Direction side)
     {
         IFramedBlock block = (IFramedBlock) component.getBlock();
         return block.getBlockType().getSideSkipPredicate().test(ctLevel, pos, component, neighborState, side);
