@@ -19,9 +19,9 @@ import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.block.cache.StateCache;
 import xfacthd.framedblocks.api.block.render.ParticleHelper;
-import xfacthd.framedblocks.api.blueprint.BlueprintData;
 import xfacthd.framedblocks.api.camo.CamoContainer;
 import xfacthd.framedblocks.api.predicate.cull.SideSkipPredicate;
+import xfacthd.framedblocks.api.util.CamoList;
 import xfacthd.framedblocks.common.blockentity.doubled.FramedDoubleBlockEntity;
 import xfacthd.framedblocks.common.data.doubleblock.*;
 import xfacthd.framedblocks.common.item.FramedBlueprintItem;
@@ -217,16 +217,22 @@ public interface IFramedDoubleBlock extends IFramedBlock
     }
 
     @Override
-    default Optional<MutableComponent> printCamoBlock(BlueprintData blueprintData)
+    default Optional<MutableComponent> printCamoData(CamoList camos, boolean blueprint)
     {
-        CamoContainer<?, ?> camoContainer = blueprintData.camos().getCamo(0);
-        CamoContainer<?, ?> camoContainerTwo = blueprintData.camos().getCamo(1);
+        return printCamoData(camos.getCamo(0), camos.getCamo(1), blueprint);
+    }
 
-        MutableComponent component = getCamoComponent(camoContainer);
-        component.append(Component.literal(" | ").withStyle(ChatFormatting.GOLD));
-        component.append(getCamoComponent(camoContainerTwo));
+    static Optional<MutableComponent> printCamoData(CamoContainer<?, ?> camoContainer, CamoContainer<?, ?> camoContainerTwo, boolean force)
+    {
+        if (force || !camoContainer.isEmpty() || !camoContainerTwo.isEmpty())
+        {
+            MutableComponent component = getCamoComponent(camoContainer);
+            component.append(Component.literal(" | ").withStyle(ChatFormatting.GOLD));
+            component.append(getCamoComponent(camoContainerTwo));
 
-        return Optional.of(component);
+            return Optional.of(component);
+        }
+        return Optional.empty();
     }
 
     static MutableComponent getCamoComponent(CamoContainer<?, ?> camoContainer)

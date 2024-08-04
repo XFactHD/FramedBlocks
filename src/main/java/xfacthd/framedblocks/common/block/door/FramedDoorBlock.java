@@ -1,6 +1,5 @@
 package xfacthd.framedblocks.common.block.door;
 
-import net.minecraft.ChatFormatting;
 import net.minecraft.core.*;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -8,7 +7,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.*;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -25,6 +24,7 @@ import xfacthd.framedblocks.api.blueprint.BlueprintData;
 import xfacthd.framedblocks.api.camo.CamoContainer;
 import xfacthd.framedblocks.api.model.wrapping.WrapHelper;
 import xfacthd.framedblocks.api.model.wrapping.statemerger.StateMerger;
+import xfacthd.framedblocks.api.util.CamoList;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.block.IFramedDoubleBlock;
 import xfacthd.framedblocks.common.blockentity.special.FramedDoorBlockEntity;
@@ -138,6 +138,12 @@ public class FramedDoorBlock extends DoorBlock implements IFramedBlock
     }
 
     @Override
+    public void appendHoverText(ItemStack stack, Item.TooltipContext ctx, List<Component> lines, TooltipFlag flag)
+    {
+        appendCamoHoverText(stack, lines);
+    }
+
+    @Override
     public BlockType getBlockType()
     {
         return type;
@@ -154,12 +160,13 @@ public class FramedDoorBlock extends DoorBlock implements IFramedBlock
     {
         CamoContainer<?, ?> camoContainer = blueprintData.camos().getCamo(0);
         CamoContainer<?, ?> camoContainerTwo = DoorCopyBehaviour.getSecondData(blueprintData).camos().getCamo(0);
+        return IFramedDoubleBlock.printCamoData(camoContainer, camoContainerTwo, true);
+    }
 
-        MutableComponent component = IFramedDoubleBlock.getCamoComponent(camoContainer);
-        component.append(Component.literal(" | ").withStyle(ChatFormatting.GOLD));
-        component.append(IFramedDoubleBlock.getCamoComponent(camoContainerTwo));
-
-        return Optional.of(component);
+    @Override
+    public Optional<MutableComponent> printCamoData(CamoList camos, boolean blueprint)
+    {
+        return IFramedDoubleBlock.printCamoData(camos.getCamo(0), camos.getCamo(1), blueprint);
     }
 
     @Override

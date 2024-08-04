@@ -2,12 +2,13 @@ package xfacthd.framedblocks.common.block.rail.vanillaslope;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.AbstractMinecart;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.*;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.*;
@@ -235,6 +236,12 @@ public class FramedDetectorRailSlopeBlock extends DetectorRailBlock implements I
     public final BlockEntity newBlockEntity(BlockPos pos, BlockState state)
     {
         return beFactory.apply(pos, state);
+    }
+
+    @Override
+    public void appendHoverText(ItemStack stack, Item.TooltipContext ctx, List<Component> lines, TooltipFlag flag)
+    {
+        appendCamoHoverText(stack, lines);
     }
 
     @Override

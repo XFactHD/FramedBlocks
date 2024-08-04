@@ -1,11 +1,12 @@
 package xfacthd.framedblocks.common.block.stairs.standard;
 
 import net.minecraft.core.*;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.*;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.StairBlock;
@@ -139,6 +140,12 @@ public class FramedStairsBlock extends StairBlock implements IFramedBlock
             return Shapes.empty();
         }
         return super.getShape(state, level, pos, ctx);
+    }
+
+    @Override
+    public void appendHoverText(ItemStack stack, Item.TooltipContext ctx, List<Component> lines, TooltipFlag flag)
+    {
+        appendCamoHoverText(stack, lines);
     }
 
     @Override

@@ -366,6 +366,7 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(FramedBlueprintItem.TRUE, "true");
         add(FramedBlueprintItem.CANT_COPY, "[Framed Blueprint] This block can currently not be copied!");
         add(FramedBlueprintItem.CANT_PLACE_FLUID_CAMO, "[Framed Blueprint] Copying blocks with fluid camos is currently not possible!");
+        add(IFramedBlock.CAMO_LABEL, "Camo: %s");
     }
 
     private void addOverlayTranslations()

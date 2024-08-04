@@ -54,6 +54,7 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension
     String LOCK_MESSAGE = Utils.translationKey("msg", "lock_state");
     Component STATE_LOCKED = Utils.translate("msg", "lock_state.locked").withStyle(ChatFormatting.RED);
     Component STATE_UNLOCKED = Utils.translate("msg", "lock_state.unlocked").withStyle(ChatFormatting.GREEN);
+    String CAMO_LABEL = Utils.translationKey("desc", "block.stored_camo");
 
     IBlockType getBlockType();
 
@@ -658,10 +659,23 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension
         return new FramedBlockEntity(pos, state);
     }
 
+    default void appendCamoHoverText(ItemStack stack, List<Component> lines)
+    {
+        Optional<MutableComponent> camoText = printCamoData(stack.getOrDefault(Utils.DC_TYPE_CAMO_LIST, CamoList.EMPTY), false);
+        if (camoText.isPresent())
+        {
+            lines.add(Component.translatable(CAMO_LABEL, camoText.get()).withStyle(ChatFormatting.GOLD));
+        }
+    }
+
     default Optional<MutableComponent> printCamoBlock(BlueprintData blueprintData)
     {
-        CamoContainer<?, ?> camoContent = blueprintData.camos().getCamo(0);
+        return printCamoData(blueprintData.camos(), true);
+    }
 
+    default Optional<MutableComponent> printCamoData(CamoList camos, boolean blueprint)
+    {
+        CamoContainer<?, ?> camoContent = camos.getCamo(0);
         if (camoContent.isEmpty())
         {
             return Optional.empty();
