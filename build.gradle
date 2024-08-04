@@ -179,9 +179,8 @@ dependencies {
 
     //implementation("curse.maven:guidebook-253874:${guidebook_coord}")
 
-    //compileOnly("appeng:appliedenergistics2-neoforge:${ae2_version}:api")
-    //runtimeOnly("appeng:appliedenergistics2-neoforge:${ae2_version}")
-    compileOnly("curse.maven:ae2-223794:5436491") // TODO: replace with proper maven once beta builds are available
+    compileOnly("appeng:appliedenergistics2:${ae2_version}:api")
+    //runtimeOnly("appeng:appliedenergistics2:${ae2_version}")
 
     compileOnly("curse.maven:jade-324717:${jade_coord}")
 
