@@ -115,8 +115,10 @@ repositories {
         name = 'ResourcefulBees maven'
         url = 'https://maven.resourcefulbees.com/repository/maven-public/'
         content {
+            includeGroup('com.teamresourceful')
             includeGroup('com.teamresourceful.resourcefullib')
             includeGroup('earth.terrarium.athena')
+            includeGroup('earth.terrarium.chipped')
         }
     }
     maven {
