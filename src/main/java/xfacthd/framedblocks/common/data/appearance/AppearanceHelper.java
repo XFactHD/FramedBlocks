@@ -203,9 +203,16 @@ public final class AppearanceHelper
         {
             return pred.test(context, side, conFace) ? conFace : null;
         }
+        return findFirstSuitableDirectionFromMultiCoordOffset(nx, ny, nz, side, context, pred);
+    }
+
+    private static <T> Direction findFirstSuitableDirectionFromMultiCoordOffset(
+            int nx, int ny, int nz, Direction side, T context, EdgePredicate<T> pred
+    )
+    {
         if (!Utils.isX(side))
         {
-            conFace = Utils.dirByNormal(nx, 0, 0);
+            Direction conFace = Utils.dirByNormal(nx, 0, 0);
             if (conFace != null && pred.test(context, side, conFace))
             {
                 return conFace;
@@ -213,7 +220,7 @@ public final class AppearanceHelper
         }
         if (!Utils.isY(side))
         {
-            conFace = Utils.dirByNormal(0, ny, 0);
+            Direction conFace = Utils.dirByNormal(0, ny, 0);
             if (conFace != null && pred.test(context, side, conFace))
             {
                 return conFace;
@@ -221,7 +228,7 @@ public final class AppearanceHelper
         }
         if (!Utils.isZ(side))
         {
-            conFace = Utils.dirByNormal(0, 0, nz);
+            Direction conFace = Utils.dirByNormal(0, 0, nz);
             if (conFace != null && pred.test(context, side, conFace))
             {
                 return conFace;
@@ -276,6 +283,12 @@ public final class AppearanceHelper
             {
                 // CT impl is trying to check connection occlusion => check opposite side
                 side = side.getOpposite();
+            }
+            // Specially handle diagonal lookups to fix cases where an edge unsuitable for the query block is selected
+            if (Utils.dirByNormal(nx, ny, nz) == null)
+            {
+                EdgePredicate<StateCache> predicate = (cache, testSide, testEdge) -> cache.canConnectFullEdge(testSide, testEdge.getOpposite());
+                return findFirstSuitableDirectionFromMultiCoordOffset(nx, ny, nz, side, queryBlock.getCache(queryState), predicate) != null;
             }
             if (edge != null)
             {
