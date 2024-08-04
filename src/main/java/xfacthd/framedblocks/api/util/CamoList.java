@@ -9,6 +9,7 @@ import xfacthd.framedblocks.api.camo.CamoContainerHelper;
 import xfacthd.framedblocks.api.camo.empty.EmptyCamoContainer;
 
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public final class CamoList implements Iterable<CamoContainer<?, ?>>
@@ -88,6 +89,12 @@ public final class CamoList implements Iterable<CamoContainer<?, ?>>
     public int hashCode()
     {
         return Objects.hashCode(camos);
+    }
+
+    @Override
+    public String toString()
+    {
+        return camos.stream().map(CamoContainer::toString).collect(Collectors.joining(",", "[", "]"));
     }
 
 

@@ -26,6 +26,12 @@ public final class BlockCamoContainer extends AbstractBlockCamoContainer<BlockCa
     }
 
     @Override
+    public String toString()
+    {
+        return "BlockCamoContainer{" + content + "}";
+    }
+
+    @Override
     public BlockCamoContainerFactory getFactory()
     {
         return FBContent.FACTORY_BLOCK.value();

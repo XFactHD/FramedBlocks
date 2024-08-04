@@ -42,6 +42,12 @@ public final class EmptyCamoContainer extends CamoContainer<EmptyCamoContent, Em
     }
 
     @Override
+    public String toString()
+    {
+        return "EmptyCamoContainer{}";
+    }
+
+    @Override
     public CamoContainerFactory<EmptyCamoContainer> getFactory()
     {
         return InternalAPI.INSTANCE.getEmptyCamoContainerFactory();

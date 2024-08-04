@@ -46,6 +46,12 @@ public final class FluidCamoContainer extends CamoContainer<FluidCamoContent, Fl
     }
 
     @Override
+    public String toString()
+    {
+        return "FluidCamoContainer{" + content + "}";
+    }
+
+    @Override
     public CamoContainerFactory<FluidCamoContainer> getFactory()
     {
         return FBContent.FACTORY_FLUID.value();
