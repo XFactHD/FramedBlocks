@@ -15,8 +15,12 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.core.Direction;
 import net.minecraft.world.phys.BlockHitResult;
 import xfacthd.framedblocks.api.block.*;
+import xfacthd.framedblocks.api.camo.CamoContainer;
+import xfacthd.framedblocks.api.camo.empty.EmptyCamoContainer;
 import xfacthd.framedblocks.api.util.*;
+import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.*;
+import xfacthd.framedblocks.common.blockentity.doubled.FramedDoubleBlockEntity;
 import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.common.data.property.SlopeType;
 import xfacthd.framedblocks.common.util.FramedUtils;
@@ -70,12 +74,21 @@ public class FramedSlopeBlock extends FramedBlock implements ISlopeBlock
 
                 if (!level.isClientSide())
                 {
+                    boolean fancy = railSlope instanceof IFramedDoubleBlock;
+                    CamoList camos = fancy ? stack.get(FBContent.DC_TYPE_CAMO_LIST) : null;
                     Utils.wrapInStateCopy(level, pos, player, stack, false, true, () ->
                             level.setBlockAndUpdate(pos, newState)
                     );
 
+                    CamoContainer<?, ?> camo = EmptyCamoContainer.EMPTY;
+                    if (fancy && camos != null && !camos.isEmpty() && level.getBlockEntity(pos) instanceof FramedDoubleBlockEntity be)
+                    {
+                        camo = camos.getCamo(0);
+                        be.setCamo(camo, true);
+                    }
+
                     //noinspection deprecation
-                    SoundType sound = Blocks.RAIL.defaultBlockState().getSoundType();
+                    SoundType sound = fancy ? camo.getContent().getSoundType() : Blocks.RAIL.defaultBlockState().getSoundType();
                     level.playSound(null, pos, sound.getPlaceSound(), SoundSource.BLOCKS, (sound.getVolume() + 1.0F) / 2.0F, sound.getPitch() * 0.8F);
                 }
 
