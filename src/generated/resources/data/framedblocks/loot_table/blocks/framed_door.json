@@ -20,6 +20,23 @@
               }
             }
           ],
+          "functions": [
+            {
+              "conditions": [
+                {
+                  "condition": "framedblocks:non_trivial_camo"
+                }
+              ],
+              "function": "minecraft:copy_components",
+              "include": [
+                "framedblocks:camo_list"
+              ],
+              "source": "block_entity"
+            },
+            {
+              "function": "minecraft:explosion_decay"
+            }
+          ],
           "name": "framedblocks:framed_door"
         }
       ],

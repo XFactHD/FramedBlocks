@@ -651,23 +651,39 @@ public class FramedBlockEntity extends BlockEntity
     }
 
     /**
+     * {@return whether all camos applied to this block can be trivially converted to {@link ItemStack}s for dropping}
+     */
+    public boolean canTriviallyDropAllCamos()
+    {
+        return camoContainer.getFactory().canTriviallyConvertToItemStack();
+    }
+
+    /**
      * Add additional drops to the list of items being dropped
      * @param drops The list of items being dropped
      * @param dropCamo Whether the camo item should be dropped
      */
     public void addAdditionalDrops(List<ItemStack> drops, boolean dropCamo)
     {
-        if (dropCamo && !camoContainer.isEmpty())
+        if (dropCamo && canTriviallyDropAllCamos())
+        {
+            addCamoDrops(drops);
+        }
+        if (reinforced)
+        {
+            drops.add(new ItemStack(Utils.FRAMED_REINFORCEMENT.value()));
+        }
+    }
+
+    protected void addCamoDrops(List<ItemStack> drops)
+    {
+        if (!camoContainer.isEmpty())
         {
             ItemStack stack = CamoContainerHelper.dropCamo(camoContainer);
             if (!stack.isEmpty())
             {
                 drops.add(stack);
             }
-        }
-        if (reinforced)
-        {
-            drops.add(new ItemStack(Utils.FRAMED_REINFORCEMENT.value()));
         }
     }
 

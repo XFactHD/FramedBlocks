@@ -16,6 +16,8 @@ import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
+import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.common.extensions.IMenuTypeExtension;
@@ -69,6 +71,8 @@ import xfacthd.framedblocks.common.data.camo.block.BlockCamoContainerFactory;
 import xfacthd.framedblocks.common.data.camo.fluid.FluidCamoContainerFactory;
 import xfacthd.framedblocks.api.blueprint.BlueprintData;
 import xfacthd.framedblocks.common.data.component.*;
+import xfacthd.framedblocks.api.datagen.loot.objects.NonTrivialCamoLootCondition;
+import xfacthd.framedblocks.api.datagen.loot.objects.SplitCamoLootFunction;
 import xfacthd.framedblocks.common.item.*;
 import xfacthd.framedblocks.common.menu.*;
 import xfacthd.framedblocks.common.particle.BasicParticleType;
@@ -91,6 +95,8 @@ public final class FBContent
     private static final DeferredRegister<RecipeSerializer<?>> RECIPE_SERIALIZERS = DeferredRegister.create(BuiltInRegistries.RECIPE_SERIALIZER, FramedConstants.MOD_ID);
     private static final DeferredRegister<CreativeModeTab> CREATIVE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, FramedConstants.MOD_ID);
     private static final DeferredRegister<ParticleType<?>> PARTICLE_TYPES = DeferredRegister.create(Registries.PARTICLE_TYPE, FramedConstants.MOD_ID);
+    private static final DeferredRegister<LootItemConditionType> LOOT_CONDITIONS = DeferredRegister.create(Registries.LOOT_CONDITION_TYPE, FramedConstants.MOD_ID);
+    private static final DeferredRegister<LootItemFunctionType<?>> LOOT_FUNCTIONS = DeferredRegister.create(Registries.LOOT_FUNCTION_TYPE, FramedConstants.MOD_ID);
 
     private static final DeferredRegister<CamoContainerFactory<?>> CAMO_CONTAINER_FACTORIES = DeferredRegister.create(
             FramedConstants.CAMO_CONTAINER_FACTORY_REGISTRY_NAME,
@@ -589,6 +595,18 @@ public final class FBContent
     );
     // endregion
 
+    // region LootItemConditions
+    public static final Holder<LootItemConditionType> NON_TRIVIAL_CAMO_LOOT_CONDITION = LOOT_CONDITIONS.register(
+            "non_trivial_camo", () -> new LootItemConditionType(NonTrivialCamoLootCondition.MAP_CODEC)
+    );
+    // endregion
+
+    // region LootItemFunctions
+    public static final DeferredHolder<LootItemFunctionType<?>, LootItemFunctionType<SplitCamoLootFunction>> SPLIT_CAMO_LOOT_FUNCTION = LOOT_FUNCTIONS.register(
+            "split_camo", () -> new LootItemFunctionType<>(SplitCamoLootFunction.MAP_CODEC)
+    );
+    // endregion
+
     // region CamoContainer.Factories
     public static final DeferredHolder<CamoContainerFactory<?>, EmptyCamoContainerFactory> FACTORY_EMPTY = CAMO_CONTAINER_FACTORIES.register(
             "empty",
@@ -638,6 +656,8 @@ public final class FBContent
         RECIPE_SERIALIZERS.register(modBus);
         CREATIVE_TABS.register(modBus);
         PARTICLE_TYPES.register(modBus);
+        LOOT_CONDITIONS.register(modBus);
+        LOOT_FUNCTIONS.register(modBus);
         CAMO_CONTAINER_FACTORIES.register(modBus);
         AUX_BLUEPRINT_DATA_TYPES.register(modBus);
 

@@ -3,14 +3,76 @@
   "pools": [
     {
       "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
       "entries": [
         {
           "type": "minecraft:item",
           "functions": [
             {
-              "add": false,
-              "count": 2.0,
-              "function": "minecraft:set_count"
+              "conditions": [
+                {
+                  "condition": "framedblocks:non_trivial_camo"
+                }
+              ],
+              "function": "minecraft:copy_components",
+              "include": [
+                "framedblocks:camo_list"
+              ],
+              "source": "block_entity"
+            },
+            {
+              "camo_index": 0,
+              "conditions": [
+                {
+                  "condition": "framedblocks:non_trivial_camo"
+                }
+              ],
+              "function": "framedblocks:split_camo"
+            },
+            {
+              "function": "minecraft:explosion_decay"
+            }
+          ],
+          "name": "framedblocks:framed_slab"
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "conditions": [
+                {
+                  "condition": "framedblocks:non_trivial_camo"
+                }
+              ],
+              "function": "minecraft:copy_components",
+              "include": [
+                "framedblocks:camo_list"
+              ],
+              "source": "block_entity"
+            },
+            {
+              "camo_index": 1,
+              "conditions": [
+                {
+                  "condition": "framedblocks:non_trivial_camo"
+                }
+              ],
+              "function": "framedblocks:split_camo"
             },
             {
               "function": "minecraft:explosion_decay"

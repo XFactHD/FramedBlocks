@@ -122,10 +122,16 @@ public class FramedDoubleBlockEntity extends FramedBlockEntity implements IFrame
     }
 
     @Override
-    public void addAdditionalDrops(List<ItemStack> drops, boolean dropCamo)
+    public boolean canTriviallyDropAllCamos()
     {
-        super.addAdditionalDrops(drops, dropCamo);
-        if (dropCamo && !camoContainer.isEmpty())
+        return super.canTriviallyDropAllCamos() && camoContainer.getFactory().canTriviallyConvertToItemStack();
+    }
+
+    @Override
+    public void addCamoDrops(List<ItemStack> drops)
+    {
+        super.addCamoDrops(drops);
+        if (!camoContainer.isEmpty())
         {
             ItemStack stack = CamoContainerHelper.dropCamo(camoContainer);
             if (!stack.isEmpty())
