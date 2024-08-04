@@ -14,16 +14,21 @@ public final class MasonryCornerSegmentShapes
     {
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
 
-        VoxelShape preShape = ShapeUtils.orUnoptimized(
+        VoxelShape preShapeBottom = ShapeUtils.orUnoptimized(
                 CommonShapes.SLAB_EDGE.get(new CommonShapes.DirBoolKey(Direction.SOUTH, false)),
                 CommonShapes.SLAB_EDGE.get(new CommonShapes.DirBoolKey(Direction.EAST, true))
         );
-        VoxelShape[] shapes = ShapeUtils.makeHorizontalRotations(preShape, Direction.NORTH);
+        VoxelShape preShapeTop = ShapeUtils.orUnoptimized(
+                CommonShapes.SLAB_EDGE.get(new CommonShapes.DirBoolKey(Direction.EAST, false)),
+                CommonShapes.SLAB_EDGE.get(new CommonShapes.DirBoolKey(Direction.SOUTH, true))
+        );
+        VoxelShape[] shapes = ShapeUtils.makeHorizontalRotationsWithFlag(preShapeBottom, preShapeTop, Direction.NORTH);
 
         for (BlockState state : states)
         {
             Direction dir = state.getValue(FramedProperties.FACING_HOR);
-            builder.put(state, shapes[dir.get2DDataValue()]);
+            boolean top = state.getValue(FramedProperties.TOP);
+            builder.put(state, shapes[dir.get2DDataValue() + (top ? 4 : 0)]);
         }
 
         return ShapeProvider.of(builder.build());
