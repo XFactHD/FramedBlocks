@@ -60,7 +60,7 @@ public class FramedCollapsibleBlock extends FramedBlock
     public boolean handleBlockLeftClick(BlockState state, Level level, BlockPos pos, Player player)
     {
         ItemStack heldItem = player.getMainHandItem();
-        if (heldItem.canPerformAction(Utils.ACTION_WRENCH))
+        if (heldItem.getItem() == FBContent.ITEM_FRAMED_WRENCH.value())
         {
             boolean rotSplitLine = state.getValue(PropertyHolder.ROTATE_SPLIT_LINE);
             level.setBlockAndUpdate(pos, state.setValue(PropertyHolder.ROTATE_SPLIT_LINE, !rotSplitLine));

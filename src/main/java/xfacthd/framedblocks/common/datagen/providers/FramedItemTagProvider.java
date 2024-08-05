@@ -52,5 +52,6 @@ public final class FramedItemTagProvider extends ItemTagsProvider
                 FBContent.ITEM_FRAMED_SCREWDRIVER.value(),
                 FBContent.ITEM_FRAMED_KEY.value()
         );
+        tag(Utils.COMPLEX_WRENCH).addOptional(Utils.rl("mekanism", "configurator"));
     }
 }

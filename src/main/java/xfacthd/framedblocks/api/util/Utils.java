@@ -57,7 +57,8 @@ public final class Utils
     /** Blocks tagged with this will not be occluded by framed blocks using them as camo, both as camo and directly placed */
     public static final TagKey<Block> NON_OCCLUDEABLE = blockTag("non_occludeable");
     public static final TagKey<Item> TOOL_WRENCH = itemTag("c", "tools/wrench");
-    public static final ItemAbility ACTION_WRENCH = ItemAbility.get("wrench");
+    public static final TagKey<Item> COMPLEX_WRENCH = itemTag("complex_wrench");
+    public static final ItemAbility ACTION_WRENCH = ItemAbility.get("wrench_rotate");
     /** Allow other mods to add items that temporarily disable intangibility to allow interaction with the targeted block */
     public static final TagKey<Item> DISABLE_INTANGIBLE = itemTag("disable_intangible");
     public static final Set<Property<?>> REQUIRED_STATE_PROPERTIES = Set.of(
@@ -570,6 +571,11 @@ public final class Utils
         {
             player.getInventory().add(stack);
         }
+    }
+
+    public static boolean isWrenchRotationTool(ItemStack stack)
+    {
+        return stack.canPerformAction(ACTION_WRENCH) || (stack.is(TOOL_WRENCH) && !stack.is(COMPLEX_WRENCH));
     }
 
     public static String formatItemStack(ItemStack stack)
