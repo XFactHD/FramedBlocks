@@ -304,9 +304,7 @@ public class FramedBlueprintItem extends FramedToolItem
         if (!ServerConfig.VIEW.shouldConsumeCamoItem()) return true;
 
         //Copying fluid camos is currently not possible
-        return camos.stream()
-                .map(CamoContainer::getFactory)
-                .allMatch(CamoContainerFactory::canTriviallyConvertToItemStack);
+        return camos.stream().allMatch(CamoContainer::canTriviallyConvertToItemStack);
     }
 
     public static BlueprintCopyBehaviour getBehaviour(Block block)

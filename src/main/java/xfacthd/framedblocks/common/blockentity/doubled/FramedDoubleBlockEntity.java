@@ -124,7 +124,7 @@ public class FramedDoubleBlockEntity extends FramedBlockEntity implements IFrame
     @Override
     public boolean canTriviallyDropAllCamos()
     {
-        return super.canTriviallyDropAllCamos() && camoContainer.getFactory().canTriviallyConvertToItemStack();
+        return super.canTriviallyDropAllCamos() && camoContainer.canTriviallyConvertToItemStack();
     }
 
     @Override

@@ -2,6 +2,7 @@ package xfacthd.framedblocks.api.camo;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponentType;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.material.MapColor;
 import org.jetbrains.annotations.Nullable;
@@ -74,6 +75,14 @@ public abstract class CamoContainer<C extends CamoContent<C>, T extends CamoCont
      */
     @Nullable
     public abstract T rotateCamo();
+
+    /**
+     * {@return whether this camo can be converted to an {@link ItemStack} without consuming another item}
+     */
+    public final boolean canTriviallyConvertToItemStack()
+    {
+        return getFactory().canTriviallyConvertToItemStack();
+    }
 
     /**
      * {@return whether this container represents a non-existent camo}

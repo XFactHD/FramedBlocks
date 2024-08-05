@@ -655,7 +655,7 @@ public class FramedBlockEntity extends BlockEntity
      */
     public boolean canTriviallyDropAllCamos()
     {
-        return camoContainer.getFactory().canTriviallyConvertToItemStack();
+        return camoContainer.canTriviallyConvertToItemStack();
     }
 
     /**
