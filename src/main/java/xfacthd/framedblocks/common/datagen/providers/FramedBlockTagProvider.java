@@ -66,6 +66,15 @@ public final class FramedBlockTagProvider extends BlockTagsProvider
                 Tags.Blocks.GLASS_BLOCKS,
                 BlockTags.ICE,
                 BlockTags.LEAVES
+        ).add(
+                Blocks.COPPER_GRATE,
+                Blocks.EXPOSED_COPPER_GRATE,
+                Blocks.WEATHERED_COPPER_GRATE,
+                Blocks.OXIDIZED_COPPER_GRATE,
+                Blocks.WAXED_COPPER_GRATE,
+                Blocks.WAXED_EXPOSED_COPPER_GRATE,
+                Blocks.WAXED_WEATHERED_COPPER_GRATE,
+                Blocks.WAXED_OXIDIZED_COPPER_GRATE
         );
 
         frameable.addOptional(Utils.rl("create", "oak_window"))
