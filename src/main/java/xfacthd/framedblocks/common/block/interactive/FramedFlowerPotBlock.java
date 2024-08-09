@@ -92,7 +92,7 @@ public class FramedFlowerPotBlock extends FramedBlock
     )
     {
         ItemInteractionResult result = super.useItemOn(stack, state, level, pos, player, hand, hit);
-        if (result != ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION && result != ItemInteractionResult.CONSUME_PARTIAL)
+        if (result.consumesAction() && result != ItemInteractionResult.CONSUME_PARTIAL)
         {
             return result;
         }

@@ -53,7 +53,7 @@ public class FramedTargetBlock extends TargetBlock implements IFramedBlock
     )
     {
         ItemInteractionResult result = handleUse(state, level, pos, player, hand, hit);
-        if (result != ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION || !player.mayBuild())
+        if (result.consumesAction() || !player.mayBuild())
         {
             return result;
         }
