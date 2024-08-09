@@ -60,8 +60,7 @@ public class FramedDoorBlock extends DoorBlock implements IFramedBlock
             ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit
     )
     {
-        ItemInteractionResult result = handleUse(state, level, pos, player, hand, hit);
-        return result.consumesAction() ? result : super.useItemOn(stack, state, level, pos, player, hand, hit);
+        return handleUse(state, level, pos, player, hand, hit);
     }
 
     @Override

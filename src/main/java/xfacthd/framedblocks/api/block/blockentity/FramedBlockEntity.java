@@ -174,7 +174,8 @@ public class FramedBlockEntity extends BlockEntity
             }
             return ItemInteractionResult.sidedSuccess(level().isClientSide());
         }
-        return ItemInteractionResult.CONSUME;
+        // Abuse CONSUME_PARTIAL to communicate failed camo application to the caller
+        return ItemInteractionResult.CONSUME_PARTIAL;
     }
 
     private ItemInteractionResult clearCamo(Player player, ItemStack stack, CamoContainer<?, ?> camo, boolean secondary)
@@ -187,7 +188,8 @@ public class FramedBlockEntity extends BlockEntity
             }
             return ItemInteractionResult.sidedSuccess(level().isClientSide());
         }
-        return ItemInteractionResult.FAIL;
+        // Abuse CONSUME_PARTIAL to communicate failed camo removal to the caller
+        return ItemInteractionResult.CONSUME_PARTIAL;
     }
 
     private ItemInteractionResult applyGlowstone(Player player, ItemStack stack)

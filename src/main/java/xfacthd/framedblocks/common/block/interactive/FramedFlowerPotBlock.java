@@ -20,6 +20,7 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.Nullable;
+import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.blockentity.special.FramedFlowerPotBlockEntity;
 import xfacthd.framedblocks.common.compat.supplementaries.SupplementariesCompat;
@@ -91,7 +92,7 @@ public class FramedFlowerPotBlock extends FramedBlock
     )
     {
         ItemInteractionResult result = super.useItemOn(stack, state, level, pos, player, hand, hit);
-        if (result != ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION)
+        if (result != ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION && result != ItemInteractionResult.CONSUME_PARTIAL)
         {
             return result;
         }
@@ -117,14 +118,7 @@ public class FramedFlowerPotBlock extends FramedBlock
                     else
                     {
                         ItemStack flowerStack = new ItemStack(be.getFlowerBlock());
-                        if (stack.isEmpty())
-                        {
-                            player.setItemInHand(hand, flowerStack);
-                        }
-                        else if (!player.addItem(flowerStack))
-                        {
-                            player.drop(flowerStack, false);
-                        }
+                        Utils.giveToPlayer(player, flowerStack, true);
 
                         be.setFlowerBlock(Blocks.AIR);
                     }
