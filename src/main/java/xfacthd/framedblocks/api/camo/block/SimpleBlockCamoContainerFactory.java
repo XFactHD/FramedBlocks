@@ -8,10 +8,13 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.EmptyBlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import xfacthd.framedblocks.api.util.ConfigView;
 
 /**
  * Basic block camo container factory for simple camos based on only a {@link BlockState} which only need minimal
@@ -29,6 +32,41 @@ public abstract class SimpleBlockCamoContainerFactory extends AbstractBlockCamoC
     public ItemStack dropCamo(SimpleBlockCamoContainer container)
     {
         return new ItemStack(container.getState().getBlock());
+    }
+
+    @Override
+    public boolean canApplyInCraftingRecipe(ItemStack stack)
+    {
+        if (stack.getItem() instanceof BlockItem item)
+        {
+            BlockState state = item.getBlock().defaultBlockState();
+            return isValidBlock(state, EmptyBlockGetter.INSTANCE, BlockPos.ZERO, null);
+        }
+        return false;
+    }
+
+    @Override
+    public SimpleBlockCamoContainer applyCamoInCraftingRecipe(ItemStack stack)
+    {
+        if (stack.getItem() instanceof BlockItem item)
+        {
+            BlockState state = item.getBlock().defaultBlockState();
+            if (isValidBlock(state, EmptyBlockGetter.INSTANCE, BlockPos.ZERO, null))
+            {
+                return new SimpleBlockCamoContainer(item.getBlock().defaultBlockState(), this);
+            }
+        }
+        throw new IllegalStateException("applyCamoInCraftingRecipe() called without canApplyInCraftingRecipe() check");
+    }
+
+    @Override
+    public ItemStack getCraftingRemainder(ItemStack stack)
+    {
+        if (!ConfigView.Server.INSTANCE.shouldConsumeCamoItem())
+        {
+            return stack.copy();
+        }
+        return ItemStack.EMPTY;
     }
 
     @Override

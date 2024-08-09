@@ -103,6 +103,42 @@ public abstract class CamoContainerFactory<T extends CamoContainer<?, T>>
     }
 
     /**
+     * {@return whether this camo can be applied in a crafting recipe without level and player context}
+     * @param stack The stack to apply as a camo
+     * @implNote If this method returns true, then {@link #applyCamoInCraftingRecipe(ItemStack)} and
+     * {@link #getCraftingRemainder(ItemStack)} must be implemented and return non-null values
+     */
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
+    public boolean canApplyInCraftingRecipe(ItemStack stack)
+    {
+        return false;
+    }
+
+    /**
+     * Compute the camo container to apply to the item in a crafting recipe from the given stack
+     *
+     * @param stack The {@link ItemStack} to apply the camo from
+     * @return The camo container to apply to the resulting stack
+     * @implNote This method must not mutate the given stack
+     */
+    public T applyCamoInCraftingRecipe(ItemStack stack)
+    {
+        throw new UnsupportedOperationException("Application via crafting is not supported");
+    }
+
+    /**
+     * Compute the crafting remainder after the given stack is used to apply a camo to a framed block in a crafting
+     * recipe. Must take {@link ConfigView.Server#shouldConsumeCamoItem()} into account.
+     *
+     * @param stack The {@link ItemStack} to apply the camo from
+     * @return The stack that should remain in the crafting grid
+     */
+    public ItemStack getCraftingRemainder(ItemStack stack)
+    {
+        throw new UnsupportedOperationException("Application via crafting is not supported");
+    }
+
+    /**
      * {@return A {@link MapCodec} for reading and writing the {@link CamoContainer}}
      */
     public abstract MapCodec<T> codec();

@@ -6,12 +6,14 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.common.Tags;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
+import xfacthd.framedblocks.common.crafting.CamoApplicationRecipe;
 import xfacthd.framedblocks.common.datagen.builders.recipe.ExtShapedRecipeBuilder;
 import xfacthd.framedblocks.common.datagen.builders.recipe.ExtShapelessRecipeBuilder;
 
@@ -1465,6 +1467,11 @@ public final class FramedRecipeProvider extends RecipeProvider
         makeRotationRecipe(FBContent.BLOCK_FRAMED_FLAT_STACKED_SLOPE_SLAB_CORNER, FBContent.BLOCK_FRAMED_FLAT_STACKED_SLOPE_PANEL_CORNER, consumer);
         makeRotationRecipe(FBContent.BLOCK_FRAMED_FLAT_STACKED_INNER_SLOPE_SLAB_CORNER, FBContent.BLOCK_FRAMED_FLAT_STACKED_INNER_SLOPE_PANEL_CORNER, consumer);
         makeRotationRecipe(FBContent.BLOCK_FRAMED_CENTERED_SLAB, FBContent.BLOCK_FRAMED_CENTERED_PANEL, consumer);
+
+
+
+        SpecialRecipeBuilder.special(category -> new CamoApplicationRecipe(category, Ingredient.of(Items.BRUSH)))
+                .save(consumer, Utils.rl("camo_application"));
     }
 
     private static void makeRotationRecipe(Holder<Block> first, Holder<Block> second, RecipeOutput consumer)

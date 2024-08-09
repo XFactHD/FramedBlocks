@@ -63,8 +63,7 @@ import xfacthd.framedblocks.common.blockentity.doubled.slopepanel.*;
 import xfacthd.framedblocks.common.blockentity.doubled.slopepanelcorner.*;
 import xfacthd.framedblocks.common.blockentity.doubled.slopeslab.*;
 import xfacthd.framedblocks.common.blockentity.special.*;
-import xfacthd.framedblocks.common.crafting.FramingSawRecipe;
-import xfacthd.framedblocks.common.crafting.FramingSawRecipeSerializer;
+import xfacthd.framedblocks.common.crafting.*;
 import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.common.data.blueprint.auxdata.DoorAuxBlueprintData;
 import xfacthd.framedblocks.common.data.camo.block.BlockCamoContainerFactory;
@@ -580,6 +579,10 @@ public final class FBContent
     public static final Holder<RecipeSerializer<?>> RECIPE_SERIALIZER_FRAMING_SAW_RECIPE = RECIPE_SERIALIZERS.register(
             "frame",
             FramingSawRecipeSerializer::new
+    );
+    public static final Holder<RecipeSerializer<?>> RECIPE_SERIALIZER_APPLY_CAMO = RECIPE_SERIALIZERS.register(
+            "apply_camo",
+            CamoApplicationRecipeSerializer::new
     );
     // endregion
 
