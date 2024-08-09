@@ -127,6 +127,16 @@ public class FramedBlockEntity extends BlockEntity
             return removeReinforcement(player, stack, hand);
         }
 
+        CamoContainer<?, ?> newCamo = CamoContainerHelper.handleCamoInteraction(level(), worldPosition, player, camo, stack);
+        if (camo != newCamo)
+        {
+            if (!level().isClientSide())
+            {
+                setCamo(newCamo, secondary);
+            }
+            return ItemInteractionResult.sidedSuccess(level().isClientSide());
+        }
+
         return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
     }
 

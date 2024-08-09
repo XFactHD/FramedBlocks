@@ -86,6 +86,23 @@ public abstract class CamoContainerFactory<T extends CamoContainer<?, T>>
     }
 
     /**
+     * Handle interactions with the given camo in the provided context. If the interaction changes the camo data,
+     * then a new camo container with the new data must be returned, otherwise the given camo should be returned.
+     *
+     * @param level The level the framed block holding the camo is in
+     * @param pos The position of the framed block holding the camo
+     * @param player The player interacting with the framed block
+     * @param camo The camo container the player is interacting with
+     * @param stack The {@link ItemStack} used to interact with the framed block
+     *
+     * @return a new camo container if the camo data changes from this interaction, otherwise the given one
+     */
+    public T handleInteraction(Level level, BlockPos pos, Player player, T camo, ItemStack stack)
+    {
+        return camo;
+    }
+
+    /**
      * {@return A {@link MapCodec} for reading and writing the {@link CamoContainer}}
      */
     public abstract MapCodec<T> codec();
