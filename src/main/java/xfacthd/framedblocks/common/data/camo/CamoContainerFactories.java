@@ -16,7 +16,7 @@ public final class CamoContainerFactories
     private static final Map<Item, CamoContainerFactory<?>> APPLICATION_ITEMS = new IdentityHashMap<>();
     private static final List<FactoryPredicatePair> APPLICATION_PREDICATES = new ArrayList<>();
     private static final Map<Item, Set<CamoContainerFactory<?>>> REMOVAL_ITEMS = new Reference2ObjectOpenHashMap<>();
-    private static final List<FactoryPredicatePair> REMOVAL_PREDICATES = new ArrayList<>();
+    private static final Map<CamoContainerFactory<?>, List<Predicate<ItemStack>>> REMOVAL_PREDICATES = new Reference2ObjectOpenHashMap<>();
 
     public static void registerCamoFactories()
     {
@@ -63,11 +63,15 @@ public final class CamoContainerFactories
             return true;
         }
 
-        for (FactoryPredicatePair pair : REMOVAL_PREDICATES)
+        List<Predicate<ItemStack>> predicates = REMOVAL_PREDICATES.getOrDefault(container.getFactory(), List.of());
+        if (!predicates.isEmpty())
         {
-            if (pair.predicate.test(stack) && pair.factory == container.getFactory())
+            for (Predicate<ItemStack> predicate : predicates)
             {
-                return true;
+                if (predicate.test(stack))
+                {
+                    return true;
+                }
             }
         }
         return false;
@@ -108,7 +112,7 @@ public final class CamoContainerFactories
         @Override
         public void registerRemovalPredicate(Predicate<ItemStack> predicate)
         {
-            REMOVAL_PREDICATES.add(new FactoryPredicatePair(predicate, factory));
+            REMOVAL_PREDICATES.computeIfAbsent(factory, $ -> new ArrayList<>()).add(predicate);
         }
     }
 
