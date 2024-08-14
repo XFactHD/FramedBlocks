@@ -19,6 +19,7 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.*;
+import net.neoforged.neoforge.client.extensions.common.IClientBlockExtensions;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
@@ -26,6 +27,7 @@ import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.BlockType;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 public final class FramedDiagonalGlassPaneBlock extends NeoForgeDiagonalGlassPaneBlock implements IFramedBlock
 {
@@ -195,4 +197,7 @@ public final class FramedDiagonalGlassPaneBlock extends NeoForgeDiagonalGlassPan
     {
         return defaultBlockState().setValue(CrossCollisionBlock.EAST, true).setValue(CrossCollisionBlock.WEST, true);
     }
+
+    @Override
+    public void initializeClient(Consumer<IClientBlockExtensions> consumer) { }
 }

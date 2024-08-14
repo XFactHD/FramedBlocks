@@ -142,7 +142,6 @@ dependencies {
 
     // Only needed when DiagonalBlocks is switched to implementation
     //runtimeOnly("curse.maven:puzzleslib-495476:${puzzles_lib_coord}")
-    //runtimeOnly("curse.maven:forgecfgapi-547434:${forge_cfg_api_coord}")
     compileOnly("fuzs.diagonalblocks:diagonalblocks-neoforge:${diag_blocks_version}")
 
     //compileOnly("curse.maven:buildinggadgets-298187:${buildinggadgets_coord}")
