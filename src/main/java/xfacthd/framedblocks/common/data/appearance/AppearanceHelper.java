@@ -63,7 +63,7 @@ public final class AppearanceHelper
         BlockState actualQueryState = findApplicableNeighbor(level, queryPos, queryState);
         if (actualQueryState == AIR)
         {
-            // Don't perform additional checks against framed blocks without CT support or air blocks
+            // Don't perform additional checks against framed blocks without CT support
             return AIR;
         }
 
@@ -263,7 +263,7 @@ public final class AppearanceHelper
             }
             return type.supportsConnectedTextures() ? queryState : AIR;
         }
-        return queryState.isAir() ? AIR : queryState;
+        return queryState.isAir() ? null : queryState;
     }
 
     /**
@@ -285,7 +285,7 @@ public final class AppearanceHelper
                 side = side.getOpposite();
             }
             // Specially handle diagonal lookups to fix cases where an edge unsuitable for the query block is selected
-            if (Utils.dirByNormal(nx, ny, nz) == null)
+            if ((nx != 0 || ny != 0 || nz != 0) && Utils.dirByNormal(nx, ny, nz) == null)
             {
                 EdgePredicate<StateCache> predicate = (cache, testSide, testEdge) -> cache.canConnectFullEdge(testSide, testEdge.getOpposite());
                 return findFirstSuitableDirectionFromMultiCoordOffset(nx, ny, nz, side, queryBlock.getCache(queryState), predicate) != null;
