@@ -146,7 +146,7 @@ public class FramedBlockEntity extends BlockEntity
         {
             return false;
         }
-        return stack.is(ConfigView.Server.INSTANCE.getIntangibilityMarkerItem()) && getBlockType().allowMakingIntangible();
+        return stack.is(Utils.PHANTOM_PASTE) && getBlockType().allowMakingIntangible();
     }
 
     private static boolean canRemoveReinforcement(ItemStack stack)
@@ -243,7 +243,7 @@ public class FramedBlockEntity extends BlockEntity
         {
             setIntangible(false);
 
-            Utils.giveToPlayer(player, new ItemStack(ConfigView.Server.INSTANCE.getIntangibilityMarkerItem()), true);
+            Utils.giveToPlayer(player, new ItemStack(Utils.PHANTOM_PASTE), true);
         }
         return ItemInteractionResult.sidedSuccess(level().isClientSide());
     }

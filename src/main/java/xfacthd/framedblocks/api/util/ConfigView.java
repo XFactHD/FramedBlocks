@@ -25,8 +25,13 @@ public final class ConfigView
 
         /**
          * Get the item used to make blocks intangible
+         * @deprecated No longer configurable, use {@link Utils#PHANTOM_PASTE} instead
          */
-        Item getIntangibilityMarkerItem();
+        @Deprecated(forRemoval = true)
+        default Item getIntangibilityMarkerItem()
+        {
+            return Utils.PHANTOM_PASTE.value();
+        }
 
         /**
          * If true, the One-Way Window is owned by the player who placed it and can only be configured by said player

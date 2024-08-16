@@ -26,6 +26,7 @@ import xfacthd.framedblocks.common.data.property.NullableDirection;
 import xfacthd.framedblocks.common.item.FramedBlueprintItem;
 import xfacthd.framedblocks.common.blockentity.special.FramedChestBlockEntity;
 import xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
+import xfacthd.framedblocks.common.item.PhantomPasteItem;
 
 public final class FramedLanguageProvider extends LanguageProvider
 {
@@ -267,6 +268,7 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(FBContent.ITEM_FRAMED_KEY.value(), "Framed Key");
         add(FBContent.ITEM_FRAMED_SCREWDRIVER.value(), "Framed Screwdriver");
         add(FBContent.ITEM_FRAMED_REINFORCEMENT.value(), "Framed Reinforcement");
+        add(FBContent.ITEM_PHANTOM_PASTE.value(), "Phantom Paste");
         add("item.framedblocks.framing_saw_pattern", "Framing Saw Pattern");
     }
 
@@ -367,6 +369,7 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(FramedBlueprintItem.CANT_COPY, "[Framed Blueprint] This block can currently not be copied!");
         add(FramedBlueprintItem.CANT_PLACE_FLUID_CAMO, "[Framed Blueprint] Copying blocks with fluid camos is currently not possible!");
         add(IFramedBlock.CAMO_LABEL, "Camo: %s");
+        add(PhantomPasteItem.FEATURE_DISABLED, "The intangibility feature is disabled, this item therefor has no function!");
     }
 
     private void addOverlayTranslations()
@@ -440,7 +443,6 @@ public final class FramedLanguageProvider extends LanguageProvider
         add("framedblocks.configuration.powered_framing_saw", "Powered Framing Saw");
         add(ServerConfig.TRANSLATION_ALLOW_BLOCK_ENTITIES, "Allow BlockEntities");
         add(ServerConfig.TRANSLATION_ENABLE_INTANGIBILITY, "Enable intangibility feature");
-        add(ServerConfig.TRANSLATION_INTANGIBLE_MARKER, "Intangibility marker item");
         add(ServerConfig.TRANSLATION_ONE_WAY_WINDOW_OWNABLE, "One-Way Window ownability");
         add(ServerConfig.TRANSLATION_CONSUME_CAMO_ITEM, "Consume camo item");
         add(ServerConfig.TRANSLATION_GLOWSTONE_LIGHT_LEVEL, "Glowstone Light Level");

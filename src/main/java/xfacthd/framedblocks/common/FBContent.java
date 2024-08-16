@@ -371,6 +371,7 @@ public final class FBContent
     public static final Holder<Item> ITEM_FRAMED_REINFORCEMENT = ITEMS.register("framed_reinforcement", () ->
             new Item(new Item.Properties())
     );
+    public static final Holder<Item> ITEM_PHANTOM_PASTE = ITEMS.registerItem("phantom_paste", PhantomPasteItem::new);
     // endregion
 
     // region BlockEntityTypes

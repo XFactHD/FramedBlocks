@@ -418,7 +418,7 @@ public final class TestUtils
                             () -> String.format("Block '%s' returns an empty shape when not intangible", state.getBlock())
                     );
                 },
-                () -> clickWithItem(helper, INTANGIBILITY_BLOCK, ConfigView.Server.INSTANCE.getIntangibilityMarkerItem()),
+                () -> clickWithItem(helper, INTANGIBILITY_BLOCK, Utils.PHANTOM_PASTE.value()),
                 () ->
                 {
                     FramedBlockEntity be = getBlockEntity(helper, INTANGIBILITY_BLOCK, FramedBlockEntity.class);

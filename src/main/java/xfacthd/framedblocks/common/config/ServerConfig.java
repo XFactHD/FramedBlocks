@@ -1,9 +1,5 @@
 package xfacthd.framedblocks.common.config;
 
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Items;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.config.ModConfig;
@@ -19,7 +15,6 @@ public final class ServerConfig
 
     private static final String KEY_ALLOW_BLOCK_ENTITIES = "allowBlockEntities";
     private static final String KEY_ENABLE_INTANGIBILITY = "enableIntangibleFeature";
-    private static final String KEY_INTANGIBLE_MARKER = "intangibleMarkerItem";
     private static final String KEY_ONE_WAY_WINDOW_OWNABLE = "oneWayWindowOwnable";
     private static final String KEY_CONSUME_CAMO_ITEM = "consumeCamoItem";
     private static final String KEY_GLOWSTONE_LIGHT_LEVEL = "glowstoneLightLevel";
@@ -31,7 +26,6 @@ public final class ServerConfig
 
     public static final String TRANSLATION_ALLOW_BLOCK_ENTITIES = translate(KEY_ALLOW_BLOCK_ENTITIES);
     public static final String TRANSLATION_ENABLE_INTANGIBILITY = translate(KEY_ENABLE_INTANGIBILITY);
-    public static final String TRANSLATION_INTANGIBLE_MARKER = translate(KEY_INTANGIBLE_MARKER);
     public static final String TRANSLATION_ONE_WAY_WINDOW_OWNABLE = translate(KEY_ONE_WAY_WINDOW_OWNABLE);
     public static final String TRANSLATION_CONSUME_CAMO_ITEM = translate(KEY_CONSUME_CAMO_ITEM);
     public static final String TRANSLATION_GLOWSTONE_LIGHT_LEVEL = translate(KEY_GLOWSTONE_LIGHT_LEVEL);
@@ -43,7 +37,6 @@ public final class ServerConfig
 
     private static boolean allowBlockEntities = false;
     private static boolean enableIntangibleFeature = false;
-    private static Item intangibleMarkerItem = Items.PHANTOM_MEMBRANE;
     private static boolean oneWayWindowOwnable = true;
     private static boolean consumeCamoItem = true;
     private static int glowstoneLightLevel = 15;
@@ -56,7 +49,6 @@ public final class ServerConfig
 
     private static final ModConfigSpec.BooleanValue ALLOW_BLOCK_ENTITIES_VALUE;
     private static final ModConfigSpec.BooleanValue ENABLE_INTANGIBLE_FEATURE_VALUE;
-    private static final ModConfigSpec.ConfigValue<String> INTANGIBLE_MARKER_ITEM_VALUE;
     private static final ModConfigSpec.BooleanValue ONE_WAY_WINDOW_OWNABLE_VALUE;
     private static final ModConfigSpec.BooleanValue CONSUME_CAMO_ITEM_VALUE;
     private static final ModConfigSpec.IntValue GLOWSTONE_LIGHT_LEVEL_VALUE;
@@ -87,10 +79,6 @@ public final class ServerConfig
                 .comment("Enables the intangbility feature. Disabling this also prevents moving through blocks that are already marked as intangible")
                 .translation(TRANSLATION_ENABLE_INTANGIBILITY)
                 .define(KEY_ENABLE_INTANGIBILITY, false);
-        INTANGIBLE_MARKER_ITEM_VALUE = builder
-                .comment("The item to use for making Framed Blocks intangible. The value must be a valid item registry name")
-                .translation(TRANSLATION_INTANGIBLE_MARKER)
-                .define(KEY_INTANGIBLE_MARKER, BuiltInRegistries.ITEM.getKey(Items.PHANTOM_MEMBRANE).toString(), ServerConfig::validateItemName);
         ONE_WAY_WINDOW_OWNABLE_VALUE = builder
                 .comment("If true, only the player who placed the Framed One-Way Window can modify the window direction")
                 .translation(TRANSLATION_ONE_WAY_WINDOW_OWNABLE)
@@ -135,19 +123,6 @@ public final class ServerConfig
         SPEC = builder.build();
     }
 
-    private static boolean validateItemName(Object obj)
-    {
-        if (obj instanceof String name)
-        {
-            ResourceLocation key = ResourceLocation.tryParse(name);
-            if (key != null && BuiltInRegistries.ITEM.containsKey(key))
-            {
-                return BuiltInRegistries.ITEM.get(key) != Items.AIR;
-            }
-        }
-        return false;
-    }
-
     private static String translate(String key)
     {
         return Utils.translateConfig("server", key);
@@ -159,7 +134,6 @@ public final class ServerConfig
         {
             allowBlockEntities = ALLOW_BLOCK_ENTITIES_VALUE.get();
             enableIntangibleFeature = ENABLE_INTANGIBLE_FEATURE_VALUE.get();
-            intangibleMarkerItem = BuiltInRegistries.ITEM.get(ResourceLocation.tryParse(INTANGIBLE_MARKER_ITEM_VALUE.get()));
             oneWayWindowOwnable = ONE_WAY_WINDOW_OWNABLE_VALUE.get();
             consumeCamoItem = CONSUME_CAMO_ITEM_VALUE.get();
             glowstoneLightLevel = GLOWSTONE_LIGHT_LEVEL_VALUE.get();
@@ -196,12 +170,6 @@ public final class ServerConfig
         public boolean enableIntangibility()
         {
             return overrideIntangibilityConfig || enableIntangibleFeature;
-        }
-
-        @Override
-        public Item getIntangibilityMarkerItem()
-        {
-            return intangibleMarkerItem;
         }
 
         @Override

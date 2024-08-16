@@ -29,6 +29,7 @@ public final class FramedItemModelProvider extends ItemModelProvider
         handheldItem(FBContent.ITEM_FRAMED_SCREWDRIVER, "cutout");
 
         simpleItem(FBContent.ITEM_FRAMED_REINFORCEMENT, "cutout");
+        simpleItem(FBContent.ITEM_PHANTOM_PASTE, "cutout");
 
         ResourceLocation patternTexture = Utils.rl("ae2", "item/crafting_pattern");
         if (!AppliedEnergisticsCompat.isLoaded())
@@ -65,5 +66,10 @@ public final class FramedItemModelProvider extends ItemModelProvider
     private ItemModelBuilder simpleItem(String name, String renderType)
     {
         return singleTexture(name, mcLoc("item/generated"), "layer0", modLoc("item/" + name)).renderType(renderType);
+    }
+
+    private ItemModelBuilder builder(Holder<Item> item)
+    {
+        return getBuilder(Utils.getKeyOrThrow(item).location().getPath());
     }
 }

@@ -1443,6 +1443,24 @@ public final class FramedRecipeProvider extends RecipeProvider
                 .unlockedBy(FBContent.BLOCK_FRAMED_CUBE)
                 .save(consumer);
 
+        shapedRecipe(RecipeCategory.MISC, FBContent.ITEM_PHANTOM_PASTE.value(), 16)
+                .pattern("SSS")
+                .pattern("SMS")
+                .pattern("SSS")
+                .define('S', Tags.Items.SLIME_BALLS)
+                .define('M', Items.PHANTOM_MEMBRANE)
+                .unlockedBy(Items.PHANTOM_MEMBRANE)
+                .save(consumer, Utils.rl("phantom_paste_from_phantom_membrane"));
+
+        shapedRecipe(RecipeCategory.MISC, FBContent.ITEM_PHANTOM_PASTE.value(), 8)
+                .pattern("SSS")
+                .pattern("SCS")
+                .pattern("SSS")
+                .define('S', Tags.Items.SLIME_BALLS)
+                .define('C', Items.CHORUS_FRUIT)
+                .unlockedBy(Items.PHANTOM_MEMBRANE)
+                .save(consumer, Utils.rl("phantom_paste_from_chorus_fruit"));
+
 
 
         makeRotationRecipe(FBContent.BLOCK_FRAMED_SLAB, FBContent.BLOCK_FRAMED_PANEL, consumer);

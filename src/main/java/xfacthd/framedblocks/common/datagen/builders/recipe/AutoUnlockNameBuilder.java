@@ -1,6 +1,7 @@
 package xfacthd.framedblocks.common.datagen.builders.recipe;
 
 import net.minecraft.core.Holder;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.recipes.RecipeBuilder;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.resources.ResourceLocation;
@@ -17,6 +18,11 @@ public interface AutoUnlockNameBuilder<T extends RecipeBuilder> extends RecipeBu
     {
         String name = buildCriterionName(Utils.getKeyOrThrow(triggerItem).location());
         return (T) unlockedBy(name, RecipeProvider.has(triggerItem.value()));
+    }
+
+    default T unlockedBy(Item triggerItem)
+    {
+        return unlockedBy(BuiltInRegistries.ITEM.wrapAsHolder(triggerItem));
     }
 
     @SuppressWarnings("unchecked")

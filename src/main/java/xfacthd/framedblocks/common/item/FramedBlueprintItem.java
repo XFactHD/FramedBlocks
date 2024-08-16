@@ -172,7 +172,7 @@ public class FramedBlueprintItem extends FramedToolItem
         int intangible = behaviour.getIntangibleCount(data);
         if (intangible > 0)
         {
-            materials.add(new ItemStack(ServerConfig.VIEW.getIntangibilityMarkerItem(), glowstone));
+            materials.add(new ItemStack(Utils.PHANTOM_PASTE, intangible));
         }
         int reinforcement = behaviour.getReinforcementCount(data);
         if (reinforcement > 0)
@@ -266,7 +266,7 @@ public class FramedBlueprintItem extends FramedToolItem
         int intangible = behaviour.getIntangibleCount(data);
         if (intangible > 0)
         {
-            materials.add(new ItemStack(ServerConfig.VIEW.getIntangibilityMarkerItem(), glowstone));
+            materials.add(new ItemStack(Utils.PHANTOM_PASTE, intangible));
         }
         int reinforcement = behaviour.getReinforcementCount(data);
         if (reinforcement > 0)
