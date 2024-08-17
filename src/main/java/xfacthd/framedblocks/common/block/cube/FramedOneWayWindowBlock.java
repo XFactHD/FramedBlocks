@@ -7,8 +7,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.Level;
+import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -153,6 +152,29 @@ public class FramedOneWayWindowBlock extends FramedBlock
             state = state.setValue(PropertyHolder.NULLABLE_FACE, NullableDirection.fromDirection(dir));
         }
         return state;
+    }
+
+    @Override
+    public BlockState getAppearance(BlockState state, BlockAndTintGetter level, BlockPos pos, Direction side, @Nullable BlockState queryState, @Nullable BlockPos queryPos)
+    {
+        Direction dir = state.getValue(PropertyHolder.NULLABLE_FACE).toDirection();
+        if (dir == side && queryPos != null)
+        {
+            if (Utils.dirByNormal(pos, queryPos) == dir)
+            {
+                return Blocks.TINTED_GLASS.defaultBlockState();
+            }
+            if (queryState == null)
+            {
+                queryState = level.getBlockState(queryPos);
+            }
+            if (queryState.is(this) && queryState.getValue(PropertyHolder.NULLABLE_FACE).toDirection() == dir)
+            {
+                return Blocks.TINTED_GLASS.defaultBlockState();
+            }
+            return Blocks.AIR.defaultBlockState();
+        }
+        return super.getAppearance(state, level, pos, side, queryState, queryPos);
     }
 
     @Override

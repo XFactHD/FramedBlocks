@@ -4,8 +4,11 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.BlockAndTintGetter;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.client.ChunkRenderTypeSet;
 import net.neoforged.neoforge.client.extensions.IBakedModelExtension;
@@ -203,5 +206,19 @@ public abstract class Geometry
     public ItemModelInfo getItemModelInfo()
     {
         return ItemModelInfo.DEFAULT;
+    }
+
+    /**
+     * Resolve additional model data such as CT data for a model used for additional quads
+     * @param level The level holding the block being rendered
+     * @param pos The position of the block being rendered
+     * @param state The state of the block being rendered
+     * @param tileData The model data provided by the {@link BlockEntity}
+     * @return the auxiliary model data or {@link ModelData#EMPTY} if no additional data is needed
+     * @apiNote The data returned from this method is accessible in all quad-related methods via {@link FramedBlockData#AUX_DATA}
+     */
+    public ModelData getAuxModelData(BlockAndTintGetter level, BlockPos pos, BlockState state, ModelData tileData)
+    {
+        return ModelData.EMPTY;
     }
 }

@@ -384,27 +384,37 @@ public final class FramedBlockModel extends AbstractFramedBlockModel
         }
 
         CamoContent<?> camoContent = data.getCamoContent();
+        ModelData camoData = ModelData.EMPTY;
         if (!camoContent.isEmpty() && needCtContext(stateCache.hasAnyFullFace(), type.getMinimumConTexMode()))
         {
             BakedModel model = CamoContainerHelper.Client.getOrCreateModel(camoContent);
-            ModelData camoData;
             try
             {
                 // Try getting camo data with the enclosing state, some mods may not like that
                 // This option provides better CT behaviour
-                camoData = model.getModelData(level, pos, state, tileData);
+                camoData = model.getModelData(level, pos, state, ModelData.EMPTY);
             }
             catch (Throwable t)
             {
                 // Fall back to getting camo data with the camo state if a mod didn't like it
                 // This option may cause some CT weirdness
-                camoData = model.getModelData(level, pos, camoContent.getAppearanceState(), tileData);
+                camoData = model.getModelData(level, pos, camoContent.getAppearanceState(), ModelData.EMPTY);
             }
-            // Avoid copying the entire data if the camo model didn't produce any additional model data
-            if (camoData != tileData)
+        }
+        ModelData auxData = geometry.getAuxModelData(level, pos, state, tileData);
+        // Avoid copying the entire data if the camo model and geometry didn't produce any additional model data
+        if (camoData != ModelData.EMPTY || auxData != ModelData.EMPTY)
+        {
+            ModelData.Builder builder = tileData.derive();
+            if (camoData != ModelData.EMPTY)
             {
-                tileData = tileData.derive().with(FramedBlockData.CAMO_DATA, camoData).build();
+                builder.with(FramedBlockData.CAMO_DATA, camoData);
             }
+            if (auxData != ModelData.EMPTY)
+            {
+                builder.with(FramedBlockData.AUX_DATA, auxData);
+            }
+            tileData = builder.build();
         }
         return tileData;
     }
