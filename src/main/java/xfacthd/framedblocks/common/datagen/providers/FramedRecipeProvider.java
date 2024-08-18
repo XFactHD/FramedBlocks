@@ -781,7 +781,7 @@ public final class FramedRecipeProvider extends RecipeProvider
                 .pattern(" S ")
                 .pattern("SCS")
                 .pattern(" S ")
-                .define('S', Tags.Items.SLIMEBALLS)
+                .define('S', Tags.Items.SLIME_BALLS)
                 .define('C', FBContent.BLOCK_FRAMED_CUBE.value())
                 .unlockedBy(FBContent.BLOCK_FRAMED_CUBE)
                 .save(consumer);
