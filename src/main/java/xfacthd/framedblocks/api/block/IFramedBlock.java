@@ -380,6 +380,17 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension
         return 5;
     }
 
+    @Override
+    default boolean isFireSource(BlockState state, LevelReader level, BlockPos pos, Direction side)
+    {
+        if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
+        {
+            CamoContent<?> camo = be.getCamo(side).getContent();
+            return !camo.isEmpty() && camo.getAsBlockState().is(level.dimensionType().infiniburn());
+        }
+        return false;
+    }
+
     default boolean handleBlockLeftClick(BlockState state, Level level, BlockPos pos, Player player)
     {
         return false;
