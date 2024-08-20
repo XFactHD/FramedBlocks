@@ -49,6 +49,8 @@ public final class SideSkipPredicates extends BlockTypeMap<SideSkipPredicate>
         put(BlockType.FRAMED_ELEVATED_SLOPE_EDGE, new ElevatedSlopeEdgeSkipPredicate());
         put(BlockType.FRAMED_ELEVATED_DOUBLE_SLOPE_EDGE, SideSkipPredicate.FALSE);
         put(BlockType.FRAMED_STACKED_SLOPE_EDGE, SideSkipPredicate.FALSE);
+        put(BlockType.FRAMED_CORNER_SLOPE_EDGE, new CornerSlopeEdgeSkipPredicate());
+        put(BlockType.FRAMED_INNER_CORNER_SLOPE_EDGE, new InnerCornerSlopeEdgeSkipPredicate());
         put(BlockType.FRAMED_SLAB, new SlabSkipPredicate());
         put(BlockType.FRAMED_DOUBLE_SLAB, SideSkipPredicate.FALSE);
         put(BlockType.FRAMED_ADJ_DOUBLE_SLAB, SideSkipPredicate.FALSE);

@@ -61,6 +61,8 @@ public enum BlockType implements IBlockType
     FRAMED_ELEVATED_SLOPE_EDGE                      ( true,  true, false,  true,  true,  true, false, false, ConTexMode.FULL_FACE, ElevatedSlopeEdgeShapes.INSTANCE),
     FRAMED_ELEVATED_DOUBLE_SLOPE_EDGE               ( true, false,  true, false,  true,  true,  true, false, ConTexMode.FULL_FACE, Shapes.block()),
     FRAMED_STACKED_SLOPE_EDGE                       ( true,  true, false,  true,  true,  true,  true, false, ConTexMode.FULL_FACE, ElevatedSlopeEdgeShapes.INSTANCE),
+    FRAMED_CORNER_SLOPE_EDGE               /*#462*/ (false,  true, false,  true,  true,  true, false, false, ConTexMode.DETAILED, CornerSlopeEdgeShapes.OUTER),
+    FRAMED_INNER_CORNER_SLOPE_EDGE         /*#462*/ (false,  true, false,  true,  true,  true, false, false, ConTexMode.FULL_EDGE, CornerSlopeEdgeShapes.INNER),
     FRAMED_SLAB                                     ( true, false, false,  true,  true,  true, false, false, ConTexMode.FULL_FACE, CommonShapes.SLAB_GENERATOR),
     FRAMED_DOUBLE_SLAB                              ( true, false, false, false,  true,  true,  true, false, ConTexMode.FULL_FACE, Shapes.block()),
     FRAMED_ADJ_DOUBLE_SLAB                          ( true, false,  true, false,  true,  true,  true, false, ConTexMode.FULL_FACE, Shapes.block()),

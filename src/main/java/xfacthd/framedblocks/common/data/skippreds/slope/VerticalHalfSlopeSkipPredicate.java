@@ -17,8 +17,7 @@ import xfacthd.framedblocks.common.data.property.SlopeType;
 import xfacthd.framedblocks.common.data.skippreds.*;
 import xfacthd.framedblocks.common.data.skippreds.slab.SlabEdgeSkipPredicate;
 import xfacthd.framedblocks.common.data.skippreds.slab.SlabSkipPredicate;
-import xfacthd.framedblocks.common.data.skippreds.slopeedge.ElevatedSlopeEdgeSkipPredicate;
-import xfacthd.framedblocks.common.data.skippreds.slopeedge.SlopeEdgeSkipPredicate;
+import xfacthd.framedblocks.common.data.skippreds.slopeedge.*;
 import xfacthd.framedblocks.common.data.skippreds.slopeslab.*;
 import xfacthd.framedblocks.common.data.skippreds.stairs.*;
 
@@ -60,6 +59,9 @@ public final class VerticalHalfSlopeSkipPredicate implements SideSkipPredicate
                         dir, top, adjState, side
                 );
                 case FRAMED_ELEVATED_SLOPE_EDGE -> testAgainstElevatedSlopeEdge(
+                        dir, top, adjState, side
+                );
+                case FRAMED_INNER_CORNER_SLOPE_EDGE -> testAgainstInnerCornerSlopeEdge(
                         dir, top, adjState, side
                 );
                 case FRAMED_SLAB_EDGE -> testAgainstSlabEdge(
@@ -210,6 +212,16 @@ public final class VerticalHalfSlopeSkipPredicate implements SideSkipPredicate
         SlopeType adjType = adjState.getValue(PropertyHolder.SLOPE_TYPE);
 
         return getHalfDir(dir, top, side).isEqualTo(ElevatedSlopeEdgeSkipPredicate.getHalfDir(adjDir, adjType, side.getOpposite()));
+    }
+
+    @CullTest.TestTarget(BlockType.FRAMED_INNER_CORNER_SLOPE_EDGE)
+    private static boolean testAgainstInnerCornerSlopeEdge(Direction dir, boolean top, BlockState adjState, Direction side)
+    {
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
+        CornerType adjType = adjState.getValue(PropertyHolder.CORNER_TYPE);
+        boolean adjAlt = adjState.getValue(PropertyHolder.ALT_TYPE);
+
+        return getHalfDir(dir, top, side).isEqualTo(InnerCornerSlopeEdgeSkipPredicate.getHalfDir(adjDir, adjType, adjAlt, side.getOpposite()));
     }
 
     @CullTest.TestTarget(BlockType.FRAMED_SLAB_EDGE)

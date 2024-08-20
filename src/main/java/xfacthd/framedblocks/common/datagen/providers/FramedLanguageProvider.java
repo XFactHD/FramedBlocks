@@ -72,6 +72,8 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(FBContent.BLOCK_FRAMED_ELEVATED_SLOPE_EDGE.value(), "Framed Elevated Slope Edge");
         add(FBContent.BLOCK_FRAMED_ELEVATED_DOUBLE_SLOPE_EDGE.value(), "Framed Elevated Double Slope Edge");
         add(FBContent.BLOCK_FRAMED_STACKED_SLOPE_EDGE.value(), "Framed Stacked Slope Edge");
+        add(FBContent.BLOCK_FRAMED_CORNER_SLOPE_EDGE.value(), "Framed Corner Slope Edge");
+        add(FBContent.BLOCK_FRAMED_INNER_CORNER_SLOPE_EDGE.value(), "Framed Inner Corner Slope Edge");
         add(FBContent.BLOCK_FRAMED_SLAB.value(), "Framed Slab");
         add(FBContent.BLOCK_FRAMED_DOUBLE_SLAB.value(), "Framed Double Slab");
         add(FBContent.BLOCK_FRAMED_ADJ_DOUBLE_SLAB.value(), "Framed Adjustable Double Slab");

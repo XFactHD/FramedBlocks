@@ -41,6 +41,12 @@ public final class SlopeEdgeSkipPredicate implements SideSkipPredicate
                 case FRAMED_ELEVATED_SLOPE_EDGE -> testAgainstElevatedSlopeEdge(
                         dir, type, alt, adjState, side
                 );
+                case FRAMED_CORNER_SLOPE_EDGE -> testAgainstCornerSlopeEdge(
+                        dir, type, alt, adjState, side
+                );
+                case FRAMED_INNER_CORNER_SLOPE_EDGE -> testAgainstInnerCornerSlopeEdge(
+                        dir, type, alt, adjState, side
+                );
                 case FRAMED_SLAB -> testAgainstSlab(
                         dir, type, alt, adjState, side
                 );
@@ -138,6 +144,31 @@ public final class SlopeEdgeSkipPredicate implements SideSkipPredicate
         SlopeType adjType = adjState.getValue(PropertyHolder.SLOPE_TYPE);
 
         return getHalfDir(dir, type, alt, side).isEqualTo(ElevatedSlopeEdgeSkipPredicate.getHalfDir(adjDir, adjType, side.getOpposite()));
+    }
+
+    @CullTest.TestTarget(BlockType.FRAMED_CORNER_SLOPE_EDGE)
+    private static boolean testAgainstCornerSlopeEdge(
+            Direction dir, SlopeType type, boolean alt, BlockState adjState, Direction side
+    )
+    {
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
+        CornerType adjType = adjState.getValue(PropertyHolder.CORNER_TYPE);
+        boolean adjAlt = adjState.getValue(PropertyHolder.ALT_TYPE);
+
+        return getTriDir(dir, type, alt, side).isEqualTo(CornerSlopeEdgeSkipPredicate.getTriDir(adjDir, adjType, adjAlt, side.getOpposite()));
+    }
+
+    @CullTest.TestTarget(BlockType.FRAMED_INNER_CORNER_SLOPE_EDGE)
+    private static boolean testAgainstInnerCornerSlopeEdge(
+            Direction dir, SlopeType type, boolean alt, BlockState adjState, Direction side
+    )
+    {
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
+        CornerType adjType = adjState.getValue(PropertyHolder.CORNER_TYPE);
+        boolean adjAlt = adjState.getValue(PropertyHolder.ALT_TYPE);
+
+        return getTriDir(dir, type, alt, side).isEqualTo(InnerCornerSlopeEdgeSkipPredicate.getTriDir(adjDir, adjType, adjAlt, side.getOpposite())) ||
+                getHalfDir(dir, type, alt, side).isEqualTo(InnerCornerSlopeEdgeSkipPredicate.getHalfDir(adjDir, adjType, adjAlt, side.getOpposite()));
     }
 
     @CullTest.TestTarget(BlockType.FRAMED_SLAB)

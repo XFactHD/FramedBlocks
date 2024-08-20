@@ -254,6 +254,8 @@ public final class FBClient
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_ELEVATED_SLOPE_EDGE, FramedElevatedSlopeEdgeGeometry::new, WrapHelper.IGNORE_DEFAULT);
         wrapDoubleModel(FBContent.BLOCK_FRAMED_ELEVATED_DOUBLE_SLOPE_EDGE, NullCullPredicate.ALWAYS, WrapHelper.IGNORE_SOLID);
         wrapDoubleModel(FBContent.BLOCK_FRAMED_STACKED_SLOPE_EDGE, NullCullPredicate.ONLY_LEFT, WrapHelper.IGNORE_DEFAULT);
+        WrapHelper.wrap(FBContent.BLOCK_FRAMED_CORNER_SLOPE_EDGE, FramedCornerSlopeEdgeGeometry::new, WrapHelper.IGNORE_WATERLOGGED);
+        WrapHelper.wrap(FBContent.BLOCK_FRAMED_INNER_CORNER_SLOPE_EDGE, FramedInnerCornerSlopeEdgeGeometry::new, WrapHelper.IGNORE_WATERLOGGED);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_SLAB, FramedSlabGeometry::new, WrapHelper.IGNORE_DEFAULT);
         wrapDoubleModel(FBContent.BLOCK_FRAMED_DOUBLE_SLAB, NullCullPredicate.ALWAYS, WrapHelper.IGNORE_SOLID);
         wrapDoubleModel(FBContent.BLOCK_FRAMED_ADJ_DOUBLE_SLAB, NullCullPredicate.ALWAYS, AdjustableDoubleBlockItemModelInfo.STANDARD, WrapHelper.IGNORE_SOLID);

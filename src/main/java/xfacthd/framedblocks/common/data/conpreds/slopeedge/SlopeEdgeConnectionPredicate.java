@@ -60,13 +60,17 @@ public final class SlopeEdgeConnectionPredicate implements ConnectionPredicate
             {
                 return !alt && (edge == dir || edge == dirTwo);
             }
+            if (side == dir || side == dirTwo)
+            {
+                return edge.getAxis() == dir.getClockWise().getAxis();
+            }
             if (side == dirTwo.getOpposite())
             {
-                return alt ? edge == dir.getOpposite() : edge == dir;
+                return edge.getAxis() == dir.getClockWise().getAxis() || (alt ? edge == dir.getOpposite() : edge == dir);
             }
             if (side == dir.getOpposite())
             {
-                return alt ? edge == dirTwo.getOpposite() : edge == dirTwo;
+                return edge.getAxis() == dir.getClockWise().getAxis() || (alt ? edge == dirTwo.getOpposite() : edge == dirTwo);
             }
         }
 

@@ -11,10 +11,10 @@ import xfacthd.framedblocks.api.predicate.cull.SideSkipPredicate;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
-import xfacthd.framedblocks.common.data.property.HorizontalRotation;
-import xfacthd.framedblocks.common.data.property.StairsType;
+import xfacthd.framedblocks.common.data.property.*;
 import xfacthd.framedblocks.common.data.skippreds.*;
 import xfacthd.framedblocks.common.data.skippreds.pillar.CornerPillarSkipPredicate;
+import xfacthd.framedblocks.common.data.skippreds.slopeedge.CornerSlopeEdgeSkipPredicate;
 import xfacthd.framedblocks.common.data.skippreds.slopepanelcorner.*;
 import xfacthd.framedblocks.common.data.skippreds.stairs.*;
 
@@ -34,6 +34,9 @@ public final class CheckeredPanelSegmentSkipPredicate implements SideSkipPredica
                         dir, second, adjState, side
                 );
                 case FRAMED_CHECKERED_CUBE_SEGMENT -> testAgainstCheckeredCubeSegment(
+                        dir, second, adjState, side
+                );
+                case FRAMED_CORNER_SLOPE_EDGE -> testAgainstCornerSlopeEdge(
                         dir, second, adjState, side
                 );
                 case FRAMED_SLAB_CORNER -> testAgainstSlabCorner(
@@ -102,6 +105,18 @@ public final class CheckeredPanelSegmentSkipPredicate implements SideSkipPredica
     {
         boolean adjSecond = adjState.getValue(PropertyHolder.SECOND);
         return getDiagCornerDir(dir, second, side).isEqualTo(CheckeredCubeSegmentSkipPredicate.getDiagCornerDir(adjSecond, side.getOpposite()));
+    }
+
+    @CullTest.TestTarget(BlockType.FRAMED_CORNER_SLOPE_EDGE)
+    private static boolean testAgainstCornerSlopeEdge(
+            Direction dir, boolean second, BlockState adjState, Direction side
+    )
+    {
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
+        CornerType adjType = adjState.getValue(PropertyHolder.CORNER_TYPE);
+        boolean adjAlt = adjState.getValue(PropertyHolder.ALT_TYPE);
+
+        return getCornerDir(dir, second, side).isEqualTo(CornerSlopeEdgeSkipPredicate.getCornerDir(adjDir, adjType, adjAlt, side.getOpposite()));
     }
 
     @CullTest.TestTarget(BlockType.FRAMED_SLAB_CORNER)

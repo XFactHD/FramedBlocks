@@ -137,6 +137,8 @@ public final class FBContent
     public static final Holder<Block> BLOCK_FRAMED_ELEVATED_SLOPE_EDGE = registerBlock(FramedElevatedSlopeEdgeBlock::new, BlockType.FRAMED_ELEVATED_SLOPE_EDGE);
     public static final Holder<Block> BLOCK_FRAMED_ELEVATED_DOUBLE_SLOPE_EDGE = registerBlock(FramedElevatedDoubleSlopeEdgeBlock::new, BlockType.FRAMED_ELEVATED_DOUBLE_SLOPE_EDGE);
     public static final Holder<Block> BLOCK_FRAMED_STACKED_SLOPE_EDGE = registerBlock(FramedStackedSlopeEdgeBlock::new, BlockType.FRAMED_STACKED_SLOPE_EDGE);
+    public static final Holder<Block> BLOCK_FRAMED_CORNER_SLOPE_EDGE = registerBlock(FramedCornerSlopeEdgeBlock::new, BlockType.FRAMED_CORNER_SLOPE_EDGE);
+    public static final Holder<Block> BLOCK_FRAMED_INNER_CORNER_SLOPE_EDGE = registerBlock(FramedCornerSlopeEdgeBlock::new, BlockType.FRAMED_INNER_CORNER_SLOPE_EDGE);
     public static final Holder<Block> BLOCK_FRAMED_SLAB = registerBlock(FramedSlabBlock::new, BlockType.FRAMED_SLAB);
     public static final Holder<Block> BLOCK_FRAMED_DOUBLE_SLAB = registerBlock(FramedDoubleSlabBlock::new, BlockType.FRAMED_DOUBLE_SLAB);
     public static final Holder<Block> BLOCK_FRAMED_ADJ_DOUBLE_SLAB = registerBlock(FramedAdjustableDoubleSlabBlock::standard, BlockType.FRAMED_ADJ_DOUBLE_SLAB);
