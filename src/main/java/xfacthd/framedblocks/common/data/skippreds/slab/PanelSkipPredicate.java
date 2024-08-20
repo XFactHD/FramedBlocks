@@ -112,7 +112,9 @@ public final class PanelSkipPredicate implements SideSkipPredicate
     private static boolean testAgainstMasonryCornerSegment(Direction dir, BlockState adjState, Direction side)
     {
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
-        return getHalfDir(dir, side).isEqualTo(MasonryCornerSegmentSkipPredicate.getHalfDir(adjDir, side.getOpposite()));
+        boolean adjTop = adjState.getValue(FramedProperties.TOP);
+
+        return getHalfDir(dir, side).isEqualTo(MasonryCornerSegmentSkipPredicate.getHalfDir(adjDir, adjTop, side.getOpposite()));
     }
 
     @CullTest.TestTarget(BlockType.FRAMED_STAIRS)

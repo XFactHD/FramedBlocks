@@ -189,7 +189,9 @@ public final class CheckeredSlabSegmentSkipPredicate implements SideSkipPredicat
     )
     {
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
-        return getCornerDir(top, second, side).isEqualTo(MasonryCornerSegmentSkipPredicate.getCornerDir(adjDir, side.getOpposite()));
+        boolean adjTop = adjState.getValue(FramedProperties.TOP);
+
+        return getCornerDir(top, second, side).isEqualTo(MasonryCornerSegmentSkipPredicate.getCornerDir(adjDir, adjTop, side.getOpposite()));
     }
 
 

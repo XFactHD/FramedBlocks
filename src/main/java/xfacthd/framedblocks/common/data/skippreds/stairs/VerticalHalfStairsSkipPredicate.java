@@ -251,7 +251,9 @@ public final class VerticalHalfStairsSkipPredicate implements SideSkipPredicate
     )
     {
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
-        return getCornerDir(dir, top, side).isEqualTo(MasonryCornerSegmentSkipPredicate.getCornerDir(adjDir, side.getOpposite()));
+        boolean adjTop = adjState.getValue(FramedProperties.TOP);
+
+        return getCornerDir(dir, top, side).isEqualTo(MasonryCornerSegmentSkipPredicate.getCornerDir(adjDir, adjTop, side.getOpposite()));
     }
 
     @CullTest.TestTarget(BlockType.FRAMED_THREEWAY_CORNER_PILLAR)

@@ -12,21 +12,23 @@ public final class MasonryCornerConnectionPredicate extends NonDetailedConnectio
     public boolean canConnectFullEdge(BlockState state, Direction side, @Nullable Direction edge)
     {
         Direction dir = state.getValue(FramedProperties.FACING_HOR);
-        if (side == Direction.DOWN)
+        boolean top = state.getValue(FramedProperties.TOP);
+        Direction bottom = top ? Direction.UP : Direction.DOWN;
+        if (side == bottom)
         {
             return edge == dir || edge == dir.getOpposite();
         }
-        else if (side == Direction.UP)
+        else if (side == bottom.getOpposite())
         {
             return edge == dir.getClockWise() || edge == dir.getCounterClockWise();
         }
         else if (side.getAxis() == dir.getAxis())
         {
-            return edge == Direction.DOWN || edge == side.getCounterClockWise();
+            return edge == bottom || edge == side.getCounterClockWise();
         }
         else if (side.getAxis() == dir.getClockWise().getAxis())
         {
-            return edge == Direction.UP || edge == side.getClockWise();
+            return edge == bottom.getOpposite() || edge == side.getClockWise();
         }
         return false;
     }

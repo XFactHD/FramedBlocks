@@ -383,7 +383,8 @@ public final class SkipPredicateGeneratorData
                     new TestDir("TriangleDir", "Stair", null, "stair_xz")
             )),
             entry("FRAMED_MASONRY_CORNER_SEGMENT", "slab", List.of(
-                    Property.api("Direction", "dir", "FACING_HOR", PropType.PRIMITIVE)
+                    Property.api("Direction", "dir", "FACING_HOR", PropType.PRIMITIVE),
+                    Property.api("boolean", "top", "TOP", PropType.PRIMITIVE)
             ), List.of(
                     new TestDir("HalfDir", "Half", null, "half_y"),
                     new TestDir("CornerDir", "Corner", null, "corner_xz"),

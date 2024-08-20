@@ -256,7 +256,9 @@ public final class CheckeredPanelSegmentSkipPredicate implements SideSkipPredica
     )
     {
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
-        return getCornerDir(dir, second, side).isEqualTo(MasonryCornerSegmentSkipPredicate.getCornerDir(adjDir, side.getOpposite()));
+        boolean adjTop = adjState.getValue(FramedProperties.TOP);
+
+        return getCornerDir(dir, second, side).isEqualTo(MasonryCornerSegmentSkipPredicate.getCornerDir(adjDir, adjTop, side.getOpposite()));
     }
 
 

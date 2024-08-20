@@ -12,21 +12,23 @@ public final class MasonryCornerSegmentConnectionPredicate implements Connection
     public boolean canConnectFullEdge(BlockState state, Direction side, @Nullable Direction edge)
     {
         Direction dir = state.getValue(FramedProperties.FACING_HOR);
-        if (side == Direction.DOWN)
+        boolean top = state.getValue(FramedProperties.TOP);
+        Direction bottom = top ? Direction.UP : Direction.DOWN;
+        if (side == bottom)
         {
             return edge == dir.getOpposite();
         }
-        else if (side == Direction.UP)
+        else if (side == bottom.getOpposite())
         {
             return edge == dir.getClockWise();
         }
         else if (side == dir.getOpposite())
         {
-            return edge == Direction.DOWN || edge == side.getCounterClockWise();
+            return edge == bottom || edge == side.getCounterClockWise();
         }
         else if (side == dir.getClockWise())
         {
-            return edge == Direction.UP || edge == side.getClockWise();
+            return edge == bottom.getOpposite() || edge == side.getClockWise();
         }
         return false;
     }
@@ -35,11 +37,13 @@ public final class MasonryCornerSegmentConnectionPredicate implements Connection
     public boolean canConnectDetailed(BlockState state, Direction side, Direction edge)
     {
         Direction dir = state.getValue(FramedProperties.FACING_HOR);
-        if (side == Direction.DOWN)
+        boolean top = state.getValue(FramedProperties.TOP);
+        Direction bottom = top ? Direction.UP : Direction.DOWN;
+        if (side == bottom)
         {
             return edge != dir.getOpposite();
         }
-        else if (side == Direction.UP)
+        else if (side == bottom.getOpposite())
         {
             return edge != dir.getClockWise();
         }
@@ -49,11 +53,11 @@ public final class MasonryCornerSegmentConnectionPredicate implements Connection
         }
         else if (side == dir.getOpposite())
         {
-            return edge == Direction.UP || edge == side.getClockWise();
+            return edge == bottom.getOpposite() || edge == side.getClockWise();
         }
         else if (side == dir.getClockWise())
         {
-            return edge == Direction.DOWN || edge == side.getCounterClockWise();
+            return edge == bottom || edge == side.getCounterClockWise();
         }
         return false;
     }
