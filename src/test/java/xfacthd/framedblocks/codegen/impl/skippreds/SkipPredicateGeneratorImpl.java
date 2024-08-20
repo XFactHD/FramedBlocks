@@ -29,8 +29,9 @@ public final class SkipPredicateGeneratorImpl
     );
     private static final String VANILLA_PROP_TYPES_PKG = "net.minecraft.world.level.block.state.properties.";
     private static final String CUSTOM_PROP_TYPES_PKG = "xfacthd.framedblocks.common.data.property.";
+    private static final String SKIP_PREDS_ROOT_PKG = "xfacthd.framedblocks.common.data.skippreds.";
     private static final String CLASS_TEMPLATE = """
-            package xfacthd.framedblocks.common.data.skippreds.%s;
+            package %s.%s;
             
             %s
             
@@ -54,10 +55,14 @@ public final class SkipPredicateGeneratorImpl
                 }
             
             %s
+            
+            
+            
+            %s
             }
             """;
     private static final String COUNTERPARTS_CLASS_TEMPLATE = """
-            package xfacthd.framedblocks.common.data.skippreds.%s;
+            package %s.%s;
             
             %s
             
@@ -79,7 +84,7 @@ public final class SkipPredicateGeneratorImpl
                 )
                 {
             %s
-                    return false;
+            %s
                 }
             """;
     private static final String COUNTERPART_TEST_MTH_TEMPLATE = """
@@ -94,24 +99,33 @@ public final class SkipPredicateGeneratorImpl
                     )
                     {
             %s
-                        return false;
+            %s
                     }
                 }
             """;
     private static final String TEST_MTH_PROP_LOOKUP_TEMPLATE = "        %s adj%s = adjState.getValue(%s.%s);";
     private static final String COUNTERPART_TEST_MTH_PROP_LOOKUP_TEMPLATE = "            %s adj%s = adjState.getValue(%s.%s);";
     private static final String TEST_MTH_PROP_LOOKUP_PLACEHOLDER = "        // Prop lookup placeholder\n";
+    private static final String DIR_COMPUTE_MTH_TEMPLATE = """
+                public static %s get%sDir(%s, Direction side)
+                {
+                    // TODO: implement
+                    return %s.NULL;
+                }
+            """;
+    private static final String DIR_TEST_TEMPLATE_FIRST = "return get%sDir(%s).isEqualTo(%sget%sDir(%s))";
+    private static final String DIR_TEST_TEMPLATE_OTHER = "       get%sDir(%s).isEqualTo(%sget%sDir(%s))";
 
-    public static void generateAndExportClass(String subPackage, String sourceTypeName, List<String> targetTypeNames)
+    public static void generateAndExportClass(String sourceTypeName, List<String> targetTypeNames)
     {
         Type sourceType = resolveType(sourceTypeName);
         List<Type> targetTypes = targetTypeNames.stream().map(SkipPredicateGeneratorImpl::resolveType).toList();
 
         String shortName = getShortTypeName(sourceType);
-        String predicateClazz = generateClass(subPackage, sourceType, targetTypes);
-        String counterpartsClazz = generateCounterpartsClass(subPackage, sourceType, targetTypes);
+        String predicateClazz = generateClass(sourceType, targetTypes);
+        String counterpartsClazz = generateCounterpartsClass(sourceType, targetTypes);
 
-        Path dirPath = Path.of("./").resolve(TARGET_PATH).resolve(subPackage);
+        Path dirPath = Path.of("./").resolve(TARGET_PATH).resolve(sourceType.subPackage());
         try
         {
             Files.createDirectories(dirPath);
@@ -144,40 +158,44 @@ public final class SkipPredicateGeneratorImpl
         }
         catch (IOException e)
         {
-            System.err.println(type + " class not exported: " + e.getMessage());
+            System.err.println(type + " class not exported: " + e.getClass().getSimpleName() + " (" + e.getMessage() + ")");
         }
     }
 
-    private static String generateClass(String subPackage, Type sourceType, List<Type> targetTypes)
+    private static String generateClass(Type sourceType, List<Type> targetTypes)
     {
         Set<String> imports = new HashSet<>(STANDARD_IMPORTS);
+        Map<Type, Set<Property>> propsByTestTarget = new HashMap<>();
 
         String propertyList = buildPropertyLookupList(sourceType, imports);
-        String testCaseList = buildTestCaseList(sourceType, targetTypes);
-        String testMthList = buildTestMethodList(sourceType, targetTypes, imports);
+        String testMthList = buildTestMethodList(sourceType, targetTypes, imports, propsByTestTarget);
+        String testCaseList = buildTestCaseList(sourceType, targetTypes, propsByTestTarget);
+        String dirComputeMthList = buildDirComputeMethodList(sourceType, imports);
         String importList = imports.stream().sorted().map(s -> "import " + s + ";").collect(Collectors.joining("\n"));
 
         return CLASS_TEMPLATE.formatted(
-                subPackage,
+                SKIP_PREDS_ROOT_PKG,
+                sourceType.subPackage(),
                 importList,
                 sourceType.type(),
                 getShortTypeName(sourceType),
                 propertyList,
                 testCaseList,
-                testMthList
+                testMthList,
+                dirComputeMthList
         );
     }
 
-    private static String generateCounterpartsClass(String subPackage, Type sourceType, List<Type> targetTypes)
+    private static String generateCounterpartsClass(Type sourceType, List<Type> targetTypes)
     {
         Set<String> imports = new HashSet<>(STANDARD_IMPORTS);
 
-        String propLookupList = buildTestPropertyLookupList(COUNTERPART_TEST_MTH_PROP_LOOKUP_TEMPLATE, sourceType.properties(), imports);
-        String testMthList = buildCounterpartTestMethodList(sourceType, targetTypes, propLookupList, imports);
+        String testMthList = buildCounterpartTestMethodList(sourceType, targetTypes, imports);
         String importList = imports.stream().sorted().map(s -> "import " + s + ";").collect(Collectors.joining("\n"));
 
         return COUNTERPARTS_CLASS_TEMPLATE.formatted(
-                subPackage,
+                SKIP_PREDS_ROOT_PKG,
+                sourceType.subPackage(),
                 importList,
                 getShortTypeName(sourceType),
                 testMthList
@@ -201,17 +219,26 @@ public final class SkipPredicateGeneratorImpl
         return builder.toString().stripTrailing();
     }
 
-    private static String buildTestCaseList(Type sourceType, List<Type> targetTypes)
+    private static String buildTestCaseList(Type sourceType, List<Type> targetTypes, Map<Type, Set<Property>> propsByTestTarget)
     {
-        String propArgsList = sourceType.properties().stream().map(Property::name).collect(Collectors.joining(", "));
-
         StringBuilder builder = new StringBuilder();
-        builder.append(buildTestCase(sourceType, propArgsList));
+        String selfPropArgsList = buildTestCaseArgList(sourceType, propsByTestTarget.get(sourceType));
+        builder.append(buildTestCase(sourceType, selfPropArgsList));
         for (Type type : targetTypes)
         {
+            String propArgsList = buildTestCaseArgList(sourceType, propsByTestTarget.get(type));
             builder.append(buildTestCase(type, propArgsList));
         }
         return builder.toString().stripTrailing();
+    }
+
+    private static String buildTestCaseArgList(Type type, Set<Property> usedProps)
+    {
+        return type.properties()
+                .stream()
+                .filter(usedProps::contains)
+                .map(Property::name)
+                .collect(Collectors.joining(", "));
     }
 
     private static String buildTestCase(Type type, String propArgsList)
@@ -219,43 +246,181 @@ public final class SkipPredicateGeneratorImpl
         return TEST_CASE_TEMPLATE.formatted(type.type(), getShortTypeName(type), propArgsList);
     }
 
-    private static String buildTestMethodList(Type sourceType, List<Type> targetTypes, Set<String> imports)
+    private static String buildTestMethodList(Type sourceType, List<Type> targetTypes, Set<String> imports, Map<Type, Set<Property>> propsByTestTarget)
     {
-        String propParamsList = sourceType.properties().stream().map(prop -> prop.typeName() + " " + prop.name()).collect(Collectors.joining(", "));
-
         StringBuilder builder = new StringBuilder();
 
-        String propLookupList = buildTestPropertyLookupList(TEST_MTH_PROP_LOOKUP_TEMPLATE, sourceType.properties(), imports);
-        builder.append(buildTestMethod(sourceType, propParamsList, propLookupList));
+        Set<Property> selfUsedProps = new HashSet<>();
+        String selfTestExec = buildTestExecution(sourceType, sourceType, selfUsedProps, new HashSet<>(), 2);
+        String selfPropParamsList = sourceType.properties()
+                .stream()
+                .filter(selfUsedProps::contains)
+                .map(prop -> prop.typeName() + " " + prop.name())
+                .collect(Collectors.joining(", "));
+        List<Property> selfProperties = sourceType.properties().stream().filter(selfUsedProps::contains).toList();
+        String selfPropLookupList = buildTestPropertyLookupList(TEST_MTH_PROP_LOOKUP_TEMPLATE, selfProperties, imports);
+        builder.append(buildTestMethod(sourceType, selfPropParamsList, selfPropLookupList, selfTestExec));
+        propsByTestTarget.put(sourceType, selfUsedProps);
 
         for (Type type : targetTypes)
         {
-            String body = TEST_MTH_PROP_LOOKUP_PLACEHOLDER;
+            Set<Property> srcUsedProps = new HashSet<>();
+            Set<Property> targetUsedProps = new HashSet<>();
+            String testExec = buildTestExecution(sourceType, type, srcUsedProps, targetUsedProps, 2);
+
+            String propParamsList = sourceType.properties()
+                    .stream()
+                    .filter(srcUsedProps::contains)
+                    .map(prop -> prop.typeName() + " " + prop.name())
+                    .collect(Collectors.joining(", "));
+
+            String propLookupList = TEST_MTH_PROP_LOOKUP_PLACEHOLDER;
             if (!type.properties().isEmpty())
             {
-                body = buildTestPropertyLookupList(TEST_MTH_PROP_LOOKUP_TEMPLATE, type.properties(), imports);
+                List<Property> properties = type.properties().stream().filter(targetUsedProps::contains).toList();
+                propLookupList = buildTestPropertyLookupList(TEST_MTH_PROP_LOOKUP_TEMPLATE, properties, imports);
             }
 
             builder.append("\n");
-            builder.append(buildTestMethod(type, propParamsList, body));
+            builder.append(buildTestMethod(type, propParamsList, propLookupList, testExec));
+
+            propsByTestTarget.put(type, srcUsedProps);
+            if (!type.subPackage().equals(sourceType.subPackage()))
+            {
+                imports.add(SKIP_PREDS_ROOT_PKG + type.subPackage() + "." + getShortTypeName(type) + "SkipPredicate");
+            }
         }
         return builder.toString().stripTrailing();
     }
 
-    private static String buildCounterpartTestMethodList(Type sourceType, List<Type> targetTypes, String propLookupList, Set<String> imports)
+    private static String buildTestExecution(Type sourceType, Type type, Set<Property> srcUsedProps, Set<Property> targetUsedProps, int indentLevel)
+    {
+        record DirPair(TestDir first, TestDir second) { }
+
+        List<DirPair> commonDirs = new ArrayList<>();
+        if (sourceType == type)
+        {
+            for (TestDir dir : sourceType.testDirs())
+            {
+                commonDirs.add(new DirPair(dir, dir));
+                List<Property> usedProps = dir.props().stream().map(sourceType.propertyMap()::get).toList();
+                srcUsedProps.addAll(usedProps);
+                targetUsedProps.addAll(usedProps);
+            }
+        }
+        else if (!sourceType.testDirs().isEmpty() && !type.testDirs().isEmpty())
+        {
+            for (TestDir dir : sourceType.testDirs())
+            {
+                for (TestDir otherDir : type.testDirs())
+                {
+                    for (String id : dir.identifiers())
+                    {
+                        if (otherDir.identifiers().contains(id))
+                        {
+                            commonDirs.add(new DirPair(dir, otherDir));
+                            srcUsedProps.addAll(dir.props().stream().map(sourceType.propertyMap()::get).toList());
+                            targetUsedProps.addAll(otherDir.props().stream().map(type.propertyMap()::get).toList());
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        String indent = "    ".repeat(indentLevel);
+        if (commonDirs.isEmpty())
+        {
+            srcUsedProps.addAll(sourceType.properties());
+            targetUsedProps.addAll(type.properties());
+            return indent + "// TODO: implement\n" + indent + "return false;";
+        }
+
+        String secondTarget = sourceType == type ? "" : (getShortTypeName(type) + "SkipPredicate.");
+
+        StringBuilder builder = new StringBuilder();
+
+        boolean first = true;
+        for (DirPair pair : commonDirs)
+        {
+            if (!first) builder.append(" ||\n");
+
+            String template = first ? DIR_TEST_TEMPLATE_FIRST : DIR_TEST_TEMPLATE_OTHER;
+            builder.append(indent).append(template.formatted(
+                    pair.first.name(),
+                    buildTestExecParams(sourceType, pair.first, false),
+                    secondTarget,
+                    pair.second.name(),
+                    buildTestExecParams(type, pair.second, true)
+            ));
+
+            first = false;
+        }
+
+        return builder.append(";").toString();
+    }
+
+    private static String buildTestExecParams(Type type, TestDir dir, boolean opposite)
+    {
+        String params = dir.props()
+                .stream()
+                .map(prop -> type.propertyMap().get(prop))
+                .map(Property::name)
+                .map(prop -> opposite ? ("adj" + capitalize(prop, false)) : prop)
+                .collect(Collectors.joining(", ", "", ", "));
+        params += opposite ? "side.getOpposite()" : "side";
+        return params;
+    }
+
+    private static String buildDirComputeMethodList(Type sourceType, Set<String> imports)
+    {
+        StringBuilder builder = new StringBuilder();
+
+        for (TestDir dir : sourceType.testDirs())
+        {
+            imports.add(SKIP_PREDS_ROOT_PKG + dir.type());
+
+            String params = dir.props()
+                    .stream()
+                    .map(prop -> sourceType.propertyMap().get(prop))
+                    .map(prop -> prop.typeName() + " " + prop.name())
+                    .collect(Collectors.joining(", "));
+
+            builder.append(DIR_COMPUTE_MTH_TEMPLATE.formatted(
+                    dir.type(),
+                    dir.name(),
+                    params,
+                    dir.type()
+            ));
+            builder.append("\n");
+        }
+
+        return builder.toString().stripTrailing();
+    }
+
+    private static String buildCounterpartTestMethodList(Type sourceType, List<Type> targetTypes, Set<String> imports)
     {
         StringBuilder builder = new StringBuilder();
         for (Type type : targetTypes)
         {
+            Set<Property> usedProps = new HashSet<>();
+            Set<Property> srcUsedProps = new HashSet<>();
+            String testExec = buildTestExecution(type, sourceType, usedProps, srcUsedProps, 3);
+
             String propParamsList = type.properties()
                     .stream()
+                    .filter(usedProps::contains)
                     .peek(prop -> collectPropertyImports(prop, imports))
                     .map(prop -> prop.typeName() + " " + prop.name())
                     .collect(Collectors.joining(", "));
             String propArgsList = type.properties()
                     .stream()
+                    .filter(usedProps::contains)
                     .map(Property::name)
                     .collect(Collectors.joining(", "));
+
+            List<Property> srcProperties = sourceType.properties().stream().filter(srcUsedProps::contains).toList();
+            String propLookupList = buildTestPropertyLookupList(COUNTERPART_TEST_MTH_PROP_LOOKUP_TEMPLATE, srcProperties, imports);
 
             builder.append(COUNTERPART_TEST_MTH_TEMPLATE.formatted(
                     getShortTypeName(type),
@@ -263,7 +428,8 @@ public final class SkipPredicateGeneratorImpl
                     sourceType.type(),
                     getShortTypeName(sourceType),
                     propParamsList,
-                    propLookupList
+                    propLookupList,
+                    testExec
             )).append("\n");
         }
         return builder.toString().stripTrailing();
@@ -291,9 +457,9 @@ public final class SkipPredicateGeneratorImpl
         return list;
     }
 
-    private static String buildTestMethod(Type type, String propParamsList, String body)
+    private static String buildTestMethod(Type type, String propParamsList, String propLookup, String testExec)
     {
-        return TEST_MTH_TEMPLATE.formatted(type.type(), getShortTypeName(type), propParamsList, body);
+        return TEST_MTH_TEMPLATE.formatted(type.type(), getShortTypeName(type), propParamsList, propLookup, testExec);
     }
 
     private static void collectPropertyImports(Property property, Set<String> imports)
@@ -317,18 +483,13 @@ public final class SkipPredicateGeneratorImpl
         StringBuilder builder = new StringBuilder();
         for (String part : type.type().replace("FRAMED_", "").split("_"))
         {
-            if (part.equals("EXT"))
+            builder.append(switch (part)
             {
-                builder.append("Extended");
-                continue;
-            }
-            if (part.equals("ELEV"))
-            {
-                builder.append("Elevated");
-                continue;
-            }
-
-            builder.append(capitalize(part, true));
+                case "EXT" -> "Extended";
+                case "ELEV" -> "Elevated";
+                case "W" -> "Wall";
+                default -> capitalize(part, true);
+            });
         }
         return builder.toString();
     }

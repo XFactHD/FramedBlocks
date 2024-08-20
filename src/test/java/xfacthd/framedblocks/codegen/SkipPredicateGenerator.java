@@ -8,8 +8,6 @@ public final class SkipPredicateGenerator
 {
     public static void main(String[] args)
     {
-        // The sub-package of xfacthd.framedblocks.common.data.skippreds the class should be placed in
-        String subPackage = "pkg";
         // The type for which the predicate should be generated (must be defined in SkipPredicateGeneratorData.KNOWN_TYPES)
         String sourceType = "FRAMED_TYPE";
         // The types against which the generated predicate should test (must be defined in SkipPredicateGeneratorData.KNOWN_TYPES)
@@ -17,7 +15,7 @@ public final class SkipPredicateGenerator
                 "FRAMED_OTHER_TYPE"
         );
 
-        SkipPredicateGeneratorImpl.generateAndExportClass(subPackage, sourceType, targetTypes);
+        SkipPredicateGeneratorImpl.generateAndExportClass(sourceType, targetTypes);
     }
 
 
