@@ -83,8 +83,7 @@ public final class FluidCamoContent extends CamoContent<FluidCamoContent>
     @Override
     public SoundType getSoundType()
     {
-        //TODO: build custom sound type suitable for the contained fluid
-        return SoundType.STONE;
+        return SoundType.WET_GRASS;
     }
 
     @Override
