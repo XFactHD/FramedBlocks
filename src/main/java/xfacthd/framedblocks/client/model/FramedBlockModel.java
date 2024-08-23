@@ -227,6 +227,12 @@ public final class FramedBlockModel extends AbstractFramedBlockModel
             if (camoInRenderType)
             {
                 quads = camoModel.getQuads(camoContent.getAppearanceState(), side, rand, camoData, renderType);
+                if (quads.isEmpty())
+                {
+                    // Try extracting useful quads from the list of (supposedly) uncullable quads if querying cullable
+                    // ones returned nothing due to the dev forgetting to specify cull-faces in the model
+                    quads = ModelUtils.getFilteredNullQuads(camoModel, camoContent.getAppearanceState(), rand, camoData, renderType, side);
+                }
                 if (camoContent.isEmissive())
                 {
                     quads = Utils.copyAllWithModifier(quads, new ArrayList<>(quads.size()), EMISSIVE_PROCESSOR);

@@ -11,7 +11,9 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.client.ChunkRenderTypeSet;
+import net.neoforged.neoforge.client.model.IQuadTransformer;
 import net.neoforged.neoforge.client.model.data.ModelData;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 import xfacthd.framedblocks.api.model.data.FramedBlockData;
 import xfacthd.framedblocks.api.model.quad.QuadData;
@@ -237,10 +239,87 @@ public final class ModelUtils
         {
             if (filter.test(dir))
             {
-                Utils.copyAll(model.getQuads(state, dir, rand, data, renderType), quads);
+                List<BakedQuad> sideQuads = model.getQuads(state, dir, rand, data, renderType);
+                if (sideQuads.isEmpty())
+                {
+                    // Try extracting useful quads from the list of (supposedly) uncullable quads if querying cullable
+                    // ones returned nothing due to the dev forgetting to specify cull-faces in the model
+                    sideQuads = getFilteredNullQuads(model, state, rand, data, renderType, dir);
+                }
+                Utils.copyAll(sideQuads, quads);
             }
         }
         return quads;
+    }
+
+    /**
+     * Guess the cull-face of quads returned by {@link BakedModel#getQuads(BlockState, Direction, RandomSource, ModelData, RenderType)}
+     * with a {@code null} side (i.e. supposedly uncullable quads) and filter them to return the ones applicable to the given
+     * {@link Direction} and touching the block edge. This fixes blocks becoming invisible when mods forget to specify
+     * cull-faces in their models
+     * <p>
+     * Heavily based on <a href="https://github.com/embeddedt/embeddium/blob/72ba934b27fa35856a0a64f3aa6c867592b2e54f/src/main/java/me/jellysquid/mods/sodium/client/model/quad/properties/ModelQuadFlags.java#L41-L115">Embeddium's quad flag calculation</a>,
+     * licensed under LGPL v3
+     */
+    @SuppressWarnings("ForLoopReplaceableByForEach")
+    public static List<BakedQuad> getFilteredNullQuads(
+            BakedModel model,
+            BlockState state,
+            RandomSource rand,
+            ModelData data,
+            @Nullable RenderType renderType,
+            Direction side
+    )
+    {
+        List<BakedQuad> nullQuads = model.getQuads(state, null, rand, data, renderType);
+        if (nullQuads.isEmpty()) return Collections.emptyList();
+
+        List<BakedQuad> filtered = new ArrayList<>();
+        for (int i = 0; i < nullQuads.size(); i++)
+        {
+            BakedQuad quad = nullQuads.get(i);
+
+            // Filter out quads pointing completely the wrong way early
+            if (quad.getDirection() != side) continue;
+
+            float minX = 32F;
+            float minY = 32F;
+            float minZ = 32F;
+            float maxX = -32F;
+            float maxY = -32F;
+            float maxZ = -32F;
+
+            int[] vertexData = quad.getVertices();
+            for (int vert = 0; vert < 4; ++vert)
+            {
+                int offset = vert * IQuadTransformer.STRIDE + IQuadTransformer.POSITION;
+
+                float x = Float.intBitsToFloat(vertexData[offset]);
+                float y = Float.intBitsToFloat(vertexData[offset + 1]);
+                float z = Float.intBitsToFloat(vertexData[offset + 2]);
+
+                minX = Math.min(minX, x);
+                minY = Math.min(minY, y);
+                minZ = Math.min(minZ, z);
+                maxX = Math.max(maxX, x);
+                maxY = Math.max(maxY, y);
+                maxZ = Math.max(maxZ, z);
+            }
+
+            boolean positive = Utils.isPositive(side);
+            boolean aligned = switch(side.getAxis())
+            {
+                case X -> minX == maxX && (positive ? maxX > 0.9999F : minX < 0.0001F);
+                case Y -> minY == maxY && (positive ? maxY > 0.9999F : minY < 0.0001F);
+                case Z -> minZ == maxZ && (positive ? maxZ > 0.9999F : minZ < 0.0001F);
+            };
+
+            if (aligned)
+            {
+                filtered.add(quad);
+            }
+        }
+        return filtered;
     }
 
 
