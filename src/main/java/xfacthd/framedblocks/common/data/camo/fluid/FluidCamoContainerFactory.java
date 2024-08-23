@@ -56,33 +56,37 @@ public final class FluidCamoContainerFactory extends CamoContainerFactory<FluidC
             return null;
         }
 
-        FluidStack fluid = handler.getFluidInTank(0);
-        if (!isValidFluid(fluid.getFluid(), player))
+        for (int tank = 0; tank < handler.getTanks(); tank++)
         {
-            return null;
-        }
-
-        if (!player.isCreative() && ServerConfig.VIEW.shouldConsumeCamoItem())
-        {
-            fluid = fluid.copyWithAmount(FluidType.BUCKET_VOLUME);
-            if (handler.drain(fluid, IFluidHandler.FluidAction.SIMULATE).getAmount() != fluid.getAmount())
+            FluidStack fluid = handler.getFluidInTank(tank);
+            if (!isValidFluid(fluid.getFluid(), player))
             {
-                return null;
+                continue;
             }
 
-            if (!level.isClientSide())
+            if (!player.isCreative() && ServerConfig.VIEW.shouldConsumeCamoItem())
             {
-                handler.drain(fluid, IFluidHandler.FluidAction.EXECUTE);
-                ItemStack result = handler.getContainer();
-                if (result != stack) // Container holds fluid by type (i.e. bucket) -> got a new stack
+                fluid = fluid.copyWithAmount(FluidType.BUCKET_VOLUME);
+                if (handler.drain(fluid, IFluidHandler.FluidAction.SIMULATE).getAmount() != fluid.getAmount())
                 {
-                    stack.shrink(1);
-                    Utils.giveToPlayer(player, result, true);
+                    continue;
+                }
+
+                if (!level.isClientSide())
+                {
+                    handler.drain(fluid, IFluidHandler.FluidAction.EXECUTE);
+                    ItemStack result = handler.getContainer();
+                    if (result != stack) // Container holds fluid by type (i.e. bucket) -> got a new stack
+                    {
+                        stack.shrink(1);
+                        Utils.giveToPlayer(player, result, true);
+                    }
                 }
             }
-        }
 
-        return new FluidCamoContainer(fluid.getFluid());
+            return new FluidCamoContainer(fluid.getFluid());
+        }
+        return null;
     }
 
     @Override
@@ -100,9 +104,17 @@ public final class FluidCamoContainerFactory extends CamoContainerFactory<FluidC
         }
 
         FluidStack fluid = new FluidStack(container.getFluid(), FluidType.BUCKET_VOLUME);
-        if (handler.fill(fluid, IFluidHandler.FluidAction.SIMULATE) == FluidType.BUCKET_VOLUME)
+        if (!isValidForHandler(handler, fluid))
         {
-            if (!player.isCreative() && ServerConfig.VIEW.shouldConsumeCamoItem())
+            return false;
+        }
+        if (!player.isCreative() && ServerConfig.VIEW.shouldConsumeCamoItem())
+        {
+            if (handler.fill(fluid, IFluidHandler.FluidAction.SIMULATE) != FluidType.BUCKET_VOLUME)
+            {
+                return false;
+            }
+            if (!level.isClientSide())
             {
                 handler.fill(fluid, IFluidHandler.FluidAction.EXECUTE);
                 ItemStack result = handler.getContainer();
@@ -112,9 +124,25 @@ public final class FluidCamoContainerFactory extends CamoContainerFactory<FluidC
                     Utils.giveToPlayer(player, result, true);
                 }
             }
-            return true;
         }
+        return true;
+    }
 
+    private static boolean isValidForHandler(IFluidHandlerItem handler, FluidStack fluid)
+    {
+        for (int tank = 0; tank < handler.getTanks(); tank++)
+        {
+            if (!handler.isFluidValid(tank, fluid))
+            {
+                continue;
+            }
+
+            FluidStack inTank = handler.getFluidInTank(tank);
+            if (inTank.isEmpty() || FluidStack.isSameFluidSameComponents(inTank, fluid))
+            {
+                return true;
+            }
+        }
         return false;
     }
 
