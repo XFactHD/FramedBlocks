@@ -15,7 +15,6 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.shapes.*;
 import org.jetbrains.annotations.Nullable;
-import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.block.PlacementStateBuilder;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.FramedBlock;
@@ -39,7 +38,7 @@ public class FramedCollapsibleCopycatBlock extends FramedBlock
 
     public FramedCollapsibleCopycatBlock()
     {
-        super(BlockType.FRAMED_COLLAPSIBLE_COPYCAT_BLOCK, IFramedBlock.createProperties(BlockType.FRAMED_COLLAPSIBLE_COPYCAT_BLOCK).dynamicShape());
+        super(BlockType.FRAMED_COLLAPSIBLE_COPYCAT_BLOCK, Properties::dynamicShape);
         registerDefaultState(defaultBlockState().setValue(PropertyHolder.SOLID_FACES, ALL_SOLID));
     }
 

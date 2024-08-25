@@ -36,14 +36,15 @@ import xfacthd.framedblocks.common.blockentity.special.FramedSignBlockEntity;
 import xfacthd.framedblocks.common.net.payload.ClientboundOpenSignScreenPayload;
 
 import java.util.*;
+import java.util.function.UnaryOperator;
 
 public abstract class AbstractFramedSignBlock extends FramedBlock
 {
     private static final Vec3 HITBOX_CENTER = new Vec3(.5, .5, .5);
 
-    protected AbstractFramedSignBlock(BlockType type, Properties props)
+    protected AbstractFramedSignBlock(BlockType type, UnaryOperator<Properties> propertyModifier)
     {
-        super(type, props);
+        super(type, propertyModifier);
     }
 
     @Override

@@ -20,7 +20,6 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import org.jetbrains.annotations.Nullable;
-import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.block.PlacementStateBuilder;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
@@ -42,7 +41,7 @@ public class FramedItemFrameBlock extends FramedBlock
 
     public FramedItemFrameBlock(BlockType type)
     {
-        super(type, IFramedBlock.createProperties(type)
+        super(type, props -> props
                 .instabreak()
                 .noCollission()
                 .isSuffocating((s, l, p) -> false)

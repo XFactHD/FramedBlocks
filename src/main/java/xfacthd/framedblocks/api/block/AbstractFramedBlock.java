@@ -26,6 +26,7 @@ import xfacthd.framedblocks.api.shapes.ShapeUtils;
 import xfacthd.framedblocks.api.type.IBlockType;
 
 import java.util.List;
+import java.util.function.UnaryOperator;
 
 public abstract class AbstractFramedBlock extends Block implements IFramedBlock, SimpleWaterloggedBlock
 {
@@ -34,6 +35,11 @@ public abstract class AbstractFramedBlock extends Block implements IFramedBlock,
     private final ShapeProvider shapes;
     private final ShapeProvider occlusionShapes;
     private final Reference2BooleanMap<BlockState> beaconBeamOcclusion;
+
+    public AbstractFramedBlock(IBlockType blockType, UnaryOperator<Properties> propertyModifier)
+    {
+        this(blockType, propertyModifier.apply(IFramedBlock.createProperties(blockType)));
+    }
 
     public AbstractFramedBlock(IBlockType blockType, Properties props)
     {

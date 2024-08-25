@@ -6,16 +6,18 @@ import xfacthd.framedblocks.api.block.AbstractFramedBlock;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.common.data.*;
 
+import java.util.function.UnaryOperator;
+
 public abstract class FramedBlock extends AbstractFramedBlock
 {
     protected FramedBlock(BlockType blockType)
     {
-        this(blockType, IFramedBlock.createProperties(blockType));
+        super(blockType, IFramedBlock.createProperties(blockType));
     }
 
-    protected FramedBlock(BlockType blockType, Properties props)
+    protected FramedBlock(BlockType blockType, UnaryOperator<Properties> propertyModifier)
     {
-        super(blockType, props);
+        super(blockType, propertyModifier);
     }
 
     @Override

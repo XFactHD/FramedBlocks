@@ -30,9 +30,7 @@ public class FramedCeilingHangingSignBlock extends AbstractFramedHangingSignBloc
 {
     public FramedCeilingHangingSignBlock()
     {
-        super(BlockType.FRAMED_HANGING_SIGN, IFramedBlock.createProperties(BlockType.FRAMED_HANGING_SIGN)
-                .noCollission()
-        );
+        super(BlockType.FRAMED_HANGING_SIGN, Properties::noCollission);
         registerDefaultState(defaultBlockState().setValue(BlockStateProperties.ATTACHED, false));
     }
 

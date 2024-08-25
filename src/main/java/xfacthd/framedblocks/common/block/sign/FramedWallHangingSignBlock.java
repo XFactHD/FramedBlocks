@@ -20,9 +20,7 @@ public class FramedWallHangingSignBlock extends AbstractFramedHangingSignBlock
 {
     public FramedWallHangingSignBlock()
     {
-        super(BlockType.FRAMED_WALL_HANGING_SIGN, IFramedBlock.createProperties(BlockType.FRAMED_WALL_HANGING_SIGN)
-                .noCollission()
-        );
+        super(BlockType.FRAMED_WALL_HANGING_SIGN, Properties::noCollission);
     }
 
     @Override

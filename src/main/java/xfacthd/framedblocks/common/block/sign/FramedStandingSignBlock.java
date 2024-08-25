@@ -23,7 +23,7 @@ public class FramedStandingSignBlock extends AbstractFramedSignBlock
 
     public FramedStandingSignBlock()
     {
-        super(BlockType.FRAMED_SIGN, IFramedBlock.createProperties(BlockType.FRAMED_SIGN).noCollission());
+        super(BlockType.FRAMED_SIGN, Properties::noCollission);
     }
 
     @Override

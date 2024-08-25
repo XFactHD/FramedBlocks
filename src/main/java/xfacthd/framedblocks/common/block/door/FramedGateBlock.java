@@ -24,15 +24,16 @@ import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
 
 import javax.annotation.Nullable;
+import java.util.function.UnaryOperator;
 
 public class FramedGateBlock extends FramedBlock
 {
     private final SoundEvent closeSound;
     private final SoundEvent openSound;
 
-    private FramedGateBlock(BlockType blockType, Properties props, SoundEvent closeSound, SoundEvent openSound)
+    private FramedGateBlock(BlockType blockType, UnaryOperator<Properties> propertyModifier, SoundEvent closeSound, SoundEvent openSound)
     {
-        super(blockType, props.pushReaction(PushReaction.DESTROY));
+        super(blockType, props -> propertyModifier.apply(props).pushReaction(PushReaction.DESTROY));
         this.closeSound = closeSound;
         this.openSound = openSound;
         registerDefaultState(defaultBlockState()
@@ -193,7 +194,7 @@ public class FramedGateBlock extends FramedBlock
     {
         return new FramedGateBlock(
                 BlockType.FRAMED_GATE,
-                IFramedBlock.createProperties(BlockType.FRAMED_GATE),
+                UnaryOperator.identity(),
                 SoundEvents.WOODEN_DOOR_CLOSE,
                 SoundEvents.WOODEN_DOOR_OPEN
         );
@@ -203,8 +204,7 @@ public class FramedGateBlock extends FramedBlock
     {
         return new FramedGateBlock(
                 BlockType.FRAMED_IRON_GATE,
-                IFramedBlock.createProperties(BlockType.FRAMED_IRON_GATE)
-                        .requiresCorrectToolForDrops(),
+                Properties::requiresCorrectToolForDrops,
                 SoundEvents.IRON_DOOR_CLOSE,
                 SoundEvents.IRON_DOOR_OPEN
         );
