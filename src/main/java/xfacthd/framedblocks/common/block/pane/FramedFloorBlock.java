@@ -14,7 +14,7 @@ public class FramedFloorBlock extends FramedBlock
 {
     public FramedFloorBlock()
     {
-        super(BlockType.FRAMED_FLOOR_BOARD);
+        super(BlockType.FRAMED_FLOOR_BOARD, Properties::forceSolidOn);
         registerDefaultState(defaultBlockState().setValue(FramedProperties.TOP, false));
     }
 

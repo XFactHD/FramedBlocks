@@ -14,7 +14,7 @@ public class FramedHorizontalPaneBlock extends FramedBlock
 {
     public FramedHorizontalPaneBlock()
     {
-        super(BlockType.FRAMED_HORIZONTAL_PANE);
+        super(BlockType.FRAMED_HORIZONTAL_PANE, Properties::forceSolidOn);
     }
 
     @Override
