@@ -167,7 +167,11 @@ public final class BlockCamoContent extends CamoContent<BlockCamoContent>
         {
             return true;
         }
-        return adjState.getBlock() == state.getBlock() && !adjState.is(Utils.NON_OCCLUDEABLE);
+        if (adjState.getBlock() == state.getBlock())
+        {
+            return !adjState.is(Utils.NON_OCCLUDEABLE);
+        }
+        return state.skipRendering(adjState, Utils.dirByNormal(pos, adjPos));
     }
 
     @Override
@@ -187,7 +191,11 @@ public final class BlockCamoContent extends CamoContent<BlockCamoContent>
         {
             return true;
         }
-        return adjState.getBlock() == state.getBlock() && !adjState.is(Utils.NON_OCCLUDEABLE);
+        if (adjState.getBlock() == state.getBlock())
+        {
+            return !adjState.is(Utils.NON_OCCLUDEABLE);
+        }
+        return adjState.skipRendering(state, Utils.dirByNormal(adjPos, pos));
     }
 
     @Override
