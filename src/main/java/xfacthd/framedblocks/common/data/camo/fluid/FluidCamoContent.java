@@ -6,6 +6,7 @@ import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
@@ -125,6 +126,16 @@ public final class FluidCamoContent extends CamoContent<FluidCamoContent>
         if (FMLEnvironment.dist.isClient())
         {
             return ClientUtils.getFluidColor(level, pos, fluid.defaultFluidState());
+        }
+        throw new UnsupportedOperationException("Block color is not available on the server!");
+    }
+
+    @Override
+    public int getTintColor(ItemStack stack, int tintIdx)
+    {
+        if (FMLEnvironment.dist.isClient())
+        {
+            return ClientUtils.getFluidColor(fluid.defaultFluidState());
         }
         throw new UnsupportedOperationException("Block color is not available on the server!");
     }

@@ -5,6 +5,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.particles.*;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
@@ -110,6 +111,12 @@ public final class EmptyCamoContent extends CamoContent<EmptyCamoContent>
 
     @Override
     public int getTintColor(BlockAndTintGetter level, BlockPos pos, int tintIdx)
+    {
+        return -1;
+    }
+
+    @Override
+    public int getTintColor(ItemStack stack, int tintIdx)
     {
         return -1;
     }

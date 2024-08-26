@@ -1,6 +1,5 @@
 package xfacthd.framedblocks.client.render.color;
 
-import net.minecraft.client.color.item.ItemColor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
@@ -10,7 +9,7 @@ import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.client.model.cube.FramedTargetGeometry;
 import xfacthd.framedblocks.common.blockentity.special.FramedTargetBlockEntity;
 
-public final class FramedTargetBlockColor extends FramedBlockColor implements ItemColor
+public final class FramedTargetBlockColor extends FramedBlockColor
 {
     public static final FramedTargetBlockColor INSTANCE = new FramedTargetBlockColor();
 
@@ -36,6 +35,6 @@ public final class FramedTargetBlockColor extends FramedBlockColor implements It
         {
             return DyeColor.RED.getTextColor();
         }
-        return -1;
+        return super.getColor(stack, tintIndex);
     }
 }

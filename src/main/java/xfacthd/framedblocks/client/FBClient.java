@@ -7,6 +7,7 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.core.Holder;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
+import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.Property;
@@ -209,6 +210,17 @@ public final class FBClient
 
     private static void onItemColors(final RegisterColorHandlersEvent.Item event)
     {
+        //noinspection SuspiciousToArrayCall
+        ItemLike[] blocks = FBContent.getRegisteredBlocks()
+                .stream()
+                .map(Holder::value)
+                .filter(IFramedBlock.class::isInstance)
+                .map(IFramedBlock.class::cast)
+                .filter(FBClient::useDefaultColorHandler)
+                .toArray(ItemLike[]::new);
+
+        event.register(FramedBlockColor.INSTANCE, blocks);
+
         event.register(FramedTargetBlockColor.INSTANCE, FBContent.BLOCK_FRAMED_TARGET.value());
     }
 

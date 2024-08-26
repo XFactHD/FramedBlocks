@@ -6,6 +6,7 @@ import net.minecraft.core.particles.*;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -125,6 +126,16 @@ public final class BlockCamoContent extends CamoContent<BlockCamoContent>
         if (FMLEnvironment.dist.isClient())
         {
             return ClientUtils.getBlockColor(level, pos, state, tintIdx);
+        }
+        throw new UnsupportedOperationException("Block color is not available on the server!");
+    }
+
+    @Override
+    public int getTintColor(ItemStack stack, int tintIdx)
+    {
+        if (FMLEnvironment.dist.isClient())
+        {
+            return ClientUtils.getBlockColor(null, null, state, tintIdx);
         }
         throw new UnsupportedOperationException("Block color is not available on the server!");
     }

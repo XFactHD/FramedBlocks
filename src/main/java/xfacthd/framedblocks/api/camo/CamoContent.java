@@ -1,11 +1,13 @@
 package xfacthd.framedblocks.api.camo;
 
 import net.minecraft.client.color.block.BlockColor;
+import net.minecraft.client.color.item.ItemColor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -17,6 +19,7 @@ import net.neoforged.neoforge.common.util.TriState;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.camo.empty.EmptyCamoContent;
 import xfacthd.framedblocks.api.model.cache.QuadCacheKey;
+import xfacthd.framedblocks.api.util.EmptyBlockAndTintGetter;
 
 public abstract class CamoContent<C extends CamoContent<C>> implements QuadCacheKey
 {
@@ -109,6 +112,15 @@ public abstract class CamoContent<C extends CamoContent<C>> implements QuadCache
      * {@return the tint color corresponding to the given tint index for use with {@link BlockColor}}
      */
     public abstract int getTintColor(BlockAndTintGetter level, BlockPos pos, int tintIdx);
+
+    /**
+     * {@return the tint color corresponding to the given tint index for use with {@link ItemColor }}
+     * // TODO 1.21.2: make abstract
+     */
+    public int getTintColor(ItemStack stack, int tintIdx)
+    {
+        return getTintColor(EmptyBlockAndTintGetter.INSTANCE, BlockPos.ZERO, tintIdx);
+    }
 
     /**
      * {@return the beacon color multiplier of this camo}

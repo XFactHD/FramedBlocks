@@ -54,6 +54,17 @@ public abstract class CamoContainer<C extends CamoContent<C>, T extends CamoCont
     }
 
     /**
+     * Returns the tint color for use in {@link net.minecraft.client.color.item.ItemColor}
+     * @param stack The stack whose tint is being requested
+     * @param tintIdx The tint index for which the color was requested
+     * @return The tint color for the given index
+     */
+    public int getTintColor(ItemStack stack, int tintIdx)
+    {
+        return content.getTintColor(stack, tintIdx);
+    }
+
+    /**
      * Returns the color multipliers to apply to a beacon beam
      * @param level The current level
      * @param pos The position of the framed block

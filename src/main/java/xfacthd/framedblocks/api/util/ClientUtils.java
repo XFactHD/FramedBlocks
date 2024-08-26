@@ -12,6 +12,7 @@ import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
+import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.internal.InternalClientAPI;
 
 import java.util.function.*;
@@ -43,7 +44,7 @@ public final class ClientUtils
         InternalClientAPI.INSTANCE.enqueueClientTask(delay, task);
     }
 
-    public static int getBlockColor(BlockAndTintGetter level, BlockPos pos, BlockState state, int tintIdx)
+    public static int getBlockColor(@Nullable BlockAndTintGetter level, @Nullable BlockPos pos, BlockState state, int tintIdx)
     {
         return Minecraft.getInstance().getBlockColors().getColor(state, level, pos, tintIdx);
     }
@@ -51,6 +52,11 @@ public final class ClientUtils
     public static int getFluidColor(BlockAndTintGetter level, BlockPos pos, FluidState fluid)
     {
         return IClientFluidTypeExtensions.of(fluid).getTintColor(fluid, level, pos);
+    }
+
+    public static int getFluidColor(FluidState fluid)
+    {
+        return IClientFluidTypeExtensions.of(fluid).getTintColor();
     }
 
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
