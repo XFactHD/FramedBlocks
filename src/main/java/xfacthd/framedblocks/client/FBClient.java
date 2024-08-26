@@ -28,6 +28,7 @@ import net.neoforged.neoforge.common.NeoForge;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import xfacthd.framedblocks.api.block.IFramedBlock;
+import xfacthd.framedblocks.api.block.render.FramedBlockColor;
 import xfacthd.framedblocks.api.block.render.FramedBlockRenderProperties;
 import xfacthd.framedblocks.api.model.wrapping.*;
 import xfacthd.framedblocks.api.model.wrapping.itemmodel.ItemModelInfo;
@@ -37,6 +38,7 @@ import xfacthd.framedblocks.client.data.extensions.block.NoEffectsClientBlockExt
 import xfacthd.framedblocks.client.data.extensions.block.OneWayWindowClientBlockExtensions;
 import xfacthd.framedblocks.client.modelwrapping.StateLocationCache;
 import xfacthd.framedblocks.client.render.block.debug.*;
+import xfacthd.framedblocks.client.render.color.*;
 import xfacthd.framedblocks.client.render.particle.FluidSpriteParticle;
 import xfacthd.framedblocks.common.block.IFramedDoubleBlock;
 import xfacthd.framedblocks.common.block.cube.FramedOneWayWindowBlock;
@@ -68,8 +70,6 @@ import xfacthd.framedblocks.client.model.stairs.*;
 import xfacthd.framedblocks.client.model.torch.*;
 import xfacthd.framedblocks.client.overlaygen.OverlayQuadGenerator;
 import xfacthd.framedblocks.client.render.block.*;
-import xfacthd.framedblocks.client.render.color.FramedBlockColor;
-import xfacthd.framedblocks.client.render.color.FramedTargetBlockColor;
 import xfacthd.framedblocks.client.render.item.BlueprintPropertyOverride;
 import xfacthd.framedblocks.client.render.special.*;
 import xfacthd.framedblocks.client.render.util.AnimationSplitterSource;
@@ -205,6 +205,7 @@ public final class FBClient
 
         event.register(FramedBlockColor.INSTANCE, blocks);
 
+        event.register(FramedFlowerPotColor.INSTANCE, FBContent.BLOCK_FRAMED_FLOWER_POT.value());
         event.register(FramedTargetBlockColor.INSTANCE, FBContent.BLOCK_FRAMED_TARGET.value());
     }
 
@@ -563,6 +564,6 @@ public final class FBClient
     private static boolean useDefaultColorHandler(IFramedBlock block)
     {
         IBlockType type = block.getBlockType();
-        return type != BlockType.FRAMED_TARGET;
+        return type != BlockType.FRAMED_FLOWER_POT && type != BlockType.FRAMED_TARGET;
     }
 }

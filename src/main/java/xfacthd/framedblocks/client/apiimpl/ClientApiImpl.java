@@ -1,6 +1,5 @@
 package xfacthd.framedblocks.client.apiimpl;
 
-import net.minecraft.client.color.block.BlockColor;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.Direction;
@@ -10,7 +9,6 @@ import xfacthd.framedblocks.api.model.data.QuadMap;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.client.data.ConTexDataHandler;
 import xfacthd.framedblocks.client.model.QuadTable;
-import xfacthd.framedblocks.client.render.color.FramedBlockColor;
 import xfacthd.framedblocks.client.overlaygen.OverlayQuadGenerator;
 
 import java.util.ArrayList;
@@ -21,12 +19,6 @@ import java.util.function.Predicate;
 @SuppressWarnings("unused")
 public final class ClientApiImpl implements FramedBlocksClientAPI
 {
-    @Override
-    public BlockColor defaultBlockColor()
-    {
-        return FramedBlockColor.INSTANCE;
-    }
-
     @Override
     public void addConTexProperty(ModelProperty<?> ctProperty)
     {

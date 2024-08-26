@@ -5,6 +5,7 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.Direction;
 import net.neoforged.neoforge.client.model.data.ModelProperty;
 import org.jetbrains.annotations.Nullable;
+import xfacthd.framedblocks.api.block.render.FramedBlockColor;
 import xfacthd.framedblocks.api.model.data.QuadMap;
 import xfacthd.framedblocks.api.util.Utils;
 
@@ -20,8 +21,13 @@ public interface FramedBlocksClientAPI
 
     /**
      * Returns the default block color implementation used by FramedBlocks for {@link BlockColor} proxying
+     * @deprecated Use {@link FramedBlockColor#INSTANCE} directly instead
      */
-    BlockColor defaultBlockColor();
+    @Deprecated(forRemoval = true)
+    default BlockColor defaultBlockColor()
+    {
+        return FramedBlockColor.INSTANCE;
+    }
 
     /**
      * Add a {@link ModelProperty} for connected textures data to allow FramedBlocks to look up the data for use

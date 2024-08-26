@@ -1,6 +1,5 @@
-package xfacthd.framedblocks.client.render.color;
+package xfacthd.framedblocks.api.block.render;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.color.block.BlockColor;
 import net.minecraft.client.color.item.ItemColor;
 import net.minecraft.core.BlockPos;
@@ -16,10 +15,10 @@ import xfacthd.framedblocks.api.block.blockentity.IFramedDoubleBlockEntity;
 import xfacthd.framedblocks.api.model.util.ModelUtils;
 import xfacthd.framedblocks.api.util.CamoList;
 import xfacthd.framedblocks.api.util.Utils;
-import xfacthd.framedblocks.common.blockentity.special.FramedFlowerPotBlockEntity;
 
 import javax.annotation.Nullable;
 
+// TODO 1.21.2: store full CamoContainer in FramedBlockData and replace use of BEs with ModelData lookups
 public class FramedBlockColor implements BlockColor, ItemColor
 {
     public static final FramedBlockColor INSTANCE = new FramedBlockColor();
@@ -30,24 +29,12 @@ public class FramedBlockColor implements BlockColor, ItemColor
         if (level != null && pos != null)
         {
             BlockEntity be = level.getBlockEntity(pos);
-            if (tintIndex < -1)
+            if (tintIndex < -1 && be instanceof IFramedDoubleBlockEntity dbe)
             {
                 tintIndex = ModelUtils.decodeSecondaryTintIndex(tintIndex);
-
-                if (be instanceof IFramedDoubleBlockEntity dbe)
-                {
-                    return dbe.getCamoTwo().getTintColor(level, pos, tintIndex);
-                }
-                else if (be instanceof FramedFlowerPotBlockEntity pbe)
-                {
-                    BlockState plantState = pbe.getFlowerBlock().defaultBlockState();
-                    if (!plantState.isAir())
-                    {
-                        return Minecraft.getInstance().getBlockColors().getColor(plantState, level, pos, tintIndex);
-                    }
-                }
+                return dbe.getCamoTwo().getTintColor(level, pos, tintIndex);
             }
-            else if (be instanceof FramedBlockEntity fbe)
+            else if (tintIndex >= 0 && be instanceof FramedBlockEntity fbe)
             {
                 return fbe.getCamo().getTintColor(level, pos, tintIndex);
             }

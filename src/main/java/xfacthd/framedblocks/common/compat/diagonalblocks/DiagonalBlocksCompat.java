@@ -19,7 +19,7 @@ import xfacthd.framedblocks.api.block.render.FramedBlockRenderProperties;
 import xfacthd.framedblocks.api.model.wrapping.RegisterModelWrappersEvent;
 import xfacthd.framedblocks.api.model.wrapping.WrapHelper;
 import xfacthd.framedblocks.api.util.Utils;
-import xfacthd.framedblocks.client.render.color.FramedBlockColor;
+import xfacthd.framedblocks.api.block.render.FramedBlockColor;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.pane.FramedPaneBlock;
 import xfacthd.framedblocks.common.block.pillar.FramedFenceBlock;

@@ -6,6 +6,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
+import xfacthd.framedblocks.api.block.render.FramedBlockColor;
 import xfacthd.framedblocks.client.model.cube.FramedTargetGeometry;
 import xfacthd.framedblocks.common.blockentity.special.FramedTargetBlockEntity;
 
