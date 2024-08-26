@@ -146,15 +146,15 @@ public class FramedAdjustableDoubleBlockEntity extends FramedDoubleBlockEntity i
     {
         BlockState state = getBlockState();
         ModelData data = super.getModelData(includeCullInfo);
-        ModelData dataLeft = Objects.requireNonNull(data.get(DATA_LEFT))
+        ModelData dataLeft = Objects.requireNonNull(data.get(DATA_ONE))
                 .derive()
                 .with(offsetProperty, offsetPacker.pack(state, firstHeight, false))
                 .build();
-        ModelData dataRight = Objects.requireNonNull(data.get(DATA_RIGHT))
+        ModelData dataRight = Objects.requireNonNull(data.get(DATA_TWO))
                 .derive()
                 .with(offsetProperty, offsetPacker.pack(state, firstHeight, true))
                 .build();
-        return data.derive().with(DATA_LEFT, dataLeft).with(DATA_RIGHT, dataRight).build();
+        return data.derive().with(DATA_ONE, dataLeft).with(DATA_TWO, dataRight).build();
     }
 
     private static Direction getFacing(BlockState state)

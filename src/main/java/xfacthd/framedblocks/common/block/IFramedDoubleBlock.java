@@ -17,6 +17,7 @@ import net.neoforged.neoforge.client.model.data.ModelData;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.IFramedBlock;
+import xfacthd.framedblocks.api.block.blockentity.IFramedDoubleBlockEntity;
 import xfacthd.framedblocks.api.block.cache.StateCache;
 import xfacthd.framedblocks.api.block.render.ParticleHelper;
 import xfacthd.framedblocks.api.camo.CamoContainer;
@@ -48,8 +49,8 @@ public interface IFramedDoubleBlock extends IFramedBlock
         ModelData modelData = level.getModelData(pos);
         if (modelData == ModelData.EMPTY) return false;
 
-        return IFramedBlock.isCamoEmissiveRendering(modelData.get(FramedDoubleBlockEntity.DATA_LEFT)) ||
-               IFramedBlock.isCamoEmissiveRendering(modelData.get(FramedDoubleBlockEntity.DATA_RIGHT));
+        return IFramedBlock.isCamoEmissiveRendering(modelData.get(IFramedDoubleBlockEntity.DATA_ONE)) ||
+               IFramedBlock.isCamoEmissiveRendering(modelData.get(IFramedDoubleBlockEntity.DATA_TWO));
     }
 
     @Override
@@ -163,11 +164,11 @@ public interface IFramedDoubleBlock extends IFramedBlock
         Tuple<BlockState, BlockState> blockPair = getBlockPair(state);
         if (componentState == blockPair.getA())
         {
-            return Objects.requireNonNullElse(data.get(FramedDoubleBlockEntity.DATA_LEFT), ModelData.EMPTY);
+            return Objects.requireNonNullElse(data.get(IFramedDoubleBlockEntity.DATA_ONE), ModelData.EMPTY);
         }
         if (componentState == blockPair.getB())
         {
-            return Objects.requireNonNullElse(data.get(FramedDoubleBlockEntity.DATA_RIGHT), ModelData.EMPTY);
+            return Objects.requireNonNullElse(data.get(IFramedDoubleBlockEntity.DATA_TWO), ModelData.EMPTY);
         }
         return ModelData.EMPTY;
     }

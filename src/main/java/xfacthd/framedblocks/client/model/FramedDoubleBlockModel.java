@@ -18,6 +18,7 @@ import net.neoforged.neoforge.client.model.data.*;
 import net.neoforged.neoforge.common.util.ConcatenatedListView;
 import net.neoforged.neoforge.common.util.TriState;
 import org.jetbrains.annotations.Nullable;
+import xfacthd.framedblocks.api.block.blockentity.IFramedDoubleBlockEntity;
 import xfacthd.framedblocks.api.camo.empty.EmptyCamoContent;
 import xfacthd.framedblocks.api.model.AbstractFramedBlockModel;
 import xfacthd.framedblocks.api.model.data.FramedBlockData;
@@ -26,7 +27,6 @@ import xfacthd.framedblocks.api.model.util.ModelUtils;
 import xfacthd.framedblocks.api.model.wrapping.itemmodel.ItemModelInfo;
 import xfacthd.framedblocks.common.data.doubleblock.*;
 import xfacthd.framedblocks.common.block.IFramedDoubleBlock;
-import xfacthd.framedblocks.common.blockentity.doubled.FramedDoubleBlockEntity;
 
 import java.util.*;
 
@@ -55,8 +55,8 @@ public final class FramedDoubleBlockModel extends AbstractFramedBlockModel
     @Override
     public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, RandomSource rand, ModelData extraData, @Nullable RenderType layer)
     {
-        ModelData dataLeft = Objects.requireNonNullElse(extraData.get(FramedDoubleBlockEntity.DATA_LEFT), EMPTY_FRAME);
-        ModelData dataRight = Objects.requireNonNullElse(extraData.get(FramedDoubleBlockEntity.DATA_RIGHT), EMPTY_ALT_FRAME);
+        ModelData dataLeft = Objects.requireNonNullElse(extraData.get(IFramedDoubleBlockEntity.DATA_ONE), EMPTY_FRAME);
+        ModelData dataRight = Objects.requireNonNullElse(extraData.get(IFramedDoubleBlockEntity.DATA_TWO), EMPTY_ALT_FRAME);
 
         boolean leftVisible = true;
         boolean rightVisible = true;
@@ -120,8 +120,8 @@ public final class FramedDoubleBlockModel extends AbstractFramedBlockModel
     {
         Tuple<BakedModel, BakedModel> models = getModels();
 
-        ModelData dataLeft = Objects.requireNonNullElse(data.get(FramedDoubleBlockEntity.DATA_LEFT), ModelData.EMPTY);
-        ModelData dataRight = Objects.requireNonNullElse(data.get(FramedDoubleBlockEntity.DATA_RIGHT), ModelData.EMPTY);
+        ModelData dataLeft = Objects.requireNonNullElse(data.get(IFramedDoubleBlockEntity.DATA_ONE), ModelData.EMPTY);
+        ModelData dataRight = Objects.requireNonNullElse(data.get(IFramedDoubleBlockEntity.DATA_TWO), ModelData.EMPTY);
 
         return ChunkRenderTypeSet.union(
                 models.getA().getRenderTypes(dummyStates.getA(), rand, dataLeft),
@@ -134,15 +134,15 @@ public final class FramedDoubleBlockModel extends AbstractFramedBlockModel
     {
         Tuple<BakedModel, BakedModel> models = getModels();
 
-        ModelData dataLeft = Objects.requireNonNullElse(tileData.get(FramedDoubleBlockEntity.DATA_LEFT), ModelData.EMPTY);
-        ModelData dataRight = Objects.requireNonNullElse(tileData.get(FramedDoubleBlockEntity.DATA_RIGHT), ModelData.EMPTY);
+        ModelData dataLeft = Objects.requireNonNullElse(tileData.get(IFramedDoubleBlockEntity.DATA_ONE), ModelData.EMPTY);
+        ModelData dataRight = Objects.requireNonNullElse(tileData.get(IFramedDoubleBlockEntity.DATA_TWO), ModelData.EMPTY);
 
         dataLeft = models.getA().getModelData(level, pos, dummyStates.getA(), dataLeft);
         dataRight = models.getB().getModelData(level, pos, dummyStates.getB(), dataRight);
 
         return tileData.derive()
-                .with(FramedDoubleBlockEntity.DATA_LEFT, dataLeft)
-                .with(FramedDoubleBlockEntity.DATA_RIGHT, dataRight)
+                .with(IFramedDoubleBlockEntity.DATA_ONE, dataLeft)
+                .with(IFramedDoubleBlockEntity.DATA_TWO, dataRight)
                 .build();
     }
 
@@ -151,14 +151,14 @@ public final class FramedDoubleBlockModel extends AbstractFramedBlockModel
     {
         Tuple<BakedModel, BakedModel> models = getModels();
 
-        ModelData dataLeft = Objects.requireNonNullElse(data.get(FramedDoubleBlockEntity.DATA_LEFT), ModelData.EMPTY);
+        ModelData dataLeft = Objects.requireNonNullElse(data.get(IFramedDoubleBlockEntity.DATA_ONE), ModelData.EMPTY);
         TriState aoLeft = models.getA().useAmbientOcclusion(dummyStates.getA(), dataLeft, renderType);
         if (aoLeft == TriState.TRUE)
         {
             return aoLeft;
         }
 
-        ModelData dataRight = Objects.requireNonNullElse(data.get(FramedDoubleBlockEntity.DATA_RIGHT), ModelData.EMPTY);
+        ModelData dataRight = Objects.requireNonNullElse(data.get(IFramedDoubleBlockEntity.DATA_TWO), ModelData.EMPTY);
         TriState aoRight = models.getA().useAmbientOcclusion(dummyStates.getB(), dataRight, renderType);
         if (aoRight == TriState.TRUE)
         {
@@ -194,7 +194,7 @@ public final class FramedDoubleBlockModel extends AbstractFramedBlockModel
 
     private TextureAtlasSprite getSprite(ModelData data, boolean secondary)
     {
-        ModelData innerData = data.get(secondary ? FramedDoubleBlockEntity.DATA_RIGHT : FramedDoubleBlockEntity.DATA_LEFT);
+        ModelData innerData = data.get(secondary ? IFramedDoubleBlockEntity.DATA_TWO : IFramedDoubleBlockEntity.DATA_ONE);
         if (innerData != null)
         {
             FramedBlockData fbData = innerData.get(FramedBlockData.PROPERTY);

@@ -40,9 +40,6 @@ import java.util.List;
 
 public class FramedDoubleBlockEntity extends FramedBlockEntity implements IFramedDoubleBlockEntity
 {
-    public static final ModelProperty<ModelData> DATA_LEFT = new ModelProperty<>();
-    public static final ModelProperty<ModelData> DATA_RIGHT = new ModelProperty<>();
-
     private final boolean[] culledFaces = new boolean[6];
     private final DoubleBlockSoundType soundType = new DoubleBlockSoundType(this);
     private CamoContainer<?, ?> camoContainer = EmptyCamoContainer.EMPTY;
@@ -448,8 +445,8 @@ public class FramedDoubleBlockEntity extends FramedBlockEntity implements IFrame
         boolean[] cullData = includeCullInfo ? culledFaces : FramedBlockData.NO_CULLED_FACES;
         FramedBlockData modelData = new FramedBlockData(camoContainer.getContent(), cullData, true, isReinforced());
         return ModelData.builder()
-                .with(DATA_LEFT, super.getModelData(includeCullInfo))
-                .with(DATA_RIGHT, ModelData.builder().with(FramedBlockData.PROPERTY, modelData).build())
+                .with(DATA_ONE, super.getModelData(includeCullInfo))
+                .with(DATA_TWO, ModelData.builder().with(FramedBlockData.PROPERTY, modelData).build())
                 .build();
     }
 

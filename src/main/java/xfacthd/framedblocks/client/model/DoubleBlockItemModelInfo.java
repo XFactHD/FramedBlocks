@@ -4,11 +4,11 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.client.model.data.ModelData;
+import xfacthd.framedblocks.api.block.blockentity.IFramedDoubleBlockEntity;
 import xfacthd.framedblocks.api.model.data.FramedBlockData;
 import xfacthd.framedblocks.api.model.wrapping.itemmodel.ItemModelInfo;
 import xfacthd.framedblocks.api.util.CamoList;
 import xfacthd.framedblocks.api.util.Utils;
-import xfacthd.framedblocks.common.blockentity.doubled.FramedDoubleBlockEntity;
 
 public class DoubleBlockItemModelInfo implements ItemModelInfo
 {
@@ -28,8 +28,8 @@ public class DoubleBlockItemModelInfo implements ItemModelInfo
         appendItemModelPartData(builderTwo, state, true);
 
         ModelData.Builder builder = ModelData.builder()
-                .with(FramedDoubleBlockEntity.DATA_LEFT, builderOne.build())
-                .with(FramedDoubleBlockEntity.DATA_RIGHT, builderTwo.build());
+                .with(IFramedDoubleBlockEntity.DATA_ONE, builderOne.build())
+                .with(IFramedDoubleBlockEntity.DATA_TWO, builderTwo.build());
         appendItemModelData(builder);
 
         return builder.build();

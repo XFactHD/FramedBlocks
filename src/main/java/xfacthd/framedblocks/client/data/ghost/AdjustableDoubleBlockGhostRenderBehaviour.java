@@ -6,8 +6,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.client.model.data.ModelData;
 import net.neoforged.neoforge.client.model.data.ModelProperty;
 import org.jetbrains.annotations.Nullable;
+import xfacthd.framedblocks.api.block.blockentity.IFramedDoubleBlockEntity;
 import xfacthd.framedblocks.common.FBContent;
-import xfacthd.framedblocks.common.blockentity.doubled.FramedDoubleBlockEntity;
 import xfacthd.framedblocks.common.blockentity.doubled.slab.FramedAdjustableDoubleBlockEntity;
 import xfacthd.framedblocks.common.blockentity.special.FramedCollapsibleBlockEntity;
 import xfacthd.framedblocks.common.blockentity.special.FramedCollapsibleCopycatBlockEntity;
@@ -37,15 +37,15 @@ public final class AdjustableDoubleBlockGhostRenderBehaviour extends DoubleBlock
         int offsetsLeft = offsetPacker.pack(renderState, firstHeight, false);
         int offsetsRight = offsetPacker.pack(renderState, firstHeight, true);
 
-        ModelData dataLeft = Objects.requireNonNullElse(data.get(FramedDoubleBlockEntity.DATA_LEFT), ModelData.EMPTY)
+        ModelData dataLeft = Objects.requireNonNullElse(data.get(IFramedDoubleBlockEntity.DATA_ONE), ModelData.EMPTY)
                 .derive()
                 .with(offsetProperty, offsetsLeft)
                 .build();
-        ModelData dataRight = Objects.requireNonNullElse(data.get(FramedDoubleBlockEntity.DATA_RIGHT), ModelData.EMPTY)
+        ModelData dataRight = Objects.requireNonNullElse(data.get(IFramedDoubleBlockEntity.DATA_TWO), ModelData.EMPTY)
                 .derive()
                 .with(offsetProperty, offsetsRight)
                 .build();
-        return data.derive().with(FramedDoubleBlockEntity.DATA_LEFT, dataLeft).with(FramedDoubleBlockEntity.DATA_RIGHT, dataRight).build();
+        return data.derive().with(IFramedDoubleBlockEntity.DATA_ONE, dataLeft).with(IFramedDoubleBlockEntity.DATA_TWO, dataRight).build();
     }
 
 

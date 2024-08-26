@@ -13,6 +13,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.client.model.data.ModelData;
+import xfacthd.framedblocks.api.block.blockentity.IFramedDoubleBlockEntity;
 import xfacthd.framedblocks.api.camo.CamoContent;
 import xfacthd.framedblocks.api.camo.block.BlockCamoContent;
 import xfacthd.framedblocks.api.camo.empty.EmptyCamoContent;
@@ -20,7 +21,6 @@ import xfacthd.framedblocks.client.model.FramedBlockModel;
 import xfacthd.framedblocks.api.model.data.FramedBlockData;
 import xfacthd.framedblocks.cmdtests.SpecialTestCommand;
 import xfacthd.framedblocks.common.FBContent;
-import xfacthd.framedblocks.common.blockentity.doubled.FramedDoubleBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.util.MarkdownTable;
 
@@ -190,11 +190,11 @@ public final class ModelPerformanceTest
 
         return ModelData.builder()
                 .with(FramedBlockData.PROPERTY, dataOne)
-                .with(FramedDoubleBlockEntity.DATA_LEFT, ModelData.builder()
+                .with(IFramedDoubleBlockEntity.DATA_ONE, ModelData.builder()
                         .with(FramedBlockData.PROPERTY, dataOne)
                         .build()
                 )
-                .with(FramedDoubleBlockEntity.DATA_RIGHT, ModelData.builder()
+                .with(IFramedDoubleBlockEntity.DATA_TWO, ModelData.builder()
                         .with(FramedBlockData.PROPERTY, dataTwo)
                         .build()
                 )
