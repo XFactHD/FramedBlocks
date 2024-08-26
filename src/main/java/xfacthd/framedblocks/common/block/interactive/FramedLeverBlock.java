@@ -53,7 +53,13 @@ public class FramedLeverBlock extends LeverBlock implements IFramedBlock
             ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit
     )
     {
-        return handleUse(state, level, pos, player, hand, hit);
+        ItemInteractionResult result = handleUse(state, level, pos, player, hand, hit);
+        if (result == ItemInteractionResult.FAIL)
+        {
+            // Allow interacting with the block while holding a framed block
+            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+        }
+        return result;
     }
 
     @Override
