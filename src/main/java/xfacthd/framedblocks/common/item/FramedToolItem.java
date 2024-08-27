@@ -5,6 +5,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.LevelReader;
+import net.neoforged.neoforge.common.ItemAbility;
 import xfacthd.framedblocks.common.data.FramedToolType;
 
 public class FramedToolItem extends Item
@@ -38,6 +39,12 @@ public class FramedToolItem extends Item
     public boolean doesSneakBypassUse(ItemStack stack, LevelReader level, BlockPos pos, Player player)
     {
         return true;
+    }
+
+    @Override
+    public boolean canPerformAction(ItemStack stack, ItemAbility ability)
+    {
+        return type.hasAbility() && ability == type.getAbility();
     }
 
     public final FramedToolType getType()

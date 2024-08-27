@@ -101,6 +101,12 @@ public class FramedDoubleBlockEntity extends FramedBlockEntity implements IFrame
     }
 
     @Override
+    protected boolean isValidRemovalToolForAnyCamo(ItemStack stack)
+    {
+        return super.isValidRemovalToolForAnyCamo(stack) || CamoContainerHelper.isValidRemovalTool(camoContainer, stack);
+    }
+
+    @Override
     public IFramedDoubleBlock getBlock()
     {
         return (IFramedDoubleBlock) super.getBlock();

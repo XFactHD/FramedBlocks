@@ -58,9 +58,27 @@ public final class Utils
     public static final TagKey<Block> NON_OCCLUDEABLE = blockTag("non_occludeable");
     public static final TagKey<Item> TOOL_WRENCH = itemTag("c", "tools/wrench");
     public static final TagKey<Item> COMPLEX_WRENCH = itemTag("complex_wrench");
-    public static final ItemAbility ACTION_WRENCH = ItemAbility.get("wrench_rotate");
     /** Allow other mods to add items that temporarily disable intangibility to allow interaction with the targeted block */
     public static final TagKey<Item> DISABLE_INTANGIBLE = itemTag("disable_intangible");
+
+    /**
+     * Provided by tools for rotating blocks
+     */
+    public static final ItemAbility ACTION_WRENCH_ROTATE = ItemAbility.get("wrench_rotate");
+    /**
+     * Provided by tools for emptying items out of blocks (respected for removal of standard block camos)
+     */
+    public static final ItemAbility ACTION_WRENCH_EMPTY = ItemAbility.get("wrench_empty");
+    /**
+     * Providing by tools for configuring blocks (respected for camo rotation)
+     */
+    public static final ItemAbility ACTION_WRENCH_CONFIGURE = ItemAbility.get("wrench_configure");
+    /**
+     * @deprecated Use {@link #ACTION_WRENCH_ROTATE} instead
+     */
+    @Deprecated(forRemoval = true)
+    public static final ItemAbility ACTION_WRENCH = ACTION_WRENCH_ROTATE;
+
     public static final Set<Property<?>> REQUIRED_STATE_PROPERTIES = Set.of(
             FramedProperties.GLOWING,
             FramedProperties.PROPAGATES_SKYLIGHT
@@ -576,7 +594,12 @@ public final class Utils
 
     public static boolean isWrenchRotationTool(ItemStack stack)
     {
-        return stack.canPerformAction(ACTION_WRENCH) || (stack.is(TOOL_WRENCH) && !stack.is(COMPLEX_WRENCH));
+        return stack.canPerformAction(ACTION_WRENCH_ROTATE) || (stack.is(TOOL_WRENCH) && !stack.is(COMPLEX_WRENCH));
+    }
+
+    public static boolean isConfigurationTool(ItemStack stack)
+    {
+        return stack.is(FRAMED_SCREWDRIVER) || stack.canPerformAction(ACTION_WRENCH_CONFIGURE);
     }
 
     public static String formatItemStack(ItemStack stack)

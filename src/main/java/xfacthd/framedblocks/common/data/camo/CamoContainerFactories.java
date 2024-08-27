@@ -34,7 +34,7 @@ public final class CamoContainerFactories
 
         TriggerRegistrar blockRegistrar = new TriggerRegistrarImpl(FBContent.FACTORY_BLOCK.value());
         blockRegistrar.registerApplicationPredicate(stack -> stack.getItem() instanceof BlockItem);
-        blockRegistrar.registerRemovalItem(FBContent.ITEM_FRAMED_HAMMER.value());
+        blockRegistrar.registerRemovalPredicate(TriggerRegistrar.DEFAULT_REMOVAL);
     }
 
     @Nullable

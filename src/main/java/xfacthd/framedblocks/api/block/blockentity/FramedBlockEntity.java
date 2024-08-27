@@ -106,7 +106,7 @@ public class FramedBlockEntity extends BlockEntity
         {
             return applyGlowstone(player, stack);
         }
-        else if (!camo.isEmpty() && !player.isShiftKeyDown() && stack.is(Utils.FRAMED_SCREWDRIVER.value()))
+        else if (!camo.isEmpty() && !player.isShiftKeyDown() && Utils.isConfigurationTool(stack))
         {
             return rotateCamo(camo, secondary);
         }
@@ -114,7 +114,7 @@ public class FramedBlockEntity extends BlockEntity
         {
             return applyIntangibility(player, stack);
         }
-        else if (intangible && player.isShiftKeyDown() && stack.is(Utils.FRAMED_SCREWDRIVER.value()))
+        else if (intangible && player.isShiftKeyDown() && Utils.isConfigurationTool(stack))
         {
             return removeIntangibility(player);
         }
@@ -591,7 +591,7 @@ public class FramedBlockEntity extends BlockEntity
         }
     }
 
-    public boolean isIntangible(CollisionContext ctx)
+    public boolean isIntangible(@Nullable CollisionContext ctx)
     {
         if (!ConfigView.Server.INSTANCE.enableIntangibility() || !intangible)
         {
@@ -601,10 +601,26 @@ public class FramedBlockEntity extends BlockEntity
         if (ctx instanceof EntityCollisionContext ectx && ectx.getEntity() instanceof Player player)
         {
             ItemStack mainItem = player.getMainHandItem();
-            return !mainItem.is(Utils.DISABLE_INTANGIBLE);
+            if (mainItem.isEmpty())
+            {
+                return true;
+            }
+            if (mainItem.is(Utils.DISABLE_INTANGIBLE) || Utils.isWrenchRotationTool(mainItem) || Utils.isConfigurationTool(mainItem))
+            {
+                return false;
+            }
+            return !isValidRemovalToolForAnyCamo(mainItem);
         }
 
         return true;
+    }
+
+    /**
+     * {@return whether any of the camos applied to this block can be removed with the given item}
+     */
+    protected boolean isValidRemovalToolForAnyCamo(ItemStack stack)
+    {
+        return CamoContainerHelper.isValidRemovalTool(camoContainer, stack);
     }
 
     public void setReinforced(boolean reinforced)
