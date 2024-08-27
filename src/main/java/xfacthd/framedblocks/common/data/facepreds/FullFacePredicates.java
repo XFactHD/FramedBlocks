@@ -33,8 +33,8 @@ public final class FullFacePredicates extends BlockTypeMap<FullFacePredicate>
         put(BlockType.FRAMED_DIVIDED_SLOPE, FullFacePredicate.FALSE);
         put(BlockType.FRAMED_DOUBLE_HALF_SLOPE, FullFacePredicate.FALSE);
         put(BlockType.FRAMED_VERTICAL_DOUBLE_HALF_SLOPE, FullFacePredicate.FALSE);
-        put(BlockType.FRAMED_CORNER_SLOPE, new CornerFullFacePredicate());
-        put(BlockType.FRAMED_INNER_CORNER_SLOPE, new InnerCornerFullFacePredicate());
+        put(BlockType.FRAMED_CORNER_SLOPE, CornerFullFacePredicate.INSTANCE);
+        put(BlockType.FRAMED_INNER_CORNER_SLOPE, InnerCornerFullFacePredicate.INSTANCE);
         put(BlockType.FRAMED_DOUBLE_CORNER, new DoubleCornerFullFacePredicate());
         put(BlockType.FRAMED_PRISM_CORNER, FullFacePredicate.FALSE);
         put(BlockType.FRAMED_INNER_PRISM_CORNER, InnerThreewayCornerFullFacePredicate.INSTANCE);
@@ -48,6 +48,8 @@ public final class FullFacePredicates extends BlockTypeMap<FullFacePredicate>
         put(BlockType.FRAMED_STACKED_SLOPE_EDGE, ElevatedSlopeEdgeFullFacePredicate.INSTANCE);
         put(BlockType.FRAMED_CORNER_SLOPE_EDGE, FullFacePredicate.FALSE);
         put(BlockType.FRAMED_INNER_CORNER_SLOPE_EDGE, FullFacePredicate.FALSE);
+        put(BlockType.FRAMED_ELEVATED_CORNER_SLOPE_EDGE, CornerFullFacePredicate.INSTANCE);
+        put(BlockType.FRAMED_ELEVATED_INNER_CORNER_SLOPE_EDGE, InnerCornerFullFacePredicate.INSTANCE);
         put(BlockType.FRAMED_SLAB, FullFacePredicate.TOP);
         put(BlockType.FRAMED_DOUBLE_SLAB, FullFacePredicate.Y_AXIS);
         put(BlockType.FRAMED_ADJ_DOUBLE_SLAB, FullFacePredicate.Y_AXIS);

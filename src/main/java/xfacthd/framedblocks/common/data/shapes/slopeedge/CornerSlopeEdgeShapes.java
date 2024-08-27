@@ -12,7 +12,7 @@ import xfacthd.framedblocks.common.data.property.CornerType;
 import xfacthd.framedblocks.common.data.property.SlopeType;
 import xfacthd.framedblocks.common.data.shapes.SplitShapeGenerator;
 
-public class CornerSlopeEdgeShapes implements SplitShapeGenerator
+public final class CornerSlopeEdgeShapes implements SplitShapeGenerator
 {
     public static final ShapeCache<ShapeKey> OUTER_SHAPES = makeCache(SlopeEdgeShapes.SHAPES, false);
     public static final ShapeCache<ShapeKey> OUTER_OCCLUSION_SHAPES = makeCache(SlopeEdgeShapes.OCCLUSION_SHAPES, false);

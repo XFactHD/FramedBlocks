@@ -96,7 +96,7 @@ public class FramedInnerCornerSlopeEdgeGeometry extends Geometry
                         QuadModifier.of(quad)
                                 .apply(Modifiers.cutSideLeftRight(dir, .5F))
                                 .apply(Modifiers.cutSideUpDown(!top, .5F))
-                                .apply(Modifiers.cutSideUpDown(top, right ? .5F : 1.5F, right ? 1.5F : .5F))
+                                .apply(Modifiers.cutSideUpDown(!top, right ? -.5F : .5F, right ? .5F : -.5F))
                                 .apply(Modifiers.makeHorizontalSlope(!right, 45))
                                 .apply(Modifiers.offset(xBackFace.getOpposite(), .5F))
                                 .export(quadMap.get(null));

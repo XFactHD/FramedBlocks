@@ -9,6 +9,10 @@ import xfacthd.framedblocks.common.data.property.CornerType;
 
 public final class InnerCornerFullFacePredicate implements FullFacePredicate
 {
+    public static final InnerCornerFullFacePredicate INSTANCE = new InnerCornerFullFacePredicate();
+
+    private InnerCornerFullFacePredicate() { }
+
     @Override
     public boolean test(BlockState state, Direction side)
     {

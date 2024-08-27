@@ -95,6 +95,21 @@ public final class SkipPredicateGeneratorData
                     new TestDir("HalfDir", "Half", null, "half_xz_hor", "half_xz_vert", "half_y"),
                     new TestDir("TriangleDir", "Stair", null, "stair_xz", "stair_y")
             )),
+            entry("FRAMED_ELEVATED_CORNER_SLOPE_EDGE", "slopeedge", List.of(
+                    Property.api("Direction", "dir", "FACING_HOR", PropType.PRIMITIVE),
+                    Property.internal("CornerType", "type", "CORNER_TYPE", PropType.CUSTOM)
+            ), List.of(
+                    new TestDir("TriangleDir", "Tri", null, "elev_slope_edge_tri"),
+                    new TestDir("HalfDir", "Half", null, "half_xz_hor", "half_xz_vert", "half_y"),
+                    new TestDir("CornerDir", "Corner", null, "corner_xz", "corner_y")
+            )),
+            entry("FRAMED_ELEVATED_INNER_CORNER_SLOPE_EDGE", "slopeedge", List.of(
+                    Property.api("Direction", "dir", "FACING_HOR", PropType.PRIMITIVE),
+                    Property.internal("CornerType", "type", "CORNER_TYPE", PropType.CUSTOM)
+            ), List.of(
+                    new TestDir("TriangleDir", "Tri", null, "elev_slope_edge_tri"),
+                    new TestDir("TriangleDir", "Stair", null, "stair_xz", "stair_y")
+            )),
             entry("FRAMED_SLAB", "slab", List.of(
                     Property.api("boolean", "top", "TOP", PropType.PRIMITIVE)
             ), List.of(
