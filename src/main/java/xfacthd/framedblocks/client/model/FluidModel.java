@@ -199,11 +199,11 @@ public final class FluidModel implements BakedModel
         {
             if (mat.texture().equals(WATER_FLOWING.get()))
             {
-                return SPRITE_GETTER.apply(stillTexture);
+                return SPRITE_GETTER.apply(flowingTexture);
             }
             if (mat.texture().equals(WATER_STILL.get()))
             {
-                return SPRITE_GETTER.apply(flowingTexture);
+                return SPRITE_GETTER.apply(stillTexture);
             }
             return mat.sprite();
         };
