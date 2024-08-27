@@ -174,7 +174,7 @@ public final class SkipPredicateGeneratorImpl
         String importList = imports.stream().sorted().map(s -> "import " + s + ";").collect(Collectors.joining("\n"));
 
         return CLASS_TEMPLATE.formatted(
-                SKIP_PREDS_ROOT_PKG,
+                SKIP_PREDS_ROOT_PKG.substring(0, SKIP_PREDS_ROOT_PKG.length() - 1),
                 sourceType.subPackage(),
                 importList,
                 sourceType.type(),
@@ -194,7 +194,7 @@ public final class SkipPredicateGeneratorImpl
         String importList = imports.stream().sorted().map(s -> "import " + s + ";").collect(Collectors.joining("\n"));
 
         return COUNTERPARTS_CLASS_TEMPLATE.formatted(
-                SKIP_PREDS_ROOT_PKG,
+                SKIP_PREDS_ROOT_PKG.substring(0, SKIP_PREDS_ROOT_PKG.length() - 1),
                 sourceType.subPackage(),
                 importList,
                 getShortTypeName(sourceType),
