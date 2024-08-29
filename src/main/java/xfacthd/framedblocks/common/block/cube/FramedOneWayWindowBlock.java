@@ -192,7 +192,7 @@ public class FramedOneWayWindowBlock extends FramedBlock
     @Override
     public BlockState getJadeRenderState(BlockState state)
     {
-        return state;
+        return state.setValue(PropertyHolder.NULLABLE_FACE, NullableDirection.EAST);
     }
 
 

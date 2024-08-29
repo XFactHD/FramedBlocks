@@ -129,6 +129,13 @@ repositories {
         }
     }
     maven {
+        name = 'Shadows Maven'
+        url = 'https://maven.shadowsoffire.dev/releases'
+        content {
+            includeGroup('snownee.jade')
+        }
+    }
+    maven {
         name = "Fuzs Mod Resources"
         url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven/"
         content {
@@ -183,7 +190,7 @@ dependencies {
     compileOnly("appeng:appliedenergistics2:${ae2_version}:api")
     //runtimeOnly("appeng:appliedenergistics2:${ae2_version}")
 
-    compileOnly("curse.maven:jade-324717:${jade_coord}")
+    compileOnly("snownee.jade:Jade-NeoForge:${jade_mc_version}-${jade_version}")
 
     implementation("curse.maven:atlasviewer-633577:${atlasviewer_coord}")
 }
