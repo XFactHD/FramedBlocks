@@ -9,7 +9,7 @@ import net.minecraft.world.item.ItemStack;
 record ClickableStack(ITypedIngredient<ItemStack> stack, Rect2i area) implements IClickableIngredient<ItemStack>
 {
     @SuppressWarnings("removal")
-	@Override
+    @Override
     public ITypedIngredient<ItemStack> getTypedIngredient()
     {
         return stack;

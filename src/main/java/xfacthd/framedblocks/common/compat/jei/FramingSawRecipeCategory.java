@@ -193,22 +193,12 @@ public final class FramingSawRecipeCategory implements IRecipeCategory<FramingSa
     @Override
     public void getTooltip(ITooltipBuilder tooltip, FramingSawRecipe recipe, IRecipeSlotsView slots, double mouseX, double mouseY)
     {
-        if (mouseX >= WARNING_X && mouseY >= WARNING_Y && mouseX <= (WARNING_X + WARNING_DRAW_SIZE) && mouseY <= (WARNING_Y + WARNING_DRAW_SIZE))
-        {
-            ItemStack input = slots.findSlotByName("input")
-                .orElseThrow()
-                .getDisplayedItemStack()
-                .orElse(ItemStack.EMPTY);
-
-            if (FramingSawRecipeCache.get(true).containsAdditive(input.getItem()))
-            {
-                tooltip.add(FramingSawScreen.TOOLTIP_LOOSE_ADDITIVE);
-			}
-        }
+        List<Component> tooltipStrings = getTooltipStrings(recipe, slots, mouseX, mouseY);
+        tooltip.addAll(tooltipStrings);
     }
 
     @SuppressWarnings("removal")
-	@Override
+    @Override
     public List<Component> getTooltipStrings(FramingSawRecipe recipe, IRecipeSlotsView slots, double mouseX, double mouseY)
     {
         if (mouseX >= WARNING_X && mouseY >= WARNING_Y && mouseX <= (WARNING_X + WARNING_DRAW_SIZE) && mouseY <= (WARNING_Y + WARNING_DRAW_SIZE))
