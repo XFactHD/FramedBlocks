@@ -3,6 +3,7 @@ package xfacthd.framedblocks.api.block.render;
 import net.minecraft.client.color.block.BlockColor;
 import net.minecraft.client.color.item.ItemColor;
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.FastColor;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockAndTintGetter;
@@ -49,11 +50,11 @@ public class FramedBlockColor implements BlockColor, ItemColor
         if (tintIndex < -1 && stack.getItem() instanceof BlockItem item && isDoubleBlock(item.getBlock()))
         {
             tintIndex = ModelUtils.decodeSecondaryTintIndex(tintIndex);
-            return camos.getCamo(1).getTintColor(stack, tintIndex);
+            return FastColor.ARGB32.opaque(camos.getCamo(1).getTintColor(stack, tintIndex));
         }
         else if (tintIndex >= 0)
         {
-            return camos.getCamo(0).getTintColor(stack, tintIndex);
+            return FastColor.ARGB32.opaque(camos.getCamo(0).getTintColor(stack, tintIndex));
         }
         return -1;
     }
