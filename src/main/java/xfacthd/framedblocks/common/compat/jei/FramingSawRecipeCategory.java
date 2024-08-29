@@ -3,6 +3,7 @@ package xfacthd.framedblocks.common.compat.jei;
 import com.google.common.collect.Lists;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
+import mezz.jei.api.gui.builder.ITooltipBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
@@ -20,6 +21,7 @@ import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.special.FramingSawBlock;
 import xfacthd.framedblocks.common.crafting.*;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
@@ -131,7 +133,7 @@ public final class FramingSawRecipeCategory implements IRecipeCategory<FramingSa
             Item input,
             FramingSawRecipe recipe,
             IRecipeSlotBuilder inputSlot,
-            IRecipeSlotBuilder[] additiveSlots,
+            @Nullable IRecipeSlotBuilder[] additiveSlots,
             IRecipeSlotBuilder outputSlot
     )
     {
@@ -160,9 +162,12 @@ public final class FramingSawRecipeCategory implements IRecipeCategory<FramingSa
         {
             inputSlot.addItemStack(inputStack);
             outputSlot.addItemStack(outputStack);
-            for (int i = 0; i < stacks.size(); i++)
+            if (additiveSlots != null)
             {
-                additiveSlots[i].addItemStack(stacks.get(i));
+                for (int i = 0; i < stacks.size(); i++)
+                {
+                    additiveSlots[i].addItemStack(stacks.get(i));
+                }
             }
         });
     }
@@ -186,6 +191,24 @@ public final class FramingSawRecipeCategory implements IRecipeCategory<FramingSa
     }
 
     @Override
+    public void getTooltip(ITooltipBuilder tooltip, FramingSawRecipe recipe, IRecipeSlotsView slots, double mouseX, double mouseY)
+    {
+        if (mouseX >= WARNING_X && mouseY >= WARNING_Y && mouseX <= (WARNING_X + WARNING_DRAW_SIZE) && mouseY <= (WARNING_Y + WARNING_DRAW_SIZE))
+        {
+            ItemStack input = slots.findSlotByName("input")
+                .orElseThrow()
+                .getDisplayedItemStack()
+                .orElse(ItemStack.EMPTY);
+
+            if (FramingSawRecipeCache.get(true).containsAdditive(input.getItem()))
+            {
+                tooltip.add(FramingSawScreen.TOOLTIP_LOOSE_ADDITIVE);
+			}
+        }
+    }
+
+    @SuppressWarnings("removal")
+	@Override
     public List<Component> getTooltipStrings(FramingSawRecipe recipe, IRecipeSlotsView slots, double mouseX, double mouseY)
     {
         if (mouseX >= WARNING_X && mouseY >= WARNING_Y && mouseX <= (WARNING_X + WARNING_DRAW_SIZE) && mouseY <= (WARNING_Y + WARNING_DRAW_SIZE))
@@ -193,7 +216,7 @@ public final class FramingSawRecipeCategory implements IRecipeCategory<FramingSa
             ItemStack input = slots.findSlotByName("input")
                     .orElseThrow()
                     .getDisplayedItemStack()
-                    .orElseThrow();
+                    .orElse(ItemStack.EMPTY);
 
             if (FramingSawRecipeCache.get(true).containsAdditive(input.getItem()))
             {
