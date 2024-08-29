@@ -66,7 +66,7 @@ public class FramedCompoundSlopeSlabGeometry extends Geometry
             QuadModifier.of(quad)
                     .apply(Modifiers.cutSideUpDown(false, cw ? .5F : 1F, cw ? 1F : .5F))
                     .apply(Modifiers.cutSideUpDown(true, cw ? 1F : .5F, cw ? .5F : 1F))
-                    .export(quadMap.get(null));
+                    .export(quadMap.get(quadDir));
         }
     }
 }
