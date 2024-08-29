@@ -16,12 +16,14 @@ record ClickableStack(ITypedIngredient<ItemStack> stack, Rect2i area) implements
     }
 
     @Override
-    public ItemStack getIngredient() {
+    public ItemStack getIngredient()
+    {
         return stack.getIngredient();
     }
 
     @Override
-    public IIngredientType<ItemStack> getIngredientType() {
+    public IIngredientType<ItemStack> getIngredientType()
+    {
         return stack.getType();
     }
 
