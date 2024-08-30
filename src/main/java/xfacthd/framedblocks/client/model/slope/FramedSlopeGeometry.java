@@ -31,10 +31,16 @@ public class FramedSlopeGeometry extends Geometry
         Direction quadDir = quad.getDirection();
         if (type == SlopeType.HORIZONTAL)
         {
-            if (quad.getDirection() == dir.getOpposite())
+            if (!ySlope && quad.getDirection() == dir.getOpposite())
             {
                 QuadModifier.of(quad)
                         .apply(Modifiers.makeHorizontalSlope(false, 45))
+                        .export(quadMap.get(null));
+            }
+            else if (ySlope && quadDir == dir.getClockWise())
+            {
+                QuadModifier.of(quad)
+                        .apply(Modifiers.makeHorizontalSlope(true, 45))
                         .export(quadMap.get(null));
             }
             else if (Utils.isY(quadDir))

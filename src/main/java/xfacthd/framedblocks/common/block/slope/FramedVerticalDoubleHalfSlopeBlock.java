@@ -3,7 +3,9 @@ package xfacthd.framedblocks.common.block.slope;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Tuple;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -14,25 +16,29 @@ import xfacthd.framedblocks.api.block.*;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
+import xfacthd.framedblocks.common.block.IComplexSlopeSource;
 import xfacthd.framedblocks.common.blockentity.doubled.slope.FramedVerticalDoubleHalfSlopeBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.doubleblock.CamoGetter;
 import xfacthd.framedblocks.common.data.doubleblock.SolidityCheck;
 import xfacthd.framedblocks.common.data.doubleblock.DoubleBlockTopInteractionMode;
 
-public class FramedVerticalDoubleHalfSlopeBlock extends AbstractFramedDoubleBlock
+public class FramedVerticalDoubleHalfSlopeBlock extends AbstractFramedDoubleBlock implements IComplexSlopeSource
 {
     public FramedVerticalDoubleHalfSlopeBlock()
     {
         super(BlockType.FRAMED_VERTICAL_DOUBLE_HALF_SLOPE);
-        registerDefaultState(defaultBlockState().setValue(FramedProperties.TOP, false));
+        registerDefaultState(defaultBlockState()
+                .setValue(FramedProperties.TOP, false)
+                .setValue(FramedProperties.Y_SLOPE, false)
+        );
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        builder.add(FramedProperties.FACING_HOR, FramedProperties.TOP, BlockStateProperties.WATERLOGGED);
+        builder.add(FramedProperties.FACING_HOR, FramedProperties.TOP, FramedProperties.Y_SLOPE, BlockStateProperties.WATERLOGGED);
     }
 
     @Override
@@ -43,6 +49,12 @@ public class FramedVerticalDoubleHalfSlopeBlock extends AbstractFramedDoubleBloc
                 .withTop()
                 .withWater()
                 .build();
+    }
+
+    @Override
+    public boolean handleBlockLeftClick(BlockState state, Level level, BlockPos pos, Player player)
+    {
+        return IFramedBlock.toggleYSlope(state, level, pos, player);
     }
 
     @Override
@@ -79,13 +91,16 @@ public class FramedVerticalDoubleHalfSlopeBlock extends AbstractFramedDoubleBloc
     {
         Direction facing = state.getValue(FramedProperties.FACING_HOR);
         boolean top = state.getValue(FramedProperties.TOP);
+        boolean ySlope = state.getValue(FramedProperties.Y_SLOPE);
 
         BlockState defState = FBContent.BLOCK_FRAMED_VERTICAL_HALF_SLOPE.value().defaultBlockState();
         return new Tuple<>(
                 defState.setValue(FramedProperties.FACING_HOR, facing)
-                        .setValue(FramedProperties.TOP, top),
+                        .setValue(FramedProperties.TOP, top)
+                        .setValue(FramedProperties.Y_SLOPE, ySlope),
                 defState.setValue(FramedProperties.FACING_HOR, facing.getOpposite())
                         .setValue(FramedProperties.TOP, top)
+                        .setValue(FramedProperties.Y_SLOPE, ySlope)
         );
     }
 
@@ -154,5 +169,11 @@ public class FramedVerticalDoubleHalfSlopeBlock extends AbstractFramedDoubleBloc
     public BlockState getJadeRenderState(BlockState state)
     {
         return ((IFramedBlock) FBContent.BLOCK_FRAMED_DOUBLE_HALF_SLOPE.value()).getJadeRenderState(state);
+    }
+
+    @Override
+    public boolean isHorizontalSlope(BlockState state)
+    {
+        return true;
     }
 }

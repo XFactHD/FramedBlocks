@@ -25,7 +25,7 @@ import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.common.data.property.SlopeType;
 import xfacthd.framedblocks.common.util.FramedUtils;
 
-public class FramedSlopeBlock extends FramedBlock implements ISlopeBlock
+public class FramedSlopeBlock extends FramedBlock implements ISlopeBlock, IComplexSlopeSource
 {
     public FramedSlopeBlock()
     {
@@ -163,5 +163,11 @@ public class FramedSlopeBlock extends FramedBlock implements ISlopeBlock
     public BlockState getJadeRenderState(BlockState state)
     {
         return getItemModelSource();
+    }
+
+    @Override
+    public boolean isHorizontalSlope(BlockState state)
+    {
+        return state.getValue(PropertyHolder.SLOPE_TYPE) == SlopeType.HORIZONTAL;
     }
 }
