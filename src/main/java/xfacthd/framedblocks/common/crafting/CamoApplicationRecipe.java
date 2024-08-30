@@ -11,7 +11,6 @@ import xfacthd.framedblocks.api.camo.*;
 import xfacthd.framedblocks.api.camo.empty.EmptyCamoContainer;
 import xfacthd.framedblocks.api.util.CamoList;
 import xfacthd.framedblocks.common.FBContent;
-import xfacthd.framedblocks.common.block.door.FramedDoorBlock;
 
 import java.util.*;
 
@@ -60,7 +59,7 @@ public final class CamoApplicationRecipe extends CustomRecipe
             camoTwo = true;
         }
 
-        boolean doubleBlock = block.getBlockType().isDoubleBlock() || block instanceof FramedDoorBlock;
+        boolean doubleBlock = block.getBlockType().consumesTwoCamosInCamoApplicationRecipe();
         return doubleBlock ? (camoOne || camoTwo) : (camoOne ^ camoTwo);
     }
 
@@ -87,7 +86,7 @@ public final class CamoApplicationRecipe extends CustomRecipe
             }
             camos.add(factoryOne.applyCamoInCraftingRecipe(camoOneStack));
         }
-        else if (block.getBlockType().isDoubleBlock() || block instanceof FramedDoorBlock)
+        else if (block.getBlockType().consumesTwoCamosInCamoApplicationRecipe())
         {
             camos.add(EmptyCamoContainer.EMPTY);
         }

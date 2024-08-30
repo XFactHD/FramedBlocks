@@ -389,6 +389,12 @@ public enum BlockType implements IBlockType
     }
 
     @Override
+    public boolean consumesTwoCamosInCamoApplicationRecipe()
+    {
+        return doubleBlock || this == FRAMED_DOOR || this == FRAMED_IRON_DOOR;
+    }
+
+    @Override
     public boolean canLockState()
     {
         return lockable;

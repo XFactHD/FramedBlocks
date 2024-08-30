@@ -82,6 +82,14 @@ public interface IBlockType
     }
 
     /**
+     * {@return whether this block can consume two camo items in the camo application recipe}
+     */
+    default boolean consumesTwoCamosInCamoApplicationRecipe()
+    {
+        return isDoubleBlock();
+    }
+
+    /**
      * Return true if this block allows locking the state in order to suppress state changes from neighbor updates.
      * Useful to allow blocks like stairs to reside in impossible states, like a corner without neighbors
      * @implNote If this method returns true, then the associated block must have the {@link FramedProperties#STATE_LOCKED} property.
