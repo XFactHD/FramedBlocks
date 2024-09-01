@@ -30,6 +30,7 @@ import xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.block.render.FramedBlockColor;
 import xfacthd.framedblocks.api.block.render.FramedBlockRenderProperties;
+import xfacthd.framedblocks.api.model.ErrorModel;
 import xfacthd.framedblocks.api.model.wrapping.*;
 import xfacthd.framedblocks.api.model.wrapping.itemmodel.ItemModelInfo;
 import xfacthd.framedblocks.api.model.wrapping.statemerger.StateMerger;
@@ -465,6 +466,7 @@ public final class FBClient
         event.register(FramedTargetGeometry.OVERLAY_LOCATION);
         event.register(FramedCollapsibleBlockGeometry.ALT_BASE_MODEL_LOC);
         event.register(FramedCollapsibleCopycatBlockGeometry.ALT_BASE_MODEL_LOC);
+        event.register(ErrorModel.LOCATION);
 
         if (SupplementariesCompat.isLoaded())
         {
@@ -490,6 +492,7 @@ public final class FBClient
         FluidCamoClientHandler.clearModelCache();
         FramedChestRenderer.onModelsLoaded(event.getModels());
         ReinforcementModel.reload(event.getModels());
+        ErrorModel.reload(event.getModels());
     }
 
     private static void onRegisterReloadListener(final RegisterClientReloadListenersEvent event)

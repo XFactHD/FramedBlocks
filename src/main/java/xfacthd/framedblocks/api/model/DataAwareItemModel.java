@@ -12,6 +12,7 @@ import net.neoforged.neoforge.client.model.BakedModelWrapper;
 import net.neoforged.neoforge.client.model.data.ModelData;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collections;
 import java.util.List;
 
 public final class DataAwareItemModel extends BakedModelWrapper<BakedModel>
@@ -33,15 +34,22 @@ public final class DataAwareItemModel extends BakedModelWrapper<BakedModel>
     {
         if (this.renderType == renderType)
         {
-            return originalModel.getQuads(state, side, rand, itemData, renderType);
+            try
+            {
+                return originalModel.getQuads(state, side, rand, itemData, renderType);
+            }
+            catch (Throwable t)
+            {
+                return ErrorModel.get().getQuads(state, side, rand, data, renderType);
+            }
         }
-        return List.of();
+        return Collections.emptyList();
     }
 
     @Override
     public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, RandomSource rand)
     {
-        return originalModel.getQuads(state, side, rand, itemData, renderType);
+        return getQuads(state, side, rand, itemData, renderType);
     }
 
     @Override
