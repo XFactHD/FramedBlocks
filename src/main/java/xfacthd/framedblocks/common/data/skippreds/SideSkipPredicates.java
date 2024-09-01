@@ -124,6 +124,7 @@ public final class SideSkipPredicates extends BlockTypeMap<SideSkipPredicate>
         put(BlockType.FRAMED_THICK_LATTICE, new ThickLatticeSkipPredicate());
         put(BlockType.FRAMED_CHEST, SideSkipPredicate.FALSE);
         put(BlockType.FRAMED_SECRET_STORAGE, SideSkipPredicate.FALSE);
+        put(BlockType.FRAMED_TANK, SideSkipPredicate.FALSE);
         put(BlockType.FRAMED_BARS, SideSkipPredicate.FALSE);
         put(BlockType.FRAMED_PANE, new PaneSkipPredicate());
         put(BlockType.FRAMED_HORIZONTAL_PANE, new HorizontalPaneSkipPredicate());

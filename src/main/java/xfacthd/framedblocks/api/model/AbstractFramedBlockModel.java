@@ -64,7 +64,7 @@ public abstract class AbstractFramedBlockModel extends BakedModelWrapper<BakedMo
             models = new ArrayList<>();
             for (RenderType renderType : getRenderTypes(state, RandomSource.create(), data))
             {
-                models.add(new DataAwareItemModel(this, data, renderType, cull));
+                models.add(new DataAwareItemModel(this, data, renderType));
             }
             itemModelCache.put(camos, models);
         }

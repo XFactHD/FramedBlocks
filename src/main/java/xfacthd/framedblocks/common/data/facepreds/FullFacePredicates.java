@@ -121,6 +121,7 @@ public final class FullFacePredicates extends BlockTypeMap<FullFacePredicate>
         put(BlockType.FRAMED_THICK_LATTICE, FullFacePredicate.FALSE);
         put(BlockType.FRAMED_CHEST, FullFacePredicate.FALSE);
         put(BlockType.FRAMED_SECRET_STORAGE, FullFacePredicate.TRUE);
+        put(BlockType.FRAMED_TANK, FullFacePredicate.TRUE);
         put(BlockType.FRAMED_BARS, FullFacePredicate.FALSE);
         put(BlockType.FRAMED_PANE, FullFacePredicate.FALSE);
         put(BlockType.FRAMED_HORIZONTAL_PANE, FullFacePredicate.FALSE);

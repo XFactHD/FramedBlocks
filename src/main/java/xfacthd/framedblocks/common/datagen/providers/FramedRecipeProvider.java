@@ -596,6 +596,16 @@ public final class FramedRecipeProvider extends RecipeProvider
                 .unlockedBy(FBContent.BLOCK_FRAMED_CUBE)
                 .save(consumer);
 
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_TANK.value(), 1)
+                .pattern("FGF")
+                .pattern("GBG")
+                .pattern("FGF")
+                .define('F', FBContent.BLOCK_FRAMED_CUBE.value())
+                .define('G', Tags.Items.GLASS_BLOCKS_CHEAP)
+                .define('B', Items.BUCKET)
+                .unlockedBy(Items.BUCKET)
+                .save(consumer);
+
         shapedBuildingBlock(FBContent.BLOCK_FRAMED_SECRET_STORAGE.value())
                 .pattern(" F ")
                 .pattern("FCF")

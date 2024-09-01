@@ -37,6 +37,7 @@ import xfacthd.framedblocks.api.model.wrapping.statemerger.StateMerger;
 import xfacthd.framedblocks.api.render.debug.AttachDebugRenderersEvent;
 import xfacthd.framedblocks.client.data.extensions.block.NoEffectsClientBlockExtensions;
 import xfacthd.framedblocks.client.data.extensions.block.OneWayWindowClientBlockExtensions;
+import xfacthd.framedblocks.client.data.extensions.item.TankClientItemExtensions;
 import xfacthd.framedblocks.client.modelwrapping.StateLocationCache;
 import xfacthd.framedblocks.client.render.block.debug.*;
 import xfacthd.framedblocks.client.render.color.*;
@@ -182,6 +183,7 @@ public final class FBClient
         event.registerBlockEntityRenderer(FBContent.BE_TYPE_FRAMED_HANGING_SIGN.value(), FramedHangingSignRenderer::new);
         event.registerBlockEntityRenderer(FBContent.BE_TYPE_FRAMED_CHEST.value(), FramedChestRenderer::new);
         event.registerBlockEntityRenderer(FBContent.BE_TYPE_FRAMED_ITEM_FRAME.value(), FramedItemFrameRenderer::new);
+        event.registerBlockEntityRenderer(FBContent.BE_TYPE_FRAMED_TANK.value(), FramedTankRenderer::new);
     }
 
     private static void onRegisterDebugRenderers(final EntityRenderersEvent.RegisterRenderers event)
@@ -343,6 +345,7 @@ public final class FBClient
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_THICK_LATTICE, FramedLatticeGeometry::new, WrapHelper.IGNORE_WATERLOGGED_LOCK);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_CHEST, FramedChestGeometry::new, WrapHelper.IGNORE_WATERLOGGED);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_SECRET_STORAGE, FramedCubeGeometry::new, WrapHelper.IGNORE_SOLID);
+        WrapHelper.wrap(FBContent.BLOCK_FRAMED_TANK, FramedCubeGeometry::new, WrapHelper.IGNORE_SOLID);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_BARS, FramedBarsGeometry::new, WrapHelper.IGNORE_WATERLOGGED_LOCK);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_PANE, FramedPaneGeometry::new, WrapHelper.IGNORE_WATERLOGGED_LOCK);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_HORIZONTAL_PANE, FramedHorizontalPaneGeometry::new, WrapHelper.IGNORE_DEFAULT);
@@ -484,6 +487,8 @@ public final class FBClient
         TextureLookup textureLookup = TextureLookup.bindBlockAtlas(event.getTextureGetter());
 
         ModelWrappingManager.handleAll(registry, textureLookup);
+
+        FramedTankItemModel.wrap(registry);
     }
 
     private static void onModelsLoaded(final ModelEvent.BakingCompleted event)
@@ -539,6 +544,8 @@ public final class FBClient
                     default -> FramedBlockRenderProperties.INSTANCE;
                 }))
                 .forEach(pair -> event.registerBlock(pair.getSecond(), pair.getFirst()));
+
+        event.registerItem(new TankClientItemExtensions(), FBContent.BLOCK_FRAMED_TANK.value().asItem());
     }
 
 

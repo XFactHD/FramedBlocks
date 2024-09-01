@@ -12,6 +12,7 @@ import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.client.screen.*;
 import xfacthd.framedblocks.client.screen.overlay.*;
+import xfacthd.framedblocks.common.block.cube.FramedTankBlock;
 import xfacthd.framedblocks.common.compat.atlasviewer.AtlasViewerCompat;
 import xfacthd.framedblocks.common.compat.jade.JadeCompat;
 import xfacthd.framedblocks.common.compat.jei.JeiMessages;
@@ -144,6 +145,7 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(FBContent.BLOCK_FRAMED_THICK_LATTICE.value(), "Framed Thick Lattice");
         add(FBContent.BLOCK_FRAMED_CHEST.value(), "Framed Chest");
         add(FBContent.BLOCK_FRAMED_SECRET_STORAGE.value(), "Framed Secret Storage");
+        add(FBContent.BLOCK_FRAMED_TANK.value(), "Framed Tank");
         add(FBContent.BLOCK_FRAMED_BARS.value(), "Framed Bars");
         add(FBContent.BLOCK_FRAMED_PANE.value(), "Framed Pane");
         add(FBContent.BLOCK_FRAMED_RAIL_SLOPE.value(), "Framed Rail Slope");
@@ -374,6 +376,8 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(FramedBlueprintItem.CANT_PLACE_FLUID_CAMO, "[Framed Blueprint] Copying blocks with fluid camos is currently not possible!");
         add(IFramedBlock.CAMO_LABEL, "Camo: %s");
         add(PhantomPasteItem.FEATURE_DISABLED, "The intangibility feature is disabled, this item therefor has no function!");
+        add(FramedTankBlock.TANK_CONTENTS, "Stored Fluid: %s");
+        add(FramedTankBlock.EMPTY_FLUID, "Empty");
     }
 
     private void addOverlayTranslations()

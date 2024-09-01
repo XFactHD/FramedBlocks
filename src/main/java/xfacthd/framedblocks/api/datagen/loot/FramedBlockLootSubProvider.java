@@ -33,6 +33,11 @@ public abstract class FramedBlockLootSubProvider extends BlockLootSubProvider
         dropWithCamo(block, block);
     }
 
+    protected void dropSelfWithCamo(Block block, Consumer<LootPoolSingletonContainer.Builder<?>> itemModifier)
+    {
+        dropWithCamo(block, block, itemModifier);
+    }
+
     protected void dropOtherWithCamo(Block block, Block drop)
     {
         dropWithCamo(block, drop);

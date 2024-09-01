@@ -136,6 +136,7 @@ public enum BlockType implements IBlockType
     FRAMED_THICK_LATTICE                            (false, false, false,  true,  true,  true, false,  true, ConTexMode.DETAILED, LatticeShapes.THICK),
     FRAMED_CHEST                                    (false, false,  true,  true,  true, false, false, false, null, Block.box(1, 0, 1, 15, 14, 15)),
     FRAMED_SECRET_STORAGE                           ( true, false,  true, false,  true, false, false, false, ConTexMode.FULL_FACE, Shapes.block()),
+    FRAMED_TANK                                     ( true, false,  true, false,  true,  true, false, false, ConTexMode.FULL_FACE, Shapes.block()),
     FRAMED_BARS                                     (false, false, false,  true,  true,  true, false,  true, null),
     FRAMED_PANE                                     (false, false, false,  true,  true,  true, false,  true, ConTexMode.DETAILED),
     FRAMED_HORIZONTAL_PANE                          ( true, false, false,  true,  true,  true, false, false, ConTexMode.DETAILED, Block.box(0, 7, 0, 16, 9, 16)),

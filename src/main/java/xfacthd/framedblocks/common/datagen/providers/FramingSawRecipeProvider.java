@@ -370,6 +370,12 @@ public final class FramingSawRecipeProvider extends RecipeProvider
                 .additive(FramingSawRecipeAdditive.of(FBContent.BLOCK_FRAMED_CHEST.value()))
                 .save(consumer);
 
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_TANK)
+                .material(FramingSawRecipe.CUBE_MATERIAL_VALUE * 4)
+                .additive(FramingSawRecipeAdditive.of(Tags.Items.GLASS_BLOCKS_CHEAP, 4))
+                .additive(FramingSawRecipeAdditive.of(Items.BUCKET))
+                .save(consumer);
+
         FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_BARS)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 8)
                 .save(consumer);

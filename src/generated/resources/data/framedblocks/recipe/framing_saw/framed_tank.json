@@ -1,0 +1,16 @@
+{
+  "type": "framedblocks:frame",
+  "additives": [
+    {
+      "count": 1,
+      "ingredient": {
+        "item": "minecraft:bucket"
+      }
+    }
+  ],
+  "material": 24576,
+  "result": {
+    "count": 1,
+    "id": "framedblocks:framed_tank"
+  }
+}

@@ -231,6 +231,7 @@ public final class FramedBlockStateProvider extends BlockStateProvider
         registerFramedFloorBoard(cube);
         registerFramedChest();
         registerFramedSecretStorage();
+        registerFramedTank();
         registerFramedBarsBlock(cube);
         registerFramedPaneBlock(cube);
         registerFramedFlowerPotBlock(cube);
@@ -600,6 +601,21 @@ public final class FramedBlockStateProvider extends BlockStateProvider
                 .texture("particle", TEXTURE);
 
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_SECRET_STORAGE, block, "cutout");
+    }
+
+    private void registerFramedTank()
+    {
+        ModelFile block = models().withExistingParent("framed_tank", "block/block")
+                .element()
+                .cube("#frame")
+                .end()
+                .element()
+                .cube("#glass")
+                .end()
+                .texture("frame", TEXTURE)
+                .texture("glass", mcLoc("block/glass"));
+
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_TANK, block, "cutout");
     }
 
     private void registerFramedBarsBlock(ModelFile cube)
