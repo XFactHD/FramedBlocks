@@ -159,7 +159,7 @@ dependencies {
 
     compileOnly("mezz.jei:jei-${jei_mc_version}-common-api:${jei_version}")
     compileOnly("mezz.jei:jei-${jei_mc_version}-neoforge-api:${jei_version}")
-    //runtimeOnly("mezz.jei:jei-${jei_mc_version}-neoforge:${jei_version}")
+    runtimeOnly("mezz.jei:jei-${jei_mc_version}-neoforge:${jei_version}")
 
     // Switch Arch, Cloth and REI-neoforge to impl for runtime testing
     compileOnly("dev.architectury:architectury-neoforge:${arch_version}")
@@ -171,7 +171,7 @@ dependencies {
     compileOnly("me.shedaniel:REIPluginCompatibilities-forge-annotations:${reipcanno_version}")
 
     compileOnly("dev.emi:emi-neoforge:${emi_version}+${emi_mc_version}:api")
-    runtimeOnly("dev.emi:emi-neoforge:${emi_version}+${emi_mc_version}")
+//    runtimeOnly("dev.emi:emi-neoforge:${emi_version}+${emi_mc_version}")
 
     compileOnly("curse.maven:modernfix-790626:${modernfix_coord}")
 
