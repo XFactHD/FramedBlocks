@@ -34,7 +34,7 @@ import java.util.stream.Stream;
 @MethodsReturnNonnullByDefault
 public class CamoCraftingHelper
 {
-    /** ItemBlocks tagged with this will be shown by default in JEI recipes when showing camo block examples */
+    /** Empty tag to help with serialization of the fake recipes, this gets replaced dynamically for displaying in JEI */
     public static final TagKey<Item> JEI_CAMO_BLOCK_EXAMPLES = Utils.itemTag("jei_camo_block_examples");
     private static final int MAX_CAMO_EXAMPLE_INGREDIENTS_COUNT = 100;
 
