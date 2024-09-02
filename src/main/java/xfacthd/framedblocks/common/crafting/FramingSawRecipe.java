@@ -9,6 +9,7 @@ import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.common.util.Lazy;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.type.IBlockType;
+import xfacthd.framedblocks.api.util.CamoList;
 import xfacthd.framedblocks.common.FBContent;
 
 import java.util.*;
@@ -46,6 +47,10 @@ public final class FramingSawRecipe implements Recipe<RecipeInput>
         if (input.isEmpty())
         {
             return FramingSawRecipeMatchResult.MATERIAL_VALUE;
+        }
+        if (!input.getOrDefault(FBContent.DC_TYPE_CAMO_LIST, CamoList.EMPTY).isEmptyOrContentsEmpty())
+        {
+            return FramingSawRecipeMatchResult.CAMO_PRESENT;
         }
 
         int inputValue = FramingSawRecipeCalculation.getInputValue(input, level.isClientSide());

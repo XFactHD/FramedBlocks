@@ -308,6 +308,7 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu> im
             int listAdditives = -1;
             MutableComponent detail = switch (matchResult)
             {
+                case CAMO_PRESENT -> null;
                 case MATERIAL_VALUE ->
                 {
                     int matIn = input.isEmpty() ? 0 : cache.getMaterialValue(input.getItem()) * input.getCount();
@@ -382,7 +383,10 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu> im
                 }
                 case SUCCESS -> throw new IllegalStateException("Unreachable");
             };
-            components.add(detail.withStyle(ChatFormatting.RED));
+            if (detail != null)
+            {
+                components.add(detail.withStyle(ChatFormatting.RED));
+            }
 
             if (listAdditives > -1)
             {
