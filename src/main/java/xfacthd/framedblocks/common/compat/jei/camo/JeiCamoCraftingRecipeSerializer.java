@@ -38,7 +38,8 @@ public class JeiCamoCraftingRecipeSerializer implements RecipeSerializer<JeiCamo
         return STREAM_CODEC;
     }
 
-    private static JeiCamoCraftingRecipe fromNetwork(RegistryFriendlyByteBuf buffer) {
+    private static JeiCamoCraftingRecipe fromNetwork(RegistryFriendlyByteBuf buffer)
+    {
         Ingredient frameStacks = Ingredient.CONTENTS_STREAM_CODEC.decode(buffer);
         Ingredient copyTool = Ingredient.CONTENTS_STREAM_CODEC.decode(buffer);
         Ingredient firstIngredient = Ingredient.CONTENTS_STREAM_CODEC.decode(buffer);
@@ -47,7 +48,8 @@ public class JeiCamoCraftingRecipeSerializer implements RecipeSerializer<JeiCamo
         return new JeiCamoCraftingRecipe(frameStacks, copyTool, firstIngredient, secondIngredient, results);
     }
 
-    private static void toNetwork(RegistryFriendlyByteBuf buffer, JeiCamoCraftingRecipe recipe) {
+    private static void toNetwork(RegistryFriendlyByteBuf buffer, JeiCamoCraftingRecipe recipe)
+    {
         Ingredient.CONTENTS_STREAM_CODEC.encode(buffer, recipe.getFrameStacks());
         Ingredient.CONTENTS_STREAM_CODEC.encode(buffer, recipe.getCopyTool());
         Ingredient.CONTENTS_STREAM_CODEC.encode(buffer, recipe.getFirstIngredient());

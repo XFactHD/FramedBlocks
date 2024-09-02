@@ -34,17 +34,19 @@ import java.util.stream.Stream;
 @MethodsReturnNonnullByDefault
 public class CamoCraftingHelper
 {
-    /** Empty tag to help with serialization of the fake recipes, this gets replaced dynamically for displaying in JEI */
-    public static final TagKey<Item> JEI_CAMO_BLOCK_EXAMPLES = Utils.itemTag("jei_camo_block_examples");
+    /**
+     * Empty tag to help with serialization of the fake recipes, this gets replaced dynamically for displaying in JEI
+     */
+    private static final TagKey<Item> JEI_CAMO_BLOCK_EXAMPLES = Utils.itemTag("jei_camo_block_examples");
     private static final int MAX_CAMO_EXAMPLE_INGREDIENTS_COUNT = 100;
 
     private final CamoApplicationRecipe helperRecipe;
     private final Ingredient camoExamplesIngredient;
     private List<ItemStack> camoExamples = new ArrayList<>();
     private List<ItemStack> framedBlocks = new ArrayList<>();
-    private List<ItemStack> doubleFramedBlocks = new ArrayList<>();
 
-    public CamoCraftingHelper() {
+    public CamoCraftingHelper()
+    {
         this.helperRecipe = new CamoApplicationRecipe(CraftingBookCategory.MISC, Ingredient.of(Items.BRUSH));
         this.camoExamplesIngredient = Ingredient.of(JEI_CAMO_BLOCK_EXAMPLES);
     }
@@ -53,7 +55,6 @@ public class CamoCraftingHelper
     {
         List<ItemStack> camoExamples = new ArrayList<>();
         List<ItemStack> framedBlocks = new ArrayList<>();
-        List<ItemStack> doubleFramedBlocks = new ArrayList<>();
 
         for (ItemStack stack : ingredientManager.getAllItemStacks())
         {
@@ -70,31 +71,16 @@ public class CamoCraftingHelper
             if (framedBlock != null)
             {
                 framedBlocks.add(stack);
-                if (isDoubleFramedBlock(framedBlock))
-                {
-                    doubleFramedBlocks.add(stack);
-                }
             }
         }
 
         this.camoExamples = Collections.unmodifiableList(camoExamples);
         this.framedBlocks = Collections.unmodifiableList(framedBlocks);
-        this.doubleFramedBlocks = Collections.unmodifiableList(doubleFramedBlocks);
-    }
-
-    public List<ItemStack> getCamoExamples()
-    {
-        return camoExamples;
     }
 
     public List<ItemStack> getFramedBlocks()
     {
         return framedBlocks;
-    }
-
-    public List<ItemStack> getDoubleFramedBlocks()
-    {
-        return doubleFramedBlocks;
     }
 
     @Nullable
@@ -158,7 +144,8 @@ public class CamoCraftingHelper
         return camoExamplesIngredient;
     }
 
-    public Stream<ItemStack> dropCamo(ItemStack itemStack) {
+    public Stream<ItemStack> dropCamo(ItemStack itemStack)
+    {
         CamoList camos = itemStack.get(FBContent.DC_TYPE_CAMO_LIST);
         if (camos != null && !camos.isEmpty())
         {
