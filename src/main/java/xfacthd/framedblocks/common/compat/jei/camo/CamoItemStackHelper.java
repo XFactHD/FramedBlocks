@@ -52,6 +52,17 @@ public final class CamoItemStackHelper
         return framedBlock.getBlockType().consumesTwoCamosInCamoApplicationRecipe();
     }
 
+    public static boolean isEmptyFramedBlock(ItemStack itemStack)
+    {
+        IFramedBlock framedBlock = getFramedBlock(itemStack);
+        if (framedBlock == null)
+        {
+            return false;
+        }
+        CamoList camos = itemStack.get(FBContent.DC_TYPE_CAMO_LIST);
+        return camos == null || camos.isEmpty();
+    }
+
     public static List<ItemStack> dropCamo(ItemStack itemStack)
     {
         CamoList camos = itemStack.get(FBContent.DC_TYPE_CAMO_LIST);

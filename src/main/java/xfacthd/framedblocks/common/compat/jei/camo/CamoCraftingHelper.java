@@ -11,7 +11,6 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.Ingredient;
-import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.camo.CamoContainerFactory;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.crafting.CamoApplicationRecipe;
@@ -32,7 +31,7 @@ public final class CamoCraftingHelper
     private final CamoApplicationRecipe helperRecipe;
     private final Ingredient camoExamplesIngredient;
     private List<ItemStack> camoExamples = new ArrayList<>();
-    private List<ItemStack> framedBlocks = new ArrayList<>();
+    private List<ItemStack> emptyFramedBlocks = new ArrayList<>();
 
     public CamoCraftingHelper()
     {
@@ -56,20 +55,19 @@ public final class CamoCraftingHelper
                 }
             }
 
-            IFramedBlock framedBlock = CamoItemStackHelper.getFramedBlock(stack);
-            if (framedBlock != null)
+            if (CamoItemStackHelper.isEmptyFramedBlock(stack))
             {
                 framedBlocks.add(stack);
             }
         }
 
         this.camoExamples = Collections.unmodifiableList(camoExamples);
-        this.framedBlocks = Collections.unmodifiableList(framedBlocks);
+        this.emptyFramedBlocks = Collections.unmodifiableList(framedBlocks);
     }
 
-    public List<ItemStack> getFramedBlocks()
+    public List<ItemStack> getEmptyFramedBlocks()
     {
-        return framedBlocks;
+        return emptyFramedBlocks;
     }
 
     public ItemStack calculateOutput(ItemStack frame, ItemStack inputOne, ItemStack inputTwo)

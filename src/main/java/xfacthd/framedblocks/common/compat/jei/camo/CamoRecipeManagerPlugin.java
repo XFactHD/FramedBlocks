@@ -31,7 +31,7 @@ public final class CamoRecipeManagerPlugin implements ISimpleRecipeManagerPlugin
     public boolean isHandledInput(ITypedIngredient<?> ingredient)
     {
         ItemStack itemStack = ingredient.getItemStack().orElse(ItemStack.EMPTY);
-        if (CamoItemStackHelper.getFramedBlock(itemStack) != null)
+        if (CamoItemStackHelper.isEmptyFramedBlock(itemStack))
         {
             return true;
         }
@@ -59,8 +59,7 @@ public final class CamoRecipeManagerPlugin implements ISimpleRecipeManagerPlugin
     public List<RecipeHolder<CraftingRecipe>> getRecipesForInput(ITypedIngredient<?> ingredient)
     {
         ItemStack itemStack = ingredient.getItemStack().orElse(ItemStack.EMPTY);
-        IFramedBlock framedBlock = CamoItemStackHelper.getFramedBlock(itemStack);
-        if (framedBlock != null)
+        if (CamoItemStackHelper.isEmptyFramedBlock(itemStack))
         {
             return createRepresentativeRecipes(
                     List.of(itemStack),
@@ -71,7 +70,7 @@ public final class CamoRecipeManagerPlugin implements ISimpleRecipeManagerPlugin
         else if (copyToolIngredient.test(itemStack))
         {
             return createRepresentativeRecipes(
-                    camoCraftingHelper.getFramedBlocks(),
+                    camoCraftingHelper.getEmptyFramedBlocks(),
                     camoCraftingHelper.getCamoExamplesIngredient(),
                     List.of()
             );
@@ -81,7 +80,7 @@ public final class CamoRecipeManagerPlugin implements ISimpleRecipeManagerPlugin
         if (containerFactory != null)
         {
             return createRepresentativeRecipes(
-                    camoCraftingHelper.getFramedBlocks(),
+                    camoCraftingHelper.getEmptyFramedBlocks(),
                     Ingredient.of(itemStack),
                     List.of()
             );
@@ -126,7 +125,7 @@ public final class CamoRecipeManagerPlugin implements ISimpleRecipeManagerPlugin
     public List<RecipeHolder<CraftingRecipe>> getAllRecipes()
     {
         return createRepresentativeRecipes(
-                camoCraftingHelper.getFramedBlocks(),
+                camoCraftingHelper.getEmptyFramedBlocks(),
                 camoCraftingHelper.getCamoExamplesIngredient(),
                 List.of()
         );
