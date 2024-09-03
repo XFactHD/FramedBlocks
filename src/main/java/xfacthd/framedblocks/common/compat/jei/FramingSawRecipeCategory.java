@@ -21,7 +21,8 @@ import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.special.FramingSawBlock;
 import xfacthd.framedblocks.common.crafting.*;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
