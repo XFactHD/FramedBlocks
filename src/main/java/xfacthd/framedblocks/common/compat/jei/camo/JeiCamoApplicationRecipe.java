@@ -90,7 +90,7 @@ public final class JeiCamoApplicationRecipe implements CraftingRecipe
     public List<List<ItemStack>> getDisplayInputs(CamoCraftingHelper camoCraftingHelper)
     {
         return List.of(
-                Arrays.asList(frameStacks.getItems()),
+                camoCraftingHelper.getEmptyFrameStacks(frameStacks),
                 Arrays.asList(copyTool.getItems()),
                 // pick a prime number count so that more combinations are shown over time
                 camoCraftingHelper.getCamoExampleStacks(firstInputStacks, 97),

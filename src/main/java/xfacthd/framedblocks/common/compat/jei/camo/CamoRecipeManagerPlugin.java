@@ -10,7 +10,6 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.camo.CamoContainerFactory;
-import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.api.util.Utils;
 
 import java.util.ArrayList;
@@ -80,11 +79,21 @@ public final class CamoRecipeManagerPlugin implements ISimpleRecipeManagerPlugin
         CamoContainerFactory<?> containerFactory = CamoItemStackHelper.getCamoContainerFactory(itemStack);
         if (containerFactory != null)
         {
-            return createRepresentativeRecipes(
-                    camoCraftingHelper.getEmptyFramedBlocks(),
+            RecipeHolder<CraftingRecipe> singleFrameRecipe = createRecipe(
+                    camoCraftingHelper.getEmptyFramesIngredient(),
+                    copyToolIngredient,
                     Ingredient.of(itemStack),
+                    Ingredient.EMPTY,
                     List.of()
             );
+            RecipeHolder<CraftingRecipe> doubleFrameRecipe = createRecipe(
+                    camoCraftingHelper.getEmptyDoubleFramesIngredient(),
+                    copyToolIngredient,
+                    Ingredient.of(itemStack),
+                    camoCraftingHelper.getCamoExamplesIngredient(),
+                    List.of()
+            );
+            return List.of(singleFrameRecipe, doubleFrameRecipe);
         }
 
         return List.of();
