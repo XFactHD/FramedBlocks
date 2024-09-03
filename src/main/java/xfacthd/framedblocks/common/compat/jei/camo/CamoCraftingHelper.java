@@ -28,7 +28,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class CamoCraftingHelper
+public final class CamoCraftingHelper
 {
     /**
      * Empty tag to help with serialization of the fake recipes, this gets replaced dynamically for displaying in JEI

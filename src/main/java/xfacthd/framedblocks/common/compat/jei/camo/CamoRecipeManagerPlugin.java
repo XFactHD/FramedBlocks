@@ -15,7 +15,7 @@ import xfacthd.framedblocks.api.util.FramedConstants;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CamoRecipeManagerPlugin implements ISimpleRecipeManagerPlugin<RecipeHolder<CraftingRecipe>>
+public final class CamoRecipeManagerPlugin implements ISimpleRecipeManagerPlugin<RecipeHolder<CraftingRecipe>>
 {
     private final Ingredient copyToolIngredient;
     private final CamoCraftingHelper camoCraftingHelper;

@@ -9,7 +9,7 @@ import xfacthd.framedblocks.common.FBContent;
 import java.util.Arrays;
 import java.util.List;
 
-public class JeiCamoCraftingRecipe implements CraftingRecipe
+public final class JeiCamoCraftingRecipe implements CraftingRecipe
 {
     private final Ingredient frameStacks;
     private final Ingredient copyTool;

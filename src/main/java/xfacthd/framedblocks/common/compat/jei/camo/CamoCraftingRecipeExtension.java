@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 @SuppressWarnings("removal")
-public class CamoCraftingRecipeExtension implements ICraftingCategoryExtension<JeiCamoCraftingRecipe>
+public final class CamoCraftingRecipeExtension implements ICraftingCategoryExtension<JeiCamoCraftingRecipe>
 {
     private final CamoCraftingHelper camoCraftingHelper;
 

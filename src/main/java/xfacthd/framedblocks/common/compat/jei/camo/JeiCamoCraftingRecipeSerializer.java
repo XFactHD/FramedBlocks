@@ -11,7 +11,7 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 
 import java.util.List;
 
-public class JeiCamoCraftingRecipeSerializer implements RecipeSerializer<JeiCamoCraftingRecipe>
+public final class JeiCamoCraftingRecipeSerializer implements RecipeSerializer<JeiCamoCraftingRecipe>
 {
     private static final MapCodec<JeiCamoCraftingRecipe> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
             Ingredient.CODEC_NONEMPTY.fieldOf("frame_stacks").forGetter(JeiCamoCraftingRecipe::getFrameStacks),
