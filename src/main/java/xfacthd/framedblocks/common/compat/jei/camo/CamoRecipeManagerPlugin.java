@@ -69,18 +69,17 @@ public final class CamoRecipeManagerPlugin implements ISimpleRecipeManagerPlugin
         ItemStack itemStack = ingredient.getItemStack().orElse(ItemStack.EMPTY);
         if (CamoItemStackHelper.isEmptyFramedBlock(itemStack))
         {
-            return createRepresentativeRecipes(
-                    List.of(itemStack),
-                    camoCraftingHelper.getCamoExamplesIngredient(),
-                    List.of()
+            RecipeHolder<CraftingRecipe> recipe = createRecipeForFrame(
+                    itemStack,
+                    camoCraftingHelper.getCamoExamplesIngredient()
             );
+            return List.of(recipe);
         }
         else if (camoCraftingHelper.getCopyToolIngredient().test(itemStack))
         {
-            return createRepresentativeRecipes(
+            return createRecipesForEachFrame(
                     camoCraftingHelper.getEmptyFramedBlocks(),
-                    camoCraftingHelper.getCamoExamplesIngredient(),
-                    List.of()
+                    camoCraftingHelper.getCamoExamplesIngredient()
             );
         }
 
@@ -89,14 +88,12 @@ public final class CamoRecipeManagerPlugin implements ISimpleRecipeManagerPlugin
         {
             RecipeHolder<CraftingRecipe> singleFrameRecipe = createRecipe(
                     camoCraftingHelper.getEmptyFramesIngredient(),
-                    camoCraftingHelper.getCopyToolIngredient(),
                     Ingredient.of(itemStack),
                     Ingredient.EMPTY,
                     List.of()
             );
             RecipeHolder<CraftingRecipe> doubleFrameRecipe = createRecipe(
                     camoCraftingHelper.getEmptyDoubleFramesIngredient(),
-                    camoCraftingHelper.getCopyToolIngredient(),
                     Ingredient.of(itemStack),
                     camoCraftingHelper.getCamoExamplesIngredient(),
                     List.of()
@@ -115,38 +112,28 @@ public final class CamoRecipeManagerPlugin implements ISimpleRecipeManagerPlugin
         IFramedBlock framedBlock = CamoItemStackHelper.getFramedBlock(itemStack);
         if (framedBlock != null)
         {
-            boolean doubleFramedBlock = CamoItemStackHelper.isDoubleFramedBlock(framedBlock);
             ItemStack plainFrame = new ItemStack(itemStack.getItem());
             List<ItemStack> camoBlocks = CamoItemStackHelper.dropCamo(itemStack);
             int camoCount = camoBlocks.size();
             if (camoCount == 1)
             {
-                if (doubleFramedBlock)
-                {
-                    return createRepresentativeDoubleRecipes(
-                            List.of(plainFrame),
-                            Ingredient.of(camoBlocks.stream()),
-                            Ingredient.EMPTY,
-                            List.of(itemStack)
-                    );
-                }
-                else
-                {
-                    return createRepresentativeRecipes(
-                            List.of(plainFrame),
-                            Ingredient.of(camoBlocks.stream()),
-                            List.of(itemStack)
-                    );
-                }
+                RecipeHolder<CraftingRecipe> recipe = createRecipe(
+                        Ingredient.of(plainFrame),
+                        Ingredient.of(camoBlocks.stream()),
+                        Ingredient.EMPTY,
+                        List.of(itemStack)
+                );
+                return List.of(recipe);
             }
-            else if (camoCount == 2 && doubleFramedBlock)
+            else if (camoCount == 2 && CamoItemStackHelper.isDoubleFramedBlock(framedBlock))
             {
-                return createRepresentativeDoubleRecipes(
-                        List.of(plainFrame),
+                RecipeHolder<CraftingRecipe> recipe = createRecipe(
+                        Ingredient.of(plainFrame),
                         Ingredient.of(camoBlocks.get(0)),
                         Ingredient.of(camoBlocks.get(1)),
                         List.of(itemStack)
                 );
+                return List.of(recipe);
             }
         }
         return List.of();
@@ -155,36 +142,23 @@ public final class CamoRecipeManagerPlugin implements ISimpleRecipeManagerPlugin
     @Override
     public List<RecipeHolder<CraftingRecipe>> getAllRecipes()
     {
-        return createRepresentativeRecipes(
+        return createRecipesForEachFrame(
                 camoCraftingHelper.getEmptyFramedBlocks(),
-                camoCraftingHelper.getCamoExamplesIngredient(),
-                List.of()
+                camoCraftingHelper.getCamoExamplesIngredient()
         );
     }
 
-    private List<RecipeHolder<CraftingRecipe>> createRepresentativeRecipes(
+    private List<RecipeHolder<CraftingRecipe>> createRecipesForEachFrame(
             List<ItemStack> framedBlocks,
-            Ingredient firstInputs,
-            List<ItemStack> optionalOutputs
+            Ingredient firstInputs
     )
     {
         List<RecipeHolder<CraftingRecipe>> recipes = new ArrayList<>();
         for (ItemStack framedBlock : framedBlocks)
         {
-            Ingredient secondInputs = Ingredient.EMPTY;
-            if (CamoItemStackHelper.isDoubleFramedBlock(framedBlock))
-            {
-                secondInputs = camoCraftingHelper.getCamoExamplesIngredient();
-            }
-
-            // calculating the correct outputs here is impossible, leave them to be generated by
-            // CamoCraftingRecipeExtension.onDisplayedIngredientsUpdate
-            RecipeHolder<CraftingRecipe> singleRecipe = createRecipe(
-                    Ingredient.of(framedBlock),
-                    camoCraftingHelper.getCopyToolIngredient(),
-                    firstInputs,
-                    secondInputs,
-                    optionalOutputs
+            RecipeHolder<CraftingRecipe> singleRecipe = createRecipeForFrame(
+                    framedBlock,
+                    firstInputs
             );
             recipes.add(singleRecipe);
         }
@@ -192,39 +166,34 @@ public final class CamoRecipeManagerPlugin implements ISimpleRecipeManagerPlugin
         return recipes;
     }
 
-    private List<RecipeHolder<CraftingRecipe>> createRepresentativeDoubleRecipes(
-            List<ItemStack> framedBlocks,
-            Ingredient firstInputs,
-            Ingredient secondInputs,
-            List<ItemStack> optionalOutputs
+    private RecipeHolder<CraftingRecipe> createRecipeForFrame(
+            ItemStack framedBlock,
+            Ingredient firstInputStacks
     )
     {
-        List<RecipeHolder<CraftingRecipe>> recipes = new ArrayList<>();
-        for (ItemStack framedBlock : framedBlocks)
+        Ingredient secondInputs = Ingredient.EMPTY;
+        if (CamoItemStackHelper.isDoubleFramedBlock(framedBlock))
         {
-            // calculating the correct outputs here is impossible, leave them to be generated by
-            // CamoCraftingRecipeExtension.onDisplayedIngredientsUpdate
-            RecipeHolder<CraftingRecipe> doubleRecipe = createRecipe(
-                    Ingredient.of(framedBlock),
-                    camoCraftingHelper.getCopyToolIngredient(),
-                    firstInputs,
-                    secondInputs,
-                    optionalOutputs
-            );
-            recipes.add(doubleRecipe);
+            secondInputs = camoCraftingHelper.getCamoExamplesIngredient();
         }
-
-        return recipes;
+        // calculating the correct outputs here is impossible, leave them to be generated by
+        // CamoCraftingRecipeExtension.onDisplayedIngredientsUpdate
+        return createRecipe(
+                Ingredient.of(framedBlock),
+                firstInputStacks,
+                secondInputs,
+                List.of()
+        );
     }
 
     private RecipeHolder<CraftingRecipe> createRecipe(
             Ingredient frameStacks,
-            Ingredient copyTool,
             Ingredient firstInputStacks,
             Ingredient secondInputStacks,
             List<ItemStack> results
     )
     {
+        Ingredient copyTool = camoCraftingHelper.getCopyToolIngredient();
         JeiCamoApplicationRecipe recipe = new JeiCamoApplicationRecipe(frameStacks, copyTool, firstInputStacks, secondInputStacks, results);
         ResourceLocation resourceLocation = generateId(recipe);
         return new RecipeHolder<>(resourceLocation, recipe);
