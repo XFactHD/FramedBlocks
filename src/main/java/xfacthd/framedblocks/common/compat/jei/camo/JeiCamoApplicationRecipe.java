@@ -92,8 +92,10 @@ public final class JeiCamoApplicationRecipe implements CraftingRecipe
         return List.of(
                 Arrays.asList(frameStacks.getItems()),
                 Arrays.asList(copyTool.getItems()),
-                camoCraftingHelper.getCamoExampleStacks(firstInputStacks),
-                camoCraftingHelper.getCamoExampleStacks(secondInputStacks)
+                // pick a prime number count so that more combinations are shown over time
+                camoCraftingHelper.getCamoExampleStacks(firstInputStacks, 97),
+                // pick a lower number so that the blank ingredient is shown more often
+                camoCraftingHelper.getDoubleCamoExampleStacks(secondInputStacks, 11)
         );
     }
 

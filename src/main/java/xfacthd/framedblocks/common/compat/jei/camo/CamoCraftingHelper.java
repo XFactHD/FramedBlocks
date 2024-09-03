@@ -15,10 +15,7 @@ import xfacthd.framedblocks.api.camo.CamoContainerFactory;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.crafting.CamoApplicationRecipe;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public final class CamoCraftingHelper
 {
@@ -61,7 +58,7 @@ public final class CamoCraftingHelper
             }
         }
 
-        this.camoExamples = Collections.unmodifiableList(camoExamples);
+        this.camoExamples = camoExamples;
         this.emptyFramedBlocks = Collections.unmodifiableList(framedBlocks);
     }
 
@@ -82,13 +79,40 @@ public final class CamoCraftingHelper
         return helperRecipe.assemble(craftingInput, registryAccess);
     }
 
-    public List<ItemStack> getCamoExampleStacks(Ingredient ingredient)
+    public List<ItemStack> getCamoExampleStacks(Ingredient ingredient, int count)
     {
         if (ingredient.equals(camoExamplesIngredient))
         {
-            List<ItemStack> camoExamples = new ArrayList<>(this.camoExamples);
-            Collections.shuffle(camoExamples);
-            return camoExamples;
+            Collections.shuffle(this.camoExamples);
+            if (count < this.camoExamples.size())
+            {
+                return new ArrayList<>(this.camoExamples.subList(0, count));
+            }
+            return new ArrayList<>(this.camoExamples);
+        }
+
+        return Arrays.asList(ingredient.getItems());
+    }
+
+    public List<ItemStack> getDoubleCamoExampleStacks(Ingredient ingredient, int count)
+    {
+        if (ingredient.equals(camoExamplesIngredient))
+        {
+            Collections.shuffle(this.camoExamples);
+            List<ItemStack> results = new ArrayList<>();
+
+            results.add(ItemStack.EMPTY);
+            count--;
+
+            if (count < this.camoExamples.size())
+            {
+                results.addAll(this.camoExamples.subList(0, count));
+            }
+            else
+            {
+                results.addAll(this.camoExamples);
+            }
+            return results;
         }
 
         return Arrays.asList(ingredient.getItems());
