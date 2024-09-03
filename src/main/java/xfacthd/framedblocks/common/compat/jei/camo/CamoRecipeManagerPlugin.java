@@ -11,6 +11,7 @@ import net.minecraft.world.item.crafting.RecipeHolder;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.camo.CamoContainerFactory;
 import xfacthd.framedblocks.api.util.FramedConstants;
+import xfacthd.framedblocks.api.util.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -208,7 +209,7 @@ public final class CamoRecipeManagerPlugin implements ISimpleRecipeManagerPlugin
     )
     {
         JeiCamoApplicationRecipe recipe = new JeiCamoApplicationRecipe(frameStacks, copyTool, firstInputStacks, secondInputStacks, results);
-        ResourceLocation resourceLocation = ResourceLocation.fromNamespaceAndPath(FramedConstants.MOD_ID, "generated_recipe_" + generatedRecipeCount++);
+        ResourceLocation resourceLocation = Utils.rl("generated_recipe_" + generatedRecipeCount++);
         return new RecipeHolder<>(resourceLocation, recipe);
     }
 
