@@ -27,26 +27,7 @@ public final class CamoCraftingRecipeExtension implements ICraftingCategoryExten
     public void setRecipe(RecipeHolder<JeiCamoApplicationRecipe> recipeHolder, IRecipeLayoutBuilder builder, ICraftingGridHelper craftingGridHelper, IFocusGroup focuses)
     {
         JeiCamoApplicationRecipe recipe = recipeHolder.value();
-        List<List<ItemStack>> inputs = camoCraftingHelper.getDisplayInputs(recipe);
-        craftingGridHelper.createAndSetInputs(builder, inputs, 2, 2);
-
-        List<ItemStack> results = recipe.getResults();
-        if (results.isEmpty())
-        {
-            // For bookmarking, the recipe must have at least one known output.
-            // Outputs are mostly calculated displayed using onDisplayedIngredientsUpdate,
-            // but we calculate one here to support bookmarking.
-            List<ItemStack> frameStacks = inputs.get(0);
-            List<ItemStack> camoStackOne = inputs.get(2);
-            List<ItemStack> camoStackTwo = inputs.get(3);
-            ItemStack firstOutput = camoCraftingHelper.calculateOutput(
-                    frameStacks.isEmpty() ? ItemStack.EMPTY : frameStacks.getFirst(),
-                    camoStackOne.isEmpty() ? ItemStack.EMPTY : camoStackOne.getFirst(),
-                    camoStackTwo.isEmpty() ? ItemStack.EMPTY : camoStackTwo.getFirst()
-            );
-            results = List.of(firstOutput);
-        }
-        craftingGridHelper.createAndSetOutputs(builder, results);
+        camoCraftingHelper.setRecipe(recipe, builder, craftingGridHelper);
     }
 
     @Override
