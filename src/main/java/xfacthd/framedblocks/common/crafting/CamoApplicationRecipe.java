@@ -6,6 +6,7 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.camo.*;
 import xfacthd.framedblocks.api.camo.empty.EmptyCamoContainer;
@@ -16,12 +17,14 @@ import java.util.*;
 
 public final class CamoApplicationRecipe extends CustomRecipe
 {
+    private static @Nullable CamoApplicationRecipe INSTANCE;
     private final Ingredient copyTool;
 
     public CamoApplicationRecipe(CraftingBookCategory category, Ingredient copyTool)
     {
         super(category);
         this.copyTool = copyTool;
+        INSTANCE = this;
     }
 
     @Override
@@ -148,5 +151,11 @@ public final class CamoApplicationRecipe extends CustomRecipe
     public RecipeSerializer<?> getSerializer()
     {
         return FBContent.RECIPE_SERIALIZER_APPLY_CAMO.value();
+    }
+
+    @Nullable
+    public static CamoApplicationRecipe getInstance()
+    {
+        return INSTANCE;
     }
 }

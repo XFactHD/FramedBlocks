@@ -4,7 +4,6 @@ import mezz.jei.api.ingredients.ITypedIngredient;
 import mezz.jei.api.recipe.advanced.ISimpleRecipeManagerPlugin;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeHolder;
@@ -17,14 +16,12 @@ import java.util.List;
 
 public final class CamoRecipeManagerPlugin implements ISimpleRecipeManagerPlugin<RecipeHolder<CraftingRecipe>>
 {
-    private final Ingredient copyToolIngredient;
     private final CamoCraftingHelper camoCraftingHelper;
     private int generatedRecipeCount;
 
     public CamoRecipeManagerPlugin(CamoCraftingHelper camoCraftingHelper)
     {
         this.camoCraftingHelper = camoCraftingHelper;
-        this.copyToolIngredient = Ingredient.of(new ItemStack(Items.BRUSH));
     }
 
     @Override
@@ -35,7 +32,7 @@ public final class CamoRecipeManagerPlugin implements ISimpleRecipeManagerPlugin
         {
             return true;
         }
-        else if (copyToolIngredient.test(itemStack))
+        else if (camoCraftingHelper.getCopyToolIngredient().test(itemStack))
         {
             return true;
         }
@@ -67,7 +64,7 @@ public final class CamoRecipeManagerPlugin implements ISimpleRecipeManagerPlugin
                     List.of()
             );
         }
-        else if (copyToolIngredient.test(itemStack))
+        else if (camoCraftingHelper.getCopyToolIngredient().test(itemStack))
         {
             return createRepresentativeRecipes(
                     camoCraftingHelper.getEmptyFramedBlocks(),
@@ -81,14 +78,14 @@ public final class CamoRecipeManagerPlugin implements ISimpleRecipeManagerPlugin
         {
             RecipeHolder<CraftingRecipe> singleFrameRecipe = createRecipe(
                     camoCraftingHelper.getEmptyFramesIngredient(),
-                    copyToolIngredient,
+                    camoCraftingHelper.getCopyToolIngredient(),
                     Ingredient.of(itemStack),
                     Ingredient.EMPTY,
                     List.of()
             );
             RecipeHolder<CraftingRecipe> doubleFrameRecipe = createRecipe(
                     camoCraftingHelper.getEmptyDoubleFramesIngredient(),
-                    copyToolIngredient,
+                    camoCraftingHelper.getCopyToolIngredient(),
                     Ingredient.of(itemStack),
                     camoCraftingHelper.getCamoExamplesIngredient(),
                     List.of()
@@ -173,7 +170,7 @@ public final class CamoRecipeManagerPlugin implements ISimpleRecipeManagerPlugin
             // CamoCraftingRecipeExtension.onDisplayedIngredientsUpdate
             RecipeHolder<CraftingRecipe> singleRecipe = createRecipe(
                     Ingredient.of(framedBlock),
-                    copyToolIngredient,
+                    camoCraftingHelper.getCopyToolIngredient(),
                     firstInputs,
                     secondInputs,
                     optionalOutputs
@@ -198,7 +195,7 @@ public final class CamoRecipeManagerPlugin implements ISimpleRecipeManagerPlugin
             // CamoCraftingRecipeExtension.onDisplayedIngredientsUpdate
             RecipeHolder<CraftingRecipe> doubleRecipe = createRecipe(
                     Ingredient.of(framedBlock),
-                    copyToolIngredient,
+                    camoCraftingHelper.getCopyToolIngredient(),
                     firstInputs,
                     secondInputs,
                     optionalOutputs

@@ -12,6 +12,7 @@ import mezz.jei.api.runtime.IIngredientManager;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
+import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.client.screen.FramingSawScreen;
 import xfacthd.framedblocks.client.screen.FramingSawWithEncoderScreen;
@@ -32,7 +33,17 @@ public final class FramedJeiPlugin implements IModPlugin
     static final RecipeType<FramingSawRecipe> FRAMING_SAW_RECIPE_TYPE = new RecipeType<>(
             Utils.rl("framing_saw"), FramingSawRecipe.class
     );
-    private static final CamoCraftingHelper camoCraftingHelper = new CamoCraftingHelper();
+    @Nullable
+    private CamoCraftingHelper camoCraftingHelperInstance;
+
+    private CamoCraftingHelper getCamoCraftingHelper()
+    {
+        if (camoCraftingHelperInstance == null)
+        {
+            camoCraftingHelperInstance = new CamoCraftingHelper();
+        }
+        return camoCraftingHelperInstance;
+    }
 
     @Override
     public void registerCategories(IRecipeCategoryRegistration registration)
@@ -45,6 +56,7 @@ public final class FramedJeiPlugin implements IModPlugin
     {
         IJeiHelpers jeiHelpers = registration.getJeiHelpers();
         IIngredientManager ingredientManager = jeiHelpers.getIngredientManager();
+        CamoCraftingHelper camoCraftingHelper = getCamoCraftingHelper();
         camoCraftingHelper.scanForItems(ingredientManager);
 
         IExtendableCraftingRecipeCategory craftingCategory = registration.getCraftingCategory();
@@ -115,6 +127,7 @@ public final class FramedJeiPlugin implements IModPlugin
     @Override
     public void registerAdvanced(IAdvancedRegistration registration)
     {
+        CamoCraftingHelper camoCraftingHelper = getCamoCraftingHelper();
         registration.addTypedRecipeManagerPlugin(RecipeTypes.CRAFTING, new CamoRecipeManagerPlugin(camoCraftingHelper));
     }
 

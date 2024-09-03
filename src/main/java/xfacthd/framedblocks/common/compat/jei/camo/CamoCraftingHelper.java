@@ -37,10 +37,16 @@ public final class CamoCraftingHelper
 
     public CamoCraftingHelper()
     {
-        this.helperRecipe = new CamoApplicationRecipe(CraftingBookCategory.MISC, Ingredient.of(Items.BRUSH));
+        CamoApplicationRecipe applicationRecipe = CamoApplicationRecipe.getInstance();
+        this.helperRecipe = Objects.requireNonNullElseGet(applicationRecipe, () -> new CamoApplicationRecipe(CraftingBookCategory.MISC, Ingredient.of(Items.BRUSH)));
         this.camoExamplesIngredient = Ingredient.of(JEI_CAMO_BLOCK_EXAMPLES);
         this.emptyFramesIngredient = Ingredient.of(JEI_CAMO_EMPTY_FRAMES);
         this.emptyDoubleFramesIngredient = Ingredient.of(JEI_CAMO_EMPTY_DOUBLE_FRAMES);
+    }
+
+    public Ingredient getCopyToolIngredient()
+    {
+        return helperRecipe.getCopyTool();
     }
 
     public void scanForItems(IIngredientManager ingredientManager)
@@ -80,11 +86,6 @@ public final class CamoCraftingHelper
         return emptyFramedBlocks;
     }
 
-    public List<ItemStack> getEmptyDoubleFramedBlocks()
-    {
-        return emptyDoubleFramedBlocks;
-    }
-
     public ItemStack calculateOutput(ItemStack frame, ItemStack inputOne, ItemStack inputTwo)
     {
         Minecraft minecraft = Minecraft.getInstance();
@@ -92,7 +93,9 @@ public final class CamoCraftingHelper
         assert level != null;
         RegistryAccess registryAccess = level.registryAccess();
 
-        List<ItemStack> inputs = List.of(frame, new ItemStack(Items.BRUSH), inputOne, inputTwo);
+        Ingredient copyTool = helperRecipe.getCopyTool();
+        ItemStack copyToolItem = copyTool.getItems()[0];
+        List<ItemStack> inputs = List.of(frame, copyToolItem, inputOne, inputTwo);
         CraftingInput craftingInput = CraftingInput.of(2, 2, inputs);
         return helperRecipe.assemble(craftingInput, registryAccess);
     }
