@@ -6,18 +6,14 @@ import mezz.jei.api.gui.ingredient.IRecipeSlotDrawable;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.category.extensions.vanilla.crafting.ICraftingCategoryExtension;
-import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
 
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 import java.util.Optional;
 
 @SuppressWarnings("removal")
-@ParametersAreNonnullByDefault
-@MethodsReturnNonnullByDefault
 public class CamoCraftingRecipeExtension implements ICraftingCategoryExtension<JeiCamoCraftingRecipe>
 {
     private final CamoCraftingHelper camoCraftingHelper;

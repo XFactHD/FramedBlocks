@@ -1,7 +1,6 @@
 package xfacthd.framedblocks.common.compat.jei.camo;
 
 import mezz.jei.api.runtime.IIngredientManager;
-import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.RegistryAccess;
@@ -13,6 +12,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.Ingredient;
+import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.camo.CamoContainer;
 import xfacthd.framedblocks.api.camo.CamoContainerFactory;
@@ -22,17 +22,12 @@ import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.crafting.CamoApplicationRecipe;
 
-import org.jetbrains.annotations.Nullable;
-
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
-@ParametersAreNonnullByDefault
-@MethodsReturnNonnullByDefault
 public class CamoCraftingHelper
 {
     /**

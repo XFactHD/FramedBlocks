@@ -3,18 +3,14 @@ package xfacthd.framedblocks.common.compat.jei.camo;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
-@ParametersAreNonnullByDefault
-@MethodsReturnNonnullByDefault
 public class JeiCamoCraftingRecipeSerializer implements RecipeSerializer<JeiCamoCraftingRecipe>
 {
     private static final MapCodec<JeiCamoCraftingRecipe> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(

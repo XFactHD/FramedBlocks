@@ -1,18 +1,14 @@
 package xfacthd.framedblocks.common.compat.jei.camo;
 
-import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 import xfacthd.framedblocks.common.FBContent;
 
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Arrays;
 import java.util.List;
 
-@ParametersAreNonnullByDefault
-@MethodsReturnNonnullByDefault
 public class JeiCamoCraftingRecipe implements CraftingRecipe
 {
     private final Ingredient frameStacks;

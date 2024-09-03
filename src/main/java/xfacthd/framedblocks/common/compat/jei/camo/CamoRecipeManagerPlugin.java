@@ -2,7 +2,6 @@ package xfacthd.framedblocks.common.compat.jei.camo;
 
 import mezz.jei.api.ingredients.ITypedIngredient;
 import mezz.jei.api.recipe.advanced.ISimpleRecipeManagerPlugin;
-import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -13,12 +12,9 @@ import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.camo.CamoContainerFactory;
 import xfacthd.framedblocks.api.util.FramedConstants;
 
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.List;
 
-@ParametersAreNonnullByDefault
-@MethodsReturnNonnullByDefault
 public class CamoRecipeManagerPlugin implements ISimpleRecipeManagerPlugin<RecipeHolder<CraftingRecipe>>
 {
     private final Ingredient copyToolIngredient;
