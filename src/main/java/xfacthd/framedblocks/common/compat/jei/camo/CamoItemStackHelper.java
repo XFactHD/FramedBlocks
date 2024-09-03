@@ -59,25 +59,28 @@ public final class CamoItemStackHelper
         {
             return false;
         }
-        CamoList camos = itemStack.get(FBContent.DC_TYPE_CAMO_LIST);
-        return camos == null || camos.isEmpty();
+        CamoList camos = itemStack.getOrDefault(FBContent.DC_TYPE_CAMO_LIST, CamoList.EMPTY);
+        return camos.isEmptyOrContentsEmpty();
     }
 
     public static List<ItemStack> dropCamo(ItemStack itemStack)
     {
-        CamoList camos = itemStack.get(FBContent.DC_TYPE_CAMO_LIST);
-        if (camos != null && !camos.isEmpty())
+        CamoList camos = itemStack.getOrDefault(FBContent.DC_TYPE_CAMO_LIST, CamoList.EMPTY);
+        if (camos.isEmptyOrContentsEmpty())
         {
-            List<ItemStack> results = new ArrayList<>();
-            for (CamoContainer<?, ?> camoContainer : camos) {
-                if (!camoContainer.canTriviallyConvertToItemStack()) {
-                    return List.of();
-                }
-                ItemStack dropped = CamoContainerHelper.dropCamo(camoContainer);
-                results.add(dropped);
-            }
-            return results;
+            return List.of();
         }
-        return List.of();
+
+        List<ItemStack> results = new ArrayList<>();
+        for (CamoContainer<?, ?> camoContainer : camos)
+        {
+            if (!camoContainer.canTriviallyConvertToItemStack())
+            {
+                return List.of();
+            }
+            ItemStack dropped = CamoContainerHelper.dropCamo(camoContainer);
+            results.add(dropped);
+        }
+        return results;
     }
 }
