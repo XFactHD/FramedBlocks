@@ -97,18 +97,31 @@ public final class CamoRecipeManagerPlugin implements ISimpleRecipeManagerPlugin
         IFramedBlock framedBlock = CamoItemStackHelper.getFramedBlock(itemStack);
         if (framedBlock != null)
         {
+            boolean doubleFramedBlock = CamoItemStackHelper.isDoubleFramedBlock(framedBlock);
             ItemStack plainFrame = new ItemStack(itemStack.getItem());
             List<ItemStack> camoBlocks = CamoItemStackHelper.dropCamo(itemStack);
             int camoCount = camoBlocks.size();
             if (camoCount == 1)
             {
-                return createRepresentativeRecipes(
-                        List.of(plainFrame),
-                        Ingredient.of(camoBlocks.stream()),
-                        List.of(itemStack)
-                );
+                if (doubleFramedBlock)
+                {
+                    return createRepresentativeDoubleRecipes(
+                            List.of(plainFrame),
+                            Ingredient.of(camoBlocks.stream()),
+                            Ingredient.EMPTY,
+                            List.of(itemStack)
+                    );
+                }
+                else
+                {
+                    return createRepresentativeRecipes(
+                            List.of(plainFrame),
+                            Ingredient.of(camoBlocks.stream()),
+                            List.of(itemStack)
+                    );
+                }
             }
-            else if (camoCount == 2)
+            else if (camoCount == 2 && doubleFramedBlock)
             {
                 return createRepresentativeDoubleRecipes(
                         List.of(plainFrame),
