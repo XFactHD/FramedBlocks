@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 @SuppressWarnings("removal")
-public final class CamoCraftingRecipeExtension implements ICraftingCategoryExtension<JeiCamoCraftingRecipe>
+public final class CamoCraftingRecipeExtension implements ICraftingCategoryExtension<JeiCamoApplicationRecipe>
 {
     private final CamoCraftingHelper camoCraftingHelper;
 
@@ -24,9 +24,9 @@ public final class CamoCraftingRecipeExtension implements ICraftingCategoryExten
     }
 
     @Override
-    public void setRecipe(RecipeHolder<JeiCamoCraftingRecipe> recipeHolder, IRecipeLayoutBuilder builder, ICraftingGridHelper craftingGridHelper, IFocusGroup focuses)
+    public void setRecipe(RecipeHolder<JeiCamoApplicationRecipe> recipeHolder, IRecipeLayoutBuilder builder, ICraftingGridHelper craftingGridHelper, IFocusGroup focuses)
     {
-        JeiCamoCraftingRecipe recipe = recipeHolder.value();
+        JeiCamoApplicationRecipe recipe = recipeHolder.value();
         List<List<ItemStack>> inputs = recipe.getDisplayInputs(camoCraftingHelper);
         craftingGridHelper.createAndSetInputs(builder, inputs, 2, 2);
 
@@ -50,25 +50,25 @@ public final class CamoCraftingRecipeExtension implements ICraftingCategoryExten
     }
 
     @Override
-    public int getWidth(RecipeHolder<JeiCamoCraftingRecipe> recipeHolder)
+    public int getWidth(RecipeHolder<JeiCamoApplicationRecipe> recipeHolder)
     {
         return 2;
     }
 
     @Override
-    public int getHeight(RecipeHolder<JeiCamoCraftingRecipe> recipeHolder)
+    public int getHeight(RecipeHolder<JeiCamoApplicationRecipe> recipeHolder)
     {
         return 2;
     }
 
     @Override
-    public Optional<ResourceLocation> getRegistryName(RecipeHolder<JeiCamoCraftingRecipe> recipeHolder)
+    public Optional<ResourceLocation> getRegistryName(RecipeHolder<JeiCamoApplicationRecipe> recipeHolder)
     {
         return Optional.of(recipeHolder.id());
     }
 
     @Override
-    public void onDisplayedIngredientsUpdate(RecipeHolder<JeiCamoCraftingRecipe> recipeHolder, List<IRecipeSlotDrawable> recipeSlots, IFocusGroup focuses)
+    public void onDisplayedIngredientsUpdate(RecipeHolder<JeiCamoApplicationRecipe> recipeHolder, List<IRecipeSlotDrawable> recipeSlots, IFocusGroup focuses)
     {
         // The combinations of outputs for these recipes is way too much to calculate ahead of time.
         // If the focus is on an output it will already be set, but otherwise we need to calculate it here.

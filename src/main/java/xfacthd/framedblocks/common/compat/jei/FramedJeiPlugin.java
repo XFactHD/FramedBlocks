@@ -20,7 +20,7 @@ import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.compat.jei.camo.CamoCraftingHelper;
 import xfacthd.framedblocks.common.compat.jei.camo.CamoCraftingRecipeExtension;
 import xfacthd.framedblocks.common.compat.jei.camo.CamoRecipeManagerPlugin;
-import xfacthd.framedblocks.common.compat.jei.camo.JeiCamoCraftingRecipe;
+import xfacthd.framedblocks.common.compat.jei.camo.JeiCamoApplicationRecipe;
 import xfacthd.framedblocks.common.crafting.FramingSawRecipe;
 import xfacthd.framedblocks.common.crafting.FramingSawRecipeCache;
 
@@ -48,7 +48,7 @@ public final class FramedJeiPlugin implements IModPlugin
         camoCraftingHelper.scanForItems(ingredientManager);
 
         IExtendableCraftingRecipeCategory craftingCategory = registration.getCraftingCategory();
-        craftingCategory.addExtension(JeiCamoCraftingRecipe.class, new CamoCraftingRecipeExtension(camoCraftingHelper));
+        craftingCategory.addExtension(JeiCamoApplicationRecipe.class, new CamoCraftingRecipeExtension(camoCraftingHelper));
     }
 
     @Override

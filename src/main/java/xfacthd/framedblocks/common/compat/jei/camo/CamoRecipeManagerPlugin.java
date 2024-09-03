@@ -203,7 +203,7 @@ public final class CamoRecipeManagerPlugin implements ISimpleRecipeManagerPlugin
             List<ItemStack> results
     )
     {
-        JeiCamoCraftingRecipe recipe = new JeiCamoCraftingRecipe(frameStacks, copyTool, firstInputStacks, secondInputStacks, results);
+        JeiCamoApplicationRecipe recipe = new JeiCamoApplicationRecipe(frameStacks, copyTool, firstInputStacks, secondInputStacks, results);
         ResourceLocation resourceLocation = ResourceLocation.fromNamespaceAndPath(FramedConstants.MOD_ID, "generated_recipe_" + generatedRecipeCount++);
         return new RecipeHolder<>(resourceLocation, recipe);
     }
