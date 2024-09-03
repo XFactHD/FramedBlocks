@@ -3,7 +3,7 @@ package xfacthd.framedblocks.common.config;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.util.ConfigView;
 import xfacthd.framedblocks.client.model.SolidFrameMode;
-import xfacthd.framedblocks.client.screen.overlay.BlockInteractOverlay;
+import xfacthd.framedblocks.client.screen.overlay.OverlayDisplayMode;
 
 import java.util.regex.Pattern;
 
@@ -39,23 +39,23 @@ public final class ExtConfigView
 
         boolean shouldRenderCamoInJade();
 
-        BlockInteractOverlay.Mode getStateLockMode();
+        OverlayDisplayMode getStateLockMode();
 
-        BlockInteractOverlay.Mode getToggleWaterlogMode();
+        OverlayDisplayMode getToggleWaterlogMode();
 
-        BlockInteractOverlay.Mode getToggleYSlopeMode();
+        OverlayDisplayMode getToggleYSlopeMode();
 
-        BlockInteractOverlay.Mode getReinforcementMode();
+        OverlayDisplayMode getReinforcementMode();
 
-        BlockInteractOverlay.Mode getPrismOffsetMode();
+        OverlayDisplayMode getPrismOffsetMode();
 
-        BlockInteractOverlay.Mode getSplitLineMode();
+        OverlayDisplayMode getSplitLineMode();
 
-        BlockInteractOverlay.Mode getOneWayWindowMode();
+        OverlayDisplayMode getOneWayWindowMode();
 
-        BlockInteractOverlay.Mode getFrameBackgroundMode();
+        OverlayDisplayMode getFrameBackgroundMode();
 
-        BlockInteractOverlay.Mode getCamoRotationMode();
+        OverlayDisplayMode getCamoRotationMode();
     }
 
     public interface DevTools extends ConfigView.DevTools

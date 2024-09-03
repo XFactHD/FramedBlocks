@@ -37,7 +37,7 @@ public final class OneWayWindowOverlay extends BlockInteractOverlay
 
     public OneWayWindowOverlay()
     {
-        super(LINES, List.of(), null, null, ClientConfig.VIEW::getOneWayWindowMode);
+        super("one_way_window", LINES, List.of(), null, null, ClientConfig.VIEW::getOneWayWindowMode);
     }
 
     @Override

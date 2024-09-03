@@ -25,7 +25,7 @@ public final class CamoRotationOverlay extends BlockInteractOverlay
 
     public CamoRotationOverlay()
     {
-        super(List.of(ROTATEABLE_FALSE), List.of(ROTATEABLE_TRUE), TEXTURE_FALSE, TEXTURE_TRUE, ClientConfig.VIEW::getCamoRotationMode);
+        super("camo_rotation", List.of(ROTATEABLE_FALSE), List.of(ROTATEABLE_TRUE), TEXTURE_FALSE, TEXTURE_TRUE, ClientConfig.VIEW::getCamoRotationMode);
     }
 
     @Override

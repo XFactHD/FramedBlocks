@@ -9,10 +9,10 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
+import xfacthd.framedblocks.api.util.FramedByteBufCodecs;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.crafting.FramingSawRecipe;
 import xfacthd.framedblocks.common.menu.FramingSawWithEncoderMenu;
-import xfacthd.framedblocks.common.net.FramedByteBufCodecs;
 
 public record ServerboundEncodeFramingSawPatternPayload(int containerId, ResourceLocation recipeId, ItemStack[] inputs) implements CustomPacketPayload
 {

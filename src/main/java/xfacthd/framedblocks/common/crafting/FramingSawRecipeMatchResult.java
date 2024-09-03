@@ -9,6 +9,7 @@ import java.util.Locale;
 public enum FramingSawRecipeMatchResult
 {
     SUCCESS(true),
+    CAMO_PRESENT(false),
     MATERIAL_VALUE(false),
     MATERIAL_LCM(false),
     OUTPUT_SIZE(false),

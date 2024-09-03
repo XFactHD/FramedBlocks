@@ -10,9 +10,9 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import xfacthd.framedblocks.FramedBlocks;
+import xfacthd.framedblocks.api.util.FramedByteBufCodecs;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.blockentity.special.FramedSignBlockEntity;
-import xfacthd.framedblocks.common.net.FramedByteBufCodecs;
 
 import java.util.List;
 import java.util.stream.Stream;

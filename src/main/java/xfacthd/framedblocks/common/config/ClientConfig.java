@@ -8,7 +8,7 @@ import net.neoforged.neoforge.common.ModConfigSpec;
 import xfacthd.framedblocks.api.predicate.contex.ConTexMode;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.client.model.SolidFrameMode;
-import xfacthd.framedblocks.client.screen.overlay.BlockInteractOverlay;
+import xfacthd.framedblocks.client.screen.overlay.OverlayDisplayMode;
 
 public final class ClientConfig
 {
@@ -84,15 +84,15 @@ public final class ClientConfig
     private static boolean showButtonPlateOverlay = false;
     private static boolean showSpecialCubeOverlay = false;
     private static boolean renderCamoInJade = false;
-    private static BlockInteractOverlay.Mode stateLockMode = BlockInteractOverlay.Mode.DETAILED;
-    private static BlockInteractOverlay.Mode toggleWaterlogMode = BlockInteractOverlay.Mode.DETAILED;
-    private static BlockInteractOverlay.Mode toggleYSlopeMode = BlockInteractOverlay.Mode.DETAILED;
-    private static BlockInteractOverlay.Mode reinforcementMode = BlockInteractOverlay.Mode.DETAILED;
-    private static BlockInteractOverlay.Mode prismOffsetMode = BlockInteractOverlay.Mode.DETAILED;
-    private static BlockInteractOverlay.Mode splitLineMode = BlockInteractOverlay.Mode.DETAILED;
-    private static BlockInteractOverlay.Mode oneWayWindowMode = BlockInteractOverlay.Mode.DETAILED;
-    private static BlockInteractOverlay.Mode frameBackgroundMode = BlockInteractOverlay.Mode.DETAILED;
-    private static BlockInteractOverlay.Mode camoRotationMode = BlockInteractOverlay.Mode.DETAILED;
+    private static OverlayDisplayMode stateLockMode = OverlayDisplayMode.DETAILED;
+    private static OverlayDisplayMode toggleWaterlogMode = OverlayDisplayMode.DETAILED;
+    private static OverlayDisplayMode toggleYSlopeMode = OverlayDisplayMode.DETAILED;
+    private static OverlayDisplayMode reinforcementMode = OverlayDisplayMode.DETAILED;
+    private static OverlayDisplayMode prismOffsetMode = OverlayDisplayMode.DETAILED;
+    private static OverlayDisplayMode splitLineMode = OverlayDisplayMode.DETAILED;
+    private static OverlayDisplayMode oneWayWindowMode = OverlayDisplayMode.DETAILED;
+    private static OverlayDisplayMode frameBackgroundMode = OverlayDisplayMode.DETAILED;
+    private static OverlayDisplayMode camoRotationMode = OverlayDisplayMode.DETAILED;
 
     private static final ModConfigSpec.BooleanValue SHOW_GHOST_BLOCKS_VALUE;
     private static final ModConfigSpec.BooleanValue ALT_GHOST_RENDERER_VALUE;
@@ -110,15 +110,15 @@ public final class ClientConfig
     private static final ModConfigSpec.BooleanValue SHOW_SPECIAL_CUBE_OVERLAY_VALUE;
     private static final ModConfigSpec.BooleanValue RENDER_CAMO_IN_JADE_VALUE;
 
-    private static final ModConfigSpec.EnumValue<BlockInteractOverlay.Mode> STATE_LOCK_MODE_VALUE;
-    private static final ModConfigSpec.EnumValue<BlockInteractOverlay.Mode> TOGGLE_WATERLOG_MODE_VALUE;
-    private static final ModConfigSpec.EnumValue<BlockInteractOverlay.Mode> TOGGLE_Y_SLOPE_MODE_VALUE;
-    private static final ModConfigSpec.EnumValue<BlockInteractOverlay.Mode> REINFORCEMENT_MODE_VALUE;
-    private static final ModConfigSpec.EnumValue<BlockInteractOverlay.Mode> PRISM_OFFSET_MODE_VALUE;
-    private static final ModConfigSpec.EnumValue<BlockInteractOverlay.Mode> SPLIT_LINE_MODE_VALUE;
-    private static final ModConfigSpec.EnumValue<BlockInteractOverlay.Mode> ONE_WAY_WINDOW_MODE_VALUE;
-    private static final ModConfigSpec.EnumValue<BlockInteractOverlay.Mode> FRAME_BACKGROUND_MODE_VALUE;
-    private static final ModConfigSpec.EnumValue<BlockInteractOverlay.Mode> CAMO_ROTATION_MODE_VALUE;
+    private static final ModConfigSpec.EnumValue<OverlayDisplayMode> STATE_LOCK_MODE_VALUE;
+    private static final ModConfigSpec.EnumValue<OverlayDisplayMode> TOGGLE_WATERLOG_MODE_VALUE;
+    private static final ModConfigSpec.EnumValue<OverlayDisplayMode> TOGGLE_Y_SLOPE_MODE_VALUE;
+    private static final ModConfigSpec.EnumValue<OverlayDisplayMode> REINFORCEMENT_MODE_VALUE;
+    private static final ModConfigSpec.EnumValue<OverlayDisplayMode> PRISM_OFFSET_MODE_VALUE;
+    private static final ModConfigSpec.EnumValue<OverlayDisplayMode> SPLIT_LINE_MODE_VALUE;
+    private static final ModConfigSpec.EnumValue<OverlayDisplayMode> ONE_WAY_WINDOW_MODE_VALUE;
+    private static final ModConfigSpec.EnumValue<OverlayDisplayMode> FRAME_BACKGROUND_MODE_VALUE;
+    private static final ModConfigSpec.EnumValue<OverlayDisplayMode> CAMO_ROTATION_MODE_VALUE;
 
     public static void init(IEventBus modBus, ModContainer modContainer)
     {
@@ -232,55 +232,55 @@ public final class ClientConfig
                 .comment(COMMENT_OVERLAY_ICON.formatted("State Lock"))
                 .comment(COMMENT_OVERLAY_DETAILED.formatted("State Lock"))
                 .translation(TRANSLATION_STATE_LOCK_MODE)
-                .defineEnum(KEY_STATE_LOCK_MODE, BlockInteractOverlay.Mode.DETAILED);
+                .defineEnum(KEY_STATE_LOCK_MODE, OverlayDisplayMode.DETAILED);
         TOGGLE_WATERLOG_MODE_VALUE = builder
                 .comment(COMMENT_OVERLAY_HIDDEN.formatted("Toggle Waterloggable"))
                 .comment(COMMENT_OVERLAY_ICON.formatted("Toggle Waterloggable"))
                 .comment(COMMENT_OVERLAY_DETAILED.formatted("Toggle Waterloggable"))
                 .translation(TRANSLATION_TOGGLE_WATERLOG_MODE)
-                .defineEnum(KEY_TOGGLE_WATERLOG_MODE, BlockInteractOverlay.Mode.DETAILED);
+                .defineEnum(KEY_TOGGLE_WATERLOG_MODE, OverlayDisplayMode.DETAILED);
         TOGGLE_Y_SLOPE_MODE_VALUE = builder
                 .comment(COMMENT_OVERLAY_HIDDEN.formatted("Toggle Slope Face"))
                 .comment(COMMENT_OVERLAY_ICON.formatted("Toggle Slope Face"))
                 .comment(COMMENT_OVERLAY_DETAILED.formatted("Toggle Slope Face"))
                 .translation(TRANSLATION_TOGGLE_Y_SLOPE_MODE)
-                .defineEnum(KEY_TOGGLE_Y_SLOPE_MODE, BlockInteractOverlay.Mode.DETAILED);
+                .defineEnum(KEY_TOGGLE_Y_SLOPE_MODE, OverlayDisplayMode.DETAILED);
         REINFORCEMENT_MODE_VALUE = builder
                 .comment(COMMENT_OVERLAY_HIDDEN.formatted("Reinforcement"))
                 .comment(COMMENT_OVERLAY_ICON.formatted("Reinforcement"))
                 .comment(COMMENT_OVERLAY_DETAILED.formatted("Reinforcement"))
                 .translation(TRANSLATION_REINFORCEMENT_MODE)
-                .defineEnum(KEY_REINFORCEMENT_MODE, BlockInteractOverlay.Mode.DETAILED);
+                .defineEnum(KEY_REINFORCEMENT_MODE, OverlayDisplayMode.DETAILED);
         PRISM_OFFSET_MODE_VALUE = builder
                 .comment(COMMENT_OVERLAY_HIDDEN.formatted("Prism Offset"))
                 .comment(COMMENT_OVERLAY_ICON.formatted("Prism Offset"))
                 .comment(COMMENT_OVERLAY_DETAILED.formatted("Prism Offset"))
                 .translation(TRANSLATION_PRISM_OFFSET_MODE)
-                .defineEnum(KEY_PRISM_OFFSET_MODE, BlockInteractOverlay.Mode.DETAILED);
+                .defineEnum(KEY_PRISM_OFFSET_MODE, OverlayDisplayMode.DETAILED);
         SPLIT_LINE_MODE_VALUE = builder
                 .comment(COMMENT_OVERLAY_HIDDEN.formatted("Collapsible Block Split Line"))
                 .comment(COMMENT_OVERLAY_ICON.formatted("Collapsible Block Split Line"))
                 .comment(COMMENT_OVERLAY_DETAILED.formatted("Collapsible Block Split Line"))
                 .translation(TRANSLATION_SPLIT_LINES_MODE)
-                .defineEnum(KEY_SPLIT_LINES_MODE, BlockInteractOverlay.Mode.DETAILED);
+                .defineEnum(KEY_SPLIT_LINES_MODE, OverlayDisplayMode.DETAILED);
         ONE_WAY_WINDOW_MODE_VALUE = builder
                 .comment(COMMENT_OVERLAY_HIDDEN.formatted("One-Way Window"))
                 .comment(COMMENT_OVERLAY_ICON.formatted("One-Way Window"))
                 .comment(COMMENT_OVERLAY_DETAILED.formatted("One-Way Window"))
                 .translation(TRANSLATION_ONE_WAY_WINDOW_MODE)
-                .defineEnum(KEY_ONE_WAY_WINDOW_MODE, BlockInteractOverlay.Mode.DETAILED);
+                .defineEnum(KEY_ONE_WAY_WINDOW_MODE, OverlayDisplayMode.DETAILED);
         FRAME_BACKGROUND_MODE_VALUE = builder
                 .comment(COMMENT_OVERLAY_HIDDEN.formatted("Item Frame Background"))
                 .comment(COMMENT_OVERLAY_ICON.formatted("Item Frame Background"))
                 .comment(COMMENT_OVERLAY_DETAILED.formatted("Item Frame Background"))
                 .translation(TRANSLATION_FRAME_BACKGROUND_MODE)
-                .defineEnum(KEY_FRAME_BACKGROUND_MODE, BlockInteractOverlay.Mode.DETAILED);
+                .defineEnum(KEY_FRAME_BACKGROUND_MODE, OverlayDisplayMode.DETAILED);
         CAMO_ROTATION_MODE_VALUE = builder
                 .comment(COMMENT_OVERLAY_HIDDEN.formatted("Camo Rotation"))
                 .comment(COMMENT_OVERLAY_ICON.formatted("Camo Rotation"))
                 .comment(COMMENT_OVERLAY_DETAILED.formatted("Camo Rotation"))
                 .translation(TRANSLATION_CAMO_ROTATION_MODE)
-                .defineEnum(KEY_CAMO_ROTATION_MODE, BlockInteractOverlay.Mode.DETAILED);
+                .defineEnum(KEY_CAMO_ROTATION_MODE, OverlayDisplayMode.DETAILED);
         builder.pop();
 
         SPEC = builder.build();
@@ -420,55 +420,55 @@ public final class ClientConfig
         }
 
         @Override
-        public BlockInteractOverlay.Mode getStateLockMode()
+        public OverlayDisplayMode getStateLockMode()
         {
             return stateLockMode;
         }
 
         @Override
-        public BlockInteractOverlay.Mode getToggleWaterlogMode()
+        public OverlayDisplayMode getToggleWaterlogMode()
         {
             return toggleWaterlogMode;
         }
 
         @Override
-        public BlockInteractOverlay.Mode getToggleYSlopeMode()
+        public OverlayDisplayMode getToggleYSlopeMode()
         {
             return toggleYSlopeMode;
         }
 
         @Override
-        public BlockInteractOverlay.Mode getReinforcementMode()
+        public OverlayDisplayMode getReinforcementMode()
         {
             return reinforcementMode;
         }
 
         @Override
-        public BlockInteractOverlay.Mode getPrismOffsetMode()
+        public OverlayDisplayMode getPrismOffsetMode()
         {
             return prismOffsetMode;
         }
 
         @Override
-        public BlockInteractOverlay.Mode getSplitLineMode()
+        public OverlayDisplayMode getSplitLineMode()
         {
             return splitLineMode;
         }
 
         @Override
-        public BlockInteractOverlay.Mode getOneWayWindowMode()
+        public OverlayDisplayMode getOneWayWindowMode()
         {
             return oneWayWindowMode;
         }
 
         @Override
-        public BlockInteractOverlay.Mode getFrameBackgroundMode()
+        public OverlayDisplayMode getFrameBackgroundMode()
         {
             return frameBackgroundMode;
         }
 
         @Override
-        public BlockInteractOverlay.Mode getCamoRotationMode()
+        public OverlayDisplayMode getCamoRotationMode()
         {
             return camoRotationMode;
         }

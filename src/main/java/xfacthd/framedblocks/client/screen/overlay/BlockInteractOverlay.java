@@ -1,18 +1,15 @@
 package xfacthd.framedblocks.client.screen.overlay;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.LayeredDraw;
 import net.minecraft.client.gui.screens.inventory.tooltip.TooltipRenderUtil;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
@@ -25,55 +22,55 @@ import net.neoforged.neoforge.common.util.ConcatenatedListView;
 import java.util.*;
 import java.util.function.Supplier;
 
-public abstract class BlockInteractOverlay implements LayeredDraw.Layer
+abstract class BlockInteractOverlay
 {
     private static final int LINE_DIST = 3;
     private static final Target NO_TARGET = new Target(BlockPos.ZERO, Blocks.AIR.defaultBlockState(), Direction.NORTH);
-    private static final List<BlockInteractOverlay> OVERLAYS = new ArrayList<>();
 
+    private final String name;
     private final List<Component> linesFalse;
     private final List<Component> linesTrue;
     private final Texture textureFalse;
     private final Texture textureTrue;
-    private final Supplier<Mode> modeGetter;
+    private final Supplier<OverlayDisplayMode> modeGetter;
     private int textWidth = 0;
-    private boolean textWidthValid = false;
+    boolean textWidthValid = false;
 
     BlockInteractOverlay(
+            String name,
             List<Component> linesFalse,
             List<Component> linesTrue,
             Texture textureFalse,
             Texture textureTrue,
-            Supplier<Mode> modeGetter
+            Supplier<OverlayDisplayMode> modeGetter
     )
     {
+        this.name = name;
         this.linesFalse = linesFalse;
         this.linesTrue = linesTrue;
         this.textureFalse = textureFalse;
         this.textureTrue = textureTrue;
         this.modeGetter = modeGetter;
-        OVERLAYS.add(this);
     }
 
-    @Override
-    public void render(GuiGraphics graphics, DeltaTracker deltaTracker)
+    boolean render(GuiGraphics graphics)
     {
-        Mode mode = modeGetter.get();
-        if (mode == Mode.HIDDEN || player().isSpectator() || Minecraft.getInstance().options.hideGui)
+        OverlayDisplayMode mode = modeGetter.get();
+        if (mode == OverlayDisplayMode.HIDDEN || player().isSpectator() || Minecraft.getInstance().options.hideGui)
         {
-            return;
+            return false;
         }
 
         ItemStack stack = player().getMainHandItem();
         if (!isValidTool(stack))
         {
-            return;
+            return false;
         }
 
         Target target = getTargettedBlock();
         if (!isValidTarget(target))
         {
-            return;
+            return false;
         }
 
         boolean state = getState(target);
@@ -88,11 +85,13 @@ public abstract class BlockInteractOverlay implements LayeredDraw.Layer
         tex.draw(graphics, texX, texY);
         renderAfterIcon(graphics, tex, texX, texY, target);
 
-        if (mode == Mode.DETAILED)
+        if (mode == OverlayDisplayMode.DETAILED)
         {
             List<Component> lines = getLines(target, state, linesFalse, linesTrue);
             renderDetailed(graphics, tex, lines, centerX, screenHeight, target);
         }
+
+        return true;
     }
 
     private void renderDetailed(
@@ -162,12 +161,12 @@ public abstract class BlockInteractOverlay implements LayeredDraw.Layer
         textWidthValid = true;
     }
 
-
-
-    public static void onResourceReload(@SuppressWarnings("unused") ResourceManager manager)
+    final String getName()
     {
-        OVERLAYS.forEach(overlay -> overlay.textWidthValid = false);
+        return name;
     }
+
+
 
     protected static BlockGetter level()
     {
@@ -215,11 +214,4 @@ public abstract class BlockInteractOverlay implements LayeredDraw.Layer
     }
 
     protected record Target(BlockPos pos, BlockState state, Direction side) { }
-
-    public enum Mode
-    {
-        HIDDEN,
-        ICON,
-        DETAILED
-    }
 }

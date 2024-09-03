@@ -344,6 +344,7 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(PoweredFramingSawScreen.TOOLTIP_STATUS_NO_RECIPE, "No recipe selected, click the target slot with any framed block to select a recipe");
         add(PoweredFramingSawScreen.TOOLTIP_ENERGY, "%s / %s FE");
         add(FramingSawRecipeMatchResult.SUCCESS.translation(), "Craftable");
+        add(FramingSawRecipeMatchResult.CAMO_PRESENT.translation(), "Input item must not have any camo");
         add(FramingSawRecipeMatchResult.MATERIAL_VALUE.translation(), "Insufficient input material available");
         add(FramingSawRecipeMatchResult.MATERIAL_LCM.translation(), "Too few input items to evenly convert to this output");
         add(FramingSawRecipeMatchResult.OUTPUT_SIZE.translation(), "Result count exceeds maximum result stack size");

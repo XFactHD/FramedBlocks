@@ -24,7 +24,7 @@ public final class PrismOffsetOverlay extends BlockInteractOverlay
 
     public PrismOffsetOverlay()
     {
-        super(LINES_FALSE, LINES_TRUE, TEXTURE_FALSE, TEXTURE_TRUE, ClientConfig.VIEW::getPrismOffsetMode);
+        super("prism_offset", LINES_FALSE, LINES_TRUE, TEXTURE_FALSE, TEXTURE_TRUE, ClientConfig.VIEW::getPrismOffsetMode);
     }
 
     @Override

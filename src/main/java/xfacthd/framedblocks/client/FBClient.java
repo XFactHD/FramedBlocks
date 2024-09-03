@@ -12,22 +12,22 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.EventPriority;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.InterModComms;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.event.lifecycle.*;
+import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.client.event.*;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import net.neoforged.neoforge.client.gui.ConfigurationScreen;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import net.neoforged.neoforge.client.model.data.ModelProperty;
-import net.neoforged.bus.api.EventPriority;
-import net.neoforged.bus.api.IEventBus;
-import net.neoforged.fml.InterModComms;
-import net.neoforged.fml.event.lifecycle.*;
-import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.common.NeoForge;
 import org.jetbrains.annotations.Nullable;
-import xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import xfacthd.framedblocks.api.block.IFramedBlock;
+import xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import xfacthd.framedblocks.api.block.render.FramedBlockColor;
 import xfacthd.framedblocks.api.block.render.FramedBlockRenderProperties;
 import xfacthd.framedblocks.api.model.ErrorModel;
@@ -35,27 +35,16 @@ import xfacthd.framedblocks.api.model.wrapping.*;
 import xfacthd.framedblocks.api.model.wrapping.itemmodel.ItemModelInfo;
 import xfacthd.framedblocks.api.model.wrapping.statemerger.StateMerger;
 import xfacthd.framedblocks.api.render.debug.AttachDebugRenderersEvent;
+import xfacthd.framedblocks.api.type.IBlockType;
+import xfacthd.framedblocks.api.util.FramedConstants;
+import xfacthd.framedblocks.api.util.Utils;
+import xfacthd.framedblocks.client.data.*;
 import xfacthd.framedblocks.client.data.extensions.block.NoEffectsClientBlockExtensions;
 import xfacthd.framedblocks.client.data.extensions.block.OneWayWindowClientBlockExtensions;
 import xfacthd.framedblocks.client.data.extensions.item.TankClientItemExtensions;
-import xfacthd.framedblocks.client.modelwrapping.StateLocationCache;
-import xfacthd.framedblocks.client.render.block.debug.*;
-import xfacthd.framedblocks.client.render.color.*;
-import xfacthd.framedblocks.client.render.particle.FluidSpriteParticle;
-import xfacthd.framedblocks.common.block.IFramedDoubleBlock;
-import xfacthd.framedblocks.common.block.cube.FramedOneWayWindowBlock;
-import xfacthd.framedblocks.common.block.interactive.FramedItemFrameBlock;
-import xfacthd.framedblocks.common.block.slopepanel.*;
-import xfacthd.framedblocks.common.block.slopeslab.*;
-import xfacthd.framedblocks.common.data.camo.fluid.FluidCamoClientHandler;
 import xfacthd.framedblocks.client.loader.fallback.FallbackLoader;
-import xfacthd.framedblocks.client.model.*;
-import xfacthd.framedblocks.client.model.slopeedge.*;
-import xfacthd.framedblocks.client.modelwrapping.ModelWrappingManager;
-import xfacthd.framedblocks.api.type.IBlockType;
-import xfacthd.framedblocks.api.util.*;
-import xfacthd.framedblocks.client.data.*;
 import xfacthd.framedblocks.client.loader.overlay.OverlayLoader;
+import xfacthd.framedblocks.client.model.*;
 import xfacthd.framedblocks.client.model.cube.*;
 import xfacthd.framedblocks.client.model.door.*;
 import xfacthd.framedblocks.client.model.interactive.*;
@@ -65,35 +54,50 @@ import xfacthd.framedblocks.client.model.prism.*;
 import xfacthd.framedblocks.client.model.rail.*;
 import xfacthd.framedblocks.client.model.slab.*;
 import xfacthd.framedblocks.client.model.slope.*;
+import xfacthd.framedblocks.client.model.slopeedge.*;
 import xfacthd.framedblocks.client.model.slopepanel.*;
 import xfacthd.framedblocks.client.model.slopepanelcorner.*;
 import xfacthd.framedblocks.client.model.slopeslab.*;
 import xfacthd.framedblocks.client.model.stairs.*;
 import xfacthd.framedblocks.client.model.torch.*;
+import xfacthd.framedblocks.client.modelwrapping.ModelWrappingManager;
+import xfacthd.framedblocks.client.modelwrapping.StateLocationCache;
 import xfacthd.framedblocks.client.overlaygen.OverlayQuadGenerator;
 import xfacthd.framedblocks.client.render.block.*;
+import xfacthd.framedblocks.client.render.block.debug.*;
+import xfacthd.framedblocks.client.render.color.FramedFlowerPotColor;
+import xfacthd.framedblocks.client.render.color.FramedTargetBlockColor;
 import xfacthd.framedblocks.client.render.item.BlueprintPropertyOverride;
+import xfacthd.framedblocks.client.render.particle.FluidSpriteParticle;
 import xfacthd.framedblocks.client.render.special.*;
 import xfacthd.framedblocks.client.render.util.AnimationSplitterSource;
 import xfacthd.framedblocks.client.screen.*;
-import xfacthd.framedblocks.client.screen.overlay.*;
+import xfacthd.framedblocks.client.screen.overlay.BlockInteractOverlayLayer;
 import xfacthd.framedblocks.client.util.*;
 import xfacthd.framedblocks.common.FBContent;
+import xfacthd.framedblocks.common.block.IFramedDoubleBlock;
 import xfacthd.framedblocks.common.block.cube.FramedMiniCubeBlock;
+import xfacthd.framedblocks.common.block.cube.FramedOneWayWindowBlock;
 import xfacthd.framedblocks.common.block.door.FramedDoorBlock;
 import xfacthd.framedblocks.common.block.door.FramedFenceGateBlock;
+import xfacthd.framedblocks.common.block.interactive.FramedItemFrameBlock;
 import xfacthd.framedblocks.common.block.interactive.button.FramedButtonBlock;
 import xfacthd.framedblocks.common.block.interactive.button.FramedLargeButtonBlock;
 import xfacthd.framedblocks.common.block.interactive.pressureplate.FramedWeightedPressurePlateBlock;
 import xfacthd.framedblocks.common.block.sign.AbstractFramedSignBlock;
+import xfacthd.framedblocks.common.block.slopepanel.FramedDoubleSlopePanelBlock;
+import xfacthd.framedblocks.common.block.slopeslab.FramedDoubleSlopeSlabBlock;
+import xfacthd.framedblocks.common.block.slopeslab.FramedFlatDoubleSlopeSlabCornerBlock;
 import xfacthd.framedblocks.common.block.stairs.standard.FramedStairsBlock;
 import xfacthd.framedblocks.common.compat.supplementaries.SupplementariesCompat;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.StateCacheBuilder;
+import xfacthd.framedblocks.common.data.camo.fluid.FluidCamoClientHandler;
 import xfacthd.framedblocks.common.data.doubleblock.FramedDoubleBlockRenderProperties;
 import xfacthd.framedblocks.common.data.doubleblock.NullCullPredicate;
 
-import java.util.*;
+import java.util.Map;
+import java.util.Set;
 import java.util.function.Supplier;
 
 @Mod(value = FramedConstants.MOD_ID, dist = Dist.CLIENT)
@@ -230,15 +234,7 @@ public final class FBClient
 
     private static void onOverlayRegister(final RegisterGuiLayersEvent event)
     {
-        event.registerAboveAll(Utils.rl("state_lock"), new StateLockOverlay());
-        event.registerAboveAll(Utils.rl("toggle_waterloggable"), new ToggleWaterloggableOverlay());
-        event.registerAboveAll(Utils.rl("y_slope"), new ToggleYSlopeOverlay());
-        event.registerAboveAll(Utils.rl("reinforced"), new ReinforcementOverlay());
-        event.registerAboveAll(Utils.rl("prism_offset"), new PrismOffsetOverlay());
-        event.registerAboveAll(Utils.rl("split_line"), new SplitLineOverlay());
-        event.registerAboveAll(Utils.rl("one_way_window"), new OneWayWindowOverlay());
-        event.registerAboveAll(Utils.rl("frame_background"), new FrameBackgroundOverlay());
-        event.registerAboveAll(Utils.rl("camo_rotation"), new CamoRotationOverlay());
+        event.registerAboveAll(Utils.rl("block_interact"), new BlockInteractOverlayLayer());
     }
 
     private static void onGeometryLoaderRegister(final ModelEvent.RegisterGeometryLoaders event)
@@ -502,7 +498,7 @@ public final class FBClient
 
     private static void onRegisterReloadListener(final RegisterClientReloadListenersEvent event)
     {
-        event.registerReloadListener((ResourceManagerReloadListener) BlockInteractOverlay::onResourceReload);
+        event.registerReloadListener((ResourceManagerReloadListener) BlockInteractOverlayLayer::onResourceReload);
         event.registerReloadListener((ResourceManagerReloadListener) OverlayQuadGenerator::onResourceReload);
 
         ModelWrappingManager.fireRegistration();
