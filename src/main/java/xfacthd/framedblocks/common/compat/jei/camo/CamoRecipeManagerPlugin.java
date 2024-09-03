@@ -1,7 +1,14 @@
 package xfacthd.framedblocks.common.compat.jei.camo;
 
+import com.google.gson.JsonElement;
+import com.mojang.serialization.DataResult;
+import com.mojang.serialization.JsonOps;
 import mezz.jei.api.ingredients.ITypedIngredient;
 import mezz.jei.api.recipe.advanced.ISimpleRecipeManagerPlugin;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingRecipe;
@@ -17,11 +24,15 @@ import java.util.List;
 public final class CamoRecipeManagerPlugin implements ISimpleRecipeManagerPlugin<RecipeHolder<CraftingRecipe>>
 {
     private final CamoCraftingHelper camoCraftingHelper;
-    private int generatedRecipeCount;
+    private final RegistryAccess registryAccess;
 
     public CamoRecipeManagerPlugin(CamoCraftingHelper camoCraftingHelper)
     {
         this.camoCraftingHelper = camoCraftingHelper;
+        Minecraft minecraft = Minecraft.getInstance();
+        ClientLevel level = minecraft.level;
+        assert level != null;
+        this.registryAccess = level.registryAccess();
     }
 
     @Override
@@ -215,8 +226,16 @@ public final class CamoRecipeManagerPlugin implements ISimpleRecipeManagerPlugin
     )
     {
         JeiCamoApplicationRecipe recipe = new JeiCamoApplicationRecipe(frameStacks, copyTool, firstInputStacks, secondInputStacks, results);
-        ResourceLocation resourceLocation = Utils.rl("generated_recipe_" + generatedRecipeCount++);
+        ResourceLocation resourceLocation = generateId(recipe);
         return new RecipeHolder<>(resourceLocation, recipe);
     }
 
+    private ResourceLocation generateId(JeiCamoApplicationRecipe recipe)
+    {
+        RegistryOps<JsonElement> registryOps = registryAccess.createSerializationContext(JsonOps.INSTANCE);
+        DataResult<JsonElement> result = JeiCamoApplicationRecipeSerializer.CODEC.codec().encodeStart(registryOps, recipe);
+        JsonElement element = result.getOrThrow();
+        String elementString = element.toString();
+        return Utils.rlSanitizePath(elementString);
+    }
 }
