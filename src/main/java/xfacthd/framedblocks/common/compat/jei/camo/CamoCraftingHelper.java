@@ -100,7 +100,34 @@ public final class CamoCraftingHelper
         return helperRecipe.assemble(craftingInput, registryAccess);
     }
 
-    public List<ItemStack> getCamoExampleStacks(Ingredient ingredient, int count)
+    public Ingredient getCamoExamplesIngredient()
+    {
+        return camoExamplesIngredient;
+    }
+
+    public Ingredient getEmptyFramesIngredient()
+    {
+        return emptyFramesIngredient;
+    }
+
+    public Ingredient getEmptyDoubleFramesIngredient()
+    {
+        return emptyDoubleFramesIngredient;
+    }
+
+    public List<List<ItemStack>> getDisplayInputs(JeiCamoApplicationRecipe recipe)
+    {
+        return List.of(
+                getEmptyFrameStacks(recipe.getFrameStacks()),
+                Arrays.asList(recipe.getCopyTool().getItems()),
+                // pick a prime number count so that more combinations are shown over time
+                getCamoExampleStacks(recipe.getFirstIngredient(), 97),
+                // pick a lower number so that the blank ingredient is shown more often
+                getDoubleCamoExampleStacks(recipe.getSecondIngredient(), 11)
+        );
+    }
+    
+    private List<ItemStack> getCamoExampleStacks(Ingredient ingredient, int count)
     {
         if (ingredient.equals(camoExamplesIngredient))
         {
@@ -115,7 +142,7 @@ public final class CamoCraftingHelper
         return Arrays.asList(ingredient.getItems());
     }
 
-    public List<ItemStack> getDoubleCamoExampleStacks(Ingredient ingredient, int count)
+    private List<ItemStack> getDoubleCamoExampleStacks(Ingredient ingredient, int count)
     {
         if (ingredient.equals(camoExamplesIngredient))
         {
@@ -139,7 +166,7 @@ public final class CamoCraftingHelper
         return Arrays.asList(ingredient.getItems());
     }
 
-    public List<ItemStack> getEmptyFrameStacks(Ingredient ingredient)
+    private List<ItemStack> getEmptyFrameStacks(Ingredient ingredient)
     {
         if (ingredient.equals(emptyFramesIngredient))
         {
@@ -151,20 +178,5 @@ public final class CamoCraftingHelper
         }
 
         return Arrays.asList(ingredient.getItems());
-    }
-
-    public Ingredient getCamoExamplesIngredient()
-    {
-        return camoExamplesIngredient;
-    }
-
-    public Ingredient getEmptyFramesIngredient()
-    {
-        return emptyFramesIngredient;
-    }
-
-    public Ingredient getEmptyDoubleFramesIngredient()
-    {
-        return emptyDoubleFramesIngredient;
     }
 }

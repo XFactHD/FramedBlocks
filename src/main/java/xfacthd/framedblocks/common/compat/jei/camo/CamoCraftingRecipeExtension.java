@@ -27,7 +27,7 @@ public final class CamoCraftingRecipeExtension implements ICraftingCategoryExten
     public void setRecipe(RecipeHolder<JeiCamoApplicationRecipe> recipeHolder, IRecipeLayoutBuilder builder, ICraftingGridHelper craftingGridHelper, IFocusGroup focuses)
     {
         JeiCamoApplicationRecipe recipe = recipeHolder.value();
-        List<List<ItemStack>> inputs = recipe.getDisplayInputs(camoCraftingHelper);
+        List<List<ItemStack>> inputs = camoCraftingHelper.getDisplayInputs(recipe);
         craftingGridHelper.createAndSetInputs(builder, inputs, 2, 2);
 
         List<ItemStack> results = recipe.getResults();

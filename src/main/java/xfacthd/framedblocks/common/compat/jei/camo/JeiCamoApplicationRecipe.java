@@ -6,7 +6,6 @@ import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 import xfacthd.framedblocks.common.FBContent;
 
-import java.util.Arrays;
 import java.util.List;
 
 public final class JeiCamoApplicationRecipe implements CraftingRecipe
@@ -85,18 +84,6 @@ public final class JeiCamoApplicationRecipe implements CraftingRecipe
     public ItemStack getResultItem(HolderLookup.Provider provider)
     {
         return results.isEmpty() ? ItemStack.EMPTY : results.getFirst();
-    }
-
-    public List<List<ItemStack>> getDisplayInputs(CamoCraftingHelper camoCraftingHelper)
-    {
-        return List.of(
-                camoCraftingHelper.getEmptyFrameStacks(frameStacks),
-                Arrays.asList(copyTool.getItems()),
-                // pick a prime number count so that more combinations are shown over time
-                camoCraftingHelper.getCamoExampleStacks(firstInputStacks, 97),
-                // pick a lower number so that the blank ingredient is shown more often
-                camoCraftingHelper.getDoubleCamoExampleStacks(secondInputStacks, 11)
-        );
     }
 
     @Override
