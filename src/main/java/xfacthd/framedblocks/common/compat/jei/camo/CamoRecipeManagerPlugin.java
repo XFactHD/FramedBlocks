@@ -49,7 +49,7 @@ public final class CamoRecipeManagerPlugin implements ISimpleRecipeManagerPlugin
         IFramedBlock framedBlock = CamoItemStackHelper.getFramedBlock(itemStack);
         if (framedBlock != null)
         {
-            long camoCount = CamoItemStackHelper.dropCamo(itemStack).count();
+            long camoCount = CamoItemStackHelper.dropCamo(itemStack).size();
             return camoCount > 0 && camoCount <= 2;
         }
         return false;
@@ -99,7 +99,7 @@ public final class CamoRecipeManagerPlugin implements ISimpleRecipeManagerPlugin
         if (framedBlock != null)
         {
             ItemStack plainFrame = new ItemStack(itemStack.getItem());
-            List<ItemStack> camoBlocks = CamoItemStackHelper.dropCamo(itemStack).toList();
+            List<ItemStack> camoBlocks = CamoItemStackHelper.dropCamo(itemStack);
             int camoCount = camoBlocks.size();
             if (camoCount == 1)
             {
