@@ -125,18 +125,6 @@ public final class CamoCraftingHelper
         return emptyDoubleFramesIngredient;
     }
 
-    public List<List<ItemStack>> getDisplayInputs(JeiCamoApplicationRecipe recipe)
-    {
-        return List.of(
-                getEmptyFrameStacks(recipe.getFrameStacks()),
-                Arrays.asList(recipe.getCopyTool().getItems()),
-                // pick a prime number count so that more combinations are shown over time
-                getCamoExampleStacks(recipe.getFirstIngredient(), 97),
-                // pick a lower number so that the blank ingredient is shown more often
-                getDoubleCamoExampleStacks(recipe.getSecondIngredient(), 11)
-        );
-    }
-
     private List<ItemStack> getCamoExampleStacks(Ingredient ingredient, int count)
     {
         if (ingredient.equals(camoExamplesIngredient))
@@ -200,7 +188,6 @@ public final class CamoCraftingHelper
                 // pick a lower number so that the blank ingredient is shown more often
                 Pair.of("camoTwo", getDoubleCamoExampleStacks(recipe.getSecondIngredient(), 11))
         );
-        List<List<ItemStack>> inputs = getDisplayInputs(recipe);
         List<IRecipeSlotBuilder> inputSlots = craftingGridHelper.createAndSetNamedInputs(builder, namedInputs, 2, 2);
 
         IRecipeSlotRichTooltipCallback tooltipCallback = new InputSlotTooltipCallback();
@@ -215,9 +202,9 @@ public final class CamoCraftingHelper
             // For bookmarking, the recipe must have at least one known output.
             // Outputs are mostly calculated displayed using onDisplayedIngredientsUpdate,
             // but we calculate one here to support bookmarking.
-            List<ItemStack> frameStacks = inputs.get(0);
-            List<ItemStack> camoStackOne = inputs.get(2);
-            List<ItemStack> camoStackTwo = inputs.get(3);
+            List<ItemStack> frameStacks = namedInputs.get(0).getSecond();
+            List<ItemStack> camoStackOne = namedInputs.get(2).getSecond();
+            List<ItemStack> camoStackTwo = namedInputs.get(3).getSecond();
             ItemStack firstOutput = calculateOutput(
                     frameStacks.isEmpty() ? ItemStack.EMPTY : frameStacks.getFirst(),
                     camoStackOne.isEmpty() ? ItemStack.EMPTY : camoStackOne.getFirst(),
