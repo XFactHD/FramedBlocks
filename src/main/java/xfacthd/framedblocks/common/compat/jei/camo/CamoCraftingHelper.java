@@ -5,28 +5,21 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.Ingredient;
-import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.IFramedBlock;
-import xfacthd.framedblocks.api.camo.CamoContainer;
 import xfacthd.framedblocks.api.camo.CamoContainerFactory;
-import xfacthd.framedblocks.api.camo.CamoContainerHelper;
-import xfacthd.framedblocks.api.util.CamoList;
 import xfacthd.framedblocks.api.util.Utils;
-import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.crafting.CamoApplicationRecipe;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Stream;
 
 public final class CamoCraftingHelper
 {
@@ -56,14 +49,14 @@ public final class CamoCraftingHelper
         {
             if (camoExamples.size() < MAX_CAMO_EXAMPLE_INGREDIENTS_COUNT)
             {
-                CamoContainerFactory<?> factory = getCamoContainerFactory(stack);
+                CamoContainerFactory<?> factory = CamoItemStackHelper.getCamoContainerFactory(stack);
                 if (factory != null)
                 {
                     camoExamples.add(stack);
                 }
             }
 
-            IFramedBlock framedBlock = getFramedBlock(stack);
+            IFramedBlock framedBlock = CamoItemStackHelper.getFramedBlock(stack);
             if (framedBlock != null)
             {
                 framedBlocks.add(stack);
@@ -77,38 +70,6 @@ public final class CamoCraftingHelper
     public List<ItemStack> getFramedBlocks()
     {
         return framedBlocks;
-    }
-
-    @Nullable
-    public static CamoContainerFactory<?> getCamoContainerFactory(ItemStack itemStack)
-    {
-        CamoContainerFactory<?> factory = CamoContainerHelper.findCamoFactory(itemStack);
-        if (factory == null || !factory.canApplyInCraftingRecipe(itemStack))
-        {
-            return null;
-        }
-        return factory;
-    }
-
-    @Nullable
-    public IFramedBlock getFramedBlock(ItemStack itemStack)
-    {
-        if (itemStack.getItem() instanceof BlockItem item && item.getBlock() instanceof IFramedBlock framedBlock)
-        {
-            return framedBlock;
-        }
-        return null;
-    }
-
-    public boolean isDoubleFramedBlock(ItemStack itemStack)
-    {
-        IFramedBlock framedBlock = getFramedBlock(itemStack);
-        return framedBlock != null && isDoubleFramedBlock(framedBlock);
-    }
-
-    public boolean isDoubleFramedBlock(IFramedBlock framedBlock)
-    {
-        return framedBlock.getBlockType().consumesTwoCamosInCamoApplicationRecipe();
     }
 
     public ItemStack calculateOutput(ItemStack frame, ItemStack inputOne, ItemStack inputTwo)
@@ -140,15 +101,4 @@ public final class CamoCraftingHelper
         return camoExamplesIngredient;
     }
 
-    public Stream<ItemStack> dropCamo(ItemStack itemStack)
-    {
-        CamoList camos = itemStack.get(FBContent.DC_TYPE_CAMO_LIST);
-        if (camos != null && !camos.isEmpty())
-        {
-            return camos.stream()
-                    .filter(CamoContainer::canTriviallyConvertToItemStack)
-                    .map(CamoContainerHelper::dropCamo);
-        }
-        return Stream.of();
-    }
 }
