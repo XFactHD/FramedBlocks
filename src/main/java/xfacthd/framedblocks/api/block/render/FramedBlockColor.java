@@ -7,15 +7,13 @@ import net.minecraft.util.FastColor;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockAndTintGetter;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import xfacthd.framedblocks.api.block.blockentity.IFramedDoubleBlockEntity;
 import xfacthd.framedblocks.api.model.util.ModelUtils;
-import xfacthd.framedblocks.api.util.CamoList;
-import xfacthd.framedblocks.api.util.Utils;
+import xfacthd.framedblocks.api.util.*;
 
 import javax.annotation.Nullable;
 
@@ -46,8 +44,17 @@ public class FramedBlockColor implements BlockColor, ItemColor
     @Override
     public int getColor(ItemStack stack, int tintIndex)
     {
+        if (!(stack.getItem() instanceof BlockItem item) || !(item.getBlock() instanceof IFramedBlock block))
+        {
+            return -1;
+        }
+        if (!ConfigView.Client.INSTANCE.shouldRenderItemModelsWithCamo() || block.getItemModelSource() == null)
+        {
+            return -1;
+        }
+
         CamoList camos = stack.getOrDefault(Utils.DC_TYPE_CAMO_LIST, CamoList.EMPTY);
-        if (tintIndex < -1 && stack.getItem() instanceof BlockItem item && isDoubleBlock(item.getBlock()))
+        if (tintIndex < -1 && block.getBlockType().isDoubleBlock())
         {
             tintIndex = ModelUtils.decodeSecondaryTintIndex(tintIndex);
             return FastColor.ARGB32.opaque(camos.getCamo(1).getTintColor(stack, tintIndex));
@@ -57,10 +64,5 @@ public class FramedBlockColor implements BlockColor, ItemColor
             return FastColor.ARGB32.opaque(camos.getCamo(0).getTintColor(stack, tintIndex));
         }
         return -1;
-    }
-
-    protected static boolean isDoubleBlock(Block block)
-    {
-        return block instanceof IFramedBlock framedBlock && framedBlock.getBlockType().isDoubleBlock();
     }
 }
