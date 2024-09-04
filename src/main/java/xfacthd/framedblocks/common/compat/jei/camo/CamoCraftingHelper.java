@@ -176,7 +176,7 @@ public final class CamoCraftingHelper
         if (results.isEmpty())
         {
             // For bookmarking, the recipe must have at least one known output.
-            // Outputs are mostly calculated displayed using onDisplayedIngredientsUpdate,
+            // Outputs are mostly calculated and displayed using onDisplayedIngredientsUpdate,
             // but we calculate one here to support bookmarking.
             List<ItemStack> frameStacks = namedInputs.get(0).getSecond();
             List<ItemStack> camoStackOne = namedInputs.get(2).getSecond();
