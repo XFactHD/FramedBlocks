@@ -1,15 +1,13 @@
 package xfacthd.framedblocks.common.compat.jei.camo;
 
-import com.google.gson.JsonElement;
-import com.mojang.serialization.DataResult;
-import com.mojang.serialization.JsonOps;
+import com.mojang.datafixers.util.Either;
+import com.mojang.datafixers.util.Pair;
 import mezz.jei.api.ingredients.ITypedIngredient;
 import mezz.jei.api.recipe.advanced.ISimpleRecipeManagerPlugin;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.core.RegistryAccess;
-import net.minecraft.resources.RegistryOps;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -24,15 +22,10 @@ import java.util.List;
 public final class CamoRecipeManagerPlugin implements ISimpleRecipeManagerPlugin<RecipeHolder<CraftingRecipe>>
 {
     private final CamoCraftingHelper camoCraftingHelper;
-    private final RegistryAccess registryAccess;
 
     public CamoRecipeManagerPlugin(CamoCraftingHelper camoCraftingHelper)
     {
         this.camoCraftingHelper = camoCraftingHelper;
-        Minecraft minecraft = Minecraft.getInstance();
-        ClientLevel level = minecraft.level;
-        assert level != null;
-        this.registryAccess = level.registryAccess();
     }
 
     @Override
@@ -71,7 +64,7 @@ public final class CamoRecipeManagerPlugin implements ISimpleRecipeManagerPlugin
         {
             RecipeHolder<CraftingRecipe> recipe = createRecipeForFrame(
                     itemStack,
-                    camoCraftingHelper.getCamoExamplesIngredient()
+                    Either.right(JeiCamoTags.getCamoBlockExamplesTag())
             );
             return List.of(recipe);
         }
@@ -79,7 +72,7 @@ public final class CamoRecipeManagerPlugin implements ISimpleRecipeManagerPlugin
         {
             return createRecipesForEachFrame(
                     camoCraftingHelper.getEmptyFramedBlocks(),
-                    camoCraftingHelper.getCamoExamplesIngredient()
+                    Either.right(JeiCamoTags.getCamoBlockExamplesTag())
             );
         }
 
@@ -87,15 +80,15 @@ public final class CamoRecipeManagerPlugin implements ISimpleRecipeManagerPlugin
         if (containerFactory != null)
         {
             RecipeHolder<CraftingRecipe> singleFrameRecipe = createRecipe(
-                    camoCraftingHelper.getEmptyFramesIngredient(),
-                    Ingredient.of(itemStack),
-                    Ingredient.EMPTY,
+                    Either.right(JeiCamoTags.getAllFramesTag()),
+                    Either.left(itemStack),
+                    Either.left(ItemStack.EMPTY),
                     List.of()
             );
             RecipeHolder<CraftingRecipe> doubleFrameRecipe = createRecipe(
-                    camoCraftingHelper.getEmptyDoubleFramesIngredient(),
-                    Ingredient.of(itemStack),
-                    camoCraftingHelper.getCamoExamplesIngredient(),
+                    Either.right(JeiCamoTags.getDoubleFramesTag()),
+                    Either.left(itemStack),
+                    Either.right(JeiCamoTags.getCamoBlockExamplesTag()),
                     List.of()
             );
             return List.of(singleFrameRecipe, doubleFrameRecipe);
@@ -118,9 +111,9 @@ public final class CamoRecipeManagerPlugin implements ISimpleRecipeManagerPlugin
             if (camoCount == 1)
             {
                 RecipeHolder<CraftingRecipe> recipe = createRecipe(
-                        Ingredient.of(plainFrame),
-                        Ingredient.of(camoBlocks.stream()),
-                        Ingredient.EMPTY,
+                        Either.left(plainFrame),
+                        Either.left(camoBlocks.getFirst()),
+                        Either.left(ItemStack.EMPTY),
                         List.of(itemStack)
                 );
                 return List.of(recipe);
@@ -128,9 +121,9 @@ public final class CamoRecipeManagerPlugin implements ISimpleRecipeManagerPlugin
             else if (camoCount == 2 && CamoItemStackHelper.isDoubleFramedBlock(framedBlock))
             {
                 RecipeHolder<CraftingRecipe> recipe = createRecipe(
-                        Ingredient.of(plainFrame),
-                        Ingredient.of(camoBlocks.get(0)),
-                        Ingredient.of(camoBlocks.get(1)),
+                        Either.left(plainFrame),
+                        Either.left(camoBlocks.get(0)),
+                        Either.left(camoBlocks.get(1)),
                         List.of(itemStack)
                 );
                 return List.of(recipe);
@@ -144,22 +137,19 @@ public final class CamoRecipeManagerPlugin implements ISimpleRecipeManagerPlugin
     {
         return createRecipesForEachFrame(
                 camoCraftingHelper.getEmptyFramedBlocks(),
-                camoCraftingHelper.getCamoExamplesIngredient()
+                Either.right(JeiCamoTags.getCamoBlockExamplesTag())
         );
     }
 
     private List<RecipeHolder<CraftingRecipe>> createRecipesForEachFrame(
             List<ItemStack> framedBlocks,
-            Ingredient firstInputs
+            Either<ItemStack, TagKey<Item>> camoOne
     )
     {
         List<RecipeHolder<CraftingRecipe>> recipes = new ArrayList<>();
         for (ItemStack framedBlock : framedBlocks)
         {
-            RecipeHolder<CraftingRecipe> singleRecipe = createRecipeForFrame(
-                    framedBlock,
-                    firstInputs
-            );
+            RecipeHolder<CraftingRecipe> singleRecipe = createRecipeForFrame(framedBlock, camoOne);
             recipes.add(singleRecipe);
         }
 
@@ -168,43 +158,82 @@ public final class CamoRecipeManagerPlugin implements ISimpleRecipeManagerPlugin
 
     private RecipeHolder<CraftingRecipe> createRecipeForFrame(
             ItemStack framedBlock,
-            Ingredient firstInputStacks
+            Either<ItemStack, TagKey<Item>> camoOne
     )
     {
-        Ingredient secondInputs = Ingredient.EMPTY;
+        Either<ItemStack, TagKey<Item>> camoTwo = Either.left(ItemStack.EMPTY);
         if (CamoItemStackHelper.isDoubleFramedBlock(framedBlock))
         {
-            secondInputs = camoCraftingHelper.getCamoExamplesIngredient();
+            camoTwo = Either.right(JeiCamoTags.getCamoBlockExamplesTag());
         }
         // calculating the correct outputs here is impossible, leave them to be generated by
         // CamoCraftingRecipeExtension.onDisplayedIngredientsUpdate
         return createRecipe(
-                Ingredient.of(framedBlock),
-                firstInputStacks,
-                secondInputs,
+                Either.left(framedBlock),
+                camoOne,
+                camoTwo,
                 List.of()
         );
     }
 
     private RecipeHolder<CraftingRecipe> createRecipe(
-            Ingredient frameStacks,
-            Ingredient firstInputStacks,
-            Ingredient secondInputStacks,
+            Either<ItemStack, TagKey<Item>> frame,
+            Either<ItemStack, TagKey<Item>> camoOne,
+            Either<ItemStack, TagKey<Item>> camoTwo,
             List<ItemStack> results
     )
     {
+        Ingredient frameIngredient = frame.map(Ingredient::of, Ingredient::of);
         Ingredient copyTool = camoCraftingHelper.getCopyToolIngredient();
-        JeiCamoApplicationRecipe recipe = new JeiCamoApplicationRecipe(frameStacks, copyTool, firstInputStacks, secondInputStacks, results);
-        ResourceLocation resourceLocation = generateId(recipe);
+        Ingredient camoOneIngredient = camoOne.map(Ingredient::of, Ingredient::of);
+        Ingredient secondInputStacks = camoTwo.map(Ingredient::of, Ingredient::of);
+        JeiCamoApplicationRecipe recipe = new JeiCamoApplicationRecipe(frameIngredient, copyTool, camoOneIngredient, secondInputStacks, results);
+
+        ResourceLocation resourceLocation = generateId(frame, camoOne, camoTwo);
         return new RecipeHolder<>(resourceLocation, recipe);
     }
 
-    private ResourceLocation generateId(JeiCamoApplicationRecipe recipe)
+    private static ResourceLocation generateId(Either<ItemStack, TagKey<Item>> frame, Either<ItemStack, TagKey<Item>> camoOne, Either<ItemStack, TagKey<Item>> camoTwo)
     {
-        RegistryOps<JsonElement> registryOps = registryAccess.createSerializationContext(JsonOps.INSTANCE);
-        DataResult<JsonElement> result = JeiCamoApplicationRecipeSerializer.CODEC.codec().encodeStart(registryOps, recipe);
-        JsonElement element = result.getOrThrow();
-        String elementString = element.toString();
-        return Utils.rlSanitizePath(elementString);
+        String frameId = mapStackOrTag(frame, List.of(
+                Pair.of(JeiCamoTags.getAllFramesTag(), "all"),
+                Pair.of(JeiCamoTags.getDoubleFramesTag(), "all_double")
+        ));
+        String camoOneId = mapStackOrTag(camoOne, List.of(
+                Pair.of(JeiCamoTags.getCamoBlockExamplesTag(), "examples")
+        ));
+        String camoTwoId = mapStackOrTag(camoTwo, List.of(
+                Pair.of(JeiCamoTags.getCamoBlockExamplesTag(), "examples")
+        ));
+        return Utils.rl("camo_application/jei_generated/" + frameId + "/" + camoOneId + "/" + camoTwoId);
+    }
+
+    private static String mapStackOrTag(Either<ItemStack, TagKey<Item>> value, List<Pair<TagKey<Item>, String>> converters)
+    {
+        return value.map(
+                CamoRecipeManagerPlugin::stackToString,
+                tag -> tagToString(tag, converters)
+        );
+    }
+
+    private static String stackToString(ItemStack itemStack)
+    {
+        if (itemStack.isEmpty())
+        {
+            return "empty";
+        }
+        return BuiltInRegistries.ITEM.getKey(itemStack.getItem()).toLanguageKey();
+    }
+
+    private static String tagToString(TagKey<Item> tag, List<Pair<TagKey<Item>, String>> converters)
+    {
+        for (Pair<TagKey<Item>, String> conv : converters)
+        {
+            if (conv.getFirst().equals(tag))
+            {
+                return conv.getSecond();
+            }
+        }
+        return Utils.sanitizePath(tag.location().toString());
     }
 }

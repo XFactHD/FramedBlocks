@@ -12,22 +12,22 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 public final class JeiCamoApplicationRecipeSerializer implements RecipeSerializer<JeiCamoApplicationRecipe>
 {
     public static final MapCodec<JeiCamoApplicationRecipe> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
-            Ingredient.CODEC_NONEMPTY.fieldOf("frame_stacks").forGetter(JeiCamoApplicationRecipe::getFrameStacks),
+            Ingredient.CODEC_NONEMPTY.fieldOf("frame").forGetter(JeiCamoApplicationRecipe::getFrame),
             Ingredient.CODEC_NONEMPTY.fieldOf("copy_tool").forGetter(JeiCamoApplicationRecipe::getCopyTool),
-            Ingredient.CODEC_NONEMPTY.fieldOf("first_ingredient").forGetter(JeiCamoApplicationRecipe::getFirstIngredient),
-            Ingredient.CODEC.fieldOf("second_ingredient").forGetter(JeiCamoApplicationRecipe::getSecondIngredient),
+            Ingredient.CODEC_NONEMPTY.fieldOf("camo_one").forGetter(JeiCamoApplicationRecipe::getCamoOne),
+            Ingredient.CODEC.fieldOf("camo_two").forGetter(JeiCamoApplicationRecipe::getCamoTwo),
             Codec.list(ItemStack.CODEC).fieldOf("results").forGetter(JeiCamoApplicationRecipe::getResults)
     ).apply(inst, JeiCamoApplicationRecipe::new));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, JeiCamoApplicationRecipe> STREAM_CODEC = StreamCodec.composite(
             Ingredient.CONTENTS_STREAM_CODEC,
-            JeiCamoApplicationRecipe::getFrameStacks,
+            JeiCamoApplicationRecipe::getFrame,
             Ingredient.CONTENTS_STREAM_CODEC,
             JeiCamoApplicationRecipe::getCopyTool,
             Ingredient.CONTENTS_STREAM_CODEC,
-            JeiCamoApplicationRecipe::getFirstIngredient,
+            JeiCamoApplicationRecipe::getCamoOne,
             Ingredient.CONTENTS_STREAM_CODEC,
-            JeiCamoApplicationRecipe::getSecondIngredient,
+            JeiCamoApplicationRecipe::getCamoTwo,
             ItemStack.LIST_STREAM_CODEC,
             JeiCamoApplicationRecipe::getResults,
             JeiCamoApplicationRecipe::new

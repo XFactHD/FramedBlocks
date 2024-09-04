@@ -548,7 +548,7 @@ public final class Utils
         return ResourceLocation.fromNamespaceAndPath(namespace, path);
     }
 
-    public static ResourceLocation rlSanitizePath(String elementString)
+    public static String sanitizePath(String elementString)
     {
         char[] charArray = elementString.toCharArray();
         boolean valid = true;
@@ -560,9 +560,9 @@ public final class Utils
             }
         }
         if (valid) {
-            return rl(elementString);
+            return elementString;
         }
-        return rl(new String(charArray));
+        return new String(charArray);
     }
 
     public static <T extends CustomPacketPayload> CustomPacketPayload.Type<T> payloadType(String path)

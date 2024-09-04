@@ -10,30 +10,30 @@ import java.util.List;
 
 public final class JeiCamoApplicationRecipe implements CraftingRecipe
 {
-    private final Ingredient frameStacks;
+    private final Ingredient frame;
     private final Ingredient copyTool;
-    private final Ingredient firstInputStacks;
-    private final Ingredient secondInputStacks;
+    private final Ingredient camoOne;
+    private final Ingredient camoTwo;
     private final List<ItemStack> results;
 
     public JeiCamoApplicationRecipe(
-            Ingredient frameStacks,
+            Ingredient frame,
             Ingredient copyTool,
-            Ingredient firstInputStacks,
-            Ingredient secondInputStacks,
+            Ingredient camoOne,
+            Ingredient camoTwo,
             List<ItemStack> results
     )
     {
-        this.frameStacks = frameStacks;
+        this.frame = frame;
         this.copyTool = copyTool;
-        this.firstInputStacks = firstInputStacks;
-        this.secondInputStacks = secondInputStacks;
+        this.camoOne = camoOne;
+        this.camoTwo = camoTwo;
         this.results = results;
     }
 
-    public Ingredient getFrameStacks()
+    public Ingredient getFrame()
     {
-        return frameStacks;
+        return frame;
     }
 
     public Ingredient getCopyTool()
@@ -41,14 +41,14 @@ public final class JeiCamoApplicationRecipe implements CraftingRecipe
         return copyTool;
     }
 
-    public Ingredient getFirstIngredient()
+    public Ingredient getCamoOne()
     {
-        return firstInputStacks;
+        return camoOne;
     }
 
-    public Ingredient getSecondIngredient()
+    public Ingredient getCamoTwo()
     {
-        return secondInputStacks;
+        return camoTwo;
     }
 
     public List<ItemStack> getResults()
