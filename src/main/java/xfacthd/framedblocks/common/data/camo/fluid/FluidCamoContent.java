@@ -230,6 +230,6 @@ public final class FluidCamoContent extends CamoContent<FluidCamoContent>
     @Override
     public String toString()
     {
-        return "FluidCamoContent{Fluid{" + BuiltInRegistries.FLUID.getKey(fluid) + "}}";
+        return "FluidCamoContent{fluid=Fluid{" + BuiltInRegistries.FLUID.getKey(fluid) + "}}";
     }
 }

@@ -250,6 +250,6 @@ public final class BlockCamoContent extends CamoContent<BlockCamoContent>
     @Override
     public String toString()
     {
-        return "BlockCamoContent{" + state + "}";
+        return "BlockCamoContent{state=" + state + "}";
     }
 }

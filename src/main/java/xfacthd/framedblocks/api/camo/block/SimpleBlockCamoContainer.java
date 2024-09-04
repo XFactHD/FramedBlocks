@@ -29,7 +29,7 @@ public final class SimpleBlockCamoContainer extends AbstractBlockCamoContainer<S
     @Override
     public String toString()
     {
-        return getClass().getSimpleName() + "{" + content + "}";
+        return getClass().getSimpleName() + "{content=" + content + "}";
     }
 
     @Override

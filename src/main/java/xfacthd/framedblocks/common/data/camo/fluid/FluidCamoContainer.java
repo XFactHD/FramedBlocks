@@ -48,7 +48,7 @@ public final class FluidCamoContainer extends CamoContainer<FluidCamoContent, Fl
     @Override
     public String toString()
     {
-        return "FluidCamoContainer{" + content + "}";
+        return "FluidCamoContainer{content=" + content + "}";
     }
 
     @Override

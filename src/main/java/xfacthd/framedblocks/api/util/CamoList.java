@@ -131,7 +131,7 @@ public final class CamoList implements Iterable<CamoContainer<?, ?>>
     @Override
     public String toString()
     {
-        return Arrays.toString(camos);
+        return "CamoList" + Arrays.toString(camos);
     }
 
 
