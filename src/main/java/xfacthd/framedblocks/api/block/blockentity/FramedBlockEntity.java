@@ -42,6 +42,7 @@ import xfacthd.framedblocks.api.block.render.CullingHelper;
 import xfacthd.framedblocks.api.blueprint.AuxBlueprintData;
 import xfacthd.framedblocks.api.camo.*;
 import xfacthd.framedblocks.api.camo.empty.EmptyCamoContainer;
+import xfacthd.framedblocks.api.component.FrameConfig;
 import xfacthd.framedblocks.api.internal.InternalAPI;
 import xfacthd.framedblocks.api.model.data.FramedBlockData;
 import xfacthd.framedblocks.api.type.IBlockType;
@@ -988,6 +989,10 @@ public class FramedBlockEntity extends BlockEntity
     public void removeComponentsFromTag(CompoundTag tag)
     {
         tag.remove("camo");
+        tag.remove("glowing");
+        tag.remove("intangible");
+        tag.remove("reinforced");
+        tag.remove("updated");
     }
 
     @Override
@@ -995,6 +1000,12 @@ public class FramedBlockEntity extends BlockEntity
     {
         collectCamoComponents(builder);
         collectMiscComponents(builder);
+
+        FrameConfig cfg = new FrameConfig(glowing, intangible, reinforced);
+        if (!cfg.equals(FrameConfig.DEFAULT))
+        {
+            builder.set(Utils.DC_TYPE_FRAME_CONFIG, cfg);
+        }
     }
 
     protected void collectCamoComponents(DataComponentMap.Builder builder)
@@ -1009,6 +1020,8 @@ public class FramedBlockEntity extends BlockEntity
     {
         applyCamoComponents(input);
         applyMiscComponents(input);
+
+        input.getOrDefault(Utils.DC_TYPE_FRAME_CONFIG, FrameConfig.DEFAULT).apply(this);
     }
 
     protected void applyCamoComponents(DataComponentInput input)

@@ -30,6 +30,7 @@ import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.blueprint.AuxBlueprintData;
 import xfacthd.framedblocks.api.camo.*;
 import xfacthd.framedblocks.api.camo.empty.EmptyCamoContainerFactory;
+import xfacthd.framedblocks.api.component.FrameConfig;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.api.util.registration.*;
 import xfacthd.framedblocks.common.block.interactive.button.*;
@@ -337,6 +338,10 @@ public final class FBContent
     public static final DeferredDataComponentType<CamoList> DC_TYPE_CAMO_LIST = DATA_COMPONENTS.registerComponentType(
             "camo_list",
             builder -> builder.persistent(CamoList.CODEC).networkSynchronized(CamoList.STREAM_CODEC).cacheEncoding()
+    );
+    public static final DeferredDataComponentType<FrameConfig> DC_TYPE_FRAME_CONFIG = DATA_COMPONENTS.registerComponentType(
+            "frame_config",
+            builder -> builder.persistent(FrameConfig.CODEC).networkSynchronized(FrameConfig.STREAM_CODEC)
     );
     public static final DeferredDataComponentType<BlueprintData> DC_TYPE_BLUEPRINT_DATA = DATA_COMPONENTS.registerComponentType(
             "blueprint_data",
