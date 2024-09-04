@@ -39,9 +39,9 @@ public final class CamoList implements Iterable<CamoContainer<?, ?>>
 
     public CamoContainer<?, ?> getCamo(int index)
     {
-        if (camos.length > index)
+        if (size > index)
         {
-            return camos[index];
+            return camos[offset + index];
         }
         return EmptyCamoContainer.EMPTY;
     }
