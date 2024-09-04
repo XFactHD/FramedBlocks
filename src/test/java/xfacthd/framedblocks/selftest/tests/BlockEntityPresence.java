@@ -5,11 +5,11 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
+import xfacthd.framedblocks.selftest.SelfTestReporter;
 
 import java.util.List;
 import java.util.Set;
@@ -17,9 +17,9 @@ import java.util.stream.Collectors;
 
 public final class BlockEntityPresence
 {
-    public static void checkBlockEntityTypePresent(List<Block> blocks)
+    public static void checkBlockEntityTypePresent(SelfTestReporter reporter, List<Block> blocks)
     {
-        FramedBlocks.LOGGER.info("  Checking presence of valid BlockEntityTypes");
+        reporter.startTest("valid BlockEntityType presence");
 
         blocks.forEach(block ->
         {
@@ -31,8 +31,8 @@ public final class BlockEntityPresence
             IBlockType type = ((IFramedBlock) block).getBlockType();
             if (types.isEmpty())
             {
-                FramedBlocks.LOGGER.warn(
-                        "    Block '{}' is not valid for any BE types (double: {}, special: {})",
+                reporter.warn(
+                        "Block '{}' is not valid for any BE types (double: {}, special: {})",
                         block, type.isDoubleBlock(), type.hasSpecialTile()
                 );
             }
@@ -43,12 +43,14 @@ public final class BlockEntityPresence
                         .map(ResourceKey::location)
                         .map(ResourceLocation::toString)
                         .collect(Collectors.joining(", "));
-                FramedBlocks.LOGGER.warn(
-                        "    Block '{}' is valid for multiple BE types: [{}] (double: {}, special: {})",
+                reporter.warn(
+                        "Block '{}' is valid for multiple BE types: [{}] (double: {}, special: {})",
                         block, typesString, type.isDoubleBlock(), type.hasSpecialTile()
                 );
             }
         });
+
+        reporter.endTest();
     }
 
 

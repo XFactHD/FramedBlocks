@@ -2,16 +2,16 @@ package xfacthd.framedblocks.selftest.tests;
 
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.StateDefinition;
-import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.block.IFramedBlock;
+import xfacthd.framedblocks.selftest.SelfTestReporter;
 
 import java.util.List;
 
 public final class JadeRenderStateErrors
 {
-    public static void checkJadeRenderStateErrors(List<Block> blocks)
+    public static void checkJadeRenderStateErrors(SelfTestReporter reporter, List<Block> blocks)
     {
-        FramedBlocks.LOGGER.info("  Checking Jade render state correctness");
+        reporter.startTest("Jade render state correctness");
 
         blocks.stream()
                 .map(Block::getStateDefinition)
@@ -25,12 +25,14 @@ public final class JadeRenderStateErrors
                     }
                     catch (Throwable t)
                     {
-                        FramedBlocks.LOGGER.error(
-                                "    IFramedBlock#getJadeRenderState throws exception on state '{}': {}",
+                        reporter.error(
+                                "IFramedBlock#getJadeRenderState throws exception on state '{}': {}",
                                 state, t.getMessage()
                         );
                     }
                 });
+
+        reporter.endTest();
     }
 
 

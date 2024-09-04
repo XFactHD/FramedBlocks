@@ -3,7 +3,7 @@ package xfacthd.framedblocks.selftest.tests;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import xfacthd.framedblocks.FramedBlocks;
+import xfacthd.framedblocks.selftest.SelfTestReporter;
 
 import java.util.*;
 
@@ -13,9 +13,9 @@ public final class RotateMirrorErrors
     private static final Mirror[] MIRRORS = Mirror.values();
 
     @SuppressWarnings("deprecation")
-    public static void checkRotateMirrorErrors(List<Block> blocks)
+    public static void checkRotateMirrorErrors(SelfTestReporter reporter, List<Block> blocks)
     {
-        FramedBlocks.LOGGER.info("  Checking rotate/mirror correctness");
+        reporter.startTest("rotate/mirror correctness");
 
         Set<Block> knownFaultyRotate = new HashSet<>();
         Set<Block> knownFaultyMirror = new HashSet<>();
@@ -28,19 +28,21 @@ public final class RotateMirrorErrors
                     for (Rotation rot : ROTATIONS)
                     {
                         if (rot == Rotation.NONE) continue;
-                        guard(state, BlockState::rotate, rot, "rotate", knownFaultyRotate);
+                        guard(reporter, state, BlockState::rotate, rot, "rotate", knownFaultyRotate);
                     }
 
                     for (Mirror mirror : MIRRORS)
                     {
                         if (mirror == Mirror.NONE) continue;
-                        guard(state, BlockState::mirror, mirror, "mirror", knownFaultyMirror);
+                        guard(reporter, state, BlockState::mirror, mirror, "mirror", knownFaultyMirror);
                     }
                 });
+
+        reporter.endTest();
     }
 
     private static <T extends Enum<T>> void guard(
-            BlockState state, Action<T> action, T modifier, String type, Set<Block> knownFaulty
+            SelfTestReporter reporter, BlockState state, Action<T> action, T modifier, String type, Set<Block> knownFaulty
     )
     {
         try
@@ -51,8 +53,8 @@ public final class RotateMirrorErrors
         {
             if (!knownFaulty.add(state.getBlock())) return;
 
-            FramedBlocks.LOGGER.error(
-                    "    Action '{}' throws exception on block '{}' with modifier '{}': {}",
+            reporter.error(
+                    "Action '{}' throws exception on block '{}' with modifier '{}': {}",
                     type, state.getBlock(), modifier, t.getMessage()
             );
         }

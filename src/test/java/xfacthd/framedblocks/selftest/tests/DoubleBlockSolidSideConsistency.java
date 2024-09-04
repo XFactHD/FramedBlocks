@@ -4,19 +4,21 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.EmptyBlockGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.shapes.*;
-import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.block.IFramedDoubleBlock;
 import xfacthd.framedblocks.common.data.doubleblock.DoubleBlockStateCache;
 import xfacthd.framedblocks.common.data.doubleblock.SolidityCheck;
+import xfacthd.framedblocks.selftest.SelfTestReporter;
 
 import java.util.List;
 
 public final class DoubleBlockSolidSideConsistency
 {
-    public static void checkSolidSideConsistency(List<Block> blocks)
+    public static void checkSolidSideConsistency(SelfTestReporter reporter, List<Block> blocks)
     {
+        reporter.startTest("solid side consistency");
+
         blocks.stream()
                 .filter(IFramedDoubleBlock.class::isInstance)
                 .map(IFramedDoubleBlock.class::cast)
@@ -33,13 +35,15 @@ public final class DoubleBlockSolidSideConsistency
 
                         if (solidShape != solidCache)
                         {
-                            FramedBlocks.LOGGER.warn(
-                                    "    Block '{}' has inconsistent side solidity for state {} on side {} (shape: {}, cache: {})",
+                            reporter.warn(
+                                    "Block '{}' has inconsistent side solidity for state {} on side {} (shape: {}, cache: {})",
                                     block, state, side, solidShape, solidCache
                             );
                         }
                     });
                 }));
+
+        reporter.endTest();
     }
 
 

@@ -1,9 +1,9 @@
 package xfacthd.framedblocks.selftest.tests;
 
-import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.skippreds.CullTest;
 import xfacthd.framedblocks.common.data.skippreds.SideSkipPredicates;
+import xfacthd.framedblocks.selftest.SelfTestReporter;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -13,9 +13,9 @@ public final class SkipPredicatePresenceConsistency
 {
     private static final Map<BlockType, Test> TESTS = new EnumMap<>(BlockType.class);
 
-    public static void checkSkipPredicateConsistency()
+    public static void checkSkipPredicateConsistency(SelfTestReporter reporter)
     {
-        FramedBlocks.LOGGER.info("  Checking skip predicate consistency");
+        reporter.startTest("skip predicate consistency");
 
         SideSkipPredicates.PREDICATES.forEach((type, pred) ->
         {
@@ -34,15 +34,15 @@ public final class SkipPredicatePresenceConsistency
 
                 if (target != null)
                 {
-                    collectTarget(test, mth, target);
+                    collectTarget(reporter, test, mth, target);
                 }
 
                 if (Modifier.isStatic(mth.getModifiers()) && mth.getReturnType() == Boolean.TYPE && mth.getName().contains("test"))
                 {
                     if (target == null)
                     {
-                        FramedBlocks.LOGGER.error(
-                                "    Method '{}' in class '{}' is missing test target annotation",
+                        reporter.error(
+                                "Method '{}' in class '{}' is missing test target annotation",
                                 mth.getName(), test.clazzName
                         );
                     }
@@ -58,7 +58,7 @@ public final class SkipPredicatePresenceConsistency
         {
             if (!test.targets.contains(type))
             {
-                FramedBlocks.LOGGER.warn("    Type '{}' is missing a test against itself", type);
+                reporter.warn("Type '{}' is missing a test against itself", type);
             }
             test.targets.forEach(target ->
             {
@@ -70,31 +70,33 @@ public final class SkipPredicatePresenceConsistency
                 Test reverse = TESTS.get(target);
                 if (reverse != null && !reverse.targets.contains(type))
                 {
-                    FramedBlocks.LOGGER.warn(
-                            "    Type '{}' has a test against type '{}' in class '{}' but class '{}' is missing the reverse test",
+                    reporter.warn(
+                            "Type '{}' has a test against type '{}' in class '{}' but class '{}' is missing the reverse test",
                             type, target, test.clazzName, reverse.clazzName
                     );
                 }
             });
         });
+
+        reporter.endTest();
     }
 
-    private static void collectTarget(Test test, Method mth, CullTest.TestTarget target)
+    private static void collectTarget(SelfTestReporter reporter, Test test, Method mth, CullTest.TestTarget target)
     {
         for (BlockType targetType : target.value())
         {
             if (targetType.isDoubleBlock())
             {
-                String msg = "SingleTarget must not handle double blocks, method '%s' in class '%s' specifies type '%s'";
-                FramedBlocks.LOGGER.error("    " + msg.formatted(mth.getName(), test.clazzName, targetType));
+                reporter.error(
+                        "SingleTarget must not handle double blocks, method '{}' in class '{}' specifies type '{}'",
+                        mth.getName(), test.clazzName, targetType
+                );
                 continue;
             }
 
             if (!test.targets.add(targetType))
             {
-                FramedBlocks.LOGGER.error(
-                        "    Class '{}' has duplicate test against type '{}'", test.clazzName, targetType
-                );
+                reporter.error("Class '{}' has duplicate test against type '{}'", test.clazzName, targetType);
             }
             if (target.oneWay())
             {

@@ -1,19 +1,19 @@
 package xfacthd.framedblocks.selftest.tests;
 
 import net.minecraft.world.level.block.Block;
-import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.block.IFramedDoubleBlock;
 import xfacthd.framedblocks.common.data.doubleblock.CamoGetter;
 import xfacthd.framedblocks.common.data.doubleblock.DoubleBlockStateCache;
+import xfacthd.framedblocks.selftest.SelfTestReporter;
 
 import java.util.List;
 
 public final class DoubleBlockCamoConnectionConsistency
 {
-    public static void checkConnectionConsistency(List<Block> blocks)
+    public static void checkConnectionConsistency(SelfTestReporter reporter, List<Block> blocks)
     {
-        FramedBlocks.LOGGER.info("  Checking camo connection consistency");
+        reporter.startTest("camo connection consistency");
 
         blocks.stream()
                 .filter(IFramedDoubleBlock.class::isInstance)
@@ -28,13 +28,15 @@ public final class DoubleBlockCamoConnectionConsistency
 
                         if (connect != hasCamo)
                         {
-                            FramedBlocks.LOGGER.warn(
-                                    "    Block '{}' has inconsistent camo-connection relation for state {} on side {} at edge {} (camo: {}, connect: {})",
+                            reporter.warn(
+                                    "Block '{}' has inconsistent camo-connection relation for state {} on side {} at edge {} (camo: {}, connect: {})",
                                     block, state, side, edge, hasCamo, connect
                             );
                         }
                     }));
                 }));
+
+        reporter.endTest();
     }
 
 
