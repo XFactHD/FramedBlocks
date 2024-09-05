@@ -61,6 +61,8 @@ public final class Utils
     public static final TagKey<Item> COMPLEX_WRENCH = itemTag("complex_wrench");
     /** Allow other mods to add items that temporarily disable intangibility to allow interaction with the targeted block */
     public static final TagKey<Item> DISABLE_INTANGIBLE = itemTag("disable_intangible");
+    /** Group tag containing all full-cube blocks excluding ones that can deviate from that via player interaction */
+    public static final TagKey<Block> GROUP_FULL_CUBE = blockTag("group/full");
 
     /**
      * Provided by tools for rotating blocks

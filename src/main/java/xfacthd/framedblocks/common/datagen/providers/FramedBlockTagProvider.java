@@ -1,15 +1,17 @@
 package xfacthd.framedblocks.common.datagen.providers;
 
-import net.minecraft.core.Holder;
-import net.minecraft.core.HolderLookup;
+import net.minecraft.core.*;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.TagsProvider;
+import net.minecraft.world.level.EmptyBlockGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.data.BlockTagsProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.api.block.IFramedBlock;
@@ -115,6 +117,20 @@ public final class FramedBlockTagProvider extends BlockTagsProvider
 
         tag(Utils.NON_OCCLUDEABLE)
                 .addTag(BlockTags.LEAVES);
+
+        IntrinsicTagAppender<Block> fullGroupTag = tag(Utils.GROUP_FULL_CUBE);
+        FBContent.getRegisteredBlocks()
+                .stream()
+                .map(Holder::value)
+                .filter(b -> !b.hasDynamicShape())
+                .map(Block::defaultBlockState)
+                .filter(state -> state.hasProperty(FramedProperties.SOLID))
+                .map(state -> state.setValue(FramedProperties.SOLID, true))
+                .filter(state -> state.isSolidRender(EmptyBlockGetter.INSTANCE, BlockPos.ZERO))
+                .map(BlockBehaviour.BlockStateBase::getBlock)
+                .forEach(fullGroupTag::add);
+        // Special cases which are not captured by the checks above
+        fullGroupTag.add(FBContent.BLOCK_FRAMED_ONE_WAY_WINDOW.value());
 
         Set<Block> noToolBlocks = Set.of(
                 FBContent.BLOCK_FRAMED_ITEM_FRAME.value(),
