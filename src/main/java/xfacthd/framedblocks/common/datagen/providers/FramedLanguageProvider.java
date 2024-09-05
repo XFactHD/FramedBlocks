@@ -290,6 +290,7 @@ public final class FramedLanguageProvider extends LanguageProvider
 
         add(JeiMessages.MSG_INVALID_RECIPE, "Invalid recipe");
         add(JeiMessages.MSG_TRANSFER_NOT_IMPLEMENTED, "Transfer not implemented, no items will be transferred");
+        add(JeiMessages.MSG_SUPPORTS_MOST_CAMOS, "Supports most items that can be used to apply camos by block interaction");
 
         add(AtlasViewerCompat.LABEL_TEXTURE, "Texture");
         add(AtlasViewerCompat.LABEL_FRAMES, "Frames");
