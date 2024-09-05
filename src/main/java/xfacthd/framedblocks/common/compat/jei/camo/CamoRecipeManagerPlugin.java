@@ -234,6 +234,6 @@ public final class CamoRecipeManagerPlugin implements ISimpleRecipeManagerPlugin
                 return conv.getSecond();
             }
         }
-        return Utils.sanitizePath(tag.location().toString());
+        return tag.location().toLanguageKey();
     }
 }
