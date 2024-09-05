@@ -321,6 +321,7 @@
   "msg.framedblocks.powered_saw.status.ready": "Ready",
   "msg.framedblocks.prism_offset.switch": "Hit with a Framed Hammer to toggle the offset",
   "msg.framedblocks.split_line.switch": "Hit with a Framed Hammer to switch the orientation of the split-line",
+  "tag.block.framedblocks.group.full": "Full Framed Blocks",
   "tag.item.c.tools.wrench": "Wrenches",
   "tag.item.framedblocks.disable_intangible": "Disable Intangibility",
   "title.framedblocks.framed_chest": "Framed Chest",

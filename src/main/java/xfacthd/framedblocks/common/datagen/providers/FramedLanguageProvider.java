@@ -303,6 +303,7 @@ public final class FramedLanguageProvider extends LanguageProvider
 
         add(Utils.TOOL_WRENCH, "Wrenches");
         add(Utils.DISABLE_INTANGIBLE, "Disable Intangibility");
+        add(Utils.GROUP_FULL_CUBE, "Full Framed Blocks");
     }
 
     private void addStatusMessageTranslations()
