@@ -15,11 +15,6 @@ import java.util.List;
 
 public final class CamoItemStackHelper
 {
-    private CamoItemStackHelper()
-    {
-    }
-
-
     @Nullable
     public static CamoContainerFactory<?> getCamoContainerFactory(ItemStack itemStack)
     {
@@ -83,4 +78,6 @@ public final class CamoItemStackHelper
         }
         return results;
     }
+
+    private CamoItemStackHelper() { }
 }

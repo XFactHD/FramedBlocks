@@ -8,18 +8,16 @@ import mezz.jei.api.gui.ingredient.ICraftingGridHelper;
 import mezz.jei.api.gui.ingredient.IRecipeSlotRichTooltipCallback;
 import mezz.jei.api.gui.ingredient.IRecipeSlotView;
 import mezz.jei.api.runtime.IIngredientManager;
-import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.crafting.CraftingBookCategory;
-import net.minecraft.world.item.crafting.CraftingInput;
-import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.*;
+import org.jetbrains.annotations.Nullable;
+import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.camo.CamoContainerFactory;
-import xfacthd.framedblocks.common.compat.jei.JeiMessages;
+import xfacthd.framedblocks.common.compat.jei.JeiConstants;
 import xfacthd.framedblocks.common.crafting.CamoApplicationRecipe;
 
 import java.util.*;
@@ -38,11 +36,30 @@ public final class CamoCraftingHelper
 
     public CamoCraftingHelper()
     {
-        CamoApplicationRecipe applicationRecipe = CamoApplicationRecipe.getInstance();
-        this.helperRecipe = Objects.requireNonNullElseGet(applicationRecipe, () -> new CamoApplicationRecipe(CraftingBookCategory.MISC, Ingredient.of(Items.BRUSH)));
-        this.camoExamplesIngredient = Ingredient.of(JeiCamoTags.getCamoBlockExamplesTag());
-        this.emptyFramesIngredient = Ingredient.of(JeiCamoTags.getAllFramesTag());
-        this.emptyDoubleFramesIngredient = Ingredient.of(JeiCamoTags.getDoubleFramesTag());
+        this.helperRecipe = Objects.requireNonNullElseGet(findCanonicalRecipe(), () ->
+        {
+            FramedBlocks.LOGGER.warn("Failed to retrieve canonical CamoApplicationRecipe, using dummy");
+            return new CamoApplicationRecipe(CraftingBookCategory.MISC, Ingredient.of(Items.BRUSH));
+        });
+        this.camoExamplesIngredient = Ingredient.of(JeiConstants.CAMO_BLOCK_EXAMPLES_TAG);
+        this.emptyFramesIngredient = Ingredient.of(JeiConstants.ALL_FRAMES_TAG);
+        this.emptyDoubleFramesIngredient = Ingredient.of(JeiConstants.DOUBLE_FRAMES_TAG);
+    }
+
+    @Nullable
+    private static CamoApplicationRecipe findCanonicalRecipe()
+    {
+        ClientLevel level = Minecraft.getInstance().level;
+        if (level == null) { return null; }
+
+        return level.getRecipeManager()
+                .getAllRecipesFor(RecipeType.CRAFTING)
+                .stream()
+                .map(RecipeHolder::value)
+                .filter(CamoApplicationRecipe.class::isInstance)
+                .map(CamoApplicationRecipe.class::cast)
+                .findFirst()
+                .orElse(null);
     }
 
     public Ingredient getCopyToolIngredient()
@@ -77,9 +94,10 @@ public final class CamoCraftingHelper
             }
         }
 
+        // Must be kept mutable for later shuffling for randomized ingredient displays
         this.camoExamples = camoExamples;
-        this.emptyFramedBlocks = Collections.unmodifiableList(emptyFramedBlocks);
-        this.emptyDoubleFramedBlocks = Collections.unmodifiableList(emptyDoubleFramedBlocks);
+        this.emptyFramedBlocks = List.copyOf(emptyFramedBlocks);
+        this.emptyDoubleFramedBlocks = List.copyOf(emptyDoubleFramedBlocks);
     }
 
     public List<ItemStack> getEmptyFramedBlocks()
@@ -196,22 +214,17 @@ public final class CamoCraftingHelper
         @Override
         public void onRichTooltip(IRecipeSlotView recipeSlotView, ITooltipBuilder tooltip)
         {
-            recipeSlotView.getSlotName()
-                    .ifPresent(name ->
+            recipeSlotView.getSlotName().ifPresent(name ->
+            {
+                if (name.equals("camoOne") || name.equals("camoTwo"))
+                {
+                    if (recipeSlotView.getItemStacks().count() > 1)
                     {
-                        if (name.equals("camoOne") || name.equals("camoTwo"))
-                        {
-                            if (recipeSlotView.getItemStacks().count() > 1)
-                            {
-                                tooltip.clear();
-                                MutableComponent component = JeiMessages.MSG_SUPPORTS_MOST_CAMOS.copy()
-                                        .withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC);
-                                tooltip.add(component);
-                            }
-                        }
-                    });
+                        tooltip.clear();
+                        tooltip.add(JeiConstants.MSG_SUPPORTS_MOST_CAMOS);
+                    }
+                }
+            });
         }
     }
-
-
 }

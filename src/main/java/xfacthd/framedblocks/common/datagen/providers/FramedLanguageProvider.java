@@ -15,7 +15,7 @@ import xfacthd.framedblocks.client.screen.overlay.*;
 import xfacthd.framedblocks.common.block.cube.FramedTankBlock;
 import xfacthd.framedblocks.common.compat.atlasviewer.AtlasViewerCompat;
 import xfacthd.framedblocks.common.compat.jade.JadeCompat;
-import xfacthd.framedblocks.common.compat.jei.JeiMessages;
+import xfacthd.framedblocks.common.compat.jei.JeiConstants;
 import xfacthd.framedblocks.common.config.*;
 import xfacthd.framedblocks.client.util.KeyMappings;
 import xfacthd.framedblocks.common.FBContent;
@@ -288,9 +288,9 @@ public final class FramedLanguageProvider extends LanguageProvider
 
         add(EmptyCamoContainer.CAMO_NAME, "Empty");
 
-        add(JeiMessages.MSG_INVALID_RECIPE, "Invalid recipe");
-        add(JeiMessages.MSG_TRANSFER_NOT_IMPLEMENTED, "Transfer not implemented, no items will be transferred");
-        add(JeiMessages.MSG_SUPPORTS_MOST_CAMOS, "Supports most items that can be used to apply camos by block interaction");
+        add(JeiConstants.MSG_INVALID_RECIPE, "Invalid recipe");
+        add(JeiConstants.MSG_TRANSFER_NOT_IMPLEMENTED, "Transfer not implemented, no items will be transferred");
+        add(JeiConstants.MSG_SUPPORTS_MOST_CAMOS, "Supports most items that can be used to apply camos by block interaction");
 
         add(AtlasViewerCompat.LABEL_TEXTURE, "Texture");
         add(AtlasViewerCompat.LABEL_FRAMES, "Frames");

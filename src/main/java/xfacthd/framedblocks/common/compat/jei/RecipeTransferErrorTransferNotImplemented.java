@@ -25,7 +25,7 @@ public final class RecipeTransferErrorTransferNotImplemented implements IRecipeT
         {
             graphics.renderTooltip(
                     Minecraft.getInstance().font,
-                    List.of(JeiMessages.MSG_TRANSFER_NOT_IMPLEMENTED),
+                    List.of(JeiConstants.MSG_TRANSFER_NOT_IMPLEMENTED),
                     Optional.empty(),
                     mouseX,
                     mouseY

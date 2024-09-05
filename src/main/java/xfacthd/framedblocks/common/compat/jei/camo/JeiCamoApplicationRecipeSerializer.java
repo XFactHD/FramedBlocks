@@ -18,7 +18,6 @@ public final class JeiCamoApplicationRecipeSerializer implements RecipeSerialize
             Ingredient.CODEC.fieldOf("camo_two").forGetter(JeiCamoApplicationRecipe::getCamoTwo),
             Codec.list(ItemStack.CODEC).fieldOf("results").forGetter(JeiCamoApplicationRecipe::getResults)
     ).apply(inst, JeiCamoApplicationRecipe::new));
-
     public static final StreamCodec<RegistryFriendlyByteBuf, JeiCamoApplicationRecipe> STREAM_CODEC = StreamCodec.composite(
             Ingredient.CONTENTS_STREAM_CODEC,
             JeiCamoApplicationRecipe::getFrame,

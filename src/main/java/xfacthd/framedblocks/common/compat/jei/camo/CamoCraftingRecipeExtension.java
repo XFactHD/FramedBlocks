@@ -56,28 +56,22 @@ public final class CamoCraftingRecipeExtension implements ICraftingCategoryExten
 
         if (recipeHolder.value().getResults().isEmpty())
         {
-            ItemStack output = calculateOutput(recipeSlots);
+            IRecipeSlotDrawable frameSlot = recipeSlots.getFirst();
+            IRecipeSlotDrawable inputOneSlot = recipeSlots.get(3);
+            IRecipeSlotDrawable inputTwoSlot = recipeSlots.get(4);
 
-            IRecipeSlotDrawable outputSlot = recipeSlots.stream()
+            ItemStack output = camoCraftingHelper.calculateOutput(
+                    frameSlot.getDisplayedItemStack().orElse(ItemStack.EMPTY),
+                    inputOneSlot.getDisplayedItemStack().orElse(ItemStack.EMPTY),
+                    inputTwoSlot.getDisplayedItemStack().orElse(ItemStack.EMPTY)
+            );
+
+            recipeSlots.stream()
                     .filter(slot -> slot.getRole().equals(RecipeIngredientRole.OUTPUT))
                     .findAny()
-                    .orElseThrow();
-
-            outputSlot.createDisplayOverrides()
+                    .orElseThrow()
+                    .createDisplayOverrides()
                     .addItemStack(output);
         }
-    }
-
-    private ItemStack calculateOutput(List<IRecipeSlotDrawable> recipeSlots)
-    {
-        IRecipeSlotDrawable frameSlot = recipeSlots.getFirst();
-        IRecipeSlotDrawable inputOneSlot = recipeSlots.get(3);
-        IRecipeSlotDrawable inputTwoSlot = recipeSlots.get(4);
-
-        return camoCraftingHelper.calculateOutput(
-                frameSlot.getDisplayedItemStack().orElse(ItemStack.EMPTY),
-                inputOneSlot.getDisplayedItemStack().orElse(ItemStack.EMPTY),
-                inputTwoSlot.getDisplayedItemStack().orElse(ItemStack.EMPTY)
-        );
     }
 }

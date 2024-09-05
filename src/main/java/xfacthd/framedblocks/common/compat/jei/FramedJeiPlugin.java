@@ -4,9 +4,7 @@ import me.shedaniel.rei.plugincompatibilities.api.REIPluginCompatIgnore;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.constants.RecipeTypes;
-import mezz.jei.api.helpers.IJeiHelpers;
 import mezz.jei.api.recipe.RecipeType;
-import mezz.jei.api.recipe.category.extensions.vanilla.crafting.IExtendableCraftingRecipeCategory;
 import mezz.jei.api.registration.*;
 import mezz.jei.api.runtime.IIngredientManager;
 import net.minecraft.resources.ResourceLocation;
@@ -54,13 +52,13 @@ public final class FramedJeiPlugin implements IModPlugin
     @Override
     public void registerVanillaCategoryExtensions(IVanillaCategoryExtensionRegistration registration)
     {
-        IJeiHelpers jeiHelpers = registration.getJeiHelpers();
-        IIngredientManager ingredientManager = jeiHelpers.getIngredientManager();
         CamoCraftingHelper camoCraftingHelper = getCamoCraftingHelper();
-        camoCraftingHelper.scanForItems(ingredientManager);
+        camoCraftingHelper.scanForItems(registration.getJeiHelpers().getIngredientManager());
 
-        IExtendableCraftingRecipeCategory craftingCategory = registration.getCraftingCategory();
-        craftingCategory.addExtension(JeiCamoApplicationRecipe.class, new CamoCraftingRecipeExtension(camoCraftingHelper));
+        registration.getCraftingCategory().addExtension(
+                JeiCamoApplicationRecipe.class,
+                new CamoCraftingRecipeExtension(camoCraftingHelper)
+        );
     }
 
     @Override
@@ -127,8 +125,16 @@ public final class FramedJeiPlugin implements IModPlugin
     @Override
     public void registerAdvanced(IAdvancedRegistration registration)
     {
-        CamoCraftingHelper camoCraftingHelper = getCamoCraftingHelper();
-        registration.addTypedRecipeManagerPlugin(RecipeTypes.CRAFTING, new CamoRecipeManagerPlugin(camoCraftingHelper));
+        registration.addTypedRecipeManagerPlugin(
+                RecipeTypes.CRAFTING,
+                new CamoRecipeManagerPlugin(getCamoCraftingHelper())
+        );
+    }
+
+    @Override
+    public void onRuntimeUnavailable()
+    {
+        camoCraftingHelperInstance = null;
     }
 
     @Override
