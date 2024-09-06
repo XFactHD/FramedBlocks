@@ -1,6 +1,5 @@
 package xfacthd.framedblocks.client.render.util;
 
-import com.google.common.base.Preconditions;
 import com.mojang.blaze3d.platform.NativeImage;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
@@ -14,20 +13,18 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.*;
 import net.minecraft.util.ExtraCodecs;
 import xfacthd.framedblocks.FramedBlocks;
-import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.client.util.NoAnimationResourceMetadata;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.function.BiFunction;
 
 public record AnimationSplitterSource(ResourceLocation resource, List<Frame> frames) implements SpriteSource
 {
-    private static SpriteSourceType TYPE = null;
     private static final MapCodec<AnimationSplitterSource> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
             ResourceLocation.CODEC.fieldOf("resource").forGetter(s -> s.resource),
             ExtraCodecs.nonEmptyList(Frame.CODEC.listOf()).fieldOf("frames").forGetter(s -> s.frames)
     ).apply(inst, AnimationSplitterSource::new));
+    public static final SpriteSourceType TYPE = new SpriteSourceType(CODEC);
 
     @Override
     public void run(ResourceManager mgr, Output out)
@@ -49,7 +46,6 @@ public record AnimationSplitterSource(ResourceLocation resource, List<Frame> fra
     @Override
     public SpriteSourceType type()
     {
-        Preconditions.checkNotNull(TYPE, "SpriteSourceType not registered");
         return TYPE;
     }
 
@@ -134,12 +130,5 @@ public record AnimationSplitterSource(ResourceLocation resource, List<Frame> fra
         {
             lazyImage.release();
         }
-    }
-
-
-
-    public static void register(BiFunction<ResourceLocation, MapCodec<? extends SpriteSource>, SpriteSourceType> registrar)
-    {
-        TYPE = registrar.apply(Utils.rl("anim_splitter"), CODEC);
     }
 }

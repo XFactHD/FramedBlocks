@@ -509,7 +509,7 @@ public final class FBClient
 
     private static void onRegisterSpriteSources(final RegisterSpriteSourceTypesEvent event)
     {
-        AnimationSplitterSource.register(event::register);
+        event.register(Utils.rl("anim_splitter"), AnimationSplitterSource.TYPE);
     }
 
     private static void onTexturesStitched(final TextureAtlasStitchedEvent event)
