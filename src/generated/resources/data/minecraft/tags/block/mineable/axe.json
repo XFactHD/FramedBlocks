@@ -203,6 +203,7 @@
     "framedblocks:framed_checkered_slab",
     "framedblocks:framed_checkered_panel_segment",
     "framedblocks:framed_checkered_panel",
-    "framedblocks:framed_tube"
+    "framedblocks:framed_tube",
+    "framedblocks:framed_chain"
   ]
 }

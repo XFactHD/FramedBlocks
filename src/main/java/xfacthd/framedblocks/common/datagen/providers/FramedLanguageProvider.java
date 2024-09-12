@@ -258,6 +258,7 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(FBContent.BLOCK_FRAMED_CHECKERED_PANEL_SEGMENT.value(), "Framed Checkered Panel Segment");
         add(FBContent.BLOCK_FRAMED_CHECKERED_PANEL.value(), "Framed Checkered Panel");
         add(FBContent.BLOCK_FRAMED_TUBE.value(), "Framed Tube");
+        add(FBContent.BLOCK_FRAMED_CHAIN.value(), "Framed Chain");
     }
 
     private void addSpecialBlockTranslations()

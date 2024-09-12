@@ -249,6 +249,7 @@ public final class FramedBlockStateProvider extends BlockStateProvider
         registerFramedOneWayWindow();
         registerFramedBookshelf();
         registerFramedChiseledBookshelf(cube);
+        registerFramedChain(cube);
 
         registerFramingSaw();
         registerPoweredFramingSaw();
@@ -970,6 +971,12 @@ public final class FramedBlockStateProvider extends BlockStateProvider
         }
 
         simpleBlockItem(FBContent.BLOCK_FRAMED_CHISELED_BOOKSHELF, cube);
+    }
+
+    private void registerFramedChain(ModelFile cube)
+    {
+        simpleBlock(FBContent.BLOCK_FRAMED_CHAIN.value(), cube);
+        itemModels().basicItem(FBContent.BLOCK_FRAMED_CHAIN.value().asItem());
     }
 
 

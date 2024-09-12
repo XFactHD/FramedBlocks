@@ -249,6 +249,7 @@ public enum BlockType implements IBlockType
     FRAMED_CHECKERED_PANEL_SEGMENT                  (false, false, false,  true, false,  true, false, false, ConTexMode.DETAILED, CheckeredPanelSegmentShapes::generate),
     FRAMED_CHECKERED_PANEL                          ( true, false, false,  true,  true,  true,  true, false, ConTexMode.DETAILED, CommonShapes.PANEL_GENERATOR),
     FRAMED_TUBE                                     ( true, false, false,  true,  true, false, false, false, ConTexMode.FULL_FACE, TubeShapes::generate),
+    FRAMED_CHAIN                                    (false, false, false,  true,  true,  true, false, false, ConTexMode.DETAILED, ChainShapes::generate),
     ;
 
     private final String name = toString().toLowerCase(Locale.ROOT);

@@ -237,5 +237,6 @@ public final class ConnectionPredicates extends BlockTypeMap<ConnectionPredicate
         put(BlockType.FRAMED_CHECKERED_PANEL_SEGMENT, new CheckeredPanelSegmentConnectionPredicate());
         put(BlockType.FRAMED_CHECKERED_PANEL, ConnectionPredicate.FALSE);
         put(BlockType.FRAMED_TUBE, new TubeConnectionPredicate());
+        put(BlockType.FRAMED_CHAIN, new ChainConnectionPredicate());
     }
 }
