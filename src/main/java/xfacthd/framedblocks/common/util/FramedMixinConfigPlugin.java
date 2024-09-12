@@ -1,5 +1,6 @@
 package xfacthd.framedblocks.common.util;
 
+import net.neoforged.fml.loading.FMLEnvironment;
 import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
@@ -7,8 +8,13 @@ import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
 import java.util.List;
 import java.util.Set;
 
+@SuppressWarnings("unused") // Referenced by mixin config
 public final class FramedMixinConfigPlugin implements IMixinConfigPlugin
 {
+    private static final Set<String> DEV_ONLY_MIXINS = Set.of(
+            "xfacthd.framedblocks.mixin.client.DevMixinLevelRenderer"
+    );
+
     @Override
     public void onLoad(String mixinPackage) { }
 
@@ -21,6 +27,10 @@ public final class FramedMixinConfigPlugin implements IMixinConfigPlugin
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName)
     {
+        if (DEV_ONLY_MIXINS.contains(mixinClassName))
+        {
+            return !FMLEnvironment.production;
+        }
         return true;
     }
 

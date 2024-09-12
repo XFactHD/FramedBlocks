@@ -1,7 +1,6 @@
 package xfacthd.framedblocks.client;
 
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelResourceLocation;
@@ -18,7 +17,6 @@ import net.neoforged.fml.InterModComms;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.*;
-import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.client.event.*;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import net.neoforged.neoforge.client.gui.ConfigurationScreen;
@@ -27,7 +25,6 @@ import net.neoforged.neoforge.client.model.data.ModelProperty;
 import net.neoforged.neoforge.common.NeoForge;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.IFramedBlock;
-import xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import xfacthd.framedblocks.api.block.render.FramedBlockColor;
 import xfacthd.framedblocks.api.block.render.FramedBlockRenderProperties;
 import xfacthd.framedblocks.api.model.ErrorModel;
@@ -64,9 +61,10 @@ import xfacthd.framedblocks.client.modelwrapping.ModelWrappingManager;
 import xfacthd.framedblocks.client.modelwrapping.StateLocationCache;
 import xfacthd.framedblocks.client.overlaygen.OverlayQuadGenerator;
 import xfacthd.framedblocks.client.render.block.*;
-import xfacthd.framedblocks.client.render.block.debug.*;
 import xfacthd.framedblocks.client.render.color.FramedFlowerPotColor;
 import xfacthd.framedblocks.client.render.color.FramedTargetBlockColor;
+import xfacthd.framedblocks.client.render.debug.FramedBlockDebugRenderer;
+import xfacthd.framedblocks.client.render.debug.impl.*;
 import xfacthd.framedblocks.client.render.item.BlueprintPropertyOverride;
 import xfacthd.framedblocks.client.render.particle.FluidSpriteParticle;
 import xfacthd.framedblocks.client.render.special.*;
@@ -112,7 +110,6 @@ public final class FBClient
         modBus.addListener(FBClient::onRegisterKeyMappings);
         modBus.addListener(FBClient::onAttachDebugRenderers);
         modBus.addListener(FBClient::onRegisterRenderers);
-        modBus.addListener(FBClient::onRegisterDebugRenderers);
         modBus.addListener(FBClient::onBlockColors);
         modBus.addListener(FBClient::onItemColors);
         modBus.addListener(FBClient::onOverlayRegister);
@@ -188,15 +185,6 @@ public final class FBClient
         event.registerBlockEntityRenderer(FBContent.BE_TYPE_FRAMED_CHEST.value(), FramedChestRenderer::new);
         event.registerBlockEntityRenderer(FBContent.BE_TYPE_FRAMED_ITEM_FRAME.value(), FramedItemFrameRenderer::new);
         event.registerBlockEntityRenderer(FBContent.BE_TYPE_FRAMED_TANK.value(), FramedTankRenderer::new);
-    }
-
-    private static void onRegisterDebugRenderers(final EntityRenderersEvent.RegisterRenderers event)
-    {
-        if (!FMLEnvironment.production)
-        {
-            BlockEntityRendererProvider<FramedBlockEntity> provider = FramedBlockDebugRenderer::new;
-            FramedBlockDebugRenderer.getTargetTypes().forEach(type -> event.registerBlockEntityRenderer(type, provider));
-        }
     }
 
     private static void onBlockColors(final RegisterColorHandlersEvent.Block event)

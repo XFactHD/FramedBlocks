@@ -78,7 +78,6 @@ public final class DevToolsConfig
                             "Only applies to FramedBlocks blocks, add-on blocks are not handled by this."
                     )
                     .translation(TRANSLATION_DOUBLE_BLOCK_PART_DEBUG)
-                    .gameRestart()
                     .define(KEY_DOUBLE_BLOCK_PART_DEBUG, false);
             CONNECTION_DEBUG_VALUE = builder
                     .comment(
@@ -86,7 +85,6 @@ public final class DevToolsConfig
                             "BlockEntities from add-ons must be registered to the renderer via AttachDebugRenderersEvent."
                     )
                     .translation(TRANSLATION_CONNECTION_DEBUG)
-                    .gameRestart()
                     .define(KEY_CONNECTION_DEBUG, false);
             QUAD_WINDING_DEBUG_VALUE = builder
                     .comment(
@@ -94,7 +92,6 @@ public final class DevToolsConfig
                             "BlockEntities from add-ons must be registered to the renderer via AttachDebugRenderersEvent."
                     )
                     .translation(TRANSLATION_QUAD_WINDING_DEBUG)
-                    .gameRestart()
                     .define(KEY_QUAD_WINDING_DEBUG, false);
             STATE_MERGER_DEBUG_VALUE = builder
                     .comment("If enabled, all model wrapper registrations will print which state properties of the associated block are used as-is and which ones are handled by a StateMerger")

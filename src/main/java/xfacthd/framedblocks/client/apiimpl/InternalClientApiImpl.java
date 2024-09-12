@@ -12,8 +12,8 @@ import xfacthd.framedblocks.api.render.debug.BlockDebugRenderer;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.client.model.FramedBlockModel;
 import xfacthd.framedblocks.client.modelwrapping.*;
-import xfacthd.framedblocks.client.render.block.debug.ConnectionPredicateDebugRenderer;
-import xfacthd.framedblocks.client.render.block.debug.QuadWindingDebugRenderer;
+import xfacthd.framedblocks.client.render.debug.impl.ConnectionPredicateDebugRenderer;
+import xfacthd.framedblocks.client.render.debug.impl.QuadWindingDebugRenderer;
 import xfacthd.framedblocks.client.util.ClientTaskQueue;
 import xfacthd.framedblocks.common.config.DevToolsConfig;
 

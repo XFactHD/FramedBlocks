@@ -1,4 +1,4 @@
-package xfacthd.framedblocks.client.render.block.debug;
+package xfacthd.framedblocks.client.render.debug.impl;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -13,6 +13,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.neoforged.neoforge.client.model.data.ModelData;
+import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.camo.block.BlockCamoContent;
 import xfacthd.framedblocks.api.model.data.FramedBlockData;
 import xfacthd.framedblocks.api.render.debug.BlockDebugRenderer;
@@ -24,10 +25,7 @@ import java.util.Objects;
 public class DoubleBlockPartDebugRenderer implements BlockDebugRenderer<FramedDoubleBlockEntity>
 {
     public static final DoubleBlockPartDebugRenderer INSTANCE = new DoubleBlockPartDebugRenderer();
-    private static final ModelData MODEL_DATA = ModelData.builder().with(
-            FramedBlockData.PROPERTY,
-            new FramedBlockData(new BlockCamoContent(Blocks.STONE.defaultBlockState()), new boolean[6], false, false)
-    ).build();
+    private static final FramedBlockData MODEL_DATA = new FramedBlockData(new BlockCamoContent(Blocks.STONE.defaultBlockState()), false);
 
     private DoubleBlockPartDebugRenderer() { }
 
@@ -42,11 +40,14 @@ public class DoubleBlockPartDebugRenderer implements BlockDebugRenderer<FramedDo
             int overlay
     )
     {
+        BlockState state = be.getBlockState();
+        if (!(state.getBlock() instanceof IFramedBlock)) return;
+
         Tuple<BlockState, BlockState> blockPair = be.getBlockPair();
         Player player = Objects.requireNonNull(Minecraft.getInstance().player);
         boolean secondary = be.debugHitSecondary(blockHit, player);
-        BlockState state = secondary ? blockPair.getB() : blockPair.getA();
-        BakedModel model = Minecraft.getInstance().getBlockRenderer().getBlockModel(state);
+        BlockState partState = secondary ? blockPair.getB() : blockPair.getA();
+        BakedModel model = Minecraft.getInstance().getBlockRenderer().getBlockModel(partState);
 
         OutlineBufferSource outlineBuffer = Minecraft.getInstance().renderBuffers().outlineBufferSource();
         outlineBuffer.setColor(
@@ -56,17 +57,20 @@ public class DoubleBlockPartDebugRenderer implements BlockDebugRenderer<FramedDo
                 0xFF
         );
 
+        ModelData modelData = ((IFramedBlock) state.getBlock()).unpackNestedModelData(be.getModelData(), state, partState);
+        modelData = modelData.derive().with(FramedBlockData.PROPERTY, MODEL_DATA).build();
+
         //noinspection deprecation
         VertexConsumer consumer = outlineBuffer.getBuffer(RenderType.outline(TextureAtlas.LOCATION_BLOCKS));
         Minecraft.getInstance().getBlockRenderer().getModelRenderer().renderModel(
                 poseStack.last(),
                 consumer,
-                state,
+                partState,
                 model,
                 1F, 1F, 1F,
                 LightTexture.FULL_BRIGHT,
                 OverlayTexture.NO_OVERLAY,
-                MODEL_DATA,
+                modelData,
                 RenderType.solid()
         );
     }
