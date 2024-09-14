@@ -6,6 +6,8 @@
     "framedblocks:framed_double_prism_corner",
     "framedblocks:framed_double_threeway_corner",
     "framedblocks:framed_elevated_double_slope_edge",
+    "framedblocks:framed_elev_double_corner_slope_edge",
+    "framedblocks:framed_elev_double_inner_corner_slope_edge",
     "framedblocks:framed_double_slab",
     "framedblocks:framed_adj_double_slab",
     "framedblocks:framed_adj_double_copycat_slab",

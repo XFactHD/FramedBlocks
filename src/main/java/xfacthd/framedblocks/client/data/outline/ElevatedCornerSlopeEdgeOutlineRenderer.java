@@ -10,6 +10,10 @@ import xfacthd.framedblocks.common.data.property.CornerType;
 
 public final class ElevatedCornerSlopeEdgeOutlineRenderer implements OutlineRenderer
 {
+    public static final ElevatedCornerSlopeEdgeOutlineRenderer INSTANCE = new ElevatedCornerSlopeEdgeOutlineRenderer();
+
+    private ElevatedCornerSlopeEdgeOutlineRenderer() { }
+
     @Override
     public void draw(BlockState state, PoseStack poseStack, VertexConsumer builder)
     {

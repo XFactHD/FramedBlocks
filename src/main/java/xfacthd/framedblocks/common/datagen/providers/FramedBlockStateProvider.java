@@ -69,6 +69,10 @@ public final class FramedBlockStateProvider extends BlockStateProvider
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_INNER_CORNER_SLOPE_EDGE, cube, "cutout");
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_ELEVATED_CORNER_SLOPE_EDGE, cube, "cutout");
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_ELEVATED_INNER_CORNER_SLOPE_EDGE, cube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_ELEVATED_DOUBLE_CORNER_SLOPE_EDGE, cube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_ELEVATED_DOUBLE_INNER_CORNER_SLOPE_EDGE, cube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_STACKED_CORNER_SLOPE_EDGE, cube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_STACKED_INNER_CORNER_SLOPE_EDGE, cube, "cutout");
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_DOUBLE_SLAB, cube, "cutout");
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_ADJ_DOUBLE_SLAB, cube, "cutout");
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_ADJ_DOUBLE_COPYCAT_SLAB, cube, "cutout");
