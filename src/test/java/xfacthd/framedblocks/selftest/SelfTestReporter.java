@@ -2,7 +2,6 @@ package xfacthd.framedblocks.selftest;
 
 import com.google.common.base.Stopwatch;
 import org.slf4j.event.Level;
-import xfacthd.framedblocks.FramedBlocks;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,7 +70,7 @@ public final class SelfTestReporter
         info("Self test completed in {}", stopwatch);
         info("=======================================");
 
-        lines.forEach(entry -> FramedBlocks.LOGGER.atLevel(entry.logLevel).log(entry.text, entry.params));
+        lines.forEach(entry -> SelfTest.LOGGER.atLevel(entry.logLevel).log(entry.text, entry.params));
     }
 
     private record Entry(Level logLevel, String text, Object... params) { }

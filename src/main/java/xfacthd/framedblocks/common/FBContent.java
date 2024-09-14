@@ -703,6 +703,11 @@ public final class FBContent
         return BLOCKS_BY_TYPE.get(type).value();
     }
 
+    public static Collection<DeferredHolder<Item, ? extends Item>> getRegisteredItems()
+    {
+        return ITEMS.getEntries();
+    }
+
     public static Item toolByType(FramedToolType type)
     {
         return TOOLS_BY_TYPE.get(type).value();

@@ -14,9 +14,10 @@ public final class FramedBlocksTest
 {
     public FramedBlocksTest(IEventBus modBus)
     {
-        modBus.addListener(SelfTest::runSelfTest);
+        modBus.addListener(SelfTest::runStartupSelfTest);
 
         NeoForge.EVENT_BUS.addListener(SpecialTestCommand::registerCommands);
         NeoForge.EVENT_BUS.addListener(ChunkBanTest::onLevelTick);
+        NeoForge.EVENT_BUS.addListener(SelfTest::runInWorldSelfTest);
     }
 }
