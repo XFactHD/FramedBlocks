@@ -81,14 +81,12 @@ public class FramedHalfSlopeBlock extends FramedBlock
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     protected BlockState rotate(BlockState state, Rotation rotation)
     {
         return rotate(state, Direction.UP, rotation);
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     protected BlockState mirror(BlockState state, Mirror mirror)
     {
         if (mirror == Mirror.NONE) { return state; }

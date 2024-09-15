@@ -112,14 +112,12 @@ public class FramedFlatElevatedSlopeSlabCornerBlock extends FramedBlock
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     protected BlockState rotate(BlockState state, Rotation rot)
     {
         return rotate(state, Direction.UP, rot);
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     protected BlockState mirror(BlockState state, Mirror mirror)
     {
         return Utils.mirrorCornerBlock(state, mirror);

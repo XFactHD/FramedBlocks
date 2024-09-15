@@ -129,7 +129,6 @@ public class FramedOneWayWindowBlock extends FramedBlock
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     protected BlockState rotate(BlockState state, Rotation rotation)
     {
         Direction dir = state.getValue(PropertyHolder.NULLABLE_FACE).toDirection();
@@ -142,7 +141,6 @@ public class FramedOneWayWindowBlock extends FramedBlock
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     protected BlockState mirror(BlockState state, Mirror mirror)
     {
         Direction dir = state.getValue(PropertyHolder.NULLABLE_FACE).toDirection();

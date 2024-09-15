@@ -15,13 +15,12 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.SingleRecipeInput;
+import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.client.screen.FramingSawScreen;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.special.FramingSawBlock;
 import xfacthd.framedblocks.common.crafting.*;
-
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -134,7 +133,7 @@ public final class FramingSawRecipeCategory implements IRecipeCategory<FramingSa
             Item input,
             FramingSawRecipe recipe,
             IRecipeSlotBuilder inputSlot,
-            @Nullable IRecipeSlotBuilder[] additiveSlots,
+            IRecipeSlotBuilder @Nullable [] additiveSlots,
             IRecipeSlotBuilder outputSlot
     )
     {

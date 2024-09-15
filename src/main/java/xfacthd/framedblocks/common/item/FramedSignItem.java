@@ -7,11 +7,10 @@ import net.minecraft.world.item.StandingAndWallBlockItem;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.sign.AbstractFramedSignBlock;
 import xfacthd.framedblocks.common.blockentity.special.FramedSignBlockEntity;
-
-import javax.annotation.Nullable;
 
 public class FramedSignItem extends StandingAndWallBlockItem
 {

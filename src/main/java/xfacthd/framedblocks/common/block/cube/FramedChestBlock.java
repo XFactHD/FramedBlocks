@@ -72,7 +72,6 @@ public class FramedChestBlock extends FramedStorageBlock
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     protected BlockState rotate(BlockState state, Rotation rot)
     {
         Direction dir = rot.rotate(state.getValue(FramedProperties.FACING_HOR));

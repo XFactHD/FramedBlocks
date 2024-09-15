@@ -118,14 +118,12 @@ public class FramedFlatInverseDoubleSlopePanelCornerBlock extends AbstractFramed
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     protected BlockState rotate(BlockState state, Rotation rotation)
     {
         return rotate(state, Direction.UP, rotation);
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     protected BlockState mirror(BlockState state, Mirror mirror)
     {
         return FramedFlatSlopePanelCornerBlock.mirrorCorner(state, mirror);

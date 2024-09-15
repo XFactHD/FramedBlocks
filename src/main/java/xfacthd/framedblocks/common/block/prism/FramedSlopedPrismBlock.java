@@ -96,7 +96,6 @@ public class FramedSlopedPrismBlock extends FramedBlock implements IFramedPrismB
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     protected BlockState rotate(BlockState state, Rotation rot)
     {
         CompoundDirection cmpDir = state.getValue(PropertyHolder.FACING_DIR);
@@ -104,7 +103,6 @@ public class FramedSlopedPrismBlock extends FramedBlock implements IFramedPrismB
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     protected BlockState mirror(BlockState state, Mirror mirror)
     {
         CompoundDirection cmpDir = state.getValue(PropertyHolder.FACING_DIR);

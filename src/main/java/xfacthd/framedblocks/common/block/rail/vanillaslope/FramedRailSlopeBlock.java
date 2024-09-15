@@ -20,6 +20,7 @@ import net.minecraft.world.level.block.state.properties.*;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.*;
+import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.*;
 import xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
@@ -31,7 +32,6 @@ import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.util.FramedUtils;
 
-import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.BiFunction;
 
@@ -200,7 +200,6 @@ public class FramedRailSlopeBlock extends BaseRailBlock implements IFramedBlock,
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     protected BlockState rotate(BlockState state, Rotation rot)
     {
         Direction dir = FramedUtils.getDirectionFromAscendingRailShape(state.getValue(PropertyHolder.ASCENDING_RAIL_SHAPE));
@@ -209,7 +208,6 @@ public class FramedRailSlopeBlock extends BaseRailBlock implements IFramedBlock,
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     protected BlockState mirror(BlockState state, Mirror mirror)
     {
         if (mirror == Mirror.NONE) { return state; }

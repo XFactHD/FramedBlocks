@@ -42,7 +42,6 @@ public class FramedCheckeredPanelSegmentBlock extends FramedBlock
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     protected BlockState rotate(BlockState state, Rotation rot)
     {
         if (rot != Rotation.CLOCKWISE_180)
@@ -54,7 +53,6 @@ public class FramedCheckeredPanelSegmentBlock extends FramedBlock
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     protected BlockState mirror(BlockState state, Mirror mirror)
     {
         return Utils.mirrorFaceBlock(state, mirror).cycle(PropertyHolder.SECOND);

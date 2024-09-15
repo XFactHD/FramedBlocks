@@ -39,7 +39,6 @@ public class FramedCheckeredCubeSegmentBlock extends FramedBlock
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     protected BlockState rotate(BlockState state, Rotation rot)
     {
         if (rot != Rotation.NONE && rot != Rotation.CLOCKWISE_180)
@@ -50,7 +49,6 @@ public class FramedCheckeredCubeSegmentBlock extends FramedBlock
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     protected BlockState mirror(BlockState state, Mirror mirror)
     {
         if (mirror != Mirror.NONE)

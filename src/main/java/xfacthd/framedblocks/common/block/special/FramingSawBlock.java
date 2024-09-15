@@ -87,7 +87,6 @@ public class FramingSawBlock extends Block
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     protected BlockState rotate(BlockState state, Rotation rotation)
     {
         Direction dir = rotation.rotate(state.getValue(FramedProperties.FACING_HOR));

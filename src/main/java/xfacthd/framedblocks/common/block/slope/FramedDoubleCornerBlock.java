@@ -65,7 +65,6 @@ public class FramedDoubleCornerBlock extends AbstractFramedDoubleBlock
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     protected BlockState rotate(BlockState state, Rotation rot)
     {
         Direction dir = state.getValue(FramedProperties.FACING_HOR);
@@ -73,7 +72,6 @@ public class FramedDoubleCornerBlock extends AbstractFramedDoubleBlock
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     protected BlockState mirror(BlockState state, Mirror mirror)
     {
         CornerType type = state.getValue(PropertyHolder.CORNER_TYPE);

@@ -58,7 +58,6 @@ public class FramedMiniCubeBlock extends FramedBlock
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     protected BlockState rotate(BlockState state, Rotation rotation)
     {
         int rot = state.getValue(BlockStateProperties.ROTATION_16);
@@ -66,7 +65,6 @@ public class FramedMiniCubeBlock extends FramedBlock
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     protected BlockState mirror(BlockState state, Mirror mirror)
     {
         int rot = state.getValue(BlockStateProperties.ROTATION_16);

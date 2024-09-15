@@ -120,7 +120,6 @@ public class FramedWallHangingSignBlock extends AbstractFramedHangingSignBlock
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     protected BlockState rotate(BlockState state, Rotation rot)
     {
         return state.setValue(FramedProperties.FACING_HOR, rot.rotate(state.getValue(FramedProperties.FACING_HOR)));

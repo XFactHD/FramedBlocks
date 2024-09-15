@@ -154,7 +154,6 @@ public class FramedCeilingHangingSignBlock extends AbstractFramedHangingSignBloc
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     protected BlockState rotate(BlockState state, Rotation rot)
     {
         int rotation = state.getValue(BlockStateProperties.ROTATION_16);
@@ -162,7 +161,6 @@ public class FramedCeilingHangingSignBlock extends AbstractFramedHangingSignBloc
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     protected BlockState mirror(BlockState state, Mirror mirror)
     {
         int rotation = state.getValue(BlockStateProperties.ROTATION_16);

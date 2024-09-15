@@ -98,7 +98,6 @@ public class FramedWallSignBlock extends AbstractFramedSignBlock
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     protected BlockState rotate(BlockState state, Rotation rot)
     {
         Direction dir = state.getValue(FramedProperties.FACING_HOR);

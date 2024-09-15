@@ -78,7 +78,6 @@ public class FramedPrismBlock extends FramedBlock implements IFramedPrismBlock
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     protected BlockState rotate(BlockState state, Rotation rot)
     {
         DirectionAxis dirAxis = state.getValue(PropertyHolder.FACING_AXIS);
@@ -86,7 +85,6 @@ public class FramedPrismBlock extends FramedBlock implements IFramedPrismBlock
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     protected BlockState mirror(BlockState state, Mirror mirror)
     {
         DirectionAxis dirAxis = state.getValue(PropertyHolder.FACING_AXIS);

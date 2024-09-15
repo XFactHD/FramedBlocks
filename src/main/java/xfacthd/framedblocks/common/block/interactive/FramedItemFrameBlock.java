@@ -178,7 +178,6 @@ public class FramedItemFrameBlock extends FramedBlock
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     protected BlockState rotate(BlockState state, Rotation rot)
     {
         Direction dir = state.getValue(BlockStateProperties.FACING);
@@ -186,7 +185,6 @@ public class FramedItemFrameBlock extends FramedBlock
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     protected BlockState mirror(BlockState state, Mirror mirror)
     {
         return Utils.mirrorFaceBlock(state, BlockStateProperties.FACING, mirror);

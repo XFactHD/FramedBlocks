@@ -48,7 +48,6 @@ public class FramedPillarBlock extends FramedBlock
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     protected BlockState rotate(BlockState state, Rotation rot)
     {
         Direction.Axis axis = state.getValue(BlockStateProperties.AXIS);

@@ -16,6 +16,7 @@ import net.minecraft.world.level.block.state.properties.*;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.BlockHitResult;
+import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.model.wrapping.WrapHelper;
@@ -23,7 +24,6 @@ import xfacthd.framedblocks.api.model.wrapping.statemerger.StateMerger;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.data.BlockType;
 
-import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Set;
 
@@ -97,7 +97,6 @@ public class FramedButtonBlock extends ButtonBlock implements IFramedBlock
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     public BlockState rotate(BlockState state, Direction face, Rotation rot)
     {
         if (state.getValue(FACE) != AttachFace.WALL)
