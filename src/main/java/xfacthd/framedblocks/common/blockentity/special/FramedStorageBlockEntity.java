@@ -15,9 +15,11 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.items.*;
+import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
+import xfacthd.framedblocks.common.capability.StorageBlockItemStackHandler;
 import xfacthd.framedblocks.common.menu.FramedStorageMenu;
 
 import java.util.ArrayList;
@@ -26,15 +28,9 @@ import java.util.List;
 public class FramedStorageBlockEntity extends FramedBlockEntity implements MenuProvider, Nameable, Clearable
 {
     public static final Component TITLE = Utils.translate("title", "framed_secret_storage");
+    private static final int SLOTS = 9 * 4;
 
-    private final ItemStackHandler itemHandler = new ItemStackHandler(9 * 4)
-    {
-        @Override
-        protected void onContentsChanged(int slot)
-        {
-            FramedStorageBlockEntity.this.setChanged();
-        }
-    };
+    private final StorageBlockItemStackHandler itemHandler = createItemHandler(this);
     private Component customName = null;
 
     public FramedStorageBlockEntity(BlockPos pos, BlockState state)
@@ -150,8 +146,6 @@ public class FramedStorageBlockEntity extends FramedBlockEntity implements MenuP
         }
     }
 
-
-
     protected Component getDefaultName()
     {
         return TITLE;
@@ -166,6 +160,13 @@ public class FramedStorageBlockEntity extends FramedBlockEntity implements MenuP
     @Override
     public AbstractContainerMenu createMenu(int windowId, Inventory inv, Player player)
     {
-        return new FramedStorageMenu(windowId, inv, this);
+        return new FramedStorageMenu(windowId, inv, itemHandler);
+    }
+
+
+
+    public static StorageBlockItemStackHandler createItemHandler(@Nullable FramedStorageBlockEntity be)
+    {
+        return new StorageBlockItemStackHandler(be, SLOTS);
     }
 }

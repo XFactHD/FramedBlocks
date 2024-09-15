@@ -43,7 +43,7 @@ public class FramedStorageBlock extends FramedBlock
             return result;
         }
 
-        if (!level.isClientSide())
+        if (!level.isClientSide() && canOpenAt(level, pos))
         {
             if (level.getBlockEntity(pos) instanceof FramedStorageBlockEntity be)
             {
@@ -51,6 +51,11 @@ public class FramedStorageBlock extends FramedBlock
             }
         }
         return InteractionResult.sidedSuccess(level.isClientSide());
+    }
+
+    protected boolean canOpenAt(Level level, BlockPos pos)
+    {
+        return true;
     }
 
     @Override

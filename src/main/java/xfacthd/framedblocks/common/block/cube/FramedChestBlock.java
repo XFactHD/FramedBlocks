@@ -2,6 +2,7 @@ package xfacthd.framedblocks.common.block.cube;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -11,6 +12,7 @@ import net.minecraft.world.level.block.entity.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.PlacementStateBuilder;
 import xfacthd.framedblocks.api.util.Utils;
@@ -19,8 +21,6 @@ import xfacthd.framedblocks.common.blockentity.special.FramedChestBlockEntity;
 import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.common.data.property.ChestState;
 import xfacthd.framedblocks.common.util.FramedUtils;
-
-import javax.annotation.Nullable;
 
 public class FramedChestBlock extends FramedStorageBlock
 {
@@ -47,6 +47,12 @@ public class FramedChestBlock extends FramedStorageBlock
                 .withHorizontalFacing(true)
                 .withWater()
                 .build();
+    }
+
+    @Override
+    protected boolean canOpenAt(Level level, BlockPos pos)
+    {
+        return !ChestBlock.isChestBlockedAt(level, pos);
     }
 
     @Override
@@ -81,9 +87,30 @@ public class FramedChestBlock extends FramedStorageBlock
     }
 
     @Override
+    protected int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos)
+    {
+        if (ChestBlock.isChestBlockedAt(level, pos))
+        {
+            return 0;
+        }
+        return super.getAnalogOutputSignal(state, level, pos);
+    }
+
+    @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
     {
         return new FramedChestBlockEntity(pos, state);
+    }
+
+    @Override
+    @Nullable
+    protected MenuProvider getMenuProvider(BlockState state, Level level, BlockPos pos)
+    {
+        if (level.getBlockEntity(pos) instanceof FramedChestBlockEntity be)
+        {
+            return be;
+        }
+        return null;
     }
 
     @Nullable

@@ -1,57 +1,44 @@
 package xfacthd.framedblocks.common.menu;
 
-import com.google.common.base.Preconditions;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.neoforge.items.*;
 import xfacthd.framedblocks.common.FBContent;
-import xfacthd.framedblocks.common.blockentity.special.FramedChestBlockEntity;
 import xfacthd.framedblocks.common.blockentity.special.FramedStorageBlockEntity;
+import xfacthd.framedblocks.common.capability.StorageBlockItemStackHandler;
 import xfacthd.framedblocks.common.util.FramedUtils;
 
 public class FramedStorageMenu extends AbstractContainerMenu
 {
     private static final int MAX_SLOT_CHEST = 27;
-    private final FramedStorageBlockEntity blockEntity;
+    private final StorageBlockItemStackHandler itemHandler;
 
-    public FramedStorageMenu(int windowId, Inventory inv, BlockEntity blockEntity)
+    public FramedStorageMenu(int windowId, Inventory inv, StorageBlockItemStackHandler itemHandler)
     {
         super(FBContent.MENU_TYPE_FRAMED_STORAGE.value(), windowId);
-
-        Preconditions.checkArgument(blockEntity instanceof FramedStorageBlockEntity);
-        this.blockEntity = (FramedStorageBlockEntity) blockEntity;
-
-        IItemHandler blockInv = this.blockEntity.getItemHandler();
-        //noinspection ConstantConditions
-        if (this.blockEntity.getLevel().isClientSide())
-        {
-            blockInv = new ItemStackHandler(blockInv.getSlots());
-        }
-
+        this.itemHandler = itemHandler;
         for (int row = 0; row < 3; ++row)
         {
             for (int col = 0; col < 9; ++col)
             {
-                addSlot(new SlotItemHandler(blockInv, col + row * 9, 8 + col * 18, 18 + row * 18));
+                addSlot(new SlotItemHandler(itemHandler, col + row * 9, 8 + col * 18, 18 + row * 18));
             }
         }
         FramedUtils.addPlayerInvSlots(this::addSlot, inv, 8, 85);
     }
 
-    public FramedStorageMenu(int windowId, Inventory inv, FriendlyByteBuf extraData)
+    public FramedStorageMenu(int windowId, Inventory inv)
     {
-        this(windowId, inv, inv.player.level().getBlockEntity(extraData.readBlockPos()));
+        this(windowId, inv, FramedStorageBlockEntity.createItemHandler(null));
     }
 
     @Override
     public boolean stillValid(Player player)
     {
-        return blockEntity.isUsableByPlayer(player);
+        return itemHandler.stillValid(player);
     }
 
     @Override
@@ -92,11 +79,6 @@ public class FramedStorageMenu extends AbstractContainerMenu
     public void removed(Player player)
     {
         super.removed(player);
-
-        //noinspection ConstantConditions
-        if (!blockEntity.getLevel().isClientSide() && blockEntity instanceof FramedChestBlockEntity chest)
-        {
-            chest.close();
-        }
+        itemHandler.close();
     }
 }

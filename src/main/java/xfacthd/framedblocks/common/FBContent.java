@@ -10,6 +10,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.*;
@@ -591,7 +592,7 @@ public final class FBContent
     // endregion
 
     // region MenuTypes
-    public static final DeferredHolder<MenuType<?>, MenuType<FramedStorageMenu>> MENU_TYPE_FRAMED_STORAGE = registerMenuType(
+    public static final DeferredHolder<MenuType<?>, MenuType<FramedStorageMenu>> MENU_TYPE_FRAMED_STORAGE = registerSimpleMenuType(
             FramedStorageMenu::new,
             "framed_chest"
     );
@@ -834,6 +835,13 @@ public final class FBContent
             FRAMED_BLOCK_ENTITIES.add((DeferredBlockEntity<? extends FramedBlockEntity>) result);
         }
         return result;
+    }
+
+    private static <T extends AbstractContainerMenu> DeferredHolder<MenuType<?>, MenuType<T>> registerSimpleMenuType(
+            MenuType.MenuSupplier<T> factory, String name
+    )
+    {
+        return CONTAINER_TYPES.register(name, () -> new MenuType<>(factory, FeatureFlags.VANILLA_SET));
     }
 
     private static <T extends AbstractContainerMenu> DeferredHolder<MenuType<?>, MenuType<T>> registerMenuType(
