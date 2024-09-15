@@ -2,37 +2,61 @@ package xfacthd.framedblocks.common.menu;
 
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.items.*;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.blockentity.special.FramedStorageBlockEntity;
-import xfacthd.framedblocks.common.capability.StorageBlockItemStackHandler;
+import xfacthd.framedblocks.common.capability.IStorageBlockItemHandler;
 import xfacthd.framedblocks.common.util.FramedUtils;
 
 public class FramedStorageMenu extends AbstractContainerMenu
 {
-    private static final int MAX_SLOT_CHEST = 27;
-    private final StorageBlockItemStackHandler itemHandler;
+    private final IStorageBlockItemHandler itemHandler;
+    private final int maxSlotChest;
 
-    public FramedStorageMenu(int windowId, Inventory inv, StorageBlockItemStackHandler itemHandler)
+    public static FramedStorageMenu createSingle(int windowId, Inventory inv, IStorageBlockItemHandler itemHandler)
     {
-        super(FBContent.MENU_TYPE_FRAMED_STORAGE.value(), windowId);
+        return new FramedStorageMenu(FBContent.MENU_TYPE_FRAMED_STORAGE.value(), windowId, inv, itemHandler);
+    }
+
+    public static FramedStorageMenu createDouble(int windowId, Inventory inv, IStorageBlockItemHandler itemHandler)
+    {
+        return new FramedStorageMenu(FBContent.MENU_TYPE_FRAMED_DOUBLE_CHEST.value(), windowId, inv, itemHandler);
+    }
+
+    public static FramedStorageMenu createSingle(int windowId, Inventory inv)
+    {
+        return createSingle(windowId, inv, FramedStorageBlockEntity.createItemHandler(null, false));
+    }
+
+    public static FramedStorageMenu createDouble(int windowId, Inventory inv)
+    {
+        return createDouble(windowId, inv, FramedStorageBlockEntity.createItemHandler(null, true));
+    }
+
+    private FramedStorageMenu(MenuType<?> type, int windowId, Inventory inv, IStorageBlockItemHandler itemHandler)
+    {
+        super(type, windowId);
         this.itemHandler = itemHandler;
-        for (int row = 0; row < 3; ++row)
+        this.maxSlotChest = itemHandler.getSlots();
+
+        int rows = getRowCount();
+        int y = 18;
+        for (int row = 0; row < rows; ++row)
         {
             for (int col = 0; col < 9; ++col)
             {
-                addSlot(new SlotItemHandler(itemHandler, col + row * 9, 8 + col * 18, 18 + row * 18));
+                addSlot(new SlotItemHandler(itemHandler, col + row * 9, 8 + col * 18, y));
             }
+            y += 18;
         }
-        FramedUtils.addPlayerInvSlots(this::addSlot, inv, 8, 85);
+        FramedUtils.addPlayerInvSlots(this::addSlot, inv, 8, y + 13);
     }
 
-    public FramedStorageMenu(int windowId, Inventory inv)
+    public int getRowCount()
     {
-        this(windowId, inv, FramedStorageBlockEntity.createItemHandler(null));
+        return itemHandler.getSlots() / 9;
     }
 
     @Override
@@ -50,14 +74,14 @@ public class FramedStorageMenu extends AbstractContainerMenu
         {
             ItemStack stack = slot.getItem();
             remainder = stack.copy();
-            if (index < MAX_SLOT_CHEST)
+            if (index < maxSlotChest)
             {
-                if (!moveItemStackTo(stack, MAX_SLOT_CHEST, slots.size(), true))
+                if (!moveItemStackTo(stack, maxSlotChest, slots.size(), true))
                 {
                     return ItemStack.EMPTY;
                 }
             }
-            else if (!moveItemStackTo(stack, 0, MAX_SLOT_CHEST, false))
+            else if (!moveItemStackTo(stack, 0, maxSlotChest, false))
             {
                 return ItemStack.EMPTY;
             }

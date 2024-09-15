@@ -1,9 +1,7 @@
 package xfacthd.framedblocks.common.blockentity.special;
 
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
+import net.minecraft.core.*;
+import net.minecraft.nbt.*;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
@@ -14,11 +12,11 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.items.*;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
+import xfacthd.framedblocks.common.capability.IStorageBlockItemHandler;
 import xfacthd.framedblocks.common.capability.StorageBlockItemStackHandler;
 import xfacthd.framedblocks.common.menu.FramedStorageMenu;
 
@@ -28,9 +26,11 @@ import java.util.List;
 public class FramedStorageBlockEntity extends FramedBlockEntity implements MenuProvider, Nameable, Clearable
 {
     public static final Component TITLE = Utils.translate("title", "framed_secret_storage");
-    private static final int SLOTS = 9 * 4;
+    public static final int SLOTS = 9 * 3;
 
-    private final StorageBlockItemStackHandler itemHandler = createItemHandler(this);
+    private final StorageBlockItemStackHandler itemHandler = createItemHandler(this, false);
+    // TODO 1.21.2: remove overflow handling
+    private List<ItemStack> overflow = null;
     private Component customName = null;
 
     public FramedStorageBlockEntity(BlockPos pos, BlockState state)
@@ -45,7 +45,7 @@ public class FramedStorageBlockEntity extends FramedBlockEntity implements MenuP
 
     public void open(ServerPlayer player)
     {
-        player.openMenu(this, worldPosition);
+        player.openMenu(this);
     }
 
     public boolean isUsableByPlayer(Player player)
@@ -68,6 +68,10 @@ public class FramedStorageBlockEntity extends FramedBlockEntity implements MenuP
                 drops.add(stack);
             }
         }
+        if (overflow != null)
+        {
+            drops.addAll(overflow);
+        }
         return drops;
     }
 
@@ -78,9 +82,15 @@ public class FramedStorageBlockEntity extends FramedBlockEntity implements MenuP
         {
             itemHandler.setStackInSlot(i, ItemStack.EMPTY);
         }
+        overflow = null;
     }
 
     public int getAnalogOutputSignal()
+    {
+        return getAnalogOutputSignal(itemHandler);
+    }
+
+    protected static int getAnalogOutputSignal(IStorageBlockItemHandler itemHandler)
     {
         int stacks = 0;
         float fullness = 0;
@@ -101,7 +111,7 @@ public class FramedStorageBlockEntity extends FramedBlockEntity implements MenuP
         return Mth.floor(fullness * 14F) + (stacks > 0 ? 1 : 0);
     }
 
-    public IItemHandler getItemHandler()
+    public IStorageBlockItemHandler getItemHandler()
     {
         return itemHandler;
     }
@@ -132,6 +142,7 @@ public class FramedStorageBlockEntity extends FramedBlockEntity implements MenuP
         {
             nbt.putString("custom_name", Component.Serializer.toJson(customName, provider));
         }
+        saveOverflow(nbt, provider);
         super.saveAdditional(nbt, provider);
     }
 
@@ -140,9 +151,65 @@ public class FramedStorageBlockEntity extends FramedBlockEntity implements MenuP
     {
         super.loadAdditional(nbt, provider);
         itemHandler.deserializeNBT(provider, nbt.getCompound("inventory"));
+        separateOverflow();
+        loadOverflow(nbt, provider);
         if (nbt.contains("custom_name", Tag.TAG_STRING))
         {
             customName = Component.Serializer.fromJson(nbt.getString("custom_name"), provider);
+        }
+    }
+
+    private void separateOverflow()
+    {
+        if (itemHandler.getSlots() > SLOTS)
+        {
+            List<ItemStack> stacks = itemHandler.getBackingList();
+            overflow = NonNullList.withSize(stacks.size() - SLOTS, ItemStack.EMPTY);
+            for (int i = SLOTS; i < stacks.size(); i++)
+            {
+                overflow.set(i - SLOTS, stacks.get(i));
+            }
+            itemHandler.setSize(SLOTS);
+            for (int i = 0; i < SLOTS; i++)
+            {
+                itemHandler.setStackInSlot(i, stacks.get(i));
+            }
+        }
+    }
+
+    private void loadOverflow(CompoundTag nbt, HolderLookup.Provider provider)
+    {
+        if (nbt.contains("overflow"))
+        {
+            ListTag stackList = nbt.getList("overflow", Tag.TAG_COMPOUND);
+            overflow = NonNullList.withSize(stackList.size(), ItemStack.EMPTY);
+            for (int i = 0; i < stackList.size(); i++)
+            {
+                CompoundTag itemTag = stackList.getCompound(i);
+                int slot = itemTag.getInt("Slot");
+                if (slot >= 0 && slot < overflow.size())
+                {
+                    ItemStack.parse(provider, itemTag).ifPresent(stack -> overflow.set(slot, stack));
+                }
+            }
+        }
+    }
+
+    private void saveOverflow(CompoundTag nbt, HolderLookup.Provider provider)
+    {
+        if (overflow != null)
+        {
+            ListTag stackList = new ListTag();
+            for (int i = 0; i < overflow.size(); i++)
+            {
+                if (!overflow.get(i).isEmpty())
+                {
+                    CompoundTag itemTag = new CompoundTag();
+                    itemTag.putInt("Slot", i);
+                    stackList.add(overflow.get(i).save(provider, itemTag));
+                }
+            }
+            nbt.put("overflow", stackList);
         }
     }
 
@@ -160,13 +227,13 @@ public class FramedStorageBlockEntity extends FramedBlockEntity implements MenuP
     @Override
     public AbstractContainerMenu createMenu(int windowId, Inventory inv, Player player)
     {
-        return new FramedStorageMenu(windowId, inv, itemHandler);
+        return FramedStorageMenu.createSingle(windowId, inv, itemHandler);
     }
 
 
 
-    public static StorageBlockItemStackHandler createItemHandler(@Nullable FramedStorageBlockEntity be)
+    public static StorageBlockItemStackHandler createItemHandler(@Nullable FramedStorageBlockEntity be, boolean doubleChest)
     {
-        return new StorageBlockItemStackHandler(be, SLOTS);
+        return new StorageBlockItemStackHandler(be, SLOTS * (doubleChest ? 2 : 1));
     }
 }

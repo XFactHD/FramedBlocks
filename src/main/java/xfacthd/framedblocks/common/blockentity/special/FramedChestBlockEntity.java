@@ -1,14 +1,22 @@
 package xfacthd.framedblocks.common.blockentity.special;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
+import net.minecraft.sounds.*;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.ChestType;
+import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
+import xfacthd.framedblocks.common.block.cube.FramedChestBlock;
+import xfacthd.framedblocks.common.capability.IStorageBlockItemHandler;
 import xfacthd.framedblocks.common.data.property.ChestState;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 
@@ -40,15 +48,22 @@ public class FramedChestBlockEntity extends FramedStorageBlockEntity
     @Override
     public void open(ServerPlayer player)
     {
+        IStorageBlockItemHandler handler = getChestItemHandler(false);
+        if (handler != null)
+        {
+            handler.open();
+            super.open(player);
+        }
+    }
+
+    public void doOpen()
+    {
+        openCount++;
         if (getBlockState().getValue(PropertyHolder.CHEST_STATE) != ChestState.OPENING)
         {
             level().setBlockAndUpdate(worldPosition, getBlockState().setValue(PropertyHolder.CHEST_STATE, ChestState.OPENING));
-            level().playSound(null, worldPosition, SoundEvents.CHEST_OPEN, SoundSource.BLOCKS, 0.5F, level().random.nextFloat() * 0.1F + 0.9F);
+            playSound(level(), worldPosition, getBlockState(), SoundEvents.CHEST_OPEN);
         }
-
-        openCount++;
-
-        super.open(player);
     }
 
     public void close()
@@ -58,11 +73,30 @@ public class FramedChestBlockEntity extends FramedStorageBlockEntity
             openCount--;
             if (openCount == 0)
             {
-                level().playSound(null, worldPosition, SoundEvents.CHEST_CLOSE, SoundSource.BLOCKS, 0.5F, level().random.nextFloat() * 0.1F + 0.9F);
+                playSound(level(), worldPosition, getBlockState(), SoundEvents.CHEST_CLOSE);
                 level().setBlockAndUpdate(worldPosition, getBlockState().setValue(PropertyHolder.CHEST_STATE, ChestState.CLOSING));
 
                 closeStart = level().getGameTime();
             }
+        }
+    }
+
+    private static void playSound(Level level, BlockPos pos, BlockState state, SoundEvent sound)
+    {
+        ChestType type = state.getValue(BlockStateProperties.CHEST_TYPE);
+        if (type != ChestType.LEFT)
+        {
+            double x = (double)pos.getX() + 0.5;
+            double y = (double)pos.getY() + 0.5;
+            double z = (double)pos.getZ() + 0.5;
+            if (type == ChestType.RIGHT)
+            {
+                Direction side = FramedChestBlock.getConnectionDirection(state);
+                x += (double) side.getStepX() * 0.5;
+                z += (double) side.getStepZ() * 0.5;
+            }
+
+            level.playSound(null, x, y, z, sound, SoundSource.BLOCKS, 0.5F, level.random.nextFloat() * 0.1F + 0.9F);
         }
     }
 
@@ -84,9 +118,39 @@ public class FramedChestBlockEntity extends FramedStorageBlockEntity
         return lastChangeTime;
     }
 
+    public IStorageBlockItemHandler getChestItemHandler(boolean override)
+    {
+        return FramedChestBlock.combine(this, override).apply(FramedChestBlock.CHEST_COMBINER).orElse(null);
+    }
+
+    @Override
+    public int getAnalogOutputSignal()
+    {
+        return getAnalogOutputSignal(getChestItemHandler(false));
+    }
+
     @Override
     protected Component getDefaultName()
     {
         return TITLE;
+    }
+
+    @Override
+    public AbstractContainerMenu createMenu(int windowId, Inventory inv, Player player)
+    {
+        IStorageBlockItemHandler handler = getChestItemHandler(false);
+        return handler == null ? null : handler.createMenu(windowId, inv);
+    }
+
+    @Override
+    public void setBlockState(BlockState state)
+    {
+        BlockState oldState = getBlockState();
+        super.setBlockState(state);
+        if (state.getValue(FramedProperties.FACING_HOR) != oldState.getValue(FramedProperties.FACING_HOR) ||
+            state.getValue(BlockStateProperties.CHEST_TYPE) != oldState.getValue(BlockStateProperties.CHEST_TYPE))
+        {
+            invalidateCapabilities();
+        }
     }
 }

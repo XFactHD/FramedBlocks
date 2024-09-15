@@ -126,7 +126,7 @@ public final class ConnectionPredicates extends BlockTypeMap<ConnectionPredicate
         put(BlockType.FRAMED_CORNER_STRIP, new CornerStripConnectionPredicate());
         put(BlockType.FRAMED_LATTICE_BLOCK, LatticeConnectionPredicate.INSTANCE);
         put(BlockType.FRAMED_THICK_LATTICE, LatticeConnectionPredicate.INSTANCE);
-        put(BlockType.FRAMED_CHEST, ConnectionPredicate.FALSE);
+        put(BlockType.FRAMED_CHEST, new ChestConnectionPredicate());
         put(BlockType.FRAMED_SECRET_STORAGE, ConnectionPredicate.FULL_EDGE);
         put(BlockType.FRAMED_TANK, ConnectionPredicate.FULL_FACE);
         put(BlockType.FRAMED_BARS, ConnectionPredicate.FALSE);

@@ -20,7 +20,7 @@ public final class CapabilitySetup
         event.registerBlockEntity(
                 Capabilities.ItemHandler.BLOCK,
                 FBContent.BE_TYPE_FRAMED_CHEST.value(),
-                (be, side) -> be.getItemHandler()
+                (be, side) -> be.getChestItemHandler(true)
         );
 
         event.registerBlockEntity(

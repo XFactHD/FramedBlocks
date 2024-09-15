@@ -13,12 +13,16 @@ public class FramedStorageScreen extends AbstractContainerScreen<FramedStorageMe
 {
     private static final ResourceLocation CHEST_GUI_TEXTURE = Utils.rl("minecraft", "textures/gui/container/generic_54.png");
 
-    public FramedStorageScreen(FramedStorageMenu container, Inventory inv, Component title)
-    {
-        super(container, inv, title);
+    private final int invHeight;
 
-        this.imageHeight = 168;
-        this.inventoryLabelY = getYSize() - 94;
+    public FramedStorageScreen(FramedStorageMenu menu, Inventory inv, Component title)
+    {
+        super(menu, inv, title);
+
+        int rows = menu.getRowCount();
+        this.imageHeight = 114 + rows * 18;
+        this.inventoryLabelY = imageHeight - 94;
+        this.invHeight = rows * 18 + 17;
     }
 
     @Override
@@ -36,7 +40,7 @@ public class FramedStorageScreen extends AbstractContainerScreen<FramedStorageMe
         int left = (this.width - this.imageWidth) / 2;
         int top = (this.height - this.imageHeight) / 2;
 
-        graphics.blit(CHEST_GUI_TEXTURE, left, top, 0, 0, imageWidth, 71);
-        graphics.blit(CHEST_GUI_TEXTURE, left, top + 71, 0, 126, imageWidth, 96);
+        graphics.blit(CHEST_GUI_TEXTURE, left, top, 0, 0, imageWidth, invHeight);
+        graphics.blit(CHEST_GUI_TEXTURE, left, top + invHeight, 0, 126, imageWidth, 96);
     }
 }

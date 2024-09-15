@@ -36,13 +36,7 @@ public class FramedStorageBlock extends FramedBlock
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit)
     {
-        InteractionResult result = super.useWithoutItem(state, level, pos, player, hit);
-        if (result != InteractionResult.PASS)
-        {
-            return result;
-        }
-
-        if (!level.isClientSide() && canOpenAt(level, pos))
+        if (!level.isClientSide())
         {
             if (level.getBlockEntity(pos) instanceof FramedStorageBlockEntity be)
             {
@@ -50,11 +44,6 @@ public class FramedStorageBlock extends FramedBlock
             }
         }
         return InteractionResult.sidedSuccess(level.isClientSide());
-    }
-
-    protected boolean canOpenAt(Level level, BlockPos pos)
-    {
-        return true;
     }
 
     @Override

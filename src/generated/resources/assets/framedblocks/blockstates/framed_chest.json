@@ -1,47 +1,137 @@
 {
   "variants": {
-    "facing=east,state=closed": {
+    "facing=east,state=closed,type=left": {
+      "model": "framedblocks:block/framed_chest_left",
+      "y": 90
+    },
+    "facing=east,state=closed,type=right": {
+      "model": "framedblocks:block/framed_chest_right",
+      "y": 90
+    },
+    "facing=east,state=closed,type=single": {
       "model": "framedblocks:block/framed_chest",
       "y": 90
     },
-    "facing=east,state=closing": {
+    "facing=east,state=closing,type=left": {
+      "model": "framedblocks:block/framed_chest_left",
+      "y": 90
+    },
+    "facing=east,state=closing,type=right": {
+      "model": "framedblocks:block/framed_chest_right",
+      "y": 90
+    },
+    "facing=east,state=closing,type=single": {
       "model": "framedblocks:block/framed_chest",
       "y": 90
     },
-    "facing=east,state=opening": {
+    "facing=east,state=opening,type=left": {
+      "model": "framedblocks:block/framed_chest_left",
+      "y": 90
+    },
+    "facing=east,state=opening,type=right": {
+      "model": "framedblocks:block/framed_chest_right",
+      "y": 90
+    },
+    "facing=east,state=opening,type=single": {
       "model": "framedblocks:block/framed_chest",
       "y": 90
     },
-    "facing=north,state=closed": {
+    "facing=north,state=closed,type=left": {
+      "model": "framedblocks:block/framed_chest_left"
+    },
+    "facing=north,state=closed,type=right": {
+      "model": "framedblocks:block/framed_chest_right"
+    },
+    "facing=north,state=closed,type=single": {
       "model": "framedblocks:block/framed_chest"
     },
-    "facing=north,state=closing": {
+    "facing=north,state=closing,type=left": {
+      "model": "framedblocks:block/framed_chest_left"
+    },
+    "facing=north,state=closing,type=right": {
+      "model": "framedblocks:block/framed_chest_right"
+    },
+    "facing=north,state=closing,type=single": {
       "model": "framedblocks:block/framed_chest"
     },
-    "facing=north,state=opening": {
+    "facing=north,state=opening,type=left": {
+      "model": "framedblocks:block/framed_chest_left"
+    },
+    "facing=north,state=opening,type=right": {
+      "model": "framedblocks:block/framed_chest_right"
+    },
+    "facing=north,state=opening,type=single": {
       "model": "framedblocks:block/framed_chest"
     },
-    "facing=south,state=closed": {
+    "facing=south,state=closed,type=left": {
+      "model": "framedblocks:block/framed_chest_left",
+      "y": 180
+    },
+    "facing=south,state=closed,type=right": {
+      "model": "framedblocks:block/framed_chest_right",
+      "y": 180
+    },
+    "facing=south,state=closed,type=single": {
       "model": "framedblocks:block/framed_chest",
       "y": 180
     },
-    "facing=south,state=closing": {
+    "facing=south,state=closing,type=left": {
+      "model": "framedblocks:block/framed_chest_left",
+      "y": 180
+    },
+    "facing=south,state=closing,type=right": {
+      "model": "framedblocks:block/framed_chest_right",
+      "y": 180
+    },
+    "facing=south,state=closing,type=single": {
       "model": "framedblocks:block/framed_chest",
       "y": 180
     },
-    "facing=south,state=opening": {
+    "facing=south,state=opening,type=left": {
+      "model": "framedblocks:block/framed_chest_left",
+      "y": 180
+    },
+    "facing=south,state=opening,type=right": {
+      "model": "framedblocks:block/framed_chest_right",
+      "y": 180
+    },
+    "facing=south,state=opening,type=single": {
       "model": "framedblocks:block/framed_chest",
       "y": 180
     },
-    "facing=west,state=closed": {
+    "facing=west,state=closed,type=left": {
+      "model": "framedblocks:block/framed_chest_left",
+      "y": 270
+    },
+    "facing=west,state=closed,type=right": {
+      "model": "framedblocks:block/framed_chest_right",
+      "y": 270
+    },
+    "facing=west,state=closed,type=single": {
       "model": "framedblocks:block/framed_chest",
       "y": 270
     },
-    "facing=west,state=closing": {
+    "facing=west,state=closing,type=left": {
+      "model": "framedblocks:block/framed_chest_left",
+      "y": 270
+    },
+    "facing=west,state=closing,type=right": {
+      "model": "framedblocks:block/framed_chest_right",
+      "y": 270
+    },
+    "facing=west,state=closing,type=single": {
       "model": "framedblocks:block/framed_chest",
       "y": 270
     },
-    "facing=west,state=opening": {
+    "facing=west,state=opening,type=left": {
+      "model": "framedblocks:block/framed_chest_left",
+      "y": 270
+    },
+    "facing=west,state=opening,type=right": {
+      "model": "framedblocks:block/framed_chest_right",
+      "y": 270
+    },
+    "facing=west,state=opening,type=single": {
       "model": "framedblocks:block/framed_chest",
       "y": 270
     }

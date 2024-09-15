@@ -573,12 +573,20 @@ public final class FramedBlockStateProvider extends BlockStateProvider
     private void registerFramedChest()
     {
         ModelFile chest = models().getExistingFile(modLoc("block/framed_chest"));
+        ModelFile chestLeft = models().getExistingFile(modLoc("block/framed_chest_left"));
+        ModelFile chestRight = models().getExistingFile(modLoc("block/framed_chest_right"));
 
         getVariantBuilder(FBContent.BLOCK_FRAMED_CHEST.value()).forAllStatesExcept(state ->
         {
             Direction dir = state.getValue(BlockStateProperties.HORIZONTAL_FACING);
             int rotY = ((int)dir.toYRot() + 180) % 360;
-            return ConfiguredModel.builder().modelFile(chest).rotationY(rotY).build();
+            ModelFile model = switch (state.getValue(BlockStateProperties.CHEST_TYPE))
+            {
+                case SINGLE -> chest;
+                case LEFT -> chestLeft;
+                case RIGHT -> chestRight;
+            };
+            return ConfiguredModel.builder().modelFile(model).rotationY(rotY).build();
         }, BlockStateProperties.WATERLOGGED, PropertyHolder.LATCH_TYPE, FramedProperties.GLOWING, FramedProperties.PROPAGATES_SKYLIGHT);
 
         simpleBlockItem(FBContent.BLOCK_FRAMED_CHEST, chest, "cutout");

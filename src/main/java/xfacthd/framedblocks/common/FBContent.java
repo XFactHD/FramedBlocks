@@ -593,8 +593,12 @@ public final class FBContent
 
     // region MenuTypes
     public static final DeferredHolder<MenuType<?>, MenuType<FramedStorageMenu>> MENU_TYPE_FRAMED_STORAGE = registerSimpleMenuType(
-            FramedStorageMenu::new,
+            FramedStorageMenu::createSingle,
             "framed_chest"
+    );
+    public static final DeferredHolder<MenuType<?>, MenuType<FramedStorageMenu>> MENU_TYPE_FRAMED_DOUBLE_CHEST = registerSimpleMenuType(
+            FramedStorageMenu::createDouble,
+            "framed_double_chest"
     );
     public static final DeferredHolder<MenuType<?>, MenuType<FramingSawMenu>> MENU_TYPE_FRAMING_SAW = registerMenuType(
             (id, inv, buf) -> FramingSawMenu.create(id, inv, ContainerLevelAccess.NULL),

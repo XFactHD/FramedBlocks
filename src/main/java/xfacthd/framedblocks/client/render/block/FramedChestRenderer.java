@@ -1,22 +1,23 @@
 package xfacthd.framedblocks.client.render.block;
 
-import com.google.common.collect.HashBasedTable;
-import com.google.common.collect.Table;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import net.minecraft.client.renderer.block.BlockModelShaper;
-import net.minecraft.client.renderer.block.ModelBlockRenderer;
-import net.minecraft.client.renderer.blockentity.*;
-import net.minecraft.client.resources.model.ModelResourceLocation;
-import net.minecraft.core.BlockPos;
-import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.*;
-import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.renderer.block.BlockModelShaper;
+import net.minecraft.client.renderer.block.ModelBlockRenderer;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.ChestType;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.client.RenderTypeHelper;
@@ -24,21 +25,25 @@ import net.neoforged.neoforge.client.model.data.ModelData;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
 import xfacthd.framedblocks.api.model.wrapping.TextureLookup;
-import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.api.util.ClientUtils;
+import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.client.model.FramedBlockModel;
 import xfacthd.framedblocks.client.model.cube.FramedChestLidGeometry;
 import xfacthd.framedblocks.common.FBContent;
-import xfacthd.framedblocks.common.data.*;
+import xfacthd.framedblocks.common.block.cube.FramedChestBlock;
 import xfacthd.framedblocks.common.blockentity.special.FramedChestBlockEntity;
+import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.property.ChestState;
 import xfacthd.framedblocks.common.data.property.LatchType;
 
-import java.util.*;
+import java.util.Map;
 
 public class FramedChestRenderer implements BlockEntityRenderer<FramedChestBlockEntity>
 {
-    private static final Table<Direction, LatchType, BakedModel> LID_MODELS = HashBasedTable.create(4, 3);
+    private static final int DIRECTIONS = 4;
+    private static final int CHEST_TYPES = ChestType.values().length;
+    private static final int LATCH_TYPES = LatchType.values().length;
+    private static final BakedModel[] LID_MODELS = new BakedModel[DIRECTIONS * CHEST_TYPES * LATCH_TYPES];
     private static final RandomSource RANDOM = RandomSource.create();
 
     @SuppressWarnings("unused")
@@ -56,16 +61,16 @@ public class FramedChestRenderer implements BlockEntityRenderer<FramedChestBlock
     {
         BlockState state = be.getBlockState();
 
-        ChestState chestState = state.getValue(PropertyHolder.CHEST_STATE);
-        if (chestState == ChestState.CLOSED)
-        {
-            return;
-        }
+        var result = FramedChestBlock.combine(be, true);
+        ChestState chestState = result.apply(FramedChestBlock.STATE_COMBINER);
 
         Direction dir = state.getValue(FramedProperties.FACING_HOR);
-        long lastChange = be.getLastChangeTime(chestState);
+        ChestType type = state.getValue(BlockStateProperties.CHEST_TYPE);
+        LatchType latch = state.getValue(PropertyHolder.LATCH_TYPE);
 
-        BakedModel model = LID_MODELS.get(dir, state.getValue(PropertyHolder.LATCH_TYPE));
+        long lastChange = result.apply(FramedChestBlock.OPENNESS_COMBINER).orElse(0L);
+
+        BakedModel model = LID_MODELS[makeModelIndex(dir, type, latch)];
         //noinspection ConstantConditions
         ModelData data = model.getModelData(be.getLevel(), be.getBlockPos(), state, be.getModelData());
 
@@ -145,9 +150,10 @@ public class FramedChestRenderer implements BlockEntityRenderer<FramedChestBlock
     @Override
     public boolean shouldRender(FramedChestBlockEntity be, Vec3 camera)
     {
-        return !ClientUtils.OPTIFINE_LOADED.get() &&
-                be.getBlockState().getValue(PropertyHolder.CHEST_STATE) != ChestState.CLOSED &&
-                BlockEntityRenderer.super.shouldRender(be, camera);
+        if (ClientUtils.OPTIFINE_LOADED.get()) return false;
+
+        ChestState state = FramedChestBlock.combine(be, true).apply(FramedChestBlock.STATE_COMBINER);
+        return state != ChestState.CLOSED && BlockEntityRenderer.super.shouldRender(be, camera);
     }
 
     @Override
@@ -163,22 +169,31 @@ public class FramedChestRenderer implements BlockEntityRenderer<FramedChestBlock
     {
         for (Direction dir : Direction.Plane.HORIZONTAL)
         {
-            for (LatchType latch : LatchType.values())
+            for (ChestType type : ChestType.values())
             {
-                BlockState state = FBContent.BLOCK_FRAMED_CHEST.value().defaultBlockState()
-                        .setValue(FramedProperties.FACING_HOR, dir)
-                        .setValue(PropertyHolder.LATCH_TYPE, latch);
-
-                ModelResourceLocation location = BlockModelShaper.stateToModelLocation(state);
-
-                BakedModel model = registry.get(location);
-                if (model instanceof FramedBlockModel fbModel)
+                for (LatchType latch : LatchType.values())
                 {
-                    model = fbModel.getBaseModel();
+                    BlockState state = FBContent.BLOCK_FRAMED_CHEST.value().defaultBlockState()
+                            .setValue(FramedProperties.FACING_HOR, dir)
+                            .setValue(BlockStateProperties.CHEST_TYPE, type)
+                            .setValue(PropertyHolder.LATCH_TYPE, latch);
+
+                    ModelResourceLocation location = BlockModelShaper.stateToModelLocation(state);
+
+                    BakedModel model = registry.get(location);
+                    if (model instanceof FramedBlockModel fbModel)
+                    {
+                        model = fbModel.getBaseModel();
+                    }
+                    GeometryFactory.Context ctx = new GeometryFactory.Context(state, model, registry::get, TextureLookup.runtime());
+                    LID_MODELS[makeModelIndex(dir, type, latch)] = new FramedBlockModel(ctx, new FramedChestLidGeometry(ctx));
                 }
-                GeometryFactory.Context ctx = new GeometryFactory.Context(state, model, registry::get, TextureLookup.runtime());
-                LID_MODELS.put(dir, latch, new FramedBlockModel(ctx, new FramedChestLidGeometry(ctx)));
             }
         }
+    }
+
+    private static int makeModelIndex(Direction dir, ChestType type, LatchType latch)
+    {
+        return dir.get2DDataValue() + (type.ordinal() * DIRECTIONS) + (latch.ordinal() * DIRECTIONS * CHEST_TYPES);
     }
 }
