@@ -43,11 +43,11 @@ import xfacthd.framedblocks.api.blueprint.AuxBlueprintData;
 import xfacthd.framedblocks.api.camo.*;
 import xfacthd.framedblocks.api.camo.empty.EmptyCamoContainer;
 import xfacthd.framedblocks.api.component.FrameConfig;
-import xfacthd.framedblocks.api.internal.InternalAPI;
 import xfacthd.framedblocks.api.model.data.FramedBlockData;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.api.blueprint.BlueprintData;
+import xfacthd.framedblocks.api.util.registration.DeferredBlockEntity;
 
 import java.util.*;
 
@@ -55,6 +55,9 @@ import java.util.*;
 public class FramedBlockEntity extends BlockEntity
 {
     private static final Logger LOGGER = LogUtils.getLogger();
+    private static final DeferredBlockEntity<FramedBlockEntity> DEFAULT_TYPE = DeferredBlockEntity.createBlockEntity(
+            Utils.rl("framed_tile")
+    );
     public static final Component MSG_BLACKLISTED = Utils.translate("msg", "camo.blacklisted");
     public static final Component MSG_BLOCK_ENTITY = Utils.translate("msg", "camo.block_entity");
     public static final Component MSG_NON_SOLID = Utils.translate("msg", "camo.non_solid");
@@ -79,7 +82,7 @@ public class FramedBlockEntity extends BlockEntity
     @ApiStatus.Internal
     public FramedBlockEntity(BlockPos pos, BlockState state)
     {
-        this(InternalAPI.INSTANCE.getDefaultBlockEntity(), pos, state);
+        this(DEFAULT_TYPE.value(), pos, state);
     }
 
     public FramedBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)

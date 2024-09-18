@@ -3,13 +3,14 @@ package xfacthd.framedblocks.api.datagen.loot.objects;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.*;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import net.neoforged.neoforge.registries.DeferredHolder;
 import xfacthd.framedblocks.api.camo.CamoContainer;
 import xfacthd.framedblocks.api.camo.empty.EmptyCamoContainer;
-import xfacthd.framedblocks.api.internal.InternalAPI;
 import xfacthd.framedblocks.api.util.CamoList;
 import xfacthd.framedblocks.api.util.Utils;
 
@@ -20,6 +21,8 @@ public final class SplitCamoLootFunction extends LootItemConditionalFunction
     public static final MapCodec<SplitCamoLootFunction> MAP_CODEC = RecordCodecBuilder.mapCodec(inst -> commonFields(inst).and(
             Codec.intRange(0, Integer.MAX_VALUE).fieldOf("camo_index").forGetter(func -> func.camoIndex)
     ).apply(inst, SplitCamoLootFunction::new));
+    private static final DeferredHolder<LootItemFunctionType<?>, LootItemFunctionType<SplitCamoLootFunction>> TYPE =
+            DeferredHolder.create(Registries.LOOT_FUNCTION_TYPE, Utils.rl("split_camo"));
 
     private final int camoIndex;
 
@@ -47,7 +50,7 @@ public final class SplitCamoLootFunction extends LootItemConditionalFunction
     @Override
     public LootItemFunctionType<SplitCamoLootFunction> getType()
     {
-        return InternalAPI.INSTANCE.getSplitCamoLootFunctionType();
+        return TYPE.value();
     }
 
 
