@@ -9,21 +9,23 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.neoforged.fml.loading.FMLEnvironment;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.util.Utils;
-import xfacthd.framedblocks.common.block.*;
+import xfacthd.framedblocks.common.block.ExtPlacementStateBuilder;
+import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
-import xfacthd.framedblocks.common.data.property.SlopeType;
 
-// TODO 1.21.2: experiment with a copycat-esque approach for the sloped faces
-public class FramedSlopeEdgeBlock extends FramedBlock implements IComplexSlopeSource
+public class FramedThreewayCornerSlopeEdgeBlock extends FramedBlock
 {
-    public FramedSlopeEdgeBlock()
+    public FramedThreewayCornerSlopeEdgeBlock(BlockType blockType)
     {
-        super(BlockType.FRAMED_SLOPE_EDGE);
+        super(blockType);
         registerDefaultState(defaultBlockState()
+                .setValue(FramedProperties.TOP, false)
+                .setValue(PropertyHolder.RIGHT, false)
                 .setValue(PropertyHolder.ALT_TYPE, false)
                 .setValue(FramedProperties.Y_SLOPE, false)
         );
@@ -34,8 +36,8 @@ public class FramedSlopeEdgeBlock extends FramedBlock implements IComplexSlopeSo
     {
         super.createBlockStateDefinition(builder);
         builder.add(
-                FramedProperties.FACING_HOR, PropertyHolder.SLOPE_TYPE, PropertyHolder.ALT_TYPE,
-                FramedProperties.Y_SLOPE, BlockStateProperties.WATERLOGGED
+                FramedProperties.FACING_HOR, FramedProperties.TOP, PropertyHolder.RIGHT,
+                PropertyHolder.ALT_TYPE, FramedProperties.Y_SLOPE, BlockStateProperties.WATERLOGGED
         );
     }
 
@@ -43,17 +45,9 @@ public class FramedSlopeEdgeBlock extends FramedBlock implements IComplexSlopeSo
     public BlockState getStateForPlacement(BlockPlaceContext ctx)
     {
         return ExtPlacementStateBuilder.of(this, ctx)
-                .withHorizontalFacingAndSlopeType()
-                .withCustom((state, modCtx) ->
-                {
-                    Direction dir = state.getValue(FramedProperties.FACING_HOR);
-                    SlopeType type = state.getValue(PropertyHolder.SLOPE_TYPE);
-                    if (dir != modCtx.getHorizontalDirection() && type == SlopeType.HORIZONTAL)
-                    {
-                        state = state.setValue(FramedProperties.Y_SLOPE, true);
-                    }
-                    return state;
-                })
+                .withHorizontalFacing()
+                .withTop()
+                .withRight()
                 .withWater()
                 .build();
     }
@@ -61,6 +55,11 @@ public class FramedSlopeEdgeBlock extends FramedBlock implements IComplexSlopeSo
     @Override
     public boolean handleBlockLeftClick(BlockState state, Level level, BlockPos pos, Player player)
     {
+        if (!FMLEnvironment.production && player.isShiftKeyDown())
+        {
+            level.setBlockAndUpdate(pos, state.cycle(PropertyHolder.ALT_TYPE));
+            return true;
+        }
         return IFramedBlock.toggleYSlope(state, level, pos, player);
     }
 
@@ -68,14 +67,13 @@ public class FramedSlopeEdgeBlock extends FramedBlock implements IComplexSlopeSo
     public BlockState rotate(BlockState state, Direction face, Rotation rot)
     {
         Direction dir = state.getValue(FramedProperties.FACING_HOR);
-        SlopeType type = state.getValue(PropertyHolder.SLOPE_TYPE);
-        if (Utils.isY(face) || (type != SlopeType.HORIZONTAL && face == dir.getOpposite()))
+        if (Utils.isY(face) || face == dir.getOpposite() || face == dir.getClockWise())
         {
             return state.setValue(FramedProperties.FACING_HOR, rot.rotate(dir));
         }
-        else if (rot != Rotation.NONE && face == dir)
+        else if ((face == dir || face == dir.getCounterClockWise()) && rot != Rotation.NONE)
         {
-            return state.cycle(PropertyHolder.SLOPE_TYPE);
+            return state.cycle(FramedProperties.TOP);
         }
         return state;
     }
@@ -89,14 +87,7 @@ public class FramedSlopeEdgeBlock extends FramedBlock implements IComplexSlopeSo
     @Override
     protected BlockState mirror(BlockState state, Mirror mirror)
     {
-        if (state.getValue(PropertyHolder.SLOPE_TYPE) == SlopeType.HORIZONTAL)
-        {
-            return Utils.mirrorCornerBlock(state, mirror);
-        }
-        else
-        {
-            return Utils.mirrorFaceBlock(state, mirror);
-        }
+        return Utils.mirrorCornerBlock(state, mirror);
     }
 
     @Override
@@ -109,11 +100,5 @@ public class FramedSlopeEdgeBlock extends FramedBlock implements IComplexSlopeSo
     public BlockState getJadeRenderState(BlockState state)
     {
         return getItemModelSource();
-    }
-
-    @Override
-    public boolean isHorizontalSlope(BlockState state)
-    {
-        return state.getValue(PropertyHolder.SLOPE_TYPE) == SlopeType.HORIZONTAL;
     }
 }

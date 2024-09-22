@@ -44,6 +44,12 @@ public final class CornerSlopeEdgeSkipPredicate implements SideSkipPredicate
                 case FRAMED_ELEVATED_CORNER_SLOPE_EDGE -> testAgainstElevatedCornerSlopeEdge(
                         dir, type, alt, adjState, side
                 );
+                case FRAMED_THREEWAY_CORNER_SLOPE_EDGE -> testAgainstThreewayCornerSlopeEdge(
+                        dir, type, alt, adjState, side
+                );
+                case FRAMED_INNER_THREEWAY_CORNER_SLOPE_EDGE -> testAgainstInnerThreewayCornerSlopeEdge(
+                        dir, type, alt, adjState, side
+                );
                 case FRAMED_SLAB_EDGE -> testAgainstSlabEdge(
                         dir, type, alt, adjState, side
                 );
@@ -147,6 +153,32 @@ public final class CornerSlopeEdgeSkipPredicate implements SideSkipPredicate
         CornerType adjType = adjState.getValue(PropertyHolder.CORNER_TYPE);
 
         return getCornerDir(dir, type, alt, side).isEqualTo(ElevatedCornerSlopeEdgeSkipPredicate.getCornerDir(adjDir, adjType, side.getOpposite()));
+    }
+
+    @CullTest.TestTarget(BlockType.FRAMED_THREEWAY_CORNER_SLOPE_EDGE)
+    private static boolean testAgainstThreewayCornerSlopeEdge(
+            Direction dir, CornerType type, boolean alt, BlockState adjState, Direction side
+    )
+    {
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
+        boolean adjTop = adjState.getValue(FramedProperties.TOP);
+        boolean adjRight = adjState.getValue(PropertyHolder.RIGHT);
+        boolean adjAlt = adjState.getValue(PropertyHolder.ALT_TYPE);
+
+        return getTriDir(dir, type, alt, side).isEqualTo(ThreewayCornerSlopeEdgeSkipPredicate.getTriDir(adjDir, adjTop, adjRight, adjAlt, side.getOpposite()));
+    }
+
+    @CullTest.TestTarget(BlockType.FRAMED_INNER_THREEWAY_CORNER_SLOPE_EDGE)
+    private static boolean testAgainstInnerThreewayCornerSlopeEdge(
+            Direction dir, CornerType type, boolean alt, BlockState adjState, Direction side
+    )
+    {
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
+        boolean adjTop = adjState.getValue(FramedProperties.TOP);
+        boolean adjRight = adjState.getValue(PropertyHolder.RIGHT);
+        boolean adjAlt = adjState.getValue(PropertyHolder.ALT_TYPE);
+
+        return getTriDir(dir, type, alt, side).isEqualTo(InnerThreewayCornerSlopeEdgeSkipPredicate.getTriDir(adjDir, adjTop, adjRight, adjAlt, side.getOpposite()));
     }
 
     @CullTest.TestTarget(BlockType.FRAMED_SLAB_EDGE)

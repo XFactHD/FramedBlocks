@@ -29,6 +29,8 @@
     "framedblocks:framed_elev_double_inner_corner_slope_edge",
     "framedblocks:framed_stacked_corner_slope_edge",
     "framedblocks:framed_stacked_inner_corner_slope_edge",
+    "framedblocks:framed_threeway_corner_slope_edge",
+    "framedblocks:framed_inner_threeway_corner_slope_edge",
     "framedblocks:framed_slab",
     "framedblocks:framed_double_slab",
     "framedblocks:framed_adj_double_slab",

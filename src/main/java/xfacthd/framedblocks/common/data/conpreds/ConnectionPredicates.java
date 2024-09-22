@@ -57,6 +57,8 @@ public final class ConnectionPredicates extends BlockTypeMap<ConnectionPredicate
         put(BlockType.FRAMED_ELEV_DOUBLE_INNER_CORNER_SLOPE_EDGE, new ElevatedDoubleInnerCornerSlopeEdgeConnectionPredicate());
         put(BlockType.FRAMED_STACKED_CORNER_SLOPE_EDGE, new StackedCornerSlopeEdgeConnectionPredicate());
         put(BlockType.FRAMED_STACKED_INNER_CORNER_SLOPE_EDGE, new StackedInnerCornerSlopeEdgeConnectionPredicate());
+        put(BlockType.FRAMED_THREEWAY_CORNER_SLOPE_EDGE, new ThreewayCornerSlopeEdgeConnectionPredicate());
+        put(BlockType.FRAMED_INNER_THREEWAY_CORNER_SLOPE_EDGE, new InnerThreewayCornerSlopeEdgeConnectionPredicate());
         put(BlockType.FRAMED_SLAB, new SlabConnectionPredicate());
         put(BlockType.FRAMED_DOUBLE_SLAB, DoubleSlabConnectionPredicate.INSTANCE);
         put(BlockType.FRAMED_ADJ_DOUBLE_SLAB, DoubleSlabConnectionPredicate.INSTANCE);

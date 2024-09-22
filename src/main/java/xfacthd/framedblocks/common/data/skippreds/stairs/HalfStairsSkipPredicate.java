@@ -83,6 +83,9 @@ public final class HalfStairsSkipPredicate implements SideSkipPredicate
                 case FRAMED_ELEVATED_INNER_CORNER_SLOPE_EDGE -> testAgainstElevatedInnerCornerSlopeEdge(
                         dir, top, right, adjState, side
                 );
+                case FRAMED_INNER_THREEWAY_CORNER_SLOPE_EDGE -> testAgainstInnerThreewayCornerSlopeEdge(
+                        dir, top, right, adjState, side
+                );
                 case FRAMED_SLOPE_PANEL -> testAgainstSlopePanel(
                         dir, top, right, adjState, side
                 );
@@ -377,6 +380,19 @@ public final class HalfStairsSkipPredicate implements SideSkipPredicate
         CornerType adjType = adjState.getValue(PropertyHolder.CORNER_TYPE);
 
         return getStairDir(dir, top, right, side).isEqualTo(ElevatedInnerCornerSlopeEdgeSkipPredicate.getStairDir(adjDir, adjType, side.getOpposite()));
+    }
+
+    @CullTest.TestTarget(BlockType.FRAMED_INNER_THREEWAY_CORNER_SLOPE_EDGE)
+    private static boolean testAgainstInnerThreewayCornerSlopeEdge(
+            Direction dir, boolean top, boolean right, BlockState adjState, Direction side
+    )
+    {
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
+        boolean adjTop = adjState.getValue(FramedProperties.TOP);
+        boolean adjRight = adjState.getValue(PropertyHolder.RIGHT);
+        boolean adjAlt = adjState.getValue(PropertyHolder.ALT_TYPE);
+
+        return getStairDir(dir, top, right, side).isEqualTo(InnerThreewayCornerSlopeEdgeSkipPredicate.getStairDir(adjDir, adjTop, adjRight, adjAlt, side.getOpposite()));
     }
 
     @CullTest.TestTarget(BlockType.FRAMED_SLOPE_PANEL)

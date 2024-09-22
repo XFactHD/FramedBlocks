@@ -131,6 +131,14 @@ public final class FramingSawRecipeProvider extends RecipeProvider
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 16 * 15)
                 .save(consumer);
 
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_THREEWAY_CORNER_SLOPE_EDGE)
+                .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 16)
+                .save(consumer);
+
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_INNER_THREEWAY_CORNER_SLOPE_EDGE)
+                .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 16 * 4)
+                .save(consumer);
+
         FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_SLAB)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 2)
                 .save(consumer);

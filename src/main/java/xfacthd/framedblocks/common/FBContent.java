@@ -150,6 +150,8 @@ public final class FBContent
     public static final Holder<Block> BLOCK_FRAMED_ELEVATED_DOUBLE_INNER_CORNER_SLOPE_EDGE = registerBlock(FramedElevatedDoubleInnerCornerSlopeEdgeBlock::new, BlockType.FRAMED_ELEV_DOUBLE_INNER_CORNER_SLOPE_EDGE);
     public static final Holder<Block> BLOCK_FRAMED_STACKED_CORNER_SLOPE_EDGE = registerBlock(FramedStackedCornerSlopeEdgeBlock::new, BlockType.FRAMED_STACKED_CORNER_SLOPE_EDGE);
     public static final Holder<Block> BLOCK_FRAMED_STACKED_INNER_CORNER_SLOPE_EDGE = registerBlock(FramedStackedInnerCornerSlopeEdgeBlock::new, BlockType.FRAMED_STACKED_INNER_CORNER_SLOPE_EDGE);
+    public static final Holder<Block> BLOCK_FRAMED_THREEWAY_CORNER_SLOPE_EDGE = registerBlock(FramedThreewayCornerSlopeEdgeBlock::new, BlockType.FRAMED_THREEWAY_CORNER_SLOPE_EDGE);
+    public static final Holder<Block> BLOCK_FRAMED_INNER_THREEWAY_CORNER_SLOPE_EDGE = registerBlock(FramedThreewayCornerSlopeEdgeBlock::new, BlockType.FRAMED_INNER_THREEWAY_CORNER_SLOPE_EDGE);
     public static final Holder<Block> BLOCK_FRAMED_SLAB = registerBlock(FramedSlabBlock::new, BlockType.FRAMED_SLAB);
     public static final Holder<Block> BLOCK_FRAMED_DOUBLE_SLAB = registerBlock(FramedDoubleSlabBlock::new, BlockType.FRAMED_DOUBLE_SLAB);
     public static final Holder<Block> BLOCK_FRAMED_ADJ_DOUBLE_SLAB = registerBlock(FramedAdjustableDoubleSlabBlock::standard, BlockType.FRAMED_ADJ_DOUBLE_SLAB);

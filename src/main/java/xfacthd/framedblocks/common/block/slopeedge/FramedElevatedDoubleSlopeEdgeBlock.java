@@ -40,7 +40,19 @@ public class FramedElevatedDoubleSlopeEdgeBlock extends AbstractFramedDoubleBloc
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext ctx)
     {
-        return ExtPlacementStateBuilder.of(this, ctx).withHorizontalFacingAndSlopeType().build();
+        return ExtPlacementStateBuilder.of(this, ctx)
+                .withHorizontalFacingAndSlopeType()
+                .withCustom((state, modCtx) ->
+                {
+                    Direction dir = state.getValue(FramedProperties.FACING_HOR);
+                    SlopeType type = state.getValue(PropertyHolder.SLOPE_TYPE);
+                    if (dir != modCtx.getHorizontalDirection() && type == SlopeType.HORIZONTAL)
+                    {
+                        state = state.setValue(FramedProperties.Y_SLOPE, true);
+                    }
+                    return state;
+                })
+                .build();
     }
 
     @Override
