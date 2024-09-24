@@ -25,7 +25,6 @@ import net.neoforged.neoforge.client.model.data.ModelData;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
 import xfacthd.framedblocks.api.model.wrapping.TextureLookup;
-import xfacthd.framedblocks.api.util.ClientUtils;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.client.model.FramedBlockModel;
 import xfacthd.framedblocks.client.model.cube.FramedChestLidGeometry;
@@ -150,8 +149,6 @@ public class FramedChestRenderer implements BlockEntityRenderer<FramedChestBlock
     @Override
     public boolean shouldRender(FramedChestBlockEntity be, Vec3 camera)
     {
-        if (ClientUtils.OPTIFINE_LOADED.get()) return false;
-
         ChestState state = FramedChestBlock.combine(be, true).apply(FramedChestBlock.STATE_COMBINER);
         return state != ChestState.CLOSED && BlockEntityRenderer.super.shouldRender(be, camera);
     }

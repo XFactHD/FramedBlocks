@@ -1,6 +1,5 @@
 package xfacthd.framedblocks.api.util;
 
-import com.google.common.base.Suppliers;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.RenderType;
@@ -16,24 +15,14 @@ import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtension
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.internal.InternalClientAPI;
 
-import java.util.function.*;
+import java.util.function.Supplier;
 
 public final class ClientUtils
 {
     public static final ResourceLocation DUMMY_TEXTURE = Utils.rl("neoforge", "white");
 
-    public static final Supplier<Boolean> OPTIFINE_LOADED = Suppliers.memoize(() ->
-    {
-        try
-        {
-            Class.forName("net.optifine.Config");
-            return true;
-        }
-        catch (ClassNotFoundException ignored)
-        {
-            return false;
-        }
-    });
+    @Deprecated(forRemoval = true)
+    public static final Supplier<Boolean> OPTIFINE_LOADED = () -> false;
 
     public static void enqueueClientTask(Runnable task)
     {

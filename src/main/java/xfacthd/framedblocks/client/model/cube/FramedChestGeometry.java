@@ -16,8 +16,8 @@ import xfacthd.framedblocks.api.model.geometry.Geometry;
 import xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
 import xfacthd.framedblocks.api.model.quad.Modifiers;
 import xfacthd.framedblocks.api.model.quad.QuadModifier;
-import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.api.model.util.ModelUtils;
+import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.property.ChestState;
 import xfacthd.framedblocks.common.data.property.LatchType;
@@ -40,7 +40,7 @@ public class FramedChestGeometry extends Geometry
         this.baseModel = ctx.baseModel();
         this.facing = ctx.state().getValue(FramedProperties.FACING_HOR);
         this.type = ctx.state().getValue(BlockStateProperties.CHEST_TYPE);
-        this.closed = ctx.state().getValue(PropertyHolder.CHEST_STATE) == ChestState.CLOSED || ClientUtils.OPTIFINE_LOADED.get();
+        this.closed = ctx.state().getValue(PropertyHolder.CHEST_STATE) == ChestState.CLOSED;
         this.latch = ctx.state().getValue(PropertyHolder.LATCH_TYPE);
         this.addLayers = latch == LatchType.DEFAULT ? ModelUtils.CUTOUT : ChunkRenderTypeSet.none();
     }
