@@ -1,4 +1,4 @@
-package xfacthd.framedblocks.client.model.slopeedge;
+package xfacthd.framedblocks.client.model.slopeedge.legacy;
 
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.core.Direction;
@@ -11,13 +11,13 @@ import xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.property.CornerType;
 
-public class FramedElevatedInnerCornerSlopeEdgeGeometry extends Geometry
+public class LegacyFramedElevatedInnerCornerSlopeEdgeGeometry extends Geometry
 {
     private final Direction dir;
     private final CornerType type;
     private final boolean ySlope;
 
-    public FramedElevatedInnerCornerSlopeEdgeGeometry(GeometryFactory.Context ctx)
+    public LegacyFramedElevatedInnerCornerSlopeEdgeGeometry(GeometryFactory.Context ctx)
     {
         this.dir = ctx.state().getValue(FramedProperties.FACING_HOR);
         this.type = ctx.state().getValue(PropertyHolder.CORNER_TYPE);

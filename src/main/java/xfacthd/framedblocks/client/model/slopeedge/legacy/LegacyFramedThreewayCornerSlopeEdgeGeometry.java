@@ -1,4 +1,4 @@
-package xfacthd.framedblocks.client.model.slopeedge;
+package xfacthd.framedblocks.client.model.slopeedge.legacy;
 
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.core.Direction;
@@ -10,7 +10,7 @@ import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 
-public class FramedThreewayCornerSlopeEdgeGeometry extends Geometry
+public class LegacyFramedThreewayCornerSlopeEdgeGeometry extends Geometry
 {
     private final Direction dir;
     private final boolean top;
@@ -18,7 +18,7 @@ public class FramedThreewayCornerSlopeEdgeGeometry extends Geometry
     private final boolean altType;
     private final boolean ySlope;
 
-    public FramedThreewayCornerSlopeEdgeGeometry(GeometryFactory.Context ctx)
+    public LegacyFramedThreewayCornerSlopeEdgeGeometry(GeometryFactory.Context ctx)
     {
         Direction dir = ctx.state().getValue(FramedProperties.FACING_HOR);
         this.top = ctx.state().getValue(FramedProperties.TOP);

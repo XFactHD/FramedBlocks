@@ -1,4 +1,4 @@
-package xfacthd.framedblocks.client.model.slopeedge;
+package xfacthd.framedblocks.client.model.slopeedge.modern;
 
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.core.Direction;
@@ -9,6 +9,8 @@ import xfacthd.framedblocks.api.model.quad.Modifiers;
 import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
 import xfacthd.framedblocks.api.util.Utils;
+import xfacthd.framedblocks.client.model.slopeedge.legacy.LegacyFramedElevatedSlopeEdgeGeometry;
+import xfacthd.framedblocks.common.config.ClientConfig;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.property.SlopeType;
 
@@ -18,7 +20,7 @@ public class FramedElevatedSlopeEdgeGeometry extends Geometry
     private final SlopeType type;
     private final boolean ySlope;
 
-    public FramedElevatedSlopeEdgeGeometry(GeometryFactory.Context ctx)
+    private FramedElevatedSlopeEdgeGeometry(GeometryFactory.Context ctx)
     {
         this.dir = ctx.state().getValue(FramedProperties.FACING_HOR);
         this.type = ctx.state().getValue(PropertyHolder.SLOPE_TYPE);
@@ -36,9 +38,15 @@ public class FramedElevatedSlopeEdgeGeometry extends Geometry
                 if (!ySlope)
                 {
                     QuadModifier.of(quad)
-                            .apply(Modifiers.cutSideLeftRight(dir.getCounterClockWise(), .5F))
+                            .apply(Modifiers.cutSideLeftRight(dir.getCounterClockWise(), .25F))
                             .apply(Modifiers.makeHorizontalSlope(false, 45))
                             .apply(Modifiers.offset(dir.getOpposite(), .5F))
+                            .export(quadMap.get(null));
+
+                    QuadModifier.of(quad)
+                            .apply(Modifiers.cutSideLeftRight(dir.getClockWise(), .25F))
+                            .apply(Modifiers.makeHorizontalSlope(false, 45))
+                            .apply(Modifiers.offset(dir.getClockWise(), .5F))
                             .export(quadMap.get(null));
                 }
 
@@ -51,9 +59,15 @@ public class FramedElevatedSlopeEdgeGeometry extends Geometry
                 if (ySlope)
                 {
                     QuadModifier.of(quad)
-                            .apply(Modifiers.cutSideLeftRight(dir, .5F))
+                            .apply(Modifiers.cutSideLeftRight(dir, .25F))
                             .apply(Modifiers.makeHorizontalSlope(true, 45))
                             .apply(Modifiers.offset(dir.getClockWise(), .5F))
+                            .export(quadMap.get(null));
+
+                    QuadModifier.of(quad)
+                            .apply(Modifiers.cutSideLeftRight(dir.getOpposite(), .25F))
+                            .apply(Modifiers.makeHorizontalSlope(true, 45))
+                            .apply(Modifiers.offset(dir.getOpposite(), .5F))
                             .export(quadMap.get(null));
                 }
 
@@ -85,9 +99,15 @@ public class FramedElevatedSlopeEdgeGeometry extends Geometry
                 if (!ySlope)
                 {
                     QuadModifier.of(quad)
-                            .apply(Modifiers.cutSideUpDown(!top, .5F))
+                            .apply(Modifiers.cutSideUpDown(!top, .25F))
                             .apply(Modifiers.makeVerticalSlope(!top, 45))
                             .apply(Modifiers.offset(dir.getOpposite(), .5F))
+                            .export(quadMap.get(null));
+
+                    QuadModifier.of(quad)
+                            .apply(Modifiers.cutSideUpDown(top, .25F))
+                            .apply(Modifiers.makeVerticalSlope(!top, 45))
+                            .apply(Modifiers.offset(top ? Direction.DOWN : Direction.UP, .5F))
                             .export(quadMap.get(null));
                 }
             }
@@ -100,9 +120,15 @@ public class FramedElevatedSlopeEdgeGeometry extends Geometry
                 if (ySlope)
                 {
                     QuadModifier.of(quad)
-                            .apply(Modifiers.cutTopBottom(dir, .5F))
+                            .apply(Modifiers.cutTopBottom(dir, .25F))
                             .apply(Modifiers.makeVerticalSlope(dir.getOpposite(), 45))
                             .apply(Modifiers.offset(top ? Direction.DOWN : Direction.UP, .5F))
+                            .export(quadMap.get(null));
+
+                    QuadModifier.of(quad)
+                            .apply(Modifiers.cutTopBottom(dir.getOpposite(), .25F))
+                            .apply(Modifiers.makeVerticalSlope(dir.getOpposite(), 45))
+                            .apply(Modifiers.offset(dir.getOpposite(), .5F))
                             .export(quadMap.get(null));
                 }
             }
@@ -118,5 +144,16 @@ public class FramedElevatedSlopeEdgeGeometry extends Geometry
                         .export(quadMap.get(quadDir));
             }
         }
+    }
+
+
+
+    public static Geometry create(GeometryFactory.Context ctx)
+    {
+        if (ClientConfig.VIEW.useLegacySlopeEdgeModel())
+        {
+            return new LegacyFramedElevatedSlopeEdgeGeometry(ctx);
+        }
+        return new FramedElevatedSlopeEdgeGeometry(ctx);
     }
 }

@@ -233,6 +233,7 @@
   "config.framedblocks.client.showButtonPlateTypeOverlay": "Show button and pressure plate type overlay",
   "config.framedblocks.client.showGhostBlocks": "Show ghost blocks",
   "config.framedblocks.client.showSpecialCubeTypeOverlay": "Show special cube type overlay",
+  "config.framedblocks.client.slopeEdgeLegacyModel": "Use legacy slope edge models",
   "config.framedblocks.client.solidFrameMode": "Solid frame mode",
   "config.framedblocks.client.splitLineMode": "Collapsible block split lines overlay: Display mode",
   "config.framedblocks.client.stateLockMode": "State lock overlay: Display mode",

@@ -17,7 +17,6 @@ import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.property.SlopeType;
 
-// TODO 1.21.2: experiment with a copycat-esque approach for the sloped faces
 public class FramedSlopeEdgeBlock extends FramedBlock implements IComplexSlopeSource
 {
     public FramedSlopeEdgeBlock()
