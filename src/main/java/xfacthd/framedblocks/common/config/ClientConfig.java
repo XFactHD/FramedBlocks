@@ -231,7 +231,7 @@ public final class ClientConfig
         SLOPE_EDGE_LEGACY_MODEL_VALUE = builder
                 .comment("If true, all framed slope edge variants will use the legacy model")
                 .translation(TRANSLATION_SLOPE_EDGE_LEGACY_MODEL)
-                .define(KEY_SLOPE_EDGE_LEGACY_MODEL, false);
+                .define(KEY_SLOPE_EDGE_LEGACY_MODEL, true);
         builder.pop();
 
         builder.push("overlay");
