@@ -14,6 +14,7 @@ import net.neoforged.fml.ModList;
 import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
+import net.neoforged.neoforge.event.BlockEntityTypeAddBlocksEvent;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.block.render.FramedBlockRenderProperties;
 import xfacthd.framedblocks.api.model.wrapping.RegisterModelWrappersEvent;
@@ -36,7 +37,7 @@ public final class DiagonalBlocksCompat
         {
             try
             {
-                GuardedAccess.init();
+                GuardedAccess.init(modBus);
                 if (FMLEnvironment.dist.isClient())
                 {
                     GuardedClientAccess.init(modBus);
@@ -64,7 +65,7 @@ public final class DiagonalBlocksCompat
 
     private static final class GuardedAccess
     {
-        public static void init()
+        public static void init(IEventBus modBus)
         {
             DiagonalBlockTypes.FENCE.registerBlockFactory(
                     Utils.getKeyOrThrow(FBContent.BLOCK_FRAMED_FENCE).location(),
@@ -76,6 +77,18 @@ public final class DiagonalBlocksCompat
             );
             DiagonalBlockTypes.WINDOW.disableBlockFactory(Utils.getKeyOrThrow(FBContent.BLOCK_FRAMED_BARS).location());
             DiagonalBlockTypes.WALL.disableBlockFactory(Utils.getKeyOrThrow(FBContent.BLOCK_FRAMED_WALL).location());
+
+            modBus.addListener(GuardedAccess::onBlockEntityTypeAddBlocks);
+        }
+
+        private static void onBlockEntityTypeAddBlocks(final BlockEntityTypeAddBlocksEvent event)
+        {
+            getBlock(DiagonalBlockTypes.FENCE, FBContent.BLOCK_FRAMED_FENCE).ifPresent(
+                    holder -> event.modify(FBContent.BE_TYPE_FRAMED_BLOCK.value(), holder.value())
+            );
+            getBlock(DiagonalBlockTypes.WINDOW, FBContent.BLOCK_FRAMED_PANE).ifPresent(
+                    holder -> event.modify(FBContent.BE_TYPE_FRAMED_BLOCK.value(), holder.value())
+            );
         }
 
         public static boolean isFramedFence(BlockState state)
@@ -86,6 +99,13 @@ public final class DiagonalBlocksCompat
         public static boolean isFramedPane(BlockState state)
         {
             return state.getBlock() instanceof FramedDiagonalGlassPaneBlock;
+        }
+
+        private static Optional<Holder.Reference<Block>> getBlock(DiagonalBlockType type, Holder<Block> srcBlock)
+        {
+            ResourceLocation srcName = Utils.getKeyOrThrow(srcBlock).location();
+            ResourceLocation destName = type.id(srcName.getNamespace() + "/" + srcName.getPath());
+            return BuiltInRegistries.BLOCK.getHolder(ResourceKey.create(Registries.BLOCK, destName));
         }
 
 
@@ -104,39 +124,32 @@ public final class DiagonalBlocksCompat
 
         private static void onRegisterModelWrappers(final RegisterModelWrappersEvent event)
         {
-            getBlock(DiagonalBlockTypes.FENCE, FBContent.BLOCK_FRAMED_FENCE).ifPresent(
+            GuardedAccess.getBlock(DiagonalBlockTypes.FENCE, FBContent.BLOCK_FRAMED_FENCE).ifPresent(
                     holder -> WrapHelper.wrap(holder, FramedDiagonalFenceGeometry::new, WrapHelper.IGNORE_WATERLOGGED_LOCK)
             );
-            getBlock(DiagonalBlockTypes.WINDOW, FBContent.BLOCK_FRAMED_PANE).ifPresent(
+            GuardedAccess.getBlock(DiagonalBlockTypes.WINDOW, FBContent.BLOCK_FRAMED_PANE).ifPresent(
                     holder -> WrapHelper.wrap(holder, FramedDiagonalPaneGeometry::new, WrapHelper.IGNORE_WATERLOGGED_LOCK)
             );
         }
 
         private static void onRegisterBlockColors(final RegisterColorHandlersEvent.Block event)
         {
-            getBlock(DiagonalBlockTypes.FENCE, FBContent.BLOCK_FRAMED_FENCE).ifPresent(
+            GuardedAccess.getBlock(DiagonalBlockTypes.FENCE, FBContent.BLOCK_FRAMED_FENCE).ifPresent(
                     holder -> event.register(FramedBlockColor.INSTANCE, holder.value())
             );
-            getBlock(DiagonalBlockTypes.WINDOW, FBContent.BLOCK_FRAMED_PANE).ifPresent(
+            GuardedAccess.getBlock(DiagonalBlockTypes.WINDOW, FBContent.BLOCK_FRAMED_PANE).ifPresent(
                     holder -> event.register(FramedBlockColor.INSTANCE, holder.value())
             );
         }
 
         private static void onRegisterClientExtensions(final RegisterClientExtensionsEvent event)
         {
-            getBlock(DiagonalBlockTypes.FENCE, FBContent.BLOCK_FRAMED_FENCE).ifPresent(
+            GuardedAccess.getBlock(DiagonalBlockTypes.FENCE, FBContent.BLOCK_FRAMED_FENCE).ifPresent(
                     holder -> event.registerBlock(FramedBlockRenderProperties.INSTANCE, holder.value())
             );
-            getBlock(DiagonalBlockTypes.WINDOW, FBContent.BLOCK_FRAMED_PANE).ifPresent(
+            GuardedAccess.getBlock(DiagonalBlockTypes.WINDOW, FBContent.BLOCK_FRAMED_PANE).ifPresent(
                     holder -> event.registerBlock(FramedBlockRenderProperties.INSTANCE, holder.value())
             );
-        }
-
-        private static Optional<Holder.Reference<Block>> getBlock(DiagonalBlockType type, Holder<Block> srcBlock)
-        {
-            ResourceLocation srcName = Utils.getKeyOrThrow(srcBlock).location();
-            ResourceLocation destName = type.id(srcName.getNamespace() + "/" + srcName.getPath());
-            return BuiltInRegistries.BLOCK.getHolder(ResourceKey.create(Registries.BLOCK, destName));
         }
     }
 
