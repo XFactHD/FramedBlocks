@@ -5,10 +5,12 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.fml.loading.FMLEnvironment;
+import net.neoforged.neoforge.event.server.ServerStoppedEvent;
 import xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.client.util.ClientAccess;
 import xfacthd.framedblocks.common.config.ServerConfig;
+import xfacthd.framedblocks.common.crafting.FramingSawRecipeCache;
 
 public final class EventHandler
 {
@@ -38,6 +40,11 @@ public final class EventHandler
                 }
             }
         }
+    }
+
+    public static void onServerShutdown(@SuppressWarnings("unused") final ServerStoppedEvent event)
+    {
+        FramingSawRecipeCache.get(false).clear();
     }
 
 

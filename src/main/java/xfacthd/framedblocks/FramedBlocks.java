@@ -48,6 +48,7 @@ public final class FramedBlocks
 
         IEventBus forgeBus = NeoForge.EVENT_BUS;
         forgeBus.addListener(EventHandler::onBlockLeftClick);
+        forgeBus.addListener(EventHandler::onServerShutdown);
         forgeBus.addListener(CullingUpdateTracker::onServerLevelTick);
         forgeBus.addListener(CullingUpdateTracker::onServerShutdown);
         forgeBus.addListener(FramingSawRecipeCache::onAddReloadListener);
