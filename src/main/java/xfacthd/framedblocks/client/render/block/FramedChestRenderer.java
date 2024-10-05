@@ -42,7 +42,7 @@ public class FramedChestRenderer implements BlockEntityRenderer<FramedChestBlock
     private static final int DIRECTIONS = 4;
     private static final int CHEST_TYPES = ChestType.values().length;
     private static final int LATCH_TYPES = LatchType.values().length;
-    private static final BakedModel[] LID_MODELS = new BakedModel[DIRECTIONS * CHEST_TYPES * LATCH_TYPES];
+    private static final FramedBlockModel[] LID_MODELS = new FramedBlockModel[DIRECTIONS * CHEST_TYPES * LATCH_TYPES];
     private static final RandomSource RANDOM = RandomSource.create();
 
     @SuppressWarnings("unused")
@@ -111,7 +111,7 @@ public class FramedChestRenderer implements BlockEntityRenderer<FramedChestBlock
         RANDOM.setSeed(42);
         for (RenderType type : model.getRenderTypes(state, RANDOM, data))
         {
-            RenderType bufferType = RenderTypeHelper.getEntityRenderType(type, false);
+            RenderType bufferType = type == RenderType.solid() ? Sheets.solidBlockSheet() : RenderTypeHelper.getEntityRenderType(type, false);
 
             renderer.renderModel(
                     matrix.last(),
@@ -192,5 +192,16 @@ public class FramedChestRenderer implements BlockEntityRenderer<FramedChestBlock
     private static int makeModelIndex(Direction dir, ChestType type, LatchType latch)
     {
         return dir.get2DDataValue() + (type.ordinal() * DIRECTIONS) + (latch.ordinal() * DIRECTIONS * CHEST_TYPES);
+    }
+
+    public static void clearModelCaches()
+    {
+        for (FramedBlockModel model : LID_MODELS)
+        {
+            if (model != null)
+            {
+                model.clearCache();
+            }
+        }
     }
 }
