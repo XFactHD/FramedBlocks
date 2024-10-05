@@ -15,7 +15,8 @@
     "client": [
         "client.AccessorMultiPlayerGameMode",
         "client.AccessorWeightedBakedModel",
-        "client.DevMixinLevelRenderer"
+        "client.DevMixinLevelRenderer",
+        "client.MixinOptions"
     ],
     "injectors": {
         "defaultRequire": 1
