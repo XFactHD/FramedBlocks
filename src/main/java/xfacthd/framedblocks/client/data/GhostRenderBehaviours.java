@@ -66,9 +66,7 @@ public final class GhostRenderBehaviours
                 FBContent.BLOCK_FRAMED_SMALL_INNER_CORNER_SLOPE_PANEL.get(),
                 FBContent.BLOCK_FRAMED_LARGE_INNER_CORNER_SLOPE_PANEL.get(),
                 FBContent.BLOCK_FRAMED_EXTENDED_CORNER_SLOPE_PANEL.get(),
-                FBContent.BLOCK_FRAMED_EXTENDED_INNER_CORNER_SLOPE_PANEL.get(),
-                FBContent.BLOCK_FRAMED_STACKED_CORNER_SLOPE_PANEL.get(),
-                FBContent.BLOCK_FRAMED_STACKED_INNER_CORNER_SLOPE_PANEL.get()
+                FBContent.BLOCK_FRAMED_EXTENDED_INNER_CORNER_SLOPE_PANEL.get()
         );
 
         GhostBlockRenderer.registerBehaviour(
@@ -77,7 +75,9 @@ public final class GhostRenderBehaviours
                 FBContent.BLOCK_FRAMED_LARGE_DOUBLE_CORNER_SLOPE_PANEL.get(),
                 FBContent.BLOCK_FRAMED_INVERSE_DOUBLE_CORNER_SLOPE_PANEL.get(),
                 FBContent.BLOCK_FRAMED_EXTENDED_DOUBLE_CORNER_SLOPE_PANEL.get(),
-                FBContent.BLOCK_FRAMED_EXTENDED_INNER_DOUBLE_CORNER_SLOPE_PANEL.get()
+                FBContent.BLOCK_FRAMED_EXTENDED_INNER_DOUBLE_CORNER_SLOPE_PANEL.get(),
+                FBContent.BLOCK_FRAMED_STACKED_CORNER_SLOPE_PANEL.get(),
+                FBContent.BLOCK_FRAMED_STACKED_INNER_CORNER_SLOPE_PANEL.get()
         );
 
         GhostBlockRenderer.registerBehaviour(
