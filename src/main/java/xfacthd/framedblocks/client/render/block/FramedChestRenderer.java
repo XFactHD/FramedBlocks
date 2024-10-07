@@ -35,6 +35,7 @@ import java.util.*;
 public class FramedChestRenderer implements BlockEntityRenderer<FramedChestBlockEntity>
 {
     private static final Table<Direction, LatchType, BakedModel> LID_MODELS = HashBasedTable.create(4, 3);
+    private static final RandomSource RANDOM = RandomSource.create();
 
     @SuppressWarnings("unused")
     public FramedChestRenderer(BlockEntityRendererProvider.Context ctx) { }
@@ -90,17 +91,17 @@ public class FramedChestRenderer implements BlockEntityRenderer<FramedChestBlock
     )
     {
         ModelBlockRenderer renderer = Minecraft.getInstance().getBlockRenderer().getModelRenderer();
-        //noinspection ConstantConditions
-        RandomSource rand = be.getLevel().getRandom();
 
         int color = Minecraft.getInstance().getBlockColors().getColor(state, be.getLevel(), be.getBlockPos(), 0);
         float red = (float)(color >> 16 & 255) / 255.0F;
         float green = (float)(color >> 8 & 255) / 255.0F;
         float blue = (float)(color & 255) / 255.0F;
 
+        //noinspection ConstantConditions
         int light = LevelRenderer.getLightColor(be.getLevel(), be.getBlockPos());
 
-        for (RenderType type : model.getRenderTypes(state, rand, data))
+        RANDOM.setSeed(42);
+        for (RenderType type : model.getRenderTypes(state, RANDOM, data))
         {
             RenderType bufferType = RenderTypeHelper.getEntityRenderType(type, false);
 
