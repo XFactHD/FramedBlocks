@@ -18,13 +18,14 @@ public class FramedMasonryCornerSegmentBlock extends FramedBlock
     public FramedMasonryCornerSegmentBlock()
     {
         super(BlockType.FRAMED_MASONRY_CORNER_SEGMENT);
+        registerDefaultState(defaultBlockState().setValue(FramedProperties.TOP, false));
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        builder.add(FramedProperties.FACING_HOR, BlockStateProperties.WATERLOGGED);
+        builder.add(FramedProperties.FACING_HOR, FramedProperties.TOP, BlockStateProperties.WATERLOGGED);
     }
 
     @Override
@@ -32,8 +33,19 @@ public class FramedMasonryCornerSegmentBlock extends FramedBlock
     {
         return PlacementStateBuilder.of(this, ctx)
                 .withHorizontalFacing()
+                .withTop()
                 .withWater()
                 .build();
+    }
+
+    @Override
+    public BlockState rotate(BlockState state, Direction face, Rotation rot)
+    {
+        if (!Utils.isY(face) && rot != Rotation.NONE)
+        {
+            return state.cycle(FramedProperties.TOP);
+        }
+        return super.rotate(state, face, rot);
     }
 
     @Override

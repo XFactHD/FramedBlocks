@@ -15,11 +15,13 @@ import java.util.Map;
 public class FramedMasonryCornerSegmentModel extends FramedBlockModel
 {
     private final Direction dir;
+    private final boolean top;
 
     public FramedMasonryCornerSegmentModel(BlockState state, BakedModel baseModel)
     {
         super(state, baseModel);
         this.dir = state.getValue(FramedProperties.FACING_HOR);
+        this.top = state.getValue(FramedProperties.TOP);
     }
 
     @Override
@@ -27,7 +29,7 @@ public class FramedMasonryCornerSegmentModel extends FramedBlockModel
     {
         Direction quadDir = quad.getDirection();
 
-        if (quadDir == Direction.UP)
+        if ((!top && quadDir == Direction.UP) || (top && quadDir == Direction.DOWN))
         {
             QuadModifier.geometry(quad)
                     .apply(Modifiers.cutTopBottom(dir, .5F))
@@ -39,7 +41,7 @@ public class FramedMasonryCornerSegmentModel extends FramedBlockModel
                     .apply(Modifiers.cutTopBottom(dir.getCounterClockWise(), .5F))
                     .export(quadMap.get(quadDir));
         }
-        else if (quadDir == Direction.DOWN)
+        else if ((!top && quadDir == Direction.DOWN) || (top && quadDir == Direction.UP))
         {
             QuadModifier.geometry(quad)
                     .apply(Modifiers.cutTopBottom(dir.getOpposite(), .5F))
@@ -55,12 +57,12 @@ public class FramedMasonryCornerSegmentModel extends FramedBlockModel
         {
             boolean inDir = quadDir == dir;
             QuadModifier.geometry(quad)
-                    .apply(Modifiers.cutSideUpDown(false, .5F))
+                    .apply(Modifiers.cutSideUpDown(top, .5F))
                     .applyIf(Modifiers.setPosition(.5F), inDir)
                     .export(quadMap.get(inDir ? null : quadDir));
 
             QuadModifier.geometry(quad)
-                    .apply(Modifiers.cutSideUpDown(true, .5F))
+                    .apply(Modifiers.cutSideUpDown(!top, .5F))
                     .apply(Modifiers.cutSideLeftRight(dir.getCounterClockWise(), .5F))
                     .export(quadMap.get(quadDir));
         }
@@ -68,12 +70,12 @@ public class FramedMasonryCornerSegmentModel extends FramedBlockModel
         {
             boolean inDir = quadDir == dir.getCounterClockWise();
             QuadModifier.geometry(quad)
-                    .apply(Modifiers.cutSideUpDown(true, .5F))
+                    .apply(Modifiers.cutSideUpDown(!top, .5F))
                     .applyIf(Modifiers.setPosition(.5F), inDir)
                     .export(quadMap.get(inDir ? null : quadDir));
 
             QuadModifier.geometry(quad)
-                    .apply(Modifiers.cutSideUpDown(false, .5F))
+                    .apply(Modifiers.cutSideUpDown(top, .5F))
                     .apply(Modifiers.cutSideLeftRight(dir, .5F))
                     .export(quadMap.get(quadDir));
         }

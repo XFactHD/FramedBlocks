@@ -25,19 +25,33 @@ public class FramedMasonryCornerBlock extends AbstractFramedDoubleBlock
     public FramedMasonryCornerBlock()
     {
         super(BlockType.FRAMED_MASONRY_CORNER);
+        registerDefaultState(defaultBlockState().setValue(FramedProperties.TOP, false));
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        builder.add(FramedProperties.FACING_HOR);
+        builder.add(FramedProperties.FACING_HOR, FramedProperties.TOP);
     }
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext ctx)
     {
-        return PlacementStateBuilder.of(this, ctx).withHorizontalFacing().build();
+        return PlacementStateBuilder.of(this, ctx)
+                .withHorizontalFacing()
+                .withTop()
+                .build();
+    }
+
+    @Override
+    public BlockState rotate(BlockState state, Direction face, Rotation rot)
+    {
+        if (!Utils.isY(face) && rot != Rotation.NONE)
+        {
+            return state.cycle(FramedProperties.TOP);
+        }
+        return super.rotate(state, face, rot);
     }
 
     @Override
@@ -69,7 +83,10 @@ public class FramedMasonryCornerBlock extends AbstractFramedDoubleBlock
     public Tuple<BlockState, BlockState> calculateBlockPair(BlockState state)
     {
         Direction dir = state.getValue(FramedProperties.FACING_HOR);
-        BlockState edgeState = FBContent.BLOCK_FRAMED_MASONRY_CORNER_SEGMENT.get().defaultBlockState();
+        BlockState edgeState = FBContent.BLOCK_FRAMED_MASONRY_CORNER_SEGMENT.get()
+                .defaultBlockState()
+                .setValue(FramedProperties.TOP, state.getValue(FramedProperties.TOP));
+
         return new Tuple<>(
                 edgeState.setValue(FramedProperties.FACING_HOR, dir),
                 edgeState.setValue(FramedProperties.FACING_HOR, dir.getOpposite())
@@ -86,7 +103,9 @@ public class FramedMasonryCornerBlock extends AbstractFramedDoubleBlock
     public CamoGetter calculateCamoGetter(BlockState state, Direction side, @Nullable Direction edge)
     {
         Direction dir = state.getValue(FramedProperties.FACING_HOR);
-        if (side == Direction.DOWN)
+        boolean top = state.getValue(FramedProperties.TOP);
+        Direction bottom = top ? Direction.UP : Direction.DOWN;
+        if (side == bottom)
         {
             if (edge == dir)
             {
@@ -97,7 +116,7 @@ public class FramedMasonryCornerBlock extends AbstractFramedDoubleBlock
                 return CamoGetter.FIRST;
             }
         }
-        else if (side == Direction.UP)
+        else if (side == bottom.getOpposite())
         {
             if (edge == dir.getClockWise())
             {
@@ -110,14 +129,14 @@ public class FramedMasonryCornerBlock extends AbstractFramedDoubleBlock
         }
         else if (side.getAxis() == dir.getAxis())
         {
-            if (edge == Direction.DOWN || edge == side.getCounterClockWise())
+            if (edge == bottom || edge == side.getCounterClockWise())
             {
                 return side == dir ? CamoGetter.SECOND : CamoGetter.FIRST;
             }
         }
         else if (side.getAxis() == dir.getClockWise().getAxis())
         {
-            if (edge == Direction.UP || edge == side.getClockWise())
+            if (edge == bottom.getOpposite() || edge == side.getClockWise())
             {
                 return side == dir.getClockWise() ? CamoGetter.FIRST : CamoGetter.SECOND;
             }

@@ -247,7 +247,9 @@ public final class SmallCornerSlopePanelWallSkipPredicate implements SideSkipPre
     )
     {
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
-        return getCornerDir(dir, rot, side).isEqualTo(MasonryCornerSegmentSkipPredicate.getCornerDir(adjDir, side.getOpposite()));
+        boolean adjTop = adjState.getValue(FramedProperties.TOP);
+
+        return getCornerDir(dir, rot, side).isEqualTo(MasonryCornerSegmentSkipPredicate.getCornerDir(adjDir, adjTop, side.getOpposite()));
     }
 
     @CullTest.TestTarget(BlockType.FRAMED_VERTICAL_STAIRS)
