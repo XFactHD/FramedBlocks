@@ -34,6 +34,7 @@ public final class FluidModel implements BakedModel
 {
     private static final ModelState SIMPLE_STATE = new SimpleModelState(Transformation.identity());
     public static final ResourceLocation BARE_MODEL = Utils.rl("fluid/bare");
+    public static final ResourceLocation BARE_MODEL_SINGLE = Utils.rl("fluid/bare_single");
     private static final Function<ResourceLocation, TextureAtlasSprite> SPRITE_GETTER = (loc ->
             Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(loc)
     );
@@ -125,20 +126,22 @@ public final class FluidModel implements BakedModel
     public static FluidModel create(Fluid fluid)
     {
         ModelBakery modelBakery = Minecraft.getInstance().getModelManager().getModelBakery();
-        UnbakedModel bareModel = modelBakery.getModel(BARE_MODEL);
-        Preconditions.checkNotNull(bareModel, "Bare fluid model not loaded!");
 
         IClientFluidTypeExtensions props = IClientFluidTypeExtensions.of(fluid);
-        Preconditions.checkNotNull(
+        ResourceLocation stillTexture = Preconditions.checkNotNull(
                 props.getStillTexture(),
                 "Fluid %s returned null from IClientFluidTypeExtensions#getStillTexture()",
                 fluid
         );
-        Preconditions.checkNotNull(
+        ResourceLocation flowingTexture = Preconditions.checkNotNull(
                 props.getFlowingTexture(),
                 "Fluid %s returned null from IClientFluidTypeExtensions#getFlowingTexture()",
                 fluid
         );
+
+        boolean singleTexture = flowingTexture.equals(stillTexture);
+        UnbakedModel bareModel = modelBakery.getModel(singleTexture ? BARE_MODEL_SINGLE : BARE_MODEL);
+        Preconditions.checkNotNull(bareModel, "Bare fluid model not loaded!");
 
         ResourceLocation fluidName = Preconditions.checkNotNull(
                 ForgeRegistries.FLUID_TYPES.get().getKey(fluid.getFluidType()),
@@ -146,16 +149,9 @@ public final class FluidModel implements BakedModel
                 fluid
         );
         ResourceLocation modelName = Utils.rl("fluid/" + fluidName.toString().replace(":", "_"));
-        Function<Material, TextureAtlasSprite> spriteGetter = matToSprite(props);
-        BakedModel model = bareModel.bake(
-                modelBakery.new ModelBakerImpl(
-                        (modelLoc, material) -> spriteGetter.apply(material),
-                        modelName
-                ),
-                spriteGetter,
-                SIMPLE_STATE,
-                modelName
-        );
+        Function<Material, TextureAtlasSprite> spriteGetter = matToSprite(stillTexture, flowingTexture);
+        ModelBakery.ModelBakerImpl baker = modelBakery.new ModelBakerImpl((modelLoc, material) -> spriteGetter.apply(material), modelName);
+        BakedModel model = bareModel.bake(baker, spriteGetter, SIMPLE_STATE, modelName);
         Preconditions.checkNotNull(model, "Failed to bake fluid model for fluid %s", fluid);
 
         Map<Direction, List<BakedQuad>> quads = new EnumMap<>(Direction.class);
@@ -168,20 +164,20 @@ public final class FluidModel implements BakedModel
             quads.put(side, model.getQuads(defState, side, random, ModelData.EMPTY, layer));
         }
 
-        return new FluidModel(layer, quads, SPRITE_GETTER.apply(props.getStillTexture()));
+        return new FluidModel(layer, quads, SPRITE_GETTER.apply(stillTexture));
     }
 
-    private static Function<Material, TextureAtlasSprite> matToSprite(IClientFluidTypeExtensions props)
+    private static Function<Material, TextureAtlasSprite> matToSprite(ResourceLocation stillTexture, ResourceLocation flowingTexture)
     {
         return mat ->
         {
             if (mat.texture().equals(WATER_FLOWING.get()))
             {
-                return SPRITE_GETTER.apply(props.getFlowingTexture());
+                return SPRITE_GETTER.apply(flowingTexture);
             }
             if (mat.texture().equals(WATER_STILL.get()))
             {
-                return SPRITE_GETTER.apply(props.getStillTexture());
+                return SPRITE_GETTER.apply(stillTexture);
             }
             return mat.sprite();
         };
