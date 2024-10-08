@@ -83,8 +83,7 @@ public class FluidCamoContainer extends CamoContainer
     @Override
     public SoundType getSoundType()
     {
-        //TODO: build custom sound type suitable for the contained fluid
-        return super.getSoundType();
+        return SoundType.WET_GRASS;
     }
 
     @Override
