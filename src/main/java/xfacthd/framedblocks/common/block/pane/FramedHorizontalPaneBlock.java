@@ -5,8 +5,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import xfacthd.framedblocks.api.block.FramedProperties;
-import xfacthd.framedblocks.api.block.PlacementStateBuilder;
+import xfacthd.framedblocks.api.block.*;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
 
@@ -14,7 +13,7 @@ public class FramedHorizontalPaneBlock extends FramedBlock
 {
     public FramedHorizontalPaneBlock()
     {
-        super(BlockType.FRAMED_HORIZONTAL_PANE);
+        super(BlockType.FRAMED_HORIZONTAL_PANE, IFramedBlock.createProperties(BlockType.FRAMED_HORIZONTAL_PANE).forceSolidOn());
     }
 
     @Override
