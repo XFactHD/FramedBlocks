@@ -241,7 +241,14 @@ public abstract class FramedBlockModel extends BakedModelProxy
 
             if (camoInRenderType)
             {
-                Utils.copyAll(model.getQuads(camoState, side, rand, camoData, renderType), quads);
+                List<BakedQuad> modelQuads = model.getQuads(camoState, side, rand, camoData, renderType);
+                if (modelQuads.isEmpty())
+                {
+                    // Try extracting useful quads from the list of (supposedly) uncullable quads if querying cullable
+                    // ones returned nothing due to the dev forgetting to specify cull-faces in the model
+                    modelQuads = ModelUtils.getFilteredNullQuads(model, camoState, rand, camoData, renderType, side);
+                }
+                Utils.copyAll(modelQuads, quads);
             }
 
             if (additionalQuads)
