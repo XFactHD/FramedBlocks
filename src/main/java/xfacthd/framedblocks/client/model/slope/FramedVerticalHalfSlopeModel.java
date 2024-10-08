@@ -19,12 +19,14 @@ public class FramedVerticalHalfSlopeModel extends FramedBlockModel
 {
     private final Direction dir;
     private final boolean top;
+    private final boolean ySlope;
 
     public FramedVerticalHalfSlopeModel(BlockState state, BakedModel baseModel)
     {
         super(state, baseModel);
         this.dir = state.getValue(FramedProperties.FACING_HOR);
         this.top = state.getValue(FramedProperties.TOP);
+        this.ySlope = state.getValue(FramedProperties.Y_SLOPE);
     }
 
     @Override
@@ -32,10 +34,17 @@ public class FramedVerticalHalfSlopeModel extends FramedBlockModel
     {
         Direction quadDir = quad.getDirection();
 
-        if (quadDir == dir.getOpposite())
+        if (!ySlope && quadDir == dir.getOpposite())
         {
             QuadModifier.geometry(quad)
                     .apply(Modifiers.makeHorizontalSlope(false, 45))
+                    .apply(Modifiers.cutSideUpDown(top, .5F))
+                    .export(quadMap.get(null));
+        }
+        else if (ySlope && quadDir == dir.getClockWise())
+        {
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.makeHorizontalSlope(true, 45))
                     .apply(Modifiers.cutSideUpDown(top, .5F))
                     .export(quadMap.get(null));
         }

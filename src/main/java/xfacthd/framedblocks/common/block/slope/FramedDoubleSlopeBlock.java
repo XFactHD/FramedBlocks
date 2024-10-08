@@ -15,8 +15,7 @@ import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
-import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
-import xfacthd.framedblocks.common.block.ExtPlacementStateBuilder;
+import xfacthd.framedblocks.common.block.*;
 import xfacthd.framedblocks.common.blockentity.doubled.FramedDoubleSlopeBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
@@ -25,7 +24,7 @@ import xfacthd.framedblocks.common.data.doubleblock.SolidityCheck;
 import xfacthd.framedblocks.common.data.property.SlopeType;
 import xfacthd.framedblocks.common.util.DoubleBlockTopInteractionMode;
 
-public class FramedDoubleSlopeBlock extends AbstractFramedDoubleBlock
+public class FramedDoubleSlopeBlock extends AbstractFramedDoubleBlock implements IComplexSlopeSource
 {
     public FramedDoubleSlopeBlock()
     {
@@ -244,6 +243,12 @@ public class FramedDoubleSlopeBlock extends AbstractFramedDoubleBlock
     public final BlockEntity newBlockEntity(BlockPos pos, BlockState state)
     {
         return new FramedDoubleSlopeBlockEntity(pos, state);
+    }
+
+    @Override
+    public boolean isHorizontalSlope(BlockState state)
+    {
+        return state.getValue(PropertyHolder.SLOPE_TYPE) == SlopeType.HORIZONTAL;
     }
 
 

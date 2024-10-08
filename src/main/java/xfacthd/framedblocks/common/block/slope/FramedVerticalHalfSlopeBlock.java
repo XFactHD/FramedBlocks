@@ -1,30 +1,36 @@
 package xfacthd.framedblocks.common.block.slope;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import xfacthd.framedblocks.api.block.FramedProperties;
-import xfacthd.framedblocks.api.block.PlacementStateBuilder;
+import xfacthd.framedblocks.api.block.*;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.block.FramedBlock;
+import xfacthd.framedblocks.common.block.IComplexSlopeSource;
 import xfacthd.framedblocks.common.data.BlockType;
 
-public class FramedVerticalHalfSlopeBlock extends FramedBlock
+public class FramedVerticalHalfSlopeBlock extends FramedBlock implements IComplexSlopeSource
 {
     public FramedVerticalHalfSlopeBlock()
     {
         super(BlockType.FRAMED_VERTICAL_HALF_SLOPE);
-        registerDefaultState(defaultBlockState().setValue(FramedProperties.TOP, false));
+        registerDefaultState(defaultBlockState()
+                .setValue(FramedProperties.TOP, false)
+                .setValue(FramedProperties.Y_SLOPE, false)
+        );
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        builder.add(FramedProperties.FACING_HOR, FramedProperties.TOP, BlockStateProperties.WATERLOGGED);
+        builder.add(FramedProperties.FACING_HOR, FramedProperties.TOP, FramedProperties.Y_SLOPE, BlockStateProperties.WATERLOGGED);
     }
 
     @Override
@@ -35,6 +41,12 @@ public class FramedVerticalHalfSlopeBlock extends FramedBlock
                 .withTop()
                 .withWater()
                 .build();
+    }
+
+    @Override
+    public boolean handleBlockLeftClick(BlockState state, Level level, BlockPos pos, Player player)
+    {
+        return IFramedBlock.toggleYSlope(state, level, pos, player);
     }
 
     @Override
@@ -64,5 +76,11 @@ public class FramedVerticalHalfSlopeBlock extends FramedBlock
     public BlockState mirror(BlockState state, Mirror mirror)
     {
         return Utils.mirrorCornerBlock(state, mirror);
+    }
+
+    @Override
+    public boolean isHorizontalSlope(BlockState state)
+    {
+        return true;
     }
 }

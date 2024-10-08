@@ -36,10 +36,16 @@ public class FramedSlopeModel extends FramedBlockModel
         Direction quadDir = quad.getDirection();
         if (type == SlopeType.HORIZONTAL)
         {
-            if (quad.getDirection() == dir.getOpposite())
+            if (!ySlope && quad.getDirection() == dir.getOpposite())
             {
                 QuadModifier.geometry(quad)
                         .apply(Modifiers.makeHorizontalSlope(false, 45))
+                        .export(quadMap.get(null));
+            }
+            else if (ySlope && quadDir == dir.getClockWise())
+            {
+                QuadModifier.geometry(quad)
+                        .apply(Modifiers.makeHorizontalSlope(true, 45))
                         .export(quadMap.get(null));
             }
             else if (Utils.isY(quadDir))

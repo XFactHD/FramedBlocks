@@ -25,7 +25,7 @@ import xfacthd.framedblocks.common.data.doubleblock.SolidityCheck;
 import xfacthd.framedblocks.common.data.property.SlopeType;
 import xfacthd.framedblocks.common.util.DoubleBlockTopInteractionMode;
 
-public class FramedDividedSlopeBlock extends AbstractFramedDoubleBlock implements ISlopeBlock
+public class FramedDividedSlopeBlock extends AbstractFramedDoubleBlock implements ISlopeBlock, IComplexSlopeSource
 {
     public FramedDividedSlopeBlock()
     {
@@ -112,22 +112,24 @@ public class FramedDividedSlopeBlock extends AbstractFramedDoubleBlock implement
     {
         SlopeType type = state.getValue(PropertyHolder.SLOPE_TYPE);
         Direction facing = state.getValue(FramedProperties.FACING_HOR);
+        boolean ySlope = state.getValue(FramedProperties.Y_SLOPE);
 
         if (type == SlopeType.HORIZONTAL)
         {
             BlockState defState = FBContent.BLOCK_FRAMED_VERTICAL_HALF_SLOPE.get().defaultBlockState();
             return new Tuple<>(
                     defState.setValue(FramedProperties.FACING_HOR, facing)
-                            .setValue(FramedProperties.TOP, false),
+                            .setValue(FramedProperties.TOP, false)
+                            .setValue(FramedProperties.Y_SLOPE, ySlope),
                     defState.setValue(FramedProperties.FACING_HOR, facing)
                             .setValue(FramedProperties.TOP, true)
+                            .setValue(FramedProperties.Y_SLOPE, ySlope)
             );
         }
         else
         {
             BlockState defState = FBContent.BLOCK_FRAMED_HALF_SLOPE.get().defaultBlockState();
             boolean top = type == SlopeType.TOP;
-            boolean ySlope = state.getValue(FramedProperties.Y_SLOPE);
             return new Tuple<>(
                     defState.setValue(FramedProperties.FACING_HOR, facing)
                             .setValue(FramedProperties.TOP, top)
@@ -225,6 +227,12 @@ public class FramedDividedSlopeBlock extends AbstractFramedDoubleBlock implement
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
     {
         return new FramedDividedSlopeBlockEntity(pos, state);
+    }
+
+    @Override
+    public boolean isHorizontalSlope(BlockState state)
+    {
+        return state.getValue(PropertyHolder.SLOPE_TYPE) == SlopeType.HORIZONTAL;
     }
 
 
