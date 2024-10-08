@@ -34,7 +34,7 @@ import java.util.*;
 
 public class FramedChestRenderer implements BlockEntityRenderer<FramedChestBlockEntity>
 {
-    private static final Table<Direction, LatchType, BakedModel> LID_MODELS = HashBasedTable.create(4, 3);
+    private static final Table<Direction, LatchType, FramedBlockModel> LID_MODELS = HashBasedTable.create(4, 3);
     private static final RandomSource RANDOM = RandomSource.create();
 
     @SuppressWarnings("unused")
@@ -103,7 +103,7 @@ public class FramedChestRenderer implements BlockEntityRenderer<FramedChestBlock
         RANDOM.setSeed(42);
         for (RenderType type : model.getRenderTypes(state, RANDOM, data))
         {
-            RenderType bufferType = RenderTypeHelper.getEntityRenderType(type, false);
+            RenderType bufferType = type == RenderType.solid() ? Sheets.solidBlockSheet() : RenderTypeHelper.getEntityRenderType(type, false);
 
             renderer.renderModel(
                     matrix.last(),
@@ -164,6 +164,17 @@ public class FramedChestRenderer implements BlockEntityRenderer<FramedChestBlock
                     model = fbModel.getBaseModel();
                 }
                 LID_MODELS.put(dir, latch, new FramedChestLidModel(state, model));
+            }
+        }
+    }
+
+    public static void clearModelCaches()
+    {
+        for (FramedBlockModel model : LID_MODELS.values())
+        {
+            if (model != null)
+            {
+                model.clearCache();
             }
         }
     }

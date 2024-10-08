@@ -12,7 +12,6 @@ import net.minecraftforge.event.TickEvent;
 import org.lwjgl.glfw.GLFW;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
-import xfacthd.framedblocks.api.model.FramedBlockModel;
 import xfacthd.framedblocks.api.util.FramedConstants;
 
 public final class KeyMappings
@@ -70,15 +69,7 @@ public final class KeyMappings
 
         if (KEYMAPPING_WIPE_CACHE.get().consumeClick())
         {
-            Minecraft.getInstance()
-                    .getModelManager()
-                    .getModelBakery()
-                    .getBakedTopLevelModels()
-                    .values()
-                    .stream()
-                    .filter(FramedBlockModel.class::isInstance)
-                    .map(FramedBlockModel.class::cast)
-                    .forEach(FramedBlockModel::clearCache);
+            FramedClientUtils.clearModelCaches();
 
             //noinspection ConstantConditions
             Minecraft.getInstance().player.displayClientMessage(Component.literal("Model cache cleared"), true);
