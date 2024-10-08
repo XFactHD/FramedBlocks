@@ -38,14 +38,14 @@ public final class FramingSawEmiRecipe extends BasicEmiRecipe
             FramingSawRecipe recipe, ResourceLocation id, EmiStack input, List<EmiIngredient> additives, EmiStack output
     )
     {
-        super(FramedEmiPlugin.SAW_CATEGORY, id, WIDTH, HEIGHT);
+        super(FramedEmiPlugin.SAW_CATEGORY.get(), id, WIDTH, HEIGHT);
         this.recipe = recipe;
         this.showOnRecipeRequest = input.getItemStack().is(FBContent.BLOCK_FRAMED_CUBE.get().asItem());
         this.inputWithAdditives = FramingSawRecipeCache.get(true).containsAdditive(input.getItemStack().getItem());
         this.inputs.add(input);
         this.inputs.addAll(additives);
         this.outputs.add(output);
-        this.catalysts.add(FramedEmiPlugin.SAW_WORKSTATION);
+        this.catalysts.add(FramedEmiPlugin.SAW_WORKSTATION.get());
     }
 
     @Override

@@ -10,6 +10,7 @@ import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.common.util.Lazy;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.client.screen.FramingSawScreen;
 import xfacthd.framedblocks.client.screen.PoweredFramingSawScreen;
@@ -24,17 +25,15 @@ import java.util.Set;
 @EmiEntrypoint
 public final class FramedEmiPlugin implements EmiPlugin
 {
-    public static final EmiStack SAW_WORKSTATION = EmiStack.of(FBContent.BLOCK_FRAMING_SAW.get());
-    private static final EmiStack POWERED_SAW_WORKSTATION = EmiStack.of(FBContent.BLOCK_POWERED_FRAMING_SAW.get());
-    public static final EmiRecipeCategory SAW_CATEGORY = new FramingSawRecipeCategory(SAW_WORKSTATION, SAW_WORKSTATION);
-    private static final Set<Item> CUBE_ITEM = Set.of(FBContent.BLOCK_FRAMED_CUBE.get().asItem());
+    public static final Lazy<EmiStack> SAW_WORKSTATION = Lazy.of(() -> EmiStack.of(FBContent.BLOCK_FRAMING_SAW.get()));
+    public static final Lazy<EmiRecipeCategory> SAW_CATEGORY = Lazy.of(() -> new FramingSawRecipeCategory(SAW_WORKSTATION.get(), SAW_WORKSTATION.get()));
 
     @Override
     public void register(EmiRegistry registry)
     {
-        registry.addCategory(SAW_CATEGORY);
-        registry.addWorkstation(SAW_CATEGORY, SAW_WORKSTATION);
-        registry.addWorkstation(SAW_CATEGORY, POWERED_SAW_WORKSTATION);
+        registry.addCategory(SAW_CATEGORY.get());
+        registry.addWorkstation(SAW_CATEGORY.get(), SAW_WORKSTATION.get());
+        registry.addWorkstation(SAW_CATEGORY.get(), EmiStack.of(FBContent.BLOCK_POWERED_FRAMING_SAW.get()));
         registry.addRecipeHandler(FBContent.MENU_TYPE_FRAMING_SAW.get(), new FramedEmiRecipeHandler<>());
         registry.addRecipeHandler(FBContent.MENU_TYPE_POWERED_FRAMING_SAW.get(), new FramedEmiRecipeHandler<>());
         registry.addStackProvider(FramingSawScreen.class, new FramingSawStackProvider());
@@ -50,7 +49,7 @@ public final class FramedEmiPlugin implements EmiPlugin
         int[] recipeCount = new int[1];
 
         FramingSawRecipeCache cache = FramingSawRecipeCache.get(true);
-        Set<Item> inputItems = ClientConfig.showAllRecipePermutationsInEmi ? cache.getKnownItems() : CUBE_ITEM;
+        Set<Item> inputItems = ClientConfig.showAllRecipePermutationsInEmi ? cache.getKnownItems() : Set.of(FBContent.BLOCK_FRAMED_CUBE.get().asItem());
         Container dummyContainer = new SimpleContainer(1);
         cache.getRecipes().forEach(recipe ->
         {

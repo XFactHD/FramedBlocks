@@ -52,7 +52,7 @@ public final class FramedEmiRecipeHandler<T extends AbstractContainerMenu & IFra
     @Override
     public boolean supportsRecipe(EmiRecipe recipe)
     {
-        return recipe.getCategory() == FramedEmiPlugin.SAW_CATEGORY;
+        return recipe.getCategory() == FramedEmiPlugin.SAW_CATEGORY.get();
     }
 
     @Override
