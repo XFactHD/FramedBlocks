@@ -69,26 +69,26 @@ public class FramedTankRenderer implements BlockEntityRenderer<FramedTankBlockEn
 
         // West
         consumer.addVertex(pose, MIN_XZ, height, MIN_XZ).setColor(tint).setUv(minU, minV).setOverlay(OverlayTexture.NO_OVERLAY).setLight(light).setNormal(pose, -1F, 0F, 0F);
-        consumer.addVertex(pose, MIN_XZ,     0F, MIN_XZ).setColor(tint).setUv(minU, maxV).setOverlay(OverlayTexture.NO_OVERLAY).setLight(light).setNormal(pose, -1F, 0F, 0F);
-        consumer.addVertex(pose, MIN_XZ,     0F, MAX_XZ).setColor(tint).setUv(maxU, maxV).setOverlay(OverlayTexture.NO_OVERLAY).setLight(light).setNormal(pose, -1F, 0F, 0F);
+        consumer.addVertex(pose, MIN_XZ, OFFSET, MIN_XZ).setColor(tint).setUv(minU, maxV).setOverlay(OverlayTexture.NO_OVERLAY).setLight(light).setNormal(pose, -1F, 0F, 0F);
+        consumer.addVertex(pose, MIN_XZ, OFFSET, MAX_XZ).setColor(tint).setUv(maxU, maxV).setOverlay(OverlayTexture.NO_OVERLAY).setLight(light).setNormal(pose, -1F, 0F, 0F);
         consumer.addVertex(pose, MIN_XZ, height, MAX_XZ).setColor(tint).setUv(maxU, minV).setOverlay(OverlayTexture.NO_OVERLAY).setLight(light).setNormal(pose, -1F, 0F, 0F);
 
         // East
         consumer.addVertex(pose, MAX_XZ, height, MAX_XZ).setColor(tint).setUv(maxU, minV).setOverlay(OverlayTexture.NO_OVERLAY).setLight(light).setNormal(pose, 1F, 0F, 0F);
-        consumer.addVertex(pose, MAX_XZ,     0F, MAX_XZ).setColor(tint).setUv(maxU, maxV).setOverlay(OverlayTexture.NO_OVERLAY).setLight(light).setNormal(pose, 1F, 0F, 0F);
-        consumer.addVertex(pose, MAX_XZ,     0F, MIN_XZ).setColor(tint).setUv(minU, maxV).setOverlay(OverlayTexture.NO_OVERLAY).setLight(light).setNormal(pose, 1F, 0F, 0F);
+        consumer.addVertex(pose, MAX_XZ, OFFSET, MAX_XZ).setColor(tint).setUv(maxU, maxV).setOverlay(OverlayTexture.NO_OVERLAY).setLight(light).setNormal(pose, 1F, 0F, 0F);
+        consumer.addVertex(pose, MAX_XZ, OFFSET, MIN_XZ).setColor(tint).setUv(minU, maxV).setOverlay(OverlayTexture.NO_OVERLAY).setLight(light).setNormal(pose, 1F, 0F, 0F);
         consumer.addVertex(pose, MAX_XZ, height, MIN_XZ).setColor(tint).setUv(minU, minV).setOverlay(OverlayTexture.NO_OVERLAY).setLight(light).setNormal(pose, 1F, 0F, 0F);
 
         // North
         consumer.addVertex(pose, MAX_XZ, height, MIN_XZ).setColor(tint).setUv(maxU, minV).setOverlay(OverlayTexture.NO_OVERLAY).setLight(light).setNormal(pose, 0F, 0F, -1F);
-        consumer.addVertex(pose, MAX_XZ,     0F, MIN_XZ).setColor(tint).setUv(maxU, maxV).setOverlay(OverlayTexture.NO_OVERLAY).setLight(light).setNormal(pose, 0F, 0F, -1F);
-        consumer.addVertex(pose, MIN_XZ,     0F, MIN_XZ).setColor(tint).setUv(minU, maxV).setOverlay(OverlayTexture.NO_OVERLAY).setLight(light).setNormal(pose, 0F, 0F, -1F);
+        consumer.addVertex(pose, MAX_XZ, OFFSET, MIN_XZ).setColor(tint).setUv(maxU, maxV).setOverlay(OverlayTexture.NO_OVERLAY).setLight(light).setNormal(pose, 0F, 0F, -1F);
+        consumer.addVertex(pose, MIN_XZ, OFFSET, MIN_XZ).setColor(tint).setUv(minU, maxV).setOverlay(OverlayTexture.NO_OVERLAY).setLight(light).setNormal(pose, 0F, 0F, -1F);
         consumer.addVertex(pose, MIN_XZ, height, MIN_XZ).setColor(tint).setUv(minU, minV).setOverlay(OverlayTexture.NO_OVERLAY).setLight(light).setNormal(pose, 0F, 0F, -1F);
 
         // South
         consumer.addVertex(pose, MIN_XZ, height, MAX_XZ).setColor(tint).setUv(minU, minV).setOverlay(OverlayTexture.NO_OVERLAY).setLight(light).setNormal(pose, 0F, 0F, 1F);
-        consumer.addVertex(pose, MIN_XZ,     0F, MAX_XZ).setColor(tint).setUv(minU, maxV).setOverlay(OverlayTexture.NO_OVERLAY).setLight(light).setNormal(pose, 0F, 0F, 1F);
-        consumer.addVertex(pose, MAX_XZ,     0F, MAX_XZ).setColor(tint).setUv(maxU, maxV).setOverlay(OverlayTexture.NO_OVERLAY).setLight(light).setNormal(pose, 0F, 0F, 1F);
+        consumer.addVertex(pose, MIN_XZ, OFFSET, MAX_XZ).setColor(tint).setUv(minU, maxV).setOverlay(OverlayTexture.NO_OVERLAY).setLight(light).setNormal(pose, 0F, 0F, 1F);
+        consumer.addVertex(pose, MAX_XZ, OFFSET, MAX_XZ).setColor(tint).setUv(maxU, maxV).setOverlay(OverlayTexture.NO_OVERLAY).setLight(light).setNormal(pose, 0F, 0F, 1F);
         consumer.addVertex(pose, MAX_XZ, height, MAX_XZ).setColor(tint).setUv(maxU, minV).setOverlay(OverlayTexture.NO_OVERLAY).setLight(light).setNormal(pose, 0F, 0F, 1F);
 
         if (!sameTex)
