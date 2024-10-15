@@ -74,6 +74,7 @@ public class FramedBlockEntity extends BlockEntity
     private boolean intangible = false;
     private boolean reinforced = false;
     private boolean recheckStates = false;
+    private boolean forceLightUpdate = false;
     private boolean cullStateDirty = false;
 
     /**
@@ -757,9 +758,17 @@ public class FramedBlockEntity extends BlockEntity
     @Override
     public void onLoad()
     {
-        if (!level().isClientSide() && recheckStates)
+        if (!level().isClientSide())
         {
-            checkCamoSolid();
+            if (recheckStates)
+            {
+                checkCamoSolid();
+            }
+            if (forceLightUpdate)
+            {
+                // Ensure blocks placed by exactly copying BlockState and BlockEntity correctly store their light emission
+                doLightUpdate();
+            }
         }
         super.onLoad();
     }
@@ -1059,6 +1068,11 @@ public class FramedBlockEntity extends BlockEntity
         glowing = nbt.getBoolean("glowing");
         intangible = nbt.getBoolean("intangible");
         reinforced = nbt.getBoolean("reinforced");
+
+        if (glowing)
+        {
+            recheckStates = forceLightUpdate = true;
+        }
     }
 
     protected final CamoContainer<?, ?> loadAndValidateCamo(CompoundTag tag, String key)
@@ -1076,6 +1090,7 @@ public class FramedBlockEntity extends BlockEntity
             );
             return EmptyCamoContainer.EMPTY;
         }
+        forceLightUpdate |= camo.getContent().getLightEmission() > 0;
         recheckStates |= tag.getByte("updated") < DATA_VERSION;
         return camo;
     }
