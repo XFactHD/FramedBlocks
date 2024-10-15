@@ -143,6 +143,12 @@ public class FramedChestBlockEntity extends FramedStorageBlockEntity
     }
 
     @Override
+    public Component getDisplayName()
+    {
+        return FramedChestBlock.combine(this, true).apply(FramedChestBlock.TITLE_COMBINER);
+    }
+
+    @Override
     public void setBlockState(BlockState state)
     {
         BlockState oldState = getBlockState();

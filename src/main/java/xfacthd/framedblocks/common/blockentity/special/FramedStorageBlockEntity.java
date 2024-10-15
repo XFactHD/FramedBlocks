@@ -219,7 +219,7 @@ public class FramedStorageBlockEntity extends FramedBlockEntity implements MenuP
     }
 
     @Override
-    public final Component getDisplayName()
+    public Component getDisplayName()
     {
         return getName();
     }

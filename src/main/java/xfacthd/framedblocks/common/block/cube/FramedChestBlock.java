@@ -2,6 +2,7 @@ package xfacthd.framedblocks.common.block.cube;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionResult;
@@ -102,6 +103,26 @@ public class FramedChestBlock extends FramedStorageBlock
         public OptionalLong acceptNone()
         {
             return OptionalLong.empty();
+        }
+    };
+    public static final DoubleBlockCombiner.Combiner<FramedChestBlockEntity, Component> TITLE_COMBINER = new DoubleBlockCombiner.Combiner<>()
+    {
+        @Override
+        public Component acceptDouble(FramedChestBlockEntity first, FramedChestBlockEntity second)
+        {
+            return first.hasCustomName() ? first.getName() : second.getName();
+        }
+
+        @Override
+        public Component acceptSingle(FramedChestBlockEntity single)
+        {
+            return single.getName();
+        }
+
+        @Override
+        public Component acceptNone()
+        {
+            return FramedChestBlockEntity.TITLE;
         }
     };
 
