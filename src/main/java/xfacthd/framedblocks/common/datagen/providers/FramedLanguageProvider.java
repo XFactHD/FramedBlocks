@@ -327,8 +327,6 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(FramedChestBlockEntity.TITLE, "Framed Chest");
         add(FramedStorageBlockEntity.TITLE, "Framed Secret Storage");
 
-        add(FramedSignScreen.TITLE, "Edit sign");
-
         add(FramingSawBlock.SAW_MENU_TITLE, "Framing Saw");
         add(PoweredFramingSawBlock.POWERED_SAW_MENU_TITLE, "Powered Framing Saw");
         add(FramingSawScreen.TOOLTIP_MATERIAL, "Material value: %s");

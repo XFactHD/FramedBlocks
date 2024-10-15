@@ -3,20 +3,28 @@ package xfacthd.framedblocks.client.screen;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.*;
+import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.BufferUploader;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.Tesselator;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.math.Axis;
-import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.font.TextFieldHelper;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.renderer.*;
+import net.minecraft.client.renderer.LightTexture;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
-import net.minecraft.client.renderer.texture.*;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.model.BakedModel;
-import net.minecraft.network.chat.*;
+import net.minecraft.network.chat.CommonComponents;
+import net.minecraft.network.chat.Component;
 import net.minecraft.util.FastColor;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.entity.SignText;
@@ -27,7 +35,7 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import org.joml.Matrix4f;
 import org.lwjgl.glfw.GLFW;
 import xfacthd.framedblocks.api.render.Quaternions;
-import xfacthd.framedblocks.api.util.Utils;
+import xfacthd.framedblocks.common.block.sign.AbstractFramedHangingSignBlock;
 import xfacthd.framedblocks.common.block.sign.AbstractFramedSignBlock;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.net.payload.ServerboundSignUpdatePayload;
@@ -38,12 +46,16 @@ import java.util.stream.IntStream;
 
 public class FramedSignScreen extends Screen
 {
-    public static final Component TITLE = Utils.translate("title", "sign.edit");
+    private static final Component TITLE_NORMAL = Component.translatable("sign.edit");
+    private static final Component TITLE_HANGING = Component.translatable("hanging_sign.edit");
+    private static final SignConfig CFG_STANDING = new SignConfig(90F, 56F, 95F, 0F, 1F);
+    private static final SignConfig CFG_WALL = new SignConfig(90F, 56F, 95F, 30F, 1F);
+    private static final SignConfig CFG_HANGING = new SignConfig(100F, 30F, 75F, 26F, 1F);
 
     private final AbstractFramedSignBlock signBlock;
     private final FramedSignBlockEntity sign;
     private final boolean front;
-    private final int textYOffset;
+    private final SignConfig signConfig;
     private SignText text;
     private final String[] lines;
     private int blinkCounter = 0;
@@ -52,7 +64,7 @@ public class FramedSignScreen extends Screen
 
     public FramedSignScreen(FramedSignBlockEntity sign, boolean front)
     {
-        super(TITLE);
+        super(getTitle(sign));
         this.signBlock = (AbstractFramedSignBlock) sign.getBlockState().getBlock();
         this.sign = sign;
         this.front = front;
@@ -62,20 +74,26 @@ public class FramedSignScreen extends Screen
                 .mapToObj(idx -> text.getMessage(idx, filtered))
                 .map(Component::getString)
                 .toArray(String[]::new);
-        this.textYOffset = switch ((BlockType) sign.getBlockType())
+        this.signConfig = switch ((BlockType) sign.getBlockType())
         {
-            case FRAMED_SIGN -> 67;
-            case FRAMED_WALL_SIGN -> 30;
-            case FRAMED_HANGING_SIGN, FRAMED_WALL_HANGING_SIGN -> 6;
+            case FRAMED_SIGN -> CFG_STANDING;
+            case FRAMED_WALL_SIGN -> CFG_WALL;
+            case FRAMED_HANGING_SIGN, FRAMED_WALL_HANGING_SIGN -> CFG_HANGING;
             default -> throw new IllegalArgumentException("Invalid block type: " + sign.getBlockType());
         };
+    }
+
+    private static Component getTitle(FramedSignBlockEntity be)
+    {
+        boolean hanging = be.getBlockState().getBlock() instanceof AbstractFramedHangingSignBlock;
+        return hanging ? TITLE_HANGING : TITLE_NORMAL;
     }
 
     @Override
     protected void init()
     {
         addRenderableWidget(Button.builder(CommonComponents.GUI_DONE, btn -> Minecraft.getInstance().setScreen(null))
-                .pos(width / 2 - 100, height / 2 + 60)
+                .pos(width / 2 - 100, height / 4 + 144)
                 .size(200, 20)
                 .build()
         );
@@ -107,7 +125,7 @@ public class FramedSignScreen extends Screen
     {
         blinkCounter++;
 
-        if (minecraft != null && minecraft.player != null && !sign.isRemoved() && sign.isTooFarAwayToEdit(minecraft.player))
+        if (minecraft != null && minecraft.player != null && (sign.isRemoved() || sign.isTooFarAwayToEdit(minecraft.player)))
         {
             Minecraft.getInstance().setScreen(null);
         }
@@ -152,16 +170,30 @@ public class FramedSignScreen extends Screen
     {
         super.render(graphics, mouseX, mouseY, partialTicks);
 
-        Lighting.setupLevel();
-
-        //noinspection ConstantConditions
-        graphics.drawCenteredString(font, title, width / 2, 40, ChatFormatting.WHITE.getColor());
-
-        drawSignBlock(graphics);
-
-        drawText(graphics);
-
+        Lighting.setupForFlatItems();
+        graphics.drawCenteredString(font, title, width / 2, 40, 0xFFFFFF);
+        drawSign(graphics);
         Lighting.setupFor3DItems();
+    }
+
+    @Override
+    public void renderBackground(GuiGraphics graphics, int mouseX, int mouseY, float partialTick)
+    {
+        renderTransparentBackground(graphics);
+    }
+
+    @SuppressWarnings("deprecation")
+    private void drawSign(GuiGraphics graphics)
+    {
+        graphics.pose().pushPose();
+        graphics.pose().translate(width / 2F, signConfig.baseYOff, 150F);
+        graphics.pose().pushPose();
+        Lighting.setupLevel();
+        RenderSystem.runAsFancy(() -> drawSignBlock(graphics));
+        Lighting.setupForFlatItems();
+        graphics.pose().popPose();
+        drawText(graphics);
+        graphics.pose().popPose();
     }
 
     private void drawSignBlock(GuiGraphics graphics)
@@ -169,11 +201,10 @@ public class FramedSignScreen extends Screen
         BlockState state = sign.getBlockState();
 
         PoseStack poseStack = graphics.pose();
-        poseStack.pushPose();
-        poseStack.translate(width / 2F, height / 2F, 100);
+        poseStack.translate(0, signConfig.addYOff, 0);
         poseStack.mulPose(Axis.YN.rotationDegrees(signBlock.getYRotationDegrees(state)));
         poseStack.mulPose(Quaternions.ZP_180);
-        poseStack.scale(112, 112, 112);
+        poseStack.scale(signConfig.signScale, signConfig.signScale, signConfig.signScale);
         poseStack.translate(-.5, -.25, -.5);
 
         //noinspection ConstantConditions
@@ -205,29 +236,24 @@ public class FramedSignScreen extends Screen
         }
 
         buffer.endBatch();
-        poseStack.popPose();
     }
 
     private void drawText(GuiGraphics graphics)
     {
-        graphics.pose().pushPose();
-        graphics.pose().translate(width / 2D, height / 2D - textYOffset, 110);
-        graphics.pose().scale(1.2F, 1.2F, 1F);
+        graphics.pose().translate(0F, signConfig.textYOff, 0F);
 
         //noinspection ConstantConditions
         MultiBufferSource.BufferSource buffer = minecraft.renderBuffers().bufferSource();
 
         drawLines(graphics.pose().last().pose(), buffer, lines);
         drawCursor(graphics, buffer, lines);
-
-        graphics.pose().popPose();
     }
 
     private void drawLines(Matrix4f matrix, MultiBufferSource.BufferSource buffer, String[] lines)
     {
         int color = text.getColor().getTextColor();
 
-        for(int line = 0; line < lines.length; line++)
+        for (int line = 0; line < lines.length; line++)
         {
             String text = lines[line];
             if (text != null)
@@ -250,7 +276,7 @@ public class FramedSignScreen extends Screen
         int dir = font.isBidirectional() ? -1 : 1;
         int y = currLine * 10 - 20;
 
-        for(int i = 0; i < lines.length; ++i)
+        for (int i = 0; i < lines.length; ++i)
         {
             String line = lines[i];
             if (line != null && i == currLine && inputUtil.getCursorPos() >= 0)
@@ -294,4 +320,6 @@ public class FramedSignScreen extends Screen
             }
         }
     }
+
+    private record SignConfig(float baseYOff, float addYOff, float signScale, float textYOff, float textScale) { }
 }
