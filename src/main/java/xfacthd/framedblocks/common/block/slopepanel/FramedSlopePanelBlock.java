@@ -99,10 +99,10 @@ public class FramedSlopePanelBlock extends FramedBlock
 
     public static BlockState mirrorPanel(BlockState state, Mirror mirror)
     {
-        BlockState newState = Utils.mirrorFaceBlock(state, mirror);
+        state = Utils.mirrorFaceBlock(state, mirror);
 
         HorizontalRotation rot = state.getValue(PropertyHolder.ROTATION);
-        if (newState != state && !rot.isVertical())
+        if (mirror != Mirror.NONE && !rot.isVertical())
         {
             state = state.setValue(PropertyHolder.ROTATION, rot.getOpposite());
         }
