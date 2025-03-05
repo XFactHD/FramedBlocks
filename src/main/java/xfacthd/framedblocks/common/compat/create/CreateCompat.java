@@ -1,10 +1,10 @@
 package xfacthd.framedblocks.common.compat.create;
 
-import com.simibubi.create.AllInteractionBehaviours;
-import com.simibubi.create.content.contraptions.BlockMovementChecks;
+import com.simibubi.create.api.behaviour.interaction.MovingInteractionBehaviour;
+import com.simibubi.create.api.contraption.BlockMovementChecks;
 import com.simibubi.create.content.contraptions.behaviour.*;
 import com.simibubi.create.foundation.block.connected.CTModel;
-import com.simibubi.create.foundation.utility.NBTProcessors;
+import net.createmod.catnip.nbt.NBTProcessors;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.client.model.data.ModelProperty;
 import net.minecraftforge.fml.ModList;
@@ -60,7 +60,8 @@ public final class CreateCompat
             registerInteractionBehaviour(FBContent.BLOCK_FRAMED_DOOR, new DoorMovingInteraction());
             registerInteractionBehaviour(FBContent.BLOCK_FRAMED_TRAP_DOOR, new TrapdoorMovingInteraction());
 
-            BlockMovementChecks.registerAllChecks(new FramedBlockMovementChecks());
+            BlockMovementChecks.registerAttachedCheck(new FramedBlockMovementChecks.FramedBlockAttachedCheck());
+            BlockMovementChecks.registerBrittleCheck(new FramedBlockMovementChecks.FramedBlockBrittleCheck());
 
             NBTProcessors.addProcessor(FBContent.BE_TYPE_FRAMED_SIGN.get(), tag ->
             {
@@ -78,7 +79,7 @@ public final class CreateCompat
 
         private static void registerInteractionBehaviour(RegistryObject<Block> block, MovingInteractionBehaviour behaviour)
         {
-            AllInteractionBehaviours.registerBehaviour(block.get(), behaviour);
+            MovingInteractionBehaviour.REGISTRY.register(block.get(), behaviour);
         }
     }
 
