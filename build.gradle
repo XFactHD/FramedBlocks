@@ -2,7 +2,7 @@ plugins {
     id 'eclipse'
     id 'idea'
     id 'maven-publish'
-    id 'net.neoforged.moddev.legacyforge' version '2.0.76'
+    id 'net.neoforged.moddev.legacyforge' version '2.0.79'
 }
 
 version = mod_version
@@ -143,7 +143,7 @@ dependencies {
 
     modCompileOnly "curse.maven:buildinggadgets-298187:3829297"
 
-    modCompileOnly ("xfacthd.contex:ConnectedTextures:2.1:slim") { transitive = false }
+    modImplementation ("xfacthd.contex:ConnectedTextures:2.1:slim") { transitive = false }
 
     modImplementation "curse.maven:athena-841890:5176879"
     //modRuntimeOnly "curse.maven:resfullib-570073:5210240"
