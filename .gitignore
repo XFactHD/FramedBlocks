@@ -24,6 +24,8 @@ run_server
 run_gametest
 .cache
 libs
+.DS_Store
+.vscode
 
 # Files from Forge MDK
 forge*changelog.txt
