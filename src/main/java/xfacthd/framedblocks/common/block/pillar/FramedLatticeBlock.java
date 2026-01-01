@@ -170,6 +170,11 @@ public class FramedLatticeBlock extends FramedBlock
     {
         if (state.is(BlockTags.WALLS))
         {
+            // Work around mods incorrectly tagging non-WallBlock blocks as walls
+            if (!state.hasProperty(BlockStateProperties.UP))
+            {
+                return false;
+            }
             return side == Direction.DOWN || (side == Direction.UP && state.getValue(BlockStateProperties.UP));
         }
         if (state.is(FBContent.BLOCK_FRAMED_PILLAR.get()))
