@@ -124,6 +124,12 @@ public final class ModelWrappingManager
         return handler;
     }
 
+    @Nullable
+    public static ModelWrappingHandler tryGetHandler(Block block)
+    {
+        return HANDLERS.get(block);
+    }
+
     @SuppressWarnings("unchecked")
     public static <T extends CachingModel> StandaloneModelWrappingHandler<T> getHandler(StandaloneWrapperKey<T> wrapperKey)
     {
