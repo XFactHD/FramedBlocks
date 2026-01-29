@@ -21,7 +21,7 @@ public class FramedToolItem extends Item
     @Override
     public ItemStack getCraftingRemainder(ItemStack stack)
     {
-        return stack.copy();
+        return stack.copyWithCount(1);
     }
 
     @Override

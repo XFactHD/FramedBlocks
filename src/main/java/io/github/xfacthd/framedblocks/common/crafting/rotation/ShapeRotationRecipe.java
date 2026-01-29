@@ -50,13 +50,13 @@ public final class ShapeRotationRecipe extends ShapelessRecipe
     @Override
     public NonNullList<ItemStack> getRemainingItems(CraftingInput input)
     {
-        NonNullList<ItemStack> remainders = NonNullList.withSize(input.size(), ItemStack.EMPTY);//super.getRemainingItems(input);
+        NonNullList<ItemStack> remainders = NonNullList.withSize(input.size(), ItemStack.EMPTY);
         for (int i = 0; i < input.size(); i++)
         {
             ItemStack stack = input.getItem(i);
             if (tool.test(stack))
             {
-                remainders.set(i, stack.copy());
+                remainders.set(i, stack.copyWithCount(1));
             }
         }
         return remainders;
