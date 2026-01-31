@@ -234,7 +234,8 @@ public final class ClientConfig
                         "Controls the maximum visibility of all overlays",
                         "- If set to HIDDEN, the overlays will be completely hidden.",
                         "- If set to ICON, the overlays will only show an icon.",
-                        "- If set to DETAILED, the overlays will show detailed info."
+                        "- If set to DETAILED_TOGGLE, the overlays show detailed info while crouching.",
+                        "- If set to DETAILED_ALWAYS, the overlays always show detailed info."
                 )
                 .translation(translate(KEY_MAX_OVERLAY_MODE))
                 .defineEnum(KEY_MAX_OVERLAY_MODE, OverlayDisplayMode.DETAILED_ALWAYS);
