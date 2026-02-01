@@ -1,5 +1,6 @@
 package io.github.xfacthd.framedblocks.common.block.slope;
 
+import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedDoubleBlockEntity;
@@ -7,6 +8,8 @@ import io.github.xfacthd.framedblocks.api.block.doubleblock.CamoGetter;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockParts;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockTopInteractionMode;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.SolidityCheck;
+import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
+import io.github.xfacthd.framedblocks.api.util.RotationDirection;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.block.ExtPlacementStateBuilder;
@@ -69,26 +72,19 @@ public class FramedDoubleHalfSlopeBlock extends FramedDoubleBlock
     }
 
     @Override
-    public BlockState rotate(BlockState state, Direction face, Rotation rot)
+    public BlockState rotate(BlockState state, RotationDirection direction, WrenchRotationMode mode)
     {
-        if (rot == Rotation.NONE) { return state; }
-
-        Direction facing = state.getValue(FramedProperties.FACING_HOR);
-        if (Utils.isY(face))
+        return switch (mode)
         {
-            return state.setValue(FramedProperties.FACING_HOR, rot.rotate(facing));
-        }
-        else if (face.getAxis() == facing.getAxis())
-        {
-            return state.cycle(PropertyHolder.RIGHT);
-        }
-        return state;
+            case PRIMARY -> super.rotate(state, direction, mode);
+            case SECONDARY -> state.cycle(PropertyHolder.RIGHT);
+        };
     }
 
     @Override
     protected BlockState rotate(BlockState state, Rotation rotation)
     {
-        return rotate(state, Direction.UP, rotation);
+        return BlockUtils.rotate(state, rotation);
     }
 
     @Override

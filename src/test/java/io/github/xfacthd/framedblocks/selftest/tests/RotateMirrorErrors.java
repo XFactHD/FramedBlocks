@@ -1,5 +1,8 @@
 package io.github.xfacthd.framedblocks.selftest.tests;
 
+import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
+import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
+import io.github.xfacthd.framedblocks.api.util.RotationDirection;
 import io.github.xfacthd.framedblocks.selftest.SelfTestReporter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Mirror;
@@ -13,6 +16,8 @@ import java.util.Set;
 
 public final class RotateMirrorErrors
 {
+    private static final RotationDirection[] DIRECTIONS = RotationDirection.values();
+    private static final WrenchRotationMode[] MODES = WrenchRotationMode.values();
     private static final Rotation[] ROTATIONS = Rotation.values();
     private static final Mirror[] MIRRORS = Mirror.values();
 
@@ -21,6 +26,7 @@ public final class RotateMirrorErrors
     {
         reporter.startTest("rotate/mirror correctness");
 
+        Set<Block> knownFaultyWrench = new HashSet<>();
         Set<Block> knownFaultyRotate = new HashSet<>();
         Set<Block> knownFaultyMirror = new HashSet<>();
         blocks.stream()
@@ -29,15 +35,23 @@ public final class RotateMirrorErrors
                 .flatMap(List::stream)
                 .forEach(state ->
                 {
+                    IFramedBlock block = (IFramedBlock) state.getBlock();
+                    for (WrenchRotationMode mode : MODES)
+                    {
+                        for (RotationDirection direction : DIRECTIONS)
+                        {
+                            String type = "wrench_rotate_" + mode.getSerializedName();
+                            guard(reporter, state, (modState, mod) -> block.rotate(state, mod, mode), direction, type, knownFaultyWrench);
+                        }
+                    }
+
                     for (Rotation rot : ROTATIONS)
                     {
-                        if (rot == Rotation.NONE) continue;
                         guard(reporter, state, BlockState::rotate, rot, "rotate", knownFaultyRotate);
                     }
 
                     for (Mirror mirror : MIRRORS)
                     {
-                        if (mirror == Mirror.NONE) continue;
                         guard(reporter, state, BlockState::mirror, mirror, "mirror", knownFaultyMirror);
                     }
                 });

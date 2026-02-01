@@ -4,13 +4,13 @@ import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
+import io.github.xfacthd.framedblocks.api.util.RotationDirection;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
 import io.github.xfacthd.framedblocks.common.block.IComplexSlopeSource;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
@@ -58,24 +58,19 @@ public class FramedVerticalHalfSlopeBlock extends FramedBlock implements IComple
     }
 
     @Override
-    public BlockState rotate(BlockState state, Direction face, Rotation rot)
+    public BlockState rotate(BlockState state, RotationDirection direction, WrenchRotationMode mode)
     {
-        if (Utils.isY(face))
+        return switch (mode)
         {
-            Direction facing = state.getValue(FramedProperties.FACING_HOR);
-            return state.setValue(FramedProperties.FACING_HOR, rot.rotate(facing));
-        }
-        else if (rot != Rotation.NONE)
-        {
-            return state.cycle(FramedProperties.TOP);
-        }
-        return state;
+            case PRIMARY -> super.rotate(state, direction, mode);
+            case SECONDARY -> state.cycle(FramedProperties.TOP);
+        };
     }
 
     @Override
     protected BlockState rotate(BlockState state, Rotation rotation)
     {
-        return rotate(state, Direction.UP, rotation);
+        return BlockUtils.rotate(state, rotation);
     }
 
     @Override

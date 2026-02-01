@@ -1,8 +1,11 @@
 package io.github.xfacthd.framedblocks.common.block.stairs.vertical;
 
+import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
+import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
+import io.github.xfacthd.framedblocks.api.util.RotationDirection;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
@@ -19,7 +22,6 @@ import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.phys.BlockHitResult;
 import org.jspecify.annotations.Nullable;
 
 public class FramedVerticalSlopedStairsBlock extends FramedBlock
@@ -73,46 +75,19 @@ public class FramedVerticalSlopedStairsBlock extends FramedBlock
     }
 
     @Override
-    public BlockState rotate(BlockState state, BlockHitResult hit, Rotation rot)
+    public BlockState rotate(BlockState state, RotationDirection direction, WrenchRotationMode mode)
     {
-        Direction facing = state.getValue(FramedProperties.FACING_HOR);
-        Direction face = hit.getDirection();
-
-        HorizontalRotation horRot = state.getValue(PropertyHolder.ROTATION);
-        Direction rotDir = horRot.withFacing(facing);
-        Direction rotDirTwo = horRot.rotate(Rotation.COUNTERCLOCKWISE_90).withFacing(facing);
-
-        if (!Utils.isY(face) && (face == rotDir || face == rotDirTwo))
+        return switch (mode)
         {
-            double frac = Utils.fractionInDir(hit.getLocation(), facing.getOpposite());
-            if (frac >= .5)
-            {
-                face = Direction.UP;
-            }
-        }
-        return rotate(state, face, rot);
-    }
-
-    @Override
-    public BlockState rotate(BlockState state, Direction face, Rotation rot)
-    {
-        Direction facing = state.getValue(FramedProperties.FACING_HOR);
-        if (Utils.isY(face))
-        {
-            return state.setValue(FramedProperties.FACING_HOR, rot.rotate(facing));
-        }
-        else if (face.getAxis() == facing.getAxis())
-        {
-            HorizontalRotation horRot = state.getValue(PropertyHolder.ROTATION);
-            return state.setValue(PropertyHolder.ROTATION, horRot.rotate(rot));
-        }
-        return state;
+            case PRIMARY -> HorizontalRotation.rotate(state, direction);
+            case SECONDARY -> super.rotate(state, direction, mode);
+        };
     }
 
     @Override
     protected BlockState rotate(BlockState state, Rotation rotation)
     {
-        return rotate(state, Direction.UP, rotation);
+        return BlockUtils.rotate(state, rotation);
     }
 
     @Override

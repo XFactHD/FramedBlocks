@@ -4,7 +4,8 @@ import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
+import io.github.xfacthd.framedblocks.api.util.RotationDirection;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
@@ -22,8 +23,6 @@ import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.Nullable;
 
 public class FramedFlatSlopeSlabCornerBlock extends FramedBlock
@@ -69,66 +68,23 @@ public class FramedFlatSlopeSlabCornerBlock extends FramedBlock
     }
 
     @Override
-    public BlockState rotate(BlockState state, BlockHitResult hit, Rotation rot)
+    public BlockState rotate(BlockState state, RotationDirection direction, WrenchRotationMode mode)
     {
-        Direction face = hit.getDirection();
-
-        Direction dir = state.getValue(FramedProperties.FACING_HOR);
-        if (face == dir.getOpposite() || face == dir.getClockWise())
+        return switch (mode)
         {
-            if (getBlockType() == BlockType.FRAMED_FLAT_SLOPE_SLAB_CORNER)
+            case PRIMARY -> super.rotate(state, direction, mode);
+            case SECONDARY -> state.cycle(switch (direction)
             {
-                face = Direction.UP;
-            }
-            else //FRAMED_FLAT_INNER_SLOPE_SLAB_CORNER
-            {
-                Vec3 vec = Utils.fraction(hit.getLocation());
-
-                Direction perpDir = face == dir.getClockWise() ? dir : dir.getCounterClockWise();
-                double hor = Utils.isX(perpDir) ? vec.x() : vec.z();
-                if (!Utils.isPositive(perpDir))
-                {
-                    hor = 1D - hor;
-                }
-
-                double y = vec.y();
-                if (state.getValue(PropertyHolder.TOP_HALF))
-                {
-                    y -= .5;
-                }
-                if (state.getValue(FramedProperties.TOP))
-                {
-                    y = .5 - y;
-                }
-                if ((y * 2D) >= hor)
-                {
-                    face = Direction.UP;
-                }
-            }
-        }
-
-        return rotate(state, face, rot);
+                case CLOCKWISE -> PropertyHolder.TOP_HALF;
+                case COUNTERCLOCKWISE -> FramedProperties.TOP;
+            });
+        };
     }
 
     @Override
-    public BlockState rotate(BlockState state, Direction face, Rotation rot)
+    protected BlockState rotate(BlockState state, Rotation rotation)
     {
-        if (Utils.isY(face))
-        {
-            Direction dir = state.getValue(FramedProperties.FACING_HOR);
-            return state.setValue(FramedProperties.FACING_HOR, rot.rotate(dir));
-        }
-        else if (rot != Rotation.NONE)
-        {
-            return state.cycle(PropertyHolder.TOP_HALF);
-        }
-        return state;
-    }
-
-    @Override
-    protected BlockState rotate(BlockState state, Rotation rot)
-    {
-        return rotate(state, Direction.UP, rot);
+        return BlockUtils.rotate(state, rotation);
     }
 
     @Override

@@ -85,10 +85,10 @@ public class FramedPrismBlock extends FramedBlock implements IFramedPrismBlock
     }
 
     @Override
-    protected BlockState rotate(BlockState state, Rotation rot)
+    protected BlockState rotate(BlockState state, Rotation rotation)
     {
         DirectionAxis dirAxis = state.getValue(PropertyHolder.FACING_AXIS);
-        return state.setValue(PropertyHolder.FACING_AXIS, dirAxis.rotate(rot));
+        return state.setValue(PropertyHolder.FACING_AXIS, dirAxis.rotate(rotation));
     }
 
     @Override

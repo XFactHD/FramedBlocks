@@ -1,8 +1,10 @@
 package io.github.xfacthd.framedblocks.common.block.slopeedge;
 
+import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
+import io.github.xfacthd.framedblocks.api.util.RotationDirection;
 import io.github.xfacthd.framedblocks.common.block.ExtPlacementStateBuilder;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
 import io.github.xfacthd.framedblocks.common.block.IComplexSlopeSource;
@@ -63,34 +65,19 @@ public class FramedSlopeEdgePanelBlock extends FramedBlock implements IComplexSl
     }
 
     @Override
-    public BlockState rotate(BlockState state, Direction face, Rotation rot)
+    public BlockState rotate(BlockState state, RotationDirection direction, WrenchRotationMode mode)
     {
-        Direction dir = state.getValue(FramedProperties.FACING_HOR);
-        HorizontalRotation rotation = state.getValue(PropertyHolder.ROTATION);
-        if (face.getAxis() == dir.getAxis() || face == rotation.withFacing(dir))
+        return switch (mode)
         {
-            return state.setValue(PropertyHolder.ROTATION, rotation.rotate(rot));
-        }
-        else if (Utils.isY(face))
-        {
-            return state.setValue(FramedProperties.FACING_HOR, rot.rotate(dir));
-        }
-        else if (rot != Rotation.NONE)
-        {
-            return state.cycle(PropertyHolder.FRONT);
-        }
-        return state;
+            case PRIMARY -> HorizontalRotation.rotate(state, direction);
+            case SECONDARY -> super.rotate(state, direction, mode);
+        };
     }
 
     @Override
-    protected BlockState rotate(BlockState state, Rotation rot)
+    protected BlockState rotate(BlockState state, Rotation rotation)
     {
-        Direction side = Direction.UP;
-        if (state.getValue(PropertyHolder.ROTATION) == HorizontalRotation.UP)
-        {
-            side = Direction.DOWN;
-        }
-        return rotate(state, side, rot);
+        return BlockUtils.rotate(state, rotation);
     }
 
     @Override

@@ -6,6 +6,7 @@ import io.github.xfacthd.framedblocks.api.camo.CamoContainerFactory;
 import io.github.xfacthd.framedblocks.api.camo.CamoPrinter;
 import io.github.xfacthd.framedblocks.api.camo.block.SimpleBlockCamoContainerFactory;
 import io.github.xfacthd.framedblocks.api.camo.empty.EmptyCamoContainer;
+import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.util.FramedConstants;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.client.screen.FramingSawScreen;
@@ -29,6 +30,7 @@ import io.github.xfacthd.framedblocks.common.crafting.saw.FramingSawRecipeMatchR
 import io.github.xfacthd.framedblocks.common.data.property.NullableDirection;
 import io.github.xfacthd.framedblocks.common.datagen.GeneratorHandler;
 import io.github.xfacthd.framedblocks.common.item.FramedBlueprintItem;
+import io.github.xfacthd.framedblocks.common.item.FramedWrenchItem;
 import io.github.xfacthd.framedblocks.common.item.PhantomPasteItem;
 import io.github.xfacthd.framedblocks.common.item.block.FramedMirroringBlockItem;
 import io.github.xfacthd.framedblocks.common.item.block.FramedTankBlockItem;
@@ -437,6 +439,10 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(FramedTankBlockItem.TANK_CONTENTS, "Stored Fluid: %s");
         add(FramedTankBlockItem.EMPTY_FLUID, "Empty");
         add(FramedMirroringBlockItem.PLACE_UPSIDE_DOWN, "Hold sneak key to place upside down");
+        add(FramedWrenchItem.LABEL_MODE, "Rotation Mode: %s");
+        add(FramedWrenchItem.LABEL_TOGGLE, "Right-click while crouching to toggle mode");
+        add(WrenchRotationMode.PRIMARY.getTranslatedName(), "Primary Axis");
+        add(WrenchRotationMode.SECONDARY.getTranslatedName(), "Secondary Axis");
     }
 
     private void addOverlayTranslations()

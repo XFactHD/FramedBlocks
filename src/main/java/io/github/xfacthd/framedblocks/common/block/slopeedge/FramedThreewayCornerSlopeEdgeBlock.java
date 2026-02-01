@@ -3,6 +3,8 @@ package io.github.xfacthd.framedblocks.common.block.slopeedge;
 import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
+import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
+import io.github.xfacthd.framedblocks.api.util.RotationDirection;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.common.block.ExtPlacementStateBuilder;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
@@ -68,24 +70,19 @@ public class FramedThreewayCornerSlopeEdgeBlock extends FramedBlock
     }
 
     @Override
-    public BlockState rotate(BlockState state, Direction face, Rotation rot)
+    public BlockState rotate(BlockState state, RotationDirection direction, WrenchRotationMode mode)
     {
-        Direction dir = state.getValue(FramedProperties.FACING_HOR);
-        if (Utils.isY(face) || face == dir.getOpposite() || face == dir.getClockWise())
+        return switch (mode)
         {
-            return state.setValue(FramedProperties.FACING_HOR, rot.rotate(dir));
-        }
-        else if ((face == dir || face == dir.getCounterClockWise()) && rot != Rotation.NONE)
-        {
-            return state.cycle(FramedProperties.TOP);
-        }
-        return state;
+            case PRIMARY -> super.rotate(state, direction, mode);
+            case SECONDARY -> state.cycle(FramedProperties.TOP);
+        };
     }
 
     @Override
-    protected BlockState rotate(BlockState state, Rotation rot)
+    protected BlockState rotate(BlockState state, Rotation rotation)
     {
-        return rotate(state, Direction.UP, rot);
+        return BlockUtils.rotate(state, rotation);
     }
 
     @Override

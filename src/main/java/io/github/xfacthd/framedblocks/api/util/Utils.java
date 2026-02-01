@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.math.IntMath;
 import io.github.xfacthd.framedblocks.api.camo.CamoList;
 import io.github.xfacthd.framedblocks.api.component.FrameConfig;
+import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.util.registration.DeferredDataComponentType;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -28,6 +29,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
@@ -107,6 +109,9 @@ public final class Utils
     );
     public static final DeferredDataComponentType<FrameConfig> DC_TYPE_FRAME_CONFIG = DeferredDataComponentType.createDataComponent(
             Utils.id("frame_config")
+    );
+    public static final DeferredDataComponentType<WrenchRotationMode> DC_TYPE_WRENCH_MODE = DeferredDataComponentType.createDataComponent(
+            Utils.id("wrench_mode")
     );
 
     public static Vec3 fraction(Vec3 vec)
@@ -317,6 +322,11 @@ public final class Utils
         Preconditions.checkArgument(axisOne != axisTwo, "Provided axis must be perpendicular");
         int idx = Lookups.makePerpAxisIndex(axisOne, axisTwo);
         return Objects.requireNonNull(Lookups.PERP_AXIS[idx]);
+    }
+
+    public static boolean isNinetyDegree(Rotation rotation)
+    {
+        return rotation == Rotation.CLOCKWISE_90 || rotation == Rotation.COUNTERCLOCKWISE_90;
     }
 
     public static <T> List<T> concat(List<T> listOne, List<T> listTwo)

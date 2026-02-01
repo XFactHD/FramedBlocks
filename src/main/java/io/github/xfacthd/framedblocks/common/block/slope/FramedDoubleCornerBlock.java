@@ -8,6 +8,8 @@ import io.github.xfacthd.framedblocks.api.block.doubleblock.CamoGetter;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockParts;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockTopInteractionMode;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.SolidityCheck;
+import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
+import io.github.xfacthd.framedblocks.api.util.RotationDirection;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.block.ExtPlacementStateBuilder;
 import io.github.xfacthd.framedblocks.common.block.FramedDoubleBlock;
@@ -56,22 +58,15 @@ public class FramedDoubleCornerBlock extends FramedDoubleBlock
     }
 
     @Override
-    public BlockState rotate(BlockState state, Direction side, Rotation rot)
+    public BlockState rotate(BlockState state, RotationDirection direction, WrenchRotationMode mode)
     {
-        CornerType type = state.getValue(PropertyHolder.CORNER_TYPE);
-        if (type.isHorizontal())
-        {
-            return state.setValue(PropertyHolder.CORNER_TYPE, type.rotate(rot));
-        }
-
-        return rotate(state, rot);
+        return FramedCornerSlopeBlock.rotateCorner(state, direction, mode);
     }
 
     @Override
-    protected BlockState rotate(BlockState state, Rotation rot)
+    protected BlockState rotate(BlockState state, Rotation rotation)
     {
-        Direction dir = state.getValue(FramedProperties.FACING_HOR);
-        return state.setValue(FramedProperties.FACING_HOR, rot.rotate(dir));
+        return BlockUtils.rotate(state, rotation);
     }
 
     @Override

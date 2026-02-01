@@ -1,7 +1,10 @@
 package io.github.xfacthd.framedblocks.common.block.slope;
 
+import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
+import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
+import io.github.xfacthd.framedblocks.api.util.RotationDirection;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.block.ExtPlacementStateBuilder;
@@ -65,29 +68,23 @@ public class FramedHalfSlopeBlock extends FramedBlock
     }
 
     @Override
-    public BlockState rotate(BlockState state, Direction face, Rotation rot)
+    public BlockState rotate(BlockState state, RotationDirection direction, WrenchRotationMode mode)
     {
-        if (rot == Rotation.NONE) { return state; }
-
-        Direction facing = state.getValue(FramedProperties.FACING_HOR);
-        if (Utils.isY(face) || face == facing.getOpposite())
+        return switch (mode)
         {
-            return state.setValue(FramedProperties.FACING_HOR, rot.rotate(facing));
-        }
-        else if (face == facing)
-        {
-            return state.cycle(PropertyHolder.RIGHT);
-        }
-        else
-        {
-            return state.cycle(FramedProperties.TOP);
-        }
+            case PRIMARY -> super.rotate(state, direction, mode);
+            case SECONDARY -> state.cycle(switch (direction)
+            {
+                case CLOCKWISE -> FramedProperties.TOP;
+                case COUNTERCLOCKWISE -> PropertyHolder.RIGHT;
+            });
+        };
     }
 
     @Override
     protected BlockState rotate(BlockState state, Rotation rotation)
     {
-        return rotate(state, Direction.UP, rotation);
+        return BlockUtils.rotate(state, rotation);
     }
 
     @Override

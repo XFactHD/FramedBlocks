@@ -1,10 +1,13 @@
 package io.github.xfacthd.framedblocks.common.block.stairs.standard;
 
+import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.CamoGetter;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockParts;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockTopInteractionMode;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.SolidityCheck;
+import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
+import io.github.xfacthd.framedblocks.api.util.RotationDirection;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.block.ExtPlacementStateBuilder;
@@ -52,33 +55,23 @@ public class FramedDoubleHalfStairsBlock extends FramedDoubleBlock
     }
 
     @Override
-    public BlockState rotate(BlockState state, Direction face, Rotation rot)
+    public BlockState rotate(BlockState state, RotationDirection direction, WrenchRotationMode mode)
     {
-        Direction dir = state.getValue(FramedProperties.FACING_HOR);
-        if (Utils.isY(face))
+        return switch (mode)
         {
-            return state.setValue(FramedProperties.FACING_HOR, rot.rotate(dir));
-        }
-
-        if (rot == Rotation.NONE)
-        {
-            return state;
-        }
-
-        if (face.getAxis() == dir.getAxis())
-        {
-            return state.cycle(PropertyHolder.RIGHT);
-        }
-        else
-        {
-            return state.cycle(FramedProperties.TOP);
-        }
+            case PRIMARY -> super.rotate(state, direction, mode);
+            case SECONDARY -> state.cycle(switch (direction)
+            {
+                case CLOCKWISE -> FramedProperties.TOP;
+                case COUNTERCLOCKWISE -> PropertyHolder.RIGHT;
+            });
+        };
     }
 
     @Override
-    protected BlockState rotate(BlockState state, Rotation rot)
+    protected BlockState rotate(BlockState state, Rotation rotation)
     {
-        return rotate(state, Direction.UP, rot);
+        return BlockUtils.rotate(state, rotation);
     }
 
     @Override

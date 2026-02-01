@@ -3,8 +3,11 @@ package io.github.xfacthd.framedblocks.common.block.slopeedge;
 import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
+import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
+import io.github.xfacthd.framedblocks.api.util.RotationDirection;
 import io.github.xfacthd.framedblocks.common.block.ExtPlacementStateBuilder;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
+import io.github.xfacthd.framedblocks.common.block.slope.FramedCornerSlopeBlock;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import io.github.xfacthd.framedblocks.common.data.property.CornerType;
@@ -59,22 +62,15 @@ public class FramedCornerSlopeEdgeBlock extends FramedBlock
     }
 
     @Override
-    public BlockState rotate(BlockState state, Direction side, Rotation rot)
+    public BlockState rotate(BlockState state, RotationDirection direction, WrenchRotationMode mode)
     {
-        CornerType type = state.getValue(PropertyHolder.CORNER_TYPE);
-        if (type.isHorizontal())
-        {
-            return state.setValue(PropertyHolder.CORNER_TYPE, type.rotate(rot));
-        }
-
-        return rotate(state, rot);
+        return FramedCornerSlopeBlock.rotateCorner(state, direction, mode);
     }
 
     @Override
-    protected BlockState rotate(BlockState state, Rotation rot)
+    protected BlockState rotate(BlockState state, Rotation rotation)
     {
-        Direction dir = rot.rotate(state.getValue(FramedProperties.FACING_HOR));
-        return state.setValue(FramedProperties.FACING_HOR, dir);
+        return BlockUtils.rotate(state, rotation);
     }
 
     @Override

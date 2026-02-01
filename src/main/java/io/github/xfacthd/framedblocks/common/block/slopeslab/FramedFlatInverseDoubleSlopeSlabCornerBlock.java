@@ -8,7 +8,8 @@ import io.github.xfacthd.framedblocks.api.block.doubleblock.CamoGetter;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockParts;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockTopInteractionMode;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.SolidityCheck;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
+import io.github.xfacthd.framedblocks.api.util.RotationDirection;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.block.FramedDoubleBlock;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
@@ -24,8 +25,6 @@ import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.Nullable;
 
 public class FramedFlatInverseDoubleSlopeSlabCornerBlock extends FramedDoubleBlock
@@ -67,68 +66,19 @@ public class FramedFlatInverseDoubleSlopeSlabCornerBlock extends FramedDoubleBlo
     }
 
     @Override
-    public BlockState rotate(BlockState state, BlockHitResult hit, Rotation rot)
+    public BlockState rotate(BlockState state, RotationDirection direction, WrenchRotationMode mode)
     {
-        Direction face = hit.getDirection();
-
-        Direction dir = state.getValue(FramedProperties.FACING_HOR);
-        boolean top = state.getValue(FramedProperties.TOP);
-        if (face == dir.getOpposite() || face == dir.getClockWise())
+        return switch (mode)
         {
-            Vec3 vec = Utils.fraction(hit.getLocation());
-            if ((vec.y > .5) != top)
-            {
-                face = top ? Direction.DOWN : Direction.UP;
-            }
-        }
-        else if (face == dir || face == dir.getCounterClockWise())
-        {
-            Vec3 vec = Utils.fraction(hit.getLocation());
-
-            Direction perpDir = face == dir.getClockWise() ? dir : dir.getCounterClockWise();
-            double hor = Utils.isX(perpDir) ? vec.x() : vec.z();
-            if (!Utils.isPositive(perpDir))
-            {
-                hor = 1D - hor;
-            }
-
-            double y = vec.y();
-            if (top)
-            {
-                y -= .5;
-            }
-            else
-            {
-                y = .5 - y;
-            }
-            if ((y * 2D) >= hor)
-            {
-                face = top ? Direction.DOWN : Direction.UP;
-            }
-        }
-
-        return rotate(state, face, rot);
-    }
-
-    @Override
-    public BlockState rotate(BlockState state, Direction face, Rotation rot)
-    {
-        if (Utils.isY(face))
-        {
-            Direction dir = state.getValue(FramedProperties.FACING_HOR);
-            return state.setValue(FramedProperties.FACING_HOR, rot.rotate(dir));
-        }
-        else if (rot != Rotation.NONE)
-        {
-            return state.cycle(FramedProperties.TOP);
-        }
-        return state;
+            case PRIMARY -> super.rotate(state, direction, mode);
+            case SECONDARY -> state.cycle(FramedProperties.TOP);
+        };
     }
 
     @Override
     protected BlockState rotate(BlockState state, Rotation rotation)
     {
-        return rotate(state, Direction.UP, rotation);
+        return BlockUtils.rotate(state, rotation);
     }
 
     @Override

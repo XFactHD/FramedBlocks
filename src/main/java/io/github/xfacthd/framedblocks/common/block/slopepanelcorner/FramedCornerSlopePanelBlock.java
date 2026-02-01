@@ -4,6 +4,8 @@ import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
+import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
+import io.github.xfacthd.framedblocks.api.util.RotationDirection;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
@@ -22,8 +24,6 @@ import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.Nullable;
 
 public class FramedCornerSlopePanelBlock extends FramedBlock
@@ -97,54 +97,19 @@ public class FramedCornerSlopePanelBlock extends FramedBlock
     }
 
     @Override
-    public BlockState rotate(BlockState state, BlockHitResult hit, Rotation rot)
+    public BlockState rotate(BlockState state, RotationDirection direction, WrenchRotationMode mode)
     {
-        Direction side = hit.getDirection();
-        Direction dir = state.getValue(FramedProperties.FACING_HOR);
-        switch (getBlockType())
+        return switch (mode)
         {
-            case FRAMED_SMALL_CORNER_SLOPE_PANEL, FRAMED_LARGE_CORNER_SLOPE_PANEL,
-                 FRAMED_SMALL_PRISM_CORNER_SLOPE_PANEL, FRAMED_LARGE_PRISM_CORNER_SLOPE_PANEL ->
-            {
-                if (side == dir.getOpposite() || side == dir.getClockWise())
-                {
-                    side = Direction.UP;
-                }
-            }
-            case FRAMED_SMALL_INNER_CORNER_SLOPE_PANEL, FRAMED_LARGE_INNER_CORNER_SLOPE_PANEL,
-                 FRAMED_SMALL_INNER_PRISM_CORNER_SLOPE_PANEL, FRAMED_LARGE_INNER_PRISM_CORNER_SLOPE_PANEL ->
-            {
-                if (side == dir || side == dir.getCounterClockWise())
-                {
-                    boolean top = state.getValue(FramedProperties.TOP);
-                    Vec3 hitVec = hit.getLocation();
-                    double y = Utils.fractionInDir(hitVec, top ? Direction.UP : Direction.DOWN);
-                    double xz = Utils.fractionInDir(hitVec, side == dir ? dir.getCounterClockWise() : dir) - .5;
-                    if (xz * 2D > y)
-                    {
-                        side = Direction.UP;
-                    }
-                }
-            }
-        }
-        return rotate(state, side, rot);
-    }
-
-    @Override
-    public BlockState rotate(BlockState state, Direction face, Rotation rot)
-    {
-        if (Utils.isY(face))
-        {
-            Direction dir = state.getValue(FramedProperties.FACING_HOR);
-            return state.setValue(FramedProperties.FACING_HOR, rot.rotate(dir));
-        }
-        return state.cycle(FramedProperties.TOP);
+            case PRIMARY -> super.rotate(state, direction, mode);
+            case SECONDARY -> state.cycle(FramedProperties.TOP);
+        };
     }
 
     @Override
     protected BlockState rotate(BlockState state, Rotation rotation)
     {
-        return rotate(state, Direction.UP, rotation);
+        return BlockUtils.rotate(state, rotation);
     }
 
     @Override

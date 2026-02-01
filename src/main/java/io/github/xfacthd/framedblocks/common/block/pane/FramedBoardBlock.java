@@ -111,7 +111,7 @@ public class FramedBoardBlock extends FramedBlock
     }
 
     @Override
-    protected BlockState rotate(BlockState state, Rotation rot)
+    protected BlockState rotate(BlockState state, Rotation rotation)
     {
         int mask = 0;
         for (Direction side : HOR_DIRECTIONS)
@@ -122,7 +122,7 @@ public class FramedBoardBlock extends FramedBlock
             }
         }
         mask |= mask << 4;
-        mask = Integer.rotateRight(mask, 4 - rot.ordinal());
+        mask = Integer.rotateRight(mask, 4 - rotation.ordinal());
         for (Direction side : HOR_DIRECTIONS)
         {
             boolean set = (mask & (1 << side.get2DDataValue())) != 0;

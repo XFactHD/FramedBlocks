@@ -4,7 +4,8 @@ import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
+import io.github.xfacthd.framedblocks.api.util.RotationDirection;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import net.minecraft.core.BlockPos;
@@ -18,8 +19,6 @@ import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.Nullable;
 
 public class FramedFlatElevatedSlopeSlabCornerBlock extends FramedBlock
@@ -61,67 +60,19 @@ public class FramedFlatElevatedSlopeSlabCornerBlock extends FramedBlock
     }
 
     @Override
-    public BlockState rotate(BlockState state, BlockHitResult hit, Rotation rot)
+    public BlockState rotate(BlockState state, RotationDirection direction, WrenchRotationMode mode)
     {
-        Direction face = hit.getDirection();
-
-        Direction dir = state.getValue(FramedProperties.FACING_HOR);
-        if (face == dir.getOpposite() || face == dir.getClockWise())
+        return switch (mode)
         {
-            boolean top = state.getValue(FramedProperties.TOP);
-            Vec3 vec = Utils.fraction(hit.getLocation());
-
-            if (getBlockType() == BlockType.FRAMED_FLAT_ELEV_SLOPE_SLAB_CORNER)
-            {
-                if ((vec.y > .5) != top)
-                {
-                    face = Direction.UP;
-                }
-            }
-            else //FRAMED_FLAT_ELEV_INNER_SLOPE_SLAB_CORNER
-            {
-                Direction perpDir = face == dir.getClockWise() ? dir : dir.getCounterClockWise();
-
-                double hor = Utils.isX(perpDir) ? vec.x() : vec.z();
-                if (!Utils.isPositive(perpDir))
-                {
-                    hor = 1D - hor;
-                }
-
-                double y = vec.y();
-                if (top)
-                {
-                    y = 1D - y;
-                }
-                y -= .5D;
-                if ((y * 2D) >= hor)
-                {
-                    face = Direction.UP;
-                }
-            }
-        }
-        return rotate(state, face, rot);
+            case PRIMARY -> super.rotate(state, direction, mode);
+            case SECONDARY -> state.cycle(FramedProperties.TOP);
+        };
     }
 
     @Override
-    public BlockState rotate(BlockState state, Direction face, Rotation rot)
+    protected BlockState rotate(BlockState state, Rotation rotation)
     {
-        if (Utils.isY(face))
-        {
-            Direction dir = state.getValue(FramedProperties.FACING_HOR);
-            return state.setValue(FramedProperties.FACING_HOR, rot.rotate(dir));
-        }
-        else if (rot != Rotation.NONE)
-        {
-            return state.cycle(FramedProperties.TOP);
-        }
-        return state;
-    }
-
-    @Override
-    protected BlockState rotate(BlockState state, Rotation rot)
-    {
-        return rotate(state, Direction.UP, rot);
+        return BlockUtils.rotate(state, rotation);
     }
 
     @Override

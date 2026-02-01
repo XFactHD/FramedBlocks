@@ -42,13 +42,9 @@ public class FramedCheckeredCubeSegmentBlock extends FramedBlock
     }
 
     @Override
-    protected BlockState rotate(BlockState state, Rotation rot)
+    protected BlockState rotate(BlockState state, Rotation rotation)
     {
-        if (rot != Rotation.NONE && rot != Rotation.CLOCKWISE_180)
-        {
-            return state.cycle(PropertyHolder.SECOND);
-        }
-        return state;
+        return Utils.isNinetyDegree(rotation) ? state.cycle(PropertyHolder.SECOND) : state;
     }
 
     @Override

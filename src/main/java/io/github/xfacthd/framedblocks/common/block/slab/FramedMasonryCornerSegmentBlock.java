@@ -3,10 +3,10 @@ package io.github.xfacthd.framedblocks.common.block.slab;
 import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
+import io.github.xfacthd.framedblocks.api.util.RotationDirection;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
-import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Mirror;
@@ -43,20 +43,19 @@ public class FramedMasonryCornerSegmentBlock extends FramedBlock
     }
 
     @Override
-    public BlockState rotate(BlockState state, Direction face, Rotation rot)
+    public BlockState rotate(BlockState state, RotationDirection direction, WrenchRotationMode mode)
     {
-        if (!Utils.isY(face) && rot != Rotation.NONE)
+        return switch (mode)
         {
-            return state.cycle(FramedProperties.TOP);
-        }
-        return super.rotate(state, face, rot);
+            case PRIMARY -> super.rotate(state, direction, mode);
+            case SECONDARY -> state.cycle(FramedProperties.TOP);
+        };
     }
 
     @Override
-    protected BlockState rotate(BlockState state, Rotation rot)
+    protected BlockState rotate(BlockState state, Rotation rotation)
     {
-        Direction dir = state.getValue(FramedProperties.FACING_HOR);
-        return state.setValue(FramedProperties.FACING_HOR, rot.rotate(dir));
+        return BlockUtils.rotate(state, rotation);
     }
 
     @Override

@@ -2,12 +2,13 @@ package io.github.xfacthd.framedblocks.common.block.cube;
 
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
+import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.model.wrapping.WrapHelper;
 import io.github.xfacthd.framedblocks.api.model.wrapping.statemerger.StateMerger;
+import io.github.xfacthd.framedblocks.api.util.RotationDirection;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
-import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.Block;
@@ -52,18 +53,15 @@ public class FramedMiniCubeBlock extends FramedBlock
     }
 
     @Override
-    public BlockState rotate(BlockState state, Direction face, Rotation rotation)
+    public BlockState rotate(BlockState state, RotationDirection direction, WrenchRotationMode mode)
     {
-        int rot = state.getValue(BlockStateProperties.ROTATION_16);
-        if (rotation == Rotation.CLOCKWISE_90)
+        int rotation = state.getValue(BlockStateProperties.ROTATION_16);
+        rotation += switch (direction)
         {
-            rot = (rot + 1) % 16;
-        }
-        else
-        {
-            rot = (rot + 15) % 16;
-        }
-        return state.setValue(BlockStateProperties.ROTATION_16, rot);
+            case CLOCKWISE -> 1;
+            case COUNTERCLOCKWISE -> 15;
+        };
+        return state.setValue(BlockStateProperties.ROTATION_16, rotation % 16);
     }
 
     @Override

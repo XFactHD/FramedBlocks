@@ -7,7 +7,8 @@ import io.github.xfacthd.framedblocks.api.block.doubleblock.CamoGetter;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockParts;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockTopInteractionMode;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.SolidityCheck;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
+import io.github.xfacthd.framedblocks.api.util.RotationDirection;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.block.ExtPlacementStateBuilder;
 import io.github.xfacthd.framedblocks.common.block.FramedDoubleBlock;
@@ -27,7 +28,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.Half;
-import net.minecraft.world.phys.BlockHitResult;
 import org.jspecify.annotations.Nullable;
 
 public class FramedStackedSlopeEdgeBlock extends FramedDoubleBlock implements IComplexSlopeSource
@@ -75,46 +75,19 @@ public class FramedStackedSlopeEdgeBlock extends FramedDoubleBlock implements IC
     }
 
     @Override
-    public BlockState rotate(BlockState state, BlockHitResult hit, Rotation rot)
+    public BlockState rotate(BlockState state, RotationDirection direction, WrenchRotationMode mode)
     {
-        Direction dir = state.getValue(FramedProperties.FACING_HOR);
-        Direction face = hit.getDirection();
-        if (hit.getDirection() == dir.getOpposite())
+        return switch (mode)
         {
-            Direction coordDir = switch (state.getValue(PropertyHolder.SLOPE_TYPE))
-            {
-                case BOTTOM -> Direction.UP;
-                case HORIZONTAL -> dir.getClockWise();
-                case TOP -> Direction.DOWN;
-            };
-            if (Utils.fractionInDir(hit.getLocation(), coordDir) < .5)
-            {
-                face = dir;
-            }
-        }
-        return rotate(state, face, rot);
+            case PRIMARY -> super.rotate(state, direction, mode);
+            case SECONDARY -> direction.cycle(state, PropertyHolder.SLOPE_TYPE);
+        };
     }
 
     @Override
-    public BlockState rotate(BlockState state, Direction face, Rotation rot)
+    protected BlockState rotate(BlockState state, Rotation rotation)
     {
-        Direction dir = state.getValue(FramedProperties.FACING_HOR);
-        SlopeType type = state.getValue(PropertyHolder.SLOPE_TYPE);
-        if (Utils.isY(face) || (type != SlopeType.HORIZONTAL && face == dir.getOpposite()))
-        {
-            return state.setValue(FramedProperties.FACING_HOR, rot.rotate(dir));
-        }
-        else if (rot != Rotation.NONE && face == dir)
-        {
-            return state.cycle(PropertyHolder.SLOPE_TYPE);
-        }
-        return state;
-    }
-
-    @Override
-    protected BlockState rotate(BlockState state, Rotation rot)
-    {
-        return rotate(state, Direction.UP, rot);
+        return BlockUtils.rotate(state, rotation);
     }
 
     @Override

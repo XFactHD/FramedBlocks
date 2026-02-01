@@ -2,6 +2,8 @@ package io.github.xfacthd.framedblocks.common.block.pillar;
 
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
+import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
+import io.github.xfacthd.framedblocks.api.util.RotationDirection;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
@@ -138,16 +140,16 @@ public class FramedLatticeBlock extends FramedBlock implements IPillarLikeBlock
     }
 
     @Override
-    public BlockState rotate(BlockState state, Direction face, Rotation rot)
+    public BlockState rotate(BlockState state, RotationDirection direction, WrenchRotationMode mode)
     {
         //Not rotatable by wrench
         return state;
     }
 
     @Override
-    protected BlockState rotate(BlockState state, Rotation rot)
+    protected BlockState rotate(BlockState state, Rotation rotation)
     {
-        if (rot != Rotation.NONE && rot != Rotation.CLOCKWISE_180)
+        if (Utils.isNinetyDegree(rotation))
         {
             boolean xAxis = state.getValue(FramedProperties.Z_AXIS);
             boolean zAxis = state.getValue(FramedProperties.X_AXIS);

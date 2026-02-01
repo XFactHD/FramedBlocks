@@ -4,13 +4,13 @@ import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
 import io.github.xfacthd.framedblocks.api.camo.CamoList;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
+import io.github.xfacthd.framedblocks.api.util.RotationDirection;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import io.github.xfacthd.framedblocks.common.item.block.FramedSpecialBlockItem;
 import net.minecraft.core.Direction;
-import net.minecraft.util.Mth;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -25,8 +25,6 @@ import org.jspecify.annotations.Nullable;
 
 public class FramedLayeredCubeBlock extends FramedBlock
 {
-    private static final Direction[] DIRECTIONS = Direction.values();
-
     public FramedLayeredCubeBlock(Properties props)
     {
         super(BlockType.FRAMED_LAYERED_CUBE, props);
@@ -100,27 +98,15 @@ public class FramedLayeredCubeBlock extends FramedBlock
     }
 
     @Override
-    public BlockState rotate(BlockState state, Direction face, Rotation rot)
+    public BlockState rotate(BlockState state, RotationDirection direction, WrenchRotationMode mode)
     {
-        Direction facing = state.getValue(BlockStateProperties.FACING);
-        return state.setValue(BlockStateProperties.FACING, switch (rot)
-        {
-            case NONE -> facing;
-            case CLOCKWISE_90 -> DIRECTIONS[(facing.ordinal() + 1) % DIRECTIONS.length];
-            case CLOCKWISE_180 -> facing.getOpposite();
-            case COUNTERCLOCKWISE_90 -> DIRECTIONS[Mth.positiveModulo(facing.ordinal() - 1, DIRECTIONS.length)];
-        });
+        return direction.cycle(state, BlockStateProperties.FACING);
     }
 
     @Override
-    protected BlockState rotate(BlockState state, Rotation rot)
+    protected BlockState rotate(BlockState state, Rotation rotation)
     {
-        Direction facing = state.getValue(BlockStateProperties.FACING);
-        if (Utils.isY(facing))
-        {
-            return state;
-        }
-        return state.setValue(BlockStateProperties.FACING, rot.rotate(facing));
+        return BlockUtils.rotate(state, BlockStateProperties.FACING, rotation);
     }
 
     @Override

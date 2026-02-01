@@ -2,11 +2,12 @@ package io.github.xfacthd.framedblocks.common.block.slab;
 
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
+import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
+import io.github.xfacthd.framedblocks.api.util.RotationDirection;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
-import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Mirror;
@@ -48,29 +49,19 @@ public class FramedCheckeredSlabSegmentBlock extends FramedBlock
     }
 
     @Override
-    public BlockState rotate(BlockState state, Direction side, Rotation rot)
+    public BlockState rotate(BlockState state, RotationDirection direction, WrenchRotationMode mode)
     {
-        if (Utils.isY(side))
+        return switch (mode)
         {
-            if (rot != Rotation.NONE && rot != Rotation.CLOCKWISE_180)
-            {
-                return state.cycle(PropertyHolder.SECOND);
-            }
-        }
-        else
-        {
-            if (rot != Rotation.NONE)
-            {
-                return state.cycle(FramedProperties.TOP);
-            }
-        }
-        return super.rotate(state, rot);
+            case PRIMARY -> rotate(state, direction.toVanillaRotation());
+            case SECONDARY -> state.cycle(FramedProperties.TOP);
+        };
     }
 
     @Override
-    protected BlockState rotate(BlockState state, Rotation rot)
+    protected BlockState rotate(BlockState state, Rotation rotation)
     {
-        return rotate(state, Direction.UP, rot);
+        return Utils.isNinetyDegree(rotation) ? state.cycle(PropertyHolder.SECOND) : state;
     }
 
     @Override

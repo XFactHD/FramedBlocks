@@ -54,10 +54,10 @@ public class FramedElevatedDoubleSlopedPrismBlock extends FramedDoubleBlock impl
     }
 
     @Override
-    protected BlockState rotate(BlockState state, Rotation rot)
+    protected BlockState rotate(BlockState state, Rotation rotation)
     {
         CompoundDirection cmpDir = state.getValue(PropertyHolder.FACING_DIR);
-        return state.setValue(PropertyHolder.FACING_DIR, cmpDir.rotate(rot));
+        return state.setValue(PropertyHolder.FACING_DIR, cmpDir.rotate(rotation));
     }
 
     @Override

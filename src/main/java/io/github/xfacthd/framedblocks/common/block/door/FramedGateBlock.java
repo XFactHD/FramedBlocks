@@ -1,5 +1,6 @@
 package io.github.xfacthd.framedblocks.common.block.door;
 
+import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
 import io.github.xfacthd.framedblocks.api.util.Utils;
@@ -153,7 +154,7 @@ public class FramedGateBlock extends FramedBlock
     @Override
     protected BlockState rotate(BlockState state, Rotation rotation)
     {
-        return state.setValue(BlockStateProperties.HORIZONTAL_FACING, rotation.rotate(state.getValue(BlockStateProperties.HORIZONTAL_FACING)));
+        return BlockUtils.rotate(state, BlockStateProperties.HORIZONTAL_FACING, rotation);
     }
 
     @Override

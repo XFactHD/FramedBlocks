@@ -7,7 +7,8 @@ import io.github.xfacthd.framedblocks.api.block.doubleblock.CamoGetter;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockParts;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockTopInteractionMode;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.SolidityCheck;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
+import io.github.xfacthd.framedblocks.api.util.RotationDirection;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.block.ExtPlacementStateBuilder;
 import io.github.xfacthd.framedblocks.common.block.FramedDoubleBlock;
@@ -58,31 +59,25 @@ public class FramedDividedSlopeBlock extends FramedDoubleBlock implements ISlope
     }
 
     @Override
-    public BlockState rotate(BlockState state, Direction face, Rotation rot)
-    {
-        Direction dir = state.getValue(FramedProperties.FACING_HOR);
-        SlopeType type = state.getValue(PropertyHolder.SLOPE_TYPE);
-        if (Utils.isY(face) || (type != SlopeType.HORIZONTAL && face == dir.getOpposite()))
-        {
-            return state.setValue(FramedProperties.FACING_HOR, rot.rotate(dir));
-        }
-        else if (rot != Rotation.NONE && face == dir)
-        {
-            return state.cycle(PropertyHolder.SLOPE_TYPE);
-        }
-        return state;
-    }
-
-    @Override
     public boolean handleBlockLeftClick(BlockState state, Level level, BlockPos pos, Player player)
     {
         return IFramedBlock.toggleYSlope(state, level, pos, player);
     }
 
     @Override
-    protected BlockState rotate(BlockState state, Rotation rot)
+    public BlockState rotate(BlockState state, RotationDirection direction, WrenchRotationMode mode)
     {
-        return rotate(state, Direction.UP, rot);
+        return switch (mode)
+        {
+            case PRIMARY -> super.rotate(state, direction, mode);
+            case SECONDARY -> direction.cycle(state, PropertyHolder.SLOPE_TYPE);
+        };
+    }
+
+    @Override
+    protected BlockState rotate(BlockState state, Rotation rotation)
+    {
+        return BlockUtils.rotate(state, rotation);
     }
 
     @Override

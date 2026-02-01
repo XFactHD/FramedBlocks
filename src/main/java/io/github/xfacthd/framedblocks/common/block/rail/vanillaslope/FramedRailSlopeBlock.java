@@ -214,10 +214,10 @@ public class FramedRailSlopeBlock<BE extends FramedBlockEntity> extends BaseRail
     }
 
     @Override
-    protected BlockState rotate(BlockState state, Rotation rot)
+    protected BlockState rotate(BlockState state, Rotation rotation)
     {
         Direction dir = FramedUtils.getDirectionFromAscendingRailShape(state.getValue(PropertyHolder.ASCENDING_RAIL_SHAPE));
-        dir = rot.rotate(dir);
+        dir = rotation.rotate(dir);
         return state.setValue(PropertyHolder.ASCENDING_RAIL_SHAPE, FramedUtils.getAscendingRailShapeFromDirection(dir));
     }
 

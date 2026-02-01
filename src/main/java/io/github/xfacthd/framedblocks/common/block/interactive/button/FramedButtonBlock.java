@@ -101,11 +101,11 @@ public class FramedButtonBlock extends ButtonBlock implements IFramedBlockIntern
     }
 
     @Override
-    public BlockState rotate(BlockState state, Direction face, Rotation rot)
+    protected BlockState rotate(BlockState state, Rotation rotation)
     {
         if (state.getValue(FACE) != AttachFace.WALL)
         {
-            return rotate(state, rot);
+            return super.rotate(state, rotation);
         }
         return state;
     }

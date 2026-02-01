@@ -2,10 +2,13 @@ package io.github.xfacthd.framedblocks.common.data.property;
 
 import com.google.common.base.Preconditions;
 import io.github.xfacthd.framedblocks.api.render.Quaternions;
+import io.github.xfacthd.framedblocks.api.util.RotationDirection;
 import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import net.minecraft.core.Direction;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -231,5 +234,11 @@ public enum HorizontalRotation implements StringRepresentable
             return LEFT;
         }
         throw new IllegalStateException(String.format("How did we get here?! %s|%s", facing, hitFace));
+    }
+
+    public static BlockState rotate(BlockState state, RotationDirection direction)
+    {
+        HorizontalRotation rotation = state.getValue(PropertyHolder.ROTATION);
+        return state.setValue(PropertyHolder.ROTATION, rotation.rotate(direction.toVanillaRotation()));
     }
 }

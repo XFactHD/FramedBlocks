@@ -10,11 +10,13 @@ import io.github.xfacthd.framedblocks.api.camo.CamoContainer;
 import io.github.xfacthd.framedblocks.api.camo.CamoContent;
 import io.github.xfacthd.framedblocks.api.camo.CamoList;
 import io.github.xfacthd.framedblocks.api.camo.empty.EmptyCamoContainer;
+import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.internal.InternalAPI;
 import io.github.xfacthd.framedblocks.api.model.data.AbstractFramedBlockData;
 import io.github.xfacthd.framedblocks.api.predicate.cull.SideSkipPredicate;
 import io.github.xfacthd.framedblocks.api.shapes.ShapeLookup;
 import io.github.xfacthd.framedblocks.api.util.ConfigView;
+import io.github.xfacthd.framedblocks.api.util.RotationDirection;
 import io.github.xfacthd.framedblocks.api.util.SoundUtils;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import net.minecraft.ChatFormatting;
@@ -42,7 +44,6 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ScheduledTickAccess;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
-import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.SupportType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -138,15 +139,16 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension
             BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit
     )
     {
-        if (getBlockType().canLockState() && hand == InteractionHand.MAIN_HAND && lockState(level, pos, player, player.getItemInHand(hand)))
+        ItemStack heldItem = player.getItemInHand(hand);
+        if (getBlockType().canLockState() && hand == InteractionHand.MAIN_HAND && lockState(level, pos, player, heldItem))
         {
             return InteractionResult.SUCCESS;
         }
 
-        if (Utils.isWrenchRotationTool(player.getItemInHand(hand)))
+        if (Utils.isWrenchRotationTool(heldItem))
         {
-            Rotation rot = player.isShiftKeyDown() ? Rotation.COUNTERCLOCKWISE_90 : Rotation.CLOCKWISE_90;
-            BlockState newState = rotate(state, hit, rot);
+            WrenchRotationMode mode = heldItem.getOrDefault(Utils.DC_TYPE_WRENCH_MODE, WrenchRotationMode.PRIMARY);
+            BlockState newState = rotate(state, RotationDirection.of(player.isShiftKeyDown()), mode);
             if (newState != state)
             {
                 if (!level.isClientSide())
@@ -552,15 +554,10 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension
         return state;
     }
 
-    default BlockState rotate(BlockState state, BlockHitResult hit, Rotation rot)
-    {
-        return rotate(state, hit.getDirection(), rot);
-    }
-
     @SuppressWarnings("deprecation")
-    default BlockState rotate(BlockState state, Direction face, Rotation rot)
+    default BlockState rotate(BlockState state, RotationDirection direction, WrenchRotationMode mode)
     {
-        return state.rotate(rot);
+        return state.rotate(direction.toVanillaRotation());
     }
 
     @Override

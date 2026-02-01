@@ -7,7 +7,6 @@ import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
-import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Mirror;
@@ -46,14 +45,13 @@ public class FramedCheckeredPanelSegmentBlock extends FramedBlock
     }
 
     @Override
-    protected BlockState rotate(BlockState state, Rotation rot)
+    protected BlockState rotate(BlockState state, Rotation rotation)
     {
-        if (rot != Rotation.CLOCKWISE_180)
+        if (Utils.isNinetyDegree(rotation))
         {
             state = state.cycle(PropertyHolder.SECOND);
         }
-        Direction dir = state.getValue(FramedProperties.FACING_HOR);
-        return state.setValue(FramedProperties.FACING_HOR, rot.rotate(dir));
+        return BlockUtils.rotate(state, rotation);
     }
 
     @Override

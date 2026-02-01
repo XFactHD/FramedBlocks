@@ -4,6 +4,8 @@ import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
+import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
+import io.github.xfacthd.framedblocks.api.util.RotationDirection;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.blockentity.special.FramedChestBlockEntity;
@@ -259,21 +261,20 @@ public class FramedChestBlock extends FramedStorageBlock
     }
 
     @Override
-    public BlockState rotate(BlockState state, Direction face, Rotation rot)
+    public BlockState rotate(BlockState state, RotationDirection direction, WrenchRotationMode mode)
     {
         if (state.getValue(BlockStateProperties.CHEST_TYPE) != ChestType.SINGLE)
         {
             // Prevent rotation by players on double chests
             return state;
         }
-        return super.rotate(state, face, rot);
+        return super.rotate(state, direction, mode);
     }
 
     @Override
-    protected BlockState rotate(BlockState state, Rotation rot)
+    protected BlockState rotate(BlockState state, Rotation rotation)
     {
-        Direction dir = rot.rotate(state.getValue(FramedProperties.FACING_HOR));
-        return state.setValue(FramedProperties.FACING_HOR, dir);
+        return BlockUtils.rotate(state, rotation);
     }
 
     @Override

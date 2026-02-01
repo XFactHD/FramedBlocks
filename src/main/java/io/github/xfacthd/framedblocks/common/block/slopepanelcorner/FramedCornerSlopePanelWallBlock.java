@@ -3,7 +3,8 @@ package io.github.xfacthd.framedblocks.common.block.slopepanelcorner;
 import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
+import io.github.xfacthd.framedblocks.api.util.RotationDirection;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.block.ExtPlacementStateBuilder;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
@@ -11,7 +12,6 @@ import io.github.xfacthd.framedblocks.common.data.BlockType;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import io.github.xfacthd.framedblocks.common.data.property.HorizontalRotation;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -22,8 +22,6 @@ import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.Nullable;
 
 public class FramedCornerSlopePanelWallBlock extends FramedBlock
@@ -85,62 +83,19 @@ public class FramedCornerSlopePanelWallBlock extends FramedBlock
     }
 
     @Override
-    public BlockState rotate(BlockState state, BlockHitResult hit, Rotation rot)
+    public BlockState rotate(BlockState state, RotationDirection direction, WrenchRotationMode mode)
     {
-        Direction side = hit.getDirection();
-
-        Direction dir = state.getValue(FramedProperties.FACING_HOR);
-        HorizontalRotation rotation = state.getValue(PropertyHolder.ROTATION);
-        Direction rotDir = rotation.withFacing(dir);
-        Direction perpRotDir = rotation.rotate(Rotation.COUNTERCLOCKWISE_90).withFacing(dir);
-        switch (getBlockType())
+        return switch (mode)
         {
-            case FRAMED_SMALL_CORNER_SLOPE_PANEL_W, FRAMED_LARGE_CORNER_SLOPE_PANEL_W,
-                 FRAMED_SMALL_PRISM_CORNER_SLOPE_PANEL_W, FRAMED_LARGE_PRISM_CORNER_SLOPE_PANEL_W ->
-            {
-                if (side == rotDir.getOpposite() || side == perpRotDir.getOpposite())
-                {
-                    side = dir;
-                }
-            }
-            case FRAMED_SMALL_INNER_CORNER_SLOPE_PANEL_W, FRAMED_LARGE_INNER_CORNER_SLOPE_PANEL_W,
-                 FRAMED_SMALL_INNER_PRISM_CORNER_SLOPE_PANEL_W, FRAMED_LARGE_INNER_PRISM_CORNER_SLOPE_PANEL_W ->
-            {
-                if (side == rotDir || side == perpRotDir)
-                {
-                    Vec3 hitVec = hit.getLocation();
-                    double paralell = Utils.fractionInDir(hitVec, dir);
-                    double perp = Utils.fractionInDir(hitVec, side == rotDir ? perpRotDir : rotDir) - .5;
-                    if (perp * 2D > paralell)
-                    {
-                        side = dir;
-                    }
-                }
-            }
-        }
-        return rotate(state, side, rot);
+            case PRIMARY -> HorizontalRotation.rotate(state, direction);
+            case SECONDARY -> super.rotate(state, direction, mode);
+        };
     }
 
     @Override
-    public BlockState rotate(BlockState state, Direction face, Rotation rot)
+    protected BlockState rotate(BlockState state, Rotation rotation)
     {
-        Direction dir = state.getValue(FramedProperties.FACING_HOR);
-        if (face.getAxis() == dir.getAxis())
-        {
-            HorizontalRotation rotation = state.getValue(PropertyHolder.ROTATION);
-            return state.setValue(PropertyHolder.ROTATION, rotation.rotate(rot));
-        }
-        else if (Utils.isY(face))
-        {
-            return state.setValue(FramedProperties.FACING_HOR, rot.rotate(dir));
-        }
-        return state;
-    }
-
-    @Override
-    protected BlockState rotate(BlockState state, Rotation rot)
-    {
-        return rotate(state, state.getValue(FramedProperties.FACING_HOR), rot);
+        return BlockUtils.rotate(state, rotation);
     }
 
     @Override

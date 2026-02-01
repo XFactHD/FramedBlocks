@@ -3,6 +3,8 @@ package io.github.xfacthd.framedblocks.common.block.interactive;
 import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
+import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
+import io.github.xfacthd.framedblocks.api.util.RotationDirection;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
 import io.github.xfacthd.framedblocks.common.blockentity.special.FramedItemFrameBlockEntity;
@@ -183,17 +185,16 @@ public class FramedItemFrameBlock extends FramedBlock
     }
 
     @Override
-    public BlockState rotate(BlockState state, Direction face, Rotation rot)
+    public BlockState rotate(BlockState state, RotationDirection direction, WrenchRotationMode mode)
     {
         //Not rotatable by wrench
         return state;
     }
 
     @Override
-    protected BlockState rotate(BlockState state, Rotation rot)
+    protected BlockState rotate(BlockState state, Rotation rotation)
     {
-        Direction dir = state.getValue(BlockStateProperties.FACING);
-        return state.setValue(BlockStateProperties.FACING, rot.rotate(dir));
+        return BlockUtils.rotate(state, BlockStateProperties.FACING, rotation);
     }
 
     @Override

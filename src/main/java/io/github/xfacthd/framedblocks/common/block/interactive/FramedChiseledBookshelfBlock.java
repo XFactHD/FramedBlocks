@@ -207,10 +207,9 @@ public class FramedChiseledBookshelfBlock extends FramedBlock implements Selecta
     }
 
     @Override
-    protected BlockState rotate(BlockState state, Rotation rot)
+    protected BlockState rotate(BlockState state, Rotation rotation)
     {
-        Direction dir = state.getValue(FramedProperties.FACING_HOR);
-        return state.setValue(FramedProperties.FACING_HOR, rot.rotate(dir));
+        return BlockUtils.rotate(state, rotation);
     }
 
     @Override

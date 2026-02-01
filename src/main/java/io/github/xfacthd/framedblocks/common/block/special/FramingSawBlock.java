@@ -1,11 +1,11 @@
 package io.github.xfacthd.framedblocks.common.block.special;
 
+import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import io.github.xfacthd.framedblocks.common.menu.FramingSawMenu;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
@@ -89,8 +89,7 @@ public class FramingSawBlock extends Block
     @Override
     protected BlockState rotate(BlockState state, Rotation rotation)
     {
-        Direction dir = rotation.rotate(state.getValue(FramedProperties.FACING_HOR));
-        return state.setValue(FramedProperties.FACING_HOR, dir);
+        return BlockUtils.rotate(state, rotation);
     }
 
     protected Component getSawMenuTitle()

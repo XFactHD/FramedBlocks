@@ -134,25 +134,15 @@ public class FramedOneWayWindowBlock extends FramedBlock
     @Override
     protected BlockState rotate(BlockState state, Rotation rotation)
     {
-        Direction dir = state.getValue(PropertyHolder.NULLABLE_FACE).toNullableDirection();
-        if (dir != null && !Utils.isY(dir))
-        {
-            dir = rotation.rotate(dir);
-            state = state.setValue(PropertyHolder.NULLABLE_FACE, NullableDirection.fromDirection(dir));
-        }
-        return state;
+        NullableDirection face = state.getValue(PropertyHolder.NULLABLE_FACE);
+        return state.setValue(PropertyHolder.NULLABLE_FACE, face.rotate(rotation));
     }
 
     @Override
     protected BlockState mirror(BlockState state, Mirror mirror)
     {
-        Direction dir = state.getValue(PropertyHolder.NULLABLE_FACE).toNullableDirection();
-        if (dir != null && !Utils.isY(dir))
-        {
-            dir = mirror.mirror(dir);
-            state = state.setValue(PropertyHolder.NULLABLE_FACE, NullableDirection.fromDirection(dir));
-        }
-        return state;
+        NullableDirection face = state.getValue(PropertyHolder.NULLABLE_FACE);
+        return state.setValue(PropertyHolder.NULLABLE_FACE, face.mirror(mirror));
     }
 
     @Override

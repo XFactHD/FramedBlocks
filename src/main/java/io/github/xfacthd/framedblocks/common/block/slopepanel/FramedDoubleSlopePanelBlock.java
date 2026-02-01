@@ -1,5 +1,6 @@
 package io.github.xfacthd.framedblocks.common.block.slopepanel;
 
+import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedDoubleBlockEntity;
@@ -8,7 +9,8 @@ import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockParts;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockTopInteractionMode;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.SolidityCheck;
 import io.github.xfacthd.framedblocks.api.block.render.NullCullPredicate;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
+import io.github.xfacthd.framedblocks.api.util.RotationDirection;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.block.FramedDoubleBlock;
 import io.github.xfacthd.framedblocks.common.blockentity.doubled.slopepanel.FramedDoubleSlopePanelBlockEntity;
@@ -68,29 +70,19 @@ public class FramedDoubleSlopePanelBlock extends FramedDoubleBlock
     }
 
     @Override
-    public BlockState rotate(BlockState state, Direction face, Rotation rot)
+    public BlockState rotate(BlockState state, RotationDirection direction, WrenchRotationMode mode)
     {
-        Direction dir = state.getValue(FramedProperties.FACING_HOR);
-        if (face.getAxis() == dir.getAxis())
+        return switch (mode)
         {
-            HorizontalRotation blockRot = state.getValue(PropertyHolder.ROTATION);
-            return state.setValue(PropertyHolder.ROTATION, blockRot.rotate(rot));
-        }
-        else if (Utils.isY(face))
-        {
-            return state.setValue(FramedProperties.FACING_HOR, rot.rotate(dir));
-        }
-        else if (rot != Rotation.NONE)
-        {
-            return state.cycle(PropertyHolder.FRONT);
-        }
-        return state;
+            case PRIMARY -> HorizontalRotation.rotate(state, direction);
+            case SECONDARY -> super.rotate(state, direction, mode);
+        };
     }
 
     @Override
-    protected BlockState rotate(BlockState state, Rotation rot)
+    protected BlockState rotate(BlockState state, Rotation rotation)
     {
-        return rotate(state, Direction.UP, rot);
+        return BlockUtils.rotate(state, rotation);
     }
 
     @Override

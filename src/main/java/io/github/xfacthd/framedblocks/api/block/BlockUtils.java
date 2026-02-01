@@ -14,6 +14,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Mirror;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -169,6 +170,16 @@ public final class BlockUtils
     )
     {
         return actualType == type ? (BlockEntityTicker<A>) ticker : null;
+    }
+
+    public static BlockState rotate(BlockState state, Rotation rotation)
+    {
+        return rotate(state, FramedProperties.FACING_HOR, rotation);
+    }
+
+    public static BlockState rotate(BlockState state, EnumProperty<Direction> property, Rotation rotation)
+    {
+        return state.setValue(property, rotation.rotate(state.getValue(property)));
     }
 
     /**

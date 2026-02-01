@@ -1,6 +1,8 @@
 package io.github.xfacthd.framedblocks.common.block.sign;
 
 import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
+import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
+import io.github.xfacthd.framedblocks.api.util.RotationDirection;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import io.github.xfacthd.framedblocks.common.item.block.FramedSignItem;
 import net.minecraft.core.BlockPos;
@@ -100,25 +102,22 @@ public class FramedStandingSignBlock extends AbstractFramedSignBlock
     }
 
     @Override
-    public BlockState rotate(BlockState state, Direction face, Rotation rot)
+    public BlockState rotate(BlockState state, RotationDirection direction, WrenchRotationMode mode)
     {
         int rotation = state.getValue(BlockStateProperties.ROTATION_16);
-        if (rot == Rotation.COUNTERCLOCKWISE_90)
+        rotation += switch (direction)
         {
-            rotation += 15;
-        }
-        else
-        {
-            rotation += 1;
-        }
+            case CLOCKWISE -> 1;
+            case COUNTERCLOCKWISE -> 15;
+        };
         return state.setValue(BlockStateProperties.ROTATION_16, rotation % 16);
     }
 
     @Override
-    protected BlockState rotate(BlockState state, Rotation rot)
+    protected BlockState rotate(BlockState state, Rotation rotation)
     {
-        int rotation = state.getValue(BlockStateProperties.ROTATION_16);
-        return state.setValue(BlockStateProperties.ROTATION_16, rot.rotate(rotation, 16));
+        int rotationStep = state.getValue(BlockStateProperties.ROTATION_16);
+        return state.setValue(BlockStateProperties.ROTATION_16, rotation.rotate(rotationStep, 16));
     }
 
     @Override

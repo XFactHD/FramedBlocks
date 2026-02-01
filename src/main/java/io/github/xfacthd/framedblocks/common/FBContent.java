@@ -11,6 +11,7 @@ import io.github.xfacthd.framedblocks.api.camo.CamoContainerFactory;
 import io.github.xfacthd.framedblocks.api.camo.CamoList;
 import io.github.xfacthd.framedblocks.api.camo.empty.EmptyCamoContainerFactory;
 import io.github.xfacthd.framedblocks.api.component.FrameConfig;
+import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.datagen.loot.objects.RetainCamoLootCondition;
 import io.github.xfacthd.framedblocks.api.datagen.loot.objects.SplitCamoLootFunction;
 import io.github.xfacthd.framedblocks.api.util.FramedConstants;
@@ -63,6 +64,7 @@ import io.github.xfacthd.framedblocks.common.data.loot.BoardAdditionalItemCountN
 import io.github.xfacthd.framedblocks.common.data.loot.LayeredCubeAdditionalItemCountNumberProvider;
 import io.github.xfacthd.framedblocks.common.item.FramedBlueprintItem;
 import io.github.xfacthd.framedblocks.common.item.FramedToolItem;
+import io.github.xfacthd.framedblocks.common.item.FramedWrenchItem;
 import io.github.xfacthd.framedblocks.common.item.PhantomPasteItem;
 import io.github.xfacthd.framedblocks.common.menu.FramedStorageMenu;
 import io.github.xfacthd.framedblocks.common.menu.FramingSawMenu;
@@ -427,11 +429,15 @@ public final class FBContent
             "tank_contents",
             builder -> builder.persistent(SimpleFluidContent.CODEC).networkSynchronized(SimpleFluidContent.STREAM_CODEC)
     );
+    public static final DeferredDataComponentType<WrenchRotationMode> DC_TYPE_WRENCH_MODE = DATA_COMPONENTS.registerComponentType(
+            "wrench_mode",
+            builder -> builder.persistent(WrenchRotationMode.CODEC).networkSynchronized(WrenchRotationMode.STREAM_CODEC)
+    );
     // endregion
 
     // region Items
     public static final Holder<Item> ITEM_FRAMED_HAMMER = registerToolItem(FramedToolItem::new, FramedToolType.HAMMER);
-    public static final Holder<Item> ITEM_FRAMED_WRENCH = registerToolItem(FramedToolItem::new, FramedToolType.WRENCH);
+    public static final Holder<Item> ITEM_FRAMED_WRENCH = registerToolItem(FramedWrenchItem::new, FramedToolType.WRENCH);
     public static final Holder<Item> ITEM_FRAMED_BLUEPRINT = registerToolItem(FramedBlueprintItem::new, FramedToolType.BLUEPRINT);
     public static final Holder<Item> ITEM_FRAMED_KEY = registerToolItem(FramedToolItem::new, FramedToolType.KEY);
     public static final Holder<Item> ITEM_FRAMED_SCREWDRIVER = registerToolItem(FramedToolItem::new, FramedToolType.SCREWDRIVER);

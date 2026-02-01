@@ -7,6 +7,8 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.util.ByIdMap;
 import net.minecraft.util.StringRepresentable;
+import net.minecraft.world.level.block.Mirror;
+import net.minecraft.world.level.block.Rotation;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Locale;
@@ -44,6 +46,16 @@ public enum NullableDirection implements StringRepresentable
     public Direction toNullableDirection()
     {
         return dir;
+    }
+
+    public NullableDirection rotate(Rotation rotation)
+    {
+        return dir != null ? fromDirection(rotation.rotate(dir)) : this;
+    }
+
+    public NullableDirection mirror(Mirror mirror)
+    {
+        return dir != null ? fromDirection(mirror.mirror(dir)) : this;
     }
 
     @Override

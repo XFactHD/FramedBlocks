@@ -1,12 +1,14 @@
 package io.github.xfacthd.framedblocks.common.block.slopepanel;
 
+import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.CamoGetter;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockParts;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockTopInteractionMode;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.SolidityCheck;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
+import io.github.xfacthd.framedblocks.api.util.RotationDirection;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.block.ExtPlacementStateBuilder;
 import io.github.xfacthd.framedblocks.common.block.FramedDoubleBlock;
@@ -24,7 +26,6 @@ import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.phys.BlockHitResult;
 import org.jspecify.annotations.Nullable;
 
 public class FramedInverseDoubleSlopePanelBlock extends FramedDoubleBlock
@@ -63,52 +64,19 @@ public class FramedInverseDoubleSlopePanelBlock extends FramedDoubleBlock
     }
 
     @Override
-    public BlockState rotate(BlockState state, BlockHitResult hit, Rotation rot)
+    public BlockState rotate(BlockState state, RotationDirection direction, WrenchRotationMode mode)
     {
-        Direction face = hit.getDirection();
-
-        Direction dir = state.getValue(FramedProperties.FACING_HOR);
-        HorizontalRotation rotation = state.getValue(PropertyHolder.ROTATION);
-        if (face == rotation.withFacing(dir))
+        return switch (mode)
         {
-            double xz = Utils.fractionInDir(hit.getLocation(), dir.getOpposite());
-            if (xz > .5)
-            {
-                face = dir.getOpposite();
-            }
-        }
-        else if (face == rotation.withFacing(dir).getOpposite())
-        {
-            double xz = Utils.fractionInDir(hit.getLocation(), dir);
-            if (xz > .5)
-            {
-                face = dir;
-            }
-        }
-
-        return rotate(state, face, rot);
+            case PRIMARY -> HorizontalRotation.rotate(state, direction);
+            case SECONDARY -> super.rotate(state, direction, mode);
+        };
     }
 
     @Override
-    public BlockState rotate(BlockState state, Direction face, Rotation rot)
+    protected BlockState rotate(BlockState state, Rotation rotation)
     {
-        Direction dir = state.getValue(FramedProperties.FACING_HOR);
-        if (face.getAxis() == dir.getAxis())
-        {
-            HorizontalRotation rotation = state.getValue(PropertyHolder.ROTATION);
-            return state.setValue(PropertyHolder.ROTATION, rotation.rotate(rot));
-        }
-        else if (Utils.isY(face))
-        {
-            return state.setValue(FramedProperties.FACING_HOR, rot.rotate(dir));
-        }
-        return state;
-    }
-
-    @Override
-    protected BlockState rotate(BlockState state, Rotation rot)
-    {
-        return rotate(state, Direction.UP, rot);
+        return BlockUtils.rotate(state, rotation);
     }
 
     @Override

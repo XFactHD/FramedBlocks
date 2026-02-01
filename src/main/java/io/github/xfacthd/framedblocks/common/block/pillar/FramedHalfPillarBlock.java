@@ -2,6 +2,8 @@ package io.github.xfacthd.framedblocks.common.block.pillar;
 
 import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
+import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
+import io.github.xfacthd.framedblocks.api.util.RotationDirection;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
 import io.github.xfacthd.framedblocks.common.block.IPillarLikeBlock;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
@@ -48,20 +50,15 @@ public class FramedHalfPillarBlock extends FramedBlock implements IPillarLikeBlo
     }
 
     @Override
-    public BlockState rotate(BlockState state, Direction side, Rotation rot)
+    public BlockState rotate(BlockState state, RotationDirection direction, WrenchRotationMode mode)
     {
-        if (rot != Rotation.NONE)
-        {
-            return state.cycle(BlockStateProperties.FACING);
-        }
-        return state;
+        return direction.cycle(state, BlockStateProperties.FACING);
     }
 
     @Override
-    protected BlockState rotate(BlockState state, Rotation rot)
+    protected BlockState rotate(BlockState state, Rotation rotation)
     {
-        Direction dir = state.getValue(BlockStateProperties.FACING);
-        return state.setValue(BlockStateProperties.FACING, rot.rotate(dir));
+        return BlockUtils.rotate(state, BlockStateProperties.FACING, rotation);
     }
 
     @Override

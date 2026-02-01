@@ -1,6 +1,8 @@
 package io.github.xfacthd.framedblocks.common.block.pillar;
 
 import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
+import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
+import io.github.xfacthd.framedblocks.api.util.RotationDirection;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
 import io.github.xfacthd.framedblocks.common.block.IPillarLikeBlock;
@@ -50,20 +52,16 @@ public class FramedPillarBlock extends FramedBlock implements IPillarLikeBlock
     }
 
     @Override
-    public BlockState rotate(BlockState state, Direction side, Rotation rot)
+    public BlockState rotate(BlockState state, RotationDirection direction, WrenchRotationMode mode)
     {
-        if (rot != Rotation.NONE)
-        {
-            return state.cycle(BlockStateProperties.AXIS);
-        }
-        return state;
+        return state.cycle(BlockStateProperties.AXIS);
     }
 
     @Override
-    protected BlockState rotate(BlockState state, Rotation rot)
+    protected BlockState rotate(BlockState state, Rotation rotation)
     {
         Direction.Axis axis = state.getValue(BlockStateProperties.AXIS);
-        if (axis != Direction.Axis.Y && rot != Rotation.NONE && rot != Rotation.CLOCKWISE_180)
+        if (axis != Direction.Axis.Y && Utils.isNinetyDegree(rotation))
         {
             axis = Utils.getPerpendicularAxis(axis, Direction.Axis.Y);
             return state.setValue(BlockStateProperties.AXIS, axis);
