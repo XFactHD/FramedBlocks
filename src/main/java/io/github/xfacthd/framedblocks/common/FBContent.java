@@ -869,7 +869,15 @@ public final class FBContent
     {
         Holder<Block> result = BLOCKS.registerBlock(type.getName(), props ->
         {
-            T block = blockFactory.apply(props);
+            T block;
+            try
+            {
+                block = blockFactory.apply(props);
+            }
+            catch (Throwable t)
+            {
+                throw new IllegalStateException("Failed to construct block of type " + type, t);
+            }
             Preconditions.checkArgument(block.getBlockType() == type, "Inconsistent block type, expected %s, got %s", type, block.getBlockType());
             return block;
         });
