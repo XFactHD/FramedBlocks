@@ -79,6 +79,12 @@ public final class LargeInnerCornerSlopePanelSkipPredicate implements SideSkipPr
                 case FRAMED_EXT_INNER_CORNER_SLOPE_PANEL -> testAgainstExtendedInnerCornerSlopePanel(
                         dir, top, adjState, side
                 );
+                case FRAMED_SMALL_PRISM_CORNER_SLOPE_PANEL -> testAgainstSmallPrismSlopePanelCorner(
+                        dir, top, adjState, side
+                );
+                case FRAMED_LARGE_INNER_PRISM_CORNER_SLOPE_PANEL -> testAgainstLargeInnerPrismSlopePanelCorner(
+                        dir, top, adjState, side
+                );
                 default -> false;
             };
         }
@@ -245,5 +251,27 @@ public final class LargeInnerCornerSlopePanelSkipPredicate implements SideSkipPr
         boolean adjTop = adjState.getValue(FramedProperties.TOP);
 
         return SlopePanelCornerDirs.LargeInnerCornerSlopePanel.getStairDir(dir, top, side).isEqualTo(SlopePanelCornerDirs.ExtendedInnerCornerSlopePanel.getStairDir(adjDir, adjTop, side.getOpposite()));
+    }
+
+    @CullTest.TestTarget(BlockType.FRAMED_SMALL_PRISM_CORNER_SLOPE_PANEL)
+    private static boolean testAgainstSmallPrismSlopePanelCorner(
+            Direction dir, boolean top, BlockState adjState, Direction side
+    )
+    {
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
+        boolean adjTop = adjState.getValue(FramedProperties.TOP);
+
+        return SlopePanelCornerDirs.LargeInnerCornerSlopePanel.getTriDir(dir, top, side).isEqualTo(SlopePanelCornerDirs.SmallPrismSlopePanelCorner.getSideTriDir(adjDir, adjTop, side.getOpposite()));
+    }
+
+    @CullTest.TestTarget(BlockType.FRAMED_LARGE_INNER_PRISM_CORNER_SLOPE_PANEL)
+    private static boolean testAgainstLargeInnerPrismSlopePanelCorner(
+            Direction dir, boolean top, BlockState adjState, Direction side
+    )
+    {
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
+        boolean adjTop = adjState.getValue(FramedProperties.TOP);
+
+        return SlopePanelCornerDirs.LargeInnerCornerSlopePanel.getTriDir(dir, top, side).isEqualTo(SlopePanelCornerDirs.LargeInnerPrismSlopePanelCorner.getSideTriDir(adjDir, adjTop, side.getOpposite()));
     }
 }

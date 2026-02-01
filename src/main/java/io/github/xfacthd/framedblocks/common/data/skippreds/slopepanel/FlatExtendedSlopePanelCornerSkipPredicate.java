@@ -116,6 +116,18 @@ public final class FlatExtendedSlopePanelCornerSkipPredicate implements SideSkip
                 case FRAMED_EXT_INNER_CORNER_SLOPE_PANEL_W -> testAgainstExtendedInnerCornerSlopePanelWall(
                         dir, rot, adjState, side
                 );
+                case FRAMED_LARGE_PRISM_CORNER_SLOPE_PANEL -> testAgainstLargePrismSlopePanelCorner(
+                        dir, rot, adjState, side
+                );
+                case FRAMED_LARGE_PRISM_CORNER_SLOPE_PANEL_W -> testAgainstLargePrismSlopePanelCornerWall(
+                        dir, rot, adjState, side
+                );
+                case FRAMED_SMALL_INNER_PRISM_CORNER_SLOPE_PANEL -> testAgainstSmallInnerPrismSlopePanelCorner(
+                        dir, rot, adjState, side
+                );
+                case FRAMED_SMALL_INNER_PRISM_CORNER_SLOPE_PANEL_W -> testAgainstSmallInnerPrismSlopePanelCornerWall(
+                        dir, rot, adjState, side
+                );
                 case FRAMED_ELEVATED_PYRAMID_SLAB -> testAgainstElevatedPyramidSlab(
                         dir, rot, adjState, side
                 );
@@ -409,6 +421,50 @@ public final class FlatExtendedSlopePanelCornerSkipPredicate implements SideSkip
         HorizontalRotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
 
         return SlopePanelDirs.FlatExtendedSlopePanelCorner.getTriDir(dir, rot, side).isEqualTo(SlopePanelCornerDirs.ExtendedInnerCornerSlopePanelWall.getTriDir(adjDir, adjRot, side.getOpposite()));
+    }
+
+    @CullTest.TestTarget(BlockType.FRAMED_LARGE_PRISM_CORNER_SLOPE_PANEL)
+    private static boolean testAgainstLargePrismSlopePanelCorner(
+            Direction dir, HorizontalRotation rot, BlockState adjState, Direction side
+    )
+    {
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
+        boolean adjTop = adjState.getValue(FramedProperties.TOP);
+
+        return SlopePanelDirs.FlatExtendedSlopePanelCorner.getTriDir(dir, rot, side).isEqualTo(SlopePanelCornerDirs.LargePrismSlopePanelCorner.getSideTriDir(adjDir, adjTop, side.getOpposite()));
+    }
+
+    @CullTest.TestTarget(BlockType.FRAMED_LARGE_PRISM_CORNER_SLOPE_PANEL_W)
+    private static boolean testAgainstLargePrismSlopePanelCornerWall(
+            Direction dir, HorizontalRotation rot, BlockState adjState, Direction side
+    )
+    {
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
+        HorizontalRotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
+
+        return SlopePanelDirs.FlatExtendedSlopePanelCorner.getTriDir(dir, rot, side).isEqualTo(SlopePanelCornerDirs.LargePrismSlopePanelCornerWall.getSideTriDir(adjDir, adjRot, side.getOpposite()));
+    }
+
+    @CullTest.TestTarget(BlockType.FRAMED_SMALL_INNER_PRISM_CORNER_SLOPE_PANEL)
+    private static boolean testAgainstSmallInnerPrismSlopePanelCorner(
+            Direction dir, HorizontalRotation rot, BlockState adjState, Direction side
+    )
+    {
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
+        boolean adjTop = adjState.getValue(FramedProperties.TOP);
+
+        return SlopePanelDirs.FlatExtendedSlopePanelCorner.getTriDir(dir, rot, side).isEqualTo(SlopePanelCornerDirs.SmallInnerPrismSlopePanelCorner.getSideTriDir(adjDir, adjTop, side.getOpposite()));
+    }
+
+    @CullTest.TestTarget(BlockType.FRAMED_SMALL_INNER_PRISM_CORNER_SLOPE_PANEL_W)
+    private static boolean testAgainstSmallInnerPrismSlopePanelCornerWall(
+            Direction dir, HorizontalRotation rot, BlockState adjState, Direction side
+    )
+    {
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
+        HorizontalRotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
+
+        return SlopePanelDirs.FlatExtendedSlopePanelCorner.getTriDir(dir, rot, side).isEqualTo(SlopePanelCornerDirs.SmallInnerPrismSlopePanelCornerWall.getSideTriDir(adjDir, adjRot, side.getOpposite()));
     }
 
     @CullTest.TestTarget(BlockType.FRAMED_ELEVATED_PYRAMID_SLAB)

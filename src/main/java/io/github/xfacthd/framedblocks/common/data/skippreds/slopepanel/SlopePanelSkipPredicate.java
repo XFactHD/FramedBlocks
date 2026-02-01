@@ -129,6 +129,18 @@ public final class SlopePanelSkipPredicate implements SideSkipPredicate
                 case FRAMED_LARGE_INNER_CORNER_SLOPE_PANEL_W -> testAgainstLargeInnerCornerSlopePanelWall(
                         dir, rot, front, adjState, side
                 );
+                case FRAMED_SMALL_PRISM_CORNER_SLOPE_PANEL -> testAgainstSmallPrismSlopePanelCorner(
+                        dir, rot, front, adjState, side
+                );
+                case FRAMED_SMALL_PRISM_CORNER_SLOPE_PANEL_W -> testAgainstSmallPrismSlopePanelCornerWall(
+                        dir, rot, front, adjState, side
+                );
+                case FRAMED_LARGE_INNER_PRISM_CORNER_SLOPE_PANEL -> testAgainstLargeInnerPrismSlopePanelCorner(
+                        dir, rot, front, adjState, side
+                );
+                case FRAMED_LARGE_INNER_PRISM_CORNER_SLOPE_PANEL_W -> testAgainstLargeInnerPrismSlopePanelCornerWall(
+                        dir, rot, front, adjState, side
+                );
                 case FRAMED_ELEVATED_PYRAMID_SLAB -> testAgainstElevatedPyramidSlab(
                         dir, rot, front, adjState, side
                 );
@@ -467,6 +479,50 @@ public final class SlopePanelSkipPredicate implements SideSkipPredicate
         HorizontalRotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
 
         return SlopePanelDirs.SlopePanel.getTriDir(dir, rot, front, side).isEqualTo(SlopePanelCornerDirs.LargeInnerCornerSlopePanelWall.getTriDir(adjDir, adjRot, side.getOpposite()));
+    }
+
+    @CullTest.TestTarget(BlockType.FRAMED_SMALL_PRISM_CORNER_SLOPE_PANEL)
+    private static boolean testAgainstSmallPrismSlopePanelCorner(
+            Direction dir, HorizontalRotation rot, boolean front, BlockState adjState, Direction side
+    )
+    {
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
+        boolean adjTop = adjState.getValue(FramedProperties.TOP);
+
+        return SlopePanelDirs.SlopePanel.getTriDir(dir, rot, front, side).isEqualTo(SlopePanelCornerDirs.SmallPrismSlopePanelCorner.getSideTriDir(adjDir, adjTop, side.getOpposite()));
+    }
+
+    @CullTest.TestTarget(BlockType.FRAMED_SMALL_PRISM_CORNER_SLOPE_PANEL_W)
+    private static boolean testAgainstSmallPrismSlopePanelCornerWall(
+            Direction dir, HorizontalRotation rot, boolean front, BlockState adjState, Direction side
+    )
+    {
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
+        HorizontalRotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
+
+        return SlopePanelDirs.SlopePanel.getTriDir(dir, rot, front, side).isEqualTo(SlopePanelCornerDirs.SmallPrismSlopePanelCornerWall.getSideTriDir(adjDir, adjRot, side.getOpposite()));
+    }
+
+    @CullTest.TestTarget(BlockType.FRAMED_LARGE_INNER_PRISM_CORNER_SLOPE_PANEL)
+    private static boolean testAgainstLargeInnerPrismSlopePanelCorner(
+            Direction dir, HorizontalRotation rot, boolean front, BlockState adjState, Direction side
+    )
+    {
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
+        boolean adjTop = adjState.getValue(FramedProperties.TOP);
+
+        return SlopePanelDirs.SlopePanel.getTriDir(dir, rot, front, side).isEqualTo(SlopePanelCornerDirs.LargeInnerPrismSlopePanelCorner.getSideTriDir(adjDir, adjTop, side.getOpposite()));
+    }
+
+    @CullTest.TestTarget(BlockType.FRAMED_LARGE_INNER_PRISM_CORNER_SLOPE_PANEL_W)
+    private static boolean testAgainstLargeInnerPrismSlopePanelCornerWall(
+            Direction dir, HorizontalRotation rot, boolean front, BlockState adjState, Direction side
+    )
+    {
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
+        HorizontalRotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
+
+        return SlopePanelDirs.SlopePanel.getTriDir(dir, rot, front, side).isEqualTo(SlopePanelCornerDirs.LargeInnerPrismSlopePanelCornerWall.getSideTriDir(adjDir, adjRot, side.getOpposite()));
     }
 
     @CullTest.TestTarget(BlockType.FRAMED_ELEVATED_PYRAMID_SLAB)

@@ -17,6 +17,7 @@ import io.github.xfacthd.framedblocks.common.data.skippreds.slab.SlabDirs;
 import io.github.xfacthd.framedblocks.common.data.skippreds.slope.SlopeDirs;
 import io.github.xfacthd.framedblocks.common.data.skippreds.slopeedge.SlopeEdgeDirs;
 import io.github.xfacthd.framedblocks.common.data.skippreds.slopepanel.SlopePanelDirs;
+import io.github.xfacthd.framedblocks.common.data.skippreds.slopepanelcorner.SlopePanelCornerDirs;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
@@ -122,6 +123,12 @@ public final class VerticalSlopedStairsSkipPredicate implements SideSkipPredicat
                         dir, rot, adjState, side
                 );
                 case FRAMED_FLAT_EXT_SLOPE_PANEL_CORNER -> testAgainstFlatExtendedSlopePanelCorner(
+                        dir, rot, adjState, side
+                );
+                case FRAMED_LARGE_PRISM_CORNER_SLOPE_PANEL_W -> testAgainstLargePrismSlopePanelCornerWall(
+                        dir, rot, adjState, side
+                );
+                case FRAMED_LARGE_INNER_PRISM_CORNER_SLOPE_PANEL_W -> testAgainstLargeInnerPrismSlopePanelCornerWall(
                         dir, rot, adjState, side
                 );
                 case FRAMED_ELEVATED_PYRAMID_SLAB -> testAgainstElevatedPyramidSlab(
@@ -437,6 +444,28 @@ public final class VerticalSlopedStairsSkipPredicate implements SideSkipPredicat
         HorizontalRotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
 
         return StairsDirs.VerticalSlopedStairs.getHalfDir(dir, rot, side).isEqualTo(SlopePanelDirs.FlatExtendedSlopePanelCorner.getHalfDir(adjDir, adjRot, side.getOpposite()));
+    }
+
+    @CullTest.TestTarget(BlockType.FRAMED_LARGE_PRISM_CORNER_SLOPE_PANEL_W)
+    private static boolean testAgainstLargePrismSlopePanelCornerWall(
+            Direction dir, HorizontalRotation rot, BlockState adjState, Direction side
+    )
+    {
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
+        HorizontalRotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
+
+        return StairsDirs.VerticalSlopedStairs.getTriDir(dir, rot, side).isEqualTo(SlopePanelCornerDirs.LargePrismSlopePanelCornerWall.getBackTriDir(adjDir, adjRot, side.getOpposite()));
+    }
+
+    @CullTest.TestTarget(BlockType.FRAMED_LARGE_INNER_PRISM_CORNER_SLOPE_PANEL_W)
+    private static boolean testAgainstLargeInnerPrismSlopePanelCornerWall(
+            Direction dir, HorizontalRotation rot, BlockState adjState, Direction side
+    )
+    {
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
+        HorizontalRotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
+
+        return StairsDirs.VerticalSlopedStairs.getTriDir(dir, rot, side).isEqualTo(SlopePanelCornerDirs.LargeInnerPrismSlopePanelCornerWall.getFrontTriDir(adjDir, adjRot, side.getOpposite()));
     }
 
     @CullTest.TestTarget(BlockType.FRAMED_ELEVATED_PYRAMID_SLAB)

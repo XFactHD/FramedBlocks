@@ -10,6 +10,7 @@ import io.github.xfacthd.framedblocks.common.data.property.CornerType;
 import io.github.xfacthd.framedblocks.common.data.property.HorizontalRotation;
 import io.github.xfacthd.framedblocks.common.data.property.SlopeType;
 import io.github.xfacthd.framedblocks.common.data.skippreds.CullTest;
+import io.github.xfacthd.framedblocks.common.data.skippreds.slopepanelcorner.SlopePanelCornerDirs;
 import io.github.xfacthd.framedblocks.common.data.skippreds.stairs.StairsDirs;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -67,6 +68,12 @@ public final class RailSlopeSkipPredicate implements SideSkipPredicate
                         dir, adjState, side
                 );
                 case FRAMED_VERTICAL_SLOPED_STAIRS -> testAgainstVerticalSlopedStairs(
+                        dir, adjState, side
+                );
+                case FRAMED_LARGE_PRISM_CORNER_SLOPE_PANEL_W -> testAgainstLargePrismSlopePanelCornerWall(
+                        dir, adjState, side
+                );
+                case FRAMED_LARGE_INNER_PRISM_CORNER_SLOPE_PANEL_W -> testAgainstLargeInnerPrismSlopePanelCornerWall(
                         dir, adjState, side
                 );
                 default -> false;
@@ -171,5 +178,27 @@ public final class RailSlopeSkipPredicate implements SideSkipPredicate
         HorizontalRotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
 
         return SlopeDirs.RailSlope.getTriDir(dir, side).isEqualTo(StairsDirs.VerticalSlopedStairs.getTriDir(adjDir, adjRot, side.getOpposite()));
+    }
+
+    @CullTest.TestTarget(BlockType.FRAMED_LARGE_PRISM_CORNER_SLOPE_PANEL_W)
+    private static boolean testAgainstLargePrismSlopePanelCornerWall(
+            Direction dir, BlockState adjState, Direction side
+    )
+    {
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
+        HorizontalRotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
+
+        return SlopeDirs.RailSlope.getTriDir(dir, side).isEqualTo(SlopePanelCornerDirs.LargePrismSlopePanelCornerWall.getBackTriDir(adjDir, adjRot, side.getOpposite()));
+    }
+
+    @CullTest.TestTarget(BlockType.FRAMED_LARGE_INNER_PRISM_CORNER_SLOPE_PANEL_W)
+    private static boolean testAgainstLargeInnerPrismSlopePanelCornerWall(
+            Direction dir, BlockState adjState, Direction side
+    )
+    {
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
+        HorizontalRotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
+
+        return SlopeDirs.RailSlope.getTriDir(dir, side).isEqualTo(SlopePanelCornerDirs.LargeInnerPrismSlopePanelCornerWall.getFrontTriDir(adjDir, adjRot, side.getOpposite()));
     }
 }

@@ -635,6 +635,82 @@ final class SkipPredicateGeneratorData
                             new TestDir("HalfTriangleDir", "Tri", null, TestDirIds.ELEV_SLOPE_SLAB_TRI, TestDirIds.EXT_SLOPE_PANEL_TRI_Y),
                             new TestDir("TriangleDir", "Stair", null, TestDirIds.STAIR_XZ)
                     ),
+            entry("FRAMED_SMALL_PRISM_SLOPE_PANEL_CORNER", "slopepanelcorner")
+                    .props(
+                            Property.api("Direction", "dir", "FACING_HOR", PropType.PRIMITIVE),
+                            Property.api("boolean", "top", "TOP", PropType.PRIMITIVE)
+                    )
+                    .dirs(
+                            new TestDir("HalfTriangleDir", "SideTri", null, TestDirIds.SLOPE_PANEL_TRI_XZ_BACK),
+                            new TestDir("QuarterTriangleDir", "BottomTri", null, TestDirIds.SLOPE_EDGE_TRI_Y)
+                    ),
+            entry("FRAMED_SMALL_PRISM_SLOPE_PANEL_CORNER_W", "slopepanelcorner")
+                    .props(
+                            Property.api("Direction", "dir", "FACING_HOR", PropType.PRIMITIVE),
+                            Property.internal("HorizontalRotation", "rot", "ROTATION", PropType.CUSTOM)
+                    )
+                    .dirs(
+                            new TestDir("HalfTriangleDir", "SideTri", null, TestDirIds.SLOPE_SLAB_TRI_BOT, TestDirIds.SLOPE_PANEL_TRI_Y_BACK),
+                            new TestDir("QuarterTriangleDir", "BackTri", null, TestDirIds.SLOPE_EDGE_TRI_XZ)
+                    ),
+            entry("FRAMED_LARGE_PRISM_SLOPE_PANEL_CORNER", "slopepanelcorner")
+                    .props(
+                            Property.api("Direction", "dir", "FACING_HOR", PropType.PRIMITIVE),
+                            Property.api("boolean", "top", "TOP", PropType.PRIMITIVE)
+                    )
+                    .dirs(
+                            new TestDir("HalfTriangleDir", "SideTri", null, TestDirIds.EXT_SLOPE_PANEL_TRI_XZ),
+                            new TestDir("TriangleDir", "BottomTri", null, TestDirIds.SLOPE_TRI_Y),
+                            new TestDir("QuarterTriangleDir", "TopTri", null, TestDirIds.SLOPE_EDGE_TRI_Y)
+                    ),
+            entry("FRAMED_LARGE_PRISM_SLOPE_PANEL_CORNER_W", "slopepanelcorner")
+                    .props(
+                            Property.api("Direction", "dir", "FACING_HOR", PropType.PRIMITIVE),
+                            Property.internal("HorizontalRotation", "rot", "ROTATION", PropType.CUSTOM)
+                    )
+                    .dirs(
+                            new TestDir("HalfTriangleDir", "SideTri", null, TestDirIds.ELEV_SLOPE_SLAB_TRI, TestDirIds.EXT_SLOPE_PANEL_TRI_Y),
+                            new TestDir("TriangleDir", "BackTri", null, TestDirIds.SLOPE_TRI_XZ),
+                            new TestDir("QuarterTriangleDir", "FrontTri", null, TestDirIds.SLOPE_EDGE_TRI_XZ)
+                    ),
+            entry("FRAMED_SMALL_INNER_PRISM_SLOPE_PANEL_CORNER", "slopepanelcorner")
+                    .props(
+                            Property.api("Direction", "dir", "FACING_HOR", PropType.PRIMITIVE),
+                            Property.api("boolean", "top", "TOP", PropType.PRIMITIVE)
+                    )
+                    .dirs(
+                            new TestDir("HalfTriangleDir", "SideTri", null, TestDirIds.EXT_SLOPE_PANEL_TRI_XZ),
+                            new TestDir("TriangleDir", "TopTri", null, TestDirIds.PRISM_SLOPE_PANEL_CORNER_TRI_Y)
+                    ),
+            entry("FRAMED_SMALL_INNER_PRISM_SLOPE_PANEL_CORNER_W", "slopepanelcorner")
+                    .props(
+                            Property.api("Direction", "dir", "FACING_HOR", PropType.PRIMITIVE),
+                            Property.internal("HorizontalRotation", "rot", "ROTATION", PropType.CUSTOM)
+                    )
+                    .dirs(
+                            new TestDir("HalfTriangleDir", "SideTri", null, TestDirIds.ELEV_SLOPE_SLAB_TRI, TestDirIds.EXT_SLOPE_PANEL_TRI_Y),
+                            new TestDir("TriangleDir", "FrontTri", null, TestDirIds.PRISM_SLOPE_PANEL_CORNER_TRI_XZ)
+                    ),
+            entry("FRAMED_LARGE_INNER_PRISM_SLOPE_PANEL_CORNER", "slopepanelcorner")
+                    .props(
+                            Property.api("Direction", "dir", "FACING_HOR", PropType.PRIMITIVE),
+                            Property.api("boolean", "top", "TOP", PropType.PRIMITIVE)
+                    )
+                    .dirs(
+                            new TestDir("HalfTriangleDir", "SideTri", null, TestDirIds.SLOPE_PANEL_TRI_XZ_BACK),
+                            new TestDir("TriangleDir", "BottomTri", null, TestDirIds.PRISM_SLOPE_PANEL_CORNER_TRI_Y),
+                            new TestDir("TriangleDir", "TopTri", null, TestDirIds.SLOPE_TRI_Y)
+                    ),
+            entry("FRAMED_LARGE_INNER_PRISM_SLOPE_PANEL_CORNER_W", "slopepanelcorner")
+                    .props(
+                            Property.api("Direction", "dir", "FACING_HOR", PropType.PRIMITIVE),
+                            Property.internal("HorizontalRotation", "rot", "ROTATION", PropType.CUSTOM)
+                    )
+                    .dirs(
+                            new TestDir("HalfTriangleDir", "SideTri", null, TestDirIds.SLOPE_SLAB_TRI_BOT, TestDirIds.SLOPE_PANEL_TRI_Y_BACK),
+                            new TestDir("TriangleDir", "BackTri", null, TestDirIds.PRISM_SLOPE_PANEL_CORNER_TRI_XZ),
+                            new TestDir("TriangleDir", "FrontTri", null, TestDirIds.SLOPE_TRI_XZ)
+                    ),
             entry("FRAMED_PYRAMID", "slope")
                     .props(
                             Property.vanilla("Direction", "dir", "FACING", PropType.PRIMITIVE)

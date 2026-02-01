@@ -231,6 +231,14 @@ public final class ConnectionPredicates extends BlockTypeMap<ConnectionPredicate
         put(BlockType.FRAMED_STACKED_CORNER_SLOPE_PANEL_W, new StackedCornerSlopePanelWallConnectionPredicate());
         put(BlockType.FRAMED_STACKED_INNER_CORNER_SLOPE_PANEL, new StackedInnerCornerSlopePanelConnectionPredicate());
         put(BlockType.FRAMED_STACKED_INNER_CORNER_SLOPE_PANEL_W, new StackedInnerCornerSlopePanelWallConnectionPredicate());
+        put(BlockType.FRAMED_SMALL_PRISM_CORNER_SLOPE_PANEL, new SmallPrismSlopePanelCornerConnectionPredicate());
+        put(BlockType.FRAMED_SMALL_PRISM_CORNER_SLOPE_PANEL_W, new SmallPrismSlopePanelCornerWallConnectionPredicate());
+        put(BlockType.FRAMED_LARGE_PRISM_CORNER_SLOPE_PANEL, new LargePrismSlopePanelCornerConnectionPredicate());
+        put(BlockType.FRAMED_LARGE_PRISM_CORNER_SLOPE_PANEL_W, new LargePrismSlopePanelCornerWallConnectionPredicate());
+        put(BlockType.FRAMED_SMALL_INNER_PRISM_CORNER_SLOPE_PANEL, new SmallInnerPrismSlopePanelCornerConnectionPredicate());
+        put(BlockType.FRAMED_SMALL_INNER_PRISM_CORNER_SLOPE_PANEL_W, new SmallInnerPrismSlopePanelCornerWallConnectionPredicate());
+        put(BlockType.FRAMED_LARGE_INNER_PRISM_CORNER_SLOPE_PANEL, new LargeInnerPrismSlopePanelCornerConnectionPredicate());
+        put(BlockType.FRAMED_LARGE_INNER_PRISM_CORNER_SLOPE_PANEL_W, new LargeInnerPrismSlopePanelCornerWallConnectionPredicate());
         put(BlockType.FRAMED_PYRAMID, new PyramidConnectionPredicate());
         put(BlockType.FRAMED_PYRAMID_SLAB, ConnectionPredicate.FULL_FACE);
         put(BlockType.FRAMED_ELEVATED_PYRAMID_SLAB, new ElevatedPyramidSlabConnectionPredicate());

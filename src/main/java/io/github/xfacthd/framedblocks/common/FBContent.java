@@ -337,6 +337,14 @@ public final class FBContent
     public static final Holder<Block> BLOCK_FRAMED_STACKED_CORNER_SLOPE_PANEL_WALL = registerBlock(FramedStackedCornerSlopePanelWallBlock::new, BlockType.FRAMED_STACKED_CORNER_SLOPE_PANEL_W);
     public static final Holder<Block> BLOCK_FRAMED_STACKED_INNER_CORNER_SLOPE_PANEL = registerBlock(FramedStackedCornerSlopePanelBlock::new, BlockType.FRAMED_STACKED_INNER_CORNER_SLOPE_PANEL);
     public static final Holder<Block> BLOCK_FRAMED_STACKED_INNER_CORNER_SLOPE_PANEL_WALL = registerBlock(FramedStackedCornerSlopePanelWallBlock::new, BlockType.FRAMED_STACKED_INNER_CORNER_SLOPE_PANEL_W);
+    public static final Holder<Block> BLOCK_FRAMED_SMALL_PRISM_SLOPE_PANEL_CORNER = registerBlock(FramedPrismSlopePanelCornerBlock::new, BlockType.FRAMED_SMALL_PRISM_CORNER_SLOPE_PANEL);
+    public static final Holder<Block> BLOCK_FRAMED_SMALL_PRISM_SLOPE_PANEL_CORNER_WALL = registerBlock(FramedPrismSlopePanelCornerWallBlock::new, BlockType.FRAMED_SMALL_PRISM_CORNER_SLOPE_PANEL_W);
+    public static final Holder<Block> BLOCK_FRAMED_LARGE_PRISM_SLOPE_PANEL_CORNER = registerBlock(FramedSolidPrismSlopePanelCornerBlock::new, BlockType.FRAMED_LARGE_PRISM_CORNER_SLOPE_PANEL);
+    public static final Holder<Block> BLOCK_FRAMED_LARGE_PRISM_SLOPE_PANEL_CORNER_WALL = registerBlock(FramedSolidPrismSlopePanelCornerWallBlock::new, BlockType.FRAMED_LARGE_PRISM_CORNER_SLOPE_PANEL_W);
+    public static final Holder<Block> BLOCK_FRAMED_SMALL_INNER_PRISM_SLOPE_PANEL_CORNER = registerBlock(FramedSolidPrismSlopePanelCornerBlock::new, BlockType.FRAMED_SMALL_INNER_PRISM_CORNER_SLOPE_PANEL);
+    public static final Holder<Block> BLOCK_FRAMED_SMALL_INNER_PRISM_SLOPE_PANEL_CORNER_WALL = registerBlock(FramedSolidPrismSlopePanelCornerWallBlock::new, BlockType.FRAMED_SMALL_INNER_PRISM_CORNER_SLOPE_PANEL_W);
+    public static final Holder<Block> BLOCK_FRAMED_LARGE_INNER_PRISM_SLOPE_PANEL_CORNER = registerBlock(FramedSolidPrismSlopePanelCornerBlock::new, BlockType.FRAMED_LARGE_INNER_PRISM_CORNER_SLOPE_PANEL);
+    public static final Holder<Block> BLOCK_FRAMED_LARGE_INNER_PRISM_SLOPE_PANEL_CORNER_WALL = registerBlock(FramedSolidPrismSlopePanelCornerWallBlock::new, BlockType.FRAMED_LARGE_INNER_PRISM_CORNER_SLOPE_PANEL_W);
     public static final Holder<Block> BLOCK_FRAMED_PYRAMID = registerBlock(FramedConnectingPyramidBlock::new, BlockType.FRAMED_PYRAMID);
     public static final Holder<Block> BLOCK_FRAMED_PYRAMID_SLAB = registerBlock(FramedPyramidBlock::new, BlockType.FRAMED_PYRAMID_SLAB);
     public static final Holder<Block> BLOCK_FRAMED_ELEVATED_PYRAMID_SLAB = registerBlock(FramedConnectingPyramidBlock::new, BlockType.FRAMED_ELEVATED_PYRAMID_SLAB);

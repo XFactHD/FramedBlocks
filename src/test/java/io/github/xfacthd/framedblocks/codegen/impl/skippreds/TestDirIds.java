@@ -88,6 +88,10 @@ final class TestDirIds
     static final String CMP_SLOPE_PANEL_TRI_XZ = "cmp_slope_panel_tri_xz";
     /** Top/bottom face of a Compound Slope Panel angled horizontally */
     static final String CMP_SLOPE_PANEL_TRI_Y = "cmp_slope_panel_tri_y";
+    /** Top face of a Small Inner Prism Slope Panel Corner */
+    static final String PRISM_SLOPE_PANEL_CORNER_TRI_Y = "prism_slope_panel_corner_tri_y";
+    /** Front face of a Small Inner Prism Slope Panel Corner Wall */
+    static final String PRISM_SLOPE_PANEL_CORNER_TRI_XZ = "prism_slope_panel_corner_tri_xz";
     /** Horizontal faces of a Checkered Cube Segment */
     static final String CHECKER_XZ = "checker_xz";
     /** Top/bottom face of a Checkered Cube Segment */

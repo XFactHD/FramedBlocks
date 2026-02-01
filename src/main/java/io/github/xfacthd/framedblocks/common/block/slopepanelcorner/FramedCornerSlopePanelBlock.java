@@ -28,8 +28,8 @@ import org.jspecify.annotations.Nullable;
 
 public class FramedCornerSlopePanelBlock extends FramedBlock
 {
-    private final boolean inner;
-    private final boolean frontEdge;
+    private final boolean invertFacing;
+    private final boolean invertFracDir;
 
     public FramedCornerSlopePanelBlock(BlockType type, Properties props)
     {
@@ -38,10 +38,10 @@ public class FramedCornerSlopePanelBlock extends FramedBlock
                 .setValue(FramedProperties.TOP, false)
                 .setValue(FramedProperties.Y_SLOPE, false)
         );
-        this.inner = type == BlockType.FRAMED_SMALL_INNER_CORNER_SLOPE_PANEL ||
-                     type == BlockType.FRAMED_LARGE_INNER_CORNER_SLOPE_PANEL;
-        this.frontEdge = type == BlockType.FRAMED_LARGE_CORNER_SLOPE_PANEL ||
-                         type == BlockType.FRAMED_SMALL_INNER_CORNER_SLOPE_PANEL;
+        this.invertFacing = type == BlockType.FRAMED_SMALL_INNER_CORNER_SLOPE_PANEL ||
+                            type == BlockType.FRAMED_LARGE_INNER_CORNER_SLOPE_PANEL;
+        this.invertFracDir = type == BlockType.FRAMED_LARGE_CORNER_SLOPE_PANEL ||
+                             type == BlockType.FRAMED_SMALL_INNER_CORNER_SLOPE_PANEL;
     }
 
     @Override
@@ -58,7 +58,7 @@ public class FramedCornerSlopePanelBlock extends FramedBlock
     @Nullable
     public BlockState getStateForPlacement(BlockPlaceContext ctx)
     {
-        return getStateForPlacement(this, ctx, inner, frontEdge);
+        return getStateForPlacement(this, ctx, invertFacing, invertFracDir);
     }
 
     @Nullable
@@ -103,14 +103,16 @@ public class FramedCornerSlopePanelBlock extends FramedBlock
         Direction dir = state.getValue(FramedProperties.FACING_HOR);
         switch (getBlockType())
         {
-            case FRAMED_SMALL_CORNER_SLOPE_PANEL, FRAMED_LARGE_CORNER_SLOPE_PANEL ->
+            case FRAMED_SMALL_CORNER_SLOPE_PANEL, FRAMED_LARGE_CORNER_SLOPE_PANEL,
+                 FRAMED_SMALL_PRISM_CORNER_SLOPE_PANEL, FRAMED_LARGE_PRISM_CORNER_SLOPE_PANEL ->
             {
                 if (side == dir.getOpposite() || side == dir.getClockWise())
                 {
                     side = Direction.UP;
                 }
             }
-            case FRAMED_SMALL_INNER_CORNER_SLOPE_PANEL, FRAMED_LARGE_INNER_CORNER_SLOPE_PANEL ->
+            case FRAMED_SMALL_INNER_CORNER_SLOPE_PANEL, FRAMED_LARGE_INNER_CORNER_SLOPE_PANEL,
+                 FRAMED_SMALL_INNER_PRISM_CORNER_SLOPE_PANEL, FRAMED_LARGE_INNER_PRISM_CORNER_SLOPE_PANEL ->
             {
                 if (side == dir || side == dir.getCounterClockWise())
                 {
@@ -160,6 +162,10 @@ public class FramedCornerSlopePanelBlock extends FramedBlock
             case FRAMED_LARGE_CORNER_SLOPE_PANEL -> FBContent.BLOCK_FRAMED_LARGE_CORNER_SLOPE_PANEL_WALL.value();
             case FRAMED_SMALL_INNER_CORNER_SLOPE_PANEL -> FBContent.BLOCK_FRAMED_SMALL_INNER_CORNER_SLOPE_PANEL_WALL.value();
             case FRAMED_LARGE_INNER_CORNER_SLOPE_PANEL -> FBContent.BLOCK_FRAMED_LARGE_INNER_CORNER_SLOPE_PANEL_WALL.value();
+            case FRAMED_SMALL_PRISM_CORNER_SLOPE_PANEL -> FBContent.BLOCK_FRAMED_SMALL_PRISM_SLOPE_PANEL_CORNER_WALL.value();
+            case FRAMED_LARGE_PRISM_CORNER_SLOPE_PANEL -> FBContent.BLOCK_FRAMED_LARGE_PRISM_SLOPE_PANEL_CORNER_WALL.value();
+            case FRAMED_SMALL_INNER_PRISM_CORNER_SLOPE_PANEL -> FBContent.BLOCK_FRAMED_SMALL_INNER_PRISM_SLOPE_PANEL_CORNER_WALL.value();
+            case FRAMED_LARGE_INNER_PRISM_CORNER_SLOPE_PANEL -> FBContent.BLOCK_FRAMED_LARGE_INNER_PRISM_SLOPE_PANEL_CORNER_WALL.value();
             default -> throw new IllegalStateException("Unexpected type: " + getBlockType());
         };
         return new VerticalAndWallBlockItem(this, other, props);
@@ -168,7 +174,7 @@ public class FramedCornerSlopePanelBlock extends FramedBlock
     @Override
     public BlockState getItemModelSource()
     {
-        return defaultBlockState().setValue(FramedProperties.FACING_HOR, inner ? Direction.EAST : Direction.WEST);
+        return defaultBlockState().setValue(FramedProperties.FACING_HOR, invertFacing ? Direction.EAST : Direction.WEST);
     }
 
     @Override

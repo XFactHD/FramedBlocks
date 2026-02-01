@@ -43,7 +43,11 @@ public final class GhostRenderBehaviours
                 FBContent.BLOCK_FRAMED_SMALL_INNER_CORNER_SLOPE_PANEL,
                 FBContent.BLOCK_FRAMED_LARGE_INNER_CORNER_SLOPE_PANEL,
                 FBContent.BLOCK_FRAMED_EXTENDED_CORNER_SLOPE_PANEL,
-                FBContent.BLOCK_FRAMED_EXTENDED_INNER_CORNER_SLOPE_PANEL
+                FBContent.BLOCK_FRAMED_EXTENDED_INNER_CORNER_SLOPE_PANEL,
+                FBContent.BLOCK_FRAMED_SMALL_PRISM_SLOPE_PANEL_CORNER,
+                FBContent.BLOCK_FRAMED_LARGE_PRISM_SLOPE_PANEL_CORNER,
+                FBContent.BLOCK_FRAMED_SMALL_INNER_PRISM_SLOPE_PANEL_CORNER,
+                FBContent.BLOCK_FRAMED_LARGE_INNER_PRISM_SLOPE_PANEL_CORNER
         ));
         event.registerBlocks(new StandingAndWallDoubleBlockGhostRenderBehaviour(), List.of(
                 FBContent.BLOCK_FRAMED_SMALL_DOUBLE_CORNER_SLOPE_PANEL,
@@ -83,8 +87,6 @@ public final class GhostRenderBehaviours
         event.registerBlock(new LayeredCubeGhostRenderBehaviour(), FBContent.BLOCK_FRAMED_LAYERED_CUBE);
         event.registerBlock(new TargetGhostRenderBehaviour(), FBContent.BLOCK_FRAMED_TARGET);
     }
-
-
 
     private GhostRenderBehaviours() { }
 }

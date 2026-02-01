@@ -243,6 +243,14 @@ public final class FramedBlockModelProvider extends AbstractFramedBlockModelProv
         simpleFramedBlock(blockModels, FBContent.BLOCK_FRAMED_STACKED_CORNER_SLOPE_PANEL_WALL, cube);
         simpleFramedBlockWithItem(blockModels, FBContent.BLOCK_FRAMED_STACKED_INNER_CORNER_SLOPE_PANEL, cube);
         simpleFramedBlock(blockModels, FBContent.BLOCK_FRAMED_STACKED_INNER_CORNER_SLOPE_PANEL_WALL, cube);
+        simpleFramedBlockWithItem(blockModels, FBContent.BLOCK_FRAMED_SMALL_PRISM_SLOPE_PANEL_CORNER, cube, builder -> builder.itemBaseModel(THIN_BLOCK_LOC));
+        simpleFramedBlock(blockModels, FBContent.BLOCK_FRAMED_SMALL_PRISM_SLOPE_PANEL_CORNER_WALL, cube);
+        simpleFramedBlockWithItem(blockModels, FBContent.BLOCK_FRAMED_LARGE_PRISM_SLOPE_PANEL_CORNER, cube);
+        simpleFramedBlock(blockModels, FBContent.BLOCK_FRAMED_LARGE_PRISM_SLOPE_PANEL_CORNER_WALL, cube);
+        simpleFramedBlockWithItem(blockModels, FBContent.BLOCK_FRAMED_SMALL_INNER_PRISM_SLOPE_PANEL_CORNER, cube);
+        simpleFramedBlock(blockModels, FBContent.BLOCK_FRAMED_SMALL_INNER_PRISM_SLOPE_PANEL_CORNER_WALL, cube);
+        simpleFramedBlockWithItem(blockModels, FBContent.BLOCK_FRAMED_LARGE_INNER_PRISM_SLOPE_PANEL_CORNER, cube);
+        simpleFramedBlock(blockModels, FBContent.BLOCK_FRAMED_LARGE_INNER_PRISM_SLOPE_PANEL_CORNER_WALL, cube);
         simpleFramedBlockWithItem(blockModels, FBContent.BLOCK_FRAMED_PYRAMID, cube);
         simpleFramedBlockWithItem(blockModels, FBContent.BLOCK_FRAMED_PYRAMID_SLAB, cube, builder -> builder.itemBaseModel(THIN_BLOCK_LOC));
         simpleFramedBlockWithItem(blockModels, FBContent.BLOCK_FRAMED_ELEVATED_PYRAMID_SLAB, cube);

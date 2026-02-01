@@ -3,6 +3,7 @@ package io.github.xfacthd.framedblocks.common.data.skippreds.slopepanelcorner;
 import io.github.xfacthd.framedblocks.common.data.property.HorizontalRotation;
 import io.github.xfacthd.framedblocks.common.data.skippreds.CornerDir;
 import io.github.xfacthd.framedblocks.common.data.skippreds.HalfTriangleDir;
+import io.github.xfacthd.framedblocks.common.data.skippreds.QuarterTriangleDir;
 import io.github.xfacthd.framedblocks.common.data.skippreds.TriangleDir;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.Rotation;
@@ -396,5 +397,295 @@ public final class SlopePanelCornerDirs
         }
 
         private ExtendedInnerCornerSlopePanelWall() { }
+    }
+
+    public static final class SmallPrismSlopePanelCorner
+    {
+        public static HalfTriangleDir getSideTriDir(Direction dir, boolean top, Direction side)
+        {
+            Direction down = top ? Direction.UP : Direction.DOWN;
+            if (side == dir)
+            {
+                return HalfTriangleDir.fromDirections(dir.getCounterClockWise(), down, true);
+            }
+            if (side == dir.getCounterClockWise())
+            {
+                return HalfTriangleDir.fromDirections(dir, down, true);
+            }
+            return HalfTriangleDir.NULL;
+        }
+
+        public static QuarterTriangleDir getBottomTriDir(Direction dir, boolean top, Direction side)
+        {
+            Direction down = top ? Direction.UP : Direction.DOWN;
+            if (side == down)
+            {
+                return QuarterTriangleDir.fromDirections(dir, dir.getCounterClockWise(), false);
+            }
+            return QuarterTriangleDir.NULL;
+        }
+
+        private SmallPrismSlopePanelCorner() { }
+    }
+
+    public static final class SmallPrismSlopePanelCornerWall
+    {
+        public static HalfTriangleDir getSideTriDir(Direction dir, HorizontalRotation rot, Direction side)
+        {
+            Direction rotDir = rot.withFacing(dir);
+            Direction perpRotDir = rot.rotate(Rotation.COUNTERCLOCKWISE_90).withFacing(dir);
+            if (side == rotDir)
+            {
+                return HalfTriangleDir.fromDirections(perpRotDir, dir, true);
+            }
+            if (side == perpRotDir)
+            {
+                return HalfTriangleDir.fromDirections(rotDir, dir, true);
+            }
+            return HalfTriangleDir.NULL;
+        }
+
+        public static QuarterTriangleDir getBackTriDir(Direction dir, HorizontalRotation rot, Direction side)
+        {
+            if (side == dir)
+            {
+                return QuarterTriangleDir.fromDirections(
+                        rot.withFacing(dir),
+                        rot.rotate(Rotation.COUNTERCLOCKWISE_90).withFacing(dir),
+                        false
+                );
+            }
+            return QuarterTriangleDir.NULL;
+        }
+
+        private SmallPrismSlopePanelCornerWall() { }
+    }
+
+    public static final class LargePrismSlopePanelCorner
+    {
+        public static HalfTriangleDir getSideTriDir(Direction dir, boolean top, Direction side)
+        {
+            Direction down = top ? Direction.UP : Direction.DOWN;
+            if (side == dir)
+            {
+                return HalfTriangleDir.fromDirections(dir.getCounterClockWise(), down, false);
+            }
+            if (side == dir.getCounterClockWise())
+            {
+                return HalfTriangleDir.fromDirections(dir, down, false);
+            }
+            return HalfTriangleDir.NULL;
+        }
+
+        public static TriangleDir getBottomTriDir(Direction dir, boolean top, Direction side)
+        {
+            Direction down = top ? Direction.UP : Direction.DOWN;
+            if (side == down)
+            {
+                return TriangleDir.fromDirections(dir, dir.getCounterClockWise());
+            }
+            return TriangleDir.NULL;
+        }
+
+        public static QuarterTriangleDir getTopTriDir(Direction dir, boolean top, Direction side)
+        {
+            Direction up = top ? Direction.DOWN : Direction.UP;
+            if (side == up)
+            {
+                return QuarterTriangleDir.fromDirections(dir, dir.getCounterClockWise(), false);
+            }
+            return QuarterTriangleDir.NULL;
+        }
+
+        private LargePrismSlopePanelCorner() { }
+    }
+
+    public static final class LargePrismSlopePanelCornerWall
+    {
+        public static HalfTriangleDir getSideTriDir(Direction dir, HorizontalRotation rot, Direction side)
+        {
+            Direction rotDir = rot.withFacing(dir);
+            Direction perpRotDir = rot.rotate(Rotation.COUNTERCLOCKWISE_90).withFacing(dir);
+            if (side == rotDir)
+            {
+                return HalfTriangleDir.fromDirections(perpRotDir, dir, false);
+            }
+            if (side == perpRotDir)
+            {
+                return HalfTriangleDir.fromDirections(rotDir, dir, false);
+            }
+            return HalfTriangleDir.NULL;
+        }
+
+        public static TriangleDir getBackTriDir(Direction dir, HorizontalRotation rot, Direction side)
+        {
+            if (side == dir)
+            {
+                return TriangleDir.fromDirections(
+                        rot.withFacing(dir),
+                        rot.rotate(Rotation.COUNTERCLOCKWISE_90).withFacing(dir)
+                );
+            }
+            return TriangleDir.NULL;
+        }
+
+        public static QuarterTriangleDir getFrontTriDir(Direction dir, HorizontalRotation rot, Direction side)
+        {
+            if (side == dir.getOpposite())
+            {
+                return QuarterTriangleDir.fromDirections(
+                        rot.withFacing(dir),
+                        rot.rotate(Rotation.COUNTERCLOCKWISE_90).withFacing(dir),
+                        false
+                );
+            }
+            return QuarterTriangleDir.NULL;
+        }
+
+        private LargePrismSlopePanelCornerWall() { }
+    }
+
+    public static final class SmallInnerPrismSlopePanelCorner
+    {
+        public static HalfTriangleDir getSideTriDir(Direction dir, boolean top, Direction side)
+        {
+            Direction down = top ? Direction.UP : Direction.DOWN;
+            if (side == dir.getOpposite())
+            {
+                return HalfTriangleDir.fromDirections(dir.getCounterClockWise(), down, false);
+            }
+            if (side == dir.getClockWise())
+            {
+                return HalfTriangleDir.fromDirections(dir, down, false);
+            }
+            return HalfTriangleDir.NULL;
+        }
+
+        public static TriangleDir getTopTriDir(Direction dir, boolean top, Direction side)
+        {
+            Direction up = top ? Direction.DOWN : Direction.UP;
+            if (side == up)
+            {
+                return TriangleDir.fromDirections(dir, dir.getCounterClockWise());
+            }
+            return TriangleDir.NULL;
+        }
+
+        private SmallInnerPrismSlopePanelCorner() { }
+    }
+
+    public static final class SmallInnerPrismSlopePanelCornerWall
+    {
+        public static HalfTriangleDir getSideTriDir(Direction dir, HorizontalRotation rot, Direction side)
+        {
+            Direction rotDir = rot.withFacing(dir);
+            Direction perpRotDir = rot.rotate(Rotation.COUNTERCLOCKWISE_90).withFacing(dir);
+            if (side == rotDir.getOpposite())
+            {
+                return HalfTriangleDir.fromDirections(perpRotDir, dir, false);
+            }
+            if (side == perpRotDir.getOpposite())
+            {
+                return HalfTriangleDir.fromDirections(rotDir, dir, false);
+            }
+            return HalfTriangleDir.NULL;
+        }
+
+        public static TriangleDir getFrontTriDir(Direction dir, HorizontalRotation rot, Direction side)
+        {
+            if (side == dir.getOpposite())
+            {
+                return TriangleDir.fromDirections(
+                        rot.withFacing(dir),
+                        rot.rotate(Rotation.COUNTERCLOCKWISE_90).withFacing(dir)
+                );
+            }
+            return TriangleDir.NULL;
+        }
+
+        private SmallInnerPrismSlopePanelCornerWall() { }
+    }
+
+    public static final class LargeInnerPrismSlopePanelCorner
+    {
+        public static HalfTriangleDir getSideTriDir(Direction dir, boolean top, Direction side)
+        {
+            Direction down = top ? Direction.UP : Direction.DOWN;
+            if (side == dir.getOpposite())
+            {
+                return HalfTriangleDir.fromDirections(dir.getCounterClockWise(), down, true);
+            }
+            if (side == dir.getClockWise())
+            {
+                return HalfTriangleDir.fromDirections(dir, down, true);
+            }
+            return HalfTriangleDir.NULL;
+        }
+
+        public static TriangleDir getBottomTriDir(Direction dir, boolean top, Direction side)
+        {
+            Direction down = top ? Direction.UP : Direction.DOWN;
+            if (side == down)
+            {
+                return TriangleDir.fromDirections(dir, dir.getCounterClockWise());
+            }
+            return TriangleDir.NULL;
+        }
+
+        public static TriangleDir getTopTriDir(Direction dir, boolean top, Direction side)
+        {
+            Direction up = top ? Direction.DOWN : Direction.UP;
+            if (side == up)
+            {
+                return TriangleDir.fromDirections(dir, dir.getCounterClockWise());
+            }
+            return TriangleDir.NULL;
+        }
+
+        private LargeInnerPrismSlopePanelCorner() { }
+    }
+
+    public static final class LargeInnerPrismSlopePanelCornerWall
+    {
+        public static HalfTriangleDir getSideTriDir(Direction dir, HorizontalRotation rot, Direction side)
+        {
+            Direction rotDir = rot.withFacing(dir);
+            Direction perpRotDir = rot.rotate(Rotation.COUNTERCLOCKWISE_90).withFacing(dir);
+            if (side == rotDir.getOpposite())
+            {
+                return HalfTriangleDir.fromDirections(perpRotDir, dir, true);
+            }
+            if (side == perpRotDir.getOpposite())
+            {
+                return HalfTriangleDir.fromDirections(rotDir, dir, true);
+            }
+            return HalfTriangleDir.NULL;
+        }
+
+        public static TriangleDir getBackTriDir(Direction dir, HorizontalRotation rot, Direction side)
+        {
+            if (side == dir)
+            {
+                return TriangleDir.fromDirections(
+                        rot.withFacing(dir),
+                        rot.rotate(Rotation.COUNTERCLOCKWISE_90).withFacing(dir)
+                );
+            }
+            return TriangleDir.NULL;
+        }
+
+        public static TriangleDir getFrontTriDir(Direction dir, HorizontalRotation rot, Direction side)
+        {
+            if (side == dir.getOpposite())
+            {
+                return TriangleDir.fromDirections(
+                        rot.withFacing(dir),
+                        rot.rotate(Rotation.COUNTERCLOCKWISE_90).withFacing(dir)
+                );
+            }
+            return TriangleDir.NULL;
+        }
+
+        private LargeInnerPrismSlopePanelCornerWall() { }
     }
 }

@@ -43,6 +43,10 @@ public class FramedCornerSlopePanelWallBlock extends FramedBlock
             case FRAMED_SMALL_INNER_CORNER_SLOPE_PANEL_W -> FBContent.BLOCK_FRAMED_SMALL_INNER_CORNER_SLOPE_PANEL;
             case FRAMED_LARGE_CORNER_SLOPE_PANEL_W -> FBContent.BLOCK_FRAMED_LARGE_CORNER_SLOPE_PANEL;
             case FRAMED_LARGE_INNER_CORNER_SLOPE_PANEL_W -> FBContent.BLOCK_FRAMED_LARGE_INNER_CORNER_SLOPE_PANEL;
+            case FRAMED_SMALL_PRISM_CORNER_SLOPE_PANEL_W -> FBContent.BLOCK_FRAMED_SMALL_PRISM_SLOPE_PANEL_CORNER;
+            case FRAMED_LARGE_PRISM_CORNER_SLOPE_PANEL_W -> FBContent.BLOCK_FRAMED_LARGE_PRISM_SLOPE_PANEL_CORNER;
+            case FRAMED_SMALL_INNER_PRISM_CORNER_SLOPE_PANEL_W -> FBContent.BLOCK_FRAMED_SMALL_INNER_PRISM_SLOPE_PANEL_CORNER;
+            case FRAMED_LARGE_INNER_PRISM_CORNER_SLOPE_PANEL_W -> FBContent.BLOCK_FRAMED_LARGE_INNER_PRISM_SLOPE_PANEL_CORNER;
             default -> throw new IllegalArgumentException("Unknown corner slope panel type: " + type);
         };
     }
@@ -91,14 +95,16 @@ public class FramedCornerSlopePanelWallBlock extends FramedBlock
         Direction perpRotDir = rotation.rotate(Rotation.COUNTERCLOCKWISE_90).withFacing(dir);
         switch (getBlockType())
         {
-            case FRAMED_SMALL_CORNER_SLOPE_PANEL_W, FRAMED_LARGE_CORNER_SLOPE_PANEL_W ->
+            case FRAMED_SMALL_CORNER_SLOPE_PANEL_W, FRAMED_LARGE_CORNER_SLOPE_PANEL_W,
+                 FRAMED_SMALL_PRISM_CORNER_SLOPE_PANEL_W, FRAMED_LARGE_PRISM_CORNER_SLOPE_PANEL_W ->
             {
                 if (side == rotDir.getOpposite() || side == perpRotDir.getOpposite())
                 {
                     side = dir;
                 }
             }
-            case FRAMED_SMALL_INNER_CORNER_SLOPE_PANEL_W, FRAMED_LARGE_INNER_CORNER_SLOPE_PANEL_W ->
+            case FRAMED_SMALL_INNER_CORNER_SLOPE_PANEL_W, FRAMED_LARGE_INNER_CORNER_SLOPE_PANEL_W,
+                 FRAMED_SMALL_INNER_PRISM_CORNER_SLOPE_PANEL_W, FRAMED_LARGE_INNER_PRISM_CORNER_SLOPE_PANEL_W ->
             {
                 if (side == rotDir || side == perpRotDir)
                 {

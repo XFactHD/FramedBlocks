@@ -782,6 +782,22 @@ public final class FramingSawRecipeProvider extends AbstractFramingSawRecipeProv
                 .material(CUBE_MATERIAL_VALUE / 8 * 5)
                 .save(output);
 
+        sawRecipe(FBContent.BLOCK_FRAMED_SMALL_PRISM_SLOPE_PANEL_CORNER)
+                .material(CUBE_MATERIAL_VALUE / 8)
+                .save(output);
+
+        sawRecipe(FBContent.BLOCK_FRAMED_LARGE_PRISM_SLOPE_PANEL_CORNER)
+                .material(CUBE_MATERIAL_VALUE / 8)
+                .save(output);
+
+        sawRecipe(FBContent.BLOCK_FRAMED_SMALL_INNER_PRISM_SLOPE_PANEL_CORNER)
+                .material(CUBE_MATERIAL_VALUE / 4)
+                .save(output);
+
+        sawRecipe(FBContent.BLOCK_FRAMED_LARGE_INNER_PRISM_SLOPE_PANEL_CORNER)
+                .material(CUBE_MATERIAL_VALUE / 2)
+                .save(output);
+
         sawRecipe(FBContent.BLOCK_FRAMED_PYRAMID, 3)
                 .material(CUBE_MATERIAL_VALUE)
                 .save(output);

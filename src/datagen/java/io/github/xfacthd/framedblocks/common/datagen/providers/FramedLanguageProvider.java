@@ -264,6 +264,14 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(FBContent.BLOCK_FRAMED_STACKED_CORNER_SLOPE_PANEL_WALL.value(), "Framed Stacked Corner Slope Panel");
         add(FBContent.BLOCK_FRAMED_STACKED_INNER_CORNER_SLOPE_PANEL.value(), "Framed Stacked Inner Corner Slope Panel");
         add(FBContent.BLOCK_FRAMED_STACKED_INNER_CORNER_SLOPE_PANEL_WALL.value(), "Framed Stacked Inner Corner Slope Panel");
+        add(FBContent.BLOCK_FRAMED_SMALL_PRISM_SLOPE_PANEL_CORNER.value(), "Framed Small Prism Corner Slope Panel");
+        add(FBContent.BLOCK_FRAMED_SMALL_PRISM_SLOPE_PANEL_CORNER_WALL.value(), "Framed Small Prism Corner Slope Panel");
+        add(FBContent.BLOCK_FRAMED_LARGE_PRISM_SLOPE_PANEL_CORNER.value(), "Framed Large Prism Corner Slope Panel");
+        add(FBContent.BLOCK_FRAMED_LARGE_PRISM_SLOPE_PANEL_CORNER_WALL.value(), "Framed Large Prism Corner Slope Panel");
+        add(FBContent.BLOCK_FRAMED_SMALL_INNER_PRISM_SLOPE_PANEL_CORNER.value(), "Framed Small Inner Prism Corner Slope Panel");
+        add(FBContent.BLOCK_FRAMED_SMALL_INNER_PRISM_SLOPE_PANEL_CORNER_WALL.value(), "Framed Small Inner Prism Corner Slope Panel");
+        add(FBContent.BLOCK_FRAMED_LARGE_INNER_PRISM_SLOPE_PANEL_CORNER.value(), "Framed Large Inner Prism Corner Slope Panel");
+        add(FBContent.BLOCK_FRAMED_LARGE_INNER_PRISM_SLOPE_PANEL_CORNER_WALL.value(), "Framed Large Inner Prism Corner Slope Panel");
         add(FBContent.BLOCK_FRAMED_PYRAMID.value(), "Framed Pyramid");
         add(FBContent.BLOCK_FRAMED_PYRAMID_SLAB.value(), "Framed Pyramid Slab");
         add(FBContent.BLOCK_FRAMED_ELEVATED_PYRAMID_SLAB.value(), "Framed Elevated Pyramid Slab");

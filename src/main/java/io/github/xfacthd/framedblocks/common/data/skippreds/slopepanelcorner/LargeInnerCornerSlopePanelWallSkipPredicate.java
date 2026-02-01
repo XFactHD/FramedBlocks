@@ -90,6 +90,12 @@ public final class LargeInnerCornerSlopePanelWallSkipPredicate implements SideSk
                 case FRAMED_EXT_INNER_CORNER_SLOPE_PANEL_W -> testAgainstExtendedInnerCornerSlopePanelWall(
                         dir, rot, adjState, side
                 );
+                case FRAMED_SMALL_PRISM_CORNER_SLOPE_PANEL_W -> testAgainstSmallPrismSlopePanelCornerWall(
+                        dir, rot, adjState, side
+                );
+                case FRAMED_LARGE_INNER_PRISM_CORNER_SLOPE_PANEL_W -> testAgainstLargeInnerPrismSlopePanelCornerWall(
+                        dir, rot, adjState, side
+                );
                 case FRAMED_MASONRY_CORNER_SEGMENT -> testAgainstMasonryCornerSegment(
                         dir, rot, adjState, side
                 );
@@ -296,6 +302,28 @@ public final class LargeInnerCornerSlopePanelWallSkipPredicate implements SideSk
         HorizontalRotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
 
         return SlopePanelCornerDirs.LargeInnerCornerSlopePanelWall.getStairDir(dir, rot, side).isEqualTo(SlopePanelCornerDirs.ExtendedInnerCornerSlopePanelWall.getStairDir(adjDir, adjRot, side.getOpposite()));
+    }
+
+    @CullTest.TestTarget(BlockType.FRAMED_SMALL_PRISM_CORNER_SLOPE_PANEL_W)
+    private static boolean testAgainstSmallPrismSlopePanelCornerWall(
+            Direction dir, HorizontalRotation rot, BlockState adjState, Direction side
+    )
+    {
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
+        HorizontalRotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
+
+        return SlopePanelCornerDirs.LargeInnerCornerSlopePanelWall.getTriDir(dir, rot, side).isEqualTo(SlopePanelCornerDirs.SmallPrismSlopePanelCornerWall.getSideTriDir(adjDir, adjRot, side.getOpposite()));
+    }
+
+    @CullTest.TestTarget(BlockType.FRAMED_LARGE_INNER_PRISM_CORNER_SLOPE_PANEL_W)
+    private static boolean testAgainstLargeInnerPrismSlopePanelCornerWall(
+            Direction dir, HorizontalRotation rot, BlockState adjState, Direction side
+    )
+    {
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
+        HorizontalRotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
+
+        return SlopePanelCornerDirs.LargeInnerCornerSlopePanelWall.getTriDir(dir, rot, side).isEqualTo(SlopePanelCornerDirs.LargeInnerPrismSlopePanelCornerWall.getSideTriDir(adjDir, adjRot, side.getOpposite()));
     }
 
     @CullTest.TestTarget(BlockType.FRAMED_MASONRY_CORNER_SEGMENT)

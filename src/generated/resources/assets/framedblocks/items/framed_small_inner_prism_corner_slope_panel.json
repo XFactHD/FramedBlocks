@@ -1,0 +1,7 @@
+{
+  "model": {
+    "type": "framedblocks:block",
+    "base_model": "framedblocks:block/framed_cube",
+    "block": "framedblocks:framed_small_inner_prism_corner_slope_panel"
+  }
+}

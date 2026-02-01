@@ -470,6 +470,14 @@ public final class FBClient
         wrapDoubleModel(FBContent.BLOCK_FRAMED_STACKED_CORNER_SLOPE_PANEL_WALL, NullCullPredicate.ONLY_LEFT, WrapHelper.IGNORE_DEFAULT);
         wrapDoubleModel(FBContent.BLOCK_FRAMED_STACKED_INNER_CORNER_SLOPE_PANEL, NullCullPredicate.ONLY_LEFT, WrapHelper.IGNORE_DEFAULT);
         wrapDoubleModel(FBContent.BLOCK_FRAMED_STACKED_INNER_CORNER_SLOPE_PANEL_WALL, NullCullPredicate.ONLY_LEFT, WrapHelper.IGNORE_DEFAULT);
+        WrapHelper.wrap(FBContent.BLOCK_FRAMED_SMALL_PRISM_SLOPE_PANEL_CORNER, FramedSmallPrismSlopePanelCornerGeometry::new, WrapHelper.IGNORE_WATERLOGGED);
+        WrapHelper.wrap(FBContent.BLOCK_FRAMED_SMALL_PRISM_SLOPE_PANEL_CORNER_WALL, FramedSmallPrismSlopePanelCornerWallGeometry::new, WrapHelper.IGNORE_WATERLOGGED);
+        WrapHelper.wrap(FBContent.BLOCK_FRAMED_LARGE_PRISM_SLOPE_PANEL_CORNER, FramedLargePrismSlopePanelCornerGeometry::new, WrapHelper.IGNORE_WATERLOGGED);
+        WrapHelper.wrap(FBContent.BLOCK_FRAMED_LARGE_PRISM_SLOPE_PANEL_CORNER_WALL, FramedLargePrismSlopePanelCornerWallGeometry::new, WrapHelper.IGNORE_WATERLOGGED);
+        WrapHelper.wrap(FBContent.BLOCK_FRAMED_SMALL_INNER_PRISM_SLOPE_PANEL_CORNER, FramedSmallInnerPrismSlopePanelCornerGeometry::new, WrapHelper.IGNORE_DEFAULT);
+        WrapHelper.wrap(FBContent.BLOCK_FRAMED_SMALL_INNER_PRISM_SLOPE_PANEL_CORNER_WALL, FramedSmallInnerPrismSlopePanelCornerWallGeometry::new, WrapHelper.IGNORE_DEFAULT);
+        WrapHelper.wrap(FBContent.BLOCK_FRAMED_LARGE_INNER_PRISM_SLOPE_PANEL_CORNER, FramedLargeInnerPrismSlopePanelCornerGeometry::new, WrapHelper.IGNORE_DEFAULT);
+        WrapHelper.wrap(FBContent.BLOCK_FRAMED_LARGE_INNER_PRISM_SLOPE_PANEL_CORNER_WALL, FramedLargeInnerPrismSlopePanelCornerWallGeometry::new, WrapHelper.IGNORE_DEFAULT);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_PYRAMID, FramedPyramidGeometry::new, WrapHelper.IGNORE_DEFAULT);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_PYRAMID_SLAB, FramedPyramidSlabGeometry::new, WrapHelper.IGNORE_DEFAULT);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_ELEVATED_PYRAMID_SLAB, FramedElevatedPyramidSlabGeometry::new, WrapHelper.IGNORE_DEFAULT);
