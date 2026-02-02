@@ -3,6 +3,7 @@ package xfacthd.framedblocks.client.screen.overlay;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.tooltip.TooltipRenderUtil;
 import net.minecraft.client.renderer.GameRenderer;
@@ -27,6 +28,10 @@ abstract class BlockInteractOverlay
 {
     private static final int LINE_DIST = 3;
     private static final Target NO_TARGET = new Target(BlockPos.ZERO, Blocks.AIR.defaultBlockState(), Direction.NORTH);
+    private static final int ICON_MARGIN = 20;
+    private static final int TOOLTIP_MARGIN = 10;
+    private static final int PADDING = 10;
+    private static final int DEFAULT_Y_OFF = 80;
 
     private final String name;
     private final List<Component> linesFalse;
@@ -82,7 +87,7 @@ abstract class BlockInteractOverlay
         int centerY = screenHeight / 2;
 
         Texture tex = getTexture(target, state, textureFalse, textureTrue);
-        int texX = centerX + 20;
+        int texX = centerX + ICON_MARGIN;
         int texY = centerY - (tex.height / 2);
         tex.draw(graphics, texX, texY);
         renderAfterIcon(graphics, tex, texX, texY, target);
@@ -111,17 +116,25 @@ abstract class BlockInteractOverlay
             updateTextWidth(font);
         }
 
+        Gui gui = Minecraft.getInstance().gui;
         int lineHeight = font.lineHeight + LINE_DIST;
         int count = lines.size();
         int contentHeight = count * lineHeight - LINE_DIST;
 
-        int width = textWidth + tex.width + 10;
+        int width = textWidth + tex.width + PADDING;
         int height = Math.max(contentHeight, tex.height);
+        int minY = screenHeight / 2 + tex.height / 2;
+        int maxY = screenHeight - Math.min(gui.leftHeight, gui.rightHeight);
         int x = centerX - (width / 2);
-        int y = screenHeight - 80 - height;
+        int y = Math.max(screenHeight - DEFAULT_Y_OFF - height, minY + TOOLTIP_MARGIN);
+        if (y + height > maxY - TOOLTIP_MARGIN)
+        {
+            return;
+        }
+
         drawTooltipBackground(graphics, x, y, width, height);
 
-        int textX = x + tex.width + 10;
+        int textX = x + tex.width + PADDING;
         int yBaseOff = tex.height > contentHeight ? ((tex.height - contentHeight) / 2) : 0;
         for (int i = 0; i < count; i++)
         {
