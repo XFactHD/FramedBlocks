@@ -327,6 +327,7 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(JadeCompat.LABEL_CAMO, "Camo: %s");
         add(JadeCompat.LABEL_CAMO_ONE, "Camo one: %s");
         add(JadeCompat.LABEL_CAMO_TWO, "Camo two: %s");
+        add(JadeCompat.DETAIL_PREFIX, "    %s");
 
         add(Utils.TOOL_WRENCH, "Wrenches");
         add(Utils.DISABLE_INTANGIBLE, "Disable Intangibility");

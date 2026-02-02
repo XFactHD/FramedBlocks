@@ -2,10 +2,14 @@ package xfacthd.framedblocks.api.camo;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponentType;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.material.MapColor;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.function.Consumer;
 
 /**
  * Base class for camo containers, holding a {@link CamoContent} as well as any additional metadata needed for
@@ -94,6 +98,18 @@ public abstract class CamoContainer<C extends CamoContent<C>, T extends CamoCont
     {
         return getFactory().canTriviallyConvertToItemStack();
     }
+
+    /**
+     * Append additional lines to the Jade tooltip.
+     * <p>
+     * Added lines will automatically be prefixed with four spaces.
+     *
+     * @param level    The level containing the framed block whose camo is shown
+     * @param pos      The position of the framed block whose camo is shown
+     * @param player   The player looking at the framed block
+     */
+    @SuppressWarnings("unused")
+    public void appendJadeTooltip(Level level, BlockPos pos, Player player, Consumer<Component> appender) { }
 
     /**
      * {@return whether this container represents a non-existent camo}
