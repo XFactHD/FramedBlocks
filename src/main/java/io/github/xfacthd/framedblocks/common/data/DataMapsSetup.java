@@ -50,6 +50,4 @@ public final class DataMapsSetup implements FramedDataMaps
     {
         return SOUND_EVENT_GROUPS;
     }
-
-    private DataMapsSetup() { }
 }
