@@ -65,14 +65,14 @@ public enum DirectionAxis implements StringRepresentable
                 return this;
             }
 
-            return of(dir, Utils.nextAxisNotEqualTo(axis, dir.getAxis()));
+            return of(dir, Utils.getPerpendicularAxis(axis, dir.getAxis()));
         }
         else
         {
             Direction.Axis newAxis = axis;
             if (axis != Direction.Axis.Y && rot != Rotation.CLOCKWISE_180)
             {
-                newAxis = Utils.nextAxisNotEqualTo(axis, Direction.Axis.Y);
+                newAxis = Utils.getPerpendicularAxis(axis, Direction.Axis.Y);
             }
             return of(rot.rotate(dir), newAxis);
         }

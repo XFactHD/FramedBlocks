@@ -63,7 +63,7 @@ public class FramedPillarBlock extends FramedBlock implements IPillarLikeBlock
         Direction.Axis axis = state.getValue(BlockStateProperties.AXIS);
         if (axis != Direction.Axis.Y && rot != Rotation.NONE && rot != Rotation.CLOCKWISE_180)
         {
-            axis = Utils.nextAxisNotEqualTo(axis, Direction.Axis.Y);
+            axis = Utils.getPerpendicularAxis(axis, Direction.Axis.Y);
             return state.setValue(BlockStateProperties.AXIS, axis);
         }
         return state;

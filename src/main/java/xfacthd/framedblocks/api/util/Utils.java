@@ -276,6 +276,8 @@ public final class Utils
         return dirByNormal(nx, ny, nz);
     }
 
+    /** @deprecated Use {@link #getPerpendicularAxis(Direction.Axis, Direction.Axis)} instead */
+    @Deprecated(forRemoval = true)
     public static Direction.Axis nextAxisNotEqualTo(Direction.Axis axis, Direction.Axis except)
     {
         Direction.Axis[] axes = Direction.Axis.VALUES;
