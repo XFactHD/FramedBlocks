@@ -36,32 +36,30 @@ public class FramedCompoundSlopePanelGeometry extends Geometry
         Direction quadDir = quad.getDirection();
         if (quadDir == orientation)
         {
-            if (Utils.isY(quadDir))
+            QuadModifier.of(quad)
+                    .apply(Modifiers.cutTopBottom(dir.getOpposite(), .5F))
+                    .export(quadMap.get(quadDir));
+
+            if (ySlope && Utils.isY(quadDir))
             {
                 QuadModifier.of(quad)
-                        .apply(Modifiers.cutTopBottom(dir.getOpposite(), .5F))
-                        .export(quadMap.get(quadDir));
-            }
-            else
-            {
-                QuadModifier.of(quad)
-                        .apply(Modifiers.cutSideLeftRight(dir.getOpposite(), .5F))
-                        .export(quadMap.get(quadDir));
+                        .apply(Modifiers.makeVerticalSlope(dir.getOpposite(), FramedSlopePanelGeometry.SLOPE_ANGLE_VERT))
+                        .apply(Modifiers.offset(dir.getOpposite(), .5F))
+                        .export(quadMap.get(null));
             }
         }
         else if (quadDir == orientation.getOpposite())
         {
-            if (Utils.isY(quadDir))
+            QuadModifier.of(quad)
+                    .apply(Modifiers.cutTopBottom(dir, .5F))
+                    .export(quadMap.get(quadDir));
+
+            if (ySlope && Utils.isY(quadDir))
             {
                 QuadModifier.of(quad)
-                        .apply(Modifiers.cutTopBottom(dir, .5F))
-                        .export(quadMap.get(quadDir));
-            }
-            else
-            {
-                QuadModifier.of(quad)
-                        .apply(Modifiers.cutSideLeftRight(dir, .5F))
-                        .export(quadMap.get(quadDir));
+                        .apply(Modifiers.makeVerticalSlope(dir, FramedSlopePanelGeometry.SLOPE_ANGLE_VERT))
+                        .apply(Modifiers.offset(dir, .5F))
+                        .export(quadMap.get(null));
             }
         }
         else if (quadDir == dir)
