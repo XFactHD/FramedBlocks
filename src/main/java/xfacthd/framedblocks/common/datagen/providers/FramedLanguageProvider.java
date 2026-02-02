@@ -518,6 +518,7 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(ClientConfig.TRANSLATION_SHOW_BUTTON_PLATE_OVERLAY, "Show button and pressure plate type overlay");
         add(ClientConfig.TRANSLATION_SHOW_SPECIAL_CUBE_OVERLAY, "Show special cube type overlay");
         add(ClientConfig.TRANSLATION_RENDER_CAMO_IN_JADE, "Render camo in Jade overlay");
+        add(ClientConfig.TRANSLATION_SHOW_CAMO_CRAFTING_IN_JEI, "Show camo application recipes in JEI");
         add(ClientConfig.TRANSLATION_MAX_OVERLAY_MODE, "Max overlay display mode");
         add(ClientConfig.TRANSLATION_STATE_LOCK_MODE, "State lock overlay: Display mode");
         add(ClientConfig.TRANSLATION_TOGGLE_WATERLOG_MODE, "Toggle waterloggable overlay: Display mode");

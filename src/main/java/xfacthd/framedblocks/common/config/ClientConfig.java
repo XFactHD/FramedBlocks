@@ -36,6 +36,7 @@ public final class ClientConfig
     private static final String KEY_SHOW_BUTTON_PLATE_OVERLAY = "showButtonPlateTypeOverlay";
     private static final String KEY_SHOW_SPECIAL_CUBE_OVERLAY = "showSpecialCubeTypeOverlay";
     private static final String KEY_RENDER_CAMO_IN_JADE = "renderCamoInJade";
+    private static final String KEY_SHOW_CAMO_CRAFTING_IN_JEI = "showCamoCraftingInJei";
     private static final String KEY_MAX_OVERLAY_MODE = "maxOverlayMode";
     private static final String KEY_STATE_LOCK_MODE = "stateLockMode";
     private static final String KEY_TOGGLE_WATERLOG_MODE = "toggleWaterlogMode";
@@ -65,6 +66,7 @@ public final class ClientConfig
     public static final String TRANSLATION_SHOW_BUTTON_PLATE_OVERLAY = translate(KEY_SHOW_BUTTON_PLATE_OVERLAY);
     public static final String TRANSLATION_SHOW_SPECIAL_CUBE_OVERLAY = translate(KEY_SHOW_SPECIAL_CUBE_OVERLAY);
     public static final String TRANSLATION_RENDER_CAMO_IN_JADE = translate(KEY_RENDER_CAMO_IN_JADE);
+    public static final String TRANSLATION_SHOW_CAMO_CRAFTING_IN_JEI = translate(KEY_SHOW_CAMO_CRAFTING_IN_JEI);
     public static final String TRANSLATION_STATE_LOCK_MODE = translate(KEY_STATE_LOCK_MODE);
     public static final String TRANSLATION_MAX_OVERLAY_MODE = translate(KEY_MAX_OVERLAY_MODE);
     public static final String TRANSLATION_TOGGLE_WATERLOG_MODE = translate(KEY_TOGGLE_WATERLOG_MODE);
@@ -98,6 +100,7 @@ public final class ClientConfig
     private static boolean showButtonPlateOverlay = false;
     private static boolean showSpecialCubeOverlay = false;
     private static boolean renderCamoInJade = false;
+    private static boolean showCamoCraftingInJei = false;
     private static OverlayDisplayMode maxOverlayMode = OverlayDisplayMode.DETAILED;
     private static OverlayDisplayMode stateLockMode = OverlayDisplayMode.DETAILED;
     private static OverlayDisplayMode toggleWaterlogMode = OverlayDisplayMode.DETAILED;
@@ -127,6 +130,7 @@ public final class ClientConfig
     private static final ModConfigSpec.BooleanValue SHOW_BUTTON_PLATE_OVERLAY_VALUE;
     private static final ModConfigSpec.BooleanValue SHOW_SPECIAL_CUBE_OVERLAY_VALUE;
     private static final ModConfigSpec.BooleanValue RENDER_CAMO_IN_JADE_VALUE;
+    private static final ModConfigSpec.BooleanValue SHOW_CAMO_CRAFTING_IN_JEI_VALUE;
 
     private static final ModConfigSpec.EnumValue<OverlayDisplayMode> MAX_OVERLAY_MODE_VALUE;
     private static final ModConfigSpec.EnumValue<OverlayDisplayMode> STATE_LOCK_MODE_VALUE;
@@ -250,6 +254,11 @@ public final class ClientConfig
                 .comment("If true, framed blocks will be rendered with their camo in Jade, otherwise they will be rendered blank")
                 .translation(TRANSLATION_RENDER_CAMO_IN_JADE)
                 .define(KEY_RENDER_CAMO_IN_JADE, true);
+        SHOW_CAMO_CRAFTING_IN_JEI_VALUE = builder
+                .comment("If true, camo application recipes will be shown in JEI")
+                .translation(TRANSLATION_SHOW_CAMO_CRAFTING_IN_JEI)
+                .worldRestart()
+                .define(KEY_SHOW_CAMO_CRAFTING_IN_JEI, true);
         builder.pop();
 
         builder.push("overlay");
@@ -363,6 +372,7 @@ public final class ClientConfig
             showButtonPlateOverlay = SHOW_BUTTON_PLATE_OVERLAY_VALUE.get();
             showSpecialCubeOverlay = SHOW_SPECIAL_CUBE_OVERLAY_VALUE.get();
             renderCamoInJade = RENDER_CAMO_IN_JADE_VALUE.get();
+            showCamoCraftingInJei = SHOW_CAMO_CRAFTING_IN_JEI_VALUE.get();
 
             maxOverlayMode = MAX_OVERLAY_MODE_VALUE.get();
             stateLockMode = STATE_LOCK_MODE_VALUE.get();
@@ -479,6 +489,12 @@ public final class ClientConfig
         public boolean shouldRenderCamoInJade()
         {
             return renderCamoInJade;
+        }
+
+        @Override
+        public boolean showCamoCraftingInJei()
+        {
+            return showCamoCraftingInJei;
         }
 
         @Override

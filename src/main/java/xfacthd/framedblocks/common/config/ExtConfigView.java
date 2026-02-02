@@ -41,6 +41,8 @@ public final class ExtConfigView
 
         boolean shouldRenderCamoInJade();
 
+        boolean showCamoCraftingInJei();
+
         OverlayDisplayMode getMaxOverlayMode();
 
         OverlayDisplayMode getStateLockMode();
