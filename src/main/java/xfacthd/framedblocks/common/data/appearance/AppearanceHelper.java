@@ -121,6 +121,19 @@ public final class AppearanceHelper
                 }
 
                 BlockState componentState = framedBlock.getComponentBySkipPredicate(level, pos, state, actualQueryState, edge);
+                if (componentState == null && Utils.dirByNormal(pos, queryPos) == null)
+                {
+                    // If pos-to-queryPos is diagonal and the first component lookup failed, try again with the other axis covered by the diagonal
+                    Direction.Axis perpAxis = Utils.getPerpendicularAxis(side.getAxis(), edge.getAxis());
+                    int nx = queryPos.getX() - pos.getX();
+                    int ny = queryPos.getY() - pos.getY();
+                    int nz = queryPos.getZ() - pos.getZ();
+                    Direction newEdge = Utils.dirByNormal(perpAxis.choose(nx, 0, 0), perpAxis.choose(0, ny, 0), perpAxis.choose(0, 0, nz));
+                    if (newEdge != null)
+                    {
+                        componentState = framedBlock.getComponentBySkipPredicate(level, pos, state, actualQueryState, newEdge);
+                    }
+                }
                 if (componentState != null)
                 {
                     IFramedBlock componentBlock = ((IFramedBlock) componentState.getBlock());

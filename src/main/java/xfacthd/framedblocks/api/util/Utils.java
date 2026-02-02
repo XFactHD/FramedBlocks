@@ -288,6 +288,13 @@ public final class Utils
         return axis;
     }
 
+    public static Direction.Axis getPerpendicularAxis(Direction.Axis axisOne, Direction.Axis axisTwo)
+    {
+        Preconditions.checkArgument(axisOne != axisTwo, "Provided axis must be perpendicular");
+        int idx = Lookups.makePerpAxisIndex(axisOne, axisTwo);
+        return Objects.requireNonNull(Lookups.PERP_AXIS[idx]);
+    }
+
     public static Rotation getOppositeRotation(Rotation rotation)
     {
         return switch (rotation)
