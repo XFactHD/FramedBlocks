@@ -2,8 +2,6 @@ package xfacthd.framedblocks.api.util;
 
 import com.google.common.base.Preconditions;
 import com.google.common.math.IntMath;
-import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
-import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.*;
 import net.minecraft.core.component.DataComponentPatch;
@@ -44,7 +42,6 @@ import xfacthd.framedblocks.api.util.registration.DeferredDataComponentType;
 
 import java.util.*;
 import java.util.function.*;
-import java.util.stream.Collectors;
 
 public final class Utils
 {
@@ -101,14 +98,6 @@ public final class Utils
     public static final DeferredDataComponentType<FrameConfig> DC_TYPE_FRAME_CONFIG = DeferredDataComponentType.createDataComponent(
             Utils.rl("frame_config")
     );
-
-    private static final Long2ObjectMap<Direction> DIRECTION_BY_NORMAL = Arrays.stream(Direction.values())
-            .collect(Collectors.toMap(
-                    side -> new BlockPos(side.getNormal()).asLong(),
-                    Function.identity(),
-                    (sideA, sideB) -> { throw new IllegalArgumentException("Duplicate keys"); },
-                    Long2ObjectOpenHashMap::new
-            ));
 
     public static Vec3 fraction(Vec3 vec)
     {
@@ -265,7 +254,7 @@ public final class Utils
 
     public static Direction dirByNormal(int x, int y, int z)
     {
-        return DIRECTION_BY_NORMAL.get(BlockPos.asLong(x, y, z));
+        return Lookups.NORMALS[Lookups.makeNormalIndex(x, y, z)];
     }
 
     public static Direction dirByNormal(BlockPos from, BlockPos to)
