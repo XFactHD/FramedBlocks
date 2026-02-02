@@ -21,6 +21,7 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Mirror;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.entity.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -285,6 +286,17 @@ public final class Utils
         while (axis == except);
 
         return axis;
+    }
+
+    public static Rotation getOppositeRotation(Rotation rotation)
+    {
+        return switch (rotation)
+        {
+            case NONE -> Rotation.NONE;
+            case CLOCKWISE_90 -> Rotation.COUNTERCLOCKWISE_90;
+            case CLOCKWISE_180 -> Rotation.CLOCKWISE_180;
+            case COUNTERCLOCKWISE_90 -> Rotation.CLOCKWISE_90;
+        };
     }
 
     /**

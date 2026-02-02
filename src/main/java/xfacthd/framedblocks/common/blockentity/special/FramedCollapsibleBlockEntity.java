@@ -2,9 +2,11 @@ package xfacthd.framedblocks.common.blockentity.special;
 
 import net.minecraft.core.*;
 import net.minecraft.core.component.DataComponentMap;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.component.BlockItemStateProperties;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.*;
@@ -30,8 +32,6 @@ public class FramedCollapsibleBlockEntity extends FramedBlockEntity implements I
     private static final int VERTEX_MASK = ~(-1 << BIT_PER_VERTEX);
     private static final NeighborVertex[][] VERTEX_MAPPINGS = makeVertexMapping();
 
-    @Nullable
-    private Direction collapsedFace = null;
     private int packedOffsets = 0;
 
     public FramedCollapsibleBlockEntity(BlockPos pos, BlockState state)
@@ -50,7 +50,8 @@ public class FramedCollapsibleBlockEntity extends FramedBlockEntity implements I
         Direction faceHit = blockHit.getDirection();
         Vec3 hitLoc = Utils.fraction(hit.getLocation());
 
-        if (collapsedFace != null && faceHit != collapsedFace)
+        Direction oldFace = getCollapsedFace();
+        if (oldFace != null && faceHit != oldFace)
         {
             return;
         }
@@ -60,36 +61,36 @@ public class FramedCollapsibleBlockEntity extends FramedBlockEntity implements I
         {
             for (int i = 0; i < 4; i++)
             {
-                handleDeformOfVertex(player, faceHit, i);
+                handleDeformOfVertex(player, faceHit, oldFace, i);
             }
         }
         else
         {
-            handleDeformOfVertex(player, faceHit, vert);
+            handleDeformOfVertex(player, faceHit, oldFace, vert);
         }
     }
 
-    private void handleDeformOfVertex(Player player, Direction faceHit, int vert)
+    private void handleDeformOfVertex(Player player, Direction faceHit, @Nullable Direction oldFace, int vert)
     {
         int offset = getVertexOffset(vert);
-        if (player.isShiftKeyDown() && collapsedFace != null && offset > 0)
+        if (player.isShiftKeyDown() && oldFace != null && offset > 0)
         {
             int target = offset - 1;
 
-            applyDeformation(vert, target, faceHit);
+            applyDeformation(vert, target, faceHit, oldFace);
             deformNeighbors(faceHit, vert, target);
         }
         else if (!player.isShiftKeyDown() && offset < 16)
         {
             int target = offset + 1;
 
-            applyDeformation(vert, target, faceHit);
+            applyDeformation(vert, target, faceHit, oldFace);
             deformNeighbors(faceHit, vert, target);
         }
     }
 
     @SuppressWarnings("ConstantConditions")
-    private void applyDeformation(int vertex, int offset, Direction faceHit)
+    private void applyDeformation(int vertex, int offset, Direction faceHit, @Nullable Direction oldFace)
     {
         offset = Mth.clamp(offset, 0, 16);
 
@@ -112,27 +113,28 @@ public class FramedCollapsibleBlockEntity extends FramedBlockEntity implements I
                 }
             }
 
-            if (noOffsets)
-            {
-                collapsedFace = null;
-                level().setBlock(worldPosition, getBlockState().setValue(PropertyHolder.NULLABLE_FACE, NullableDirection.NONE), Block.UPDATE_ALL);
-            }
-            else
-            {
-                level().sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
-            }
+            updateStateAndSync(oldFace, noOffsets ? null : oldFace);
         }
-        else if (collapsedFace == null)
+        else
         {
-            collapsedFace = faceHit;
-            level().setBlock(worldPosition, getBlockState().setValue(PropertyHolder.NULLABLE_FACE, NullableDirection.fromDirection(collapsedFace)), Block.UPDATE_ALL);
+            updateStateAndSync(oldFace, faceHit);
+        }
+
+        setChangedWithoutSignalUpdate();
+    }
+
+    private void updateStateAndSync(@Nullable Direction oldFace, @Nullable Direction newFace)
+    {
+        if (oldFace != newFace)
+        {
+            NullableDirection face = NullableDirection.fromDirection(newFace);
+            BlockState newState = getBlockState().setValue(PropertyHolder.NULLABLE_FACE, face);
+            level().setBlock(worldPosition, newState, Block.UPDATE_ALL);
         }
         else
         {
             level().sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
         }
-
-        setChangedWithoutSignalUpdate();
     }
 
     private void deformNeighbors(Direction faceHit, int srcVert, int offset)
@@ -144,9 +146,10 @@ public class FramedCollapsibleBlockEntity extends FramedBlockEntity implements I
             BlockPos pos = worldPosition.offset(vert.offset);
             if (level().getBlockEntity(pos) instanceof FramedCollapsibleBlockEntity be)
             {
-                if (be.collapsedFace == null || be.collapsedFace == faceHit)
+                Direction oldFace = be.getCollapsedFace();
+                if (oldFace == null || oldFace == faceHit)
                 {
-                    be.applyDeformation(vert.targetVert, offset, faceHit);
+                    be.applyDeformation(vert.targetVert, offset, faceHit, oldFace);
                 }
             }
         }
@@ -204,7 +207,7 @@ public class FramedCollapsibleBlockEntity extends FramedBlockEntity implements I
     @Nullable
     public Direction getCollapsedFace()
     {
-        return collapsedFace;
+        return getBlockState().getValue(PropertyHolder.NULLABLE_FACE).toDirection();
     }
 
     public int getVertexOffset(int vertex)
@@ -235,7 +238,6 @@ public class FramedCollapsibleBlockEntity extends FramedBlockEntity implements I
     {
         super.writeToDataPacket(nbt, lookupProvider);
         nbt.putInt("offsets", packedOffsets);
-        nbt.putByte("face", (byte) (collapsedFace == null ? -1 : collapsedFace.get3DDataValue()));
     }
 
     @Override
@@ -252,15 +254,6 @@ public class FramedCollapsibleBlockEntity extends FramedBlockEntity implements I
             updateCulling(true, false);
         }
 
-        int faceIdx = nbt.getByte("face");
-        Direction face = faceIdx == -1 ? null : Direction.from3DDataValue(faceIdx);
-        if (collapsedFace != face)
-        {
-            collapsedFace = face;
-
-            needUpdate = true;
-        }
-
         return needUpdate;
     }
 
@@ -269,7 +262,6 @@ public class FramedCollapsibleBlockEntity extends FramedBlockEntity implements I
     {
         CompoundTag nbt = super.getUpdateTag(provider);
         nbt.putInt("offsets", packedOffsets);
-        nbt.putByte("face", (byte) (collapsedFace == null ? -1 : collapsedFace.get3DDataValue()));
         return nbt;
     }
 
@@ -277,17 +269,13 @@ public class FramedCollapsibleBlockEntity extends FramedBlockEntity implements I
     public void handleUpdateTag(CompoundTag nbt, HolderLookup.Provider provider)
     {
         packedOffsets = nbt.getInt("offsets");
-
-        int face = nbt.getByte("face");
-        collapsedFace = face == -1 ? null : Direction.from3DDataValue(face);
-
         super.handleUpdateTag(nbt, provider);
     }
 
     @Override
     protected Optional<AuxBlueprintData<?>> collectAuxBlueprintData()
     {
-        return Optional.of(new CollapsibleBlockData(collapsedFace, packedOffsets));
+        return Optional.of(new CollapsibleBlockData(packedOffsets));
     }
 
     @Override
@@ -301,9 +289,8 @@ public class FramedCollapsibleBlockEntity extends FramedBlockEntity implements I
     @Override
     protected void applyAuxDataFromBlueprint(AuxBlueprintData<?> auxData)
     {
-        if (auxData instanceof CollapsibleBlockData(NullableDirection face, int offsets))
+        if (auxData instanceof CollapsibleBlockData(int offsets))
         {
-            collapsedFace = face.toDirection();
             packedOffsets = offsets;
         }
     }
@@ -311,7 +298,13 @@ public class FramedCollapsibleBlockEntity extends FramedBlockEntity implements I
     @Override
     protected void collectMiscComponents(DataComponentMap.Builder builder)
     {
-        builder.set(FBContent.DC_TYPE_COLLAPSIBLE_BLOCK_DATA, new CollapsibleBlockData(collapsedFace, packedOffsets));
+        builder.set(FBContent.DC_TYPE_COLLAPSIBLE_BLOCK_DATA, new CollapsibleBlockData(packedOffsets));
+
+        BlockState state = getBlockState();
+        BlockItemStateProperties stateProperties = BlockItemStateProperties.EMPTY
+                .with(PropertyHolder.NULLABLE_FACE, state)
+                .with(PropertyHolder.ROTATE_SPLIT_LINE, state);
+        builder.set(DataComponents.BLOCK_STATE, stateProperties);
     }
 
     @Override
@@ -320,7 +313,6 @@ public class FramedCollapsibleBlockEntity extends FramedBlockEntity implements I
         CollapsibleBlockData blockData = input.get(FBContent.DC_TYPE_COLLAPSIBLE_BLOCK_DATA);
         if (blockData != null)
         {
-            collapsedFace = blockData.collapsedFace().toDirection();
             packedOffsets = blockData.offsets();
         }
     }
@@ -330,7 +322,6 @@ public class FramedCollapsibleBlockEntity extends FramedBlockEntity implements I
     {
         super.saveAdditional(nbt, provider);
         nbt.putInt("offsets", packedOffsets);
-        nbt.putInt("face", collapsedFace == null ? -1 : collapsedFace.get3DDataValue());
     }
 
     @Override
@@ -338,8 +329,6 @@ public class FramedCollapsibleBlockEntity extends FramedBlockEntity implements I
     {
         super.loadAdditional(nbt, provider);
         packedOffsets = nbt.getInt("offsets");
-        int face = nbt.getInt("face");
-        collapsedFace = face == -1 ? null : Direction.from3DDataValue(face);
     }
 
 

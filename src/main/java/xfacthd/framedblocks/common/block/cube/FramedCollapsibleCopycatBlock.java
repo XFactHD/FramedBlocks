@@ -9,6 +9,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -16,6 +17,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.shapes.*;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.PlacementStateBuilder;
+import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.blockentity.special.FramedCollapsibleCopycatBlockEntity;
@@ -33,6 +35,7 @@ public class FramedCollapsibleCopycatBlock extends FramedBlock
     private static final int EAST = Direction.EAST.ordinal();
     private static final int SOUTH = Direction.SOUTH.ordinal();
     private static final int WEST = Direction.WEST.ordinal();
+    private static final Rotation[] ROTATIONS = Rotation.values();
     private static final Map<Integer, VoxelShape> SHAPE_CACHE = new ConcurrentHashMap<>();
     public static final int ALL_SOLID = 0b00111111;
 
@@ -46,7 +49,7 @@ public class FramedCollapsibleCopycatBlock extends FramedBlock
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        builder.add(PropertyHolder.SOLID_FACES, BlockStateProperties.WATERLOGGED);
+        builder.add(PropertyHolder.SOLID_FACES, PropertyHolder.COPYCAT_ROTATION, BlockStateProperties.WATERLOGGED);
     }
 
     @Override
@@ -83,9 +86,12 @@ public class FramedCollapsibleCopycatBlock extends FramedBlock
         int solid = state.getValue(PropertyHolder.SOLID_FACES);
         if (solid != ALL_SOLID && level.getBlockEntity(pos) instanceof FramedCollapsibleCopycatBlockEntity be)
         {
-            return SHAPE_CACHE.computeIfAbsent(be.getPackedOffsets(state), key ->
+            int rotOrd = state.getValue(PropertyHolder.COPYCAT_ROTATION).ordinal();
+            int packed = be.getPackedOffsets(state) | (rotOrd << FramedCollapsibleCopycatBlockEntity.OFFSET_BITS);
+            return SHAPE_CACHE.computeIfAbsent(packed, key ->
             {
-                byte[] offsets = FramedCollapsibleCopycatBlockEntity.unpackOffsets(key);
+                Rotation rotation = ROTATIONS[(key >> FramedCollapsibleCopycatBlockEntity.OFFSET_BITS) & 0b11];
+                byte[] offsets = FramedCollapsibleCopycatBlockEntity.unpackOffsets(key, rotation);
                 return box(
                         offsets[WEST],
                         offsets[DOWN],
@@ -119,6 +125,15 @@ public class FramedCollapsibleCopycatBlock extends FramedBlock
                 be.updateFaceSolidity();
             }
         }
+    }
+
+    @Override
+    protected BlockState rotate(BlockState state, Rotation rotation)
+    {
+        Rotation blockRot = state.getValue(PropertyHolder.COPYCAT_ROTATION);
+        // Store "unrotation" to avoid having to invert it at use sites
+        blockRot = blockRot.getRotated(Utils.getOppositeRotation(rotation));
+        return state.setValue(PropertyHolder.COPYCAT_ROTATION, blockRot);
     }
 
     @Override

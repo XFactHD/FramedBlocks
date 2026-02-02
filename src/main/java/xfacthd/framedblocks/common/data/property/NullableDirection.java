@@ -7,6 +7,7 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.util.ByIdMap;
 import net.minecraft.util.StringRepresentable;
+import net.minecraft.world.level.block.Rotation;
 
 import java.util.Locale;
 import java.util.function.IntFunction;
@@ -35,6 +36,11 @@ public enum NullableDirection implements StringRepresentable
     public Direction toDirection()
     {
         return dir;
+    }
+
+    public NullableDirection rotate(Rotation rotation)
+    {
+        return dir == null ? this : fromDirection(rotation.rotate(dir));
     }
 
     @Override
