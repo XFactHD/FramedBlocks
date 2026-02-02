@@ -712,6 +712,10 @@ public class FramedBlockEntity extends BlockEntity
         {
             addCamoDrops(drops);
         }
+        if (intangible)
+        {
+            drops.add(new ItemStack(Utils.PHANTOM_PASTE.value()));
+        }
         if (reinforced)
         {
             drops.add(new ItemStack(Utils.FRAMED_REINFORCEMENT.value()));
