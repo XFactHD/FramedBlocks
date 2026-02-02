@@ -15,7 +15,9 @@ import net.minecraft.world.level.pathfinder.PathComputationType;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.PlacementStateBuilder;
+import xfacthd.framedblocks.api.util.CamoList;
 import xfacthd.framedblocks.api.util.Utils;
+import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.item.FramedSpecialBlockItem;
@@ -62,6 +64,10 @@ public class FramedLayeredCubeBlock extends FramedBlock
     {
         int layers = state.getValue(BlockStateProperties.LAYERS);
         if (layers >= 8 || !useContext.getItemInHand().is(this.asItem()))
+        {
+            return false;
+        }
+        if (!useContext.getItemInHand().getOrDefault(FBContent.DC_TYPE_CAMO_LIST, CamoList.EMPTY).isEmpty())
         {
             return false;
         }
