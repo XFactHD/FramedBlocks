@@ -17,7 +17,7 @@ import io.github.xfacthd.framedblocks.api.predicate.cull.SideSkipPredicate;
 import io.github.xfacthd.framedblocks.api.shapes.ShapeLookup;
 import io.github.xfacthd.framedblocks.api.util.ConfigView;
 import io.github.xfacthd.framedblocks.api.util.RotationDirection;
-import io.github.xfacthd.framedblocks.api.util.SoundUtils;
+import io.github.xfacthd.framedblocks.api.util.sound.SoundUtils;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;

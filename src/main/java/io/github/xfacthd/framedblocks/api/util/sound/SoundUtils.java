@@ -1,4 +1,4 @@
-package io.github.xfacthd.framedblocks.api.util;
+package io.github.xfacthd.framedblocks.api.util.sound;
 
 import io.github.xfacthd.framedblocks.api.internal.InternalAPI;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
@@ -11,8 +11,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.SoundType;
-
-import java.util.function.Function;
 
 public final class SoundUtils
 {
@@ -38,9 +36,9 @@ public final class SoundUtils
         entity.playSound(soundType.getFallSound(), soundType.getVolume() * .5F, soundType.getPitch() * .75F);
     }
 
-    public static boolean isSameSound(SoundType typeOne, SoundType typeTwo, Function<SoundType, SoundEvent> eventResolver)
+    public static boolean isSameSound(SoundType soundTypeOne, SoundType soundTypeTwo, SoundEventType eventType)
     {
-        return InternalAPI.INSTANCE.isSameSound(typeOne, typeTwo, eventResolver);
+        return InternalAPI.INSTANCE.isSameSound(soundTypeOne, soundTypeTwo, eventType);
     }
 
     public static final class Client

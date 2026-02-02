@@ -2,7 +2,7 @@ package io.github.xfacthd.framedblocks.api.block.render;
 
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
-import io.github.xfacthd.framedblocks.api.util.SoundUtils;
+import io.github.xfacthd.framedblocks.api.util.sound.SoundUtils;
 import net.minecraft.client.particle.ParticleEngine;
 import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.core.BlockPos;

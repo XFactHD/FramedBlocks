@@ -1,29 +1,36 @@
 package io.github.xfacthd.framedblocks.common.data.datamaps;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import io.github.xfacthd.framedblocks.api.util.sound.SoundEventType;
 import io.github.xfacthd.framedblocks.common.data.FramedDataMaps;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.level.block.SoundType;
+import org.jspecify.annotations.Nullable;
 
-import java.util.function.Function;
-
-public record SoundEventGroup(String group)
+public record SoundEventGroup(SoundEventType type, String group)
 {
-    public static final Codec<SoundEventGroup> CODEC = Codec.STRING.xmap(SoundEventGroup::new, SoundEventGroup::group);
+    public static final Codec<SoundEventGroup> CODEC = RecordCodecBuilder.create(inst -> inst.group(
+            SoundEventType.CODEC.fieldOf("type").forGetter(SoundEventGroup::type),
+            Codec.STRING.fieldOf("group").forGetter(SoundEventGroup::group)
+    ).apply(inst, SoundEventGroup::new));
 
-    public static boolean isSameSound(SoundType typeOne, SoundType typeTwo, Function<SoundType, SoundEvent> eventResolver)
+    public static boolean isSameSound(SoundType soundTypeOne, SoundType soundTypeTwo, SoundEventType eventType)
     {
-        if (typeOne == typeTwo) return true;
+        if (soundTypeOne == soundTypeTwo) return true;
 
-        SoundEvent soundOne = eventResolver.apply(typeOne);
-        SoundEvent soundTwo = eventResolver.apply(typeTwo);
+        SoundEvent soundOne = eventType.resolve(soundTypeOne);
+        SoundEvent soundTwo = eventType.resolve(soundTypeTwo);
         if (soundOne == soundTwo) return true;
 
-        SoundEventGroup groupOne = BuiltInRegistries.SOUND_EVENT.wrapAsHolder(soundOne).getData(FramedDataMaps.SOUND_EVENT_GROUPS);
-        if (groupOne == null) return false;
+        SoundEventGroup groupOne = getGroup(soundOne);
+        return groupOne != null && groupOne.type == eventType && groupOne.equals(getGroup(soundTwo));
+    }
 
-        SoundEventGroup groupTwo = BuiltInRegistries.SOUND_EVENT.wrapAsHolder(soundTwo).getData(FramedDataMaps.SOUND_EVENT_GROUPS);
-        return groupOne.equals(groupTwo);
+    @Nullable
+    public static SoundEventGroup getGroup(SoundEvent event)
+    {
+        return BuiltInRegistries.SOUND_EVENT.wrapAsHolder(event).getData(FramedDataMaps.SOUND_EVENT_GROUPS);
     }
 }

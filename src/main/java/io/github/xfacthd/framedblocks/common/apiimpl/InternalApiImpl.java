@@ -10,6 +10,7 @@ import io.github.xfacthd.framedblocks.api.internal.InternalAPI;
 import io.github.xfacthd.framedblocks.api.shapes.ReloadableShapeLookup;
 import io.github.xfacthd.framedblocks.api.shapes.ShapeCache;
 import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.sound.SoundEventType;
 import io.github.xfacthd.framedblocks.common.crafting.saw.FramingSawRecipe;
 import io.github.xfacthd.framedblocks.common.crafting.saw.FramingSawRecipeAdditive;
 import io.github.xfacthd.framedblocks.common.data.appearance.AppearanceHelper;
@@ -20,7 +21,6 @@ import io.github.xfacthd.framedblocks.common.data.datamaps.SoundEventGroup;
 import io.github.xfacthd.framedblocks.common.data.shapes.ShapeReloader;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.BlockGetter;
@@ -31,7 +31,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
-import java.util.function.Function;
 
 public final class InternalApiImpl implements InternalAPI
 {
@@ -89,9 +88,9 @@ public final class InternalApiImpl implements InternalAPI
     }
 
     @Override
-    public boolean isSameSound(SoundType typeOne, SoundType typeTwo, Function<SoundType, SoundEvent> eventResolver)
+    public boolean isSameSound(SoundType soundTypeOne, SoundType soundTypeTwo, SoundEventType eventType)
     {
-        return SoundEventGroup.isSameSound(typeOne, typeTwo, eventResolver);
+        return SoundEventGroup.isSameSound(soundTypeOne, soundTypeTwo, eventType);
     }
 
     @Override

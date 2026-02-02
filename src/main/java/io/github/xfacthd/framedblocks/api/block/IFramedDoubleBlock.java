@@ -12,7 +12,8 @@ import io.github.xfacthd.framedblocks.api.camo.CamoContainer;
 import io.github.xfacthd.framedblocks.api.camo.empty.EmptyCamoContainer;
 import io.github.xfacthd.framedblocks.api.model.data.AbstractFramedBlockData;
 import io.github.xfacthd.framedblocks.api.predicate.cull.SideSkipPredicate;
-import io.github.xfacthd.framedblocks.api.util.SoundUtils;
+import io.github.xfacthd.framedblocks.api.util.sound.SoundEventType;
+import io.github.xfacthd.framedblocks.api.util.sound.SoundUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -158,7 +159,7 @@ public interface IFramedDoubleBlock extends IFramedBlock
         if (!mode.applySecond()) return;
 
         SoundType soundTwo = be.getCamoTwo().getContent().getSoundType();
-        if (soundOne == null || !SoundUtils.isSameSound(soundOne, soundTwo, SoundType::getStepSound))
+        if (soundOne == null || !SoundUtils.isSameSound(soundOne, soundTwo, SoundEventType.STEP))
         {
             SoundUtils.playStepSound(entity, soundTwo, volumeMult, pitchMult);
         }
@@ -186,7 +187,7 @@ public interface IFramedDoubleBlock extends IFramedBlock
         if (!mode.applySecond()) return;
 
         SoundType soundTwo = be.getCamoTwo().getContent().getSoundType();
-        if (soundOne == null || !SoundUtils.isSameSound(soundOne, soundTwo, SoundType::getStepSound))
+        if (soundOne == null || !SoundUtils.isSameSound(soundOne, soundTwo, SoundEventType.FALL))
         {
             SoundUtils.playFallSound(entity, soundTwo);
         }

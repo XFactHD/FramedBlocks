@@ -6,7 +6,7 @@ import io.github.xfacthd.framedblocks.api.block.item.FramedBlockItem;
 import io.github.xfacthd.framedblocks.api.camo.CamoContainer;
 import io.github.xfacthd.framedblocks.api.camo.CamoList;
 import io.github.xfacthd.framedblocks.api.camo.empty.EmptyCamoContainer;
-import io.github.xfacthd.framedblocks.api.util.SoundUtils;
+import io.github.xfacthd.framedblocks.api.util.sound.SoundUtils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionResult;

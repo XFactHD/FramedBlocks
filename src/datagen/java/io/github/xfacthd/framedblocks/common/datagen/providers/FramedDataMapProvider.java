@@ -1,5 +1,6 @@
 package io.github.xfacthd.framedblocks.common.datagen.providers;
 
+import io.github.xfacthd.framedblocks.api.util.sound.SoundEventType;
 import io.github.xfacthd.framedblocks.common.data.FramedDataMaps;
 import io.github.xfacthd.framedblocks.common.data.datamaps.SoundEventGroup;
 import net.minecraft.core.HolderLookup;
@@ -14,26 +15,28 @@ import java.util.concurrent.CompletableFuture;
 
 public final class FramedDataMapProvider extends DataMapProvider
 {
-    public FramedDataMapProvider(PackOutput packOutput, CompletableFuture<HolderLookup.Provider> lookupProvider)
+    public FramedDataMapProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registries)
     {
-        super(packOutput, lookupProvider);
+        super(output, registries);
     }
 
     @Override
     protected void gather(HolderLookup.Provider provider)
     {
-        SoundEventGroup stoneLike = new SoundEventGroup("stone_like");
+        SoundEventGroup stoneLikeStep = new SoundEventGroup(SoundEventType.STEP, "stone_like");
+        SoundEventGroup stoneLikePlace = new SoundEventGroup(SoundEventType.PLACE, "stone_like");
+        SoundEventGroup stoneLikeHit = new SoundEventGroup(SoundEventType.HIT, "stone_like");
+        SoundEventGroup stoneLikeFall = new SoundEventGroup(SoundEventType.FALL, "stone_like");
+
         builder(FramedDataMaps.SOUND_EVENT_GROUPS)
-                .add(key(SoundEvents.STONE_BREAK), stoneLike, false)
-                .add(key(SoundEvents.STONE_STEP), stoneLike, false)
-                .add(key(SoundEvents.STONE_PLACE), stoneLike, false)
-                .add(key(SoundEvents.STONE_HIT), stoneLike, false)
-                .add(key(SoundEvents.STONE_FALL), stoneLike, false)
-                .add(key(SoundEvents.GLASS_BREAK), stoneLike, false)
-                .add(key(SoundEvents.GLASS_STEP), stoneLike, false)
-                .add(key(SoundEvents.GLASS_PLACE), stoneLike, false)
-                .add(key(SoundEvents.GLASS_HIT), stoneLike, false)
-                .add(key(SoundEvents.GLASS_FALL), stoneLike, false);
+                .add(key(SoundEvents.STONE_STEP), stoneLikeStep, false)
+                .add(key(SoundEvents.STONE_PLACE), stoneLikePlace, false)
+                .add(key(SoundEvents.STONE_HIT), stoneLikeHit, false)
+                .add(key(SoundEvents.STONE_FALL), stoneLikeFall, false)
+                .add(key(SoundEvents.GLASS_STEP), stoneLikeStep, false)
+                .add(key(SoundEvents.GLASS_PLACE), stoneLikePlace, false)
+                .add(key(SoundEvents.GLASS_HIT), stoneLikeHit, false)
+                .add(key(SoundEvents.GLASS_FALL), stoneLikeFall, false);
     }
 
     private static ResourceKey<SoundEvent> key(SoundEvent event)

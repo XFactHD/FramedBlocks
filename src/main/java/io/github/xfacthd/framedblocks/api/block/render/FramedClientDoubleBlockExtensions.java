@@ -1,7 +1,8 @@
 package io.github.xfacthd.framedblocks.api.block.render;
 
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedDoubleBlockEntity;
-import io.github.xfacthd.framedblocks.api.util.SoundUtils;
+import io.github.xfacthd.framedblocks.api.util.sound.SoundEventType;
+import io.github.xfacthd.framedblocks.api.util.sound.SoundUtils;
 import net.minecraft.client.particle.ParticleEngine;
 import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.core.BlockPos;
@@ -57,7 +58,7 @@ public final class FramedClientDoubleBlockExtensions extends FramedClientBlockEx
             SoundUtils.Client.playHitSound(soundManager, pos, soundOne);
 
             SoundType soundTwo = be.getCamoTwo().getContent().getSoundType();
-            if (!SoundUtils.isSameSound(soundOne, soundTwo, SoundType::getHitSound))
+            if (!SoundUtils.isSameSound(soundOne, soundTwo, SoundEventType.HIT))
             {
                 SoundUtils.Client.playHitSound(soundManager, pos, soundTwo);
             }
@@ -75,7 +76,7 @@ public final class FramedClientDoubleBlockExtensions extends FramedClientBlockEx
             SoundUtils.Client.playBreakSound(level, pos, soundOne);
 
             SoundType soundTwo = be.getCamoTwo().getContent().getSoundType();
-            if (!SoundUtils.isSameSound(soundOne, soundTwo, SoundType::getBreakSound))
+            if (!SoundUtils.isSameSound(soundOne, soundTwo, SoundEventType.BREAK))
             {
                 SoundUtils.Client.playBreakSound(level, pos, soundTwo);
             }

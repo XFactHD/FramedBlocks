@@ -5,7 +5,8 @@ import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedDoubleBlockEntity;
 import io.github.xfacthd.framedblocks.api.camo.CamoPrinter;
-import io.github.xfacthd.framedblocks.api.util.SoundUtils;
+import io.github.xfacthd.framedblocks.api.util.sound.SoundEventType;
+import io.github.xfacthd.framedblocks.api.util.sound.SoundUtils;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -56,7 +57,7 @@ public class FramedBlockItem extends BlockItem
         if (!(be instanceof FramedDoubleBlockEntity dbe)) return;
 
         SoundType soundTwo = dbe.getCamoTwo().getContent().getSoundType();
-        if (!SoundUtils.isSameSound(soundOne, soundTwo, SoundType::getPlaceSound))
+        if (!SoundUtils.isSameSound(soundOne, soundTwo, SoundEventType.PLACE))
         {
             SoundUtils.playPlaceSound(context, soundTwo, false);
         }

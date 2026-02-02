@@ -1,14 +1,36 @@
 {
   "values": {
-    "minecraft:block.glass.break": "stone_like",
-    "minecraft:block.glass.fall": "stone_like",
-    "minecraft:block.glass.hit": "stone_like",
-    "minecraft:block.glass.place": "stone_like",
-    "minecraft:block.glass.step": "stone_like",
-    "minecraft:block.stone.break": "stone_like",
-    "minecraft:block.stone.fall": "stone_like",
-    "minecraft:block.stone.hit": "stone_like",
-    "minecraft:block.stone.place": "stone_like",
-    "minecraft:block.stone.step": "stone_like"
+    "minecraft:block.glass.fall": {
+      "type": "fall",
+      "group": "stone_like"
+    },
+    "minecraft:block.glass.hit": {
+      "type": "hit",
+      "group": "stone_like"
+    },
+    "minecraft:block.glass.place": {
+      "type": "place",
+      "group": "stone_like"
+    },
+    "minecraft:block.glass.step": {
+      "type": "step",
+      "group": "stone_like"
+    },
+    "minecraft:block.stone.fall": {
+      "type": "fall",
+      "group": "stone_like"
+    },
+    "minecraft:block.stone.hit": {
+      "type": "hit",
+      "group": "stone_like"
+    },
+    "minecraft:block.stone.place": {
+      "type": "place",
+      "group": "stone_like"
+    },
+    "minecraft:block.stone.step": {
+      "type": "step",
+      "group": "stone_like"
+    }
   }
 }
