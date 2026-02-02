@@ -55,7 +55,7 @@ public final class ShapeRotationRecipe extends ShapelessRecipe
             ItemStack stack = input.getItem(i);
             if (tool.test(stack))
             {
-                remainders.set(i, stack.copy());
+                remainders.set(i, stack.copyWithCount(1));
             }
         }
         return remainders;
