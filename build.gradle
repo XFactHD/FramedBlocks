@@ -251,7 +251,7 @@ tasks.withType(ProcessResources).configureEach {
 }
 
 processTestResources {
-    duplicatesStrategy(DuplicatesStrategy.INCLUDE)
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
 }
 
 publishing {
@@ -262,7 +262,7 @@ publishing {
     }
     repositories {
         maven {
-            url "file://${project.projectDir}/mcmodsrepo"
+            url = "file://${project.projectDir}/mcmodsrepo"
         }
     }
 }
