@@ -3,9 +3,10 @@ package io.github.xfacthd.framedblocks.client.data.ghost;
 import io.github.xfacthd.framedblocks.api.ghost.GhostRenderBehaviour;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.blockentity.PackedCollapsibleBlockOffsets;
-import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import io.github.xfacthd.framedblocks.common.data.component.CollapsibleBlockData;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.BlockItemStateProperties;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
@@ -26,10 +27,10 @@ public final class CollapsibleBlockGhostRenderBehaviour implements GhostRenderBe
     )
     {
         BlockState state = GhostRenderBehaviour.super.getRenderState(stack, proxiedStack, hit, ctx, hitState, renderPass);
-        CollapsibleBlockData blockData = stack.get(FBContent.DC_TYPE_COLLAPSIBLE_BLOCK_DATA);
-        if (state != null && blockData != null)
+        BlockItemStateProperties properties = stack.get(DataComponents.BLOCK_STATE);
+        if (state != null && properties != null && !properties.isEmpty())
         {
-            state = state.setValue(PropertyHolder.NULLABLE_FACE, blockData.collapsedFace());
+            state = properties.apply(state);
         }
         return state;
     }

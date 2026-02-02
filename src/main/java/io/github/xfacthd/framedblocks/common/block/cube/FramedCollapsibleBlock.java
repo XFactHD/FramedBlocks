@@ -12,9 +12,7 @@ import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import io.github.xfacthd.framedblocks.common.data.property.NullableDirection;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -22,6 +20,7 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -113,23 +112,10 @@ public class FramedCollapsibleBlock extends FramedBlock
     }
 
     @Override
-    public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)
+    protected BlockState rotate(BlockState state, Rotation rotation)
     {
-        super.setPlacedBy(level, pos, state, placer, stack);
-
-        //noinspection ConstantConditions
-        if (!level.isClientSide() && stack.get(DataComponents.BLOCK_ENTITY_DATA) != null)
-        {
-            //Properly set collapsed face when placed from a stack with BE NBT data
-            if (level.getBlockEntity(pos) instanceof FramedCollapsibleBlockEntity be)
-            {
-                Direction collapseFace = be.getCollapsedFace();
-                if (state.getValue(PropertyHolder.NULLABLE_FACE).toNullableDirection() != collapseFace)
-                {
-                    level.setBlockAndUpdate(pos, state.setValue(PropertyHolder.NULLABLE_FACE, NullableDirection.fromDirection(collapseFace)));
-                }
-            }
-        }
+        NullableDirection collapsedFace = state.getValue(PropertyHolder.NULLABLE_FACE);
+        return state.setValue(PropertyHolder.NULLABLE_FACE, collapsedFace.rotate(rotation));
     }
 
     @Override

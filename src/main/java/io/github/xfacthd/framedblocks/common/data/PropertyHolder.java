@@ -1,6 +1,7 @@
 package io.github.xfacthd.framedblocks.common.data;
 
 import io.github.xfacthd.framedblocks.common.data.property.*;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
@@ -21,6 +22,7 @@ public final class PropertyHolder
     public static final EnumProperty<ChainType> CHAIN_TYPE = EnumProperty.create("chain", ChainType.class);
     public static final EnumProperty<CornerTubeOrientation> CORNER_TYPE_ORIENTATION = EnumProperty.create("orientation", CornerTubeOrientation.class);
     public static final EnumProperty<PillarConnection> PILLAR_CONNECTION = EnumProperty.create("pillar", PillarConnection.class);
+    public static final EnumProperty<Rotation> COPYCAT_ROTATION = EnumProperty.create("rotation", Rotation.class);
 
     public static final BooleanProperty RIGHT = BooleanProperty.create("right");
     public static final BooleanProperty TOP_HALF = BooleanProperty.create("top_half");

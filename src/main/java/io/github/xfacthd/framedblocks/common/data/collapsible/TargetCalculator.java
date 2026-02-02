@@ -24,13 +24,13 @@ public final class TargetCalculator
     {
         Direction face = blockHit.getDirection();
         Vec3 hitLoc = blockHit.getLocation();
-        Direction collapsedFace = be.getCollapsedFace();
+        Direction oldFace = be.getCollapsedFace();
 
-        if (collapsedFace == null)
+        if (oldFace == null)
         {
-            return new HammerTarget(face, hitLoc, relative);
+            return new HammerTarget(face, null, hitLoc, relative);
         }
-        if (face == collapsedFace.getOpposite())
+        if (face == oldFace.getOpposite())
         {
             return null;
         }
@@ -39,15 +39,15 @@ public final class TargetCalculator
         byte[] offsets = FramedCollapsibleBlockEntity.unpackOffsets(be.getPackedOffsets(state));
         if (offsets[0] == offsets[1] && offsets[0] == offsets[2] && offsets[0] == offsets[3])
         {
-            return face == collapsedFace ? new HammerTarget(face, hitLoc, relative) : null;
+            return face == oldFace ? new HammerTarget(face, oldFace, hitLoc, relative) : null;
         }
 
-        if (face != collapsedFace)
+        if (face != oldFace)
         {
-            VertexPair pair = VertexMappings.getEdgeVertices(collapsedFace, face);
+            VertexPair pair = VertexMappings.getEdgeVertices(oldFace, face);
             double hitHor = Utils.fractionInDir(blockHit.getLocation(), pair.dirToV2());
             double edgeHeight = 1D - Mth.lerp(hitHor, offsets[pair.v1()] / 16D, offsets[pair.v2()] / 16D);
-            double hitHeight = Utils.fractionInDir(blockHit.getLocation(), collapsedFace);
+            double hitHeight = Utils.fractionInDir(blockHit.getLocation(), oldFace);
             if (hitHeight <= edgeHeight)
             {
                 return null;
@@ -60,15 +60,15 @@ public final class TargetCalculator
         double dist = rayStart.distanceTo(blockHit.getLocation()) + 1D;
         Vec3 rayVec = player.getLookAngle().normalize().scale(dist);
 
-        Vec3 hitTri1 = computeTriangle(pos, collapsedFace, offsets, rotate, true).clip(rayStart, rayVec);
+        Vec3 hitTri1 = computeTriangle(pos, oldFace, offsets, rotate, true).clip(rayStart, rayVec);
         if (hitTri1 != null)
         {
-            return new HammerTarget(collapsedFace, hitTri1, relative);
+            return new HammerTarget(oldFace, oldFace, hitTri1, relative);
         }
-        Vec3 hitTri2 = computeTriangle(pos, collapsedFace, offsets, rotate, false).clip(rayStart, rayVec);
+        Vec3 hitTri2 = computeTriangle(pos, oldFace, offsets, rotate, false).clip(rayStart, rayVec);
         if (hitTri2 != null)
         {
-            return new HammerTarget(collapsedFace, hitTri2, relative);
+            return new HammerTarget(oldFace, oldFace, hitTri2, relative);
         }
         return null;
     }

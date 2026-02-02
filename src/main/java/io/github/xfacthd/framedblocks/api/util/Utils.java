@@ -329,6 +329,17 @@ public final class Utils
         return rotation == Rotation.CLOCKWISE_90 || rotation == Rotation.COUNTERCLOCKWISE_90;
     }
 
+    public static Rotation getOppositeRotation(Rotation rotation)
+    {
+        return switch (rotation)
+        {
+            case NONE -> Rotation.NONE;
+            case CLOCKWISE_90 -> Rotation.COUNTERCLOCKWISE_90;
+            case CLOCKWISE_180 -> Rotation.CLOCKWISE_180;
+            case COUNTERCLOCKWISE_90 -> Rotation.CLOCKWISE_90;
+        };
+    }
+
     public static <T> List<T> concat(List<T> listOne, List<T> listTwo)
     {
         List<T> list = new ArrayList<>(listOne.size() + listTwo.size());
