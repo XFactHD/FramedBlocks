@@ -11,7 +11,7 @@ import io.github.xfacthd.framedblocks.common.config.DevToolsConfig;
 import io.github.xfacthd.framedblocks.common.config.ServerConfig;
 import io.github.xfacthd.framedblocks.common.crafting.saw.FramingSawRecipeCache;
 import io.github.xfacthd.framedblocks.common.data.BlueprintBehaviours;
-import io.github.xfacthd.framedblocks.common.data.FramedDataMaps;
+import io.github.xfacthd.framedblocks.common.data.DataMapsSetup;
 import io.github.xfacthd.framedblocks.common.data.StateCacheBuilder;
 import io.github.xfacthd.framedblocks.common.data.camo.CamoContainerFactories;
 import io.github.xfacthd.framedblocks.common.data.conpreds.ConnectionPredicates;
@@ -51,7 +51,7 @@ public final class FramedBlocks
         modBus.addListener(FramedBlocks::onCommonSetup);
         modBus.addListener(NetworkHandler::onRegisterPayloads);
         modBus.addListener(BlueprintBehaviours::onRegisterBlueprintCopyBehaviours);
-        modBus.addListener(FramedDataMaps::onRegisterDataMapTypes);
+        modBus.addListener(DataMapsSetup::onRegisterDataMapTypes);
         modBus.addListener(FramedBlocks::onExtendPoiTypes);
 
         NeoForge.EVENT_BUS.addListener(EventHandler::onBlockLeftClick);
@@ -61,7 +61,7 @@ public final class FramedBlocks
         NeoForge.EVENT_BUS.addListener(FramingSawRecipeCache::onAddReloadListener);
         NeoForge.EVENT_BUS.addListener(FramingSawRecipeCache::onDataPackSync);
         NeoForge.EVENT_BUS.addListener(FramingSawRecipeCache::onRecipesReceived);
-        NeoForge.EVENT_BUS.addListener(FramedDataMaps::onDataMapsUpdated);
+        NeoForge.EVENT_BUS.addListener(DataMapsSetup::onDataMapsUpdated);
 
         if (!Utils.PRODUCTION)
         {

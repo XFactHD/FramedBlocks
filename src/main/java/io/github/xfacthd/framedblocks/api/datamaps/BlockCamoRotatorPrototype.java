@@ -1,4 +1,4 @@
-package io.github.xfacthd.framedblocks.common.data.camo.block.rotator;
+package io.github.xfacthd.framedblocks.api.datamaps;
 
 import com.mojang.serialization.Codec;
 import io.github.xfacthd.framedblocks.api.camo.block.rotator.BlockCamoRotator;

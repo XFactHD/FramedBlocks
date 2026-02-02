@@ -1,6 +1,6 @@
 package io.github.xfacthd.framedblocks.api.util.sound;
 
-import io.github.xfacthd.framedblocks.api.internal.InternalAPI;
+import io.github.xfacthd.framedblocks.api.datamaps.SoundEventGroup;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.client.sounds.SoundManager;
@@ -38,7 +38,16 @@ public final class SoundUtils
 
     public static boolean isSameSound(SoundType soundTypeOne, SoundType soundTypeTwo, SoundEventType eventType)
     {
-        return InternalAPI.INSTANCE.isSameSound(soundTypeOne, soundTypeTwo, eventType);
+        if (soundTypeOne == soundTypeTwo) return true;
+
+        SoundEvent soundOne = eventType.resolve(soundTypeOne);
+        SoundEvent soundTwo = eventType.resolve(soundTypeTwo);
+        if (soundOne == soundTwo) return true;
+
+        SoundEventGroup groupOne = SoundEventGroup.getGroup(soundOne);
+        if (groupOne == null || groupOne.type() != eventType) return false;
+
+        return groupOne.equals(SoundEventGroup.getGroup(soundTwo));
     }
 
     public static final class Client

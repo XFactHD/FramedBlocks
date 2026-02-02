@@ -1,8 +1,8 @@
 package io.github.xfacthd.framedblocks.common.datagen.providers;
 
+import io.github.xfacthd.framedblocks.api.datamaps.SoundEventGroup;
 import io.github.xfacthd.framedblocks.api.util.sound.SoundEventType;
-import io.github.xfacthd.framedblocks.common.data.FramedDataMaps;
-import io.github.xfacthd.framedblocks.common.data.datamaps.SoundEventGroup;
+import io.github.xfacthd.framedblocks.common.data.DataMapsSetup;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
@@ -28,7 +28,7 @@ public final class FramedDataMapProvider extends DataMapProvider
         SoundEventGroup stoneLikeHit = new SoundEventGroup(SoundEventType.HIT, "stone_like");
         SoundEventGroup stoneLikeFall = new SoundEventGroup(SoundEventType.FALL, "stone_like");
 
-        builder(FramedDataMaps.SOUND_EVENT_GROUPS)
+        builder(DataMapsSetup.SOUND_EVENT_GROUPS)
                 .add(key(SoundEvents.STONE_STEP), stoneLikeStep, false)
                 .add(key(SoundEvents.STONE_PLACE), stoneLikePlace, false)
                 .add(key(SoundEvents.STONE_HIT), stoneLikeHit, false)

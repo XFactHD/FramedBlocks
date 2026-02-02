@@ -10,14 +10,12 @@ import io.github.xfacthd.framedblocks.api.internal.InternalAPI;
 import io.github.xfacthd.framedblocks.api.shapes.ReloadableShapeLookup;
 import io.github.xfacthd.framedblocks.api.shapes.ShapeCache;
 import io.github.xfacthd.framedblocks.api.util.Utils;
-import io.github.xfacthd.framedblocks.api.util.sound.SoundEventType;
 import io.github.xfacthd.framedblocks.common.crafting.saw.FramingSawRecipe;
 import io.github.xfacthd.framedblocks.common.crafting.saw.FramingSawRecipeAdditive;
 import io.github.xfacthd.framedblocks.common.data.appearance.AppearanceHelper;
 import io.github.xfacthd.framedblocks.common.data.camo.CamoContainerFactories;
 import io.github.xfacthd.framedblocks.common.data.camo.block.rotator.BlockCamoRotators;
 import io.github.xfacthd.framedblocks.common.data.cullupdate.CullingUpdateTracker;
-import io.github.xfacthd.framedblocks.common.data.datamaps.SoundEventGroup;
 import io.github.xfacthd.framedblocks.common.data.shapes.ShapeReloader;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -26,7 +24,6 @@ import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jspecify.annotations.Nullable;
 
@@ -85,12 +82,6 @@ public final class InternalApiImpl implements InternalAPI
     public BlockCamoRotator getCamoRotator(Block block)
     {
         return BlockCamoRotators.get(block);
-    }
-
-    @Override
-    public boolean isSameSound(SoundType soundTypeOne, SoundType soundTypeTwo, SoundEventType eventType)
-    {
-        return SoundEventGroup.isSameSound(soundTypeOne, soundTypeTwo, eventType);
     }
 
     @Override

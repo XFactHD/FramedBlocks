@@ -7,7 +7,7 @@ import io.github.xfacthd.framedblocks.api.camo.block.AbstractBlockCamoContainerF
 import io.github.xfacthd.framedblocks.api.camo.block.rotator.BlockCamoRotator;
 import io.github.xfacthd.framedblocks.api.camo.block.rotator.RegisterBlockCamoRotatorsEvent;
 import io.github.xfacthd.framedblocks.api.camo.block.rotator.SimpleBlockCamoRotator;
-import io.github.xfacthd.framedblocks.common.data.FramedDataMaps;
+import io.github.xfacthd.framedblocks.common.data.DataMapsSetup;
 import io.github.xfacthd.framedblocks.common.data.camo.CamoContainerFactories;
 import it.unimi.dsi.fastutil.objects.Reference2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
@@ -83,7 +83,7 @@ public final class BlockCamoRotators
         }));
 
         MutableInt datapackCount = new MutableInt();
-        BuiltInRegistries.BLOCK.getDataMap(FramedDataMaps.BLOCK_CAMO_ROTATORS).forEach((key, prototype) ->
+        BuiltInRegistries.BLOCK.getDataMap(DataMapsSetup.BLOCK_CAMO_ROTATORS).forEach((key, prototype) ->
         {
             Block block = BuiltInRegistries.BLOCK.getValueOrThrow(key);
             if (!prototype.isApplicableTo(block))

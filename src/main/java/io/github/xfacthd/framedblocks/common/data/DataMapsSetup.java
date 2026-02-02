@@ -1,9 +1,10 @@
 package io.github.xfacthd.framedblocks.common.data;
 
+import io.github.xfacthd.framedblocks.api.datamaps.BlockCamoRotatorPrototype;
+import io.github.xfacthd.framedblocks.api.datamaps.FramedDataMaps;
+import io.github.xfacthd.framedblocks.api.datamaps.SoundEventGroup;
 import io.github.xfacthd.framedblocks.api.util.Utils;
-import io.github.xfacthd.framedblocks.common.data.camo.block.rotator.BlockCamoRotatorPrototype;
 import io.github.xfacthd.framedblocks.common.data.camo.block.rotator.BlockCamoRotators;
-import io.github.xfacthd.framedblocks.common.data.datamaps.SoundEventGroup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.level.block.Block;
@@ -11,7 +12,7 @@ import net.neoforged.neoforge.registries.datamaps.DataMapType;
 import net.neoforged.neoforge.registries.datamaps.DataMapsUpdatedEvent;
 import net.neoforged.neoforge.registries.datamaps.RegisterDataMapTypesEvent;
 
-public final class FramedDataMaps
+public final class DataMapsSetup implements FramedDataMaps
 {
     public static final DataMapType<Block, BlockCamoRotatorPrototype> BLOCK_CAMO_ROTATORS = DataMapType.builder(
             Utils.id("block_camo_rotators"),
@@ -38,5 +39,17 @@ public final class FramedDataMaps
         }
     }
 
-    private FramedDataMaps() { }
+    @Override
+    public DataMapType<Block, BlockCamoRotatorPrototype> blockCamoRotators()
+    {
+        return BLOCK_CAMO_ROTATORS;
+    }
+
+    @Override
+    public DataMapType<SoundEvent, SoundEventGroup> soundEventGroups()
+    {
+        return SOUND_EVENT_GROUPS;
+    }
+
+    private DataMapsSetup() { }
 }

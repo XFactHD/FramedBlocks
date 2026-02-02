@@ -8,7 +8,6 @@ import io.github.xfacthd.framedblocks.api.datagen.recipes.builders.FramingSawRec
 import io.github.xfacthd.framedblocks.api.shapes.ReloadableShapeLookup;
 import io.github.xfacthd.framedblocks.api.shapes.ShapeCache;
 import io.github.xfacthd.framedblocks.api.util.Utils;
-import io.github.xfacthd.framedblocks.api.util.sound.SoundEventType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemStack;
@@ -16,7 +15,6 @@ import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.Nullable;
@@ -50,8 +48,6 @@ public interface InternalAPI
     void registerReloadableShapeLookup(ReloadableShapeLookup lookup);
 
     BlockCamoRotator getCamoRotator(Block block);
-
-    boolean isSameSound(SoundType soundTypeOne, SoundType soundTypeTwo, SoundEventType eventType);
 
     Recipe<?> makeFramingSawRecipe(int materialAmount, List<FramingSawRecipeBuilder.Additive> additives, ItemStack result, boolean disabled);
 }
