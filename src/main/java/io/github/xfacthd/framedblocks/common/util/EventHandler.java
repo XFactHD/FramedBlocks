@@ -7,6 +7,10 @@ import io.github.xfacthd.framedblocks.client.util.ClientAccess;
 import io.github.xfacthd.framedblocks.common.config.ServerConfig;
 import io.github.xfacthd.framedblocks.common.crafting.saw.FramingSawRecipeCache;
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.TriState;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
@@ -39,6 +43,22 @@ public final class EventHandler
                     event.setCanceled(true);
                 }
             }
+        }
+    }
+
+    public static void onBlockRightClick(PlayerInteractEvent.RightClickBlock event)
+    {
+        Player player = event.getEntity();
+        if (!player.isShiftKeyDown()) return;
+
+        ItemStack itemInHand = player.getItemInHand(event.getHand());
+        if (!itemInHand.is(Items.BRUSH)) return;
+
+        BlockPos pos = event.getHitVec().getBlockPos();
+        if (event.getLevel().getBlockState(pos).getBlock() instanceof IFramedBlock)
+        {
+            event.setUseBlock(TriState.TRUE);
+            event.setUseItem(TriState.FALSE);
         }
     }
 

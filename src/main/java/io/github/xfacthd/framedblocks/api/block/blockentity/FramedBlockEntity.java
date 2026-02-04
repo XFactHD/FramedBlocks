@@ -36,6 +36,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.component.BlockItemStateProperties;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.BlockGetter;
@@ -56,6 +57,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.EntityCollisionContext;
+import net.neoforged.neoforge.common.ItemAbilities;
 import net.neoforged.neoforge.common.world.AuxiliaryLightManager;
 import net.neoforged.neoforge.model.data.ModelData;
 import net.neoforged.neoforge.transfer.access.ItemAccess;
@@ -221,13 +223,23 @@ public class FramedBlockEntity extends BlockEntity
 
     private InteractionResult tryRemoveModifier(Player player, ItemStack stack, InteractionHand hand)
     {
-        if (intangible && player.isShiftKeyDown() && Utils.isConfigurationTool(stack))
+        if (!player.isShiftKeyDown()) return InteractionResult.PASS;
+
+        if (glowing && stack.is(Items.BRUSH))
+        {
+            return removeGlowstone(player);
+        }
+        if (intangible && Utils.isConfigurationTool(stack))
         {
             return removeIntangibility(player);
         }
         if (reinforced && stack.isCorrectToolForDrops(Blocks.OBSIDIAN.defaultBlockState()))
         {
             return removeReinforcement(player, stack, hand);
+        }
+        if (emissive && stack.canPerformAction(ItemAbilities.AXE_SCRAPE))
+        {
+            return removeEmissivity(player);
         }
         return InteractionResult.PASS;
     }
@@ -298,6 +310,17 @@ public class FramedBlockEntity extends BlockEntity
         return InteractionResult.SUCCESS;
     }
 
+    private InteractionResult removeGlowstone(Player player)
+    {
+        if (!level().isClientSide())
+        {
+            setGlowing(false);
+
+            Utils.giveToPlayer(player, FrameModifier.GLOWING.getDefaultStack(), true);
+        }
+        return InteractionResult.SUCCESS;
+    }
+
     private InteractionResult applyIntangibility(ItemAccess itemAccess)
     {
         if (!Utils.extractOneFromItemAccess(itemAccess, !level().isClientSide()))
@@ -360,6 +383,17 @@ public class FramedBlockEntity extends BlockEntity
         if (!level().isClientSide())
         {
             setEmissive(true);
+        }
+        return InteractionResult.SUCCESS;
+    }
+
+    private InteractionResult removeEmissivity(Player player)
+    {
+        if (!level().isClientSide())
+        {
+            setEmissive(false);
+
+            Utils.giveToPlayer(player, FrameModifier.EMISSIVE.getDefaultStack(), true);
         }
         return InteractionResult.SUCCESS;
     }
@@ -807,13 +841,12 @@ public class FramedBlockEntity extends BlockEntity
         {
             addCamoDrops(drops);
         }
-        if (intangible)
+        for (FrameModifier modifier : FrameModifier.MODIFIERS)
         {
-            drops.accept(new ItemStack(Utils.PHANTOM_PASTE.value()));
-        }
-        if (reinforced)
-        {
-            drops.accept(new ItemStack(Utils.FRAMED_REINFORCEMENT.value()));
+            if (modifier.isActive(this))
+            {
+                drops.accept(modifier.getDefaultStack());
+            }
         }
     }
 
