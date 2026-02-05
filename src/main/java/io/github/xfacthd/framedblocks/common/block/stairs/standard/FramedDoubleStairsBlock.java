@@ -13,14 +13,11 @@ import io.github.xfacthd.framedblocks.common.block.IFramedDoubleBlockInternal;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.LevelReader;
-import net.minecraft.world.level.ScheduledTickAccess;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -64,29 +61,6 @@ public class FramedDoubleStairsBlock extends FramedStairsBlock implements IFrame
                 .setValue(FACING, ctx.getHorizontalDirection())
                 .setValue(HALF, half);
         return state.setValue(SHAPE, getStairsShape(state, ctx.getLevel(), pos));
-    }
-
-    @Override
-    protected BlockState updateShape(
-            BlockState state,
-            LevelReader level,
-            ScheduledTickAccess tickAccess,
-            BlockPos pos,
-            Direction side,
-            BlockPos adjPos,
-            BlockState adjState,
-            RandomSource random
-    )
-    {
-        BlockState newState = updateShapeLockable(
-                state, level, tickAccess, pos,
-                () -> !Utils.isY(side) ? state.setValue(SHAPE, getStairsShape(state, level, pos)) : state
-        );
-        if (newState == state)
-        {
-            updateCulling(level, pos);
-        }
-        return newState;
     }
 
     @Override

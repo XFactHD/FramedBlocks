@@ -26,6 +26,7 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.util.TriState;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -63,8 +64,6 @@ import net.neoforged.neoforge.common.extensions.IBlockExtension;
 import net.neoforged.neoforge.common.world.AuxiliaryLightManager;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.Nullable;
-
-import java.util.function.Supplier;
 
 public interface IFramedBlock extends EntityBlock, IBlockExtension
 {
@@ -540,13 +539,22 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension
         return true;
     }
 
-    default BlockState updateShapeLockable(BlockState state, LevelReader level, ScheduledTickAccess tickAccess, BlockPos pos, Supplier<BlockState> updateShape)
+    default BlockState updateShapeLockable(
+            BlockState state,
+            LevelReader level,
+            ScheduledTickAccess tickAccess,
+            BlockPos pos,
+            Direction side,
+            BlockPos adjPos,
+            BlockState adjState,
+            RandomSource random,
+            UpdateShapeHandler updateShape
+    )
     {
         if (!state.getValue(FramedProperties.STATE_LOCKED))
         {
-            return updateShape.get();
+            return updateShape.handle(state, level, tickAccess, pos, side, adjPos, adjState, random);
         }
-
         if (getBlockType().supportsWaterLogging() && state.getValue(BlockStateProperties.WATERLOGGED))
         {
             tickAccess.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
@@ -681,5 +689,20 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension
     default float getJadeRenderScale(BlockState state)
     {
         return 1F;
+    }
+
+    @FunctionalInterface
+    interface UpdateShapeHandler
+    {
+        BlockState handle(
+                BlockState state,
+                LevelReader level,
+                ScheduledTickAccess tickAccess,
+                BlockPos pos,
+                Direction side,
+                BlockPos adjPos,
+                BlockState adjState,
+                RandomSource random
+        );
     }
 }

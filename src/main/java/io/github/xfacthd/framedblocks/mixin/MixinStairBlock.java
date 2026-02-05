@@ -29,4 +29,17 @@ public class MixinStairBlock
         }
         return instance;
     }
+
+    @WrapOperation(
+            method = "updateShape",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/world/level/block/state/BlockState;getValue(Lnet/minecraft/world/level/block/state/properties/Property;)Ljava/lang/Comparable;"
+            )
+    )
+    @SuppressWarnings("MethodMayBeStatic")
+    private Comparable<?> framedblocks$preventWaterloggedUpdateShape(BlockState instance, Property<?> property, Operation<Comparable<?>> original)
+    {
+        return instance.hasProperty(property) ? instance.getValue(property) : Boolean.FALSE;
+    }
 }

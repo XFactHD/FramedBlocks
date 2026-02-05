@@ -78,11 +78,7 @@ public final class FramedDiagonalGlassPaneBlock extends DiagonalGlassPaneBlock i
             RandomSource random
     )
     {
-        BlockState newState = updateShapeLockable(
-                state, level, tickAccess, pos,
-                () -> super.updateShape(state, level, tickAccess, pos, side, adjPos, adjState, random)
-        );
-
+        BlockState newState = updateShapeLockable(state, level, tickAccess, pos, side, adjPos, adjState, random, super::updateShape);
         if (newState == state)
         {
             updateCulling(level, pos);
