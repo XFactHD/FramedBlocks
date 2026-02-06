@@ -36,9 +36,18 @@ public class FramedCompoundSlopePanelGeometry extends Geometry
         Direction quadDir = quad.getDirection();
         if (quadDir == orientation)
         {
-            QuadModifier.of(quad)
-                    .apply(Modifiers.cutTopBottom(dir.getOpposite(), .5F))
-                    .export(quadMap.get(quadDir));
+            if (Utils.isY(quadDir))
+            {
+                QuadModifier.of(quad)
+                        .apply(Modifiers.cutTopBottom(dir.getOpposite(), .5F))
+                        .export(quadMap.get(quadDir));
+            }
+            else
+            {
+                QuadModifier.of(quad)
+                        .apply(Modifiers.cutSideLeftRight(dir.getOpposite(), .5F))
+                        .export(quadMap.get(quadDir));
+            }
 
             if (ySlope && Utils.isY(quadDir))
             {
@@ -50,9 +59,18 @@ public class FramedCompoundSlopePanelGeometry extends Geometry
         }
         else if (quadDir == orientation.getOpposite())
         {
-            QuadModifier.of(quad)
-                    .apply(Modifiers.cutTopBottom(dir, .5F))
-                    .export(quadMap.get(quadDir));
+            if (Utils.isY(quadDir))
+            {
+                QuadModifier.of(quad)
+                        .apply(Modifiers.cutTopBottom(dir, .5F))
+                        .export(quadMap.get(quadDir));
+            }
+            else
+            {
+                QuadModifier.of(quad)
+                        .apply(Modifiers.cutSideLeftRight(dir, .5F))
+                        .export(quadMap.get(quadDir));
+            }
 
             if (ySlope && Utils.isY(quadDir))
             {
