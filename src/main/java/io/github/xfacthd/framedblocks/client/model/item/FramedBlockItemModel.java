@@ -8,7 +8,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.api.camo.CamoList;
 import io.github.xfacthd.framedblocks.api.model.AbstractFramedBlockModel;
-import io.github.xfacthd.framedblocks.api.model.ModelPartCollectionFakeLevel;
 import io.github.xfacthd.framedblocks.api.model.item.AbstractFramedBlockItemModel;
 import io.github.xfacthd.framedblocks.api.model.item.ItemModelInfo;
 import io.github.xfacthd.framedblocks.api.model.item.block.BlockItemModelProvider;
@@ -18,6 +17,7 @@ import io.github.xfacthd.framedblocks.api.model.util.ModelUtils;
 import io.github.xfacthd.framedblocks.api.model.util.QuadUtils;
 import io.github.xfacthd.framedblocks.api.render.RenderUtils;
 import io.github.xfacthd.framedblocks.api.util.ConfigView;
+import io.github.xfacthd.framedblocks.api.util.SingleBlockFakeLevel;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import it.unimi.dsi.fastutil.ints.Int2IntMap;
 import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
@@ -176,7 +176,7 @@ public final class FramedBlockItemModel extends AbstractFramedBlockItemModel
         {
             BlockStateModel model = modelSupplier.get();
             ModelData data = itemModelInfo.isDataRequired() || !camos.isEmpty() ? itemModelInfo.buildItemModelData(state, camos) : ModelData.EMPTY;
-            BlockAndTintGetter level = new ModelPartCollectionFakeLevel(state, data);
+            BlockAndTintGetter level = SingleBlockFakeLevel.withoutRealLevel(state, data);
 
             List<ModelEntry> models = new ArrayList<>();
             Int2IntMap tintValues = new Int2IntOpenHashMap();

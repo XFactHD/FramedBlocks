@@ -6,10 +6,10 @@ import io.github.xfacthd.framedblocks.api.block.IFramedDoubleBlock;
 import io.github.xfacthd.framedblocks.api.camo.CamoContainer;
 import io.github.xfacthd.framedblocks.api.camo.block.SimpleBlockCamoContainer;
 import io.github.xfacthd.framedblocks.api.camo.empty.EmptyCamoContainer;
-import io.github.xfacthd.framedblocks.api.model.ModelPartCollectionFakeLevel;
 import io.github.xfacthd.framedblocks.api.model.data.AbstractFramedBlockData;
 import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
 import io.github.xfacthd.framedblocks.api.model.data.FramedDoubleBlockData;
+import io.github.xfacthd.framedblocks.api.util.SingleBlockFakeLevel;
 import io.github.xfacthd.framedblocks.client.model.baked.FramedBlockModel;
 import io.github.xfacthd.framedblocks.cmdtests.SpecialTestCommand;
 import io.github.xfacthd.framedblocks.common.FBContent;
@@ -200,7 +200,7 @@ public final class ModelPerformanceTest
             framedModel.clearCache();
         }
 
-        BlockAndTintGetter level = new ModelPartCollectionFakeLevel(state, data);
+        BlockAndTintGetter level = SingleBlockFakeLevel.withoutRealLevel(state, data);
 
         Stopwatch watch = Stopwatch.createStarted();
 

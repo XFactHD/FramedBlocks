@@ -259,7 +259,7 @@ public final class GhostBlockRenderer
         BlockPos pos = renderState.pos;
         BlockState state = renderState.state;
         Vec3 offset = Vec3.atLowerCornerOf(pos).subtract(mc().gameRenderer.getMainCamera().position());
-        BlockAndTintGetter level = new SingleBlockFakeLevel(mc().level, pos, pos, state, null, renderState.modelData);
+        BlockAndTintGetter level = SingleBlockFakeLevel.atPos(mc().level, pos, state, renderState.modelData);
         profiler.pop(); //prepare
 
         profiler.push("render");

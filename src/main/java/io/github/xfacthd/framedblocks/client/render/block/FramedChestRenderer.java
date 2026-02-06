@@ -102,7 +102,7 @@ public final class FramedChestRenderer implements BlockEntityRenderer<FramedChes
         Level level = Objects.requireNonNull(blockEntity.getLevel());
         BlockPos pos = renderState.pos = blockEntity.getBlockPos();
         BlockState state = renderState.state = blockEntity.getBlockState();
-        renderState.level = new SingleBlockFakeLevel(level, pos, pos, state, null, level.getModelData(pos));
+        renderState.level = SingleBlockFakeLevel.atPos(level, pos, state, level.getModelData(pos));
 
         Direction dir = state.getValue(FramedProperties.FACING_HOR);
         ChestType type = state.getValue(BlockStateProperties.CHEST_TYPE);

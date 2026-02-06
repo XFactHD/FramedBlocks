@@ -7,12 +7,12 @@ import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockTopIntera
 import io.github.xfacthd.framedblocks.api.block.render.NullCullPredicate;
 import io.github.xfacthd.framedblocks.api.camo.empty.EmptyCamoContainer;
 import io.github.xfacthd.framedblocks.api.model.AbstractFramedBlockModel;
-import io.github.xfacthd.framedblocks.api.model.ModelPartCollectionFakeLevel;
 import io.github.xfacthd.framedblocks.api.model.data.AbstractFramedBlockData;
 import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
 import io.github.xfacthd.framedblocks.api.model.data.FramedDoubleBlockData;
 import io.github.xfacthd.framedblocks.api.model.item.ItemModelInfo;
 import io.github.xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
+import io.github.xfacthd.framedblocks.api.util.SingleBlockFakeLevel;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.block.model.BlockModelPart;
@@ -46,7 +46,7 @@ public final class FramedDoubleBlockModel extends AbstractFramedBlockModel
         ModelData dummyData = ModelData.of(AbstractFramedBlockData.PROPERTY, new FramedDoubleBlockData(
                 parts, FramedBlockData.EMPTY, new FramedBlockData(EmptyCamoContainer.EMPTY, true)
         ));
-        this.dummyLevel = new ModelPartCollectionFakeLevel(state, dummyData);
+        this.dummyLevel = SingleBlockFakeLevel.withoutRealLevel(state, dummyData);
         this.particleMode = cache.getTopInteractionMode();
         this.canCullOne = cullPredicate.testLeft(state);
         this.canCullTwo = cullPredicate.testRight(state);

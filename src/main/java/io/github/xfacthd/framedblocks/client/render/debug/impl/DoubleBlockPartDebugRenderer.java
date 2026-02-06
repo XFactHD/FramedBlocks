@@ -6,11 +6,11 @@ import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedDoubleBlockEntity;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockParts;
 import io.github.xfacthd.framedblocks.api.camo.block.SimpleBlockCamoContainer;
-import io.github.xfacthd.framedblocks.api.model.ModelPartCollectionFakeLevel;
 import io.github.xfacthd.framedblocks.api.model.data.AbstractFramedBlockData;
 import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
 import io.github.xfacthd.framedblocks.api.render.debug.BlockDebugRenderer;
 import io.github.xfacthd.framedblocks.api.util.ClientUtils;
+import io.github.xfacthd.framedblocks.api.util.SingleBlockFakeLevel;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.config.DevToolsConfig;
@@ -59,7 +59,7 @@ public class DoubleBlockPartDebugRenderer implements BlockDebugRenderer<FramedDo
         BlockStateModel model = Minecraft.getInstance().getBlockRenderer().getBlockModel(partState);
 
         ModelData modelData = be.getModelData().derive().with(AbstractFramedBlockData.PROPERTY, MODEL_DATA).build();
-        BlockAndTintGetter level = new ModelPartCollectionFakeLevel(partState, modelData);
+        BlockAndTintGetter level = SingleBlockFakeLevel.withoutRealLevel(partState, modelData);
         int color = secondary ? COLOR_SECONDARY : COLOR_PRIMARY;
 
         renderState.haveGlowingEntities = true;

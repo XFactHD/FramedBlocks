@@ -3,9 +3,9 @@ package io.github.xfacthd.framedblocks.client.render.debug.impl;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
-import io.github.xfacthd.framedblocks.api.model.ModelPartCollectionFakeLevel;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadData;
 import io.github.xfacthd.framedblocks.api.render.debug.BlockDebugRenderer;
+import io.github.xfacthd.framedblocks.api.util.SingleBlockFakeLevel;
 import io.github.xfacthd.framedblocks.api.util.Triangle;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.common.config.DevToolsConfig;
@@ -53,7 +53,7 @@ public class QuadWindingDebugRenderer implements BlockDebugRenderer<FramedBlockE
         boolean sneak = player.isShiftKeyDown();
 
         ModelData modelData = Objects.requireNonNull(be.getLevel()).getModelData(pos);
-        BlockAndTintGetter level = new ModelPartCollectionFakeLevel(state, modelData);
+        BlockAndTintGetter level = SingleBlockFakeLevel.withoutRealLevel(state, modelData);
 
         renderState.setRenderData(DATA_KEY, new QuadWindingRenderState(level, state, pos, model, eyePos, viewVector, sneak));
     }

@@ -21,12 +21,9 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockAndTintGetter;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.model.data.ModelData;
 import org.jspecify.annotations.Nullable;
-
-import java.util.Objects;
 
 public final class SignBlockPictureInPictureRenderer extends PictureInPictureRenderer<SignBlockPictureInPictureRenderer.RenderState>
 {
@@ -50,15 +47,13 @@ public final class SignBlockPictureInPictureRenderer extends PictureInPictureRen
         poseStack.translate(-.5, 0, -.5);
 
         Minecraft minecraft = Minecraft.getInstance();
-        Level level = Objects.requireNonNull(minecraft.level);
-        BlockAndTintGetter fakeLevel = new SingleBlockFakeLevel(level, state.signPos, state.signPos, state.signState, null, state.signBlockData);
 
         minecraft.gameRenderer.getLighting().setupFor(Lighting.Entry.ITEMS_FLAT);
         BlockRenderDispatcher renderer = minecraft.getBlockRenderer();
         RANDOM.setSeed(42);
         RenderUtils.renderModel(
                 state.signState,
-                fakeLevel,
+                state.fakeLevel,
                 state.signPos,
                 poseStack.last(),
                 bufferSource,
@@ -102,6 +97,7 @@ public final class SignBlockPictureInPictureRenderer extends PictureInPictureRen
 
     public record RenderState(
             AbstractFramedSignBlock signBlock,
+            BlockAndTintGetter fakeLevel,
             BlockState signState,
             BlockPos signPos,
             ModelData signBlockData,
@@ -128,8 +124,9 @@ public final class SignBlockPictureInPictureRenderer extends PictureInPictureRen
             BlockState state = sign.getBlockState();
             BlockPos pos = sign.getBlockPos();
             ModelData modelData = sign.getModelData(false, state);
+            BlockAndTintGetter fakeLevel = SingleBlockFakeLevel.atPos(sign.level(), pos, state, modelData);
             ScreenRectangle bounds = PictureInPictureRenderState.getBounds(x0, y0, x1, y1, scissorArea);
-            return new RenderState(signBlock, state, pos, modelData, x0, y0, x1, y1, scale, scissorArea, bounds);
+            return new RenderState(signBlock, fakeLevel, state, pos, modelData, x0, y0, x1, y1, scale, scissorArea, bounds);
         }
     }
 }
