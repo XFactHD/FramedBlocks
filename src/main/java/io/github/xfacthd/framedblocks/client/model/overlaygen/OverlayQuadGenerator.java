@@ -1,11 +1,8 @@
 package io.github.xfacthd.framedblocks.client.model.overlaygen;
 
-import io.github.xfacthd.framedblocks.api.util.Utils;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.Identifier;
-import net.minecraft.server.packs.resources.ResourceManager;
 import net.neoforged.neoforge.client.model.pipeline.QuadBakingVertexConsumer;
 import org.joml.Vector3f;
 
@@ -20,7 +17,6 @@ import java.util.function.Predicate;
 
 public final class OverlayQuadGenerator
 {
-    public static final Identifier LISTENER_ID = Utils.id("overlay_quad_gen");
     private static final Map<OverlayCacheKey, BakedQuad> OVERLAY_CACHE = new ConcurrentHashMap<>();
 
     public static void generate(
@@ -81,7 +77,7 @@ public final class OverlayQuadGenerator
         return new OverlayCacheKey(quad.direction(), quad.position0(), quad.position1(), quad.position2(), quad.position3(), quad.bakedNormals(), sprite);
     }
 
-    public static void onResourceReload(@SuppressWarnings("unused") ResourceManager resourceManager)
+    public static void clearCaches()
     {
         OVERLAY_CACHE.clear();
     }

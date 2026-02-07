@@ -1,6 +1,6 @@
 package io.github.xfacthd.framedblocks.mixin.client;
 
-import io.github.xfacthd.framedblocks.client.util.FramedClientUtils;
+import io.github.xfacthd.framedblocks.client.util.CacheCleaner;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.RenderBuffers;
@@ -47,7 +47,7 @@ public class MixinLevelRenderer
         if (cutoutLeaves != framedblocks$lastCutoutLeaves)
         {
             framedblocks$lastCutoutLeaves = cutoutLeaves;
-            FramedClientUtils.clearModelCaches();
+            CacheCleaner.clearModelCaches();
         }
     }
 }

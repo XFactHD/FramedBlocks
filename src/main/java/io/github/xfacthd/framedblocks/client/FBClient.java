@@ -19,7 +19,6 @@ import io.github.xfacthd.framedblocks.api.model.wrapping.RegisterModelWrappersEv
 import io.github.xfacthd.framedblocks.api.model.wrapping.WrapHelper;
 import io.github.xfacthd.framedblocks.api.model.wrapping.statemerger.StateMerger;
 import io.github.xfacthd.framedblocks.api.render.debug.AttachDebugRenderersEvent;
-import io.github.xfacthd.framedblocks.api.render.outline.ModelBasedOutlineRenderer;
 import io.github.xfacthd.framedblocks.api.screen.overlay.RegisterBlockInteractOverlaysEvent;
 import io.github.xfacthd.framedblocks.api.util.FramedConstants;
 import io.github.xfacthd.framedblocks.api.util.Utils;
@@ -51,7 +50,6 @@ import io.github.xfacthd.framedblocks.client.model.item.modelprovider.FenceBlock
 import io.github.xfacthd.framedblocks.client.model.item.property.BlueprintProperty;
 import io.github.xfacthd.framedblocks.client.model.item.tintprovider.FramedTargetItemTintProvider;
 import io.github.xfacthd.framedblocks.client.model.loader.fallback.FallbackLoader;
-import io.github.xfacthd.framedblocks.client.model.overlaygen.OverlayQuadGenerator;
 import io.github.xfacthd.framedblocks.client.model.special.FramedChestLidModel;
 import io.github.xfacthd.framedblocks.client.model.unbaked.FramedBlockModelDefinition;
 import io.github.xfacthd.framedblocks.client.model.wrapping.ModelWrappingManager;
@@ -84,6 +82,7 @@ import io.github.xfacthd.framedblocks.client.screen.pip.BlockPictureInPictureRen
 import io.github.xfacthd.framedblocks.client.screen.pip.SignBlockPictureInPictureRenderer;
 import io.github.xfacthd.framedblocks.client.screen.pip.SpinningItemPictureInPictureRenderer;
 import io.github.xfacthd.framedblocks.client.screen.widget.BlockPreviewTooltipComponent;
+import io.github.xfacthd.framedblocks.client.util.CacheCleaner;
 import io.github.xfacthd.framedblocks.client.util.ClientEventHandler;
 import io.github.xfacthd.framedblocks.client.util.ClientTaskQueue;
 import io.github.xfacthd.framedblocks.client.util.KeyMappings;
@@ -102,7 +101,6 @@ import io.github.xfacthd.framedblocks.common.block.slopeslab.FramedDoubleSlopeSl
 import io.github.xfacthd.framedblocks.common.block.slopeslab.FramedFlatDoubleSlopeSlabCornerBlock;
 import io.github.xfacthd.framedblocks.common.block.stairs.standard.FramedStairsBlock;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
-import io.github.xfacthd.framedblocks.common.data.camo.fluid.FluidCamoClientHandler;
 import net.minecraft.core.Holder;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.minecraft.world.level.block.Block;
@@ -529,7 +527,7 @@ public final class FBClient
 
     private static void onModelsLoaded(ModelEvent.BakingCompleted event)
     {
-        FluidCamoClientHandler.clearModelCache();
+        CacheCleaner.clearExternalGeometryCaches();
         FramedBlockModel.collectCubeBaseModels(event.getBakingResult().blockStateModels());
 
         ModelWrappingManager.printWrappingInfo(event.getBakingResult().blockStateModels());
@@ -538,8 +536,6 @@ public final class FBClient
     private static void onRegisterReloadListener(AddClientReloadListenersEvent event)
     {
         event.addListener(BlockInteractOverlayLayer.LISTENER_ID, (ResourceManagerReloadListener) BlockInteractOverlayLayer::onResourceReload);
-        event.addListener(OverlayQuadGenerator.LISTENER_ID, (ResourceManagerReloadListener) OverlayQuadGenerator::onResourceReload);
-        event.addListener(ModelBasedOutlineRenderer.LISTENER_ID, (ResourceManagerReloadListener) (mgr -> ModelBasedOutlineRenderer.clearCaches()));
     }
 
     private static void onInitClientRegistries(InitializeClientRegistriesEvent event)

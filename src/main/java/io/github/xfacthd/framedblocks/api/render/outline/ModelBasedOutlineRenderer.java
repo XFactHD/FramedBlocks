@@ -4,7 +4,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.logging.LogUtils;
 import io.github.xfacthd.framedblocks.api.model.util.ModelUtils;
 import io.github.xfacthd.framedblocks.api.model.wrapping.statemerger.StateMerger;
-import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.client.model.wrapping.ModelWrappingHandler;
 import io.github.xfacthd.framedblocks.client.model.wrapping.ModelWrappingManager;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
@@ -19,7 +18,6 @@ import net.minecraft.client.renderer.block.model.BlockModelPart;
 import net.minecraft.client.renderer.block.model.BlockStateModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.EmptyBlockAndTintGetter;
@@ -48,8 +46,6 @@ import java.util.function.Consumer;
 public final class ModelBasedOutlineRenderer implements SimpleOutlineRenderer
 {
     private static final Logger LOGGER = LogUtils.getLogger();
-    @ApiStatus.Internal
-    public static final Identifier LISTENER_ID = Utils.id("model_based_outline_renderer");
     private static final List<ModelBasedOutlineRenderer> RENDERERS = new ArrayList<>();
     private static final @Nullable Direction[] DIRECTIONS = Arrays.copyOf(Direction.values(), 7);
     private static final RandomSource RANDOM = RandomSource.createNewThreadLocalInstance();
