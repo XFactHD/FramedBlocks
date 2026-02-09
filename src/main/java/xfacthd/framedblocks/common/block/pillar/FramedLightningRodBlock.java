@@ -2,6 +2,8 @@ package xfacthd.framedblocks.common.block.pillar;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.LivingEntity;
@@ -112,6 +114,17 @@ public class FramedLightningRodBlock extends LightningRodBlock implements IFrame
     {
         return getCamoDrops(super.getDrops(state, builder), builder);
     }
+
+    // Prevent CopperAgeBackport mixins from oxidizing this block
+    @Override
+    protected boolean isRandomlyTicking(BlockState state)
+    {
+        return false;
+    }
+
+    // Prevent CopperAgeBackport mixins from oxidizing this block
+    @Override
+    protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) { }
 
     @Override
     public IBlockType getBlockType()
