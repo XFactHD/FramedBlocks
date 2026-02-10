@@ -7,7 +7,6 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.block.model.BlockStateModel;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.material.Fluid;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -15,14 +14,14 @@ import java.util.concurrent.ConcurrentHashMap;
 public final class FluidCamoClientHandler extends CamoClientHandler<FluidCamoContent>
 {
     public static final CamoClientHandler<FluidCamoContent> INSTANCE = new FluidCamoClientHandler();
-    private static final Map<Fluid, BlockStateModel> FLUID_MODEL_CACHE = new ConcurrentHashMap<>();
+    private static final Map<FluidCamoContent, BlockStateModel> FLUID_MODEL_CACHE = new ConcurrentHashMap<>();
 
     private FluidCamoClientHandler() { }
 
     @Override
     public BlockStateModel getOrCreateModel(FluidCamoContent camo)
     {
-        return FLUID_MODEL_CACHE.computeIfAbsent(camo.getFluid(), FluidModel::create);
+        return FLUID_MODEL_CACHE.computeIfAbsent(camo, FluidModel::create);
     }
 
     @Override

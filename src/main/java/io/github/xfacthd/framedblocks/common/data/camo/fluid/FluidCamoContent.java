@@ -29,15 +29,22 @@ import org.jspecify.annotations.Nullable;
 public final class FluidCamoContent extends CamoContent<FluidCamoContent>
 {
     private final Fluid fluid;
+    private final Direction flowDirection;
 
-    public FluidCamoContent(Fluid fluid)
+    public FluidCamoContent(Fluid fluid, Direction flowDirection)
     {
         this.fluid = fluid;
+        this.flowDirection = flowDirection;
     }
 
     public Fluid getFluid()
     {
         return fluid;
+    }
+
+    public Direction getFlowDirection()
+    {
+        return flowDirection;
     }
 
     @Override
@@ -229,13 +236,13 @@ public final class FluidCamoContent extends CamoContent<FluidCamoContent>
     @Override
     public int hashCode()
     {
-        return fluid.hashCode();
+        return fluid.hashCode() * 31 + flowDirection.hashCode();
     }
 
     @Override
     public boolean equals(@Nullable Object obj)
     {
-        return obj == this || (obj instanceof FluidCamoContent camo && fluid == camo.fluid);
+        return obj == this || (obj instanceof FluidCamoContent camo && fluid == camo.fluid && flowDirection == camo.flowDirection);
     }
 
     @Override

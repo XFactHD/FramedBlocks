@@ -1,8 +1,10 @@
 package io.github.xfacthd.framedblocks.client.model;
 
 import com.google.common.base.Preconditions;
+import com.mojang.math.Quadrant;
 import io.github.xfacthd.framedblocks.api.util.ClientUtils;
 import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.common.data.camo.fluid.FluidCamoContent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.block.model.BlockStateModel;
@@ -21,7 +23,9 @@ import net.minecraft.client.resources.model.ModelManager;
 import net.minecraft.client.resources.model.QuadCollection;
 import net.minecraft.client.resources.model.ResolvedModel;
 import net.minecraft.client.resources.model.SpriteGetter;
+import net.minecraft.core.Direction;
 import net.minecraft.resources.Identifier;
+import net.minecraft.util.Util;
 import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 
@@ -32,6 +36,15 @@ public final class FluidModel
     public static final Identifier BARE_MODEL = Utils.id("fluid/bare");
     public static final Identifier BARE_MODEL_SINGLE = Utils.id("fluid/bare_single");
     private static final ModelBaker.PartCache PART_CACHE = new ModelBakery.PartCacheImpl();
+    private static final BlockModelRotation[] ROTATIONS = Util.make(new BlockModelRotation[6], arr ->
+    {
+        arr[Direction.DOWN.ordinal()] = BlockModelRotation.IDENTITY;
+        arr[Direction.UP.ordinal()] = BlockModelRotation.get(Quadrant.fromXYAngles(Quadrant.R180, Quadrant.R0));
+        arr[Direction.NORTH.ordinal()] = BlockModelRotation.get(Quadrant.fromXYAngles(Quadrant.R270, Quadrant.R0));
+        arr[Direction.SOUTH.ordinal()] = BlockModelRotation.get(Quadrant.fromXYAngles(Quadrant.R90, Quadrant.R0));
+        arr[Direction.WEST.ordinal()] = BlockModelRotation.get(Quadrant.fromXYAngles(Quadrant.R90, Quadrant.R90));
+        arr[Direction.EAST.ordinal()] = BlockModelRotation.get(Quadrant.fromXYAngles(Quadrant.R90, Quadrant.R270));
+    });
     private static final SpriteGetter TEXTURE_GETTER = new SpriteGetter()
     {
         @Override
@@ -48,11 +61,12 @@ public final class FluidModel
         }
     };
 
-    public static BlockStateModel create(Fluid fluid)
+    public static BlockStateModel create(FluidCamoContent fluidCamo)
     {
         ModelManager modelManager = Minecraft.getInstance().getModelManager();
         ModelBakery modelBakery = modelManager.getModelBakery();
 
+        Fluid fluid = fluidCamo.getFluid();
         IClientFluidTypeExtensions props = IClientFluidTypeExtensions.of(fluid);
         Identifier stillTexture = Preconditions.checkNotNull(
                 props.getStillTexture(),
@@ -80,7 +94,7 @@ public final class FluidModel
         QuadCollection fluidQuads = bareModel.getTopGeometry().bake(
                 textures,
                 baker,
-                BlockModelRotation.IDENTITY,
+                ROTATIONS[fluidCamo.getFlowDirection().ordinal()],
                 bareModel,
                 bareModel.getTopAdditionalProperties()
         );
