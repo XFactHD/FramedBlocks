@@ -143,8 +143,8 @@ public final class ModelPerformanceTest
                 .append("- Max (blank):          ").append("%6.2f (%6d us)\n".formatted(allEmptyRel[maxBlank], allEmptyAvg[maxBlank]))
                 .append("- Min (camo):           ").append("%6.2f (%6d us)\n".formatted(allCamoRel[minCamo], allCamoAvg[minCamo]))
                 .append("- Max (camo):           ").append("%6.2f (%6d us)\n".formatted(allCamoRel[maxCamo], allCamoAvg[maxCamo]))
-                .append("- Min (camo emissive):  ").append("%6.2f (%6d us)\n".formatted(allCamoEmissiveRel[minCamo], allCamoEmissiveAvg[minCamo]))
-                .append("- Max (camo emissive):  ").append("%6.2f (%6d us)\n".formatted(allCamoEmissiveRel[maxCamo], allCamoEmissiveAvg[maxCamo]))
+                .append("- Min (camo emissive):  ").append("%6.2f (%6d us)\n".formatted(allCamoEmissiveRel[minCamoEmissive], allCamoEmissiveAvg[minCamoEmissive]))
+                .append("- Max (camo emissive):  ").append("%6.2f (%6d us)\n".formatted(allCamoEmissiveRel[maxCamoEmissive], allCamoEmissiveAvg[maxCamoEmissive]))
                 .append("\n\n").append(table.print());
 
         Component msg = SpecialTestCommand.writeResultToFile("modelperf", "md", data.toString());
