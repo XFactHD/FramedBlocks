@@ -1,10 +1,8 @@
 package io.github.xfacthd.framedblocks.api.render.outline;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.logging.LogUtils;
 import io.github.xfacthd.framedblocks.api.model.util.ModelUtils;
 import io.github.xfacthd.framedblocks.api.model.wrapping.statemerger.StateMerger;
-import io.github.xfacthd.framedblocks.client.model.wrapping.ModelWrappingHandler;
 import io.github.xfacthd.framedblocks.client.model.wrapping.ModelWrappingManager;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
@@ -12,7 +10,6 @@ import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMaps;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import net.minecraft.Optionull;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.BlockModelPart;
 import net.minecraft.client.renderer.block.model.BlockStateModel;
@@ -28,7 +25,6 @@ import org.jetbrains.annotations.ApiStatus;
 import org.joml.Vector3f;
 import org.joml.Vector3fc;
 import org.jspecify.annotations.Nullable;
-import org.slf4j.Logger;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -45,7 +41,6 @@ import java.util.function.Consumer;
  */
 public final class ModelBasedOutlineRenderer implements SimpleOutlineRenderer
 {
-    private static final Logger LOGGER = LogUtils.getLogger();
     private static final List<ModelBasedOutlineRenderer> RENDERERS = new ArrayList<>();
     private static final @Nullable Direction[] DIRECTIONS = Arrays.copyOf(Direction.values(), 7);
     private static final RandomSource RANDOM = RandomSource.createNewThreadLocalInstance();
@@ -56,11 +51,7 @@ public final class ModelBasedOutlineRenderer implements SimpleOutlineRenderer
 
     public ModelBasedOutlineRenderer(Block block)
     {
-        this.stateMerger = Optionull.mapOrElse(ModelWrappingManager.tryGetHandler(block), ModelWrappingHandler::getStateMerger, () ->
-        {
-            LOGGER.error("No ModelWrappingHandler registered for block {}, falling back to passthrough StateMerger", block);
-            return StateMerger.PASSTHROUGH;
-        });
+        this.stateMerger = ModelWrappingManager.tryGetStateMerger(block);
         RENDERERS.add(this);
     }
 

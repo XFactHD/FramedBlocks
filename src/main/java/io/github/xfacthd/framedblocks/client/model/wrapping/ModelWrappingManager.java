@@ -124,10 +124,16 @@ public final class ModelWrappingManager
         return handler;
     }
 
-    @Nullable
-    public static ModelWrappingHandler tryGetHandler(Block block)
+    public static StateMerger tryGetStateMerger(Block block)
     {
-        return HANDLERS.get(block);
+        ModelWrappingHandler handler = HANDLERS.get(block);
+        if (handler != null)
+        {
+            return handler.getStateMerger();
+        }
+
+        LOGGER.error("No ModelWrappingHandler registered for block {}, falling back to passthrough StateMerger", block);
+        return StateMerger.PASSTHROUGH;
     }
 
     @SuppressWarnings("unchecked")
