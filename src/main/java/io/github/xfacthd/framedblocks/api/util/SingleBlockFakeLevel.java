@@ -13,7 +13,7 @@ import net.minecraft.world.level.lighting.LevelLightEngine;
 import net.minecraft.world.level.lighting.LightEngine;
 import net.minecraft.world.level.material.FluidState;
 import net.neoforged.neoforge.model.data.ModelData;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Delegating {@link BlockAndTintGetter} providing access to a single {@link BlockState} and associated {@link ModelData}.
