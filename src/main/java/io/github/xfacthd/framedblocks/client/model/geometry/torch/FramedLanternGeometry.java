@@ -1,6 +1,5 @@
 package io.github.xfacthd.framedblocks.client.model.geometry.torch;
 
-import io.github.xfacthd.framedblocks.api.model.cache.QuadCacheKey;
 import io.github.xfacthd.framedblocks.api.model.data.QuadMap;
 import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.geometry.PartConsumer;
@@ -22,6 +21,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.neoforged.neoforge.model.data.ModelData;
 import org.joml.Vector3f;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -165,7 +165,7 @@ public class FramedLanternGeometry extends Geometry
     }
 
     @Override
-    public void collectAdditionalPartsCached(PartConsumer consumer, BlockAndTintGetter level, BlockPos pos, RandomSource random, ModelData data, QuadCacheKey cacheKey)
+    public void collectAdditionalPartsCached(PartConsumer consumer, BlockAndTintGetter level, BlockPos pos, RandomSource random, ModelData data, @Nullable Object cacheKeyUserData)
     {
         consumer.acceptAll(baseModel, level, pos, random, state, true, false, false, false, auxShaderState, null);
     }

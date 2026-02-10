@@ -1,7 +1,5 @@
 package io.github.xfacthd.framedblocks.client.model.geometry.interactive;
 
-import io.github.xfacthd.framedblocks.api.camo.CamoContent;
-import io.github.xfacthd.framedblocks.api.model.cache.QuadCacheKey;
 import io.github.xfacthd.framedblocks.api.model.data.AbstractFramedBlockData;
 import io.github.xfacthd.framedblocks.api.model.data.QuadMap;
 import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
@@ -114,7 +112,7 @@ public class FramedFlowerPotGeometry extends Geometry
     }
 
     @Override
-    public void collectAdditionalPartsCached(PartConsumer consumer, BlockAndTintGetter level, BlockPos pos, RandomSource random, ModelData data, QuadCacheKey cacheKey)
+    public void collectAdditionalPartsCached(PartConsumer consumer, BlockAndTintGetter level, BlockPos pos, RandomSource random, ModelData data, @Nullable Object cacheKeyUserData)
     {
         BlockState potState = FramedFlowerPotBlock.getFlowerPotState(getFlowerBlock(data));
         if (!potState.isAir())
@@ -152,23 +150,11 @@ public class FramedFlowerPotGeometry extends Geometry
     }
 
     @Override
-    public QuadCacheKey makeCacheKey(
-            BlockAndTintGetter level,
-            BlockPos pos,
-            RandomSource random,
-            CamoContent<?> camo,
-            @Nullable Object ctCtx,
-            boolean secondPart,
-            boolean emissive,
-            ModelData data
-    )
+    @Nullable
+    public Object computeCacheKeyUserData(BlockAndTintGetter level, BlockPos pos, RandomSource random, ModelData data)
     {
         Block flower = getFlowerBlock(data);
-        if (flower != Blocks.AIR)
-        {
-            return new FlowerPotQuadCacheKey(camo, ctCtx, secondPart, emissive, flower);
-        }
-        return super.makeCacheKey(level, pos, random, camo, ctCtx, secondPart, emissive, data);
+        return flower != Blocks.AIR ? flower : null;
     }
 
     @Override
@@ -182,12 +168,4 @@ public class FramedFlowerPotGeometry extends Geometry
         Block flower = data.get(FramedFlowerPotBlockEntity.FLOWER_BLOCK);
         return flower != null ? flower : Blocks.AIR;
     }
-
-    private record FlowerPotQuadCacheKey(
-            CamoContent<?> camo,
-            @Nullable Object ctCtx,
-            boolean secondPart,
-            boolean emissive,
-            Block flower
-    ) implements QuadCacheKey { }
 }

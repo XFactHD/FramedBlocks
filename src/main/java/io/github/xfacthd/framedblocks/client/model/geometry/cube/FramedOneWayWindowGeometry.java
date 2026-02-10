@@ -1,7 +1,5 @@
 package io.github.xfacthd.framedblocks.client.model.geometry.cube;
 
-import io.github.xfacthd.framedblocks.api.camo.CamoContent;
-import io.github.xfacthd.framedblocks.api.model.cache.QuadCacheKey;
 import io.github.xfacthd.framedblocks.api.model.data.QuadMap;
 import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.geometry.PartConsumer;
@@ -42,12 +40,11 @@ public class FramedOneWayWindowGeometry extends Geometry
     public void transformQuad(QuadMap quadMap, BakedQuad quad, ModelData modelData) { }
 
     @Override
-    public void collectAdditionalPartsCached(PartConsumer consumer, BlockAndTintGetter level, BlockPos pos, RandomSource random, ModelData data, QuadCacheKey cacheKey)
+    public void collectAdditionalPartsCached(PartConsumer consumer, BlockAndTintGetter level, BlockPos pos, RandomSource random, ModelData data, @Nullable Object cacheKeyUserData)
     {
         if (face != NullableDirection.NONE)
         {
-            boolean dynamic = cacheKey instanceof OneWayWindowCacheKey;
-            for (BlockModelPart part : ModelUtils.collectModelParts(tintedGlassModel.get(), level, pos, GLASS_STATE, random, dynamic))
+            for (BlockModelPart part : ModelUtils.collectModelParts(tintedGlassModel.get(), level, pos, GLASS_STATE, random, cacheKeyUserData != null))
             {
                 consumer.accept(part, GLASS_STATE, true, false, false, false, GLASS_STATE, faceFilter);
             }
@@ -55,23 +52,13 @@ public class FramedOneWayWindowGeometry extends Geometry
     }
 
     @Override
-    public QuadCacheKey makeCacheKey(
-            BlockAndTintGetter level,
-            BlockPos pos,
-            RandomSource random,
-            CamoContent<?> camo,
-            @Nullable Object ctCtx,
-            boolean secondPart,
-            boolean emissive,
-            ModelData data
-    )
+    @Nullable
+    public Object computeCacheKeyUserData(BlockAndTintGetter level, BlockPos pos, RandomSource random, ModelData data)
     {
-        Object auxCtCtx = tintedGlassModel.get().createGeometryKey(level, pos, GLASS_STATE, random);
-        if (auxCtCtx != null)
-        {
-            return new OneWayWindowCacheKey(camo, ctCtx, secondPart, emissive, auxCtCtx);
-        }
-        return super.makeCacheKey(level, pos, random, camo, ctCtx, secondPart, emissive, data);
+        BlockStateModel model = tintedGlassModel.get();
+        Object geometryKey = model.createGeometryKey(level, pos, GLASS_STATE, random);
+        // Only include the geometry key if it's not the SingleVariant's default value (i.e. the model itself)
+        return geometryKey != model ? geometryKey : null;
     }
 
     @Override
@@ -79,14 +66,4 @@ public class FramedOneWayWindowGeometry extends Geometry
     {
         return true;
     }
-
-
-
-    private record OneWayWindowCacheKey(
-            CamoContent<?> camo,
-            @Nullable Object ctCtx,
-            boolean secondPart,
-            boolean emissive,
-            Object auxCtCtx
-    ) implements QuadCacheKey { }
 }

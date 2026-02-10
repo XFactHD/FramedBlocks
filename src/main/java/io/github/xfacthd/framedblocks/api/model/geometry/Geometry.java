@@ -2,8 +2,6 @@ package io.github.xfacthd.framedblocks.api.model.geometry;
 
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import io.github.xfacthd.framedblocks.api.camo.CamoContent;
-import io.github.xfacthd.framedblocks.api.model.cache.QuadCacheKey;
-import io.github.xfacthd.framedblocks.api.model.cache.SimpleQuadCacheKey;
 import io.github.xfacthd.framedblocks.api.model.data.AbstractFramedBlockData;
 import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
 import io.github.xfacthd.framedblocks.api.model.data.QuadMap;
@@ -84,45 +82,32 @@ public abstract class Geometry
     /**
      * Add additional {@link BlockModelPart}s which should be cached.
      * The result of this method will be cached, processing time is therefore not critical
+     *
+     * @param cacheKeyUserData The additional user data, if available, from the cache key used to cache the generated parts together with other geometry
      */
-    public void collectAdditionalPartsCached(PartConsumer consumer, BlockAndTintGetter level, BlockPos pos, RandomSource random, ModelData data, QuadCacheKey cacheKey) { }
+    public void collectAdditionalPartsCached(PartConsumer consumer, BlockAndTintGetter level, BlockPos pos, RandomSource random, ModelData data, @Nullable Object cacheKeyUserData) { }
 
     /**
      * Add additional generated quads based on the full set of previously generated quads to avoid z-fighting with the
      * other quads below the overlay on faces that return {@code false} from {@link FullFacePredicate#test(BlockState, Direction)}
      *
-     * @param generator The {@link OverlayPartGenerator} used to generate the overlay parts
-     * @param cacheKey  The {@link QuadCacheKey} used to cache the generated parts together with other geometry
+     * @param generator        The {@link OverlayPartGenerator} used to generate the overlay parts
+     * @param cacheKeyUserData The additional user data, if available, from the cache key used to cache the generated parts together with other geometry
      */
-    public void generateOverlayParts(OverlayPartGenerator generator, RandomSource rand, ModelData data, QuadCacheKey cacheKey) { }
+    public void generateOverlayParts(OverlayPartGenerator generator, RandomSource rand, ModelData data, @Nullable Object cacheKeyUserData) { }
 
     /**
-     * Return a custom {@link QuadCacheKey} that holds additional metadata which influences the resulting quads.
+     * Compute additional data to be included in the cache key which influences the resulting quads.
      *
      * @param level      The {@linkplain BlockAndTintGetter level} the block is being rendered in
      * @param pos        The {@link BlockPos} the block is being rendered at
      * @param random     The {@link RandomSource} to use for randomization
-     * @param camo       The {@link CamoContent} of the camo applied to the block
-     * @param ctCtx      The current connected textures context object, may be null
-     * @param secondPart Whether the generated quads are part of the second part of a double block model
-     * @param emissive   Whether the generated quads should be emissive
      * @param data       The {@link ModelData} from the {@link FramedBlockEntity}
-     * @implNote The resulting object must at least store the given {@link BlockState}, connected textures context object
-     * and emissivity state and should either be a record or have an otherwise properly implemented {@code hashCode()}
-     * and {@code equals()} implementation
      */
-    public QuadCacheKey makeCacheKey(
-            BlockAndTintGetter level, BlockPos pos,
-            RandomSource random,
-            CamoContent<?> camo,
-            @Nullable Object ctCtx,
-            boolean secondPart,
-            boolean emissive,
-            ModelData data
-    )
+    @Nullable
+    public Object computeCacheKeyUserData(BlockAndTintGetter level, BlockPos pos, RandomSource random, ModelData data)
     {
-        // Avoid allocating a key if the CT context is null
-        return ctCtx != null || secondPart || emissive ? new SimpleQuadCacheKey(camo, ctCtx, secondPart, emissive) : camo;
+        return null;
     }
 
     /**

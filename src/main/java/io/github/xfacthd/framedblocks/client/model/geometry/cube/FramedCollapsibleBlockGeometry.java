@@ -1,7 +1,5 @@
 package io.github.xfacthd.framedblocks.client.model.geometry.cube;
 
-import io.github.xfacthd.framedblocks.api.camo.CamoContent;
-import io.github.xfacthd.framedblocks.api.model.cache.QuadCacheKey;
 import io.github.xfacthd.framedblocks.api.model.data.QuadMap;
 import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
@@ -183,23 +181,10 @@ public class FramedCollapsibleBlockGeometry extends Geometry
     }
 
     @Override
-    public QuadCacheKey makeCacheKey(
-            BlockAndTintGetter level,
-            BlockPos pos,
-            RandomSource random,
-            CamoContent<?> camo,
-            @Nullable Object ctCtx,
-            boolean secondPart,
-            boolean emissive,
-            ModelData data
-    )
+    @Nullable
+    public Object computeCacheKeyUserData(BlockAndTintGetter level, BlockPos pos, RandomSource random, ModelData data)
     {
-        int packedOffsets = PackedCollapsibleBlockOffsets.get(data, state);
-        if (packedOffsets != 0)
-        {
-            return new CollapsibleBlockQuadCacheKey(camo, ctCtx, secondPart, emissive, packedOffsets);
-        }
-        return super.makeCacheKey(level, pos, random, camo, ctCtx, secondPart, emissive, data);
+        return data.get(PackedCollapsibleBlockOffsets.PROPERTY);
     }
 
     private int getYCollapsedIndexOffset(Direction quadFace)
@@ -214,12 +199,4 @@ public class FramedCollapsibleBlockGeometry extends Geometry
             case DOWN, UP -> throw new IllegalArgumentException("Invalid facing for y face collapse!");
         };
     }
-
-    private record CollapsibleBlockQuadCacheKey(
-            CamoContent<?> camo,
-            @Nullable Object ctCtx,
-            boolean secondPart,
-            boolean emissive,
-            @Nullable Integer packedOffsets
-    ) implements QuadCacheKey { }
 }

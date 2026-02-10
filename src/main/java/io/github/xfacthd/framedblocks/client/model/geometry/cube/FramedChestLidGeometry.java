@@ -1,7 +1,6 @@
 package io.github.xfacthd.framedblocks.client.model.geometry.cube;
 
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
-import io.github.xfacthd.framedblocks.api.model.cache.QuadCacheKey;
 import io.github.xfacthd.framedblocks.api.model.data.QuadMap;
 import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.geometry.PartConsumer;
@@ -21,6 +20,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.ChestType;
 import net.neoforged.neoforge.model.data.ModelData;
+import org.jspecify.annotations.Nullable;
 
 public class FramedChestLidGeometry extends Geometry
 {
@@ -80,7 +80,7 @@ public class FramedChestLidGeometry extends Geometry
     }
 
     @Override
-    public void collectAdditionalPartsCached(PartConsumer consumer, BlockAndTintGetter level, BlockPos pos, RandomSource random, ModelData data, QuadCacheKey cacheKey)
+    public void collectAdditionalPartsCached(PartConsumer consumer, BlockAndTintGetter level, BlockPos pos, RandomSource random, ModelData data, @Nullable Object cacheKeyUserData)
     {
         if (latch == LatchType.DEFAULT)
         {

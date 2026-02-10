@@ -1,7 +1,6 @@
 package io.github.xfacthd.framedblocks.client.model.geometry.rail;
 
 import com.mojang.datafixers.util.Pair;
-import io.github.xfacthd.framedblocks.api.model.cache.QuadCacheKey;
 import io.github.xfacthd.framedblocks.api.model.data.QuadMap;
 import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.geometry.PartConsumer;
@@ -234,7 +233,7 @@ public class FramedFancyRailGeometry extends Geometry
     }
 
     @Override
-    public void collectAdditionalPartsCached(PartConsumer consumer, BlockAndTintGetter level, BlockPos pos, RandomSource random, ModelData data, QuadCacheKey cacheKey)
+    public void collectAdditionalPartsCached(PartConsumer consumer, BlockAndTintGetter level, BlockPos pos, RandomSource random, ModelData data, @Nullable Object cacheKeyUserData)
     {
         consumer.acceptAll(baseModel, level, pos, random, state, true, false, false, false, auxShaderState, null);
     }

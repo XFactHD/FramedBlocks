@@ -10,7 +10,6 @@ import io.github.xfacthd.framedblocks.api.camo.block.BlockCamoContent;
 import io.github.xfacthd.framedblocks.api.camo.empty.EmptyCamoContainer;
 import io.github.xfacthd.framedblocks.api.model.AbstractFramedBlockModel;
 import io.github.xfacthd.framedblocks.api.model.ExtendedBlockModelPart;
-import io.github.xfacthd.framedblocks.api.model.cache.QuadCacheKey;
 import io.github.xfacthd.framedblocks.api.model.data.AbstractFramedBlockData;
 import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
 import io.github.xfacthd.framedblocks.api.model.geometry.DefaultAO;
@@ -18,6 +17,7 @@ import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.geometry.PartConsumer;
 import io.github.xfacthd.framedblocks.api.model.geometry.QuadListModifier;
 import io.github.xfacthd.framedblocks.api.model.util.ModelUtils;
+import io.github.xfacthd.framedblocks.api.model.util.PartCacheKey;
 import io.github.xfacthd.framedblocks.api.model.util.QuadUtils;
 import io.github.xfacthd.framedblocks.api.model.wrapping.DelegateBlockModelPart;
 import io.github.xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
@@ -56,7 +56,7 @@ public final class FramedBlockModel extends AbstractFramedBlockModel
     private static final FramedBlockData DEFAULT_DATA = new FramedBlockData(EmptyCamoContainer.EMPTY, false);
     private static final Direction[] DIRECTIONS = Direction.values();
     private static final @Nullable Direction[] DIRECTIONS_WITH_NULL = Arrays.copyOfRange(DIRECTIONS, 0, 7);
-    private static final int FLAG_NO_CAMO_ATL_MODEL = 0b001;
+    private static final int FLAG_NO_CAMO_ALT_MODEL = 0b001;
     private static final int FLAG_NO_CAMO_REINFORCED = 0b010;
     private static final int FLAG_NO_CAMO_SOLID_BG = 0b100;
     private static final BlockCamoContent[] NO_CAMO_CONTENTS = makeNoCamoContents();
@@ -65,7 +65,7 @@ public final class FramedBlockModel extends AbstractFramedBlockModel
     private static final UnaryOperator<BakedQuad> FULL_EMISSIVE_PROCESSOR = quad -> QuadUtils.setLightEmission(quad, 15, false, false);
     private static final UnaryOperator<BakedQuad> TINT_INDEX_INVERTER = QuadUtils::invertTintIndex;
 
-    private final Map<QuadCacheKey, List<ExtendedBlockModelPart>> partCache = new ConcurrentHashMap<>();
+    private final Map<PartCacheKey, List<ExtendedBlockModelPart>> partCache = new ConcurrentHashMap<>();
     private final BlockState state;
     private final Geometry geometry;
     private final IBlockType type;
@@ -147,7 +147,7 @@ public final class FramedBlockModel extends AbstractFramedBlockModel
             random.setSeed(seed);
             Object ctCtx = needCtCtxCached ? camoModel.createGeometryKey(level, pos, this.state, random) : null;
             random.setSeed(seed);
-            QuadCacheKey key = geometry.makeCacheKey(level, pos, random, camoContent, ctCtx, secondPart, forceEmissive, extraData);
+            PartCacheKey key = computeCacheKey(level, pos, random, camoContent, ctCtx, secondPart, forceEmissive, extraData);
             List<ExtendedBlockModelPart> cachedParts = partCache.get(key);
             if (cachedParts == null)
             {
@@ -261,8 +261,28 @@ public final class FramedBlockModel extends AbstractFramedBlockModel
         return side != null && (cullMask & (1 << side.ordinal())) == 0;
     }
 
+    private PartCacheKey computeCacheKey(
+            BlockAndTintGetter level,
+            BlockPos pos,
+            RandomSource random,
+            CamoContent<?> camo,
+            @Nullable Object ctCtx,
+            boolean secondPart,
+            boolean emissive,
+            ModelData data
+    )
+    {
+        Object userKeyData = geometry.computeCacheKeyUserData(level, pos, random, data);
+        if (ctCtx != null || userKeyData != null || secondPart || emissive)
+        {
+            return new CompoundPartCacheKey(camo, ctCtx, secondPart, emissive, userKeyData);
+        }
+        // Avoid allocating a wrapping key object if possible
+        return camo;
+    }
+
     private List<ExtendedBlockModelPart> buildPartCache(
-            QuadCacheKey cacheKey,
+            PartCacheKey cacheKey,
             List<BlockModelPart> srcParts,
             BlockAndTintGetter level,
             BlockPos pos,
@@ -301,13 +321,13 @@ public final class FramedBlockModel extends AbstractFramedBlockModel
             partConsumer.accept(srcPart, ReinforcementModel.SHADER_STATE, false, true, !xformAll, false, ReinforcementModel.SHADER_STATE, modifier);
         }
         random.setSeed(seed);
-        geometry.collectAdditionalPartsCached(partConsumer, level, pos, random, data, cacheKey);
+        geometry.collectAdditionalPartsCached(partConsumer, level, pos, random, data, cacheKey.userData());
 
         if (!parts.isEmpty())
         {
             OverlayModelPartGenerator overlayGenerator = new OverlayModelPartGenerator(parts, defaultAO.apply(TriState.DEFAULT));
             random.setSeed(seed);
-            geometry.generateOverlayParts(overlayGenerator, random, data, cacheKey);
+            geometry.generateOverlayParts(overlayGenerator, random, data, cacheKey.userData());
             overlayGenerator.flush();
         }
 
@@ -327,7 +347,7 @@ public final class FramedBlockModel extends AbstractFramedBlockModel
     private int getNoCamoModelSourceIndex(FramedBlockData fbData)
     {
         int idx = 0;
-        if (fbData.isSecondPart()) idx |= FLAG_NO_CAMO_ATL_MODEL;
+        if (fbData.isSecondPart()) idx |= FLAG_NO_CAMO_ALT_MODEL;
         if (fbData.isReinforced()) idx |= FLAG_NO_CAMO_REINFORCED;
         if (ClientConfig.VIEW.getSolidFrameMode().useSolidFrame(useSolidBase)) idx |= FLAG_NO_CAMO_SOLID_BG;
         return idx;
@@ -339,7 +359,7 @@ public final class FramedBlockModel extends AbstractFramedBlockModel
         for (int i = 0; i < contents.length; i++)
         {
             BlockState stateOut = FBContent.BLOCK_FRAMED_CUBE.value().defaultBlockState();
-            if ((i & FLAG_NO_CAMO_ATL_MODEL) != 0) stateOut = stateOut.setValue(PropertyHolder.ALT, true);
+            if ((i & FLAG_NO_CAMO_ALT_MODEL) != 0) stateOut = stateOut.setValue(PropertyHolder.ALT, true);
             if ((i & FLAG_NO_CAMO_REINFORCED) != 0) stateOut = stateOut.setValue(PropertyHolder.REINFORCED, true);
             if ((i & FLAG_NO_CAMO_SOLID_BG) != 0) stateOut = stateOut.setValue(PropertyHolder.SOLID_BG, true);
             contents[i] = new BlockCamoContent(stateOut);
@@ -366,6 +386,14 @@ public final class FramedBlockModel extends AbstractFramedBlockModel
             NO_CAMO_MODELS[i] = model;
         }
     }
+
+    private record CompoundPartCacheKey(
+            CamoContent<?> camo,
+            @Nullable Object ctContext,
+            boolean secondPart,
+            boolean emissive,
+            @Nullable Object userData
+    ) implements PartCacheKey { }
 
     private record CullableBlockModelPart(ExtendedBlockModelPart wrapped, int cullMask) implements DelegateBlockModelPart
     {

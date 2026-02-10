@@ -1,6 +1,5 @@
 package io.github.xfacthd.framedblocks.client.model.geometry.interactive;
 
-import io.github.xfacthd.framedblocks.api.model.cache.QuadCacheKey;
 import io.github.xfacthd.framedblocks.api.model.data.AbstractFramedBlockData;
 import io.github.xfacthd.framedblocks.api.model.geometry.OverlayPartGenerator;
 import io.github.xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
@@ -39,7 +38,7 @@ public class FramedMarkedPressurePlateGeometry extends FramedPressurePlateGeomet
     }
 
     @Override
-    public void generateOverlayParts(OverlayPartGenerator generator, RandomSource rand, ModelData data, QuadCacheKey cacheKey)
+    public void generateOverlayParts(OverlayPartGenerator generator, RandomSource rand, ModelData data, @Nullable Object cacheKeyUserData)
     {
         AbstractFramedBlockData fbData = data.get(AbstractFramedBlockData.PROPERTY);
         if (fbData != null && !fbData.unwrap(state).getCamoContent().isEmpty())
