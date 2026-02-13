@@ -1098,21 +1098,27 @@ public class FramedBlockEntity extends BlockEntity
      */
     public final ModelData getModelData(boolean includeCullInfo, BlockState state)
     {
-        AbstractFramedBlockData modelData = computeBlockData(includeCullInfo, state);
+        AbstractFramedBlockData modelData = computeBlockData(state, includeCullInfo);
         ModelData.Builder builder = ModelData.builder().with(AbstractFramedBlockData.PROPERTY, modelData);
         attachAdditionalModelData(builder);
         return builder.build();
     }
 
     /**
-     * @param includeCullInfo Whether culling data should be included
      * @param state           The {@link BlockState} with which the model data is used for rendering (usually {@link #getBlockState()})
+     * @param includeCullInfo Whether culling data should be included
      */
-    AbstractFramedBlockData computeBlockData(boolean includeCullInfo, BlockState state)
+    AbstractFramedBlockData computeBlockData(BlockState state, boolean includeCullInfo)
     {
         boolean[] cullData = includeCullInfo ? culledFaces : FramedBlockData.NO_CULLED_FACES;
-        TriState viewBlocking = Utils.toTriState(state.isSuffocating(level(), worldPosition));
-        return new FramedBlockData(camoContainer, cullData, false, isReinforced(), isEmissive(), viewBlocking);
+        return makeBlockData(state, camoContainer, cullData, false);
+    }
+
+    final FramedBlockData makeBlockData(BlockState state, CamoContainer<?, ?> camo, boolean[] cullData, boolean secondPart)
+    {
+        // The view-blocking value is never resolved from the second part, no point in computing it twice
+        TriState viewBlocking = secondPart ? TriState.DEFAULT : Utils.toTriState(state.isSuffocating(level(), worldPosition));
+        return new FramedBlockData(camo, cullData, secondPart, reinforced, emissive, viewBlocking);
     }
 
     protected void attachAdditionalModelData(ModelData.Builder builder) { }
