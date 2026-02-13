@@ -23,13 +23,15 @@ import java.util.function.Predicate;
 public final class OverlayModelPartGenerator implements OverlayPartGenerator
 {
     private final ObjectList<ExtendedBlockModelPart> staticParts;
+    private final boolean forceEmissive;
     private final TriState ambientOcclusion;
     private final ObjectList<ExtendedBlockModelPart> generatedParts = new ObjectArrayList<>();
     private boolean flushed = false;
 
-    public OverlayModelPartGenerator(ObjectList<ExtendedBlockModelPart> staticParts, TriState ambientOcclusion)
+    public OverlayModelPartGenerator(ObjectList<ExtendedBlockModelPart> staticParts, boolean forceEmissive, TriState ambientOcclusion)
     {
         this.staticParts = staticParts;
+        this.forceEmissive = forceEmissive;
         this.ambientOcclusion = ambientOcclusion;
     }
 
@@ -52,7 +54,7 @@ public final class OverlayModelPartGenerator implements OverlayPartGenerator
             for (Direction side : cullfaces)
             {
                 ArrayList<BakedQuad> outQuads = quadMap.get(side);
-                OverlayQuadGenerator.generate(part.getQuads(side), outQuads, spriteGetter, normalFilter);
+                OverlayQuadGenerator.generate(part.getQuads(side), outQuads, spriteGetter, normalFilter, forceEmissive);
                 hasQuads |= !outQuads.isEmpty();
             }
         }

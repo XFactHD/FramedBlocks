@@ -316,7 +316,7 @@ public final class FramedBlockModel extends AbstractFramedBlockModel
 
         if (!parts.isEmpty() && geometry.hasGeneratedOverlay(fbData, cacheKeyUserData))
         {
-            OverlayModelPartGenerator overlayGenerator = new OverlayModelPartGenerator(parts, defaultAO.apply(TriState.DEFAULT));
+            OverlayModelPartGenerator overlayGenerator = new OverlayModelPartGenerator(parts, forceEmissive, defaultAO.apply(TriState.DEFAULT));
             random.setSeed(seed);
             geometry.generateOverlayParts(overlayGenerator, random, cacheKeyUserData);
             overlayGenerator.flush();

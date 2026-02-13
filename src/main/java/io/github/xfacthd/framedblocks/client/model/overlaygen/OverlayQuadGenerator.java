@@ -3,6 +3,7 @@ package io.github.xfacthd.framedblocks.client.model.overlaygen;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.Direction;
+import net.minecraft.world.level.lighting.LightEngine;
 import net.neoforged.neoforge.client.model.pipeline.QuadBakingVertexConsumer;
 import org.joml.Vector3f;
 
@@ -23,7 +24,8 @@ public final class OverlayQuadGenerator
             List<BakedQuad> srcQuads,
             ArrayList<BakedQuad> outQuads,
             Function<Direction, TextureAtlasSprite> spriteGetter,
-            Predicate<Direction> filter
+            Predicate<Direction> filter,
+            boolean forceEmissive
     )
     {
         outQuads.ensureCapacity(outQuads.size() + srcQuads.size());
@@ -33,7 +35,7 @@ public final class OverlayQuadGenerator
             if (!filter.test(quad.direction())) continue;
 
             TextureAtlasSprite sprite = spriteGetter.apply(quad.direction());
-            OverlayCacheKey key = buildCacheKey(quad, sprite);
+            OverlayCacheKey key = new OverlayCacheKey(quad, sprite, forceEmissive);
             if (uniqueKeys.add(key))
             {
                 outQuads.add(OVERLAY_CACHE.computeIfAbsent(key, OverlayQuadGenerator::generateOverlayQuad));
@@ -46,13 +48,18 @@ public final class OverlayQuadGenerator
         QuadBakingVertexConsumer baker = new QuadBakingVertexConsumer();
 
         TextureAtlasSprite sprite = key.sprite();
+        boolean emissive = key.forceEmissive();
         UVInfo uvInfo = UVInfo.get(key.face());
         Vector3f scratch = new Vector3f();
 
         baker.setDirection(key.face());
         baker.setSprite(sprite);
-        baker.setHasAmbientOcclusion(true);
-        baker.setShade(true);
+        baker.setHasAmbientOcclusion(!emissive);
+        baker.setShade(!emissive);
+        if (emissive)
+        {
+            baker.setLightEmission(LightEngine.MAX_LEVEL);
+        }
 
         for (int i = 0; i < 4; i++)
         {
@@ -70,11 +77,6 @@ public final class OverlayQuadGenerator
         }
 
         return baker.bakeQuad();
-    }
-
-    private static OverlayCacheKey buildCacheKey(BakedQuad quad, TextureAtlasSprite sprite)
-    {
-        return new OverlayCacheKey(quad.direction(), quad.position0(), quad.position1(), quad.position2(), quad.position3(), quad.bakedNormals(), sprite);
     }
 
     public static void clearCaches()
