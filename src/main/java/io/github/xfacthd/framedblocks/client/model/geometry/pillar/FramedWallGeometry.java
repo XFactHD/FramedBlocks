@@ -1,5 +1,6 @@
 package io.github.xfacthd.framedblocks.client.model.geometry.pillar;
 
+import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
 import io.github.xfacthd.framedblocks.api.model.data.QuadMap;
 import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
@@ -10,8 +11,8 @@ import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.WallSide;
-import net.neoforged.neoforge.model.data.ModelData;
 import org.joml.Vector4f;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
@@ -49,7 +50,7 @@ public class FramedWallGeometry extends Geometry
     }
 
     @Override
-    public void transformQuad(QuadMap quadMap, BakedQuad quad, ModelData modelData)
+    public void transformQuad(QuadMap quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
     {
         if (north != WallSide.NONE)
         {

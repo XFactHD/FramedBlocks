@@ -1,6 +1,6 @@
 package io.github.xfacthd.framedblocks.client.model.geometry.interactive;
 
-import io.github.xfacthd.framedblocks.api.model.data.AbstractFramedBlockData;
+import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
 import io.github.xfacthd.framedblocks.api.model.geometry.OverlayPartGenerator;
 import io.github.xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
 import io.github.xfacthd.framedblocks.api.util.Utils;
@@ -14,7 +14,6 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.PressurePlateBlock;
 import net.minecraft.world.level.block.WeightedPressurePlateBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.model.data.ModelData;
 import org.jspecify.annotations.Nullable;
 
 public class FramedMarkedPressurePlateGeometry extends FramedPressurePlateGeometry
@@ -25,26 +24,26 @@ public class FramedMarkedPressurePlateGeometry extends FramedPressurePlateGeomet
     private static final Identifier IRON_FRAME_LOCATION = Utils.id("block/iron_plate_frame");
     private static final @Nullable Direction[] OVERLAY_CULL_FACES = { Direction.DOWN, null };
 
-    private final BlockState state;
     private final TextureAtlasSprite frameSprite;
     private final BlockState frameShaderState;
 
-    private FramedMarkedPressurePlateGeometry(GeometryFactory.Context ctx, TextureAtlasSprite frameSprite, BlockState frameShaderState, boolean powered)
+    private FramedMarkedPressurePlateGeometry(TextureAtlasSprite frameSprite, BlockState frameShaderState, boolean powered)
     {
         super(powered, true);
-        this.state = ctx.state();
         this.frameSprite = frameSprite;
         this.frameShaderState = frameShaderState;
     }
 
     @Override
-    public void generateOverlayParts(OverlayPartGenerator generator, RandomSource rand, ModelData data, @Nullable Object cacheKeyUserData)
+    public boolean hasGeneratedOverlay(FramedBlockData blockData, @Nullable Object cacheKeyUserData)
     {
-        AbstractFramedBlockData fbData = data.get(AbstractFramedBlockData.PROPERTY);
-        if (fbData != null && !fbData.unwrap(state).getCamoContent().isEmpty())
-        {
-            generator.generate(OVERLAY_CULL_FACES, frameSprite, Utils::isY, ChunkSectionLayer.CUTOUT, frameShaderState);
-        }
+        return !blockData.getCamoContent().isEmpty();
+    }
+
+    @Override
+    public void generateOverlayParts(OverlayPartGenerator generator, RandomSource rand, @Nullable Object cacheKeyUserData)
+    {
+        generator.generate(OVERLAY_CULL_FACES, frameSprite, Utils::isY, ChunkSectionLayer.CUTOUT, frameShaderState);
     }
 
 
@@ -58,7 +57,7 @@ public class FramedMarkedPressurePlateGeometry extends FramedPressurePlateGeomet
         }
 
         TextureAtlasSprite frame = ctx.textureLookup().get(STONE_FRAME_LOCATION);
-        return new FramedMarkedPressurePlateGeometry(ctx, frame, Blocks.STONE.defaultBlockState(), powered);
+        return new FramedMarkedPressurePlateGeometry(frame, Blocks.STONE.defaultBlockState(), powered);
     }
 
     public static FramedPressurePlateGeometry obsidian(GeometryFactory.Context ctx)
@@ -70,7 +69,7 @@ public class FramedMarkedPressurePlateGeometry extends FramedPressurePlateGeomet
         }
 
         TextureAtlasSprite frame = ctx.textureLookup().get(OBSIDIAN_FRAME_LOCATION);
-        return new FramedMarkedPressurePlateGeometry(ctx, frame, Blocks.OBSIDIAN.defaultBlockState(), powered);
+        return new FramedMarkedPressurePlateGeometry(frame, Blocks.OBSIDIAN.defaultBlockState(), powered);
     }
 
     public static FramedPressurePlateGeometry gold(GeometryFactory.Context ctx)
@@ -82,7 +81,7 @@ public class FramedMarkedPressurePlateGeometry extends FramedPressurePlateGeomet
         }
 
         TextureAtlasSprite frame = ctx.textureLookup().get(GOLD_FRAME_LOCATION);
-        return new FramedMarkedPressurePlateGeometry(ctx, frame, Blocks.GOLD_BLOCK.defaultBlockState(), powered);
+        return new FramedMarkedPressurePlateGeometry(frame, Blocks.GOLD_BLOCK.defaultBlockState(), powered);
     }
 
     public static FramedPressurePlateGeometry iron(GeometryFactory.Context ctx)
@@ -94,6 +93,6 @@ public class FramedMarkedPressurePlateGeometry extends FramedPressurePlateGeomet
         }
 
         TextureAtlasSprite frame = ctx.textureLookup().get(IRON_FRAME_LOCATION);
-        return new FramedMarkedPressurePlateGeometry(ctx, frame, Blocks.IRON_BLOCK.defaultBlockState(), powered);
+        return new FramedMarkedPressurePlateGeometry(frame, Blocks.IRON_BLOCK.defaultBlockState(), powered);
     }
 }

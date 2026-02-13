@@ -1,5 +1,6 @@
 package io.github.xfacthd.framedblocks.client.model.geometry.pillar;
 
+import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
 import io.github.xfacthd.framedblocks.api.model.data.QuadMap;
 import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
@@ -9,7 +10,7 @@ import io.github.xfacthd.framedblocks.api.util.Utils;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.neoforged.neoforge.model.data.ModelData;
+import org.jspecify.annotations.Nullable;
 
 public class FramedPillarSocketGeometry extends Geometry
 {
@@ -21,7 +22,7 @@ public class FramedPillarSocketGeometry extends Geometry
     }
 
     @Override
-    public void transformQuad(QuadMap quadMap, BakedQuad quad, ModelData data)
+    public void transformQuad(QuadMap quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object cacheKeyUserData)
     {
         Direction quadDir = quad.direction();
         Direction.Axis quadAxis = quadDir.getAxis();

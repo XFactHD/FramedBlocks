@@ -1,6 +1,7 @@
 package io.github.xfacthd.framedblocks.common.compat.diagonalblocks;
 
 import fuzs.diagonalblocks.api.v2.block.DiagonalBlock;
+import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
 import io.github.xfacthd.framedblocks.api.model.data.QuadMap;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
@@ -9,8 +10,8 @@ import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.client.model.geometry.pillar.FramedFenceGeometry;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.core.Direction;
-import net.neoforged.neoforge.model.data.ModelData;
 import org.joml.Vector3f;
+import org.jspecify.annotations.Nullable;
 
 class FramedDiagonalFenceGeometry extends FramedFenceGeometry
 {
@@ -29,9 +30,9 @@ class FramedDiagonalFenceGeometry extends FramedFenceGeometry
     }
 
     @Override
-    public void transformQuad(QuadMap quadMap, BakedQuad quad, ModelData modelData)
+    public void transformQuad(QuadMap quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
     {
-        super.transformQuad(quadMap, quad, modelData);
+        super.transformQuad(quadMap, quad, blockData, modelData);
 
         createDiagonalFenceBars(quadMap, quad, Direction.NORTH, northEast);
         createDiagonalFenceBars(quadMap, quad, Direction.EAST, southEast);

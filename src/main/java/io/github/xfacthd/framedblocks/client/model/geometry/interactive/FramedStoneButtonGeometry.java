@@ -1,6 +1,6 @@
 package io.github.xfacthd.framedblocks.client.model.geometry.interactive;
 
-import io.github.xfacthd.framedblocks.api.model.data.AbstractFramedBlockData;
+import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
 import io.github.xfacthd.framedblocks.api.model.geometry.OverlayPartGenerator;
 import io.github.xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
 import io.github.xfacthd.framedblocks.api.util.Utils;
@@ -11,9 +11,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.AttachFace;
-import net.neoforged.neoforge.model.data.ModelData;
 import org.jspecify.annotations.Nullable;
 
 public class FramedStoneButtonGeometry extends FramedButtonGeometry
@@ -22,7 +20,6 @@ public class FramedStoneButtonGeometry extends FramedButtonGeometry
     private static final Identifier FRAME_LOCATION_NARROW = Utils.id("block/stone_button_frame_narrow");
     private static final Identifier FRAME_LOCATION_WIDE = Utils.id("block/stone_button_frame_wide");
 
-    private final BlockState state;
     private final TextureAtlasSprite frameSpriteFront;
     private final TextureAtlasSprite frameSpriteNarrow;
     private final TextureAtlasSprite frameSpriteWide;
@@ -32,7 +29,6 @@ public class FramedStoneButtonGeometry extends FramedButtonGeometry
     private FramedStoneButtonGeometry(GeometryFactory.Context ctx)
     {
         super(ctx);
-        this.state = ctx.state();
         this.frameSpriteFront = ctx.textureLookup().get(FRAME_LOCATION_FRONT);
         this.frameSpriteNarrow = ctx.textureLookup().get(FRAME_LOCATION_NARROW);
         this.frameSpriteWide = ctx.textureLookup().get(FRAME_LOCATION_WIDE);
@@ -47,13 +43,15 @@ public class FramedStoneButtonGeometry extends FramedButtonGeometry
     }
 
     @Override
-    public void generateOverlayParts(OverlayPartGenerator generator, RandomSource rand, ModelData data, @Nullable Object cacheKeyUserData)
+    public boolean hasGeneratedOverlay(FramedBlockData blockData, @Nullable Object cacheKeyUserData)
     {
-        AbstractFramedBlockData fbData = data.get(AbstractFramedBlockData.PROPERTY);
-        if (fbData != null && !fbData.unwrap(state).getCamoContent().isEmpty())
-        {
-            generator.generate(overlayCullFaces, overlaySpriteGetter, frameSpriteFront, ChunkSectionLayer.CUTOUT, Blocks.STONE.defaultBlockState());
-        }
+        return !blockData.getCamoContent().isEmpty();
+    }
+
+    @Override
+    public void generateOverlayParts(OverlayPartGenerator generator, RandomSource rand, @Nullable Object cacheKeyUserData)
+    {
+        generator.generate(overlayCullFaces, overlaySpriteGetter, frameSpriteFront, ChunkSectionLayer.CUTOUT, Blocks.STONE.defaultBlockState());
     }
 
     @Override

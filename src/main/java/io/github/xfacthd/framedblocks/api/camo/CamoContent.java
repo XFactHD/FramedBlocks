@@ -1,7 +1,6 @@
 package io.github.xfacthd.framedblocks.api.camo;
 
 import io.github.xfacthd.framedblocks.api.camo.empty.EmptyCamoContent;
-import io.github.xfacthd.framedblocks.api.model.util.PartCacheKey;
 import net.minecraft.client.color.block.BlockColor;
 import net.minecraft.client.color.item.ItemTintSource;
 import net.minecraft.core.BlockPos;
@@ -21,10 +20,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.MapColor;
 import net.neoforged.neoforge.common.extensions.IBlockStateExtension;
-import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.Nullable;
 
-public abstract class CamoContent<C extends CamoContent<C>> implements PartCacheKey
+public abstract class CamoContent<C extends CamoContent<C>>
 {
     /**
      * {@return whether this camo propagates skylight downwards}
@@ -213,19 +211,4 @@ public abstract class CamoContent<C extends CamoContent<C>> implements PartCache
 
     @Override
     public abstract String toString();
-
-    @Override
-    @ApiStatus.Internal
-    public final CamoContent<?> camo()
-    {
-        return this;
-    }
-
-    @Override
-    @Nullable
-    @ApiStatus.Internal
-    public final Object userData()
-    {
-        return null;
-    }
 }

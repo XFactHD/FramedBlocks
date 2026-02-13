@@ -1,5 +1,6 @@
 package io.github.xfacthd.framedblocks.client.model.item.modelprovider;
 
+import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
 import io.github.xfacthd.framedblocks.api.model.data.QuadMap;
 import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.item.block.BlockItemModelProvider;
@@ -12,7 +13,7 @@ import net.minecraft.client.renderer.block.model.BlockStateModel;
 import net.minecraft.client.resources.model.ModelBaker;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.model.data.ModelData;
+import org.jspecify.annotations.Nullable;
 
 import java.util.function.Supplier;
 
@@ -33,7 +34,7 @@ public final class FenceBlockItemModelProvider implements BlockItemModelProvider
         private FenceItemGeometry(GeometryFactory.Context ctx) { }
 
         @Override
-        public void transformQuad(QuadMap quadMap, BakedQuad quad, ModelData modelData)
+        public void transformQuad(QuadMap quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
         {
             Direction quadDir = quad.direction();
             if (Utils.isY(quadDir))

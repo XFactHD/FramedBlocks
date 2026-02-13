@@ -2,8 +2,8 @@ package io.github.xfacthd.framedblocks.common.blockentity;
 
 import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockParts;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.model.data.ModelData;
 import net.neoforged.neoforge.model.data.ModelProperty;
+import org.jspecify.annotations.Nullable;
 
 public sealed interface PackedCollapsibleBlockOffsets
 {
@@ -11,10 +11,9 @@ public sealed interface PackedCollapsibleBlockOffsets
 
     int unwrap(BlockState state);
 
-    static int get(ModelData modelData, BlockState partState)
+    static int unwrap(@Nullable Object userData, BlockState partState)
     {
-        PackedCollapsibleBlockOffsets offsets = modelData.get(PROPERTY);
-        return offsets != null ? offsets.unwrap(partState) : 0;
+        return userData instanceof PackedCollapsibleBlockOffsets offsets ? offsets.unwrap(partState) : 0;
     }
 
     record Single(int offsets) implements PackedCollapsibleBlockOffsets

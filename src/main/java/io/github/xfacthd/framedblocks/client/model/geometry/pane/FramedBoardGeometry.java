@@ -1,6 +1,6 @@
 package io.github.xfacthd.framedblocks.client.model.geometry.pane;
 
-import io.github.xfacthd.framedblocks.api.model.data.AbstractFramedBlockData;
+import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
 import io.github.xfacthd.framedblocks.api.model.data.QuadMap;
 import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
@@ -10,7 +10,7 @@ import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Util;
-import net.neoforged.neoforge.model.data.ModelData;
+import org.jspecify.annotations.Nullable;
 
 public class FramedBoardGeometry extends Geometry
 {
@@ -41,10 +41,10 @@ public class FramedBoardGeometry extends Geometry
     }
 
     @Override
-    public void transformQuad(QuadMap quadMap, BakedQuad quad, ModelData modelData)
+    public void transformQuad(QuadMap quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
     {
         Direction quadDir = quad.direction();
-        if (hasFace(quadDir.getOpposite()) && !canCullInner(modelData))
+        if (hasFace(quadDir.getOpposite()) && !canCullInner(blockData))
         {
             QuadModifier modifier = QuadModifier.of(quad)
                     .apply(Modifiers.setPosition(DEPTH));
@@ -90,12 +90,9 @@ public class FramedBoardGeometry extends Geometry
         return (faces & (1 << side.ordinal())) != 0;
     }
 
-    private boolean canCullInner(ModelData modelData)
+    private boolean canCullInner(FramedBlockData blockData)
     {
-        if (!allFaces) return false;
-
-        AbstractFramedBlockData blockData = modelData.get(AbstractFramedBlockData.PROPERTY);
-        return blockData != null && blockData.unwrap(false).getCamoContent().isSolid();
+        return allFaces && blockData.getCamoContent().isSolid();
     }
 
     @Override

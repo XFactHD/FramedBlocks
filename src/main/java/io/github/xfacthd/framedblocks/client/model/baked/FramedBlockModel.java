@@ -17,7 +17,6 @@ import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.geometry.PartConsumer;
 import io.github.xfacthd.framedblocks.api.model.geometry.QuadListModifier;
 import io.github.xfacthd.framedblocks.api.model.util.ModelUtils;
-import io.github.xfacthd.framedblocks.api.model.util.PartCacheKey;
 import io.github.xfacthd.framedblocks.api.model.util.QuadUtils;
 import io.github.xfacthd.framedblocks.api.model.wrapping.DelegateBlockModelPart;
 import io.github.xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
@@ -65,7 +64,7 @@ public final class FramedBlockModel extends AbstractFramedBlockModel
     private static final UnaryOperator<BakedQuad> FULL_EMISSIVE_PROCESSOR = quad -> QuadUtils.setLightEmission(quad, 15, false, false);
     private static final UnaryOperator<BakedQuad> TINT_INDEX_INVERTER = QuadUtils::invertTintIndex;
 
-    private final Map<PartCacheKey, List<ExtendedBlockModelPart>> partCache = new ConcurrentHashMap<>();
+    private final Map<Object, List<ExtendedBlockModelPart>> partCache = new ConcurrentHashMap<>();
     private final BlockState state;
     private final Geometry geometry;
     private final IBlockType type;
@@ -147,13 +146,14 @@ public final class FramedBlockModel extends AbstractFramedBlockModel
             random.setSeed(seed);
             Object ctCtx = needCtCtxCached ? camoModel.createGeometryKey(level, pos, this.state, random) : null;
             random.setSeed(seed);
-            PartCacheKey key = computeCacheKey(level, pos, random, camoContent, ctCtx, secondPart, forceEmissive, extraData);
+            Object userKeyData = geometry.computeCacheKeyUserData(level, pos, random, extraData);
+            Object key = createCacheKey(camoContent, ctCtx, secondPart, forceEmissive, userKeyData);
             List<ExtendedBlockModelPart> cachedParts = partCache.get(key);
             if (cachedParts == null)
             {
                 random.setSeed(seed);
                 List<BlockModelPart> srcParts = ModelUtils.collectModelParts(camoModel, level, pos, this.state, random, ctCtx != null);
-                cachedParts = buildPartCache(key, srcParts, level, pos, random, seed, extraData, reinforce, camoEmissive, forceEmissive, secondPart, defaultAO);
+                cachedParts = buildPartCache(srcParts, level, pos, random, seed, fbData, camoContent, userKeyData, reinforce, camoEmissive, forceEmissive, secondPart, defaultAO);
                 partCache.put(key, cachedParts);
             }
             if (!cachedParts.isEmpty())
@@ -261,18 +261,8 @@ public final class FramedBlockModel extends AbstractFramedBlockModel
         return side != null && (cullMask & (1 << side.ordinal())) == 0;
     }
 
-    private PartCacheKey computeCacheKey(
-            BlockAndTintGetter level,
-            BlockPos pos,
-            RandomSource random,
-            CamoContent<?> camo,
-            @Nullable Object ctCtx,
-            boolean secondPart,
-            boolean emissive,
-            ModelData data
-    )
+    private static Object createCacheKey(CamoContent<?> camo, @Nullable Object ctCtx, boolean secondPart, boolean emissive, @Nullable Object userKeyData)
     {
-        Object userKeyData = geometry.computeCacheKeyUserData(level, pos, random, data);
         if (ctCtx != null || userKeyData != null || secondPart || emissive)
         {
             return new CompoundPartCacheKey(camo, ctCtx, secondPart, emissive, userKeyData);
@@ -282,13 +272,14 @@ public final class FramedBlockModel extends AbstractFramedBlockModel
     }
 
     private List<ExtendedBlockModelPart> buildPartCache(
-            PartCacheKey cacheKey,
             List<BlockModelPart> srcParts,
             BlockAndTintGetter level,
             BlockPos pos,
             RandomSource random,
             long seed,
-            ModelData data,
+            FramedBlockData fbData,
+            CamoContent<?> camo,
+            @Nullable Object cacheKeyUserData,
             boolean reinforce,
             boolean camoEmissive,
             boolean forceEmissive,
@@ -305,12 +296,12 @@ public final class FramedBlockModel extends AbstractFramedBlockModel
         {
             for (BakedQuad quad : quads)
             {
-                geometry.transformQuad(quadMap, quad, data);
+                geometry.transformQuad(quadMap, quad, fbData, cacheKeyUserData);
             }
             quads.clear();
         };
 
-        BlockState camoState = cacheKey.camo().getAsBlockState();
+        BlockState camoState = camo.getAsBlockState();
         for (BlockModelPart srcPart : srcParts)
         {
             partConsumer.accept(srcPart, camoState, false, true, !xformAll, true, camoState, modifier);
@@ -321,13 +312,13 @@ public final class FramedBlockModel extends AbstractFramedBlockModel
             partConsumer.accept(srcPart, ReinforcementModel.SHADER_STATE, false, true, !xformAll, false, ReinforcementModel.SHADER_STATE, modifier);
         }
         random.setSeed(seed);
-        geometry.collectAdditionalPartsCached(partConsumer, level, pos, random, data, cacheKey.userData());
+        geometry.collectAdditionalPartsCached(partConsumer, level, pos, random, fbData, cacheKeyUserData);
 
-        if (!parts.isEmpty())
+        if (!parts.isEmpty() && geometry.hasGeneratedOverlay(fbData, cacheKeyUserData))
         {
             OverlayModelPartGenerator overlayGenerator = new OverlayModelPartGenerator(parts, defaultAO.apply(TriState.DEFAULT));
             random.setSeed(seed);
-            geometry.generateOverlayParts(overlayGenerator, random, data, cacheKey.userData());
+            geometry.generateOverlayParts(overlayGenerator, random, cacheKeyUserData);
             overlayGenerator.flush();
         }
 
@@ -393,7 +384,7 @@ public final class FramedBlockModel extends AbstractFramedBlockModel
             boolean secondPart,
             boolean emissive,
             @Nullable Object userData
-    ) implements PartCacheKey { }
+    ) { }
 
     private record CullableBlockModelPart(ExtendedBlockModelPart wrapped, int cullMask) implements DelegateBlockModelPart
     {

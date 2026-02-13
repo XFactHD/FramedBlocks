@@ -1,6 +1,6 @@
 package io.github.xfacthd.framedblocks.client.model.geometry.interactive;
 
-import io.github.xfacthd.framedblocks.api.model.data.AbstractFramedBlockData;
+import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
 import io.github.xfacthd.framedblocks.api.model.data.QuadMap;
 import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.geometry.PartConsumer;
@@ -67,7 +67,7 @@ public class FramedFlowerPotGeometry extends Geometry
     }
 
     @Override
-    public void transformQuad(QuadMap quadMap, BakedQuad quad, ModelData modelData)
+    public void transformQuad(QuadMap quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
     {
         if (quad.direction() == Direction.DOWN)
         {
@@ -112,10 +112,10 @@ public class FramedFlowerPotGeometry extends Geometry
     }
 
     @Override
-    public void collectAdditionalPartsCached(PartConsumer consumer, BlockAndTintGetter level, BlockPos pos, RandomSource random, ModelData data, @Nullable Object cacheKeyUserData)
+    public void collectAdditionalPartsCached(PartConsumer consumer, BlockAndTintGetter level, BlockPos pos, RandomSource random, FramedBlockData blockData, @Nullable Object cacheKeyUserData)
     {
-        BlockState potState = FramedFlowerPotBlock.getFlowerPotState(getFlowerBlock(data));
-        if (!potState.isAir())
+        BlockState potState;
+        if (cacheKeyUserData instanceof Block block && !(potState = FramedFlowerPotBlock.getFlowerPotState(block)).isAir())
         {
             BlockStateModel potModel = ModelUtils.getModel(potState);
             consumer.acceptAll(potModel, level, pos, random, potState, true, false, false, false, potState, (quadMap, quads, side) ->
@@ -123,8 +123,7 @@ public class FramedFlowerPotGeometry extends Geometry
             );
         }
 
-        AbstractFramedBlockData fbData = data.get(AbstractFramedBlockData.PROPERTY);
-        boolean camoOccludes = fbData != null && fbData.unwrap(false).getCamoContent().canOcclude();
+        boolean camoOccludes = blockData.getCamoContent().canOcclude();
         BlockStateModel dirtModel = ModelUtils.getModel(DIRT_STATE);
         consumer.acceptAll(dirtModel, level, pos, random, DIRT_STATE, false, true, false, false, DIRT_STATE, (quadMap, quads, side) ->
         {

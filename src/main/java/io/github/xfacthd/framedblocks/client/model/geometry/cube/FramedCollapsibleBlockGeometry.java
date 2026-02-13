@@ -1,5 +1,6 @@
 package io.github.xfacthd.framedblocks.client.model.geometry.cube;
 
+import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
 import io.github.xfacthd.framedblocks.api.model.data.QuadMap;
 import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
@@ -41,7 +42,7 @@ public class FramedCollapsibleBlockGeometry extends Geometry
     }
 
     @Override
-    public void transformQuad(QuadMap quadMap, BakedQuad quad, ModelData data)
+    public void transformQuad(QuadMap quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object cacheKeyUserData)
     {
         Direction quadDir = quad.direction();
         if (collapsedFace == null || quadDir == collapsedFace.getOpposite())
@@ -50,7 +51,7 @@ public class FramedCollapsibleBlockGeometry extends Geometry
             return;
         }
 
-        int offsets = PackedCollapsibleBlockOffsets.get(data, state);
+        int offsets = PackedCollapsibleBlockOffsets.unwrap(cacheKeyUserData, state);
         float[] vertexPos = new float[] { 1F, 1F, 1F, 1F };
         boolean allSame = true;
         if (offsets != 0)
