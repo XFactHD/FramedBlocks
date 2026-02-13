@@ -37,7 +37,6 @@ public final class GhostRenderBehaviours
                 FBContent.BLOCK_FRAMED_COPPER_TORCH,
                 FBContent.BLOCK_FRAMED_REDSTONE_TORCH,
                 FBContent.BLOCK_FRAMED_HALF_SLOPE,
-                FBContent.BLOCK_FRAMED_DOUBLE_HALF_SLOPE,
                 FBContent.BLOCK_FRAMED_SMALL_CORNER_SLOPE_PANEL,
                 FBContent.BLOCK_FRAMED_LARGE_CORNER_SLOPE_PANEL,
                 FBContent.BLOCK_FRAMED_SMALL_INNER_CORNER_SLOPE_PANEL,
@@ -50,6 +49,7 @@ public final class GhostRenderBehaviours
                 FBContent.BLOCK_FRAMED_LARGE_INNER_PRISM_SLOPE_PANEL_CORNER
         ));
         event.registerBlocks(new StandingAndWallDoubleBlockGhostRenderBehaviour(), List.of(
+                FBContent.BLOCK_FRAMED_DOUBLE_HALF_SLOPE,
                 FBContent.BLOCK_FRAMED_SMALL_DOUBLE_CORNER_SLOPE_PANEL,
                 FBContent.BLOCK_FRAMED_LARGE_DOUBLE_CORNER_SLOPE_PANEL,
                 FBContent.BLOCK_FRAMED_INVERSE_DOUBLE_CORNER_SLOPE_PANEL,
