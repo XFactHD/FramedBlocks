@@ -1,1 +1,5 @@
 blank_issues_enabled: false
+contact_links:
+  - name: Fabric Port
+    url: https://github.com/XFactHD/FramedBlocks/issues?q=is%3Aissue%20state%3Aclosed%20label%3Afabric
+    about: There are no plans to support Fabric, see the linked issues for details.
