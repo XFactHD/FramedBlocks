@@ -6,6 +6,7 @@ import io.github.xfacthd.framedblocks.api.block.IBlockType;
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedDoubleBlockEntity;
+import io.github.xfacthd.framedblocks.api.block.overlay.BlockOverlay;
 import io.github.xfacthd.framedblocks.api.blueprint.BlueprintData;
 import io.github.xfacthd.framedblocks.api.camo.CamoContainerFactory;
 import io.github.xfacthd.framedblocks.api.camo.CamoList;
@@ -69,6 +70,7 @@ import io.github.xfacthd.framedblocks.common.item.PhantomPasteItem;
 import io.github.xfacthd.framedblocks.common.menu.FramedStorageMenu;
 import io.github.xfacthd.framedblocks.common.menu.FramingSawMenu;
 import io.github.xfacthd.framedblocks.common.menu.PoweredFramingSawMenu;
+import io.github.xfacthd.framedblocks.common.particle.BlockOverlayParticleOptions;
 import io.github.xfacthd.framedblocks.common.particle.FluidParticleOptions;
 import io.github.xfacthd.framedblocks.common.util.FramedCreativeTab;
 import io.github.xfacthd.framedblocks.common.util.registration.*;
@@ -433,6 +435,10 @@ public final class FBContent
             "wrench_mode",
             builder -> builder.persistent(WrenchRotationMode.CODEC).networkSynchronized(WrenchRotationMode.STREAM_CODEC)
     );
+    public static final DeferredDataComponentType<Holder<BlockOverlay>> DC_TYPE_BLOCK_OVERLAY = DATA_COMPONENTS.registerComponentType(
+            "block_overlay",
+            builder -> builder.persistent(BlockOverlay.CODEC).networkSynchronized(BlockOverlay.STREAM_CODEC)
+    );
     // endregion
 
     // region Items
@@ -732,6 +738,9 @@ public final class FBContent
     // region ParticleTypes
     public static final DeferredParticleType<FluidParticleOptions> FLUID_PARTICLE = PARTICLE_TYPES.registerParticleType(
             "fluid", false, FluidParticleOptions.CODEC, FluidParticleOptions.STREAM_CODEC
+    );
+    public static final DeferredParticleType<BlockOverlayParticleOptions> BLOCK_OVERLAY_PARTICLE = PARTICLE_TYPES.registerParticleType(
+            "block_overlay", false, BlockOverlayParticleOptions.CODEC, BlockOverlayParticleOptions.STREAM_CODEC
     );
     // endregion
 

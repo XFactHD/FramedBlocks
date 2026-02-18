@@ -47,7 +47,7 @@ public class MixinLevelRenderer
         if (cutoutLeaves != framedblocks$lastCutoutLeaves)
         {
             framedblocks$lastCutoutLeaves = cutoutLeaves;
-            CacheCleaner.clearModelCaches();
+            CacheCleaner.clearModelCaches(CacheCleaner.Reason.SETTINGS_CHANGED);
         }
     }
 }

@@ -3,12 +3,14 @@ package io.github.xfacthd.framedblocks.api.block;
 import com.google.common.base.Preconditions;
 import io.github.xfacthd.framedblocks.api.block.blockentity.FrameModifier;
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
+import io.github.xfacthd.framedblocks.api.block.overlay.BlockOverlay;
 import io.github.xfacthd.framedblocks.api.camo.CamoContainer;
 import io.github.xfacthd.framedblocks.api.camo.empty.EmptyCamoContainer;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.mixin.InvokerBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.LevelAccessor;
@@ -283,11 +285,13 @@ public final class BlockUtils
     )
     {
         CamoContainer<?, ?> camo = EmptyCamoContainer.EMPTY;
+        Holder<BlockOverlay> overlay = null;
         boolean[] modifiers = new boolean[MODIFIERS.length];
 
         if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
         {
             camo = be.getCamo();
+            overlay = be.getOverlay();
             for (FrameModifier modifier : MODIFIERS)
             {
                 modifiers[modifier.ordinal()] = modifier.isActive(be);
@@ -305,6 +309,7 @@ public final class BlockUtils
         if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
         {
             be.setCamo(camo, writeToCamoTwo);
+            be.setOverlay(overlay);
             for (FrameModifier modifier : MODIFIERS)
             {
                 modifier.setActive(be, modifiers[modifier.ordinal()]);

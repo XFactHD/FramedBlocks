@@ -3,10 +3,15 @@ package io.github.xfacthd.framedblocks.api.util;
 import net.minecraft.core.Direction;
 import org.jspecify.annotations.Nullable;
 
+import java.util.Set;
+
 final class Lookups
 {
     static final Direction.@Nullable Axis[] PERP_AXIS = buildPerpAxisMapping();
     static final @Nullable Direction[] NORMALS = makeNormalMapping();
+    static final Set<Direction>[] AXIS_TUBE_FACES = makeAxisTubeFaceMapping();
+    static final Set<Direction>[] AXIS_CAP_FACES = makeAxisCapFaceMapping();
+    static final int[] DIR_2D_VALUE_AROUND_AXIS = build2dValueMapping();
 
     static int makePerpAxisIndex(Direction.Axis axis1, Direction.Axis axis2)
     {
@@ -19,6 +24,11 @@ final class Lookups
         y = Math.clamp(y, -1, 1);
         z = Math.clamp(z, -1, 1);
         return ((x & 0b11) | (y & 0b11) << 2 | (z & 0b11) << 4);
+    }
+
+    static int make2dValueIndex(Direction.Axis axis, Direction dir)
+    {
+        return axis.ordinal() << 3 | dir.ordinal();
     }
 
     private static Direction.@Nullable Axis[] buildPerpAxisMapping()
@@ -36,6 +46,54 @@ final class Lookups
         for (Direction dir : Direction.values())
         {
             mapping[makeNormalIndex(dir.getStepX(), dir.getStepY(), dir.getStepZ())] = dir;
+        }
+        return mapping;
+    }
+
+    @SuppressWarnings("unchecked")
+    private static Set<Direction>[] makeAxisTubeFaceMapping()
+    {
+        Set<Direction>[] mapping = new Set[3];
+        for (Direction.Axis axis : Direction.Axis.values())
+        {
+            mapping[axis.ordinal()] = Set.copyOf(Direction.stream().filter(dir -> dir.getAxis() != axis).toList());
+        }
+        return mapping;
+    }
+
+    @SuppressWarnings("unchecked")
+    private static Set<Direction>[] makeAxisCapFaceMapping()
+    {
+        Set<Direction>[] mapping = new Set[3];
+        for (Direction.Axis axis : Direction.Axis.values())
+        {
+            mapping[axis.ordinal()] = Set.of(axis.getDirections());
+        }
+        return mapping;
+    }
+
+    private static int[] build2dValueMapping()
+    {
+        int[] mapping = new int[24];
+        for (Direction dir : Direction.values())
+        {
+            mapping[make2dValueIndex(Direction.Axis.Y, dir)] = dir.get2DDataValue();
+            mapping[make2dValueIndex(Direction.Axis.X, dir)] = switch (dir)
+            {
+                case SOUTH -> 0;
+                case DOWN -> 1;
+                case NORTH -> 2;
+                case UP -> 3;
+                default -> -1;
+            };
+            mapping[make2dValueIndex(Direction.Axis.Z, dir)] = switch (dir)
+            {
+                case EAST -> 0;
+                case DOWN -> 1;
+                case WEST -> 2;
+                case UP -> 3;
+                default -> -1;
+            };
         }
         return mapping;
     }

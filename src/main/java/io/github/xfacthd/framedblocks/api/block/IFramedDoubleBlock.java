@@ -7,6 +7,7 @@ import io.github.xfacthd.framedblocks.api.block.doubleblock.CamoGetter;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockParts;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockTopInteractionMode;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.SolidityCheck;
+import io.github.xfacthd.framedblocks.api.block.overlay.BlockOverlay;
 import io.github.xfacthd.framedblocks.api.block.render.ParticleHelper;
 import io.github.xfacthd.framedblocks.api.camo.CamoContainer;
 import io.github.xfacthd.framedblocks.api.camo.empty.EmptyCamoContainer;
@@ -16,6 +17,7 @@ import io.github.xfacthd.framedblocks.api.util.sound.SoundEventType;
 import io.github.xfacthd.framedblocks.api.util.sound.SoundUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -114,24 +116,24 @@ public interface IFramedDoubleBlock extends IFramedBlock
     {
         if (level.getBlockEntity(pos) instanceof FramedDoubleBlockEntity be)
         {
+            Holder<BlockOverlay> overlay = be.getOverlay();
             DoubleBlockTopInteractionMode mode = getCache(state).getTopInteractionMode();
-            if (mode.applyFirst()) ParticleHelper.spawnRunningParticles(be.getCamo(), level, pos, entity);
-            if (mode.applySecond()) ParticleHelper.spawnRunningParticles(be.getCamoTwo(), level, pos, entity);
+            if (mode.applyFirst()) ParticleHelper.spawnRunningParticles(be.getCamo(), overlay, state, level, pos, entity);
+            if (mode.applySecond()) ParticleHelper.spawnRunningParticles(be.getCamoTwo(), overlay, state, level, pos, entity);
             return true;
         }
         return false;
     }
 
     @Override
-    default boolean addLandingEffects(
-            BlockState state, ServerLevel level, BlockPos pos, BlockState sameState, LivingEntity entity, int count
-    )
+    default boolean addLandingEffects(BlockState state, ServerLevel level, BlockPos pos, BlockState sameState, LivingEntity entity, int count)
     {
         if (level.getBlockEntity(pos) instanceof FramedDoubleBlockEntity be)
         {
+            Holder<BlockOverlay> overlay = be.getOverlay();
             DoubleBlockTopInteractionMode mode = getCache(state).getTopInteractionMode();
-            if (mode.applyFirst()) ParticleHelper.spawnLandingParticles(be.getCamo(), level, pos, entity, count);
-            if (mode.applySecond()) ParticleHelper.spawnLandingParticles(be.getCamoTwo(), level, pos, entity, count);
+            if (mode.applyFirst()) ParticleHelper.spawnLandingParticles(be.getCamo(), overlay, state, level, pos, entity, count);
+            if (mode.applySecond()) ParticleHelper.spawnLandingParticles(be.getCamoTwo(), overlay, state, level, pos, entity, count);
             return true;
         }
         return false;

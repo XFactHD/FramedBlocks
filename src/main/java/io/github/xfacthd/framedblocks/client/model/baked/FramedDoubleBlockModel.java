@@ -44,7 +44,9 @@ public final class FramedDoubleBlockModel extends AbstractFramedBlockModel
         DoubleBlockStateCache cache = ((IFramedDoubleBlock) state.getBlock()).getCache(state);
         this.parts = cache.getParts();
         ModelData dummyData = ModelData.of(AbstractFramedBlockData.PROPERTY, new FramedDoubleBlockData(
-                parts, FramedBlockData.EMPTY, new FramedBlockData(EmptyCamoContainer.EMPTY, true)
+                parts,
+                new FramedBlockData(state, EmptyCamoContainer.EMPTY, false, null),
+                new FramedBlockData(state, EmptyCamoContainer.EMPTY, true, null)
         ));
         this.dummyLevel = SingleBlockFakeLevel.withoutRealLevel(state, dummyData);
         this.particleMode = cache.getTopInteractionMode();

@@ -3,6 +3,7 @@ package io.github.xfacthd.framedblocks.cmdtests.tests;
 import com.google.common.base.Stopwatch;
 import com.mojang.brigadier.context.CommandContext;
 import io.github.xfacthd.framedblocks.api.block.IFramedDoubleBlock;
+import io.github.xfacthd.framedblocks.api.block.overlay.BlockOverlay;
 import io.github.xfacthd.framedblocks.api.camo.CamoContainer;
 import io.github.xfacthd.framedblocks.api.camo.block.SimpleBlockCamoContainer;
 import io.github.xfacthd.framedblocks.api.camo.empty.EmptyCamoContainer;
@@ -10,6 +11,7 @@ import io.github.xfacthd.framedblocks.api.model.data.AbstractFramedBlockData;
 import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
 import io.github.xfacthd.framedblocks.api.model.data.FramedDoubleBlockData;
 import io.github.xfacthd.framedblocks.api.util.SingleBlockFakeLevel;
+import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.client.model.baked.FramedBlockModel;
 import io.github.xfacthd.framedblocks.cmdtests.SpecialTestCommand;
 import io.github.xfacthd.framedblocks.common.FBContent;
@@ -21,16 +23,19 @@ import net.minecraft.client.renderer.block.model.BlockStateModel;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.TriState;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.RandomSupport;
 import net.minecraft.world.level.levelgen.SingleThreadedRandomSource;
 import net.neoforged.neoforge.model.data.ModelData;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -50,11 +55,17 @@ public final class ModelPerformanceTest
     private static final Direction[] DIRECTIONS = Arrays.copyOf(Direction.values(), 7);
     private static final RandomSource RANDOM = new SingleThreadedRandomSource(RandomSupport.generateUniqueSeed());
     private static final CamoContainer<?, ?> TEST_CAMO_CONTAINER = new SimpleBlockCamoContainer(Blocks.STONE.defaultBlockState(), FBContent.FACTORY_BLOCK.get());
+    private static final Holder<BlockOverlay> TEST_OVERLAY = Holder.direct(new BlockOverlay(
+            Utils.id("minecraft", "block/grass_block_top"),
+            Utils.id("minecraft", "block/grass_block_side_overlay"),
+            BlockOverlay.SolidFace.TOP,
+            Holder.direct(Blocks.GRASS_BLOCK),
+            Holder.direct(Items.SHORT_GRASS),
+            false
+    ));
     private static final String STONE_NAME = BuiltInRegistries.BLOCK.getKey(Blocks.STONE).toString();
 
-    public static void testModelPerformance(
-            @SuppressWarnings("unused") CommandContext<CommandSourceStack> ctx, Consumer<Component> msgQueueAppender
-    )
+    public static void testModelPerformance(CommandContext<CommandSourceStack> ignored, Consumer<Component> msgQueueAppender)
     {
         Map<String, BlockState> testStates = new LinkedHashMap<>();
 
@@ -70,9 +81,10 @@ public final class ModelPerformanceTest
         msgQueueAppender.accept(Component.literal(PREFIX + "Warmup..."));
         for (BlockState state : testStates.values())
         {
-            testModel(state, makeModelData(state, EmptyCamoContainer.EMPTY, false));
-            testModel(state, makeModelData(state, TEST_CAMO_CONTAINER, false));
-            testModel(state, makeModelData(state, TEST_CAMO_CONTAINER, true));
+            testModel(state, makeModelData(state, EmptyCamoContainer.EMPTY, false, null));
+            testModel(state, makeModelData(state, TEST_CAMO_CONTAINER, false, null));
+            testModel(state, makeModelData(state, TEST_CAMO_CONTAINER, true, null));
+            testModel(state, makeModelData(state, TEST_CAMO_CONTAINER, false, TEST_OVERLAY));
         }
 
         msgQueueAppender.accept(Component.literal(PREFIX + "Measure..."));
@@ -85,10 +97,11 @@ public final class ModelPerformanceTest
             {
                 BlockState state = entry.getValue();
                 boolean stone = state.getBlock() == Blocks.STONE;
-                long timeEmpty = testModel(state, makeModelData(state, EmptyCamoContainer.EMPTY, false));
-                long timeCamo = stone ? 0 : testModel(state, makeModelData(state, TEST_CAMO_CONTAINER, false));
-                long timeCamoEmissive = stone ? 0 : testModel(state, makeModelData(state, TEST_CAMO_CONTAINER, true));
-                results.computeIfAbsent(entry.getKey(), $ -> new ArrayList<>()).add(new Result(timeEmpty, timeCamo, timeCamoEmissive));
+                long timeEmpty = testModel(state, makeModelData(state, EmptyCamoContainer.EMPTY, false, null));
+                long timeCamo = stone ? 0 : testModel(state, makeModelData(state, TEST_CAMO_CONTAINER, false, null));
+                long timeCamoEmissive = stone ? 0 : testModel(state, makeModelData(state, TEST_CAMO_CONTAINER, true, null));
+                long timeCamoOverlay = stone ? 0 : testModel(state, makeModelData(state, TEST_CAMO_CONTAINER, true, TEST_OVERLAY));
+                results.computeIfAbsent(entry.getKey(), $ -> new ArrayList<>()).add(new Result(timeEmpty, timeCamo, timeCamoEmissive, timeCamoOverlay));
             }
         }
 
@@ -110,12 +123,15 @@ public final class ModelPerformanceTest
         float[] allCamoRel = new float[results.size() - 1];
         long[] allCamoEmissiveAvg = new long[results.size() - 1];
         float[] allCamoEmissiveRel = new float[results.size() - 1];
+        long[] allCamoOverlayAvg = new long[results.size() - 1];
+        float[] allCamoOverlayRel = new float[results.size() - 1];
         results.forEach((name, values) ->
         {
             int index = count[0] - 1;
             computeAndPrintEntry(table, index, name, TestType.EMPTY, values, allEmptyAvg, allEmptyRel, stoneAvg);
             computeAndPrintEntry(table, index, name, TestType.CAMO, values, allCamoAvg, allCamoRel, stoneAvg);
             computeAndPrintEntry(table, index, name, TestType.CAMO_EMISSIVE, values, allCamoEmissiveAvg, allCamoEmissiveRel, stoneAvg);
+            computeAndPrintEntry(table, index, name, TestType.CAMO_OVERLAY, values, allCamoOverlayAvg, allCamoOverlayRel, stoneAvg);
 
             count[0]++;
         });
@@ -128,6 +144,8 @@ public final class ModelPerformanceTest
         int maxCamo = 0;
         int minCamoEmissive = 0;
         int maxCamoEmissive = 0;
+        int minCamoOverlay = 0;
+        int maxCamoOverlay = 0;
         for (int i = 0; i < results.size() - 1; i++)
         {
             minBlank = compare(allEmptyAvg, i, minBlank, true);
@@ -136,6 +154,8 @@ public final class ModelPerformanceTest
             maxCamo = compare(allCamoAvg, i, maxCamo, false);
             minCamoEmissive = compare(allCamoEmissiveAvg, i, minCamoEmissive, true);
             maxCamoEmissive = compare(allCamoEmissiveAvg, i, maxCamoEmissive, false);
+            minCamoOverlay = compare(allCamoOverlayAvg, i, minCamoOverlay, true);
+            maxCamoOverlay = compare(allCamoOverlayAvg, i, maxCamoOverlay, false);
         }
 
         data.append("Relative speed:\n")
@@ -145,6 +165,8 @@ public final class ModelPerformanceTest
                 .append("- Max (camo):           ").append("%6.2f (%6d us)\n".formatted(allCamoRel[maxCamo], allCamoAvg[maxCamo]))
                 .append("- Min (camo emissive):  ").append("%6.2f (%6d us)\n".formatted(allCamoEmissiveRel[minCamoEmissive], allCamoEmissiveAvg[minCamoEmissive]))
                 .append("- Max (camo emissive):  ").append("%6.2f (%6d us)\n".formatted(allCamoEmissiveRel[maxCamoEmissive], allCamoEmissiveAvg[maxCamoEmissive]))
+                .append("- Min (camo overlay):   ").append("%6.2f (%6d us)\n".formatted(allCamoOverlayRel[minCamoOverlay], allCamoOverlayAvg[minCamoOverlay]))
+                .append("- Max (camo overlay):   ").append("%6.2f (%6d us)\n".formatted(allCamoOverlayRel[maxCamoOverlay], allCamoOverlayAvg[maxCamoOverlay]))
                 .append("\n\n").append(table.print());
 
         Component msg = SpecialTestCommand.writeResultToFile("modelperf", "md", data.toString());
@@ -219,29 +241,30 @@ public final class ModelPerformanceTest
         return watch.elapsed(TimeUnit.MICROSECONDS);
     }
 
-    private static ModelData makeModelData(BlockState state, CamoContainer<?, ?> camo, boolean emissive)
+    private static ModelData makeModelData(BlockState state, CamoContainer<?, ?> camo, boolean emissive, @Nullable Holder<BlockOverlay> overlay)
     {
         AbstractFramedBlockData fbData;
         if (state.getBlock() instanceof IFramedDoubleBlock doubleBlock)
         {
-            FramedBlockData dataOne = new FramedBlockData(camo, FramedBlockData.NO_CULLED_FACES, false, false, emissive, TriState.DEFAULT);
-            FramedBlockData dataTwo = new FramedBlockData(camo, FramedBlockData.NO_CULLED_FACES, true, false, emissive, TriState.DEFAULT);
+            FramedBlockData dataOne = new FramedBlockData(state, camo, FramedBlockData.NO_CULLED_FACES, false, false, emissive, TriState.DEFAULT, overlay);
+            FramedBlockData dataTwo = new FramedBlockData(state, camo, FramedBlockData.NO_CULLED_FACES, true, false, emissive, TriState.DEFAULT, null);
             fbData = new FramedDoubleBlockData(doubleBlock.getCache(state).getParts(), dataOne, dataTwo);
         }
         else
         {
-            fbData = new FramedBlockData(camo, FramedBlockData.NO_CULLED_FACES, false, false, emissive, TriState.DEFAULT);
+            fbData = new FramedBlockData(state, camo, FramedBlockData.NO_CULLED_FACES, false, false, emissive, TriState.DEFAULT, overlay);
         }
         return ModelData.of(AbstractFramedBlockData.PROPERTY, fbData);
     }
 
-    private record Result(long timeEmpty, long timeCamo, long timeCamoEmissive) { }
+    private record Result(long timeEmpty, long timeCamo, long timeCamoEmissive, long timeCamoOverlay) { }
 
     private enum TestType
     {
         EMPTY("empty", Result::timeEmpty),
         CAMO("camo", Result::timeCamo),
         CAMO_EMISSIVE("camo emissive", Result::timeCamoEmissive),
+        CAMO_OVERLAY("camo overlay", Result::timeCamoOverlay),
         ;
 
         private final String suffix;

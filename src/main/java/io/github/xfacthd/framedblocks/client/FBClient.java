@@ -67,6 +67,7 @@ import io.github.xfacthd.framedblocks.client.render.debug.impl.ConnectionPredica
 import io.github.xfacthd.framedblocks.client.render.debug.impl.DoubleBlockPartDebugRenderer;
 import io.github.xfacthd.framedblocks.client.render.debug.impl.QuadWindingDebugRenderer;
 import io.github.xfacthd.framedblocks.client.render.item.TankItemRenderer;
+import io.github.xfacthd.framedblocks.client.render.particle.BlockOverlayParticle;
 import io.github.xfacthd.framedblocks.client.render.particle.FluidSpriteParticle;
 import io.github.xfacthd.framedblocks.client.render.special.BlockOutlineRenderer;
 import io.github.xfacthd.framedblocks.client.render.special.CollapsibleBlockIndicatorRenderer;
@@ -527,7 +528,7 @@ public final class FBClient
 
     private static void onModelsLoaded(ModelEvent.BakingCompleted event)
     {
-        CacheCleaner.clearExternalGeometryCaches();
+        CacheCleaner.clearExternalGeometryCaches(CacheCleaner.Reason.RELOAD);
         FramedBlockModel.collectCubeBaseModels(event.getBakingResult().blockStateModels());
 
         ModelWrappingManager.printWrappingInfo(event.getBakingResult().blockStateModels());
@@ -556,6 +557,7 @@ public final class FBClient
     private static void onRegisterParticleProviders(RegisterParticleProvidersEvent event)
     {
         event.registerSpecial(FBContent.FLUID_PARTICLE.get(), new FluidSpriteParticle.Provider());
+        event.registerSpecial(FBContent.BLOCK_OVERLAY_PARTICLE.value(), new BlockOverlayParticle.Provider());
     }
 
     private static void onRegisterClientExtensions(RegisterClientExtensionsEvent event)

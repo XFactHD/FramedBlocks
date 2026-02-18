@@ -5,7 +5,9 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.lighting.LightEngine;
 import net.neoforged.neoforge.client.model.pipeline.QuadBakingVertexConsumer;
+import net.neoforged.neoforge.client.model.quad.BakedNormals;
 import org.joml.Vector3f;
+import org.joml.Vector3fc;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -45,17 +47,21 @@ public final class OverlayQuadGenerator
 
     private static BakedQuad generateOverlayQuad(OverlayCacheKey key)
     {
+        return generateOverlayQuad(key, key.face(), key.normals(), key.sprite(), key.forceEmissive(), -1);
+    }
+
+    static BakedQuad generateOverlayQuad(VertexCoordProvider coords, Direction face, BakedNormals normals, TextureAtlasSprite sprite, boolean emissive, int tintIndex)
+    {
         QuadBakingVertexConsumer baker = new QuadBakingVertexConsumer();
 
-        TextureAtlasSprite sprite = key.sprite();
-        boolean emissive = key.forceEmissive();
-        UVInfo uvInfo = UVInfo.get(key.face());
+        UVInfo uvInfo = UVInfo.get(face);
         Vector3f scratch = new Vector3f();
 
-        baker.setDirection(key.face());
+        baker.setDirection(face);
         baker.setSprite(sprite);
         baker.setHasAmbientOcclusion(!emissive);
         baker.setShade(!emissive);
+        baker.setTintIndex(tintIndex);
         if (emissive)
         {
             baker.setLightEmission(LightEngine.MAX_LEVEL);
@@ -63,16 +69,16 @@ public final class OverlayQuadGenerator
 
         for (int i = 0; i < 4; i++)
         {
-            key.pos(i, scratch);
-            baker.addVertex(scratch.x, scratch.y, scratch.z);
+            Vector3fc pos = coords.pos(i);
+            baker.addVertex(pos.x(), pos.y(), pos.z());
 
-            float uSrc = scratch.get(uvInfo.uIdx());
-            float vSrc = scratch.get(uvInfo.vIdx());
+            float uSrc = pos.get(uvInfo.uIdx());
+            float vSrc = pos.get(uvInfo.vIdx());
             float u = uvInfo.uInv() ? (1F - uSrc) : uSrc;
             float v = uvInfo.vInv() ? (1F - vSrc) : vSrc;
             baker.setUv(sprite.getU(u), sprite.getV(v));
 
-            key.normal(i, scratch);
+            BakedNormals.unpack(normals.normal(i), scratch);
             baker.setNormal(scratch.x, scratch.y, scratch.z).setColor(-1);
         }
 
@@ -82,6 +88,11 @@ public final class OverlayQuadGenerator
     public static void clearCaches()
     {
         OVERLAY_CACHE.clear();
+    }
+
+    sealed interface VertexCoordProvider permits OverlayCacheKey, BlockOverlayCacheKey.QuadBounds
+    {
+        Vector3fc pos(int index);
     }
 
     private OverlayQuadGenerator() { }

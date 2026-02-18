@@ -6,6 +6,7 @@ import com.mojang.serialization.DataResult;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
+import io.github.xfacthd.framedblocks.api.block.overlay.BlockOverlay;
 import io.github.xfacthd.framedblocks.api.camo.CamoList;
 import io.github.xfacthd.framedblocks.api.model.AbstractFramedBlockModel;
 import io.github.xfacthd.framedblocks.api.model.item.AbstractFramedBlockItemModel;
@@ -40,6 +41,7 @@ import net.minecraft.client.resources.model.ModelBaker;
 import net.minecraft.client.resources.model.ResolvedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.RandomSource;
@@ -101,7 +103,7 @@ public final class FramedBlockItemModel extends AbstractFramedBlockItemModel
             {
                 modelInfo = Objects.requireNonNullElse(blockModel.getItemModelInfo(), ItemModelInfo.DEFAULT);
             }
-            ModelSet modelSet = getOrCreateModelSet(ItemStack.EMPTY, CamoList.EMPTY, modelInfo);
+            ModelSet modelSet = getOrCreateModelSet(ItemStack.EMPTY, CamoList.EMPTY, null, modelInfo);
             ArrayList<BakedQuad> allQuads = new ArrayList<>();
             for (ModelEntry modelEntry : modelSet.models)
             {
@@ -132,11 +134,12 @@ public final class FramedBlockItemModel extends AbstractFramedBlockItemModel
 
         boolean showCamo = ConfigView.Client.INSTANCE.shouldRenderItemModelsWithCamo();
         CamoList camos = showCamo ? stack.getOrDefault(Utils.DC_TYPE_CAMO_LIST, CamoList.EMPTY) : CamoList.EMPTY;
+        Holder<BlockOverlay> overlay = showCamo ? stack.get(Utils.DC_TYPE_BLOCK_OVERLAY) : null;
 
         ModelSet modelSet;
         try
         {
-            modelSet = getOrCreateModelSet(stack, camos, itemModelInfo);
+            modelSet = getOrCreateModelSet(stack, camos, overlay, itemModelInfo);
         }
         catch (Throwable ignored)
         {
@@ -148,6 +151,10 @@ public final class FramedBlockItemModel extends AbstractFramedBlockItemModel
         if (!modelSet.camos.isEmpty())
         {
             renderState.appendModelIdentityElement(modelSet.camos);
+        }
+        if (modelSet.overlay != null)
+        {
+            renderState.appendModelIdentityElement(modelSet.overlay);
         }
         if (modelSet.userData != null)
         {
@@ -167,15 +174,15 @@ public final class FramedBlockItemModel extends AbstractFramedBlockItemModel
         }
     }
 
-    private ModelSet getOrCreateModelSet(ItemStack stack, CamoList camos, ItemModelInfo itemModelInfo)
+    private ModelSet getOrCreateModelSet(ItemStack stack, CamoList camos, @Nullable Holder<BlockOverlay> overlay, ItemModelInfo itemModelInfo)
     {
         Object userData = itemModelInfo.computeCacheKey(stack);
-        Object cacheKey = userData != null ? new CompoundCacheKey(camos, userData) : camos;
+        Object cacheKey = userData != null || overlay != null ? new CompoundCacheKey(camos, overlay, userData) : camos;
         ModelSet modelSet = itemModelCache.get(cacheKey);
         if (modelSet == null)
         {
             BlockStateModel model = modelSupplier.get();
-            ModelData data = itemModelInfo.isDataRequired() || !camos.isEmpty() ? itemModelInfo.buildItemModelData(state, camos) : ModelData.EMPTY;
+            ModelData data = itemModelInfo.isDataRequired() || !camos.isEmpty() ? itemModelInfo.buildItemModelData(state, camos, overlay) : ModelData.EMPTY;
             BlockAndTintGetter level = SingleBlockFakeLevel.withoutRealLevel(state, data);
 
             List<ModelEntry> models = new ArrayList<>();
@@ -210,7 +217,7 @@ public final class FramedBlockItemModel extends AbstractFramedBlockItemModel
             }
 
             ModelRenderProperties renderProps = new ModelRenderProperties(true, model.particleIcon(EmptyBlockAndTintGetter.INSTANCE, BlockPos.ZERO, state), itemTransforms);
-            modelSet = new ModelSet(models, renderProps, camos, userData, animated);
+            modelSet = new ModelSet(models, renderProps, camos, overlay, userData, animated);
             itemModelCache.put(cacheKey, modelSet);
         }
         return modelSet;
@@ -244,9 +251,16 @@ public final class FramedBlockItemModel extends AbstractFramedBlockItemModel
         }
     }
 
-    private record CompoundCacheKey(CamoList camos, Object userData) { }
+    private record CompoundCacheKey(CamoList camos, @Nullable Holder<BlockOverlay> overlay, @Nullable Object userData) { }
 
-    private record ModelSet(List<ModelEntry> models, ModelRenderProperties properties, CamoList camos, @Nullable Object userData, boolean animated) { }
+    private record ModelSet(
+            List<ModelEntry> models,
+            ModelRenderProperties properties,
+            CamoList camos,
+            @Nullable Holder<BlockOverlay> overlay,
+            @Nullable Object userData,
+            boolean animated
+    ) { }
 
     private record ModelEntry(List<BakedQuad> quads, RenderType renderType) { }
 

@@ -6,6 +6,7 @@ import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.IBlockType;
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.api.block.cache.StateCache;
+import io.github.xfacthd.framedblocks.api.block.overlay.BlockOverlay;
 import io.github.xfacthd.framedblocks.api.block.render.CullingHelper;
 import io.github.xfacthd.framedblocks.api.blueprint.BlueprintData;
 import io.github.xfacthd.framedblocks.api.camo.CamoContainer;
@@ -21,6 +22,7 @@ import io.github.xfacthd.framedblocks.api.util.ConfigView;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponentGetter;
 import net.minecraft.core.component.DataComponentMap;
@@ -75,6 +77,7 @@ public class FramedBlockEntity extends BlockEntity
 {
     private static final Logger LOGGER = LogUtils.getLogger();
     public static final String CAMO_NBT_KEY = "camo";
+    public static final String OVERLAY_NBT_KEY = "overlay";
     /**
      * {@link InteractionResult} marker instance to consume the interaction and communicate a failed camo interaction
      */
@@ -89,6 +92,8 @@ public class FramedBlockEntity extends BlockEntity
     private final boolean[] culledFaces = new boolean[6];
     private StateCache stateCache;
     private CamoContainer<?, ?> camoContainer = EmptyCamoContainer.EMPTY;
+    @Nullable
+    private Holder<BlockOverlay> overlay = null;
     private boolean glowing = false;
     private boolean intangible = false;
     private boolean reinforced = false;
@@ -657,6 +662,27 @@ public class FramedBlockEntity extends BlockEntity
         return !reinforced && camoContainer.getContent().isIgnitedByLava(level(), worldPosition, face);
     }
 
+    public boolean hasOverlay()
+    {
+        return overlay != null;
+    }
+
+    @Nullable
+    public Holder<BlockOverlay> getOverlay()
+    {
+        return overlay;
+    }
+
+    public void setOverlay(@Nullable Holder<BlockOverlay> overlay)
+    {
+        if (overlay != this.overlay)
+        {
+            this.overlay = overlay;
+            setChangedWithoutSignalUpdate();
+            level().sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
+        }
+    }
+
     public final void setGlowing(boolean glowing)
     {
         if (this.glowing != glowing)
@@ -848,6 +874,10 @@ public class FramedBlockEntity extends BlockEntity
                 drops.accept(modifier.getDefaultStack());
             }
         }
+        if (overlay != null)
+        {
+            drops.accept(overlay.value().sourceItem().value().getDefaultInstance());
+        }
     }
 
     void addCamoDrops(Consumer<ItemStack> drops)
@@ -957,6 +987,7 @@ public class FramedBlockEntity extends BlockEntity
     protected void writeToDataPacket(ValueOutput valueOutput)
     {
         CamoContainerHelper.writeToNetwork(valueOutput.child(CAMO_NBT_KEY), camoContainer);
+        valueOutput.storeNullable(OVERLAY_NBT_KEY, BlockOverlay.CODEC, overlay);
         valueOutput.putByte("flags", writeFlags());
     }
 
@@ -977,6 +1008,13 @@ public class FramedBlockEntity extends BlockEntity
 
             needUpdate = true;
             needCullingUpdate = true;
+        }
+
+        Holder<BlockOverlay> newOverlay = valueInput.read(OVERLAY_NBT_KEY, BlockOverlay.CODEC).orElse(null);
+        if (newOverlay != overlay)
+        {
+            overlay = newOverlay;
+            needUpdate = true;
         }
 
         byte flags = valueInput.getByteOr("flags", (byte) 0);
@@ -1031,6 +1069,7 @@ public class FramedBlockEntity extends BlockEntity
     protected void writeUpdateTag(ValueOutput valueOutput)
     {
         CamoContainerHelper.writeToNetwork(valueOutput.child(CAMO_NBT_KEY), camoContainer);
+        valueOutput.storeNullable(OVERLAY_NBT_KEY, BlockOverlay.CODEC, overlay);
         valueOutput.putByte("flags", writeFlags());
     }
 
@@ -1041,6 +1080,8 @@ public class FramedBlockEntity extends BlockEntity
         {
             cullStateDirty = true;
         }
+
+        overlay = valueInput.read(OVERLAY_NBT_KEY, BlockOverlay.CODEC).orElse(null);
 
         byte flags = valueInput.getByteOr("flags", (byte) 0);
         glowing = readFlag(flags, FLAG_GLOWING);
@@ -1118,7 +1159,7 @@ public class FramedBlockEntity extends BlockEntity
     {
         // The view-blocking value is never resolved from the second part, no point in computing it twice
         TriState viewBlocking = secondPart ? TriState.DEFAULT : Utils.toTriState(state.isSuffocating(level(), worldPosition));
-        return new FramedBlockData(camo, cullData, secondPart, reinforced, emissive, viewBlocking);
+        return new FramedBlockData(state, camo, cullData, secondPart, reinforced, emissive, viewBlocking, overlay);
     }
 
     protected void attachAdditionalModelData(ModelData.Builder builder) { }
@@ -1132,6 +1173,7 @@ public class FramedBlockEntity extends BlockEntity
         return appendCustomBlueprintData(new BlueprintData(
                 getBlockState().getBlock(),
                 collectCamosForBlueprint(),
+                Optional.ofNullable(overlay),
                 glowing,
                 intangible,
                 reinforced,
@@ -1154,6 +1196,7 @@ public class FramedBlockEntity extends BlockEntity
     public final void applyBlueprintData(BlueprintData blueprintData)
     {
         applyCamosFromBlueprint(blueprintData);
+        setOverlay(blueprintData.overlay().orElse(null));
         setGlowing(blueprintData.glowing());
         setIntangible(blueprintData.intangible());
         setReinforced(blueprintData.reinforced());
@@ -1176,6 +1219,7 @@ public class FramedBlockEntity extends BlockEntity
     public void removeComponentsFromTag(ValueOutput valueOutput)
     {
         valueOutput.discard(CAMO_NBT_KEY);
+        valueOutput.discard(OVERLAY_NBT_KEY);
         valueOutput.discard("glowing");
         valueOutput.discard("intangible");
         valueOutput.discard("reinforced");
@@ -1194,6 +1238,11 @@ public class FramedBlockEntity extends BlockEntity
         {
             builder.set(Utils.DC_TYPE_FRAME_CONFIG, cfg);
         }
+
+        if (overlay != null)
+        {
+            builder.set(Utils.DC_TYPE_BLOCK_OVERLAY, overlay);
+        }
     }
 
     protected void collectCamoComponents(DataComponentMap.Builder builder)
@@ -1210,6 +1259,7 @@ public class FramedBlockEntity extends BlockEntity
         applyMiscComponents(input);
 
         input.getOrDefault(Utils.DC_TYPE_FRAME_CONFIG, FrameConfig.DEFAULT).apply(this);
+        overlay = input.get(Utils.DC_TYPE_BLOCK_OVERLAY);
     }
 
     protected void applyCamoComponents(DataComponentGetter input)
@@ -1227,6 +1277,7 @@ public class FramedBlockEntity extends BlockEntity
     public void saveAdditional(ValueOutput valueOutput)
     {
         valueOutput.store(CAMO_NBT_KEY, CamoContainerHelper.CODEC, camoContainer);
+        valueOutput.storeNullable(OVERLAY_NBT_KEY, BlockOverlay.CODEC, overlay);
         valueOutput.putBoolean("glowing", glowing);
         valueOutput.putBoolean("intangible", intangible);
         valueOutput.putBoolean("reinforced", reinforced);
@@ -1242,6 +1293,7 @@ public class FramedBlockEntity extends BlockEntity
         super.loadAdditional(valueInput);
 
         camoContainer = loadAndValidateCamo(valueInput, CAMO_NBT_KEY);
+        overlay = valueInput.read(OVERLAY_NBT_KEY, BlockOverlay.CODEC).orElse(null);
         glowing = valueInput.getBooleanOr("glowing", false);
         intangible = valueInput.getBooleanOr("intangible", false);
         reinforced = valueInput.getBooleanOr("reinforced", false);

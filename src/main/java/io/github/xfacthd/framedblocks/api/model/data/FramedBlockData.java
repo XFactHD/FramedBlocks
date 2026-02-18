@@ -1,37 +1,54 @@
 package io.github.xfacthd.framedblocks.api.model.data;
 
 import io.github.xfacthd.framedblocks.api.block.cache.StateCache;
+import io.github.xfacthd.framedblocks.api.block.overlay.BlockOverlay;
 import io.github.xfacthd.framedblocks.api.camo.CamoContainer;
 import io.github.xfacthd.framedblocks.api.camo.CamoContent;
 import io.github.xfacthd.framedblocks.api.camo.empty.EmptyCamoContainer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
 import net.minecraft.util.TriState;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jspecify.annotations.Nullable;
 
 public final class FramedBlockData extends AbstractFramedBlockData
 {
     public static final boolean[] NO_CULLED_FACES = new boolean[0];
-    public static final FramedBlockData EMPTY = new FramedBlockData(EmptyCamoContainer.EMPTY, false);
+    public static final FramedBlockData EMPTY = new FramedBlockData(null, EmptyCamoContainer.EMPTY, false, null);
     private static final int FULL_FACE_INVERSION_MASK = 0b111111;
     private static final int FLAG_SECOND_PART = 1;
     private static final int FLAG_REINFORCED = 1 << 1;
     private static final int FLAG_EMISSIVE = 1 << 2;
 
+    @Nullable
+    private final BlockState outerState;
     private final CamoContainer<?, ?> camoContainer;
     private final CamoContent<?> camoContent;
     private final byte hidden;
     private final byte flags;
     private final TriState viewBlocking;
+    @Nullable
+    private final Holder<BlockOverlay> overlay;
 
-    public FramedBlockData(CamoContainer<?, ?> camoContent, boolean secondPart)
+    public FramedBlockData(@Nullable BlockState outerState, CamoContainer<?, ?> camoContent, boolean secondPart, @Nullable Holder<BlockOverlay> overlay)
     {
-        this(camoContent, NO_CULLED_FACES, secondPart, false, false, TriState.DEFAULT);
+        this(outerState, camoContent, NO_CULLED_FACES, secondPart, false, false, TriState.DEFAULT, overlay);
     }
 
-    public FramedBlockData(CamoContainer<?, ?> camoContainer, boolean[] hidden, boolean secondPart, boolean reinforced, boolean emissive, TriState viewBlocking)
+    public FramedBlockData(
+            @Nullable BlockState outerState,
+            CamoContainer<?, ?> camoContainer,
+            boolean[] hidden,
+            boolean secondPart,
+            boolean reinforced,
+            boolean emissive,
+            TriState viewBlocking,
+            @Nullable Holder<BlockOverlay> overlay
+    )
     {
+        this.outerState = outerState;
         this.camoContainer = camoContainer;
         this.camoContent = camoContainer.getContent();
         byte mask = 0;
@@ -49,6 +66,13 @@ public final class FramedBlockData extends AbstractFramedBlockData
         if (emissive) flags |= FLAG_EMISSIVE;
         this.flags = flags;
         this.viewBlocking = viewBlocking;
+        this.overlay = overlay;
+    }
+
+    @Nullable
+    public BlockState getOuterState()
+    {
+        return outerState;
     }
 
     public CamoContainer<?, ?> getCamoContainer()
@@ -127,6 +151,13 @@ public final class FramedBlockData extends AbstractFramedBlockData
     public TriState isViewBlocking()
     {
         return viewBlocking;
+    }
+
+    @Override
+    @Nullable
+    public Holder<BlockOverlay> getBlockOverlay()
+    {
+        return overlay;
     }
 
     @Override

@@ -37,9 +37,9 @@ import java.util.Objects;
 public class DoubleBlockPartDebugRenderer implements BlockDebugRenderer<FramedDoubleBlockEntity>
 {
     public static final DoubleBlockPartDebugRenderer INSTANCE = new DoubleBlockPartDebugRenderer();
-    private static final FramedBlockData MODEL_DATA = new FramedBlockData(new SimpleBlockCamoContainer(
+    private static final FramedBlockData MODEL_DATA = new FramedBlockData(null, new SimpleBlockCamoContainer(
             Blocks.STONE.defaultBlockState(), FBContent.FACTORY_BLOCK.get()
-    ), false);
+    ), false, null);
     private static final ContextKey<BlockPartRenderState> DATA_KEY = new ContextKey<>(Utils.id("double_block_part_debug_renderer"));
     private static final int COLOR_PRIMARY = 0xFFFF0000;
     private static final int COLOR_SECONDARY = 0xFF00FF00;

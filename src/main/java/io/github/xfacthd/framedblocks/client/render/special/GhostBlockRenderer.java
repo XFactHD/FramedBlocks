@@ -13,6 +13,7 @@ import com.mojang.blaze3d.vertex.MeshData;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.blaze3d.vertex.VertexFormat;
+import io.github.xfacthd.framedblocks.api.block.overlay.BlockOverlay;
 import io.github.xfacthd.framedblocks.api.camo.CamoList;
 import io.github.xfacthd.framedblocks.api.ghost.GhostRenderBehaviour;
 import io.github.xfacthd.framedblocks.api.ghost.RegisterGhostRenderBehavioursEvent;
@@ -32,6 +33,7 @@ import net.minecraft.client.renderer.block.model.BlockStateModel;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.state.LevelRenderState;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.context.ContextKey;
 import net.minecraft.util.profiling.Profiler;
@@ -195,8 +197,10 @@ public final class GhostBlockRenderer
         profiler.push("get_camo");
         CamoList camo = behaviour.readCamo(stack, proxiedStack, renderPass);
         camo = behaviour.postProcessCamo(stack, proxiedStack, context, renderState, renderPass, camo);
-        profiler.popPush("build_modeldata"); //get_camo
-        ModelData modelData = behaviour.buildModelData(stack, proxiedStack, context, renderState, renderPass, camo);
+        profiler.popPush("get_overlay"); // get_camo
+        Holder<BlockOverlay> overlay = behaviour.readBlockOverlay(stack, proxiedStack, renderPass);
+        profiler.popPush("build_modeldata"); //get_overlay
+        ModelData modelData = behaviour.buildModelData(stack, proxiedStack, context, renderState, renderPass, camo, overlay);
         profiler.pop(); //get_camo
 
         profiler.push("append_modeldata");

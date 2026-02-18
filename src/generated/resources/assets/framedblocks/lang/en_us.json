@@ -350,6 +350,8 @@
   "desc.framedblocks.block.fluid_tank.contents.empty": "Empty",
   "desc.framedblocks.block.stored_camo": "Camo: %s",
   "desc.framedblocks.block.stored_camo_multi": "Camos: %s",
+  "desc.framedblocks.blueprint.overlay": "Overlay: %s",
+  "desc.framedblocks.blueprint.overlay.none": "None",
   "desc.framedblocks.blueprint_block": "Contained Block: %s",
   "desc.framedblocks.blueprint_cant_copy": "[Framed Blueprint] This block can currently not be copied!",
   "desc.framedblocks.blueprint_cant_place_fluid_camo": "[Framed Blueprint] Copying blocks with fluid camos is currently not possible!",

@@ -38,7 +38,7 @@ public class FramedClientBlockExtensions implements IClientBlockExtensions
             BlockState state, Level level, BlockHitResult hit, FramedBlockEntity be, ParticleEngine engine
     )
     {
-        ParticleHelper.Client.addHitEffects(state, level, hit, be.getCamo().getContent(), engine);
+        ParticleHelper.Client.addHitEffects(state, level, hit, be.getCamo().getContent(), be.getOverlay(), engine);
         return true;
     }
 
@@ -57,7 +57,7 @@ public class FramedClientBlockExtensions implements IClientBlockExtensions
             BlockState state, Level level, BlockPos pos, FramedBlockEntity be, ParticleEngine engine
     )
     {
-        ParticleHelper.Client.addDestroyEffects(state, level, pos, be.getCamo().getContent(), engine);
+        ParticleHelper.Client.addDestroyEffects(state, level, pos, be.getCamo().getContent(), be.getOverlay(), engine);
         return true;
     }
 

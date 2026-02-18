@@ -4,6 +4,7 @@
   - Create a `FullFacePredicate` indicating on which sides the full face is occupied and should use the uncached path in the model
   - Create a `SideSkipPredicate` indicating whether the given face of a given state should be culled in the presence of the given neighbor state
   - Create a `ConnectionPredicate` indicating which edges of a given face can participate in connected textures handling
+  - Create a `BlockOverlayPredicate` indicating how solid and edge textures apply to "uncertain" faces
   - Create a `ShapeGenerator` providing the `VoxelShape`s to be used by the block:
     - If the block handles the shapes itself (i.e. when extending a vanilla block), return `ShapeGenerator.EMPTY`
     - If the block only has a single shape, return `ShapeGenerator.singleShape()`
@@ -28,7 +29,7 @@
   - Create the "client item" file via `AbstractFramedBlockModelProvider#simpleFramedBlockWithItem()` or `AbstractFramedBlockModelProvider#framedBlockItemModel()`
 - If the block has sloped edges, register an `OutlineRenderer` in `RegisterOutlineRenderersEvent`
 - If the block needs custom handling in the placement preview, register a `GhostRenderBehaviour` in `RegisterGhostRenderBehavioursEvent`
-  - All double blocks must have `DoubleBlockGhostRenderBehaviour` or a subclass thereof registered as their ghost render behaviour
+  - All double blocks must have `DoubleBlockGhostRenderBehaviour` or a subclass thereof registered as their ghost render behavior
 - If the block needs custom handling when copied by a Framed Blueprint, register a `BlueprintCopyBehaviour` in `RegisterBlueprintCopyBehavioursEvent`
 - To participate in dev-only debug renderers, the debug renderers must be attached to the `BlockEntityType`s in `AttachDebugRenderersEvent`
 - For visually correct and safe particle handling, all blocks must have a custom `IClientBlockExtensions` attached in `RegisterClientExtensionsEvent`

@@ -1,5 +1,6 @@
 package io.github.xfacthd.framedblocks.client.data.ghost;
 
+import io.github.xfacthd.framedblocks.api.block.overlay.BlockOverlay;
 import io.github.xfacthd.framedblocks.api.blueprint.BlueprintData;
 import io.github.xfacthd.framedblocks.api.camo.CamoList;
 import io.github.xfacthd.framedblocks.api.ghost.GhostRenderBehaviour;
@@ -7,6 +8,7 @@ import io.github.xfacthd.framedblocks.client.render.special.GhostBlockRenderer;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.item.FramedBlueprintItem;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.BlockItemStateProperties;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -135,13 +137,32 @@ public final class BlueprintGhostRenderBehaviour implements GhostRenderBehaviour
     }
 
     @Override
-    public ModelData buildModelData(ItemStack stack, @Nullable ItemStack proxiedStack, BlockPlaceContext ctx, BlockState renderState, int renderPass, CamoList camo)
+    @Nullable
+    public Holder<BlockOverlay> readBlockOverlay(ItemStack stack, @Nullable ItemStack proxiedStack, int renderPass)
+    {
+        if (proxiedStack == null)
+        {
+            return null;
+        }
+        return proxyBehaviour(proxiedStack).readBlockOverlay(stack, proxiedStack, renderPass);
+    }
+
+    @Override
+    public ModelData buildModelData(
+            ItemStack stack,
+            @Nullable ItemStack proxiedStack,
+            BlockPlaceContext ctx,
+            BlockState renderState,
+            int renderPass,
+            CamoList camo,
+            @Nullable Holder<BlockOverlay> overlay
+    )
     {
         if (proxiedStack == null)
         {
             return ModelData.EMPTY;
         }
-        return proxyBehaviour(proxiedStack).buildModelData(stack, proxiedStack, ctx, renderState, renderPass, camo);
+        return proxyBehaviour(proxiedStack).buildModelData(stack, proxiedStack, ctx, renderState, renderPass, camo, overlay);
     }
 
     @Override

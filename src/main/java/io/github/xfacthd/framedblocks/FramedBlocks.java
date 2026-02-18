@@ -16,6 +16,7 @@ import io.github.xfacthd.framedblocks.common.data.StateCacheBuilder;
 import io.github.xfacthd.framedblocks.common.data.camo.CamoContainerFactories;
 import io.github.xfacthd.framedblocks.common.data.conpreds.ConnectionPredicates;
 import io.github.xfacthd.framedblocks.common.data.cullupdate.CullingUpdateTracker;
+import io.github.xfacthd.framedblocks.common.data.dynreg.DynamicRegistrySetup;
 import io.github.xfacthd.framedblocks.common.data.facepreds.FullFacePredicates;
 import io.github.xfacthd.framedblocks.common.data.shapes.ShapeReloader;
 import io.github.xfacthd.framedblocks.common.data.skippreds.SideSkipPredicates;
@@ -53,6 +54,7 @@ public final class FramedBlocks
         modBus.addListener(BlueprintBehaviours::onRegisterBlueprintCopyBehaviours);
         modBus.addListener(DataMapsSetup::onRegisterDataMapTypes);
         modBus.addListener(FramedBlocks::onExtendPoiTypes);
+        modBus.addListener(DynamicRegistrySetup::onCreateDatapackRegistries);
 
         NeoForge.EVENT_BUS.addListener(EventHandler::onBlockLeftClick);
         NeoForge.EVENT_BUS.addListener(EventHandler::onBlockRightClick);

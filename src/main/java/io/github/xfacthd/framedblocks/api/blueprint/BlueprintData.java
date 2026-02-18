@@ -4,10 +4,12 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
+import io.github.xfacthd.framedblocks.api.block.overlay.BlockOverlay;
 import io.github.xfacthd.framedblocks.api.camo.CamoList;
 import io.github.xfacthd.framedblocks.api.camo.CamoPrinter;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentGetter;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.TypedDataComponent;
@@ -32,6 +34,7 @@ import java.util.function.Supplier;
 public record BlueprintData(
         Block block,
         CamoList camos,
+        Optional<Holder<BlockOverlay>> overlay,
         boolean glowing,
         boolean intangible,
         boolean reinforced,
@@ -45,6 +48,7 @@ public record BlueprintData(
     public static final Codec<BlueprintData> CODEC = RecordCodecBuilder.create(inst -> inst.group(
             BuiltInRegistries.BLOCK.byNameCodec().fieldOf("block").forGetter(BlueprintData::block),
             CamoList.CODEC.fieldOf("camos").forGetter(BlueprintData::camos),
+            BlockOverlay.CODEC.optionalFieldOf("overlay").forGetter(BlueprintData::overlay),
             Codec.BOOL.fieldOf("glowing").forGetter(BlueprintData::glowing),
             Codec.BOOL.fieldOf("intangible").forGetter(BlueprintData::intangible),
             Codec.BOOL.fieldOf("reinforced").forGetter(BlueprintData::reinforced),
@@ -57,6 +61,8 @@ public record BlueprintData(
             BlueprintData::block,
             CamoList.STREAM_CODEC,
             BlueprintData::camos,
+            ByteBufCodecs.optional(BlockOverlay.STREAM_CODEC),
+            BlueprintData::overlay,
             ByteBufCodecs.BOOL,
             BlueprintData::glowing,
             ByteBufCodecs.BOOL,
@@ -71,14 +77,16 @@ public record BlueprintData(
             BlueprintData::customData,
             BlueprintData::new
     );
-    public static final BlueprintData EMPTY = new BlueprintData(Blocks.AIR, CamoList.EMPTY, false, false, false, false, BlockItemStateProperties.EMPTY, Optional.empty());
+    public static final BlueprintData EMPTY = new BlueprintData(Blocks.AIR, CamoList.EMPTY, Optional.empty(), false, false, false, false, BlockItemStateProperties.EMPTY, Optional.empty());
     public static final String CONTAINED_BLOCK = "desc.framedblocks.blueprint_block";
+    public static final String STORED_OVERLAY = Utils.translationKey("desc", "blueprint.overlay");
     public static final String IS_ILLUMINATED = "desc.framedblocks.blueprint_illuminated";
     public static final String IS_INTANGIBLE = "desc.framedblocks.blueprint_intangible";
     public static final String IS_REINFORCED = "desc.framedblocks.blueprint_reinforced";
     public static final String IS_EMISSIVE = "desc.framedblocks.blueprint_emissive";
     public static final String MISSING_MATERIALS = Utils.translationKey("desc", "blueprint_missing_materials");
     public static final MutableComponent BLOCK_INVALID = Utils.translate("desc", "blueprint_invalid").withStyle(ChatFormatting.RED);
+    public static final MutableComponent OVERLAY_NONE = Utils.translate("desc", "blueprint.overlay.none").withStyle(ChatFormatting.RED);
     public static final MutableComponent FALSE = Utils.translate("desc", "blueprint_false").withStyle(ChatFormatting.RED);
     public static final MutableComponent TRUE = Utils.translate("desc", "blueprint_true").withStyle(ChatFormatting.GREEN);
     public static final MutableComponent CANT_COPY = Utils.translate("desc", "blueprint_cant_copy").withStyle(ChatFormatting.RED);
@@ -105,7 +113,7 @@ public record BlueprintData(
 
     public BlueprintData withBlockState(BlockItemStateProperties newBlockState)
     {
-        return new BlueprintData(block, camos, glowing, intangible, reinforced, emissive, newBlockState, customData);
+        return new BlueprintData(block, camos, overlay, glowing, intangible, reinforced, emissive, newBlockState, customData);
     }
 
     public <T> BlueprintData withCustomData(Supplier<DataComponentType<T>> type, T data)
@@ -115,7 +123,7 @@ public record BlueprintData(
 
     public <T> BlueprintData withCustomData(DataComponentType<T> type, T data)
     {
-        return new BlueprintData(block, camos, glowing, intangible, reinforced, emissive, blockState, Optional.of(new TypedDataComponent<>(type, data)));
+        return new BlueprintData(block, camos, overlay, glowing, intangible, reinforced, emissive, blockState, Optional.of(new TypedDataComponent<>(type, data)));
     }
 
     @Override
@@ -129,9 +137,11 @@ public record BlueprintData(
 
         Component blockName = block == Blocks.AIR ? BLOCK_INVALID : block.getName().withStyle(ChatFormatting.WHITE);
         CamoList camos = block instanceof IFramedBlock fb ? fb.getCamosFromBlueprint(this) : CamoList.EMPTY;
+        Component overlayName = overlay.map(BlockOverlay::getName).orElse(OVERLAY_NONE);
 
         appender.accept(Component.translatable(CONTAINED_BLOCK, blockName).withStyle(ChatFormatting.GOLD));
         CamoPrinter.printCamoList(appender, camos, true);
+        appender.accept(Component.translatable(STORED_OVERLAY, overlayName).withStyle(ChatFormatting.GOLD));
         appender.accept(Component.translatable(IS_ILLUMINATED, glowing ? TRUE : FALSE).withStyle(ChatFormatting.GOLD));
         appender.accept(Component.translatable(IS_INTANGIBLE, intangible ? TRUE : FALSE).withStyle(ChatFormatting.GOLD));
         appender.accept(Component.translatable(IS_REINFORCED, reinforced ? TRUE : FALSE).withStyle(ChatFormatting.GOLD));

@@ -6,6 +6,7 @@ import io.github.xfacthd.framedblocks.api.predicate.contex.ConTexMode;
 import io.github.xfacthd.framedblocks.api.predicate.contex.ConnectionPredicate;
 import io.github.xfacthd.framedblocks.api.predicate.cull.SideSkipPredicate;
 import io.github.xfacthd.framedblocks.api.predicate.fullface.FullFacePredicate;
+import io.github.xfacthd.framedblocks.api.predicate.overlay.BlockOverlayPredicate;
 import io.github.xfacthd.framedblocks.api.shapes.CommonShapes;
 import io.github.xfacthd.framedblocks.api.shapes.ShapeGenerator;
 import io.github.xfacthd.framedblocks.common.data.conpreds.ConnectionPredicates;
@@ -363,6 +364,12 @@ public enum BlockType implements IBlockType
     }
 
     @Override
+    public BlockOverlayPredicate getBlockOverlayPredicate()
+    {
+        return BlockOverlayPredicate.NEVER;
+    }
+
+    @Override
     public ShapeGenerator getShapeGenerator()
     {
         return shapeGen;
@@ -420,6 +427,12 @@ public enum BlockType implements IBlockType
     public boolean canLockState()
     {
         return lockable;
+    }
+
+    @Override
+    public boolean supportsBlockOverlays()
+    {
+        return false;
     }
 
     @Override

@@ -21,7 +21,7 @@ public final class OneWayWindowClientBlockExtensions extends FramedClientBlockEx
     {
         if (state.getValue(PropertyHolder.NULLABLE_FACE) != NullableDirection.NONE)
         {
-            ParticleHelper.Client.addHitEffects(state, level, hit, FramedOneWayWindowBlock.GLASS_DUMMY_CAMO, engine);
+            ParticleHelper.Client.addHitEffects(state, level, hit, FramedOneWayWindowBlock.GLASS_DUMMY_CAMO, null, engine);
         }
         return super.addHitEffectsUnsuppressed(state, level, hit, be, engine);
     }
@@ -33,7 +33,7 @@ public final class OneWayWindowClientBlockExtensions extends FramedClientBlockEx
     {
         if (state.getValue(PropertyHolder.NULLABLE_FACE) != NullableDirection.NONE)
         {
-            ParticleHelper.Client.addDestroyEffects(state, level, pos, FramedOneWayWindowBlock.GLASS_DUMMY_CAMO, engine);
+            ParticleHelper.Client.addDestroyEffects(state, level, pos, FramedOneWayWindowBlock.GLASS_DUMMY_CAMO, null, engine);
         }
         return super.addDestroyEffectsUnsuppressed(state, level, pos, be, engine);
     }

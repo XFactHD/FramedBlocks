@@ -8,6 +8,7 @@ public final class ClientEventHandler
     public static void onClientDisconnect(@SuppressWarnings("unused") ClientPlayerNetworkEvent.LoggingOut event)
     {
         FramingSawRecipeCache.get(true).clear();
+        CacheCleaner.clearModelCaches(CacheCleaner.Reason.DISCONNECT);
     }
 
 

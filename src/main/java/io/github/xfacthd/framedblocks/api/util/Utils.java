@@ -2,6 +2,7 @@ package io.github.xfacthd.framedblocks.api.util;
 
 import com.google.common.base.Preconditions;
 import com.google.common.math.IntMath;
+import io.github.xfacthd.framedblocks.api.block.overlay.BlockOverlay;
 import io.github.xfacthd.framedblocks.api.camo.CamoList;
 import io.github.xfacthd.framedblocks.api.component.FrameConfig;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
@@ -109,6 +110,9 @@ public final class Utils
     );
     public static final DeferredDataComponentType<FrameConfig> DC_TYPE_FRAME_CONFIG = DeferredDataComponentType.createDataComponent(
             Utils.id("frame_config")
+    );
+    public static final DeferredDataComponentType<Holder<BlockOverlay>> DC_TYPE_BLOCK_OVERLAY = DeferredDataComponentType.createDataComponent(
+            Utils.id("block_overlay")
     );
     public static final DeferredDataComponentType<WrenchRotationMode> DC_TYPE_WRENCH_MODE = DeferredDataComponentType.createDataComponent(
             Utils.id("wrench_mode")
@@ -322,6 +326,22 @@ public final class Utils
         Preconditions.checkArgument(axisOne != axisTwo, "Provided axis must be perpendicular");
         int idx = Lookups.makePerpAxisIndex(axisOne, axisTwo);
         return Objects.requireNonNull(Lookups.PERP_AXIS[idx]);
+    }
+
+    public static Set<Direction> getAxisTubeFaces(Direction.Axis axis)
+    {
+        return Lookups.AXIS_TUBE_FACES[axis.ordinal()];
+    }
+
+    public static Set<Direction> getAxisCapFaces(Direction.Axis axis)
+    {
+        return Lookups.AXIS_CAP_FACES[axis.ordinal()];
+    }
+
+    public static int get2dValueAround(Direction.Axis axis, Direction dir)
+    {
+        Preconditions.checkArgument(axis != dir.getAxis(), "Direction must be perpendicular to axis");
+        return Lookups.DIR_2D_VALUE_AROUND_AXIS[Lookups.make2dValueIndex(axis, dir)];
     }
 
     public static boolean isNinetyDegree(Rotation rotation)

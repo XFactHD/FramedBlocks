@@ -420,6 +420,7 @@ public final class FramedLanguageProvider extends LanguageProvider
     private void addTooltipTranslations()
     {
         add(BlueprintData.CONTAINED_BLOCK, "Contained Block: %s");
+        add(BlueprintData.STORED_OVERLAY, "Overlay: %s");
         add(BlueprintData.IS_ILLUMINATED, "Illuminated: %s");
         add(BlueprintData.IS_INTANGIBLE, "Intangible: %s");
         add(BlueprintData.IS_REINFORCED, "Reinforced: %s");
@@ -429,6 +430,7 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(CamoPrinter.DOUBLE_CAMO_SEPARATOR_KEY, "%s | %s");
         add(CamoPrinter.MULTI_CAMO_ENTRY_PREFIX_KEY, "  - %s");
         add(BlueprintData.BLOCK_INVALID, "Invalid");
+        add(BlueprintData.OVERLAY_NONE, "None");
         add(BlueprintData.FALSE, "false");
         add(BlueprintData.TRUE, "true");
         add(BlueprintData.CANT_COPY, "[Framed Blueprint] This block can currently not be copied!");

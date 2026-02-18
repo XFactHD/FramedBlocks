@@ -438,20 +438,18 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension
     {
         if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
         {
-            ParticleHelper.spawnRunningParticles(be.getCamo(), level, pos, entity);
+            ParticleHelper.spawnRunningParticles(be.getCamo(), be.getOverlay(), state, level, pos, entity);
             return true;
         }
         return false;
     }
 
     @Override
-    default boolean addLandingEffects(
-            BlockState state, ServerLevel level, BlockPos pos, BlockState sameState, LivingEntity entity, int count
-    )
+    default boolean addLandingEffects(BlockState state, ServerLevel level, BlockPos pos, BlockState sameState, LivingEntity entity, int count)
     {
         if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
         {
-            ParticleHelper.spawnLandingParticles(be.getCamo(), level, pos, entity, count);
+            ParticleHelper.spawnLandingParticles(be.getCamo(), be.getOverlay(), state, level, pos, entity, count);
             return true;
         }
         return false;

@@ -1,11 +1,14 @@
 package io.github.xfacthd.framedblocks.api.model.data;
 
 import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockParts;
+import io.github.xfacthd.framedblocks.api.block.overlay.BlockOverlay;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.util.TriState;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jspecify.annotations.Nullable;
 
 public final class FramedDoubleBlockData extends AbstractFramedBlockData
 {
@@ -59,5 +62,12 @@ public final class FramedDoubleBlockData extends AbstractFramedBlockData
     public TriState isViewBlocking()
     {
         return dataOne.isViewBlocking();
+    }
+
+    @Override
+    @Nullable
+    public Holder<BlockOverlay> getBlockOverlay()
+    {
+        return dataOne.getBlockOverlay();
     }
 }

@@ -80,7 +80,7 @@ public final class KeyMappings
 
         if (KEYMAPPING_WIPE_CACHE.get().consumeClick())
         {
-            CacheCleaner.clearModelCaches();
+            CacheCleaner.clearModelCaches(CacheCleaner.Reason.MANUAL);
 
             //noinspection ConstantConditions
             Minecraft.getInstance().player.displayClientMessage(Component.literal("Model cache cleared"), true);

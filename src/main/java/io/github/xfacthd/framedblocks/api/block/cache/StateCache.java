@@ -3,6 +3,7 @@ package io.github.xfacthd.framedblocks.api.block.cache;
 import io.github.xfacthd.framedblocks.api.block.IBlockType;
 import io.github.xfacthd.framedblocks.api.predicate.contex.ConnectionPredicate;
 import io.github.xfacthd.framedblocks.api.predicate.fullface.FullFacePredicate;
+import io.github.xfacthd.framedblocks.api.predicate.overlay.BlockOverlayPredicate;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Util;
@@ -33,6 +34,8 @@ public class StateCache
     private final byte mayConnect;
     private final long conFullEdge;
     private final long conDetailed;
+    private final byte solidOverlay;
+    private final EdgeOverlayMask edgeOverlay;
 
     public StateCache(BlockState state, IBlockType type)
     {
@@ -40,9 +43,11 @@ public class StateCache
         byte mayConnect = 0;
         long conFullEdge = 0;
         long conDetailed = 0;
+        byte solidOverlay = 0;
 
         FullFacePredicate facePred = type.getFullFacePredicate();
         ConnectionPredicate conPred = type.getConnectionPredicate();
+        BlockOverlayPredicate overlayPredicate = type.getBlockOverlayPredicate();
         boolean supportsCt = type.supportsConnectedTextures();
 
         for (Direction side : DIRECTIONS)
@@ -51,6 +56,10 @@ public class StateCache
             if (facePred.test(state, side))
             {
                 fullFace |= sideBit;
+            }
+            if (overlayPredicate.supportsSolid(state, side, false))
+            {
+                solidOverlay |= sideBit;
             }
 
             if (!supportsCt)
@@ -95,6 +104,8 @@ public class StateCache
         this.mayConnect = mayConnect;
         this.conFullEdge = conFullEdge;
         this.conDetailed = conDetailed;
+        this.solidOverlay = solidOverlay;
+        this.edgeOverlay = EdgeOverlayMask.compute(state, overlayPredicate, false);
     }
 
     private StateCache()
@@ -103,6 +114,8 @@ public class StateCache
         this.mayConnect = 0;
         this.conFullEdge = 0;
         this.conDetailed = 0;
+        this.solidOverlay = 0;
+        this.edgeOverlay = EdgeOverlayMask.NEVER;
     }
 
     public final boolean hasAnyFullFace()
@@ -142,6 +155,18 @@ public class StateCache
         return conDetailed != 0;
     }
 
+    @ApiStatus.NonExtendable
+    public boolean supportsSolidOverlay(Direction side, boolean secondPart)
+    {
+        return (solidOverlay & (1 << side.ordinal())) != 0;
+    }
+
+    @ApiStatus.NonExtendable
+    public boolean supportsEdgeOverlay(Direction side, Direction edge, boolean secondPart, boolean nullCullFace, boolean unaligned)
+    {
+        return edgeOverlay.isSet(side, edge, nullCullFace, unaligned);
+    }
+
     @Override
     public boolean equals(Object other)
     {
@@ -154,7 +179,11 @@ public class StateCache
             return false;
         }
         StateCache that = (StateCache) other;
-        return fullFace == that.fullFace && conFullEdge == that.conFullEdge && conDetailed == that.conDetailed;
+        return fullFace == that.fullFace &&
+               conFullEdge == that.conFullEdge &&
+               conDetailed == that.conDetailed &&
+               solidOverlay == that.solidOverlay &&
+               edgeOverlay.equals(that.edgeOverlay);
     }
 
     @Override
@@ -163,6 +192,8 @@ public class StateCache
         int result = Byte.hashCode(fullFace);
         result = 31 * result + Long.hashCode(conFullEdge);
         result = 31 * result + Long.hashCode(conDetailed);
+        result = 31 * result + Byte.hashCode(solidOverlay);
+        result = 31 * result + edgeOverlay.hashCode();
         return result;
     }
 

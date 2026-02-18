@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import io.github.xfacthd.framedblocks.api.block.IBlockType;
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.api.block.cache.StateCache;
+import io.github.xfacthd.framedblocks.api.block.overlay.BlockOverlay;
 import io.github.xfacthd.framedblocks.api.camo.CamoContainerHelper;
 import io.github.xfacthd.framedblocks.api.camo.CamoContent;
 import io.github.xfacthd.framedblocks.api.camo.block.BlockCamoContent;
@@ -24,6 +25,7 @@ import io.github.xfacthd.framedblocks.api.predicate.contex.ConTexMode;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.client.model.QuadMapImpl;
 import io.github.xfacthd.framedblocks.client.model.ReinforcementModel;
+import io.github.xfacthd.framedblocks.client.model.overlaygen.BlockOverlayGenerator;
 import io.github.xfacthd.framedblocks.client.model.overlaygen.OverlayModelPartGenerator;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.config.ClientConfig;
@@ -35,6 +37,7 @@ import net.minecraft.client.renderer.block.model.BlockModelPart;
 import net.minecraft.client.renderer.block.model.BlockStateModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.TriState;
 import net.minecraft.world.level.BlockAndTintGetter;
@@ -52,7 +55,7 @@ import java.util.function.UnaryOperator;
 
 public final class FramedBlockModel extends AbstractFramedBlockModel
 {
-    private static final FramedBlockData DEFAULT_DATA = new FramedBlockData(EmptyCamoContainer.EMPTY, false);
+    private static final FramedBlockData DEFAULT_DATA = new FramedBlockData(null, EmptyCamoContainer.EMPTY, false, null);
     private static final Direction[] DIRECTIONS = Direction.values();
     private static final @Nullable Direction[] DIRECTIONS_WITH_NULL = Arrays.copyOfRange(DIRECTIONS, 0, 7);
     private static final int FLAG_NO_CAMO_ALT_MODEL = 0b001;
@@ -113,6 +116,7 @@ public final class FramedBlockModel extends AbstractFramedBlockModel
         boolean camoEmissive;
         boolean forceEmissive = fbData.isEmissive();
         boolean secondPart = fbData.isSecondPart();
+        Holder<BlockOverlay> blockOverlay = fbData.getBlockOverlay();
         long seed = state.getSeed(pos);
 
         if (empty)
@@ -136,10 +140,15 @@ public final class FramedBlockModel extends AbstractFramedBlockModel
         int uncachedFaceMask = fbData.computeFaceMask(stateCache, false);
         PartConsumer partConsumer = makePartConsumer(partsOut, uncachedFaceMask, defaultAO, camoEmissive, forceEmissive, secondPart);
 
+        int prevOutSize = partsOut.size();
         BlockState camoState = camoContent.getAsBlockState();
         for (int i = 0; i < srcPartsUncached.size(); i++)
         {
             partConsumer.accept(srcPartsUncached.get(i), camoState, false, true, true, true, camoState, null);
+        }
+        if (blockOverlay != null && partsOut.size() > prevOutSize)
+        {
+            BlockOverlayGenerator.generateUncached(state, blockOverlay, partsOut.subList(prevOutSize, partsOut.size()), partsOut, forceEmissive);
         }
         if (!empty || !forceUngeneratedBaseModel)
         {
@@ -147,13 +156,13 @@ public final class FramedBlockModel extends AbstractFramedBlockModel
             Object ctCtx = needCtCtxCached ? camoModel.createGeometryKey(level, pos, this.state, random) : null;
             random.setSeed(seed);
             Object userKeyData = geometry.computeCacheKeyUserData(level, pos, random, extraData);
-            Object key = createCacheKey(camoContent, ctCtx, secondPart, forceEmissive, userKeyData);
+            Object key = createCacheKey(fbData, camoContent, ctCtx, userKeyData);
             List<ExtendedBlockModelPart> cachedParts = partCache.get(key);
             if (cachedParts == null)
             {
                 random.setSeed(seed);
                 List<BlockModelPart> srcParts = ModelUtils.collectModelParts(camoModel, level, pos, this.state, random, ctCtx != null);
-                cachedParts = buildPartCache(srcParts, level, pos, random, seed, fbData, camoContent, userKeyData, reinforce, camoEmissive, forceEmissive, secondPart, defaultAO);
+                cachedParts = buildPartCache(srcParts, level, pos, random, seed, fbData, camoContent, userKeyData, reinforce, camoEmissive, defaultAO);
                 partCache.put(key, cachedParts);
             }
             if (!cachedParts.isEmpty())
@@ -261,11 +270,15 @@ public final class FramedBlockModel extends AbstractFramedBlockModel
         return side != null && (cullMask & (1 << side.ordinal())) == 0;
     }
 
-    private static Object createCacheKey(CamoContent<?> camo, @Nullable Object ctCtx, boolean secondPart, boolean emissive, @Nullable Object userKeyData)
+    private static Object createCacheKey(FramedBlockData fbData, CamoContent<?> camo, @Nullable Object ctCtx, @Nullable Object userKeyData)
     {
-        if (ctCtx != null || userKeyData != null || secondPart || emissive)
+        Holder<BlockOverlay> overlay = fbData.getBlockOverlay();
+        boolean secondPart = fbData.isSecondPart();
+        boolean emissive = fbData.isEmissive();
+        if (overlay != null || ctCtx != null || userKeyData != null || secondPart || emissive)
         {
-            return new CompoundPartCacheKey(camo, ctCtx, secondPart, emissive, userKeyData);
+            BlockState outerState = overlay != null ? fbData.getOuterState() : null;
+            return new CompoundPartCacheKey(outerState, camo, overlay, ctCtx, secondPart, emissive, userKeyData);
         }
         // Avoid allocating a wrapping key object if possible
         return camo;
@@ -282,12 +295,12 @@ public final class FramedBlockModel extends AbstractFramedBlockModel
             @Nullable Object cacheKeyUserData,
             boolean reinforce,
             boolean camoEmissive,
-            boolean forceEmissive,
-            boolean secondPart,
             DefaultAO defaultAO
     )
     {
         ObjectList<ExtendedBlockModelPart> parts = new ObjectArrayList<>();
+        boolean forceEmissive = fbData.isEmissive();
+        boolean secondPart = fbData.isSecondPart();
         int cullMask = DEFAULT_DATA.computeFaceMask(stateCache, true);
         PartConsumer partConsumer = makePartConsumer(parts, cullMask, defaultAO, camoEmissive, forceEmissive, secondPart);
         boolean xformAll = geometry.transformAllQuads();
@@ -310,6 +323,11 @@ public final class FramedBlockModel extends AbstractFramedBlockModel
         {
             BlockModelPart srcPart = reinforcement.getFiltered(xformAll ? 0b00111111 : cullMask, defaultAO.apply(TriState.DEFAULT));
             partConsumer.accept(srcPart, ReinforcementModel.SHADER_STATE, false, true, !xformAll, false, ReinforcementModel.SHADER_STATE, modifier);
+        }
+        Holder<BlockOverlay> overlay = fbData.getBlockOverlay();
+        if (!parts.isEmpty() && overlay != null)
+        {
+            BlockOverlayGenerator.generateCached(fbData.getOuterState(), state, secondPart, overlay, parts, forceEmissive);
         }
         random.setSeed(seed);
         geometry.collectAdditionalPartsCached(partConsumer, level, pos, random, fbData, cacheKeyUserData);
@@ -379,7 +397,9 @@ public final class FramedBlockModel extends AbstractFramedBlockModel
     }
 
     private record CompoundPartCacheKey(
+            @Nullable BlockState outerState,
             CamoContent<?> camo,
+            @Nullable Holder<BlockOverlay> overlay,
             @Nullable Object ctContext,
             boolean secondPart,
             boolean emissive,

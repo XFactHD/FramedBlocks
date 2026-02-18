@@ -2,6 +2,7 @@ package io.github.xfacthd.framedblocks.api.ghost;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
+import io.github.xfacthd.framedblocks.api.block.overlay.BlockOverlay;
 import io.github.xfacthd.framedblocks.api.camo.CamoList;
 import io.github.xfacthd.framedblocks.api.model.data.AbstractFramedBlockData;
 import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
@@ -9,6 +10,7 @@ import io.github.xfacthd.framedblocks.api.util.Utils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.BlockStateModel;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -27,7 +29,7 @@ import org.jspecify.annotations.Nullable;
 import java.util.Objects;
 
 /**
- * Provide custom behaviours for ghost block rendering when the player is looking at another block while holding an
+ * Provide custom behaviors for ghost block rendering when the player is looking at another block while holding an
  * {@link ItemStack} in the main hand.
  * <p>
  * Must be registered in {@link RegisterGhostRenderBehavioursEvent}
@@ -198,15 +200,30 @@ public interface GhostRenderBehaviour
     }
 
     /**
+     * Read the {@link BlockOverlay} stored in the given {@link ItemStack} or return {@code null} if no overlay is present.
+     *
+     * @param stack        The {@link ItemStack} in the players main hand
+     * @param proxiedStack The proxied {@code ItemStack} as returned from {@link GhostRenderBehaviour#getProxiedStack(ItemStack)}
+     * @param renderPass   The current render pass index
+     * @return The stored overlay to apply to the rendered block
+     */
+    @Nullable
+    default Holder<BlockOverlay> readBlockOverlay(ItemStack stack, @Nullable ItemStack proxiedStack, int renderPass)
+    {
+        return stack.get(Utils.DC_TYPE_BLOCK_OVERLAY);
+    }
+
+    /**
      * Build the {@link ModelData} to render the placement preview with. Allows full control over the model data creation,
      * for example to allow custom double blocks with two camos
      *
-     * @param stack The {@link ItemStack} in the players main hand
+     * @param stack        The {@link ItemStack} in the players main hand
      * @param proxiedStack The proxied {@code ItemStack} as returned from {@link GhostRenderBehaviour#getProxiedStack(ItemStack)}
-     * @param ctx The {@link BlockPlaceContext} to use for determining the resulting
-     * @param renderState The {@code BlockState} to render
-     * @param renderPass The current render pass index
-     * @param camo The prepared {@code ModelData} to be given to the {@link BlockStateModel} that is to be rendered
+     * @param ctx          The {@link BlockPlaceContext} to use for determining the resulting
+     * @param renderState  The {@code BlockState} to render
+     * @param renderPass   The current render pass index
+     * @param camo         The prepared {@code ModelData} to be given to the {@link BlockStateModel} that is to be rendered
+     * @param overlay      The overlay applied to the block
      * @return The {@code ModelData} with any necessary modifications applied to it
      */
     default ModelData buildModelData(
@@ -215,10 +232,11 @@ public interface GhostRenderBehaviour
             BlockPlaceContext ctx,
             BlockState renderState,
             int renderPass,
-            CamoList camo
+            CamoList camo,
+            @Nullable Holder<BlockOverlay> overlay
     )
     {
-        return ModelData.of(AbstractFramedBlockData.PROPERTY, new FramedBlockData(camo.getCamo(0), false));
+        return ModelData.of(AbstractFramedBlockData.PROPERTY, new FramedBlockData(renderState, camo.getCamo(0), false, overlay));
     }
 
     /**
