@@ -33,6 +33,12 @@ public class FramedRailSlopeGeometry extends FramedSlopeGeometry
     }
 
     @Override
+    public boolean hasAdditionalUncachedParts()
+    {
+        return true;
+    }
+
+    @Override
     public void collectAdditionalPartsUncached(PartConsumer consumer, BlockAndTintGetter level, BlockPos pos, RandomSource random, ModelData data)
     {
         BlockStateModel model = ModelUtils.getModel(railState);

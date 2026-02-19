@@ -74,6 +74,7 @@ public final class FramedBlockModel extends AbstractFramedBlockModel
     private final boolean forceUngeneratedBaseModel;
     private final boolean useBaseModel;
     private final boolean useSolidBase;
+    private final boolean uncachedAdditionalParts;
     private final StateCache stateCache;
     private final ReinforcementModel reinforcement;
 
@@ -86,6 +87,7 @@ public final class FramedBlockModel extends AbstractFramedBlockModel
         this.forceUngeneratedBaseModel = geometry.forceUngeneratedBaseModel();
         this.useBaseModel = geometry.useBaseModel();
         this.useSolidBase = geometry.useSolidNoCamoModel();
+        this.uncachedAdditionalParts = geometry.hasAdditionalUncachedParts();
         this.stateCache = state.framedblocks$getCache();
         this.reinforcement = reinforcement;
 
@@ -135,20 +137,23 @@ public final class FramedBlockModel extends AbstractFramedBlockModel
             camoEmissive = camoContent.isEmissive();
         }
 
-        random.setSeed(seed);
-        List<BlockModelPart> srcPartsUncached = ModelUtils.collectModelParts(camoModel, level, pos, this.state, random, needCtCtxUncached);
+        PartConsumer partConsumer = null;
         int uncachedFaceMask = fbData.computeFaceMask(stateCache, false);
-        PartConsumer partConsumer = makePartConsumer(partsOut, uncachedFaceMask, defaultAO, camoEmissive, forceEmissive, secondPart);
-
-        int prevOutSize = partsOut.size();
-        BlockState camoState = camoContent.getAsBlockState();
-        for (int i = 0; i < srcPartsUncached.size(); i++)
+        if (uncachedFaceMask != 0)
         {
-            partConsumer.accept(srcPartsUncached.get(i), camoState, false, true, true, true, camoState, null);
-        }
-        if (blockOverlay != null && partsOut.size() > prevOutSize)
-        {
-            BlockOverlayGenerator.generateUncached(state, blockOverlay, partsOut.subList(prevOutSize, partsOut.size()), partsOut, forceEmissive);
+            random.setSeed(seed);
+            List<BlockModelPart> srcPartsUncached = ModelUtils.collectModelParts(camoModel, level, pos, this.state, random, needCtCtxUncached);
+            partConsumer = makePartConsumer(partsOut, uncachedFaceMask, defaultAO, camoEmissive, forceEmissive, secondPart);
+            int prevOutSize = partsOut.size();
+            BlockState camoState = camoContent.getAsBlockState();
+            for (int i = 0; i < srcPartsUncached.size(); i++)
+            {
+                partConsumer.accept(srcPartsUncached.get(i), camoState, false, true, true, true, camoState, null);
+            }
+            if (blockOverlay != null && partsOut.size() > prevOutSize)
+            {
+                BlockOverlayGenerator.generateUncached(state, blockOverlay, partsOut.subList(prevOutSize, partsOut.size()), partsOut, forceEmissive);
+            }
         }
         if (!empty || !forceUngeneratedBaseModel)
         {
@@ -174,9 +179,16 @@ public final class FramedBlockModel extends AbstractFramedBlockModel
                 }
             }
         }
-        random.setSeed(seed);
-        geometry.collectAdditionalPartsUncached(partConsumer, level, pos, random, extraData);
-        if (reinforce)
+        if (uncachedAdditionalParts)
+        {
+            if (partConsumer == null)
+            {
+                partConsumer = makePartConsumer(partsOut, uncachedFaceMask, defaultAO, camoEmissive, forceEmissive, secondPart);
+            }
+            random.setSeed(seed);
+            geometry.collectAdditionalPartsUncached(partConsumer, level, pos, random, extraData);
+        }
+        if (reinforce && uncachedFaceMask != 0)
         {
             BlockModelPart reinforcementPart = reinforcement.getFiltered(uncachedFaceMask, defaultAO.apply(TriState.DEFAULT));
             partConsumer.accept(reinforcementPart, ReinforcementModel.SHADER_STATE, false, false, true, false, ReinforcementModel.SHADER_STATE, null);

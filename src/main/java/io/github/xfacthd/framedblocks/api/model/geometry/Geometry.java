@@ -75,8 +75,17 @@ public abstract class Geometry
     }
 
     /**
+     * Return true if this geometry may add additional parts in {@link #collectAdditionalPartsUncached(PartConsumer, BlockAndTintGetter, BlockPos, RandomSource, ModelData)}.
+     */
+    public boolean hasAdditionalUncachedParts()
+    {
+        return false;
+    }
+
+    /**
      * Add additional {@link BlockModelPart}s which should not be cached.
-     * The result of this method will NOT be cached, execution should therefore be as fast as possible
+     * The result of this method will NOT be cached, execution should therefore be as fast as possible.
+     * Only called if {@link #hasAdditionalUncachedParts()} returns true.
      *
      * @param consumer The {@link PartConsumer} to pass the additional parts to
      * @param level    The {@linkplain BlockAndTintGetter level} the block is being rendered in

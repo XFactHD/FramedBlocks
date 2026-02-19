@@ -39,6 +39,12 @@ public class FramedTargetGeometry extends Geometry
     public void transformQuad(QuadMap quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData) { }
 
     @Override
+    public boolean hasAdditionalUncachedParts()
+    {
+        return true;
+    }
+
+    @Override
     public void collectAdditionalPartsUncached(PartConsumer consumer, BlockAndTintGetter level, BlockPos pos, RandomSource random, ModelData data)
     {
         consumer.acceptAll(overlayModel, level, pos, random, state, false, false, true, false, null, null);

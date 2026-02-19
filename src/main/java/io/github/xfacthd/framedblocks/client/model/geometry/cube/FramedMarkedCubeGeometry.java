@@ -33,6 +33,12 @@ public class FramedMarkedCubeGeometry extends FramedCubeGeometry
     }
 
     @Override
+    public boolean hasAdditionalUncachedParts()
+    {
+        return true;
+    }
+
+    @Override
     public void collectAdditionalPartsUncached(PartConsumer consumer, BlockAndTintGetter level, BlockPos pos, RandomSource random, ModelData data)
     {
         AbstractFramedBlockData fbData = data.get(AbstractFramedBlockData.PROPERTY);
