@@ -34,6 +34,7 @@ public final class BlockStateInfo
         table.header("Block")
                 .header("State count", true)
                 .header("Model state count", true)
+                .header("BlockOverlays")
                 .header("Solid")
                 .header("Glowing")
                 .header("Skylight")
@@ -43,6 +44,8 @@ public final class BlockStateInfo
 
         long totalStates = 0;
         long totalModelStates = 0;
+        long totalStatesWithOverlays = 0;
+        long totalModelStatesWithOverlays = 0;
         for (BlockType type : TYPES)
         {
             Block block = FBContent.byType(type);
@@ -51,6 +54,7 @@ public final class BlockStateInfo
             int stateCount = block.getStateDefinition().getPossibleStates().size();
             int modelStateCount = wrapper.getVisitedStateCount();
 
+            String blockOverlays = type.supportsBlockOverlays() ? "supported" : "-";
             String solid = type.canOccludeWithSolidCamo() ? checkBooleanProperty(block, FramedProperties.SOLID) : "-";
             String glowing = checkBooleanProperty(block, FramedProperties.GLOWING);
             String skylight = checkBooleanProperty(block, FramedProperties.PROPAGATES_SKYLIGHT);
@@ -61,6 +65,7 @@ public final class BlockStateInfo
             table.cell(name)
                     .cell("%,d".formatted(stateCount))
                     .cell("%,d".formatted(modelStateCount))
+                    .cell(blockOverlays)
                     .cell(solid)
                     .cell(glowing)
                     .cell(skylight)
@@ -71,12 +76,19 @@ public final class BlockStateInfo
 
             totalStates += stateCount;
             totalModelStates += modelStateCount;
+            if (type.supportsBlockOverlays())
+            {
+                totalStatesWithOverlays += stateCount;
+                totalModelStatesWithOverlays += modelStateCount;
+            }
         }
 
         String dump = table.print() +
                 "\nBlock count: " + TYPES.length +
                 "\\\nTotal states: " + totalStates +
+                "\\\n↳ With BlockOverlays: " + totalStatesWithOverlays +
                 "\\\nTotal model states: " + totalModelStates +
+                "\\\n↳ With BlockOverlays: " + totalModelStatesWithOverlays +
                 "\n";
 
         watch.stop();
