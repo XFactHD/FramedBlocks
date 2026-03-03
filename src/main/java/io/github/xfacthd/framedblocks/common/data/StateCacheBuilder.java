@@ -5,6 +5,7 @@ import io.github.xfacthd.framedblocks.FramedBlocks;
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.api.block.cache.StateCache;
 import io.github.xfacthd.framedblocks.api.util.Utils;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.ResourceManager;
@@ -13,9 +14,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 
-import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 public final class StateCacheBuilder
 {
@@ -40,7 +39,9 @@ public final class StateCacheBuilder
     {
         FramedBlocks.LOGGER.debug("Initializing custom state metadata caches");
         Stopwatch watch = Stopwatch.createStarted();
-        long[] counts = new long[] { 0, 1 }; // +1 for the empty instance
+        long[] stateCount = new long[] { 0 };
+        ObjectOpenHashSet<StateCache> cacheDedup = new ObjectOpenHashSet<>();
+        cacheDedup.add(StateCache.EMPTY);
         BuiltInRegistries.BLOCK.entrySet()
                 .stream()
                 .map(Map.Entry::getValue)
@@ -49,26 +50,16 @@ public final class StateCacheBuilder
                 .map(StateDefinition::getPossibleStates)
                 .forEach(states ->
                 {
-                    Map<StateCache, StateCache> cacheDedup = new HashMap<>();
                     for (BlockState state : states)
                     {
                         StateCache cache = ((IFramedBlock) state.getBlock()).initCache(state);
-                        if (cache.equals(StateCache.EMPTY))
-                        {
-                            state.framedblocks$initCache(StateCache.EMPTY);
-                        }
-                        else
-                        {
-                            state.framedblocks$initCache(
-                                    Objects.requireNonNullElse(cacheDedup.putIfAbsent(cache, cache), cache)
-                            );
-                        }
+                        cache = cacheDedup.addOrGet(cache);
+                        state.framedblocks$initCache(cache);
                     }
-                    counts[0] += states.size();
-                    counts[1] += cacheDedup.size();
+                    stateCount[0] += states.size();
                 });
         watch.stop();
-        FramedBlocks.LOGGER.debug("Initialized {} unique caches for {} states in {}", counts[1], counts[0], watch);
+        FramedBlocks.LOGGER.debug("Initialized {} unique caches for {} states in {}", cacheDedup.size(), stateCount[0], watch);
     }
 
     public static final class CacheReloader implements ResourceManagerReloadListener

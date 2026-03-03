@@ -31,11 +31,12 @@ public class DoubleBlockStateCache extends StateCache
         this.topInteractionMode = block.calculateTopInteractionMode(state);
         this.parts = block.calculateParts(state);
         BlockOverlayPredicate overlayPredicate = type.getBlockOverlayPredicate();
+        boolean supportsOverlay = type.supportsBlockOverlays();
         byte solidOverlay = 0;
         for (Direction side : DIRECTIONS)
         {
             solidityChecks[side.ordinal()] = block.calculateSolidityCheck(state, side);
-            if (overlayPredicate.supportsSolid(state, side, true))
+            if (supportsOverlay && overlayPredicate.supportsSolid(state, side, true))
             {
                 solidOverlay |= (byte) (1 << side.ordinal());
             }
@@ -57,7 +58,7 @@ public class DoubleBlockStateCache extends StateCache
             }
         }
         this.solidOverlay = solidOverlay;
-        this.edgeOverlay = EdgeOverlayMask.compute(state, overlayPredicate, true);
+        this.edgeOverlay = supportsOverlay ? EdgeOverlayMask.compute(state, overlayPredicate, true) : EdgeOverlayMask.NEVER;
     }
 
     public final DoubleBlockTopInteractionMode getTopInteractionMode()

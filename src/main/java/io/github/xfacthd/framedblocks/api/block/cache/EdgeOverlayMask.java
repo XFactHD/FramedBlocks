@@ -2,15 +2,13 @@ package io.github.xfacthd.framedblocks.api.block.cache;
 
 import io.github.xfacthd.framedblocks.api.predicate.overlay.BlockOverlayPredicate;
 import io.github.xfacthd.framedblocks.api.util.Utils;
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 
-import java.util.Map;
-
 record EdgeOverlayMask(int maskNullCullFace, int maskUnaligned, int maskBoth)
 {
-    private static final Map<EdgeOverlayMask, EdgeOverlayMask> MASK_INTERNER = new Object2ObjectOpenHashMap<>();
+    private static final ObjectOpenHashSet<EdgeOverlayMask> MASK_INTERNER = new ObjectOpenHashSet<>();
     private static final Direction[] DIRECTIONS = Direction.values();
     static final EdgeOverlayMask NEVER = intern(new EdgeOverlayMask(0, 0, 0));
 
@@ -58,7 +56,7 @@ record EdgeOverlayMask(int maskNullCullFace, int maskUnaligned, int maskBoth)
 
     private static EdgeOverlayMask intern(EdgeOverlayMask mask)
     {
-        return MASK_INTERNER.computeIfAbsent(mask, m -> m);
+        return MASK_INTERNER.addOrGet(mask);
     }
 
     private enum EdgeOverlayCondition

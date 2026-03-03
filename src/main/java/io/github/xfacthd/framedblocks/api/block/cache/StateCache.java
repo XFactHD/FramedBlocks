@@ -49,6 +49,7 @@ public class StateCache
         ConnectionPredicate conPred = type.getConnectionPredicate();
         BlockOverlayPredicate overlayPredicate = type.getBlockOverlayPredicate();
         boolean supportsCt = type.supportsConnectedTextures();
+        boolean supportsOverlay = type.supportsBlockOverlays();
 
         for (Direction side : DIRECTIONS)
         {
@@ -57,7 +58,7 @@ public class StateCache
             {
                 fullFace |= sideBit;
             }
-            if (overlayPredicate.supportsSolid(state, side, false))
+            if (supportsOverlay && overlayPredicate.supportsSolid(state, side, false))
             {
                 solidOverlay |= sideBit;
             }
@@ -105,7 +106,7 @@ public class StateCache
         this.conFullEdge = conFullEdge;
         this.conDetailed = conDetailed;
         this.solidOverlay = solidOverlay;
-        this.edgeOverlay = EdgeOverlayMask.compute(state, overlayPredicate, false);
+        this.edgeOverlay = supportsOverlay ? EdgeOverlayMask.compute(state, overlayPredicate, false) : EdgeOverlayMask.NEVER;
     }
 
     private StateCache()
