@@ -6,7 +6,7 @@ import io.github.xfacthd.framedblocks.api.camo.CamoContainerFactory;
 import io.github.xfacthd.framedblocks.api.camo.block.AbstractBlockCamoContainerFactory;
 import io.github.xfacthd.framedblocks.api.camo.block.rotator.BlockCamoRotator;
 import io.github.xfacthd.framedblocks.api.camo.block.rotator.RegisterBlockCamoRotatorsEvent;
-import io.github.xfacthd.framedblocks.api.camo.block.rotator.SimpleBlockCamoRotator;
+import io.github.xfacthd.framedblocks.api.camo.block.rotator.SinglePropertyBlockCamoRotator;
 import io.github.xfacthd.framedblocks.common.data.DataMapsSetup;
 import io.github.xfacthd.framedblocks.common.data.camo.CamoContainerFactories;
 import it.unimi.dsi.fastutil.objects.Reference2ObjectMap;
@@ -28,10 +28,10 @@ public final class BlockCamoRotators
 {
     private static final Logger LOGGER = LogUtils.getLogger();
     private static final Reference2ObjectMap<Block, BlockCamoRotator> ROTATORS = new Reference2ObjectOpenHashMap<>();
-    private static final BlockCamoRotator AXIS = new SimpleBlockCamoRotator(RotatedPillarBlock.AXIS);
-    private static final BlockCamoRotator DIR = new SimpleBlockCamoRotator(DirectionalBlock.FACING);
-    private static final BlockCamoRotator HOR_DIR = new SimpleBlockCamoRotator(HorizontalDirectionalBlock.FACING);
-    private static final BlockCamoRotator REDSTONE_LAMP = new SimpleBlockCamoRotator(RedstoneLampBlock.LIT);
+    private static final BlockCamoRotator AXIS = new SinglePropertyBlockCamoRotator(RotatedPillarBlock.AXIS);
+    private static final BlockCamoRotator DIR = new SinglePropertyBlockCamoRotator(DirectionalBlock.FACING);
+    private static final BlockCamoRotator HOR_DIR = new SinglePropertyBlockCamoRotator(HorizontalDirectionalBlock.FACING);
+    private static final BlockCamoRotator REDSTONE_LAMP = new SinglePropertyBlockCamoRotator(RedstoneLampBlock.LIT);
 
     public static BlockCamoRotator get(Block block)
     {
@@ -88,7 +88,7 @@ public final class BlockCamoRotators
             Block block = BuiltInRegistries.BLOCK.getValueOrThrow(key);
             if (!prototype.isApplicableTo(block))
             {
-                LOGGER.error("BlockCamoRotator for property {} from datamap cannot be applied to {}, dropping!", prototype.property(), block);
+                LOGGER.error("BlockCamoRotator with properties {} from datamap cannot be applied to {}, dropping!", prototype.properties(), block);
                 return;
             }
 
