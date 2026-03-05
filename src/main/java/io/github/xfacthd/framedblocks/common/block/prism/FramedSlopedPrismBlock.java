@@ -125,6 +125,15 @@ public class FramedSlopedPrismBlock extends FramedBlock implements IFramedPrismB
     }
 
     @Override
+    public Direction getHorizontalOrientation(BlockState state)
+    {
+        CompoundDirection cmpDir = state.getValue(PropertyHolder.FACING_DIR);
+        if (!Utils.isY(cmpDir.direction())) return cmpDir.direction();
+        if (!Utils.isY(cmpDir.orientation())) return cmpDir.orientation();
+        return Direction.NORTH;
+    }
+
+    @Override
     public BlockState getJadeRenderState(BlockState state)
     {
         return getItemModelSource();

@@ -2,6 +2,7 @@ package io.github.xfacthd.framedblocks.common.block.pillar;
 
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
+import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import net.minecraft.core.Direction;
@@ -40,6 +41,13 @@ public class FramedPillarSocketBlock extends FramedBlock
     public BlockState getItemModelSource()
     {
         return defaultBlockState().setValue(BlockStateProperties.FACING, Direction.DOWN);
+    }
+
+    @Override
+    public Direction getHorizontalOrientation(BlockState state)
+    {
+        Direction facing = state.getValue(BlockStateProperties.FACING);
+        return Utils.isY(facing) ? Direction.NORTH : facing;
     }
 
     @Override

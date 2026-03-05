@@ -105,6 +105,14 @@ public class FramedPrismBlock extends FramedBlock implements IFramedPrismBlock
     }
 
     @Override
+    public Direction getHorizontalOrientation(BlockState state)
+    {
+        DirectionAxis dirAxis = state.getValue(PropertyHolder.FACING_AXIS);
+        if (!Utils.isY(dirAxis.direction())) return dirAxis.direction();
+        return Utils.getHorizontalDirection(dirAxis.axis());
+    }
+
+    @Override
     public BlockState getJadeRenderState(BlockState state)
     {
         return getItemModelSource();

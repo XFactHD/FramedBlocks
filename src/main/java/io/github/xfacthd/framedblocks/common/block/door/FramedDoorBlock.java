@@ -179,6 +179,12 @@ public class FramedDoorBlock extends DoorBlock implements IFramedBlockInternal
     }
 
     @Override
+    public Direction getHorizontalOrientation(BlockState state)
+    {
+        return state.getValue(FACING);
+    }
+
+    @Override
     public boolean shouldRenderAsBlockInJadeTooltip()
     {
         return false;

@@ -87,6 +87,17 @@ public final class FramedUtils
         };
     }
 
+    public static Direction getDirectionFromStraightRailShape(RailShape shape)
+    {
+        return switch (shape)
+        {
+            case NORTH_SOUTH, ASCENDING_NORTH, NORTH_WEST, NORTH_EAST -> Direction.NORTH;
+            case EAST_WEST, ASCENDING_WEST -> Direction.WEST;
+            case ASCENDING_EAST -> Direction.EAST;
+            case ASCENDING_SOUTH, SOUTH_EAST, SOUTH_WEST -> Direction.SOUTH;
+        };
+    }
+
     public static void enqueueImmediateTask(LevelAccessor level, Runnable task, boolean allowClient)
     {
         if (level.isClientSide() && allowClient)

@@ -231,6 +231,12 @@ public class FramedChiseledBookshelfBlock extends FramedBlock implements Selecta
     }
 
     @Override
+    public Direction getHorizontalOrientation(BlockState state)
+    {
+        return state.getValue(FramedProperties.FACING_HOR);
+    }
+
+    @Override
     public BlockState getJadeRenderState(BlockState state)
     {
         return state.setValue(FramedProperties.FACING_HOR, Direction.NORTH);

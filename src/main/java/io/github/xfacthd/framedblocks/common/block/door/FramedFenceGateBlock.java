@@ -123,6 +123,12 @@ public class FramedFenceGateBlock extends FenceGateBlock implements IFramedBlock
     }
 
     @Override
+    public Direction getHorizontalOrientation(BlockState state)
+    {
+        return state.getValue(FACING);
+    }
+
+    @Override
     public BlockState getJadeRenderState(BlockState state)
     {
         return defaultBlockState();

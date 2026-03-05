@@ -119,6 +119,12 @@ public class FramedCornerTubeBlock extends FramedBlock
     }
 
     @Override
+    public Direction getHorizontalOrientation(BlockState state)
+    {
+        return state.getValue(PropertyHolder.CORNER_TYPE_ORIENTATION).getSecondaryDir();
+    }
+
+    @Override
     public BlockState getJadeRenderState(BlockState state)
     {
         return getItemModelSource();

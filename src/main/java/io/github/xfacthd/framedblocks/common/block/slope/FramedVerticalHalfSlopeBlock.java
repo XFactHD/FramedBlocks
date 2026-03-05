@@ -11,6 +11,7 @@ import io.github.xfacthd.framedblocks.common.block.FramedBlock;
 import io.github.xfacthd.framedblocks.common.block.IComplexSlopeSource;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
@@ -84,6 +85,12 @@ public class FramedVerticalHalfSlopeBlock extends FramedBlock implements IComple
     public BlockState getItemModelSource()
     {
         return null;
+    }
+
+    @Override
+    public Direction getHorizontalOrientation(BlockState state)
+    {
+        return state.getValue(FramedProperties.FACING_HOR);
     }
 
     @Override

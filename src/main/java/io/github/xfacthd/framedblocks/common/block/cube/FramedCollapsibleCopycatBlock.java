@@ -164,6 +164,13 @@ public class FramedCollapsibleCopycatBlock extends FramedBlock
     }
 
     @Override
+    public Direction getHorizontalOrientation(BlockState state)
+    {
+        Rotation rotation = state.getValue(PropertyHolder.COPYCAT_ROTATION);
+        return Utils.getOppositeRotation(rotation).rotate(Direction.NORTH);
+    }
+
+    @Override
     public BlockState getJadeRenderState(BlockState state)
     {
         return state;

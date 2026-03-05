@@ -9,6 +9,7 @@ import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.block.IFramedBlockInternal;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
@@ -107,6 +108,12 @@ public class FramedRedstoneWallTorchBlock extends RedstoneWallTorchBlock impleme
     public BlockState getItemModelSource()
     {
         return null;
+    }
+
+    @Override
+    public Direction getHorizontalOrientation(BlockState state)
+    {
+        return state.getValue(FACING);
     }
 
     @Override

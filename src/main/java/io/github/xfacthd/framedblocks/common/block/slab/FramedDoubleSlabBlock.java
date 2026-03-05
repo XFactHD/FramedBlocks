@@ -90,6 +90,13 @@ public class FramedDoubleSlabBlock extends FramedDoubleBlock
     }
 
     @Override
+    @Nullable
+    public Direction getHorizontalOrientation(BlockState state)
+    {
+        return null;
+    }
+
+    @Override
     public BlockState getJadeRenderState(BlockState state)
     {
         return defaultBlockState();

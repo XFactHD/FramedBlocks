@@ -10,6 +10,7 @@ import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.block.IFramedBlockInternal;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -131,6 +132,13 @@ public class FramedWeightedPressurePlateBlock extends WeightedPressurePlateBlock
     public BlockState getItemModelSource()
     {
         return defaultBlockState();
+    }
+
+    @Override
+    @Nullable
+    public Direction getHorizontalOrientation(BlockState state)
+    {
+        return null;
     }
 
     @Override

@@ -165,6 +165,12 @@ public class FramedTrapDoorBlock extends TrapDoorBlock implements IFramedBlockIn
     }
 
     @Override
+    public Direction getHorizontalOrientation(BlockState state)
+    {
+        return state.getValue(FACING);
+    }
+
+    @Override
     public BlockState getJadeRenderState(BlockState state)
     {
         return defaultBlockState();

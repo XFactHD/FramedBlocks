@@ -4,6 +4,7 @@ import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
+import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -36,6 +37,13 @@ public class FramedHorizontalPaneBlock extends FramedBlock
     public BlockState getItemModelSource()
     {
         return defaultBlockState();
+    }
+
+    @Override
+    @Nullable
+    public Direction getHorizontalOrientation(BlockState state)
+    {
+        return null;
     }
 
     @Override

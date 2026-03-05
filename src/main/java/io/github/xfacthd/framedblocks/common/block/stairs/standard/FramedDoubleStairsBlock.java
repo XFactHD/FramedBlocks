@@ -337,6 +337,12 @@ public class FramedDoubleStairsBlock extends FramedStairsBlock implements IFrame
     }
 
     @Override
+    public Direction getHorizontalOrientation(BlockState state)
+    {
+        return state.getValue(FACING);
+    }
+
+    @Override
     public BlockState getJadeRenderState(BlockState state)
     {
         return getItemModelSource();

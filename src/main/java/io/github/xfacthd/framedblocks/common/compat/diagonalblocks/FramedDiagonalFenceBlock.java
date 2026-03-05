@@ -167,6 +167,13 @@ public final class FramedDiagonalFenceBlock extends DiagonalFenceBlock implement
     }
 
     @Override
+    @Nullable
+    public Direction getHorizontalOrientation(BlockState state)
+    {
+        return null;
+    }
+
+    @Override
     public BlockState getJadeRenderState(BlockState state)
     {
         return defaultBlockState().setValue(CrossCollisionBlock.EAST, true).setValue(CrossCollisionBlock.WEST, true);

@@ -20,6 +20,7 @@ import io.github.xfacthd.framedblocks.api.model.data.AbstractFramedBlockData;
 import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
 import io.github.xfacthd.framedblocks.api.util.ConfigView;
 import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.serdes.FramedCodecs;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
@@ -47,6 +48,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -77,6 +79,7 @@ public class FramedBlockEntity extends BlockEntity
 {
     private static final Logger LOGGER = LogUtils.getLogger();
     public static final String CAMO_NBT_KEY = "camo";
+    public static final String CAMO_DIR_NBT_KEY = "camo_dir";
     public static final String OVERLAY_NBT_KEY = "overlay";
     /**
      * {@link InteractionResult} marker instance to consume the interaction and communicate a failed camo interaction
@@ -92,6 +95,9 @@ public class FramedBlockEntity extends BlockEntity
     private final boolean[] culledFaces = new boolean[6];
     private StateCache stateCache;
     private CamoContainer<?, ?> camoContainer = EmptyCamoContainer.EMPTY;
+    /** Holds the horizontal orientation this block had when the camo was applied ("applications" for the purpose of updating an existing camo don't update this) */
+    @Nullable
+    private Direction camoOrientation = null;
     @Nullable
     private Holder<BlockOverlay> overlay = null;
     private boolean glowing = false;
@@ -435,9 +441,16 @@ public class FramedBlockEntity extends BlockEntity
 
     public final void setCamo(CamoContainer<?, ?> camo, boolean secondary)
     {
+        setCamo(camo, secondary, CamoOrientation.UNKNOWN);
+    }
+
+    public final void setCamo(CamoContainer<?, ?> camo, boolean secondary, CamoOrientation orientation)
+    {
         int light = getLightValue();
 
-        setCamoInternal(camo, secondary);
+        boolean forceOrientation = orientation != CamoOrientation.UNKNOWN;
+        Direction camoOrientation = orientation.resolve(this);
+        setCamoInternal(camo, secondary, camoOrientation, forceOrientation);
 
         setChangedWithoutSignalUpdate();
         if (getLightValue() != light)
@@ -451,9 +464,22 @@ public class FramedBlockEntity extends BlockEntity
         }
     }
 
-    void setCamoInternal(CamoContainer<?, ?> camo, boolean secondary)
+    void setCamoInternal(CamoContainer<?, ?> camo, boolean secondary, @Nullable Direction orientation, boolean forceOrientation)
     {
-        this.camoContainer = camo;
+        camoOrientation = updateOrientation(camo, orientation, false, forceOrientation);
+        camoContainer = camo;
+    }
+
+    @Nullable
+    Direction updateOrientation(CamoContainer<?, ?> newCamo, @Nullable Direction newDir, boolean second, boolean force)
+    {
+        if (newCamo.isEmpty()) return null;
+
+        CamoContainer<?, ?> oldCamo = getCamo(second);
+        if (oldCamo.isEmpty() || force) return newDir;
+
+        // Keep previous orientation
+        return getCamoOrientation(second);
     }
 
     /**
@@ -506,6 +532,17 @@ public class FramedBlockEntity extends BlockEntity
     CamoContainer<?, ?> getCamo(boolean secondary)
     {
         return camoContainer;
+    }
+
+    /**
+     * Returns the horizontal orientation this block had when the camo was applied.
+     *
+     * @param secondary Whether the orientation of the first or second camo should be returned
+     */
+    @Nullable
+    public Direction getCamoOrientation(boolean secondary)
+    {
+        return camoOrientation;
     }
 
     public final CamoContainer<?, ?> getCamo()
@@ -955,8 +992,21 @@ public class FramedBlockEntity extends BlockEntity
     @Override
     public void setBlockState(BlockState state)
     {
+        BlockState oldState = getBlockState();
         super.setBlockState(state);
         this.stateCache = state.framedblocks$getCache();
+        if (level != null && level.isClientSide() && needsModelDataUpdateAfterStateChange(oldState))
+        {
+            requestModelDataUpdate();
+        }
+    }
+
+    protected boolean needsModelDataUpdateAfterStateChange(BlockState oldState)
+    {
+        IFramedBlock block = getBlock();
+        Direction oldOrientation = block.getHorizontalOrientation(oldState);
+        Direction newOrientation = block.getHorizontalOrientation(getBlockState());
+        return oldOrientation != newOrientation;
     }
 
     /*
@@ -987,6 +1037,7 @@ public class FramedBlockEntity extends BlockEntity
     protected void writeToDataPacket(ValueOutput valueOutput)
     {
         CamoContainerHelper.writeToNetwork(valueOutput.child(CAMO_NBT_KEY), camoContainer);
+        valueOutput.storeNullable(CAMO_DIR_NBT_KEY, FramedCodecs.DIRECTION_BY_INT, camoOrientation);
         valueOutput.storeNullable(OVERLAY_NBT_KEY, BlockOverlay.CODEC, overlay);
         valueOutput.putByte("flags", writeFlags());
     }
@@ -1008,6 +1059,12 @@ public class FramedBlockEntity extends BlockEntity
 
             needUpdate = true;
             needCullingUpdate = true;
+        }
+        Direction newOrientation = valueInput.read(CAMO_DIR_NBT_KEY, FramedCodecs.DIRECTION_BY_INT).orElse(null);
+        if (newOrientation != camoOrientation)
+        {
+            camoOrientation = newOrientation;
+            needUpdate = true;
         }
 
         Holder<BlockOverlay> newOverlay = valueInput.read(OVERLAY_NBT_KEY, BlockOverlay.CODEC).orElse(null);
@@ -1069,6 +1126,7 @@ public class FramedBlockEntity extends BlockEntity
     protected void writeUpdateTag(ValueOutput valueOutput)
     {
         CamoContainerHelper.writeToNetwork(valueOutput.child(CAMO_NBT_KEY), camoContainer);
+        valueOutput.storeNullable(CAMO_DIR_NBT_KEY, FramedCodecs.DIRECTION_BY_INT, camoOrientation);
         valueOutput.storeNullable(OVERLAY_NBT_KEY, BlockOverlay.CODEC, overlay);
         valueOutput.putByte("flags", writeFlags());
     }
@@ -1094,13 +1152,20 @@ public class FramedBlockEntity extends BlockEntity
 
     boolean readCamoFromUpdateTag(ValueInput valueInput)
     {
+        boolean changed = false;
         CamoContainer<?, ?> newCamo = CamoContainerHelper.readFromNetwork(valueInput.child(CAMO_NBT_KEY));
         if (!newCamo.equals(camoContainer))
         {
             camoContainer = newCamo;
-            return true;
+            changed = true;
         }
-        return false;
+        Direction newOrientation = valueInput.read(CAMO_DIR_NBT_KEY, FramedCodecs.DIRECTION_BY_INT).orElse(null);
+        if (newOrientation != camoOrientation)
+        {
+            camoOrientation = newOrientation;
+            changed = true;
+        }
+        return changed;
     }
 
     private byte writeFlags()
@@ -1159,7 +1224,20 @@ public class FramedBlockEntity extends BlockEntity
     {
         // The view-blocking value is never resolved from the second part, no point in computing it twice
         TriState viewBlocking = secondPart ? TriState.DEFAULT : Utils.toTriState(state.isSuffocating(level(), worldPosition));
-        return new FramedBlockData(state, camo, cullData, secondPart, reinforced, emissive, viewBlocking, overlay);
+        CamoContainer<?, ?> adjustedCamo = adjustCamoOrientation(camo, state, secondPart);
+        return new FramedBlockData(state, adjustedCamo, cullData, secondPart, reinforced, emissive, viewBlocking, overlay);
+    }
+
+    private CamoContainer<?, ?> adjustCamoOrientation(CamoContainer<?, ?> camo, BlockState state, boolean secondPart)
+    {
+        Direction camoOrientation = getCamoOrientation(secondPart);
+        if (camoOrientation == null) return camo;
+
+        Direction blockOrientation = getBlock().getHorizontalOrientation(state);
+        if (blockOrientation == null) return camo;
+
+        Rotation rotation = Utils.getRotationBetween(camoOrientation, blockOrientation);
+        return camo.adjustForCarrierRotation(rotation);
     }
 
     protected void attachAdditionalModelData(ModelData.Builder builder) { }
@@ -1219,6 +1297,7 @@ public class FramedBlockEntity extends BlockEntity
     public void removeComponentsFromTag(ValueOutput valueOutput)
     {
         valueOutput.discard(CAMO_NBT_KEY);
+        valueOutput.discard(CAMO_DIR_NBT_KEY);
         valueOutput.discard(OVERLAY_NBT_KEY);
         valueOutput.discard("glowing");
         valueOutput.discard("intangible");
@@ -1277,6 +1356,7 @@ public class FramedBlockEntity extends BlockEntity
     public void saveAdditional(ValueOutput valueOutput)
     {
         valueOutput.store(CAMO_NBT_KEY, CamoContainerHelper.CODEC, camoContainer);
+        valueOutput.storeNullable(CAMO_DIR_NBT_KEY, Direction.CODEC, camoOrientation);
         valueOutput.storeNullable(OVERLAY_NBT_KEY, BlockOverlay.CODEC, overlay);
         valueOutput.putBoolean("glowing", glowing);
         valueOutput.putBoolean("intangible", intangible);
@@ -1293,11 +1373,13 @@ public class FramedBlockEntity extends BlockEntity
         super.loadAdditional(valueInput);
 
         camoContainer = loadAndValidateCamo(valueInput, CAMO_NBT_KEY);
+        camoOrientation = valueInput.read(CAMO_DIR_NBT_KEY, Direction.CODEC).orElse(null);
         overlay = valueInput.read(OVERLAY_NBT_KEY, BlockOverlay.CODEC).orElse(null);
         glowing = valueInput.getBooleanOr("glowing", false);
         intangible = valueInput.getBooleanOr("intangible", false);
         reinforced = valueInput.getBooleanOr("reinforced", false);
         emissive = valueInput.getBooleanOr("emissive", false);
+        recheckStates |= valueInput.getByteOr("updated", (byte) 0) < FramedBlockEntity.DATA_VERSION;
 
         if (glowing)
         {
@@ -1321,7 +1403,6 @@ public class FramedBlockEntity extends BlockEntity
             return EmptyCamoContainer.EMPTY;
         }
         forceLightUpdate |= camo.getContent().getLightEmission() > 0;
-        recheckStates |= valueInput.getByteOr("updated", (byte) 0) < DATA_VERSION;
         return camo;
     }
 }

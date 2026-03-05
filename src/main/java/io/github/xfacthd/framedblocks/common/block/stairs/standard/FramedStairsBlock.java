@@ -165,6 +165,12 @@ public class FramedStairsBlock extends StairBlock implements IFramedBlockInterna
     }
 
     @Override
+    public Direction getHorizontalOrientation(BlockState state)
+    {
+        return state.getValue(FramedProperties.FACING_HOR);
+    }
+
+    @Override
     public Class<? extends Block> getJadeTargetClass()
     {
         return FramedStairsBlock.class;

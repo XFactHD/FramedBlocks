@@ -90,6 +90,12 @@ public class FramedAdjustableDoublePanelBlock extends FramedAdjustableDoubleBloc
         return CamoGetter.NONE;
     }
 
+    @Override
+    public Direction getHorizontalOrientation(BlockState state)
+    {
+        return state.getValue(FramedProperties.FACING_HOR);
+    }
+
 
 
     public static FramedAdjustableDoublePanelBlock standard(Properties props)

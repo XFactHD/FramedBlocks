@@ -84,6 +84,12 @@ public class FramedTubeBlock extends FramedBlock
     }
 
     @Override
+    public Direction getHorizontalOrientation(BlockState state)
+    {
+        return Utils.getHorizontalDirection(state.getValue(BlockStateProperties.AXIS));
+    }
+
+    @Override
     public BlockState getJadeRenderState(BlockState state)
     {
         return getItemModelSource();

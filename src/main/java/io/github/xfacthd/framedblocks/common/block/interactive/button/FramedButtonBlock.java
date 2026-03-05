@@ -123,6 +123,13 @@ public class FramedButtonBlock extends ButtonBlock implements IFramedBlockIntern
     }
 
     @Override
+    @Nullable
+    public Direction getHorizontalOrientation(BlockState state)
+    {
+        return state.getValue(FACING);
+    }
+
+    @Override
     public Class<? extends Block> getJadeTargetClass()
     {
         return FramedButtonBlock.class;

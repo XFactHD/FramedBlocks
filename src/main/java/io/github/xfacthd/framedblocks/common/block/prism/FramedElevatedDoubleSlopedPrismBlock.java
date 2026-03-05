@@ -7,6 +7,7 @@ import io.github.xfacthd.framedblocks.api.block.doubleblock.CamoGetter;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockParts;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockTopInteractionMode;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.SolidityCheck;
+import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.block.FramedDoubleBlock;
 import io.github.xfacthd.framedblocks.common.blockentity.doubled.prism.FramedElevatedDoubleSlopedPrismBlockEntity;
@@ -155,6 +156,15 @@ public class FramedElevatedDoubleSlopedPrismBlock extends FramedDoubleBlock impl
         boolean inner = getBlockType() == BlockType.FRAMED_ELEVATED_INNER_DOUBLE_SLOPED_PRISM;
         CompoundDirection cmpDir = inner ? CompoundDirection.UP_EAST : CompoundDirection.UP_WEST;
         return defaultBlockState().setValue(PropertyHolder.FACING_DIR, cmpDir);
+    }
+
+    @Override
+    public Direction getHorizontalOrientation(BlockState state)
+    {
+        CompoundDirection cmpDir = state.getValue(PropertyHolder.FACING_DIR);
+        if (!Utils.isY(cmpDir.direction())) return cmpDir.direction();
+        if (!Utils.isY(cmpDir.orientation())) return cmpDir.orientation();
+        return Direction.NORTH;
     }
 
     @Override

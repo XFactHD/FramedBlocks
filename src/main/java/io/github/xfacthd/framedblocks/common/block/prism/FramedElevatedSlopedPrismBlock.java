@@ -2,11 +2,13 @@ package io.github.xfacthd.framedblocks.common.block.prism;
 
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
+import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import io.github.xfacthd.framedblocks.common.data.property.CompoundDirection;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
@@ -72,6 +74,15 @@ public class FramedElevatedSlopedPrismBlock extends FramedBlock implements IFram
         boolean inner = getBlockType() == BlockType.FRAMED_ELEVATED_INNER_SLOPED_PRISM;
         CompoundDirection cmpDir = inner ? CompoundDirection.UP_EAST : CompoundDirection.UP_WEST;
         return defaultBlockState().setValue(PropertyHolder.FACING_DIR, cmpDir);
+    }
+
+    @Override
+    public Direction getHorizontalOrientation(BlockState state)
+    {
+        CompoundDirection cmpDir = state.getValue(PropertyHolder.FACING_DIR);
+        if (!Utils.isY(cmpDir.direction())) return cmpDir.direction();
+        if (!Utils.isY(cmpDir.orientation())) return cmpDir.orientation();
+        return Direction.NORTH;
     }
 
     @Override

@@ -10,6 +10,8 @@ import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.MapColor;
 import org.jspecify.annotations.Nullable;
 
@@ -94,6 +96,15 @@ public abstract class CamoContainer<C extends CamoContent<C>, T extends CamoCont
      */
     @Nullable
     public abstract T rotateCamo();
+
+    /**
+     * Rotate the camo to follow the containing framed block's horizontal rotation,
+     * i.e. via {@link BlockState#rotate(Rotation)} on block camos.
+     *
+     * @param rotation The rotation to apply to the camo
+     */
+    @SuppressWarnings("deprecation")
+    public abstract T adjustForCarrierRotation(Rotation rotation);
 
     /**
      * {@return whether this camo can be converted to an {@link ItemStack} without consuming another item}

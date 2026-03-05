@@ -659,6 +659,19 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension
     BlockState getItemModelSource();
 
     /**
+     * {@return the horizontal orientation of the given state to adjust the camo rotation to the block's rotation or {@code null} if not applicable}
+     * <p>
+     * This method should either always or never return {@code null}. Special cases:
+     * <ul>
+     *     <li>Blocks with a {@link Direction.Axis} property as primary orientation should return {@link Utils#getHorizontalDirection(Direction.Axis)}</li>
+     *     <li>Blocks with a {@link Direction} property including vertical directions should return {@link Direction#NORTH} for vertical directions</li>
+     *     <li>Blocks which have a conditional orientation (i.e. one-way window) should always return {@code null}</li>
+     * </ul>
+     */
+    @Nullable
+    Direction getHorizontalOrientation(BlockState state);
+
+    /**
      * {@return the class under which this block should be registered to the Jade BlockComponentProvider to prevent
      * duplicate provider attachment for blocks which extend a class that is instantiated for other blocks}
      * @apiNote This is only relevant for blocks which do not extend {@link AbstractFramedBlock}

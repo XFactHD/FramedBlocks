@@ -2,11 +2,13 @@ package io.github.xfacthd.framedblocks.common.block.prism;
 
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
+import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import io.github.xfacthd.framedblocks.common.data.property.DirectionAxis;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
@@ -67,6 +69,14 @@ public class FramedElevatedPrismBlock extends FramedBlock implements IFramedPris
     public BlockState getItemModelSource()
     {
         return defaultBlockState().setValue(PropertyHolder.FACING_AXIS, DirectionAxis.UP_X);
+    }
+
+    @Override
+    public Direction getHorizontalOrientation(BlockState state)
+    {
+        DirectionAxis dirAxis = state.getValue(PropertyHolder.FACING_AXIS);
+        if (!Utils.isY(dirAxis.direction())) return dirAxis.direction();
+        return Utils.getHorizontalDirection(dirAxis.axis());
     }
 
     @Override

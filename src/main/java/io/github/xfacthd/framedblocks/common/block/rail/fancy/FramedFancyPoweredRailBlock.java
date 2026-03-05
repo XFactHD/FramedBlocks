@@ -6,6 +6,7 @@ import io.github.xfacthd.framedblocks.api.block.IBlockType;
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.common.block.IFramedBlockInternal;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
+import io.github.xfacthd.framedblocks.common.util.FramedUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
@@ -139,6 +140,13 @@ public class FramedFancyPoweredRailBlock extends PoweredRailBlock implements IFr
     public BlockState getItemModelSource()
     {
         return defaultBlockState();
+    }
+
+    @Override
+    @Nullable
+    public Direction getHorizontalOrientation(BlockState state)
+    {
+        return FramedUtils.getDirectionFromStraightRailShape(state.getValue(SHAPE));
     }
 
     @Override

@@ -190,6 +190,12 @@ public class FramedGateBlock extends FramedBlock
     }
 
     @Override
+    public Direction getHorizontalOrientation(BlockState state)
+    {
+        return state.getValue(FramedProperties.FACING_HOR);
+    }
+
+    @Override
     public BlockState getJadeRenderState(BlockState state)
     {
         return defaultBlockState();

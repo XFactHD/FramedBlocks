@@ -1,6 +1,7 @@
 package io.github.xfacthd.framedblocks.api.util;
 
 import net.minecraft.core.Direction;
+import net.minecraft.world.level.block.Rotation;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Set;
@@ -12,6 +13,7 @@ final class Lookups
     static final Set<Direction>[] AXIS_TUBE_FACES = makeAxisTubeFaceMapping();
     static final Set<Direction>[] AXIS_CAP_FACES = makeAxisCapFaceMapping();
     static final int[] DIR_2D_VALUE_AROUND_AXIS = build2dValueMapping();
+    static final Rotation[] ROTATIONS = makeDirToDirRotationMapping();
 
     static int makePerpAxisIndex(Direction.Axis axis1, Direction.Axis axis2)
     {
@@ -31,6 +33,11 @@ final class Lookups
         return axis.ordinal() << 3 | dir.ordinal();
     }
 
+    static int makeDirToDirRotationIndex(Direction dirOne, Direction dirTwo)
+    {
+        return dirOne.get2DDataValue() << 2 | dirTwo.get2DDataValue();
+    }
+
     private static Direction.@Nullable Axis[] buildPerpAxisMapping()
     {
         Direction.Axis[] mapping = new Direction.Axis[11];
@@ -43,7 +50,7 @@ final class Lookups
     private static @Nullable Direction[] makeNormalMapping()
     {
         Direction[] mapping = new Direction[64];
-        for (Direction dir : Direction.values())
+        for (Direction dir : Utils.DIRECTIONS)
         {
             mapping[makeNormalIndex(dir.getStepX(), dir.getStepY(), dir.getStepZ())] = dir;
         }
@@ -75,7 +82,7 @@ final class Lookups
     private static int[] build2dValueMapping()
     {
         int[] mapping = new int[24];
-        for (Direction dir : Direction.values())
+        for (Direction dir : Utils.DIRECTIONS)
         {
             mapping[make2dValueIndex(Direction.Axis.Y, dir)] = dir.get2DDataValue();
             mapping[make2dValueIndex(Direction.Axis.X, dir)] = switch (dir)
@@ -94,6 +101,20 @@ final class Lookups
                 case UP -> 3;
                 default -> -1;
             };
+        }
+        return mapping;
+    }
+
+    private static Rotation[] makeDirToDirRotationMapping()
+    {
+        Rotation[] mapping = new Rotation[16];
+        for (Rotation rotation : Rotation.values())
+        {
+            for (Direction dirOne : Utils.HORIZONTAL_DIRECTIONS)
+            {
+                Direction dirTwo = rotation.rotate(dirOne);
+                mapping[makeDirToDirRotationIndex(dirOne, dirTwo)] = rotation;
+            }
         }
         return mapping;
     }

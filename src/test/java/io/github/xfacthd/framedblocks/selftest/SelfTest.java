@@ -40,6 +40,7 @@ public final class SelfTest
         JadeRenderStateErrors.checkJadeRenderStateErrors(reporter, blocks);
         BlockEntityPresence.checkBlockEntityTypePresent(reporter, blocks);
         DoubleBlockPartModelStateConsistency.checkBlockPartConsistency(reporter, blocks);
+        HorizontalOrientationValidity.checkHorizontalOrientations(reporter, blocks);
 
         reporter.finish();
     }

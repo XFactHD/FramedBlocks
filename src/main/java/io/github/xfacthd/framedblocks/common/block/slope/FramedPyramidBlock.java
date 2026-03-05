@@ -6,6 +6,7 @@ import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.util.RotationDirection;
+import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import net.minecraft.core.BlockPos;
@@ -80,6 +81,13 @@ public class FramedPyramidBlock extends FramedBlock
     public BlockState getItemModelSource()
     {
         return defaultBlockState();
+    }
+
+    @Override
+    public Direction getHorizontalOrientation(BlockState state)
+    {
+        Direction facing = state.getValue(BlockStateProperties.FACING);
+        return Utils.isY(facing) ? Direction.NORTH : facing;
     }
 
     @Override

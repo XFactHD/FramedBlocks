@@ -4,6 +4,7 @@ import io.github.xfacthd.framedblocks.api.camo.CamoContainer;
 import io.github.xfacthd.framedblocks.api.camo.CamoContainerFactory;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import net.minecraft.core.Direction;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.material.Fluid;
 
 public final class FluidCamoContainer extends CamoContainer<FluidCamoContent, FluidCamoContainer>
@@ -36,6 +37,14 @@ public final class FluidCamoContainer extends CamoContainer<FluidCamoContent, Fl
     {
         int nextIdx = (getFlowDirection().ordinal() + 1) % DIRECTIONS.length;
         return new FluidCamoContainer(getFluid(), DIRECTIONS[nextIdx]);
+    }
+
+    @Override
+    public FluidCamoContainer adjustForCarrierRotation(Rotation rotation)
+    {
+        Direction flowDir = getFlowDirection();
+        Direction newFlorDir = rotation.rotate(flowDir);
+        return flowDir != newFlorDir ? new FluidCamoContainer(getFluid(), newFlorDir) : this;
     }
 
     @Override

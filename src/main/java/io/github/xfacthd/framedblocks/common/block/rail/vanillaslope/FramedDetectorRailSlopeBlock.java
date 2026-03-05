@@ -261,6 +261,12 @@ public class FramedDetectorRailSlopeBlock<BE extends FramedBlockEntity> extends 
     }
 
     @Override
+    public Direction getHorizontalOrientation(BlockState state)
+    {
+        return FramedUtils.getDirectionFromAscendingRailShape(state.getValue(PropertyHolder.ASCENDING_RAIL_SHAPE));
+    }
+
+    @Override
     public Class<? extends Block> getJadeTargetClass()
     {
         return FramedDetectorRailSlopeBlock.class;

@@ -202,6 +202,13 @@ public class FramedCeilingHangingSignBlock extends AbstractFramedHangingSignBloc
     }
 
     @Override
+    public Direction getHorizontalOrientation(BlockState state)
+    {
+        int rotation = state.getValue(BlockStateProperties.ROTATION_16);
+        return Direction.from2DDataValue(rotation / 4);
+    }
+
+    @Override
     public BlockState getJadeRenderState(BlockState state)
     {
         return defaultBlockState();

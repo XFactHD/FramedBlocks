@@ -4,6 +4,7 @@ import com.mojang.serialization.MapCodec;
 import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.IBlockType;
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
+import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.common.block.IFramedBlockInternal;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import net.minecraft.core.BlockPos;
@@ -128,6 +129,12 @@ public class FramedChainBlock extends ChainBlock implements IFramedBlockInternal
     public BlockState getItemModelSource()
     {
         return null;
+    }
+
+    @Override
+    public Direction getHorizontalOrientation(BlockState state)
+    {
+        return Utils.getHorizontalDirection(state.getValue(AXIS));
     }
 
     @Override

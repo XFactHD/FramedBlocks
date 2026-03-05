@@ -151,6 +151,13 @@ public class FramedBoardBlock extends FramedBlock
     }
 
     @Override
+    @Nullable
+    public Direction getHorizontalOrientation(BlockState state)
+    {
+        return null;
+    }
+
+    @Override
     public BlockState getJadeRenderState(BlockState state)
     {
         return defaultBlockState();

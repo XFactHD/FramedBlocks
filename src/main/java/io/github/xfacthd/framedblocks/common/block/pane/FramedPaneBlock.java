@@ -171,6 +171,13 @@ public class FramedPaneBlock extends IronBarsBlock implements IFramedBlockIntern
     }
 
     @Override
+    @Nullable
+    public Direction getHorizontalOrientation(BlockState state)
+    {
+        return null;
+    }
+
+    @Override
     public BlockState getJadeRenderState(BlockState state)
     {
         return defaultBlockState().setValue(EAST, true).setValue(WEST, true);

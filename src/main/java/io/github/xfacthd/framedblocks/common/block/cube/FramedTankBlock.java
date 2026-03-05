@@ -19,6 +19,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.phys.BlockHitResult;
+import org.jspecify.annotations.Nullable;
 
 public class FramedTankBlock extends FramedBlock
 {
@@ -82,6 +83,13 @@ public class FramedTankBlock extends FramedBlock
     public BlockState getItemModelSource()
     {
         return defaultBlockState();
+    }
+
+    @Override
+    @Nullable
+    public Direction getHorizontalOrientation(BlockState state)
+    {
+        return null;
     }
 
     @Override

@@ -9,6 +9,7 @@ import io.github.xfacthd.framedblocks.api.util.RotationDirection;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
+import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.Block;
@@ -82,6 +83,13 @@ public class FramedMiniCubeBlock extends FramedBlock
     public BlockState getItemModelSource()
     {
         return defaultBlockState();
+    }
+
+    @Override
+    public Direction getHorizontalOrientation(BlockState state)
+    {
+        int rotation = state.getValue(BlockStateProperties.ROTATION_16);
+        return Direction.from2DDataValue(rotation / 4);
     }
 
     @Override

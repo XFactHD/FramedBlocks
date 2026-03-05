@@ -138,6 +138,13 @@ public class FramedLightningRodBlock extends LightningRodBlock implements IFrame
     }
 
     @Override
+    public Direction getHorizontalOrientation(BlockState state)
+    {
+        Direction facing = state.getValue(FACING);
+        return Utils.isY(facing) ? Direction.NORTH : facing;
+    }
+
+    @Override
     public BlockState getJadeRenderState(BlockState state)
     {
         return defaultBlockState();

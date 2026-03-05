@@ -64,8 +64,8 @@ public final class Utils
     private static final Identifier RL_TEMPLATE = Utils.id(FramedConstants.MOD_ID, "");
     public static final boolean PRODUCTION = FMLEnvironment.isProduction();
     public static final boolean CLIENT_DIST = FMLEnvironment.getDist().isClient();
-    private static final Direction[] DIRECTIONS = Direction.values();
-    private static final Direction[] HORIZONTAL_DIRECTIONS = Direction.Plane.HORIZONTAL.stream().toArray(Direction[]::new);
+    static final Direction[] DIRECTIONS = Direction.values();
+    static final Direction[] HORIZONTAL_DIRECTIONS = Direction.Plane.HORIZONTAL.stream().toArray(Direction[]::new);
     public static final TagKey<Block> FRAMEABLE = blockTag("frameable");
     public static final TagKey<Block> BLOCK_BLACKLIST = blockTag("blacklisted");
     public static final TagKey<Fluid> FLUID_BLACKLIST = TagKey.create(Registries.FLUID, id("blacklisted"));
@@ -344,6 +344,11 @@ public final class Utils
         return Lookups.DIR_2D_VALUE_AROUND_AXIS[Lookups.make2dValueIndex(axis, dir)];
     }
 
+    public static Direction getHorizontalDirection(Direction.Axis axis)
+    {
+        return axis != Direction.Axis.Y ? axis.getNegative() : Direction.NORTH;
+    }
+
     public static boolean isNinetyDegree(Rotation rotation)
     {
         return rotation == Rotation.CLOCKWISE_90 || rotation == Rotation.COUNTERCLOCKWISE_90;
@@ -358,6 +363,11 @@ public final class Utils
             case CLOCKWISE_180 -> Rotation.CLOCKWISE_180;
             case COUNTERCLOCKWISE_90 -> Rotation.CLOCKWISE_90;
         };
+    }
+
+    public static Rotation getRotationBetween(Direction dirOne, Direction dirTwo)
+    {
+        return Lookups.ROTATIONS[Lookups.makeDirToDirRotationIndex(dirOne, dirTwo)];
     }
 
     public static <T> List<T> concat(List<T> listOne, List<T> listTwo)

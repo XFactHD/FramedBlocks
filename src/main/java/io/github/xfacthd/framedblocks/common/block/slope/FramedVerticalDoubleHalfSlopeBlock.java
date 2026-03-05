@@ -166,6 +166,12 @@ public class FramedVerticalDoubleHalfSlopeBlock extends FramedDoubleBlock implem
     }
 
     @Override
+    public Direction getHorizontalOrientation(BlockState state)
+    {
+        return state.getValue(FramedProperties.FACING_HOR);
+    }
+
+    @Override
     public BlockState getJadeRenderState(BlockState state)
     {
         return ((IFramedBlock) FBContent.BLOCK_FRAMED_DOUBLE_HALF_SLOPE.value()).getJadeRenderState(state);
