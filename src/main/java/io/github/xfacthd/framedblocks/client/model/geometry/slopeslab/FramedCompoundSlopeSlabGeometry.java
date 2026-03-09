@@ -15,12 +15,12 @@ import org.jspecify.annotations.Nullable;
 public class FramedCompoundSlopeSlabGeometry extends Geometry
 {
     private final Direction dir;
-    private final boolean ySlope;
+    private final boolean altSlope;
 
     public FramedCompoundSlopeSlabGeometry(GeometryFactory.Context ctx)
     {
         this.dir = ctx.state().getValue(FramedProperties.FACING_HOR);
-        this.ySlope = ctx.state().getValue(FramedProperties.Y_SLOPE);
+        this.altSlope = ctx.state().getValue(FramedProperties.ALT_SLOPE);
     }
 
     @Override
@@ -33,7 +33,7 @@ public class FramedCompoundSlopeSlabGeometry extends Geometry
                     .apply(Modifiers.cut(Direction.DOWN, .5F))
                     .export(quadMap.get(quadDir));
 
-            if (!ySlope)
+            if (!altSlope)
             {
                 QuadModifier.of(quad)
                         .apply(Modifiers.makeVerticalSlope(false, FramedSlopeSlabGeometry.SLOPE_ANGLE))
@@ -47,7 +47,7 @@ public class FramedCompoundSlopeSlabGeometry extends Geometry
                     .apply(Modifiers.cut(Direction.UP, .5F))
                     .export(quadMap.get(quadDir));
 
-            if (!ySlope)
+            if (!altSlope)
             {
                 QuadModifier.of(quad)
                         .apply(Modifiers.makeVerticalSlope(true, FramedSlopeSlabGeometry.SLOPE_ANGLE))
@@ -55,7 +55,7 @@ public class FramedCompoundSlopeSlabGeometry extends Geometry
                         .export(quadMap.get(null));
             }
         }
-        else if (ySlope && DirUtils.isY(quadDir))
+        else if (altSlope && DirUtils.isY(quadDir))
         {
             Direction edge = quadDir == Direction.UP ? dir.getOpposite() : dir;
             QuadModifier.of(quad)

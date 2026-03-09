@@ -67,7 +67,7 @@ public class FramedFancyDetectorRailSlopeBlock extends FramedDetectorRailSlopeBl
     public DoubleBlockParts calculateParts(BlockState state)
     {
         RailShape shape = state.getValue(PropertyHolder.ASCENDING_RAIL_SHAPE);
-        boolean ySlope = state.getValue(FramedProperties.Y_SLOPE);
+        boolean altSlope = state.getValue(FramedProperties.ALT_SLOPE);
 
         Direction facing = FramedUtils.getDirectionFromAscendingRailShape(shape);
 
@@ -75,7 +75,7 @@ public class FramedFancyDetectorRailSlopeBlock extends FramedDetectorRailSlopeBl
                 FBContent.BLOCK_FRAMED_SLOPE.value().defaultBlockState()
                         .setValue(PropertyHolder.SLOPE_TYPE, SlopeType.BOTTOM)
                         .setValue(FramedProperties.FACING_HOR, facing)
-                        .setValue(FramedProperties.Y_SLOPE, ySlope),
+                        .setValue(FramedProperties.ALT_SLOPE, altSlope),
                 FBContent.BLOCK_FRAMED_FANCY_DETECTOR_RAIL.value().defaultBlockState()
                         .setValue(BlockStateProperties.RAIL_SHAPE_STRAIGHT, shape)
         );

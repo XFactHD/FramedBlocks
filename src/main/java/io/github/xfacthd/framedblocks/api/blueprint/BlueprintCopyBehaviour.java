@@ -61,9 +61,9 @@ public interface BlueprintCopyBehaviour
     default Set<Property<?>> getPropertiesToCopy(BlockState state)
     {
         Set<Property<?>> properties = Set.of();
-        if (state.hasProperty(FramedProperties.Y_SLOPE))
+        if (state.hasProperty(FramedProperties.ALT_SLOPE))
         {
-            properties = Set.of(FramedProperties.Y_SLOPE);
+            properties = Set.of(FramedProperties.ALT_SLOPE);
         }
         if (state.getBlock() instanceof ShapeLockableBlock lockable && lockable.isLocked(state))
         {

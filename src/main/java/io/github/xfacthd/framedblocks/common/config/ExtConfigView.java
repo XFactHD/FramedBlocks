@@ -47,7 +47,7 @@ public final class ExtConfigView
 
         OverlayDisplayMode getToggleWaterlogMode();
 
-        OverlayDisplayMode getToggleYSlopeMode();
+        OverlayDisplayMode getToggleAltSlopeMode();
 
         OverlayDisplayMode getReinforcementMode();
 

@@ -2,8 +2,8 @@ package io.github.xfacthd.framedblocks.common.block.slopeslab;
 
 import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
-import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
+import io.github.xfacthd.framedblocks.api.block.SlopeToggleBlock;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.CamoGetter;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockParts;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockTopInteractionMode;
@@ -15,11 +15,8 @@ import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.block.FramedDoubleBlock;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
@@ -28,7 +25,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.jspecify.annotations.Nullable;
 
-public class FramedFlatStackedSlopeSlabCornerBlock extends FramedDoubleBlock
+public class FramedFlatStackedSlopeSlabCornerBlock extends FramedDoubleBlock implements SlopeToggleBlock
 {
     private final boolean corner;
 
@@ -38,7 +35,7 @@ public class FramedFlatStackedSlopeSlabCornerBlock extends FramedDoubleBlock
         this.corner = type == BlockType.FRAMED_FLAT_STACKED_SLOPE_SLAB_CORNER;
         registerDefaultState(defaultBlockState()
                 .setValue(FramedProperties.TOP, false)
-                .setValue(FramedProperties.Y_SLOPE, true)
+                .setValue(FramedProperties.ALT_SLOPE, true)
         );
     }
 
@@ -48,7 +45,7 @@ public class FramedFlatStackedSlopeSlabCornerBlock extends FramedDoubleBlock
         super.createBlockStateDefinition(builder);
         builder.add(
                 FramedProperties.FACING_HOR, FramedProperties.TOP,
-                FramedProperties.Y_SLOPE, BlockStateProperties.WATERLOGGED
+                FramedProperties.ALT_SLOPE, BlockStateProperties.WATERLOGGED
         );
     }
 
@@ -61,12 +58,6 @@ public class FramedFlatStackedSlopeSlabCornerBlock extends FramedDoubleBlock
                 .withTop()
                 .withWater()
                 .build();
-    }
-
-    @Override
-    public boolean handleBlockLeftClick(BlockState state, Level level, BlockPos pos, Player player)
-    {
-        return IFramedBlock.toggleYSlope(state, level, pos, player);
     }
 
     @Override
@@ -96,7 +87,7 @@ public class FramedFlatStackedSlopeSlabCornerBlock extends FramedDoubleBlock
     {
         Direction dir = state.getValue(FramedProperties.FACING_HOR);
         boolean top = state.getValue(FramedProperties.TOP);
-        boolean ySlope = state.getValue(FramedProperties.Y_SLOPE);
+        boolean altSlope = state.getValue(FramedProperties.ALT_SLOPE);
 
         Block topBlock;
         if (getBlockType() == BlockType.FRAMED_FLAT_STACKED_INNER_SLOPE_SLAB_CORNER)
@@ -116,7 +107,7 @@ public class FramedFlatStackedSlopeSlabCornerBlock extends FramedDoubleBlock
                         .setValue(FramedProperties.FACING_HOR, dir)
                         .setValue(FramedProperties.TOP, top)
                         .setValue(PropertyHolder.TOP_HALF, !top)
-                        .setValue(FramedProperties.Y_SLOPE, ySlope)
+                        .setValue(FramedProperties.ALT_SLOPE, altSlope)
         );
     }
 

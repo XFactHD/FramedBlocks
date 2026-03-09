@@ -2,7 +2,7 @@ package io.github.xfacthd.framedblocks.common.block.slopepanel;
 
 import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
-import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
+import io.github.xfacthd.framedblocks.api.block.SlopeToggleBlock;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.util.RotationDirection;
 import io.github.xfacthd.framedblocks.common.block.ExtPlacementStateBuilder;
@@ -10,11 +10,8 @@ import io.github.xfacthd.framedblocks.common.block.FramedBlock;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import io.github.xfacthd.framedblocks.common.data.property.HorizontalRotation;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
@@ -23,12 +20,11 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.jspecify.annotations.Nullable;
 
-public class FramedExtendedSlopePanelBlock extends FramedBlock
+public class FramedExtendedSlopePanelBlock extends FramedBlock implements SlopeToggleBlock
 {
     public FramedExtendedSlopePanelBlock(Properties props)
     {
         super(BlockType.FRAMED_EXTENDED_SLOPE_PANEL, props);
-        registerDefaultState(defaultBlockState().setValue(FramedProperties.Y_SLOPE, false));
     }
 
     @Override
@@ -37,7 +33,7 @@ public class FramedExtendedSlopePanelBlock extends FramedBlock
         super.createBlockStateDefinition(builder);
         builder.add(
                 FramedProperties.FACING_HOR, PropertyHolder.ROTATION, FramedProperties.SOLID,
-                BlockStateProperties.WATERLOGGED, FramedProperties.Y_SLOPE
+                BlockStateProperties.WATERLOGGED, FramedProperties.ALT_SLOPE
         );
     }
 
@@ -50,12 +46,6 @@ public class FramedExtendedSlopePanelBlock extends FramedBlock
                 .withCrossOrSideRotation()
                 .withWater()
                 .build();
-    }
-
-    @Override
-    public boolean handleBlockLeftClick(BlockState state, Level level, BlockPos pos, Player player)
-    {
-        return IFramedBlock.toggleYSlope(state, level, pos, player);
     }
 
     @Override

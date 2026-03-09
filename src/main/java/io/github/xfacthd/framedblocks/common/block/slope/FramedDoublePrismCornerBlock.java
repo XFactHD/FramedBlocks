@@ -57,19 +57,19 @@ public class FramedDoublePrismCornerBlock extends FramedDoubleThreewayCornerBloc
         Direction facing = state.getValue(FramedProperties.FACING_HOR);
         boolean top = state.getValue(FramedProperties.TOP);
         boolean offset = state.getValue(FramedProperties.OFFSET);
-        boolean ySlope = state.getValue(FramedProperties.Y_SLOPE);
+        boolean altSlope = state.getValue(FramedProperties.ALT_SLOPE);
 
         return new DoubleBlockParts(
                 FBContent.BLOCK_FRAMED_INNER_PRISM_CORNER.value().defaultBlockState()
                         .setValue(FramedProperties.FACING_HOR, facing)
                         .setValue(FramedProperties.TOP, top)
                         .setValue(FramedProperties.OFFSET, offset)
-                        .setValue(FramedProperties.Y_SLOPE, ySlope),
+                        .setValue(FramedProperties.ALT_SLOPE, altSlope),
                 FBContent.BLOCK_FRAMED_PRISM_CORNER.value().defaultBlockState()
                         .setValue(FramedProperties.FACING_HOR, facing.getOpposite())
                         .setValue(FramedProperties.TOP, !top)
                         .setValue(FramedProperties.OFFSET, !offset)
-                        .setValue(FramedProperties.Y_SLOPE, ySlope)
+                        .setValue(FramedProperties.ALT_SLOPE, altSlope)
         );
     }
 }

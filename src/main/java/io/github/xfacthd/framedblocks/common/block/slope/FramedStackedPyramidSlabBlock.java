@@ -36,7 +36,7 @@ public class FramedStackedPyramidSlabBlock extends FramedConnectingPyramidBlock 
     {
         Direction facing = state.getValue(BlockStateProperties.FACING);
         PillarConnection connection = state.getValue(PropertyHolder.PILLAR_CONNECTION);
-        boolean ySlope = state.getValue(FramedProperties.Y_SLOPE);
+        boolean altSlope = state.getValue(FramedProperties.ALT_SLOPE);
         BlockState stateOne;
         if (DirUtils.isY(facing))
         {
@@ -53,7 +53,7 @@ public class FramedStackedPyramidSlabBlock extends FramedConnectingPyramidBlock 
                 FBContent.BLOCK_FRAMED_UPPER_PYRAMID_SLAB.value().defaultBlockState()
                         .setValue(BlockStateProperties.FACING, facing)
                         .setValue(PropertyHolder.PILLAR_CONNECTION, connection)
-                        .setValue(FramedProperties.Y_SLOPE, ySlope)
+                        .setValue(FramedProperties.ALT_SLOPE, altSlope)
         );
     }
 

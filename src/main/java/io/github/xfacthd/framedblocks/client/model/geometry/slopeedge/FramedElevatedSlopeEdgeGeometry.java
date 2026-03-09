@@ -18,13 +18,13 @@ public class FramedElevatedSlopeEdgeGeometry extends Geometry
 {
     private final Direction dir;
     private final SlopeType type;
-    private final boolean ySlope;
+    private final boolean altSlope;
 
     public FramedElevatedSlopeEdgeGeometry(GeometryFactory.Context ctx)
     {
         this.dir = ctx.state().getValue(FramedProperties.FACING_HOR);
         this.type = ctx.state().getValue(PropertyHolder.SLOPE_TYPE);
-        this.ySlope = ctx.state().getValue(FramedProperties.Y_SLOPE);
+        this.altSlope = ctx.state().getValue(FramedProperties.ALT_SLOPE);
     }
 
     @Override
@@ -35,7 +35,7 @@ public class FramedElevatedSlopeEdgeGeometry extends Geometry
         {
             if (quadDir == dir.getOpposite())
             {
-                if (!ySlope)
+                if (!altSlope)
                 {
                     QuadModifier.of(quad)
                             .apply(Modifiers.cut(dir.getCounterClockWise(), .5F))
@@ -50,7 +50,7 @@ public class FramedElevatedSlopeEdgeGeometry extends Geometry
             }
             else if (quadDir == dir.getClockWise())
             {
-                if (ySlope)
+                if (altSlope)
                 {
                     QuadModifier.of(quad)
                             .apply(Modifiers.cut(dir, .5F))
@@ -85,7 +85,7 @@ public class FramedElevatedSlopeEdgeGeometry extends Geometry
                         .apply(Modifiers.cut(vertEdge, .5F))
                         .export(quadMap.get(quadDir));
 
-                if (!ySlope)
+                if (!altSlope)
                 {
                     QuadModifier.of(quad)
                             .apply(Modifiers.cut(vertEdge.getOpposite(), .5F))
@@ -100,7 +100,7 @@ public class FramedElevatedSlopeEdgeGeometry extends Geometry
                         .apply(Modifiers.cut(dir.getOpposite(), .5F))
                         .export(quadMap.get(quadDir));
 
-                if (ySlope)
+                if (altSlope)
                 {
                     QuadModifier.of(quad)
                             .apply(Modifiers.cut(dir, .5F))

@@ -308,13 +308,13 @@ public class PlacementStateBuilder<T extends PlacementStateBuilder<T>>
     }
 
     /**
-     * Set the state's {@link FramedProperties#Y_SLOPE} property to the given value
+     * Set the state's {@link FramedProperties#ALT_SLOPE} property to the given value
      */
-    public final T withYSlope(boolean ySlope)
+    public final T withAltSlope(boolean altSlope)
     {
         if (state == null) return self();
 
-        state = state.setValue(FramedProperties.Y_SLOPE, ySlope);
+        state = state.setValue(FramedProperties.ALT_SLOPE, altSlope);
         return self();
     }
 

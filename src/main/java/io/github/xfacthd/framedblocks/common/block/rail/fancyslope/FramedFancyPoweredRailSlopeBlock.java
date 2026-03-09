@@ -69,7 +69,7 @@ public class FramedFancyPoweredRailSlopeBlock extends FramedPoweredRailSlopeBloc
     public DoubleBlockParts calculateParts(BlockState state)
     {
         RailShape shape = state.getValue(PropertyHolder.ASCENDING_RAIL_SHAPE);
-        boolean ySlope = state.getValue(FramedProperties.Y_SLOPE);
+        boolean altSlope = state.getValue(FramedProperties.ALT_SLOPE);
 
         BlockState railState = (switch (getBlockType())
         {
@@ -83,7 +83,7 @@ public class FramedFancyPoweredRailSlopeBlock extends FramedPoweredRailSlopeBloc
                 FBContent.BLOCK_FRAMED_SLOPE.value().defaultBlockState()
                         .setValue(PropertyHolder.SLOPE_TYPE, SlopeType.BOTTOM)
                         .setValue(FramedProperties.FACING_HOR, facing)
-                        .setValue(FramedProperties.Y_SLOPE, ySlope),
+                        .setValue(FramedProperties.ALT_SLOPE, altSlope),
                 railState.setValue(BlockStateProperties.RAIL_SHAPE_STRAIGHT, shape)
         );
     }

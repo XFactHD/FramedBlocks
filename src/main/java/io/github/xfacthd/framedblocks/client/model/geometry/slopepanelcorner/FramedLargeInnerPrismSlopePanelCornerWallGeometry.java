@@ -48,7 +48,7 @@ public class FramedLargeInnerPrismSlopePanelCornerWallGeometry extends Geometry
     private final Direction dir;
     private final Direction rotDirOne;
     private final Direction rotDirTwo;
-    private final boolean ySlope;
+    private final boolean altSlope;
     private final boolean offset;
     private final boolean flipSideTris;
     private final boolean flipPrismTri;
@@ -63,15 +63,15 @@ public class FramedLargeInnerPrismSlopePanelCornerWallGeometry extends Geometry
         HorizontalRotation rot = ctx.state().getValue(PropertyHolder.ROTATION);
         this.rotDirOne = rot.withFacing(dir);
         this.rotDirTwo = rot.rotate(Rotation.COUNTERCLOCKWISE_90).withFacing(dir);
-        this.ySlope = ctx.state().getValue(FramedProperties.Y_SLOPE);
+        this.altSlope = ctx.state().getValue(FramedProperties.ALT_SLOPE);
         this.offset = ctx.state().getValue(FramedProperties.OFFSET);
         this.flipSideTris = rot == HorizontalRotation.DOWN || rot == HorizontalRotation.RIGHT;
-        this.flipPrismTri = rot == (ySlope ? HorizontalRotation.UP : HorizontalRotation.DOWN) || rot == HorizontalRotation.RIGHT;
+        this.flipPrismTri = rot == (altSlope ? HorizontalRotation.UP : HorizontalRotation.DOWN) || rot == HorizontalRotation.RIGHT;
         this.flipPrismTriOpp = rot == HorizontalRotation.DOWN || rot == HorizontalRotation.RIGHT;
         HorizontalRotation tiltRot = rot.isVertical() ? rot : rot.getOpposite();
-        this.tiltOrigin = FramedLargePrismSlopePanelCornerWallGeometry.getRotTiltOrigin(dir.getOpposite(), tiltRot, !ySlope);
-        this.invAngle = FramedSmallPrismSlopePanelCornerWallGeometry.invertTiltAngle(dir, rot) == ySlope;
-        this.dirAxisRotOrigin = getRotOrigin(dir, rot, ySlope);
+        this.tiltOrigin = FramedLargePrismSlopePanelCornerWallGeometry.getRotTiltOrigin(dir.getOpposite(), tiltRot, !altSlope);
+        this.invAngle = FramedSmallPrismSlopePanelCornerWallGeometry.invertTiltAngle(dir, rot) == altSlope;
+        this.dirAxisRotOrigin = getRotOrigin(dir, rot, altSlope);
     }
 
     @Override
@@ -94,7 +94,7 @@ public class FramedLargeInnerPrismSlopePanelCornerWallGeometry extends Geometry
                     .apply(Modifiers.cut(rotDirTwo.getOpposite(), flipSideTris ? 0 : 1, flipSideTris ? 1 : 0))
                     .export(quadMap.get(quadDir));
 
-            if (!ySlope)
+            if (!altSlope)
             {
                 makePrismSlope(quadMap, quad, this::makePrismSlopeHorizontal);
             }
@@ -105,7 +105,7 @@ public class FramedLargeInnerPrismSlopePanelCornerWallGeometry extends Geometry
                     .apply(Modifiers.cut(rotDirTwo.getOpposite(), flipSideTris ? .5F : 0, flipSideTris ? 0 : .5F))
                     .export(quadMap.get(quadDir));
 
-            if (ySlope)
+            if (altSlope)
             {
                 makePrismSlope(quadMap, quad, this::makePrismSlopeVertical);
             }
@@ -161,8 +161,8 @@ public class FramedLargeInnerPrismSlopePanelCornerWallGeometry extends Geometry
                 .export(quadMap.get(null));
     }
 
-    private static Vector3f getRotOrigin(Direction dir, HorizontalRotation rot, boolean ySlope)
+    private static Vector3f getRotOrigin(Direction dir, HorizontalRotation rot, boolean altSlope)
     {
-        return ROT_ORIGINS[dir.get2DDataValue() << 3 | rot.ordinal() << 1 | (ySlope ? 1 : 0)];
+        return ROT_ORIGINS[dir.get2DDataValue() << 3 | rot.ordinal() << 1 | (altSlope ? 1 : 0)];
     }
 }

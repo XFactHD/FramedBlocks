@@ -16,13 +16,13 @@ public class FramedVerticalHalfSlopeGeometry extends Geometry
 {
     private final Direction dir;
     private final boolean top;
-    private final boolean ySlope;
+    private final boolean altSlope;
 
     public FramedVerticalHalfSlopeGeometry(GeometryFactory.Context ctx)
     {
         this.dir = ctx.state().getValue(FramedProperties.FACING_HOR);
         this.top = ctx.state().getValue(FramedProperties.TOP);
-        this.ySlope = ctx.state().getValue(FramedProperties.Y_SLOPE);
+        this.altSlope = ctx.state().getValue(FramedProperties.ALT_SLOPE);
     }
 
     @Override
@@ -31,14 +31,14 @@ public class FramedVerticalHalfSlopeGeometry extends Geometry
         Direction quadDir = quad.direction();
         Direction vertEdge = top ? Direction.DOWN : Direction.UP;
 
-        if (!ySlope && quadDir == dir.getOpposite())
+        if (!altSlope && quadDir == dir.getOpposite())
         {
             QuadModifier.of(quad)
                     .apply(Modifiers.makeHorizontalSlope(false, 45))
                     .apply(Modifiers.cut(vertEdge, .5F))
                     .export(quadMap.get(null));
         }
-        else if (ySlope && quadDir == dir.getClockWise())
+        else if (altSlope && quadDir == dir.getClockWise())
         {
             QuadModifier.of(quad)
                     .apply(Modifiers.makeHorizontalSlope(true, 45))

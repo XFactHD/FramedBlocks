@@ -18,13 +18,13 @@ public class FramedSlopeGeometry extends Geometry
 {
     private final Direction dir;
     private final SlopeType type;
-    private final boolean ySlope;
+    private final boolean altSlope;
 
     public FramedSlopeGeometry(GeometryFactory.Context ctx)
     {
         this.dir = ctx.state().getValue(FramedProperties.FACING_HOR);
         this.type = ctx.state().getValue(PropertyHolder.SLOPE_TYPE);
-        this.ySlope = ctx.state().getValue(FramedProperties.Y_SLOPE);
+        this.altSlope = ctx.state().getValue(FramedProperties.ALT_SLOPE);
     }
 
     @Override
@@ -33,13 +33,13 @@ public class FramedSlopeGeometry extends Geometry
         Direction quadDir = quad.direction();
         if (type == SlopeType.HORIZONTAL)
         {
-            if (!ySlope && quad.direction() == dir.getOpposite())
+            if (!altSlope && quad.direction() == dir.getOpposite())
             {
                 QuadModifier.of(quad)
                         .apply(Modifiers.makeHorizontalSlope(false, 45))
                         .export(quadMap.get(null));
             }
-            else if (ySlope && quadDir == dir.getClockWise())
+            else if (altSlope && quadDir == dir.getClockWise())
             {
                 QuadModifier.of(quad)
                         .apply(Modifiers.makeHorizontalSlope(true, 45))
@@ -55,13 +55,13 @@ public class FramedSlopeGeometry extends Geometry
         else
         {
             boolean top = type == SlopeType.TOP;
-            if (!ySlope && quadDir == dir.getOpposite())
+            if (!altSlope && quadDir == dir.getOpposite())
             {
                 QuadModifier.of(quad)
                         .apply(Modifiers.makeVerticalSlope(!top, 45))
                         .export(quadMap.get(null));
             }
-            else if (ySlope && DirUtils.isY(quadDir))
+            else if (altSlope && DirUtils.isY(quadDir))
             {
                 QuadModifier.of(quad)
                         .apply(Modifiers.makeVerticalSlope(dir.getOpposite(), 45))

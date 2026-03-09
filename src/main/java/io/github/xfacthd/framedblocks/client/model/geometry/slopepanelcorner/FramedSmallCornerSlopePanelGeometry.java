@@ -20,13 +20,13 @@ public class FramedSmallCornerSlopePanelGeometry extends Geometry
 
     private final Direction dir;
     private final boolean top;
-    private final boolean ySlope;
+    private final boolean altSlope;
 
     public FramedSmallCornerSlopePanelGeometry(GeometryFactory.Context ctx)
     {
         this.dir = ctx.state().getValue(FramedProperties.FACING_HOR);
         this.top = ctx.state().getValue(FramedProperties.TOP);
-        this.ySlope = ctx.state().getValue(FramedProperties.Y_SLOPE);
+        this.altSlope = ctx.state().getValue(FramedProperties.ALT_SLOPE);
     }
 
     @Override
@@ -40,7 +40,7 @@ public class FramedSmallCornerSlopePanelGeometry extends Geometry
                     .apply(Modifiers.cut(cutDir, top ? .5F : 0F, top ? 0F : .5F))
                     .export(quadMap.get(quadDir));
         }
-        else if (!ySlope && (quadDir == dir.getOpposite() || quadDir == dir.getClockWise()))
+        else if (!altSlope && (quadDir == dir.getOpposite() || quadDir == dir.getClockWise()))
         {
             Direction cutDir = quadDir == dir.getOpposite() ? dir.getClockWise() : dir.getOpposite();
             float angle = top ? FramedSlopePanelGeometry.SLOPE_ANGLE : -FramedSlopePanelGeometry.SLOPE_ANGLE;
@@ -55,7 +55,7 @@ public class FramedSmallCornerSlopePanelGeometry extends Geometry
                     .apply(Modifiers.rotate(cutDir.getAxis(), top ? ORIGIN_TOP : ORIGIN_BOTTOM, angle, true))
                     .export(quadMap.get(null));
         }
-        else if (ySlope && ((!top && quadDir == Direction.UP) || (top && quadDir == Direction.DOWN)))
+        else if (altSlope && ((!top && quadDir == Direction.UP) || (top && quadDir == Direction.DOWN)))
         {
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(dir.getOpposite(), 0, .5F))

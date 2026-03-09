@@ -2,7 +2,7 @@ package io.github.xfacthd.framedblocks.common.block.slope;
 
 import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
-import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
+import io.github.xfacthd.framedblocks.api.block.SlopeToggleBlock;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.CamoGetter;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockParts;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockTopInteractionMode;
@@ -12,16 +12,12 @@ import io.github.xfacthd.framedblocks.api.util.RotationDirection;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.block.ExtPlacementStateBuilder;
 import io.github.xfacthd.framedblocks.common.block.FramedDoubleBlock;
-import io.github.xfacthd.framedblocks.common.block.IComplexSlopeSource;
 import io.github.xfacthd.framedblocks.common.block.ISlopeBlock;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import io.github.xfacthd.framedblocks.common.data.property.SlopeType;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
@@ -30,12 +26,11 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.jspecify.annotations.Nullable;
 
-public class FramedDividedSlopeBlock extends FramedDoubleBlock implements ISlopeBlock, IComplexSlopeSource
+public class FramedDividedSlopeBlock extends FramedDoubleBlock implements ISlopeBlock, SlopeToggleBlock
 {
     public FramedDividedSlopeBlock(Properties props)
     {
         super(BlockType.FRAMED_DIVIDED_SLOPE, props);
-        registerDefaultState(defaultBlockState().setValue(FramedProperties.Y_SLOPE, false));
     }
 
     @Override
@@ -44,7 +39,7 @@ public class FramedDividedSlopeBlock extends FramedDoubleBlock implements ISlope
         super.createBlockStateDefinition(builder);
         builder.add(
                 FramedProperties.FACING_HOR, PropertyHolder.SLOPE_TYPE, BlockStateProperties.WATERLOGGED,
-                FramedProperties.Y_SLOPE
+                FramedProperties.ALT_SLOPE
         );
     }
 
@@ -56,12 +51,6 @@ public class FramedDividedSlopeBlock extends FramedDoubleBlock implements ISlope
                 .withHorizontalFacingAndSlopeType()
                 .withWater()
                 .build();
-    }
-
-    @Override
-    public boolean handleBlockLeftClick(BlockState state, Level level, BlockPos pos, Player player)
-    {
-        return IFramedBlock.toggleYSlope(state, level, pos, player);
     }
 
     @Override
@@ -110,7 +99,7 @@ public class FramedDividedSlopeBlock extends FramedDoubleBlock implements ISlope
     {
         SlopeType type = state.getValue(PropertyHolder.SLOPE_TYPE);
         Direction facing = state.getValue(FramedProperties.FACING_HOR);
-        boolean ySlope = state.getValue(FramedProperties.Y_SLOPE);
+        boolean altSlope = state.getValue(FramedProperties.ALT_SLOPE);
 
         if (type == SlopeType.HORIZONTAL)
         {
@@ -118,10 +107,10 @@ public class FramedDividedSlopeBlock extends FramedDoubleBlock implements ISlope
             return new DoubleBlockParts(
                     defState.setValue(FramedProperties.FACING_HOR, facing)
                             .setValue(FramedProperties.TOP, false)
-                            .setValue(FramedProperties.Y_SLOPE, ySlope),
+                            .setValue(FramedProperties.ALT_SLOPE, altSlope),
                     defState.setValue(FramedProperties.FACING_HOR, facing)
                             .setValue(FramedProperties.TOP, true)
-                            .setValue(FramedProperties.Y_SLOPE, ySlope)
+                            .setValue(FramedProperties.ALT_SLOPE, altSlope)
             );
         }
         else
@@ -132,11 +121,11 @@ public class FramedDividedSlopeBlock extends FramedDoubleBlock implements ISlope
                     defState.setValue(FramedProperties.FACING_HOR, facing)
                             .setValue(FramedProperties.TOP, top)
                             .setValue(PropertyHolder.RIGHT, false)
-                            .setValue(FramedProperties.Y_SLOPE, ySlope),
+                            .setValue(FramedProperties.ALT_SLOPE, altSlope),
                     defState.setValue(FramedProperties.FACING_HOR, facing)
                             .setValue(FramedProperties.TOP, top)
                             .setValue(PropertyHolder.RIGHT, true)
-                            .setValue(FramedProperties.Y_SLOPE, ySlope)
+                            .setValue(FramedProperties.ALT_SLOPE, altSlope)
             );
         }
     }
@@ -240,8 +229,8 @@ public class FramedDividedSlopeBlock extends FramedDoubleBlock implements ISlope
     }
 
     @Override
-    public boolean isHorizontalSlope(BlockState state)
+    public SlopeOrientation getSlopeOrientation(BlockState state)
     {
-        return state.getValue(PropertyHolder.SLOPE_TYPE) == SlopeType.HORIZONTAL;
+        return state.getValue(PropertyHolder.SLOPE_TYPE).getOrientation();
     }
 }

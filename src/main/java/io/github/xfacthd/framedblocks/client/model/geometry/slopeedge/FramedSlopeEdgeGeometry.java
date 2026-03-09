@@ -19,14 +19,14 @@ public class FramedSlopeEdgeGeometry extends Geometry
     private final Direction dir;
     private final SlopeType type;
     private final boolean altType;
-    private final boolean ySlope;
+    private final boolean altSlope;
 
     public FramedSlopeEdgeGeometry(GeometryFactory.Context ctx)
     {
         this.dir = ctx.state().getValue(FramedProperties.FACING_HOR);
         this.type = ctx.state().getValue(PropertyHolder.SLOPE_TYPE);
         this.altType = ctx.state().getValue(PropertyHolder.ALT_TYPE);
-        this.ySlope = ctx.state().getValue(FramedProperties.Y_SLOPE);
+        this.altSlope = ctx.state().getValue(FramedProperties.ALT_SLOPE);
     }
 
     @Override
@@ -52,7 +52,7 @@ public class FramedSlopeEdgeGeometry extends Geometry
                             .apply(Modifiers.setPosition(.5F))
                             .export(quadMap.get(null));
                 }
-                else if (!ySlope && quadDir == dir.getOpposite())
+                else if (!altSlope && quadDir == dir.getOpposite())
                 {
                     QuadModifier.of(quad)
                             .apply(Modifiers.cut(dir.getCounterClockWise(), .5F))
@@ -60,7 +60,7 @@ public class FramedSlopeEdgeGeometry extends Geometry
                             .apply(Modifiers.offset(dir.getOpposite(), .5F))
                             .export(quadMap.get(null));
                 }
-                else if (ySlope && quadDir == dir.getClockWise())
+                else if (altSlope && quadDir == dir.getClockWise())
                 {
                     QuadModifier.of(quad)
                             .apply(Modifiers.cut(dir, .5F))
@@ -93,7 +93,7 @@ public class FramedSlopeEdgeGeometry extends Geometry
                             .apply(Modifiers.setPosition(.5F))
                             .export(quadMap.get(null));
                 }
-                else if (!ySlope && quadDir == dir.getOpposite())
+                else if (!altSlope && quadDir == dir.getOpposite())
                 {
                     QuadModifier.of(quad)
                             .apply(Modifiers.cut(top ? Direction.UP : Direction.DOWN, .5F))
@@ -101,7 +101,7 @@ public class FramedSlopeEdgeGeometry extends Geometry
                             .apply(Modifiers.offset(dir.getOpposite(), .5F))
                             .export(quadMap.get(null));
                 }
-                else if (ySlope && ((!top && quadDir == Direction.UP) || (top && quadDir == Direction.DOWN)))
+                else if (altSlope && ((!top && quadDir == Direction.UP) || (top && quadDir == Direction.DOWN)))
                 {
                     QuadModifier.of(quad)
                             .apply(Modifiers.cut(dir, .5F))
@@ -123,7 +123,7 @@ public class FramedSlopeEdgeGeometry extends Geometry
 
         if (type == SlopeType.HORIZONTAL)
         {
-            if (!ySlope && quadDir == dir.getOpposite())
+            if (!altSlope && quadDir == dir.getOpposite())
             {
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(dir.getClockWise(), .5F))
@@ -131,7 +131,7 @@ public class FramedSlopeEdgeGeometry extends Geometry
                         .apply(Modifiers.offset(dir, .5F))
                         .export(quadMap.get(null));
             }
-            else if (ySlope && quadDir == dir.getClockWise())
+            else if (altSlope && quadDir == dir.getClockWise())
             {
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(dir.getOpposite(), .5F))
@@ -161,7 +161,7 @@ public class FramedSlopeEdgeGeometry extends Geometry
         }
         else
         {
-            if (!ySlope && quadDir == dir.getOpposite())
+            if (!altSlope && quadDir == dir.getOpposite())
             {
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(top ? Direction.DOWN : Direction.UP, .5F))
@@ -169,7 +169,7 @@ public class FramedSlopeEdgeGeometry extends Geometry
                         .apply(Modifiers.offset(dir, .5F))
                         .export(quadMap.get(null));
             }
-            else if (ySlope && ((!top && quadDir == Direction.UP) || (top && quadDir == Direction.DOWN)))
+            else if (altSlope && ((!top && quadDir == Direction.UP) || (top && quadDir == Direction.DOWN)))
             {
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(dir.getOpposite(), .5F))

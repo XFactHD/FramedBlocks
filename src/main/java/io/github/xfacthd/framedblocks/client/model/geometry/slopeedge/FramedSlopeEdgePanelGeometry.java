@@ -19,7 +19,7 @@ public class FramedSlopeEdgePanelGeometry extends Geometry
     private final Direction dir;
     private final Direction backEdge;
     private final boolean front;
-    private final boolean ySlope;
+    private final boolean altSlope;
 
     public FramedSlopeEdgePanelGeometry(GeometryFactory.Context ctx)
     {
@@ -27,7 +27,7 @@ public class FramedSlopeEdgePanelGeometry extends Geometry
         HorizontalRotation rot = ctx.state().getValue(PropertyHolder.ROTATION);
         this.backEdge = rot.withFacing(dir).getOpposite();
         this.front = ctx.state().getValue(PropertyHolder.FRONT);
-        this.ySlope = ctx.state().getValue(FramedProperties.Y_SLOPE);
+        this.altSlope = ctx.state().getValue(FramedProperties.ALT_SLOPE);
     }
 
     @Override
@@ -50,7 +50,7 @@ public class FramedSlopeEdgePanelGeometry extends Geometry
                     .applyIf(Modifiers.setPosition(.5F), !front)
                     .export(quadMap.get(front ? quadDir : null));
 
-            if (ySlope)
+            if (altSlope)
             {
                 boolean vert = DirUtils.isY(backEdge);
                 boolean topEdge = backEdge == Direction.DOWN;
@@ -70,7 +70,7 @@ public class FramedSlopeEdgePanelGeometry extends Geometry
         }
         else if (quadDir == backEdge.getOpposite())
         {
-            if (!ySlope)
+            if (!altSlope)
             {
                 boolean vert = DirUtils.isY(backEdge);
                 boolean rightEdge = backEdge == dir.getClockWise();

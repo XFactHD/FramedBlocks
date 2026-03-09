@@ -2,17 +2,14 @@ package io.github.xfacthd.framedblocks.common.block.slopeslab;
 
 import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
-import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
+import io.github.xfacthd.framedblocks.api.block.SlopeToggleBlock;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.util.RotationDirection;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
@@ -21,14 +18,14 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.jspecify.annotations.Nullable;
 
-public class FramedFlatElevatedSlopeSlabCornerBlock extends FramedBlock
+public class FramedFlatElevatedSlopeSlabCornerBlock extends FramedBlock implements SlopeToggleBlock
 {
     public FramedFlatElevatedSlopeSlabCornerBlock(BlockType type, Properties props)
     {
         super(type, props);
         registerDefaultState(defaultBlockState()
                 .setValue(FramedProperties.TOP, false)
-                .setValue(FramedProperties.Y_SLOPE, true)
+                .setValue(FramedProperties.ALT_SLOPE, true)
         );
     }
 
@@ -38,7 +35,7 @@ public class FramedFlatElevatedSlopeSlabCornerBlock extends FramedBlock
         super.createBlockStateDefinition(builder);
         builder.add(
                 FramedProperties.FACING_HOR, FramedProperties.TOP, FramedProperties.SOLID,
-                BlockStateProperties.WATERLOGGED, FramedProperties.Y_SLOPE
+                BlockStateProperties.WATERLOGGED, FramedProperties.ALT_SLOPE
         );
     }
 
@@ -51,12 +48,6 @@ public class FramedFlatElevatedSlopeSlabCornerBlock extends FramedBlock
                 .withTop()
                 .withWater()
                 .build();
-    }
-
-    @Override
-    public boolean handleBlockLeftClick(BlockState state, Level level, BlockPos pos, Player player)
-    {
-        return IFramedBlock.toggleYSlope(state, level, pos, player);
     }
 
     @Override

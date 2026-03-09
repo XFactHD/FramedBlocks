@@ -15,13 +15,13 @@ public class FramedThreewayCornerGeometry extends Geometry
 {
     private final Direction dir;
     private final boolean top;
-    private final boolean ySlope;
+    private final boolean altSlope;
 
     public FramedThreewayCornerGeometry(GeometryFactory.Context ctx)
     {
         this.dir = ctx.state().getValue(FramedProperties.FACING_HOR);
         this.top = ctx.state().getValue(FramedProperties.TOP);
-        this.ySlope = ctx.state().getValue(FramedProperties.Y_SLOPE);
+        this.altSlope = ctx.state().getValue(FramedProperties.ALT_SLOPE);
     }
 
     @Override
@@ -43,7 +43,7 @@ public class FramedThreewayCornerGeometry extends Geometry
         }
         else if (quadDir == dir.getOpposite())
         {
-            if (!ySlope)
+            if (!altSlope)
             {
                 QuadModifier.of(quad)
                     .apply(Modifiers.cutSmallTriangle(dir.getClockWise()))
@@ -56,14 +56,14 @@ public class FramedThreewayCornerGeometry extends Geometry
                     .apply(Modifiers.makeHorizontalSlope(false, 45))
                     .export(quadMap.get(null));
         }
-        else if (!ySlope && quadDir == dir.getClockWise())
+        else if (!altSlope && quadDir == dir.getClockWise())
         {
             QuadModifier.of(quad)
                     .apply(Modifiers.cutSmallTriangle(dir.getOpposite()))
                     .apply(Modifiers.makeVerticalSlope(!top, 45))
                     .export(quadMap.get(null));
         }
-        else if (ySlope && ((!top && quadDir == Direction.UP) || (top && quadDir == Direction.DOWN)))
+        else if (altSlope && ((!top && quadDir == Direction.UP) || (top && quadDir == Direction.DOWN)))
         {
             QuadModifier.of(quad)
                     .apply(Modifiers.cutSmallTriangle(dir.getOpposite()))

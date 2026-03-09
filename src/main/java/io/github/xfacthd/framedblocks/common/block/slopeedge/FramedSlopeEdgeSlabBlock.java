@@ -2,21 +2,18 @@ package io.github.xfacthd.framedblocks.common.block.slopeedge;
 
 import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
-import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
+import io.github.xfacthd.framedblocks.api.block.SlopeToggleBlock;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.util.RotationDirection;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import io.github.xfacthd.framedblocks.common.item.block.FramedMirroringBlockItem;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
@@ -25,7 +22,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.jspecify.annotations.Nullable;
 
-public class FramedSlopeEdgeSlabBlock extends FramedBlock
+public class FramedSlopeEdgeSlabBlock extends FramedBlock implements SlopeToggleBlock
 {
     public FramedSlopeEdgeSlabBlock(Properties props)
     {
@@ -33,7 +30,6 @@ public class FramedSlopeEdgeSlabBlock extends FramedBlock
         registerDefaultState(defaultBlockState()
                 .setValue(FramedProperties.TOP, false)
                 .setValue(PropertyHolder.TOP_HALF, false)
-                .setValue(FramedProperties.Y_SLOPE, false)
         );
     }
 
@@ -43,7 +39,7 @@ public class FramedSlopeEdgeSlabBlock extends FramedBlock
         super.createBlockStateDefinition(builder);
         builder.add(
                 FramedProperties.FACING_HOR, FramedProperties.TOP, PropertyHolder.TOP_HALF,
-                FramedProperties.Y_SLOPE, FramedProperties.SOLID, BlockStateProperties.WATERLOGGED
+                FramedProperties.ALT_SLOPE, FramedProperties.SOLID, BlockStateProperties.WATERLOGGED
         );
     }
 
@@ -59,12 +55,6 @@ public class FramedSlopeEdgeSlabBlock extends FramedBlock
                 )
                 .withWater()
                 .build();
-    }
-
-    @Override
-    public boolean handleBlockLeftClick(BlockState state, Level level, BlockPos pos, Player player)
-    {
-        return IFramedBlock.toggleYSlope(state, level, pos, player);
     }
 
     @Override

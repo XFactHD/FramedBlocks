@@ -3,6 +3,7 @@ package io.github.xfacthd.framedblocks.common.block.slopepanelcorner;
 import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
+import io.github.xfacthd.framedblocks.api.block.SlopeToggleBlock;
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedDoubleBlockEntity;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.CamoGetter;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockParts;
@@ -20,9 +21,7 @@ import io.github.xfacthd.framedblocks.common.data.property.HorizontalRotation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
@@ -30,14 +29,14 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import org.jspecify.annotations.Nullable;
 
-public class FramedExtendedDoubleCornerSlopePanelWallBlock extends FramedDoubleBlock
+public class FramedExtendedDoubleCornerSlopePanelWallBlock extends FramedDoubleBlock implements SlopeToggleBlock
 {
     private final Holder<Block> nonWallBlock;
 
     public FramedExtendedDoubleCornerSlopePanelWallBlock(BlockType type, Properties props)
     {
         super(type, props);
-        registerDefaultState(defaultBlockState().setValue(FramedProperties.Y_SLOPE, true));
+        registerDefaultState(defaultBlockState().setValue(FramedProperties.ALT_SLOPE, true));
         this.nonWallBlock = switch (type)
         {
             case FRAMED_EXT_DOUBLE_CORNER_SLOPE_PANEL_W -> FBContent.BLOCK_FRAMED_EXTENDED_DOUBLE_CORNER_SLOPE_PANEL;
@@ -51,7 +50,7 @@ public class FramedExtendedDoubleCornerSlopePanelWallBlock extends FramedDoubleB
     {
         super.createBlockStateDefinition(builder);
         builder.add(
-                FramedProperties.FACING_HOR, PropertyHolder.ROTATION, FramedProperties.Y_SLOPE
+                FramedProperties.FACING_HOR, PropertyHolder.ROTATION, FramedProperties.ALT_SLOPE
         );
     }
 
@@ -62,12 +61,6 @@ public class FramedExtendedDoubleCornerSlopePanelWallBlock extends FramedDoubleB
         return FramedCornerSlopePanelWallBlock.getStateForPlacement(
                 this, ctx, getBlockType() == BlockType.FRAMED_EXT_DOUBLE_CORNER_SLOPE_PANEL_W
         );
-    }
-
-    @Override
-    public boolean handleBlockLeftClick(BlockState state, Level level, BlockPos pos, Player player)
-    {
-        return IFramedBlock.toggleYSlope(state, level, pos, player);
     }
 
     @Override
@@ -109,7 +102,7 @@ public class FramedExtendedDoubleCornerSlopePanelWallBlock extends FramedDoubleB
         Direction dir = state.getValue(FramedProperties.FACING_HOR);
         HorizontalRotation rot = state.getValue(PropertyHolder.ROTATION);
         HorizontalRotation backRot = rot.rotate(rot.isVertical() ? Rotation.CLOCKWISE_90 : Rotation.COUNTERCLOCKWISE_90);
-        boolean ySlope = state.getValue(FramedProperties.Y_SLOPE);
+        boolean altSlope = state.getValue(FramedProperties.ALT_SLOPE);
 
         return switch (getBlockType())
         {
@@ -118,24 +111,24 @@ public class FramedExtendedDoubleCornerSlopePanelWallBlock extends FramedDoubleB
                             .defaultBlockState()
                             .setValue(FramedProperties.FACING_HOR, dir)
                             .setValue(PropertyHolder.ROTATION, rot)
-                            .setValue(FramedProperties.Y_SLOPE, ySlope),
+                            .setValue(FramedProperties.ALT_SLOPE, altSlope),
                     FBContent.BLOCK_FRAMED_LARGE_INNER_CORNER_SLOPE_PANEL_WALL.value()
                             .defaultBlockState()
                             .setValue(FramedProperties.FACING_HOR, dir.getOpposite())
                             .setValue(PropertyHolder.ROTATION, backRot)
-                            .setValue(FramedProperties.Y_SLOPE, ySlope)
+                            .setValue(FramedProperties.ALT_SLOPE, altSlope)
             );
             case FRAMED_EXT_INNER_DOUBLE_CORNER_SLOPE_PANEL_W -> new DoubleBlockParts(
                     FBContent.BLOCK_FRAMED_EXTENDED_INNER_CORNER_SLOPE_PANEL_WALL.value()
                             .defaultBlockState()
                             .setValue(FramedProperties.FACING_HOR, dir)
                             .setValue(PropertyHolder.ROTATION, rot)
-                            .setValue(FramedProperties.Y_SLOPE, ySlope),
+                            .setValue(FramedProperties.ALT_SLOPE, altSlope),
                     FBContent.BLOCK_FRAMED_SMALL_CORNER_SLOPE_PANEL_WALL.value()
                             .defaultBlockState()
                             .setValue(FramedProperties.FACING_HOR, dir.getOpposite())
                             .setValue(PropertyHolder.ROTATION, backRot)
-                            .setValue(FramedProperties.Y_SLOPE, ySlope)
+                            .setValue(FramedProperties.ALT_SLOPE, altSlope)
             );
             default -> throw new IllegalArgumentException("Invalid type for this block: " + getBlockType());
         };

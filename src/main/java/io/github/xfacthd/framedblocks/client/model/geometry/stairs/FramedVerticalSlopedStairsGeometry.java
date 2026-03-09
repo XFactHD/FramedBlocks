@@ -20,7 +20,7 @@ public class FramedVerticalSlopedStairsGeometry extends Geometry
     private final Direction facing;
     private final Direction rotDir;
     private final Direction rotDirTwo;
-    private final boolean ySlope;
+    private final boolean altSlope;
 
     public FramedVerticalSlopedStairsGeometry(GeometryFactory.Context ctx)
     {
@@ -28,7 +28,7 @@ public class FramedVerticalSlopedStairsGeometry extends Geometry
         HorizontalRotation rot = ctx.state().getValue(PropertyHolder.ROTATION);
         this.rotDir = rot.withFacing(facing);
         this.rotDirTwo = rot.rotate(Rotation.COUNTERCLOCKWISE_90).withFacing(facing);
-        this.ySlope = ctx.state().getValue(FramedProperties.Y_SLOPE);
+        this.altSlope = ctx.state().getValue(FramedProperties.ALT_SLOPE);
     }
 
     @Override
@@ -53,7 +53,7 @@ public class FramedVerticalSlopedStairsGeometry extends Geometry
                     .export(quadMap.get(null));
         }
 
-        boolean useRotDirQuad = DirUtils.isY(rotDir) == ySlope;
+        boolean useRotDirQuad = DirUtils.isY(rotDir) == altSlope;
         Direction slopeQuadDir = useRotDirQuad ? rotDir : rotDirTwo;
         Direction slopeRotDir = useRotDirQuad ? rotDirTwo : rotDir;
 

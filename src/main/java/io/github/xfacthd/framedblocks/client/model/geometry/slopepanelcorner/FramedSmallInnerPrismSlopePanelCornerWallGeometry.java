@@ -26,7 +26,7 @@ public class FramedSmallInnerPrismSlopePanelCornerWallGeometry extends Geometry
     private final Direction dir;
     private final Direction rotDirOne;
     private final Direction rotDirTwo;
-    private final boolean ySlope;
+    private final boolean altSlope;
     private final boolean offset;
     private final boolean flipSideTris;
     private final boolean flipPrismTri;
@@ -41,14 +41,14 @@ public class FramedSmallInnerPrismSlopePanelCornerWallGeometry extends Geometry
         HorizontalRotation rot = ctx.state().getValue(PropertyHolder.ROTATION);
         this.rotDirOne = rot.withFacing(dir);
         this.rotDirTwo = rot.rotate(Rotation.COUNTERCLOCKWISE_90).withFacing(dir);
-        this.ySlope = ctx.state().getValue(FramedProperties.Y_SLOPE);
+        this.altSlope = ctx.state().getValue(FramedProperties.ALT_SLOPE);
         this.offset = ctx.state().getValue(FramedProperties.OFFSET);
         this.flipSideTris = rot == HorizontalRotation.DOWN || rot == HorizontalRotation.RIGHT;
-        this.flipPrismTri = rot == HorizontalRotation.LEFT || rot == (ySlope ? HorizontalRotation.DOWN : HorizontalRotation.UP);
+        this.flipPrismTri = rot == HorizontalRotation.LEFT || rot == (altSlope ? HorizontalRotation.DOWN : HorizontalRotation.UP);
         this.flipPrismTriOpp = rot == HorizontalRotation.RIGHT || rot == HorizontalRotation.DOWN;
         HorizontalRotation tiltRot = rot.isVertical() ? rot.getOpposite() : rot;
-        this.tiltOrigin = FramedSmallPrismSlopePanelCornerWallGeometry.getTiltOrigin(dir.getOpposite(), tiltRot, ySlope);
-        this.invAngle = FramedSmallPrismSlopePanelCornerWallGeometry.invertTiltAngle(dir, rot) == ySlope;
+        this.tiltOrigin = FramedSmallPrismSlopePanelCornerWallGeometry.getTiltOrigin(dir.getOpposite(), tiltRot, altSlope);
+        this.invAngle = FramedSmallPrismSlopePanelCornerWallGeometry.invertTiltAngle(dir, rot) == altSlope;
         this.dirAxisRotOrigin = FramedSmallPrismSlopePanelCornerWallGeometry.getDirAxisRotOrigin(dir);
     }
 
@@ -66,7 +66,7 @@ public class FramedSmallInnerPrismSlopePanelCornerWallGeometry extends Geometry
                     .apply(Modifiers.cut(rotDirTwo.getOpposite(), flipSideTris ? .5F : 1.5F, flipSideTris ? 1.5F : .5F))
                     .export(quadMap.get(quadDir));
 
-            if (!ySlope)
+            if (!altSlope)
             {
                 makePrismSlope(quadMap, quad, this::makePrismSlopeHorizontal);
             }
@@ -77,7 +77,7 @@ public class FramedSmallInnerPrismSlopePanelCornerWallGeometry extends Geometry
                     .apply(Modifiers.cut(rotDirTwo.getOpposite(), flipSideTris ? 1 : .5F, flipSideTris ? .5F : 1))
                     .export(quadMap.get(quadDir));
 
-            if (ySlope)
+            if (altSlope)
             {
                 makePrismSlope(quadMap, quad, this::makePrismSlopeVertical);
             }

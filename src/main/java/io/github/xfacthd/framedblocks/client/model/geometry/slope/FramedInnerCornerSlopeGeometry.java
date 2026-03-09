@@ -17,13 +17,13 @@ public class FramedInnerCornerSlopeGeometry extends Geometry
 {
     private final Direction dir;
     private final CornerType type;
-    private final boolean ySlope;
+    private final boolean altSlope;
 
     public FramedInnerCornerSlopeGeometry(GeometryFactory.Context ctx)
     {
         this.dir = ctx.state().getValue(FramedProperties.FACING_HOR);
         this.type = ctx.state().getValue(PropertyHolder.CORNER_TYPE);
-        this.ySlope = ctx.state().getValue(FramedProperties.Y_SLOPE);
+        this.altSlope = ctx.state().getValue(FramedProperties.ALT_SLOPE);
     }
 
     @Override
@@ -51,7 +51,7 @@ public class FramedInnerCornerSlopeGeometry extends Geometry
                     .apply(Modifiers.cut(dir.getOpposite(), right ? 0 : 1, right ? 1 : 0))
                     .export(quadMap.get(quadDir));
 
-            if (ySlope)
+            if (altSlope)
             {
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(dir, right ? 0 : 1, right ? 1 : 0))
@@ -67,7 +67,7 @@ public class FramedInnerCornerSlopeGeometry extends Geometry
                     .apply(Modifiers.makeHorizontalSlope(right, 45))
                     .export(quadMap.get(null));
 
-            if (!ySlope)
+            if (!altSlope)
             {
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(top ? Direction.DOWN : Direction.UP, right ? 1 : 0, right ? 0 : 1))
@@ -94,7 +94,7 @@ public class FramedInnerCornerSlopeGeometry extends Geometry
                     .apply(Modifiers.cut(dir.getOpposite(), top ? 1 : 0, top ? 0 : 1))
                     .export(quadMap.get(quadDir));
 
-            if (!ySlope)
+            if (!altSlope)
             {
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(dir, top ? 0 : 1, top ? 1 : 0))
@@ -108,7 +108,7 @@ public class FramedInnerCornerSlopeGeometry extends Geometry
                     .apply(Modifiers.cut(dir.getClockWise(), top ? 1 : 0, top ? 0 : 1))
                     .export(quadMap.get(quadDir));
 
-            if (!ySlope)
+            if (!altSlope)
             {
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(dir.getCounterClockWise(), top ? 0 : 1, top ? 1 : 0))
@@ -116,7 +116,7 @@ public class FramedInnerCornerSlopeGeometry extends Geometry
                         .export(quadMap.get(null));
             }
         }
-        else if (ySlope && ((!top && quadDir == Direction.UP) || (top && quadDir == Direction.DOWN)))
+        else if (altSlope && ((!top && quadDir == Direction.UP) || (top && quadDir == Direction.DOWN)))
         {
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(dir.getClockWise(), 1, 0))

@@ -1,7 +1,7 @@
 package io.github.xfacthd.framedblocks.common.block.prism;
 
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
-import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
+import io.github.xfacthd.framedblocks.api.block.SlopeToggleBlock;
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedDoubleBlockEntity;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.CamoGetter;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockParts;
@@ -16,9 +16,7 @@ import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import io.github.xfacthd.framedblocks.common.data.property.CompoundDirection;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
@@ -26,19 +24,18 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import org.jspecify.annotations.Nullable;
 
-public class FramedElevatedDoubleSlopedPrismBlock extends FramedDoubleBlock implements IFramedPrismBlock
+public class FramedElevatedDoubleSlopedPrismBlock extends FramedDoubleBlock implements IFramedPrismBlock, SlopeToggleBlock
 {
     public FramedElevatedDoubleSlopedPrismBlock(BlockType type, Properties props)
     {
         super(type, props);
-        registerDefaultState(defaultBlockState().setValue(FramedProperties.Y_SLOPE, false));
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        builder.add(PropertyHolder.FACING_DIR, FramedProperties.Y_SLOPE);
+        builder.add(PropertyHolder.FACING_DIR, FramedProperties.ALT_SLOPE);
     }
 
     @Override
@@ -46,12 +43,6 @@ public class FramedElevatedDoubleSlopedPrismBlock extends FramedDoubleBlock impl
     public BlockState getStateForPlacement(BlockPlaceContext context)
     {
         return FramedSlopedPrismBlock.getStateForPlacement(context, this);
-    }
-
-    @Override
-    public boolean handleBlockLeftClick(BlockState state, Level level, BlockPos pos, Player player)
-    {
-        return IFramedBlock.toggleYSlope(state, level, pos, player);
     }
 
     @Override
@@ -72,20 +63,20 @@ public class FramedElevatedDoubleSlopedPrismBlock extends FramedDoubleBlock impl
     public DoubleBlockParts calculateParts(BlockState state)
     {
         CompoundDirection cmpDir = state.getValue(PropertyHolder.FACING_DIR);
-        boolean ySlope = state.getValue(FramedProperties.Y_SLOPE);
+        boolean altSlope = state.getValue(FramedProperties.ALT_SLOPE);
 
         return new DoubleBlockParts(
                 FBContent.BLOCK_FRAMED_ELEVATED_INNER_SLOPED_PRISM.value()
                         .defaultBlockState()
                         .setValue(PropertyHolder.FACING_DIR, cmpDir)
-                        .setValue(FramedProperties.Y_SLOPE, ySlope),
+                        .setValue(FramedProperties.ALT_SLOPE, altSlope),
                 FBContent.BLOCK_FRAMED_SLOPED_PRISM.value()
                         .defaultBlockState()
                         .setValue(PropertyHolder.FACING_DIR, CompoundDirection.of(
                                 cmpDir.direction().getOpposite(),
                                 cmpDir.orientation()
                         ))
-                        .setValue(FramedProperties.Y_SLOPE, ySlope)
+                        .setValue(FramedProperties.ALT_SLOPE, altSlope)
         );
     }
 

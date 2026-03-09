@@ -2,8 +2,8 @@ package io.github.xfacthd.framedblocks.common.block.slopepanelcorner;
 
 import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
-import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
+import io.github.xfacthd.framedblocks.api.block.SlopeToggleBlock;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.util.MathUtils;
 import io.github.xfacthd.framedblocks.api.util.RotationDirection;
@@ -11,13 +11,10 @@ import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import io.github.xfacthd.framedblocks.common.item.block.VerticalAndWallBlockItem;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
@@ -26,7 +23,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.jspecify.annotations.Nullable;
 
-public class FramedCornerSlopePanelBlock extends FramedBlock
+public class FramedCornerSlopePanelBlock extends FramedBlock implements SlopeToggleBlock
 {
     private final boolean invertFacing;
     private final boolean invertFracDir;
@@ -34,10 +31,7 @@ public class FramedCornerSlopePanelBlock extends FramedBlock
     public FramedCornerSlopePanelBlock(BlockType type, Properties props)
     {
         super(type, props);
-        registerDefaultState(defaultBlockState()
-                .setValue(FramedProperties.TOP, false)
-                .setValue(FramedProperties.Y_SLOPE, false)
-        );
+        registerDefaultState(defaultBlockState().setValue(FramedProperties.TOP, false));
         this.invertFacing = type == BlockType.FRAMED_SMALL_INNER_CORNER_SLOPE_PANEL ||
                             type == BlockType.FRAMED_LARGE_INNER_CORNER_SLOPE_PANEL;
         this.invertFracDir = type == BlockType.FRAMED_LARGE_CORNER_SLOPE_PANEL ||
@@ -50,7 +44,7 @@ public class FramedCornerSlopePanelBlock extends FramedBlock
         super.createBlockStateDefinition(builder);
         builder.add(
                 FramedProperties.FACING_HOR, FramedProperties.TOP,
-                FramedProperties.Y_SLOPE, BlockStateProperties.WATERLOGGED
+                FramedProperties.ALT_SLOPE, BlockStateProperties.WATERLOGGED
         );
     }
 
@@ -88,12 +82,6 @@ public class FramedCornerSlopePanelBlock extends FramedBlock
                 .withTop()
                 .tryWithWater()
                 .build();
-    }
-
-    @Override
-    public boolean handleBlockLeftClick(BlockState state, Level level, BlockPos pos, Player player)
-    {
-        return IFramedBlock.toggleYSlope(state, level, pos, player);
     }
 
     @Override

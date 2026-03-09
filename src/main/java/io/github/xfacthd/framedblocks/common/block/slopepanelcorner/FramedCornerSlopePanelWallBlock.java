@@ -3,6 +3,7 @@ package io.github.xfacthd.framedblocks.common.block.slopepanelcorner;
 import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
+import io.github.xfacthd.framedblocks.api.block.SlopeToggleBlock;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.util.RotationDirection;
 import io.github.xfacthd.framedblocks.common.FBContent;
@@ -11,12 +12,9 @@ import io.github.xfacthd.framedblocks.common.block.FramedBlock;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import io.github.xfacthd.framedblocks.common.data.property.HorizontalRotation;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
@@ -25,7 +23,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.jspecify.annotations.Nullable;
 
-public class FramedCornerSlopePanelWallBlock extends FramedBlock
+public class FramedCornerSlopePanelWallBlock extends FramedBlock implements SlopeToggleBlock
 {
     private final boolean large;
     private final Holder<Block> nonWallBlock;
@@ -33,7 +31,7 @@ public class FramedCornerSlopePanelWallBlock extends FramedBlock
     public FramedCornerSlopePanelWallBlock(BlockType type, Properties props)
     {
         super(type, props);
-        registerDefaultState(defaultBlockState().setValue(FramedProperties.Y_SLOPE, true));
+        registerDefaultState(defaultBlockState().setValue(FramedProperties.ALT_SLOPE, true));
         this.large = type == BlockType.FRAMED_LARGE_CORNER_SLOPE_PANEL_W ||
                      type == BlockType.FRAMED_LARGE_INNER_CORNER_SLOPE_PANEL_W;
         this.nonWallBlock = switch (type)
@@ -56,7 +54,7 @@ public class FramedCornerSlopePanelWallBlock extends FramedBlock
         super.createBlockStateDefinition(builder);
         builder.add(
                 FramedProperties.FACING_HOR, PropertyHolder.ROTATION,
-                FramedProperties.Y_SLOPE, BlockStateProperties.WATERLOGGED
+                FramedProperties.ALT_SLOPE, BlockStateProperties.WATERLOGGED
         );
     }
 
@@ -75,12 +73,6 @@ public class FramedCornerSlopePanelWallBlock extends FramedBlock
                 .withCornerRotation(!invert)
                 .tryWithWater()
                 .build();
-    }
-
-    @Override
-    public boolean handleBlockLeftClick(BlockState state, Level level, BlockPos pos, Player player)
-    {
-        return IFramedBlock.toggleYSlope(state, level, pos, player);
     }
 
     @Override

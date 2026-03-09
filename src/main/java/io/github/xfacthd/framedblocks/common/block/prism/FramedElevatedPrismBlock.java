@@ -1,17 +1,14 @@
 package io.github.xfacthd.framedblocks.common.block.prism;
 
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
-import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
+import io.github.xfacthd.framedblocks.api.block.SlopeToggleBlock;
 import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import io.github.xfacthd.framedblocks.common.data.property.DirectionAxis;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
@@ -20,12 +17,11 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.jspecify.annotations.Nullable;
 
-public class FramedElevatedPrismBlock extends FramedBlock implements IFramedPrismBlock
+public class FramedElevatedPrismBlock extends FramedBlock implements IFramedPrismBlock, SlopeToggleBlock
 {
     public FramedElevatedPrismBlock(BlockType type, Properties props)
     {
         super(type, props);
-        registerDefaultState(defaultBlockState().setValue(FramedProperties.Y_SLOPE, false));
     }
 
     @Override
@@ -34,7 +30,7 @@ public class FramedElevatedPrismBlock extends FramedBlock implements IFramedPris
         super.createBlockStateDefinition(builder);
         builder.add(
                 PropertyHolder.FACING_AXIS, BlockStateProperties.WATERLOGGED,
-                FramedProperties.SOLID, FramedProperties.Y_SLOPE
+                FramedProperties.SOLID, FramedProperties.ALT_SLOPE
         );
     }
 
@@ -43,12 +39,6 @@ public class FramedElevatedPrismBlock extends FramedBlock implements IFramedPris
     public BlockState getStateForPlacement(BlockPlaceContext context)
     {
         return FramedPrismBlock.getStateForPlacement(context, this);
-    }
-
-    @Override
-    public boolean handleBlockLeftClick(BlockState state, Level level, BlockPos pos, Player player)
-    {
-        return IFramedBlock.toggleYSlope(state, level, pos, player);
     }
 
     @Override

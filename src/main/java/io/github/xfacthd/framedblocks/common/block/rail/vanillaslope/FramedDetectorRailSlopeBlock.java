@@ -4,6 +4,7 @@ import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
+import io.github.xfacthd.framedblocks.api.block.SlopeToggleBlock;
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedDoubleBlockEntity;
 import io.github.xfacthd.framedblocks.api.shapes.ShapeLookup;
@@ -51,7 +52,7 @@ import org.jspecify.annotations.Nullable;
 import java.util.List;
 import java.util.Objects;
 
-public class FramedDetectorRailSlopeBlock<BE extends FramedBlockEntity> extends DetectorRailBlock implements IFramedBlockInternal, ISlopeBlock.IRailSlopeBlock
+public class FramedDetectorRailSlopeBlock<BE extends FramedBlockEntity> extends DetectorRailBlock implements IFramedBlockInternal, ISlopeBlock.IRailSlopeBlock, SlopeToggleBlock
 {
     private final BlockType type;
     private final ShapeLookup shapes;
@@ -64,10 +65,7 @@ public class FramedDetectorRailSlopeBlock<BE extends FramedBlockEntity> extends 
         this.shapes = ShapeLookup.of(this);
         this.beFactory = beFactory;
         BlockUtils.configureStandardProperties(this);
-        registerDefaultState(defaultBlockState()
-                .setValue(POWERED, false)
-                .setValue(FramedProperties.Y_SLOPE, false)
-        );
+        registerDefaultState(defaultBlockState().setValue(POWERED, false));
     }
 
     @Override
@@ -78,7 +76,7 @@ public class FramedDetectorRailSlopeBlock<BE extends FramedBlockEntity> extends 
     {
         super.createBlockStateDefinition(builder);
         BlockUtils.addRequiredProperties(builder);
-        builder.add(FramedProperties.SOLID, FramedProperties.Y_SLOPE);
+        builder.add(FramedProperties.SOLID, FramedProperties.ALT_SLOPE);
     }
 
     @Override
@@ -205,12 +203,6 @@ public class FramedDetectorRailSlopeBlock<BE extends FramedBlockEntity> extends 
             return Shapes.empty();
         }
         return getShape(state, worldIn, pos, context);
-    }
-
-    @Override
-    public boolean handleBlockLeftClick(BlockState state, Level level, BlockPos pos, Player player)
-    {
-        return IFramedBlock.toggleYSlope(state, level, pos, player);
     }
 
     @Override

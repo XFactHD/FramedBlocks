@@ -46,7 +46,7 @@ public class FramedLargePrismSlopePanelCornerGeometry extends Geometry
     private final Direction dir;
     private final boolean top;
     private final Direction upDir;
-    private final boolean ySlope;
+    private final boolean altSlope;
     private final boolean offset;
     private final Vector3f tiltOrigin;
     private final boolean invAngle;
@@ -57,10 +57,10 @@ public class FramedLargePrismSlopePanelCornerGeometry extends Geometry
         this.dir = ctx.state().getValue(FramedProperties.FACING_HOR);
         this.top = ctx.state().getValue(FramedProperties.TOP);
         this.upDir = top ? Direction.DOWN : Direction.UP;
-        this.ySlope = ctx.state().getValue(FramedProperties.Y_SLOPE);
+        this.altSlope = ctx.state().getValue(FramedProperties.ALT_SLOPE);
         this.offset = ctx.state().getValue(FramedProperties.OFFSET);
         this.tiltOrigin = getTiltOrigin(dir, top, false);
-        this.invAngle = DirUtils.isPositive(dir.getClockWise()) ^ top ^ ySlope;
+        this.invAngle = DirUtils.isPositive(dir.getClockWise()) ^ top ^ altSlope;
         this.yRotOrigin = getYRotOrigin(dir);
     }
 
@@ -75,7 +75,7 @@ public class FramedLargePrismSlopePanelCornerGeometry extends Geometry
                     .apply(Modifiers.cut(cutDir, top ? 1F : .5F, top ? .5F : 1F))
                     .export(quadMap, quadDir);
         }
-        else if (!ySlope && quadDir == dir.getOpposite())
+        else if (!altSlope && quadDir == dir.getOpposite())
         {
             makePrismSlope(quadMap, quad, this::makePrismSlopeHorizontal);
         }
@@ -86,7 +86,7 @@ public class FramedLargePrismSlopePanelCornerGeometry extends Geometry
                     .apply(Modifiers.cut(dir.getOpposite(), .5F, -.5F))
                     .export(quadMap, quadDir);
 
-            if (ySlope)
+            if (altSlope)
             {
                 makePrismSlope(quadMap, quad, this::makePrismSlopeVertical);
             }
@@ -139,9 +139,9 @@ public class FramedLargePrismSlopePanelCornerGeometry extends Geometry
                 .export(quadMap, null);
     }
 
-    static Vector3f getTiltOrigin(Direction dir, boolean top, boolean ySlope)
+    static Vector3f getTiltOrigin(Direction dir, boolean top, boolean altSlope)
     {
-        return TILT_ORIGINS[dir.get2DDataValue() + (top ^ ySlope ? 4 : 0)];
+        return TILT_ORIGINS[dir.get2DDataValue() + (top ^ altSlope ? 4 : 0)];
     }
 
     static Vector3f getYRotOrigin(Direction dir)

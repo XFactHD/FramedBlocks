@@ -15,13 +15,13 @@ public class FramedElevatedSlopeSlabGeometry extends Geometry
 {
     private final Direction facing;
     private final boolean top;
-    private final boolean ySlope;
+    private final boolean altSlope;
 
     public FramedElevatedSlopeSlabGeometry(GeometryFactory.Context ctx)
     {
         this.facing = ctx.state().getValue(FramedProperties.FACING_HOR);
         this.top = ctx.state().getValue(FramedProperties.TOP);
-        this.ySlope = ctx.state().getValue(FramedProperties.Y_SLOPE);
+        this.altSlope = ctx.state().getValue(FramedProperties.ALT_SLOPE);
     }
 
     @Override
@@ -30,7 +30,7 @@ public class FramedElevatedSlopeSlabGeometry extends Geometry
         Direction face = quad.direction();
         if (face == facing.getOpposite())
         {
-            if (!ySlope)
+            if (!altSlope)
             {
                 QuadModifier.of(quad)
                         .apply(Modifiers.makeVerticalSlope(!top, FramedSlopeSlabGeometry.SLOPE_ANGLE))
@@ -42,7 +42,7 @@ public class FramedElevatedSlopeSlabGeometry extends Geometry
                     .apply(Modifiers.cut(top ? Direction.DOWN : Direction.UP, .5F))
                     .export(quadMap.get(face));
         }
-        else if (ySlope && ((!top && face == Direction.UP) || (top && face == Direction.DOWN)))
+        else if (altSlope && ((!top && face == Direction.UP) || (top && face == Direction.DOWN)))
         {
             QuadModifier.of(quad)
                     .apply(Modifiers.makeVerticalSlope(facing.getOpposite(), FramedSlopeSlabGeometry.SLOPE_ANGLE_VERT))

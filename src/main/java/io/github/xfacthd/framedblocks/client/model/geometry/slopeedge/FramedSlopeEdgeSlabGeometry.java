@@ -17,7 +17,7 @@ public class FramedSlopeEdgeSlabGeometry extends Geometry
     private final Direction dir;
     private final boolean topHalf;
     private final boolean top;
-    private final boolean ySlope;
+    private final boolean altSlope;
     private final boolean backfaceAligned;
 
     public FramedSlopeEdgeSlabGeometry(GeometryFactory.Context ctx)
@@ -25,7 +25,7 @@ public class FramedSlopeEdgeSlabGeometry extends Geometry
         this.dir = ctx.state().getValue(FramedProperties.FACING_HOR);
         this.topHalf = ctx.state().getValue(PropertyHolder.TOP_HALF);
         this.top = ctx.state().getValue(FramedProperties.TOP);
-        this.ySlope = ctx.state().getValue(FramedProperties.Y_SLOPE);
+        this.altSlope = ctx.state().getValue(FramedProperties.ALT_SLOPE);
         this.backfaceAligned = top == topHalf;
     }
 
@@ -56,7 +56,7 @@ public class FramedSlopeEdgeSlabGeometry extends Geometry
                     .applyIf(Modifiers.setPosition(.5F), backfaceAligned)
                     .export(quadMap.get(backfaceAligned ? null : quadDir));
 
-            if (ySlope)
+            if (altSlope)
             {
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(dir, .5F))
@@ -67,7 +67,7 @@ public class FramedSlopeEdgeSlabGeometry extends Geometry
         }
         else if (quadDir == dir.getOpposite())
         {
-            if (!ySlope)
+            if (!altSlope)
             {
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(backFace.getOpposite(), .5F))

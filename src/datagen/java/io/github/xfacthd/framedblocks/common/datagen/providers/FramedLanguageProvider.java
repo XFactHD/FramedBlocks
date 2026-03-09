@@ -506,14 +506,14 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(ToggleWaterloggableOverlay.MSG_MAKE_WATERLOGGABLE, "Hit with a Framed Hammer to make waterloggable");
         add(ToggleWaterloggableOverlay.MSG_MAKE_NOT_WATERLOGGABLE, "Hit with a Framed Hammer to make not waterloggable");
 
-        add(ToggleYSlopeOverlay.SLOPE_MESSAGE, "Block uses %s faces for vertical sloped faces.");
-        add(ToggleYSlopeOverlay.TOGGLE_MESSAGE, "Hit with a Framed Wrench to switch to %s faces");
-        add(ToggleYSlopeOverlay.SLOPE_HOR, "horizontal");
-        add(ToggleYSlopeOverlay.SLOPE_VERT, "vertical");
-        add(ToggleYSlopeOverlay.SLOPE_MESSAGE_ALT, "Block uses the %s face for horizontal sloped faces.");
-        add(ToggleYSlopeOverlay.TOGGLE_MESSAGE_ALT, "Hit with a Framed Wrench to switch to the %s face");
-        add(ToggleYSlopeOverlay.SLOPE_FRONT, "front");
-        add(ToggleYSlopeOverlay.SLOPE_SIDE, "right");
+        add(ToggleAltSlopeOverlay.SLOPE_MESSAGE_VERT, "Block uses %s faces for vertical sloped faces.");
+        add(ToggleAltSlopeOverlay.TOGGLE_MESSAGE_VERT, "Hit with a Framed Wrench to switch to %s faces");
+        add(ToggleAltSlopeOverlay.SLOPE_VERT_HOR, "horizontal");
+        add(ToggleAltSlopeOverlay.SLOPE_VERT_VERT, "vertical");
+        add(ToggleAltSlopeOverlay.SLOPE_MESSAGE_HOR, "Block uses the %s face for horizontal sloped faces.");
+        add(ToggleAltSlopeOverlay.TOGGLE_MESSAGE_HOR, "Hit with a Framed Wrench to switch to the %s face");
+        add(ToggleAltSlopeOverlay.SLOPE_HOR_FRONT, "front");
+        add(ToggleAltSlopeOverlay.SLOPE_HOR_SIDE, "right");
 
         add(ReinforcementOverlay.REINFORCE_MESSAGE, "Block is %s.");
         add(ReinforcementOverlay.STATE_NOT_REINFORCED, "not reinforced");
@@ -611,7 +611,7 @@ public final class FramedLanguageProvider extends LanguageProvider
         addConfigValue(ClientConfig.MAX_OVERLAY_MODE_VALUE, "Max overlay display mode");
         addConfigValue(ClientConfig.STATE_LOCK_MODE_VALUE, "State lock overlay: Display mode");
         addConfigValue(ClientConfig.TOGGLE_WATERLOG_MODE_VALUE, "Toggle waterloggable overlay: Display mode");
-        addConfigValue(ClientConfig.TOGGLE_Y_SLOPE_MODE_VALUE, "Toggle Y slope overlay: Display mode");
+        addConfigValue(ClientConfig.TOGGLE_ALT_SLOPE_MODE_VALUE, "Toggle Y slope overlay: Display mode");
         addConfigValue(ClientConfig.REINFORCEMENT_MODE_VALUE, "Reinforcement overlay: Display mode");
         addConfigValue(ClientConfig.PRISM_OFFSET_MODE_VALUE, "Prism offset overlay: Display mode");
         addConfigValue(ClientConfig.SPLIT_LINE_MODE_VALUE, "Collapsible block split lines overlay: Display mode");

@@ -5,6 +5,7 @@ import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
+import io.github.xfacthd.framedblocks.api.block.SlopeToggleBlock;
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedDoubleBlockEntity;
 import io.github.xfacthd.framedblocks.api.shapes.ShapeLookup;
@@ -53,7 +54,7 @@ import org.jspecify.annotations.Nullable;
 import java.util.List;
 import java.util.Objects;
 
-public class FramedRailSlopeBlock<BE extends FramedBlockEntity> extends BaseRailBlock implements IFramedBlockInternal, ISlopeBlock.IRailSlopeBlock
+public class FramedRailSlopeBlock<BE extends FramedBlockEntity> extends BaseRailBlock implements IFramedBlockInternal, ISlopeBlock.IRailSlopeBlock, SlopeToggleBlock
 {
     private final BlockType type;
     private final ShapeLookup shapes;
@@ -66,7 +67,6 @@ public class FramedRailSlopeBlock<BE extends FramedBlockEntity> extends BaseRail
         this.shapes = ShapeLookup.of(this);
         this.beFactory = beFactory;
         BlockUtils.configureStandardProperties(this);
-        registerDefaultState(defaultBlockState().setValue(FramedProperties.Y_SLOPE, false));
     }
 
     @Override
@@ -75,7 +75,7 @@ public class FramedRailSlopeBlock<BE extends FramedBlockEntity> extends BaseRail
         BlockUtils.addRequiredProperties(builder);
         builder.add(
                 PropertyHolder.ASCENDING_RAIL_SHAPE, BlockStateProperties.WATERLOGGED, FramedProperties.SOLID,
-                FramedProperties.Y_SLOPE
+                FramedProperties.ALT_SLOPE
         );
     }
 
@@ -205,12 +205,6 @@ public class FramedRailSlopeBlock<BE extends FramedBlockEntity> extends BaseRail
             return Shapes.empty();
         }
         return getShape(state, worldIn, pos, context);
-    }
-
-    @Override
-    public boolean handleBlockLeftClick(BlockState state, Level level, BlockPos pos, Player player)
-    {
-        return IFramedBlock.toggleYSlope(state, level, pos, player);
     }
 
     @Override

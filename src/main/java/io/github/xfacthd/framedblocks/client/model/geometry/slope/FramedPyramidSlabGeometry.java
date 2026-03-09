@@ -19,12 +19,12 @@ public class FramedPyramidSlabGeometry extends Geometry
     private static final Vector3f ZERO = new Vector3f();
 
     private final Direction facing;
-    private final boolean ySlope;
+    private final boolean altSlope;
 
     public FramedPyramidSlabGeometry(GeometryFactory.Context ctx)
     {
         this.facing = ctx.state().getValue(BlockStateProperties.FACING);
-        this.ySlope = ctx.state().getValue(FramedProperties.Y_SLOPE);
+        this.altSlope = ctx.state().getValue(FramedProperties.ALT_SLOPE);
     }
 
     @Override
@@ -34,7 +34,7 @@ public class FramedPyramidSlabGeometry extends Geometry
         if (DirUtils.isY(facing))
         {
             boolean up = facing == Direction.UP;
-            if (!ySlope && quadDir.getAxis() != facing.getAxis())
+            if (!altSlope && quadDir.getAxis() != facing.getAxis())
             {
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(facing, .5F))
@@ -43,7 +43,7 @@ public class FramedPyramidSlabGeometry extends Geometry
                         .apply(Modifiers.makeVerticalSlope(up, 45))
                         .export(quadMap.get(null));
             }
-            else if (ySlope && quadDir == facing)
+            else if (altSlope && quadDir == facing)
             {
                 for (Direction dir : Direction.Plane.HORIZONTAL)
                 {
@@ -62,7 +62,7 @@ public class FramedPyramidSlabGeometry extends Geometry
         }
         else
         {
-            if (!ySlope && quadDir.getAxis() == facing.getAxis())
+            if (!altSlope && quadDir.getAxis() == facing.getAxis())
             {
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(Direction.DOWN, .5F))
@@ -78,7 +78,7 @@ public class FramedPyramidSlabGeometry extends Geometry
                         .apply(Modifiers.makeVerticalSlope(false, 45))
                         .export(quadMap.get(null));
             }
-            else if (ySlope && DirUtils.isY(quadDir))
+            else if (altSlope && DirUtils.isY(quadDir))
             {
                 boolean up = quadDir == Direction.UP;
 

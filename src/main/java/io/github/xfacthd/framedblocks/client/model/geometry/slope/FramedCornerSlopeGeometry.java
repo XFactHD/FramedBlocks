@@ -18,13 +18,13 @@ public class FramedCornerSlopeGeometry extends Geometry
 {
     private final Direction dir;
     private final CornerType type;
-    private final boolean ySlope;
+    private final boolean altSlope;
 
     public FramedCornerSlopeGeometry(GeometryFactory.Context ctx)
     {
         this.dir = ctx.state().getValue(FramedProperties.FACING_HOR);
         this.type = ctx.state().getValue(PropertyHolder.CORNER_TYPE);
-        this.ySlope = ctx.state().getValue(FramedProperties.Y_SLOPE);
+        this.altSlope = ctx.state().getValue(FramedProperties.ALT_SLOPE);
     }
 
     @Override
@@ -66,14 +66,14 @@ public class FramedCornerSlopeGeometry extends Geometry
                     .apply(Modifiers.makeHorizontalSlope(!right, 45))
                     .export(quadMap.get(null));
         }
-        else if (!ySlope && quadDir == dir.getOpposite())
+        else if (!altSlope && quadDir == dir.getOpposite())
         {
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(top ? Direction.UP : Direction.DOWN, right ? 0 : 1, right ? 1 : 0))
                     .apply(Modifiers.makeVerticalSlope(!top, 45))
                     .export(quadMap.get(null));
         }
-        else if (ySlope && ((!top && quadDir == Direction.UP) || (top && quadDir == Direction.DOWN)))
+        else if (altSlope && ((!top && quadDir == Direction.UP) || (top && quadDir == Direction.DOWN)))
         {
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(dir.getOpposite(), right ? 0 : 1, right ? 1 : 0))
@@ -86,7 +86,7 @@ public class FramedCornerSlopeGeometry extends Geometry
     {
         Direction quadDir = quad.direction();
         boolean yQuad = DirUtils.isY(quadDir);
-        if (!ySlope && yQuad)
+        if (!altSlope && yQuad)
         {
             return;
         }
@@ -95,7 +95,7 @@ public class FramedCornerSlopeGeometry extends Geometry
         Direction cutDir = quadDir.getAxis() == dir.getAxis() ? dir.getClockWise() : dir.getOpposite();
         boolean slope = quadDir == dir.getOpposite() || quadDir == dir.getClockWise();
 
-        if ((!slope && !yQuad) || !ySlope)
+        if ((!slope && !yQuad) || !altSlope)
         {
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(cutDir, top ? 1 : 0, top ? 0 : 1))

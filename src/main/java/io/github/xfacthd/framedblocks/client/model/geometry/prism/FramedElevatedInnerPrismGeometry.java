@@ -18,14 +18,14 @@ public class FramedElevatedInnerPrismGeometry extends Geometry
 {
     private final Direction facing;
     private final Direction.Axis axis;
-    private final boolean ySlope;
+    private final boolean altSlope;
 
     public FramedElevatedInnerPrismGeometry(GeometryFactory.Context ctx)
     {
         DirectionAxis dirAxis = ctx.state().getValue(PropertyHolder.FACING_AXIS);
         this.facing = dirAxis.direction();
         this.axis = dirAxis.axis();
-        this.ySlope = ctx.state().getValue(FramedProperties.Y_SLOPE);
+        this.altSlope = ctx.state().getValue(FramedProperties.ALT_SLOPE);
     }
 
     @Override
@@ -37,7 +37,7 @@ public class FramedElevatedInnerPrismGeometry extends Geometry
         boolean quadOnFacingAxis = quadFace.getAxis() == facing.getAxis();
         boolean quadOnAxis = quadFace.getAxis() == axis;
 
-        if (!ySlope && yFacing && !quadOnAxis && !quadOnFacingAxis) // Slopes for Y facing without Y_SLOPE
+        if (!altSlope && yFacing && !quadOnAxis && !quadOnFacingAxis) // Slopes for Y facing without Y_SLOPE
         {
             boolean up = facing == Direction.UP;
             QuadModifier.of(quad)
@@ -45,7 +45,7 @@ public class FramedElevatedInnerPrismGeometry extends Geometry
                     .apply(Modifiers.makeVerticalSlope(up, 45))
                     .export(quadMap.get(null));
         }
-        else if (ySlope && yFacing && quadFace == facing) // Slopes for Y facing with Y_SLOPE
+        else if (altSlope && yFacing && quadFace == facing) // Slopes for Y facing with Y_SLOPE
         {
             Direction onAxis = Direction.fromAxisAndDirection(axis, Direction.AxisDirection.POSITIVE);
 
@@ -73,7 +73,7 @@ public class FramedElevatedInnerPrismGeometry extends Geometry
                     .apply(Modifiers.makeHorizontalSlope(false, 45))
                     .export(quadMap.get(null));
         }
-        else if (!ySlope && !yFacing && !yAxis && quadFace == facing)
+        else if (!altSlope && !yFacing && !yAxis && quadFace == facing)
         {
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(Direction.UP, .5F))
@@ -85,7 +85,7 @@ public class FramedElevatedInnerPrismGeometry extends Geometry
                     .apply(Modifiers.makeVerticalSlope(false, 45))
                     .export(quadMap.get(null));
         }
-        else if (ySlope && !yFacing && !yAxis && DirUtils.isY(quadFace)) // Slopes for horizontal facing and Y axis with Y_SLOPE
+        else if (altSlope && !yFacing && !yAxis && DirUtils.isY(quadFace)) // Slopes for horizontal facing and Y axis with Y_SLOPE
         {
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(facing.getOpposite(), .5F))
@@ -136,7 +136,7 @@ public class FramedElevatedInnerPrismGeometry extends Geometry
     @Override
     public boolean transformAllQuads()
     {
-        if (ySlope)
+        if (altSlope)
         {
             return true;
         }

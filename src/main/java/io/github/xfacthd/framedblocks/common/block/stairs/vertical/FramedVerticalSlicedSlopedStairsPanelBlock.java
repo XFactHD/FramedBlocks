@@ -36,7 +36,7 @@ public class FramedVerticalSlicedSlopedStairsPanelBlock extends FramedVerticalSl
     {
         Direction facing = state.getValue(FramedProperties.FACING_HOR);
         HorizontalRotation rot = state.getValue(PropertyHolder.ROTATION);
-        boolean ySlope = state.getValue(FramedProperties.Y_SLOPE);
+        boolean altSlope = state.getValue(FramedProperties.ALT_SLOPE);
 
         boolean top = rot == HorizontalRotation.LEFT || rot == HorizontalRotation.DOWN;
         boolean right = rot == HorizontalRotation.LEFT || rot == HorizontalRotation.UP;
@@ -51,7 +51,7 @@ public class FramedVerticalSlicedSlopedStairsPanelBlock extends FramedVerticalSl
                         .setValue(FramedProperties.FACING_HOR, facingTwo)
                         .setValue(FramedProperties.TOP, top)
                         .setValue(PropertyHolder.RIGHT, right)
-                        .setValue(FramedProperties.Y_SLOPE, ySlope)
+                        .setValue(FramedProperties.ALT_SLOPE, altSlope)
         );
     }
 

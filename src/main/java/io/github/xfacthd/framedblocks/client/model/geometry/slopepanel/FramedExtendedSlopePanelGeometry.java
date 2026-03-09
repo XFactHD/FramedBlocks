@@ -19,14 +19,14 @@ public class FramedExtendedSlopePanelGeometry extends Geometry
     private final Direction facing;
     private final HorizontalRotation rotation;
     private final Direction orientation;
-    private final boolean ySlope;
+    private final boolean altSlope;
 
     public FramedExtendedSlopePanelGeometry(GeometryFactory.Context ctx)
     {
         this.facing = ctx.state().getValue(FramedProperties.FACING_HOR);
         this.rotation = ctx.state().getValue(PropertyHolder.ROTATION);
         this.orientation = rotation.withFacing(facing);
-        this.ySlope = ctx.state().getValue(FramedProperties.Y_SLOPE);
+        this.altSlope = ctx.state().getValue(FramedProperties.ALT_SLOPE);
     }
 
     @Override
@@ -42,7 +42,7 @@ public class FramedExtendedSlopePanelGeometry extends Geometry
                         .apply(Modifiers.cut(facing.getOpposite(), .5F))
                         .export(quadMap.get(face));
 
-                if (ySlope)
+                if (altSlope)
                 {
                     QuadModifier.of(quad)
                             .apply(FramedSlopePanelGeometry.createVerticalSlope(facing, orientation))
@@ -57,7 +57,7 @@ public class FramedExtendedSlopePanelGeometry extends Geometry
                         .export(quadMap.get(face));
             }
         }
-        else if ((!rotation.isVertical() || !ySlope) && face == facing.getOpposite())
+        else if ((!rotation.isVertical() || !altSlope) && face == facing.getOpposite())
         {
             QuadModifier.of(quad)
                     .apply(FramedSlopePanelGeometry.createSlope(facing, orientation))

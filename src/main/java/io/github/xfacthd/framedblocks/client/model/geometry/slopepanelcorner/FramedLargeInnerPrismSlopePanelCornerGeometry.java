@@ -23,7 +23,7 @@ public class FramedLargeInnerPrismSlopePanelCornerGeometry extends Geometry
     private final Direction dir;
     private final boolean top;
     private final Direction upDir;
-    private final boolean ySlope;
+    private final boolean altSlope;
     private final boolean offset;
     private final Vector3f tiltOrigin;
     private final boolean invAngle;
@@ -34,10 +34,10 @@ public class FramedLargeInnerPrismSlopePanelCornerGeometry extends Geometry
         this.dir = ctx.state().getValue(FramedProperties.FACING_HOR);
         this.top = ctx.state().getValue(FramedProperties.TOP);
         this.upDir = top ? Direction.DOWN : Direction.UP;
-        this.ySlope = ctx.state().getValue(FramedProperties.Y_SLOPE);
+        this.altSlope = ctx.state().getValue(FramedProperties.ALT_SLOPE);
         this.offset = ctx.state().getValue(FramedProperties.OFFSET);
-        this.tiltOrigin = FramedLargePrismSlopePanelCornerGeometry.getTiltOrigin(dir, !top, ySlope);
-        this.invAngle = DirUtils.isPositive(dir.getClockWise()) ^ top ^ ySlope;
+        this.tiltOrigin = FramedLargePrismSlopePanelCornerGeometry.getTiltOrigin(dir, !top, altSlope);
+        this.invAngle = DirUtils.isPositive(dir.getClockWise()) ^ top ^ altSlope;
         this.yRotOrigin = FramedLargePrismSlopePanelCornerGeometry.getYRotOrigin(dir);
     }
 
@@ -57,7 +57,7 @@ public class FramedLargeInnerPrismSlopePanelCornerGeometry extends Geometry
                     .apply(Modifiers.cut(dir.getClockWise(), top ? .5F : 0F, top ? 0F : .5F))
                     .export(quadMap, quadDir);
 
-            if (!ySlope)
+            if (!altSlope)
             {
                 makePrismSlope(quadMap, quad, this::makePrismSlopeHorizontal);
             }
@@ -68,7 +68,7 @@ public class FramedLargeInnerPrismSlopePanelCornerGeometry extends Geometry
                     .apply(Modifiers.cut(dir.getOpposite(), 1F, 0F))
                     .export(quadMap, quadDir);
 
-            if (ySlope)
+            if (altSlope)
             {
                 makePrismSlope(quadMap, quad, this::makePrismSlopeVertical);
             }

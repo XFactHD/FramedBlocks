@@ -16,14 +16,14 @@ public class FramedPrismCornerGeometry extends Geometry
     private final Direction dir;
     private final boolean top;
     private final boolean offset;
-    private final boolean ySlope;
+    private final boolean altSlope;
 
     public FramedPrismCornerGeometry(GeometryFactory.Context ctx)
     {
         this.dir = ctx.state().getValue(FramedProperties.FACING_HOR);
         this.top = ctx.state().getValue(FramedProperties.TOP);
         this.offset = ctx.state().getValue(FramedProperties.OFFSET);
-        this.ySlope = ctx.state().getValue(FramedProperties.Y_SLOPE);
+        this.altSlope = ctx.state().getValue(FramedProperties.ALT_SLOPE);
     }
 
     @Override
@@ -43,7 +43,7 @@ public class FramedPrismCornerGeometry extends Geometry
                     .apply(Modifiers.cut(cutDir, top ? 1 : 0, top ? 0 : 1))
                     .export(quadMap.get(quadDir));
         }
-        else if (!ySlope && quadDir == dir.getOpposite())
+        else if (!altSlope && quadDir == dir.getOpposite())
         {
             if (offset)
             {
@@ -66,7 +66,7 @@ public class FramedPrismCornerGeometry extends Geometry
                         .export(quadMap.get(null));
             }
         }
-        else if (ySlope && ((!top && quadDir == Direction.UP) || (top && quadDir == Direction.DOWN)))
+        else if (altSlope && ((!top && quadDir == Direction.UP) || (top && quadDir == Direction.DOWN)))
         {
             if (offset)
             {

@@ -17,14 +17,14 @@ public class FramedFlatSlopeSlabCornerGeometry extends Geometry
     private final Direction facing;
     private final boolean top;
     private final boolean topHalf;
-    private final boolean ySlope;
+    private final boolean altSlope;
 
     public FramedFlatSlopeSlabCornerGeometry(GeometryFactory.Context ctx)
     {
         this.facing = ctx.state().getValue(FramedProperties.FACING_HOR);
         this.top = ctx.state().getValue(FramedProperties.TOP);
         this.topHalf = ctx.state().getValue(PropertyHolder.TOP_HALF);
-        this.ySlope = ctx.state().getValue(FramedProperties.Y_SLOPE);
+        this.altSlope = ctx.state().getValue(FramedProperties.ALT_SLOPE);
     }
 
     @Override
@@ -33,7 +33,7 @@ public class FramedFlatSlopeSlabCornerGeometry extends Geometry
         Direction face = quad.direction();
         boolean offset = top != topHalf;
 
-        if (!ySlope && (face == facing.getOpposite() || face == facing.getClockWise()))
+        if (!altSlope && (face == facing.getOpposite() || face == facing.getClockWise()))
         {
             Direction cutDir = face == facing.getClockWise() ? face.getClockWise() : face.getCounterClockWise();
             float lenTop = top ? 1F : 0F;
@@ -45,7 +45,7 @@ public class FramedFlatSlopeSlabCornerGeometry extends Geometry
                     .applyIf(Modifiers.offset(top ? Direction.DOWN : Direction.UP, .5F), offset)
                     .export(quadMap.get(null));
         }
-        else if (ySlope && ((!top && face == Direction.UP) || (top && face == Direction.DOWN)))
+        else if (altSlope && ((!top && face == Direction.UP) || (top && face == Direction.DOWN)))
         {
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(facing.getClockWise(), 1, 0))

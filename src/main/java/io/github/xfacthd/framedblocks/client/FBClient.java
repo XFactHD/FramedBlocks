@@ -249,7 +249,7 @@ public final class FBClient
     {
         event.register("state_lock", new StateLockOverlay());
         event.register("toggle_waterloggable", new ToggleWaterloggableOverlay());
-        event.register("toggle_y_slope", new ToggleYSlopeOverlay());
+        event.register("toggle_alt_slope", new ToggleAltSlopeOverlay());
         event.register("reinforcement", new ReinforcementOverlay());
         event.register("prism_offset", new PrismOffsetOverlay());
         event.register("split_line", new SplitLineOverlay());

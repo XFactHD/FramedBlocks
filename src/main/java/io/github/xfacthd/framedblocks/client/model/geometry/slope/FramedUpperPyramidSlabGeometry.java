@@ -23,7 +23,7 @@ public class FramedUpperPyramidSlabGeometry extends FramedPyramidGeometry
         if (DirUtils.isY(facing))
         {
             boolean up = facing == Direction.UP;
-            if (!ySlope && quadDir.getAxis() != facing.getAxis())
+            if (!altSlope && quadDir.getAxis() != facing.getAxis())
             {
                 QuadModifier.of(quad)
                         .applyIf(Modifiers.cut(facing, slopeHeight), hasPillar)
@@ -34,7 +34,7 @@ public class FramedUpperPyramidSlabGeometry extends FramedPyramidGeometry
                         .apply(Modifiers.offset(quadDir, .5F))
                         .export(quadMap.get(null));
             }
-            else if (ySlope && quadDir == facing)
+            else if (altSlope && quadDir == facing)
             {
                 for (Direction dir : Direction.Plane.HORIZONTAL)
                 {
@@ -54,7 +54,7 @@ public class FramedUpperPyramidSlabGeometry extends FramedPyramidGeometry
         }
         else
         {
-            if (!ySlope && quadDir.getAxis() == facing.getAxis())
+            if (!altSlope && quadDir.getAxis() == facing.getAxis())
             {
                 QuadModifier.of(quad)
                         .applyIf(Modifiers.cut(Direction.DOWN, slopeHeight), hasPillar)
@@ -74,7 +74,7 @@ public class FramedUpperPyramidSlabGeometry extends FramedPyramidGeometry
                         .apply(Modifiers.offset(Direction.DOWN, .5F))
                         .export(quadMap.get(null));
             }
-            else if (ySlope && DirUtils.isY(quadDir))
+            else if (altSlope && DirUtils.isY(quadDir))
             {
                 boolean up = quadDir == Direction.UP;
 

@@ -354,7 +354,7 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension
 
     default boolean handleBlockLeftClick(BlockState state, Level level, BlockPos pos, Player player)
     {
-        return false;
+        return this instanceof SlopeToggleBlock && SlopeToggleBlock.toggleAltSlope(state, level, pos, player);
     }
 
     default boolean isIntangible(@SuppressWarnings("unused") BlockState state, BlockGetter level, BlockPos pos, @Nullable CollisionContext ctx)
@@ -575,16 +575,6 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension
     default CamoList getCamosFromBlueprint(BlueprintData blueprintData)
     {
         return blueprintData.camos();
-    }
-
-    static boolean toggleYSlope(BlockState state, Level level, BlockPos pos, Player player)
-    {
-        if (player.getMainHandItem().getItem() == Utils.FRAMED_WRENCH.value())
-        {
-            level.setBlockAndUpdate(pos, state.setValue(FramedProperties.Y_SLOPE, !state.getValue(FramedProperties.Y_SLOPE)));
-            return true;
-        }
-        return false;
     }
 
     /**

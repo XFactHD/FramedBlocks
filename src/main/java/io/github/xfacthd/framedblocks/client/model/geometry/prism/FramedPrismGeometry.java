@@ -18,14 +18,14 @@ public class FramedPrismGeometry extends Geometry
 {
     private final Direction facing;
     private final Direction.Axis axis;
-    private final boolean ySlope;
+    private final boolean altSlope;
 
     public FramedPrismGeometry(GeometryFactory.Context ctx)
     {
         DirectionAxis dirAxis = ctx.state().getValue(PropertyHolder.FACING_AXIS);
         this.facing = dirAxis.direction();
         this.axis = dirAxis.axis();
-        this.ySlope = ctx.state().getValue(FramedProperties.Y_SLOPE);
+        this.altSlope = ctx.state().getValue(FramedProperties.ALT_SLOPE);
     }
 
     @Override
@@ -37,7 +37,7 @@ public class FramedPrismGeometry extends Geometry
         boolean quadOnAxis = quadFace.getAxis() == axis;
         boolean quadOnFacingAxis = quadFace.getAxis() == facing.getAxis();
 
-        if (!ySlope && yFacing && !quadOnAxis && !quadOnFacingAxis) // Slopes for Y facing without Y_SLOPE
+        if (!altSlope && yFacing && !quadOnAxis && !quadOnFacingAxis) // Slopes for Y facing without Y_SLOPE
         {
             boolean up = facing == Direction.UP;
             QuadModifier.of(quad)
@@ -45,7 +45,7 @@ public class FramedPrismGeometry extends Geometry
                     .apply(Modifiers.makeVerticalSlope(up, 45))
                     .export(quadMap.get(null));
         }
-        else if (ySlope && yFacing && DirUtils.isY(quadFace)) // Slopes for Y facing with Y_SLOPE
+        else if (altSlope && yFacing && DirUtils.isY(quadFace)) // Slopes for Y facing with Y_SLOPE
         {
             Direction onAxis = Direction.fromAxisAndDirection(axis, Direction.AxisDirection.POSITIVE);
             Direction offAxisCW = onAxis.getClockWise();
@@ -68,7 +68,7 @@ public class FramedPrismGeometry extends Geometry
                     .apply(Modifiers.makeHorizontalSlope(quadFace == facing.getCounterClockWise(), 45))
                     .export(quadMap.get(null));
         }
-        else if (!ySlope && !yFacing && !yAxis && quadFace == facing) // Slopes for horizontal facing and horizontal axis without Y_SLOPE
+        else if (!altSlope && !yFacing && !yAxis && quadFace == facing) // Slopes for horizontal facing and horizontal axis without Y_SLOPE
         {
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(Direction.UP, .5F))
@@ -80,7 +80,7 @@ public class FramedPrismGeometry extends Geometry
                     .apply(Modifiers.makeVerticalSlope(true, 45))
                     .export(quadMap.get(null));
         }
-        else if (ySlope && !yFacing && !yAxis && DirUtils.isY(quadFace)) // Slopes for horizontal facing and horizontal axis with Y_SLOPE
+        else if (altSlope && !yFacing && !yAxis && DirUtils.isY(quadFace)) // Slopes for horizontal facing and horizontal axis with Y_SLOPE
         {
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(facing, .5F))

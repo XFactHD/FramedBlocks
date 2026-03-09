@@ -19,7 +19,7 @@ public final class FramedProperties
     public static final BooleanProperty PROPAGATES_SKYLIGHT = BooleanProperty.create("propagates_skylight");
     public static final BooleanProperty GLOWING = BooleanProperty.create("glowing");
     public static final BooleanProperty STATE_LOCKED = BooleanProperty.create("locked");
-    public static final BooleanProperty Y_SLOPE = BooleanProperty.create("yslope");
+    public static final BooleanProperty ALT_SLOPE = BooleanProperty.create("alt_slope");
     public static final BooleanProperty COPYCAT_STYLE = BooleanProperty.create("copycat_style");
 
 

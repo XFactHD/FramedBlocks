@@ -2,7 +2,7 @@ package io.github.xfacthd.framedblocks.common.block.slopepanelcorner;
 
 import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
-import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
+import io.github.xfacthd.framedblocks.api.block.SlopeToggleBlock;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.CamoGetter;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockParts;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockTopInteractionMode;
@@ -14,13 +14,10 @@ import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.block.FramedDoubleBlock;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import io.github.xfacthd.framedblocks.common.item.block.VerticalAndWallBlockItem;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
@@ -29,15 +26,12 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.jspecify.annotations.Nullable;
 
-public class FramedStackedCornerSlopePanelBlock extends FramedDoubleBlock
+public class FramedStackedCornerSlopePanelBlock extends FramedDoubleBlock implements SlopeToggleBlock
 {
     public FramedStackedCornerSlopePanelBlock(BlockType blockType, Properties props)
     {
         super(blockType, props);
-        registerDefaultState(defaultBlockState()
-                .setValue(FramedProperties.TOP, false)
-                .setValue(FramedProperties.Y_SLOPE, false)
-        );
+        registerDefaultState(defaultBlockState().setValue(FramedProperties.TOP, false));
     }
 
     @Override
@@ -46,7 +40,7 @@ public class FramedStackedCornerSlopePanelBlock extends FramedDoubleBlock
         super.createBlockStateDefinition(builder);
         builder.add(
                 FramedProperties.FACING_HOR, FramedProperties.TOP,
-                FramedProperties.Y_SLOPE, BlockStateProperties.WATERLOGGED
+                FramedProperties.ALT_SLOPE, BlockStateProperties.WATERLOGGED
         );
     }
 
@@ -57,12 +51,6 @@ public class FramedStackedCornerSlopePanelBlock extends FramedDoubleBlock
         return FramedCornerSlopePanelBlock.getStateForPlacement(
                 this, ctx, getBlockType() == BlockType.FRAMED_STACKED_INNER_CORNER_SLOPE_PANEL, true
         );
-    }
-
-    @Override
-    public boolean handleBlockLeftClick(BlockState state, Level level, BlockPos pos, Player player)
-    {
-        return IFramedBlock.toggleYSlope(state, level, pos, player);
     }
 
     @Override
@@ -92,7 +80,7 @@ public class FramedStackedCornerSlopePanelBlock extends FramedDoubleBlock
     {
         Direction dir = state.getValue(FramedProperties.FACING_HOR);
         boolean top = state.getValue(FramedProperties.TOP);
-        boolean ySlope = state.getValue(FramedProperties.Y_SLOPE);
+        boolean altSlope = state.getValue(FramedProperties.ALT_SLOPE);
 
         return switch (getBlockType())
         {
@@ -104,7 +92,7 @@ public class FramedStackedCornerSlopePanelBlock extends FramedDoubleBlock
                             .defaultBlockState()
                             .setValue(FramedProperties.FACING_HOR, dir)
                             .setValue(FramedProperties.TOP, top)
-                            .setValue(FramedProperties.Y_SLOPE, ySlope)
+                            .setValue(FramedProperties.ALT_SLOPE, altSlope)
             );
             case FRAMED_STACKED_INNER_CORNER_SLOPE_PANEL -> new DoubleBlockParts(
                     FBContent.BLOCK_FRAMED_VERTICAL_STAIRS.value()
@@ -114,7 +102,7 @@ public class FramedStackedCornerSlopePanelBlock extends FramedDoubleBlock
                             .defaultBlockState()
                             .setValue(FramedProperties.FACING_HOR, dir)
                             .setValue(FramedProperties.TOP, top)
-                            .setValue(FramedProperties.Y_SLOPE, ySlope)
+                            .setValue(FramedProperties.ALT_SLOPE, altSlope)
             );
             default -> throw new IllegalArgumentException("Unexpected type: " + getBlockType());
         };

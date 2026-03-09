@@ -16,13 +16,13 @@ public class FramedExtendedCornerSlopePanelGeometry extends Geometry
 {
     private final Direction dir;
     private final boolean top;
-    private final boolean ySlope;
+    private final boolean altSlope;
 
     public FramedExtendedCornerSlopePanelGeometry(GeometryFactory.Context ctx)
     {
         this.dir = ctx.state().getValue(FramedProperties.FACING_HOR);
         this.top = ctx.state().getValue(FramedProperties.TOP);
-        this.ySlope = ctx.state().getValue(FramedProperties.Y_SLOPE);
+        this.altSlope = ctx.state().getValue(FramedProperties.ALT_SLOPE);
     }
 
     @Override
@@ -37,7 +37,7 @@ public class FramedExtendedCornerSlopePanelGeometry extends Geometry
                     .apply(Modifiers.cut(cutDir, top ? 1F : .5F, top ? .5F : 1F))
                     .export(quadMap.get(quadDir));
         }
-        else if (!ySlope && (quadDir == dir.getOpposite() || quadDir == dir.getClockWise()))
+        else if (!altSlope && (quadDir == dir.getOpposite() || quadDir == dir.getClockWise()))
         {
             Direction cutDir = quadDir == dir.getOpposite() ? dir.getClockWise() : dir.getOpposite();
             QuadModifier.of(quad)
@@ -47,7 +47,7 @@ public class FramedExtendedCornerSlopePanelGeometry extends Geometry
         }
         else if ((!top && quadDir == Direction.UP) || (top && quadDir == Direction.DOWN))
         {
-            if (ySlope)
+            if (altSlope)
             {
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(dir.getOpposite(), .5F, 1))

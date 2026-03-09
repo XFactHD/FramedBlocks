@@ -21,7 +21,7 @@ public class FramedCompoundSlopePanelGeometry extends Geometry
     private final HorizontalRotation rot;
     private final Direction orientation;
     private final Direction.Axis triangleAxis;
-    private final boolean ySlope;
+    private final boolean altSlope;
 
     public FramedCompoundSlopePanelGeometry(GeometryFactory.Context ctx)
     {
@@ -29,7 +29,7 @@ public class FramedCompoundSlopePanelGeometry extends Geometry
         this.rot = ctx.state().getValue(PropertyHolder.ROTATION);
         this.orientation = rot.withFacing(dir);
         this.triangleAxis = rot.rotate(Rotation.CLOCKWISE_90).withFacing(dir).getAxis();
-        this.ySlope = ctx.state().getValue(FramedProperties.Y_SLOPE);
+        this.altSlope = ctx.state().getValue(FramedProperties.ALT_SLOPE);
     }
 
     @Override
@@ -42,7 +42,7 @@ public class FramedCompoundSlopePanelGeometry extends Geometry
                     .apply(Modifiers.cut(dir.getOpposite(), .5F))
                     .export(quadMap.get(quadDir));
 
-            if (ySlope && DirUtils.isY(quadDir))
+            if (altSlope && DirUtils.isY(quadDir))
             {
                 QuadModifier.of(quad)
                         .apply(Modifiers.makeVerticalSlope(dir.getOpposite(), FramedSlopePanelGeometry.SLOPE_ANGLE_VERT))
@@ -56,7 +56,7 @@ public class FramedCompoundSlopePanelGeometry extends Geometry
                     .apply(Modifiers.cut(dir, .5F))
                     .export(quadMap.get(quadDir));
 
-            if (ySlope && DirUtils.isY(quadDir))
+            if (altSlope && DirUtils.isY(quadDir))
             {
                 QuadModifier.of(quad)
                         .apply(Modifiers.makeVerticalSlope(dir, FramedSlopePanelGeometry.SLOPE_ANGLE_VERT))
@@ -72,7 +72,7 @@ public class FramedCompoundSlopePanelGeometry extends Geometry
                         .apply(Modifiers.makeHorizontalSlope(rot == HorizontalRotation.LEFT, FramedSlopePanelGeometry.SLOPE_ANGLE))
                         .export(quadMap.get(null));
             }
-            else if (!ySlope)
+            else if (!altSlope)
             {
                 QuadModifier.of(quad)
                         .apply(Modifiers.makeVerticalSlope(rot == HorizontalRotation.DOWN, FramedSlopePanelGeometry.SLOPE_ANGLE))
@@ -87,7 +87,7 @@ public class FramedCompoundSlopePanelGeometry extends Geometry
                         .apply(Modifiers.makeHorizontalSlope(rot == HorizontalRotation.LEFT, FramedSlopePanelGeometry.SLOPE_ANGLE))
                         .export(quadMap.get(null));
             }
-            else if (!ySlope)
+            else if (!altSlope)
             {
                 QuadModifier.of(quad)
                         .apply(Modifiers.makeVerticalSlope(rot == HorizontalRotation.UP, FramedSlopePanelGeometry.SLOPE_ANGLE))

@@ -23,7 +23,7 @@ public class FramedSmallInnerPrismSlopePanelCornerGeometry extends Geometry
     private final Direction dir;
     private final boolean top;
     private final Direction upDir;
-    private final boolean ySlope;
+    private final boolean altSlope;
     private final boolean offset;
     private final Vector3f tiltOrigin;
     private final boolean invAngle;
@@ -33,10 +33,10 @@ public class FramedSmallInnerPrismSlopePanelCornerGeometry extends Geometry
         this.dir = ctx.state().getValue(FramedProperties.FACING_HOR);
         this.top = ctx.state().getValue(FramedProperties.TOP);
         this.upDir = top ? Direction.DOWN : Direction.UP;
-        this.ySlope = ctx.state().getValue(FramedProperties.Y_SLOPE);
+        this.altSlope = ctx.state().getValue(FramedProperties.ALT_SLOPE);
         this.offset = ctx.state().getValue(FramedProperties.OFFSET);
-        this.invAngle = DirUtils.isPositive(dir.getClockWise()) ^ top ^ ySlope;
-        this.tiltOrigin = FramedSmallPrismSlopePanelCornerGeometry.getTiltOrigin(dir.getOpposite(), !top, ySlope);
+        this.invAngle = DirUtils.isPositive(dir.getClockWise()) ^ top ^ altSlope;
+        this.tiltOrigin = FramedSmallPrismSlopePanelCornerGeometry.getTiltOrigin(dir.getOpposite(), !top, altSlope);
     }
 
     @Override
@@ -55,7 +55,7 @@ public class FramedSmallInnerPrismSlopePanelCornerGeometry extends Geometry
                     .apply(Modifiers.cut(dir.getClockWise(), top ? 1F : .5F, top ? .5F : 1F))
                     .export(quadMap, quadDir);
 
-            if (!ySlope)
+            if (!altSlope)
             {
                 makePrismSlope(quadMap, quad, this::makePrismSlopeHorizontal);
             }
@@ -71,7 +71,7 @@ public class FramedSmallInnerPrismSlopePanelCornerGeometry extends Geometry
                     .apply(Modifiers.cut(dir.getClockWise(), .5F, 1.5F))
                     .export(quadMap, quadDir);
 
-            if (ySlope)
+            if (altSlope)
             {
                 makePrismSlope(quadMap, quad, this::makePrismSlopeVertical);
             }

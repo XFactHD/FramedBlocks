@@ -77,6 +77,11 @@ public final class BlockUtils
         {
             builder.add(FramedProperties.STATE_LOCKED);
         }
+
+        if (block instanceof SlopeToggleBlock)
+        {
+            builder.add(FramedProperties.ALT_SLOPE);
+        }
     }
 
     /**
@@ -100,6 +105,10 @@ public final class BlockUtils
         if (block instanceof ShapeLockableBlock)
         {
             state = state.setValue(FramedProperties.STATE_LOCKED, false);
+        }
+        if (block instanceof SlopeToggleBlock)
+        {
+            state = state.setValue(FramedProperties.ALT_SLOPE, false);
         }
         ((InvokerBlock) block).framedblocks$callRegisterDefaultState(state);
     }

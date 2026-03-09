@@ -2,7 +2,7 @@ package io.github.xfacthd.framedblocks.common.block.slopepanel;
 
 import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
-import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
+import io.github.xfacthd.framedblocks.api.block.SlopeToggleBlock;
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedDoubleBlockEntity;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.CamoGetter;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockParts;
@@ -19,9 +19,7 @@ import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import io.github.xfacthd.framedblocks.common.data.property.HorizontalRotation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
@@ -30,7 +28,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.jspecify.annotations.Nullable;
 
-public class FramedDoubleSlopePanelBlock extends FramedDoubleBlock
+public class FramedDoubleSlopePanelBlock extends FramedDoubleBlock implements SlopeToggleBlock
 {
     public static final NullCullPredicate NULL_CULL_PREDICATE = new NullCullPredicate(
             state -> !state.getValue(PropertyHolder.FRONT),
@@ -40,10 +38,7 @@ public class FramedDoubleSlopePanelBlock extends FramedDoubleBlock
     public FramedDoubleSlopePanelBlock(Properties props)
     {
         super(BlockType.FRAMED_DOUBLE_SLOPE_PANEL, props);
-        registerDefaultState(defaultBlockState()
-                .setValue(PropertyHolder.FRONT, false)
-                .setValue(FramedProperties.Y_SLOPE, false)
-        );
+        registerDefaultState(defaultBlockState().setValue(PropertyHolder.FRONT, false));
     }
 
     @Override
@@ -52,7 +47,7 @@ public class FramedDoubleSlopePanelBlock extends FramedDoubleBlock
         super.createBlockStateDefinition(builder);
         builder.add(
                 FramedProperties.FACING_HOR, PropertyHolder.ROTATION, PropertyHolder.FRONT,
-                BlockStateProperties.WATERLOGGED, FramedProperties.Y_SLOPE
+                BlockStateProperties.WATERLOGGED, FramedProperties.ALT_SLOPE
         );
     }
 
@@ -61,12 +56,6 @@ public class FramedDoubleSlopePanelBlock extends FramedDoubleBlock
     public BlockState getStateForPlacement(BlockPlaceContext context)
     {
         return FramedSlopePanelBlock.getStateForPlacement(this, context);
-    }
-
-    @Override
-    public boolean handleBlockLeftClick(BlockState state, Level level, BlockPos pos, Player player)
-    {
-        return IFramedBlock.toggleYSlope(state, level, pos, player);
     }
 
     @Override
@@ -97,18 +86,18 @@ public class FramedDoubleSlopePanelBlock extends FramedDoubleBlock
         Direction facing = state.getValue(FramedProperties.FACING_HOR);
         HorizontalRotation rotation = state.getValue(PropertyHolder.ROTATION);
         boolean front = state.getValue(PropertyHolder.FRONT);
-        boolean ySlope = state.getValue(FramedProperties.Y_SLOPE);
+        boolean altSlope = state.getValue(FramedProperties.ALT_SLOPE);
 
         BlockState defState = FBContent.BLOCK_FRAMED_SLOPE_PANEL.value().defaultBlockState();
         return new DoubleBlockParts(
                 defState.setValue(FramedProperties.FACING_HOR, facing)
                         .setValue(PropertyHolder.ROTATION, rotation)
                         .setValue(PropertyHolder.FRONT, front)
-                        .setValue(FramedProperties.Y_SLOPE, ySlope),
+                        .setValue(FramedProperties.ALT_SLOPE, altSlope),
                 defState.setValue(FramedProperties.FACING_HOR, facing.getOpposite())
                         .setValue(PropertyHolder.ROTATION, rotation.isVertical() ? rotation.getOpposite() : rotation)
                         .setValue(PropertyHolder.FRONT, !front)
-                        .setValue(FramedProperties.Y_SLOPE, ySlope)
+                        .setValue(FramedProperties.ALT_SLOPE, altSlope)
         );
     }
 

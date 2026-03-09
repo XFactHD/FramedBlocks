@@ -2,8 +2,8 @@ package io.github.xfacthd.framedblocks.common.block.slope;
 
 import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
-import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.api.block.IFramedDoubleBlock;
+import io.github.xfacthd.framedblocks.api.block.SlopeToggleBlock;
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedDoubleBlockEntity;
 import io.github.xfacthd.framedblocks.api.camo.CamoContainer;
 import io.github.xfacthd.framedblocks.api.camo.CamoList;
@@ -13,7 +13,6 @@ import io.github.xfacthd.framedblocks.api.util.RotationDirection;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.block.ExtPlacementStateBuilder;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
-import io.github.xfacthd.framedblocks.common.block.IComplexSlopeSource;
 import io.github.xfacthd.framedblocks.common.block.ISlopeBlock;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
@@ -39,12 +38,11 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jspecify.annotations.Nullable;
 
-public class FramedSlopeBlock extends FramedBlock implements ISlopeBlock, IComplexSlopeSource
+public class FramedSlopeBlock extends FramedBlock implements ISlopeBlock, SlopeToggleBlock
 {
     public FramedSlopeBlock(Properties props)
     {
         super(BlockType.FRAMED_SLOPE, props);
-        registerDefaultState(defaultBlockState().setValue(FramedProperties.Y_SLOPE, false));
     }
 
     @Override
@@ -53,7 +51,7 @@ public class FramedSlopeBlock extends FramedBlock implements ISlopeBlock, ICompl
         super.createBlockStateDefinition(builder);
         builder.add(
                 FramedProperties.FACING_HOR, PropertyHolder.SLOPE_TYPE, BlockStateProperties.WATERLOGGED,
-                FramedProperties.SOLID, FramedProperties.Y_SLOPE
+                FramedProperties.SOLID, FramedProperties.ALT_SLOPE
         );
     }
 
@@ -111,12 +109,6 @@ public class FramedSlopeBlock extends FramedBlock implements ISlopeBlock, ICompl
             }
         }
         return super.useItemOn(stack, state, level, pos, player, hand, hit);
-    }
-
-    @Override
-    public boolean handleBlockLeftClick(BlockState state, Level level, BlockPos pos, Player player)
-    {
-        return IFramedBlock.toggleYSlope(state, level, pos, player);
     }
 
     @Override
@@ -179,8 +171,8 @@ public class FramedSlopeBlock extends FramedBlock implements ISlopeBlock, ICompl
     }
 
     @Override
-    public boolean isHorizontalSlope(BlockState state)
+    public SlopeOrientation getSlopeOrientation(BlockState state)
     {
-        return state.getValue(PropertyHolder.SLOPE_TYPE) == SlopeType.HORIZONTAL;
+        return state.getValue(PropertyHolder.SLOPE_TYPE).getOrientation();
     }
 }
