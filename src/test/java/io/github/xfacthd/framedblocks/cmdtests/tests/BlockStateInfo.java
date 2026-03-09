@@ -5,6 +5,7 @@ import com.mojang.brigadier.Command;
 import com.mojang.brigadier.context.CommandContext;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
+import io.github.xfacthd.framedblocks.api.block.ShapeLockableBlock;
 import io.github.xfacthd.framedblocks.client.model.wrapping.ModelWrappingHandler;
 import io.github.xfacthd.framedblocks.client.model.wrapping.ModelWrappingManager;
 import io.github.xfacthd.framedblocks.cmdtests.SpecialTestCommand;
@@ -72,7 +73,7 @@ public final class BlockStateInfo
             String glowing = checkBooleanProperty(block, FramedProperties.GLOWING);
             String skylight = checkBooleanProperty(block, FramedProperties.PROPAGATES_SKYLIGHT);
             String waterlogging = type.supportsWaterLogging() ? checkBooleanProperty(block, BlockStateProperties.WATERLOGGED) : "-";
-            String stateLock = type.canLockState() ? checkBooleanProperty(block, FramedProperties.STATE_LOCKED) : "-";
+            String stateLock = block instanceof ShapeLockableBlock ? checkBooleanProperty(block, FramedProperties.STATE_LOCKED) : "-";
             String ignoredProperties = printIgnoredProperties(wrapper, block);
 
             table.cell(name)

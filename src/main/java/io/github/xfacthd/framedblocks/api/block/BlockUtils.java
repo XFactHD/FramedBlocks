@@ -73,7 +73,7 @@ public final class BlockUtils
             removeProperty(builder, BlockStateProperties.WATERLOGGED);
         }
 
-        if (block.getBlockType().canLockState())
+        if (block instanceof ShapeLockableBlock)
         {
             builder.add(FramedProperties.STATE_LOCKED);
         }
@@ -97,7 +97,7 @@ public final class BlockUtils
         {
             state = state.setValue(BlockStateProperties.WATERLOGGED, false);
         }
-        if (block.getBlockType().canLockState())
+        if (block instanceof ShapeLockableBlock)
         {
             state = state.setValue(FramedProperties.STATE_LOCKED, false);
         }

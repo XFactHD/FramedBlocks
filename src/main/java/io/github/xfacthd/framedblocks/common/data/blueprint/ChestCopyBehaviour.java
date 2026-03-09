@@ -5,13 +5,13 @@ import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Property;
 
-import java.util.List;
+import java.util.Set;
 
 public final class ChestCopyBehaviour implements BlueprintCopyBehaviour
 {
     @Override
-    public List<Property<?>> getPropertiesToCopy(BlockState state)
+    public Set<Property<?>> getPropertiesToCopy(BlockState state)
     {
-        return List.of(PropertyHolder.LATCH_TYPE);
+        return Set.of(PropertyHolder.LATCH_TYPE);
     }
 }

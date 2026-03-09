@@ -1,6 +1,7 @@
 package io.github.xfacthd.framedblocks.common.datagen.providers;
 
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
+import io.github.xfacthd.framedblocks.api.block.ShapeLockableBlock;
 import io.github.xfacthd.framedblocks.api.block.overlay.BlockOverlay;
 import io.github.xfacthd.framedblocks.api.blueprint.BlueprintData;
 import io.github.xfacthd.framedblocks.api.camo.CamoContainerFactory;
@@ -413,7 +414,7 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(SimpleBlockCamoContainerFactory.MSG_BLOCK_ENTITY, "Blocks with BlockEntities cannot be inserted into framed blocks!");
         add(SimpleBlockCamoContainerFactory.MSG_NON_SOLID, "Untagged non-solid blocks cannot be inserted into framed blocks!");
 
-        add(IFramedBlock.LOCK_MESSAGE, "The state of this block is now %s");
+        add(ShapeLockableBlock.LOCK_MESSAGE, "The state of this block is now %s");
     }
 
     private void addScreenTranslations()
@@ -497,8 +498,8 @@ public final class FramedLanguageProvider extends LanguageProvider
     private void addOverlayTranslations()
     {
         add(StateLockOverlay.LOCK_MESSAGE, "State %s");
-        add(IFramedBlock.STATE_LOCKED, "locked");
-        add(IFramedBlock.STATE_UNLOCKED, "unlocked");
+        add(ShapeLockableBlock.STATE_LOCKED, "locked");
+        add(ShapeLockableBlock.STATE_UNLOCKED, "unlocked");
 
         add(ToggleWaterloggableOverlay.MSG_IS_WATERLOGGABLE, "Block is waterloggable.");
         add(ToggleWaterloggableOverlay.MSG_IS_NOT_WATERLOGGABLE, "Block is not waterloggable.");

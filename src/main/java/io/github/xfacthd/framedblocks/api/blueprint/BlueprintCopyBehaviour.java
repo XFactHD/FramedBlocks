@@ -2,6 +2,7 @@ package io.github.xfacthd.framedblocks.api.blueprint;
 
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
+import io.github.xfacthd.framedblocks.api.block.ShapeLockableBlock;
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import io.github.xfacthd.framedblocks.api.camo.CamoList;
 import net.minecraft.core.BlockPos;
@@ -15,10 +16,12 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Property;
 import org.jspecify.annotations.Nullable;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
- * Provide custom behaviours when an {@link IFramedBlock} is copied and/or pasted with the Framed Blueprint
+ * Provide custom behaviors when an {@link IFramedBlock} is copied and/or pasted with the Framed Blueprint
  * <p>
  * Must be registered in {@link RegisterBlueprintCopyBehavioursEvent}
  * </p>
@@ -50,18 +53,26 @@ public interface BlueprintCopyBehaviour
     }
 
     /**
-     * Provide a list of {@link Property}s to copy from the original block
+     * Provide a set of {@link Property}s to copy from the original block
      *
      * @param state The {@link BlockState} of the block being copied
-     * @return the list of blockstate properties to copy
+     * @return the set of blockstate properties to copy
      */
-    default List<Property<?>> getPropertiesToCopy(BlockState state)
+    default Set<Property<?>> getPropertiesToCopy(BlockState state)
     {
+        Set<Property<?>> properties = Set.of();
         if (state.hasProperty(FramedProperties.Y_SLOPE))
         {
-            return List.of(FramedProperties.Y_SLOPE);
+            properties = Set.of(FramedProperties.Y_SLOPE);
         }
-        return List.of();
+        if (state.getBlock() instanceof ShapeLockableBlock lockable && lockable.isLocked(state))
+        {
+            properties = new HashSet<>(properties);
+            properties.addAll(lockable.getPropertiesToCopy());
+            properties.add(FramedProperties.STATE_LOCKED);
+            properties = Set.copyOf(properties);
+        }
+        return properties;
     }
 
     /**

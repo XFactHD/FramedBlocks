@@ -3,6 +3,7 @@ package io.github.xfacthd.framedblocks.common.block.stairs.vertical;
 import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
+import io.github.xfacthd.framedblocks.api.block.ShapeLockableBlock;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
 import io.github.xfacthd.framedblocks.common.block.stairs.standard.FramedHalfStairsBlock;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
@@ -22,9 +23,12 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.Half;
+import net.minecraft.world.level.block.state.properties.Property;
 import org.jspecify.annotations.Nullable;
 
-public class FramedVerticalStairsBlock extends FramedBlock
+import java.util.Set;
+
+public class FramedVerticalStairsBlock extends FramedBlock implements ShapeLockableBlock
 {
     public FramedVerticalStairsBlock(BlockType type, Properties props)
     {
@@ -182,6 +186,12 @@ public class FramedVerticalStairsBlock extends FramedBlock
     protected BlockState mirror(BlockState state, Mirror mirror)
     {
         return BlockUtils.mirrorCornerBlock(state, mirror);
+    }
+
+    @Override
+    public Set<Property<?>> getPropertiesToCopy()
+    {
+        return Set.of(PropertyHolder.STAIRS_TYPE);
     }
 
     @Override

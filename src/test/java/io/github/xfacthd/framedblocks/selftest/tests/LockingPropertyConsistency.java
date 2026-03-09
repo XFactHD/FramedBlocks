@@ -1,7 +1,7 @@
 package io.github.xfacthd.framedblocks.selftest.tests;
 
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
-import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
+import io.github.xfacthd.framedblocks.api.block.ShapeLockableBlock;
 import io.github.xfacthd.framedblocks.selftest.SelfTestReporter;
 import net.minecraft.world.level.block.Block;
 
@@ -15,9 +15,9 @@ public final class LockingPropertyConsistency
 
         blocks.forEach(block ->
         {
-            boolean onType = ((IFramedBlock) block).getBlockType().canLockState();
-            boolean onBlock = block.defaultBlockState().hasProperty(FramedProperties.STATE_LOCKED);
-            if (onType != onBlock)
+            boolean hasInterface = block instanceof ShapeLockableBlock;
+            boolean hasProperty = block.defaultBlockState().hasProperty(FramedProperties.STATE_LOCKED);
+            if (hasInterface != hasProperty)
             {
                 reporter.warn("Block '{}' has inconsistent locking configuration", block);
             }

@@ -3,6 +3,7 @@ package io.github.xfacthd.framedblocks.common.block.pillar;
 import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
+import io.github.xfacthd.framedblocks.api.block.ShapeLockableBlock;
 import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.common.block.IFramedBlockInternal;
 import io.github.xfacthd.framedblocks.common.compat.diagonalblocks.DiagonalBlocksCompat;
@@ -25,14 +26,16 @@ import net.minecraft.world.level.block.FenceBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.redstone.Orientation;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
+import java.util.Set;
 
-public class FramedFenceBlock extends FenceBlock implements IFramedBlockInternal
+public class FramedFenceBlock extends FenceBlock implements IFramedBlockInternal, ShapeLockableBlock
 {
     public FramedFenceBlock(Properties props)
     {
@@ -130,6 +133,12 @@ public class FramedFenceBlock extends FenceBlock implements IFramedBlockInternal
     public BlockType getBlockType()
     {
         return BlockType.FRAMED_FENCE;
+    }
+
+    @Override
+    public Set<Property<?>> getPropertiesToCopy()
+    {
+        return Set.of(NORTH, EAST, SOUTH, WEST);
     }
 
     @Override

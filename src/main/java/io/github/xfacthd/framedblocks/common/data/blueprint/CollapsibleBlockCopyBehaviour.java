@@ -6,7 +6,7 @@ import io.github.xfacthd.framedblocks.common.data.component.CollapsibleBlockData
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Property;
 
-import java.util.List;
+import java.util.Set;
 
 public final class CollapsibleBlockCopyBehaviour extends DummyDataHandlingCopyBehaviour<CollapsibleBlockData>
 {
@@ -16,8 +16,8 @@ public final class CollapsibleBlockCopyBehaviour extends DummyDataHandlingCopyBe
     }
 
     @Override
-    public List<Property<?>> getPropertiesToCopy(BlockState state)
+    public Set<Property<?>> getPropertiesToCopy(BlockState state)
     {
-        return List.of(PropertyHolder.NULLABLE_FACE, PropertyHolder.ROTATE_SPLIT_LINE);
+        return Set.of(PropertyHolder.NULLABLE_FACE, PropertyHolder.ROTATE_SPLIT_LINE);
     }
 }

@@ -3,6 +3,7 @@ package io.github.xfacthd.framedblocks.common.block.stairs.standard;
 import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
+import io.github.xfacthd.framedblocks.api.block.ShapeLockableBlock;
 import io.github.xfacthd.framedblocks.api.model.wrapping.WrapHelper;
 import io.github.xfacthd.framedblocks.api.model.wrapping.statemerger.StateMerger;
 import io.github.xfacthd.framedblocks.api.util.Utils;
@@ -39,7 +40,7 @@ import org.jspecify.annotations.Nullable;
 import java.util.List;
 import java.util.Set;
 
-public class FramedStairsBlock extends StairBlock implements IFramedBlockInternal
+public class FramedStairsBlock extends StairBlock implements IFramedBlockInternal, ShapeLockableBlock
 {
     public static final StateMerger STATE_MERGER = new StairStateMerger();
 
@@ -156,6 +157,12 @@ public class FramedStairsBlock extends StairBlock implements IFramedBlockInterna
     public BlockType getBlockType()
     {
         return type;
+    }
+
+    @Override
+    public Set<Property<?>> getPropertiesToCopy()
+    {
+        return Set.of(SHAPE);
     }
 
     @Override

@@ -42,6 +42,7 @@ import java.util.ArrayList;
 import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Consumer;
 
 public class FramedBlueprintItem extends FramedToolItem
@@ -123,7 +124,7 @@ public class FramedBlueprintItem extends FramedToolItem
 
     private static BlueprintData storeBlockStateProperties(BlueprintCopyBehaviour behaviour, BlueprintData data, BlockState state)
     {
-        List<Property<?>> properties = behaviour.getPropertiesToCopy(state);
+        Set<Property<?>> properties = behaviour.getPropertiesToCopy(state);
         if (!properties.isEmpty())
         {
             BlockItemStateProperties stateProps = BlockItemStateProperties.EMPTY;

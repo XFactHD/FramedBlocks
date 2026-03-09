@@ -20,13 +20,10 @@ import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.api.util.RotationDirection;
 import io.github.xfacthd.framedblocks.api.util.sound.SoundUtils;
 import io.github.xfacthd.framedblocks.api.util.Utils;
-import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.RandomSource;
 import net.minecraft.util.TriState;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -42,17 +39,14 @@ import net.minecraft.world.level.EmptyBlockGetter;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
-import net.minecraft.world.level.ScheduledTickAccess;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.SupportType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.FluidState;
-import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
@@ -67,9 +61,6 @@ import org.jspecify.annotations.Nullable;
 
 public interface IFramedBlock extends EntityBlock, IBlockExtension
 {
-    String LOCK_MESSAGE = Utils.translationKey("msg", "lock_state");
-    Component STATE_LOCKED = Utils.translate("msg", "lock_state.locked").withStyle(ChatFormatting.RED);
-    Component STATE_UNLOCKED = Utils.translate("msg", "lock_state.unlocked").withStyle(ChatFormatting.GREEN);
     String CAMO_LABEL = Utils.translationKey("desc", "block.stored_camo");
     String CAMO_LABEL_MULTI = Utils.translationKey("desc", "block.stored_camo_multi");
     Identifier DYNAMIC_DROPS = Utils.id("dynamic_drops");
@@ -124,7 +115,7 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension
     )
     {
         ItemStack heldItem = player.getItemInHand(hand);
-        if (getBlockType().canLockState() && hand == InteractionHand.MAIN_HAND && lockState(level, pos, player, heldItem))
+        if (hand == InteractionHand.MAIN_HAND && this instanceof ShapeLockableBlock block && block.lockState(level, pos, player, heldItem))
         {
             return InteractionResult.SUCCESS;
         }
@@ -504,47 +495,6 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension
         }
     }
 
-    default boolean lockState(Level level, BlockPos pos, Player player, ItemStack stack)
-    {
-        if (stack.getItem() != Utils.FRAMED_KEY.value())
-        {
-            return false;
-        }
-
-        if (!level.isClientSide())
-        {
-            BlockState state = level.getBlockState(pos);
-            boolean locked = state.getValue(FramedProperties.STATE_LOCKED);
-            player.displayClientMessage(Component.translatable(LOCK_MESSAGE, locked ? STATE_UNLOCKED : STATE_LOCKED), true);
-
-            level.setBlockAndUpdate(pos, state.cycle(FramedProperties.STATE_LOCKED));
-        }
-        return true;
-    }
-
-    default BlockState updateShapeLockable(
-            BlockState state,
-            LevelReader level,
-            ScheduledTickAccess tickAccess,
-            BlockPos pos,
-            Direction side,
-            BlockPos adjPos,
-            BlockState adjState,
-            RandomSource random,
-            UpdateShapeHandler updateShape
-    )
-    {
-        if (!state.getValue(FramedProperties.STATE_LOCKED))
-        {
-            return updateShape.handle(state, level, tickAccess, pos, side, adjPos, adjState, random);
-        }
-        if (getBlockType().supportsWaterLogging() && state.getValue(BlockStateProperties.WATERLOGGED))
-        {
-            tickAccess.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
-        }
-        return state;
-    }
-
     @SuppressWarnings("deprecation")
     default BlockState rotate(BlockState state, RotationDirection direction, WrenchRotationMode mode)
     {
@@ -685,20 +635,5 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension
     default float getJadeRenderScale(BlockState state)
     {
         return 1F;
-    }
-
-    @FunctionalInterface
-    interface UpdateShapeHandler
-    {
-        BlockState handle(
-                BlockState state,
-                LevelReader level,
-                ScheduledTickAccess tickAccess,
-                BlockPos pos,
-                Direction side,
-                BlockPos adjPos,
-                BlockState adjState,
-                RandomSource random
-        );
     }
 }

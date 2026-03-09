@@ -172,6 +172,9 @@ public final class Utils
 
     public static <T> List<T> concat(List<T> listOne, List<T> listTwo)
     {
+        if (listOne.isEmpty()) return listTwo;
+        if (listTwo.isEmpty()) return listOne;
+
         List<T> list = new ArrayList<>(listOne.size() + listTwo.size());
         list.addAll(listOne);
         list.addAll(listTwo);
@@ -180,6 +183,9 @@ public final class Utils
 
     public static <T> Set<T> concat(Set<T> setOne, Set<T> setTwo)
     {
+        if (setOne.isEmpty()) return setTwo;
+        if (setTwo.isEmpty()) return setOne;
+
         Set<T> set = new HashSet<>(setOne.size() + setTwo.size());
         set.addAll(setOne);
         set.addAll(setTwo);

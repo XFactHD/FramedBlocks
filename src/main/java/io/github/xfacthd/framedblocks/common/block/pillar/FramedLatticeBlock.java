@@ -2,6 +2,7 @@ package io.github.xfacthd.framedblocks.common.block.pillar;
 
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
+import io.github.xfacthd.framedblocks.api.block.ShapeLockableBlock;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.api.util.RotationDirection;
@@ -25,11 +26,13 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.Property;
 import org.jspecify.annotations.Nullable;
 
+import java.util.Set;
 import java.util.function.BiPredicate;
 
-public class FramedLatticeBlock extends FramedBlock implements IPillarLikeBlock
+public class FramedLatticeBlock extends FramedBlock implements IPillarLikeBlock, ShapeLockableBlock
 {
     private final BiPredicate<Direction, BlockState> connectionTest;
     private final PillarConnection pillarConnection;
@@ -175,6 +178,12 @@ public class FramedLatticeBlock extends FramedBlock implements IPillarLikeBlock
     public Direction getHorizontalOrientation(BlockState state)
     {
         return null;
+    }
+
+    @Override
+    public Set<Property<?>> getPropertiesToCopy()
+    {
+        return Set.of(FramedProperties.X_AXIS, FramedProperties.Y_AXIS, FramedProperties.Z_AXIS);
     }
 
     @Override

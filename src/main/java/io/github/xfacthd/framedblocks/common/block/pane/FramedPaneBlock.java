@@ -3,6 +3,7 @@ package io.github.xfacthd.framedblocks.common.block.pane;
 import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
+import io.github.xfacthd.framedblocks.api.block.ShapeLockableBlock;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.block.IFramedBlockInternal;
 import io.github.xfacthd.framedblocks.common.compat.diagonalblocks.DiagonalBlocksCompat;
@@ -23,6 +24,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.IronBarsBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.redstone.Orientation;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.BlockHitResult;
@@ -32,8 +34,9 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
+import java.util.Set;
 
-public class FramedPaneBlock extends IronBarsBlock implements IFramedBlockInternal
+public class FramedPaneBlock extends IronBarsBlock implements IFramedBlockInternal, ShapeLockableBlock
 {
     private final BlockType type;
 
@@ -161,6 +164,12 @@ public class FramedPaneBlock extends IronBarsBlock implements IFramedBlockIntern
     public BlockType getBlockType()
     {
         return type;
+    }
+
+    @Override
+    public Set<Property<?>> getPropertiesToCopy()
+    {
+        return Set.of(NORTH, EAST, SOUTH, WEST);
     }
 
     @Override

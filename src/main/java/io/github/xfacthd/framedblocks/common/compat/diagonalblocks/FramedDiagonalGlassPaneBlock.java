@@ -1,10 +1,12 @@
 package io.github.xfacthd.framedblocks.common.compat.diagonalblocks;
 
+import fuzs.diagonalblocks.api.v2.block.DiagonalBlock;
 import fuzs.diagonalblocks.api.v2.block.DiagonalGlassPaneBlock;
 import fuzs.diagonalblocks.api.v2.block.StarCollisionBlock;
 import fuzs.diagonalblocks.api.v2.util.EightWayDirection;
 import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
+import io.github.xfacthd.framedblocks.api.block.ShapeLockableBlock;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.block.IFramedBlockInternal;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
@@ -27,6 +29,7 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.redstone.Orientation;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.BlockHitResult;
@@ -36,8 +39,9 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
+import java.util.Set;
 
-public final class FramedDiagonalGlassPaneBlock extends DiagonalGlassPaneBlock implements IFramedBlockInternal
+public final class FramedDiagonalGlassPaneBlock extends DiagonalGlassPaneBlock implements IFramedBlockInternal, ShapeLockableBlock
 {
     public FramedDiagonalGlassPaneBlock(BlockBehaviour.Properties props)
     {
@@ -186,6 +190,12 @@ public final class FramedDiagonalGlassPaneBlock extends DiagonalGlassPaneBlock i
     public BlockType getBlockType()
     {
         return BlockType.FRAMED_PANE;
+    }
+
+    @Override
+    public Set<Property<?>> getPropertiesToCopy()
+    {
+        return Set.of(DiagonalBlock.NORTH, DiagonalBlock.EAST, DiagonalBlock.SOUTH, DiagonalBlock.WEST, NORTH_EAST, SOUTH_EAST, SOUTH_WEST, NORTH_WEST);
     }
 
     @Override

@@ -1,7 +1,7 @@
 package io.github.xfacthd.framedblocks.client.screen.overlay.impl;
 
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
-import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
+import io.github.xfacthd.framedblocks.api.block.ShapeLockableBlock;
 import io.github.xfacthd.framedblocks.api.screen.overlay.BlockInteractOverlay;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.common.FBContent;
@@ -17,10 +17,10 @@ public final class StateLockOverlay extends BlockInteractOverlay
 {
     public static final String LOCK_MESSAGE = Utils.translationKey("tooltip", "lock_state");
     private static final List<Component> LINES_FALSE = List.of(
-            Component.translatable(LOCK_MESSAGE, IFramedBlock.STATE_UNLOCKED)
+            Component.translatable(LOCK_MESSAGE, ShapeLockableBlock.STATE_UNLOCKED)
     );
     private static final List<Component> LINES_TRUE = List.of(
-            Component.translatable(LOCK_MESSAGE, IFramedBlock.STATE_LOCKED)
+            Component.translatable(LOCK_MESSAGE, ShapeLockableBlock.STATE_LOCKED)
     );
 
     private static final Identifier SYMBOL_TEXTURE = Utils.id("textures/overlay/state_lock_symbols.png");
@@ -41,7 +41,7 @@ public final class StateLockOverlay extends BlockInteractOverlay
     @Override
     public boolean isValidTarget(Target target)
     {
-        return target.state().getBlock() instanceof IFramedBlock block && block.getBlockType().canLockState();
+        return target.state().getBlock() instanceof ShapeLockableBlock;
     }
 
     @Override
