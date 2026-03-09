@@ -46,6 +46,7 @@ public final class BlockStateInfo
                 .header("State lock")
                 .header("Ignored properties");
 
+        long totalBlocksWithOverlays = 0;
         long totalBlocksWithCamoRotation = 0;
         long totalStates = 0;
         long totalModelStates = 0;
@@ -91,6 +92,7 @@ public final class BlockStateInfo
             totalModelStates += modelStateCount;
             if (type.supportsBlockOverlays())
             {
+                totalBlocksWithOverlays++;
                 totalStatesWithOverlays += stateCount;
                 totalModelStatesWithOverlays += modelStateCount;
             }
@@ -98,6 +100,7 @@ public final class BlockStateInfo
 
         String dump = table.print() +
                 "\nBlock count: " + TYPES.length +
+                "\\\n↳ With BlockOverlays: " + totalBlocksWithOverlays +
                 "\\\n↳ With camo rotation: " + totalBlocksWithCamoRotation +
                 "\\\nTotal states: " + totalStates +
                 "\\\n↳ With BlockOverlays: " + totalStatesWithOverlays +

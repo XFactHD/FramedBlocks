@@ -18,6 +18,7 @@ import io.github.xfacthd.framedblocks.common.data.conpreds.ConnectionPredicates;
 import io.github.xfacthd.framedblocks.common.data.cullupdate.CullingUpdateTracker;
 import io.github.xfacthd.framedblocks.common.data.dynreg.DynamicRegistrySetup;
 import io.github.xfacthd.framedblocks.common.data.facepreds.FullFacePredicates;
+import io.github.xfacthd.framedblocks.common.data.overlaypreds.BlockOverlayPredicates;
 import io.github.xfacthd.framedblocks.common.data.shapes.ShapeReloader;
 import io.github.xfacthd.framedblocks.common.data.skippreds.SideSkipPredicates;
 import io.github.xfacthd.framedblocks.common.item.FramedBlueprintItem;
@@ -74,6 +75,7 @@ public final class FramedBlocks
         FullFacePredicates.PREDICATES.initialize();
         SideSkipPredicates.PREDICATES.initialize();
         ConnectionPredicates.PREDICATES.initialize();
+        BlockOverlayPredicates.PREDICATES.initialize();
 
         CompatHandler.init(modBus);
 

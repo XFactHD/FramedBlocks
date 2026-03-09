@@ -2,6 +2,7 @@ package io.github.xfacthd.framedblocks.common.block.pillar;
 
 import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
+import io.github.xfacthd.framedblocks.api.block.overlay.AxisOverlayCarrier;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.util.RotationDirection;
 import io.github.xfacthd.framedblocks.api.util.Utils;
@@ -19,7 +20,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.jspecify.annotations.Nullable;
 
-public class FramedHalfPillarBlock extends FramedBlock implements IPillarLikeBlock
+public class FramedHalfPillarBlock extends FramedBlock implements IPillarLikeBlock, AxisOverlayCarrier
 {
     private final PillarConnection pillarConnection;
 
@@ -91,5 +92,11 @@ public class FramedHalfPillarBlock extends FramedBlock implements IPillarLikeBlo
     public PillarConnection getPillarConnection(BlockState state, Direction side)
     {
         return side == state.getValue(BlockStateProperties.FACING) ? pillarConnection : PillarConnection.NONE;
+    }
+
+    @Override
+    public Direction.Axis getAxis(BlockState state)
+    {
+        return state.getValue(BlockStateProperties.FACING).getAxis();
     }
 }
