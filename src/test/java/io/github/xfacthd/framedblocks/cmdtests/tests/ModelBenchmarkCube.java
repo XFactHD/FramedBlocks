@@ -4,13 +4,18 @@ import com.mojang.brigadier.Command;
 import com.mojang.brigadier.context.CommandContext;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
+import io.github.xfacthd.framedblocks.api.block.overlay.BlockOverlay;
 import io.github.xfacthd.framedblocks.api.camo.CamoContainer;
+import io.github.xfacthd.framedblocks.api.util.FramedConstants;
+import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
 import net.minecraft.core.SectionPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.TickTask;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -21,12 +26,16 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.neoforged.neoforge.common.util.FakePlayer;
 import net.neoforged.neoforge.transfer.access.ItemAccess;
 
+import java.util.Optional;
+
 public final class ModelBenchmarkCube
 {
     private static final String CONFIRMATION_KEY = "confirm";
     private static final Component MSG_NO_CONFIRM = Component.literal("Incorrect confirmation key, expected '" + CONFIRMATION_KEY + "'");
     private static final Component MSG_NOT_A_PLAYER = Component.literal("This command can only be executed by a real player");
     private static final Component MSG_CAMO_FAILED = Component.literal("Failed to create camo for test blocks");
+    private static final Component MSG_OVERLAY_FAILED = Component.literal("Failed to resolve BlockOverlay for test blocks");
+    private static final ResourceKey<BlockOverlay> OVERLAY_KEY = ResourceKey.create(FramedConstants.BLOCK_OVERLAY_REGISTRY_KEY, Utils.id("grass"));
 
     public static int buildBenchmarkCube(CommandContext<CommandSourceStack> ctx)
     {
@@ -55,6 +64,18 @@ public final class ModelBenchmarkCube
             return 0;
         }
 
+        Holder<BlockOverlay> blockOverlay = null;
+        if (ctx.getArgument("overlays", Boolean.class))
+        {
+            Optional<Holder.Reference<BlockOverlay>> optional = level.registryAccess().get(OVERLAY_KEY);
+            if (optional.isEmpty())
+            {
+                ctx.getSource().sendFailure(MSG_OVERLAY_FAILED);
+                return 0;
+            }
+            blockOverlay = optional.get();
+        }
+
         int minX = chunk.minBlockX();
         int minY = chunk.minBlockY();
         int minZ = chunk.minBlockZ();
@@ -72,6 +93,7 @@ public final class ModelBenchmarkCube
                     if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
                     {
                         be.setCamo(camo, false);
+                        be.setOverlay(blockOverlay);
                     }
                 }
             }

@@ -1,6 +1,7 @@
 package io.github.xfacthd.framedblocks.cmdtests;
 
 import com.mojang.brigadier.Command;
+import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import io.github.xfacthd.framedblocks.FramedBlocks;
@@ -63,8 +64,10 @@ public final class SpecialTestCommand
                         .executes(async(ModelPerformanceTest.NAME, ModelPerformanceTest::testModelPerformance))
                 )
                 .then(Commands.literal("benchmark_cube")
-                        .then(Commands.argument("confirm", StringArgumentType.string())
-                                .executes(ModelBenchmarkCube::buildBenchmarkCube)
+                        .then(Commands.argument("overlays", BoolArgumentType.bool())
+                                .then(Commands.argument("confirm", StringArgumentType.string())
+                                        .executes(ModelBenchmarkCube::buildBenchmarkCube)
+                                )
                         )
                 )
                 .then(Commands.literal("reload_shapes")
