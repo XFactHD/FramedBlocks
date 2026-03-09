@@ -23,7 +23,6 @@ import io.github.xfacthd.framedblocks.api.util.Utils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
@@ -114,22 +113,7 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension
 
     default void tryApplyCamoImmediately(Level level, BlockPos pos, @Nullable LivingEntity placer, ItemStack stack)
     {
-        if (level.isClientSide())
-        {
-            return;
-        }
-
-        //noinspection ConstantConditions
-        if (stack.get(DataComponents.BLOCK_ENTITY_DATA) != null)
-        {
-            if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
-            {
-                be.checkCamoSolid();
-            }
-            return;
-        }
-
-        if (placer instanceof Player player && player.getMainHandItem() == stack && level.getBlockEntity(pos) instanceof FramedBlockEntity be)
+        if (!level.isClientSide() && placer instanceof Player player && player.getMainHandItem() == stack && level.getBlockEntity(pos) instanceof FramedBlockEntity be)
         {
             be.tryApplyCamoImmediately(player);
         }

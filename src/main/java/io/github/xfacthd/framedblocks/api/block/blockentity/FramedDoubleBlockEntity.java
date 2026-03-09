@@ -131,7 +131,7 @@ public class FramedDoubleBlockEntity extends FramedBlockEntity
     }
 
     @Override
-    public final boolean canAutoApplyCamoOnPlacement()
+    protected final boolean canAutoApplyCamoOnPlacement()
     {
         return false;
     }

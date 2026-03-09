@@ -190,7 +190,7 @@ public class FramedBlockEntity extends BlockEntity
         CamoContainerFactory<?> factory = CamoContainerHelper.findCamoFactory(stack);
         if (factory != null)
         {
-            if (canAutoApplyCamoOnPlacement())
+            if (canAutoApplyCamoOnPlacement() && camoContainer.isEmpty())
             {
                 setCamo(player, ItemAccess.forPlayerInteraction(player, InteractionHand.OFF_HAND), factory, false);
             }
@@ -881,7 +881,7 @@ public class FramedBlockEntity extends BlockEntity
         return stateCache;
     }
 
-    public boolean canAutoApplyCamoOnPlacement()
+    protected boolean canAutoApplyCamoOnPlacement()
     {
         return true;
     }
