@@ -144,8 +144,6 @@ public final class ServerConfig
 
     public static final class ViewImpl implements ExtConfigView.Server
     {
-        private static boolean overrideIntangibilityConfig = false;
-
         @Override
         public boolean allowBlockEntities()
         {
@@ -153,15 +151,9 @@ public final class ServerConfig
         }
 
         @Override
-        public void setOverrideIntangibilityConfig(boolean override)
-        {
-            overrideIntangibilityConfig = override;
-        }
-
-        @Override
         public boolean enableIntangibility()
         {
-            return overrideIntangibilityConfig || enableIntangibility;
+            return enableIntangibility;
         }
 
         @Override

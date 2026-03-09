@@ -11,8 +11,6 @@ public final class ExtConfigView
 {
     public interface Server extends ConfigView.Server
     {
-        void setOverrideIntangibilityConfig(boolean override);
-
         int getPoweredSawEnergyCapacity();
 
         int getPoweredSawMaxInput();
