@@ -3,10 +3,10 @@ package io.github.xfacthd.framedblocks.api.blueprint;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.api.block.overlay.BlockOverlay;
 import io.github.xfacthd.framedblocks.api.camo.CamoList;
 import io.github.xfacthd.framedblocks.api.camo.CamoPrinter;
+import io.github.xfacthd.framedblocks.api.internal.InternalAPI;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
@@ -136,7 +136,7 @@ public record BlueprintData(
         }
 
         Component blockName = block == Blocks.AIR ? BLOCK_INVALID : block.getName().withStyle(ChatFormatting.WHITE);
-        CamoList camos = block instanceof IFramedBlock fb ? fb.getCamosFromBlueprint(this) : CamoList.EMPTY;
+        CamoList camos = InternalAPI.INSTANCE.getBlueprintCopyBehavior(block).getCamos(this);
         Component overlayName = overlay.map(BlockOverlay::getName).orElse(OVERLAY_NONE);
 
         appender.accept(Component.translatable(CONTAINED_BLOCK, blockName).withStyle(ChatFormatting.GOLD));

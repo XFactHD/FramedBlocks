@@ -1,6 +1,7 @@
 package io.github.xfacthd.framedblocks.api.internal;
 
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
+import io.github.xfacthd.framedblocks.api.blueprint.BlueprintCopyBehaviour;
 import io.github.xfacthd.framedblocks.api.camo.CamoContainer;
 import io.github.xfacthd.framedblocks.api.camo.CamoContainerFactory;
 import io.github.xfacthd.framedblocks.api.camo.block.rotator.BlockCamoRotator;
@@ -50,4 +51,6 @@ public interface InternalAPI
     BlockCamoRotator getCamoRotator(Block block);
 
     Recipe<?> makeFramingSawRecipe(int materialAmount, List<FramingSawRecipeBuilder.Additive> additives, ItemStack result, boolean disabled);
+
+    BlueprintCopyBehaviour getBlueprintCopyBehavior(Block block);
 }

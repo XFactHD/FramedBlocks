@@ -4,15 +4,12 @@ import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
-import io.github.xfacthd.framedblocks.api.blueprint.BlueprintData;
-import io.github.xfacthd.framedblocks.api.camo.CamoList;
 import io.github.xfacthd.framedblocks.api.model.wrapping.WrapHelper;
 import io.github.xfacthd.framedblocks.api.model.wrapping.statemerger.StateMerger;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.common.block.IFramedBlockInternal;
 import io.github.xfacthd.framedblocks.common.blockentity.special.FramedDoorBlockEntity;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
-import io.github.xfacthd.framedblocks.common.data.blueprint.DoorCopyBehaviour;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
@@ -163,12 +160,6 @@ public class FramedDoorBlock extends DoorBlock implements IFramedBlockInternal
     public FramedBlockEntity newBlockEntity(BlockPos pos, BlockState state)
     {
         return new FramedDoorBlockEntity(pos, state);
-    }
-
-    @Override
-    public CamoList getCamosFromBlueprint(BlueprintData blueprintData)
-    {
-        return blueprintData.camos().concat(DoorCopyBehaviour.getSecondData(blueprintData).camos());
     }
 
     @Override

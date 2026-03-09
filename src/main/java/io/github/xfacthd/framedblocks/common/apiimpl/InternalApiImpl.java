@@ -2,6 +2,7 @@ package io.github.xfacthd.framedblocks.common.apiimpl;
 
 import com.google.common.base.Preconditions;
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
+import io.github.xfacthd.framedblocks.api.blueprint.BlueprintCopyBehaviour;
 import io.github.xfacthd.framedblocks.api.camo.CamoContainer;
 import io.github.xfacthd.framedblocks.api.camo.CamoContainerFactory;
 import io.github.xfacthd.framedblocks.api.camo.block.rotator.BlockCamoRotator;
@@ -17,6 +18,7 @@ import io.github.xfacthd.framedblocks.common.data.camo.CamoContainerFactories;
 import io.github.xfacthd.framedblocks.common.data.camo.block.rotator.BlockCamoRotators;
 import io.github.xfacthd.framedblocks.common.data.cullupdate.CullingUpdateTracker;
 import io.github.xfacthd.framedblocks.common.data.shapes.ShapeReloader;
+import io.github.xfacthd.framedblocks.common.item.FramedBlueprintItem;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemStack;
@@ -89,5 +91,11 @@ public final class InternalApiImpl implements InternalAPI
     {
         List<FramingSawRecipeAdditive> builtAdditives = additives.stream().map(FramingSawRecipeAdditive::of).toList();
         return new FramingSawRecipe(materialAmount, builtAdditives, result, disabled);
+    }
+
+    @Override
+    public BlueprintCopyBehaviour getBlueprintCopyBehavior(Block block)
+    {
+        return FramedBlueprintItem.getBehaviour(block);
     }
 }

@@ -5,10 +5,8 @@ import io.github.xfacthd.framedblocks.api.block.cache.StateCache;
 import io.github.xfacthd.framedblocks.api.block.item.FramedBlockItem;
 import io.github.xfacthd.framedblocks.api.block.render.CullingHelper;
 import io.github.xfacthd.framedblocks.api.block.render.ParticleHelper;
-import io.github.xfacthd.framedblocks.api.blueprint.BlueprintData;
 import io.github.xfacthd.framedblocks.api.camo.CamoContainer;
 import io.github.xfacthd.framedblocks.api.camo.CamoContent;
-import io.github.xfacthd.framedblocks.api.camo.CamoList;
 import io.github.xfacthd.framedblocks.api.camo.empty.EmptyCamoContainer;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.internal.InternalAPI;
@@ -571,11 +569,6 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension
 
     @Override
     FramedBlockEntity newBlockEntity(BlockPos pos, BlockState state);
-
-    default CamoList getCamosFromBlueprint(BlueprintData blueprintData)
-    {
-        return blueprintData.camos();
-    }
 
     /**
      * {@return the state whose block model to reuse for the item or null if the loaded item model should be used}
