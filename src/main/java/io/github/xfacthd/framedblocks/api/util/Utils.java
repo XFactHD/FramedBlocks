@@ -1,7 +1,6 @@
 package io.github.xfacthd.framedblocks.api.util;
 
 import com.google.common.base.Preconditions;
-import com.google.common.math.IntMath;
 import io.github.xfacthd.framedblocks.api.block.overlay.BlockOverlay;
 import io.github.xfacthd.framedblocks.api.camo.CamoList;
 import io.github.xfacthd.framedblocks.api.component.FrameConfig;
@@ -9,7 +8,6 @@ import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.util.registration.DeferredDataComponentType;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.registries.Registries;
@@ -21,7 +19,6 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
-import net.minecraft.util.Mth;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.util.TriState;
 import net.minecraft.world.Containers;
@@ -30,12 +27,10 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
-import net.minecraft.world.phys.Vec3;
 import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.common.ItemAbility;
 import net.neoforged.neoforge.common.Tags;
@@ -54,18 +49,14 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
 import java.util.ServiceLoader;
 import java.util.Set;
-import java.util.function.Consumer;
 
 public final class Utils
 {
     private static final Identifier RL_TEMPLATE = Utils.id(FramedConstants.MOD_ID, "");
     public static final boolean PRODUCTION = FMLEnvironment.isProduction();
     public static final boolean CLIENT_DIST = FMLEnvironment.getDist().isClient();
-    static final Direction[] DIRECTIONS = Direction.values();
-    static final Direction[] HORIZONTAL_DIRECTIONS = Direction.Plane.HORIZONTAL.stream().toArray(Direction[]::new);
     public static final TagKey<Block> FRAMEABLE = blockTag("frameable");
     public static final TagKey<Block> BLOCK_BLACKLIST = blockTag("blacklisted");
     public static final TagKey<Fluid> FLUID_BLACKLIST = TagKey.create(Registries.FLUID, id("blacklisted"));
@@ -117,70 +108,6 @@ public final class Utils
     public static final DeferredDataComponentType<WrenchRotationMode> DC_TYPE_WRENCH_MODE = DeferredDataComponentType.createDataComponent(
             Utils.id("wrench_mode")
     );
-
-    public static Vec3 fraction(Vec3 vec)
-    {
-        return new Vec3(
-                vec.x() - Math.floor(vec.x()),
-                vec.y() - Math.floor(vec.y()),
-                vec.z() - Math.floor(vec.z())
-        );
-    }
-
-    /**
-     * Calculate how far into the block the coordinate of the given direction's axis points in the given direction
-     */
-    public static double fractionInDir(Vec3 vec, Direction dir)
-    {
-        double coord = switch (dir.getAxis())
-        {
-            case X -> vec.x;
-            case Y -> vec.y;
-            case Z -> vec.z;
-        };
-        coord = coord - Math.floor(coord);
-        return isPositive(dir) ? coord : (1D - coord);
-    }
-
-    /**
-     * Check if the left hand value is lower than the right hand value.
-     * If the difference between the two values is smaller than {@code 1.0E-5F},
-     * the result will be {@code false}
-     * @return Returns true when the left hand value is lower than the right hand value,
-     *         accounting for floating point precision issues
-     */
-    public static boolean isLower(float lhs, float rhs)
-    {
-        if (Mth.equal(lhs, rhs))
-        {
-            return false;
-        }
-        return lhs < rhs;
-    }
-
-    /**
-     * Check if the left hand value is higher than the right hand value.
-     * If the difference between the two values is smaller than {@code 1.0E-5F},
-     * the result will be {@code false}
-     * @return Returns true when the left hand value is higher than the right hand value,
-     *         accounting for floating point precision issues
-     */
-    public static boolean isHigher(float lhs, float rhs)
-    {
-        if (Mth.equal(lhs, rhs))
-        {
-            return false;
-        }
-        return lhs > rhs;
-    }
-
-    /**
-     * {@return the least common multiple of the two input values}
-     */
-    public static long lcm(int a, int b)
-    {
-        return (long) a * (long) (b / IntMath.gcd(a, b));
-    }
 
     public static MutableComponent translate(@Nullable String prefix, @Nullable String postfix, Object... arguments)
     {
@@ -243,133 +170,6 @@ public final class Utils
         return Component.translatableWithFallback(key, "#" + tag.location());
     }
 
-    public static boolean isPositive(Direction dir)
-    {
-        return dir.getAxisDirection() == Direction.AxisDirection.POSITIVE;
-    }
-
-    public static boolean isX(Direction dir)
-    {
-        return dir.getAxis() == Direction.Axis.X;
-    }
-
-    public static boolean isY(Direction dir)
-    {
-        return dir.getAxis() == Direction.Axis.Y;
-    }
-
-    public static boolean isZ(Direction dir)
-    {
-        return dir.getAxis() == Direction.Axis.Z;
-    }
-
-    @Nullable
-    public static Direction dirByNormal(int x, int y, int z)
-    {
-        return Lookups.NORMALS[Lookups.makeNormalIndex(x, y, z)];
-    }
-
-    @Nullable
-    public static Direction dirByNormal(BlockPos from, BlockPos to)
-    {
-        int nx = to.getX() - from.getX();
-        int ny = to.getY() - from.getY();
-        int nz = to.getZ() - from.getZ();
-        return dirByNormal(nx, ny, nz);
-    }
-
-    public static Direction getDirByCross(Direction face, Vec3 hitVec)
-    {
-        hitVec = Utils.fraction(hitVec);
-
-        if (Utils.isY(face))
-        {
-            double x = hitVec.x() - .5;
-            double z = hitVec.z() - .5;
-            if (Math.max(Math.abs(x), Math.abs(z)) == Math.abs(x))
-            {
-                return x > 0 ? Direction.EAST : Direction.WEST;
-            }
-            else
-            {
-                return z > 0 ? Direction.SOUTH : Direction.NORTH;
-            }
-        }
-        else
-        {
-            double xz = (Utils.isX(face) ? hitVec.z() : hitVec.x()) - .5;
-            double y = hitVec.y() - .5;
-
-            if (Math.max(Math.abs(xz), Math.abs(y)) == Math.abs(xz))
-            {
-                if (Utils.isX(face))
-                {
-                    return xz < 0 ? Direction.NORTH : Direction.SOUTH;
-                }
-                else
-                {
-                    return (xz < 0) ? Direction.WEST : Direction.EAST;
-                }
-            }
-            else
-            {
-                return y < 0 ? Direction.DOWN : Direction.UP;
-            }
-        }
-    }
-
-    /**
-     * Returns the axis perpendicular to both provided axis which must themselves be perpendicular to each other
-     */
-    public static Direction.Axis getPerpendicularAxis(Direction.Axis axisOne, Direction.Axis axisTwo)
-    {
-        Preconditions.checkArgument(axisOne != axisTwo, "Provided axis must be perpendicular");
-        int idx = Lookups.makePerpAxisIndex(axisOne, axisTwo);
-        return Objects.requireNonNull(Lookups.PERP_AXIS[idx]);
-    }
-
-    public static Set<Direction> getAxisTubeFaces(Direction.Axis axis)
-    {
-        return Lookups.AXIS_TUBE_FACES[axis.ordinal()];
-    }
-
-    public static Set<Direction> getAxisCapFaces(Direction.Axis axis)
-    {
-        return Lookups.AXIS_CAP_FACES[axis.ordinal()];
-    }
-
-    public static int get2dValueAround(Direction.Axis axis, Direction dir)
-    {
-        Preconditions.checkArgument(axis != dir.getAxis(), "Direction must be perpendicular to axis");
-        return Lookups.DIR_2D_VALUE_AROUND_AXIS[Lookups.make2dValueIndex(axis, dir)];
-    }
-
-    public static Direction getHorizontalDirection(Direction.Axis axis)
-    {
-        return axis != Direction.Axis.Y ? axis.getNegative() : Direction.NORTH;
-    }
-
-    public static boolean isNinetyDegree(Rotation rotation)
-    {
-        return rotation == Rotation.CLOCKWISE_90 || rotation == Rotation.COUNTERCLOCKWISE_90;
-    }
-
-    public static Rotation getOppositeRotation(Rotation rotation)
-    {
-        return switch (rotation)
-        {
-            case NONE -> Rotation.NONE;
-            case CLOCKWISE_90 -> Rotation.COUNTERCLOCKWISE_90;
-            case CLOCKWISE_180 -> Rotation.CLOCKWISE_180;
-            case COUNTERCLOCKWISE_90 -> Rotation.CLOCKWISE_90;
-        };
-    }
-
-    public static Rotation getRotationBetween(Direction dirOne, Direction dirTwo)
-    {
-        return Lookups.ROTATIONS[Lookups.makeDirToDirRotationIndex(dirOne, dirTwo)];
-    }
-
     public static <T> List<T> concat(List<T> listOne, List<T> listTwo)
     {
         List<T> list = new ArrayList<>(listOne.size() + listTwo.size());
@@ -421,33 +221,6 @@ public final class Utils
     public static TagKey<Item> itemTag(String modid, String name)
     {
         return ItemTags.create(Utils.id(modid, name));
-    }
-
-    public static void forAllDirectionsAndNull(Consumer<@Nullable Direction> consumer)
-    {
-        consumer.accept(null);
-        forAllDirections(consumer);
-    }
-
-    public static void forAllDirections(Consumer<Direction> consumer)
-    {
-        for (Direction dir : DIRECTIONS)
-        {
-            consumer.accept(dir);
-        }
-    }
-
-    public static void forHorizontalDirections(Consumer<Direction> consumer)
-    {
-        for (Direction dir : HORIZONTAL_DIRECTIONS)
-        {
-            consumer.accept(dir);
-        }
-    }
-
-    public static int maskNullDirection(@Nullable Direction dir)
-    {
-        return dir == null ? DIRECTIONS.length : dir.ordinal();
     }
 
     public static Identifier id(String path)

@@ -2,7 +2,7 @@ package io.github.xfacthd.framedblocks.common.blockentity.doubled.slopeedge;
 
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedDoubleBlockEntity;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.MathUtils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import io.github.xfacthd.framedblocks.common.data.property.CornerType;
@@ -50,19 +50,19 @@ public class FramedElevatedDoubleCornerSlopeEdgeBlockEntity extends FramedDouble
 
         if (side == baseFace.getOpposite())
         {
-            double offX = Utils.fractionInDir(hitVec, xFront);
-            double offY = Utils.fractionInDir(hitVec, yFront);
+            double offX = MathUtils.fractionInDir(hitVec, xFront);
+            double offY = MathUtils.fractionInDir(hitVec, yFront);
             return offX > .5D || offY > .5D;
         }
         else if (side == xFront || side == yFront)
         {
-            double off = Utils.fractionInDir(hitVec, baseFace.getOpposite());
+            double off = MathUtils.fractionInDir(hitVec, baseFace.getOpposite());
             return off > .5D;
         }
         else if (side == xFront.getOpposite() || side == yFront.getOpposite())
         {
-            double offY = (Utils.fractionInDir(hitVec, baseFace.getOpposite()) - .5D) * 2D;
-            double offXZ = (Utils.fractionInDir(hitVec, side == xFront.getOpposite() ? yFront : xFront) - .5D) * 2D;
+            double offY = (MathUtils.fractionInDir(hitVec, baseFace.getOpposite()) - .5D) * 2D;
+            double offXZ = (MathUtils.fractionInDir(hitVec, side == xFront.getOpposite() ? yFront : xFront) - .5D) * 2D;
             return offXZ >= 0D && offY >= (1D - offXZ);
         }
         return false;

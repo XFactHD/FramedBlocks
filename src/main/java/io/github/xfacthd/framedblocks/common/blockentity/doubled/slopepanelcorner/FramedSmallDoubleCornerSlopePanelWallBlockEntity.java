@@ -2,7 +2,8 @@ package io.github.xfacthd.framedblocks.common.blockentity.doubled.slopepanelcorn
 
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedDoubleBlockEntity;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
+import io.github.xfacthd.framedblocks.api.util.MathUtils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import io.github.xfacthd.framedblocks.common.data.property.HorizontalRotation;
@@ -44,15 +45,15 @@ public class FramedSmallDoubleCornerSlopePanelWallBlockEntity extends FramedDoub
         }
 
         Vec3 hitVec = hit.getLocation();
-        double xzDir = Utils.fractionInDir(hitVec, dir);
+        double xzDir = MathUtils.fractionInDir(hitVec, dir);
         double xzPerp;
-        if (Utils.isY(side))
+        if (DirUtils.isY(side))
         {
-            xzPerp = Utils.fractionInDir(hitVec, Utils.isY(rotDir) ? perpRotDir : rotDir);
+            xzPerp = MathUtils.fractionInDir(hitVec, DirUtils.isY(rotDir) ? perpRotDir : rotDir);
         }
         else
         {
-            xzPerp = Utils.fractionInDir(hitVec, Utils.isY(rotDir) ? rotDir : perpRotDir);
+            xzPerp = MathUtils.fractionInDir(hitVec, DirUtils.isY(rotDir) ? rotDir : perpRotDir);
         }
 
         return ((xzPerp - .5) * 2D) > xzDir;

@@ -96,7 +96,7 @@ public class FramedPaneBlock extends IronBarsBlock implements IFramedBlockIntern
     public boolean attachsTo(BlockState adjState, boolean sideSolid)
     {
         Direction adjSide = null;
-        if (adjSide != null && !Utils.isY(adjSide) && DiagonalBlocksCompat.isFramedPane(adjState) && adjState.getValue(FramedProperties.STATE_LOCKED))
+        if (adjSide != null && !DirUtils.isY(adjSide) && DiagonalBlocksCompat.isFramedPane(adjState) && adjState.getValue(FramedProperties.STATE_LOCKED))
         {
             BooleanProperty prop = CrossCollisionBlock.PROPERTY_BY_DIRECTION.get(adjSide);
             if (!adjState.getValue(prop))

@@ -1,7 +1,7 @@
 package io.github.xfacthd.framedblocks.common.data.conpreds.misc;
 
 import io.github.xfacthd.framedblocks.api.predicate.contex.ConnectionPredicate;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jspecify.annotations.Nullable;
@@ -17,6 +17,6 @@ public final class LadderConnectionPredicate implements ConnectionPredicate
     @Override
     public boolean canConnectDetailed(BlockState state, Direction side, Direction edge)
     {
-        return !Utils.isY(side) && Utils.isY(edge);
+        return !DirUtils.isY(side) && DirUtils.isY(edge);
     }
 }

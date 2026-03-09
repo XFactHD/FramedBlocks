@@ -3,7 +3,8 @@ package io.github.xfacthd.framedblocks.common.block.door;
 import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
+import io.github.xfacthd.framedblocks.api.util.MathUtils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
@@ -98,9 +99,9 @@ public class FramedGateBlock extends FramedBlock
             return DoorHingeSide.LEFT;
         }
 
-        Vec3 hitVec = Utils.fraction(context.getClickLocation());
-        double xz = Utils.isX(dir) ? hitVec.z() : hitVec.x();
-        if (Utils.isPositive(dir.getCounterClockWise()))
+        Vec3 hitVec = MathUtils.fraction(context.getClickLocation());
+        double xz = DirUtils.isX(dir) ? hitVec.z() : hitVec.x();
+        if (DirUtils.isPositive(dir.getCounterClockWise()))
         {
             xz = 1D - xz;
         }

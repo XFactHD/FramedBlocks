@@ -7,7 +7,7 @@ import io.github.xfacthd.framedblocks.api.model.data.QuadMap;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
 import io.github.xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.client.model.geometry.pane.FramedPaneGeometry;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.core.Direction;
@@ -41,7 +41,7 @@ class FramedDiagonalPaneGeometry extends FramedPaneGeometry
         super.transformQuad(quadMap, quad, blockData, modelData);
 
         Direction face = quad.direction();
-        if (Utils.isY(face))
+        if (DirUtils.isY(face))
         {
             if (northEast)
             {
@@ -67,7 +67,7 @@ class FramedDiagonalPaneGeometry extends FramedPaneGeometry
                 createDiagonalSideEdgeQuad(quadMap, quad);
             }
 
-            if (Utils.isX(face))
+            if (DirUtils.isX(face))
             {
                 if (northEast)
                 {
@@ -79,7 +79,7 @@ class FramedDiagonalPaneGeometry extends FramedPaneGeometry
                 }
             }
 
-            if (Utils.isZ(face))
+            if (DirUtils.isZ(face))
             {
                 if (southEast)
                 {
@@ -101,7 +101,7 @@ class FramedDiagonalPaneGeometry extends FramedPaneGeometry
 
     protected static void createDiagonalTopBottomEdgeQuad(QuadMap quadMap, BakedQuad quad, Direction dir, boolean noPillar)
     {
-        Preconditions.checkArgument(!Utils.isY(dir), String.format("Invalid direction: %s!", dir));
+        Preconditions.checkArgument(!DirUtils.isY(dir), String.format("Invalid direction: %s!", dir));
 
         QuadModifier.of(quad)
                 .apply(Modifiers.cut(dir.getOpposite(), noPillar ? 8F/16F : 7F/16F))

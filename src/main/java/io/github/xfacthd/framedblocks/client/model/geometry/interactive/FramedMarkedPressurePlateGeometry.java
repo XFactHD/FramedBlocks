@@ -3,6 +3,7 @@ package io.github.xfacthd.framedblocks.client.model.geometry.interactive;
 import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
 import io.github.xfacthd.framedblocks.api.model.geometry.OverlayPartGenerator;
 import io.github.xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.common.config.ClientConfig;
 import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
@@ -43,7 +44,7 @@ public class FramedMarkedPressurePlateGeometry extends FramedPressurePlateGeomet
     @Override
     public void generateOverlayParts(OverlayPartGenerator generator, RandomSource rand, @Nullable Object cacheKeyUserData)
     {
-        generator.generate(OVERLAY_CULL_FACES, frameSprite, Utils::isY, ChunkSectionLayer.CUTOUT, frameShaderState);
+        generator.generate(OVERLAY_CULL_FACES, frameSprite, DirUtils::isY, ChunkSectionLayer.CUTOUT, frameShaderState);
     }
 
 

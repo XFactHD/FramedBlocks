@@ -4,7 +4,7 @@ import io.github.xfacthd.framedblocks.api.model.data.QuadMap;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
 import io.github.xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.common.data.property.PillarConnection;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.core.Direction;
@@ -20,7 +20,7 @@ public class FramedUpperPyramidSlabGeometry extends FramedPyramidGeometry
     @Override
     protected void buildBody(QuadMap quadMap, BakedQuad quad, Direction quadDir)
     {
-        if (Utils.isY(facing))
+        if (DirUtils.isY(facing))
         {
             boolean up = facing == Direction.UP;
             if (!ySlope && quadDir.getAxis() != facing.getAxis())
@@ -74,7 +74,7 @@ public class FramedUpperPyramidSlabGeometry extends FramedPyramidGeometry
                         .apply(Modifiers.offset(Direction.DOWN, .5F))
                         .export(quadMap.get(null));
             }
-            else if (ySlope && Utils.isY(quadDir))
+            else if (ySlope && DirUtils.isY(quadDir))
             {
                 boolean up = quadDir == Direction.UP;
 

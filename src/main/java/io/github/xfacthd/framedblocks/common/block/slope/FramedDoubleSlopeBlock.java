@@ -9,8 +9,8 @@ import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockParts;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockTopInteractionMode;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.SolidityCheck;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.api.util.RotationDirection;
-import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.block.ExtPlacementStateBuilder;
 import io.github.xfacthd.framedblocks.common.block.FramedDoubleBlock;
@@ -126,12 +126,12 @@ public class FramedDoubleSlopeBlock extends FramedDoubleBlock implements IComple
         {
             case HORIZONTAL ->
             {
-                if (matchesHor(side, facing) || (Utils.isY(side) && matchesHor(edge, facing)))
+                if (matchesHor(side, facing) || (DirUtils.isY(side) && matchesHor(edge, facing)))
                 {
                     yield CamoGetter.FIRST;
                 }
                 Direction oppFacing = facing.getOpposite();
-                if (matchesHor(side, oppFacing) || (Utils.isY(side) && matchesHor(edge, oppFacing)))
+                if (matchesHor(side, oppFacing) || (DirUtils.isY(side) && matchesHor(edge, oppFacing)))
                 {
                     yield CamoGetter.SECOND;
                 }

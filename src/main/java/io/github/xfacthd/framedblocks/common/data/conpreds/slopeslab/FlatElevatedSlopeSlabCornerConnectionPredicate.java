@@ -2,7 +2,7 @@ package io.github.xfacthd.framedblocks.common.data.conpreds.slopeslab;
 
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.predicate.contex.ConnectionPredicate;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jspecify.annotations.Nullable;
@@ -52,7 +52,7 @@ public final class FlatElevatedSlopeSlabCornerConnectionPredicate implements Con
         }
         else if (side == facing.getOpposite() || side == facing.getClockWise())
         {
-            return !Utils.isY(edge);
+            return !DirUtils.isY(edge);
         }
         else if (side == dirTwo)
         {

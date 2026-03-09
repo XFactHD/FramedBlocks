@@ -8,7 +8,7 @@ import io.github.xfacthd.framedblocks.api.model.geometry.PartConsumer;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
 import io.github.xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.BlockStateModel;
 import net.minecraft.core.BlockPos;
@@ -91,7 +91,7 @@ public class FramedFancyRailGeometry extends Geometry
         Direction targetDir;
 
         Direction quadDir = quad.direction();
-        if (Utils.isY(quadDir))
+        if (DirUtils.isY(quadDir))
         {
             targetDir = quadDir == Direction.UP ? null : quadDir;
 
@@ -137,8 +137,8 @@ public class FramedFancyRailGeometry extends Geometry
     {
         Direction.Axis axis = dir.getClockWise().getAxis();
         Vector3f origin = SLOPE_ORIGINS[dir.get2DDataValue()];
-        float angle = Utils.isPositive(dir) == Utils.isX(dir) ? 45F : -45F;
-        Vector3f scaleVec = Utils.isX(dir) ? SCALE_X : SCALE_Z;
+        float angle = DirUtils.isPositive(dir) == DirUtils.isX(dir) ? 45F : -45F;
+        Vector3f scaleVec = DirUtils.isX(dir) ? SCALE_X : SCALE_Z;
 
         Pair<List<BakedQuad>, Direction> result = makeStraightRailSleepers(quad, dir, Modifiers.rotate(axis, origin, angle, true, scaleVec));
         return result.getSecond() == Direction.DOWN ? Pair.of(result.getFirst(), null) : result;
@@ -150,7 +150,7 @@ public class FramedFancyRailGeometry extends Geometry
         Direction targetDir;
 
         Direction quadDir = quad.direction();
-        if (Utils.isY(quadDir))
+        if (DirUtils.isY(quadDir))
         {
             targetDir = quadDir == Direction.UP ? null : quadDir;
 

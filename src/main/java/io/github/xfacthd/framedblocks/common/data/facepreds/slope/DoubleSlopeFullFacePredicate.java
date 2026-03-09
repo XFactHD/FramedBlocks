@@ -2,7 +2,7 @@ package io.github.xfacthd.framedblocks.common.data.facepreds.slope;
 
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.predicate.fullface.FullFacePredicate;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import io.github.xfacthd.framedblocks.common.data.property.SlopeType;
 import net.minecraft.core.Direction;
@@ -15,12 +15,12 @@ public final class DoubleSlopeFullFacePredicate implements FullFacePredicate
     {
         if (state.getValue(PropertyHolder.SLOPE_TYPE) == SlopeType.HORIZONTAL)
         {
-            return !Utils.isY(side);
+            return !DirUtils.isY(side);
         }
         else
         {
             Direction facing = state.getValue(FramedProperties.FACING_HOR);
-            return Utils.isY(side) || side == facing || side == facing.getOpposite();
+            return DirUtils.isY(side) || side == facing || side == facing.getOpposite();
         }
     }
 }

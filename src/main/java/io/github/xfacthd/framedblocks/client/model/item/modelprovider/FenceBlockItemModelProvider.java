@@ -7,7 +7,7 @@ import io.github.xfacthd.framedblocks.api.model.item.block.BlockItemModelProvide
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
 import io.github.xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.BlockStateModel;
 import net.minecraft.client.resources.model.ModelBaker;
@@ -37,7 +37,7 @@ public final class FenceBlockItemModelProvider implements BlockItemModelProvider
         public void transformQuad(QuadMap quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
         {
             Direction quadDir = quad.direction();
-            if (Utils.isY(quadDir))
+            if (DirUtils.isY(quadDir))
             {
                 QuadModifier.of(quad)
                         .apply(Modifiers.cutTopBottom(6F/16F, 0F, 10F/16F, 4F/16F))
@@ -80,7 +80,7 @@ public final class FenceBlockItemModelProvider implements BlockItemModelProvider
                         .apply(Modifiers.offset(Direction.NORTH, 1F))
                         .export(quadMap.get(null));
             }
-            else if (Utils.isX(quadDir))
+            else if (DirUtils.isX(quadDir))
             {
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(Direction.SOUTH, 4F/16F))

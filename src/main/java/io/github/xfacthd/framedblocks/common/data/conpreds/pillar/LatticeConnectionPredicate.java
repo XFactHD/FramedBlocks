@@ -2,7 +2,7 @@ package io.github.xfacthd.framedblocks.common.data.conpreds.pillar;
 
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.predicate.contex.ConnectionPredicate;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jspecify.annotations.Nullable;
@@ -27,9 +27,9 @@ public final class LatticeConnectionPredicate implements ConnectionPredicate
         boolean z = state.getValue(FramedProperties.Z_AXIS);
         return switch (side.getAxis())
         {
-            case X -> (y && Utils.isY(edge)) || (z && Utils.isZ(edge));
-            case Y -> (x && Utils.isX(edge)) || (z && Utils.isZ(edge));
-            case Z -> (x && Utils.isX(edge)) || (y && Utils.isY(edge));
+            case X -> (y && DirUtils.isY(edge)) || (z && DirUtils.isZ(edge));
+            case Y -> (x && DirUtils.isX(edge)) || (z && DirUtils.isZ(edge));
+            case Z -> (x && DirUtils.isX(edge)) || (y && DirUtils.isY(edge));
         };
     }
 }

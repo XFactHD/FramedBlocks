@@ -2,7 +2,7 @@ package io.github.xfacthd.framedblocks.client.render.special;
 
 import io.github.xfacthd.framedblocks.api.render.Quaternions;
 import io.github.xfacthd.framedblocks.api.render.outline.OutlineRenderer;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.MathUtils;
 import io.github.xfacthd.framedblocks.client.render.util.FramedRenderTypes;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.blockentity.special.FramedCollapsibleBlockEntity;
@@ -98,7 +98,7 @@ public final class CollapsibleBlockIndicatorRenderer
 
     private static void drawCornerMarkers(OutlineRenderer.LineDrawer drawer, Direction faceDir, Vec3 hitLocation, float[] vY)
     {
-        int vert = FramedCollapsibleBlockEntity.vertexFromHit(faceDir, Utils.fraction(hitLocation));
+        int vert = FramedCollapsibleBlockEntity.vertexFromHit(faceDir, MathUtils.fraction(hitLocation));
         if (vert == 0 || vert == 4)
         {
             drawCubeFrame(drawer,  0.25F/16F,  0.25F/16F, vY[0]);

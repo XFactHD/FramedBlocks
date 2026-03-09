@@ -1,6 +1,6 @@
 package io.github.xfacthd.framedblocks.common.data.skippreds.slab;
 
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.common.data.skippreds.CornerDir;
 import io.github.xfacthd.framedblocks.common.data.skippreds.DiagCornerDir;
 import io.github.xfacthd.framedblocks.common.data.skippreds.HalfDir;
@@ -13,7 +13,7 @@ public final class SlabDirs
     {
         public static HalfDir getHalfDir(boolean top, Direction side)
         {
-            if (!Utils.isY(side))
+            if (!DirUtils.isY(side))
             {
                 return HalfDir.fromDirections(
                         side,
@@ -180,9 +180,9 @@ public final class SlabDirs
 
         public static CornerDir getCornerDir(boolean top, boolean second, Direction side)
         {
-            if (!Utils.isY(side))
+            if (!DirUtils.isY(side))
             {
-                boolean x = Utils.isX(side);
+                boolean x = DirUtils.isX(side);
                 return CornerDir.fromDirections(
                         side,
                         top ? Direction.UP : Direction.DOWN,
@@ -215,9 +215,9 @@ public final class SlabDirs
 
         public static CornerDir getCornerDir(Direction dir, boolean second, Direction side)
         {
-            if (Utils.isY(side))
+            if (DirUtils.isY(side))
             {
-                boolean x = Utils.isX(dir);
+                boolean x = DirUtils.isX(dir);
                 boolean up = side == Direction.UP;
                 return CornerDir.fromDirections(
                         side,
@@ -227,7 +227,7 @@ public final class SlabDirs
             }
             else if (side.getAxis() != dir.getAxis())
             {
-                boolean x = Utils.isX(dir);
+                boolean x = DirUtils.isX(dir);
                 boolean cw = side == dir.getClockWise();
                 return CornerDir.fromDirections(
                         side,

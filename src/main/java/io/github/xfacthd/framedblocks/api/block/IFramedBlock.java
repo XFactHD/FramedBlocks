@@ -16,6 +16,7 @@ import io.github.xfacthd.framedblocks.api.model.data.AbstractFramedBlockData;
 import io.github.xfacthd.framedblocks.api.predicate.cull.SideSkipPredicate;
 import io.github.xfacthd.framedblocks.api.shapes.ShapeLookup;
 import io.github.xfacthd.framedblocks.api.util.ConfigView;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.api.util.RotationDirection;
 import io.github.xfacthd.framedblocks.api.util.sound.SoundUtils;
 import io.github.xfacthd.framedblocks.api.util.Utils;
@@ -663,7 +664,7 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension
      * <p>
      * This method should either always or never return {@code null}. Special cases:
      * <ul>
-     *     <li>Blocks with a {@link Direction.Axis} property as primary orientation should return {@link Utils#getHorizontalDirection(Direction.Axis)}</li>
+     *     <li>Blocks with a {@link Direction.Axis} property as primary orientation should return {@link DirUtils#getHorizontalDirection(Direction.Axis)}</li>
      *     <li>Blocks with a {@link Direction} property including vertical directions should return {@link Direction#NORTH} for vertical directions</li>
      *     <li>Blocks which have a conditional orientation (i.e. one-way window) should always return {@code null}</li>
      * </ul>

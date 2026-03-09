@@ -8,7 +8,7 @@ import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockParts;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockTopInteractionMode;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.SolidityCheck;
 import io.github.xfacthd.framedblocks.api.predicate.cull.SideSkipPredicate;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.block.IFramedDoubleBlockInternal;
 import io.github.xfacthd.framedblocks.common.block.ISlopeBlock;
@@ -89,7 +89,7 @@ public class FramedFancyRailSlopeBlock extends FramedRailSlopeBlock<FramedDouble
         {
             return CamoGetter.FIRST;
         }
-        else if (side.getAxis() != facing.getAxis() && !Utils.isY(side))
+        else if (side.getAxis() != facing.getAxis() && !DirUtils.isY(side))
         {
             if (edge == facing || edge == Direction.DOWN)
             {

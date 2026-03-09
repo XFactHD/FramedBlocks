@@ -2,7 +2,7 @@ package io.github.xfacthd.framedblocks.common.block.slab;
 
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import net.minecraft.core.Direction;
@@ -49,7 +49,7 @@ public class FramedCenteredPanelBlock extends FramedBlock
     @Override
     protected BlockState rotate(BlockState state, Rotation rotation)
     {
-        return Utils.isNinetyDegree(rotation) ? state.cycle(FramedProperties.FACING_NE) : state;
+        return DirUtils.isNinetyDegree(rotation) ? state.cycle(FramedProperties.FACING_NE) : state;
     }
 
     @Override

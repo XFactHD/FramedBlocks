@@ -4,7 +4,7 @@ import io.github.xfacthd.framedblocks.api.shapes.ShapeCache;
 import io.github.xfacthd.framedblocks.api.shapes.ShapeContainer;
 import io.github.xfacthd.framedblocks.api.shapes.ShapeGenerator;
 import io.github.xfacthd.framedblocks.api.shapes.ShapeUtils;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import io.github.xfacthd.framedblocks.common.data.property.DirectionAxis;
 import io.github.xfacthd.framedblocks.common.data.property.SlopeType;
@@ -62,7 +62,7 @@ public final class PrismShapes implements ShapeGenerator
             Direction facing = dirAxis.direction();
             Direction.Axis axis = dirAxis.axis();
 
-            if (Utils.isY(facing))
+            if (DirUtils.isY(facing))
             {
                 shapes[dirAxis.ordinal()] = ShapeUtils.rotateShapeAroundY(
                         Direction.EAST,

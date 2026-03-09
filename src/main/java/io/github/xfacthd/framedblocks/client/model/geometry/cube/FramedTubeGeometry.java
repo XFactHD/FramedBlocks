@@ -6,7 +6,7 @@ import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
 import io.github.xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.core.Direction;
@@ -74,10 +74,10 @@ public class FramedTubeGeometry extends Geometry
                         .apply(Modifiers.cut(Direction.Axis.Y, 1F - thickness))
                         .export(quadMap.get(quadDir));
             }
-            else if (Utils.isY(quadDir))
+            else if (DirUtils.isY(quadDir))
             {
                 QuadModifier.of(quad)
-                        .apply(Modifiers.cut(Utils.getPerpendicularAxis(axis, Direction.Axis.Y), 1F - thickness))
+                        .apply(Modifiers.cut(DirUtils.getPerpendicularAxis(axis, Direction.Axis.Y), 1F - thickness))
                         .apply(Modifiers.setPosition(thickness))
                         .export(quadMap.get(null));
             }

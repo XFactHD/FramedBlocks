@@ -7,7 +7,7 @@ import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
 import io.github.xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -39,7 +39,7 @@ public class FramedMiniCubeGeometry extends Geometry
         QuadModifier.of(quad)
                 .apply(Modifiers.scaleFace(.5F, origin))
                 .applyIf(Modifiers.setPosition(.5F), quadDir == bottomFace.getOpposite())
-                .applyIf(Modifiers.setPosition(.75F), !Utils.isY(quadDir))
+                .applyIf(Modifiers.setPosition(.75F), !DirUtils.isY(quadDir))
                 .apply(Modifiers.rotate(Direction.Axis.Y, origin, rotAngle, false))
                 .export(quadMap.get(quadDir == bottomFace ? quadDir : null));
     }

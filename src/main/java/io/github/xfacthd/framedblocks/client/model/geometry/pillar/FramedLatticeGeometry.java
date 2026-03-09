@@ -7,7 +7,7 @@ import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
 import io.github.xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.core.Direction;
@@ -40,7 +40,7 @@ public class FramedLatticeGeometry extends Geometry
     public void transformQuad(QuadMap quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
     {
         Direction quadDir = quad.direction();
-        if (Utils.isY(quadDir))
+        if (DirUtils.isY(quadDir))
         {
             QuadModifier.of(quad)
                     .apply(Modifiers.cutTopBottom(minCoord, minCoord, maxCoord, maxCoord))
@@ -73,16 +73,16 @@ public class FramedLatticeGeometry extends Geometry
                         .export(quadMap.get(null));
             }
         }
-        else if (Utils.isX(quadDir))
+        else if (DirUtils.isX(quadDir))
         {
             createHorizontalStrutSideQuads(quadMap, quad, xAxis, zAxis);
         }
-        else if (Utils.isZ(quadDir))
+        else if (DirUtils.isZ(quadDir))
         {
             createHorizontalStrutSideQuads(quadMap, quad, zAxis, xAxis);
         }
 
-        if (!Utils.isY(quadDir) && yAxis)
+        if (!DirUtils.isY(quadDir) && yAxis)
         {
             QuadModifier.of(quad)
                     .apply(Modifiers.cutSide(minCoord, 0F, maxCoord, minCoord))

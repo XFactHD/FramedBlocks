@@ -1,6 +1,7 @@
 package io.github.xfacthd.framedblocks.api.block;
 
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
+import io.github.xfacthd.framedblocks.api.util.MathUtils;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.Block;
@@ -85,7 +86,7 @@ public class PlacementStateBuilder<T extends PlacementStateBuilder<T>>
         if (state == null) return self();
 
         Direction face = ctx.getClickedFace();
-        if (!Utils.isY(face))
+        if (!DirUtils.isY(face))
         {
             if (!opposite)
             {
@@ -119,7 +120,7 @@ public class PlacementStateBuilder<T extends PlacementStateBuilder<T>>
         if (state == null) return self();
 
         Direction face = ctx.getClickedFace();
-        if (Utils.isY(face))
+        if (DirUtils.isY(face))
         {
             state = null;
             return self();
@@ -168,11 +169,11 @@ public class PlacementStateBuilder<T extends PlacementStateBuilder<T>>
         if (state == null) return self();
 
         Direction side = ctx.getClickedFace();
-        if (Utils.isY(side))
+        if (DirUtils.isY(side))
         {
             state = state.setValue(FramedProperties.FACING_HOR, ctx.getHorizontalDirection());
         }
-        else if (Utils.fractionInDir(ctx.getClickLocation(), side.getCounterClockWise()) > .5)
+        else if (MathUtils.fractionInDir(ctx.getClickLocation(), side.getCounterClockWise()) > .5)
         {
             state = state.setValue(FramedProperties.FACING_HOR, side.getOpposite().getClockWise());
         }
@@ -192,14 +193,14 @@ public class PlacementStateBuilder<T extends PlacementStateBuilder<T>>
         if (state == null) return self();
 
         Direction side = ctx.getClickedFace();
-        if (Utils.isY(side))
+        if (DirUtils.isY(side))
         {
             Vec3 hitVec = ctx.getClickLocation();
-            double x = Utils.fractionInDir(hitVec, Direction.EAST);
-            double z = Utils.fractionInDir(hitVec, Direction.SOUTH);
+            double x = MathUtils.fractionInDir(hitVec, Direction.EAST);
+            double z = MathUtils.fractionInDir(hitVec, Direction.SOUTH);
 
             Direction dir = z > .5D ? Direction.SOUTH : Direction.NORTH;
-            if ((x > .5D) != Utils.isPositive(dir))
+            if ((x > .5D) != DirUtils.isPositive(dir))
             {
                 dir = dir.getClockWise();
             }
@@ -220,10 +221,10 @@ public class PlacementStateBuilder<T extends PlacementStateBuilder<T>>
         if (state == null) return self();
 
         Direction side = ctx.getClickedFace();
-        if (Utils.isY(side))
+        if (DirUtils.isY(side))
         {
             Direction dir = ctx.getHorizontalDirection();
-            double xz = Utils.fractionInDir(ctx.getClickLocation(), dir.getClockWise());
+            double xz = MathUtils.fractionInDir(ctx.getClickLocation(), dir.getClockWise());
             if (xz > .5D)
             {
                 dir = dir.getClockWise();
@@ -276,7 +277,7 @@ public class PlacementStateBuilder<T extends PlacementStateBuilder<T>>
         }
         else
         {
-            double y = Utils.fractionInDir(ctx.getClickLocation(), Direction.UP);
+            double y = MathUtils.fractionInDir(ctx.getClickLocation(), Direction.UP);
             state = state.setValue(prop, y >= .5D);
         }
         return self();

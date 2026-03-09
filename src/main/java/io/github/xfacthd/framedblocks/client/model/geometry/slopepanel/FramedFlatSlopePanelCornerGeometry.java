@@ -7,7 +7,7 @@ import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
 import io.github.xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import io.github.xfacthd.framedblocks.common.data.property.HorizontalRotation;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -50,7 +50,7 @@ public class FramedFlatSlopePanelCornerGeometry extends Geometry
         }
         else if (face == facing.getOpposite())
         {
-            if (!ySlope || !Utils.isY(orientation))
+            if (!ySlope || !DirUtils.isY(orientation))
             {
                 QuadModifier.of(quad)
                         .apply(createSlopeTriangle(facing, orientation, false, face))
@@ -59,7 +59,7 @@ public class FramedFlatSlopePanelCornerGeometry extends Geometry
                         .export(quadMap.get(null));
             }
 
-            if (!ySlope || !Utils.isY(rotOrientation))
+            if (!ySlope || !DirUtils.isY(rotOrientation))
             {
                 QuadModifier.of(quad)
                         .apply(createSlopeTriangle(facing, rotOrientation, true, face))
@@ -68,7 +68,7 @@ public class FramedFlatSlopePanelCornerGeometry extends Geometry
                         .export(quadMap.get(null));
             }
         }
-        else if (ySlope && Utils.isY(orientation) && face == orientation)
+        else if (ySlope && DirUtils.isY(orientation) && face == orientation)
         {
             QuadModifier.of(quad)
                     .apply(createVerticalSlopeTriangle(facing, orientation, false))
@@ -76,7 +76,7 @@ public class FramedFlatSlopePanelCornerGeometry extends Geometry
                     .applyIf(Modifiers.offset(facing.getOpposite(), .5F), front)
                     .export(quadMap.get(null));
         }
-        else if (ySlope && Utils.isY(rotOrientation) && face == rotOrientation)
+        else if (ySlope && DirUtils.isY(rotOrientation) && face == rotOrientation)
         {
             QuadModifier.of(quad)
                     .apply(createVerticalSlopeTriangle(facing, rotOrientation, true))
@@ -94,7 +94,7 @@ public class FramedFlatSlopePanelCornerGeometry extends Geometry
 
     public static QuadModifier.Modifier createSlopeTriangle(Direction facing, Direction orientation, boolean second, Direction quadDir)
     {
-        if (Utils.isY(orientation))
+        if (DirUtils.isY(orientation))
         {
             boolean down = orientation == Direction.UP;
             Direction cutDir = down ? Direction.DOWN : Direction.UP;
@@ -133,7 +133,7 @@ public class FramedFlatSlopePanelCornerGeometry extends Geometry
     {
         Direction face = quad.direction();
         Direction orientation = rotation.withFacing(facing);
-        boolean yAxis = Utils.isY(orientation);
+        boolean yAxis = DirUtils.isY(orientation);
 
         if (yAxis)
         {

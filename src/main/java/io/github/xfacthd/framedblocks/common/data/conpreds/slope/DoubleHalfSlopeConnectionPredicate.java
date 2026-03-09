@@ -2,7 +2,7 @@ package io.github.xfacthd.framedblocks.common.data.conpreds.slope;
 
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.predicate.contex.NonDetailedConnectionPredicate;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
@@ -17,7 +17,7 @@ public final class DoubleHalfSlopeConnectionPredicate extends NonDetailedConnect
         boolean right = state.getValue(PropertyHolder.RIGHT);
         Direction dirTwo = right ? facing.getClockWise() : facing.getCounterClockWise();
 
-        if (side.getAxis() == facing.getAxis() || Utils.isY(side))
+        if (side.getAxis() == facing.getAxis() || DirUtils.isY(side))
         {
             return edge == dirTwo;
         }

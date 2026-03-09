@@ -1,7 +1,7 @@
 package io.github.xfacthd.framedblocks.api.model.quad;
 
 import com.mojang.datafixers.util.Pair;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import net.minecraft.core.Direction;
 import org.jspecify.annotations.Nullable;
 
@@ -241,7 +241,7 @@ final class ModifierConfigs
 
     private static boolean invertParallelEdge(Direction quadDir, Direction cutEdge)
     {
-        if (Utils.isY(quadDir))
+        if (DirUtils.isY(quadDir))
         {
             return switch (cutEdge)
             {
@@ -250,16 +250,16 @@ final class ModifierConfigs
                 case UP, DOWN -> throw new IllegalArgumentException();
             };
         }
-        if (Utils.isY(cutEdge))
+        if (DirUtils.isY(cutEdge))
         {
-            return Utils.isPositive(quadDir.getClockWise());
+            return DirUtils.isPositive(quadDir.getClockWise());
         }
         return true;
     }
 
     private static boolean swapCornerLengths(Direction quadDir, Direction cutEdge)
     {
-        if (Utils.isY(quadDir))
+        if (DirUtils.isY(quadDir))
         {
             return switch (cutEdge)
             {

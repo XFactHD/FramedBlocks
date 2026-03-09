@@ -7,7 +7,7 @@ import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
 import io.github.xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.client.model.geometry.slopepanel.FramedSlopePanelGeometry;
 import io.github.xfacthd.framedblocks.client.model.geometry.slopeslab.FramedSlopeSlabGeometry;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
@@ -70,7 +70,7 @@ public class FramedPyramidGeometry extends Geometry
 
     protected void buildBody(QuadMap quadMap, BakedQuad quad, Direction quadDir)
     {
-        if (Utils.isY(facing))
+        if (DirUtils.isY(facing))
         {
             boolean up = facing == Direction.UP;
             if (!ySlope && quadDir.getAxis() != facing.getAxis())
@@ -122,7 +122,7 @@ public class FramedPyramidGeometry extends Geometry
                         .apply(Modifiers.offset(Direction.DOWN, .5F))
                         .export(quadMap.get(null));
             }
-            else if (ySlope && Utils.isY(quadDir))
+            else if (ySlope && DirUtils.isY(quadDir))
             {
                 boolean up = quadDir == Direction.UP;
 
@@ -160,7 +160,7 @@ public class FramedPyramidGeometry extends Geometry
 
     private void buildPillar(QuadMap quadMap, BakedQuad quad, Direction quadDir)
     {
-        if (Utils.isY(facing))
+        if (DirUtils.isY(facing))
         {
             if (quadDir == facing)
             {
@@ -179,7 +179,7 @@ public class FramedPyramidGeometry extends Geometry
         }
         else
         {
-            if (Utils.isY(quadDir))
+            if (DirUtils.isY(quadDir))
             {
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(facing.getOpposite(), pillarHeight))

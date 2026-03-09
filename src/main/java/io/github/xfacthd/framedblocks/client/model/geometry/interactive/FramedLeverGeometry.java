@@ -9,7 +9,7 @@ import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
 import io.github.xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
 import io.github.xfacthd.framedblocks.api.util.ClientUtils;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.BlockStateModel;
 import net.minecraft.core.BlockPos;
@@ -59,7 +59,7 @@ public class FramedLeverGeometry extends Geometry
         Direction facing = getFacing();
         boolean quadInDir = quadDir == facing;
 
-        if (Utils.isY(facing))
+        if (DirUtils.isY(facing))
         {
             if (quadDir.getAxis() == facing.getAxis())
             {
@@ -89,7 +89,7 @@ public class FramedLeverGeometry extends Geometry
                         .applyIf(Modifiers.setPosition(HEIGHT), quadInDir)
                         .export(quadMap.get(quadInDir ? null : quadDir));
             }
-            else if (Utils.isY(quadDir))
+            else if (DirUtils.isY(quadDir))
             {
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(dir, HEIGHT))

@@ -2,8 +2,8 @@ package io.github.xfacthd.framedblocks.common.blockentity.doubled.stairs;
 
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedDoubleBlockEntity;
+import io.github.xfacthd.framedblocks.api.util.MathUtils;
 import io.github.xfacthd.framedblocks.api.util.Triangle;
-import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import io.github.xfacthd.framedblocks.common.data.property.HorizontalRotation;
@@ -33,8 +33,8 @@ public class FramedVerticalSlicedSlopedStairsSlopeBlockEntity extends FramedDoub
 
         if (side == facing)
         {
-            double par = Utils.fractionInDir(hitVec, dirTwo);
-            double perp = Utils.fractionInDir(hitVec, dirThree.getOpposite());
+            double par = MathUtils.fractionInDir(hitVec, dirTwo);
+            double perp = MathUtils.fractionInDir(hitVec, dirThree.getOpposite());
             return perp > par;
         }
         if (side == dirTwo || side == dirThree)
@@ -44,15 +44,15 @@ public class FramedVerticalSlicedSlopedStairsSlopeBlockEntity extends FramedDoub
 
         if (side == dirTwo.getOpposite() || side == dirThree.getOpposite())
         {
-            if (Utils.fractionInDir(hitVec, facing) > .5) // Crosshair is definitely on half slope's half-width faces
+            if (MathUtils.fractionInDir(hitVec, facing) > .5) // Crosshair is definitely on half slope's half-width faces
             {
                 return true;
             }
         }
         else if (side == facing.getOpposite())
         {
-            double par = Utils.fractionInDir(hitVec, dirTwo.getOpposite());
-            double perp = Utils.fractionInDir(hitVec, dirThree);
+            double par = MathUtils.fractionInDir(hitVec, dirTwo.getOpposite());
+            double perp = MathUtils.fractionInDir(hitVec, dirThree);
             if (perp > par) // Crosshair is definitely on slope's triangle face
             {
                 return false;

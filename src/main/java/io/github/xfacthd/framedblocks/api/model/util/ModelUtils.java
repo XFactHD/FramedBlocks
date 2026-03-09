@@ -5,7 +5,7 @@ import io.github.xfacthd.framedblocks.api.model.ExtendedBlockModelPart;
 import io.github.xfacthd.framedblocks.api.model.data.QuadMap;
 import io.github.xfacthd.framedblocks.api.model.geometry.DefaultAO;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadData;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.BlockModelPart;
@@ -187,7 +187,7 @@ public final class ModelUtils
                 maxZ = Math.max(maxZ, pos.z());
             }
 
-            boolean positive = Utils.isPositive(side);
+            boolean positive = DirUtils.isPositive(side);
             boolean aligned = switch(side.getAxis())
             {
                 case X -> minX == maxX && (positive ? maxX > 0.9999F : minX < 0.0001F);

@@ -1,7 +1,7 @@
 package io.github.xfacthd.framedblocks.client.model.overlaygen;
 
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import net.minecraft.core.Direction;
-import io.github.xfacthd.framedblocks.api.util.Utils;
 
 record UVInfo(int uIdx, int vIdx, boolean uInv, boolean vInv)
 {
@@ -29,7 +29,7 @@ record UVInfo(int uIdx, int vIdx, boolean uInv, boolean vInv)
             int vIdx;
             boolean uInv;
             boolean vInv;
-            if (Utils.isY(face))
+            if (DirUtils.isY(face))
             {
                 uIdx = 0;
                 vIdx = 2;
@@ -39,10 +39,10 @@ record UVInfo(int uIdx, int vIdx, boolean uInv, boolean vInv)
             }
             else
             {
-                uIdx = Utils.isX(face) ? 2 : 0;
+                uIdx = DirUtils.isX(face) ? 2 : 0;
                 vIdx = 1;
 
-                uInv = Utils.isPositive(face.getClockWise());
+                uInv = DirUtils.isPositive(face.getClockWise());
                 vInv = true;
             }
             infos[face.ordinal()] = new UVInfo(uIdx, vIdx, uInv, vInv);
@@ -64,9 +64,9 @@ record UVInfo(int uIdx, int vIdx, boolean uInv, boolean vInv)
                 int vIdx;
                 boolean uInv;
                 boolean vInv;
-                if (Utils.isY(face))
+                if (DirUtils.isY(face))
                 {
-                    boolean xEdge = Utils.isX(edge);
+                    boolean xEdge = DirUtils.isX(edge);
                     uIdx = xEdge ? 2 : 0;
                     vIdx = xEdge ? 0 : 2;
 
@@ -76,10 +76,10 @@ record UVInfo(int uIdx, int vIdx, boolean uInv, boolean vInv)
                 else
                 {
                     Direction faceCW = face.getClockWise();
-                    boolean cwPositive = Utils.isPositive(faceCW);
-                    if (Utils.isY(edge))
+                    boolean cwPositive = DirUtils.isPositive(faceCW);
+                    if (DirUtils.isY(edge))
                     {
-                        uIdx = Utils.isX(face) ? 2 : 0;
+                        uIdx = DirUtils.isX(face) ? 2 : 0;
                         vIdx = 1;
 
                         uInv = cwPositive ^ edge == Direction.DOWN;
@@ -88,7 +88,7 @@ record UVInfo(int uIdx, int vIdx, boolean uInv, boolean vInv)
                     else
                     {
                         uIdx = 1;
-                        vIdx = Utils.isX(face) ? 2 : 0;
+                        vIdx = DirUtils.isX(face) ? 2 : 0;
 
                         uInv = cwPositive;
                         vInv = true;

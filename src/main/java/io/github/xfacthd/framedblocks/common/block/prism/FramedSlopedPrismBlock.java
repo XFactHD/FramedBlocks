@@ -3,7 +3,8 @@ package io.github.xfacthd.framedblocks.common.block.prism;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
+import io.github.xfacthd.framedblocks.api.util.MathUtils;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
@@ -58,7 +59,7 @@ public class FramedSlopedPrismBlock extends FramedBlock implements IFramedPrismB
                 {
                     Direction face = modCtx.getClickedFace();
                     Direction orientation;
-                    if (Utils.isY(face))
+                    if (DirUtils.isY(face))
                     {
                         orientation = modCtx.getHorizontalDirection();
                         if (block.isInnerPrism())
@@ -68,14 +69,14 @@ public class FramedSlopedPrismBlock extends FramedBlock implements IFramedPrismB
                     }
                     else
                     {
-                        Vec3 subHit = Utils.fraction(modCtx.getClickLocation());
+                        Vec3 subHit = MathUtils.fraction(modCtx.getClickLocation());
 
-                        double xz = (Utils.isX(face) ? subHit.z() : subHit.x()) - .5;
+                        double xz = (DirUtils.isX(face) ? subHit.z() : subHit.x()) - .5;
                         double y = subHit.y() - .5;
 
                         if (Math.max(Math.abs(xz), Math.abs(y)) == Math.abs(xz))
                         {
-                            if (Utils.isX(face))
+                            if (DirUtils.isX(face))
                             {
                                 orientation = xz < 0 ? Direction.SOUTH : Direction.NORTH;
                             }
@@ -91,7 +92,7 @@ public class FramedSlopedPrismBlock extends FramedBlock implements IFramedPrismB
                     }
                     return state.setValue(PropertyHolder.FACING_DIR, CompoundDirection.of(face, orientation));
                 })
-                .withYSlope(Utils.isY(context.getClickedFace()))
+                .withYSlope(DirUtils.isY(context.getClickedFace()))
                 .tryWithWater()
                 .build();
     }
@@ -128,8 +129,8 @@ public class FramedSlopedPrismBlock extends FramedBlock implements IFramedPrismB
     public Direction getHorizontalOrientation(BlockState state)
     {
         CompoundDirection cmpDir = state.getValue(PropertyHolder.FACING_DIR);
-        if (!Utils.isY(cmpDir.direction())) return cmpDir.direction();
-        if (!Utils.isY(cmpDir.orientation())) return cmpDir.orientation();
+        if (!DirUtils.isY(cmpDir.direction())) return cmpDir.direction();
+        if (!DirUtils.isY(cmpDir.orientation())) return cmpDir.orientation();
         return Direction.NORTH;
     }
 

@@ -7,7 +7,7 @@ import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.MultiQuadModifier;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
 import io.github.xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.common.block.pillar.FramedChainBlock;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.core.Direction;
@@ -35,15 +35,15 @@ public class FramedChainGeometry extends Geometry
         Direction quadDir = quad.direction();
         if (quadDir.getAxis() == axis) return;
 
-        Direction.Axis quadPerpAxis = Utils.getPerpendicularAxis(quadDir.getAxis(), axis);
+        Direction.Axis quadPerpAxis = DirUtils.getPerpendicularAxis(quadDir.getAxis(), axis);
         if (axis == Direction.Axis.Y)
         {
-            createChainEdgeParts(quadMap, quad, quadDir, quadPerpAxis, Utils::isX, Modifiers::cut, Modifiers::cut);
+            createChainEdgeParts(quadMap, quad, quadDir, quadPerpAxis, DirUtils::isX, Modifiers::cut, Modifiers::cut);
             createChainCenterParts(quadMap, quad, Modifiers::cut, length -> Modifiers.cut(quadPerpAxis, length));
         }
         else
         {
-            if (Utils.isY(quadDir))
+            if (DirUtils.isY(quadDir))
             {
                 Direction.Axis perpAxis = axis == Direction.Axis.X ? Direction.Axis.Z : Direction.Axis.X;
 

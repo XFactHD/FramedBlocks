@@ -1,7 +1,7 @@
 package io.github.xfacthd.framedblocks.common.data.conpreds.stairs;
 
 import io.github.xfacthd.framedblocks.api.predicate.contex.NonDetailedConnectionPredicate;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.StairBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -38,7 +38,7 @@ public final class SlicedStairsSlabConnectionPredicate extends NonDetailedConnec
                 return true;
             }
         }
-        else if (!Utils.isY(side) && edge == dirTwo)
+        else if (!DirUtils.isY(side) && edge == dirTwo)
         {
             return true;
         }

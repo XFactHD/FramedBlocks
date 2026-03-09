@@ -2,7 +2,7 @@ package io.github.xfacthd.framedblocks.common.data.conpreds.slope;
 
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.predicate.contex.NonDetailedConnectionPredicate;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import io.github.xfacthd.framedblocks.common.data.property.SlopeType;
 import net.minecraft.core.Direction;
@@ -17,7 +17,7 @@ public final class DoubleSlopeConnectionPredicate extends NonDetailedConnectionP
         SlopeType type = state.getValue(PropertyHolder.SLOPE_TYPE);
         if (type == SlopeType.HORIZONTAL)
         {
-            return !Utils.isY(side) || edge != null;
+            return !DirUtils.isY(side) || edge != null;
         }
 
         Direction dirOne = state.getValue(FramedProperties.FACING_HOR);

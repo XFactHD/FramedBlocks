@@ -5,7 +5,7 @@ import fuzs.diagonalblocks.api.v2.block.StarCollisionBlock;
 import fuzs.diagonalblocks.api.v2.util.EightWayDirection;
 import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.common.block.IFramedBlockInternal;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import net.minecraft.core.BlockPos;
@@ -93,7 +93,7 @@ public final class FramedDiagonalFenceBlock extends DiagonalFenceBlock implement
     @Override
     public boolean connectsTo(BlockState adjState, boolean sideSolid, Direction adjSide)
     {
-        if (!Utils.isY(adjSide) && DiagonalBlocksCompat.isFramedFence(adjState) && adjState.getValue(FramedProperties.STATE_LOCKED))
+        if (!DirUtils.isY(adjSide) && DiagonalBlocksCompat.isFramedFence(adjState) && adjState.getValue(FramedProperties.STATE_LOCKED))
         {
             BooleanProperty prop = CrossCollisionBlock.PROPERTY_BY_DIRECTION.get(adjSide);
             if (!adjState.getValue(prop))

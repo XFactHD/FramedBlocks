@@ -7,7 +7,7 @@ import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
 import io.github.xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import io.github.xfacthd.framedblocks.common.data.property.CompoundDirection;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -31,8 +31,8 @@ public class FramedElevatedInnerSlopedPrismGeometry extends Geometry
     @Override
     public void transformQuad(QuadMap quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
     {
-        boolean yFacing = Utils.isY(facing);
-        boolean yOrient = Utils.isY(orientation);
+        boolean yFacing = DirUtils.isY(facing);
+        boolean yOrient = DirUtils.isY(orientation);
         Direction quadFace = quad.direction();
 
         if (quadFace == facing)
@@ -221,6 +221,6 @@ public class FramedElevatedInnerSlopedPrismGeometry extends Geometry
         {
             return true;
         }
-        return Utils.isY(facing) || Utils.isY(orientation);
+        return DirUtils.isY(facing) || DirUtils.isY(orientation);
     }
 }

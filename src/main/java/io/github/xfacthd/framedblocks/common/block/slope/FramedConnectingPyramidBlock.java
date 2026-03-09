@@ -1,7 +1,7 @@
 package io.github.xfacthd.framedblocks.common.block.slope;
 
 import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.common.block.IPillarLikeBlock;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
@@ -67,7 +67,7 @@ public class FramedConnectingPyramidBlock extends FramedPyramidBlock
         {
             return block.getPillarConnection(state, side.getOpposite());
         }
-        else if (Utils.isY(side))
+        else if (DirUtils.isY(side))
         {
             if (state.is(BlockTags.FENCES))
             {

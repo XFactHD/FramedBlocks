@@ -2,7 +2,8 @@ package io.github.xfacthd.framedblocks.common.blockentity.doubled.slopeslab;
 
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedDoubleBlockEntity;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
+import io.github.xfacthd.framedblocks.api.util.MathUtils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -33,14 +34,14 @@ public class FramedElevatedDoubleSlopeSlabBlockEntity extends FramedDoubleBlockE
             return top;
         }
 
-        Vec3 vec = Utils.fraction(hit.getLocation());
+        Vec3 vec = MathUtils.fraction(hit.getLocation());
         if (side == facing.getOpposite())
         {
             return (vec.y() >= .5D) != top;
         }
 
-        double hor = Utils.isX(facing) ? vec.x() : vec.z();
-        if (!Utils.isPositive(facing))
+        double hor = DirUtils.isX(facing) ? vec.x() : vec.z();
+        if (!DirUtils.isPositive(facing))
         {
             hor = 1D - hor;
         }

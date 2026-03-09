@@ -2,7 +2,8 @@ package io.github.xfacthd.framedblocks.common.block;
 
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
+import io.github.xfacthd.framedblocks.api.util.MathUtils;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import io.github.xfacthd.framedblocks.common.data.property.CornerType;
 import io.github.xfacthd.framedblocks.common.data.property.HorizontalRotation;
@@ -35,7 +36,7 @@ public final class ExtPlacementStateBuilder extends PlacementStateBuilder<ExtPla
     {
         if (state == null) return self();
 
-        boolean right = Utils.fractionInDir(ctx.getClickLocation(), ctx.getHorizontalDirection().getClockWise()) > .5D;
+        boolean right = MathUtils.fractionInDir(ctx.getClickLocation(), ctx.getHorizontalDirection().getClockWise()) > .5D;
         state = state.setValue(PropertyHolder.RIGHT, right);
         return self();
     }
@@ -49,9 +50,9 @@ public final class ExtPlacementStateBuilder extends PlacementStateBuilder<ExtPla
 
         state = state.setValue(FramedProperties.FACING_HOR, facing);
 
-        if (!Utils.isY(side))
+        if (!DirUtils.isY(side))
         {
-            double y = Utils.fractionInDir(ctx.getClickLocation(), Direction.UP);
+            double y = MathUtils.fractionInDir(ctx.getClickLocation(), Direction.UP);
             if (y < (3D / 16D))
             {
                 side = Direction.UP;
@@ -84,10 +85,10 @@ public final class ExtPlacementStateBuilder extends PlacementStateBuilder<ExtPla
         if (state == null) return self();
 
         Direction side = ctx.getClickedFace();
-        Vec3 hitPoint = Utils.fraction(ctx.getClickLocation());
+        Vec3 hitPoint = MathUtils.fraction(ctx.getClickLocation());
 
         Direction typeSide = side;
-        if (!Utils.isY(side))
+        if (!DirUtils.isY(side))
         {
             if (hitPoint.y() < (3D / 16D))
             {
@@ -111,8 +112,8 @@ public final class ExtPlacementStateBuilder extends PlacementStateBuilder<ExtPla
         }
         else
         {
-            boolean xAxis = Utils.isX(side);
-            boolean positive = Utils.isPositive(side.getCounterClockWise());
+            boolean xAxis = DirUtils.isX(side);
+            boolean positive = DirUtils.isPositive(side.getCounterClockWise());
             double xz = xAxis ? hitPoint.z() : hitPoint.x();
             double y = hitPoint.y();
 
@@ -250,7 +251,7 @@ public final class ExtPlacementStateBuilder extends PlacementStateBuilder<ExtPla
         Direction facing = ctx.getHorizontalDirection();
         if (facing.getAxis() != ctx.getClickedFace().getAxis())
         {
-            double xz = Utils.fractionInDir(ctx.getClickLocation(), facing);
+            double xz = MathUtils.fractionInDir(ctx.getClickLocation(), facing);
             state = state.setValue(PropertyHolder.FRONT, xz < .5);
         }
 

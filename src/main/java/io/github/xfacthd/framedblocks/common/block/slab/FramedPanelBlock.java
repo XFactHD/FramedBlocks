@@ -3,7 +3,7 @@ package io.github.xfacthd.framedblocks.common.block.slab;
 import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.MathUtils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
@@ -55,7 +55,7 @@ public class FramedPanelBlock extends FramedBlock
             }
 
             Direction innerFace = state.getValue(FramedProperties.FACING_HOR).getOpposite();
-            return ctx.getClickedFace() == innerFace || Utils.fractionInDir(ctx.getClickLocation(), innerFace) > .5D;
+            return ctx.getClickedFace() == innerFace || MathUtils.fractionInDir(ctx.getClickLocation(), innerFace) > .5D;
         }
         return false;
     }

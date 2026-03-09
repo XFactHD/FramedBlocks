@@ -2,7 +2,7 @@ package io.github.xfacthd.framedblocks.common.blockentity.doubled.stairs;
 
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedDoubleBlockEntity;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.MathUtils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -28,13 +28,13 @@ public class FramedSlopedDoubleStairsBlockEntity extends FramedDoubleBlockEntity
 
         if (side == dirTwo)
         {
-            double par = Utils.fractionInDir(hitVec, facing);
-            double perp = Utils.fractionInDir(hitVec, facing.getClockWise());
+            double par = MathUtils.fractionInDir(hitVec, facing);
+            double perp = MathUtils.fractionInDir(hitVec, facing.getClockWise());
             return perp > par;
         }
         else if (side == facing.getOpposite() || side == facing.getClockWise())
         {
-            return Utils.fractionInDir(hitVec, dirTwo) > .5;
+            return MathUtils.fractionInDir(hitVec, dirTwo) > .5;
         }
         return false;
     }

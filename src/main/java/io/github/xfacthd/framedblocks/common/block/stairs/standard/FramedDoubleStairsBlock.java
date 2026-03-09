@@ -7,7 +7,7 @@ import io.github.xfacthd.framedblocks.api.block.doubleblock.CamoGetter;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockParts;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockTopInteractionMode;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.SolidityCheck;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.MathUtils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.block.IFramedDoubleBlockInternal;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
@@ -55,7 +55,7 @@ public class FramedDoubleStairsBlock extends FramedStairsBlock implements IFrame
         {
             case UP -> Half.BOTTOM;
             case DOWN -> Half.TOP;
-            default -> Utils.fractionInDir(ctx.getClickLocation(), Direction.UP) > .5D ? Half.TOP : Half.BOTTOM;
+            default -> MathUtils.fractionInDir(ctx.getClickLocation(), Direction.UP) > .5D ? Half.TOP : Half.BOTTOM;
         };
         BlockState state = defaultBlockState()
                 .setValue(FACING, ctx.getHorizontalDirection())

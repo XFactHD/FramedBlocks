@@ -1,7 +1,7 @@
 package io.github.xfacthd.framedblocks.common.data.conpreds.door;
 
 import io.github.xfacthd.framedblocks.api.predicate.contex.ConnectionPredicate;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -58,7 +58,7 @@ public final class DoorConnectionPredicate implements ConnectionPredicate
         }
         else if (side.getAxis() == fullFace.getClockWise().getAxis())
         {
-            return Utils.isY(edge);
+            return DirUtils.isY(edge);
         }
         return false;
     }

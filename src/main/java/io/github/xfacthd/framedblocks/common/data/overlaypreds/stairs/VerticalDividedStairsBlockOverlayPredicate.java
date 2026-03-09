@@ -1,7 +1,7 @@
 package io.github.xfacthd.framedblocks.common.data.overlaypreds.stairs;
 
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import io.github.xfacthd.framedblocks.common.data.property.StairsType;
 import net.minecraft.core.Direction;
@@ -31,7 +31,7 @@ public final class VerticalDividedStairsBlockOverlayPredicate extends AbstractVe
         {
             case VERTICAL ->
             {
-                if ((nullCullFace && Utils.isY(side)) || (!secondPart && edge == Direction.UP) || (secondPart && edge == Direction.DOWN))
+                if ((nullCullFace && DirUtils.isY(side)) || (!secondPart && edge == Direction.UP) || (secondPart && edge == Direction.DOWN))
                 {
                     yield false;
                 }

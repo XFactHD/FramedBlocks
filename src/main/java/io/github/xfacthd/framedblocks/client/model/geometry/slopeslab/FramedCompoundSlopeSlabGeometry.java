@@ -7,7 +7,7 @@ import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
 import io.github.xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.core.Direction;
 import org.jspecify.annotations.Nullable;
@@ -55,7 +55,7 @@ public class FramedCompoundSlopeSlabGeometry extends Geometry
                         .export(quadMap.get(null));
             }
         }
-        else if (ySlope && Utils.isY(quadDir))
+        else if (ySlope && DirUtils.isY(quadDir))
         {
             Direction edge = quadDir == Direction.UP ? dir.getOpposite() : dir;
             QuadModifier.of(quad)

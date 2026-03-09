@@ -1,6 +1,6 @@
 package io.github.xfacthd.framedblocks.common.data.property;
 
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import net.minecraft.core.Direction;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.level.block.Mirror;
@@ -58,21 +58,21 @@ public enum DirectionAxis implements StringRepresentable
             return this;
         }
 
-        if (Utils.isY(dir))
+        if (DirUtils.isY(dir))
         {
             if (rot == Rotation.CLOCKWISE_180)
             {
                 return this;
             }
 
-            return of(dir, Utils.getPerpendicularAxis(axis, dir.getAxis()));
+            return of(dir, DirUtils.getPerpendicularAxis(axis, dir.getAxis()));
         }
         else
         {
             Direction.Axis newAxis = axis;
             if (axis != Direction.Axis.Y && rot != Rotation.CLOCKWISE_180)
             {
-                newAxis = Utils.getPerpendicularAxis(axis, Direction.Axis.Y);
+                newAxis = DirUtils.getPerpendicularAxis(axis, Direction.Axis.Y);
             }
             return of(rot.rotate(dir), newAxis);
         }
@@ -83,8 +83,8 @@ public enum DirectionAxis implements StringRepresentable
         return switch (mirror)
         {
             case NONE -> this;
-            case FRONT_BACK -> Utils.isX(dir) ? of(dir.getOpposite(), axis) : this;
-            case LEFT_RIGHT -> Utils.isZ(dir) ? of(dir.getOpposite(), axis) : this;
+            case FRONT_BACK -> DirUtils.isX(dir) ? of(dir.getOpposite(), axis) : this;
+            case LEFT_RIGHT -> DirUtils.isZ(dir) ? of(dir.getOpposite(), axis) : this;
         };
     }
 

@@ -3,7 +3,7 @@ package io.github.xfacthd.framedblocks.common.block.slab;
 import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
@@ -39,7 +39,7 @@ public class FramedCheckeredPanelSegmentBlock extends FramedBlock
         return PlacementStateBuilder.of(this, ctx)
                 .withTargetOrHorizontalFacing()
                 .withCustom((state, modCtx) -> state.setValue(
-                        PropertyHolder.SECOND, Utils.isX(ctx.getHorizontalDirection())
+                        PropertyHolder.SECOND, DirUtils.isX(modCtx.getHorizontalDirection())
                 ))
                 .withWater()
                 .build();
@@ -48,7 +48,7 @@ public class FramedCheckeredPanelSegmentBlock extends FramedBlock
     @Override
     protected BlockState rotate(BlockState state, Rotation rotation)
     {
-        if (Utils.isNinetyDegree(rotation))
+        if (DirUtils.isNinetyDegree(rotation))
         {
             state = state.cycle(PropertyHolder.SECOND);
         }

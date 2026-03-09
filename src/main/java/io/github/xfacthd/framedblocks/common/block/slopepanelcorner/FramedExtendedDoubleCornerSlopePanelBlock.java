@@ -9,8 +9,8 @@ import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockParts;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockTopInteractionMode;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.SolidityCheck;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.api.util.RotationDirection;
-import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.block.FramedDoubleBlock;
 import io.github.xfacthd.framedblocks.common.blockentity.doubled.slopepanelcorner.FramedExtendedDoubleCornerSlopePanelBlockEntity;
@@ -237,7 +237,7 @@ public class FramedExtendedDoubleCornerSlopePanelBlock extends FramedDoubleBlock
         {
             case FRAMED_EXT_DOUBLE_CORNER_SLOPE_PANEL ->
             {
-                if (Utils.isY(side))
+                if (DirUtils.isY(side))
                 {
                     boolean top = state.getValue(FramedProperties.TOP);
                     if (top ? (side == Direction.UP) : (side == Direction.DOWN))
@@ -256,7 +256,7 @@ public class FramedExtendedDoubleCornerSlopePanelBlock extends FramedDoubleBlock
             case FRAMED_EXT_INNER_DOUBLE_CORNER_SLOPE_PANEL ->
             {
                 boolean primaryYFace = false;
-                if (Utils.isY(side))
+                if (DirUtils.isY(side))
                 {
                     boolean top = state.getValue(FramedProperties.TOP);
                     primaryYFace = top ? (side == Direction.UP) : (side == Direction.DOWN);

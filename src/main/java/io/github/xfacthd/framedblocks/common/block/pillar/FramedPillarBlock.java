@@ -3,8 +3,8 @@ package io.github.xfacthd.framedblocks.common.block.pillar;
 import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
 import io.github.xfacthd.framedblocks.api.block.overlay.AxisOverlayCarrier;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.api.util.RotationDirection;
-import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
 import io.github.xfacthd.framedblocks.common.block.IPillarLikeBlock;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
@@ -62,9 +62,9 @@ public class FramedPillarBlock extends FramedBlock implements IPillarLikeBlock, 
     protected BlockState rotate(BlockState state, Rotation rotation)
     {
         Direction.Axis axis = state.getValue(BlockStateProperties.AXIS);
-        if (axis != Direction.Axis.Y && Utils.isNinetyDegree(rotation))
+        if (axis != Direction.Axis.Y && DirUtils.isNinetyDegree(rotation))
         {
-            axis = Utils.getPerpendicularAxis(axis, Direction.Axis.Y);
+            axis = DirUtils.getPerpendicularAxis(axis, Direction.Axis.Y);
             return state.setValue(BlockStateProperties.AXIS, axis);
         }
         return state;
@@ -79,7 +79,7 @@ public class FramedPillarBlock extends FramedBlock implements IPillarLikeBlock, 
     @Override
     public Direction getHorizontalOrientation(BlockState state)
     {
-        return Utils.getHorizontalDirection(state.getValue(BlockStateProperties.AXIS));
+        return DirUtils.getHorizontalDirection(state.getValue(BlockStateProperties.AXIS));
     }
 
     @Override

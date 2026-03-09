@@ -1,7 +1,7 @@
 package io.github.xfacthd.framedblocks.common.data.conpreds.pillar;
 
 import io.github.xfacthd.framedblocks.api.predicate.contex.ConnectionPredicate;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.WallBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -29,7 +29,7 @@ public final class WallConnectionPredicate implements ConnectionPredicate
     @Override
     public boolean canConnectDetailed(BlockState state, Direction side, Direction edge)
     {
-        if (Utils.isY(side) || !Utils.isY(edge))
+        if (DirUtils.isY(side) || !DirUtils.isY(edge))
         {
             Property<WallSide> prop = WALL_PROPERTIES.get(edge);
             return state.getValue(prop) != WallSide.NONE;

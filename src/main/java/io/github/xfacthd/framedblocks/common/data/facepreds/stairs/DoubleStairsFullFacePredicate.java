@@ -1,7 +1,7 @@
 package io.github.xfacthd.framedblocks.common.data.facepreds.stairs;
 
 import io.github.xfacthd.framedblocks.api.predicate.fullface.FullFacePredicate;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.StairBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -29,6 +29,6 @@ public final class DoubleStairsFullFacePredicate implements FullFacePredicate
         }
 
         boolean top = state.getValue(StairBlock.HALF) == Half.TOP;
-        return Utils.isY(side) && top == (side == Direction.UP);
+        return DirUtils.isY(side) && top == (side == Direction.UP);
     }
 }

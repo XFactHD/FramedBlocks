@@ -3,8 +3,8 @@ package io.github.xfacthd.framedblocks.common.block.pillar;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.api.util.RotationDirection;
-import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
 import io.github.xfacthd.framedblocks.common.block.IPillarLikeBlock;
@@ -149,7 +149,7 @@ public class FramedLatticeBlock extends FramedBlock implements IPillarLikeBlock
     @Override
     protected BlockState rotate(BlockState state, Rotation rotation)
     {
-        if (Utils.isNinetyDegree(rotation))
+        if (DirUtils.isNinetyDegree(rotation))
         {
             boolean xAxis = state.getValue(FramedProperties.Z_AXIS);
             boolean zAxis = state.getValue(FramedProperties.X_AXIS);
@@ -210,7 +210,7 @@ public class FramedLatticeBlock extends FramedBlock implements IPillarLikeBlock
         {
             return side.getAxis() == state.getValue(BlockStateProperties.AXIS);
         }
-        return Utils.isY(side) && state.is(BlockTags.FENCES);
+        return DirUtils.isY(side) && state.is(BlockTags.FENCES);
     }
 
     private static boolean canConnectThick(Direction side, BlockState state)

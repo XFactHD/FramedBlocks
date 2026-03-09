@@ -2,7 +2,7 @@ package io.github.xfacthd.framedblocks.common.data.conpreds.slopepanelcorner;
 
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.predicate.contex.ConnectionPredicate;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jspecify.annotations.Nullable;
@@ -30,11 +30,11 @@ public final class LargeCornerSlopePanelConnectionPredicate implements Connectio
         }
         else if (side == dir)
         {
-            return edge == dir.getCounterClockWise() || Utils.isY(edge);
+            return edge == dir.getCounterClockWise() || DirUtils.isY(edge);
         }
         else if (side == dir.getCounterClockWise())
         {
-            return edge == dir || Utils.isY(edge);
+            return edge == dir || DirUtils.isY(edge);
         }
         else if (side == dirTwo.getOpposite() || side == dir.getOpposite() || side == dir.getClockWise())
         {

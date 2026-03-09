@@ -1,7 +1,7 @@
 package io.github.xfacthd.framedblocks.api.shapes;
 
 import com.mojang.math.OctahedralGroup;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Util;
 import net.minecraft.world.level.block.Block;
@@ -18,8 +18,8 @@ import java.util.function.ToIntFunction;
 public final class ShapeUtils
 {
     private static final Direction[] HORIZONTAL_DIRECTIONS = Direction.Plane.HORIZONTAL.stream().toArray(Direction[]::new);
-    private static final Direction[] ZY_PLANE_DIRECTIONS = Arrays.stream(Direction.values()).filter(dir -> !Utils.isX(dir)).toArray(Direction[]::new);
-    private static final Direction[] XY_PLANE_DIRECTIONS = Arrays.stream(Direction.values()).filter(dir -> !Utils.isZ(dir)).toArray(Direction[]::new);
+    private static final Direction[] ZY_PLANE_DIRECTIONS = Arrays.stream(Direction.values()).filter(dir -> !DirUtils.isX(dir)).toArray(Direction[]::new);
+    private static final Direction[] XY_PLANE_DIRECTIONS = Arrays.stream(Direction.values()).filter(dir -> !DirUtils.isZ(dir)).toArray(Direction[]::new);
     private static final int[] DIR_ROT_X_2D_DATA = Util.make(new int[6], arr ->
     {
         arr[Direction.DOWN.ordinal()] = 2;
@@ -116,7 +116,7 @@ public final class ShapeUtils
 
     public static VoxelShape rotateShapeUnoptimizedAroundY(Direction from, Direction to, VoxelShape shape)
     {
-        if (Utils.isY(from) || Utils.isY(to)) throw new IllegalArgumentException("Invalid Direction!");
+        if (DirUtils.isY(from) || DirUtils.isY(to)) throw new IllegalArgumentException("Invalid Direction!");
         if (from == to) return shape;
 
         return Shapes.rotate(shape, DIR_ROT_Y_OCTAHEDRAL[from.get2DDataValue() << 2 | to.get2DDataValue()]);
@@ -129,7 +129,7 @@ public final class ShapeUtils
 
     public static VoxelShape rotateShapeUnoptimizedAroundX(Direction from, Direction to, VoxelShape shape)
     {
-        if (Utils.isX(from) || Utils.isX(to)) throw new IllegalArgumentException("Invalid Direction!");
+        if (DirUtils.isX(from) || DirUtils.isX(to)) throw new IllegalArgumentException("Invalid Direction!");
         if (from == to) return shape;
 
         return Shapes.rotate(shape, DIR_ROT_X_OCTAHEDRAL[DIR_ROT_X_2D_DATA[from.ordinal()] << 2 | DIR_ROT_X_2D_DATA[to.ordinal()]]);
@@ -142,7 +142,7 @@ public final class ShapeUtils
 
     public static VoxelShape rotateShapeUnoptimizedAroundZ(Direction from, Direction to, VoxelShape shape)
     {
-        if (Utils.isZ(from) || Utils.isZ(to)) throw new IllegalArgumentException("Invalid Direction!");
+        if (DirUtils.isZ(from) || DirUtils.isZ(to)) throw new IllegalArgumentException("Invalid Direction!");
         if (from == to) return shape;
 
         return Shapes.rotate(shape, DIR_ROT_Z_OCTAHEDRAL[DIR_ROT_Z_2D_DATA[from.ordinal()] << 2 | DIR_ROT_Z_2D_DATA[to.ordinal()]]);
@@ -166,7 +166,7 @@ public final class ShapeUtils
 
     public static void makeHorizontalRotations(VoxelShape shape, Direction srcDir, VoxelShape[] out, int baseOffset)
     {
-        if (Utils.isY(srcDir)) throw new IllegalArgumentException("Invalid Direction!");
+        if (DirUtils.isY(srcDir)) throw new IllegalArgumentException("Invalid Direction!");
 
         for (int i = 0; i < 4; i++)
         {

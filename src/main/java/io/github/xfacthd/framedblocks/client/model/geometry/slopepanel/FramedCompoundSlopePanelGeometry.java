@@ -7,7 +7,7 @@ import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
 import io.github.xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import io.github.xfacthd.framedblocks.common.data.property.HorizontalRotation;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -42,7 +42,7 @@ public class FramedCompoundSlopePanelGeometry extends Geometry
                     .apply(Modifiers.cut(dir.getOpposite(), .5F))
                     .export(quadMap.get(quadDir));
 
-            if (ySlope && Utils.isY(quadDir))
+            if (ySlope && DirUtils.isY(quadDir))
             {
                 QuadModifier.of(quad)
                         .apply(Modifiers.makeVerticalSlope(dir.getOpposite(), FramedSlopePanelGeometry.SLOPE_ANGLE_VERT))
@@ -56,7 +56,7 @@ public class FramedCompoundSlopePanelGeometry extends Geometry
                     .apply(Modifiers.cut(dir, .5F))
                     .export(quadMap.get(quadDir));
 
-            if (ySlope && Utils.isY(quadDir))
+            if (ySlope && DirUtils.isY(quadDir))
             {
                 QuadModifier.of(quad)
                         .apply(Modifiers.makeVerticalSlope(dir, FramedSlopePanelGeometry.SLOPE_ANGLE_VERT))
@@ -66,7 +66,7 @@ public class FramedCompoundSlopePanelGeometry extends Geometry
         }
         else if (quadDir == dir)
         {
-            if (!Utils.isY(orientation))
+            if (!DirUtils.isY(orientation))
             {
                 QuadModifier.of(quad)
                         .apply(Modifiers.makeHorizontalSlope(rot == HorizontalRotation.LEFT, FramedSlopePanelGeometry.SLOPE_ANGLE))
@@ -81,7 +81,7 @@ public class FramedCompoundSlopePanelGeometry extends Geometry
         }
         else if (quadDir == dir.getOpposite())
         {
-            if (!Utils.isY(orientation))
+            if (!DirUtils.isY(orientation))
             {
                 QuadModifier.of(quad)
                         .apply(Modifiers.makeHorizontalSlope(rot == HorizontalRotation.LEFT, FramedSlopePanelGeometry.SLOPE_ANGLE))
@@ -94,7 +94,7 @@ public class FramedCompoundSlopePanelGeometry extends Geometry
                         .export(quadMap.get(null));
             }
         }
-        else if (triangleAxis == Direction.Axis.Y && Utils.isY(quadDir))
+        else if (triangleAxis == Direction.Axis.Y && DirUtils.isY(quadDir))
         {
             boolean right = rot == HorizontalRotation.RIGHT;
             QuadModifier.of(quad)

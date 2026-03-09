@@ -1,7 +1,7 @@
 package io.github.xfacthd.framedblocks.common.data.conpreds.stairs;
 
 import io.github.xfacthd.framedblocks.api.predicate.contex.NonDetailedConnectionPredicate;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.StairBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -37,7 +37,7 @@ public final class DoubleStairsConnectionPredicate extends NonDetailedConnection
                 }
                 else if (side == facing.getOpposite())
                 {
-                    yield edge != null && Utils.isY(edge);
+                    yield edge != null && DirUtils.isY(edge);
                 }
                 yield false;
             }
@@ -101,7 +101,7 @@ public final class DoubleStairsConnectionPredicate extends NonDetailedConnection
                 }
                 else if (side == facing.getClockWise() || side == facing.getOpposite())
                 {
-                    yield edge != null && Utils.isY(edge);
+                    yield edge != null && DirUtils.isY(edge);
                 }
                 yield false;
             }
@@ -125,7 +125,7 @@ public final class DoubleStairsConnectionPredicate extends NonDetailedConnection
                 }
                 else if (side == facing.getCounterClockWise() || side == facing.getOpposite())
                 {
-                    yield edge != null && Utils.isY(edge);
+                    yield edge != null && DirUtils.isY(edge);
                 }
                 yield false;
             }

@@ -6,7 +6,7 @@ import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
 import io.github.xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.common.blockentity.PackedCollapsibleBlockOffsets;
 import io.github.xfacthd.framedblocks.common.blockentity.special.FramedCollapsibleCopycatBlockEntity;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
@@ -62,7 +62,7 @@ public class FramedCollapsibleCopycatBlockGeometry extends Geometry
         boolean solid = (solidFaces & (1 << quadDir.ordinal())) != 0;
         List<QuadModifier> mods = new ArrayList<>(2);
         QuadModifier initialModifier = QuadModifier.of(quad).apply(Modifiers.setPosition((16F - offsets[quadDir.ordinal()]) / 16F));
-        if (Utils.isY(quadDir))
+        if (DirUtils.isY(quadDir))
         {
             if (offsets[NORTH] > 0 || offsets[SOUTH] > 0)
             {
@@ -118,7 +118,7 @@ public class FramedCollapsibleCopycatBlockGeometry extends Geometry
         }
         else
         {
-            boolean xAxis = Utils.isX(quadDir);
+            boolean xAxis = DirUtils.isX(quadDir);
             Direction axisNeg = xAxis ? Direction.NORTH : Direction.WEST;
             int axisMin = xAxis ? NORTH : WEST;
             int axisMax = xAxis ? SOUTH : EAST;

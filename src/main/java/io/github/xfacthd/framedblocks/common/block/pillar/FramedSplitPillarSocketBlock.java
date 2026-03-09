@@ -6,7 +6,7 @@ import io.github.xfacthd.framedblocks.api.block.doubleblock.CamoGetter;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockParts;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockTopInteractionMode;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.SolidityCheck;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.block.IFramedDoubleBlockInternal;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
@@ -34,7 +34,7 @@ public class FramedSplitPillarSocketBlock extends FramedPillarSocketBlock implem
     {
         Direction facing = state.getValue(BlockStateProperties.FACING);
         BlockState stateOne;
-        if (Utils.isY(facing))
+        if (DirUtils.isY(facing))
         {
             stateOne = FBContent.BLOCK_FRAMED_SLAB.value()
                     .defaultBlockState()

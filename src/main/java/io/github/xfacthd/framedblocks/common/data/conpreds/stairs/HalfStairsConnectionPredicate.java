@@ -2,7 +2,7 @@ package io.github.xfacthd.framedblocks.common.data.conpreds.stairs;
 
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.predicate.contex.ConnectionPredicate;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
@@ -41,7 +41,7 @@ public final class HalfStairsConnectionPredicate implements ConnectionPredicate
 
         if (side == facing)
         {
-            return Utils.isY(edge);
+            return DirUtils.isY(edge);
         }
         else if (side == facing.getOpposite() || side == dirTwo.getOpposite())
         {

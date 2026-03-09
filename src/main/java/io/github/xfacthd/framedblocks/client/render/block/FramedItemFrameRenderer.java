@@ -2,7 +2,7 @@ package io.github.xfacthd.framedblocks.client.render.block;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.client.render.block.state.FramedItemFrameRenderState;
 import io.github.xfacthd.framedblocks.common.blockentity.special.FramedItemFrameBlockEntity;
 import net.minecraft.client.Camera;
@@ -52,14 +52,14 @@ public class FramedItemFrameRenderer implements BlockEntityRenderer<FramedItemFr
         poseStack.pushPose();
 
         Direction dir = renderState.direction;
-        float dirOff = Utils.isPositive(dir) ? 0 : 1;
+        float dirOff = DirUtils.isPositive(dir) ? 0 : 1;
         poseStack.translate(
-                dir.getStepX() * DIR_OFF_MULT + (Utils.isX(dir) ? dirOff : .5F),
-                dir.getStepY() * DIR_OFF_MULT + (Utils.isY(dir) ? dirOff : .5F),
-                dir.getStepZ() * DIR_OFF_MULT + (Utils.isZ(dir) ? dirOff : .5F)
+                dir.getStepX() * DIR_OFF_MULT + (DirUtils.isX(dir) ? dirOff : .5F),
+                dir.getStepY() * DIR_OFF_MULT + (DirUtils.isY(dir) ? dirOff : .5F),
+                dir.getStepZ() * DIR_OFF_MULT + (DirUtils.isZ(dir) ? dirOff : .5F)
         );
 
-        boolean vert = Utils.isY(dir);
+        boolean vert = DirUtils.isY(dir);
         float yRot = vert ? 0 : dir.toYRot();
         if (vert)
         {

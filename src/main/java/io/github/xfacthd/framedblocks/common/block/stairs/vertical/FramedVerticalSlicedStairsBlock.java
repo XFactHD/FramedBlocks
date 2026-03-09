@@ -6,7 +6,8 @@ import io.github.xfacthd.framedblocks.api.block.doubleblock.CamoGetter;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockParts;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockTopInteractionMode;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.SolidityCheck;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
+import io.github.xfacthd.framedblocks.api.util.MathUtils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.block.IFramedDoubleBlockInternal;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
@@ -43,8 +44,8 @@ public class FramedVerticalSlicedStairsBlock extends FramedVerticalStairsBlock i
         if (state == null) return null;
 
         Direction face = ctx.getClickedFace();
-        Direction fracDir = Utils.isY(face) ? ctx.getHorizontalDirection().getClockWise() : face.getCounterClockWise();
-        boolean right = Utils.fractionInDir(ctx.getClickLocation(), fracDir) > .5;
+        Direction fracDir = DirUtils.isY(face) ? ctx.getHorizontalDirection().getClockWise() : face.getCounterClockWise();
+        boolean right = MathUtils.fractionInDir(ctx.getClickLocation(), fracDir) > .5;
         return state.setValue(PropertyHolder.RIGHT, right);
     }
 

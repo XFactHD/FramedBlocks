@@ -7,7 +7,7 @@ import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
 import io.github.xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import io.github.xfacthd.framedblocks.common.data.property.SlopeType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -31,7 +31,7 @@ public class FramedCornerStripGeometry extends Geometry
         Direction quadDir = quad.direction();
         if (type == SlopeType.HORIZONTAL)
         {
-            if (Utils.isY(quadDir))
+            if (DirUtils.isY(quadDir))
             {
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(dir.getOpposite(), 1F/16F))
@@ -73,7 +73,7 @@ public class FramedCornerStripGeometry extends Geometry
                         .applyIf(Modifiers.setPosition(1F/16F), !onFace)
                         .export(quadMap.get(onFace ? quadDir : null));
             }
-            else if (Utils.isY(quadDir))
+            else if (DirUtils.isY(quadDir))
             {
                 boolean onFace = top ? quadDir == Direction.UP : quadDir == Direction.DOWN;
                 QuadModifier.of(quad)

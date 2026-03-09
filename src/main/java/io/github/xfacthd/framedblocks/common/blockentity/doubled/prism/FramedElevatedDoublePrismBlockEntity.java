@@ -1,7 +1,7 @@
 package io.github.xfacthd.framedblocks.common.blockentity.doubled.prism;
 
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedDoubleBlockEntity;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.MathUtils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import net.minecraft.core.BlockPos;
@@ -45,10 +45,10 @@ public class FramedElevatedDoublePrismBlockEntity extends FramedDoubleBlockEntit
         if (isDoubleSide(side))
         {
             Direction horDir = side.getClockWise(facing.getAxis());
-            double hor = Utils.fractionInDir(hit.getLocation(), horDir);
+            double hor = MathUtils.fractionInDir(hit.getLocation(), horDir);
             hor = Math.abs(hor - .5);
 
-            double vert = Utils.fractionInDir(hit.getLocation(), facing) - .5;
+            double vert = MathUtils.fractionInDir(hit.getLocation(), facing) - .5;
 
             return vert > hor;
         }

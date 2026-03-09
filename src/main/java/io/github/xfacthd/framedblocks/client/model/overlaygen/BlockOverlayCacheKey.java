@@ -1,7 +1,7 @@
 package io.github.xfacthd.framedblocks.client.model.overlaygen;
 
 import io.github.xfacthd.framedblocks.api.block.overlay.BlockOverlay;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.client.model.wrapping.ModelWrappingManager;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
@@ -159,8 +159,8 @@ record BlockOverlayCacheKey(
                 float minY = 1F;
                 float maxX = 0F;
                 float maxY = 0F;
-                Direction.Axis axisX = Utils.isX(normalDir) ? Direction.Axis.Z : Direction.Axis.X;
-                Direction.Axis axisY = Utils.isY(normalDir) ? Direction.Axis.Z : Direction.Axis.Y;
+                Direction.Axis axisX = DirUtils.isX(normalDir) ? Direction.Axis.Z : Direction.Axis.X;
+                Direction.Axis axisY = DirUtils.isY(normalDir) ? Direction.Axis.Z : Direction.Axis.Y;
                 // TODO: expand bounds extraction to handle tilted edges to allow aligning overlays on the tilted edges of sloped blocks, discarding edges with an angle > 45°
                 for (BakedQuad quad : quads)
                 {

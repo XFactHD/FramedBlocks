@@ -7,7 +7,7 @@ import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
 import io.github.xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Util;
@@ -24,7 +24,7 @@ public class FramedSmallPrismSlopePanelCornerGeometry extends Geometry
     private static final Vector3f[] TILT_ORIGINS = Util.make(() ->
     {
         Vector3f[] origins = new Vector3f[16];
-        Utils.forHorizontalDirections(dir ->
+        DirUtils.forHorizontalDirections(dir ->
         {
             int idx = dir.get2DDataValue();
             float x = .5F + dir.getStepX() * .25F;
@@ -54,7 +54,7 @@ public class FramedSmallPrismSlopePanelCornerGeometry extends Geometry
         this.upDir = top ? Direction.DOWN : Direction.UP;
         this.ySlope = ctx.state().getValue(FramedProperties.Y_SLOPE);
         this.offset = ctx.state().getValue(FramedProperties.OFFSET);
-        this.invAngle = Utils.isPositive(dir.getClockWise()) ^ top ^ ySlope;
+        this.invAngle = DirUtils.isPositive(dir.getClockWise()) ^ top ^ ySlope;
         this.tiltOrigin = getTiltOrigin(dir, top, ySlope);
     }
 

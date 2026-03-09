@@ -2,7 +2,7 @@ package io.github.xfacthd.framedblocks.common.blockentity.doubled.slopeedge;
 
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedDoubleBlockEntity;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.MathUtils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import io.github.xfacthd.framedblocks.common.data.property.SlopeType;
@@ -45,15 +45,15 @@ public class FramedElevatedDoubleSlopeEdgeBlockEntity extends FramedDoubleBlockE
         Vec3 hitVec = hit.getLocation();
         if (side == dir.getOpposite())
         {
-            return Utils.fractionInDir(hitVec, dirTwo.getOpposite()) > .5;
+            return MathUtils.fractionInDir(hitVec, dirTwo.getOpposite()) > .5;
         }
         else if (side == dirTwo.getOpposite())
         {
-            return Utils.fractionInDir(hitVec, dir.getOpposite()) > .5;
+            return MathUtils.fractionInDir(hitVec, dir.getOpposite()) > .5;
         }
 
-        double par = (Utils.fractionInDir(hitVec, dir.getOpposite()) - .5) * 2D;
-        double perp = (Utils.fractionInDir(hitVec, dirTwo.getOpposite()) - .5) * 2D;
+        double par = (MathUtils.fractionInDir(hitVec, dir.getOpposite()) - .5) * 2D;
+        double perp = (MathUtils.fractionInDir(hitVec, dirTwo.getOpposite()) - .5) * 2D;
         if (par >= 0D && perp >= 0D)
         {
             return perp >= (1D - par);

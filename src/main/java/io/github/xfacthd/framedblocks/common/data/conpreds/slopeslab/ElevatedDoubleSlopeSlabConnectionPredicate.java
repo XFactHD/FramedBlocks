@@ -2,7 +2,7 @@ package io.github.xfacthd.framedblocks.common.data.conpreds.slopeslab;
 
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.predicate.contex.NonDetailedConnectionPredicate;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jspecify.annotations.Nullable;
@@ -13,7 +13,7 @@ public final class ElevatedDoubleSlopeSlabConnectionPredicate extends NonDetaile
     public boolean canConnectFullEdge(BlockState state, Direction side, @Nullable Direction edge)
     {
         Direction facing = state.getValue(FramedProperties.FACING_HOR);
-        if (side == facing || Utils.isY(side))
+        if (side == facing || DirUtils.isY(side))
         {
             return true;
         }
@@ -21,6 +21,6 @@ public final class ElevatedDoubleSlopeSlabConnectionPredicate extends NonDetaile
         {
             return edge != null && edge != facing.getOpposite();
         }
-        return edge != null && Utils.isY(edge);
+        return edge != null && DirUtils.isY(edge);
     }
 }

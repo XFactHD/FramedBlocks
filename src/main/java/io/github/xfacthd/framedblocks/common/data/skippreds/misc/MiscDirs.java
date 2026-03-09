@@ -1,6 +1,6 @@
 package io.github.xfacthd.framedblocks.common.data.skippreds.misc;
 
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.common.data.property.CornerTubeOrientation;
 import io.github.xfacthd.framedblocks.common.data.skippreds.HalfDir;
 import io.github.xfacthd.framedblocks.common.data.skippreds.TubeOpening;
@@ -50,7 +50,7 @@ public final class MiscDirs
     {
         public static boolean isHopperSideDir(Direction side)
         {
-            return !Utils.isY(side);
+            return !DirUtils.isY(side);
         }
 
         public static TubeOpening getOpeningDir(Direction side)

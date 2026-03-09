@@ -1,14 +1,13 @@
 package io.github.xfacthd.framedblocks.client.model;
 
 import io.github.xfacthd.framedblocks.api.model.ExtendedBlockModelPart;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.Direction;
 import net.minecraft.util.TriState;
 import net.minecraft.world.level.block.state.BlockState;
-import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
@@ -20,7 +19,6 @@ import java.util.List;
  * @param chunkLayer       The {@link ChunkSectionLayer} this part should render with
  * @param shaderState      The {@link BlockState} the framed block or part thereof is pretending to be, for use by shader mods
  */
-@ApiStatus.Internal
 public record FramedBlockModelPart(
         List<BakedQuad>[] quads,
         TriState ambientOcclusion,
@@ -32,7 +30,7 @@ public record FramedBlockModelPart(
     @Override
     public List<BakedQuad> getQuads(@Nullable Direction side)
     {
-        return quads[Utils.maskNullDirection(side)];
+        return quads[DirUtils.maskNullDirection(side)];
     }
 
     @Override

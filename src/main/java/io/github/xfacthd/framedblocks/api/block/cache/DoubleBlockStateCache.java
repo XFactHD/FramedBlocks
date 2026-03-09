@@ -7,7 +7,7 @@ import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockParts;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockTopInteractionMode;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.SolidityCheck;
 import io.github.xfacthd.framedblocks.api.predicate.overlay.BlockOverlayPredicate;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jspecify.annotations.Nullable;
@@ -46,14 +46,14 @@ public class DoubleBlockStateCache extends StateCache
                 if (edge != null && edge.getAxis() == side.getAxis())
                 {
                     // null is the first value in DIRECTIONS_WITH_NULL, so this is safe
-                    int cgNullIdx = side.ordinal() * DIR_COUNT_N + Utils.maskNullDirection(null);
+                    int cgNullIdx = side.ordinal() * DIR_COUNT_N + DirUtils.maskNullDirection(null);
                     getter = camoGetters[cgNullIdx];
                 }
                 else
                 {
                     getter = block.calculateCamoGetter(state, side, edge);
                 }
-                int cgIdx = side.ordinal() * DIR_COUNT_N + Utils.maskNullDirection(edge);
+                int cgIdx = side.ordinal() * DIR_COUNT_N + DirUtils.maskNullDirection(edge);
                 camoGetters[cgIdx] = getter;
             }
         }
@@ -78,7 +78,7 @@ public class DoubleBlockStateCache extends StateCache
 
     public final CamoGetter getCamoGetter(Direction side, @Nullable Direction edge)
     {
-        return camoGetters[side.ordinal() * DIR_COUNT_N + Utils.maskNullDirection(edge)];
+        return camoGetters[side.ordinal() * DIR_COUNT_N + DirUtils.maskNullDirection(edge)];
     }
 
     @Override

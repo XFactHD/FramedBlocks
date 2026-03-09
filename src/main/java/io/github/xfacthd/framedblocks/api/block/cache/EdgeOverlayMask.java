@@ -1,7 +1,7 @@
 package io.github.xfacthd.framedblocks.api.block.cache;
 
 import io.github.xfacthd.framedblocks.api.predicate.overlay.BlockOverlayPredicate;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
@@ -20,7 +20,7 @@ record EdgeOverlayMask(int maskNullCullFace, int maskUnaligned, int maskBoth)
 
     private static int getBitMask(Direction side, Direction edge)
     {
-        return 1 << (side.ordinal() << 2 | Utils.get2dValueAround(side.getAxis(), edge));
+        return 1 << (side.ordinal() << 2 | DirUtils.get2dValueAround(side.getAxis(), edge));
     }
 
     static EdgeOverlayMask compute(BlockState state, BlockOverlayPredicate predicate, boolean secondPart)

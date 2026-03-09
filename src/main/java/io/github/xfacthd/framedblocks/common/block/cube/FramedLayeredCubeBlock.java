@@ -5,8 +5,8 @@ import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
 import io.github.xfacthd.framedblocks.api.camo.CamoList;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.api.util.RotationDirection;
-import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
@@ -126,7 +126,7 @@ public class FramedLayeredCubeBlock extends FramedBlock
     public Direction getHorizontalOrientation(BlockState state)
     {
         Direction facing = state.getValue(BlockStateProperties.FACING);
-        return Utils.isY(facing) ? Direction.NORTH : facing;
+        return DirUtils.isY(facing) ? Direction.NORTH : facing;
     }
 
     @Override

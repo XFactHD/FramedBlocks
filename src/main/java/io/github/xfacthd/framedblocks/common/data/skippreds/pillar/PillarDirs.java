@@ -1,6 +1,6 @@
 package io.github.xfacthd.framedblocks.common.data.skippreds.pillar;
 
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.common.data.skippreds.CornerDir;
 import io.github.xfacthd.framedblocks.common.data.skippreds.HalfDir;
 import io.github.xfacthd.framedblocks.common.data.skippreds.TriangleDir;
@@ -31,7 +31,7 @@ public final class PillarDirs
 
         public static CornerDir getCornerDir(Direction dir, Direction side)
         {
-            if (Utils.isY(side))
+            if (DirUtils.isY(side))
             {
                 return CornerDir.fromDirections(side, dir, dir.getCounterClockWise());
             }
@@ -84,7 +84,7 @@ public final class PillarDirs
     {
         public static boolean testWallArmDir(BlockState state, BlockState adjState, Direction side)
         {
-            if (!Utils.isY(side))
+            if (!DirUtils.isY(side))
             {
                 WallSide wallSide = getWallSide(state, side);
                 WallSide adjWallSide = getWallSide(adjState, side.getOpposite());
@@ -107,7 +107,7 @@ public final class PillarDirs
 
         public static boolean isPillarDir(boolean up, Direction side)
         {
-            return up && Utils.isY(side);
+            return up && DirUtils.isY(side);
         }
 
         private Wall() { }
@@ -117,12 +117,12 @@ public final class PillarDirs
     {
         public static boolean testFenceArmDir(BlockState state, BlockState adjState, Direction side)
         {
-            return !Utils.isY(side) && hasFenceArm(state, side) && hasFenceArm(adjState, side.getOpposite());
+            return !DirUtils.isY(side) && hasFenceArm(state, side) && hasFenceArm(adjState, side.getOpposite());
         }
 
         public static boolean testFenceArmToGateDir(BlockState state, BlockState adjState, Direction side)
         {
-            if (!Utils.isY(side) && hasFenceArm(state, side))
+            if (!DirUtils.isY(side) && hasFenceArm(state, side))
             {
                 Direction adjDir = adjState.getValue(BlockStateProperties.HORIZONTAL_FACING);
                 return adjDir.getClockWise().getAxis() == side.getAxis();
@@ -144,7 +144,7 @@ public final class PillarDirs
 
         public static boolean isPostDir(Direction side)
         {
-            return Utils.isY(side);
+            return DirUtils.isY(side);
         }
 
         private Fence() { }

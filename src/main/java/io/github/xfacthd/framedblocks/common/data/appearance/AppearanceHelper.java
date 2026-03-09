@@ -7,6 +7,7 @@ import io.github.xfacthd.framedblocks.api.block.cache.StateCache;
 import io.github.xfacthd.framedblocks.api.model.data.AbstractFramedBlockData;
 import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
 import io.github.xfacthd.framedblocks.api.predicate.contex.ConTexMode;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.common.config.ClientConfig;
 import net.minecraft.core.BlockPos;
@@ -120,14 +121,14 @@ public final class AppearanceHelper
                 }
 
                 BlockState componentState = framedBlock.getComponentBySkipPredicate(level, pos, state, actualQueryState, edge);
-                if (componentState == null && Utils.dirByNormal(pos, queryPos) == null)
+                if (componentState == null && DirUtils.dirByNormal(pos, queryPos) == null)
                 {
                     // If pos-to-queryPos is diagonal and the first component lookup failed, try again with the other axis covered by the diagonal
-                    Direction.Axis perpAxis = Utils.getPerpendicularAxis(side.getAxis(), edge.getAxis());
+                    Direction.Axis perpAxis = DirUtils.getPerpendicularAxis(side.getAxis(), edge.getAxis());
                     int nx = queryPos.getX() - pos.getX();
                     int ny = queryPos.getY() - pos.getY();
                     int nz = queryPos.getZ() - pos.getZ();
-                    Direction newEdge = Utils.dirByNormal(perpAxis.choose(nx, 0, 0), perpAxis.choose(0, ny, 0), perpAxis.choose(0, 0, nz));
+                    Direction newEdge = DirUtils.dirByNormal(perpAxis.choose(nx, 0, 0), perpAxis.choose(0, ny, 0), perpAxis.choose(0, 0, nz));
                     if (newEdge != null)
                     {
                         componentState = framedBlock.getComponentBySkipPredicate(level, pos, state, actualQueryState, newEdge);
@@ -229,7 +230,7 @@ public final class AppearanceHelper
         int nx = queryPos.getX() - pos.getX();
         int ny = queryPos.getY() - pos.getY();
         int nz = queryPos.getZ() - pos.getZ();
-        Direction conFace = Utils.dirByNormal(nx, ny, nz);
+        Direction conFace = DirUtils.dirByNormal(nx, ny, nz);
         if (conFace != null)
         {
             return pred.test(context, side, conFace) ? conFace : null;
@@ -242,25 +243,25 @@ public final class AppearanceHelper
             int nx, int ny, int nz, Direction side, @Nullable T context, EdgePredicate<T> pred
     )
     {
-        if (!Utils.isX(side))
+        if (!DirUtils.isX(side))
         {
-            Direction conFace = Utils.dirByNormal(nx, 0, 0);
+            Direction conFace = DirUtils.dirByNormal(nx, 0, 0);
             if (conFace != null && pred.test(context, side, conFace))
             {
                 return conFace;
             }
         }
-        if (!Utils.isY(side))
+        if (!DirUtils.isY(side))
         {
-            Direction conFace = Utils.dirByNormal(0, ny, 0);
+            Direction conFace = DirUtils.dirByNormal(0, ny, 0);
             if (conFace != null && pred.test(context, side, conFace))
             {
                 return conFace;
             }
         }
-        if (!Utils.isZ(side))
+        if (!DirUtils.isZ(side))
         {
-            Direction conFace = Utils.dirByNormal(0, 0, nz);
+            Direction conFace = DirUtils.dirByNormal(0, 0, nz);
             if (conFace != null && pred.test(context, side, conFace))
             {
                 return conFace;
@@ -329,7 +330,7 @@ public final class AppearanceHelper
                 side = side.getOpposite();
             }
             // Specially handle diagonal lookups to fix cases where an edge unsuitable for the query block is selected
-            if ((nx != 0 || ny != 0 || nz != 0) && Utils.dirByNormal(nx, ny, nz) == null)
+            if ((nx != 0 || ny != 0 || nz != 0) && DirUtils.dirByNormal(nx, ny, nz) == null)
             {
                 EdgePredicate<StateCache> predicate = (cache, testSide, testEdge) -> cache.canConnectFullEdge(testSide, testEdge.getOpposite());
                 return findFirstSuitableDirectionFromMultiCoordOffset(nx, ny, nz, side, queryState.framedblocks$getCache(), predicate) != null;

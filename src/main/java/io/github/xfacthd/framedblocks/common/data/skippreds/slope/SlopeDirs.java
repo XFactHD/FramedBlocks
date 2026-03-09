@@ -1,6 +1,6 @@
 package io.github.xfacthd.framedblocks.common.data.skippreds.slope;
 
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.common.data.property.CornerType;
 import io.github.xfacthd.framedblocks.common.data.property.PillarConnection;
 import io.github.xfacthd.framedblocks.common.data.property.SlopeType;
@@ -16,7 +16,7 @@ public final class SlopeDirs
         {
             if (type == SlopeType.HORIZONTAL)
             {
-                if (Utils.isY(side))
+                if (DirUtils.isY(side))
                 {
                     return TriangleDir.fromDirections(dir, dir.getCounterClockWise());
                 }

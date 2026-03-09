@@ -7,7 +7,7 @@ import io.github.xfacthd.framedblocks.api.model.geometry.PartConsumer;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
 import io.github.xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.BlockStateModel;
 import net.minecraft.core.BlockPos;
@@ -71,7 +71,7 @@ public class FramedWallTorchGeometry extends Geometry
         }
         else if (quadDir != Direction.UP)
         {
-            boolean xAxis = Utils.isX(quadDir);
+            boolean xAxis = DirUtils.isX(quadDir);
             boolean east = quadDir == Direction.EAST;
             QuadModifier.of(quad)
                     .apply(Modifiers.cutSide(MIN, 0, MAX, height))

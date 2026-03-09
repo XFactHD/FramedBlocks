@@ -7,7 +7,7 @@ import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
 import io.github.xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import io.github.xfacthd.framedblocks.common.data.property.HorizontalRotation;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -42,7 +42,7 @@ public class FramedFlatExtendedInnerSlopePanelCornerGeometry extends Geometry
         {
             FramedFlatSlopePanelCornerGeometry.createSideTriangle(quadMap, quad, facing, rotRotation, true, true);
 
-            if (ySlope && Utils.isY(orientation))
+            if (ySlope && DirUtils.isY(orientation))
             {
                 QuadModifier.of(quad)
                         .apply(FramedFlatSlopePanelCornerGeometry.createVerticalSlopeTriangle(facing.getOpposite(), orientation, false))
@@ -55,7 +55,7 @@ public class FramedFlatExtendedInnerSlopePanelCornerGeometry extends Geometry
         {
             FramedFlatSlopePanelCornerGeometry.createSideTriangle(quadMap, quad, facing, rotation, true, true);
 
-            if (ySlope && Utils.isY(rotOrientation))
+            if (ySlope && DirUtils.isY(rotOrientation))
             {
                 QuadModifier.of(quad)
                         .apply(FramedFlatSlopePanelCornerGeometry.createVerticalSlopeTriangle(facing.getOpposite(), rotOrientation, true))
@@ -66,7 +66,7 @@ public class FramedFlatExtendedInnerSlopePanelCornerGeometry extends Geometry
         }
         else if (face == facing.getOpposite())
         {
-            if (!ySlope || !Utils.isY(orientation))
+            if (!ySlope || !DirUtils.isY(orientation))
             {
                 QuadModifier.of(quad)
                         .apply(FramedFlatSlopePanelCornerGeometry.createSlopeTriangle(facing, rotOrientation, true, face))
@@ -74,7 +74,7 @@ public class FramedFlatExtendedInnerSlopePanelCornerGeometry extends Geometry
                         .export(quadMap.get(null));
             }
 
-            if (!ySlope || !Utils.isY(rotOrientation))
+            if (!ySlope || !DirUtils.isY(rotOrientation))
             {
                 QuadModifier.of(quad)
                         .apply(FramedFlatSlopePanelCornerGeometry.createSlopeTriangle(facing, orientation, false, face))

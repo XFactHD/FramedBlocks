@@ -3,7 +3,7 @@ package io.github.xfacthd.framedblocks.common.block.cube;
 import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import io.github.xfacthd.framedblocks.api.shapes.ShapeUtils;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
 import io.github.xfacthd.framedblocks.common.blockentity.special.FramedCollapsibleBlockEntity;
@@ -122,7 +122,7 @@ public class FramedCollapsibleBlock extends FramedBlock
     public boolean doesBlockOccludeBeaconBeam(BlockState state, LevelReader level, BlockPos pos)
     {
         NullableDirection face = state.getValue(PropertyHolder.NULLABLE_FACE);
-        return face == NullableDirection.NONE || Utils.isY(face.toDirection());
+        return face == NullableDirection.NONE || DirUtils.isY(face.toDirection());
     }
 
     @Override
@@ -158,7 +158,7 @@ public class FramedCollapsibleBlock extends FramedBlock
         Direction face = Direction.from3DDataValue(packedData >> 20);
         byte[] offsets = FramedCollapsibleBlockEntity.unpackOffsets(packedData & 0xFFFFF);
 
-        boolean positive = Utils.isPositive(face);
+        boolean positive = DirUtils.isPositive(face);
         boolean flipX = face == Direction.NORTH || face == Direction.EAST;
         boolean flipZ = face != Direction.UP;
 

@@ -4,7 +4,7 @@ import io.github.xfacthd.framedblocks.api.shapes.ShapeCache;
 import io.github.xfacthd.framedblocks.api.shapes.ShapeContainer;
 import io.github.xfacthd.framedblocks.api.shapes.ShapeGenerator;
 import io.github.xfacthd.framedblocks.api.shapes.ShapeUtils;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import io.github.xfacthd.framedblocks.common.data.property.CompoundDirection;
 import io.github.xfacthd.framedblocks.common.data.property.SlopeType;
@@ -58,7 +58,7 @@ public final class SlopedPrismShapes implements ShapeGenerator
             Direction facing = cmpDir.direction();
             Direction orientation = cmpDir.orientation();
 
-            if (Utils.isY(facing))
+            if (DirUtils.isY(facing))
             {
                 shapes[cmpDir.ordinal()] = ShapeUtils.rotateShapeAroundY(
                         Direction.NORTH,

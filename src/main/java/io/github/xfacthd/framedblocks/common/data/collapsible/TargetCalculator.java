@@ -1,7 +1,7 @@
 package io.github.xfacthd.framedblocks.common.data.collapsible;
 
+import io.github.xfacthd.framedblocks.api.util.MathUtils;
 import io.github.xfacthd.framedblocks.api.util.Triangle;
-import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.common.blockentity.special.FramedCollapsibleBlockEntity;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import net.minecraft.core.BlockPos;
@@ -45,9 +45,9 @@ public final class TargetCalculator
         if (face != oldFace)
         {
             VertexPair pair = VertexMappings.getEdgeVertices(oldFace, face);
-            double hitHor = Utils.fractionInDir(blockHit.getLocation(), pair.dirToV2());
+            double hitHor = MathUtils.fractionInDir(blockHit.getLocation(), pair.dirToV2());
             double edgeHeight = 1D - Mth.lerp(hitHor, offsets[pair.v1()] / 16D, offsets[pair.v2()] / 16D);
-            double hitHeight = Utils.fractionInDir(blockHit.getLocation(), oldFace);
+            double hitHeight = MathUtils.fractionInDir(blockHit.getLocation(), oldFace);
             if (hitHeight <= edgeHeight)
             {
                 return null;

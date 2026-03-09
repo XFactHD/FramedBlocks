@@ -3,8 +3,8 @@ package io.github.xfacthd.framedblocks.common.block.slab;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
+import io.github.xfacthd.framedblocks.api.util.MathUtils;
 import io.github.xfacthd.framedblocks.api.util.RotationDirection;
-import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
@@ -62,7 +62,7 @@ public class FramedSlabBlock extends FramedBlock
             {
                 return true;
             }
-            return Utils.fractionInDir(ctx.getClickLocation(), top ? Direction.DOWN : Direction.UP) > .5D;
+            return MathUtils.fractionInDir(ctx.getClickLocation(), top ? Direction.DOWN : Direction.UP) > .5D;
         }
         return false;
     }

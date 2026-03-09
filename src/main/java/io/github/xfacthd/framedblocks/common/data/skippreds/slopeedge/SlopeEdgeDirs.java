@@ -1,6 +1,6 @@
 package io.github.xfacthd.framedblocks.common.data.skippreds.slopeedge;
 
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.common.data.property.CornerType;
 import io.github.xfacthd.framedblocks.common.data.property.HorizontalRotation;
 import io.github.xfacthd.framedblocks.common.data.property.SlopeType;
@@ -18,7 +18,7 @@ public final class SlopeEdgeDirs
         {
             if (type == SlopeType.HORIZONTAL)
             {
-                if (Utils.isY(side))
+                if (DirUtils.isY(side))
                 {
                     return QuarterTriangleDir.fromDirections(dir, dir.getCounterClockWise(), alt);
                 }
@@ -75,7 +75,7 @@ public final class SlopeEdgeDirs
         {
             if (type == SlopeType.HORIZONTAL)
             {
-                if (Utils.isY(side))
+                if (DirUtils.isY(side))
                 {
                     return TriangleDir.fromDirections(dir, dir.getCounterClockWise());
                 }

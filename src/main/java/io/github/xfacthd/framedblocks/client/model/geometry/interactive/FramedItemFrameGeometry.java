@@ -8,7 +8,7 @@ import io.github.xfacthd.framedblocks.api.model.geometry.QuadListModifier;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
 import io.github.xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.BlockStateModel;
@@ -65,7 +65,7 @@ public class FramedItemFrameGeometry extends Geometry
     public void transformQuad(QuadMap quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
     {
         Direction quadFace = quad.direction();
-        if (Utils.isY(facing))
+        if (DirUtils.isY(facing))
         {
             makeVerticalFrame(quadMap, quad, quadFace);
         }
@@ -207,7 +207,7 @@ public class FramedItemFrameGeometry extends Geometry
                         .export(quadMap.get(quadFace));
             }
         }
-        else if (Utils.isY(quadFace))
+        else if (DirUtils.isY(quadFace))
         {
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(facing.getOpposite(), 1F/16F))

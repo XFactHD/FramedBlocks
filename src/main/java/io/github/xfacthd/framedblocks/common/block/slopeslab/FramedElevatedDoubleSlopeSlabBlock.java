@@ -10,8 +10,8 @@ import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockParts;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockTopInteractionMode;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.SolidityCheck;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.api.util.RotationDirection;
-import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.block.FramedDoubleBlock;
 import io.github.xfacthd.framedblocks.common.blockentity.doubled.slopeslab.FramedElevatedDoubleSlopeSlabBlockEntity;
@@ -130,7 +130,7 @@ public class FramedElevatedDoubleSlopeSlabBlock extends FramedDoubleBlock
         {
             return CamoGetter.SECOND;
         }
-        else if (!Utils.isY(side))
+        else if (!DirUtils.isY(side))
         {
             if (edge == dirTwo || edge == facing)
             {

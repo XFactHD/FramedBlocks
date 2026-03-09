@@ -6,7 +6,7 @@ import io.github.xfacthd.framedblocks.api.block.doubleblock.CamoGetter;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockParts;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockTopInteractionMode;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.SolidityCheck;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.block.IFramedDoubleBlockInternal;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
@@ -38,7 +38,7 @@ public class FramedStackedPyramidSlabBlock extends FramedConnectingPyramidBlock 
         PillarConnection connection = state.getValue(PropertyHolder.PILLAR_CONNECTION);
         boolean ySlope = state.getValue(FramedProperties.Y_SLOPE);
         BlockState stateOne;
-        if (Utils.isY(facing))
+        if (DirUtils.isY(facing))
         {
             stateOne = FBContent.BLOCK_FRAMED_SLAB.value().defaultBlockState()
                     .setValue(FramedProperties.TOP, facing == Direction.DOWN);

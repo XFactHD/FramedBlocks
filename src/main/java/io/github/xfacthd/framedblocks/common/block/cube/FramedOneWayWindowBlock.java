@@ -3,7 +3,7 @@ package io.github.xfacthd.framedblocks.common.block.cube;
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import io.github.xfacthd.framedblocks.api.block.render.ParticleHelper;
 import io.github.xfacthd.framedblocks.api.camo.block.BlockCamoContent;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
 import io.github.xfacthd.framedblocks.common.blockentity.special.FramedOwnableBlockEntity;
@@ -151,7 +151,7 @@ public class FramedOneWayWindowBlock extends FramedBlock
         Direction dir = state.getValue(PropertyHolder.NULLABLE_FACE).toNullableDirection();
         if (dir == side && queryPos != null)
         {
-            if (Utils.dirByNormal(pos, queryPos) == dir)
+            if (DirUtils.dirByNormal(pos, queryPos) == dir)
             {
                 return Blocks.TINTED_GLASS.defaultBlockState();
             }

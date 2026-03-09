@@ -8,7 +8,7 @@ import io.github.xfacthd.framedblocks.api.model.geometry.PartConsumer;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
 import io.github.xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.BlockStateModel;
 import net.minecraft.core.BlockPos;
@@ -41,7 +41,7 @@ public class FramedBookshelfGeometry extends Geometry
     public void transformQuad(QuadMap quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
     {
         Direction quadDir = quad.direction();
-        if (Utils.isY(quadDir) || !frontFacePred.test(quadDir))
+        if (DirUtils.isY(quadDir) || !frontFacePred.test(quadDir))
         {
             return;
         }

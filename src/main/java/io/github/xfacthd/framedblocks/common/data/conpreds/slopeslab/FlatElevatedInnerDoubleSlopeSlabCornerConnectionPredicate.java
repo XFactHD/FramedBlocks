@@ -2,7 +2,7 @@ package io.github.xfacthd.framedblocks.common.data.conpreds.slopeslab;
 
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.predicate.contex.NonDetailedConnectionPredicate;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jspecify.annotations.Nullable;
@@ -14,10 +14,10 @@ public final class FlatElevatedInnerDoubleSlopeSlabCornerConnectionPredicate ext
     {
         Direction facing = state.getValue(FramedProperties.FACING_HOR);
 
-        if (Utils.isY(side) || side == facing || side == facing.getCounterClockWise())
+        if (DirUtils.isY(side) || side == facing || side == facing.getCounterClockWise())
         {
             return true;
         }
-        return edge != null && Utils.isY(edge);
+        return edge != null && DirUtils.isY(edge);
     }
 }

@@ -2,7 +2,7 @@ package io.github.xfacthd.framedblocks.common.blockentity.doubled.stairs;
 
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedDoubleBlockEntity;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.MathUtils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import io.github.xfacthd.framedblocks.common.data.property.HorizontalRotation;
@@ -33,12 +33,12 @@ public class FramedVerticalSlopedDoubleStairsBlockEntity extends FramedDoubleBlo
 
         if (side == dirTwo || side == dirThree)
         {
-            return Utils.fractionInDir(hitVec, facing) < .5;
+            return MathUtils.fractionInDir(hitVec, facing) < .5;
         }
         else if (side == facing.getOpposite())
         {
-            double par = Utils.fractionInDir(hitVec, dirTwo.getOpposite());
-            double perp = Utils.fractionInDir(hitVec, dirThree);
+            double par = MathUtils.fractionInDir(hitVec, dirTwo.getOpposite());
+            double perp = MathUtils.fractionInDir(hitVec, dirThree);
             return perp > par;
         }
         return false;

@@ -1,6 +1,6 @@
 package io.github.xfacthd.framedblocks.common.crafting.saw;
 
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.MathUtils;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeInput;
 
@@ -42,7 +42,7 @@ public final class FramingSawRecipeCalculation
 
     static long getMaterialLCM(FramingSawRecipe recipe, int inputValue)
     {
-        return Utils.lcm(inputValue, recipe.getMaterialAmount());
+        return MathUtils.lcm(inputValue, recipe.getMaterialAmount());
     }
 
     static int getOutputCount(int materialAmount, ItemStack result, long lcm)

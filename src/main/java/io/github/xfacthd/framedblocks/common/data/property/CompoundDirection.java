@@ -1,6 +1,6 @@
 package io.github.xfacthd.framedblocks.common.data.property;
 
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import net.minecraft.core.Direction;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.level.block.Mirror;
@@ -71,7 +71,7 @@ public enum CompoundDirection implements StringRepresentable
             return this;
         }
 
-        if (Utils.isY(direction))
+        if (DirUtils.isY(direction))
         {
             return of(direction, rot.rotate(orientation));
         }
@@ -91,8 +91,8 @@ public enum CompoundDirection implements StringRepresentable
         return switch (mirror)
         {
             case NONE -> this;
-            case FRONT_BACK -> Utils.isX(direction) ? of(direction.getOpposite(), orientation) : this;
-            case LEFT_RIGHT -> Utils.isZ(direction) ? of(direction.getOpposite(), orientation) : this;
+            case FRONT_BACK -> DirUtils.isX(direction) ? of(direction.getOpposite(), orientation) : this;
+            case LEFT_RIGHT -> DirUtils.isZ(direction) ? of(direction.getOpposite(), orientation) : this;
         };
     }
 

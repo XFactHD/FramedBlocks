@@ -1,7 +1,7 @@
 package io.github.xfacthd.framedblocks.common.data.overlaypreds.stairs;
 
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -12,7 +12,7 @@ public final class SlicedStairsPanelBlockOverlayPredicate extends AbstractVertic
     @Override
     public boolean supportsSolid(BlockState state, Direction side, boolean secondPart)
     {
-        return !secondPart || Utils.isY(side);
+        return !secondPart || DirUtils.isY(side);
     }
 
     @Override
@@ -93,7 +93,7 @@ public final class SlicedStairsPanelBlockOverlayPredicate extends AbstractVertic
                     }
                     yield true;
                 }
-                if (Utils.isY(side) && unaligned && (edge == facing || edge == facing.getCounterClockWise()))
+                if (DirUtils.isY(side) && unaligned && (edge == facing || edge == facing.getCounterClockWise()))
                 {
                     yield false;
                 }
@@ -117,7 +117,7 @@ public final class SlicedStairsPanelBlockOverlayPredicate extends AbstractVertic
                     }
                     yield true;
                 }
-                if (Utils.isY(side) && unaligned && (edge == facing || edge == facing.getClockWise()))
+                if (DirUtils.isY(side) && unaligned && (edge == facing || edge == facing.getClockWise()))
                 {
                     yield false;
                 }

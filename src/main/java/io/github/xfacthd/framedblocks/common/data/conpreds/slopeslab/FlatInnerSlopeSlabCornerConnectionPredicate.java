@@ -2,7 +2,7 @@ package io.github.xfacthd.framedblocks.common.data.conpreds.slopeslab;
 
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.predicate.contex.ConnectionPredicate;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
@@ -44,7 +44,7 @@ public final class FlatInnerSlopeSlabCornerConnectionPredicate implements Connec
 
         if (side == facing || side == facing.getCounterClockWise())
         {
-            return !Utils.isY(edge);
+            return !DirUtils.isY(edge);
         }
         else if (top != topHalf && side == dirTwo.getOpposite())
         {

@@ -7,7 +7,7 @@ import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
 import io.github.xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.client.model.geometry.slopepanel.FramedSlopePanelGeometry;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import io.github.xfacthd.framedblocks.common.data.property.HorizontalRotation;
@@ -29,8 +29,8 @@ public class FramedLargeCornerSlopePanelWallGeometry extends Geometry
         HorizontalRotation rot = ctx.state().getValue(PropertyHolder.ROTATION);
         Direction rotDir = rot.withFacing(dir);
         Direction perpRotDir = rot.rotate(Rotation.COUNTERCLOCKWISE_90).withFacing(dir);
-        this.horRotDir = Utils.isY(rotDir) ? perpRotDir : rotDir;
-        this.vertRotDir = Utils.isY(rotDir) ? rotDir : perpRotDir;
+        this.horRotDir = DirUtils.isY(rotDir) ? perpRotDir : rotDir;
+        this.vertRotDir = DirUtils.isY(rotDir) ? rotDir : perpRotDir;
         this.ySlope = ctx.state().getValue(FramedProperties.Y_SLOPE);
     }
 

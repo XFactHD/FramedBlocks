@@ -2,8 +2,9 @@ package io.github.xfacthd.framedblocks.common.data.property;
 
 import com.google.common.base.Preconditions;
 import io.github.xfacthd.framedblocks.api.render.Quaternions;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
+import io.github.xfacthd.framedblocks.api.util.MathUtils;
 import io.github.xfacthd.framedblocks.api.util.RotationDirection;
-import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import net.minecraft.core.Direction;
 import net.minecraft.util.StringRepresentable;
@@ -127,7 +128,7 @@ public enum HorizontalRotation implements StringRepresentable
      */
     public static HorizontalRotation fromDirection(Direction facing, Direction dir)
     {
-        Preconditions.checkArgument(!Utils.isY(facing), "View direction must not be on the Y axis");
+        Preconditions.checkArgument(!DirUtils.isY(facing), "View direction must not be on the Y axis");
         Preconditions.checkArgument(facing.getAxis() != dir.getAxis(), "Directions must be perpendicular");
 
         if (dir == Direction.UP) { return UP; }
@@ -142,30 +143,30 @@ public enum HorizontalRotation implements StringRepresentable
         HorizontalRotation rot = fromDirection(facing, dir);
         double dist = switch (rot)
         {
-            case UP -> Utils.fractionInDir(hitVec, facing.getCounterClockWise());
-            case DOWN -> Utils.fractionInDir(hitVec, facing.getClockWise());
-            case RIGHT -> Utils.fractionInDir(hitVec, Direction.UP);
-            case LEFT -> Utils.fractionInDir(hitVec, Direction.DOWN);
+            case UP -> MathUtils.fractionInDir(hitVec, facing.getCounterClockWise());
+            case DOWN -> MathUtils.fractionInDir(hitVec, facing.getClockWise());
+            case RIGHT -> MathUtils.fractionInDir(hitVec, Direction.UP);
+            case LEFT -> MathUtils.fractionInDir(hitVec, Direction.DOWN);
         };
         return dist > .5 ? rot.rotate(Rotation.CLOCKWISE_90) : rot;
     }
 
     public static HorizontalRotation fromWallCross(Vec3 hitVec, Direction hitFace)
     {
-        hitVec = Utils.fraction(hitVec);
+        hitVec = MathUtils.fraction(hitVec);
 
-        double xz = (Utils.isX(hitFace) ? hitVec.z() : hitVec.x()) - .5;
+        double xz = (DirUtils.isX(hitFace) ? hitVec.z() : hitVec.x()) - .5;
         double y = hitVec.y() - .5;
 
         if (Math.max(Math.abs(xz), Math.abs(y)) == Math.abs(xz))
         {
-            if (Utils.isX(hitFace))
+            if (DirUtils.isX(hitFace))
             {
-                return (xz < 0) == Utils.isPositive(hitFace) ? LEFT : RIGHT;
+                return (xz < 0) == DirUtils.isPositive(hitFace) ? LEFT : RIGHT;
             }
             else
             {
-                return (xz < 0) == Utils.isPositive(hitFace) ? RIGHT : LEFT;
+                return (xz < 0) == DirUtils.isPositive(hitFace) ? RIGHT : LEFT;
             }
         }
         else
@@ -176,12 +177,12 @@ public enum HorizontalRotation implements StringRepresentable
 
     public static HorizontalRotation fromWallCorner(Vec3 hitVec, Direction hitFace)
     {
-        Preconditions.checkArgument(!Utils.isY(hitFace), "Hit face must not be on the Y axis");
+        Preconditions.checkArgument(!DirUtils.isY(hitFace), "Hit face must not be on the Y axis");
 
-        hitVec = Utils.fraction(hitVec);
+        hitVec = MathUtils.fraction(hitVec);
 
-        double xz = (Utils.isX(hitFace) ? hitVec.z() : hitVec.x());
-        if (!Utils.isPositive(hitFace.getCounterClockWise()))
+        double xz = (DirUtils.isX(hitFace) ? hitVec.z() : hitVec.x());
+        if (!DirUtils.isPositive(hitFace.getCounterClockWise()))
         {
             xz = 1D - xz;
         }
@@ -198,12 +199,12 @@ public enum HorizontalRotation implements StringRepresentable
 
     public static HorizontalRotation fromPerpendicularWallCorner(Direction facing, Direction hitFace, Vec3 hitVec)
     {
-        Preconditions.checkArgument(!Utils.isY(facing), "View direction must not be on the Y axis");
+        Preconditions.checkArgument(!DirUtils.isY(facing), "View direction must not be on the Y axis");
         Preconditions.checkArgument(facing.getAxis() != hitFace.getAxis(), "Directions must be perpendicular");
 
         if (hitFace == Direction.UP)
         {
-            if (Utils.fractionInDir(hitVec, facing.getCounterClockWise()) > .5)
+            if (MathUtils.fractionInDir(hitVec, facing.getCounterClockWise()) > .5)
             {
                 return HorizontalRotation.RIGHT;
             }
@@ -211,7 +212,7 @@ public enum HorizontalRotation implements StringRepresentable
         }
         if (hitFace == Direction.DOWN)
         {
-            if (Utils.fractionInDir(hitVec, facing.getClockWise()) > .5)
+            if (MathUtils.fractionInDir(hitVec, facing.getClockWise()) > .5)
             {
                 return HorizontalRotation.LEFT;
             }
@@ -219,7 +220,7 @@ public enum HorizontalRotation implements StringRepresentable
         }
         if (hitFace == facing.getClockWise())
         {
-            if (Utils.fractionInDir(hitVec, Direction.UP) > .5)
+            if (MathUtils.fractionInDir(hitVec, Direction.UP) > .5)
             {
                 return HorizontalRotation.DOWN;
             }
@@ -227,7 +228,7 @@ public enum HorizontalRotation implements StringRepresentable
         }
         if (hitFace == facing.getCounterClockWise())
         {
-            if (Utils.fractionInDir(hitVec, Direction.DOWN) > .5)
+            if (MathUtils.fractionInDir(hitVec, Direction.DOWN) > .5)
             {
                 return HorizontalRotation.UP;
             }

@@ -8,7 +8,7 @@ import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
 import io.github.xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import io.github.xfacthd.framedblocks.common.data.property.HorizontalRotation;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -42,7 +42,7 @@ public class FramedSlopePanelGeometry extends Geometry
     public void transformQuad(QuadMap quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
     {
         Direction face = quad.direction();
-        boolean yAxis = Utils.isY(orientation);
+        boolean yAxis = DirUtils.isY(orientation);
         if (face == orientation.getOpposite())
         {
             Direction cutDir = front ? facing : facing.getOpposite();
@@ -114,7 +114,7 @@ public class FramedSlopePanelGeometry extends Geometry
     {
         Preconditions.checkArgument(facing.getAxis() != orientation.getAxis(), "Directions must be perpendicular");
 
-        if (Utils.isY(orientation))
+        if (DirUtils.isY(orientation))
         {
             return Modifiers.makeVerticalSlope(orientation == Direction.UP, SLOPE_ANGLE);
         }

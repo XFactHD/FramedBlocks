@@ -1,7 +1,7 @@
 package io.github.xfacthd.framedblocks.client.model;
 
 import io.github.xfacthd.framedblocks.api.model.data.QuadMap;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.core.Direction;
 import org.jspecify.annotations.Nullable;
@@ -20,7 +20,7 @@ public final class QuadMapImpl extends QuadMap
     @Override
     public ArrayList<BakedQuad> get(@Nullable Direction side)
     {
-        int idx = Utils.maskNullDirection(side);
+        int idx = DirUtils.maskNullDirection(side);
         ArrayList<BakedQuad> list = (ArrayList<BakedQuad>) quads[idx];
         if (list == null)
         {
@@ -32,7 +32,7 @@ public final class QuadMapImpl extends QuadMap
     @Nullable
     public ArrayList<BakedQuad> tryGet(@Nullable Direction side)
     {
-        int idx = Utils.maskNullDirection(side);
+        int idx = DirUtils.maskNullDirection(side);
         return (ArrayList<BakedQuad>) quads[idx];
     }
 
@@ -42,7 +42,7 @@ public final class QuadMapImpl extends QuadMap
      */
     public void set(@Nullable Direction side, List<BakedQuad> list)
     {
-        quads[Utils.maskNullDirection(side)] = list;
+        quads[DirUtils.maskNullDirection(side)] = list;
     }
 
     public boolean isEmpty()

@@ -1,7 +1,7 @@
 package io.github.xfacthd.framedblocks.common.data.skippreds.misc;
 
 import io.github.xfacthd.framedblocks.api.predicate.cull.SideSkipPredicate;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import io.github.xfacthd.framedblocks.common.data.skippreds.CullTest;
@@ -17,6 +17,6 @@ public final class LadderSkipPredicate implements SideSkipPredicate
     @CullTest.TestTarget(BlockType.FRAMED_LADDER)
     public boolean test(BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side)
     {
-        return Utils.isY(side) && adjState.getBlock() == FBContent.BLOCK_FRAMED_LADDER.value();
+        return DirUtils.isY(side) && adjState.getBlock() == FBContent.BLOCK_FRAMED_LADDER.value();
     }
 }

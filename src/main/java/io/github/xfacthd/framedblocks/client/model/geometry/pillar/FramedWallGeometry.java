@@ -6,7 +6,7 @@ import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
 import io.github.xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -83,7 +83,7 @@ public class FramedWallGeometry extends Geometry
         if (height != WallSide.NONE)
         {
             Direction quadDir = quad.direction();
-            if (Utils.isY(quadDir))
+            if (DirUtils.isY(quadDir))
             {
                 Vector4f rect = rects[dir.ordinal() - 2 + (center ? 4 : 0)];
                 boolean inset = height != WallSide.TALL && quadDir != Direction.DOWN;
@@ -118,7 +118,7 @@ public class FramedWallGeometry extends Geometry
         Direction quadDir = quad.direction();
         if (center)
         {
-            if (Utils.isY(quadDir))
+            if (DirUtils.isY(quadDir))
             {
                 QuadModifier.of(quad)
                         .apply(Modifiers.cutTopBottom(LARGE_MIN, LARGE_MIN, LARGE_MAX, LARGE_MAX))

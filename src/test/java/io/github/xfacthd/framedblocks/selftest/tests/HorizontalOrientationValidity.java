@@ -1,7 +1,7 @@
 package io.github.xfacthd.framedblocks.selftest.tests;
 
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.selftest.SelfTestReporter;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.Block;
@@ -35,7 +35,7 @@ public final class HorizontalOrientationValidity
                 if (orientation != null)
                 {
                     orientations.add(orientation);
-                    if (Utils.isY(orientation))
+                    if (DirUtils.isY(orientation))
                     {
                         reporter.error("Block '{}' returns {} as horizontal orientation", state, orientation);
                     }

@@ -7,7 +7,7 @@ import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
 import io.github.xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import io.github.xfacthd.framedblocks.common.data.property.SlopeType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -45,7 +45,7 @@ public class FramedSlopeGeometry extends Geometry
                         .apply(Modifiers.makeHorizontalSlope(true, 45))
                         .export(quadMap.get(null));
             }
-            else if (Utils.isY(quadDir))
+            else if (DirUtils.isY(quadDir))
             {
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(dir.getOpposite(), 1, 0))
@@ -61,7 +61,7 @@ public class FramedSlopeGeometry extends Geometry
                         .apply(Modifiers.makeVerticalSlope(!top, 45))
                         .export(quadMap.get(null));
             }
-            else if (ySlope && Utils.isY(quadDir))
+            else if (ySlope && DirUtils.isY(quadDir))
             {
                 QuadModifier.of(quad)
                         .apply(Modifiers.makeVerticalSlope(dir.getOpposite(), 45))

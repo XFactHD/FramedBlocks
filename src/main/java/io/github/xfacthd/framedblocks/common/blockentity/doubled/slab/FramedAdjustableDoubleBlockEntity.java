@@ -4,7 +4,7 @@ import io.github.xfacthd.framedblocks.api.block.IFramedDoubleBlock;
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedDoubleBlockEntity;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockParts;
 import io.github.xfacthd.framedblocks.api.blueprint.BlueprintData;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.MathUtils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.block.slab.FramedAdjustableDoubleBlock;
 import io.github.xfacthd.framedblocks.common.blockentity.PackedCollapsibleBlockOffsets;
@@ -50,7 +50,7 @@ public class FramedAdjustableDoubleBlockEntity extends FramedDoubleBlockEntity i
         if (face == facing.getOpposite()) return false;
         if (face == facing) return true;
 
-        int y = (int)(Utils.fractionInDir(hit.getLocation(), facing) * 16F);
+        int y = (int)(MathUtils.fractionInDir(hit.getLocation(), facing) * 16F);
         return y > firstHeight;
     }
 

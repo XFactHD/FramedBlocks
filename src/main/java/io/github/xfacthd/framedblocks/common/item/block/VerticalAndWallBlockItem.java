@@ -1,7 +1,7 @@
 package io.github.xfacthd.framedblocks.common.item.block;
 
 import io.github.xfacthd.framedblocks.api.block.item.FramedBlockItem;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.Block;
@@ -24,7 +24,7 @@ public class VerticalAndWallBlockItem extends FramedBlockItem
     @Nullable
     protected BlockState getPlacementState(BlockPlaceContext context)
     {
-        if (Utils.isY(context.getClickedFace()))
+        if (DirUtils.isY(context.getClickedFace()))
         {
             return getBlock().getStateForPlacement(context);
         }

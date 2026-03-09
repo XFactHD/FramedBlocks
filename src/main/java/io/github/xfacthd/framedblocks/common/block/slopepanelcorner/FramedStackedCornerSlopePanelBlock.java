@@ -8,8 +8,8 @@ import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockParts;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockTopInteractionMode;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.SolidityCheck;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.api.util.RotationDirection;
-import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.block.FramedDoubleBlock;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
@@ -165,7 +165,7 @@ public class FramedStackedCornerSlopePanelBlock extends FramedDoubleBlock
                 {
                     yield CamoGetter.FIRST;
                 }
-                else if (Utils.isY(side) && (edge == facing.getOpposite() || edge == facing.getClockWise()))
+                else if (DirUtils.isY(side) && (edge == facing.getOpposite() || edge == facing.getClockWise()))
                 {
                     yield CamoGetter.FIRST;
                 }
@@ -182,7 +182,7 @@ public class FramedStackedCornerSlopePanelBlock extends FramedDoubleBlock
         {
             case FRAMED_STACKED_CORNER_SLOPE_PANEL ->
             {
-                if (Utils.isY(side))
+                if (DirUtils.isY(side))
                 {
                     boolean top = state.getValue(FramedProperties.TOP);
                     if ((!top && side == Direction.DOWN) || (top && side == Direction.UP))
@@ -194,7 +194,7 @@ public class FramedStackedCornerSlopePanelBlock extends FramedDoubleBlock
             }
             case FRAMED_STACKED_INNER_CORNER_SLOPE_PANEL ->
             {
-                if (Utils.isY(side))
+                if (DirUtils.isY(side))
                 {
                     boolean top = state.getValue(FramedProperties.TOP);
                     if ((!top && side == Direction.DOWN) || (top && side == Direction.UP))

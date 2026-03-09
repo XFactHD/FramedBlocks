@@ -2,7 +2,7 @@ package io.github.xfacthd.framedblocks.common.block.prism;
 
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
@@ -75,8 +75,8 @@ public class FramedElevatedPrismBlock extends FramedBlock implements IFramedPris
     public Direction getHorizontalOrientation(BlockState state)
     {
         DirectionAxis dirAxis = state.getValue(PropertyHolder.FACING_AXIS);
-        if (!Utils.isY(dirAxis.direction())) return dirAxis.direction();
-        return Utils.getHorizontalDirection(dirAxis.axis());
+        if (!DirUtils.isY(dirAxis.direction())) return dirAxis.direction();
+        return DirUtils.getHorizontalDirection(dirAxis.axis());
     }
 
     @Override

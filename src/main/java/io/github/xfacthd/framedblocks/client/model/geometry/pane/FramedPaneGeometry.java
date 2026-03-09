@@ -7,7 +7,7 @@ import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
 import io.github.xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -34,7 +34,7 @@ public class FramedPaneGeometry extends Geometry
     public void transformQuad(QuadMap quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
     {
         Direction face = quad.direction();
-        if (Utils.isY(face))
+        if (DirUtils.isY(face))
         {
             if (isPillarVisible())
             {
@@ -54,13 +54,13 @@ public class FramedPaneGeometry extends Geometry
                 createSideEdgeQuad(quadMap, quad, inset, false);
             }
 
-            if (Utils.isX(face))
+            if (DirUtils.isX(face))
             {
                 if (north) { createSideQuad(quadMap.get(null), quad, Direction.NORTH); }
                 if (south) { createSideQuad(quadMap.get(null), quad, Direction.SOUTH); }
             }
 
-            if (Utils.isZ(face))
+            if (DirUtils.isZ(face))
             {
                 if (east) { createSideQuad(quadMap.get(null), quad, Direction.EAST); }
                 if (west) { createSideQuad(quadMap.get(null), quad, Direction.WEST); }
@@ -83,7 +83,7 @@ public class FramedPaneGeometry extends Geometry
 
     protected static void createTopBottomEdgeQuad(QuadMap quadMap, BakedQuad quad, Direction dir, boolean mirrored)
     {
-        Preconditions.checkArgument(!Utils.isY(dir), String.format("Invalid direction: %s!", dir));
+        Preconditions.checkArgument(!DirUtils.isY(dir), String.format("Invalid direction: %s!", dir));
 
         QuadModifier.of(quad)
                 .apply(Modifiers.cut(dir.getOpposite(), 7F/16F))

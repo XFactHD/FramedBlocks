@@ -2,7 +2,8 @@ package io.github.xfacthd.framedblocks.common.blockentity.doubled.slope;
 
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedDoubleBlockEntity;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
+import io.github.xfacthd.framedblocks.api.util.MathUtils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -33,10 +34,10 @@ public class FramedVerticalDoubleHalfSlopeBlockEntity extends FramedDoubleBlockE
             return true;
         }
 
-        Vec3 vec = Utils.fraction(hit.getLocation());
-        boolean secondary = Utils.isX(facing) ? vec.x() >= vec.z() : vec.z() >= (1D - vec.x());
+        Vec3 vec = MathUtils.fraction(hit.getLocation());
+        boolean secondary = DirUtils.isX(facing) ? vec.x() >= vec.z() : vec.z() >= (1D - vec.x());
 
-        if (Utils.isPositive(facing))
+        if (DirUtils.isPositive(facing))
         {
             secondary = !secondary;
         }

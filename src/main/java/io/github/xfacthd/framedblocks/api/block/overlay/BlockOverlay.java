@@ -3,6 +3,7 @@ package io.github.xfacthd.framedblocks.api.block.overlay;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.api.util.FramedConstants;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import net.minecraft.core.Direction;
@@ -141,7 +142,7 @@ public record BlockOverlay(
             {
                 if (state.getBlock() instanceof AxisOverlayCarrier axisOverlayCarrier)
                 {
-                    return Utils.getAxisTubeFaces(axisOverlayCarrier.getAxis(state));
+                    return DirUtils.getAxisTubeFaces(axisOverlayCarrier.getAxis(state));
                 }
                 return Set.of();
             }
@@ -153,7 +154,7 @@ public record BlockOverlay(
             {
                 if (state.getBlock() instanceof AxisOverlayCarrier axisOverlayCarrier)
                 {
-                    return Utils.getAxisCapFaces(axisOverlayCarrier.getAxis(state));
+                    return DirUtils.getAxisCapFaces(axisOverlayCarrier.getAxis(state));
                 }
                 return Set.of();
             }

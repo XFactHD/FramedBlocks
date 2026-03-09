@@ -6,7 +6,7 @@ import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
 import io.github.xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import io.github.xfacthd.framedblocks.common.data.property.CornerTubeOrientation;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -34,7 +34,7 @@ public class FramedCornerTubeGeometry extends Geometry
     {
         Direction quadDir = quad.direction();
 
-        if (Utils.isY(quadDir))
+        if (DirUtils.isY(quadDir))
         {
             if (orientation.isSideOpen(quadDir))
             {

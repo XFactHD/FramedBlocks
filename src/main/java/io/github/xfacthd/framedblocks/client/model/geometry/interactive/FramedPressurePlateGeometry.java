@@ -6,7 +6,7 @@ import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
 import io.github.xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -34,7 +34,7 @@ public class FramedPressurePlateGeometry extends Geometry
         Direction quadDir = quad.direction();
         float height = pressed ? .5F / 16F : 1F / 16F;
 
-        if (Utils.isY(quadDir))
+        if (DirUtils.isY(quadDir))
         {
             boolean up = quadDir == Direction.UP;
             QuadModifier.of(quad)

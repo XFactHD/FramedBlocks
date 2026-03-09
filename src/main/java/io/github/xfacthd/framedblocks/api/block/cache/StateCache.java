@@ -4,7 +4,7 @@ import io.github.xfacthd.framedblocks.api.block.IBlockType;
 import io.github.xfacthd.framedblocks.api.predicate.contex.ConnectionPredicate;
 import io.github.xfacthd.framedblocks.api.predicate.fullface.FullFacePredicate;
 import io.github.xfacthd.framedblocks.api.predicate.overlay.BlockOverlayPredicate;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Util;
 import net.minecraft.world.level.block.state.BlockState;
@@ -200,7 +200,7 @@ public class StateCache
 
     protected static long getSideEdgeNullableMask(Direction side, @Nullable Direction edge)
     {
-        return 1L << (side.ordinal() * DIR_COUNT_N + Utils.maskNullDirection(edge));
+        return 1L << (side.ordinal() * DIR_COUNT_N + DirUtils.maskNullDirection(edge));
     }
 
     protected static long getSideEdgeMask(Direction side, Direction edge)

@@ -8,7 +8,7 @@ import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.MultiQuadModifier;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
 import io.github.xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import io.github.xfacthd.framedblocks.common.data.property.ChainType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -51,7 +51,7 @@ public class FramedLanternGeometry extends Geometry
     public void transformQuad(QuadMap quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
     {
         Direction quadDir = quad.direction();
-        if (Utils.isY(quadDir))
+        if (DirUtils.isY(quadDir))
         {
             boolean up = quadDir == Direction.UP;
 
@@ -98,7 +98,7 @@ public class FramedLanternGeometry extends Geometry
 
     private void createCamoChain(QuadMap quadMap, BakedQuad quad, Direction quadDir)
     {
-        Direction.Axis quadPerpAxis = Utils.isX(quadDir) ? Direction.Axis.Z : Direction.Axis.X;
+        Direction.Axis quadPerpAxis = DirUtils.isX(quadDir) ? Direction.Axis.Z : Direction.Axis.X;
         Direction dirNeg = quadPerpAxis.getNegative();
         Direction dirPos = quadPerpAxis.getPositive();
 
@@ -114,7 +114,7 @@ public class FramedLanternGeometry extends Geometry
                         .apply(Modifiers.offset(dirNeg, .5F/16F))
         );
 
-        if (Utils.isX(quadDir) || !hanging)
+        if (DirUtils.isX(quadDir) || !hanging)
         {
             modifiers.add(
                     baseEdgeMod.derive()
@@ -138,14 +138,14 @@ public class FramedLanternGeometry extends Geometry
 
         if (hanging)
         {
-            if (Utils.isX(quadDir))
+            if (DirUtils.isX(quadDir))
             {
                 modifiers.add(
                         baseEdgeMod.derive()
                                 .apply(Modifiers.cut(Direction.DOWN, 2F/16F))
                 );
             }
-            else if (Utils.isZ(quadDir))
+            else if (DirUtils.isZ(quadDir))
             {
                 modifiers.add(
                         baseEdgeMod.derive()

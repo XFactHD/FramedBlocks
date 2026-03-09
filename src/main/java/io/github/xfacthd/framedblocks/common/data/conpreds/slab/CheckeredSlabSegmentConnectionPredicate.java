@@ -2,7 +2,7 @@ package io.github.xfacthd.framedblocks.common.data.conpreds.slab;
 
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.predicate.contex.ConnectionPredicate;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jspecify.annotations.Nullable;
@@ -19,7 +19,7 @@ public final class CheckeredSlabSegmentConnectionPredicate implements Connection
     public boolean canConnectDetailed(BlockState state, Direction side, Direction edge)
     {
         boolean top = state.getValue(FramedProperties.TOP);
-        if (!Utils.isY(side))
+        if (!DirUtils.isY(side))
         {
             return (!top && edge != Direction.UP) || (top && edge != Direction.DOWN);
         }

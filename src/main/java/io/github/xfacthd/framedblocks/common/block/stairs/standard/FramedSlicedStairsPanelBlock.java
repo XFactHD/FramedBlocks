@@ -6,7 +6,7 @@ import io.github.xfacthd.framedblocks.api.block.doubleblock.CamoGetter;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockParts;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockTopInteractionMode;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.SolidityCheck;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.block.IFramedDoubleBlockInternal;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
@@ -144,7 +144,7 @@ public class FramedSlicedStairsPanelBlock extends FramedStairsBlock implements I
                 {
                     yield CamoGetter.FIRST;
                 }
-                if (Utils.isY(side) && (edge == dir || edge == dir.getCounterClockWise()))
+                if (DirUtils.isY(side) && (edge == dir || edge == dir.getCounterClockWise()))
                 {
                     yield CamoGetter.FIRST;
                 }
@@ -160,7 +160,7 @@ public class FramedSlicedStairsPanelBlock extends FramedStairsBlock implements I
                 {
                     yield CamoGetter.FIRST;
                 }
-                if (Utils.isY(side) && (edge == dir || edge == dir.getClockWise()))
+                if (DirUtils.isY(side) && (edge == dir || edge == dir.getClockWise()))
                 {
                     yield CamoGetter.FIRST;
                 }

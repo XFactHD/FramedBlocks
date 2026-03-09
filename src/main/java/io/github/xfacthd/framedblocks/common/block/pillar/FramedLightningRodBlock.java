@@ -3,6 +3,7 @@ package io.github.xfacthd.framedblocks.common.block.pillar;
 import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.IBlockType;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.common.block.IFramedBlockInternal;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
@@ -141,7 +142,7 @@ public class FramedLightningRodBlock extends LightningRodBlock implements IFrame
     public Direction getHorizontalOrientation(BlockState state)
     {
         Direction facing = state.getValue(FACING);
-        return Utils.isY(facing) ? Direction.NORTH : facing;
+        return DirUtils.isY(facing) ? Direction.NORTH : facing;
     }
 
     @Override

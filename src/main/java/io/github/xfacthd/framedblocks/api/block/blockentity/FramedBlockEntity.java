@@ -19,6 +19,7 @@ import io.github.xfacthd.framedblocks.api.component.FrameConfig;
 import io.github.xfacthd.framedblocks.api.model.data.AbstractFramedBlockData;
 import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
 import io.github.xfacthd.framedblocks.api.util.ConfigView;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.api.util.serdes.FramedCodecs;
 import net.minecraft.core.BlockPos;
@@ -1236,7 +1237,7 @@ public class FramedBlockEntity extends BlockEntity
         Direction blockOrientation = getBlock().getHorizontalOrientation(state);
         if (blockOrientation == null) return camo;
 
-        Rotation rotation = Utils.getRotationBetween(camoOrientation, blockOrientation);
+        Rotation rotation = DirUtils.getRotationBetween(camoOrientation, blockOrientation);
         return camo.adjustForCarrierRotation(rotation);
     }
 

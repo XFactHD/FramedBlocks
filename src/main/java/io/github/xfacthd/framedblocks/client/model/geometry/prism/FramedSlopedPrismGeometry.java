@@ -7,7 +7,7 @@ import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
 import io.github.xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import io.github.xfacthd.framedblocks.common.data.property.CompoundDirection;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -31,8 +31,8 @@ public class FramedSlopedPrismGeometry extends Geometry
     @Override
     public void transformQuad(QuadMap quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
     {
-        boolean yFacing = Utils.isY(facing);
-        boolean yOrient = Utils.isY(orientation);
+        boolean yFacing = DirUtils.isY(facing);
+        boolean yOrient = DirUtils.isY(orientation);
         Direction orientOpp = orientation.getOpposite();
         Direction quadFace = quad.direction();
 
@@ -53,7 +53,7 @@ public class FramedSlopedPrismGeometry extends Geometry
                         .export(quadMap.get(null));
             }
         }
-        else if (ySlope && yFacing && Utils.isY(quadFace)) // Triangle and slopes for vertical facing with Y_SLOPE
+        else if (ySlope && yFacing && DirUtils.isY(quadFace)) // Triangle and slopes for vertical facing with Y_SLOPE
         {
             QuadModifier.of(quad)
                     .apply(Modifiers.cutSmallTriangle(orientation))
@@ -127,7 +127,7 @@ public class FramedSlopedPrismGeometry extends Geometry
                     .apply(Modifiers.makeVerticalSlope(true, 45))
                     .export(quadMap.get(null));
         }
-        else if (ySlope && !yOrient && !yFacing && Utils.isY(quadFace)) // Slopes for horizontal facing and horizontal orientation with Y_SLOPE
+        else if (ySlope && !yOrient && !yFacing && DirUtils.isY(quadFace)) // Slopes for horizontal facing and horizontal orientation with Y_SLOPE
         {
             boolean right = orientation == facing.getClockWise();
             QuadModifier.of(quad)

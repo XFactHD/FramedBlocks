@@ -2,7 +2,7 @@ package io.github.xfacthd.framedblocks.common.data.conpreds.slopeslab;
 
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.predicate.contex.NonDetailedConnectionPredicate;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jspecify.annotations.Nullable;
@@ -18,9 +18,9 @@ public final class StackedSlopeSlabConnectionPredicate extends NonDetailedConnec
 
         if (side == facing)
         {
-            return edge != null && Utils.isY(edge);
+            return edge != null && DirUtils.isY(edge);
         }
-        else if (side == dirTwo || (!Utils.isY(side) && edge == dirTwo))
+        else if (side == dirTwo || (!DirUtils.isY(side) && edge == dirTwo))
         {
             return true;
         }

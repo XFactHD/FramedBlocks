@@ -2,6 +2,7 @@ package io.github.xfacthd.framedblocks.common.block.cube;
 
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
@@ -86,7 +87,7 @@ public class FramedTubeBlock extends FramedBlock
     @Override
     public Direction getHorizontalOrientation(BlockState state)
     {
-        return Utils.getHorizontalDirection(state.getValue(BlockStateProperties.AXIS));
+        return DirUtils.getHorizontalDirection(state.getValue(BlockStateProperties.AXIS));
     }
 
     @Override

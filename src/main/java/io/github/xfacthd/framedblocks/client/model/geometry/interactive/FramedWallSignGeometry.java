@@ -6,7 +6,7 @@ import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
 import io.github.xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -34,7 +34,7 @@ public class FramedWallSignGeometry extends Geometry
                     .applyIf(Modifiers.setPosition(DEPTH), inset)
                     .export(quadMap.get(inset ? null : quadDir));
         }
-        else if (Utils.isY(quadDir))
+        else if (DirUtils.isY(quadDir))
         {
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(dir, DEPTH))

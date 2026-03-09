@@ -5,6 +5,7 @@ import com.mojang.math.Axis;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.model.standalone.StandaloneWrapperKey;
 import io.github.xfacthd.framedblocks.api.render.RenderUtils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.api.util.SingleBlockFakeLevel;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.client.model.special.FramedChestLidModel;
@@ -113,10 +114,10 @@ public final class FramedChestRenderer implements BlockEntityRenderer<FramedChes
         ChestState chestState = result.apply(FramedChestBlock.STATE_COMBINER);
         long lastChange = result.apply(FramedChestBlock.OPENNESS_COMBINER).orElse(0L);
         float angle = calculateAngle(level, chestState, dir, lastChange, partialTick);
-        renderState.lidAngle = Utils.isX(dir) ? Axis.ZP.rotationDegrees(angle) : Axis.XN.rotationDegrees(angle);
+        renderState.lidAngle = DirUtils.isX(dir) ? Axis.ZP.rotationDegrees(angle) : Axis.XN.rotationDegrees(angle);
 
-        renderState.rotOriginX = Utils.isX(dir) ? (Utils.isPositive(dir) ? 1F/16F : 15F/16F) : 0;
-        renderState.rotOriginZ = Utils.isZ(dir) ? (Utils.isPositive(dir) ? 1F/16F : 15F/16F) : 0;
+        renderState.rotOriginX = DirUtils.isX(dir) ? (DirUtils.isPositive(dir) ? 1F/16F : 15F/16F) : 0;
+        renderState.rotOriginZ = DirUtils.isZ(dir) ? (DirUtils.isPositive(dir) ? 1F/16F : 15F/16F) : 0;
     }
 
     private static float calculateAngle(Level level, ChestState chestState, Direction dir, long lastChange, float partialTicks)
@@ -130,7 +131,7 @@ public final class FramedChestRenderer implements BlockEntityRenderer<FramedChes
         factor = 1.0F - factor * factor * factor;
 
         float angle = Mth.clamp(factor * 90F, 0F, 90F);
-        if (!Utils.isPositive(dir)) { angle *= -1F; }
+        if (!DirUtils.isPositive(dir)) { angle *= -1F; }
 
         return angle;
     }

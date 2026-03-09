@@ -2,7 +2,7 @@ package io.github.xfacthd.framedblocks.common.blockentity.doubled.slopepanel;
 
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedDoubleBlockEntity;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.MathUtils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
@@ -49,7 +49,7 @@ public class FramedFlatExtendedDoubleSlopePanelCornerBlockEntity extends FramedD
         }
 
         Vec3 hitVec = hit.getLocation();
-        double hor = Utils.fractionInDir(hitVec, facing.getOpposite());
+        double hor = MathUtils.fractionInDir(hitVec, facing.getOpposite());
         if (!isInner && (side == rotDir || side == perpRotDir))
         {
             return hor > .5;
@@ -65,7 +65,7 @@ public class FramedFlatExtendedDoubleSlopePanelCornerBlockEntity extends FramedD
             perpDir = side == rotDir.getOpposite() ? perpRotDir.getOpposite() : rotDir.getOpposite();
         }
 
-        double perpHor = Utils.fractionInDir(hitVec, perpDir);
+        double perpHor = MathUtils.fractionInDir(hitVec, perpDir);
         return ((hor - .5) * 2D) > perpHor;
     }
 }

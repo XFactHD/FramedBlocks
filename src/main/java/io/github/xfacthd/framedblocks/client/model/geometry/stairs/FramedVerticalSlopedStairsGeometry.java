@@ -7,7 +7,7 @@ import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
 import io.github.xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import io.github.xfacthd.framedblocks.common.data.property.HorizontalRotation;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -53,13 +53,13 @@ public class FramedVerticalSlopedStairsGeometry extends Geometry
                     .export(quadMap.get(null));
         }
 
-        boolean useRotDirQuad = Utils.isY(rotDir) == ySlope;
+        boolean useRotDirQuad = DirUtils.isY(rotDir) == ySlope;
         Direction slopeQuadDir = useRotDirQuad ? rotDir : rotDirTwo;
         Direction slopeRotDir = useRotDirQuad ? rotDirTwo : rotDir;
 
         if (quadDir == slopeQuadDir)
         {
-            if (Utils.isY(slopeQuadDir))
+            if (DirUtils.isY(slopeQuadDir))
             {
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(facing, .5F))

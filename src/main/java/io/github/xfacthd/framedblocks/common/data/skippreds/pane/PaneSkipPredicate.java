@@ -1,7 +1,7 @@
 package io.github.xfacthd.framedblocks.common.data.skippreds.pane;
 
 import io.github.xfacthd.framedblocks.api.predicate.cull.SideSkipPredicate;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import io.github.xfacthd.framedblocks.common.data.skippreds.CullTest;
 import net.minecraft.core.BlockPos;
@@ -32,7 +32,7 @@ public final class PaneSkipPredicate implements SideSkipPredicate
         boolean adjSouth = adjState.getValue(BlockStateProperties.SOUTH);
         boolean adjWest = adjState.getValue(BlockStateProperties.WEST);
 
-        if (Utils.isY(side) && north == adjNorth && east == adjEast && south == adjSouth && west == adjWest)
+        if (DirUtils.isY(side) && north == adjNorth && east == adjEast && south == adjSouth && west == adjWest)
         {
             return true;
         }

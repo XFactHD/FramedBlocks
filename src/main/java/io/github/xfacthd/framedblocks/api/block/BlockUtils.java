@@ -7,7 +7,7 @@ import io.github.xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import io.github.xfacthd.framedblocks.api.block.overlay.BlockOverlay;
 import io.github.xfacthd.framedblocks.api.camo.CamoContainer;
 import io.github.xfacthd.framedblocks.api.camo.empty.EmptyCamoContainer;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.mixin.InvokerBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -212,7 +212,7 @@ public final class BlockUtils
 
         Direction dir = state.getValue(property);
         //Y directions are inherently ignored
-        if ((mirror == Mirror.FRONT_BACK && Utils.isX(dir)) || (mirror == Mirror.LEFT_RIGHT && Utils.isZ(dir)))
+        if ((mirror == Mirror.FRONT_BACK && DirUtils.isX(dir)) || (mirror == Mirror.LEFT_RIGHT && DirUtils.isZ(dir)))
         {
             return state.setValue(property, dir.getOpposite());
         }
@@ -245,7 +245,7 @@ public final class BlockUtils
         }
 
         Direction dir = state.getValue(property);
-        if (Utils.isY(dir))
+        if (DirUtils.isY(dir))
         {
             return state;
         }

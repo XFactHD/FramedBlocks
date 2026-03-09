@@ -2,7 +2,7 @@ package io.github.xfacthd.framedblocks.api.camo;
 
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
@@ -47,7 +47,7 @@ final class CamoResolvingLevelReader implements LevelReader
         BlockState state = wrapped.getBlockState(pos);
         if (state.getBlock() instanceof IFramedBlock)
         {
-            Direction side = Utils.dirByNormal(pos, origin);
+            Direction side = DirUtils.dirByNormal(pos, origin);
             if (side == null || !state.isFaceSturdy(wrapped, pos, side, SupportType.FULL))
             {
                 return Blocks.AIR.defaultBlockState();

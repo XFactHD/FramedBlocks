@@ -6,7 +6,7 @@ import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
 import io.github.xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -29,16 +29,16 @@ public class FramedPillarSocketGeometry extends Geometry
 
         if (quadDir == facing.getOpposite())
         {
-            boolean y = Utils.isY(quadDir);
+            boolean y = DirUtils.isY(quadDir);
             QuadModifier.of(quad)
                     .apply(y ? Modifiers.cutTopBottom(.25F, .25F, .75F, .75F) : Modifiers.cutSide(.25F, .25F, .75F, .75F))
                     .export(quadMap.get(quadDir));
 
-            Utils.forAllDirections(dir ->
+            DirUtils.forAllDirections(dir ->
             {
                 if (dir.getAxis() == facing.getAxis()) return;
 
-                boolean perp = y ? Utils.isZ(dir) : Utils.isY(dir);
+                boolean perp = y ? DirUtils.isZ(dir) : DirUtils.isY(dir);
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(dir, .25F))
                         .applyIf(Modifiers.cut(dir.getClockWise(quadAxis).getAxis(), .75F), perp)

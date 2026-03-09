@@ -50,7 +50,7 @@ final class Lookups
     private static @Nullable Direction[] makeNormalMapping()
     {
         Direction[] mapping = new Direction[64];
-        for (Direction dir : Utils.DIRECTIONS)
+        for (Direction dir : DirUtils.DIRECTIONS)
         {
             mapping[makeNormalIndex(dir.getStepX(), dir.getStepY(), dir.getStepZ())] = dir;
         }
@@ -82,7 +82,7 @@ final class Lookups
     private static int[] build2dValueMapping()
     {
         int[] mapping = new int[24];
-        for (Direction dir : Utils.DIRECTIONS)
+        for (Direction dir : DirUtils.DIRECTIONS)
         {
             mapping[make2dValueIndex(Direction.Axis.Y, dir)] = dir.get2DDataValue();
             mapping[make2dValueIndex(Direction.Axis.X, dir)] = switch (dir)
@@ -110,7 +110,7 @@ final class Lookups
         Rotation[] mapping = new Rotation[16];
         for (Rotation rotation : Rotation.values())
         {
-            for (Direction dirOne : Utils.HORIZONTAL_DIRECTIONS)
+            for (Direction dirOne : DirUtils.HORIZONTAL_DIRECTIONS)
             {
                 Direction dirTwo = rotation.rotate(dirOne);
                 mapping[makeDirToDirRotationIndex(dirOne, dirTwo)] = rotation;

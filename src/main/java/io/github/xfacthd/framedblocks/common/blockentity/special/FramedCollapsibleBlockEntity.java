@@ -2,7 +2,7 @@ package io.github.xfacthd.framedblocks.common.blockentity.special;
 
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import io.github.xfacthd.framedblocks.api.blueprint.BlueprintData;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.blockentity.PackedCollapsibleBlockOffsets;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
@@ -163,7 +163,7 @@ public class FramedCollapsibleBlockEntity extends FramedBlockEntity implements I
 
     public static int vertexFromHit(Direction faceHit, Vec3 loc)
     {
-        if (Utils.isY(faceHit))
+        if (DirUtils.isY(faceHit))
         {
             double ax = Math.abs((loc.x - .5) * 4D);
             double az = Math.abs((loc.z - .5) * 4D);
@@ -183,7 +183,7 @@ public class FramedCollapsibleBlockEntity extends FramedBlockEntity implements I
         }
         else
         {
-            double xz = Utils.isX(faceHit) ? loc.z : loc.x;
+            double xz = DirUtils.isX(faceHit) ? loc.z : loc.x;
             double axz = Math.abs((xz - .5) * 4D);
             double ay = Math.abs((loc.y - .5D) * 4D);
             if (axz >= 0D && axz <= 1D && ay >= 0D && ay <= 1D && ay <= (1D - axz))

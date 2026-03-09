@@ -2,6 +2,8 @@ package io.github.xfacthd.framedblocks.common.block.cube;
 
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
+import io.github.xfacthd.framedblocks.api.util.MathUtils;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
@@ -49,11 +51,11 @@ public class FramedCornerTubeBlock extends FramedBlock
 
                     Direction secDir;
                     Vec3 hitVec = modCtx.getClickLocation();
-                    if (Utils.isY(primDir))
+                    if (DirUtils.isY(primDir))
                     {
                         Direction forwardDir = modCtx.getHorizontalDirection();
-                        double forward = Utils.fractionInDir(hitVec, forwardDir) - .5;
-                        double sideways = Utils.fractionInDir(hitVec, forwardDir.getClockWise()) - .5;
+                        double forward = MathUtils.fractionInDir(hitVec, forwardDir) - .5;
+                        double sideways = MathUtils.fractionInDir(hitVec, forwardDir.getClockWise()) - .5;
                         if (Math.max(Math.abs(forward), Math.abs(sideways)) == Math.abs(forward))
                         {
                             secDir = forward < 0 ? forwardDir.getOpposite() : forwardDir;
@@ -66,7 +68,7 @@ public class FramedCornerTubeBlock extends FramedBlock
                     else
                     {
                         Direction forwardDir = primDir.getOpposite();
-                        boolean right = Utils.fractionInDir(hitVec, forwardDir.getClockWise()) > .5;
+                        boolean right = MathUtils.fractionInDir(hitVec, forwardDir.getClockWise()) > .5;
                         secDir = right ? forwardDir.getClockWise() : forwardDir.getCounterClockWise();
                     }
 

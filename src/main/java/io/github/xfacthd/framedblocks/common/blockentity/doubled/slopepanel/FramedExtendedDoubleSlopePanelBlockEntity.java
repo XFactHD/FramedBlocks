@@ -2,7 +2,8 @@ package io.github.xfacthd.framedblocks.common.blockentity.doubled.slopepanel;
 
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedDoubleBlockEntity;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
+import io.github.xfacthd.framedblocks.api.util.MathUtils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import net.minecraft.core.BlockPos;
@@ -39,10 +40,10 @@ public class FramedExtendedDoubleSlopePanelBlockEntity extends FramedDoubleBlock
             return false;
         }
 
-        Vec3 vec = Utils.fraction(hit.getLocation());
+        Vec3 vec = MathUtils.fraction(hit.getLocation());
 
-        double hor = Utils.isX(facing) ? vec.x() : vec.z();
-        if (Utils.isPositive(facing))
+        double hor = DirUtils.isX(facing) ? vec.x() : vec.z();
+        if (DirUtils.isPositive(facing))
         {
             hor = 1D - hor;
         }
@@ -52,8 +53,8 @@ public class FramedExtendedDoubleSlopePanelBlockEntity extends FramedDoubleBlock
         }
         hor -= .5D;
 
-        double vert = Utils.isY(orientation) ? vec.y() : (Utils.isX(facing) ? vec.z() : vec.x());
-        if (orientation == Direction.UP || (!Utils.isY(orientation) && Utils.isPositive(orientation)))
+        double vert = DirUtils.isY(orientation) ? vec.y() : (DirUtils.isX(facing) ? vec.z() : vec.x());
+        if (orientation == Direction.UP || (!DirUtils.isY(orientation) && DirUtils.isPositive(orientation)))
         {
             vert = 1F - vert;
         }

@@ -6,7 +6,7 @@ import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
 import io.github.xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.core.Direction;
@@ -39,10 +39,10 @@ public class FramedTrapDoorGeometry extends Geometry
         if (rotate)
         {
             this.rotAxis = dir.getClockWise().getAxis();
-            boolean positive = Utils.isPositive(dir);
+            boolean positive = DirUtils.isPositive(dir);
             float xzOrigin = positive ? 1.5F/16F : 14.5F/16F;
             this.rotOrigin = new Vector3f(xzOrigin, top ? 14.5F/16F : 1.5F/16F, xzOrigin);
-            this.rotAngle = (positive ^ Utils.isZ(dir)) == top ? -90 : 90;
+            this.rotAngle = (positive ^ DirUtils.isZ(dir)) == top ? -90 : 90;
         }
         else
         {
@@ -64,7 +64,7 @@ public class FramedTrapDoorGeometry extends Geometry
                         .apply(Modifiers.setPosition(DEPTH))
                         .export(quadMap.get(null));
             }
-            else if (Utils.isY(quadDir))
+            else if (DirUtils.isY(quadDir))
             {
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(dir, DEPTH))
@@ -94,7 +94,7 @@ public class FramedTrapDoorGeometry extends Geometry
                         .apply(Modifiers.rotate(rotAxis, rotOrigin, rotAngle, false))
                         .export(quadMap.get(null));
             }
-            else if (!Utils.isY(quadDir))
+            else if (!DirUtils.isY(quadDir))
             {
                 Direction exportDir = quadDir;
                 if (open && quadDir.getAxis() == dir.getAxis())

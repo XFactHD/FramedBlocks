@@ -3,7 +3,8 @@ package io.github.xfacthd.framedblocks.common.block.prism;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
+import io.github.xfacthd.framedblocks.api.util.MathUtils;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
@@ -55,11 +56,11 @@ public class FramedPrismBlock extends FramedBlock implements IFramedPrismBlock
                 {
                     Direction face = modCtx.getClickedFace();
                     Direction.Axis axis = modCtx.getHorizontalDirection().getAxis();
-                    if (!Utils.isY(face))
+                    if (!DirUtils.isY(face))
                     {
-                        Vec3 subHit = Utils.fraction(modCtx.getClickLocation());
+                        Vec3 subHit = MathUtils.fraction(modCtx.getClickLocation());
 
-                        double xz = (Utils.isX(face) ? subHit.z() : subHit.x()) - .5;
+                        double xz = (DirUtils.isX(face) ? subHit.z() : subHit.x()) - .5;
                         double y = subHit.y() - .5;
 
                         if (Math.max(Math.abs(xz), Math.abs(y)) == Math.abs(xz))
@@ -73,7 +74,7 @@ public class FramedPrismBlock extends FramedBlock implements IFramedPrismBlock
                     }
                     return state.setValue(PropertyHolder.FACING_AXIS, DirectionAxis.of(face, axis));
                 })
-                .withYSlope(Utils.isY(ctx.getClickedFace()))
+                .withYSlope(DirUtils.isY(ctx.getClickedFace()))
                 .tryWithWater()
                 .build();
     }
@@ -108,8 +109,8 @@ public class FramedPrismBlock extends FramedBlock implements IFramedPrismBlock
     public Direction getHorizontalOrientation(BlockState state)
     {
         DirectionAxis dirAxis = state.getValue(PropertyHolder.FACING_AXIS);
-        if (!Utils.isY(dirAxis.direction())) return dirAxis.direction();
-        return Utils.getHorizontalDirection(dirAxis.axis());
+        if (!DirUtils.isY(dirAxis.direction())) return dirAxis.direction();
+        return DirUtils.getHorizontalDirection(dirAxis.axis());
     }
 
     @Override

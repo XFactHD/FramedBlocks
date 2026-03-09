@@ -3,7 +3,7 @@ package io.github.xfacthd.framedblocks.common.data.shapes.slab;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.shapes.ShapeContainer;
 import io.github.xfacthd.framedblocks.api.shapes.ShapeUtils;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.Block;
@@ -31,7 +31,7 @@ public final class CheckeredPanelSegmentShapes
         for (Direction dir : Direction.Plane.HORIZONTAL)
         {
             int idx = dir.get2DDataValue();
-            boolean x = Utils.isX(dir);
+            boolean x = DirUtils.isX(dir);
             shapes[idx] = ShapeUtils.rotateShapeAroundY(Direction.NORTH, dir, x ? shapeSecond : shapeFirst);
             shapes[idx + 4] = ShapeUtils.rotateShapeAroundY(Direction.NORTH, dir, x ? shapeFirst : shapeSecond);
         }

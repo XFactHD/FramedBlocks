@@ -4,7 +4,7 @@ import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.IFramedDoubleBlock;
 import io.github.xfacthd.framedblocks.api.block.cache.DoubleBlockStateCache;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.SolidityCheck;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.selftest.SelfTestReporter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.shapes.BooleanOp;
@@ -27,7 +27,7 @@ public final class DoubleBlockSolidSideConsistency
                     if (!state.hasProperty(FramedProperties.SOLID) || !state.getValue(FramedProperties.SOLID)) return;
 
                     DoubleBlockStateCache cache = block.getCache(state);
-                    Utils.forAllDirections(side ->
+                    DirUtils.forAllDirections(side ->
                     {
                         VoxelShape faceShape = state.getFaceOcclusionShape(side);
                         boolean solidShape = !Shapes.joinIsNotEmpty(faceShape, Shapes.block(), BooleanOp.ONLY_SECOND);

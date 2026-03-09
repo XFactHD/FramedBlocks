@@ -2,7 +2,7 @@ package io.github.xfacthd.framedblocks.common.data.overlaypreds.stairs;
 
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.predicate.overlay.BlockOverlayPredicate;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -26,7 +26,7 @@ public final class SlicedSlopedStairsSlopeBlockOverlayPredicate implements Block
         Direction baseDir = state.getValue(FramedProperties.TOP) ? Direction.UP : Direction.DOWN;
         if (secondPart)
         {
-            return !Utils.isY(side) || (edge != facing && edge != facing.getCounterClockWise());
+            return !DirUtils.isY(side) || (edge != facing && edge != facing.getCounterClockWise());
         }
 
         if (side == baseDir)

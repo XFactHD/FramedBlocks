@@ -2,7 +2,8 @@ package io.github.xfacthd.framedblocks.common.blockentity.doubled.slopepanel;
 
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedDoubleBlockEntity;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
+import io.github.xfacthd.framedblocks.api.util.MathUtils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import io.github.xfacthd.framedblocks.common.data.property.HorizontalRotation;
@@ -43,10 +44,10 @@ public class FramedFlatDoubleSlopePanelCornerBlockEntity extends FramedDoubleBlo
             return false;
         }
 
-        Vec3 vec = Utils.fraction(hit.getLocation());
+        Vec3 vec = MathUtils.fraction(hit.getLocation());
 
-        double hor = Utils.isX(facing) ? vec.x() : vec.z();
-        if (!Utils.isPositive(facing))
+        double hor = DirUtils.isX(facing) ? vec.x() : vec.z();
+        if (!DirUtils.isPositive(facing))
         {
             hor = 1D - hor;
         }
@@ -56,8 +57,8 @@ public class FramedFlatDoubleSlopePanelCornerBlockEntity extends FramedDoubleBlo
         }
 
         Direction perpDir = side == rotDir ? perpRotDir : rotDir;
-        double vert = Utils.isY(perpDir) ? vec.y() : (Utils.isX(facing) ? vec.z() : vec.x());
-        if (perpDir == Direction.DOWN || (!Utils.isY(perpDir) && !Utils.isPositive(perpDir)))
+        double vert = DirUtils.isY(perpDir) ? vec.y() : (DirUtils.isX(facing) ? vec.z() : vec.x());
+        if (perpDir == Direction.DOWN || (!DirUtils.isY(perpDir) && !DirUtils.isPositive(perpDir)))
         {
             vert = 1F - vert;
         }

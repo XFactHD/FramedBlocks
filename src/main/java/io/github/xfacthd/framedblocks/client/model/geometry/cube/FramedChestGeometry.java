@@ -8,7 +8,7 @@ import io.github.xfacthd.framedblocks.api.model.geometry.PartConsumer;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
 import io.github.xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import io.github.xfacthd.framedblocks.common.data.property.ChestState;
 import io.github.xfacthd.framedblocks.common.data.property.LatchType;
@@ -46,7 +46,7 @@ public class FramedChestGeometry extends Geometry
     public void transformQuad(QuadMap quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
     {
         Direction quadDir = quad.direction();
-        if (Utils.isY(quadDir))
+        if (DirUtils.isY(quadDir))
         {
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(facing.getAxis(), 15F/16F))
@@ -95,7 +95,7 @@ public class FramedChestGeometry extends Geometry
                     .applyIf(Modifiers.setPosition(1F/16F), face != facing)
                     .export(quadMap.get(face == facing ? facing : null));
         }
-        else if (Utils.isY(face))
+        else if (DirUtils.isY(face))
         {
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(facing.getOpposite(), 1F/16F))

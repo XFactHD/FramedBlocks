@@ -2,7 +2,7 @@ package io.github.xfacthd.framedblocks.common.data.conpreds.slope;
 
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.predicate.contex.ConnectionPredicate;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.common.block.ISlopeBlock;
 import io.github.xfacthd.framedblocks.common.data.property.SlopeType;
 import net.minecraft.core.Direction;
@@ -28,7 +28,7 @@ public final class SlopeConnectionPredicate implements ConnectionPredicate
             {
                 return true;
             }
-            if (Utils.isY(side))
+            if (DirUtils.isY(side))
             {
                 return edge == dirOne || edge == dirTwo;
             }
@@ -60,7 +60,7 @@ public final class SlopeConnectionPredicate implements ConnectionPredicate
 
             if (side == dirOne || side == dirTwo)
             {
-                return Utils.isY(edge);
+                return DirUtils.isY(edge);
             }
             return false;
         }

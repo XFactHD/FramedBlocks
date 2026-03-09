@@ -4,8 +4,8 @@ import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
 import io.github.xfacthd.framedblocks.api.block.overlay.AxisOverlayCarrier;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.api.util.RotationDirection;
-import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
 import io.github.xfacthd.framedblocks.common.block.IPillarLikeBlock;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
@@ -79,7 +79,7 @@ public class FramedHalfPillarBlock extends FramedBlock implements IPillarLikeBlo
     public Direction getHorizontalOrientation(BlockState state)
     {
         Direction facing = state.getValue(BlockStateProperties.FACING);
-        return Utils.isY(facing) ? Direction.NORTH : facing;
+        return DirUtils.isY(facing) ? Direction.NORTH : facing;
     }
 
     @Override

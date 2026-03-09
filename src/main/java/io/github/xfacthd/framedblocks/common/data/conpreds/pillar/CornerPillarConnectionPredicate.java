@@ -2,7 +2,7 @@ package io.github.xfacthd.framedblocks.common.data.conpreds.pillar;
 
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.predicate.contex.ConnectionPredicate;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jspecify.annotations.Nullable;
@@ -30,6 +30,6 @@ public final class CornerPillarConnectionPredicate implements ConnectionPredicat
         {
             return edge != dirOne;
         }
-        return Utils.isY(side) && edge != dirOne && edge != dirTwo;
+        return DirUtils.isY(side) && edge != dirOne && edge != dirTwo;
     }
 }

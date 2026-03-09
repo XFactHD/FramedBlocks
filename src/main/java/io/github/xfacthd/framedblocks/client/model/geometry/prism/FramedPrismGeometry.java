@@ -7,7 +7,7 @@ import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
 import io.github.xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import io.github.xfacthd.framedblocks.common.data.property.DirectionAxis;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -31,7 +31,7 @@ public class FramedPrismGeometry extends Geometry
     @Override
     public void transformQuad(QuadMap quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
     {
-        boolean yFacing = Utils.isY(facing);
+        boolean yFacing = DirUtils.isY(facing);
         boolean yAxis = axis == Direction.Axis.Y;
         Direction quadFace = quad.direction();
         boolean quadOnAxis = quadFace.getAxis() == axis;
@@ -45,7 +45,7 @@ public class FramedPrismGeometry extends Geometry
                     .apply(Modifiers.makeVerticalSlope(up, 45))
                     .export(quadMap.get(null));
         }
-        else if (ySlope && yFacing && Utils.isY(quadFace)) // Slopes for Y facing with Y_SLOPE
+        else if (ySlope && yFacing && DirUtils.isY(quadFace)) // Slopes for Y facing with Y_SLOPE
         {
             Direction onAxis = Direction.fromAxisAndDirection(axis, Direction.AxisDirection.POSITIVE);
             Direction offAxisCW = onAxis.getClockWise();
@@ -80,7 +80,7 @@ public class FramedPrismGeometry extends Geometry
                     .apply(Modifiers.makeVerticalSlope(true, 45))
                     .export(quadMap.get(null));
         }
-        else if (ySlope && !yFacing && !yAxis && Utils.isY(quadFace)) // Slopes for horizontal facing and horizontal axis with Y_SLOPE
+        else if (ySlope && !yFacing && !yAxis && DirUtils.isY(quadFace)) // Slopes for horizontal facing and horizontal axis with Y_SLOPE
         {
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(facing, .5F))

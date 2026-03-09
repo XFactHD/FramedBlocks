@@ -2,7 +2,7 @@ package io.github.xfacthd.framedblocks.common.data.conpreds.slopeedge;
 
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.predicate.contex.ConnectionPredicate;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
@@ -59,7 +59,7 @@ public final class SlopeEdgeSlabConnectionPredicate implements ConnectionPredica
         }
         else if (side.getAxis() == dir.getAxis())
         {
-            return !Utils.isY(edge);
+            return !DirUtils.isY(edge);
         }
         else
         {

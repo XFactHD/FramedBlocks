@@ -3,7 +3,8 @@ package io.github.xfacthd.framedblocks.common.block.pane;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
 import io.github.xfacthd.framedblocks.api.camo.CamoList;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
+import io.github.xfacthd.framedblocks.api.util.MathUtils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
@@ -65,7 +66,7 @@ public class FramedBoardBlock extends FramedBlock
                     {
                         if (modCtx.replacingClickedOnBlock())
                         {
-                            face = Utils.getDirByCross(face, modCtx.getClickLocation());
+                            face = DirUtils.getDirByCross(face, modCtx.getClickLocation());
                         }
                         return isFacePresent(prevState, face) ? null : setFacePresent(prevState, face, true);
                     }
@@ -88,7 +89,7 @@ public class FramedBoardBlock extends FramedBlock
             if (ctx.replacingClickedOnBlock())
             {
                 Direction face = ctx.getClickedFace();
-                double fraction = Utils.fractionInDir(ctx.getClickLocation(), face);
+                double fraction = MathUtils.fractionInDir(ctx.getClickLocation(), face);
                 return !isFacePresent(state, face) || (fraction > 0F && fraction < (3F / 32F));
             }
             return true;

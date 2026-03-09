@@ -7,7 +7,7 @@ import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
 import io.github.xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import io.github.xfacthd.framedblocks.common.data.property.DirectionAxis;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -31,7 +31,7 @@ public class FramedElevatedInnerPrismGeometry extends Geometry
     @Override
     public void transformQuad(QuadMap quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
     {
-        boolean yFacing = Utils.isY(facing);
+        boolean yFacing = DirUtils.isY(facing);
         boolean yAxis = axis == Direction.Axis.Y;
         Direction quadFace = quad.direction();
         boolean quadOnFacingAxis = quadFace.getAxis() == facing.getAxis();
@@ -85,7 +85,7 @@ public class FramedElevatedInnerPrismGeometry extends Geometry
                     .apply(Modifiers.makeVerticalSlope(false, 45))
                     .export(quadMap.get(null));
         }
-        else if (ySlope && !yFacing && !yAxis && Utils.isY(quadFace)) // Slopes for horizontal facing and Y axis with Y_SLOPE
+        else if (ySlope && !yFacing && !yAxis && DirUtils.isY(quadFace)) // Slopes for horizontal facing and Y axis with Y_SLOPE
         {
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(facing.getOpposite(), .5F))
@@ -140,6 +140,6 @@ public class FramedElevatedInnerPrismGeometry extends Geometry
         {
             return true;
         }
-        return Utils.isY(facing) || axis == Direction.Axis.Y;
+        return DirUtils.isY(facing) || axis == Direction.Axis.Y;
     }
 }

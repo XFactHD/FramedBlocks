@@ -2,7 +2,7 @@ package io.github.xfacthd.framedblocks.common.blockentity.doubled.slopepanelcorn
 
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedDoubleBlockEntity;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.MathUtils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -37,18 +37,18 @@ public class FramedExtendedInnerDoubleCornerSlopePanelBlockEntity extends Framed
         Vec3 hitVec = hit.getLocation();
         if ((!top && side == Direction.UP) || (top && side == Direction.DOWN))
         {
-            double xz1 = Utils.fractionInDir(hitVec, facing);
-            double xz2 = Utils.fractionInDir(hitVec, facing.getCounterClockWise());
+            double xz1 = MathUtils.fractionInDir(hitVec, facing);
+            double xz2 = MathUtils.fractionInDir(hitVec, facing.getCounterClockWise());
             return xz1 > .5 && xz2 > .5;
         }
 
-        double xz = Utils.fractionInDir(hitVec, side == facing ? facing.getCounterClockWise() : facing);
+        double xz = MathUtils.fractionInDir(hitVec, side == facing ? facing.getCounterClockWise() : facing);
         if (xz < .5)
         {
             return false;
         }
 
-        double y = Utils.fractionInDir(hitVec, top ? Direction.UP : Direction.DOWN);
+        double y = MathUtils.fractionInDir(hitVec, top ? Direction.UP : Direction.DOWN);
         return ((xz - .5) * 2D) > y;
     }
 }

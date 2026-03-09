@@ -2,7 +2,7 @@ package io.github.xfacthd.framedblocks.common.data.conpreds.slab;
 
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.predicate.contex.NonDetailedConnectionPredicate;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jspecify.annotations.Nullable;
@@ -15,9 +15,9 @@ public final class DividedPanelHorizontalConnectionPredicate extends NonDetailed
         Direction facing = state.getValue(FramedProperties.FACING_HOR);
         if (side == facing)
         {
-            return edge != null && Utils.isY(edge);
+            return edge != null && DirUtils.isY(edge);
         }
-        else if (Utils.isY(side))
+        else if (DirUtils.isY(side))
         {
             return edge == facing;
         }

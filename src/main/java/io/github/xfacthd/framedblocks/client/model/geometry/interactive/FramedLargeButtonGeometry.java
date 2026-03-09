@@ -6,7 +6,7 @@ import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
 import io.github.xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.core.Direction;
@@ -35,7 +35,7 @@ public class FramedLargeButtonGeometry extends Geometry
     public void transformQuad(QuadMap quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
     {
         Direction quadDir = quad.direction();
-        if (Utils.isY(facing))
+        if (DirUtils.isY(facing))
         {
             generateVerticalButton(quadMap, quad, quadDir);
         }
@@ -74,7 +74,7 @@ public class FramedLargeButtonGeometry extends Geometry
                     .applyIf(Modifiers.setPosition(height), quadDir == facing)
                     .export(quadMap.get(quadDir == facing ? null : quadDir));
         }
-        else if (Utils.isY(quadDir))
+        else if (DirUtils.isY(quadDir))
         {
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(dir, height))

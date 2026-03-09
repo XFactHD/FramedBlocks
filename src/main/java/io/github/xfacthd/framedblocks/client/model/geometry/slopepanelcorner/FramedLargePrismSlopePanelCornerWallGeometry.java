@@ -7,7 +7,7 @@ import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
 import io.github.xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import io.github.xfacthd.framedblocks.common.data.property.HorizontalRotation;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -26,7 +26,7 @@ public class FramedLargePrismSlopePanelCornerWallGeometry extends Geometry
     private static final Vector3f[] ROT_TILT_ORIGINS = Util.make(() ->
     {
         Vector3f[] origins = new Vector3f[16];
-        Utils.forHorizontalDirections(dir ->
+        DirUtils.forHorizontalDirections(dir ->
         {
             for (HorizontalRotation rot : HorizontalRotation.values())
             {
@@ -129,7 +129,7 @@ public class FramedLargePrismSlopePanelCornerWallGeometry extends Geometry
     private void makePrismSlopeHorizontal(QuadMap quadMap, QuadModifier modifier)
     {
         float tiltAngle = invAngle ? -PRISM_ANGLE_HOR : PRISM_ANGLE_HOR;
-        float rotAngle = Utils.isPositive(dir) ? -45F : 45F;
+        float rotAngle = DirUtils.isPositive(dir) ? -45F : 45F;
         modifier.apply(Modifiers.cut(rotDirTwo, flipPrismTri ? 1 : .75F, flipPrismTri ? .75F : 1))
                 .apply(Modifiers.cut(rotDirTwo.getOpposite(), flipPrismTriOpp ? 1 : .75F, flipPrismTriOpp ? .75F : 1))
                 .apply(Modifiers.setPosition(0F))
@@ -141,7 +141,7 @@ public class FramedLargePrismSlopePanelCornerWallGeometry extends Geometry
     private void makePrismSlopeVertical(QuadMap quadMap, QuadModifier modifier)
     {
         float tiltAngle = invAngle ? -PRISM_ANGLE_VERT : PRISM_ANGLE_VERT;
-        float rotAngle = Utils.isPositive(dir) ? -45F : 45F;
+        float rotAngle = DirUtils.isPositive(dir) ? -45F : 45F;
         modifier.apply(Modifiers.cut(rotDirTwo, flipPrismTri ? 1 : .75F, flipPrismTri ? .75F : 1))
                 .apply(Modifiers.cut(rotDirTwo.getOpposite(), flipPrismTriOpp ? 1 : .75F, flipPrismTriOpp ? .75F : 1))
                 .apply(Modifiers.rotate(rotDirTwo.getAxis(), rotTiltOrigin, tiltAngle, true))

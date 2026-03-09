@@ -6,7 +6,7 @@ import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
 import io.github.xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -31,7 +31,7 @@ public class FramedFenceGeometry extends Geometry
     public void transformQuad(QuadMap quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
     {
         Direction quadDir = quad.direction();
-        if (Utils.isY(quadDir))
+        if (DirUtils.isY(quadDir))
         {
             QuadModifier.of(quad)
                     .apply(Modifiers.cutTopBottom(6F/16F, 6F/16F, 10F/16F, 10F/16F))
@@ -60,7 +60,7 @@ public class FramedFenceGeometry extends Geometry
         }
 
         Direction quadDir = quad.direction();
-        if (Utils.isY(quadDir))
+        if (DirUtils.isY(quadDir))
         {
             QuadModifier mod = QuadModifier.of(quad)
                     .apply(Modifiers.cut(dir.getOpposite(), 6F/16F))
@@ -75,7 +75,7 @@ public class FramedFenceGeometry extends Geometry
         }
         else if (quadDir == dir.getClockWise() || quadDir == dir.getCounterClockWise())
         {
-            boolean neg = !Utils.isPositive(dir);
+            boolean neg = !DirUtils.isPositive(dir);
 
             QuadModifier.of(quad)
                     .apply(Modifiers.cutSide(neg ? 0F : 10F/16F, 6F/16F, neg ? 6F/16F : 1F, 9F/16F))

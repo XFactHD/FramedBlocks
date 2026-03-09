@@ -1,10 +1,10 @@
 package io.github.xfacthd.framedblocks.common.data.property;
 
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import net.minecraft.core.Direction;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
-import io.github.xfacthd.framedblocks.api.util.Utils;
 
 import java.util.Locale;
 import java.util.Objects;
@@ -51,7 +51,7 @@ public enum CornerTubeOrientation implements StringRepresentable
 
     public boolean isVertical()
     {
-        return Utils.isY(primDir);
+        return DirUtils.isY(primDir);
     }
 
     public boolean isSideOpen(Direction side)

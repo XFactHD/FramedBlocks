@@ -2,7 +2,7 @@ package io.github.xfacthd.framedblocks.common.block.cube;
 
 import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
 import io.github.xfacthd.framedblocks.common.blockentity.special.FramedCollapsibleCopycatBlockEntity;
@@ -137,7 +137,7 @@ public class FramedCollapsibleCopycatBlock extends FramedBlock
     {
         Rotation blockRot = state.getValue(PropertyHolder.COPYCAT_ROTATION);
         // Store "unrotation" to avoid having to invert it at use sites
-        blockRot = blockRot.getRotated(Utils.getOppositeRotation(rotation));
+        blockRot = blockRot.getRotated(DirUtils.getOppositeRotation(rotation));
         return state.setValue(PropertyHolder.COPYCAT_ROTATION, blockRot);
     }
 
@@ -167,7 +167,7 @@ public class FramedCollapsibleCopycatBlock extends FramedBlock
     public Direction getHorizontalOrientation(BlockState state)
     {
         Rotation rotation = state.getValue(PropertyHolder.COPYCAT_ROTATION);
-        return Utils.getOppositeRotation(rotation).rotate(Direction.NORTH);
+        return DirUtils.getOppositeRotation(rotation).rotate(Direction.NORTH);
     }
 
     @Override

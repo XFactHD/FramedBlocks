@@ -2,7 +2,7 @@ package io.github.xfacthd.framedblocks.common.data.conpreds.slope;
 
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.predicate.contex.NonDetailedConnectionPredicate;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import io.github.xfacthd.framedblocks.common.data.property.CornerType;
 import net.minecraft.core.Direction;
@@ -26,7 +26,7 @@ public final class DoubleCornerConnectionPredicate extends NonDetailedConnection
                 return true;
             }
         }
-        else if (side == facing || side == facing.getCounterClockWise() || Utils.isY(side))
+        else if (side == facing || side == facing.getCounterClockWise() || DirUtils.isY(side))
         {
             return true;
         }

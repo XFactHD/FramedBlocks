@@ -2,7 +2,8 @@ package io.github.xfacthd.framedblocks.common.blockentity.doubled.slope;
 
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedDoubleBlockEntity;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
+import io.github.xfacthd.framedblocks.api.util.MathUtils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import io.github.xfacthd.framedblocks.common.data.property.SlopeType;
@@ -26,7 +27,7 @@ public class FramedDoubleSlopeBlockEntity extends FramedDoubleBlockEntity
         Direction facing = getBlockState().getValue(FramedProperties.FACING_HOR);
         Direction side = hit.getDirection();
 
-        Vec3 vec = Utils.fraction(hit.getLocation());
+        Vec3 vec = MathUtils.fraction(hit.getLocation());
 
         if (type == SlopeType.HORIZONTAL)
         {
@@ -39,15 +40,15 @@ public class FramedDoubleSlopeBlockEntity extends FramedDoubleBlockEntity
                 return true;
             }
 
-            boolean secondary = Utils.isX(facing) ? vec.x() >= vec.z() : vec.z() >= (1D - vec.x());
+            boolean secondary = DirUtils.isX(facing) ? vec.x() >= vec.z() : vec.z() >= (1D - vec.x());
 
-            if (Utils.isPositive(facing)) { secondary = !secondary; }
+            if (DirUtils.isPositive(facing)) { secondary = !secondary; }
             return secondary;
         }
         else
         {
-            double hor = Utils.isX(facing) ? vec.x() : vec.z();
-            if (!Utils.isPositive(facing))
+            double hor = DirUtils.isX(facing) ? vec.x() : vec.z();
+            if (!DirUtils.isPositive(facing))
             {
                 hor = 1D - hor;
             }

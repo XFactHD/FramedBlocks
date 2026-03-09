@@ -7,7 +7,7 @@ import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
 import io.github.xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.core.Direction;
 import org.jspecify.annotations.Nullable;
@@ -47,7 +47,7 @@ public class FramedVerticalHalfStairsGeometry extends Geometry
                     .apply(Modifiers.cut(vertEdge, .5F))
                     .export(quadMap.get(quadDir));
         }
-        else if (Utils.isY(quadDir))
+        else if (DirUtils.isY(quadDir))
         {
             boolean inset = (quadDir == Direction.UP) != top;
 

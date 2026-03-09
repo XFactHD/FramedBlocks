@@ -7,7 +7,7 @@ import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
 import io.github.xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.core.Direction;
 import org.joml.Vector3f;
@@ -35,7 +35,7 @@ public class FramedSmallInnerPrismSlopePanelCornerGeometry extends Geometry
         this.upDir = top ? Direction.DOWN : Direction.UP;
         this.ySlope = ctx.state().getValue(FramedProperties.Y_SLOPE);
         this.offset = ctx.state().getValue(FramedProperties.OFFSET);
-        this.invAngle = Utils.isPositive(dir.getClockWise()) ^ top ^ ySlope;
+        this.invAngle = DirUtils.isPositive(dir.getClockWise()) ^ top ^ ySlope;
         this.tiltOrigin = FramedSmallPrismSlopePanelCornerGeometry.getTiltOrigin(dir.getOpposite(), !top, ySlope);
     }
 

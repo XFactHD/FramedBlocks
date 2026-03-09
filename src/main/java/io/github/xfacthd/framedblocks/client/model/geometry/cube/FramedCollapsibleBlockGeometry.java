@@ -6,7 +6,7 @@ import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
 import io.github.xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.common.blockentity.PackedCollapsibleBlockOffsets;
 import io.github.xfacthd.framedblocks.common.blockentity.special.FramedCollapsibleBlockEntity;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
@@ -103,7 +103,7 @@ public class FramedCollapsibleBlockGeometry extends Geometry
                 vertexPosTwo[1] = vertexPosTwo[0] + vertexPosTwo[2] - vertexPosTwo[3];
             }
 
-            if (Utils.isY(collapsedFace))
+            if (DirUtils.isY(collapsedFace))
             {
                 rotate ^= collapsedFace == Direction.DOWN;
                 float left = rotate ? 0F : 1F;
@@ -134,7 +134,7 @@ public class FramedCollapsibleBlockGeometry extends Geometry
         }
         else
         {
-            if (Utils.isY(collapsedFace))
+            if (DirUtils.isY(collapsedFace))
             {
                 boolean top = collapsedFace == Direction.UP;
                 int idxOne = getYCollapsedIndexOffset(quadDir);
@@ -146,7 +146,7 @@ public class FramedCollapsibleBlockGeometry extends Geometry
                         .apply(Modifiers.cut(collapsedFace, posOne, posTwo))
                         .export(quadMap.get(quadDir));
             }
-            else if (Utils.isY(quadDir))
+            else if (DirUtils.isY(quadDir))
             {
                 boolean top = quad.direction() == Direction.UP;
                 float posOne = vertexPos[top ? 0 : 1];

@@ -2,7 +2,7 @@ package io.github.xfacthd.framedblocks.common.data.overlaypreds.slab;
 
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.predicate.overlay.BlockOverlayPredicate;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -11,7 +11,7 @@ public final class DividedPanelVerticalBlockOverlayPredicate implements BlockOve
     @Override
     public boolean supportsSolid(BlockState state, Direction side, boolean secondPart)
     {
-        return Utils.isY(side) || side.getAxis() == state.getValue(FramedProperties.FACING_HOR).getAxis();
+        return DirUtils.isY(side) || side.getAxis() == state.getValue(FramedProperties.FACING_HOR).getAxis();
     }
 
     @Override

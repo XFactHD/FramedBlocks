@@ -3,7 +3,7 @@ package io.github.xfacthd.framedblocks.selftest.tests;
 import io.github.xfacthd.framedblocks.api.block.IFramedDoubleBlock;
 import io.github.xfacthd.framedblocks.api.block.cache.DoubleBlockStateCache;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.CamoGetter;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.selftest.SelfTestReporter;
 import net.minecraft.world.level.block.Block;
 
@@ -21,7 +21,7 @@ public final class DoubleBlockCamoConnectionConsistency
                 .forEach(block -> ((Block) block).getStateDefinition().getPossibleStates().forEach(state ->
                 {
                     DoubleBlockStateCache cache = block.getCache(state);
-                    Utils.forAllDirections(side -> Utils.forAllDirectionsAndNull(edge ->
+                    DirUtils.forAllDirections(side -> DirUtils.forAllDirectionsAndNull(edge ->
                     {
                         boolean connect = cache.canConnectFullEdge(side, edge);
                         boolean hasCamo = cache.getCamoGetter(side, edge) != CamoGetter.NONE;

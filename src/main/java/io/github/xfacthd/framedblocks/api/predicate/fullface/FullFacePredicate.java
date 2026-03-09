@@ -1,7 +1,7 @@
 package io.github.xfacthd.framedblocks.api.predicate.fullface;
 
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -13,7 +13,7 @@ public interface FullFacePredicate extends BiPredicate<BlockState, Direction>
 {
     FullFacePredicate TRUE = (state, dir) -> true;
     FullFacePredicate FALSE = (state, dir) -> false;
-    FullFacePredicate Y_AXIS = (state, dir) -> Utils.isY(dir);
+    FullFacePredicate Y_AXIS = (state, dir) -> DirUtils.isY(dir);
     FullFacePredicate TOP = (state, dir) -> state.getValue(FramedProperties.TOP) ? dir == Direction.UP : dir == Direction.DOWN;
     FullFacePredicate DIR = (state, dir) -> dir == state.getValue(BlockStateProperties.FACING);
     FullFacePredicate DIR_OPPOSITE = (state, dir) -> dir == state.getValue(BlockStateProperties.FACING).getOpposite();

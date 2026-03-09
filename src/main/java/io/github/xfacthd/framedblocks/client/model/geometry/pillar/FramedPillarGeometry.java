@@ -7,7 +7,7 @@ import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
 import io.github.xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.core.Direction;
@@ -65,7 +65,7 @@ public class FramedPillarGeometry extends Geometry
                         .apply(Modifiers.cut(quadDir.getCounterClockWise(), sideCut))
                         .apply(Modifiers.setPosition(sideCut));
             }
-            else if (Utils.isY(quadDir))
+            else if (DirUtils.isY(quadDir))
             {
                 return QuadModifier.of(quad)
                         .apply(Modifiers.cut(axisToDir(axis, true).getClockWise(), sideCut))

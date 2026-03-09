@@ -1,7 +1,7 @@
 package io.github.xfacthd.framedblocks.common.data.skippreds.pane;
 
 import io.github.xfacthd.framedblocks.api.predicate.cull.SideSkipPredicate;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import io.github.xfacthd.framedblocks.common.data.skippreds.CullTest;
 import net.minecraft.core.BlockPos;
@@ -16,6 +16,6 @@ public final class HorizontalPaneSkipPredicate implements SideSkipPredicate
     @CullTest.TestTarget(BlockType.FRAMED_HORIZONTAL_PANE)
     public boolean test(BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side)
     {
-        return adjState.getBlock() == state.getBlock() && !Utils.isY(side);
+        return adjState.getBlock() == state.getBlock() && !DirUtils.isY(side);
     }
 }

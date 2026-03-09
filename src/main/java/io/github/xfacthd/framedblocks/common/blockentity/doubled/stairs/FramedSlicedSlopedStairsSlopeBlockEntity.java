@@ -2,8 +2,8 @@ package io.github.xfacthd.framedblocks.common.blockentity.doubled.stairs;
 
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedDoubleBlockEntity;
+import io.github.xfacthd.framedblocks.api.util.MathUtils;
 import io.github.xfacthd.framedblocks.api.util.Triangle;
-import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -32,22 +32,22 @@ public class FramedSlicedSlopedStairsSlopeBlockEntity extends FramedDoubleBlockE
         }
         if (side == dirTwo)
         {
-            double par = Utils.fractionInDir(hitVec, facing);
-            double perp = Utils.fractionInDir(hitVec, facing.getClockWise());
+            double par = MathUtils.fractionInDir(hitVec, facing);
+            double perp = MathUtils.fractionInDir(hitVec, facing.getClockWise());
             return perp > par;
         }
 
         if (side == facing.getOpposite() || side == facing.getClockWise())
         {
-            if (Utils.fractionInDir(hitVec, dirTwo) > .5) // Crosshair is definitely on half slope's half-width faces
+            if (MathUtils.fractionInDir(hitVec, dirTwo) > .5) // Crosshair is definitely on half slope's half-width faces
             {
                 return true;
             }
         }
         else if (side == dirTwo.getOpposite())
         {
-            double par = Utils.fractionInDir(hitVec, facing);
-            double perp = Utils.fractionInDir(hitVec, facing.getClockWise());
+            double par = MathUtils.fractionInDir(hitVec, facing);
+            double perp = MathUtils.fractionInDir(hitVec, facing.getClockWise());
             if (perp < par) // Crosshair is definitely on slope's triangle face
             {
                 return false;

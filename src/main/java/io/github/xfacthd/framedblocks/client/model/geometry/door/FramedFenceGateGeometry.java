@@ -6,7 +6,7 @@ import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
 import io.github.xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -32,7 +32,7 @@ public class FramedFenceGateGeometry extends Geometry
     {
         Direction quadDir = quad.direction();
         float yOff = inWall ? 3F/16F : 0F;
-        if (Utils.isY(quadDir))
+        if (DirUtils.isY(quadDir))
         {
             float quadInset = quadDir == Direction.UP ? 1F - yOff : 11F/16F + yOff;
 
@@ -108,7 +108,7 @@ public class FramedFenceGateGeometry extends Geometry
                     .apply(Modifiers.setPosition(9F/16F))
                     .export(quadList);
         }
-        else if (Utils.isY(quadDir))
+        else if (DirUtils.isY(quadDir))
         {
             QuadModifier mod = QuadModifier.of(quad)
                     .apply(Modifiers.cut(dir, 9F/16F))
@@ -178,7 +178,7 @@ public class FramedFenceGateGeometry extends Geometry
             mod.apply(Modifiers.setPosition(2F/16F))
                     .export(quadMap.get(null));
         }
-        else if (Utils.isY(quadDir))
+        else if (DirUtils.isY(quadDir))
         {
             boolean up = quadDir == Direction.UP;
             float heightOuter = up ? 15F/16F - yOff : 10F/16F + yOff;

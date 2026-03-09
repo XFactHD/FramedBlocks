@@ -5,8 +5,8 @@ import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
+import io.github.xfacthd.framedblocks.api.util.MathUtils;
 import io.github.xfacthd.framedblocks.api.util.RotationDirection;
-import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
@@ -79,7 +79,7 @@ public class FramedCornerSlopePanelBlock extends FramedBlock
                     {
                         fracDir = fracDir.getOpposite();
                     }
-                    if (Utils.fractionInDir(modCtx.getClickLocation(), fracDir.getClockWise()) > .5)
+                    if (MathUtils.fractionInDir(modCtx.getClickLocation(), fracDir.getClockWise()) > .5)
                     {
                         dir = dir.getClockWise();
                     }

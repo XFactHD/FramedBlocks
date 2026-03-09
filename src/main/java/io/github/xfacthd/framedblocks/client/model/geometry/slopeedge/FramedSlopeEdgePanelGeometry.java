@@ -7,7 +7,7 @@ import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
 import io.github.xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import io.github.xfacthd.framedblocks.common.data.property.HorizontalRotation;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -52,7 +52,7 @@ public class FramedSlopeEdgePanelGeometry extends Geometry
 
             if (ySlope)
             {
-                boolean vert = Utils.isY(backEdge);
+                boolean vert = DirUtils.isY(backEdge);
                 boolean topEdge = backEdge == Direction.DOWN;
                 boolean rightEdge = backEdge == dir.getClockWise();
                 QuadModifier.of(quad)
@@ -72,7 +72,7 @@ public class FramedSlopeEdgePanelGeometry extends Geometry
         {
             if (!ySlope)
             {
-                boolean vert = Utils.isY(backEdge);
+                boolean vert = DirUtils.isY(backEdge);
                 boolean rightEdge = backEdge == dir.getClockWise();
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(dir.getOpposite(), .5F))
@@ -84,7 +84,7 @@ public class FramedSlopeEdgePanelGeometry extends Geometry
         }
         else
         {
-            boolean flip = Utils.isY(backEdge) ? quadDir == dir.getClockWise() : backEdge == dir.getCounterClockWise();
+            boolean flip = DirUtils.isY(backEdge) ? quadDir == dir.getClockWise() : backEdge == dir.getCounterClockWise();
             float lenOne = (flip ? 0F : 1F) + (front ? .5F : 0F);
             float lenTwo = (flip ? 1F : 0F) + (front ? .5F : 0F);
             QuadModifier.of(quad)
