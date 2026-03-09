@@ -1,0 +1,6 @@
+{
+  "edge_texture": "framedblocks:block/overlay/cyan_carpet_edge",
+  "solid_face": "top",
+  "solid_texture": "minecraft:block/cyan_wool",
+  "source_item": "minecraft:cyan_carpet"
+}

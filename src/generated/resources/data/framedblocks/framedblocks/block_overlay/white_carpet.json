@@ -1,0 +1,6 @@
+{
+  "edge_texture": "framedblocks:block/overlay/white_carpet_edge",
+  "solid_face": "top",
+  "solid_texture": "minecraft:block/white_wool",
+  "source_item": "minecraft:white_carpet"
+}

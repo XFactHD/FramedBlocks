@@ -1,0 +1,6 @@
+{
+  "edge_texture": "framedblocks:block/overlay/light_blue_carpet_edge",
+  "solid_face": "top",
+  "solid_texture": "minecraft:block/light_blue_wool",
+  "source_item": "minecraft:light_blue_carpet"
+}

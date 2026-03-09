@@ -1,0 +1,6 @@
+{
+  "edge_texture": "framedblocks:block/overlay/pink_carpet_edge",
+  "solid_face": "top",
+  "solid_texture": "minecraft:block/pink_wool",
+  "source_item": "minecraft:pink_carpet"
+}

@@ -73,6 +73,7 @@ import io.github.xfacthd.framedblocks.client.render.special.BlockOutlineRenderer
 import io.github.xfacthd.framedblocks.client.render.special.CollapsibleBlockIndicatorRenderer;
 import io.github.xfacthd.framedblocks.client.render.special.GhostBlockRenderer;
 import io.github.xfacthd.framedblocks.client.render.util.AnimationSplitterSource;
+import io.github.xfacthd.framedblocks.client.render.util.AreaMaskSource;
 import io.github.xfacthd.framedblocks.client.render.util.FramedRenderPipelines;
 import io.github.xfacthd.framedblocks.client.screen.FramedStorageScreen;
 import io.github.xfacthd.framedblocks.client.screen.FramingSawScreen;
@@ -552,6 +553,7 @@ public final class FBClient
     private static void onRegisterSpriteSources(RegisterSpriteSourcesEvent event)
     {
         event.register(Utils.id("anim_splitter"), AnimationSplitterSource.CODEC);
+        event.register(Utils.id("area_mask"), AreaMaskSource.CODEC);
     }
 
     private static void onRegisterParticleProviders(RegisterParticleProvidersEvent event)

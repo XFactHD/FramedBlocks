@@ -1,0 +1,6 @@
+{
+  "edge_texture": "framedblocks:block/overlay/green_carpet_edge",
+  "solid_face": "top",
+  "solid_texture": "minecraft:block/green_wool",
+  "source_item": "minecraft:green_carpet"
+}

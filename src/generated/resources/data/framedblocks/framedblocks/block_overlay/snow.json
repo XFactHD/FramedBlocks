@@ -1,0 +1,6 @@
+{
+  "edge_texture": "framedblocks:block/overlay/snow_edge",
+  "solid_face": "top",
+  "solid_texture": "minecraft:block/snow",
+  "source_item": "minecraft:snowball"
+}

@@ -3,6 +3,7 @@ package io.github.xfacthd.framedblocks.common.datagen;
 import io.github.xfacthd.framedblocks.api.util.FramedConstants;
 import io.github.xfacthd.framedblocks.common.compat.ae2.AppliedEnergisticsCompat;
 import io.github.xfacthd.framedblocks.common.datagen.providers.*;
+import net.minecraft.core.RegistrySetBuilder;
 import net.minecraft.world.item.Item;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
@@ -34,6 +35,11 @@ public final class GeneratorHandler
 
     private static void onGatherData(GatherDataEvent.Client event)
     {
+        event.createDatapackRegistryObjects(
+                new RegistrySetBuilder()
+                        .add(FramedConstants.BLOCK_OVERLAY_REGISTRY_KEY, FramedBlockOverlayProvider::buildBlockOverlayEntries)
+        );
+
         event.createProvider(FramedSpriteSourceProvider::new);
         event.createProvider(FramedBlockModelProvider::new);
         event.createProvider(FramedItemModelProvider::new);

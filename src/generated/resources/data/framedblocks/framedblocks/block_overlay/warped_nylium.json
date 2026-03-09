@@ -1,0 +1,6 @@
+{
+  "edge_texture": "framedblocks:block/overlay/warped_nylium_edge",
+  "solid_face": "top",
+  "solid_texture": "minecraft:block/warped_nylium",
+  "source_item": "minecraft:warped_fungus"
+}

@@ -1,0 +1,6 @@
+{
+  "edge_texture": "framedblocks:block/overlay/lime_carpet_edge",
+  "solid_face": "top",
+  "solid_texture": "minecraft:block/lime_wool",
+  "source_item": "minecraft:lime_carpet"
+}

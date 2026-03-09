@@ -1,0 +1,6 @@
+{
+  "edge_texture": "framedblocks:block/overlay/yellow_carpet_edge",
+  "solid_face": "top",
+  "solid_texture": "minecraft:block/yellow_wool",
+  "source_item": "minecraft:yellow_carpet"
+}

@@ -9,6 +9,166 @@
         }
       ],
       "resource": "minecraft:block/stonecutter_saw"
+    },
+    {
+      "type": "framedblocks:area_mask",
+      "height": 1,
+      "offset_y": -15,
+      "resource": "minecraft:block/white_wool",
+      "sprite": "framedblocks:block/overlay/white_carpet_edge",
+      "width": 16,
+      "x": 0,
+      "y": 15
+    },
+    {
+      "type": "framedblocks:area_mask",
+      "height": 1,
+      "offset_y": -15,
+      "resource": "minecraft:block/orange_wool",
+      "sprite": "framedblocks:block/overlay/orange_carpet_edge",
+      "width": 16,
+      "x": 0,
+      "y": 15
+    },
+    {
+      "type": "framedblocks:area_mask",
+      "height": 1,
+      "offset_y": -15,
+      "resource": "minecraft:block/magenta_wool",
+      "sprite": "framedblocks:block/overlay/magenta_carpet_edge",
+      "width": 16,
+      "x": 0,
+      "y": 15
+    },
+    {
+      "type": "framedblocks:area_mask",
+      "height": 1,
+      "offset_y": -15,
+      "resource": "minecraft:block/light_blue_wool",
+      "sprite": "framedblocks:block/overlay/light_blue_carpet_edge",
+      "width": 16,
+      "x": 0,
+      "y": 15
+    },
+    {
+      "type": "framedblocks:area_mask",
+      "height": 1,
+      "offset_y": -15,
+      "resource": "minecraft:block/yellow_wool",
+      "sprite": "framedblocks:block/overlay/yellow_carpet_edge",
+      "width": 16,
+      "x": 0,
+      "y": 15
+    },
+    {
+      "type": "framedblocks:area_mask",
+      "height": 1,
+      "offset_y": -15,
+      "resource": "minecraft:block/lime_wool",
+      "sprite": "framedblocks:block/overlay/lime_carpet_edge",
+      "width": 16,
+      "x": 0,
+      "y": 15
+    },
+    {
+      "type": "framedblocks:area_mask",
+      "height": 1,
+      "offset_y": -15,
+      "resource": "minecraft:block/pink_wool",
+      "sprite": "framedblocks:block/overlay/pink_carpet_edge",
+      "width": 16,
+      "x": 0,
+      "y": 15
+    },
+    {
+      "type": "framedblocks:area_mask",
+      "height": 1,
+      "offset_y": -15,
+      "resource": "minecraft:block/gray_wool",
+      "sprite": "framedblocks:block/overlay/gray_carpet_edge",
+      "width": 16,
+      "x": 0,
+      "y": 15
+    },
+    {
+      "type": "framedblocks:area_mask",
+      "height": 1,
+      "offset_y": -15,
+      "resource": "minecraft:block/light_gray_wool",
+      "sprite": "framedblocks:block/overlay/light_gray_carpet_edge",
+      "width": 16,
+      "x": 0,
+      "y": 15
+    },
+    {
+      "type": "framedblocks:area_mask",
+      "height": 1,
+      "offset_y": -15,
+      "resource": "minecraft:block/cyan_wool",
+      "sprite": "framedblocks:block/overlay/cyan_carpet_edge",
+      "width": 16,
+      "x": 0,
+      "y": 15
+    },
+    {
+      "type": "framedblocks:area_mask",
+      "height": 1,
+      "offset_y": -15,
+      "resource": "minecraft:block/purple_wool",
+      "sprite": "framedblocks:block/overlay/purple_carpet_edge",
+      "width": 16,
+      "x": 0,
+      "y": 15
+    },
+    {
+      "type": "framedblocks:area_mask",
+      "height": 1,
+      "offset_y": -15,
+      "resource": "minecraft:block/blue_wool",
+      "sprite": "framedblocks:block/overlay/blue_carpet_edge",
+      "width": 16,
+      "x": 0,
+      "y": 15
+    },
+    {
+      "type": "framedblocks:area_mask",
+      "height": 1,
+      "offset_y": -15,
+      "resource": "minecraft:block/brown_wool",
+      "sprite": "framedblocks:block/overlay/brown_carpet_edge",
+      "width": 16,
+      "x": 0,
+      "y": 15
+    },
+    {
+      "type": "framedblocks:area_mask",
+      "height": 1,
+      "offset_y": -15,
+      "resource": "minecraft:block/green_wool",
+      "sprite": "framedblocks:block/overlay/green_carpet_edge",
+      "width": 16,
+      "x": 0,
+      "y": 15
+    },
+    {
+      "type": "framedblocks:area_mask",
+      "height": 1,
+      "offset_y": -15,
+      "resource": "minecraft:block/red_wool",
+      "sprite": "framedblocks:block/overlay/red_carpet_edge",
+      "width": 16,
+      "x": 0,
+      "y": 15
+    },
+    {
+      "type": "framedblocks:area_mask",
+      "height": 1,
+      "offset_y": -15,
+      "resource": "minecraft:block/black_wool",
+      "sprite": "framedblocks:block/overlay/black_carpet_edge",
+      "width": 16,
+      "x": 0,
+      "y": 15
     }
   ]
 }

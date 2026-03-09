@@ -1,0 +1,6 @@
+{
+  "edge_texture": "framedblocks:block/overlay/mycelium_edge",
+  "solid_face": "top",
+  "solid_texture": "minecraft:block/mycelium_top",
+  "source_item": "minecraft:brown_mushroom"
+}

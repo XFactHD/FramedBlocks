@@ -1,0 +1,7 @@
+{
+  "edge_texture": "minecraft:block/grass_block_side_overlay",
+  "solid_face": "top",
+  "solid_texture": "minecraft:block/grass_block_top",
+  "source_item": "minecraft:short_grass",
+  "tint_source": "minecraft:grass_block"
+}

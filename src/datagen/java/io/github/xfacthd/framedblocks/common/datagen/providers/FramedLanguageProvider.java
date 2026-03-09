@@ -1,6 +1,7 @@
 package io.github.xfacthd.framedblocks.common.datagen.providers;
 
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
+import io.github.xfacthd.framedblocks.api.block.overlay.BlockOverlay;
 import io.github.xfacthd.framedblocks.api.blueprint.BlueprintData;
 import io.github.xfacthd.framedblocks.api.camo.CamoContainerFactory;
 import io.github.xfacthd.framedblocks.api.camo.CamoPrinter;
@@ -35,21 +36,43 @@ import io.github.xfacthd.framedblocks.common.item.PhantomPasteItem;
 import io.github.xfacthd.framedblocks.common.item.block.FramedMirroringBlockItem;
 import io.github.xfacthd.framedblocks.common.item.block.FramedTankBlockItem;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.data.CachedOutput;
 import net.minecraft.data.PackOutput;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentContents;
 import net.minecraft.network.chat.contents.TranslatableContents;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.item.DyeColor;
 import net.neoforged.neoforge.common.ModConfigSpec;
 import net.neoforged.neoforge.common.data.LanguageProvider;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.UnknownNullability;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 
 public final class FramedLanguageProvider extends LanguageProvider
 {
-    public FramedLanguageProvider(PackOutput output)
+    private final CompletableFuture<HolderLookup.Provider> registries;
+    private HolderLookup.@Nullable Provider lookup;
+
+    public FramedLanguageProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registries)
     {
         super(output, FramedConstants.MOD_ID, "en_us");
+        this.registries = registries;
+    }
+
+    @Override
+    public CompletableFuture<?> run(CachedOutput cache)
+    {
+        return registries.thenCompose(lookup ->
+        {
+            this.lookup = lookup;
+            return super.run(cache);
+        });
     }
 
     @Override
@@ -346,6 +369,12 @@ public final class FramedLanguageProvider extends LanguageProvider
 
         add(AtlasViewerCompat.LABEL_TEXTURE, "Texture");
         add(AtlasViewerCompat.LABEL_FRAMES, "Frames");
+        add(AtlasViewerCompat.LABEL_MASK_TEXTURE, "Texture");
+        add(AtlasViewerCompat.LABEL_MASK_SPRITE, "Sprite");
+        add(AtlasViewerCompat.LABEL_MASK_AREA, "Area");
+        add(AtlasViewerCompat.VALUE_MASK_AREA, "X: %s Y: %s Width: %s Height: %s");
+        add(AtlasViewerCompat.LABEL_MASK_OFFSET, "Offset");
+        add(AtlasViewerCompat.VALUE_MASK_OFFSET, "X: %s Y: %s");
 
         add(JadeCompat.configTranslation(JadeCompat.ID_FRAMED_BLOCK), "FramedBlocks camo");
         add(JadeCompat.configTranslation(JadeCompat.ID_ITEM_FRAME), "Framed Item Frame");
@@ -358,6 +387,24 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(Utils.DISABLE_INTANGIBLE, "Disable Intangibility");
         add(Utils.GROUP_FULL_CUBE, "Full Framed Blocks");
         add(Utils.CRAFTING_BLOCKED_FLUID_CONTAINERS, "Camo-crafting-blocked Fluid Containers");
+
+        addBlockOverlay("grass", "Grass");
+        addBlockOverlay("podzol", "Podzol");
+        addBlockOverlay("mycelium", "Mycelium");
+        addBlockOverlay("path", "Dirt Path");
+        addBlockOverlay("crimson_nylium", "Crimson Nylium");
+        addBlockOverlay("warped_nylium", "Warped Nylium");
+        addBlockOverlay("snow", "Snow");
+        addBlockOverlay("moss", "Moss");
+        for (DyeColor color : DyeColor.values())
+        {
+            StringBuilder name = new StringBuilder();
+            for (String part : color.getName().split("_"))
+            {
+                name.append(StringUtils.capitalize(part)).append(" ");
+            }
+            addBlockOverlay(color.getName() + "_carpet", name.append("Carpet").toString());
+        }
     }
 
     private void addStatusMessageTranslations()
@@ -610,5 +657,13 @@ public final class FramedLanguageProvider extends LanguageProvider
         String translationKey = Objects.requireNonNull(configValue.getSpec().getTranslationKey());
         add(translationKey, value);
         add(translationKey + ".tooltip", Objects.requireNonNull(configValue.getSpec().getComment()));
+    }
+
+    private void addBlockOverlay(String id, String name)
+    {
+        Holder<BlockOverlay> overlay = Objects.requireNonNull(lookup).getOrThrow(
+                ResourceKey.create(FramedConstants.BLOCK_OVERLAY_REGISTRY_KEY, Utils.id(id))
+        );
+        add(BlockOverlay.getDescriptionId(overlay), name);
     }
 }

@@ -1,0 +1,6 @@
+{
+  "edge_texture": "framedblocks:block/overlay/path_edge",
+  "solid_face": "top",
+  "solid_texture": "minecraft:block/dirt_path_top",
+  "source_item": "minecraft:dirt_path"
+}
