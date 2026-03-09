@@ -2,8 +2,10 @@ package io.github.xfacthd.framedblocks.common.block.interactive.button;
 
 import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
+import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.model.wrapping.WrapHelper;
 import io.github.xfacthd.framedblocks.api.model.wrapping.statemerger.StateMerger;
+import io.github.xfacthd.framedblocks.api.util.RotationDirection;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.common.block.IFramedBlockInternal;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
@@ -101,13 +103,19 @@ public class FramedButtonBlock extends ButtonBlock implements IFramedBlockIntern
     }
 
     @Override
-    protected BlockState rotate(BlockState state, Rotation rotation)
+    public BlockState rotate(BlockState state, RotationDirection direction, WrenchRotationMode mode)
     {
         if (state.getValue(FACE) != AttachFace.WALL)
         {
-            return super.rotate(state, rotation);
+            return IFramedBlockInternal.super.rotate(state, direction, mode);
         }
         return state;
+    }
+
+    @Override
+    protected BlockState rotate(BlockState state, Rotation rotation)
+    {
+        return super.rotate(state, rotation);
     }
 
     @Override
