@@ -8,7 +8,6 @@ import io.github.xfacthd.framedblocks.common.config.ServerConfig;
 import io.github.xfacthd.framedblocks.common.crafting.saw.FramingSawRecipeCache;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.TriState;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
@@ -48,10 +47,7 @@ public final class EventHandler
 
     public static void onBlockRightClick(PlayerInteractEvent.RightClickBlock event)
     {
-        Player player = event.getEntity();
-        if (!player.isShiftKeyDown()) return;
-
-        ItemStack itemInHand = player.getItemInHand(event.getHand());
+        ItemStack itemInHand = event.getEntity().getItemInHand(event.getHand());
         if (!itemInHand.is(Items.BRUSH)) return;
 
         BlockPos pos = event.getHitVec().getBlockPos();

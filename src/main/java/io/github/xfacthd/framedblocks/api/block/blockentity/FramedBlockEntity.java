@@ -235,13 +235,11 @@ public class FramedBlockEntity extends BlockEntity
 
     private InteractionResult tryRemoveModifier(Player player, ItemStack stack, InteractionHand hand)
     {
-        if (!player.isShiftKeyDown()) return InteractionResult.PASS;
-
         if (glowing && stack.is(Items.BRUSH))
         {
             return removeGlowstone(player);
         }
-        if (intangible && Utils.isConfigurationTool(stack))
+        if (intangible && player.isShiftKeyDown() && Utils.isConfigurationTool(stack))
         {
             return removeIntangibility(player);
         }
@@ -253,7 +251,7 @@ public class FramedBlockEntity extends BlockEntity
         {
             return removeEmissivity(player);
         }
-        return InteractionResult.PASS;
+        return InteractionResult.FAIL;
     }
 
     private boolean canMakeIntangible(ItemResource resource)
