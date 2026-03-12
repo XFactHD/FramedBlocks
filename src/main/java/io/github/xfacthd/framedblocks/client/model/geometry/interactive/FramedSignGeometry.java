@@ -1,7 +1,7 @@
 package io.github.xfacthd.framedblocks.client.model.geometry.interactive;
 
 import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
-import io.github.xfacthd.framedblocks.api.model.data.QuadMap;
+import io.github.xfacthd.framedblocks.api.model.data.QuadMapBuilder;
 import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
@@ -27,7 +27,7 @@ public class FramedSignGeometry extends Geometry
     }
 
     @Override
-    public void transformQuad(QuadMap quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
+    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
     {
         Direction quadDir = quad.direction();
         if (quadDir.getAxis() == dir.getAxis())
@@ -37,7 +37,7 @@ public class FramedSignGeometry extends Geometry
                     .apply(Modifiers.setPosition(POS))
                     .apply(Modifiers.offset(Direction.UP, Y_OFF))
                     .apply(Modifiers.rotateCentered(Direction.Axis.Y, rotDegrees, false))
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
         }
         else if (DirUtils.isY(quadDir))
         {
@@ -46,7 +46,7 @@ public class FramedSignGeometry extends Geometry
                     .applyIf(Modifiers.setPosition(.5F), quadDir == Direction.DOWN)
                     .apply(Modifiers.offset(Direction.UP, Y_OFF))
                     .apply(Modifiers.rotateCentered(Direction.Axis.Y, rotDegrees, false))
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
         }
         else
         {
@@ -54,7 +54,7 @@ public class FramedSignGeometry extends Geometry
                     .apply(Modifiers.cutSide(7F/16F, .5F, 9F/16F, 1F))
                     .apply(Modifiers.offset(Direction.UP, Y_OFF))
                     .apply(Modifiers.rotateCentered(Direction.Axis.Y, rotDegrees, false))
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
         }
 
         if (!DirUtils.isY(quadDir))
@@ -63,14 +63,14 @@ public class FramedSignGeometry extends Geometry
                     .apply(Modifiers.cutSide(7F/16F, 0F, 9F/16F, 9.75F/16F))
                     .apply(Modifiers.setPosition(POS))
                     .apply(Modifiers.rotateCentered(Direction.Axis.Y, rotDegrees, false))
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
         }
         else if (quadDir == Direction.DOWN)
         {
             QuadModifier.of(quad)
                     .apply(Modifiers.cutTopBottom(7F/16F, 7F/16F, 9F/16F, 9F/16F))
                     .apply(Modifiers.rotateCentered(Direction.Axis.Y, rotDegrees, false))
-                    .export(quadMap.get(Direction.DOWN));
+                    .export(quadMap, Direction.DOWN);
         }
     }
 

@@ -2,7 +2,7 @@ package io.github.xfacthd.framedblocks.client.model.geometry.stairs;
 
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
-import io.github.xfacthd.framedblocks.api.model.data.QuadMap;
+import io.github.xfacthd.framedblocks.api.model.data.QuadMapBuilder;
 import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
@@ -32,25 +32,25 @@ public class FramedVerticalSlopedStairsGeometry extends Geometry
     }
 
     @Override
-    public void transformQuad(QuadMap quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
+    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
     {
         Direction quadDir = quad.direction();
         if (quadDir == rotDir || quadDir == rotDirTwo)
         {
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(facing.getOpposite(), .5F))
-                    .export(quadMap.get(quadDir));
+                    .export(quadMap, quadDir);
         }
         else if (quadDir == facing.getOpposite())
         {
             QuadModifier.of(quad)
                     .apply(Modifiers.cutSide(rotDir, 1F, 0F))
-                    .export(quadMap.get(quadDir));
+                    .export(quadMap, quadDir);
 
             QuadModifier.of(quad)
                     .apply(Modifiers.cutSide(rotDir.getOpposite(), 1F, 0F))
                     .apply(Modifiers.setPosition(.5F))
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
         }
 
         boolean useRotDirQuad = DirUtils.isY(rotDir) == altSlope;
@@ -64,14 +64,14 @@ public class FramedVerticalSlopedStairsGeometry extends Geometry
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(facing, .5F))
                         .apply(Modifiers.makeVerticalSlope(slopeRotDir, 45F))
-                        .export(quadMap.get(null));
+                        .export(quadMap, null);
             }
             else
             {
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(facing, .5F))
                         .apply(Modifiers.makeVerticalSlope(slopeRotDir == Direction.UP, 45F))
-                        .export(quadMap.get(null));
+                        .export(quadMap, null);
             }
         }
     }

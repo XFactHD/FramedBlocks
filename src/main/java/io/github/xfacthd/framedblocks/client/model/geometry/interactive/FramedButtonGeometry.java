@@ -1,7 +1,7 @@
 package io.github.xfacthd.framedblocks.client.model.geometry.interactive;
 
 import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
-import io.github.xfacthd.framedblocks.api.model.data.QuadMap;
+import io.github.xfacthd.framedblocks.api.model.data.QuadMapBuilder;
 import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
@@ -32,7 +32,7 @@ public class FramedButtonGeometry extends Geometry
     }
 
     @Override
-    public void transformQuad(QuadMap quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
+    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
     {
         Direction quadDir = quad.direction();
         if (DirUtils.isY(facing))
@@ -45,7 +45,7 @@ public class FramedButtonGeometry extends Geometry
         }
     }
 
-    private void generateVerticalButton(QuadMap quadMap, BakedQuad quad, Direction quadDir)
+    private void generateVerticalButton(QuadMapBuilder quadMap, BakedQuad quad, Direction quadDir)
     {
         if (quadDir.getAxis() == facing.getAxis())
         {
@@ -53,7 +53,7 @@ public class FramedButtonGeometry extends Geometry
                     .apply(Modifiers.cut(dir.getAxis(), 10F/16F))
                     .apply(Modifiers.cut(dir.getClockWise().getAxis(), 11F/16F))
                     .applyIf(Modifiers.setPosition(pressed ? 1F/16F : 2F/16F), quadDir == facing)
-                    .export(quadMap.get(quadDir == facing ? null : quadDir));
+                    .export(quadMap, quadDir == facing ? null : quadDir);
         }
         else
         {
@@ -63,11 +63,11 @@ public class FramedButtonGeometry extends Geometry
                     .apply(Modifiers.cut(facing, pressed ? 1F/16F : 2F/16F))
                     .apply(Modifiers.cut(quadDir.getClockWise().getAxis(), largeSide ? 11F/16F : 10F/16F))
                     .apply(Modifiers.setPosition(largeSide ? 10F/16F : 11F/16F))
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
         }
     }
 
-    private void generateHorizontalButton(QuadMap quadMap, BakedQuad quad, Direction quadDir)
+    private void generateHorizontalButton(QuadMapBuilder quadMap, BakedQuad quad, Direction quadDir)
     {
         float height = pressed ? 1F/16F : 2F/16F;
         if (quadDir.getAxis() == facing.getAxis())
@@ -75,7 +75,7 @@ public class FramedButtonGeometry extends Geometry
             QuadModifier.of(quad)
                     .apply(Modifiers.cutSide(5F/16F, 6F/16F, 11F/16F, 10F/16F))
                     .applyIf(Modifiers.setPosition(height), quadDir == facing)
-                    .export(quadMap.get(quadDir == facing ? null : quadDir));
+                    .export(quadMap, quadDir == facing ? null : quadDir);
         }
         else if (DirUtils.isY(quadDir))
         {
@@ -83,7 +83,7 @@ public class FramedButtonGeometry extends Geometry
                     .apply(Modifiers.cut(dir, height))
                     .apply(Modifiers.cut(dir.getClockWise().getAxis(), 11F/16F))
                     .apply(Modifiers.setPosition(10F / 16F))
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
         }
         else
         {
@@ -91,7 +91,7 @@ public class FramedButtonGeometry extends Geometry
                     .apply(Modifiers.cut(dir, height))
                     .apply(Modifiers.cut(Direction.Axis.Y, 10F/16F))
                     .apply(Modifiers.setPosition(11F / 16F))
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
         }
     }
 

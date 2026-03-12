@@ -2,7 +2,7 @@ package io.github.xfacthd.framedblocks.client.model.geometry.slopepanel;
 
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
-import io.github.xfacthd.framedblocks.api.model.data.QuadMap;
+import io.github.xfacthd.framedblocks.api.model.data.QuadMapBuilder;
 import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
@@ -37,7 +37,7 @@ public class FramedFlatSlopePanelCornerGeometry extends Geometry
     }
 
     @Override
-    public void transformQuad(QuadMap quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
+    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
     {
         Direction face = quad.direction();
         if (face == orientation.getOpposite())
@@ -56,7 +56,7 @@ public class FramedFlatSlopePanelCornerGeometry extends Geometry
                         .apply(createSlopeTriangle(facing, orientation, false, face))
                         .apply(FramedSlopePanelGeometry.createSlope(facing, orientation))
                         .applyIf(Modifiers.offset(facing, .5F), !front)
-                        .export(quadMap.get(null));
+                        .export(quadMap, null);
             }
 
             if (!altSlope || !DirUtils.isY(rotOrientation))
@@ -65,7 +65,7 @@ public class FramedFlatSlopePanelCornerGeometry extends Geometry
                         .apply(createSlopeTriangle(facing, rotOrientation, true, face))
                         .apply(FramedSlopePanelGeometry.createSlope(facing, rotOrientation))
                         .applyIf(Modifiers.offset(facing, .5F), !front)
-                        .export(quadMap.get(null));
+                        .export(quadMap, null);
             }
         }
         else if (altSlope && DirUtils.isY(orientation) && face == orientation)
@@ -74,7 +74,7 @@ public class FramedFlatSlopePanelCornerGeometry extends Geometry
                     .apply(createVerticalSlopeTriangle(facing, orientation, false))
                     .apply(FramedSlopePanelGeometry.createVerticalSlope(facing, orientation))
                     .applyIf(Modifiers.offset(facing.getOpposite(), .5F), front)
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
         }
         else if (altSlope && DirUtils.isY(rotOrientation) && face == rotOrientation)
         {
@@ -82,13 +82,13 @@ public class FramedFlatSlopePanelCornerGeometry extends Geometry
                     .apply(createVerticalSlopeTriangle(facing, rotOrientation, true))
                     .apply(FramedSlopePanelGeometry.createVerticalSlope(facing, rotOrientation))
                     .applyIf(Modifiers.offset(facing.getOpposite(), .5F), front)
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
         }
         else if (face == facing && front)
         {
             QuadModifier.of(quad)
                     .apply(Modifiers.setPosition(.5F))
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
         }
     }
 
@@ -123,7 +123,7 @@ public class FramedFlatSlopePanelCornerGeometry extends Geometry
     }
 
     public static void createSideTriangle(
-            QuadMap quadMap,
+            QuadMapBuilder quadMap,
             BakedQuad quad,
             Direction facing,
             HorizontalRotation rotation,
@@ -143,7 +143,7 @@ public class FramedFlatSlopePanelCornerGeometry extends Geometry
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(facing.getOpposite(), top, bottom))
                     .applyIf(Modifiers.cut(facing, .5F), front && !extended)
-                    .export(quadMap.get(face));
+                    .export(quadMap, face);
         }
         else
         {
@@ -153,7 +153,7 @@ public class FramedFlatSlopePanelCornerGeometry extends Geometry
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(facing.getOpposite(), right, left))
                     .applyIf(Modifiers.cut(facing, .5F), front && !extended)
-                    .export(quadMap.get(face));
+                    .export(quadMap, face);
         }
     }
 }

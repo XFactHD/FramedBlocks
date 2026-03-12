@@ -1,6 +1,6 @@
 package io.github.xfacthd.framedblocks.client.model.geometry.slope;
 
-import io.github.xfacthd.framedblocks.api.model.data.QuadMap;
+import io.github.xfacthd.framedblocks.api.model.data.QuadMapBuilder;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
 import io.github.xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
@@ -18,7 +18,7 @@ public class FramedUpperPyramidSlabGeometry extends FramedPyramidGeometry
     }
 
     @Override
-    protected void buildBody(QuadMap quadMap, BakedQuad quad, Direction quadDir)
+    protected void buildBody(QuadMapBuilder quadMap, BakedQuad quad, Direction quadDir)
     {
         if (DirUtils.isY(facing))
         {
@@ -32,7 +32,7 @@ public class FramedUpperPyramidSlabGeometry extends FramedPyramidGeometry
                         .apply(Modifiers.cut(quadDir.getClockWise(), up ? .5F : 1.5F, up ? 1.5F : .5F))
                         .apply(Modifiers.makeVerticalSlope(up, 45))
                         .apply(Modifiers.offset(quadDir, .5F))
-                        .export(quadMap.get(null));
+                        .export(quadMap, null);
             }
             else if (altSlope && quadDir == facing)
             {
@@ -48,7 +48,7 @@ public class FramedUpperPyramidSlabGeometry extends FramedPyramidGeometry
                             .apply(Modifiers.cut(dir.getClockWise(), 1.5F, .5F))
                             .apply(Modifiers.rotateCentered(dir.getClockWise().getAxis(), angle, true))
                             .apply(Modifiers.offset(facing.getOpposite(), .5F))
-                            .export(quadMap.get(null));
+                            .export(quadMap, null);
                 }
             }
         }
@@ -63,7 +63,7 @@ public class FramedUpperPyramidSlabGeometry extends FramedPyramidGeometry
                         .apply(Modifiers.cut(facing.getCounterClockWise(), 1.5F, .5F))
                         .apply(Modifiers.makeVerticalSlope(true, 45))
                         .apply(Modifiers.offset(Direction.UP, .5F))
-                        .export(quadMap.get(null));
+                        .export(quadMap, null);
 
                 QuadModifier.of(quad)
                         .applyIf(Modifiers.cut(Direction.UP, slopeHeight), hasPillar)
@@ -72,7 +72,7 @@ public class FramedUpperPyramidSlabGeometry extends FramedPyramidGeometry
                         .apply(Modifiers.cut(facing.getCounterClockWise(), .5F, 1.5F))
                         .apply(Modifiers.makeVerticalSlope(false, 45))
                         .apply(Modifiers.offset(Direction.DOWN, .5F))
-                        .export(quadMap.get(null));
+                        .export(quadMap, null);
             }
             else if (altSlope && DirUtils.isY(quadDir))
             {
@@ -97,7 +97,7 @@ public class FramedUpperPyramidSlabGeometry extends FramedPyramidGeometry
                         .apply(Modifiers.cut(facing.getClockWise(), 1.5F, .5F))
                         .apply(Modifiers.rotate(facing.getClockWise().getAxis(), origin, angle, true))
                         .apply(Modifiers.offset(quadDir, .5F))
-                        .export(quadMap.get(null));
+                        .export(quadMap, null);
             }
             else if (quadDir.getAxis() == facing.getClockWise().getAxis())
             {
@@ -109,14 +109,14 @@ public class FramedUpperPyramidSlabGeometry extends FramedPyramidGeometry
                         .apply(Modifiers.cut(Direction.UP, right ? 1.5F : .5F, right ? .5F : 1.5F))
                         .apply(Modifiers.makeHorizontalSlope(!right, 45))
                         .apply(Modifiers.offset(quadDir, .5F))
-                        .export(quadMap.get(null));
+                        .export(quadMap, null);
             }
         }
         if (quadDir == facing.getOpposite())
         {
             QuadModifier.of(quad)
                     .apply(Modifiers.setPosition(.5F))
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
         }
     }
 

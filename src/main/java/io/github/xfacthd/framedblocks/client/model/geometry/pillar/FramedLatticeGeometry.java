@@ -2,7 +2,7 @@ package io.github.xfacthd.framedblocks.client.model.geometry.pillar;
 
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
-import io.github.xfacthd.framedblocks.api.model.data.QuadMap;
+import io.github.xfacthd.framedblocks.api.model.data.QuadMapBuilder;
 import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
@@ -37,7 +37,7 @@ public class FramedLatticeGeometry extends Geometry
     }
 
     @Override
-    public void transformQuad(QuadMap quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
+    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
     {
         Direction quadDir = quad.direction();
         if (DirUtils.isY(quadDir))
@@ -45,19 +45,19 @@ public class FramedLatticeGeometry extends Geometry
             QuadModifier.of(quad)
                     .apply(Modifiers.cutTopBottom(minCoord, minCoord, maxCoord, maxCoord))
                     .applyIf(Modifiers.setPosition(maxCoord), !yAxis)
-                    .export(quadMap.get(yAxis ? quadDir : null));
+                    .export(quadMap, yAxis ? quadDir : null);
 
             if (xAxis)
             {
                 QuadModifier.of(quad)
                         .apply(Modifiers.cutTopBottom(0F, minCoord, minCoord, maxCoord))
                         .apply(Modifiers.setPosition(maxCoord))
-                        .export(quadMap.get(null));
+                        .export(quadMap, null);
 
                 QuadModifier.of(quad)
                         .apply(Modifiers.cutTopBottom(maxCoord, minCoord, 1F, maxCoord))
                         .apply(Modifiers.setPosition(maxCoord))
-                        .export(quadMap.get(null));
+                        .export(quadMap, null);
             }
 
             if (zAxis)
@@ -65,12 +65,12 @@ public class FramedLatticeGeometry extends Geometry
                 QuadModifier.of(quad)
                         .apply(Modifiers.cutTopBottom(minCoord, 0F, maxCoord, minCoord))
                         .apply(Modifiers.setPosition(maxCoord))
-                        .export(quadMap.get(null));
+                        .export(quadMap, null);
 
                 QuadModifier.of(quad)
                         .apply(Modifiers.cutTopBottom(minCoord, maxCoord, maxCoord, 1F))
                         .apply(Modifiers.setPosition(maxCoord))
-                        .export(quadMap.get(null));
+                        .export(quadMap, null);
             }
         }
         else if (DirUtils.isX(quadDir))
@@ -87,33 +87,33 @@ public class FramedLatticeGeometry extends Geometry
             QuadModifier.of(quad)
                     .apply(Modifiers.cutSide(minCoord, 0F, maxCoord, minCoord))
                     .apply(Modifiers.setPosition(maxCoord))
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
 
             QuadModifier.of(quad)
                     .apply(Modifiers.cutSide(minCoord, maxCoord, maxCoord, 1F))
                     .apply(Modifiers.setPosition(maxCoord))
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
         }
     }
 
-    private void createHorizontalStrutSideQuads(QuadMap quadMap, BakedQuad quad, boolean frontAxis, boolean sideAxis)
+    private void createHorizontalStrutSideQuads(QuadMapBuilder quadMap, BakedQuad quad, boolean frontAxis, boolean sideAxis)
     {
         QuadModifier.of(quad)
                 .apply(Modifiers.cutSide(minCoord, minCoord, maxCoord, maxCoord))
                 .applyIf(Modifiers.setPosition(maxCoord), !frontAxis)
-                .export(quadMap.get(frontAxis ? quad.direction() : null));
+                .export(quadMap, frontAxis ? quad.direction() : null);
 
         if (sideAxis)
         {
             QuadModifier.of(quad)
                     .apply(Modifiers.cutSide(0F, minCoord, minCoord, maxCoord))
                     .apply(Modifiers.setPosition(maxCoord))
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
 
             QuadModifier.of(quad)
                     .apply(Modifiers.cutSide(maxCoord, minCoord, 1F, maxCoord))
                     .apply(Modifiers.setPosition(maxCoord))
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
         }
     }
 

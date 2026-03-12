@@ -1,7 +1,7 @@
 package io.github.xfacthd.framedblocks.client.model.geometry.door;
 
 import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
-import io.github.xfacthd.framedblocks.api.model.data.QuadMap;
+import io.github.xfacthd.framedblocks.api.model.data.QuadMapBuilder;
 import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
@@ -29,7 +29,7 @@ public class FramedDoorGeometry extends Geometry
     }
 
     @Override
-    public void transformQuad(QuadMap quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
+    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
     {
         Direction faceDir = dir;
         if (open) { faceDir = hingeRight ? faceDir.getCounterClockWise() : faceDir.getClockWise(); }
@@ -39,7 +39,7 @@ public class FramedDoorGeometry extends Geometry
         {
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(faceDir, 3F/16F))
-                    .export(quadMap.get(quadDir));
+                    .export(quadMap, quadDir);
         }
         else
         {
@@ -47,13 +47,13 @@ public class FramedDoorGeometry extends Geometry
             {
                 QuadModifier.of(quad)
                         .apply(Modifiers.setPosition(3F/16F))
-                        .export(quadMap.get(null));
+                        .export(quadMap, null);
             }
             else
             {
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(faceDir, 3F/16F))
-                        .export(quadMap.get(quadDir));
+                        .export(quadMap, quadDir);
             }
         }
     }

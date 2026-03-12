@@ -2,7 +2,7 @@ package io.github.xfacthd.framedblocks.common.compat.diagonalblocks;
 
 import fuzs.diagonalblocks.api.v2.block.DiagonalBlock;
 import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
-import io.github.xfacthd.framedblocks.api.model.data.QuadMap;
+import io.github.xfacthd.framedblocks.api.model.data.QuadMapBuilder;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
 import io.github.xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
@@ -30,7 +30,7 @@ class FramedDiagonalFenceGeometry extends FramedFenceGeometry
     }
 
     @Override
-    public void transformQuad(QuadMap quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
+    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
     {
         super.transformQuad(quadMap, quad, blockData, modelData);
 
@@ -40,7 +40,7 @@ class FramedDiagonalFenceGeometry extends FramedFenceGeometry
         createDiagonalFenceBars(quadMap, quad, Direction.WEST, northWest);
     }
 
-    private static void createDiagonalFenceBars(QuadMap quadMap, BakedQuad quad, Direction dir, boolean active)
+    private static void createDiagonalFenceBars(QuadMapBuilder quadMap, BakedQuad quad, Direction dir, boolean active)
     {
         if (!active)
         {
@@ -58,10 +58,10 @@ class FramedDiagonalFenceGeometry extends FramedFenceGeometry
                     .apply(rotate(dir));
 
             mod.derive().apply(Modifiers.setPosition(quadDir == Direction.UP ? 15F/16F : 4F/16F))
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
 
             mod.apply(Modifiers.setPosition(quadDir == Direction.UP ? 9F/16F : 10F/16F))
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
         }
         else if (quadDir == dir.getClockWise() || quadDir == dir.getCounterClockWise())
         {
@@ -71,25 +71,25 @@ class FramedDiagonalFenceGeometry extends FramedFenceGeometry
                     .apply(Modifiers.cutSide(neg ? 0F : 9F/16F, 6F/16F, neg ? 7F/16F : 1F, 9F/16F))
                     .apply(Modifiers.setPosition(9F/16F))
                     .apply(rotate(dir))
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
 
             QuadModifier.of(quad)
                     .apply(Modifiers.cutSide(neg ? 0F : 9F/16F, 12F/16F, neg ? 7F/16F : 1F, 15F/16F))
                     .apply(Modifiers.setPosition(9F/16F))
                     .apply(rotate(dir))
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
         }
         else if (quadDir == dir)
         {
             QuadModifier.of(quad)
                     .apply(Modifiers.cutSide(7F/16F, 6F/16F, 9F/16F, 9F/16F))
                     .apply(rotate(dir))
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
 
             QuadModifier.of(quad)
                     .apply(Modifiers.cutSide(7F/16F, 12F/16F, 9F/16F, 15F/16F))
                     .apply(rotate(dir))
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
         }
     }
 

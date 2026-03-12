@@ -2,7 +2,7 @@ package io.github.xfacthd.framedblocks.api.model.util;
 
 import io.github.xfacthd.framedblocks.api.internal.InternalClientAPI;
 import io.github.xfacthd.framedblocks.api.model.ExtendedBlockModelPart;
-import io.github.xfacthd.framedblocks.api.model.data.QuadMap;
+import io.github.xfacthd.framedblocks.api.model.data.QuadMapBuilder;
 import io.github.xfacthd.framedblocks.api.model.geometry.DefaultAO;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadData;
 import io.github.xfacthd.framedblocks.api.util.DirUtils;
@@ -123,14 +123,14 @@ public final class ModelUtils
         return Lazy.of(() -> getModel(state));
     }
 
-    public static ExtendedBlockModelPart makeModelPart(BlockModelPart srcPart, QuadMap quadMap, BlockState state, DefaultAO defaultAO, @Nullable BlockState shaderState)
+    public static ExtendedBlockModelPart makeModelPart(BlockModelPart srcPart, QuadMapBuilder quadMap, BlockState state, DefaultAO defaultAO, @Nullable BlockState shaderState)
     {
         TriState partAO = defaultAO.apply(srcPart.ambientOcclusion());
         ChunkSectionLayer chunkLayer = srcPart.getRenderType(state);
         return makeModelPart(quadMap, partAO, srcPart.particleIcon(), chunkLayer, shaderState);
     }
 
-    public static ExtendedBlockModelPart makeModelPart(QuadMap quadMap, TriState partAO, TextureAtlasSprite particleSprite, ChunkSectionLayer chunkLayer, @Nullable BlockState shaderState)
+    public static ExtendedBlockModelPart makeModelPart(QuadMapBuilder quadMap, TriState partAO, TextureAtlasSprite particleSprite, ChunkSectionLayer chunkLayer, @Nullable BlockState shaderState)
     {
         return InternalClientAPI.INSTANCE.makeBlockModelPart(quadMap, partAO, particleSprite, chunkLayer, shaderState);
     }

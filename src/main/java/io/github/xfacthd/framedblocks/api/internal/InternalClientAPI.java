@@ -3,7 +3,7 @@ package io.github.xfacthd.framedblocks.api.internal;
 import com.mojang.datafixers.util.Either;
 import io.github.xfacthd.framedblocks.api.block.render.NullCullPredicate;
 import io.github.xfacthd.framedblocks.api.model.ExtendedBlockModelPart;
-import io.github.xfacthd.framedblocks.api.model.data.QuadMap;
+import io.github.xfacthd.framedblocks.api.model.data.QuadMapBuilder;
 import io.github.xfacthd.framedblocks.api.model.item.ItemModelInfo;
 import io.github.xfacthd.framedblocks.api.model.item.block.BlockItemModelProvider;
 import io.github.xfacthd.framedblocks.api.model.item.tint.DynamicItemTintProvider;
@@ -59,7 +59,7 @@ public interface InternalClientAPI
 
     ItemModel.Unbaked createFramedBlockItemModel(Block block, BlockItemModelProvider modelProvider, DynamicItemTintProvider tintProvider, Identifier baseModel);
 
-    ExtendedBlockModelPart makeBlockModelPart(QuadMap quadMap, TriState partAO, TextureAtlasSprite particleSprite, ChunkSectionLayer chunkLayer, @Nullable BlockState shaderState);
+    ExtendedBlockModelPart makeBlockModelPart(QuadMapBuilder quadMap, TriState partAO, TextureAtlasSprite particleSprite, ChunkSectionLayer chunkLayer, @Nullable BlockState shaderState);
 
     BlockModelDefinition createFramedBlockDefinition(
             Either<BlockModelDefinition, SingleVariant.Unbaked> wrapped,

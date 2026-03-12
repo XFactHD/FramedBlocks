@@ -2,7 +2,7 @@ package io.github.xfacthd.framedblocks.client.model.geometry.pane;
 
 import com.google.common.base.Preconditions;
 import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
-import io.github.xfacthd.framedblocks.api.model.data.QuadMap;
+import io.github.xfacthd.framedblocks.api.model.data.QuadMapBuilder;
 import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
@@ -12,8 +12,6 @@ import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.jspecify.annotations.Nullable;
-
-import java.util.List;
 
 public class FramedPaneGeometry extends Geometry
 {
@@ -31,7 +29,7 @@ public class FramedPaneGeometry extends Geometry
     }
 
     @Override
-    public void transformQuad(QuadMap quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
+    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
     {
         Direction face = quad.direction();
         if (DirUtils.isY(face))
@@ -41,10 +39,10 @@ public class FramedPaneGeometry extends Geometry
                 createTopBottomCenterQuad(quadMap, quad, false);
             }
 
-            if (north) { createTopBottomEdgeQuad(quadMap, quad, Direction.NORTH, false); }
-            if (east) { createTopBottomEdgeQuad(quadMap, quad, Direction.EAST, false); }
-            if (south) { createTopBottomEdgeQuad(quadMap, quad, Direction.SOUTH, false); }
-            if (west) { createTopBottomEdgeQuad(quadMap, quad, Direction.WEST, false); }
+            if (north) createTopBottomEdgeQuad(quadMap, quad, Direction.NORTH, false);
+            if (east) createTopBottomEdgeQuad(quadMap, quad, Direction.EAST, false);
+            if (south) createTopBottomEdgeQuad(quadMap, quad, Direction.SOUTH, false);
+            if (west) createTopBottomEdgeQuad(quadMap, quad, Direction.WEST, false);
         }
         else
         {
@@ -56,14 +54,14 @@ public class FramedPaneGeometry extends Geometry
 
             if (DirUtils.isX(face))
             {
-                if (north) { createSideQuad(quadMap.get(null), quad, Direction.NORTH); }
-                if (south) { createSideQuad(quadMap.get(null), quad, Direction.SOUTH); }
+                if (north) createSideQuad(quadMap, quad, Direction.NORTH);
+                if (south) createSideQuad(quadMap, quad, Direction.SOUTH);
             }
 
             if (DirUtils.isZ(face))
             {
-                if (east) { createSideQuad(quadMap.get(null), quad, Direction.EAST); }
-                if (west) { createSideQuad(quadMap.get(null), quad, Direction.WEST); }
+                if (east) createSideQuad(quadMap, quad, Direction.EAST);
+                if (west) createSideQuad(quadMap, quad, Direction.WEST);
             }
         }
     }
@@ -73,15 +71,15 @@ public class FramedPaneGeometry extends Geometry
         return true;
     }
 
-    protected static void createTopBottomCenterQuad(QuadMap quadMap, BakedQuad quad, boolean mirrored)
+    protected static void createTopBottomCenterQuad(QuadMapBuilder quadMap, BakedQuad quad, boolean mirrored)
     {
         QuadModifier.of(quad)
                 .apply(Modifiers.cutTopBottom(7F/16F, 7F/16F, 9F/16F, 9F/16F))
                 .applyIf(Modifiers.setPosition(.001F), mirrored)
-                .export(quadMap.get(mirrored ? null : quad.direction()));
+                .export(quadMap, mirrored ? null : quad.direction());
     }
 
-    protected static void createTopBottomEdgeQuad(QuadMap quadMap, BakedQuad quad, Direction dir, boolean mirrored)
+    protected static void createTopBottomEdgeQuad(QuadMapBuilder quadMap, BakedQuad quad, Direction dir, boolean mirrored)
     {
         Preconditions.checkArgument(!DirUtils.isY(dir), String.format("Invalid direction: %s!", dir));
 
@@ -89,10 +87,10 @@ public class FramedPaneGeometry extends Geometry
                 .apply(Modifiers.cut(dir.getOpposite(), 7F/16F))
                 .apply(Modifiers.cut(dir.getClockWise().getAxis(), 9F/16F))
                 .applyIf(Modifiers.setPosition(.001F), mirrored)
-                .export(quadMap.get(mirrored ? null : quad.direction()));
+                .export(quadMap, mirrored ? null : quad.direction());
     }
 
-    protected static void createSideEdgeQuad(QuadMap quadMap, BakedQuad quad, boolean inset, boolean mirrored)
+    protected static void createSideEdgeQuad(QuadMapBuilder quadMap, BakedQuad quad, boolean inset, boolean mirrored)
     {
         Preconditions.checkArgument(!inset || !mirrored, "Quad can't be mirrored and inset!");
 
@@ -103,15 +101,15 @@ public class FramedPaneGeometry extends Geometry
                 .apply(Modifiers.cut(quadDir.getClockWise().getAxis(), 9F/16F))
                 .applyIf(Modifiers.setPosition(9F/16F), inset)
                 .applyIf(Modifiers.setPosition(.001F), !inset && mirrored)
-                .export(quadMap.get(exportSide));
+                .export(quadMap, exportSide);
     }
 
-    private static void createSideQuad(List<BakedQuad> quadList, BakedQuad quad, Direction dir)
+    private static void createSideQuad(QuadMapBuilder quadMap, BakedQuad quad, Direction dir)
     {
         QuadModifier.of(quad)
                 .apply(Modifiers.cut(dir.getOpposite(), 7F/16F))
                 .apply(Modifiers.setPosition(9F/16F))
-                .export(quadList);
+                .export(quadMap, null);
     }
 
     protected boolean isSideInset(Direction face)

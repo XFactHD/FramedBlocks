@@ -1,6 +1,6 @@
 package io.github.xfacthd.framedblocks.api.model.geometry;
 
-import io.github.xfacthd.framedblocks.api.model.data.QuadMap;
+import io.github.xfacthd.framedblocks.api.model.data.QuadMapBuilder;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.core.Direction;
 import org.jspecify.annotations.Nullable;
@@ -14,17 +14,17 @@ import java.util.function.Predicate;
 public interface QuadListModifier
 {
     /**
-     * Allows modifying the quads for a particular side before they are copied to the {@link QuadMap}.
+     * Allows modifying the quads for a particular side before they are copied to the {@link QuadMapBuilder}.
      * <p>
-     * If the implementation manually copies any quads to the provided {@link QuadMap}, then it must
+     * If the implementation manually copies any quads to the provided {@link QuadMapBuilder}, then it must
      * remove the affected quads from the provided list, otherwise they will be copied to the
-     * {@link QuadMap} by the calling code.
+     * {@link QuadMapBuilder} by the calling code.
      *
-     * @param quadMap The {@link QuadMap} that will contain the final quads
+     * @param quadMap The {@link QuadMapBuilder} that will contain the final quads
      * @param quads   The list of quads for the side currently being operated on
      * @param side    The side currently being operated on
      */
-    void modify(QuadMap quadMap, ArrayList<BakedQuad> quads, @Nullable Direction side);
+    void modify(QuadMapBuilder quadMap, ArrayList<BakedQuad> quads, @Nullable Direction side);
 
 
 

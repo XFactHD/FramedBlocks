@@ -1,7 +1,7 @@
 package io.github.xfacthd.framedblocks.client.model.geometry.pillar;
 
 import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
-import io.github.xfacthd.framedblocks.api.model.data.QuadMap;
+import io.github.xfacthd.framedblocks.api.model.data.QuadMapBuilder;
 import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
@@ -28,14 +28,14 @@ public class FramedFenceGeometry extends Geometry
     }
 
     @Override
-    public void transformQuad(QuadMap quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
+    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
     {
         Direction quadDir = quad.direction();
         if (DirUtils.isY(quadDir))
         {
             QuadModifier.of(quad)
                     .apply(Modifiers.cutTopBottom(6F/16F, 6F/16F, 10F/16F, 10F/16F))
-                    .export(quadMap.get(quadDir));
+                    .export(quadMap, quadDir);
         }
         else
         {
@@ -43,7 +43,7 @@ public class FramedFenceGeometry extends Geometry
                     .apply(Modifiers.cut(quadDir.getClockWise(), 10F/16F))
                     .apply(Modifiers.cut(quadDir.getCounterClockWise(), 10F/16F))
                     .apply(Modifiers.setPosition(10F/16F))
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
         }
 
         createFenceBars(quadMap, quad, Direction.NORTH, north);
@@ -52,7 +52,7 @@ public class FramedFenceGeometry extends Geometry
         createFenceBars(quadMap, quad, Direction.WEST, west);
     }
 
-    private static void createFenceBars(QuadMap quadMap, BakedQuad quad, Direction dir, boolean active)
+    private static void createFenceBars(QuadMapBuilder quadMap, BakedQuad quad, Direction dir, boolean active)
     {
         if (!active)
         {
@@ -68,10 +68,10 @@ public class FramedFenceGeometry extends Geometry
                     .apply(Modifiers.cut(dir.getCounterClockWise(), 9F/16F));
 
             mod.derive().apply(Modifiers.setPosition(quadDir == Direction.UP ? 15F/16F : 4F/16F))
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
 
             mod.apply(Modifiers.setPosition(quadDir == Direction.UP ? 9F/16F : 10F/16F))
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
         }
         else if (quadDir == dir.getClockWise() || quadDir == dir.getCounterClockWise())
         {
@@ -80,22 +80,22 @@ public class FramedFenceGeometry extends Geometry
             QuadModifier.of(quad)
                     .apply(Modifiers.cutSide(neg ? 0F : 10F/16F, 6F/16F, neg ? 6F/16F : 1F, 9F/16F))
                     .apply(Modifiers.setPosition(9F/16F))
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
 
             QuadModifier.of(quad)
                     .apply(Modifiers.cutSide(neg ? 0F : 10F/16F, 12F/16F, neg ? 6F/16F : 1F, 15F/16F))
                     .apply(Modifiers.setPosition(9F/16F))
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
         }
         else if (quadDir == dir)
         {
             QuadModifier.of(quad)
                     .apply(Modifiers.cutSide(7F/16F, 6F/16F, 9F/16F, 9F/16F))
-                    .export(quadMap.get(quadDir));
+                    .export(quadMap, quadDir);
 
             QuadModifier.of(quad)
                     .apply(Modifiers.cutSide(7F/16F, 12F/16F, 9F/16F, 15F/16F))
-                    .export(quadMap.get(quadDir));
+                    .export(quadMap, quadDir);
         }
     }
 

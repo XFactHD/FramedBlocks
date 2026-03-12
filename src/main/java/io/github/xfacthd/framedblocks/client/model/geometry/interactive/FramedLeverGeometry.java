@@ -1,7 +1,7 @@
 package io.github.xfacthd.framedblocks.client.model.geometry.interactive;
 
 import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
-import io.github.xfacthd.framedblocks.api.model.data.QuadMap;
+import io.github.xfacthd.framedblocks.api.model.data.QuadMapBuilder;
 import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.geometry.PartConsumer;
 import io.github.xfacthd.framedblocks.api.model.geometry.QuadListModifier;
@@ -53,7 +53,7 @@ public class FramedLeverGeometry extends Geometry
     }
 
     @Override
-    public void transformQuad(QuadMap quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
+    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
     {
         Direction quadDir = quad.direction();
         Direction facing = getFacing();
@@ -67,7 +67,7 @@ public class FramedLeverGeometry extends Geometry
                         .apply(Modifiers.cut(dir.getAxis(), MAX_LARGE))
                         .apply(Modifiers.cut(dir.getClockWise().getAxis(), MAX_SMALL))
                         .applyIf(Modifiers.setPosition(HEIGHT), quadInDir)
-                        .export(quadMap.get(quadInDir ? null : quadDir));
+                        .export(quadMap, quadInDir ? null : quadDir);
             }
             else
             {
@@ -77,7 +77,7 @@ public class FramedLeverGeometry extends Geometry
                         .apply(Modifiers.cut(facing, HEIGHT))
                         .apply(Modifiers.cut(quadDir.getClockWise().getAxis(), smallSide ? MAX_SMALL : MAX_LARGE))
                         .apply(Modifiers.setPosition(smallSide ? MAX_LARGE : MAX_SMALL))
-                        .export(quadMap.get(null));
+                        .export(quadMap, null);
             }
         }
         else
@@ -87,7 +87,7 @@ public class FramedLeverGeometry extends Geometry
                 QuadModifier.of(quad)
                         .apply(Modifiers.cutSide(MIN_SMALL, MIN_LARGE, MAX_SMALL, MAX_LARGE))
                         .applyIf(Modifiers.setPosition(HEIGHT), quadInDir)
-                        .export(quadMap.get(quadInDir ? null : quadDir));
+                        .export(quadMap, quadInDir ? null : quadDir);
             }
             else if (DirUtils.isY(quadDir))
             {
@@ -95,7 +95,7 @@ public class FramedLeverGeometry extends Geometry
                         .apply(Modifiers.cut(dir, HEIGHT))
                         .apply(Modifiers.cut(dir.getClockWise().getAxis(), MAX_SMALL))
                         .apply(Modifiers.setPosition(MAX_LARGE))
-                        .export(quadMap.get(null));
+                        .export(quadMap, null);
             }
             else
             {
@@ -103,7 +103,7 @@ public class FramedLeverGeometry extends Geometry
                         .apply(Modifiers.cut(dir, HEIGHT))
                         .apply(Modifiers.cut(Direction.Axis.Y, MAX_LARGE))
                         .apply(Modifiers.setPosition(MAX_SMALL))
-                        .export(quadMap.get(null));
+                        .export(quadMap, null);
             }
         }
     }

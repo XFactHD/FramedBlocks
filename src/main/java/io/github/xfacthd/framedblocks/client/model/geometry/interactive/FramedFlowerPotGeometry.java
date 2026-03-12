@@ -1,7 +1,7 @@
 package io.github.xfacthd.framedblocks.client.model.geometry.interactive;
 
 import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
-import io.github.xfacthd.framedblocks.api.model.data.QuadMap;
+import io.github.xfacthd.framedblocks.api.model.data.QuadMapBuilder;
 import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.geometry.PartConsumer;
 import io.github.xfacthd.framedblocks.api.model.geometry.QuadListModifier;
@@ -68,47 +68,47 @@ public class FramedFlowerPotGeometry extends Geometry
     }
 
     @Override
-    public void transformQuad(QuadMap quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
+    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
     {
         if (quad.direction() == Direction.DOWN)
         {
             QuadModifier.of(quad)
                     .apply(Modifiers.cutTopBottom(5F/16F, 5F/16F, 11F/16F, 11F/16F))
-                    .export(quadMap.get(Direction.DOWN));
+                    .export(quadMap, Direction.DOWN);
         }
         else if (quad.direction() == Direction.UP)
         {
             QuadModifier.of(quad)
                     .apply(Modifiers.cutTopBottom(5F/16F, 5F/16F, 11F/16F, 6F/16F))
                     .apply(Modifiers.setPosition(6F/16F))
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
 
             QuadModifier.of(quad)
                     .apply(Modifiers.cutTopBottom(5F/16F, 10F/16F, 11F/16F, 11F/16F))
                     .apply(Modifiers.setPosition(6F/16F))
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
 
             QuadModifier.of(quad)
                     .apply(Modifiers.cutTopBottom(5F/16F, 6F/16F, 6F/16F, 10F/16F))
                     .apply(Modifiers.setPosition(6F/16F))
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
 
             QuadModifier.of(quad)
                     .apply(Modifiers.cutTopBottom(10F/16F, 6F/16F, 11F/16F, 10F/16F))
                     .apply(Modifiers.setPosition(6F/16F))
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
         }
         else if (!DirUtils.isY(quad.direction()))
         {
             QuadModifier.of(quad)
                     .apply(Modifiers.cutSide(5F/16F, 0, 11F/16F, 6F/16F))
                     .apply(Modifiers.setPosition(11F/16F))
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
 
             QuadModifier.of(quad)
                     .apply(Modifiers.cutSide(6F/16F, 1F/16F, 10F/16F, 6F/16F))
                     .apply(Modifiers.setPosition(6F/16F))
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
         }
     }
 

@@ -1,7 +1,7 @@
 package io.github.xfacthd.framedblocks.client.model.geometry.pane;
 
 import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
-import io.github.xfacthd.framedblocks.api.model.data.QuadMap;
+import io.github.xfacthd.framedblocks.api.model.data.QuadMapBuilder;
 import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
@@ -41,7 +41,7 @@ public class FramedBoardGeometry extends Geometry
     }
 
     @Override
-    public void transformQuad(QuadMap quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
+    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
     {
         Direction quadDir = quad.direction();
         if (hasFace(quadDir.getOpposite()) && !canCullInner(blockData))
@@ -55,7 +55,7 @@ public class FramedBoardGeometry extends Geometry
                     modifier.apply(Modifiers.cut(edge, 1F - DEPTH));
                 }
             }
-            modifier.export(quadMap.get(null));
+            modifier.export(quadMap, null);
         }
         if (!hasFace(quadDir))
         {
@@ -80,7 +80,7 @@ public class FramedBoardGeometry extends Geometry
                         modifier.apply(Modifiers.cut(cornerTwo, 1F - DEPTH));
                     }
                 }
-                modifier.export(quadMap.get(quadDir));
+                modifier.export(quadMap, quadDir);
             }
         }
     }

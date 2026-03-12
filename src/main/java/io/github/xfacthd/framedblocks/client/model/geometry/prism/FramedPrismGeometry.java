@@ -2,7 +2,7 @@ package io.github.xfacthd.framedblocks.client.model.geometry.prism;
 
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
-import io.github.xfacthd.framedblocks.api.model.data.QuadMap;
+import io.github.xfacthd.framedblocks.api.model.data.QuadMapBuilder;
 import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
@@ -29,7 +29,7 @@ public class FramedPrismGeometry extends Geometry
     }
 
     @Override
-    public void transformQuad(QuadMap quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
+    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
     {
         boolean yFacing = DirUtils.isY(facing);
         boolean yAxis = axis == Direction.Axis.Y;
@@ -43,7 +43,7 @@ public class FramedPrismGeometry extends Geometry
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(facing, .5F))
                     .apply(Modifiers.makeVerticalSlope(up, 45))
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
         }
         else if (altSlope && yFacing && DirUtils.isY(quadFace)) // Slopes for Y facing with Y_SLOPE
         {
@@ -54,44 +54,44 @@ public class FramedPrismGeometry extends Geometry
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(offAxisCW, .5F))
                     .apply(Modifiers.makeVerticalSlope(offAxisCCW, 45))
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
 
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(offAxisCCW, .5F))
                     .apply(Modifiers.makeVerticalSlope(offAxisCW, 45))
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
         }
         else if (!yFacing && yAxis && !quadOnAxis && !quadOnFacingAxis) // Slopes for horizontal facing and vertical axis
         {
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(facing, .5F))
                     .apply(Modifiers.makeHorizontalSlope(quadFace == facing.getCounterClockWise(), 45))
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
         }
         else if (!altSlope && !yFacing && !yAxis && quadFace == facing) // Slopes for horizontal facing and horizontal axis without Y_SLOPE
         {
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(Direction.UP, .5F))
                     .apply(Modifiers.makeVerticalSlope(false, 45))
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
 
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(Direction.DOWN, .5F))
                     .apply(Modifiers.makeVerticalSlope(true, 45))
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
         }
         else if (altSlope && !yFacing && !yAxis && DirUtils.isY(quadFace)) // Slopes for horizontal facing and horizontal axis with Y_SLOPE
         {
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(facing, .5F))
                     .apply(Modifiers.makeVerticalSlope(facing, 45))
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
         }
         else if (quadFace.getAxis() == axis) // Triangles
         {
             QuadModifier.of(quad)
                     .apply(Modifiers.cutSmallTriangle(facing))
-                    .export(quadMap.get(quadFace));
+                    .export(quadMap, quadFace);
         }
     }
 }

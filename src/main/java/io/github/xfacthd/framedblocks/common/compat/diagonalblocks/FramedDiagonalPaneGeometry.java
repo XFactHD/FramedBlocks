@@ -3,7 +3,7 @@ package io.github.xfacthd.framedblocks.common.compat.diagonalblocks;
 import com.google.common.base.Preconditions;
 import fuzs.diagonalblocks.api.v2.block.DiagonalBlock;
 import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
-import io.github.xfacthd.framedblocks.api.model.data.QuadMap;
+import io.github.xfacthd.framedblocks.api.model.data.QuadMapBuilder;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
 import io.github.xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
@@ -13,8 +13,6 @@ import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.core.Direction;
 import org.joml.Vector3f;
 import org.jspecify.annotations.Nullable;
-
-import java.util.List;
 
 class FramedDiagonalPaneGeometry extends FramedPaneGeometry
 {
@@ -36,7 +34,7 @@ class FramedDiagonalPaneGeometry extends FramedPaneGeometry
     }
 
     @Override
-    public void transformQuad(QuadMap quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
+    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
     {
         super.transformQuad(quadMap, quad, blockData, modelData);
 
@@ -71,11 +69,11 @@ class FramedDiagonalPaneGeometry extends FramedPaneGeometry
             {
                 if (northEast)
                 {
-                    createDiagonalSideQuad(quadMap.get(null), quad, Direction.NORTH, noPillar);
+                    createDiagonalSideQuad(quadMap, quad, Direction.NORTH, noPillar);
                 }
                 if (southWest)
                 {
-                    createDiagonalSideQuad(quadMap.get(null), quad, Direction.SOUTH, noPillar);
+                    createDiagonalSideQuad(quadMap, quad, Direction.SOUTH, noPillar);
                 }
             }
 
@@ -83,11 +81,11 @@ class FramedDiagonalPaneGeometry extends FramedPaneGeometry
             {
                 if (southEast)
                 {
-                    createDiagonalSideQuad(quadMap.get(null), quad, Direction.EAST, noPillar);
+                    createDiagonalSideQuad(quadMap, quad, Direction.EAST, noPillar);
                 }
                 if (northWest)
                 {
-                    createDiagonalSideQuad(quadMap.get(null), quad, Direction.WEST, noPillar);
+                    createDiagonalSideQuad(quadMap, quad, Direction.WEST, noPillar);
                 }
             }
         }
@@ -99,7 +97,7 @@ class FramedDiagonalPaneGeometry extends FramedPaneGeometry
         return !noPillar;
     }
 
-    protected static void createDiagonalTopBottomEdgeQuad(QuadMap quadMap, BakedQuad quad, Direction dir, boolean noPillar)
+    protected static void createDiagonalTopBottomEdgeQuad(QuadMapBuilder quadMap, BakedQuad quad, Direction dir, boolean noPillar)
     {
         Preconditions.checkArgument(!DirUtils.isY(dir), String.format("Invalid direction: %s!", dir));
 
@@ -107,25 +105,25 @@ class FramedDiagonalPaneGeometry extends FramedPaneGeometry
                 .apply(Modifiers.cut(dir.getOpposite(), noPillar ? 8F/16F : 7F/16F))
                 .apply(Modifiers.cut(dir.getClockWise().getAxis(), 9F/16F))
                 .apply(rotate(dir))
-                .export(quadMap.get(null));
+                .export(quadMap, null);
     }
 
-    protected static void createDiagonalSideEdgeQuad(QuadMap quadMap, BakedQuad quad)
+    protected static void createDiagonalSideEdgeQuad(QuadMapBuilder quadMap, BakedQuad quad)
     {
         Direction quadDir = quad.direction();
         QuadModifier.of(quad)
                 .apply(Modifiers.cut(quadDir.getClockWise().getAxis(), 9F/16F))
                 .apply(rotate(quadDir))
-                .export(quadMap.get(null));
+                .export(quadMap, null);
     }
 
-    private static void createDiagonalSideQuad(List<BakedQuad> quadList, BakedQuad quad, Direction dir, boolean noPillar)
+    private static void createDiagonalSideQuad(QuadMapBuilder quadMap, BakedQuad quad, Direction dir, boolean noPillar)
     {
         QuadModifier.of(quad)
                 .apply(Modifiers.cut(dir.getOpposite(), noPillar ? 8F/16F : 7F/16F))
                 .apply(Modifiers.setPosition(9F/16F))
                 .apply(rotate(dir))
-                .export(quadList);
+                .export(quadMap, null);
     }
 
     protected boolean isDiagonalSideNotInset(Direction face)

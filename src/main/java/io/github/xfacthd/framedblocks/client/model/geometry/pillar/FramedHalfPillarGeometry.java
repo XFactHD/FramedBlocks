@@ -1,7 +1,7 @@
 package io.github.xfacthd.framedblocks.client.model.geometry.pillar;
 
 import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
-import io.github.xfacthd.framedblocks.api.model.data.QuadMap;
+import io.github.xfacthd.framedblocks.api.model.data.QuadMapBuilder;
 import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
@@ -22,7 +22,7 @@ public class FramedHalfPillarGeometry extends Geometry
     }
 
     @Override
-    public void transformQuad(QuadMap quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
+    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
     {
         QuadModifier mod = FramedPillarGeometry.createPillarQuad(quad, face.getAxis(), 4F / 16F, 12F / 16F, 12F / 16F);
         if (mod.hasFailed())
@@ -33,27 +33,27 @@ public class FramedHalfPillarGeometry extends Geometry
         Direction quadDir = quad.direction();
         if (quadDir == face)
         {
-            mod.export(quadMap.get(face));
+            mod.export(quadMap, face);
         }
         else if (quadDir == face.getOpposite())
         {
             mod.apply(Modifiers.setPosition(.5F))
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
         }
         else if (DirUtils.isY(face))
         {
             mod.apply(Modifiers.cut(face.getOpposite(), .5F))
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
         }
         else if (DirUtils.isY(quadDir))
         {
             mod.apply(Modifiers.cut(face.getOpposite(), .5F))
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
         }
         else
         {
             mod.apply(Modifiers.cut(face.getOpposite(), .5F))
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
         }
     }
 }

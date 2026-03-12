@@ -2,7 +2,7 @@ package io.github.xfacthd.framedblocks.client.model.geometry.slab;
 
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
-import io.github.xfacthd.framedblocks.api.model.data.QuadMap;
+import io.github.xfacthd.framedblocks.api.model.data.QuadMapBuilder;
 import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
@@ -24,7 +24,7 @@ public class FramedSlabEdgeGeometry extends Geometry
     }
 
     @Override
-    public void transformQuad(QuadMap quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
+    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
     {
         Direction quadDir = quad.direction();
         if (DirUtils.isY(quadDir))
@@ -34,7 +34,7 @@ public class FramedSlabEdgeGeometry extends Geometry
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(dir.getOpposite(), .5F))
                     .applyIf(Modifiers.setPosition(.5F), inset)
-                    .export(quadMap.get(inset ? null : quadDir));
+                    .export(quadMap, inset ? null : quadDir);
         }
         else
         {
@@ -45,7 +45,7 @@ public class FramedSlabEdgeGeometry extends Geometry
                     .apply(Modifiers.cut(top ? Direction.DOWN : Direction.UP, .5F))
                     .applyIf(Modifiers.cut(dir.getOpposite(), .5F), side)
                     .applyIf(Modifiers.setPosition(.5F), inset)
-                    .export(quadMap.get(inset ? null : quadDir));
+                    .export(quadMap, inset ? null : quadDir);
         }
     }
 }

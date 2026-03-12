@@ -1,7 +1,7 @@
 package io.github.xfacthd.framedblocks.client.model.geometry.torch;
 
 import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
-import io.github.xfacthd.framedblocks.api.model.data.QuadMap;
+import io.github.xfacthd.framedblocks.api.model.data.QuadMapBuilder;
 import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.geometry.PartConsumer;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
@@ -51,7 +51,7 @@ public class FramedWallTorchGeometry extends Geometry
     }
 
     @Override
-    public void transformQuad(QuadMap quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
+    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
     {
         /*
         "from": [-1, 3.5, 7],
@@ -67,7 +67,7 @@ public class FramedWallTorchGeometry extends Geometry
                     .apply(Modifiers.setPosition(BOTTOM))
                     .apply(Modifiers.offset(Direction.WEST, .5F))
                     .apply(applyRotation(yAngle))
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
         }
         else if (quadDir != Direction.UP)
         {
@@ -80,7 +80,7 @@ public class FramedWallTorchGeometry extends Geometry
                     .applyIf(Modifiers.offset(Direction.WEST, .5F), !xAxis)
                     .apply(Modifiers.offset(Direction.UP, 3.5F/16F))
                     .apply(applyRotation(yAngle))
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
         }
     }
 

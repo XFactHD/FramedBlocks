@@ -2,7 +2,7 @@ package io.github.xfacthd.framedblocks.client.model.geometry.cube;
 
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
-import io.github.xfacthd.framedblocks.api.model.data.QuadMap;
+import io.github.xfacthd.framedblocks.api.model.data.QuadMapBuilder;
 import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.geometry.PartConsumer;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
@@ -19,7 +19,6 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jspecify.annotations.Nullable;
 
-import java.util.List;
 import java.util.function.Predicate;
 
 public class FramedBookshelfGeometry extends Geometry
@@ -38,7 +37,7 @@ public class FramedBookshelfGeometry extends Geometry
     }
 
     @Override
-    public void transformQuad(QuadMap quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
+    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
     {
         Direction quadDir = quad.direction();
         if (DirUtils.isY(quadDir) || !frontFacePred.test(quadDir))
@@ -46,30 +45,28 @@ public class FramedBookshelfGeometry extends Geometry
             return;
         }
 
-        List<BakedQuad> quads = quadMap.get(quadDir);
-
         QuadModifier.of(quad)
                 .apply(Modifiers.cut(Direction.DOWN, 1F/16F))
-                .export(quads);
+                .export(quadMap, quadDir);
 
         QuadModifier.of(quad)
                 .apply(Modifiers.cut(Direction.UP, 1F/16F))
-                .export(quads);
+                .export(quadMap, quadDir);
 
         QuadModifier.of(quad)
                 .apply(Modifiers.cut(quadDir.getClockWise(), 1F/16F))
                 .apply(Modifiers.cut(Direction.Axis.Y, 15F/16F))
-                .export(quads);
+                .export(quadMap, quadDir);
 
         QuadModifier.of(quad)
                 .apply(Modifiers.cut(quadDir.getCounterClockWise(), 1F/16F))
                 .apply(Modifiers.cut(Direction.Axis.Y, 15F/16F))
-                .export(quads);
+                .export(quadMap, quadDir);
 
         QuadModifier.of(quad)
                 .apply(Modifiers.cut(Direction.Axis.Y, 9F/16F))
                 .apply(Modifiers.cut(quadDir.getClockWise().getAxis(), 15F/16F))
-                .export(quads);
+                .export(quadMap, quadDir);
     }
 
     @Override

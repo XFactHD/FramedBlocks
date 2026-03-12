@@ -239,12 +239,12 @@ public final class FramedBlockModel extends AbstractFramedBlockModel
                     ArrayList<BakedQuad> quads = new ArrayList<>(srcQuads);
                     modifier.modify(quadMap, quads, side);
                     // Copy to final destination at the end in case the modifier wants to iterate or clear the list
-                    Utils.copyAll(quads, quadMap.get(side));
+                    Utils.copyAll(quads, quadMap.getOrCreate(side));
                     hasAnyQuads |= !quadMap.isEmpty();
                 }
                 else
                 {
-                    Utils.copyAll(srcQuads, quadMap.get(side));
+                    Utils.copyAll(srcQuads, quadMap.getOrCreate(side));
                     hasAnyQuads = true;
                 }
             }

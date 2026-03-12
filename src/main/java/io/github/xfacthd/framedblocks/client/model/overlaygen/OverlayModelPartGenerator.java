@@ -2,7 +2,7 @@ package io.github.xfacthd.framedblocks.client.model.overlaygen;
 
 import com.google.common.base.Preconditions;
 import io.github.xfacthd.framedblocks.api.model.ExtendedBlockModelPart;
-import io.github.xfacthd.framedblocks.api.model.data.QuadMap;
+import io.github.xfacthd.framedblocks.api.model.data.QuadMapBuilder;
 import io.github.xfacthd.framedblocks.api.model.geometry.OverlayPartGenerator;
 import io.github.xfacthd.framedblocks.api.model.util.ModelUtils;
 import io.github.xfacthd.framedblocks.client.model.QuadMapImpl;
@@ -47,13 +47,13 @@ public final class OverlayModelPartGenerator implements OverlayPartGenerator
     {
         Preconditions.checkState(!flushed, "OverlayPartGenerator was already flushed");
 
-        QuadMap quadMap = new QuadMapImpl();
+        QuadMapBuilder quadMap = new QuadMapImpl();
         boolean hasQuads = false;
         for (BlockModelPart part : staticParts)
         {
             for (Direction side : cullfaces)
             {
-                ArrayList<BakedQuad> outQuads = quadMap.get(side);
+                ArrayList<BakedQuad> outQuads = quadMap.getOrCreate(side);
                 OverlayQuadGenerator.generate(part.getQuads(side), outQuads, spriteGetter, normalFilter, forceEmissive);
                 hasQuads |= !outQuads.isEmpty();
             }

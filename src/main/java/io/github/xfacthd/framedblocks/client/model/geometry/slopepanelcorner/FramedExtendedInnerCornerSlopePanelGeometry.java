@@ -2,7 +2,7 @@ package io.github.xfacthd.framedblocks.client.model.geometry.slopepanelcorner;
 
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
-import io.github.xfacthd.framedblocks.api.model.data.QuadMap;
+import io.github.xfacthd.framedblocks.api.model.data.QuadMapBuilder;
 import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
@@ -26,7 +26,7 @@ public class FramedExtendedInnerCornerSlopePanelGeometry extends Geometry
     }
 
     @Override
-    public void transformQuad(QuadMap quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
+    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
     {
         Direction quadDir = quad.direction();
         if (quadDir == dir || quadDir == dir.getCounterClockWise())
@@ -34,14 +34,14 @@ public class FramedExtendedInnerCornerSlopePanelGeometry extends Geometry
             Direction cutDir = quadDir == dir ? dir.getClockWise() : dir.getOpposite();
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(cutDir.getOpposite(), top ? 1F : .5F, top ? .5F : 1F))
-                    .export(quadMap.get(quadDir));
+                    .export(quadMap, quadDir);
 
             if (!altSlope)
             {
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(cutDir, top ? 0F : .5F, top ? .5F : 0F))
                         .apply(Modifiers.makeVerticalSlope(!top, FramedSlopePanelGeometry.SLOPE_ANGLE))
-                        .export(quadMap.get(null));
+                        .export(quadMap, null);
             }
         }
         else if ((!top && quadDir == Direction.UP) || (top && quadDir == Direction.DOWN))
@@ -52,23 +52,23 @@ public class FramedExtendedInnerCornerSlopePanelGeometry extends Geometry
                         .apply(Modifiers.cut(dir.getOpposite(), 0, .5F))
                         .apply(Modifiers.makeVerticalSlope(dir.getCounterClockWise(), FramedSlopePanelGeometry.SLOPE_ANGLE_VERT))
                         .apply(Modifiers.offset(dir.getCounterClockWise(), .5F))
-                        .export(quadMap.get(null));
+                        .export(quadMap, null);
 
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(dir.getClockWise(), .5F, 0))
                         .apply(Modifiers.makeVerticalSlope(dir, FramedSlopePanelGeometry.SLOPE_ANGLE_VERT))
                         .apply(Modifiers.offset(dir, .5F))
-                        .export(quadMap.get(null));
+                        .export(quadMap, null);
             }
 
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(dir, .5F))
-                    .export(quadMap.get(quadDir));
+                    .export(quadMap, quadDir);
 
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(dir.getOpposite(), .5F))
                     .apply(Modifiers.cut(dir.getCounterClockWise(), .5F))
-                    .export(quadMap.get(quadDir));
+                    .export(quadMap, quadDir);
         }
     }
 }

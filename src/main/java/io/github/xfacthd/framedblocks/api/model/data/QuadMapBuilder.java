@@ -8,7 +8,7 @@ import org.jspecify.annotations.Nullable;
 import java.util.ArrayList;
 
 @ApiStatus.NonExtendable
-public abstract class QuadMap
+public interface QuadMapBuilder
 {
-    public abstract ArrayList<BakedQuad> get(@Nullable Direction side);
+    ArrayList<BakedQuad> getOrCreate(@Nullable Direction side);
 }

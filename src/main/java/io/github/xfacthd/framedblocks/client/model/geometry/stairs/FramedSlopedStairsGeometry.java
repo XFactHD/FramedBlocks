@@ -2,7 +2,7 @@ package io.github.xfacthd.framedblocks.client.model.geometry.stairs;
 
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
-import io.github.xfacthd.framedblocks.api.model.data.QuadMap;
+import io.github.xfacthd.framedblocks.api.model.data.QuadMapBuilder;
 import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
@@ -24,7 +24,7 @@ public class FramedSlopedStairsGeometry extends Geometry
     }
 
     @Override
-    public void transformQuad(QuadMap quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
+    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
     {
         Direction quadDir = quad.direction();
 
@@ -32,25 +32,25 @@ public class FramedSlopedStairsGeometry extends Geometry
         {
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(dir.getOpposite(), 1, 0))
-                    .export(quadMap.get(quadDir));
+                    .export(quadMap, quadDir);
 
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(dir, 1, 0))
                     .apply(Modifiers.setPosition(.5F))
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
         }
         else
         {
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(top ? Direction.DOWN : Direction.UP, .5F))
-                    .export(quadMap.get(quadDir));
+                    .export(quadMap, quadDir);
 
             if (quadDir == dir.getOpposite())
             {
                 QuadModifier.of(quad)
                         .apply(Modifiers.makeHorizontalSlope(false, 45))
                         .apply(Modifiers.cut(top ? Direction.UP : Direction.DOWN, .5F))
-                        .export(quadMap.get(null));
+                        .export(quadMap, null);
             }
         }
     }

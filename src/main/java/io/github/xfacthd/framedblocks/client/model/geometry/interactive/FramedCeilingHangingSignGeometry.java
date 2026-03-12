@@ -1,7 +1,7 @@
 package io.github.xfacthd.framedblocks.client.model.geometry.interactive;
 
 import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
-import io.github.xfacthd.framedblocks.api.model.data.QuadMap;
+import io.github.xfacthd.framedblocks.api.model.data.QuadMapBuilder;
 import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.geometry.PartConsumer;
 import io.github.xfacthd.framedblocks.api.model.geometry.QuadListModifier;
@@ -47,7 +47,7 @@ public class FramedCeilingHangingSignGeometry extends Geometry
     }
 
     @Override
-    public void transformQuad(QuadMap quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
+    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
     {
         Direction quadDir = quad.direction();
         if (quadDir.getAxis() == dir.getAxis())
@@ -57,7 +57,7 @@ public class FramedCeilingHangingSignGeometry extends Geometry
                     .apply(Modifiers.cut(quadDir.getClockWise().getAxis(), 15F/16F))
                     .apply(Modifiers.setPosition(9F/16F))
                     .applyIf(Modifiers.rotateCentered(Direction.Axis.Y, rotDegrees, false), attached)
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
         }
         else if (quadDir.getAxis() == dir.getClockWise().getAxis())
         {
@@ -66,7 +66,7 @@ public class FramedCeilingHangingSignGeometry extends Geometry
                     .apply(Modifiers.cut(quadDir.getClockWise().getAxis(), 9F/16F))
                     .apply(Modifiers.setPosition(15F/16F))
                     .applyIf(Modifiers.rotateCentered(Direction.Axis.Y, rotDegrees, false), attached)
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
         }
         else
         {
@@ -76,7 +76,7 @@ public class FramedCeilingHangingSignGeometry extends Geometry
                     .apply(Modifiers.cut(dir.getClockWise().getAxis(), 15F/16F))
                     .applyIf(Modifiers.setPosition(10F/16F), up)
                     .applyIf(Modifiers.rotateCentered(Direction.Axis.Y, rotDegrees, false), attached)
-                    .export(quadMap.get(up ? null : quadDir));
+                    .export(quadMap, up ? null : quadDir);
         }
     }
 

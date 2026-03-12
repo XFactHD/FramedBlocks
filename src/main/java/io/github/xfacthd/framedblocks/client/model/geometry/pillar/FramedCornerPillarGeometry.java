@@ -2,7 +2,7 @@ package io.github.xfacthd.framedblocks.client.model.geometry.pillar;
 
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
-import io.github.xfacthd.framedblocks.api.model.data.QuadMap;
+import io.github.xfacthd.framedblocks.api.model.data.QuadMapBuilder;
 import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
@@ -21,7 +21,7 @@ public class FramedCornerPillarGeometry extends Geometry
     }
 
     @Override
-    public void transformQuad(QuadMap quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
+    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
     {
         Direction quadDir = quad.direction();
         if (quadDir == dir || quadDir == dir.getOpposite())
@@ -29,7 +29,7 @@ public class FramedCornerPillarGeometry extends Geometry
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(dir.getClockWise(), .5F))
                     .applyIf(Modifiers.setPosition(.5F), quadDir != dir)
-                    .export(quadMap.get(quadDir == dir ? quadDir : null));
+                    .export(quadMap, quadDir == dir ? quadDir : null);
         }
         else if (quadDir == dir.getClockWise() || quadDir == dir.getCounterClockWise())
         {
@@ -37,14 +37,14 @@ public class FramedCornerPillarGeometry extends Geometry
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(dir.getOpposite(), .5F))
                     .applyIf(Modifiers.setPosition(.5F), !isCCW)
-                    .export(quadMap.get(isCCW ? quadDir : null));
+                    .export(quadMap, isCCW ? quadDir : null);
         }
         else
         {
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(dir.getOpposite(), .5F))
                     .apply(Modifiers.cut(dir.getClockWise(), .5F))
-                    .export(quadMap.get(quadDir));
+                    .export(quadMap, quadDir);
         }
     }
 }

@@ -2,7 +2,7 @@ package io.github.xfacthd.framedblocks.client.model.geometry.slope;
 
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
-import io.github.xfacthd.framedblocks.api.model.data.QuadMap;
+import io.github.xfacthd.framedblocks.api.model.data.QuadMapBuilder;
 import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
@@ -27,21 +27,21 @@ public class FramedInnerPrismCornerGeometry extends Geometry
     }
 
     @Override
-    public void transformQuad(QuadMap quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
+    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
     {
         Direction quadDir = quad.direction();
         if ((quadDir == Direction.DOWN && top) || (quadDir == Direction.UP && !top))
         {
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(dir.getOpposite(), 1, 0))
-                    .export(quadMap.get(quadDir));
+                    .export(quadMap, quadDir);
         }
         else if (quadDir == dir.getOpposite() || quadDir == dir.getClockWise())
         {
             Direction cutDir = quadDir == dir.getOpposite() ? dir.getClockWise() : dir.getOpposite();
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(cutDir, top ? 1 : 0, top ? 0 : 1))
-                    .export(quadMap.get(quadDir));
+                    .export(quadMap, quadDir);
         }
 
         if (!altSlope && quadDir == dir.getOpposite())
@@ -52,19 +52,19 @@ public class FramedInnerPrismCornerGeometry extends Geometry
                         .apply(Modifiers.cut(dir.getClockWise(), .5F))
                         .apply(Modifiers.offset(dir.getClockWise(), .5F))
                         .apply(Modifiers.cutPrismTriangle(top, false))
-                        .export(quadMap.get(null));
+                        .export(quadMap, null);
 
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(dir.getCounterClockWise(), .5F))
                         .apply(Modifiers.offset(dir.getCounterClockWise(), .5F))
                         .apply(Modifiers.cutPrismTriangle(top, false))
-                        .export(quadMap.get(null));
+                        .export(quadMap, null);
             }
             else
             {
                 QuadModifier.of(quad)
                         .apply(Modifiers.cutPrismTriangle(top, false))
-                        .export(quadMap.get(null));
+                        .export(quadMap, null);
             }
         }
         else if (altSlope && ((!top && quadDir == Direction.UP) || (top && quadDir == Direction.DOWN)))
@@ -75,19 +75,19 @@ public class FramedInnerPrismCornerGeometry extends Geometry
                         .apply(Modifiers.cut(dir.getClockWise(), .5F))
                         .apply(Modifiers.offset(dir.getClockWise(), .5F))
                         .apply(Modifiers.cutPrismTriangle(dir.getOpposite(), false))
-                        .export(quadMap.get(null));
+                        .export(quadMap, null);
 
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(dir.getCounterClockWise(), .5F))
                         .apply(Modifiers.offset(dir.getCounterClockWise(), .5F))
                         .apply(Modifiers.cutPrismTriangle(dir.getOpposite(), false))
-                        .export(quadMap.get(null));
+                        .export(quadMap, null);
             }
             else
             {
                 QuadModifier.of(quad)
                         .apply(Modifiers.cutPrismTriangle(dir.getOpposite(), false))
-                        .export(quadMap.get(null));
+                        .export(quadMap, null);
             }
         }
     }

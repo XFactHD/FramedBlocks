@@ -2,7 +2,7 @@ package io.github.xfacthd.framedblocks.client.model.geometry.pillar;
 
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
-import io.github.xfacthd.framedblocks.api.model.data.QuadMap;
+import io.github.xfacthd.framedblocks.api.model.data.QuadMapBuilder;
 import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
@@ -33,11 +33,11 @@ public class FramedPillarGeometry extends Geometry
     }
 
     @Override
-    public void transformQuad(QuadMap quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
+    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
     {
         Direction quadDir = quad.direction();
         createPillarQuad(quad, axis, capStart, capEnd, sideCut)
-                .export(quadMap.get(quadDir.getAxis() == axis ? quadDir : null));
+                .export(quadMap, quadDir.getAxis() == axis ? quadDir : null);
     }
 
     public static QuadModifier createPillarQuad(

@@ -2,7 +2,7 @@ package io.github.xfacthd.framedblocks.client.model.geometry.slopepanelcorner;
 
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
-import io.github.xfacthd.framedblocks.api.model.data.QuadMap;
+import io.github.xfacthd.framedblocks.api.model.data.QuadMapBuilder;
 import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
@@ -59,7 +59,7 @@ public class FramedSmallPrismSlopePanelCornerGeometry extends Geometry
     }
 
     @Override
-    public void transformQuad(QuadMap quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object cacheKeyUserData)
+    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object cacheKeyUserData)
     {
         Direction quadDir = quad.direction();
         if (quadDir == dir || quadDir == dir.getCounterClockWise())
@@ -86,7 +86,7 @@ public class FramedSmallPrismSlopePanelCornerGeometry extends Geometry
         }
     }
 
-    private void makePrismSlope(QuadMap quadMap, BakedQuad quad, BiConsumer<QuadMap, QuadModifier> slopeMaker)
+    private void makePrismSlope(QuadMapBuilder quadMap, BakedQuad quad, BiConsumer<QuadMapBuilder, QuadModifier> slopeMaker)
     {
         if (offset)
         {
@@ -105,7 +105,7 @@ public class FramedSmallPrismSlopePanelCornerGeometry extends Geometry
         }
     }
 
-    private void makePrismSlopeHorizontal(QuadMap quadMap, QuadModifier modifier)
+    private void makePrismSlopeHorizontal(QuadMapBuilder quadMap, QuadModifier modifier)
     {
         float tiltAngle = invAngle ? -PRISM_ANGLE_HOR : PRISM_ANGLE_HOR;
         modifier.apply(Modifiers.cut(dir.getClockWise(), top ? .75F : .5F, top ? .5F : .75F))
@@ -116,7 +116,7 @@ public class FramedSmallPrismSlopePanelCornerGeometry extends Geometry
                 .export(quadMap, null);
     }
 
-    private void makePrismSlopeVertical(QuadMap quadMap, QuadModifier modifier)
+    private void makePrismSlopeVertical(QuadMapBuilder quadMap, QuadModifier modifier)
     {
         float tiltAngle = invAngle ? -PRISM_ANGLE_VERT : PRISM_ANGLE_VERT;
         modifier.apply(Modifiers.cut(dir.getClockWise(), .75F, .5F))

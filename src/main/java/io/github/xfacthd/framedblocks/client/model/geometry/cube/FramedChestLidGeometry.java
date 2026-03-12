@@ -2,7 +2,7 @@ package io.github.xfacthd.framedblocks.client.model.geometry.cube;
 
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
-import io.github.xfacthd.framedblocks.api.model.data.QuadMap;
+import io.github.xfacthd.framedblocks.api.model.data.QuadMapBuilder;
 import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.geometry.PartConsumer;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
@@ -40,7 +40,7 @@ public class FramedChestLidGeometry extends Geometry
     }
 
     @Override
-    public void transformQuad(QuadMap quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
+    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
     {
         Direction quadDir = quad.direction();
         if (DirUtils.isY(quadDir))
@@ -50,7 +50,7 @@ public class FramedChestLidGeometry extends Geometry
                     .applyIf(Modifiers.cut(facing.getClockWise(), 15F/16F), type != ChestType.LEFT)
                     .applyIf(Modifiers.cut(facing.getCounterClockWise(), 15F/16F), type != ChestType.RIGHT)
                     .apply(Modifiers.setPosition(quadDir == Direction.UP ? 14F/16F : 7F/16F))
-                    .export(quadMap.get(quadDir == Direction.UP ? null : quadDir));
+                    .export(quadMap, quadDir == Direction.UP ? null : quadDir);
         }
         else if (quadDir.getAxis() == facing.getAxis())
         {
@@ -60,7 +60,7 @@ public class FramedChestLidGeometry extends Geometry
                     .applyIf(Modifiers.cut(facing.getClockWise(), 15F/16F), type != ChestType.LEFT)
                     .applyIf(Modifiers.cut(facing.getCounterClockWise(), 15F/16F), type != ChestType.RIGHT)
                     .apply(Modifiers.setPosition(15F/16F))
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
         }
         else
         {
@@ -70,7 +70,7 @@ public class FramedChestLidGeometry extends Geometry
                     .apply(Modifiers.cut(Direction.DOWN, 7F/16F))
                     .apply(Modifiers.cut(quadDir.getClockWise().getAxis(), 15F/16F))
                     .applyIf(Modifiers.setPosition(15F/16F), offset)
-                    .export(quadMap.get(offset ? null : quadDir));
+                    .export(quadMap, offset ? null : quadDir);
         }
 
         if (latch == LatchType.CAMO)

@@ -2,7 +2,7 @@ package io.github.xfacthd.framedblocks.client.model.geometry.prism;
 
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
-import io.github.xfacthd.framedblocks.api.model.data.QuadMap;
+import io.github.xfacthd.framedblocks.api.model.data.QuadMapBuilder;
 import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
@@ -29,7 +29,7 @@ public class FramedSlopedPrismGeometry extends Geometry
     }
 
     @Override
-    public void transformQuad(QuadMap quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
+    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
     {
         boolean yFacing = DirUtils.isY(facing);
         boolean yOrient = DirUtils.isY(orientation);
@@ -43,14 +43,14 @@ public class FramedSlopedPrismGeometry extends Geometry
                 QuadModifier.of(quad)
                         .apply(Modifiers.cutSmallTriangle(facing))
                         .apply(Modifiers.makeHorizontalSlope(orientation == facing.getClockWise(), 45))
-                        .export(quadMap.get(null));
+                        .export(quadMap, null);
             }
             else if (!altSlope)  // Triangle for horizontal facing and vertical orientation without Y_SLOPE
             {
                 QuadModifier.of(quad)
                         .apply(Modifiers.cutSmallTriangle(facing))
                         .apply(Modifiers.makeVerticalSlope(facing == Direction.UP, 45))
-                        .export(quadMap.get(null));
+                        .export(quadMap, null);
             }
         }
         else if (altSlope && yFacing && DirUtils.isY(quadFace)) // Triangle and slopes for vertical facing with Y_SLOPE
@@ -58,7 +58,7 @@ public class FramedSlopedPrismGeometry extends Geometry
             QuadModifier.of(quad)
                     .apply(Modifiers.cutSmallTriangle(orientation))
                     .apply(Modifiers.makeVerticalSlope(orientOpp, 45))
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
 
             Direction offAxisCW = orientation.getClockWise();
             Direction offAxisCCW = orientation.getCounterClockWise();
@@ -67,33 +67,33 @@ public class FramedSlopedPrismGeometry extends Geometry
                     .apply(Modifiers.cut(offAxisCW, .5F))
                     .apply(Modifiers.cut(orientOpp, 1, 0))
                     .apply(Modifiers.makeVerticalSlope(offAxisCCW, 45))
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
 
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(offAxisCCW, .5F))
                     .apply(Modifiers.cut(orientOpp, 0, 1))
                     .apply(Modifiers.makeVerticalSlope(offAxisCW, 45))
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
         }
         else if (!altSlope && yOrient && quadFace == facing) // Tilted triangle for horizontal facing and vertical orientation without Y_SLOPE
         {
             QuadModifier.of(quad)
                     .apply(Modifiers.cutSmallTriangle(orientation))
                     .apply(Modifiers.makeVerticalSlope(orientation == Direction.DOWN, 45))
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
         }
         else if (altSlope && yOrient && quadFace == orientOpp) // Tilted triangle for horizontal facing and vertical orientation with Y_SLOPE
         {
             QuadModifier.of(quad)
                     .apply(Modifiers.cutSmallTriangle(facing))
                     .apply(Modifiers.makeVerticalSlope(facing, 45))
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
         }
         else if (quadFace == orientation) // Triangle
         {
             QuadModifier.of(quad)
                     .apply(Modifiers.cutSmallTriangle(facing))
-                    .export(quadMap.get(quadFace));
+                    .export(quadMap, quadFace);
         }
         else if (!altSlope && yFacing && quadFace.getAxis() == orientation.getClockWise().getAxis()) // Slopes for Y facing without Y_SLOPE
         {
@@ -102,7 +102,7 @@ public class FramedSlopedPrismGeometry extends Geometry
                     .apply(Modifiers.cut(facing, .5F))
                     .apply(Modifiers.cut(orientation.getOpposite(), up ? 0 : 1, up ? 1 : 0))
                     .apply(Modifiers.makeVerticalSlope(up, 45))
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
         }
         else if (yOrient && quadFace.getAxis() == facing.getClockWise().getAxis()) // Slopes for horizontal facing and vertical orientation
         {
@@ -111,7 +111,7 @@ public class FramedSlopedPrismGeometry extends Geometry
                     .apply(Modifiers.cut(facing, .5F))
                     .apply(Modifiers.cut(orientation.getOpposite(), right ? 1 : 0, right ? 0 : 1))
                     .apply(Modifiers.makeHorizontalSlope(quadFace == facing.getCounterClockWise(), 45))
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
         }
         else if (!altSlope && !yOrient && !yFacing && quadFace == facing) // Slopes for horizontal facing and horizontal orientation without Y_SLOPE
         {
@@ -119,13 +119,13 @@ public class FramedSlopedPrismGeometry extends Geometry
                     .apply(Modifiers.cut(Direction.UP, .5F))
                     .apply(Modifiers.cut(orientation.getOpposite(), 0, 1))
                     .apply(Modifiers.makeVerticalSlope(false, 45))
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
 
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(Direction.DOWN, .5F))
                     .apply(Modifiers.cut(orientation.getOpposite(), 1, 0))
                     .apply(Modifiers.makeVerticalSlope(true, 45))
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
         }
         else if (altSlope && !yOrient && !yFacing && DirUtils.isY(quadFace)) // Slopes for horizontal facing and horizontal orientation with Y_SLOPE
         {
@@ -134,7 +134,7 @@ public class FramedSlopedPrismGeometry extends Geometry
                     .apply(Modifiers.cut(facing, .5F))
                     .apply(Modifiers.cut(orientOpp, right ? 0 : 1, right ? 1 : 0))
                     .apply(Modifiers.makeVerticalSlope(facing, 45))
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
         }
     }
 }

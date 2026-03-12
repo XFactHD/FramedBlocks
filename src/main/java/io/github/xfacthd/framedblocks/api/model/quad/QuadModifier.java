@@ -1,12 +1,10 @@
 package io.github.xfacthd.framedblocks.api.model.quad;
 
-import io.github.xfacthd.framedblocks.api.model.data.QuadMap;
+import io.github.xfacthd.framedblocks.api.model.data.QuadMapBuilder;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.core.Direction;
 import org.jetbrains.annotations.UnknownNullability;
 import org.jspecify.annotations.Nullable;
-
-import java.util.List;
 
 public final class QuadModifier
 {
@@ -59,27 +57,15 @@ public final class QuadModifier
     }
 
     /**
-     * Re-assemble the quad and add it to the given quad list. If any modifier failed, the quad will not be exported.
-     */
-    public void export(List<BakedQuad> quadList)
-    {
-        BakedQuad quad = exportDirect();
-        if (quad != null)
-        {
-            quadList.add(quad);
-        }
-    }
-
-    /**
      * Re-assemble the quad and add it to the given quad map under the provided cull face.
      * If any modifier failed, the quad will not be exported.
      */
-    public void export(QuadMap quadMap, @Nullable Direction cullFace)
+    public void export(QuadMapBuilder quadMap, @Nullable Direction cullFace)
     {
         BakedQuad quad = exportDirect();
         if (quad != null)
         {
-            quadMap.get(cullFace).add(quad);
+            quadMap.getOrCreate(cullFace).add(quad);
         }
     }
 

@@ -3,7 +3,7 @@ package io.github.xfacthd.framedblocks.client.model.geometry.slopepanel;
 import com.google.common.base.Preconditions;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
-import io.github.xfacthd.framedblocks.api.model.data.QuadMap;
+import io.github.xfacthd.framedblocks.api.model.data.QuadMapBuilder;
 import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
@@ -39,7 +39,7 @@ public class FramedSlopePanelGeometry extends Geometry
     }
 
     @Override
-    public void transformQuad(QuadMap quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
+    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
     {
         Direction face = quad.direction();
         boolean yAxis = DirUtils.isY(orientation);
@@ -48,21 +48,21 @@ public class FramedSlopePanelGeometry extends Geometry
             Direction cutDir = front ? facing : facing.getOpposite();
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(cutDir, .5F))
-                    .export(quadMap.get(face));
+                    .export(quadMap, face);
         }
         else if ((!rotation.isVertical() || !altSlope) && face == facing.getOpposite())
         {
             QuadModifier.of(quad)
                     .apply(createSlope(facing, orientation))
                     .applyIf(Modifiers.offset(facing, .5F), !front)
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
         }
         else if (altSlope && isVerticalSlopeQuad(rotation, face))
         {
             QuadModifier.of(quad)
                     .apply(createVerticalSlope(facing, orientation))
                     .applyIf(Modifiers.offset(facing.getOpposite(), .5F), front)
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
         }
         else if (face == facing)
         {
@@ -70,7 +70,7 @@ public class FramedSlopePanelGeometry extends Geometry
             {
                 QuadModifier.of(quad)
                         .apply(Modifiers.setPosition(.5F))
-                        .export(quadMap.get(null));
+                        .export(quadMap, null);
             }
         }
         else if (face.getAxis() == triangleAxis)
@@ -83,7 +83,7 @@ public class FramedSlopePanelGeometry extends Geometry
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(facing.getOpposite(), top, bottom))
                         .applyIf(Modifiers.cut(facing, .5F), front)
-                        .export(quadMap.get(face));
+                        .export(quadMap, face);
             }
             else
             {
@@ -93,7 +93,7 @@ public class FramedSlopePanelGeometry extends Geometry
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(facing.getOpposite(), right, left))
                         .applyIf(Modifiers.cut(facing, .5F), front)
-                        .export(quadMap.get(face));
+                        .export(quadMap, face);
             }
         }
     }

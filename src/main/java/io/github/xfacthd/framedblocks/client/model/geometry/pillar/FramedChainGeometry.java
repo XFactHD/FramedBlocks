@@ -1,7 +1,7 @@
 package io.github.xfacthd.framedblocks.client.model.geometry.pillar;
 
 import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
-import io.github.xfacthd.framedblocks.api.model.data.QuadMap;
+import io.github.xfacthd.framedblocks.api.model.data.QuadMapBuilder;
 import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.MultiQuadModifier;
@@ -30,7 +30,7 @@ public class FramedChainGeometry extends Geometry
     }
 
     @Override
-    public void transformQuad(QuadMap quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
+    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
     {
         Direction quadDir = quad.direction();
         if (quadDir.getAxis() == axis) return;
@@ -59,7 +59,7 @@ public class FramedChainGeometry extends Geometry
     }
 
     private void createChainEdgeParts(
-            QuadMap quadMap,
+            QuadMapBuilder quadMap,
             BakedQuad quad,
             Direction quadDir,
             Direction.Axis quadPerpAxis,
@@ -123,12 +123,12 @@ public class FramedChainGeometry extends Geometry
         {
             mod.apply(Modifiers.setPosition(.5F))
                     .apply(Modifiers.rotate(axis, ROT_ORIGIN, 45, false))
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
         }
     }
 
     private void createChainCenterParts(
-            QuadMap quadMap,
+            QuadMapBuilder quadMap,
             BakedQuad quad,
             CutterFactory vertCutterFactory,
             BidirectionalCutterFactory horCutterFactory
@@ -151,7 +151,7 @@ public class FramedChainGeometry extends Geometry
                     .apply(vertCutterFactory.create(dirUp, (16F - height + 1F) / 16F))
                     .apply(Modifiers.setPosition(.5F))
                     .apply(Modifiers.rotate(axis, ROT_ORIGIN, 45, false))
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
         }
     }
 

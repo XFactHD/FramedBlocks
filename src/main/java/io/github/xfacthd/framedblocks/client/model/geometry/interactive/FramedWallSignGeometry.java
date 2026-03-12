@@ -1,7 +1,7 @@
 package io.github.xfacthd.framedblocks.client.model.geometry.interactive;
 
 import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
-import io.github.xfacthd.framedblocks.api.model.data.QuadMap;
+import io.github.xfacthd.framedblocks.api.model.data.QuadMapBuilder;
 import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
@@ -23,7 +23,7 @@ public class FramedWallSignGeometry extends Geometry
     }
 
     @Override
-    public void transformQuad(QuadMap quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
+    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
     {
         Direction quadDir = quad.direction();
         if (quadDir.getAxis() == dir.getAxis())
@@ -32,14 +32,14 @@ public class FramedWallSignGeometry extends Geometry
             QuadModifier.of(quad)
                     .apply(Modifiers.cutSide(0F, 4.5F/16F, 1F, 12.5F/16F))
                     .applyIf(Modifiers.setPosition(DEPTH), inset)
-                    .export(quadMap.get(inset ? null : quadDir));
+                    .export(quadMap, inset ? null : quadDir);
         }
         else if (DirUtils.isY(quadDir))
         {
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(dir, DEPTH))
                     .apply(Modifiers.setPosition(quadDir == Direction.UP ? 12.5F/16F : 11.5F/16F))
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
         }
         else
         {
@@ -47,7 +47,7 @@ public class FramedWallSignGeometry extends Geometry
                     .apply(Modifiers.cut(dir, DEPTH))
                     .apply(Modifiers.cut(Direction.UP, 12.5F/16F))
                     .apply(Modifiers.cut(Direction.DOWN, 11.5F/16F))
-                    .export(quadMap.get(quadDir));
+                    .export(quadMap, quadDir);
         }
     }
 }

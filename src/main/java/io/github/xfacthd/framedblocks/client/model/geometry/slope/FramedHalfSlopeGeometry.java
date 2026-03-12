@@ -2,7 +2,7 @@ package io.github.xfacthd.framedblocks.client.model.geometry.slope;
 
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
-import io.github.xfacthd.framedblocks.api.model.data.QuadMap;
+import io.github.xfacthd.framedblocks.api.model.data.QuadMapBuilder;
 import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
@@ -28,7 +28,7 @@ public class FramedHalfSlopeGeometry extends Geometry
     }
 
     @Override
-    public void transformQuad(QuadMap quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
+    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
     {
         Direction quadDir = quad.direction();
 
@@ -39,14 +39,14 @@ public class FramedHalfSlopeGeometry extends Geometry
             QuadModifier.of(quad)
                     .apply(Modifiers.makeVerticalSlope(!top, 45))
                     .apply(Modifiers.cut(cutDir, .5F))
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
         }
         else if (altSlope && ((!top && quadDir == Direction.UP) || (top && quadDir == Direction.DOWN)))
         {
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(cutDir, .5F))
                     .apply(Modifiers.makeVerticalSlope(dir.getOpposite(), 45))
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
         }
         else if (quadDir == dir.getClockWise() || quadDir == dir.getCounterClockWise())
         {
@@ -55,19 +55,19 @@ public class FramedHalfSlopeGeometry extends Geometry
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(dir.getOpposite(), top ? 1 : 0, top ? 0 : 1))
                     .applyIf(Modifiers.setPosition(.5F), needOffset)
-                    .export(quadMap.get(needOffset ? null : quadDir));
+                    .export(quadMap, needOffset ? null : quadDir);
         }
         else if ((!top && quadDir == Direction.DOWN) || (top && quadDir == Direction.UP))
         {
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(cutDir, .5F))
-                    .export(quadMap.get(quadDir));
+                    .export(quadMap, quadDir);
         }
         else if (quadDir == dir)
         {
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(cutDir, .5F))
-                    .export(quadMap.get(quadDir));
+                    .export(quadMap, quadDir);
         }
     }
 }

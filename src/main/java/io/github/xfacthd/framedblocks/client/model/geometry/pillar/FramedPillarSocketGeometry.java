@@ -1,7 +1,7 @@
 package io.github.xfacthd.framedblocks.client.model.geometry.pillar;
 
 import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
-import io.github.xfacthd.framedblocks.api.model.data.QuadMap;
+import io.github.xfacthd.framedblocks.api.model.data.QuadMapBuilder;
 import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
@@ -22,7 +22,7 @@ public class FramedPillarSocketGeometry extends Geometry
     }
 
     @Override
-    public void transformQuad(QuadMap quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object cacheKeyUserData)
+    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object cacheKeyUserData)
     {
         Direction quadDir = quad.direction();
         Direction.Axis quadAxis = quadDir.getAxis();
@@ -32,7 +32,7 @@ public class FramedPillarSocketGeometry extends Geometry
             boolean y = DirUtils.isY(quadDir);
             QuadModifier.of(quad)
                     .apply(y ? Modifiers.cutTopBottom(.25F, .25F, .75F, .75F) : Modifiers.cutSide(.25F, .25F, .75F, .75F))
-                    .export(quadMap.get(quadDir));
+                    .export(quadMap, quadDir);
 
             DirUtils.forAllDirections(dir ->
             {
@@ -43,20 +43,20 @@ public class FramedPillarSocketGeometry extends Geometry
                         .apply(Modifiers.cut(dir, .25F))
                         .applyIf(Modifiers.cut(dir.getClockWise(quadAxis).getAxis(), .75F), perp)
                         .apply(Modifiers.setPosition(.5F))
-                        .export(quadMap.get(null));
+                        .export(quadMap, null);
             });
         }
         else if (quadDir != facing)
         {
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(facing.getOpposite(), .5F))
-                    .export(quadMap.get(quadDir));
+                    .export(quadMap, quadDir);
 
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(facing, .5F))
                     .apply(Modifiers.cut(facing.getClockWise(quadAxis).getAxis(), .75F))
                     .apply(Modifiers.setPosition(.75F))
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
         }
     }
 }

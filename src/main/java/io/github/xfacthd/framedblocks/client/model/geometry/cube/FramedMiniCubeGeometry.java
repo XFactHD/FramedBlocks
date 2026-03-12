@@ -2,7 +2,7 @@ package io.github.xfacthd.framedblocks.client.model.geometry.cube;
 
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
-import io.github.xfacthd.framedblocks.api.model.data.QuadMap;
+import io.github.xfacthd.framedblocks.api.model.data.QuadMapBuilder;
 import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
@@ -33,7 +33,7 @@ public class FramedMiniCubeGeometry extends Geometry
     }
 
     @Override
-    public void transformQuad(QuadMap quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
+    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
     {
         Direction quadDir = quad.direction();
         QuadModifier.of(quad)
@@ -41,6 +41,6 @@ public class FramedMiniCubeGeometry extends Geometry
                 .applyIf(Modifiers.setPosition(.5F), quadDir == bottomFace.getOpposite())
                 .applyIf(Modifiers.setPosition(.75F), !DirUtils.isY(quadDir))
                 .apply(Modifiers.rotate(Direction.Axis.Y, origin, rotAngle, false))
-                .export(quadMap.get(quadDir == bottomFace ? quadDir : null));
+                .export(quadMap, quadDir == bottomFace ? quadDir : null);
     }
 }

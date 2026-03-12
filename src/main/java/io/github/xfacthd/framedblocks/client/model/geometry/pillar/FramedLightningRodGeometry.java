@@ -2,7 +2,7 @@ package io.github.xfacthd.framedblocks.client.model.geometry.pillar;
 
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
-import io.github.xfacthd.framedblocks.api.model.data.QuadMap;
+import io.github.xfacthd.framedblocks.api.model.data.QuadMapBuilder;
 import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
@@ -35,7 +35,7 @@ public class FramedLightningRodGeometry extends Geometry
     }
 
     @Override
-    public void transformQuad(QuadMap quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object cacheKeyUserData)
+    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object cacheKeyUserData)
     {
         Direction quadDir = quad.direction();
         boolean vertical = DirUtils.isY(quadDir);
@@ -57,7 +57,7 @@ public class FramedLightningRodGeometry extends Geometry
                         .apply(Modifiers.offset(dir, dirOff))
                         .apply(Modifiers.offset(dirCw, dirCwOff))
                         .applyIf(Modifiers.setPosition(back ? 4F / 16F : 10F / 16F), !front)
-                        .export(quadMap.get(front ? quadDir : null));
+                        .export(quadMap, front ? quadDir : null);
             }
         }
         else if (front || back)
@@ -65,7 +65,7 @@ public class FramedLightningRodGeometry extends Geometry
             QuadModifier.of(quad)
                     .apply(vertical ? MOD_HEAD_VERT : MOD_HEAD_HOR)
                     .applyIf(Modifiers.setPosition(4F/16F), back)
-                    .export(quadMap.get(front ? quadDir : null));
+                    .export(quadMap, front ? quadDir : null);
         }
         else
         {
@@ -74,14 +74,14 @@ public class FramedLightningRodGeometry extends Geometry
                     .apply(Modifiers.cut(facing.getClockWise(quadDir.getAxis()), 10F/16F))
                     .apply(Modifiers.cut(facing.getCounterClockWise(quadDir.getAxis()), 10F/16F))
                     .apply(Modifiers.setPosition(10F/16F))
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
         }
 
         if (back)
         {
             QuadModifier.of(quad)
                     .apply(vertical ? MOD_TAIL_VERT : MOD_TAIL_HOR)
-                    .export(quadMap.get(quadDir));
+                    .export(quadMap, quadDir);
         }
         else if (!front)
         {
@@ -90,7 +90,7 @@ public class FramedLightningRodGeometry extends Geometry
                     .apply(Modifiers.cut(facing.getClockWise(quadDir.getAxis()), 9F/16F))
                     .apply(Modifiers.cut(facing.getCounterClockWise(quadDir.getAxis()), 9F/16F))
                     .apply(Modifiers.setPosition(9F/16F))
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
         }
     }
 

@@ -1,7 +1,7 @@
 package io.github.xfacthd.framedblocks.client.model.geometry.pillar;
 
 import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
-import io.github.xfacthd.framedblocks.api.model.data.QuadMap;
+import io.github.xfacthd.framedblocks.api.model.data.QuadMapBuilder;
 import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
@@ -13,8 +13,6 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.WallSide;
 import org.joml.Vector4f;
 import org.jspecify.annotations.Nullable;
-
-import java.util.List;
 
 public class FramedWallGeometry extends Geometry
 {
@@ -50,7 +48,7 @@ public class FramedWallGeometry extends Geometry
     }
 
     @Override
-    public void transformQuad(QuadMap quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
+    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
     {
         if (north != WallSide.NONE)
         {
@@ -78,7 +76,7 @@ public class FramedWallGeometry extends Geometry
         buildCenterPillar(quadMap, quad);
     }
 
-    private void buildWallHalfSegment(QuadMap quadMap, BakedQuad quad, Direction dir, WallSide height)
+    private void buildWallHalfSegment(QuadMapBuilder quadMap, BakedQuad quad, Direction dir, WallSide height)
     {
         if (height != WallSide.NONE)
         {
@@ -90,7 +88,7 @@ public class FramedWallGeometry extends Geometry
                 QuadModifier.of(quad)
                         .apply(Modifiers.cutTopBottom(rect.x(), rect.y(), rect.z(), rect.w()))
                         .applyIf(Modifiers.setPosition(LOW_HEIGHT), inset)
-                        .export(quadMap.get(inset ? null : quadDir));
+                        .export(quadMap, inset ? null : quadDir);
             }
             else if (quadDir.getAxis() != dir.getAxis())
             {
@@ -98,22 +96,22 @@ public class FramedWallGeometry extends Geometry
                         .apply(Modifiers.cut(dir.getOpposite(), center ? LARGE_MIN : SMALL_MIN))
                         .applyIf(Modifiers.cut(Direction.UP, LOW_HEIGHT), height != WallSide.TALL)
                         .apply(Modifiers.setPosition(SMALL_MAX))
-                        .export(quadMap.get(null));
+                        .export(quadMap, null);
             }
         }
     }
 
-    private static void buildWallEndCap(QuadMap quadMap, BakedQuad quad, Direction dir, WallSide height)
+    private static void buildWallEndCap(QuadMapBuilder quadMap, BakedQuad quad, Direction dir, WallSide height)
     {
         if (quad.direction() == dir && height != WallSide.NONE)
         {
             QuadModifier.of(quad)
                     .apply(Modifiers.cutSide(SMALL_MIN, 0, SMALL_MAX, height == WallSide.TALL ? 1F : LOW_HEIGHT))
-                    .export(quadMap.get(dir));
+                    .export(quadMap, dir);
         }
     }
 
-    private void buildCenterPillar(QuadMap quadMap, BakedQuad quad)
+    private void buildCenterPillar(QuadMapBuilder quadMap, BakedQuad quad)
     {
         Direction quadDir = quad.direction();
         if (center)
@@ -122,14 +120,14 @@ public class FramedWallGeometry extends Geometry
             {
                 QuadModifier.of(quad)
                         .apply(Modifiers.cutTopBottom(LARGE_MIN, LARGE_MIN, LARGE_MAX, LARGE_MAX))
-                        .export(quadMap.get(quadDir));
+                        .export(quadMap, quadDir);
             }
             else
             {
                 QuadModifier.of(quad)
                         .apply(Modifiers.cutSide(LARGE_MIN, 0, LARGE_MAX, 1))
                         .apply(Modifiers.setPosition(LARGE_MAX))
-                        .export(quadMap.get(null));
+                        .export(quadMap, null);
             }
         }
         else
@@ -144,31 +142,31 @@ public class FramedWallGeometry extends Geometry
                     QuadModifier.of(quad)
                             .apply(Modifiers.cutTopBottom(SMALL_MIN, SMALL_MIN, SMALL_MAX, SMALL_MAX))
                             .applyIf(Modifiers.setPosition(LOW_HEIGHT), inset)
-                            .export(quadMap.get(inset ? null : quadDir));
+                            .export(quadMap, inset ? null : quadDir);
                 }
-                case NORTH -> buildSmallCenterSide(quadMap.get(null), quad, north, tall);
-                case EAST -> buildSmallCenterSide(quadMap.get(null), quad, east , tall);
-                case SOUTH -> buildSmallCenterSide(quadMap.get(null), quad, south, tall);
-                case WEST -> buildSmallCenterSide(quadMap.get(null), quad, west , tall);
+                case NORTH -> buildSmallCenterSide(quadMap, quad, north, tall);
+                case EAST -> buildSmallCenterSide(quadMap, quad, east , tall);
+                case SOUTH -> buildSmallCenterSide(quadMap, quad, south, tall);
+                case WEST -> buildSmallCenterSide(quadMap, quad, west , tall);
             }
         }
     }
 
-    private static void buildSmallCenterSide(List<BakedQuad> quadList, BakedQuad quad, WallSide height, boolean tall)
+    private static void buildSmallCenterSide(QuadMapBuilder quadMap, BakedQuad quad, WallSide height, boolean tall)
     {
         if (height == WallSide.NONE)
         {
             QuadModifier.of(quad)
                     .apply(Modifiers.cutSide(SMALL_MIN, 0, SMALL_MAX, tall ? 1 : LOW_HEIGHT))
                     .apply(Modifiers.setPosition(SMALL_MAX))
-                    .export(quadList);
+                    .export(quadMap, null);
         }
         else if (tall && height == WallSide.LOW)
         {
             QuadModifier.of(quad)
                     .apply(Modifiers.cutSide(SMALL_MIN, LOW_HEIGHT, SMALL_MAX, 1))
                     .apply(Modifiers.setPosition(SMALL_MAX))
-                    .export(quadList);
+                    .export(quadMap, null);
         }
     }
 }

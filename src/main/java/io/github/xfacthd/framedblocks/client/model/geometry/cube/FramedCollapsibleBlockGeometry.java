@@ -1,7 +1,7 @@
 package io.github.xfacthd.framedblocks.client.model.geometry.cube;
 
 import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
-import io.github.xfacthd.framedblocks.api.model.data.QuadMap;
+import io.github.xfacthd.framedblocks.api.model.data.QuadMapBuilder;
 import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
@@ -42,12 +42,12 @@ public class FramedCollapsibleBlockGeometry extends Geometry
     }
 
     @Override
-    public void transformQuad(QuadMap quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object cacheKeyUserData)
+    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object cacheKeyUserData)
     {
         Direction quadDir = quad.direction();
         if (collapsedFace == null || quadDir == collapsedFace.getOpposite())
         {
-            quadMap.get(quadDir).add(quad);
+            quadMap.getOrCreate(quadDir).add(quad);
             return;
         }
 
@@ -82,7 +82,7 @@ public class FramedCollapsibleBlockGeometry extends Geometry
             }
             if (planar)
             {
-                QuadModifier.of(quad).apply(Modifiers.setPosition(vertexPos)).export(quadMap.get(null));
+                QuadModifier.of(quad).apply(Modifiers.setPosition(vertexPos)).export(quadMap, null);
                 return;
             }
 
@@ -112,24 +112,24 @@ public class FramedCollapsibleBlockGeometry extends Geometry
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(Direction.EAST, left, right))
                         .apply(Modifiers.setPosition(vertexPos))
-                        .export(quadMap.get(null));
+                        .export(quadMap, null);
 
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(Direction.WEST, left, right))
                         .apply(Modifiers.setPosition(vertexPosTwo))
-                        .export(quadMap.get(null));
+                        .export(quadMap, null);
             }
             else
             {
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(quadDir.getCounterClockWise(), rotate ? 1F : 0F, rotate ? 0F : 1F))
                         .apply(Modifiers.setPosition(vertexPos))
-                        .export(quadMap.get(null));
+                        .export(quadMap, null);
 
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(quadDir.getClockWise(), rotate ? 0F : 1F, rotate ? 1F : 0F))
                         .apply(Modifiers.setPosition(vertexPosTwo))
-                        .export(quadMap.get(null));
+                        .export(quadMap, null);
             }
         }
         else
@@ -144,7 +144,7 @@ public class FramedCollapsibleBlockGeometry extends Geometry
 
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(collapsedFace, posOne, posTwo))
-                        .export(quadMap.get(quadDir));
+                        .export(quadMap, quadDir);
             }
             else if (DirUtils.isY(quadDir))
             {
@@ -154,7 +154,7 @@ public class FramedCollapsibleBlockGeometry extends Geometry
 
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(collapsedFace, posOne, posTwo))
-                        .export(quadMap.get(quadDir));
+                        .export(quadMap, quadDir);
             }
             else
             {
@@ -164,7 +164,7 @@ public class FramedCollapsibleBlockGeometry extends Geometry
 
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(collapsedFace, posTop, posBot))
-                        .export(quadMap.get(quadDir));
+                        .export(quadMap, quadDir);
             }
         }
     }

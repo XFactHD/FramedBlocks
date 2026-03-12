@@ -2,7 +2,7 @@ package io.github.xfacthd.framedblocks.client.model.geometry.slopeslab;
 
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
-import io.github.xfacthd.framedblocks.api.model.data.QuadMap;
+import io.github.xfacthd.framedblocks.api.model.data.QuadMapBuilder;
 import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
@@ -28,7 +28,7 @@ public class FramedFlatInnerSlopeSlabCornerGeometry extends Geometry
     }
 
     @Override
-    public void transformQuad(QuadMap quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
+    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
     {
         Direction face = quad.direction();
         boolean offset = top != topHalf;
@@ -45,7 +45,7 @@ public class FramedFlatInnerSlopeSlabCornerGeometry extends Geometry
                         .apply(Modifiers.cut(cutDir, lenTop, lenBot))
                         .apply(Modifiers.makeVerticalSlope(!top, FramedSlopeSlabGeometry.SLOPE_ANGLE))
                         .applyIf(Modifiers.offset(top ? Direction.DOWN : Direction.UP, .5F), offset)
-                        .export(quadMap.get(null));
+                        .export(quadMap, null);
             }
 
             boolean rightFace = face == facing.getClockWise();
@@ -55,7 +55,7 @@ public class FramedFlatInnerSlopeSlabCornerGeometry extends Geometry
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(top ? Direction.DOWN : Direction.UP, lenRight, lenLeft))
                     .applyIf(Modifiers.cut(top ? Direction.UP : Direction.DOWN, .5F), offset)
-                    .export(quadMap.get(face));
+                    .export(quadMap, face);
         }
         else if (altSlope && ((!top && face == Direction.UP) || (top && face == Direction.DOWN)))
         {
@@ -63,25 +63,25 @@ public class FramedFlatInnerSlopeSlabCornerGeometry extends Geometry
                     .apply(Modifiers.cut(facing.getCounterClockWise(), 1, 0))
                     .apply(Modifiers.makeVerticalSlope(facing.getOpposite(), FramedSlopeSlabGeometry.SLOPE_ANGLE_VERT))
                     .applyIf(Modifiers.offset(top ? Direction.UP : Direction.DOWN, .5F), !offset)
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
 
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(facing, 0, 1))
                     .apply(Modifiers.makeVerticalSlope(facing.getClockWise(), FramedSlopeSlabGeometry.SLOPE_ANGLE_VERT))
                     .applyIf(Modifiers.offset(top ? Direction.UP : Direction.DOWN, .5F), !offset)
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
         }
         else if (face == facing || face == facing.getCounterClockWise())
         {
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(topHalf ? Direction.DOWN : Direction.UP, .5F))
-                    .export(quadMap.get(face));
+                    .export(quadMap, face);
         }
         else if ((top && !topHalf && face == Direction.UP) || (!top && topHalf && face == Direction.DOWN))
         {
             QuadModifier.of(quad)
                     .apply(Modifiers.setPosition(.5F))
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
         }
     }
 }

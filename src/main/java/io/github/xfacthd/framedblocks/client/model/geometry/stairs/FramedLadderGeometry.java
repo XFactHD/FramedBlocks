@@ -2,7 +2,7 @@ package io.github.xfacthd.framedblocks.client.model.geometry.stairs;
 
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
-import io.github.xfacthd.framedblocks.api.model.data.QuadMap;
+import io.github.xfacthd.framedblocks.api.model.data.QuadMapBuilder;
 import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
@@ -32,7 +32,7 @@ public class FramedLadderGeometry extends Geometry
     }
 
     @Override
-    public void transformQuad(QuadMap quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
+    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
     {
         Direction quadDir = quad.direction();
         if (DirUtils.isY(quadDir))
@@ -41,10 +41,10 @@ public class FramedLadderGeometry extends Geometry
                     .apply(Modifiers.cut(dir.getOpposite(), LEG_DEPTH));
 
             capMod.derive().apply(Modifiers.cut(dir.getClockWise(), LEG_DEPTH))
-                    .export(quadMap.get(quadDir));
+                    .export(quadMap, quadDir);
 
             capMod.apply(Modifiers.cut(dir.getCounterClockWise(), LEG_DEPTH))
-                    .export(quadMap.get(quadDir));
+                    .export(quadMap, quadDir);
 
             QuadModifier rungMod = QuadModifier.of(quad)
                     .apply(Modifiers.cut(dir, 1F - RUNG_OFFSET))
@@ -56,7 +56,7 @@ public class FramedLadderGeometry extends Geometry
             {
                 float height = quad.direction() == Direction.DOWN ? 1F - RUNGS[i] : RUNGS[i] + RUNG_DEPTH;
                 rungMod.derive().apply(Modifiers.setPosition(height))
-                        .export(quadMap.get(null));
+                        .export(quadMap, null);
             }
         }
         else if (quadDir.getAxis() == dir.getAxis())
@@ -66,12 +66,12 @@ public class FramedLadderGeometry extends Geometry
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(dir.getClockWise(), LEG_DEPTH))
                     .applyIf(Modifiers.setPosition(LEG_DEPTH), opposite)
-                    .export(quadMap.get(opposite ? null : quadDir));
+                    .export(quadMap, opposite ? null : quadDir);
 
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(dir.getCounterClockWise(), LEG_DEPTH))
                     .applyIf(Modifiers.setPosition(LEG_DEPTH), opposite)
-                    .export(quadMap.get(opposite ? null : quadDir));
+                    .export(quadMap, opposite ? null : quadDir);
 
             float pos = quad.direction() == dir ? (1F - RUNG_OFFSET) : (RUNG_DEPTH + RUNG_OFFSET);
 
@@ -80,7 +80,7 @@ public class FramedLadderGeometry extends Geometry
                 QuadModifier.of(quad)
                         .apply(Modifiers.cutSide(LEG_DEPTH, RUNGS[i], 1F - LEG_DEPTH, RUNGS[i] + RUNG_DEPTH))
                         .apply(Modifiers.setPosition(pos))
-                        .export(quadMap.get(null));
+                        .export(quadMap, null);
             }
         }
         else
@@ -88,10 +88,10 @@ public class FramedLadderGeometry extends Geometry
             QuadModifier mod = QuadModifier.of(quad)
                     .apply(Modifiers.cut(dir.getOpposite(), RUNG_DEPTH * 2F));
 
-            mod.export(quadMap.get(quadDir));
+            mod.export(quadMap, quadDir);
 
             mod.derive().apply(Modifiers.setPosition(RUNG_DEPTH * 2F))
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
         }
     }
 

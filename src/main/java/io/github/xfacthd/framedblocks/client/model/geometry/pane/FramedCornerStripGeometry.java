@@ -2,7 +2,7 @@ package io.github.xfacthd.framedblocks.client.model.geometry.pane;
 
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
-import io.github.xfacthd.framedblocks.api.model.data.QuadMap;
+import io.github.xfacthd.framedblocks.api.model.data.QuadMapBuilder;
 import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
@@ -26,7 +26,7 @@ public class FramedCornerStripGeometry extends Geometry
     }
 
     @Override
-    public void transformQuad(QuadMap quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
+    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
     {
         Direction quadDir = quad.direction();
         if (type == SlopeType.HORIZONTAL)
@@ -36,7 +36,7 @@ public class FramedCornerStripGeometry extends Geometry
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(dir.getOpposite(), 1F/16F))
                         .apply(Modifiers.cut(dir.getClockWise(), 1F/16F))
-                        .export(quadMap.get(quadDir));
+                        .export(quadMap, quadDir);
             }
             else if (quadDir.getAxis() == dir.getAxis())
             {
@@ -44,7 +44,7 @@ public class FramedCornerStripGeometry extends Geometry
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(dir.getClockWise(), 1F/16F))
                         .applyIf(Modifiers.setPosition(1F/16F), !onFace)
-                        .export(quadMap.get(onFace ? quadDir : null));
+                        .export(quadMap, onFace ? quadDir : null);
             }
             else if (quadDir.getAxis() == dir.getClockWise().getAxis())
             {
@@ -52,7 +52,7 @@ public class FramedCornerStripGeometry extends Geometry
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(dir.getOpposite(), 1F/16F))
                         .applyIf(Modifiers.setPosition(1F/16F), !onFace)
-                        .export(quadMap.get(onFace ? quadDir : null));
+                        .export(quadMap, onFace ? quadDir : null);
             }
         }
         else
@@ -63,7 +63,7 @@ public class FramedCornerStripGeometry extends Geometry
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(dir.getOpposite(), 1F/16F))
                         .apply(Modifiers.cut(top ? Direction.DOWN : Direction.UP, 1F/16F))
-                        .export(quadMap.get(quadDir));
+                        .export(quadMap, quadDir);
             }
             else if (quadDir.getAxis() == dir.getAxis())
             {
@@ -71,7 +71,7 @@ public class FramedCornerStripGeometry extends Geometry
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(top ? Direction.DOWN : Direction.UP, 1F/16F))
                         .applyIf(Modifiers.setPosition(1F/16F), !onFace)
-                        .export(quadMap.get(onFace ? quadDir : null));
+                        .export(quadMap, onFace ? quadDir : null);
             }
             else if (DirUtils.isY(quadDir))
             {
@@ -79,7 +79,7 @@ public class FramedCornerStripGeometry extends Geometry
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(dir.getOpposite(), 1F/16F))
                         .applyIf(Modifiers.setPosition(1F/16F), !onFace)
-                        .export(quadMap.get(onFace ? quadDir : null));
+                        .export(quadMap, onFace ? quadDir : null);
             }
         }
     }

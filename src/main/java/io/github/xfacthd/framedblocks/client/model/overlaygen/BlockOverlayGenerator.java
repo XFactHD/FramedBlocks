@@ -107,7 +107,7 @@ public final class BlockOverlayGenerator
 
     private static void generateSolidFaceOverlay(QuadMapImpl quads, BlockOverlayCacheKey.Bounds bounds, TextureAtlasSprite sprite, boolean emissive, int tintIndex)
     {
-        ArrayList<BakedQuad> quadList = quads.get(bounds.cullFace());
+        ArrayList<BakedQuad> quadList = quads.getOrCreate(bounds.cullFace());
         BakedNormals normals = BakedNormals.of(bounds.normal());
         for (BlockOverlayCacheKey.QuadBounds quadBounds : bounds.quadBounds())
         {
@@ -127,7 +127,7 @@ public final class BlockOverlayGenerator
             int tintIndex
     )
     {
-        ArrayList<BakedQuad> quadList = quads.get(bounds.cullFace());
+        ArrayList<BakedQuad> quadList = quads.getOrCreate(bounds.cullFace());
         Direction face = bounds.normalDir();
         BakedNormals normals = BakedNormals.of(bounds.normal());
         BlockOverlayCacheKey.SurfaceBounds surfaceBounds = bounds.surfaceBounds();

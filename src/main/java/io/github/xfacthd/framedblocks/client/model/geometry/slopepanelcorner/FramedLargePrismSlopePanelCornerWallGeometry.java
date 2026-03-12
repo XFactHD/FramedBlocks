@@ -2,7 +2,7 @@ package io.github.xfacthd.framedblocks.client.model.geometry.slopepanelcorner;
 
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
-import io.github.xfacthd.framedblocks.api.model.data.QuadMap;
+import io.github.xfacthd.framedblocks.api.model.data.QuadMapBuilder;
 import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
@@ -68,21 +68,21 @@ public class FramedLargePrismSlopePanelCornerWallGeometry extends Geometry
     }
 
     @Override
-    public void transformQuad(QuadMap quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object cacheKeyUserData)
+    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object cacheKeyUserData)
     {
         Direction quadDir = quad.direction();
         if (quadDir == dir)
         {
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(rotDirTwo.getOpposite(), flipSideTris ? 0 : 1, flipSideTris ? 1 : 0))
-                    .export(quadMap.get(quadDir));
+                    .export(quadMap, quadDir);
         }
         else if (quadDir == dir.getOpposite())
         {
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(rotDirTwo.getOpposite(), .5F))
                     .apply(Modifiers.cut(rotDirOne.getOpposite(), flipSideTris ? -.5F : .5F, flipSideTris ? .5F : -.5F))
-                    .export(quadMap.get(quadDir));
+                    .export(quadMap, quadDir);
 
             if (!altSlope)
             {
@@ -93,13 +93,13 @@ public class FramedLargePrismSlopePanelCornerWallGeometry extends Geometry
         {
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(rotDirTwo.getOpposite(), flipSideTris ? 1 : .5F, flipSideTris ? .5F : 1))
-                    .export(quadMap.get(quadDir));
+                    .export(quadMap, quadDir);
         }
         else if (quadDir == rotDirTwo)
         {
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(rotDirOne.getOpposite(), flipSideTris ? .5F : 1, flipSideTris ? 1 : .5F))
-                    .export(quadMap.get(quadDir));
+                    .export(quadMap, quadDir);
         }
         else if (altSlope && quadDir == rotDirOne.getOpposite())
         {
@@ -107,7 +107,7 @@ public class FramedLargePrismSlopePanelCornerWallGeometry extends Geometry
         }
     }
 
-    private void makePrismSlope(QuadMap quadMap, BakedQuad quad, BiConsumer<QuadMap, QuadModifier> slopeMaker)
+    private void makePrismSlope(QuadMapBuilder quadMap, BakedQuad quad, BiConsumer<QuadMapBuilder, QuadModifier> slopeMaker)
     {
         if (offset)
         {
@@ -126,7 +126,7 @@ public class FramedLargePrismSlopePanelCornerWallGeometry extends Geometry
         }
     }
 
-    private void makePrismSlopeHorizontal(QuadMap quadMap, QuadModifier modifier)
+    private void makePrismSlopeHorizontal(QuadMapBuilder quadMap, QuadModifier modifier)
     {
         float tiltAngle = invAngle ? -PRISM_ANGLE_HOR : PRISM_ANGLE_HOR;
         float rotAngle = DirUtils.isPositive(dir) ? -45F : 45F;
@@ -138,7 +138,7 @@ public class FramedLargePrismSlopePanelCornerWallGeometry extends Geometry
                 .export(quadMap, null);
     }
 
-    private void makePrismSlopeVertical(QuadMap quadMap, QuadModifier modifier)
+    private void makePrismSlopeVertical(QuadMapBuilder quadMap, QuadModifier modifier)
     {
         float tiltAngle = invAngle ? -PRISM_ANGLE_VERT : PRISM_ANGLE_VERT;
         float rotAngle = DirUtils.isPositive(dir) ? -45F : 45F;
@@ -146,7 +146,7 @@ public class FramedLargePrismSlopePanelCornerWallGeometry extends Geometry
                 .apply(Modifiers.cut(rotDirTwo.getOpposite(), flipPrismTriOpp ? 1 : .75F, flipPrismTriOpp ? .75F : 1))
                 .apply(Modifiers.rotate(rotDirTwo.getAxis(), rotTiltOrigin, tiltAngle, true))
                 .apply(Modifiers.rotate(dir.getAxis(), rotTiltOrigin, rotAngle, true))
-                .export(quadMap.get(null));
+                .export(quadMap, null);
     }
 
     static Vector3f getRotTiltOrigin(Direction dir, HorizontalRotation rot, boolean altSlope)

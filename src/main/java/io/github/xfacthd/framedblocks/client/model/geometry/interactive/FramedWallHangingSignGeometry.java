@@ -2,7 +2,7 @@ package io.github.xfacthd.framedblocks.client.model.geometry.interactive;
 
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
-import io.github.xfacthd.framedblocks.api.model.data.QuadMap;
+import io.github.xfacthd.framedblocks.api.model.data.QuadMapBuilder;
 import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.geometry.PartConsumer;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
@@ -34,7 +34,7 @@ public class FramedWallHangingSignGeometry extends Geometry
     }
 
     @Override
-    public void transformQuad(QuadMap quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
+    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
     {
         Direction quadDir = quad.direction();
         if (quadDir.getAxis() == dir.getAxis())
@@ -43,12 +43,12 @@ public class FramedWallHangingSignGeometry extends Geometry
                     .apply(Modifiers.cut(Direction.UP, 10F/16F))
                     .apply(Modifiers.cut(quadDir.getClockWise().getAxis(), 15F/16F))
                     .apply(Modifiers.setPosition(9F/16F))
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
 
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(Direction.DOWN, 2F/16F))
                     .apply(Modifiers.setPosition(10F/16F))
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
         }
         else if (quadDir.getAxis() == dir.getClockWise().getAxis())
         {
@@ -56,12 +56,12 @@ public class FramedWallHangingSignGeometry extends Geometry
                     .apply(Modifiers.cut(Direction.UP, 10F/16F))
                     .apply(Modifiers.cut(quadDir.getClockWise().getAxis(), 9F/16F))
                     .apply(Modifiers.setPosition(15F/16F))
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
 
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(Direction.DOWN, 2F/16F))
                     .apply(Modifiers.cut(quadDir.getClockWise().getAxis(), 10F/16F))
-                    .export(quadMap.get(quadDir));
+                    .export(quadMap, quadDir);
         }
         else
         {
@@ -70,12 +70,12 @@ public class FramedWallHangingSignGeometry extends Geometry
                     .apply(Modifiers.cut(dir.getAxis(), 9F/16F))
                     .apply(Modifiers.cut(dir.getClockWise().getAxis(), 15F/16F))
                     .applyIf(Modifiers.setPosition(10F/16F), up)
-                    .export(quadMap.get(up ? null : quadDir));
+                    .export(quadMap, up ? null : quadDir);
 
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(dir.getAxis(), 10F/16F))
                     .applyIf(Modifiers.setPosition(2F/16F), !up)
-                    .export(quadMap.get(up ? quadDir : null));
+                    .export(quadMap, up ? quadDir : null);
         }
     }
 

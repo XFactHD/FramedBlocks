@@ -2,7 +2,7 @@ package io.github.xfacthd.framedblocks.client.model.geometry.slope;
 
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
-import io.github.xfacthd.framedblocks.api.model.data.QuadMap;
+import io.github.xfacthd.framedblocks.api.model.data.QuadMapBuilder;
 import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
@@ -28,7 +28,7 @@ public class FramedPyramidSlabGeometry extends Geometry
     }
 
     @Override
-    public void transformQuad(QuadMap quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
+    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
     {
         Direction quadDir = quad.direction();
         if (DirUtils.isY(facing))
@@ -41,7 +41,7 @@ public class FramedPyramidSlabGeometry extends Geometry
                         .apply(Modifiers.cut(quadDir.getCounterClockWise(), up ? 0 : 1, up ? 1 : 0))
                         .apply(Modifiers.cut(quadDir.getClockWise(), up ? 0 : 1, up ? 1 : 0))
                         .apply(Modifiers.makeVerticalSlope(up, 45))
-                        .export(quadMap.get(null));
+                        .export(quadMap, null);
             }
             else if (altSlope && quadDir == facing)
             {
@@ -56,7 +56,7 @@ public class FramedPyramidSlabGeometry extends Geometry
                             .apply(Modifiers.cut(dir.getClockWise(), 1, 0))
                             .apply(Modifiers.setPosition(.5F))
                             .apply(Modifiers.rotateCentered(dir.getClockWise().getAxis(), angle, true))
-                            .export(quadMap.get(null));
+                            .export(quadMap, null);
                 }
             }
         }
@@ -69,14 +69,14 @@ public class FramedPyramidSlabGeometry extends Geometry
                         .apply(Modifiers.cut(facing.getClockWise(), 1, 0))
                         .apply(Modifiers.cut(facing.getCounterClockWise(), 1, 0))
                         .apply(Modifiers.makeVerticalSlope(true, 45))
-                        .export(quadMap.get(null));
+                        .export(quadMap, null);
 
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(Direction.UP, .5F))
                         .apply(Modifiers.cut(facing.getClockWise(), 0, 1))
                         .apply(Modifiers.cut(facing.getCounterClockWise(), 0, 1))
                         .apply(Modifiers.makeVerticalSlope(false, 45))
-                        .export(quadMap.get(null));
+                        .export(quadMap, null);
             }
             else if (altSlope && DirUtils.isY(quadDir))
             {
@@ -99,7 +99,7 @@ public class FramedPyramidSlabGeometry extends Geometry
                         .apply(Modifiers.cut(facing.getCounterClockWise(), 0, 1))
                         .apply(Modifiers.cut(facing.getClockWise(), 1, 0))
                         .apply(Modifiers.rotate(facing.getClockWise().getAxis(), origin, angle, true))
-                        .export(quadMap.get(null));
+                        .export(quadMap, null);
             }
             else if (quadDir.getAxis() == facing.getClockWise().getAxis())
             {
@@ -109,7 +109,7 @@ public class FramedPyramidSlabGeometry extends Geometry
                         .apply(Modifiers.cut(Direction.DOWN, right ? 1 : 0, right ? 0 : 1))
                         .apply(Modifiers.cut(Direction.UP, right ? 1 : 0, right ? 0 : 1))
                         .apply(Modifiers.makeHorizontalSlope(!right, 45))
-                        .export(quadMap.get(null));
+                        .export(quadMap, null);
             }
         }
     }

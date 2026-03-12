@@ -4,7 +4,7 @@ import io.github.xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import io.github.xfacthd.framedblocks.api.camo.CamoContent;
 import io.github.xfacthd.framedblocks.api.model.data.AbstractFramedBlockData;
 import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
-import io.github.xfacthd.framedblocks.api.model.data.QuadMap;
+import io.github.xfacthd.framedblocks.api.model.data.QuadMapBuilder;
 import io.github.xfacthd.framedblocks.api.model.item.ItemModelInfo;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
 import io.github.xfacthd.framedblocks.api.predicate.fullface.FullFacePredicate;
@@ -34,7 +34,7 @@ public abstract class Geometry
      * @param blockData        The {@link FramedBlockData} holding the block's camo and related metadata
      * @param cacheKeyUserData The additional user data, if available, from the cache key used to cache the transformed quads
      */
-    public abstract void transformQuad(QuadMap quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object cacheKeyUserData);
+    public abstract void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object cacheKeyUserData);
 
     /**
      * Return true if the base model loaded from JSON should be used when no camo is applied without going

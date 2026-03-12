@@ -1,8 +1,8 @@
 package io.github.xfacthd.framedblocks.api.model.quad;
 
-import net.minecraft.client.renderer.block.model.BakedQuad;
-
-import java.util.List;
+import io.github.xfacthd.framedblocks.api.model.data.QuadMapBuilder;
+import net.minecraft.core.Direction;
+import org.jetbrains.annotations.Nullable;
 
 public final class MultiQuadModifier
 {
@@ -38,13 +38,14 @@ public final class MultiQuadModifier
     }
 
     /**
-     * Re-assemble the quads of both wrapped {@link QuadModifier}s and add them to the given quad list.
-     * @see QuadModifier#export(List)
+     * Re-assemble the quads of both wrapped {@link QuadModifier}s and add them to the given quad map under
+     * the provided cull face.
+     * @see QuadModifier#export(QuadMapBuilder, Direction)
      */
-    public void export(List<BakedQuad> quadList)
+    public void export(QuadMapBuilder quadMap, @Nullable Direction cullFace)
     {
-        modOne.export(quadList);
-        modTwo.export(quadList);
+        modOne.export(quadMap, cullFace);
+        modTwo.export(quadMap, cullFace);
     }
 
     /**

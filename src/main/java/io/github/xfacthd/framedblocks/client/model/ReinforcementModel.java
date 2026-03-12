@@ -1,6 +1,6 @@
 package io.github.xfacthd.framedblocks.client.model;
 
-import io.github.xfacthd.framedblocks.api.model.data.QuadMap;
+import io.github.xfacthd.framedblocks.api.model.data.QuadMapBuilder;
 import io.github.xfacthd.framedblocks.api.model.util.ModelUtils;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import net.minecraft.client.renderer.block.model.BlockModelPart;
@@ -43,12 +43,12 @@ public final class ReinforcementModel
         BlockModelPart part = cachedFilteredParts[faceMask];
         if (part == null)
         {
-            QuadMap quadMap = new QuadMapImpl();
+            QuadMapBuilder quadMap = new QuadMapImpl();
             for (Direction side : DIRECTIONS)
             {
                 if ((faceMask & (1 << side.ordinal())) != 0)
                 {
-                    quadMap.get(side).add(baseModel.getQuads(side).getFirst());
+                    quadMap.getOrCreate(side).add(baseModel.getQuads(side).getFirst());
                 }
             }
             cachedFilteredParts[faceMask] = part = ModelUtils.makeModelPart(

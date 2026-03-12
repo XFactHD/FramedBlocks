@@ -2,7 +2,7 @@ package io.github.xfacthd.framedblocks.client.model.geometry.slopeedge;
 
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
-import io.github.xfacthd.framedblocks.api.model.data.QuadMap;
+import io.github.xfacthd.framedblocks.api.model.data.QuadMapBuilder;
 import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
@@ -30,7 +30,7 @@ public class FramedSlopeEdgeSlabGeometry extends Geometry
     }
 
     @Override
-    public void transformQuad(QuadMap quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object cacheKeyUserData)
+    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object cacheKeyUserData)
     {
         Direction quadDir = quad.direction();
         Direction backFace = top ? Direction.UP : Direction.DOWN;
@@ -38,7 +38,7 @@ public class FramedSlopeEdgeSlabGeometry extends Geometry
         {
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(topHalf ? Direction.DOWN : Direction.UP, .5F))
-                    .export(quadMap.get(dir));
+                    .export(quadMap, dir);
         }
         else if (quadDir == backFace)
         {
@@ -46,7 +46,7 @@ public class FramedSlopeEdgeSlabGeometry extends Geometry
             {
                 QuadModifier.of(quad)
                         .apply(Modifiers.setPosition(.5F))
-                        .export(quadMap.get(null));
+                        .export(quadMap, null);
             }
         }
         else if (quadDir == backFace.getOpposite())
@@ -54,7 +54,7 @@ public class FramedSlopeEdgeSlabGeometry extends Geometry
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(dir.getOpposite(), .5F))
                     .applyIf(Modifiers.setPosition(.5F), backfaceAligned)
-                    .export(quadMap.get(backfaceAligned ? null : quadDir));
+                    .export(quadMap, backfaceAligned ? null : quadDir);
 
             if (altSlope)
             {
@@ -62,7 +62,7 @@ public class FramedSlopeEdgeSlabGeometry extends Geometry
                         .apply(Modifiers.cut(dir, .5F))
                         .apply(Modifiers.makeVerticalSlope(dir, -45))
                         .apply(Modifiers.offset(backFace, backfaceAligned ? 1F : .5F))
-                        .export(quadMap.get(null));
+                        .export(quadMap, null);
             }
         }
         else if (quadDir == dir.getOpposite())
@@ -74,7 +74,7 @@ public class FramedSlopeEdgeSlabGeometry extends Geometry
                         .apply(Modifiers.makeVerticalSlope(top, -45))
                         .apply(Modifiers.offset(dir, 1F))
                         .applyIf(Modifiers.offset(backFace.getOpposite(), .5F), !backfaceAligned)
-                        .export(quadMap.get(null));
+                        .export(quadMap, null);
             }
         }
         else
@@ -84,7 +84,7 @@ public class FramedSlopeEdgeSlabGeometry extends Geometry
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(topHalf ? Direction.DOWN : Direction.UP, .5F))
                     .apply(Modifiers.cut(dir.getOpposite(), lenTop, lenBot))
-                    .export(quadMap.get(quadDir));
+                    .export(quadMap, quadDir);
         }
     }
 }

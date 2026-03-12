@@ -2,7 +2,7 @@ package io.github.xfacthd.framedblocks.client.model.geometry.prism;
 
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
-import io.github.xfacthd.framedblocks.api.model.data.QuadMap;
+import io.github.xfacthd.framedblocks.api.model.data.QuadMapBuilder;
 import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
@@ -29,7 +29,7 @@ public class FramedElevatedInnerPrismGeometry extends Geometry
     }
 
     @Override
-    public void transformQuad(QuadMap quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
+    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
     {
         boolean yFacing = DirUtils.isY(facing);
         boolean yAxis = axis == Direction.Axis.Y;
@@ -43,7 +43,7 @@ public class FramedElevatedInnerPrismGeometry extends Geometry
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(facing.getOpposite(), .5F))
                     .apply(Modifiers.makeVerticalSlope(up, 45))
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
         }
         else if (altSlope && yFacing && quadFace == facing) // Slopes for Y facing with Y_SLOPE
         {
@@ -53,44 +53,44 @@ public class FramedElevatedInnerPrismGeometry extends Geometry
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(offAxisCW, .5F))
                     .apply(Modifiers.makeVerticalSlope(offAxisCW, 45))
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
 
             Direction offAxisCCW = onAxis.getCounterClockWise();
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(offAxisCCW, .5F))
                     .apply(Modifiers.makeVerticalSlope(offAxisCCW, 45))
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
         }
         else if (!yFacing && yAxis && !quadOnAxis && quadOnFacingAxis) // Slopes for horizontal facing and Y axis without Y_SLOPE
         {
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(facing.getClockWise(), .5F))
                     .apply(Modifiers.makeHorizontalSlope(true, 45))
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
 
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(facing.getCounterClockWise(), .5F))
                     .apply(Modifiers.makeHorizontalSlope(false, 45))
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
         }
         else if (!altSlope && !yFacing && !yAxis && quadFace == facing)
         {
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(Direction.UP, .5F))
                     .apply(Modifiers.makeVerticalSlope(true, 45))
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
 
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(Direction.DOWN, .5F))
                     .apply(Modifiers.makeVerticalSlope(false, 45))
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
         }
         else if (altSlope && !yFacing && !yAxis && DirUtils.isY(quadFace)) // Slopes for horizontal facing and Y axis with Y_SLOPE
         {
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(facing.getOpposite(), .5F))
                     .apply(Modifiers.makeVerticalSlope(facing, 45))
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
         }
         else if (quadOnAxis)
         {
@@ -99,36 +99,36 @@ public class FramedElevatedInnerPrismGeometry extends Geometry
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(facing.getClockWise(), .5F))
                         .apply(Modifiers.cut(facing, 0F, 1F))
-                        .export(quadMap.get(quadFace));
+                        .export(quadMap, quadFace);
 
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(facing.getCounterClockWise(), .5F))
                         .apply(Modifiers.cut(facing, 1F, 0F))
-                        .export(quadMap.get(quadFace));
+                        .export(quadMap, quadFace);
             }
             else if (yFacing)
             {
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(quadFace.getClockWise(), .5F))
                         .apply(Modifiers.cut(facing, 0F, 1F))
-                        .export(quadMap.get(quadFace));
+                        .export(quadMap, quadFace);
 
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(quadFace.getCounterClockWise(), .5F))
                         .apply(Modifiers.cut(facing, 1F, 0F))
-                        .export(quadMap.get(quadFace));
+                        .export(quadMap, quadFace);
             }
             else //!yAxis && !yFacing
             {
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(Direction.DOWN, .5F))
                         .apply(Modifiers.cut(facing, 1F, 0F))
-                        .export(quadMap.get(quadFace));
+                        .export(quadMap, quadFace);
 
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(Direction.UP, .5F))
                         .apply(Modifiers.cut(facing, 0F, 1F))
-                        .export(quadMap.get(quadFace));
+                        .export(quadMap, quadFace);
             }
         }
     }

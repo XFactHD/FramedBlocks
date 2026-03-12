@@ -2,7 +2,7 @@ package io.github.xfacthd.framedblocks.client.model.geometry.stairs;
 
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
-import io.github.xfacthd.framedblocks.api.model.data.QuadMap;
+import io.github.xfacthd.framedblocks.api.model.data.QuadMapBuilder;
 import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
@@ -27,7 +27,7 @@ public class FramedHalfStairsGeometry extends Geometry
     }
 
     @Override
-    public void transformQuad(QuadMap quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
+    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
     {
         Direction face = quad.direction();
         Direction horCut = right ? dir.getCounterClockWise() : dir.getClockWise();
@@ -37,7 +37,7 @@ public class FramedHalfStairsGeometry extends Geometry
         {
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(horCut, .5F))
-                    .export(quadMap.get(face));
+                    .export(quadMap, face);
         }
         else if (face == dir.getOpposite())
         {
@@ -46,23 +46,23 @@ public class FramedHalfStairsGeometry extends Geometry
 
             mod.derive().apply(Modifiers.cut(vertCut.getOpposite(), .5F))
                     .apply(Modifiers.setPosition(.5F))
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
 
             mod.apply(Modifiers.cut(vertCut, .5F))
-                    .export(quadMap.get(face));
+                    .export(quadMap, face);
         }
         else if (!DirUtils.isY(face) && face.getAxis() != dir.getAxis())
         {
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(dir.getOpposite(), .5F))
                     .applyIf(Modifiers.setPosition(.5F), face == horCut)
-                    .export(quadMap.get(face == horCut ? null : face));
+                    .export(quadMap, face == horCut ? null : face);
 
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(dir, .5F))
                     .apply(Modifiers.cut(vertCut, .5F))
                     .applyIf(Modifiers.setPosition(.5F), face == horCut)
-                    .export(quadMap.get(face == horCut ? null : face));
+                    .export(quadMap, face == horCut ? null : face);
         }
         else if (DirUtils.isY(face))
         {
@@ -75,11 +75,11 @@ public class FramedHalfStairsGeometry extends Geometry
             {
                 mod.derive().apply(Modifiers.cut(dir, .5F))
                         .apply(Modifiers.setPosition(.5F))
-                        .export(quadMap.get(null));
+                        .export(quadMap, null);
             }
 
             mod.applyIf(Modifiers.cut(dir.getOpposite(), .5F), !base)
-                    .export(quadMap.get(face));
+                    .export(quadMap, face);
         }
     }
 }

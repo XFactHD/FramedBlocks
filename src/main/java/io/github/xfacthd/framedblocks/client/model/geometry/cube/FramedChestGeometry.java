@@ -2,7 +2,7 @@ package io.github.xfacthd.framedblocks.client.model.geometry.cube;
 
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
-import io.github.xfacthd.framedblocks.api.model.data.QuadMap;
+import io.github.xfacthd.framedblocks.api.model.data.QuadMapBuilder;
 import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.geometry.PartConsumer;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
@@ -43,7 +43,7 @@ public class FramedChestGeometry extends Geometry
     }
 
     @Override
-    public void transformQuad(QuadMap quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
+    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
     {
         Direction quadDir = quad.direction();
         if (DirUtils.isY(quadDir))
@@ -53,7 +53,7 @@ public class FramedChestGeometry extends Geometry
                     .applyIf(Modifiers.cut(facing.getClockWise(), 15F/16F), type != ChestType.LEFT)
                     .applyIf(Modifiers.cut(facing.getCounterClockWise(), 15F/16F), type != ChestType.RIGHT)
                     .applyIf(Modifiers.setPosition(closed ? 14F/16F : 10F/16F), quadDir == Direction.UP)
-                    .export(quadMap.get(quadDir == Direction.UP ? null : quadDir));
+                    .export(quadMap, quadDir == Direction.UP ? null : quadDir);
         }
         else if (quadDir.getAxis() == facing.getAxis())
         {
@@ -62,7 +62,7 @@ public class FramedChestGeometry extends Geometry
                     .applyIf(Modifiers.cut(facing.getClockWise(), 15F/16F), type != ChestType.LEFT)
                     .applyIf(Modifiers.cut(facing.getCounterClockWise(), 15F/16F), type != ChestType.RIGHT)
                     .apply(Modifiers.setPosition(15F/16F))
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
         }
         else
         {
@@ -71,7 +71,7 @@ public class FramedChestGeometry extends Geometry
                     .apply(Modifiers.cut(Direction.UP, closed ? 14F/16F : 10F/16F))
                     .apply(Modifiers.cut(quadDir.getClockWise().getAxis(), 15F/16F))
                     .applyIf(Modifiers.setPosition(15F/16F), offset)
-                    .export(quadMap.get(offset ? null : quadDir));
+                    .export(quadMap, offset ? null : quadDir);
         }
 
         if (latch == LatchType.CAMO && closed)
@@ -80,7 +80,7 @@ public class FramedChestGeometry extends Geometry
         }
     }
 
-    public static void makeChestLatch(QuadMap quadMap, BakedQuad quad, Direction facing, ChestType type)
+    public static void makeChestLatch(QuadMapBuilder quadMap, BakedQuad quad, Direction facing, ChestType type)
     {
         Direction face = quad.direction();
         float length = type == ChestType.SINGLE ? 9F/16F : 1F/16F;
@@ -93,7 +93,7 @@ public class FramedChestGeometry extends Geometry
                     .applyIf(Modifiers.cut(facing.getClockWise(), length), type != ChestType.LEFT)
                     .applyIf(Modifiers.cut(facing.getCounterClockWise(), length), type != ChestType.RIGHT)
                     .applyIf(Modifiers.setPosition(1F/16F), face != facing)
-                    .export(quadMap.get(face == facing ? facing : null));
+                    .export(quadMap, face == facing ? facing : null);
         }
         else if (DirUtils.isY(face))
         {
@@ -102,7 +102,7 @@ public class FramedChestGeometry extends Geometry
                     .applyIf(Modifiers.cut(facing.getClockWise(), length), type != ChestType.LEFT)
                     .applyIf(Modifiers.cut(facing.getCounterClockWise(), length), type != ChestType.RIGHT)
                     .apply(Modifiers.setPosition(face == Direction.UP ? 11F/16F : 9F/16F))
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
         }
         else
         {
@@ -111,7 +111,7 @@ public class FramedChestGeometry extends Geometry
                     .apply(Modifiers.cutSide(0, 7F/16F, 1, 11F/16F))
                     .apply(Modifiers.cut(facing.getOpposite(), 1F/16F))
                     .applyIf(Modifiers.setPosition(length), offset)
-                    .export(quadMap.get(offset ? null : face));
+                    .export(quadMap, offset ? null : face);
         }
     }
 

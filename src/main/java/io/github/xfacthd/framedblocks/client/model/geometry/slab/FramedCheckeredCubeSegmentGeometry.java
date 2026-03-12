@@ -1,7 +1,7 @@
 package io.github.xfacthd.framedblocks.client.model.geometry.slab;
 
 import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
-import io.github.xfacthd.framedblocks.api.model.data.QuadMap;
+import io.github.xfacthd.framedblocks.api.model.data.QuadMapBuilder;
 import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
@@ -22,7 +22,7 @@ public class FramedCheckeredCubeSegmentGeometry extends Geometry
     }
 
     @Override
-    public void transformQuad(QuadMap quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
+    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
     {
         Direction quadDir = quad.direction();
         if (DirUtils.isY(quadDir))
@@ -33,24 +33,24 @@ public class FramedCheckeredCubeSegmentGeometry extends Geometry
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(Direction.SOUTH, .5F))
                     .apply(Modifiers.cut(xDir, .5F))
-                    .export(quadMap.get(quadDir));
+                    .export(quadMap, quadDir);
 
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(Direction.NORTH, .5F))
                     .apply(Modifiers.cut(xDir.getOpposite(), .5F))
-                    .export(quadMap.get(quadDir));
+                    .export(quadMap, quadDir);
 
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(Direction.SOUTH, .5F))
                     .apply(Modifiers.cut(xDir.getOpposite(), .5F))
                     .apply(Modifiers.setPosition(.5F))
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
 
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(Direction.NORTH, .5F))
                     .apply(Modifiers.cut(xDir, .5F))
                     .apply(Modifiers.setPosition(.5F))
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
         }
         else
         {
@@ -59,24 +59,24 @@ public class FramedCheckeredCubeSegmentGeometry extends Geometry
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(Direction.UP, .5F))
                     .apply(Modifiers.cut(horDir, .5F))
-                    .export(quadMap.get(quadDir));
+                    .export(quadMap, quadDir);
 
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(Direction.DOWN, .5F))
                     .apply(Modifiers.cut(horDir.getOpposite(), .5F))
-                    .export(quadMap.get(quadDir));
+                    .export(quadMap, quadDir);
 
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(Direction.UP, .5F))
                     .apply(Modifiers.cut(horDir.getOpposite(), .5F))
                     .apply(Modifiers.setPosition(.5F))
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
 
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(Direction.DOWN, .5F))
                     .apply(Modifiers.cut(horDir, .5F))
                     .apply(Modifiers.setPosition(.5F))
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
         }
     }
 }

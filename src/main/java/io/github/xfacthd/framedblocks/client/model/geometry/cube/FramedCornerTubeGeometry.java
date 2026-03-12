@@ -1,7 +1,7 @@
 package io.github.xfacthd.framedblocks.client.model.geometry.cube;
 
 import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
-import io.github.xfacthd.framedblocks.api.model.data.QuadMap;
+import io.github.xfacthd.framedblocks.api.model.data.QuadMapBuilder;
 import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
@@ -30,7 +30,7 @@ public class FramedCornerTubeGeometry extends Geometry
     }
 
     @Override
-    public void transformQuad(QuadMap quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
+    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
     {
         Direction quadDir = quad.direction();
 
@@ -40,18 +40,18 @@ public class FramedCornerTubeGeometry extends Geometry
             {
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(Direction.NORTH, minWidth))
-                        .export(quadMap.get(quadDir));
+                        .export(quadMap, quadDir);
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(Direction.SOUTH, minWidth))
-                        .export(quadMap.get(quadDir));
+                        .export(quadMap, quadDir);
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(Direction.EAST, minWidth))
                         .apply(Modifiers.cut(Direction.Axis.Z, maxWidth))
-                        .export(quadMap.get(quadDir));
+                        .export(quadMap, quadDir);
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(Direction.WEST, minWidth))
                         .apply(Modifiers.cut(Direction.Axis.Z, maxWidth))
-                        .export(quadMap.get(quadDir));
+                        .export(quadMap, quadDir);
 
                 QuadModifier mod = QuadModifier.of(quad);
                 for (Direction side : DIRECTIONS)
@@ -61,7 +61,7 @@ public class FramedCornerTubeGeometry extends Geometry
                         mod.apply(Modifiers.cut(side, maxWidth));
                     }
                 }
-                mod.apply(Modifiers.setPosition(minWidth)).export(quadMap.get(null));
+                mod.apply(Modifiers.setPosition(minWidth)).export(quadMap, null);
             }
             else if (orientation.isSideOpen(quadDir.getOpposite()))
             {
@@ -79,7 +79,7 @@ public class FramedCornerTubeGeometry extends Geometry
                         mod.apply(Modifiers.cut(side, maxWidth));
                     }
                 }
-                mod.apply(Modifiers.setPosition(minWidth)).export(quadMap.get(null));
+                mod.apply(Modifiers.setPosition(minWidth)).export(quadMap, null);
             }
             else
             {
@@ -99,8 +99,8 @@ public class FramedCornerTubeGeometry extends Geometry
                         modTwo.apply(Modifiers.cut(side, len));
                     }
                 }
-                modOne.apply(Modifiers.setPosition(minWidth)).export(quadMap.get(null));
-                modTwo.apply(Modifiers.setPosition(minWidth)).export(quadMap.get(null));
+                modOne.apply(Modifiers.setPosition(minWidth)).export(quadMap, null);
+                modTwo.apply(Modifiers.setPosition(minWidth)).export(quadMap, null);
             }
         }
         else
@@ -109,18 +109,18 @@ public class FramedCornerTubeGeometry extends Geometry
             {
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(Direction.UP, minWidth))
-                        .export(quadMap.get(quadDir));
+                        .export(quadMap, quadDir);
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(Direction.DOWN, minWidth))
-                        .export(quadMap.get(quadDir));
+                        .export(quadMap, quadDir);
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(quadDir.getClockWise(), minWidth))
                         .apply(Modifiers.cut(Direction.Axis.Y, maxWidth))
-                        .export(quadMap.get(quadDir));
+                        .export(quadMap, quadDir);
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(quadDir.getCounterClockWise(), minWidth))
                         .apply(Modifiers.cut(Direction.Axis.Y, maxWidth))
-                        .export(quadMap.get(quadDir));
+                        .export(quadMap, quadDir);
 
                 QuadModifier mod = QuadModifier.of(quad);
                 for (Direction side : DIRECTIONS)
@@ -130,7 +130,7 @@ public class FramedCornerTubeGeometry extends Geometry
                         mod.apply(Modifiers.cut(side, maxWidth, maxWidth));
                     }
                 }
-                mod.apply(Modifiers.setPosition(minWidth)).export(quadMap.get(null));
+                mod.apply(Modifiers.setPosition(minWidth)).export(quadMap, null);
             }
             else if (orientation.isSideOpen(quadDir.getOpposite()))
             {
@@ -148,7 +148,7 @@ public class FramedCornerTubeGeometry extends Geometry
                         mod.apply(Modifiers.cut(side, maxWidth, maxWidth));
                     }
                 }
-                mod.apply(Modifiers.setPosition(minWidth)).export(quadMap.get(null));
+                mod.apply(Modifiers.setPosition(minWidth)).export(quadMap, null);
             }
             else
             {
@@ -168,8 +168,8 @@ public class FramedCornerTubeGeometry extends Geometry
                         modTwo.apply(Modifiers.cut(side, len, len));
                     }
                 }
-                modOne.apply(Modifiers.setPosition(minWidth)).export(quadMap.get(null));
-                modTwo.apply(Modifiers.setPosition(minWidth)).export(quadMap.get(null));
+                modOne.apply(Modifiers.setPosition(minWidth)).export(quadMap, null);
+                modTwo.apply(Modifiers.setPosition(minWidth)).export(quadMap, null);
             }
         }
     }

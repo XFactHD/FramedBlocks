@@ -1,7 +1,7 @@
 package io.github.xfacthd.framedblocks.client.model.geometry.torch;
 
 import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
-import io.github.xfacthd.framedblocks.api.model.data.QuadMap;
+import io.github.xfacthd.framedblocks.api.model.data.QuadMapBuilder;
 import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.geometry.PartConsumer;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
@@ -48,7 +48,7 @@ public class FramedLanternGeometry extends Geometry
     }
 
     @Override
-    public void transformQuad(QuadMap quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
+    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
     {
         Direction quadDir = quad.direction();
         if (DirUtils.isY(quadDir))
@@ -59,14 +59,14 @@ public class FramedLanternGeometry extends Geometry
                     .apply(Modifiers.cutTopBottom(5F/16F, 5F/16F, 11F/16F, 11F/16F))
                     .applyIf(Modifiers.setPosition(15F/16F), hanging && !up)
                     .applyIf(Modifiers.setPosition(hanging ? 8F/16F : 7F/16F), up)
-                    .export(hanging || up ? quadMap.get(null) : quadMap.get(Direction.DOWN));
+                    .export(quadMap, hanging || up ? null : Direction.DOWN);
 
             if (up)
             {
                 QuadModifier.of(quad)
                         .apply(Modifiers.cutTopBottom(6F/16F, 6F/16F, 10F/16F, 10F/16F))
                         .apply(Modifiers.setPosition(hanging ? 10F/16F : 9F/16F))
-                        .export(quadMap.get(null));
+                        .export(quadMap, null);
             }
         }
         else
@@ -81,13 +81,13 @@ public class FramedLanternGeometry extends Geometry
             {
                 mod.applyIf(Modifiers.offset(Direction.UP, 1F/16F), hanging)
                         .apply(Modifiers.setPosition(11F/16F))
-                        .export(quadMap.get(null));
+                        .export(quadMap, null);
             }
 
             QuadModifier.of(quad).apply(Modifiers.cutSide(6F/16F, closedHead ? 7F/16F : 8F/16F, 10F/16F, 9F/16F))
                     .applyIf(Modifiers.offset(Direction.UP, 1F/16F), hanging)
                     .apply(Modifiers.setPosition(10F/16F))
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
 
             if (chain == ChainType.CAMO)
             {
@@ -96,7 +96,7 @@ public class FramedLanternGeometry extends Geometry
         }
     }
 
-    private void createCamoChain(QuadMap quadMap, BakedQuad quad, Direction quadDir)
+    private void createCamoChain(QuadMapBuilder quadMap, BakedQuad quad, Direction quadDir)
     {
         Direction.Axis quadPerpAxis = DirUtils.isX(quadDir) ? Direction.Axis.Z : Direction.Axis.X;
         Direction dirNeg = quadPerpAxis.getNegative();
@@ -133,7 +133,7 @@ public class FramedLanternGeometry extends Geometry
                     .apply(Modifiers.cut(Direction.UP, (16F - height + 1F) / 16F))
                     .apply(Modifiers.setPosition(.5F))
                     .apply(Modifiers.rotate(Direction.Axis.Y, ROT_ORIGIN, 45, false))
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
         }
 
         if (hanging)
@@ -160,7 +160,7 @@ public class FramedLanternGeometry extends Geometry
         {
             mod.apply(Modifiers.setPosition(.5F))
                     .apply(Modifiers.rotate(Direction.Axis.Y, ROT_ORIGIN, 45, false))
-                    .export(quadMap.get(null));
+                    .export(quadMap, null);
         }
     }
 

@@ -1,7 +1,7 @@
 package io.github.xfacthd.framedblocks.client.model.geometry.cube;
 
 import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
-import io.github.xfacthd.framedblocks.api.model.data.QuadMap;
+import io.github.xfacthd.framedblocks.api.model.data.QuadMapBuilder;
 import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
@@ -48,13 +48,13 @@ public class FramedCollapsibleCopycatBlockGeometry extends Geometry
     }
 
     @Override
-    public void transformQuad(QuadMap quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object cacheKeyUserData)
+    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object cacheKeyUserData)
     {
         Direction quadDir = quad.direction();
         int packedOffsets = PackedCollapsibleBlockOffsets.unwrap(cacheKeyUserData, state);
         if (packedOffsets == 0)
         {
-            quadMap.get(quadDir).add(quad);
+            quadMap.getOrCreate(quadDir).add(quad);
             return;
         }
 
@@ -98,13 +98,13 @@ public class FramedCollapsibleCopycatBlockGeometry extends Geometry
                         modifier.derive()
                                 .apply(Modifiers.cut(Direction.EAST, length.valOne))
                                 .apply(Modifiers.offset(Direction.EAST, offsets[WEST] / 16F))
-                                .export(quadMap.get(solid ? quadDir : null));
+                                .export(quadMap, solid ? quadDir : null);
                     }
                     if (length.valTwo > 0F)
                     {
                         modifier.apply(Modifiers.cut(Direction.WEST, length.valTwo))
                                 .apply(Modifiers.offset(Direction.WEST, offsets[EAST] / 16F))
-                                .export(quadMap.get(solid ? quadDir : null));
+                                .export(quadMap, solid ? quadDir : null);
                     }
                 }
             }
@@ -112,7 +112,7 @@ public class FramedCollapsibleCopycatBlockGeometry extends Geometry
             {
                 for (QuadModifier modifier : mods)
                 {
-                    modifier.export(quadMap.get(solid ? quadDir : null));
+                    modifier.export(quadMap, solid ? quadDir : null);
                 }
             }
         }
@@ -156,13 +156,13 @@ public class FramedCollapsibleCopycatBlockGeometry extends Geometry
                         modifier.derive()
                                 .apply(Modifiers.cut(Direction.UP, length.valOne))
                                 .apply(Modifiers.offset(Direction.UP, offsets[DOWN] / 16F))
-                                .export(quadMap.get(solid ? quadDir : null));
+                                .export(quadMap, solid ? quadDir : null);
                     }
                     if (length.valTwo > 0F)
                     {
                         modifier.apply(Modifiers.cut(Direction.DOWN, length.valTwo))
                                 .apply(Modifiers.offset(Direction.DOWN, offsets[UP] / 16F))
-                                .export(quadMap.get(solid ? quadDir : null));
+                                .export(quadMap, solid ? quadDir : null);
                     }
                 }
             }
@@ -170,7 +170,7 @@ public class FramedCollapsibleCopycatBlockGeometry extends Geometry
             {
                 for (QuadModifier modifier : mods)
                 {
-                    modifier.export(quadMap.get(solid ? quadDir : null));
+                    modifier.export(quadMap, solid ? quadDir : null);
                 }
             }
         }

@@ -1,7 +1,7 @@
 package io.github.xfacthd.framedblocks.client.model.geometry.pane;
 
 import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
-import io.github.xfacthd.framedblocks.api.model.data.QuadMap;
+import io.github.xfacthd.framedblocks.api.model.data.QuadMapBuilder;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
 import io.github.xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
@@ -9,8 +9,6 @@ import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.core.Direction;
 import org.jspecify.annotations.Nullable;
-
-import java.util.List;
 
 public class FramedBarsGeometry extends FramedPaneGeometry
 {
@@ -20,7 +18,7 @@ public class FramedBarsGeometry extends FramedPaneGeometry
     }
 
     @Override
-    public void transformQuad(QuadMap quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
+    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
     {
         Direction face = quad.direction();
         if (DirUtils.isY(face))
@@ -62,33 +60,33 @@ public class FramedBarsGeometry extends FramedPaneGeometry
 
             if (DirUtils.isX(face))
             {
-                createCenterPillarQuad(quadMap.get(null), quad, east, west, south, north);
+                createCenterPillarQuad(quadMap, quad, east, west, south, north);
 
                 if (north)
                 {
-                    createPillarQuad(quadMap.get(null), quad, Direction.NORTH);
-                    createBarQuads(quadMap.get(null), quad, Direction.NORTH);
+                    createPillarQuad(quadMap, quad, Direction.NORTH);
+                    createBarQuads(quadMap, quad, Direction.NORTH);
                 }
                 if (south)
                 {
-                    createPillarQuad(quadMap.get(null), quad, Direction.SOUTH);
-                    createBarQuads(quadMap.get(null), quad, Direction.SOUTH);
+                    createPillarQuad(quadMap, quad, Direction.SOUTH);
+                    createBarQuads(quadMap, quad, Direction.SOUTH);
                 }
             }
 
             if (DirUtils.isZ(face))
             {
-                createCenterPillarQuad(quadMap.get(null), quad, south, north, east, west);
+                createCenterPillarQuad(quadMap, quad, south, north, east, west);
 
                 if (east)
                 {
-                    createPillarQuad(quadMap.get(null), quad, Direction.EAST);
-                    createBarQuads(quadMap.get(null), quad, Direction.EAST);
+                    createPillarQuad(quadMap, quad, Direction.EAST);
+                    createBarQuads(quadMap, quad, Direction.EAST);
                 }
                 if (west)
                 {
-                    createPillarQuad(quadMap.get(null), quad, Direction.WEST);
-                    createBarQuads(quadMap.get(null), quad, Direction.WEST);
+                    createPillarQuad(quadMap, quad, Direction.WEST);
+                    createBarQuads(quadMap, quad, Direction.WEST);
                 }
             }
         }
@@ -106,7 +104,7 @@ public class FramedBarsGeometry extends FramedPaneGeometry
      * @param parNeg Connection state in the negative direction in the same plane as the quad
      * @param parPos Connection state in the positive direction in the same plane as the quad
      */
-    private static void createCenterPillarQuad(List<BakedQuad> quadList, BakedQuad quad, boolean perpNeg, boolean perpPos, boolean parNeg, boolean parPos)
+    private static void createCenterPillarQuad(QuadMapBuilder quadMap, BakedQuad quad, boolean perpNeg, boolean perpPos, boolean parNeg, boolean parPos)
     {
         if (perpNeg && perpPos && !parNeg && !parPos)
         {
@@ -137,10 +135,10 @@ public class FramedBarsGeometry extends FramedPaneGeometry
         QuadModifier.of(quad)
                 .apply(Modifiers.cutSide(minXZ, 0, maxXZ, 1))
                 .apply(Modifiers.setPosition(offset))
-                .export(quadList);
+                .export(quadMap, null);
     }
 
-    private static void createPillarQuad(List<BakedQuad> quadList, BakedQuad quad, Direction dir)
+    private static void createPillarQuad(QuadMapBuilder quadMap, BakedQuad quad, Direction dir)
     {
         if (DirUtils.isY(dir))
         {
@@ -154,10 +152,10 @@ public class FramedBarsGeometry extends FramedPaneGeometry
         QuadModifier.of(quad)
                 .apply(Modifiers.cutSide(minXZ, 0, maxXZ, 1))
                 .apply(Modifiers.setPosition(.5F))
-                .export(quadList);
+                .export(quadMap, null);
     }
 
-    private static void createBarQuads(List<BakedQuad> quadList, BakedQuad quad, Direction dir)
+    private static void createBarQuads(QuadMapBuilder quadMap, BakedQuad quad, Direction dir)
     {
         if (DirUtils.isY(dir))
         {
@@ -175,7 +173,7 @@ public class FramedBarsGeometry extends FramedPaneGeometry
         QuadModifier.of(quad)
                 .apply(Modifiers.cutSide(minXZ, minY, maxXZ, maxY))
                 .apply(Modifiers.setPosition(.5F))
-                .export(quadList);
+                .export(quadMap, null);
 
         minXZ = positive ? 14F/16F : 0;
         maxXZ = positive ? 1 :  2F/16F;
@@ -183,6 +181,6 @@ public class FramedBarsGeometry extends FramedPaneGeometry
         QuadModifier.of(quad)
                 .apply(Modifiers.cutSide(minXZ, 7F/16F, maxXZ, 9F/16F))
                 .apply(Modifiers.setPosition(.5F))
-                .export(quadList);
+                .export(quadMap, null);
     }
 }
