@@ -1,109 +1,140 @@
 package io.github.xfacthd.framedblocks.common.blockentity.special;
 
-import io.github.xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.block.blockentity.DelegatingFramedBlockEntity;
+import io.github.xfacthd.framedblocks.api.block.blockentity.WrappedFramedBlockEntity;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.Clearable;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponentGetter;
+import net.minecraft.core.component.DataComponentMap;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.Connection;
 import net.minecraft.world.ContainerHelper;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.ChiseledBookShelfBlock;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.ChiseledBookShelfBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
-import net.neoforged.neoforge.transfer.ResourceHandler;
-import net.neoforged.neoforge.transfer.item.ItemResource;
-import net.neoforged.neoforge.transfer.item.ItemStacksResourceHandler;
+import net.neoforged.neoforge.model.data.ModelData;
 
-public class FramedChiseledBookshelfBlockEntity extends FramedBlockEntity implements Clearable
+public final class FramedChiseledBookshelfBlockEntity extends ChiseledBookShelfBlockEntity implements DelegatingFramedBlockEntity
 {
     public static final String INVENTORY_NBT_KEY = ContainerHelper.TAG_ITEMS;
-    public static final String LAST_SLOT_NBT_KEY = "last_slot";
+    public static final String LAST_SLOT_NBT_KEY = "last_interacted_slot";
 
-    private final ItemStacksResourceHandler itemHandler = new ItemStacksResourceHandler(6);
-    private int lastInteractedSlot = -1;
+    private final WrappedFramedBlockEntity delegate;
 
     public FramedChiseledBookshelfBlockEntity(BlockPos pos, BlockState state)
     {
-        super(FBContent.BE_TYPE_FRAMED_CHISELED_BOOKSHELF.value(), pos, state);
-    }
-
-    public void placeBook(ItemStack stack, int slot)
-    {
-        itemHandler.set(slot, ItemResource.of(stack), 1);
-        updateState(slot);
-        setChanged();
-    }
-
-    public ItemStack takeBook(int slot)
-    {
-        ItemStack stack = itemHandler.getResource(slot).toStack();
-        itemHandler.set(slot, ItemResource.EMPTY, 0);
-        updateState(slot);
-        setChanged();
-        return stack;
-    }
-
-    private void updateState(int slot)
-    {
-        lastInteractedSlot = slot;
-
-        BlockState state = getBlockState();
-        for (int i = 0; i < ChiseledBookShelfBlockEntity.MAX_BOOKS_IN_STORAGE; i++)
-        {
-            BooleanProperty prop = ChiseledBookShelfBlock.SLOT_OCCUPIED_PROPERTIES.get(i);
-            state = state.setValue(prop, !itemHandler.getResource(i).isEmpty());
-        }
-        level().setBlockAndUpdate(worldPosition, state);
-    }
-
-    public void forceStateUpdate()
-    {
-        updateState(lastInteractedSlot);
-    }
-
-    public ResourceHandler<ItemResource> getItemHandler()
-    {
-        return itemHandler;
+        super(pos, state);
+        this.delegate = new WrappedFramedBlockEntity(this);
     }
 
     @Override
-    public void clearContent()
+    public WrappedFramedBlockEntity unwrap()
     {
-        Utils.clearItemResourceHandler(itemHandler);
-    }
-
-    public int getAnalogOutputSignal()
-    {
-        return lastInteractedSlot + 1;
+        return delegate;
     }
 
     @Override
-    public void preRemoveSideEffects(BlockPos pos, BlockState state)
+    public BlockEntityType<?> getType()
     {
-        super.preRemoveSideEffects(pos, state);
-        if (level != null)
-        {
-            Utils.dropItemResourceHandlerContents(level, pos, itemHandler);
-            clearContent();
-        }
+        return FBContent.BE_TYPE_FRAMED_CHISELED_BOOKSHELF.value();
     }
 
     @Override
-    public void saveAdditional(ValueOutput valueOutput)
+    public void setRemoved()
     {
-        itemHandler.serialize(valueOutput.child(INVENTORY_NBT_KEY));
-        valueOutput.putInt(LAST_SLOT_NBT_KEY, lastInteractedSlot);
-        super.saveAdditional(valueOutput);
+        super.setRemoved();
+        delegate.setRemoved();
     }
 
     @Override
-    public void loadAdditional(ValueInput valueInput)
+    public void clearRemoved()
     {
-        super.loadAdditional(valueInput);
-        itemHandler.deserialize(valueInput.childOrEmpty(INVENTORY_NBT_KEY));
-        lastInteractedSlot = valueInput.getIntOr(LAST_SLOT_NBT_KEY, -1);
+        super.clearRemoved();
+        delegate.clearRemoved();
+    }
+
+    @Override
+    public void setLevel(Level level)
+    {
+        super.setLevel(level);
+        delegate.setLevel(level);
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public void setBlockState(BlockState state)
+    {
+        super.setBlockState(state);
+        delegate.setBlockState(state);
+    }
+
+    @Override
+    public ModelData getModelData()
+    {
+        return delegate.getModelData();
+    }
+
+    @Override
+    public void onLoad()
+    {
+        delegate.onLoadInternal();
+        super.onLoad();
+    }
+
+    @Override
+    public CompoundTag getUpdateTag(HolderLookup.Provider registries)
+    {
+        return delegate.getUpdateTag(registries, super::getUpdateTag);
+    }
+
+    @Override
+    public void handleUpdateTag(ValueInput input)
+    {
+        delegate.handleUpdateTag(input, super::handleUpdateTag);
+    }
+
+    @Override
+    public void onDataPacket(Connection net, ValueInput input)
+    {
+        delegate.onDataPacket(net, input, super::onDataPacket);
+    }
+
+    @Override
+    protected void collectImplicitComponents(DataComponentMap.Builder builder)
+    {
+        super.collectImplicitComponents(builder);
+        delegate.collectImplicitComponentsForDelegate(builder);
+    }
+
+    @Override
+    protected void applyImplicitComponents(DataComponentGetter getter)
+    {
+        super.applyImplicitComponents(getter);
+        delegate.applyImplicitComponentsForDelegate(getter);
+    }
+
+    @Override
+    public void removeComponentsFromTag(ValueOutput output)
+    {
+        super.removeComponentsFromTag(output);
+        delegate.removeComponentsFromTag(output);
+    }
+
+    @Override
+    protected void loadAdditional(ValueInput input)
+    {
+        super.loadAdditional(input);
+        delegate.loadAdditionalInternal(input);
+    }
+
+    @Override
+    protected void saveAdditional(ValueOutput output)
+    {
+        super.saveAdditional(output);
+        delegate.saveAdditionalInternal(output);
     }
 }

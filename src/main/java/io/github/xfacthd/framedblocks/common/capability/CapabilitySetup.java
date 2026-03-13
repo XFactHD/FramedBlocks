@@ -40,7 +40,7 @@ public final class CapabilitySetup
         event.registerBlockEntity(
                 Capabilities.Item.BLOCK,
                 FBContent.BE_TYPE_FRAMED_CHISELED_BOOKSHELF.value(),
-                (be, side) -> be.getItemHandler()
+                (be, side) -> VanillaContainerWrapper.of(be)
         );
 
         event.registerBlockEntity(
