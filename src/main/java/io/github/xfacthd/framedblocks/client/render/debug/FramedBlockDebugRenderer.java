@@ -2,7 +2,7 @@ package io.github.xfacthd.framedblocks.client.render.debug;
 
 import com.google.common.collect.Sets;
 import com.mojang.blaze3d.vertex.PoseStack;
-import io.github.xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
+import io.github.xfacthd.framedblocks.api.block.blockentity.IFramedBlockEntity;
 import io.github.xfacthd.framedblocks.api.render.debug.AttachDebugRenderersEvent;
 import io.github.xfacthd.framedblocks.api.render.debug.BlockDebugRenderer;
 import io.github.xfacthd.framedblocks.api.util.Utils;
@@ -31,7 +31,7 @@ import java.util.Set;
 
 public final class FramedBlockDebugRenderer
 {
-    private static final Map<BlockEntityType<? extends FramedBlockEntity>, Set<BlockDebugRenderer<? extends FramedBlockEntity>>> RENDERERS_BY_TYPE = new IdentityHashMap<>();
+    private static final Map<BlockEntityType<?>, Set<BlockDebugRenderer<? extends IFramedBlockEntity>>> RENDERERS_BY_TYPE = new IdentityHashMap<>();
     private static final Set<BlockDebugRenderer<?>> RENDERERS = new ReferenceOpenHashSet<>();
     private static final ContextKey<DebugRenderState> DATA_KEY = new ContextKey<>(Utils.id("debug_renderers"));
 
@@ -54,19 +54,19 @@ public final class FramedBlockDebugRenderer
 
         ClientLevel level = Objects.requireNonNull(Minecraft.getInstance().level);
         BlockPos pos = blockHit.getBlockPos();
-        if (!(level.getBlockEntity(pos) instanceof FramedBlockEntity be)) return;
+        if (!(level.getBlockEntity(pos) instanceof IFramedBlockEntity be)) return;
 
-        Set<BlockDebugRenderer<? extends FramedBlockEntity>> renderers = RENDERERS_BY_TYPE.get(be.getType());
+        Set<BlockDebugRenderer<?>> renderers = RENDERERS_BY_TYPE.get(be.getType());
         if (renderers.isEmpty()) return;
 
         renderers = Set.copyOf(Sets.intersection(renderers, activeRenderers));
 
         LevelRenderState renderState = event.getRenderState();
         float partialTick = event.getDeltaTracker().getGameTimeDeltaPartialTick(false);
-        for (BlockDebugRenderer<? extends FramedBlockEntity> renderer : renderers)
+        for (BlockDebugRenderer<?> renderer : renderers)
         {
             //noinspection NullableProblems - IDEA's nullability checks are broken
-            ((BlockDebugRenderer<FramedBlockEntity>) renderer).extract(be, blockHit, partialTick, renderState);
+            ((BlockDebugRenderer<IFramedBlockEntity>) renderer).extract(be, blockHit, partialTick, renderState);
         }
         renderState.setRenderData(DATA_KEY, new DebugRenderState(pos, renderers));
     }
@@ -84,7 +84,7 @@ public final class FramedBlockDebugRenderer
         poseStack.translate(offset.x, offset.y, offset.z);
 
         MultiBufferSource.BufferSource buffer = Minecraft.getInstance().renderBuffers().bufferSource();
-        for (BlockDebugRenderer<? extends FramedBlockEntity> renderer : renderState.renderers)
+        for (BlockDebugRenderer<?> renderer : renderState.renderers)
         {
             poseStack.pushPose();
             renderer.render(levelRenderState, poseStack, buffer, LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY);

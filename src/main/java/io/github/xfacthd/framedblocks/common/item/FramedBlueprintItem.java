@@ -2,7 +2,7 @@ package io.github.xfacthd.framedblocks.common.item;
 
 import com.google.common.base.Preconditions;
 import io.github.xfacthd.framedblocks.api.block.blockentity.FrameModifier;
-import io.github.xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
+import io.github.xfacthd.framedblocks.api.block.blockentity.IFramedBlockEntity;
 import io.github.xfacthd.framedblocks.api.blueprint.BlueprintCopyBehaviour;
 import io.github.xfacthd.framedblocks.api.blueprint.BlueprintData;
 import io.github.xfacthd.framedblocks.api.blueprint.RegisterBlueprintCopyBehavioursEvent;
@@ -106,7 +106,7 @@ public class FramedBlueprintItem extends FramedToolItem
 
     private static InteractionResult writeBlueprint(Level level, BlockPos pos, ItemStack stack)
     {
-        if (!(level.getBlockEntity(pos) instanceof FramedBlockEntity be))
+        if (!(level.getBlockEntity(pos) instanceof IFramedBlockEntity be))
         {
             return InteractionResult.FAIL;
         }
@@ -231,7 +231,7 @@ public class FramedBlueprintItem extends FramedToolItem
 
         if (!context.getLevel().isClientSide() && result.consumesAction())
         {
-            if (context.getLevel().getBlockEntity(pos) instanceof FramedBlockEntity be)
+            if (context.getLevel().getBlockEntity(pos) instanceof IFramedBlockEntity be)
             {
                 be.applyBlueprintData(data);
             }

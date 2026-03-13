@@ -1,7 +1,7 @@
 package io.github.xfacthd.framedblocks.client.screen.overlay.impl;
 
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
-import io.github.xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
+import io.github.xfacthd.framedblocks.api.block.blockentity.IFramedBlockEntity;
 import io.github.xfacthd.framedblocks.api.screen.overlay.BlockInteractOverlay;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.common.config.ClientConfig;
@@ -51,7 +51,7 @@ public final class ReinforcementOverlay extends BlockInteractOverlay
     @Override
     public boolean getState(Target target)
     {
-        if (target.level().getBlockEntity(target.pos()) instanceof FramedBlockEntity be)
+        if (target.level().getBlockEntity(target.pos()) instanceof IFramedBlockEntity be)
         {
             return be.isReinforced();
         }

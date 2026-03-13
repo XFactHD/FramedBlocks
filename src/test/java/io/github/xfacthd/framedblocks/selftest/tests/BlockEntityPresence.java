@@ -24,7 +24,6 @@ public final class BlockEntityPresence
         blocks.forEach(block ->
         {
             Set<Holder<BlockEntityType<?>>> types = FBContent.getBlockEntities()
-                    .stream()
                     .filter(type -> type.value().getValidBlocks().contains(block))
                     .collect(Collectors.toSet());
 

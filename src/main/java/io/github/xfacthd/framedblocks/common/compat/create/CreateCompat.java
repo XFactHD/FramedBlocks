@@ -10,10 +10,8 @@ import com.simibubi.create.content.contraptions.behaviour.FenceGateMovingInterac
 import com.simibubi.create.content.contraptions.behaviour.LeverMovingInteraction;
 import com.simibubi.create.content.contraptions.behaviour.TrapdoorMovingInteraction;
 import io.github.xfacthd.framedblocks.FramedBlocks;
-import io.github.xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import io.github.xfacthd.framedblocks.api.compat.create.FramedBlockEntityItemRequirement;
 import io.github.xfacthd.framedblocks.api.compat.create.FramedBlockSafeNbtWriter;
-import io.github.xfacthd.framedblocks.api.util.registration.DeferredBlockEntity;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.blockentity.special.FramedHopperBlockEntity;
 import io.github.xfacthd.framedblocks.common.blockentity.special.FramedStorageBlockEntity;
@@ -99,7 +97,7 @@ public final class CreateCompat
             registerBlockItemRequirement(FBContent.BLOCK_FRAMED_DOOR, FramedDoorBlockItemRequirement.INSTANCE);
             registerBlockItemRequirement(FBContent.BLOCK_FRAMED_IRON_DOOR, FramedDoorBlockItemRequirement.INSTANCE);
 
-            for (DeferredBlockEntity<? extends FramedBlockEntity> blockEntity : FBContent.getBlockEntities())
+            FBContent.getBlockEntities().forEach(blockEntity ->
             {
                 registerBlockEntityItemRequirement(blockEntity, SPECIAL_REQUIREMENT_BLOCK_ENTITIES.getOrDefault(
                         blockEntity, FramedBlockEntityItemRequirement.INSTANCE
@@ -107,7 +105,7 @@ public final class CreateCompat
                 registerSafeNbtWriter(blockEntity, SPECIAL_NBT_BLOCK_ENTITIES.getOrDefault(
                         blockEntity, FramedBlockSafeNbtWriter.INSTANCE
                 ));
-            }
+            });
 
             registerStateFilter(FBContent.BLOCK_FRAMED_CHISELED_BOOKSHELF, new FramedChiseledBookshelfStateFilter());
         }

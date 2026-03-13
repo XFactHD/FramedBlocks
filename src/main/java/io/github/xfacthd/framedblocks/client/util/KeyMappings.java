@@ -1,7 +1,7 @@
 package io.github.xfacthd.framedblocks.client.util;
 
 import io.github.xfacthd.framedblocks.FramedBlocks;
-import io.github.xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
+import io.github.xfacthd.framedblocks.api.block.blockentity.IFramedBlockEntity;
 import io.github.xfacthd.framedblocks.api.util.FramedConstants;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import net.minecraft.client.KeyMapping;
@@ -48,7 +48,7 @@ public final class KeyMappings
         if (KEYMAPPING_UPDATE_CULLING.get().consumeClick())
         {
             HitResult hit = Minecraft.getInstance().hitResult;
-            if (hit instanceof BlockHitResult blockHit && level.getBlockEntity(blockHit.getBlockPos()) instanceof FramedBlockEntity be)
+            if (hit instanceof BlockHitResult blockHit && level.getBlockEntity(blockHit.getBlockPos()) instanceof IFramedBlockEntity be)
             {
                 try
                 {

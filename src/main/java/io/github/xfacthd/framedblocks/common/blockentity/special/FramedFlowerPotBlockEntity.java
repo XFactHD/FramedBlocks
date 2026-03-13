@@ -1,6 +1,7 @@
 package io.github.xfacthd.framedblocks.common.blockentity.special;
 
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
+import io.github.xfacthd.framedblocks.api.block.blockentity.NetworkValueInput;
 import io.github.xfacthd.framedblocks.api.blueprint.BlueprintData;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.data.component.PottedFlower;
@@ -77,35 +78,15 @@ public class FramedFlowerPotBlockEntity extends FramedBlockEntity
     }
 
     @Override
-    protected boolean readFromDataPacket(ValueInput valueInput)
+    protected void readFromDataPacket(NetworkValueInput input)
     {
-        Block flower = BuiltInRegistries.BLOCK.getValue(Identifier.parse(valueInput.getStringOr("flower", "")));
+        super.readFromDataPacket(input);
 
-        boolean update = flower != flowerBlock;
-        if (update)
-        {
-            flowerBlock = flower;
-        }
-
-        return super.readFromDataPacket(valueInput) || update;
-    }
-
-    @Override
-    protected void writeUpdateTag(ValueOutput valueOutput)
-    {
-        super.writeUpdateTag(valueOutput);
-        valueOutput.putString("flower", BuiltInRegistries.BLOCK.getKey(flowerBlock).toString());
-    }
-
-    @Override
-    public void handleUpdateTag(ValueInput valueInput)
-    {
-        super.handleUpdateTag(valueInput);
-
-        Block flower = BuiltInRegistries.BLOCK.getValue(Identifier.parse(valueInput.getStringOr("flower", "")));
+        Block flower = BuiltInRegistries.BLOCK.getValue(Identifier.parse(input.getStringOr("flower", "")));
         if (flower != flowerBlock)
         {
             flowerBlock = flower;
+            input.requestRenderUpdate();
         }
     }
 

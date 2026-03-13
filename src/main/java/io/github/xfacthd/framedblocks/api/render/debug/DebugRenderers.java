@@ -1,7 +1,7 @@
 package io.github.xfacthd.framedblocks.api.render.debug;
 
-import io.github.xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedDoubleBlockEntity;
+import io.github.xfacthd.framedblocks.api.block.blockentity.IFramedBlockEntity;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import org.jetbrains.annotations.ApiStatus;
 
@@ -11,9 +11,9 @@ public interface DebugRenderers
 {
     DebugRenderers INSTANCE = Utils.loadService(DebugRenderers.class);
 
-    BlockDebugRenderer<FramedBlockEntity> connectionPredicate();
+    BlockDebugRenderer<IFramedBlockEntity> connectionPredicate();
 
-    BlockDebugRenderer<FramedBlockEntity> quadWinding();
+    BlockDebugRenderer<IFramedBlockEntity> quadWinding();
 
     BlockDebugRenderer<FramedDoubleBlockEntity> doubleBlockPart();
 }

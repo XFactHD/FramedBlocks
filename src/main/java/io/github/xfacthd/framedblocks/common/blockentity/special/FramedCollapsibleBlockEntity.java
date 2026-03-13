@@ -1,6 +1,7 @@
 package io.github.xfacthd.framedblocks.common.blockentity.special;
 
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
+import io.github.xfacthd.framedblocks.api.block.blockentity.NetworkValueInput;
 import io.github.xfacthd.framedblocks.api.blueprint.BlueprintData;
 import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.common.FBContent;
@@ -240,34 +241,18 @@ public class FramedCollapsibleBlockEntity extends FramedBlockEntity implements I
     }
 
     @Override
-    protected boolean readFromDataPacket(ValueInput valueInput)
+    protected void readFromDataPacket(NetworkValueInput input)
     {
-        boolean needUpdate = super.readFromDataPacket(valueInput);
+        super.readFromDataPacket(input);
 
-        int packed = valueInput.getIntOr("offsets", 0);
+        int packed = input.getIntOr("offsets", 0);
         if (packed != packedOffsets)
         {
             packedOffsets = packed;
 
-            needUpdate = true;
-            updateCulling(true, false);
+            input.requestRenderUpdate();
+            input.requestCullingUpdate();
         }
-
-        return needUpdate;
-    }
-
-    @Override
-    protected void writeUpdateTag(ValueOutput valueOutput)
-    {
-        super.writeUpdateTag(valueOutput);
-        valueOutput.putInt("offsets", packedOffsets);
-    }
-
-    @Override
-    public void handleUpdateTag(ValueInput valueInput)
-    {
-        packedOffsets = valueInput.getIntOr("offsets", 0);
-        super.handleUpdateTag(valueInput);
     }
 
     @Override

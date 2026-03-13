@@ -3,8 +3,8 @@ package io.github.xfacthd.framedblocks.api.compat.create;
 import com.simibubi.create.api.schematic.requirement.SchematicRequirementRegistries;
 import com.simibubi.create.content.schematics.requirement.ItemRequirement;
 import io.github.xfacthd.framedblocks.api.block.blockentity.FrameModifier;
-import io.github.xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedDoubleBlockEntity;
+import io.github.xfacthd.framedblocks.api.block.blockentity.IFramedBlockEntity;
 import io.github.xfacthd.framedblocks.api.camo.CamoContainer;
 import io.github.xfacthd.framedblocks.api.camo.CamoContainerHelper;
 import net.minecraft.world.item.ItemStack;
@@ -25,7 +25,7 @@ public class FramedBlockEntityItemRequirement implements SchematicRequirementReg
     @Override
     public final ItemRequirement getRequiredItems(BlockEntity blockEntity, BlockState state)
     {
-        if (blockEntity instanceof FramedBlockEntity fbe)
+        if (blockEntity instanceof IFramedBlockEntity fbe)
         {
             List<ItemRequirement.StackRequirement> requirements = new ArrayList<>();
 
@@ -58,7 +58,7 @@ public class FramedBlockEntityItemRequirement implements SchematicRequirementReg
         return ItemRequirement.NONE;
     }
 
-    protected void collectAdditionalRequirements(FramedBlockEntity blockEntity, List<ItemRequirement.StackRequirement> requirements) { }
+    protected void collectAdditionalRequirements(IFramedBlockEntity blockEntity, List<ItemRequirement.StackRequirement> requirements) { }
 
     protected static ItemRequirement.StackRequirement consume(ItemLike item)
     {

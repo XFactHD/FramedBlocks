@@ -1,8 +1,8 @@
 package io.github.xfacthd.framedblocks.common.compat.jade;
 
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
-import io.github.xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedDoubleBlockEntity;
+import io.github.xfacthd.framedblocks.api.block.blockentity.IFramedBlockEntity;
 import io.github.xfacthd.framedblocks.api.camo.CamoContainer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -28,7 +28,7 @@ final class FramedBlockComponentProvider implements IBlockComponentProvider
     {
         if (!(accessor.getBlockState().getBlock() instanceof IFramedBlock block)) return null;
         if (!block.shouldRenderAsBlockInJadeTooltip()) return null;
-        if (!(accessor.getBlockEntity() instanceof FramedBlockEntity blockEntity)) return null;
+        if (!(accessor.getBlockEntity() instanceof IFramedBlockEntity blockEntity)) return null;
 
         return new FramedBlockElement(accessor.getBlockState(), blockEntity);
     }
@@ -36,7 +36,7 @@ final class FramedBlockComponentProvider implements IBlockComponentProvider
     @Override
     public void appendTooltip(ITooltip tooltip, BlockAccessor accessor, IPluginConfig config)
     {
-        if (accessor.getBlockEntity() instanceof FramedBlockEntity fbe)
+        if (accessor.getBlockEntity() instanceof IFramedBlockEntity fbe)
         {
             Level level = accessor.getLevel();
             BlockPos pos = accessor.getPosition();

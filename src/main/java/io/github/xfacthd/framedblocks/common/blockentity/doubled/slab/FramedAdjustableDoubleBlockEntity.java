@@ -2,6 +2,7 @@ package io.github.xfacthd.framedblocks.common.blockentity.doubled.slab;
 
 import io.github.xfacthd.framedblocks.api.block.IFramedDoubleBlock;
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedDoubleBlockEntity;
+import io.github.xfacthd.framedblocks.api.block.blockentity.NetworkValueInput;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockParts;
 import io.github.xfacthd.framedblocks.api.blueprint.BlueprintData;
 import io.github.xfacthd.framedblocks.api.util.MathUtils;
@@ -157,34 +158,18 @@ public class FramedAdjustableDoubleBlockEntity extends FramedDoubleBlockEntity i
     }
 
     @Override
-    protected boolean readFromDataPacket(ValueInput valueInput)
+    protected void readFromDataPacket(NetworkValueInput input)
     {
-        boolean needUpdate = super.readFromDataPacket(valueInput);
+        super.readFromDataPacket(input);
 
-        int height = valueInput.getIntOr("first_height", CENTER_PART_HEIGHT);
+        int height = input.getIntOr("first_height", CENTER_PART_HEIGHT);
         if (height != firstHeight)
         {
             firstHeight = height;
 
-            needUpdate = true;
-            updateCulling(true, false);
+            input.requestRenderUpdate();
+            input.requestCullingUpdate();
         }
-
-        return needUpdate;
-    }
-
-    @Override
-    protected void writeUpdateTag(ValueOutput valueOutput)
-    {
-        super.writeUpdateTag(valueOutput);
-        valueOutput.putInt("first_height", firstHeight);
-    }
-
-    @Override
-    public void handleUpdateTag(ValueInput valueInput)
-    {
-        super.handleUpdateTag(valueInput);
-        firstHeight = valueInput.getIntOr("first_height", CENTER_PART_HEIGHT);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package io.github.xfacthd.framedblocks.common.blockentity.special;
 
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
+import io.github.xfacthd.framedblocks.api.block.blockentity.NetworkValueInput;
 import io.github.xfacthd.framedblocks.api.blueprint.BlueprintData;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.data.component.TargetColor;
@@ -59,20 +60,6 @@ public class FramedTargetBlockEntity extends FramedBlockEntity
     }
 
     @Override
-    protected void writeUpdateTag(ValueOutput valueOutput)
-    {
-        super.writeUpdateTag(valueOutput);
-        valueOutput.putInt("overlay_color", overlayColor.getId());
-    }
-
-    @Override
-    public void handleUpdateTag(ValueInput valueInput)
-    {
-        super.handleUpdateTag(valueInput);
-        overlayColor = DyeColor.byId(valueInput.getIntOr("overlay_color", DEFAULT_COLOR.getId()));
-    }
-
-    @Override
     protected void writeToDataPacket(ValueOutput tag)
     {
         super.writeToDataPacket(tag);
@@ -80,20 +67,20 @@ public class FramedTargetBlockEntity extends FramedBlockEntity
     }
 
     @Override
-    protected boolean readFromDataPacket(ValueInput valueInput)
+    protected void readFromDataPacket(NetworkValueInput input)
     {
-        boolean colored = false;
-        Optional<Integer> optOverlayColor = valueInput.getInt("overlay_color");
+        super.readFromDataPacket(input);
+
+        Optional<Integer> optOverlayColor = input.getInt("overlay_color");
         if (optOverlayColor.isPresent())
         {
             DyeColor color = DyeColor.byId(optOverlayColor.get());
             if (overlayColor != color)
             {
                 overlayColor = color;
-                colored = true;
+                input.requestRenderUpdate();
             }
         }
-        return super.readFromDataPacket(valueInput) || colored;
     }
 
     @Override

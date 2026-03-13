@@ -3,7 +3,7 @@ package io.github.xfacthd.framedblocks.api.block;
 import com.google.common.base.Preconditions;
 import io.github.xfacthd.framedblocks.api.block.blockentity.CamoOrientation;
 import io.github.xfacthd.framedblocks.api.block.blockentity.FrameModifier;
-import io.github.xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
+import io.github.xfacthd.framedblocks.api.block.blockentity.IFramedBlockEntity;
 import io.github.xfacthd.framedblocks.api.block.overlay.BlockOverlay;
 import io.github.xfacthd.framedblocks.api.camo.CamoContainer;
 import io.github.xfacthd.framedblocks.api.camo.empty.EmptyCamoContainer;
@@ -299,7 +299,7 @@ public final class BlockUtils
         Holder<BlockOverlay> overlay = null;
         boolean[] modifiers = new boolean[MODIFIERS.length];
 
-        if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
+        if (level.getBlockEntity(pos) instanceof IFramedBlockEntity be)
         {
             camo = be.getCamo();
             camoOrientation = CamoOrientation.of(be.getCamoOrientation(false));
@@ -318,7 +318,7 @@ public final class BlockUtils
             player.getInventory().setChanged();
         }
 
-        if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
+        if (level.getBlockEntity(pos) instanceof IFramedBlockEntity be)
         {
             be.setCamo(camo, writeToCamoTwo, camoOrientation);
             be.setOverlay(overlay);

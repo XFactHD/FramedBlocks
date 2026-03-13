@@ -1,6 +1,6 @@
 package io.github.xfacthd.framedblocks.common.data.blueprint;
 
-import io.github.xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
+import io.github.xfacthd.framedblocks.api.block.blockentity.IFramedBlockEntity;
 import io.github.xfacthd.framedblocks.api.blueprint.BlueprintCopyBehaviour;
 import io.github.xfacthd.framedblocks.api.blueprint.BlueprintData;
 import io.github.xfacthd.framedblocks.api.camo.CamoList;
@@ -18,14 +18,14 @@ import org.jspecify.annotations.Nullable;
 public final class DoorCopyBehaviour implements BlueprintCopyBehaviour
 {
     @Override
-    public BlueprintData writeToBlueprint(Level level, BlockPos pos, BlockState state, FramedBlockEntity be)
+    public BlueprintData writeToBlueprint(Level level, BlockPos pos, BlockState state, IFramedBlockEntity be)
     {
         boolean top = FramedDoorBlockEntity.isTopHalf(state);
         BlockPos posTwo = top ? pos.below() : pos.above();
 
         BlueprintData dataOne = be.writeToBlueprint();
         BlueprintData dataTwo = BlueprintData.EMPTY;
-        if (getSecondBlockEntity(level, posTwo) instanceof FramedBlockEntity beTwo)
+        if (getSecondBlockEntity(level, posTwo) instanceof IFramedBlockEntity beTwo)
         {
             dataTwo = beTwo.writeToBlueprint();
         }
@@ -89,7 +89,7 @@ public final class DoorCopyBehaviour implements BlueprintCopyBehaviour
         if (secData.isEmpty()) return;
 
         BlockPos topPos = pos.above();
-        if (getSecondBlockEntity(level, topPos) instanceof FramedBlockEntity be)
+        if (getSecondBlockEntity(level, topPos) instanceof IFramedBlockEntity be)
         {
             be.applyBlueprintData(secData);
         }

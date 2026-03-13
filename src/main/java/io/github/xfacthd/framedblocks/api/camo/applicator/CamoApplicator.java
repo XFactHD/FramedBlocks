@@ -1,6 +1,6 @@
 package io.github.xfacthd.framedblocks.api.camo.applicator;
 
-import io.github.xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
+import io.github.xfacthd.framedblocks.api.block.blockentity.IFramedBlockEntity;
 import io.github.xfacthd.framedblocks.api.camo.CamoContainerFactory;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import net.minecraft.world.InteractionHand;
@@ -13,7 +13,7 @@ public interface CamoApplicator
 {
     ItemCapability<CamoApplicator, Void> CAPABILITY = ItemCapability.createVoid(Utils.id("camo_applicator"), CamoApplicator.class);
 
-    boolean apply(FramedBlockEntity be, Player player, InteractionHand hand, CamoHandler camoHandler, ModifierHandler modHandler);
+    boolean apply(IFramedBlockEntity be, Player player, InteractionHand hand, CamoHandler camoHandler, ModifierHandler modHandler);
 
     @FunctionalInterface
     @ApiStatus.NonExtendable

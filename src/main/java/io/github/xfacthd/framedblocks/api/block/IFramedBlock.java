@@ -1,6 +1,6 @@
 package io.github.xfacthd.framedblocks.api.block;
 
-import io.github.xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
+import io.github.xfacthd.framedblocks.api.block.blockentity.IFramedBlockEntity;
 import io.github.xfacthd.framedblocks.api.block.cache.StateCache;
 import io.github.xfacthd.framedblocks.api.block.item.FramedBlockItem;
 import io.github.xfacthd.framedblocks.api.block.render.CullingHelper;
@@ -41,6 +41,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.SupportType;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
@@ -102,7 +103,7 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension
 
     default void tryApplyCamoImmediately(Level level, BlockPos pos, @Nullable LivingEntity placer, ItemStack stack)
     {
-        if (!level.isClientSide() && placer instanceof Player player && player.getMainHandItem() == stack && level.getBlockEntity(pos) instanceof FramedBlockEntity be)
+        if (!level.isClientSide() && placer instanceof Player player && player.getMainHandItem() == stack && level.getBlockEntity(pos) instanceof IFramedBlockEntity be)
         {
             be.tryApplyCamoImmediately(player);
         }
@@ -134,7 +135,7 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension
             return InteractionResult.FAIL;
         }
 
-        if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
+        if (level.getBlockEntity(pos) instanceof IFramedBlockEntity be)
         {
             return be.handleInteraction(player, hand, hit);
         }
@@ -164,7 +165,7 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension
 
     default LootParams.Builder getCamoDrops(LootParams.Builder builder)
     {
-        if (builder.getOptionalParameter(LootContextParams.BLOCK_ENTITY) instanceof FramedBlockEntity be)
+        if (builder.getOptionalParameter(LootContextParams.BLOCK_ENTITY) instanceof IFramedBlockEntity be)
         {
             builder.withDynamicDrop(DYNAMIC_DROPS, consumer ->
                     be.addAdditionalDrops(consumer, ConfigView.Server.INSTANCE.shouldConsumeCamoItem())
@@ -175,7 +176,7 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension
 
     /**
      * Called on the occluding block to determine which {@link BlockState} should be used to retrieve the camo from its
-     * {@link FramedBlockEntity} if the given {@link SideSkipPredicate} of the block being occluded succeeds
+     * {@link IFramedBlockEntity} if the given {@link SideSkipPredicate} of the block being occluded succeeds
      * @param pred The skip predicate of the block being occluded
      * @param level The level the blocks are in
      * @param pos The position of the block being occluded
@@ -249,7 +250,7 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension
     @Override
     default float getFriction(BlockState state, LevelReader level, BlockPos pos, @Nullable Entity entity)
     {
-        if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
+        if (level.getBlockEntity(pos) instanceof IFramedBlockEntity be)
         {
             return be.getCamoFriction(state, entity, state.getBlock().getFriction());
         }
@@ -260,7 +261,7 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension
     @SuppressWarnings("deprecation")
     default float getExplosionResistance(BlockState state, BlockGetter level, BlockPos pos, Explosion explosion)
     {
-        if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
+        if (level.getBlockEntity(pos) instanceof IFramedBlockEntity be)
         {
             float resistance = be.getCamoExplosionResistance(explosion);
             if (resistance > 0F)
@@ -279,7 +280,7 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension
             return false;
         }
 
-        if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
+        if (level.getBlockEntity(pos) instanceof IFramedBlockEntity be)
         {
             return be.isCamoFlammable(face);
         }
@@ -294,7 +295,7 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension
             return 0;
         }
 
-        if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
+        if (level.getBlockEntity(pos) instanceof IFramedBlockEntity be)
         {
             int flammability = be.getCamoFlammability(face);
             if (flammability > -1)
@@ -313,7 +314,7 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension
             return 0;
         }
 
-        if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
+        if (level.getBlockEntity(pos) instanceof IFramedBlockEntity be)
         {
             int spreadSpeed = be.getCamoFireSpreadSpeed(face);
             if (spreadSpeed > -1)
@@ -327,9 +328,9 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension
     @Override
     default boolean isFireSource(BlockState state, LevelReader level, BlockPos pos, Direction side)
     {
-        if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
+        if (level.getBlockEntity(pos) instanceof IFramedBlockEntity be)
         {
-            CamoContent<?> camo = be.getCamo(side).getContent();
+            CamoContent<?> camo = be.getCamo(side, null).getContent();
             return !camo.isEmpty() && camo.getAsBlockState().is(level.dimensionType().infiniburn());
         }
         return false;
@@ -343,7 +344,7 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension
             return false;
         }
 
-        if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
+        if (level.getBlockEntity(pos) instanceof IFramedBlockEntity be)
         {
             return be.isCamoIgnitedByLava(side);
         }
@@ -361,7 +362,7 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension
         {
             return false;
         }
-        return level.getBlockEntity(pos) instanceof FramedBlockEntity be && be.isIntangible(ctx);
+        return level.getBlockEntity(pos) instanceof IFramedBlockEntity be && be.isIntangible(ctx);
     }
 
     default boolean useCamoOcclusionShapeForLightOcclusion(BlockState state)
@@ -410,7 +411,7 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension
     @Override
     default boolean addRunningEffects(BlockState state, Level level, BlockPos pos, Entity entity)
     {
-        if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
+        if (level.getBlockEntity(pos) instanceof IFramedBlockEntity be)
         {
             ParticleHelper.spawnRunningParticles(be.getCamo(), be.getOverlay(), state, level, pos, entity);
             return true;
@@ -421,7 +422,7 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension
     @Override
     default boolean addLandingEffects(BlockState state, ServerLevel level, BlockPos pos, BlockState sameState, LivingEntity entity, int count)
     {
-        if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
+        if (level.getBlockEntity(pos) instanceof IFramedBlockEntity be)
         {
             ParticleHelper.spawnLandingParticles(be.getCamo(), be.getOverlay(), state, level, pos, entity, count);
             return true;
@@ -432,14 +433,14 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension
     @Override
     default void playStepSound(BlockState state, Level level, BlockPos pos, Entity entity, float volumeMult, float pitchMult)
     {
-        CamoContainer<?, ?> camo = level.getBlockEntity(pos) instanceof FramedBlockEntity be ? be.getCamo() : EmptyCamoContainer.EMPTY;
+        CamoContainer<?, ?> camo = level.getBlockEntity(pos) instanceof IFramedBlockEntity be ? be.getCamo() : EmptyCamoContainer.EMPTY;
         SoundUtils.playStepSound(entity, camo.getContent().getSoundType(), volumeMult, pitchMult);
     }
 
     @Override
     default void playFallSound(BlockState state, Level level, BlockPos pos, LivingEntity entity)
     {
-        CamoContainer<?, ?> camo = level.getBlockEntity(pos) instanceof FramedBlockEntity be ? be.getCamo() : EmptyCamoContainer.EMPTY;
+        CamoContainer<?, ?> camo = level.getBlockEntity(pos) instanceof IFramedBlockEntity be ? be.getCamo() : EmptyCamoContainer.EMPTY;
         SoundUtils.playFallSound(entity, camo.getContent().getSoundType());
     }
 
@@ -474,7 +475,7 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension
             {
                 updateCulling(level, pos);
             }
-            if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
+            if (level.getBlockEntity(pos) instanceof IFramedBlockEntity be)
             {
                 be.setBlockState(newState);
             }
@@ -487,7 +488,7 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension
         {
             InternalAPI.INSTANCE.enqueueCullingUpdate(realLevel, pos);
         }
-        else if (level.isClientSide() && level.getBlockEntity(pos) instanceof FramedBlockEntity be)
+        else if (level.isClientSide() && level.getBlockEntity(pos) instanceof IFramedBlockEntity be)
         {
             be.updateCulling(true, false);
         }
@@ -502,7 +503,7 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension
     @Override
     default MapColor getMapColor(BlockState state, BlockGetter level, BlockPos pos, MapColor defaultColor)
     {
-        if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
+        if (level.getBlockEntity(pos) instanceof IFramedBlockEntity be)
         {
             MapColor color = be.getMapColor();
             if (color != null)
@@ -521,7 +522,7 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension
         {
             return null;
         }
-        if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
+        if (level.getBlockEntity(pos) instanceof IFramedBlockEntity be)
         {
             return be.getCamoBeaconColorMultiplier(level, pos, beaconPos);
         }
@@ -536,7 +537,7 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension
     @Override
     default TriState canSustainPlant(BlockState state, BlockGetter level, BlockPos pos, Direction side, BlockState plant)
     {
-        if (state.isFaceSturdy(level, pos, side, SupportType.FULL) && level.getBlockEntity(pos) instanceof FramedBlockEntity be)
+        if (state.isFaceSturdy(level, pos, side, SupportType.FULL) && level.getBlockEntity(pos) instanceof IFramedBlockEntity be)
         {
             return be.canCamoSustainPlant(level, side, plant);
         }
@@ -550,7 +551,7 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension
         {
             return false;
         }
-        if (!state.getValue(FramedProperties.SOLID) && level.getBlockEntity(pos) instanceof FramedBlockEntity be)
+        if (!state.getValue(FramedProperties.SOLID) && level.getBlockEntity(pos) instanceof IFramedBlockEntity be)
         {
             return be.shouldCamoDisplayFluidOverlay(level, pos, fluid);
         }
@@ -560,7 +561,7 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension
     @Override
     default boolean canEntityDestroy(BlockState state, BlockGetter level, BlockPos pos, Entity entity)
     {
-        if (level.getBlockEntity(pos) instanceof FramedBlockEntity be && !be.canEntityDestroyCamo(entity))
+        if (level.getBlockEntity(pos) instanceof IFramedBlockEntity be && !be.canEntityDestroyCamo(entity))
         {
             return false;
         }
@@ -568,7 +569,7 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension
     }
 
     @Override
-    FramedBlockEntity newBlockEntity(BlockPos pos, BlockState state);
+    BlockEntity newBlockEntity(BlockPos pos, BlockState state);
 
     /**
      * {@return the state whose block model to reuse for the item or null if the loaded item model should be used}

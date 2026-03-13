@@ -3,6 +3,7 @@ package io.github.xfacthd.framedblocks.common.blockentity.special;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import io.github.xfacthd.framedblocks.FramedBlocks;
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
+import io.github.xfacthd.framedblocks.api.block.blockentity.NetworkValueInput;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.block.sign.AbstractFramedSignBlock;
 import net.minecraft.commands.CommandSource;
@@ -210,24 +211,10 @@ public class FramedSignBlockEntity extends FramedBlockEntity
     }
 
     @Override
-    protected boolean readFromDataPacket(ValueInput valueInput)
+    protected void readFromDataPacket(NetworkValueInput input)
     {
-        readFromNbt(valueInput);
-        return super.readFromDataPacket(valueInput);
-    }
-
-    @Override
-    protected void writeUpdateTag(ValueOutput valueOutput)
-    {
-        super.writeUpdateTag(valueOutput);
-        writeToNbt(valueOutput);
-    }
-
-    @Override
-    public void handleUpdateTag(ValueInput valueInput)
-    {
-        super.handleUpdateTag(valueInput);
-        readFromNbt(valueInput);
+        super.readFromDataPacket(input);
+        readFromNbt(input);
     }
 
     private void writeToNbt(ValueOutput valueOutput)

@@ -1,7 +1,7 @@
 package io.github.xfacthd.framedblocks.api.block.render;
 
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
-import io.github.xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
+import io.github.xfacthd.framedblocks.api.block.blockentity.IFramedBlockEntity;
 import io.github.xfacthd.framedblocks.api.util.sound.SoundUtils;
 import net.minecraft.client.particle.ParticleEngine;
 import net.minecraft.client.sounds.SoundManager;
@@ -27,7 +27,7 @@ public class FramedClientBlockExtensions implements IClientBlockExtensions
     {
         BlockHitResult hit = (BlockHitResult) Objects.requireNonNull(target);
         boolean suppressed = suppressParticles(state, level, hit.getBlockPos());
-        if (!suppressed && level.getBlockEntity(hit.getBlockPos()) instanceof FramedBlockEntity be)
+        if (!suppressed && level.getBlockEntity(hit.getBlockPos()) instanceof IFramedBlockEntity be)
         {
             return addHitEffectsUnsuppressed(state, level, hit, be, engine);
         }
@@ -35,7 +35,7 @@ public class FramedClientBlockExtensions implements IClientBlockExtensions
     }
 
     protected boolean addHitEffectsUnsuppressed(
-            BlockState state, Level level, BlockHitResult hit, FramedBlockEntity be, ParticleEngine engine
+            BlockState state, Level level, BlockHitResult hit, IFramedBlockEntity be, ParticleEngine engine
     )
     {
         ParticleHelper.Client.addHitEffects(state, level, hit, be.getCamo().getContent(), be.getOverlay(), engine);
@@ -46,7 +46,7 @@ public class FramedClientBlockExtensions implements IClientBlockExtensions
     public boolean addDestroyEffects(BlockState state, Level level, BlockPos pos, ParticleEngine engine)
     {
         boolean suppressed = suppressParticles(state, level, pos);
-        if (!suppressed && level.getBlockEntity(pos) instanceof FramedBlockEntity be)
+        if (!suppressed && level.getBlockEntity(pos) instanceof IFramedBlockEntity be)
         {
             return addDestroyEffectsUnsuppressed(state, level, pos, be, engine);
         }
@@ -54,7 +54,7 @@ public class FramedClientBlockExtensions implements IClientBlockExtensions
     }
 
     protected boolean addDestroyEffectsUnsuppressed(
-            BlockState state, Level level, BlockPos pos, FramedBlockEntity be, ParticleEngine engine
+            BlockState state, Level level, BlockPos pos, IFramedBlockEntity be, ParticleEngine engine
     )
     {
         ParticleHelper.Client.addDestroyEffects(state, level, pos, be.getCamo().getContent(), be.getOverlay(), engine);
@@ -64,7 +64,7 @@ public class FramedClientBlockExtensions implements IClientBlockExtensions
     @Override
     public boolean playHitSound(BlockState state, Level level, BlockPos pos, Direction hitFace, SoundManager soundManager)
     {
-        if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
+        if (level.getBlockEntity(pos) instanceof IFramedBlockEntity be)
         {
             SoundUtils.Client.playHitSound(soundManager, pos, be.getCamo().getContent().getSoundType());
             return true;
@@ -75,7 +75,7 @@ public class FramedClientBlockExtensions implements IClientBlockExtensions
     @Override
     public boolean playBreakSound(BlockState state, Level level, BlockPos pos)
     {
-        if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
+        if (level.getBlockEntity(pos) instanceof IFramedBlockEntity be)
         {
             SoundUtils.Client.playBreakSound(level, pos, be.getCamo().getContent().getSoundType());
             return true;

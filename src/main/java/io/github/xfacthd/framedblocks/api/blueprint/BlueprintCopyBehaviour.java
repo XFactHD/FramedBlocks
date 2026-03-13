@@ -3,7 +3,7 @@ package io.github.xfacthd.framedblocks.api.blueprint;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.api.block.ShapeLockableBlock;
-import io.github.xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
+import io.github.xfacthd.framedblocks.api.block.blockentity.IFramedBlockEntity;
 import io.github.xfacthd.framedblocks.api.camo.CamoList;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
@@ -34,10 +34,10 @@ public interface BlueprintCopyBehaviour
      * @param level The {@link Level} in which the {@link Block} to store is placed
      * @param pos The {@link BlockPos} at which the Block to store is placed
      * @param state The {@link BlockState} of the Block to store
-     * @param be The {@link FramedBlockEntity} of the Block to store
+     * @param be The {@link IFramedBlockEntity} of the Block to store
      * @return the {@link BlueprintData} to be stored on the blueprint stack
      */
-    default BlueprintData writeToBlueprint(Level level, BlockPos pos, BlockState state, FramedBlockEntity be)
+    default BlueprintData writeToBlueprint(Level level, BlockPos pos, BlockState state, IFramedBlockEntity be)
     {
         return be.writeToBlueprint();
     }

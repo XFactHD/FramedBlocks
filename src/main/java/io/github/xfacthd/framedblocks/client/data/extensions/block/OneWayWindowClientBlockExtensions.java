@@ -1,6 +1,6 @@
 package io.github.xfacthd.framedblocks.client.data.extensions.block;
 
-import io.github.xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
+import io.github.xfacthd.framedblocks.api.block.blockentity.IFramedBlockEntity;
 import io.github.xfacthd.framedblocks.api.block.render.FramedClientBlockExtensions;
 import io.github.xfacthd.framedblocks.api.block.render.ParticleHelper;
 import io.github.xfacthd.framedblocks.common.block.cube.FramedOneWayWindowBlock;
@@ -16,7 +16,7 @@ public final class OneWayWindowClientBlockExtensions extends FramedClientBlockEx
 {
     @Override
     protected boolean addHitEffectsUnsuppressed(
-            BlockState state, Level level, BlockHitResult hit, FramedBlockEntity be, ParticleEngine engine
+            BlockState state, Level level, BlockHitResult hit, IFramedBlockEntity be, ParticleEngine engine
     )
     {
         if (state.getValue(PropertyHolder.NULLABLE_FACE) != NullableDirection.NONE)
@@ -28,7 +28,7 @@ public final class OneWayWindowClientBlockExtensions extends FramedClientBlockEx
 
     @Override
     protected boolean addDestroyEffectsUnsuppressed(
-            BlockState state, Level level, BlockPos pos, FramedBlockEntity be, ParticleEngine engine
+            BlockState state, Level level, BlockPos pos, IFramedBlockEntity be, ParticleEngine engine
     )
     {
         if (state.getValue(PropertyHolder.NULLABLE_FACE) != NullableDirection.NONE)

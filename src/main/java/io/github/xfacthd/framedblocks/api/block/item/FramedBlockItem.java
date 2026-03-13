@@ -2,8 +2,8 @@ package io.github.xfacthd.framedblocks.api.block.item;
 
 import com.google.common.base.Preconditions;
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
-import io.github.xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedDoubleBlockEntity;
+import io.github.xfacthd.framedblocks.api.block.blockentity.IFramedBlockEntity;
 import io.github.xfacthd.framedblocks.api.camo.CamoPrinter;
 import io.github.xfacthd.framedblocks.api.util.sound.SoundEventType;
 import io.github.xfacthd.framedblocks.api.util.sound.SoundUtils;
@@ -49,7 +49,7 @@ public class FramedBlockItem extends BlockItem
     {
         Level level = context.getLevel();
         BlockPos pos = context.getClickedPos();
-        if (!(level.getBlockEntity(pos) instanceof FramedBlockEntity be)) return;
+        if (!(level.getBlockEntity(pos) instanceof IFramedBlockEntity be)) return;
 
         SoundType soundOne = be.getCamo().getContent().getSoundType();
         SoundUtils.playPlaceSound(context, soundOne, false);
@@ -66,7 +66,7 @@ public class FramedBlockItem extends BlockItem
     @Override
     protected SoundEvent getPlaceSound(BlockState state, Level level, BlockPos pos, Player entity)
     {
-        if (level.getBlockEntity(pos) instanceof FramedBlockEntity)
+        if (level.getBlockEntity(pos) instanceof IFramedBlockEntity)
         {
             // Dummy out the automatically played place sound
             return SoundEvents.EMPTY;

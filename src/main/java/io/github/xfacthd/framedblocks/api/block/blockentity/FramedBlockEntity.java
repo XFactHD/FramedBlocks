@@ -31,6 +31,7 @@ import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.TypedDataComponent;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.util.ProblemReporter;
@@ -76,7 +77,7 @@ import java.util.Optional;
 import java.util.function.Consumer;
 
 @SuppressWarnings("deprecation")
-public class FramedBlockEntity extends BlockEntity
+public non-sealed class FramedBlockEntity extends BlockEntity implements IFramedBlockEntity
 {
     private static final Logger LOGGER = LogUtils.getLogger();
     public static final String CAMO_NBT_KEY = "camo";
@@ -115,6 +116,7 @@ public class FramedBlockEntity extends BlockEntity
         this.stateCache = state.framedblocks$getCache();
     }
 
+    @Override
     public final InteractionResult handleInteraction(Player player, InteractionHand hand, BlockHitResult hit)
     {
         ItemStack stack = player.getItemInHand(hand);
@@ -174,6 +176,7 @@ public class FramedBlockEntity extends BlockEntity
         return InteractionResult.TRY_WITH_EMPTY_HAND;
     }
 
+    @Override
     @ApiStatus.Internal
     public final void tryApplyCamoImmediately(Player player)
     {
@@ -433,16 +436,19 @@ public class FramedBlockEntity extends BlockEntity
      * Update the camo of this block. Whether the primary or secondary camo will be replaced depends
      * on the given {@link BlockHitResult} and {@link Player}
      */
+    @Override
     public final void setCamo(CamoContainer<?, ?> camo, BlockHitResult hit, Player player)
     {
         setCamo(camo, hitSecondary(hit, player));
     }
 
+    @Override
     public final void setCamo(CamoContainer<?, ?> camo, boolean secondary)
     {
         setCamo(camo, secondary, CamoOrientation.UNKNOWN);
     }
 
+    @Override
     public final void setCamo(CamoContainer<?, ?> camo, boolean secondary, CamoOrientation orientation)
     {
         int light = getLightValue();
@@ -461,6 +467,11 @@ public class FramedBlockEntity extends BlockEntity
         {
             level().sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
         }
+    }
+
+    void setCamoNoUpdate(CamoContainer<?, ?> camo, boolean secondary)
+    {
+        camoContainer = camo;
     }
 
     void setCamoInternal(CamoContainer<?, ?> camo, boolean secondary, @Nullable Direction orientation, boolean forceOrientation)
@@ -485,26 +496,19 @@ public class FramedBlockEntity extends BlockEntity
      * Returns the camo for the given {@link BlockState}. Used for cases where different double blocks
      * with the same underlying shape(s) don't use the same side to return the camo for a given "sub-state".
      */
+    @Override
     public CamoContainer<?, ?> getCamo(BlockState state)
     {
         return camoContainer;
     }
 
     /**
-     * Used to return a different camo depending on the given side
-     * @param side The blocks face, can return EMPTY if the face does not pass the CTM_PREDICATE
+     * Returns the camo for the given edge of the given side or for the full face if a null edge is provided
      */
-    public CamoContainer<?, ?> getCamo(Direction side)
-    {
-        return camoContainer;
-    }
-
-    /**
-     * Returns the camo for the given edge of the given side
-     */
+    @Override
     public CamoContainer<?, ?> getCamo(Direction side, @Nullable Direction edge)
     {
-        return getCamo(side);
+        return camoContainer;
     }
 
     /**
@@ -512,6 +516,7 @@ public class FramedBlockEntity extends BlockEntity
      * @param hit The result of the raycast against this block
      * @param player The player from which the raycast originated
      */
+    @Override
     public final CamoContainer<?, ?> getCamo(BlockHitResult hit, Player player)
     {
         return getCamo(hitSecondary(hit, player));
@@ -523,6 +528,7 @@ public class FramedBlockEntity extends BlockEntity
      * @param lookVec The look vector used for the raycast (usually {@link Player#getLookAngle()})
      * @param eyePos The eye position from which the raycast originated (usually {@link Player#getEyePosition()})
      */
+    @Override
     public final CamoContainer<?, ?> getCamo(BlockHitResult hit, Vec3 lookVec, Vec3 eyePos)
     {
         return getCamo(hitSecondary(hit, lookVec, eyePos));
@@ -538,12 +544,14 @@ public class FramedBlockEntity extends BlockEntity
      *
      * @param secondary Whether the orientation of the first or second camo should be returned
      */
+    @Override
     @Nullable
     public Direction getCamoOrientation(boolean secondary)
     {
         return camoOrientation;
     }
 
+    @Override
     public final CamoContainer<?, ?> getCamo()
     {
         return camoContainer;
@@ -557,12 +565,6 @@ public class FramedBlockEntity extends BlockEntity
     protected boolean doesCamoPropagateSkylightDown()
     {
         return camoContainer.getContent().propagatesSkylightDown();
-    }
-
-    public final void checkCamoSolid()
-    {
-        boolean checkSolid = getBlock().getBlockType().canOccludeWithSolidCamo();
-        updateDynamicStates(checkSolid, true, true);
     }
 
     protected final boolean updateDynamicStates(boolean updateSolid, boolean updateLight, boolean updateSkylight)
@@ -611,6 +613,12 @@ public class FramedBlockEntity extends BlockEntity
         return changed;
     }
 
+    void markCullStateDirty()
+    {
+        cullStateDirty = true;
+    }
+
+    @Override
     public final void updateCulling(boolean neighbors, boolean rerender)
     {
         boolean changed = false;
@@ -618,9 +626,9 @@ public class FramedBlockEntity extends BlockEntity
         {
             BlockState state = getBlockState();
             changed |= updateCulling(dir, state, false);
-            if (neighbors && level().getBlockEntity(worldPosition.relative(dir)) instanceof FramedBlockEntity be)
+            if (neighbors && level().getBlockEntity(worldPosition.relative(dir)) instanceof IFramedBlockEntity be)
             {
-                be.updateCulling(dir.getOpposite(), be.getBlockState(), true);
+                be.unwrap().updateCulling(dir.getOpposite(), be.getBlockState(), true);
             }
         }
 
@@ -656,6 +664,7 @@ public class FramedBlockEntity extends BlockEntity
         return false;
     }
 
+    @Override
     public float getCamoExplosionResistance(Explosion explosion)
     {
         float camoRes = camoContainer.getContent().getExplosionResistance(level(), worldPosition, explosion);
@@ -666,6 +675,7 @@ public class FramedBlockEntity extends BlockEntity
         return camoRes;
     }
 
+    @Override
     public boolean isCamoFlammable(Direction face)
     {
         if (reinforced)
@@ -675,6 +685,7 @@ public class FramedBlockEntity extends BlockEntity
         return camoContainer.isEmpty() || camoContainer.getContent().isFlammable(level(), worldPosition, face);
     }
 
+    @Override
     public int getCamoFlammability(Direction face)
     {
         if (reinforced)
@@ -684,6 +695,7 @@ public class FramedBlockEntity extends BlockEntity
         return camoContainer.isEmpty() ? -1 : camoContainer.getContent().getFlammability(level(), worldPosition, face);
     }
 
+    @Override
     public int getCamoFireSpreadSpeed(Direction face)
     {
         if (reinforced)
@@ -693,22 +705,26 @@ public class FramedBlockEntity extends BlockEntity
         return camoContainer.isEmpty() ? -1 : camoContainer.getContent().getFireSpreadSpeed(level(), worldPosition, face);
     }
 
+    @Override
     public boolean isCamoIgnitedByLava(Direction face)
     {
         return !reinforced && camoContainer.getContent().isIgnitedByLava(level(), worldPosition, face);
     }
 
+    @Override
     public boolean hasOverlay()
     {
         return overlay != null;
     }
 
+    @Override
     @Nullable
     public Holder<BlockOverlay> getOverlay()
     {
         return overlay;
     }
 
+    @Override
     public void setOverlay(@Nullable Holder<BlockOverlay> overlay)
     {
         if (overlay != this.overlay)
@@ -719,6 +735,7 @@ public class FramedBlockEntity extends BlockEntity
         }
     }
 
+    @Override
     public final void setGlowing(boolean glowing)
     {
         if (this.glowing != glowing)
@@ -738,6 +755,7 @@ public class FramedBlockEntity extends BlockEntity
         }
     }
 
+    @Override
     public final boolean isGlowing()
     {
         return glowing;
@@ -749,6 +767,7 @@ public class FramedBlockEntity extends BlockEntity
         return Math.max(baseLight, camoContainer.getContent().getLightEmission());
     }
 
+    @Override
     public final void setIntangible(boolean intangible)
     {
         if (this.intangible != intangible)
@@ -772,11 +791,13 @@ public class FramedBlockEntity extends BlockEntity
      *
      * @return whether this block is marked as intangible
      */
+    @Override
     public final boolean isMarkedIntangible()
     {
         return intangible;
     }
 
+    @Override
     public final boolean isIntangible(@Nullable CollisionContext ctx)
     {
         if (!ConfigView.Server.INSTANCE.enableIntangibility() || !intangible)
@@ -813,6 +834,7 @@ public class FramedBlockEntity extends BlockEntity
         return CamoContainerHelper.isValidRemovalTool(camoContainer, stack);
     }
 
+    @Override
     public final void setReinforced(boolean reinforced)
     {
         if (this.reinforced != reinforced)
@@ -824,11 +846,13 @@ public class FramedBlockEntity extends BlockEntity
         }
     }
 
+    @Override
     public final boolean isReinforced()
     {
         return reinforced;
     }
 
+    @Override
     public final void setEmissive(boolean emissive)
     {
         if (this.emissive != emissive)
@@ -840,12 +864,13 @@ public class FramedBlockEntity extends BlockEntity
         }
     }
 
+    @Override
     public final boolean isEmissive()
     {
         return emissive;
     }
 
-    protected final void doLightUpdate()
+    final void doLightUpdate()
     {
         AuxiliaryLightManager lightManager = level().getAuxLightManager(worldPosition);
         if (lightManager != null)
@@ -854,11 +879,13 @@ public class FramedBlockEntity extends BlockEntity
         }
     }
 
+    @Override
     public IFramedBlock getBlock()
     {
         return (IFramedBlock) getBlockState().getBlock();
     }
 
+    @Override
     public final IBlockType getBlockType()
     {
         return getBlock().getBlockType();
@@ -887,6 +914,7 @@ public class FramedBlockEntity extends BlockEntity
     /**
      * {@return whether all camos applied to this block can be trivially converted to {@link ItemStack}s for dropping}
      */
+    @Override
     public boolean canTriviallyDropAllCamos()
     {
         return camoContainer.canTriviallyConvertToItemStack();
@@ -897,6 +925,7 @@ public class FramedBlockEntity extends BlockEntity
      * @param drops The list of items being dropped
      * @param dropCamo Whether the camo item should be dropped
      */
+    @Override
     public void addAdditionalDrops(Consumer<ItemStack> drops, boolean dropCamo)
     {
         if (dropCamo && canTriviallyDropAllCamos())
@@ -933,33 +962,39 @@ public class FramedBlockEntity extends BlockEntity
         }
     }
 
+    @Override
     @Nullable
     public MapColor getMapColor()
     {
         return camoContainer.getMapColor(level(), worldPosition);
     }
 
+    @Override
     @Nullable
     public Integer getCamoBeaconColorMultiplier(LevelReader level, BlockPos pos, BlockPos beaconPos)
     {
         return camoContainer.getBeaconColorMultiplier(level, pos, beaconPos);
     }
 
+    @Override
     public boolean shouldCamoDisplayFluidOverlay(BlockAndTintGetter level, BlockPos pos, FluidState fluid)
     {
         return camoContainer.getContent().shouldDisplayFluidOverlay(level, pos, fluid);
     }
 
+    @Override
     public float getCamoFriction(BlockState state, @Nullable Entity entity, float frameFriction)
     {
         return camoContainer.getContent().getFriction(level(), worldPosition, entity, frameFriction);
     }
 
+    @Override
     public TriState canCamoSustainPlant(BlockGetter level, Direction side, BlockState plant)
     {
         return camoContainer.getContent().canSustainPlant(level, worldPosition, side, plant);
     }
 
+    @Override
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean canEntityDestroyCamo(Entity entity)
     {
@@ -973,11 +1008,17 @@ public class FramedBlockEntity extends BlockEntity
     @Override
     public void onLoad()
     {
+        onLoadInternal();
+        super.onLoad();
+    }
+
+    void onLoadInternal()
+    {
         if (!level().isClientSide())
         {
             if (recheckStates)
             {
-                checkCamoSolid();
+                updateDynamicStates(true, true, true);
             }
             if (forceLightUpdate)
             {
@@ -985,7 +1026,6 @@ public class FramedBlockEntity extends BlockEntity
                 doLightUpdate();
             }
         }
-        super.onLoad();
     }
 
     @Override
@@ -1008,29 +1048,45 @@ public class FramedBlockEntity extends BlockEntity
         return oldOrientation != newOrientation;
     }
 
+    @Override
+    public final FramedBlockEntity unwrap()
+    {
+        return this;
+    }
+
     /*
      * Sync
      */
 
     @Override
+    public final CompoundTag getUpdateTag(HolderLookup.Provider registries)
+    {
+        return appendUpdateTag(new CompoundTag(), registries);
+    }
+
+    final CompoundTag appendUpdateTag(CompoundTag tag, HolderLookup.Provider registries)
+    {
+        TagValueOutput valueOutput = new TagValueOutput(ProblemReporter.DISCARDING, registries.createSerializationContext(NbtOps.INSTANCE), tag);
+        writeToDataPacket(valueOutput);
+        return valueOutput.buildResult();
+    }
+
+    @Override
     public final ClientboundBlockEntityDataPacket getUpdatePacket()
     {
-        return ClientboundBlockEntityDataPacket.create(this, (be, registryAccess) ->
-        {
-            TagValueOutput valueOutput = TagValueOutput.createWithContext(ProblemReporter.DISCARDING, registryAccess);
-            ((FramedBlockEntity) be).writeToDataPacket(valueOutput);
-            return valueOutput.buildResult();
-        });
+        return ClientboundBlockEntityDataPacket.create(this);
+    }
+
+    @Override
+    public final void handleUpdateTag(ValueInput valueInput)
+    {
+        NetworkValueInput.handleUpdateTag(this, valueInput);
     }
 
     @Override
     public final void onDataPacket(Connection net, ValueInput valueInput)
     {
-        if (readFromDataPacket(valueInput))
-        {
-            level().sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
-            requestModelDataUpdate();
-        }
+        NetworkValueInput.handleUpdatePacket(this, valueInput);
     }
 
     protected void writeToDataPacket(ValueOutput valueOutput)
@@ -1041,130 +1097,55 @@ public class FramedBlockEntity extends BlockEntity
         valueOutput.putByte("flags", writeFlags());
     }
 
-    protected boolean readFromDataPacket(ValueInput valueInput)
+    protected void readFromDataPacket(NetworkValueInput input)
     {
-        boolean needUpdate = false;
-        boolean needCullingUpdate = false;
+        camoContainer = input.readCamo(CAMO_NBT_KEY, false);
 
-        CamoContainer<?, ?> newCamo = CamoContainerHelper.readFromNetwork(valueInput.child(CAMO_NBT_KEY));
-        if (!newCamo.equals(camoContainer))
-        {
-            int oldLight = getLightValue();
-            camoContainer = newCamo;
-            if (oldLight != getLightValue())
-            {
-                doLightUpdate();
-            }
-
-            needUpdate = true;
-            needCullingUpdate = true;
-        }
-        Direction newOrientation = valueInput.read(CAMO_DIR_NBT_KEY, FramedCodecs.DIRECTION_BY_INT).orElse(null);
+        Direction newOrientation = input.read(CAMO_DIR_NBT_KEY, FramedCodecs.DIRECTION_BY_INT).orElse(null);
         if (newOrientation != camoOrientation)
         {
             camoOrientation = newOrientation;
-            needUpdate = true;
+            input.requestRenderUpdate();
         }
 
-        Holder<BlockOverlay> newOverlay = valueInput.read(OVERLAY_NBT_KEY, BlockOverlay.CODEC).orElse(null);
+        Holder<BlockOverlay> newOverlay = input.read(OVERLAY_NBT_KEY, BlockOverlay.CODEC).orElse(null);
         if (newOverlay != overlay)
         {
             overlay = newOverlay;
-            needUpdate = true;
+            input.requestRenderUpdate();
         }
 
-        byte flags = valueInput.getByteOr("flags", (byte) 0);
+        byte flags = input.getByteOr("flags", (byte) 0);
 
         boolean newGlow = readFlag(flags, FLAG_GLOWING);
         if (newGlow != glowing)
         {
             glowing = newGlow;
-            needUpdate = true;
-
-            doLightUpdate();
+            input.requestRenderUpdate();
+            input.requestLightUpdate();
         }
 
         boolean newIntangible = readFlag(flags, FLAG_INTANGIBLE);
         if (newIntangible != intangible)
         {
             intangible = newIntangible;
-            needUpdate = true;
-            needCullingUpdate = true;
+            input.requestRenderUpdate();
+            input.requestCullingUpdate();
         }
 
         boolean newReinforced = readFlag(flags, FLAG_REINFORCED);
         if (newReinforced != reinforced)
         {
             reinforced = newReinforced;
-            needUpdate = true;
+            input.requestRenderUpdate();
         }
 
         boolean newEmissive = readFlag(flags, FLAG_EMISSIVE);
         if (newEmissive != emissive)
         {
             emissive = newEmissive;
-            needUpdate = true;
+            input.requestRenderUpdate();
         }
-
-        if (needCullingUpdate)
-        {
-            updateCulling(true, false);
-        }
-
-        return needUpdate;
-    }
-
-    @Override
-    public final CompoundTag getUpdateTag(HolderLookup.Provider provider)
-    {
-        TagValueOutput valueOutput = TagValueOutput.createWithContext(ProblemReporter.DISCARDING, provider);
-        writeUpdateTag(valueOutput);
-        return valueOutput.buildResult();
-    }
-
-    protected void writeUpdateTag(ValueOutput valueOutput)
-    {
-        CamoContainerHelper.writeToNetwork(valueOutput.child(CAMO_NBT_KEY), camoContainer);
-        valueOutput.storeNullable(CAMO_DIR_NBT_KEY, FramedCodecs.DIRECTION_BY_INT, camoOrientation);
-        valueOutput.storeNullable(OVERLAY_NBT_KEY, BlockOverlay.CODEC, overlay);
-        valueOutput.putByte("flags", writeFlags());
-    }
-
-    @Override
-    public void handleUpdateTag(ValueInput valueInput)
-    {
-        if (readCamoFromUpdateTag(valueInput))
-        {
-            cullStateDirty = true;
-        }
-
-        overlay = valueInput.read(OVERLAY_NBT_KEY, BlockOverlay.CODEC).orElse(null);
-
-        byte flags = valueInput.getByteOr("flags", (byte) 0);
-        glowing = readFlag(flags, FLAG_GLOWING);
-        intangible = readFlag(flags, FLAG_INTANGIBLE);
-        reinforced = readFlag(flags, FLAG_REINFORCED);
-        emissive = readFlag(flags, FLAG_EMISSIVE);
-
-        requestModelDataUpdate();
-    }
-
-    boolean readCamoFromUpdateTag(ValueInput valueInput)
-    {
-        boolean changed = false;
-        CamoContainer<?, ?> newCamo = CamoContainerHelper.readFromNetwork(valueInput.child(CAMO_NBT_KEY));
-        if (!newCamo.equals(camoContainer))
-        {
-            camoContainer = newCamo;
-            changed = true;
-        }
-        Direction newOrientation = valueInput.read(CAMO_DIR_NBT_KEY, FramedCodecs.DIRECTION_BY_INT).orElse(null);
-        if (newOrientation != camoOrientation)
-        {
-            camoOrientation = newOrientation;
-            changed = true;
-        }
-        return changed;
     }
 
     private byte writeFlags()
@@ -1201,6 +1182,7 @@ public class FramedBlockEntity extends BlockEntity
      * @param includeCullInfo Whether culling data should be included
      * @param state           The {@link BlockState} with which the model data is used for rendering (usually {@link #getBlockState()})
      */
+    @Override
     public final ModelData getModelData(boolean includeCullInfo, BlockState state)
     {
         AbstractFramedBlockData modelData = computeBlockData(state, includeCullInfo);
@@ -1245,6 +1227,7 @@ public class FramedBlockEntity extends BlockEntity
      * Blueprint handling
      */
 
+    @Override
     public final BlueprintData writeToBlueprint()
     {
         return appendCustomBlueprintData(new BlueprintData(
@@ -1270,6 +1253,7 @@ public class FramedBlockEntity extends BlockEntity
         return blueprintData;
     }
 
+    @Override
     public final void applyBlueprintData(BlueprintData blueprintData)
     {
         applyCamosFromBlueprint(blueprintData);
@@ -1311,11 +1295,7 @@ public class FramedBlockEntity extends BlockEntity
         collectCamoComponents(builder);
         collectMiscComponents(builder);
 
-        FrameConfig cfg = new FrameConfig(glowing, intangible, reinforced, emissive);
-        if (!cfg.equals(FrameConfig.DEFAULT))
-        {
-            builder.set(Utils.DC_TYPE_FRAME_CONFIG, cfg);
-        }
+        FrameConfig.collect(builder, this);
 
         if (overlay != null)
         {
@@ -1354,6 +1334,12 @@ public class FramedBlockEntity extends BlockEntity
     @Override
     public void saveAdditional(ValueOutput valueOutput)
     {
+        super.saveAdditional(valueOutput);
+        saveAdditionalInternal(valueOutput);
+    }
+
+    void saveAdditionalInternal(ValueOutput valueOutput)
+    {
         valueOutput.store(CAMO_NBT_KEY, CamoContainerHelper.CODEC, camoContainer);
         valueOutput.storeNullable(CAMO_DIR_NBT_KEY, Direction.CODEC, camoOrientation);
         valueOutput.storeNullable(OVERLAY_NBT_KEY, BlockOverlay.CODEC, overlay);
@@ -1362,15 +1348,17 @@ public class FramedBlockEntity extends BlockEntity
         valueOutput.putBoolean("reinforced", reinforced);
         valueOutput.putBoolean("emissive", emissive);
         valueOutput.putByte("updated", (byte) DATA_VERSION);
-
-        super.saveAdditional(valueOutput);
     }
 
     @Override
     public void loadAdditional(ValueInput valueInput)
     {
         super.loadAdditional(valueInput);
+        loadAdditionalInternal(valueInput);
+    }
 
+    void loadAdditionalInternal(ValueInput valueInput)
+    {
         camoContainer = loadAndValidateCamo(valueInput, CAMO_NBT_KEY);
         camoOrientation = valueInput.read(CAMO_DIR_NBT_KEY, Direction.CODEC).orElse(null);
         overlay = valueInput.read(OVERLAY_NBT_KEY, BlockOverlay.CODEC).orElse(null);
@@ -1378,7 +1366,7 @@ public class FramedBlockEntity extends BlockEntity
         intangible = valueInput.getBooleanOr("intangible", false);
         reinforced = valueInput.getBooleanOr("reinforced", false);
         emissive = valueInput.getBooleanOr("emissive", false);
-        recheckStates |= valueInput.getByteOr("updated", (byte) 0) < FramedBlockEntity.DATA_VERSION;
+        recheckStates |= valueInput.getByteOr("updated", (byte) 0) < DATA_VERSION;
 
         if (glowing)
         {

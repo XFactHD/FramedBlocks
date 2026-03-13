@@ -1,7 +1,8 @@
 package io.github.xfacthd.framedblocks.api.render.debug;
 
-import io.github.xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
+import io.github.xfacthd.framedblocks.api.block.blockentity.IFramedBlockEntity;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.bus.api.Event;
 import net.neoforged.fml.event.IModBusEvent;
@@ -18,15 +19,15 @@ import java.util.function.BiConsumer;
  */
 public final class AttachDebugRenderersEvent extends Event implements IModBusEvent
 {
-    private final BiConsumer<BlockEntityType<? extends FramedBlockEntity>, BlockDebugRenderer<?>> registrar;
+    private final BiConsumer<BlockEntityType<? extends BlockEntity>, BlockDebugRenderer<?>> registrar;
 
     @ApiStatus.Internal
-    public AttachDebugRenderersEvent(BiConsumer<BlockEntityType<? extends FramedBlockEntity>, BlockDebugRenderer<?>> registrar)
+    public AttachDebugRenderersEvent(BiConsumer<BlockEntityType<? extends BlockEntity>, BlockDebugRenderer<?>> registrar)
     {
         this.registrar = registrar;
     }
 
-    public <RT extends FramedBlockEntity, BT extends RT> void attach(BlockEntityType<BT> type, BlockDebugRenderer<RT> renderer)
+    public <BT extends BlockEntity & IFramedBlockEntity> void attach(BlockEntityType<BT> type, BlockDebugRenderer<? super BT> renderer)
     {
         registrar.accept(type, renderer);
     }

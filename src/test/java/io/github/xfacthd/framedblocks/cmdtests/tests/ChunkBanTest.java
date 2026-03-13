@@ -2,8 +2,8 @@ package io.github.xfacthd.framedblocks.cmdtests.tests;
 
 import com.google.common.base.Preconditions;
 import com.mojang.brigadier.context.CommandContext;
-import io.github.xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedDoubleBlockEntity;
+import io.github.xfacthd.framedblocks.api.block.blockentity.IFramedBlockEntity;
 import io.github.xfacthd.framedblocks.api.camo.block.SimpleBlockCamoContainer;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import net.minecraft.commands.CommandSourceStack;
@@ -151,7 +151,7 @@ public final class ChunkBanTest
 
                 level.setBlockAndUpdate(pos, state);
                 BlockEntity be = level.getBlockEntity(pos);
-                if (be instanceof FramedBlockEntity fbe)
+                if (be instanceof IFramedBlockEntity fbe)
                 {
                     fbe.setCamo(CAMO_ONE_FACTORY.get(), false);
                 }

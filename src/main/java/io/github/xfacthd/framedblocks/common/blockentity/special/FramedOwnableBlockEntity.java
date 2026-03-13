@@ -1,6 +1,7 @@
 package io.github.xfacthd.framedblocks.common.blockentity.special;
 
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
+import io.github.xfacthd.framedblocks.api.block.blockentity.NetworkValueInput;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.UUIDUtil;
@@ -53,24 +54,10 @@ public class FramedOwnableBlockEntity extends FramedBlockEntity
     }
 
     @Override
-    protected boolean readFromDataPacket(ValueInput valueInput)
+    protected void readFromDataPacket(NetworkValueInput input)
     {
-        owner = valueInput.read("owner", UUIDUtil.CODEC).orElse(null);
-        return super.readFromDataPacket(valueInput);
-    }
-
-    @Override
-    protected void writeUpdateTag(ValueOutput valueOutput)
-    {
-        super.writeUpdateTag(valueOutput);
-        valueOutput.storeNullable("owner", UUIDUtil.CODEC, owner);
-    }
-
-    @Override
-    public void handleUpdateTag(ValueInput valueInput)
-    {
-        super.handleUpdateTag(valueInput);
-        owner = valueInput.read("owner", UUIDUtil.CODEC).orElse(null);
+        super.readFromDataPacket(input);
+        owner = input.read("owner", UUIDUtil.CODEC).orElse(null);
     }
 
     @Override

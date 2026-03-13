@@ -3,7 +3,7 @@ package io.github.xfacthd.framedblocks.client.render.debug.impl;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import io.github.xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
+import io.github.xfacthd.framedblocks.api.block.blockentity.IFramedBlockEntity;
 import io.github.xfacthd.framedblocks.api.block.cache.DoubleBlockStateCache;
 import io.github.xfacthd.framedblocks.api.block.cache.StateCache;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.CamoGetter;
@@ -18,7 +18,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.util.context.ContextKey;
 import net.minecraft.world.phys.BlockHitResult;
 
-public class ConnectionPredicateDebugRenderer implements BlockDebugRenderer<FramedBlockEntity>
+public class ConnectionPredicateDebugRenderer implements BlockDebugRenderer<IFramedBlockEntity>
 {
     public static final ConnectionPredicateDebugRenderer INSTANCE = new ConnectionPredicateDebugRenderer();
     private static final ContextKey<ConnectionPredicateRenderState> DATA_KEY = new ContextKey<>(Utils.id("con_pred_debug_renderer"));
@@ -26,7 +26,7 @@ public class ConnectionPredicateDebugRenderer implements BlockDebugRenderer<Fram
     private ConnectionPredicateDebugRenderer() { }
 
     @Override
-    public void extract(FramedBlockEntity be, BlockHitResult blockHit, float partialTick, LevelRenderState renderState)
+    public void extract(IFramedBlockEntity be, BlockHitResult blockHit, float partialTick, LevelRenderState renderState)
     {
         Direction face = blockHit.getDirection();
         StateCache cache = be.getBlockState().framedblocks$getCache();

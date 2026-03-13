@@ -1,6 +1,7 @@
 package io.github.xfacthd.framedblocks.common.blockentity.special;
 
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
+import io.github.xfacthd.framedblocks.api.block.blockentity.NetworkValueInput;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
@@ -233,44 +234,21 @@ public class FramedItemFrameBlockEntity extends FramedBlockEntity implements Ite
 
     // Network
 
-    private void readFromNetwork(ValueInput valueInput)
-    {
-        heldItem = valueInput.read(ITEM_NBT_KEY, ItemStack.OPTIONAL_CODEC).orElse(ItemStack.EMPTY);
-        rotation = valueInput.getByteOr("rotation", (byte) 0);
-    }
-
-    private void writeToNetwork(ValueOutput valueOutput)
-    {
-        valueOutput.store(ITEM_NBT_KEY, ItemStack.OPTIONAL_CODEC, heldItem);
-        valueOutput.putByte("rotation", (byte) rotation);
-    }
-
     @Override
-    protected boolean readFromDataPacket(ValueInput valueInput)
+    protected void readFromDataPacket(NetworkValueInput input)
     {
-        readFromNetwork(valueInput);
-        return super.readFromDataPacket(valueInput);
+        super.readFromDataPacket(input);
+
+        heldItem = input.read(ITEM_NBT_KEY, ItemStack.OPTIONAL_CODEC).orElse(ItemStack.EMPTY);
+        rotation = input.getByteOr("rotation", (byte) 0);
     }
 
     @Override
     protected void writeToDataPacket(ValueOutput valueOutput)
     {
         super.writeToDataPacket(valueOutput);
-        writeToNetwork(valueOutput);
-    }
-
-    @Override
-    public void handleUpdateTag(ValueInput valueInput)
-    {
-        super.handleUpdateTag(valueInput);
-        readFromNetwork(valueInput);
-    }
-
-    @Override
-    protected void writeUpdateTag(ValueOutput valueOutput)
-    {
-        super.writeUpdateTag(valueOutput);
-        writeToNetwork(valueOutput);
+        valueOutput.store(ITEM_NBT_KEY, ItemStack.OPTIONAL_CODEC, heldItem);
+        valueOutput.putByte("rotation", (byte) rotation);
     }
 
     // NBT

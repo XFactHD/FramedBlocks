@@ -3,6 +3,7 @@ package io.github.xfacthd.framedblocks.api.compat.create;
 import com.simibubi.create.api.schematic.nbt.SafeNbtWriterRegistry;
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedDoubleBlockEntity;
+import io.github.xfacthd.framedblocks.api.block.blockentity.IFramedBlockEntity;
 import io.github.xfacthd.framedblocks.api.camo.CamoContainer;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
@@ -24,7 +25,7 @@ public class FramedBlockSafeNbtWriter implements SafeNbtWriterRegistry.SafeNbtWr
     @Override
     public final void writeSafe(BlockEntity be, CompoundTag tag, HolderLookup.Provider registries)
     {
-        if (be instanceof FramedBlockEntity fbe)
+        if (be instanceof IFramedBlockEntity fbe)
         {
             tag.merge(be.saveWithFullMetadata(registries));
 
@@ -50,5 +51,5 @@ public class FramedBlockSafeNbtWriter implements SafeNbtWriterRegistry.SafeNbtWr
         }
     }
 
-    protected void cleanupTag(FramedBlockEntity fbe, CompoundTag tag) { }
+    protected void cleanupTag(IFramedBlockEntity fbe, CompoundTag tag) { }
 }

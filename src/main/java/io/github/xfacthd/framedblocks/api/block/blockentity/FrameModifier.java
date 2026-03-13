@@ -25,29 +25,29 @@ import java.util.function.ToIntBiFunction;
 public enum FrameModifier implements StringRepresentable
 {
     GLOWING(
-            FramedBlockEntity::isGlowing,
-            FramedBlockEntity::setGlowing,
+            IFramedBlockEntity::isGlowing,
+            IFramedBlockEntity::setGlowing,
             ItemPredicate.ofTag(Tags.Items.DUSTS_GLOWSTONE),
             () -> ItemResource.of(Items.GLOWSTONE_DUST),
             BlueprintCopyBehaviour::getGlowstoneCount
     ),
     INTANGIBLE(
-            FramedBlockEntity::isMarkedIntangible,
-            FramedBlockEntity::setIntangible,
+            IFramedBlockEntity::isMarkedIntangible,
+            IFramedBlockEntity::setIntangible,
             ItemPredicate.ofItem(Utils.PHANTOM_PASTE),
             () -> ItemResource.of(Utils.PHANTOM_PASTE),
             BlueprintCopyBehaviour::getIntangibleCount
     ),
     REINFORCED(
-            FramedBlockEntity::isReinforced,
-            FramedBlockEntity::setReinforced,
+            IFramedBlockEntity::isReinforced,
+            IFramedBlockEntity::setReinforced,
             ItemPredicate.ofItem(Utils.FRAMED_REINFORCEMENT),
             () -> ItemResource.of(Utils.FRAMED_REINFORCEMENT),
             BlueprintCopyBehaviour::getReinforcementCount
     ),
     EMISSIVE(
-            FramedBlockEntity::isEmissive,
-            FramedBlockEntity::setEmissive,
+            IFramedBlockEntity::isEmissive,
+            IFramedBlockEntity::setEmissive,
             ItemPredicate.ofItem(Utils.GLOW_PASTE),
             () -> ItemResource.of(Utils.GLOW_PASTE),
             BlueprintCopyBehaviour::getEmissiveCount
@@ -60,13 +60,13 @@ public enum FrameModifier implements StringRepresentable
     public static final StreamCodec<ByteBuf, FrameModifier> STREAM_CODEC = ByteBufCodecs.idMapper(BY_ID, FrameModifier::ordinal);
 
     private final String name = toString().toLowerCase(Locale.ROOT);
-    private final Predicate<FramedBlockEntity> flagGetter;
+    private final Predicate<IFramedBlockEntity> flagGetter;
     private final FlagSetter flagSetter;
     private final ItemPredicate itemPredicate;
     private final Supplier<ItemResource> defaultResourceProvider;
     private final ToIntBiFunction<BlueprintCopyBehaviour, BlueprintData> blueprintReader;
 
-    FrameModifier(Predicate<FramedBlockEntity> flagGetter, FlagSetter flagSetter, ItemPredicate itemPredicate, Supplier<ItemResource> defaultResourceProvider, ToIntBiFunction<BlueprintCopyBehaviour, BlueprintData> blueprintReader)
+    FrameModifier(Predicate<IFramedBlockEntity> flagGetter, FlagSetter flagSetter, ItemPredicate itemPredicate, Supplier<ItemResource> defaultResourceProvider, ToIntBiFunction<BlueprintCopyBehaviour, BlueprintData> blueprintReader)
     {
         this.flagGetter = flagGetter;
         this.flagSetter = flagSetter;
@@ -75,12 +75,12 @@ public enum FrameModifier implements StringRepresentable
         this.blueprintReader = blueprintReader;
     }
 
-    public boolean isActive(FramedBlockEntity be)
+    public boolean isActive(IFramedBlockEntity be)
     {
         return flagGetter.test(be);
     }
 
-    public void setActive(FramedBlockEntity be, boolean active)
+    public void setActive(IFramedBlockEntity be, boolean active)
     {
         flagSetter.setFlag(be, active);
     }
@@ -163,6 +163,6 @@ public enum FrameModifier implements StringRepresentable
 
     private interface FlagSetter
     {
-        void setFlag(FramedBlockEntity be, boolean flag);
+        void setFlag(IFramedBlockEntity be, boolean flag);
     }
 }

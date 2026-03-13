@@ -2,7 +2,7 @@ package io.github.xfacthd.framedblocks.client.render.debug.impl;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import io.github.xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
+import io.github.xfacthd.framedblocks.api.block.blockentity.IFramedBlockEntity;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadData;
 import io.github.xfacthd.framedblocks.api.render.debug.BlockDebugRenderer;
 import io.github.xfacthd.framedblocks.api.util.SingleBlockFakeLevel;
@@ -32,7 +32,7 @@ import org.joml.Vector3f;
 import java.util.Arrays;
 import java.util.Objects;
 
-public class QuadWindingDebugRenderer implements BlockDebugRenderer<FramedBlockEntity>
+public class QuadWindingDebugRenderer implements BlockDebugRenderer<IFramedBlockEntity>
 {
     public static final QuadWindingDebugRenderer INSTANCE = new QuadWindingDebugRenderer();
     private static final Direction[] DIRECTIONS = Arrays.copyOf(Direction.values(), 7);
@@ -41,7 +41,7 @@ public class QuadWindingDebugRenderer implements BlockDebugRenderer<FramedBlockE
     private static final ContextKey<QuadWindingRenderState> DATA_KEY = new ContextKey<>(Utils.id("quad_winding_debug_renderer"));
 
     @Override
-    public void extract(FramedBlockEntity be, BlockHitResult blockHit, float partialTick, LevelRenderState renderState)
+    public void extract(IFramedBlockEntity be, BlockHitResult blockHit, float partialTick, LevelRenderState renderState)
     {
         BlockPos pos = be.getBlockPos();
         BlockState state = be.getBlockState();

@@ -61,6 +61,19 @@ public class FramedDoubleBlockEntity extends FramedBlockEntity
     }
 
     @Override
+    void setCamoNoUpdate(CamoContainer<?, ?> camo, boolean secondary)
+    {
+        if (secondary)
+        {
+            camoContainer = camo;
+        }
+        else
+        {
+            super.setCamoNoUpdate(camo, false);
+        }
+    }
+
+    @Override
     void setCamoInternal(CamoContainer<?, ?> camo, boolean secondary, @Nullable Direction orientation, boolean forceOrientation)
     {
         if (!secondary)
@@ -232,7 +245,7 @@ public class FramedDoubleBlockEntity extends FramedBlockEntity
     {
         if (isReinforced()) return false;
 
-        CamoContainer<?, ?> camo = getCamo(face);
+        CamoContainer<?, ?> camo = getCamo(face, null);
         if (camo.isEmpty() && (!getCamo().isEmpty() || !camoContainer.isEmpty()))
         {
             return (getCamo().isEmpty() || getCamo().getContent().isFlammable(level(), worldPosition, face)) &&
@@ -270,7 +283,7 @@ public class FramedDoubleBlockEntity extends FramedBlockEntity
     {
         if (isReinforced()) return false;
 
-        CamoContainer<?, ?> camo = getCamo(face);
+        CamoContainer<?, ?> camo = getCamo(face, null);
         if (camo.isEmpty() && (!getCamo().isEmpty() || !camoContainer.isEmpty()))
         {
             return (getCamo().isEmpty() || getCamo().getContent().isIgnitedByLava(level(), worldPosition, face)) &&
@@ -306,12 +319,6 @@ public class FramedDoubleBlockEntity extends FramedBlockEntity
         }
 
         return eyePos.distanceToSqr(clipSec.getLocation()) < eyePos.distanceToSqr(clipPri.getLocation());
-    }
-
-    @Override
-    public final CamoContainer<?, ?> getCamo(Direction side)
-    {
-        return getCamo(side, null);
     }
 
     @Override
@@ -365,57 +372,18 @@ public class FramedDoubleBlockEntity extends FramedBlockEntity
     }
 
     @Override
-    protected boolean readFromDataPacket(ValueInput valueInput)
+    protected void readFromDataPacket(NetworkValueInput input)
     {
-        boolean needUpdate = false;
-        CamoContainer<?, ?> newCamo = CamoContainerHelper.readFromNetwork(valueInput.child(CAMO_TWO_NBT_KEY));
-        if (!newCamo.equals(camoContainer))
-        {
-            int oldLight = getLightValue();
-            camoContainer = newCamo;
-            if (oldLight != getLightValue())
-            {
-                doLightUpdate();
-            }
+        super.readFromDataPacket(input);
 
-            needUpdate = true;
-            updateCulling(true, false);
-        }
-        Direction newOrientation = valueInput.read(CAMO_DIR_TWO_NBT_KEY, FramedCodecs.DIRECTION_BY_INT).orElse(null);
+        camoContainer = input.readCamo(CAMO_TWO_NBT_KEY, true);
+
+        Direction newOrientation = input.read(CAMO_DIR_TWO_NBT_KEY, FramedCodecs.DIRECTION_BY_INT).orElse(null);
         if (newOrientation != camoOrientation)
         {
             camoOrientation = newOrientation;
-            needUpdate = true;
+            input.requestRenderUpdate();
         }
-
-        return super.readFromDataPacket(valueInput) || needUpdate;
-    }
-
-    @Override
-    protected void writeUpdateTag(ValueOutput valueOutput)
-    {
-        super.writeUpdateTag(valueOutput);
-        CamoContainerHelper.writeToNetwork(valueOutput.child(CAMO_TWO_NBT_KEY), camoContainer);
-        valueOutput.storeNullable(CAMO_DIR_TWO_NBT_KEY, FramedCodecs.DIRECTION_BY_INT, camoOrientation);
-    }
-
-    @Override
-    boolean readCamoFromUpdateTag(ValueInput valueInput)
-    {
-        boolean changed = super.readCamoFromUpdateTag(valueInput);
-        CamoContainer<?, ?> newCamo = CamoContainerHelper.readFromNetwork(valueInput.child(CAMO_TWO_NBT_KEY));
-        if (!newCamo.equals(camoContainer))
-        {
-            camoContainer = newCamo;
-            changed = true;
-        }
-        Direction newOrientation = valueInput.read(CAMO_DIR_TWO_NBT_KEY, FramedCodecs.DIRECTION_BY_INT).orElse(null);
-        if (newOrientation != camoOrientation)
-        {
-            camoOrientation = newOrientation;
-            changed = true;
-        }
-        return changed;
     }
 
     /*

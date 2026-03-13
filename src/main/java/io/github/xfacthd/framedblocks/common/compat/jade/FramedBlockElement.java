@@ -1,7 +1,7 @@
 package io.github.xfacthd.framedblocks.common.compat.jade;
 
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
-import io.github.xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
+import io.github.xfacthd.framedblocks.api.block.blockentity.IFramedBlockEntity;
 import io.github.xfacthd.framedblocks.api.util.SingleBlockFakeLevel;
 import io.github.xfacthd.framedblocks.client.screen.pip.BlockPictureInPictureRenderer;
 import io.github.xfacthd.framedblocks.common.config.ClientConfig;
@@ -22,7 +22,7 @@ final class FramedBlockElement extends Element
     private final SingleBlockFakeLevel fakeLevel;
     private final float scale;
 
-    FramedBlockElement(BlockState state, FramedBlockEntity blockEntity)
+    FramedBlockElement(BlockState state, IFramedBlockEntity blockEntity)
     {
         this.width = SIZE;
         this.height = SIZE;

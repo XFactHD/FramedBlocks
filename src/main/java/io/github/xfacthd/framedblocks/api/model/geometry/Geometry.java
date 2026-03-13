@@ -1,6 +1,6 @@
 package io.github.xfacthd.framedblocks.api.model.geometry;
 
-import io.github.xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
+import io.github.xfacthd.framedblocks.api.block.blockentity.IFramedBlockEntity;
 import io.github.xfacthd.framedblocks.api.camo.CamoContent;
 import io.github.xfacthd.framedblocks.api.model.data.AbstractFramedBlockData;
 import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
@@ -91,7 +91,7 @@ public abstract class Geometry
      * @param level    The {@linkplain BlockAndTintGetter level} the block is being rendered in
      * @param pos      The {@link BlockPos} the block is being rendered at
      * @param random   The {@link RandomSource} to use for randomization
-     * @param data     The {@link ModelData} from the {@link FramedBlockEntity}
+     * @param data     The {@link ModelData} from the {@link IFramedBlockEntity}
      */
     public void collectAdditionalPartsUncached(PartConsumer consumer, BlockAndTintGetter level, BlockPos pos, RandomSource random, ModelData data) { }
 
@@ -136,7 +136,7 @@ public abstract class Geometry
      * @param level      The {@linkplain BlockAndTintGetter level} the block is being rendered in
      * @param pos        The {@link BlockPos} the block is being rendered at
      * @param random     The {@link RandomSource} to use for randomization
-     * @param data       The {@link ModelData} from the {@link FramedBlockEntity}
+     * @param data       The {@link ModelData} from the {@link IFramedBlockEntity}
      */
     @Nullable
     public Object computeCacheKeyUserData(BlockAndTintGetter level, BlockPos pos, RandomSource random, ModelData data)

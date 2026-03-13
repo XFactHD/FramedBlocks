@@ -3,7 +3,7 @@ package io.github.xfacthd.framedblocks.cmdtests.tests;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.context.CommandContext;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
-import io.github.xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
+import io.github.xfacthd.framedblocks.api.block.blockentity.IFramedBlockEntity;
 import io.github.xfacthd.framedblocks.api.block.overlay.BlockOverlay;
 import io.github.xfacthd.framedblocks.api.camo.CamoContainer;
 import io.github.xfacthd.framedblocks.api.util.FramedConstants;
@@ -90,7 +90,7 @@ public final class ModelBenchmarkCube
                     top |= y == 14 && x >= 7 && x <= 8 && z >= 7 && z <= 9;
 
                     level.setBlockAndUpdate(pos, state.setValue(FramedProperties.TOP, top));
-                    if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
+                    if (level.getBlockEntity(pos) instanceof IFramedBlockEntity be)
                     {
                         be.setCamo(camo, false);
                         be.setOverlay(blockOverlay);

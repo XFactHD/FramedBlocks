@@ -29,7 +29,7 @@ public enum CamoOrientation implements StringRepresentable
     }
 
     @Nullable
-    public Direction resolve(FramedBlockEntity be)
+    public Direction resolve(IFramedBlockEntity be)
     {
         if (this != UNKNOWN) return dir;
 

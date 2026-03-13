@@ -1,7 +1,7 @@
 package io.github.xfacthd.framedblocks.api.block.render;
 
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
-import io.github.xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
+import io.github.xfacthd.framedblocks.api.block.blockentity.IFramedBlockEntity;
 import io.github.xfacthd.framedblocks.api.camo.CamoContent;
 import io.github.xfacthd.framedblocks.api.predicate.cull.SideSkipPredicate;
 import io.github.xfacthd.framedblocks.api.util.ConfigView;
@@ -13,7 +13,7 @@ import net.minecraft.world.level.block.state.BlockState;
 /**
  * Helpers for checking whether an {@link IFramedBlock}'s side is occluded by the neighboring block or it occludes
  * a neighboring non-framed block.
- * These helpers must not be used outside the server and client thread, otherwise the {@link FramedBlockEntity}
+ * These helpers must not be used outside the server and client thread, otherwise the {@link IFramedBlockEntity}
  * lookups will fail due to safeguards in vanilla code.
  */
 public final class CullingHelper
@@ -56,19 +56,19 @@ public final class CullingHelper
         {
             if (fullFace && (!adjFramed || adjState.framedblocks$getCache().isFullFace(side.getOpposite())))
             {
-                if (!(level.getBlockEntity(pos) instanceof FramedBlockEntity be))
+                if (!(level.getBlockEntity(pos) instanceof IFramedBlockEntity be))
                 {
                     return false;
                 }
 
-                CamoContent<?> camoContent = be.getCamo(side).getContent();
+                CamoContent<?> camoContent = be.getCamo(side, null).getContent();
                 if (adjFramed)
                 {
-                    if (!(level.getBlockEntity(adjPos) instanceof FramedBlockEntity adjBe))
+                    if (!(level.getBlockEntity(adjPos) instanceof IFramedBlockEntity adjBe))
                     {
                         return false;
                     }
-                    CamoContent<?> adjCamoContent = adjBe.getCamo(side.getOpposite()).getContent();
+                    CamoContent<?> adjCamoContent = adjBe.getCamo(side.getOpposite(), null).getContent();
                     return camoContent.isOccludedBy(adjCamoContent, level, pos, adjPos, side);
                 }
                 return camoContent.isOccludedBy(adjState, level, pos, adjPos, side);
@@ -80,13 +80,13 @@ public final class CullingHelper
         BlockState adjTestState = adjBlock.runOcclusionTestAndGetLookupState(pred, level, pos, state, adjState, side);
         if (adjTestState != null)
         {
-            if (!(level.getBlockEntity(adjPos) instanceof FramedBlockEntity adjBe))
+            if (!(level.getBlockEntity(adjPos) instanceof IFramedBlockEntity adjBe))
             {
                 return false;
             }
 
             CamoContent<?> adjCamoContent = adjBe.getCamo(adjTestState).getContent();
-            if (!adjCamoContent.isEmpty() && level.getBlockEntity(pos) instanceof FramedBlockEntity be)
+            if (!adjCamoContent.isEmpty() && level.getBlockEntity(pos) instanceof IFramedBlockEntity be)
             {
                 CamoContent<?> camoContent = be.getCamo(state).getContent();
                 return camoContent.isOccludedBy(adjCamoContent, level, pos, adjPos, side);

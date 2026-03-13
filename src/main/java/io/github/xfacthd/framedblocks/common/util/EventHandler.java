@@ -1,7 +1,7 @@
 package io.github.xfacthd.framedblocks.common.util;
 
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
-import io.github.xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
+import io.github.xfacthd.framedblocks.api.block.blockentity.IFramedBlockEntity;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.client.util.ClientAccess;
 import io.github.xfacthd.framedblocks.common.config.ServerConfig;
@@ -37,7 +37,7 @@ public final class EventHandler
 
             if (ServerConfig.VIEW.enableIntangibility() && !event.isCanceled() && block.getBlockType().allowMakingIntangible())
             {
-                if (level.getBlockEntity(pos) instanceof FramedBlockEntity be && be.isIntangible(null))
+                if (level.getBlockEntity(pos) instanceof IFramedBlockEntity be && be.isIntangible(null))
                 {
                     event.setCanceled(true);
                 }

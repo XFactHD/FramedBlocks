@@ -1,6 +1,6 @@
 package io.github.xfacthd.framedblocks.common.data.cullupdate;
 
-import io.github.xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
+import io.github.xfacthd.framedblocks.api.block.blockentity.IFramedBlockEntity;
 import io.github.xfacthd.framedblocks.client.util.ClientTaskQueue;
 import it.unimi.dsi.fastutil.longs.LongSet;
 import net.minecraft.client.Minecraft;
@@ -23,7 +23,7 @@ public final class ClientCullingUpdateTracker
                 positions.forEach(pos ->
                 {
                     blockPos.set(pos);
-                    if (level.getBlockEntity(blockPos) instanceof FramedBlockEntity be)
+                    if (level.getBlockEntity(blockPos) instanceof IFramedBlockEntity be)
                     {
                         be.updateCulling(true, true);
                     }

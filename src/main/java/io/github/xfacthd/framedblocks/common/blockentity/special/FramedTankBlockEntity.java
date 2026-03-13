@@ -2,6 +2,7 @@ package io.github.xfacthd.framedblocks.common.blockentity.special;
 
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
+import io.github.xfacthd.framedblocks.api.block.blockentity.NetworkValueInput;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.capability.fluid.TankFluidResourceHandler;
 import net.minecraft.core.BlockPos;
@@ -66,20 +67,6 @@ public class FramedTankBlockEntity extends FramedBlockEntity
     }
 
     @Override
-    protected void writeUpdateTag(ValueOutput valueOutput)
-    {
-        super.writeUpdateTag(valueOutput);
-        fluidHandler.serialize(valueOutput);
-    }
-
-    @Override
-    public void handleUpdateTag(ValueInput valueInput)
-    {
-        super.handleUpdateTag(valueInput);
-        fluidHandler.deserialize(valueInput);
-    }
-
-    @Override
     protected void writeToDataPacket(ValueOutput valueOutput)
     {
         super.writeToDataPacket(valueOutput);
@@ -87,10 +74,10 @@ public class FramedTankBlockEntity extends FramedBlockEntity
     }
 
     @Override
-    protected boolean readFromDataPacket(ValueInput valueInput)
+    protected void readFromDataPacket(NetworkValueInput input)
     {
-        fluidHandler.deserialize(valueInput);
-        return super.readFromDataPacket(valueInput);
+        super.readFromDataPacket(input);
+        fluidHandler.deserialize(input);
     }
 
     @Override
