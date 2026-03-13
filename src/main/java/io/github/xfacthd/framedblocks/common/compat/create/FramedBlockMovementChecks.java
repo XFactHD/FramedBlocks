@@ -4,12 +4,12 @@ import com.simibubi.create.api.contraption.BlockMovementChecks;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.common.block.pane.FramedBoardBlock;
-import io.github.xfacthd.framedblocks.common.block.sign.AbstractFramedSignBlock;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SignBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
 public final class FramedBlockMovementChecks implements
@@ -39,7 +39,7 @@ public final class FramedBlockMovementChecks implements
     public BlockMovementChecks.CheckResult isBrittle(BlockState state)
     {
         Block block = state.getBlock();
-        if (block instanceof AbstractFramedSignBlock)
+        if (block instanceof SignBlock && block instanceof IFramedBlock)
         {
             return BlockMovementChecks.CheckResult.SUCCESS;
         }

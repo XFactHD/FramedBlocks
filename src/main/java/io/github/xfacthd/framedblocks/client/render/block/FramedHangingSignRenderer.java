@@ -2,11 +2,11 @@ package io.github.xfacthd.framedblocks.client.render.block;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import io.github.xfacthd.framedblocks.common.block.sign.AbstractFramedSignBlock;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.world.level.block.SignBlock;
 import org.joml.Vector3f;
 
-public class FramedHangingSignRenderer extends FramedSignRenderer
+public final class FramedHangingSignRenderer extends FramedSignRenderer
 {
     private static final float TEXT_RENDER_SCALE = 0.9F;
     private static final Vector3f TEXT_OFFSET = new Vector3f(0.1F/16F, -5.12F/16F, 1.024F/16F);
@@ -31,7 +31,7 @@ public class FramedHangingSignRenderer extends FramedSignRenderer
     }
 
     @Override
-    protected Vector3f getTextOffset(AbstractFramedSignBlock signBlock)
+    protected Vector3f getTextOffset(SignBlock signBlock)
     {
         return TEXT_OFFSET;
     }

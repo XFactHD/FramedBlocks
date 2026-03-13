@@ -97,7 +97,7 @@ import io.github.xfacthd.framedblocks.common.block.interactive.FramedItemFrameBl
 import io.github.xfacthd.framedblocks.common.block.interactive.button.FramedButtonBlock;
 import io.github.xfacthd.framedblocks.common.block.interactive.button.FramedLargeButtonBlock;
 import io.github.xfacthd.framedblocks.common.block.interactive.pressureplate.FramedWeightedPressurePlateBlock;
-import io.github.xfacthd.framedblocks.common.block.sign.AbstractFramedSignBlock;
+import io.github.xfacthd.framedblocks.common.block.sign.FramedStandingSignBlock;
 import io.github.xfacthd.framedblocks.common.block.slopepanel.FramedDoubleSlopePanelBlock;
 import io.github.xfacthd.framedblocks.common.block.slopeslab.FramedDoubleSlopeSlabBlock;
 import io.github.xfacthd.framedblocks.common.block.slopeslab.FramedFlatDoubleSlopeSlabCornerBlock;
@@ -360,9 +360,9 @@ public final class FBClient
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_LARGE_BUTTON, FramedLargeButtonGeometry::new, FramedLargeButtonBlock.LARGE_STATE_MERGER);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_LARGE_STONE_BUTTON, FramedLargeStoneButtonGeometry::create, FramedLargeButtonBlock.LARGE_STATE_MERGER);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_LEVER, FramedLeverGeometry::new, WrapHelper.IGNORE_ALWAYS);
-        WrapHelper.wrap(FBContent.BLOCK_FRAMED_SIGN, FramedSignGeometry::new, AbstractFramedSignBlock.RotatingSignStateMerger.INSTANCE);
+        WrapHelper.wrap(FBContent.BLOCK_FRAMED_SIGN, FramedSignGeometry::new, FramedStandingSignBlock.RotatingSignStateMerger.INSTANCE);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_WALL_SIGN, FramedWallSignGeometry::new, WrapHelper.IGNORE_WATERLOGGED);
-        WrapHelper.wrap(FBContent.BLOCK_FRAMED_HANGING_SIGN, FramedCeilingHangingSignGeometry::new, AbstractFramedSignBlock.RotatingSignStateMerger.INSTANCE);
+        WrapHelper.wrap(FBContent.BLOCK_FRAMED_HANGING_SIGN, FramedCeilingHangingSignGeometry::new, FramedStandingSignBlock.RotatingSignStateMerger.INSTANCE);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_WALL_HANGING_SIGN, FramedWallHangingSignGeometry::new, WrapHelper.IGNORE_WATERLOGGED);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_TORCH, FramedTorchGeometry::normal, WrapHelper.IGNORE_ALWAYS);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_WALL_TORCH, FramedWallTorchGeometry::normal, WrapHelper.IGNORE_ALWAYS);

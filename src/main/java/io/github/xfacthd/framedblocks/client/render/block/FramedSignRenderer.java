@@ -4,7 +4,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import io.github.xfacthd.framedblocks.api.render.Quaternions;
 import io.github.xfacthd.framedblocks.client.render.block.state.FramedSignRenderState;
-import io.github.xfacthd.framedblocks.common.block.sign.AbstractFramedSignBlock;
 import io.github.xfacthd.framedblocks.common.block.sign.FramedStandingSignBlock;
 import io.github.xfacthd.framedblocks.common.blockentity.special.FramedSignBlockEntity;
 import net.minecraft.client.Minecraft;
@@ -19,6 +18,7 @@ import net.minecraft.client.renderer.state.CameraRenderState;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.level.block.SignBlock;
 import net.minecraft.world.level.block.entity.SignText;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
@@ -28,7 +28,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
-public class FramedSignRenderer implements BlockEntityRenderer<FramedSignBlockEntity, FramedSignRenderState>
+public sealed class FramedSignRenderer implements BlockEntityRenderer<FramedSignBlockEntity, FramedSignRenderState> permits FramedHangingSignRenderer
 {
     private static final float RENDER_SCALE = 0.6666667F;
     private static final Vector3f TEXT_OFFSET = new Vector3f(0F, 5.6F/16F, 1.024F/16F);
@@ -38,7 +38,7 @@ public class FramedSignRenderer implements BlockEntityRenderer<FramedSignBlockEn
 
     public FramedSignRenderer(BlockEntityRendererProvider.Context ctx)
     {
-        font = ctx.font();
+        this.font = ctx.font();
     }
 
     @Override
@@ -75,15 +75,15 @@ public class FramedSignRenderer implements BlockEntityRenderer<FramedSignBlockEn
         BlockEntityRenderer.super.extractRenderState(blockEntity, renderState, partialTick, cameraPos, crumblingOverlay);
 
         BlockState state = blockEntity.getBlockState();
-        if (!(state.getBlock() instanceof AbstractFramedSignBlock signBlock)) return;
+        if (!(state.getBlock() instanceof SignBlock signBlock)) return;
 
         renderState.standing = state.getBlock() instanceof FramedStandingSignBlock;
         renderState.yRot = -signBlock.getYRotationDegrees(state);
         renderState.frontText = blockEntity.getText(true);
         renderState.backText = blockEntity.getText(false);
         renderState.textOffset = getTextOffset(signBlock);
-        renderState.lineHeight = signBlock.getTextLineHeight();
-        renderState.lineWidth = signBlock.getMaxTextLineWidth();
+        renderState.lineHeight = blockEntity.getTextLineHeight();
+        renderState.lineWidth = blockEntity.getMaxTextLineWidth();
         renderState.outline = AbstractSignRenderer.isOutlineVisible(blockEntity.getBlockPos());
     }
 
@@ -125,7 +125,7 @@ public class FramedSignRenderer implements BlockEntityRenderer<FramedSignBlockEn
         return RENDER_SCALE;
     }
 
-    protected Vector3f getTextOffset(AbstractFramedSignBlock signBlock)
+    protected Vector3f getTextOffset(SignBlock signBlock)
     {
         boolean standing = signBlock instanceof FramedStandingSignBlock;
         return standing ? TEXT_OFFSET : WALL_TEXT_OFFSET;

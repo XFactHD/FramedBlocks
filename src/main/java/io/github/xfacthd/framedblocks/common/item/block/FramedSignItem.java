@@ -1,44 +1,45 @@
 package io.github.xfacthd.framedblocks.common.item.block;
 
+import io.github.xfacthd.framedblocks.api.block.item.IFramedBlockItem;
 import io.github.xfacthd.framedblocks.common.FBContent;
-import io.github.xfacthd.framedblocks.common.block.sign.AbstractFramedSignBlock;
-import io.github.xfacthd.framedblocks.common.blockentity.special.FramedSignBlockEntity;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.core.Holder;
+import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.SignItem;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipDisplay;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import org.jspecify.annotations.Nullable;
 
-public class FramedSignItem extends FramedStandingAndWallBlockItem
+import java.util.function.Consumer;
+
+public final class FramedSignItem extends SignItem implements IFramedBlockItem
 {
-    public FramedSignItem(Properties props)
+    public FramedSignItem(Properties properties)
     {
-        this(FBContent.BLOCK_FRAMED_SIGN, FBContent.BLOCK_FRAMED_WALL_SIGN, Direction.DOWN, props);
-    }
-
-    @SuppressWarnings("NullableProblems") // IDEA's nullability analysis is broken on generics
-    protected FramedSignItem(Holder<Block> standing, Holder<Block> wall, Direction attachFace, Properties props)
-    {
-        super(standing.value(), wall.value(), attachFace, props);
+        super(FBContent.BLOCK_FRAMED_SIGN.value(), FBContent.BLOCK_FRAMED_WALL_SIGN.value(), properties.stacksTo(16));
     }
 
     @Override
-    protected boolean updateCustomBlockEntityTag(
-            BlockPos pos, Level level, @Nullable Player player, ItemStack stack, BlockState state
-    )
+    public InteractionResult place(BlockPlaceContext context)
     {
-        boolean hadNBT = super.updateCustomBlockEntityTag(pos, level, player, stack, state);
-        if (!level.isClientSide() && !hadNBT && player != null)
-        {
-            if (level.getBlockEntity(pos) instanceof FramedSignBlockEntity be)
-            {
-                AbstractFramedSignBlock.openEditScreen(player, be, true);
-            }
-        }
-        return hadNBT;
+        return handlePlace(context, super::place);
+    }
+
+    @Override
+    protected SoundEvent getPlaceSound(BlockState state, Level level, BlockPos pos, Player entity)
+    {
+        return getCamoPlaceSound(state, level, pos, entity, super::getPlaceSound);
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public void appendHoverText(ItemStack stack, TooltipContext ctx, TooltipDisplay display, Consumer<Component> appender, TooltipFlag flag)
+    {
+        IFramedBlockItem.appendCamoHoverText(stack, appender);
     }
 }

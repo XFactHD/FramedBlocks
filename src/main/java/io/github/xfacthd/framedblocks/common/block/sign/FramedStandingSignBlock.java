@@ -1,72 +1,84 @@
 package io.github.xfacthd.framedblocks.common.block.sign;
 
-import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
-import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
-import io.github.xfacthd.framedblocks.api.util.RotationDirection;
+import io.github.xfacthd.framedblocks.api.block.BlockUtils;
+import io.github.xfacthd.framedblocks.api.block.FramedProperties;
+import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
+import io.github.xfacthd.framedblocks.api.model.wrapping.WrapHelper;
+import io.github.xfacthd.framedblocks.api.model.wrapping.statemerger.StateMerger;
+import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.common.FBContent;
+import io.github.xfacthd.framedblocks.common.block.IFramedBlockInternal;
+import io.github.xfacthd.framedblocks.common.blockentity.special.FramedSignBlockEntity;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import io.github.xfacthd.framedblocks.common.item.block.FramedSignItem;
+import io.github.xfacthd.framedblocks.common.net.payload.clientbound.ClientboundOpenSignScreenPayload;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ScheduledTickAccess;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.Mirror;
-import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.StandingSignBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.entity.SignBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.RotationSegment;
-import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.Shapes;
-import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.level.block.state.properties.Property;
+import net.minecraft.world.level.block.state.properties.WoodType;
+import net.minecraft.world.level.redstone.Orientation;
+import net.minecraft.world.level.storage.loot.LootParams;
+import net.minecraft.world.phys.BlockHitResult;
+import net.neoforged.neoforge.network.PacketDistributor;
 import org.jspecify.annotations.Nullable;
 
-public class FramedStandingSignBlock extends AbstractFramedSignBlock
-{
-    private static final VoxelShape SHAPE = Block.box(4.0D, 0.0D, 4.0D, 12.0D, 16.0D, 12.0D);
+import java.util.List;
+import java.util.Set;
 
-    public FramedStandingSignBlock(Properties props)
+public final class FramedStandingSignBlock extends StandingSignBlock implements IFramedBlockInternal
+{
+    public FramedStandingSignBlock(Properties properties)
     {
-        super(BlockType.FRAMED_SIGN, props.noCollision());
+        super(WoodType.OAK, IFramedBlock.applyDefaultProperties(properties, BlockType.FRAMED_SIGN)
+                .forceSolidOn()
+                .noCollision()
+                .strength(1F)
+        );
+        BlockUtils.configureStandardProperties(this);
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        builder.add(BlockStateProperties.ROTATION_16);
+        BlockUtils.addStandardProperties(this, builder);
     }
 
     @Override
-    @Nullable
-    public BlockState getStateForPlacement(BlockPlaceContext ctx)
+    protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult)
     {
-        return PlacementStateBuilder.of(this, ctx)
-                .withCustom((state, modCtx) ->
-                {
-                    int rotation = RotationSegment.convertToSegment(modCtx.getRotation() + 180.0F);
-                    return state.setValue(BlockStateProperties.ROTATION_16, rotation);
-                })
-                .withWater()
-                .build();
+        InteractionResult result = handleUse(state, level, pos, player, hand, hitResult);
+        if (result.consumesAction()) return result;
+
+        return super.useItemOn(stack, state, level, pos, player, hand, hitResult);
     }
 
     @Override
-    protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext ctx)
+    public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)
     {
-        return SHAPE;
-    }
-
-    @Override
-    protected VoxelShape getOcclusionShape(BlockState state)
-    {
-        return Shapes.empty();
+        tryApplyCamoImmediately(level, pos, placer, stack);
     }
 
     @Override
@@ -81,56 +93,50 @@ public class FramedStandingSignBlock extends AbstractFramedSignBlock
             RandomSource random
     )
     {
-        if (side == Direction.DOWN && !canSurvive(state, level, pos))
+        BlockState newState = super.updateShape(state, level, tickAccess, pos, side, adjPos, adjState, random);
+        if (!newState.isAir())
         {
-            return Blocks.AIR.defaultBlockState();
+            updateCulling(level, pos);
         }
-        return super.updateShape(state, level, tickAccess, pos, side, adjPos, adjState, random);
+        return newState;
     }
 
     @Override
-    @SuppressWarnings("deprecation")
-    protected boolean canSurvive(BlockState state, LevelReader level, BlockPos pos)
+    protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, @Nullable Orientation orientation, boolean isMoving)
     {
-        return level.getBlockState(pos.below()).isSolid();
+        updateCulling(level, pos);
     }
 
     @Override
-    public boolean doesBlockOccludeBeaconBeam(BlockState state, LevelReader level, BlockPos pos)
+    protected boolean propagatesSkylightDown(BlockState state)
     {
-        return false;
+        return state.getValue(FramedProperties.PROPAGATES_SKYLIGHT);
     }
 
     @Override
-    public BlockState rotate(BlockState state, RotationDirection direction, WrenchRotationMode mode)
+    protected List<ItemStack> getDrops(BlockState state, LootParams.Builder builder)
     {
-        int rotation = state.getValue(BlockStateProperties.ROTATION_16);
-        rotation += switch (direction)
-        {
-            case CLOCKWISE -> 1;
-            case COUNTERCLOCKWISE -> 15;
-        };
-        return state.setValue(BlockStateProperties.ROTATION_16, rotation % 16);
+        return super.getDrops(state, getCamoDrops(builder));
     }
 
     @Override
-    protected BlockState rotate(BlockState state, Rotation rotation)
+    public void openTextEdit(Player player, SignBlockEntity signEntity, boolean isFrontText)
     {
-        int rotationStep = state.getValue(BlockStateProperties.ROTATION_16);
-        return state.setValue(BlockStateProperties.ROTATION_16, rotation.rotate(rotationStep, 16));
+        signEntity.setAllowedPlayerEditor(player.getUUID());
+        PacketDistributor.sendToPlayer((ServerPlayer) player, new ClientboundOpenSignScreenPayload(signEntity.getBlockPos(), isFrontText));
     }
 
     @Override
-    protected BlockState mirror(BlockState state, Mirror mirror)
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
     {
-        int rot = state.getValue(BlockStateProperties.ROTATION_16);
-        return state.setValue(BlockStateProperties.ROTATION_16, mirror.mirror(rot, 16));
+        return new FramedSignBlockEntity(pos, state);
     }
 
     @Override
-    public float getYRotationDegrees(BlockState state)
+    @Nullable
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type)
     {
-        return RotationSegment.convertToDegrees(state.getValue(BlockStateProperties.ROTATION_16));
+        return createTickerHelper(type, FBContent.BE_TYPE_FRAMED_SIGN.value(), FramedSignBlockEntity::tick);
     }
 
     @Override
@@ -140,7 +146,13 @@ public class FramedStandingSignBlock extends AbstractFramedSignBlock
     }
 
     @Override
+    public BlockType getBlockType()
+    {
+        return BlockType.FRAMED_SIGN;
+    }
+
     @Nullable
+    @Override
     public BlockState getItemModelSource()
     {
         return null;
@@ -157,5 +169,35 @@ public class FramedStandingSignBlock extends AbstractFramedSignBlock
     public BlockState getJadeRenderState(BlockState state)
     {
         return defaultBlockState();
+    }
+
+    public static final class RotatingSignStateMerger implements StateMerger
+    {
+        public static final RotatingSignStateMerger INSTANCE = new RotatingSignStateMerger();
+
+        private final StateMerger ignoringMerger = StateMerger.ignoring(WrapHelper.IGNORE_WATERLOGGED);
+
+        private RotatingSignStateMerger() { }
+
+        @Override
+        public BlockState apply(BlockState state)
+        {
+            state = ignoringMerger.apply(state);
+            int rot = state.getValue(BlockStateProperties.ROTATION_16);
+            if (rot > 7)
+            {
+                state = state.setValue(BlockStateProperties.ROTATION_16, rot - 8);
+            }
+            return state;
+        }
+
+        @Override
+        public Set<Property<?>> getHandledProperties(Holder<Block> block)
+        {
+            return Utils.concat(
+                    ignoringMerger.getHandledProperties(block),
+                    Set.of(BlockStateProperties.ROTATION_16)
+            );
+        }
     }
 }

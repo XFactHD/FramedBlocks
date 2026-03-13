@@ -530,12 +530,12 @@ public final class FBContent
             BlockType.FRAMED_DOOR, BlockType.FRAMED_IRON_DOOR
     );
     public static final DeferredBlockEntity<FramedSignBlockEntity> BE_TYPE_FRAMED_SIGN = registerBlockEntity(
-            FramedSignBlockEntity::normalSign,
+            FramedSignBlockEntity::new,
             true,
             BlockType.FRAMED_SIGN, BlockType.FRAMED_WALL_SIGN
     );
     public static final DeferredBlockEntity<FramedSignBlockEntity> BE_TYPE_FRAMED_HANGING_SIGN = registerBlockEntity(
-            FramedSignBlockEntity::hangingSign,
+            FramedSignBlockEntity.Hanging::new,
             true,
             BlockType.FRAMED_HANGING_SIGN, BlockType.FRAMED_WALL_HANGING_SIGN
     );
