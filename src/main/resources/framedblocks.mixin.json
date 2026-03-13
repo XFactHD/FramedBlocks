@@ -7,7 +7,6 @@
         "InvokerBlock",
         "InvokerBlockItem",
         "MixinBlockStateBase",
-        "MixinHopperBlockEntity",
         "MixinMapItemSavedData",
         "MixinStairBlock",
         "MixinStateDefinitionBuilder"

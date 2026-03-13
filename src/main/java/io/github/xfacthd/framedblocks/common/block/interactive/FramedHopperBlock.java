@@ -3,19 +3,16 @@ package io.github.xfacthd.framedblocks.common.block.interactive;
 import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.IBlockType;
-import io.github.xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.block.IFramedBlockInternal;
 import io.github.xfacthd.framedblocks.common.blockentity.special.FramedHopperBlockEntity;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.stats.Stats;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.InsideBlockEffectApplier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -56,17 +53,6 @@ public class FramedHopperBlock extends HopperBlock implements IFramedBlockIntern
     protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult)
     {
         return handleUse(state, level, pos, player, hand, hitResult);
-    }
-
-    @Override
-    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult)
-    {
-        if (!level.isClientSide() && level.getBlockEntity(pos) instanceof FramedHopperBlockEntity hopper)
-        {
-            player.openMenu(hopper);
-            player.awardStat(Stats.INSPECT_HOPPER);
-        }
-        return InteractionResult.SUCCESS;
     }
 
     @Override
@@ -129,16 +115,7 @@ public class FramedHopperBlock extends HopperBlock implements IFramedBlockIntern
     }
 
     @Override
-    protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity, InsideBlockEffectApplier effectApplier, boolean b)
-    {
-        if (level.getBlockEntity(pos) instanceof FramedHopperBlockEntity hopper)
-        {
-            hopper.entityInside(entity);
-        }
-    }
-
-    @Override
-    public FramedBlockEntity newBlockEntity(BlockPos pos, BlockState state)
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
     {
         return new FramedHopperBlockEntity(pos, state);
     }
@@ -147,7 +124,7 @@ public class FramedHopperBlock extends HopperBlock implements IFramedBlockIntern
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type)
     {
-        return level.isClientSide() ? null : createTickerHelper(type, FBContent.BE_TYPE_FRAMED_HOPPER.value(), FramedHopperBlockEntity::tick);
+        return level.isClientSide() ? null : createTickerHelper(type, FBContent.BE_TYPE_FRAMED_HOPPER.value(), FramedHopperBlockEntity::pushItemsTick);
     }
 
     @Override
@@ -157,17 +134,16 @@ public class FramedHopperBlock extends HopperBlock implements IFramedBlockIntern
     }
 
     @Override
-    @Nullable
     public BlockState getItemModelSource()
     {
         return defaultBlockState();
     }
 
     @Override
-    @Nullable
     public Direction getHorizontalOrientation(BlockState state)
     {
-        return null;
+        Direction facing = state.getValue(FACING);
+        return DirUtils.isY(facing) ? Direction.NORTH : facing;
     }
 
     @Override
