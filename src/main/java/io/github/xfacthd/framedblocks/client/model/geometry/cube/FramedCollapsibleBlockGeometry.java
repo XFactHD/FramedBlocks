@@ -103,6 +103,9 @@ public class FramedCollapsibleBlockGeometry extends Geometry
                 vertexPosTwo[1] = vertexPosTwo[0] + vertexPosTwo[2] - vertexPosTwo[3];
             }
 
+            // FIXME: certain configurations cause holes on the sides (i.e. one corner on 16, other corner between 1 and 7)
+            //        when "undersized" quads (i.e. connected textures quads) are involved, needs improved quad cutting
+            //        which interpolates on two axis instead of only one
             if (DirUtils.isY(collapsedFace))
             {
                 rotate ^= collapsedFace == Direction.DOWN;

@@ -85,6 +85,7 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension
         return props;
     }
 
+    // TODO: replace with custom BlockItem with support for manual placement state cycling instead of automatic state detection
     default BlockItem createBlockItem(Item.Properties props)
     {
         return new FramedBlockItem((Block) this, props);
