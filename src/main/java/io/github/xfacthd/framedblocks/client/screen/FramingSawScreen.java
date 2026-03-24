@@ -18,7 +18,7 @@ import io.github.xfacthd.framedblocks.common.net.payload.serverbound.Serverbound
 import io.github.xfacthd.framedblocks.common.util.CachingIngredientResolver;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.input.KeyEvent;
@@ -106,12 +106,10 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu> im
 
     protected FramingSawScreen(FramingSawMenu menu, Inventory inv, Component title)
     {
-        super(menu, inv, title);
+        super(menu, inv, title, IMAGE_WIDTH, IMAGE_HEIGHT);
         this.titleLabelY -= 1;
         this.inventoryLabelX = 47;
         this.inventoryLabelY = 139;
-        this.imageWidth = IMAGE_WIDTH;
-        this.imageHeight = IMAGE_HEIGHT;
         this.filteredRecipes.addAll(menu.getRecipes());
         Level level = Objects.requireNonNull(minecraft.level);
         this.additiveResolver = new CachingIngredientResolver.Multi(level, FramingSawRecipe.MAX_ADDITIVE_COUNT);
@@ -132,15 +130,10 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu> im
     }
 
     @Override
-    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick)
+    public void extractBackground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick)
     {
-        super.render(graphics, mouseX, mouseY, partialTick);
-        renderTooltip(graphics, mouseX, mouseY);
-    }
+        super.extractBackground(graphics, mouseX, mouseY, partialTick);
 
-    @Override
-    protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY)
-    {
         graphics.blit(RenderPipelines.GUI_TEXTURED, getBackground(), leftPos, topPos, 0, 0, imageWidth, imageHeight, 256, 256);
         int offset = (int) ((SCROLL_BAR_HEIGHT - SCROLL_BTN_HEIGHT) * scrollOffset);
         int scrollU = SCROLL_BTN_TEX_X + (isScrollBarActive() ? 0 : SCROLL_BTN_WIDTH);
@@ -208,7 +201,7 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu> im
         tryScrollToRecipe(menu.getSelectedRecipeIndex());
     }
 
-    protected boolean drawInputStackHint(GuiGraphics graphics, ItemStack input)
+    protected boolean drawInputStackHint(GuiGraphicsExtractor graphics, ItemStack input)
     {
         if (input.isEmpty())
         {
@@ -218,7 +211,7 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu> im
         return false;
     }
 
-    protected boolean drawAdditiveStackHint(GuiGraphics graphics, int index, ItemStack additive, List<FramingSawRecipeAdditive> additives, int y)
+    protected boolean drawAdditiveStackHint(GuiGraphicsExtractor graphics, int index, ItemStack additive, List<FramingSawRecipeAdditive> additives, int y)
     {
         if (additive.isEmpty())
         {
@@ -257,7 +250,7 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu> im
     }
 
     @Override
-    protected void renderTooltip(GuiGraphics graphics, int mouseX, int mouseY)
+    protected void extractTooltip(GuiGraphicsExtractor graphics, int mouseX, int mouseY)
     {
         if (menu.getCarried().isEmpty() && hoveredSlot != null && hoveredSlot.hasItem())
         {
@@ -284,16 +277,15 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu> im
             if (mouseX >= recX && mouseX < recX + RECIPE_WIDTH && mouseY >= recY && mouseY < recY + RECIPE_HEIGHT)
             {
                 FramingSawMenu.FramedRecipeHolder recipe = filteredRecipes.get(idx);
-                ItemStack result = recipe.getRecipe().getResult();
+                ItemStack result = recipe.getRecipe().getResultStack();
                 renderItemTooltip(graphics, mouseX, mouseY, result, recipe);
                 break;
             }
         }
     }
 
-    protected void renderItemTooltip(GuiGraphics graphics, int mouseX, int mouseY, ItemStack stack, FramingSawMenu.@Nullable FramedRecipeHolder recipeHolder)
+    protected void renderItemTooltip(GuiGraphicsExtractor graphics, int mouseX, int mouseY, ItemStack stack, FramingSawMenu.@Nullable FramedRecipeHolder recipeHolder)
     {
-        //noinspection ConstantConditions
         List<Component> components = new ArrayList<>(getTooltipFromItem(minecraft, stack));
         Optional<TooltipComponent> tooltip = stack.getTooltipImage();
 
@@ -486,7 +478,7 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu> im
         );
     }
 
-    private void renderButtons(GuiGraphics graphics, int mouseX, int mouseY, int x, int y, int lastIdx)
+    private void renderButtons(GuiGraphicsExtractor graphics, int mouseX, int mouseY, int x, int y, int lastIdx)
     {
         int selIdx = menu.getSelectedRecipeIndex();
         // Only need to convert the index into filtered space when a query is present which shrinks the displayed count
@@ -523,7 +515,7 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu> im
         }
     }
 
-    private void renderRecipes(GuiGraphics graphics, int pLeft, int pTop, int lastIndex)
+    private void renderRecipes(GuiGraphicsExtractor graphics, int pLeft, int pTop, int lastIndex)
     {
         for (int idx = firstIndex; idx < lastIndex && idx < filteredRecipes.size(); idx++)
         {
@@ -531,9 +523,9 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu> im
             int x = pLeft + relIdx % RECIPE_COLS * RECIPE_WIDTH + 1;
             int y = pTop + relIdx / RECIPE_COLS * RECIPE_HEIGHT + 1;
 
-            ItemStack stack = filteredRecipes.get(idx).getRecipe().getResult();
-            graphics.renderItem(stack, x, y, x * y * imageWidth);
-            graphics.renderItemDecorations(font, stack, x, y);
+            ItemStack stack = filteredRecipes.get(idx).getRecipe().getResultStack();
+            graphics.item(stack, x, y, x * y * imageWidth);
+            graphics.itemDecorations(font, stack, x, y);
         }
     }
 
@@ -677,7 +669,7 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu> im
         query = query.toLowerCase(Locale.ROOT);
         for (FramingSawMenu.FramedRecipeHolder recipe : menu.getRecipes())
         {
-            Component name = recipe.getRecipe().getResult().getItemName();
+            Component name = recipe.getRecipe().getResultStack().getItemName();
             if (name.getString().toLowerCase(Locale.ROOT).contains(query))
             {
                 recipes.add(recipe);
@@ -713,8 +705,6 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu> im
         int idx = (int) ((double) (scrollOffset * (float) hiddenRows) + .5D) * RECIPE_COLS;
         return Mth.clamp(idx, 0, filteredRecipes.size() - 1);
     }
-
-
 
     public static FramingSawScreen create(FramingSawMenu menu, Inventory inv, Component title)
     {

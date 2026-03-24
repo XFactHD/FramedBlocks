@@ -1,16 +1,20 @@
 package io.github.xfacthd.framedblocks.client.model.special;
 
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
-import io.github.xfacthd.framedblocks.api.model.AbstractFramedBlockModel;
+import io.github.xfacthd.framedblocks.api.model.AbstractFramedBlockStateModel;
 import io.github.xfacthd.framedblocks.api.model.standalone.CachingModel;
+import io.github.xfacthd.framedblocks.client.model.block.FramedBlockModel;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import io.github.xfacthd.framedblocks.common.data.property.LatchType;
-import net.minecraft.client.renderer.block.model.BlockStateModel;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
+import net.minecraft.client.renderer.block.model.BlockModel;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.ChestType;
+import org.joml.Matrix4f;
+import org.joml.Matrix4fc;
 
 import java.util.Map;
 
@@ -22,8 +26,9 @@ public final class FramedChestLidModel implements CachingModel
     private static final int DIRECTION_COUNT = DIRECTIONS.length;
     private static final int TYPE_COUNT = TYPES.length;
     private static final int MODEL_COUNT = DIRECTION_COUNT * TYPE_COUNT * LATCHES.length;
+    private static final Matrix4fc IDENTITY = new Matrix4f();
 
-    private final BlockStateModel[] models = new BlockStateModel[MODEL_COUNT];
+    private final FramedBlockModel[] models = new FramedBlockModel[MODEL_COUNT];
 
     public FramedChestLidModel(Map<BlockState, BlockStateModel> models)
     {
@@ -37,13 +42,15 @@ public final class FramedChestLidModel implements CachingModel
                             .setValue(FramedProperties.FACING_HOR, dir)
                             .setValue(BlockStateProperties.CHEST_TYPE, type)
                             .setValue(PropertyHolder.LATCH_TYPE, latch);
-                    this.models[makeModelIndex(dir, type, latch)] = models.get(state);
+                    int idx = makeModelIndex(dir, type, latch);
+                    BlockStateModel model = models.get(state);
+                    this.models[idx] = new FramedBlockModel(model, IDENTITY);
                 }
             }
         }
     }
 
-    public BlockStateModel getModel(Direction dir, ChestType type, LatchType latch)
+    public BlockModel getModel(Direction dir, ChestType type, LatchType latch)
     {
         return models[makeModelIndex(dir, type, latch)];
     }
@@ -51,9 +58,9 @@ public final class FramedChestLidModel implements CachingModel
     @Override
     public void clearCache()
     {
-        for (BlockStateModel model : models)
+        for (FramedBlockModel model : models)
         {
-            if (model instanceof AbstractFramedBlockModel fbModel)
+            if (model.getModel() instanceof AbstractFramedBlockStateModel fbModel)
             {
                 fbModel.clearCache();
             }

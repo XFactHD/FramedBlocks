@@ -2,9 +2,13 @@ package io.github.xfacthd.framedblocks.api.block.render;
 
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedDoubleBlockEntity;
 import io.github.xfacthd.framedblocks.api.block.overlay.BlockOverlay;
+import io.github.xfacthd.framedblocks.api.camo.CamoContainerHelper;
+import io.github.xfacthd.framedblocks.api.model.data.AbstractFramedBlockData;
 import io.github.xfacthd.framedblocks.api.util.sound.SoundEventType;
 import io.github.xfacthd.framedblocks.api.util.sound.SoundUtils;
+import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.client.particle.ParticleEngine;
+import net.minecraft.client.renderer.block.BlockAndTintGetter;
 import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -88,5 +92,12 @@ public final class FramedClientDoubleBlockExtensions extends FramedClientBlockEx
             return true;
         }
         return false;
+    }
+
+    @Override
+    void collectCamoTintValues(AbstractFramedBlockData data, BlockAndTintGetter level, BlockPos pos, IntList tintValues)
+    {
+        super.collectCamoTintValues(data, level, pos, tintValues);
+        CamoContainerHelper.Client.collectTintValues(data.unwrap(true).getCamoContainer(), level, pos, tintValues);
     }
 }

@@ -2,7 +2,7 @@ package io.github.xfacthd.framedblocks.client.screen.widget;
 
 import io.github.xfacthd.framedblocks.client.screen.pip.SpinningItemPictureInPictureRenderer;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.client.renderer.item.TrackingItemStackRenderState;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
@@ -20,7 +20,7 @@ public final class BlockPreviewTooltipComponent implements TooltipComponent, Cli
     }
 
     @Override
-    public void renderImage(Font font, int x, int y, int width, int height, GuiGraphics graphics)
+    public void extractImage(Font font, int x, int y, int width, int height, GuiGraphicsExtractor graphics)
     {
         graphics.submitPictureInPictureRenderState(new SpinningItemPictureInPictureRenderer.RenderState(
                 renderState,

@@ -52,7 +52,5 @@ public final class TubeShapes
         return ShapeContainer.of(map);
     }
 
-
-
     private TubeShapes() { }
 }

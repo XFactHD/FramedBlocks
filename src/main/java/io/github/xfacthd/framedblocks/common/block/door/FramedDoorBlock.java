@@ -47,8 +47,8 @@ public class FramedDoorBlock extends DoorBlock implements IFramedBlockInternal
 
     private FramedDoorBlock(BlockType type, BlockSetType blockSet, Properties props)
     {
-        super(blockSet, props);
         this.type = type;
+        super(blockSet, props);
         BlockUtils.configureStandardProperties(this);
     }
 
@@ -56,8 +56,7 @@ public class FramedDoorBlock extends DoorBlock implements IFramedBlockInternal
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        BlockUtils.addRequiredProperties(builder);
-        builder.add(FramedProperties.SOLID);
+        BlockUtils.addStandardProperties(this, builder);
     }
 
     @Override
@@ -71,7 +70,6 @@ public class FramedDoorBlock extends DoorBlock implements IFramedBlockInternal
     @Override
     public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)
     {
-        //noinspection ConstantConditions
         super.setPlacedBy(level, pos, state, placer, stack);
         if (level.getBlockEntity(pos.above()) instanceof FramedDoorBlockEntity be)
         {
@@ -97,7 +95,6 @@ public class FramedDoorBlock extends DoorBlock implements IFramedBlockInternal
         BlockState newState = super.updateShape(state, level, tickAccess, pos, side, adjPos, adjState, random);
         if (newState.getBlock() == this)
         {
-            newState = newState.setValue(FramedProperties.SOLID, state.getValue(FramedProperties.SOLID));
             newState = BlockUtils.copyStandardProperties(this, state, newState, false);
         }
         if (newState == state)
@@ -187,8 +184,6 @@ public class FramedDoorBlock extends DoorBlock implements IFramedBlockInternal
         return state;
     }
 
-
-
     public static FramedDoorBlock wood(Properties props)
     {
         return new FramedDoorBlock(
@@ -208,23 +203,16 @@ public class FramedDoorBlock extends DoorBlock implements IFramedBlockInternal
         );
     }
 
-
-
     public static final class DoorStateMerger implements StateMerger
     {
         public static final DoorStateMerger INSTANCE = new DoorStateMerger();
-
-        private final StateMerger ignoreMerger = StateMerger.ignoring(Utils.concat(
-                Set.of(BlockStateProperties.POWERED),
-                WrapHelper.IGNORE_SOLID
-        ));
 
         private DoorStateMerger() { }
 
         @Override
         public BlockState apply(BlockState state)
         {
-            state = ignoreMerger.apply(state);
+            state = WrapHelper.POWERED_MERGER.apply(state);
             if (state.getValue(BlockStateProperties.OPEN))
             {
                 Direction dir = state.getValue(BlockStateProperties.HORIZONTAL_FACING);
@@ -247,7 +235,7 @@ public class FramedDoorBlock extends DoorBlock implements IFramedBlockInternal
         public Set<Property<?>> getHandledProperties(Holder<Block> block)
         {
             return Utils.concat(
-                    ignoreMerger.getHandledProperties(block),
+                    WrapHelper.POWERED_MERGER.getHandledProperties(block),
                     Set.of(BlockStateProperties.OPEN, BlockStateProperties.DOOR_HINGE)
             );
         }

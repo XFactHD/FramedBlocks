@@ -47,7 +47,7 @@ public final class SkipPredicateRedundancy
         List<Redundancy> redundancies = new ArrayList<>();
         AsyncTypeTest.Stats stats = AsyncTypeTest.execute(
                 SkipPredicateRedundancy::testTypeAgainstAll,
-                (result, error) -> redundancies.addAll(result.redundancies),
+                (result, _) -> redundancies.addAll(result.redundancies),
                 PROGRESS_MSG,
                 msgQueueAppender
         );
@@ -153,8 +153,6 @@ public final class SkipPredicateRedundancy
     private record Redundancy(BlockType typeOne, BlockType typeTwo) { }
 
     private record Result(long combinations, List<Redundancy> redundancies) { }
-
-
 
     private SkipPredicateRedundancy() { }
 }

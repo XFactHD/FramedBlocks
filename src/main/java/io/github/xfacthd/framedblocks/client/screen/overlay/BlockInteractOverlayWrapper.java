@@ -5,7 +5,7 @@ import io.github.xfacthd.framedblocks.api.screen.overlay.OverlayDisplayMode;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.Gui;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.tooltip.TooltipRenderUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -37,7 +37,7 @@ final class BlockInteractOverlayWrapper
         this.overlay = overlay;
     }
 
-    boolean render(GuiGraphics graphics, Player player, OverlayDisplayMode cfgMode)
+    boolean render(GuiGraphicsExtractor graphics, Player player, OverlayDisplayMode cfgMode)
     {
         OverlayDisplayMode mode = cfgMode.constrain(overlay.getDisplayMode());
         if (mode == OverlayDisplayMode.HIDDEN)
@@ -89,7 +89,7 @@ final class BlockInteractOverlayWrapper
     }
 
     private void renderDetailed(
-            GuiGraphics graphics,
+            GuiGraphicsExtractor graphics,
             BlockInteractOverlay.Texture tex,
             List<Component> lines,
             int centerX,
@@ -127,7 +127,7 @@ final class BlockInteractOverlayWrapper
         {
             Component text = lines.get(i);
             int yOff = yBaseOff + lineHeight * i;
-            graphics.drawString(font, text, textX, y + yOff, -1);
+            graphics.text(font, text, textX, y + yOff, -1);
         }
 
         int texY = y + (height / 2) - (tex.height() / 2);
@@ -162,8 +162,8 @@ final class BlockInteractOverlayWrapper
         return null;
     }
 
-    private static void drawTooltipBackground(GuiGraphics graphics, int x, int y, int width, int height)
+    private static void drawTooltipBackground(GuiGraphicsExtractor graphics, int x, int y, int width, int height)
     {
-        TooltipRenderUtil.renderTooltipBackground(graphics, x - 2, y - 2, width + 4, height + 4, null);
+        TooltipRenderUtil.extractTooltipBackground(graphics, x - 2, y - 2, width + 4, height + 4, null);
     }
 }

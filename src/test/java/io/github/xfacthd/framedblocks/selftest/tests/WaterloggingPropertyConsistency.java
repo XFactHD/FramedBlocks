@@ -26,7 +26,5 @@ public final class WaterloggingPropertyConsistency
         reporter.endTest();
     }
 
-
-
     private WaterloggingPropertyConsistency() { }
 }

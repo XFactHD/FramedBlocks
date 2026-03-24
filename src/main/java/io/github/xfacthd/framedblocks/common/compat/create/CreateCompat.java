@@ -65,7 +65,7 @@ public final class CreateCompat
 
         public static void init()
         {
-            // The interaction behaviour implementations are not exposed as API
+            // The interaction behavior implementations are not exposed as API
             try
             {
                 registerInteractionBehaviour(FBContent.BLOCK_FRAMED_LEVER, new LeverMovingInteraction());
@@ -135,8 +135,6 @@ public final class CreateCompat
             SchematicStateFilterRegistry.REGISTRY.register(block.value(), filter);
         }
     }
-
-
 
     private CreateCompat() { }
 }

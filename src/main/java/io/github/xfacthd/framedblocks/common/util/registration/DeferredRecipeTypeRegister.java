@@ -19,7 +19,7 @@ public final class DeferredRecipeTypeRegister extends DeferredRegister<RecipeTyp
     }
 
     @Override
-    @SuppressWarnings({ "unchecked", "NullableProblems" })
+    @SuppressWarnings("unchecked")
     protected <I extends RecipeType<?>> DeferredHolder<RecipeType<?>, I> createHolder(
             ResourceKey<? extends Registry<RecipeType<?>>> registryKey, Identifier key
     )

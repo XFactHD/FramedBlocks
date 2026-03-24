@@ -2,13 +2,14 @@ package io.github.xfacthd.framedblocks.api.block;
 
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedDoubleBlockEntity;
 import io.github.xfacthd.framedblocks.api.block.render.FramedClientBlockExtensions;
+import io.github.xfacthd.framedblocks.api.block.render.NullCullPredicate;
 import io.github.xfacthd.framedblocks.api.predicate.contex.ConTexMode;
 import io.github.xfacthd.framedblocks.api.predicate.contex.ConnectionPredicate;
 import io.github.xfacthd.framedblocks.api.predicate.cull.SideSkipPredicate;
 import io.github.xfacthd.framedblocks.api.predicate.fullface.FullFacePredicate;
 import io.github.xfacthd.framedblocks.api.predicate.overlay.BlockOverlayPredicate;
 import io.github.xfacthd.framedblocks.api.shapes.ShapeGenerator;
-import net.minecraft.client.renderer.block.model.BlockStateModel;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
@@ -30,6 +31,13 @@ public interface IBlockType
 
     @ApiStatus.OverrideOnly
     BlockOverlayPredicate getBlockOverlayPredicate();
+
+    /// Returns the [NullCullPredicate] used to decide whether "uncullable" faces of a double block's part may
+    /// be culled if the other part's camo is solid.
+    ///
+    /// Only relevant for blocks returning `true` from [#isDoubleBlock()].
+    @ApiStatus.OverrideOnly
+    NullCullPredicate getNullCullPredicate();
 
     ShapeGenerator getShapeGenerator();
 

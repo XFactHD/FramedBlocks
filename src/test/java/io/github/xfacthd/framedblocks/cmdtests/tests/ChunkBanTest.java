@@ -124,7 +124,7 @@ public final class ChunkBanTest
         }
 
         ServerLevel level = ctx.getSource().getLevel();
-        ChunkPos chunk = new ChunkPos(new BlockPos((int) player.getX(), (int) player.getY(), (int) player.getZ()));
+        ChunkPos chunk = ChunkPos.containing(new BlockPos((int) player.getX(), (int) player.getY(), (int) player.getZ()));
         int minY = level.getMinY();
         startPos = placePos = SectionPos.of(chunk, SectionPos.blockToSectionCoord(minY)).origin().above();
         dimension = level.dimension();
@@ -143,7 +143,6 @@ public final class ChunkBanTest
             Objects.requireNonNull(state);
             Objects.requireNonNull(startPos);
             Objects.requireNonNull(placePos);
-
 
             for (int i = 0; i < 16; i++)
             {
@@ -183,8 +182,6 @@ public final class ChunkBanTest
             }
         }
     }
-
-
 
     private ChunkBanTest() { }
 }

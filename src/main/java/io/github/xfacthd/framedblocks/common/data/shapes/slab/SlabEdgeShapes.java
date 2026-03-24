@@ -27,7 +27,5 @@ public final class SlabEdgeShapes
         return ShapeContainer.of(map);
     }
 
-
-
     private SlabEdgeShapes() { }
 }

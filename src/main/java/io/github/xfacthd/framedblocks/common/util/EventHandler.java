@@ -63,7 +63,5 @@ public final class EventHandler
         FramingSawRecipeCache.get(false).clear();
     }
 
-
-
     private EventHandler() { }
 }

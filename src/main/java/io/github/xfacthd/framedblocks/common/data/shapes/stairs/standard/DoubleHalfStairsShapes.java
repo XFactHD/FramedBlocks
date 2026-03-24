@@ -29,7 +29,5 @@ public final class DoubleHalfStairsShapes
         return ShapeContainer.of(map);
     }
 
-
-
     private DoubleHalfStairsShapes() { }
 }

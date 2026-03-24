@@ -15,7 +15,6 @@ import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.jspecify.annotations.Nullable;
 
 public class FramedThreewayCornerBlock extends FramedBlock implements SlopeToggleBlock
@@ -30,10 +29,7 @@ public class FramedThreewayCornerBlock extends FramedBlock implements SlopeToggl
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        builder.add(
-                FramedProperties.FACING_HOR, FramedProperties.TOP,
-                BlockStateProperties.WATERLOGGED, FramedProperties.ALT_SLOPE
-        );
+        builder.add(FramedProperties.FACING_HOR, FramedProperties.TOP);
     }
 
     @Override

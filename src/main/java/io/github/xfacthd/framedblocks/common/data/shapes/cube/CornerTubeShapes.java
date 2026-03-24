@@ -61,7 +61,5 @@ public final class CornerTubeShapes
         return shapes;
     }
 
-
-
     private CornerTubeShapes() { }
 }

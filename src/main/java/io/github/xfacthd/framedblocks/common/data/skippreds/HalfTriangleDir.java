@@ -114,8 +114,6 @@ public enum HalfTriangleDir
         return dir;
     }
 
-
-
     private static HalfTriangleDir[][][] makeDirTable()
     {
         HalfTriangleDir[][][] table = new HalfTriangleDir[6][6][2];

@@ -54,7 +54,5 @@ public final class BoardShapes
         return ShapeContainer.of(map);
     }
 
-
-
     private BoardShapes() { }
 }

@@ -7,7 +7,7 @@ import net.minecraft.world.level.BlockGetter;
 
 public interface SideSkipPredicate
 {
-    SideSkipPredicate FALSE = (level, pos, state, adjState, side) -> false;
+    SideSkipPredicate FALSE = (_, _, _, _, _) -> false;
 
     /**
      * Check whether the given side should be hidden in presence of the given neighbor

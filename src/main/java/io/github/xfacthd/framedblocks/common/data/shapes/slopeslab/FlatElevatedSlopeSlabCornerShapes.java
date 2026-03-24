@@ -89,7 +89,5 @@ public final class FlatElevatedSlopeSlabCornerShapes implements ShapeGenerator
         });
     }
 
-
-
     private record ShapeKey(Direction dir, boolean top) { }
 }

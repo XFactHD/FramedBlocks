@@ -122,7 +122,5 @@ public final class ModelBenchmarkCube
         return Command.SINGLE_SUCCESS;
     }
 
-
-
     private ModelBenchmarkCube() { }
 }

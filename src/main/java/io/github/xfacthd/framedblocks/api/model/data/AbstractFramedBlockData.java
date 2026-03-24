@@ -28,6 +28,14 @@ public abstract sealed class AbstractFramedBlockData permits FramedBlockData, Fr
     @Nullable
     public abstract Holder<BlockOverlay> getBlockOverlay();
 
+    /// Returns the offset to apply to tint indices in camo quads of the specified part
+    ///
+    /// @param secondPart Whether the second part is requesting the offset
+    public abstract int getCamoTintIndexOffset(boolean secondPart);
+
+    /// Returns the offset to apply to tint indices in non-camo quads
+    public abstract int getPostCamoTintIndexOffset();
+
     @Nullable
     @Contract("_,_,!null -> !null")
     public static FramedBlockData getOrDefault(ModelData modelData, BlockState partState, @Nullable FramedBlockData defaultData)

@@ -24,7 +24,5 @@ public final class ClientBlockExtensionsPresence
         reporter.endTest();
     }
 
-
-
     private ClientBlockExtensionsPresence() { }
 }

@@ -35,7 +35,11 @@ public final class DataMapsSetup implements FramedDataMaps
     {
         if (event.getRegistryKey() == Registries.BLOCK)
         {
-            BlockCamoRotators.reload();
+            // Data maps arrive on the client after default data components are bound
+            if (event.getCause() == DataMapsUpdatedEvent.UpdateCause.CLIENT_SYNC)
+            {
+                BlockCamoRotators.reload();
+            }
         }
     }
 

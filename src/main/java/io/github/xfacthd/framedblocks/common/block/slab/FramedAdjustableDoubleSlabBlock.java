@@ -22,7 +22,7 @@ public class FramedAdjustableDoubleSlabBlock extends FramedAdjustableDoubleBlock
             BlockEntityType.BlockEntitySupplier<FramedAdjustableDoubleBlockEntity> beSupplier
     )
     {
-        super(type, props, state -> Direction.UP, partsBuilder, beSupplier);
+        super(type, props, _ -> Direction.UP, partsBuilder, beSupplier);
     }
 
     @Override
@@ -64,8 +64,6 @@ public class FramedAdjustableDoubleSlabBlock extends FramedAdjustableDoubleBlock
     {
         return null;
     }
-
-
 
     public static FramedAdjustableDoubleSlabBlock standard(Properties props)
     {

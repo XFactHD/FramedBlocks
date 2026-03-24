@@ -42,8 +42,8 @@ public class FramedPaneBlock extends IronBarsBlock implements IFramedBlockIntern
 
     public FramedPaneBlock(BlockType type, Properties props)
     {
-        super(IFramedBlock.applyDefaultProperties(props, type));
         this.type = type;
+        super(IFramedBlock.applyDefaultProperties(props, type));
         BlockUtils.configureStandardProperties(this);
     }
 
@@ -51,8 +51,7 @@ public class FramedPaneBlock extends IronBarsBlock implements IFramedBlockIntern
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        BlockUtils.addRequiredProperties(builder);
-        builder.add(FramedProperties.STATE_LOCKED);
+        BlockUtils.addStandardProperties(this, builder);
     }
 
     @Override

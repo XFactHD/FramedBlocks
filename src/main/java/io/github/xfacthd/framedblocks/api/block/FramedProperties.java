@@ -22,7 +22,5 @@ public final class FramedProperties
     public static final BooleanProperty ALT_SLOPE = BooleanProperty.create("alt_slope");
     public static final BooleanProperty COPYCAT_STYLE = BooleanProperty.create("copycat_style");
 
-
-
     private FramedProperties() { }
 }

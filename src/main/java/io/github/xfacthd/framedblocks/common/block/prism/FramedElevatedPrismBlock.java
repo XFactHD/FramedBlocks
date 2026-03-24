@@ -1,6 +1,5 @@
 package io.github.xfacthd.framedblocks.common.block.prism;
 
-import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.SlopeToggleBlock;
 import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
@@ -14,7 +13,6 @@ import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.jspecify.annotations.Nullable;
 
 public class FramedElevatedPrismBlock extends FramedBlock implements IFramedPrismBlock, SlopeToggleBlock
@@ -28,10 +26,7 @@ public class FramedElevatedPrismBlock extends FramedBlock implements IFramedPris
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        builder.add(
-                PropertyHolder.FACING_AXIS, BlockStateProperties.WATERLOGGED,
-                FramedProperties.SOLID, FramedProperties.ALT_SLOPE
-        );
+        builder.add(PropertyHolder.FACING_AXIS);
     }
 
     @Override

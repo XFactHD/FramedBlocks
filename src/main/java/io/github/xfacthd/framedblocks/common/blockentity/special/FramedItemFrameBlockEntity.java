@@ -68,7 +68,7 @@ public class FramedItemFrameBlockEntity extends FramedBlockEntity implements Ite
                 MapId mapId = Objects.requireNonNull(heldItem.get(DataComponents.MAP_ID));
                 for (Player player : level().players())
                 {
-                    mapData.tickCarriedBy(player, heldItem);
+                    mapData.tickCarriedBy(player, heldItem, null);
                     Packet<?> packet = mapData.getUpdatePacket(mapId, player);
                     if (packet != null)
                     {
@@ -197,7 +197,7 @@ public class FramedItemFrameBlockEntity extends FramedBlockEntity implements Ite
         if (mapItem != mapState)
         {
             level().setBlockAndUpdate(worldPosition, getBlockState().setValue(PropertyHolder.MAP_FRAME, mapItem));
-            mapTickCount = mapTickOffset = mapItem ? level().random.nextInt(MAP_UPDATE_INTERVAL) : 0;
+            mapTickCount = mapTickOffset = mapItem ? level().getRandom().nextInt(MAP_UPDATE_INTERVAL) : 0;
             return true;
         }
         return false;

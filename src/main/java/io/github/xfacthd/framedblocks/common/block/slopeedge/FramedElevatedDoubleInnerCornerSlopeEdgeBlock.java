@@ -39,7 +39,7 @@ public class FramedElevatedDoubleInnerCornerSlopeEdgeBlock extends FramedDoubleB
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        builder.add(FramedProperties.FACING_HOR, PropertyHolder.CORNER_TYPE, FramedProperties.ALT_SLOPE);
+        builder.add(FramedProperties.FACING_HOR, PropertyHolder.CORNER_TYPE);
     }
 
     @Override

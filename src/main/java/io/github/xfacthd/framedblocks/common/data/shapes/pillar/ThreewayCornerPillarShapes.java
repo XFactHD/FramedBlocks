@@ -35,7 +35,5 @@ public final class ThreewayCornerPillarShapes
         return ShapeContainer.of(map);
     }
 
-
-
     private ThreewayCornerPillarShapes() { }
 }

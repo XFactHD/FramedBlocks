@@ -42,8 +42,6 @@ public enum StairsType implements StringRepresentable
         return this == TOP_CCW || this == BOTTOM_CCW || this == TOP_BOTH || this == BOTTOM_BOTH;
     }
 
-
-
     public static StairsType get(boolean top, boolean fwd, boolean ccw)
     {
         if (fwd && ccw)

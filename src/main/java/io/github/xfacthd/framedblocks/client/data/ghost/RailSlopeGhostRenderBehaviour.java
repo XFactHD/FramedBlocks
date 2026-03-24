@@ -28,6 +28,7 @@ public final class RailSlopeGhostRenderBehaviour implements GhostRenderBehaviour
 
     @Override
     @Nullable
+    @SuppressWarnings("deprecation")
     public BlockState getRenderState(
             ItemStack stack,
             @Nullable ItemStack proxiedStack,
@@ -44,7 +45,6 @@ public final class RailSlopeGhostRenderBehaviour implements GhostRenderBehaviour
             {
                 return null;
             }
-            //noinspection deprecation
             return block.defaultBlockState().setValue(block.getShapeProperty(), shape);
         }
         return null;

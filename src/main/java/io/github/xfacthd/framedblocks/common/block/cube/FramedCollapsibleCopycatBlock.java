@@ -22,7 +22,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -53,7 +52,7 @@ public class FramedCollapsibleCopycatBlock extends FramedBlock
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        builder.add(PropertyHolder.SOLID_FACES, PropertyHolder.COPYCAT_ROTATION, BlockStateProperties.WATERLOGGED);
+        builder.add(PropertyHolder.SOLID_FACES, PropertyHolder.COPYCAT_ROTATION);
     }
 
     @Override
@@ -121,7 +120,6 @@ public class FramedCollapsibleCopycatBlock extends FramedBlock
     {
         super.setPlacedBy(level, pos, state, placer, stack);
 
-        //noinspection ConstantConditions
         if (!level.isClientSide() && stack.get(DataComponents.BLOCK_ENTITY_DATA) != null)
         {
             //Properly set face solidity when placed from a stack with BE NBT data

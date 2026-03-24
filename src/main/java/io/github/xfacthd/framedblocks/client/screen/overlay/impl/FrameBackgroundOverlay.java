@@ -6,7 +6,7 @@ import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.block.interactive.FramedItemFrameBlock;
 import io.github.xfacthd.framedblocks.common.config.ClientConfig;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
@@ -52,7 +52,7 @@ public final class FrameBackgroundOverlay extends BlockInteractOverlay
     }
 
     @Override
-    public void renderAfterIcon(GuiGraphics graphics, Texture tex, int texX, int texY, Target target)
+    public void renderAfterIcon(GuiGraphicsExtractor graphics, Texture tex, int texX, int texY, Target target)
     {
         TEXTURE_LEATHER.draw(graphics, texX + 3, texY + 3);
         if (!target.state().getValue(PropertyHolder.LEATHER))

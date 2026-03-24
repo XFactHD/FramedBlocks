@@ -5,10 +5,8 @@ import io.github.xfacthd.framedblocks.api.model.geometry.OverlayPartGenerator;
 import io.github.xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.common.config.ClientConfig;
-import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.Identifier;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.properties.AttachFace;
@@ -16,29 +14,29 @@ import org.jspecify.annotations.Nullable;
 
 public class FramedStoneButtonGeometry extends FramedButtonGeometry
 {
-    private static final Identifier FRAME_LOCATION_FRONT = Utils.id("block/stone_button_frame_front");
-    private static final Identifier FRAME_LOCATION_NARROW = Utils.id("block/stone_button_frame_narrow");
-    private static final Identifier FRAME_LOCATION_WIDE = Utils.id("block/stone_button_frame_wide");
+    private static final Material FRAME_LOCATION_FRONT = new Material(Utils.id("block/stone_button_frame_front"));
+    private static final Material FRAME_LOCATION_NARROW = new Material(Utils.id("block/stone_button_frame_narrow"));
+    private static final Material FRAME_LOCATION_WIDE = new Material(Utils.id("block/stone_button_frame_wide"));
 
-    private final TextureAtlasSprite frameSpriteFront;
-    private final TextureAtlasSprite frameSpriteNarrow;
-    private final TextureAtlasSprite frameSpriteWide;
+    private final Material.Baked frameMaterialFront;
+    private final Material.Baked frameMaterialNarrow;
+    private final Material.Baked frameMaterialWide;
     private final @Nullable Direction[] overlayCullFaces;
-    private final OverlayPartGenerator.SpriteGetter overlaySpriteGetter;
+    private final OverlayPartGenerator.MaterialGetter overlayMaterialGetter;
 
     private FramedStoneButtonGeometry(GeometryFactory.Context ctx)
     {
         super(ctx);
-        this.frameSpriteFront = ctx.textureLookup().get(FRAME_LOCATION_FRONT);
-        this.frameSpriteNarrow = ctx.textureLookup().get(FRAME_LOCATION_NARROW);
-        this.frameSpriteWide = ctx.textureLookup().get(FRAME_LOCATION_WIDE);
+        this.frameMaterialFront = ctx.materialLookup().getMaterial(FRAME_LOCATION_FRONT);
+        this.frameMaterialNarrow = ctx.materialLookup().getMaterial(FRAME_LOCATION_NARROW);
+        this.frameMaterialWide = ctx.materialLookup().getMaterial(FRAME_LOCATION_WIDE);
         this.overlayCullFaces = new @Nullable Direction[] { facing.getOpposite(), null };
         Direction.Axis wideAxis = face == AttachFace.WALL ? Direction.Axis.Y : dir.getAxis();
-        this.overlaySpriteGetter = dir ->
+        this.overlayMaterialGetter = dir ->
         {
-            if (dir.getAxis() == facing.getAxis()) return frameSpriteFront;
-            if (dir.getAxis() == wideAxis) return frameSpriteWide;
-            return frameSpriteNarrow;
+            if (dir.getAxis() == facing.getAxis()) return frameMaterialFront;
+            if (dir.getAxis() == wideAxis) return frameMaterialWide;
+            return frameMaterialNarrow;
         };
     }
 
@@ -51,7 +49,7 @@ public class FramedStoneButtonGeometry extends FramedButtonGeometry
     @Override
     public void generateOverlayParts(OverlayPartGenerator generator, RandomSource rand, @Nullable Object cacheKeyUserData)
     {
-        generator.generate(overlayCullFaces, overlaySpriteGetter, frameSpriteFront, ChunkSectionLayer.CUTOUT, Blocks.STONE.defaultBlockState());
+        generator.generate(overlayCullFaces, overlayMaterialGetter, frameMaterialFront, Blocks.STONE.defaultBlockState());
     }
 
     @Override

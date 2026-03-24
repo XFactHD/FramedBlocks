@@ -22,7 +22,7 @@ public final class DeferredBlockEntityRegister extends DeferredRegister<BlockEnt
     }
 
     @Override
-    @SuppressWarnings({ "unchecked", "NullableProblems" })
+    @SuppressWarnings("unchecked")
     protected <I extends BlockEntityType<?>> DeferredHolder<BlockEntityType<?>, I> createHolder(
             ResourceKey<? extends Registry<BlockEntityType<?>>> registryKey, Identifier key
     )

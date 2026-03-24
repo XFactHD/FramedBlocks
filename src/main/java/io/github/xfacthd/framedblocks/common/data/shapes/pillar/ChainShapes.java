@@ -32,7 +32,5 @@ public final class ChainShapes
         return ShapeContainer.of(map);
     }
 
-
-
     private ChainShapes() { }
 }

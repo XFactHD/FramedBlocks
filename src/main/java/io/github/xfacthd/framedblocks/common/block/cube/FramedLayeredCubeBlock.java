@@ -1,7 +1,6 @@
 package io.github.xfacthd.framedblocks.common.block.cube;
 
 import io.github.xfacthd.framedblocks.api.block.BlockUtils;
-import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
 import io.github.xfacthd.framedblocks.api.camo.CamoList;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
@@ -36,7 +35,7 @@ public class FramedLayeredCubeBlock extends FramedBlock
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        builder.add(BlockStateProperties.FACING, BlockStateProperties.LAYERS, FramedProperties.SOLID, BlockStateProperties.WATERLOGGED);
+        builder.add(BlockStateProperties.FACING, BlockStateProperties.LAYERS);
     }
 
     @Override

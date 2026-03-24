@@ -34,6 +34,8 @@ public final class FramedRecipeProvider extends AbstractFramedRecipeProvider
     @Override
     protected void buildRecipes()
     {
+        // region Framed Blocks
+
         shapedBuildingBlock(FBContent.BLOCK_FRAMED_CUBE.value(), 4)
                 .pattern("PSP")
                 .pattern("S S")
@@ -1499,7 +1501,9 @@ public final class FramedRecipeProvider extends AbstractFramedRecipeProvider
                 .unlockedBy(Items.COPPER_TORCH)
                 .save(output);
 
+        // endregion
 
+        // region Special Blocks
 
         shapedRecipe(RecipeCategory.TOOLS, FBContent.BLOCK_FRAMING_SAW.value())
                 .pattern(" I ")
@@ -1518,7 +1522,9 @@ public final class FramedRecipeProvider extends AbstractFramedRecipeProvider
                 .unlockedBy(FBContent.BLOCK_FRAMED_CUBE)
                 .save(output);
 
+        // endregion
 
+        // region Items
 
         shapedRecipe(RecipeCategory.TOOLS, FBContent.ITEM_FRAMED_HAMMER.value())
                 .pattern(" F ")
@@ -1601,7 +1607,9 @@ public final class FramedRecipeProvider extends AbstractFramedRecipeProvider
                 .unlockedBy(Tags.Items.DUSTS_GLOWSTONE)
                 .save(output);
 
+        // endregion
 
+        // region Shape Rotations
 
         makeRotationRecipe(FBContent.BLOCK_FRAMED_SLAB, FBContent.BLOCK_FRAMED_PANEL, output);
         makeRotationRecipe(FBContent.BLOCK_FRAMED_DIVIDED_SLAB, FBContent.BLOCK_FRAMED_DIVIDED_PANEL_HOR, output);
@@ -1625,10 +1633,14 @@ public final class FramedRecipeProvider extends AbstractFramedRecipeProvider
         makeRotationRecipe(FBContent.BLOCK_FRAMED_FLAT_STACKED_INNER_SLOPE_SLAB_CORNER, FBContent.BLOCK_FRAMED_FLAT_STACKED_INNER_SLOPE_PANEL_CORNER, output);
         makeRotationRecipe(FBContent.BLOCK_FRAMED_CENTERED_SLAB, FBContent.BLOCK_FRAMED_CENTERED_PANEL, output);
 
+        // endregion
 
+        // region Special Recipes
 
-        SpecialRecipeBuilder.special(category -> new CamoApplicationRecipe(category, Ingredient.of(Items.BRUSH)))
+        SpecialRecipeBuilder.special(() -> new CamoApplicationRecipe(Ingredient.of(Items.BRUSH)))
                 .save(output, key("camo_application"));
+
+        // endregion
     }
 
     private void makeRotationRecipe(Holder<Block> first, Holder<Block> second, RecipeOutput consumer)

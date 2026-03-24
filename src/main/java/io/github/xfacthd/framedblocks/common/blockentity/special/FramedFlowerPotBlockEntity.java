@@ -97,7 +97,6 @@ public class FramedFlowerPotBlockEntity extends FramedBlockEntity
     }
 
     @Override
-    @SuppressWarnings("DeconstructionCanBeUsed") // IDEA is broken
     protected void applyCustomDataFromBlueprint(TypedDataComponent<?> auxData)
     {
         if (auxData.value() instanceof PottedFlower flower && !flower.isEmpty())

@@ -20,8 +20,8 @@ import java.util.function.Function;
 
 public enum HorizontalRotation implements StringRepresentable
 {
-    UP   (dir -> Direction.UP,   Shapes.box( 0, .5, 0,  1,  1, 1), Shapes.box( 0, .5, 0, .5,  1, 1), Quaternions.ONE),
-    DOWN (dir -> Direction.DOWN, Shapes.box( 0,  0, 0,  1, .5, 1), Shapes.box(.5,  0, 0,  1, .5, 1), Quaternions.ZP_180),
+    UP   (_ -> Direction.UP,   Shapes.box( 0, .5, 0,  1,  1, 1), Shapes.box( 0, .5, 0, .5,  1, 1), Quaternions.ONE),
+    DOWN (_ -> Direction.DOWN, Shapes.box( 0,  0, 0,  1, .5, 1), Shapes.box(.5,  0, 0,  1, .5, 1), Quaternions.ZP_180),
     RIGHT(Direction::getClockWise,        Shapes.box(.5,  0, 0,  1,  1, 1), Shapes.box(.5, .5, 0,  1,  1, 1), Quaternions.ZP_90),
     LEFT (Direction::getCounterClockWise, Shapes.box( 0,  0, 0, .5,  1, 1), Shapes.box( 0,  0, 0, .5, .5, 1), Quaternions.ZN_90);
 

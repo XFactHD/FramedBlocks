@@ -77,7 +77,5 @@ public final class ExtendedSlopePanelShapes implements ShapeGenerator
         });
     }
 
-
-
     private record ShapeKey(Direction dir, HorizontalRotation rot) { }
 }

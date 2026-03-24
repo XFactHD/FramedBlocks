@@ -8,8 +8,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.data.recipes.RecipeBuilder;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.ItemLike;
@@ -21,16 +20,14 @@ public final class FramingSawRecipeBuilder implements RecipeBuilder
 {
     public static final int MAX_ADDITIVE_COUNT = 3;
 
-    private final Item result;
-    private final int count;
+    private final ItemStackTemplate result;
     private int material = 0;
     private List<Additive> additives = List.of();
     private boolean disabled = false;
 
     public FramingSawRecipeBuilder(ItemLike result, int count)
     {
-        this.result = result.asItem();
-        this.count = count;
+        this.result = new ItemStackTemplate(result.asItem(), count);
     }
 
     public static <T extends ItemLike> FramingSawRecipeBuilder builder(Holder<T> result)
@@ -97,19 +94,19 @@ public final class FramingSawRecipeBuilder implements RecipeBuilder
     }
 
     @Override
-    public Item getResult()
+    public ResourceKey<Recipe<?>> defaultId()
     {
-        return result;
+        return RecipeBuilder.getDefaultRecipeId(result);
     }
 
     @Override
     public void save(RecipeOutput output, ResourceKey<Recipe<?>> recipeId)
     {
         Preconditions.checkState(material > 0, "Material value not set");
-        Preconditions.checkState(material / count * count == material, "Material value not divisible by result size");
+        Preconditions.checkState(material / result.count() * result.count() == material, "Material value not divisible by result size");
 
         recipeId = ResourceKey.create(Registries.RECIPE, recipeId.identifier().withPrefix("framing_saw/"));
-        Recipe<?> recipe = InternalAPI.INSTANCE.makeFramingSawRecipe(material, additives, new ItemStack(result, count), disabled);
+        Recipe<?> recipe = InternalAPI.INSTANCE.makeFramingSawRecipe(material, additives, result, disabled);
         output.accept(recipeId, recipe, null);
     }
 

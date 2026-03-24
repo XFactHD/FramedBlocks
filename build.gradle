@@ -1,7 +1,7 @@
 plugins {
     id 'java-library'
     id 'maven-publish'
-    id 'net.neoforged.moddev' version '2.0.134'
+    id 'net.neoforged.moddev' version '2.0.140'
 }
 
 version = mod_version
@@ -11,7 +11,7 @@ base {
     archivesName = 'FramedBlocks'
 }
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+java.toolchain.languageVersion = JavaLanguageVersion.of(25)
 
 sourceSets {
     main.resources {
@@ -43,16 +43,11 @@ neoForge {
 
     interfaceInjectionData = files('src/main/resources/injected_interfaces.json')
 
-    parchment {
-        minecraftVersion = project.parchment_minecraft_version
-        mappingsVersion = project.parchment_mappings_version
-    }
-
     runs {
         configureEach {
             // systemProperty  'neoforge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-            systemProperty 'neoforge.enabledGameTestNamespaces', 'framedblocks'
-            systemProperty 'terminal.ansi', 'true'
+            systemProperty('neoforge.enabledGameTestNamespaces', 'framedblocks')
+            systemProperty('terminal.ansi', 'true')
 
             logLevel = org.slf4j.event.Level.DEBUG
 
@@ -62,13 +57,15 @@ neoForge {
         client {
             client()
             gameDirectory = project.file('run')
+
+            //systemProperty('framedblocks.quad_modifier.check_leaks', 'true')
         }
 
         server {
             server()
             gameDirectory = project.file('run_server')
 
-            programArgument '--nogui'
+            programArgument('--nogui')
         }
 
         data {
@@ -199,6 +196,14 @@ repositories {
             includeGroup('fuzs.diagonalblocks')
         }
     }
+    maven {
+        name = "Maven for PR #2879" // https://github.com/neoforged/NeoForge/pull/2879
+        url = uri("https://prmaven.neoforged.net/NeoForge/pr2879")
+        content {
+            includeModule("net.neoforged", "neoforge")
+            includeModule("net.neoforged", "testframework")
+        }
+    }
 }
 
 // Sets up a dependency configuration called 'localRuntime'.
@@ -222,7 +227,7 @@ dependencies {
 
     compileOnly("mezz.jei:jei-${jei_mc_version}-common-api:${jei_version}")
     compileOnly("mezz.jei:jei-${jei_mc_version}-neoforge-api:${jei_version}")
-    localRuntime("mezz.jei:jei-${jei_mc_version}-neoforge:${jei_version}")
+    //localRuntime("mezz.jei:jei-${jei_mc_version}-neoforge:${jei_version}")
 
     compileOnly("dev.emi:emi-neoforge:${emi_version}+${emi_mc_version}:api")
     //localRuntime("dev.emi:emi-neoforge:${emi_version}+${emi_mc_version}")

@@ -30,8 +30,6 @@ public final class PoweredFramingSawGhostIngredientHandler implements IGhostIngr
     @Override
     public void onComplete() { }
 
-
-
     private record SawTarget(PoweredFramingSawScreen screen, Rect2i area) implements Target<ItemStack>
     {
         private SawTarget(PoweredFramingSawScreen screen)

@@ -20,7 +20,7 @@ import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import mezz.jei.api.recipe.types.IRecipeType;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.context.ContextMap;
@@ -157,7 +157,7 @@ public final class FramingSawRecipeCategory implements IRecipeCategory<FramingSa
         );
 
         ItemStack inputStack = new ItemStack(input, calc.getInputCount());
-        ItemStack outputStack = recipe.getResult().copy();
+        ItemStack outputStack = recipe.getResultStack().copy();
         int outputCount = calc.getOutputCount();
         outputStack.setCount(outputCount);
 
@@ -166,7 +166,7 @@ public final class FramingSawRecipeCategory implements IRecipeCategory<FramingSa
         ContextMap context = SlotDisplayContext.fromLevel(Objects.requireNonNull(Minecraft.getInstance().level));
         for (FramingSawRecipeAdditive additive : additives)
         {
-            int addCount = additive.count() * (outputCount / recipe.getResult().getCount());
+            int addCount = additive.count() * (outputCount / recipe.getResult().count());
             List<ItemStack> additiveStacks = additive.ingredient()
                     .display()
                     .resolve(context, SlotDisplay.ItemStackContentsFactory.INSTANCE)
@@ -191,7 +191,7 @@ public final class FramingSawRecipeCategory implements IRecipeCategory<FramingSa
     }
 
     @Override
-    public void draw(FramingSawRecipe recipe, IRecipeSlotsView slots, GuiGraphics graphics, double mouseX, double mouseY)
+    public void draw(FramingSawRecipe recipe, IRecipeSlotsView slots, GuiGraphicsExtractor graphics, double mouseX, double mouseY)
     {
         background.draw(graphics);
 

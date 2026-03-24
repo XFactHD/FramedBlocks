@@ -11,6 +11,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeHolder;
@@ -158,7 +159,7 @@ public final class CamoRecipeManagerPlugin implements ISimpleRecipeManagerPlugin
         Ingredient copyTool = camoCraftingHelper.getCopyToolIngredient();
         Ingredient camoOneIngredient = camoOne.map(stack -> Ingredient.of(stack.getItem()), CamoCraftingHelper::makeDummyIngredient);
         Ingredient secondInputStacks = camoTwo.map(stack -> Ingredient.of(stack.getItem()), CamoCraftingHelper::makeDummyIngredient);
-        JeiCamoApplicationRecipe recipe = new JeiCamoApplicationRecipe(frameIngredient, copyTool, camoOneIngredient, secondInputStacks, result);
+        JeiCamoApplicationRecipe recipe = new JeiCamoApplicationRecipe(frameIngredient, copyTool, camoOneIngredient, secondInputStacks, result.map(ItemStackTemplate::fromNonEmptyStack));
 
         Identifier Identifier = generateId(frame, camoOne, camoTwo);
         return new RecipeHolder<>(ResourceKey.create(Registries.RECIPE, Identifier), recipe);

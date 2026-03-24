@@ -45,7 +45,5 @@ final class FramedBlockInternals
         return state.blocksMotion() && state.isCollisionShapeFullBlock(level, pos);
     }
 
-
-
     private FramedBlockInternals() { }
 }

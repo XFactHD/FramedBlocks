@@ -4,8 +4,8 @@ import com.mojang.datafixers.util.Either;
 import io.github.xfacthd.framedblocks.api.internal.InternalClientAPI;
 import io.github.xfacthd.framedblocks.api.model.standalone.StandaloneWrapperKey;
 import net.minecraft.client.data.models.blockstates.BlockModelDefinitionGenerator;
-import net.minecraft.client.renderer.block.model.BlockModelDefinition;
-import net.minecraft.client.renderer.block.model.SingleVariant;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModelDispatcher;
+import net.minecraft.client.renderer.block.dispatch.SingleVariant;
 import net.minecraft.world.level.block.Block;
 
 import java.util.HashMap;
@@ -16,11 +16,11 @@ import java.util.Optional;
 public final class FramedBlockModelDefinitionGenerator implements BlockModelDefinitionGenerator
 {
     private final Block block;
-    private final Either<BlockModelDefinition, SingleVariant.Unbaked> baseModel;
+    private final Either<BlockStateModelDispatcher, SingleVariant.Unbaked> baseModel;
     private final Optional<StandaloneWrapperKey<?>> wrapperKey;
     private final Map<String, SingleVariant.Unbaked> auxModels = new HashMap<>();
 
-    FramedBlockModelDefinitionGenerator(Block block, BlockModelDefinition definition, Optional<StandaloneWrapperKey<?>> wrapperKey)
+    FramedBlockModelDefinitionGenerator(Block block, BlockStateModelDispatcher definition, Optional<StandaloneWrapperKey<?>> wrapperKey)
     {
         this.block = block;
         this.baseModel = Either.left(definition);
@@ -47,7 +47,7 @@ public final class FramedBlockModelDefinitionGenerator implements BlockModelDefi
     }
 
     @Override
-    public BlockModelDefinition create()
+    public BlockStateModelDispatcher create()
     {
         return InternalClientAPI.INSTANCE.createFramedBlockDefinition(baseModel, auxModels, wrapperKey);
     }

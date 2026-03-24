@@ -31,7 +31,5 @@ public final class DoubleHalfSlopeShapes
         return ShapeContainer.of(map);
     }
 
-
-
     private DoubleHalfSlopeShapes() { }
 }

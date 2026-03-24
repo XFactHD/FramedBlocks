@@ -26,7 +26,5 @@ public final class CornerPillarShapes
         return ShapeContainer.of(map);
     }
 
-
-
     private CornerPillarShapes() { }
 }

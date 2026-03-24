@@ -58,8 +58,7 @@ public class FramedGateBlock extends FramedBlock
                 BlockStateProperties.HORIZONTAL_FACING,
                 BlockStateProperties.DOOR_HINGE,
                 BlockStateProperties.OPEN,
-                BlockStateProperties.POWERED,
-                FramedProperties.SOLID
+                BlockStateProperties.POWERED
         );
     }
 
@@ -201,8 +200,6 @@ public class FramedGateBlock extends FramedBlock
     {
         return defaultBlockState();
     }
-
-
 
     public static FramedGateBlock wood(Properties props)
     {

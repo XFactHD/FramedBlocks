@@ -18,7 +18,7 @@ public sealed class FramingSawGuiContainerHandler<T extends FramingSawScreen> im
         FramingSawScreen.PointedRecipe recipe = screen.getRecipeAt(mouseX, mouseY);
         if (recipe != null)
         {
-            return factory.createBuilder(recipe.recipe().getResult()).buildWithArea(recipe.area());
+            return factory.createBuilder(recipe.recipe().getResultStack()).buildWithArea(recipe.area());
         }
         return Optional.empty();
     }

@@ -12,7 +12,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SignBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
-public final class FramedBlockMovementChecks implements
+final class FramedBlockMovementChecks implements
         BlockMovementChecks.MovementNecessaryCheck,
         BlockMovementChecks.MovementAllowedCheck,
         BlockMovementChecks.BrittleCheck,
@@ -63,8 +63,6 @@ public final class FramedBlockMovementChecks implements
     {
         return BlockMovementChecks.CheckResult.PASS;
     }
-
-
 
     private static BlockMovementChecks.CheckResult result(boolean value)
     {

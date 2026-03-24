@@ -135,7 +135,5 @@ public final class ThreewayCornerSlopeEdgeShapes implements ShapeGenerator
         }
     }
 
-
-
     public record ShapeKey(boolean top, boolean altType) { }
 }

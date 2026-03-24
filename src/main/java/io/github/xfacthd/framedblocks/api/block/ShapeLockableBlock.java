@@ -53,7 +53,7 @@ public interface ShapeLockableBlock extends IFramedBlock
         {
             BlockState state = level.getBlockState(pos);
             boolean locked = state.getValue(FramedProperties.STATE_LOCKED);
-            player.displayClientMessage(Component.translatable(LOCK_MESSAGE, locked ? STATE_UNLOCKED : STATE_LOCKED), true);
+            player.sendOverlayMessage(Component.translatable(LOCK_MESSAGE, locked ? STATE_UNLOCKED : STATE_LOCKED));
 
             level.setBlockAndUpdate(pos, state.cycle(FramedProperties.STATE_LOCKED));
         }

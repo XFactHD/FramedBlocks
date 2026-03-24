@@ -7,38 +7,40 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.api.block.overlay.BlockOverlay;
+import io.github.xfacthd.framedblocks.api.block.overlay.TintSource;
+import io.github.xfacthd.framedblocks.api.camo.CamoContainer;
+import io.github.xfacthd.framedblocks.api.camo.CamoContainerHelper;
 import io.github.xfacthd.framedblocks.api.camo.CamoList;
-import io.github.xfacthd.framedblocks.api.model.AbstractFramedBlockModel;
+import io.github.xfacthd.framedblocks.api.model.AbstractFramedBlockStateModel;
 import io.github.xfacthd.framedblocks.api.model.item.AbstractFramedBlockItemModel;
 import io.github.xfacthd.framedblocks.api.model.item.ItemModelInfo;
 import io.github.xfacthd.framedblocks.api.model.item.block.BlockItemModelProvider;
-import io.github.xfacthd.framedblocks.api.model.item.tint.DynamicItemTintProvider;
-import io.github.xfacthd.framedblocks.api.model.item.tint.FramedBlockItemTintProvider;
 import io.github.xfacthd.framedblocks.api.model.util.ModelUtils;
-import io.github.xfacthd.framedblocks.api.model.util.QuadUtils;
-import io.github.xfacthd.framedblocks.api.render.RenderUtils;
+import io.github.xfacthd.framedblocks.api.model.util.TintUtils;
+import io.github.xfacthd.framedblocks.api.render.fakelevel.FreestandingBlockRenderFakeLevel;
 import io.github.xfacthd.framedblocks.api.util.ConfigView;
-import io.github.xfacthd.framedblocks.api.util.SingleBlockFakeLevel;
 import io.github.xfacthd.framedblocks.api.util.Utils;
-import it.unimi.dsi.fastutil.ints.Int2IntMap;
-import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
+import it.unimi.dsi.fastutil.ints.IntArrayList;
+import it.unimi.dsi.fastutil.ints.IntList;
+import it.unimi.dsi.fastutil.ints.IntLists;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.block.model.BlockModelPart;
-import net.minecraft.client.renderer.block.model.BlockStateModel;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
-import net.minecraft.client.renderer.block.model.TextureSlots;
-import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
-import net.minecraft.client.renderer.item.BlockModelWrapper;
+import net.minecraft.client.renderer.block.BlockAndTintGetter;
+import net.minecraft.client.renderer.block.dispatch.BlockModelRotation;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModelPart;
+import net.minecraft.client.renderer.item.CuboidItemModelWrapper;
+import net.minecraft.client.resources.model.cuboid.ItemTransforms;
+import net.minecraft.client.resources.model.geometry.BakedQuad;
 import net.minecraft.client.renderer.item.ItemModel;
 import net.minecraft.client.renderer.item.ItemModelResolver;
 import net.minecraft.client.renderer.item.ItemStackRenderState;
 import net.minecraft.client.renderer.item.ModelRenderProperties;
-import net.minecraft.client.renderer.rendertype.RenderType;
-import net.minecraft.client.resources.model.BlockModelRotation;
 import net.minecraft.client.resources.model.ModelBaker;
 import net.minecraft.client.resources.model.ResolvedModel;
+import net.minecraft.client.resources.model.geometry.QuadCollection;
+import net.minecraft.client.resources.model.sprite.TextureSlots;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
@@ -48,13 +50,12 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.ItemOwner;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.BlockAndTintGetter;
-import net.minecraft.world.level.EmptyBlockAndTintGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.client.model.quad.BakedColors;
 import net.neoforged.neoforge.common.util.Lazy;
 import net.neoforged.neoforge.model.data.ModelData;
+import org.joml.Matrix4f;
+import org.joml.Matrix4fc;
 import org.joml.Vector3fc;
 import org.jspecify.annotations.Nullable;
 
@@ -71,20 +72,19 @@ public final class FramedBlockItemModel extends AbstractFramedBlockItemModel
     private static final Direction[] DIRECTIONS = Arrays.copyOf(Direction.values(), 7);
     private static final Identifier ERROR_MODEL_LOCATION = Utils.id("item/error");
 
-    private final Map<Object, ModelSet> itemModelCache = new Object2ObjectOpenHashMap<>();
+    private final Map<Object, ModelEntry> itemModelCache = new Object2ObjectOpenHashMap<>();
     private final BlockState state;
     private final Supplier<BlockStateModel> modelSupplier;
     private final boolean nonStandardModelProvider;
-    private final DynamicItemTintProvider tintProvider;
     private final ItemTransforms itemTransforms;
     private final ItemModel errorModel;
     private final Supplier<Vector3fc[]> extents;
+    private final List<BlockStateModelPart> partScratchList = new ObjectArrayList<>();
 
     private FramedBlockItemModel(
             BlockState state,
             Supplier<BlockStateModel> modelSupplier,
             boolean nonStandardModelProvider,
-            DynamicItemTintProvider tintProvider,
             ItemTransforms itemTransforms,
             ItemModel errorModel
     )
@@ -92,24 +92,18 @@ public final class FramedBlockItemModel extends AbstractFramedBlockItemModel
         this.state = state;
         this.modelSupplier = Lazy.of(modelSupplier);
         this.nonStandardModelProvider = nonStandardModelProvider;
-        this.tintProvider = tintProvider;
         this.itemTransforms = itemTransforms;
         this.errorModel = errorModel;
         this.extents = Suppliers.memoize(() ->
         {
             BlockStateModel model = this.modelSupplier.get();
             ItemModelInfo modelInfo = ItemModelInfo.DEFAULT;
-            if (model instanceof AbstractFramedBlockModel blockModel)
+            if (model instanceof AbstractFramedBlockStateModel blockModel)
             {
                 modelInfo = Objects.requireNonNullElse(blockModel.getItemModelInfo(), ItemModelInfo.DEFAULT);
             }
-            ModelSet modelSet = getOrCreateModelSet(ItemStack.EMPTY, CamoList.EMPTY, null, modelInfo);
-            ArrayList<BakedQuad> allQuads = new ArrayList<>();
-            for (ModelEntry modelEntry : modelSet.models)
-            {
-                Utils.copyAll(modelEntry.quads, allQuads);
-            }
-            return BlockModelWrapper.computeExtents(allQuads);
+            ModelEntry modelEntry = getOrCreateModelEntry(ItemStack.EMPTY, CamoList.EMPTY, null, modelInfo);
+            return CuboidItemModelWrapper.computeExtents(modelEntry.quads);
         });
     }
 
@@ -126,7 +120,7 @@ public final class FramedBlockItemModel extends AbstractFramedBlockItemModel
     {
         BlockStateModel model = modelSupplier.get();
         ItemModelInfo itemModelInfo;
-        if (!(model instanceof AbstractFramedBlockModel blockModel) || (itemModelInfo = blockModel.getItemModelInfo()) == null)
+        if (!(model instanceof AbstractFramedBlockStateModel blockModel) || (itemModelInfo = blockModel.getItemModelInfo()) == null)
         {
             errorModel.update(renderState, stack, resolver, ctx, level, owner, seed);
             return;
@@ -136,10 +130,10 @@ public final class FramedBlockItemModel extends AbstractFramedBlockItemModel
         CamoList camos = showCamo ? stack.getOrDefault(Utils.DC_TYPE_CAMO_LIST, CamoList.EMPTY) : CamoList.EMPTY;
         Holder<BlockOverlay> overlay = showCamo ? stack.get(Utils.DC_TYPE_BLOCK_OVERLAY) : null;
 
-        ModelSet modelSet;
+        ModelEntry modelEntry;
         try
         {
-            modelSet = getOrCreateModelSet(stack, camos, overlay, itemModelInfo);
+            modelEntry = getOrCreateModelEntry(stack, camos, overlay, itemModelInfo);
         }
         catch (Throwable ignored)
         {
@@ -148,90 +142,81 @@ public final class FramedBlockItemModel extends AbstractFramedBlockItemModel
         }
 
         renderState.appendModelIdentityElement(this);
-        if (!modelSet.camos.isEmpty())
+        if (!modelEntry.camos.isEmpty())
         {
-            renderState.appendModelIdentityElement(modelSet.camos);
+            renderState.appendModelIdentityElement(modelEntry.camos);
         }
-        if (modelSet.overlay != null)
+        if (modelEntry.overlay != null)
         {
-            renderState.appendModelIdentityElement(modelSet.overlay);
+            renderState.appendModelIdentityElement(modelEntry.overlay);
         }
-        if (modelSet.userData != null)
+        if (modelEntry.userData != null)
         {
-            renderState.appendModelIdentityElement(modelSet.userData);
+            renderState.appendModelIdentityElement(modelEntry.userData);
         }
-        if (modelSet.animated)
+        if (modelEntry.animated)
         {
             renderState.setAnimated();
         }
-        for (ModelEntry layerModel : modelSet.models)
+
+        ItemStackRenderState.LayerRenderState layer = renderState.newLayer();
+        layer.setExtents(extents);
+        layer.prepareQuadList().addAll(modelEntry.quads);
+        modelEntry.properties.applyToLayer(layer, ctx);
+        if (!modelEntry.tints.isEmpty())
         {
-            ItemStackRenderState.LayerRenderState layer = renderState.newLayer();
-            layer.setExtents(extents);
-            layer.prepareQuadList().addAll(layerModel.quads);
-            layer.setRenderType(layerModel.renderType);
-            modelSet.properties.applyToLayer(layer, ctx);
+            layer.tintLayers().addAll(modelEntry.tints);
         }
     }
 
-    private ModelSet getOrCreateModelSet(ItemStack stack, CamoList camos, @Nullable Holder<BlockOverlay> overlay, ItemModelInfo itemModelInfo)
+    private ModelEntry getOrCreateModelEntry(ItemStack stack, CamoList camos, @Nullable Holder<BlockOverlay> overlay, ItemModelInfo itemModelInfo)
     {
         Object userData = itemModelInfo.computeCacheKey(stack);
         Object cacheKey = userData != null || overlay != null ? new CompoundCacheKey(camos, overlay, userData) : camos;
-        ModelSet modelSet = itemModelCache.get(cacheKey);
-        if (modelSet == null)
+        ModelEntry modelEntry = itemModelCache.get(cacheKey);
+        if (modelEntry == null)
         {
             BlockStateModel model = modelSupplier.get();
             ModelData data = itemModelInfo.isDataRequired() || !camos.isEmpty() ? itemModelInfo.buildItemModelData(state, camos, overlay) : ModelData.EMPTY;
-            BlockAndTintGetter level = SingleBlockFakeLevel.withoutRealLevel(state, data);
+            BlockAndTintGetter level = new FreestandingBlockRenderFakeLevel.Simple(state, data);
 
-            List<ModelEntry> models = new ArrayList<>();
-            Int2IntMap tintValues = new Int2IntOpenHashMap();
-            tintValues.defaultReturnValue(-1);
+            ArrayList<BakedQuad> allQuads = new ArrayList<>();
             boolean animated = false;
 
             RANDOM.setSeed(42);
-            for (BlockModelPart modelPart : model.collectParts(level, BlockPos.ZERO, state, RANDOM))
+            model.collectParts(level, BlockPos.ZERO, state, RANDOM, partScratchList);
+            for (BlockStateModelPart modelPart : partScratchList)
             {
-                ArrayList<BakedQuad> allQuads = new ArrayList<>();
+                animated |= (modelPart.materialFlags() & BakedQuad.FLAG_ANIMATED) != 0;
                 for (Direction face : DIRECTIONS)
                 {
                     RANDOM.setSeed(42);
                     Utils.copyAll(modelPart.getQuads(face), allQuads);
                 }
-                for (int i = 0; i < allQuads.size(); i++)
-                {
-                    BakedQuad quad = allQuads.get(i);
-                    int tintIndex = quad.tintIndex();
-                    if (tintIndex != -1)
-                    {
-                        allQuads.set(i, bakeTint(quad, tintProvider, stack, camos, tintValues));
-                    }
-                    if (quad.sprite().contents().isAnimated())
-                    {
-                        animated = true;
-                    }
-                }
-                ChunkSectionLayer chunkLayer = modelPart.getRenderType(state);
-                models.add(new ModelEntry(allQuads, RenderUtils.getEntityRenderType(chunkLayer)));
             }
+            partScratchList.clear();
 
-            ModelRenderProperties renderProps = new ModelRenderProperties(true, model.particleIcon(EmptyBlockAndTintGetter.INSTANCE, BlockPos.ZERO, state), itemTransforms);
-            modelSet = new ModelSet(models, renderProps, camos, overlay, userData, animated);
-            itemModelCache.put(cacheKey, modelSet);
-        }
-        return modelSet;
-    }
+            int tintCount = camos.stream().mapToInt(CamoContainerHelper.Client::getTintCount).sum();
+            IntArrayList tints = new IntArrayList(tintCount);
+            if (tintCount > 0)
+            {
+                for (CamoContainer<?, ?> camo : camos)
+                {
+                    CamoContainerHelper.Client.collectTintValues(camo, stack, tints);
+                }
+            }
+            TintSource overlayTintSource;
+            if (overlay != null && (overlayTintSource = overlay.value().tintSource()) != null)
+            {
+                tints.add(TintUtils.getOverlayTintSource(overlayTintSource).color(overlayTintSource.defaultBlockState()));
+            }
+            itemModelInfo.appendTintValues(stack, tints);
 
-    private static BakedQuad bakeTint(BakedQuad quad, DynamicItemTintProvider tintProvider, ItemStack stack, CamoList camos, Int2IntMap tintValues)
-    {
-        int index = quad.tintIndex();
-        if (!tintValues.containsKey(index))
-        {
-            tintValues.put(index, tintProvider.getColor(stack, camos, index));
+            ModelRenderProperties renderProps = new ModelRenderProperties(true, model.particleMaterial(BlockAndTintGetter.EMPTY, BlockPos.ZERO, state), itemTransforms);
+            modelEntry = new ModelEntry(allQuads, renderProps, camos, tints.isEmpty() ? IntLists.emptyList() : tints, overlay, userData, animated);
+            itemModelCache.put(cacheKey, modelEntry);
         }
-        int tint = tintValues.get(index);
-        return tint == -1 ? quad : QuadUtils.setBakedColors(quad, BakedColors.of(tint), true);
+        return modelEntry;
     }
 
     public ItemTransforms getItemTransforms()
@@ -245,7 +230,7 @@ public final class FramedBlockItemModel extends AbstractFramedBlockItemModel
         itemModelCache.clear();
         // Assume that models provided by non-standard providers are "freestanding" and therefore don't get caught by
         // the clearCache() call on all AbstractFramedBlockModels in the block model "registry"
-        if (nonStandardModelProvider && modelSupplier.get() instanceof AbstractFramedBlockModel framedModel)
+        if (nonStandardModelProvider && modelSupplier.get() instanceof AbstractFramedBlockStateModel framedModel)
         {
             framedModel.clearCache();
         }
@@ -253,33 +238,31 @@ public final class FramedBlockItemModel extends AbstractFramedBlockItemModel
 
     private record CompoundCacheKey(CamoList camos, @Nullable Holder<BlockOverlay> overlay, @Nullable Object userData) { }
 
-    private record ModelSet(
-            List<ModelEntry> models,
+    private record ModelEntry(
+            List<BakedQuad> quads,
             ModelRenderProperties properties,
             CamoList camos,
+            IntList tints,
             @Nullable Holder<BlockOverlay> overlay,
             @Nullable Object userData,
             boolean animated
     ) { }
 
-    private record ModelEntry(List<BakedQuad> quads, RenderType renderType) { }
-
-    public record Unbaked(Block block, BlockItemModelProvider modelProvider, DynamicItemTintProvider tintProvider, Identifier baseModel) implements ItemModel.Unbaked
+    public record Unbaked(Block block, BlockItemModelProvider modelProvider, Identifier baseModel) implements ItemModel.Unbaked
     {
         public static final Identifier ID = Utils.id("block");
         public static final MapCodec<FramedBlockItemModel.Unbaked> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
                 BuiltInRegistries.BLOCK.byNameCodec().fieldOf("block").validate(FramedBlockItemModel.Unbaked::validateBlock).forGetter(FramedBlockItemModel.Unbaked::block),
                 BlockItemModelProviders.CODEC.optionalFieldOf("model_provider", BlockItemModelProvider.DEFAULT).forGetter(FramedBlockItemModel.Unbaked::modelProvider),
-                DynamicItemTintProviders.CODEC.optionalFieldOf("tint_provider", FramedBlockItemTintProvider.INSTANCE_SINGLE).forGetter(FramedBlockItemModel.Unbaked::tintProvider),
                 Identifier.CODEC.fieldOf("base_model").forGetter(FramedBlockItemModel.Unbaked::baseModel)
         ).apply(inst, FramedBlockItemModel.Unbaked::new));
         private static final ModelBaker.SharedOperationKey<ItemModel> ERROR_MODEL_KEY = ModelUtils.makeSharedOpsKey(baker ->
         {
             ResolvedModel model = baker.getModel(ERROR_MODEL_LOCATION);
             TextureSlots textureslots = model.getTopTextureSlots();
-            List<BakedQuad> quads = model.bakeTopGeometry(textureslots, baker, BlockModelRotation.IDENTITY).getAll();
+            QuadCollection quads = model.bakeTopGeometry(textureslots, baker, BlockModelRotation.IDENTITY);
             ModelRenderProperties renderProps = ModelRenderProperties.fromResolvedModel(baker, model, model.getTopTextureSlots());
-            return new BlockModelWrapper(List.of(), quads, renderProps, BlockModelWrapper.ITEM_RENDER_TYPE_GETTER);
+            return new CuboidItemModelWrapper(List.of(), quads, renderProps, new Matrix4f());
         });
 
         public Unbaked
@@ -288,14 +271,14 @@ public final class FramedBlockItemModel extends AbstractFramedBlockItemModel
         }
 
         @Override
-        public FramedBlockItemModel bake(BakingContext context)
+        public FramedBlockItemModel bake(BakingContext context, Matrix4fc transformation)
         {
             BlockState state = Objects.requireNonNull(((IFramedBlock) block).getItemModelSource());
             Supplier<BlockStateModel> modelSupplier = modelProvider.create(state, context.blockModelBaker());
             boolean nonStandardModelProvider = modelProvider != BlockItemModelProvider.DEFAULT;
             ItemTransforms transforms = context.blockModelBaker().getModel(baseModel).getTopTransforms();
             ItemModel errorModel = context.blockModelBaker().compute(ERROR_MODEL_KEY);
-            return new FramedBlockItemModel(state, modelSupplier, nonStandardModelProvider, tintProvider, transforms, errorModel);
+            return new FramedBlockItemModel(state, modelSupplier, nonStandardModelProvider, transforms, errorModel);
         }
 
         @Override

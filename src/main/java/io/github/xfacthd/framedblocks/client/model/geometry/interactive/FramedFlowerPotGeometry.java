@@ -16,13 +16,13 @@ import io.github.xfacthd.framedblocks.common.block.interactive.FramedFlowerPotBl
 import io.github.xfacthd.framedblocks.common.blockentity.special.FramedFlowerPotBlockEntity;
 import io.github.xfacthd.framedblocks.common.compat.amendments.AmendmentsCompat;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
-import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.block.model.BlockStateModel;
+import net.minecraft.client.renderer.block.BlockAndTintGetter;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
+import net.minecraft.client.resources.model.geometry.BakedQuad;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
@@ -53,6 +53,9 @@ public class FramedFlowerPotGeometry extends Geometry
                     .apply(Modifiers.cutSide(6F / 16F, 1F / 16F, 10F / 16F, 4F / 16F))
                     .apply(Modifiers.setPosition(10F / 16F))
                     .exportDirect()
+    );
+    private static final QuadListModifier PLANT_MODIFIER = QuadListModifier.filtering(quad ->
+            ClientUtils.isTexture(quad, POT_TEXTURE) || ClientUtils.isTexture(quad, DIRT_TEXTURE)
     );
 
     private final BlockState state;
@@ -119,14 +122,12 @@ public class FramedFlowerPotGeometry extends Geometry
         if (cacheKeyUserData instanceof Block block && !(potState = FramedFlowerPotBlock.getFlowerPotState(block)).isAir())
         {
             BlockStateModel potModel = ModelUtils.getModel(potState);
-            consumer.acceptAll(potModel, level, pos, random, potState, true, false, false, false, potState, (quadMap, quads, side) ->
-                    quads.removeIf(quad -> ClientUtils.isTexture(quad, POT_TEXTURE) || ClientUtils.isTexture(quad, DIRT_TEXTURE))
-            );
+            consumer.acceptAll(potModel, level, pos, random, potState, true, false, false, potState, PLANT_MODIFIER);
         }
 
         boolean camoOccludes = blockData.getCamoContent().canOcclude();
         BlockStateModel dirtModel = ModelUtils.getModel(DIRT_STATE);
-        consumer.acceptAll(dirtModel, level, pos, random, DIRT_STATE, false, true, false, false, DIRT_STATE, (quadMap, quads, side) ->
+        consumer.acceptAll(dirtModel, level, pos, random, DIRT_STATE, false, true, false, DIRT_STATE, (quadMap, quads, side) ->
         {
             if ((camoOccludes && side != Direction.UP) || side == null)
             {
@@ -145,7 +146,7 @@ public class FramedFlowerPotGeometry extends Geometry
 
         if (hanging && hangingPotModel != null)
         {
-            consumer.acceptAll(hangingPotModel, level, pos, random, state, true, false, false, false, null, null);
+            consumer.acceptAll(hangingPotModel, level, pos, random, state, true, false, false, null, null);
         }
     }
 

@@ -96,8 +96,6 @@ public enum HalfDir
         return dir;
     }
 
-
-
     private static HalfDir[][] makeDirTable()
     {
         HalfDir[][] table = new HalfDir[6][6];

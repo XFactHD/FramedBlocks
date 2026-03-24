@@ -46,8 +46,6 @@ public record FramingSawRecipeDisplay(int materialAmount, List<AdditiveDisplay> 
         return FBContent.RECIPE_DISPLAY_TYPE_FRAMING_SAW.value();
     }
 
-
-
     public record AdditiveDisplay(SlotDisplay ingredient, int count)
     {
         private static final Codec<AdditiveDisplay> CODEC = RecordCodecBuilder.create(inst -> inst.group(

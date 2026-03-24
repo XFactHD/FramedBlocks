@@ -58,8 +58,6 @@ public final class CornerStripSkipPredicate implements SideSkipPredicate
         return faceAbsent && getHalfDir(dir, type, side).isEqualTo(BoardSkipPredicate.getHalfDir(edgeMask, side.getOpposite()));
     }
 
-
-
     public static HalfDir getHalfDir(Direction dir, SlopeType type, Direction side)
     {
         Direction dirTwo = switch (type)

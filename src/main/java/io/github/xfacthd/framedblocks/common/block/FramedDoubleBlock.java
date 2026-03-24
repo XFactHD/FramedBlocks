@@ -10,12 +10,12 @@ import java.util.function.UnaryOperator;
 
 public abstract class FramedDoubleBlock extends AbstractFramedDoubleBlock implements IFramedDoubleBlockInternal
 {
-    public FramedDoubleBlock(BlockType blockType, Properties props)
+    protected FramedDoubleBlock(BlockType blockType, Properties props)
     {
         this(blockType, props, UnaryOperator.identity());
     }
 
-    public FramedDoubleBlock(BlockType blockType, Properties props, UnaryOperator<Properties> propertyModifier)
+    protected FramedDoubleBlock(BlockType blockType, Properties props, UnaryOperator<Properties> propertyModifier)
     {
         super(blockType, propertyModifier.apply(IFramedBlock.applyDefaultProperties(props, blockType)));
     }

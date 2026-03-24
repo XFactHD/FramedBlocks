@@ -12,7 +12,7 @@ import io.github.xfacthd.framedblocks.client.model.geometry.slopepanel.FramedSlo
 import io.github.xfacthd.framedblocks.client.model.geometry.slopeslab.FramedSlopeSlabGeometry;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import io.github.xfacthd.framedblocks.common.data.property.PillarConnection;
-import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.resources.model.geometry.BakedQuad;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.joml.Vector3f;

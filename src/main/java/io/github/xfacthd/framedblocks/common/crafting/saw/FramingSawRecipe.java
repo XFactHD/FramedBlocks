@@ -10,12 +10,12 @@ import io.github.xfacthd.framedblocks.api.camo.CamoList;
 import io.github.xfacthd.framedblocks.api.datagen.recipes.AbstractFramingSawRecipeProvider;
 import io.github.xfacthd.framedblocks.api.datagen.recipes.builders.FramingSawRecipeBuilder;
 import io.github.xfacthd.framedblocks.common.FBContent;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.PlacementInfo;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeBookCategory;
@@ -25,6 +25,7 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.display.RecipeDisplay;
 import net.minecraft.world.item.crafting.display.SlotDisplay;
 import net.minecraft.world.level.Level;
+import net.neoforged.neoforge.common.util.Lazy;
 
 import java.util.List;
 
@@ -35,7 +36,7 @@ public final class FramingSawRecipe implements Recipe<RecipeInput>
     public static final MapCodec<FramingSawRecipe> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
             Codec.intRange(0, Integer.MAX_VALUE).fieldOf("material").forGetter(FramingSawRecipe::getMaterialAmount),
             FramingSawRecipeAdditive.CODEC.sizeLimitedListOf(FramingSawRecipe.MAX_ADDITIVE_COUNT).optionalFieldOf("additives", List.of()).forGetter(FramingSawRecipe::getAdditives),
-            ItemStack.STRICT_CODEC.fieldOf("result").forGetter(FramingSawRecipe::getResult),
+            ItemStackTemplate.CODEC.fieldOf("result").forGetter(FramingSawRecipe::getResult),
             Codec.BOOL.optionalFieldOf("disabled", false).forGetter(FramingSawRecipe::isDisabled)
     ).apply(inst, FramingSawRecipe::new));
     public static final StreamCodec<RegistryFriendlyByteBuf, FramingSawRecipe> STREAM_CODEC = StreamCodec.composite(
@@ -43,7 +44,7 @@ public final class FramingSawRecipe implements Recipe<RecipeInput>
             FramingSawRecipe::getMaterialAmount,
             FramingSawRecipeAdditive.STREAM_CODEC.apply(ByteBufCodecs.list()),
             FramingSawRecipe::getAdditives,
-            ItemStack.STREAM_CODEC,
+            ItemStackTemplate.STREAM_CODEC,
             FramingSawRecipe::getResult,
             ByteBufCodecs.BOOL,
             FramingSawRecipe::isDisabled,
@@ -52,15 +53,17 @@ public final class FramingSawRecipe implements Recipe<RecipeInput>
 
     private final int materialAmount;
     private final List<FramingSawRecipeAdditive> additives;
-    private final ItemStack result;
+    private final ItemStackTemplate result;
+    private final Lazy<ItemStack> resultStack;
     private final IBlockType resultType;
     private final boolean disabled;
 
-    public FramingSawRecipe(int materialAmount, List<FramingSawRecipeAdditive> additives, ItemStack result, boolean disabled)
+    public FramingSawRecipe(int materialAmount, List<FramingSawRecipeAdditive> additives, ItemStackTemplate result, boolean disabled)
     {
         this.materialAmount = materialAmount;
         this.additives = additives;
         this.result = result;
+        this.resultStack = Lazy.of(result::create);
         this.resultType = findResultType(result);
         this.disabled = disabled;
     }
@@ -140,9 +143,9 @@ public final class FramingSawRecipe implements Recipe<RecipeInput>
     }
 
     @Override
-    public ItemStack assemble(RecipeInput container, HolderLookup.Provider access)
+    public ItemStack assemble(RecipeInput container)
     {
-        return result.copy();
+        return result.create();
     }
 
     public int getMaterialAmount()
@@ -155,9 +158,14 @@ public final class FramingSawRecipe implements Recipe<RecipeInput>
         return additives;
     }
 
-    public ItemStack getResult()
+    public ItemStackTemplate getResult()
     {
         return result;
+    }
+
+    public ItemStack getResultStack()
+    {
+        return resultStack.get();
     }
 
     public IBlockType getResultType()
@@ -174,6 +182,18 @@ public final class FramingSawRecipe implements Recipe<RecipeInput>
     public boolean isSpecial()
     {
         return true;
+    }
+
+    @Override
+    public boolean showNotification()
+    {
+        return false;
+    }
+
+    @Override
+    public String group()
+    {
+        return "";
     }
 
     @Override
@@ -210,11 +230,9 @@ public final class FramingSawRecipe implements Recipe<RecipeInput>
         return FBContent.RECIPE_TYPE_FRAMING_SAW_RECIPE.value();
     }
 
-
-
-    private static IBlockType findResultType(ItemStack result)
+    private static IBlockType findResultType(ItemStackTemplate result)
     {
-        if (!(result.getItem() instanceof BlockItem item))
+        if (!(result.item().value() instanceof BlockItem item))
         {
             throw new JsonSyntaxException("Result items must be BlockItems");
         }

@@ -10,9 +10,9 @@ import io.github.xfacthd.framedblocks.client.model.wrapping.ModelWrappingHandler
 import io.github.xfacthd.framedblocks.client.model.wrapping.ModelWrappingManager;
 import io.github.xfacthd.framedblocks.client.model.wrapping.StandaloneWrapperKeys;
 import io.github.xfacthd.framedblocks.common.data.StateCacheBuilder;
-import net.minecraft.client.renderer.block.model.BlockModelDefinition;
-import net.minecraft.client.renderer.block.model.BlockStateModel;
-import net.minecraft.client.renderer.block.model.SingleVariant;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModelDispatcher;
+import net.minecraft.client.renderer.block.dispatch.SingleVariant;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -25,13 +25,13 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 public record FramedBlockModelDefinition(
-        Either<BlockModelDefinition, SingleVariant.Unbaked> baseModel,
+        Either<BlockStateModelDispatcher, SingleVariant.Unbaked> baseModel,
         Map<String, SingleVariant.Unbaked> auxModels,
         Optional<StandaloneWrapperKey<?>> wrapperKey
 ) implements CustomBlockModelDefinition
 {
     public static final MapCodec<FramedBlockModelDefinition> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
-            Codec.mapEither(BlockModelDefinition.VANILLA_CODEC, SingleVariant.Unbaked.MAP_CODEC.fieldOf("base_model"))
+            Codec.mapEither(BlockStateModelDispatcher.VANILLA_CODEC, SingleVariant.Unbaked.MAP_CODEC.fieldOf("base_model"))
                     .forGetter(FramedBlockModelDefinition::baseModel),
             Codec.unboundedMap(Codec.STRING, SingleVariant.Unbaked.CODEC)
                     .optionalFieldOf("aux_models", Map.of())
@@ -48,14 +48,13 @@ public record FramedBlockModelDefinition(
                 variant ->
                 {
                     BlockStateModel.UnbakedRoot variantRoot = variant.asRoot();
-                    return new IdentityHashMap<>(Maps.toMap(states.getPossibleStates(), state -> variantRoot));
+                    return new IdentityHashMap<>(Maps.toMap(states.getPossibleStates(), _ -> variantRoot));
                 }
         );
 
         StateCacheBuilder.ensureStateCachesInitialized();
         ModelWrappingHandler handler = getWrappingHandler(states.any().getBlock());
-        handler.reset();
-        models.replaceAll((state, model) -> handler.wrapBlockModel(state, model, auxModels));
+        handler.wrapAllBlockStateModels(models, auxModels);
 
         return models;
     }

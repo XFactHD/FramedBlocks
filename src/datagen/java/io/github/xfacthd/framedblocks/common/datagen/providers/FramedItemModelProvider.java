@@ -11,12 +11,11 @@ import io.github.xfacthd.framedblocks.common.datagen.GeneratorHandler;
 import net.minecraft.client.data.models.BlockModelGenerators;
 import net.minecraft.client.data.models.ItemModelGenerators;
 import net.minecraft.client.data.models.model.ItemModelUtils;
-import net.minecraft.client.data.models.model.ModelTemplate;
 import net.minecraft.client.data.models.model.ModelTemplates;
 import net.minecraft.client.data.models.model.TextureMapping;
+import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.core.Holder;
 import net.minecraft.data.PackOutput;
-import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.common.conditions.ModLoadedCondition;
 
@@ -25,9 +24,6 @@ import java.util.stream.Stream;
 
 public final class FramedItemModelProvider extends AbstractFramedItemModelProvider
 {
-    private static final ModelTemplate FLAT_CUTOUT = ModelTemplates.FLAT_ITEM.extend().renderType("cutout").build();
-    private static final ModelTemplate HANDHELD_CUTOUT = ModelTemplates.FLAT_HANDHELD_ITEM.extend().renderType("cutout").build();
-
     public FramedItemModelProvider(PackOutput output)
     {
         super(output, FramedConstants.MOD_ID);
@@ -36,16 +32,16 @@ public final class FramedItemModelProvider extends AbstractFramedItemModelProvid
     @Override
     protected void registerModels(BlockModelGenerators blockModels, ItemModelGenerators itemModels)
     {
-        itemModels.generateFlatItem(FBContent.ITEM_FRAMED_HAMMER.value(), HANDHELD_CUTOUT);
-        itemModels.generateFlatItem(FBContent.ITEM_FRAMED_WRENCH.value(), HANDHELD_CUTOUT);
-        itemModels.generateFlatItem(FBContent.ITEM_FRAMED_KEY.value(), HANDHELD_CUTOUT);
-        itemModels.generateFlatItem(FBContent.ITEM_FRAMED_SCREWDRIVER.value(), HANDHELD_CUTOUT);
+        itemModels.generateFlatItem(FBContent.ITEM_FRAMED_HAMMER.value(), ModelTemplates.FLAT_HANDHELD_ITEM);
+        itemModels.generateFlatItem(FBContent.ITEM_FRAMED_WRENCH.value(), ModelTemplates.FLAT_HANDHELD_ITEM);
+        itemModels.generateFlatItem(FBContent.ITEM_FRAMED_KEY.value(), ModelTemplates.FLAT_HANDHELD_ITEM);
+        itemModels.generateFlatItem(FBContent.ITEM_FRAMED_SCREWDRIVER.value(), ModelTemplates.FLAT_HANDHELD_ITEM);
 
-        itemModels.generateFlatItem(FBContent.ITEM_FRAMED_REINFORCEMENT.value(), FLAT_CUTOUT);
-        itemModels.generateFlatItem(FBContent.ITEM_PHANTOM_PASTE.value(), FLAT_CUTOUT);
-        itemModels.generateFlatItem(FBContent.ITEM_GLOW_PASTE.value(), FLAT_CUTOUT);
+        itemModels.generateFlatItem(FBContent.ITEM_FRAMED_REINFORCEMENT.value(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(FBContent.ITEM_PHANTOM_PASTE.value(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(FBContent.ITEM_GLOW_PASTE.value(), ModelTemplates.FLAT_ITEM);
 
-        Identifier patternTexture = Utils.id(AppliedEnergisticsCompat.MOD_ID, "item/crafting_pattern");
+        Material patternTexture = new Material(Utils.id(AppliedEnergisticsCompat.MOD_ID, "item/crafting_pattern"));
         Item patternItem = Objects.requireNonNull(GeneratorHandler.framingSawPattern).asItem();
         itemModels.itemModelOutput.accept(patternItem, ItemModelUtils.plainModel(
                 ModelTemplates.FLAT_ITEM
@@ -61,8 +57,8 @@ public final class FramedItemModelProvider extends AbstractFramedItemModelProvid
 
         itemModels.itemModelOutput.accept(FBContent.ITEM_FRAMED_BLUEPRINT.value(), ItemModelUtils.conditional(
                 BlueprintProperty.INSTANCE,
-                ItemModelUtils.plainModel(itemModels.createFlatItemModel(FBContent.ITEM_FRAMED_BLUEPRINT.value(), "_written", FLAT_CUTOUT)),
-                ItemModelUtils.plainModel(itemModels.createFlatItemModel(FBContent.ITEM_FRAMED_BLUEPRINT.value(), FLAT_CUTOUT))
+                ItemModelUtils.plainModel(itemModels.createFlatItemModel(FBContent.ITEM_FRAMED_BLUEPRINT.value(), "_written", ModelTemplates.FLAT_ITEM)),
+                ItemModelUtils.plainModel(itemModels.createFlatItemModel(FBContent.ITEM_FRAMED_BLUEPRINT.value(), ModelTemplates.FLAT_ITEM))
         ));
     }
 

@@ -1,8 +1,8 @@
 {
   "type": "framedblocks:rotate_shape",
   "block": "framedblocks:framed_flat_double_slope_panel_corner",
+  "category": "building",
   "result": {
-    "count": 1,
     "id": "framedblocks:framed_flat_double_slope_slab_corner"
   },
   "tool": "#c:tools/wrench"

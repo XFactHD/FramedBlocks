@@ -54,12 +54,10 @@ public final class PoweredFramingSawGuiContainerHandler implements IGuiContainer
         RecipeHolder<FramingSawRecipe> recipe = screen.getMenu().getSelectedRecipe();
         if (screen.isMouseOverRecipeSlot(mouseX, mouseY) && recipe != null)
         {
-            return factory.createBuilder(recipe.value().getResult()).buildWithArea(screen.getTargetStackArea());
+            return factory.createBuilder(recipe.value().getResultStack()).buildWithArea(screen.getTargetStackArea());
         }
         return Optional.empty();
     }
-
-
 
     private record ClickableArea(Rect2i area, IIngredientManager ingredients) implements IGuiClickableArea
     {

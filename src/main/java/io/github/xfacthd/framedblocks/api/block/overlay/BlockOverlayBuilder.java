@@ -2,6 +2,7 @@ package io.github.xfacthd.framedblocks.api.block.overlay;
 
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import net.minecraft.Optionull;
+import net.minecraft.core.Holder;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -19,9 +20,9 @@ public final class BlockOverlayBuilder
     private Identifier edgeTexture;
     private BlockOverlay.@Nullable SolidFace solidFace = null;
     @Nullable
-    private Block tintSource;
+    private Holder<Block> tintSource;
     @Nullable
-    private Item sourceItem;
+    private Holder<Item> sourceItem;
     private boolean translucent;
 
     BlockOverlayBuilder(String namespace)
@@ -57,15 +58,17 @@ public final class BlockOverlayBuilder
         return this;
     }
 
+    @SuppressWarnings("deprecation")
     public BlockOverlayBuilder tintSource(Block tintSource)
     {
-        this.tintSource = tintSource;
+        this.tintSource = tintSource.builtInRegistryHolder();
         return this;
     }
 
+    @SuppressWarnings("deprecation")
     public BlockOverlayBuilder sourceItem(Item sourceItem)
     {
-        this.sourceItem = sourceItem;
+        this.sourceItem = sourceItem.builtInRegistryHolder();
         return this;
     }
 
@@ -75,12 +78,11 @@ public final class BlockOverlayBuilder
         return this;
     }
 
-    @SuppressWarnings("deprecation")
     public BlockOverlay build()
     {
         Objects.requireNonNull(solidTexture, "No solid texture specified");
         Objects.requireNonNull(solidFace, "No solid face specified");
         Objects.requireNonNull(sourceItem, "No source item specified");
-        return new BlockOverlay(solidTexture, edgeTexture, solidFace, Optionull.map(tintSource, Block::builtInRegistryHolder), sourceItem.builtInRegistryHolder(), translucent);
+        return new BlockOverlay(solidTexture, edgeTexture, solidFace, Optionull.map(this.tintSource, TintSource::new), sourceItem, translucent);
     }
 }

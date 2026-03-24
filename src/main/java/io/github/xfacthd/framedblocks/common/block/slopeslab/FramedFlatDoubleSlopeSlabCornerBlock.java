@@ -25,7 +25,6 @@ import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.jspecify.annotations.Nullable;
 
 public class FramedFlatDoubleSlopeSlabCornerBlock extends FramedDoubleBlock implements SlopeToggleBlock
@@ -49,10 +48,7 @@ public class FramedFlatDoubleSlopeSlabCornerBlock extends FramedDoubleBlock impl
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        builder.add(
-                FramedProperties.FACING_HOR, FramedProperties.TOP, PropertyHolder.TOP_HALF,
-                BlockStateProperties.WATERLOGGED, FramedProperties.ALT_SLOPE
-        );
+        builder.add(FramedProperties.FACING_HOR, FramedProperties.TOP, PropertyHolder.TOP_HALF);
     }
 
     @Override
@@ -63,7 +59,7 @@ public class FramedFlatDoubleSlopeSlabCornerBlock extends FramedDoubleBlock impl
                 .withHalfFacing()
                 .withTop(PropertyHolder.TOP_HALF)
                 .withCustom((state, modCtx) ->
-                        state.setValue(FramedProperties.TOP, ctx.getPlayer() != null && ctx.getPlayer().isShiftKeyDown())
+                        state.setValue(FramedProperties.TOP, modCtx.getPlayer() != null && modCtx.getPlayer().isShiftKeyDown())
                 )
                 .withWater()
                 .build();

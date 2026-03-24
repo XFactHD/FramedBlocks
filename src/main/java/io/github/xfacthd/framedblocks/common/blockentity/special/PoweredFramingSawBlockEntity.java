@@ -125,7 +125,7 @@ public class PoweredFramingSawBlockEntity extends BlockEntity
             {
                 be.progress = 0;
 
-                ItemResource result = ItemResource.of(Objects.requireNonNull(be.selectedRecipe).value().getResult());
+                ItemResource result = ItemResource.of(Objects.requireNonNull(be.selectedRecipe).value().getResultStack());
                 be.internalAccess = true;
                 try (Transaction tx = Transaction.open(null))
                 {
@@ -172,7 +172,7 @@ public class PoweredFramingSawBlockEntity extends BlockEntity
         ItemResource output = itemHandler.getResource(FramingSawMenu.SLOT_RESULT);
         if (!output.isEmpty())
         {
-            ItemStack result = selectedRecipe.value().getResult();
+            ItemStack result = selectedRecipe.value().getResultStack();
             if (!output.equals(ItemResource.of(result)))
             {
                 return false;
@@ -324,7 +324,6 @@ public class PoweredFramingSawBlockEntity extends BlockEntity
         cache = FramingSawRecipeCache.get(level().isClientSide());
         if (level() instanceof ServerLevel serverLevel && selectedRecipeId != null)
         {
-            //noinspection NullableProblems - IDEA's nullability analysis is broken
             RecipeHolder<FramingSawRecipe> recipe = (RecipeHolder<FramingSawRecipe>) serverLevel.recipeAccess()
                     .byKey(selectedRecipeId)
                     .filter(h -> h.value() instanceof FramingSawRecipe)

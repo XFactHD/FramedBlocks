@@ -1,7 +1,6 @@
 package io.github.xfacthd.framedblocks.common.crafting.camo;
 
 import com.mojang.serialization.MapCodec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.api.camo.CamoContainer;
 import io.github.xfacthd.framedblocks.api.camo.CamoContainerHelper;
@@ -10,13 +9,11 @@ import io.github.xfacthd.framedblocks.api.camo.CamoList;
 import io.github.xfacthd.framedblocks.api.camo.empty.EmptyCamoContainer;
 import io.github.xfacthd.framedblocks.api.util.ConfigView;
 import io.github.xfacthd.framedblocks.common.FBContent;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -29,13 +26,9 @@ import java.util.Objects;
 
 public final class CamoApplicationRecipe extends CustomRecipe
 {
-    public static final MapCodec<CamoApplicationRecipe> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
-            CraftingBookCategory.CODEC.fieldOf("category").orElse(CraftingBookCategory.MISC).forGetter(CamoApplicationRecipe::category),
-            Ingredient.CODEC.fieldOf("copy_tool").forGetter(CamoApplicationRecipe::getCopyTool)
-    ).apply(inst, CamoApplicationRecipe::new));
+    public static final MapCodec<CamoApplicationRecipe> CODEC = Ingredient.CODEC.fieldOf("copy_tool")
+            .xmap(CamoApplicationRecipe::new, CamoApplicationRecipe::getCopyTool);
     public static final StreamCodec<RegistryFriendlyByteBuf, CamoApplicationRecipe> STREAM_CODEC = StreamCodec.composite(
-            CraftingBookCategory.STREAM_CODEC,
-            CamoApplicationRecipe::category,
             Ingredient.CONTENTS_STREAM_CODEC,
             CamoApplicationRecipe::getCopyTool,
             CamoApplicationRecipe::new
@@ -43,9 +36,8 @@ public final class CamoApplicationRecipe extends CustomRecipe
 
     private final Ingredient copyTool;
 
-    public CamoApplicationRecipe(CraftingBookCategory category, Ingredient copyTool)
+    public CamoApplicationRecipe(Ingredient copyTool)
     {
-        super(category);
         this.copyTool = copyTool;
     }
 
@@ -91,7 +83,7 @@ public final class CamoApplicationRecipe extends CustomRecipe
     }
 
     @Override
-    public ItemStack assemble(CraftingInput input, HolderLookup.Provider registries)
+    public ItemStack assemble(CraftingInput input)
     {
         if (input.width() != 2 || input.height() != 2 || !copyTool.test(input.getItem(1, 0))) return ItemStack.EMPTY;
 

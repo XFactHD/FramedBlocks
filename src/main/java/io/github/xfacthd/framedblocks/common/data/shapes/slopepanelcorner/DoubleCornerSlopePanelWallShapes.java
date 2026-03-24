@@ -61,7 +61,5 @@ public final class DoubleCornerSlopePanelWallShapes
         return ShapeContainer.of(map);
     }
 
-
-
     private DoubleCornerSlopePanelWallShapes() { }
 }

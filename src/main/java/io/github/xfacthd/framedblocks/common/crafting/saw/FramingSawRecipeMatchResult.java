@@ -73,8 +73,6 @@ public enum FramingSawRecipeMatchResult
         return translation;
     }
 
-
-
     public static FramingSawRecipeMatchResult valueOf(int idx)
     {
         return VALUES[idx];

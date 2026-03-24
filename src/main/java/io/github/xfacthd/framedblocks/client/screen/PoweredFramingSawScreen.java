@@ -12,7 +12,7 @@ import io.github.xfacthd.framedblocks.common.menu.PoweredFramingSawMenu;
 import io.github.xfacthd.framedblocks.common.net.payload.serverbound.ServerboundSelectFramingSawRecipePayload;
 import io.github.xfacthd.framedblocks.common.util.CachingIngredientResolver;
 import net.minecraft.Optionull;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.Rect2i;
@@ -82,8 +82,7 @@ public class PoweredFramingSawScreen extends AbstractContainerScreen<PoweredFram
 
     public PoweredFramingSawScreen(PoweredFramingSawMenu menu, Inventory inv, Component title)
     {
-        super(menu, inv, title);
-        this.imageHeight = 182;
+        super(menu, inv, title, DEFAULT_IMAGE_WIDTH, 182);
         this.inventoryLabelY = imageHeight - 94;
         Level level = Objects.requireNonNull(minecraft.level);
         this.additiveResolver = new CachingIngredientResolver.Multi(level, FramingSawRecipe.MAX_ADDITIVE_COUNT);
@@ -99,20 +98,15 @@ public class PoweredFramingSawScreen extends AbstractContainerScreen<PoweredFram
     }
 
     @Override
-    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick)
+    public void extractBackground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick)
     {
-        super.render(graphics, mouseX, mouseY, partialTick);
-        renderTooltip(graphics, mouseX, mouseY);
-    }
+        super.extractBackground(graphics, mouseX, mouseY, partialTick);
 
-    @Override
-    protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY)
-    {
         graphics.blit(RenderPipelines.GUI_TEXTURED, BACKGROUND, leftPos, topPos, 0, 0, imageWidth, imageHeight, 256, 256);
 
         int tx = leftPos + TITLE_TARGETBLOCK_X - font.width(TITLE_TARGETBLOCK);
         int ty = topPos + TITLE_TARGETBLOCK_Y;
-        graphics.drawString(font, TITLE_TARGETBLOCK, tx, ty, 0xFF404040, false);
+        graphics.text(font, TITLE_TARGETBLOCK, tx, ty, 0xFF404040, false);
 
         FramingSawRecipe recipe = Optionull.map(menu.getSelectedRecipe(), RecipeHolder::value);
         FramingSawRecipeMatchResult match = recipe != null ? menu.getMatchResult() : null;
@@ -122,7 +116,7 @@ public class PoweredFramingSawScreen extends AbstractContainerScreen<PoweredFram
         drawEnergyBar(graphics, mouseX, mouseY);
     }
 
-    private void drawRecipeInfo(GuiGraphics graphics, @Nullable FramingSawRecipe recipe, @Nullable FramingSawRecipeMatchResult match)
+    private void drawRecipeInfo(GuiGraphicsExtractor graphics, @Nullable FramingSawRecipe recipe, @Nullable FramingSawRecipeMatchResult match)
     {
         Slot inputSlot = menu.getSlot(FramingSawMenu.SLOT_INPUT);
         if (!inputSlot.hasItem())
@@ -134,7 +128,7 @@ public class PoweredFramingSawScreen extends AbstractContainerScreen<PoweredFram
 
         if (recipe != null)
         {
-            ItemStack result = recipe.getResult();
+            ItemStack result = recipe.getResultStack();
             ClientUtils.renderTransparentFakeItem(graphics, result, targetStackX, targetStackY);
 
             List<FramingSawRecipeAdditive> additives = recipe.getAdditives();
@@ -169,7 +163,7 @@ public class PoweredFramingSawScreen extends AbstractContainerScreen<PoweredFram
         }
     }
 
-    private void drawStatus(GuiGraphics graphics, @Nullable FramingSawRecipe recipe, @Nullable FramingSawRecipeMatchResult match)
+    private void drawStatus(GuiGraphicsExtractor graphics, @Nullable FramingSawRecipe recipe, @Nullable FramingSawRecipeMatchResult match)
     {
         MutableComponent status = MSG_STATUS.copy();
         int width = -1;
@@ -191,11 +185,11 @@ public class PoweredFramingSawScreen extends AbstractContainerScreen<PoweredFram
         }
         int sx = leftPos + STATUS_X;
         int sy = topPos + STATUS_Y + font.lineHeight;
-        graphics.drawString(font, status, sx, sy, 0xFF404040, false);
+        graphics.text(font, status, sx, sy, 0xFF404040, false);
         statusTooltipArea = width == -1 ? EMPTY : new Rect2i(sx + font.width(MSG_STATUS), sy, width, font.lineHeight);
     }
 
-    private void drawEnergyBar(GuiGraphics graphics, int mouseX, int mouseY)
+    private void drawEnergyBar(GuiGraphicsExtractor graphics, int mouseX, int mouseY)
     {
         float energy = (float) menu.getEnergy() / (float) menu.getEnergyCapacity();
         int height = (int) (energy * ENERGY_HEIGHT);
@@ -231,7 +225,7 @@ public class PoweredFramingSawScreen extends AbstractContainerScreen<PoweredFram
     }
 
     @Override
-    protected void renderTooltip(GuiGraphics graphics, int mouseX, int mouseY)
+    protected void extractTooltip(GuiGraphicsExtractor graphics, int mouseX, int mouseY)
     {
         if (menu.getCarried().isEmpty() && hoveredSlot != null && hoveredSlot.hasItem())
         {
@@ -247,9 +241,8 @@ public class PoweredFramingSawScreen extends AbstractContainerScreen<PoweredFram
         }
     }
 
-    private void renderHoveredItemTooltip(GuiGraphics graphics, int mouseX, int mouseY, ItemStack stack)
+    private void renderHoveredItemTooltip(GuiGraphicsExtractor graphics, int mouseX, int mouseY, ItemStack stack)
     {
-        //noinspection ConstantConditions
         List<Component> components = new ArrayList<>(getTooltipFromItem(minecraft, stack));
         Optional<TooltipComponent> tooltip = stack.getTooltipImage();
 

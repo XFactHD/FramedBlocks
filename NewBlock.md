@@ -5,6 +5,7 @@
   - Create a `SideSkipPredicate` indicating whether the given face of a given state should be culled in the presence of the given neighbor state
   - Create a `ConnectionPredicate` indicating which edges of a given face can participate in connected textures handling
   - Create a `BlockOverlayPredicate` indicating how solid and edge textures apply to "uncertain" faces
+  - Create a `NullCullPredicate` indicating whether either part of a double block may have "uncullable" faces culled (only applies to double blocks)
   - Create a `ShapeGenerator` providing the `VoxelShape`s to be used by the block:
     - If the block handles the shapes itself (i.e. when extending a vanilla block), return `ShapeGenerator.EMPTY`
     - If the block only has a single shape, return `ShapeGenerator.singleShape()`

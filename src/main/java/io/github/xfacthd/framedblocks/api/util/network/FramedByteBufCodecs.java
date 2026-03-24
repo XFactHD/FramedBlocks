@@ -72,7 +72,5 @@ public final class FramedByteBufCodecs
         };
     }
 
-
-
     private FramedByteBufCodecs() { }
 }

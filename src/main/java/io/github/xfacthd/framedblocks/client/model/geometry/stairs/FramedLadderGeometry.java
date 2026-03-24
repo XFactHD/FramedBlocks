@@ -8,7 +8,7 @@ import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
 import io.github.xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
 import io.github.xfacthd.framedblocks.api.util.DirUtils;
-import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.resources.model.geometry.BakedQuad;
 import net.minecraft.core.Direction;
 import org.jspecify.annotations.Nullable;
 
@@ -58,6 +58,8 @@ public class FramedLadderGeometry extends Geometry
                 rungMod.derive().apply(Modifiers.setPosition(height))
                         .export(quadMap, null);
             }
+
+            rungMod.discard();
         }
         else if (quadDir.getAxis() == dir.getAxis())
         {
@@ -88,10 +90,10 @@ public class FramedLadderGeometry extends Geometry
             QuadModifier mod = QuadModifier.of(quad)
                     .apply(Modifiers.cut(dir.getOpposite(), RUNG_DEPTH * 2F));
 
-            mod.export(quadMap, quadDir);
-
             mod.derive().apply(Modifiers.setPosition(RUNG_DEPTH * 2F))
                     .export(quadMap, null);
+
+            mod.export(quadMap, quadDir);
         }
     }
 

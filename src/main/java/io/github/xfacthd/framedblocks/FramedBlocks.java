@@ -12,8 +12,10 @@ import io.github.xfacthd.framedblocks.common.config.ServerConfig;
 import io.github.xfacthd.framedblocks.common.crafting.saw.FramingSawRecipeCache;
 import io.github.xfacthd.framedblocks.common.data.BlueprintBehaviours;
 import io.github.xfacthd.framedblocks.common.data.DataMapsSetup;
+import io.github.xfacthd.framedblocks.common.data.NullCullPredicates;
 import io.github.xfacthd.framedblocks.common.data.StateCacheBuilder;
 import io.github.xfacthd.framedblocks.common.data.camo.CamoContainerFactories;
+import io.github.xfacthd.framedblocks.common.data.camo.block.rotator.BlockCamoRotators;
 import io.github.xfacthd.framedblocks.common.data.conpreds.ConnectionPredicates;
 import io.github.xfacthd.framedblocks.common.data.cullupdate.CullingUpdateTracker;
 import io.github.xfacthd.framedblocks.common.data.dynreg.DynamicRegistrySetup;
@@ -66,6 +68,7 @@ public final class FramedBlocks
         NeoForge.EVENT_BUS.addListener(FramingSawRecipeCache::onDataPackSync);
         NeoForge.EVENT_BUS.addListener(FramingSawRecipeCache::onRecipesReceived);
         NeoForge.EVENT_BUS.addListener(DataMapsSetup::onDataMapsUpdated);
+        NeoForge.EVENT_BUS.addListener(BlockCamoRotators::onDefaultComponentsBound);
 
         if (!Utils.PRODUCTION)
         {
@@ -76,6 +79,7 @@ public final class FramedBlocks
         SideSkipPredicates.PREDICATES.initialize();
         ConnectionPredicates.PREDICATES.initialize();
         BlockOverlayPredicates.PREDICATES.initialize();
+        NullCullPredicates.PREDICATES.initialize();
 
         CompatHandler.init(modBus);
 

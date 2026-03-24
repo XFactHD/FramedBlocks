@@ -57,7 +57,5 @@ public final class SelfTest
         reporter.finish();
     }
 
-
-
     private SelfTest() { }
 }

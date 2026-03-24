@@ -14,7 +14,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.BlockAndTintGetter;
+import net.minecraft.world.level.BlockAndLightGetter;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
@@ -102,7 +102,7 @@ public sealed interface IFramedBlockEntity extends IBlockEntityExtension permits
     @Nullable
     Integer getCamoBeaconColorMultiplier(LevelReader level, BlockPos pos, BlockPos beaconPos);
 
-    boolean shouldCamoDisplayFluidOverlay(BlockAndTintGetter level, BlockPos pos, FluidState fluid);
+    boolean shouldCamoDisplayFluidOverlay(BlockAndLightGetter level, BlockPos pos, FluidState fluid);
 
     float getCamoFriction(BlockState state, @Nullable Entity entity, float frameFriction);
 

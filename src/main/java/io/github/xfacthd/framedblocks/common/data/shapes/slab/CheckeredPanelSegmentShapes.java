@@ -47,7 +47,5 @@ public final class CheckeredPanelSegmentShapes
         return ShapeContainer.of(map);
     }
 
-
-
     private CheckeredPanelSegmentShapes() { }
 }

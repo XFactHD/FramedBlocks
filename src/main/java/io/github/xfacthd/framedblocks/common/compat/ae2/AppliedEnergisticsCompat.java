@@ -77,18 +77,16 @@ public final class AppliedEnergisticsCompat
         return null;
     }
 
-
-
     static final class GuardedAccess
     {
         private static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(FramedConstants.MOD_ID);
         private static final DeferredRegister<AttachmentType<?>> ATTACHMENTS = DeferredRegister.create(NeoForgeRegistries.ATTACHMENT_TYPES, FramedConstants.MOD_ID);
         private static final DeferredDataComponentTypeRegister DATA_COMPONENTS = DeferredDataComponentTypeRegister.create(FramedConstants.MOD_ID);
 
-        static final Holder<Item> ITEM_FRAMING_SAW_PATTERN = ITEMS.register(SAW_PATTERN_ID, () ->
+        static final Holder<Item> ITEM_FRAMING_SAW_PATTERN = ITEMS.registerItem(SAW_PATTERN_ID, props ->
                 PatternDetailsHelper.encodedPatternItemBuilder(FramingSawPatternDetails::new)
                         .invalidPatternTooltip(FramingSawPatternDetails::makeInvalidPatternTooltip)
-                        .build()
+                        .build(props)
         );
         static final DeferredHolder<AttachmentType<?>, AttachmentType<FramingSawCraftingMachine>> ATTACHMENT_SAW_MACHINE = ATTACHMENTS.register(
                 "framing_saw_machine", () -> AttachmentType.builder(FramingSawCraftingMachine::new).build()
@@ -112,7 +110,7 @@ public final class AppliedEnergisticsCompat
             event.registerBlockEntity(
                     AECapabilities.CRAFTING_MACHINE,
                     FBContent.BE_TYPE_POWERED_FRAMING_SAW.value(),
-                    (saw, side) -> saw.getData(ATTACHMENT_SAW_MACHINE)
+                    (saw, _) -> saw.getData(ATTACHMENT_SAW_MACHINE)
             );
         }
 
@@ -138,12 +136,8 @@ public final class AppliedEnergisticsCompat
             return stack;
         }
 
-
-
         private GuardedAccess() { }
     }
-
-
 
     private AppliedEnergisticsCompat() { }
 }

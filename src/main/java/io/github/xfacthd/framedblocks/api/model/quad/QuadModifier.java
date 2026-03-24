@@ -1,30 +1,30 @@
 package io.github.xfacthd.framedblocks.api.model.quad;
 
 import io.github.xfacthd.framedblocks.api.model.data.QuadMapBuilder;
-import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.resources.model.geometry.BakedQuad;
 import net.minecraft.core.Direction;
-import org.jetbrains.annotations.UnknownNullability;
 import org.jspecify.annotations.Nullable;
 
-public final class QuadModifier
+public sealed class QuadModifier permits QuadModifierPool.LeakDetectingQuadModifier
 {
-    private static final QuadModifier FAILED = new QuadModifier(null, true);
+    private static final QuadModifier FAILED = new QuadModifier(true);
 
-    private final QuadData data;
-    private boolean failed;
-    private boolean exported;
+    private final ExtMutableQuad mutableQuad = new ExtMutableQuad();
+    private final boolean failed;
+    boolean retired = false;
 
     /**
      * @return a {@code QuadModifier} for the given {@link BakedQuad}
      */
     public static QuadModifier of(BakedQuad quad)
     {
-        return new QuadModifier(new QuadData(quad), false);
+        QuadModifier modifier = QuadModifierPool.acquire();
+        modifier.mutableQuad.setFrom(quad);
+        return modifier;
     }
 
-    private QuadModifier(@UnknownNullability QuadData data, boolean failed)
+    QuadModifier(boolean failed)
     {
-        this.data = data;
         this.failed = failed;
     }
 
@@ -43,15 +43,11 @@ public final class QuadModifier
      */
     public QuadModifier apply(Modifier modifier)
     {
-        if (!failed)
+        ensureValid();
+        if (!failed && !modifier.accept(mutableQuad))
         {
-            if (exported)
-            {
-                throw new IllegalStateException(
-                        "QuadModifier has been exported, no further modifications allowed without deriving"
-                );
-            }
-            failed = !modifier.accept(data);
+            QuadModifierPool.release(this);
+            return FAILED;
         }
         return this;
     }
@@ -72,13 +68,12 @@ public final class QuadModifier
     @Nullable
     public BakedQuad exportDirect()
     {
-        if (failed)
-        {
-            return null;
-        }
+        ensureValid();
+        if (failed) return null;
 
-        BakedQuad newQuad = data.toQuad();
-        exported = true;
+        mutableQuad.recomputeNormals(true);
+        BakedQuad newQuad = mutableQuad.toBakedQuad();
+        QuadModifierPool.release(this);
         return newQuad;
     }
 
@@ -90,17 +85,42 @@ public final class QuadModifier
      */
     public QuadModifier derive()
     {
-        return failed ? FAILED : new QuadModifier(new QuadData(data), false);
+        ensureValid();
+        if (failed) return FAILED;
+
+        QuadModifier modifier = QuadModifierPool.acquire();
+        mutableQuad.copyInto(modifier.mutableQuad);
+        return modifier;
     }
 
-    public boolean hasFailed()
+    /**
+     * Discard this {@code QuadModifier} to return it to the pool without exporting it.
+     */
+    public void discard()
+    {
+        ensureValid();
+        if (!failed)
+        {
+            QuadModifierPool.release(this);
+        }
+    }
+
+    public boolean isFailed()
     {
         return failed;
+    }
+
+    private void ensureValid()
+    {
+        if (retired)
+        {
+            throw new IllegalStateException("QuadModifier has been retired, no further modifications allowed!");
+        }
     }
 
     @FunctionalInterface
     public interface Modifier
     {
-        boolean accept(QuadData data);
+        boolean accept(ExtMutableQuad quad);
     }
 }

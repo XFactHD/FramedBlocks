@@ -1,10 +1,11 @@
 package io.github.xfacthd.framedblocks.api.camo.block;
 
-import io.github.xfacthd.framedblocks.api.camo.CamoClientHandler;
+import io.github.xfacthd.framedblocks.api.camo.CamoContentClientHandler;
 import io.github.xfacthd.framedblocks.api.camo.CamoContainerHelper;
 import io.github.xfacthd.framedblocks.api.camo.CamoContent;
-import io.github.xfacthd.framedblocks.api.util.ClientUtils;
+import io.github.xfacthd.framedblocks.api.model.util.BlockTintSourceCache;
 import io.github.xfacthd.framedblocks.api.util.Utils;
+import net.minecraft.client.color.block.BlockTintSource;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.BlockParticleOption;
@@ -14,8 +15,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.util.TriState;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.BlockAndTintGetter;
+import net.minecraft.world.level.BlockAndLightGetter;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.EmptyBlockGetter;
 import net.minecraft.world.level.Explosion;
@@ -24,11 +24,17 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.MapColor;
+import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.Nullable;
 
-public final class BlockCamoContent extends CamoContent<BlockCamoContent>
+import java.util.List;
+import java.util.function.Function;
+
+public final class BlockCamoContent extends CamoContent<BlockCamoContent> implements BlockTintSourceCache
 {
     private final BlockState state;
+    @Nullable
+    private List<BlockTintSource> tintSources = null;
 
     public BlockCamoContent(BlockState state)
     {
@@ -103,7 +109,7 @@ public final class BlockCamoContent extends CamoContent<BlockCamoContent>
     }
 
     @Override
-    public boolean shouldDisplayFluidOverlay(BlockAndTintGetter level, BlockPos pos, FluidState fluid)
+    public boolean shouldDisplayFluidOverlay(BlockAndLightGetter level, BlockPos pos, FluidState fluid)
     {
         return state.shouldDisplayFluidOverlay(level, pos, fluid);
     }
@@ -130,26 +136,6 @@ public final class BlockCamoContent extends CamoContent<BlockCamoContent>
     public MapColor getMapColor(BlockGetter level, BlockPos pos)
     {
         return state.getMapColor(level, pos);
-    }
-
-    @Override
-    public int getTintColor(BlockAndTintGetter level, BlockPos pos, int tintIdx)
-    {
-        if (Utils.CLIENT_DIST)
-        {
-            return ClientUtils.getBlockColor(level, pos, state, tintIdx);
-        }
-        throw new UnsupportedOperationException("Block color is not available on the server!");
-    }
-
-    @Override
-    public int getTintColor(ItemStack stack, int tintIdx)
-    {
-        if (Utils.CLIENT_DIST)
-        {
-            return ClientUtils.getBlockColor(null, null, state, tintIdx);
-        }
-        throw new UnsupportedOperationException("Block color is not available on the server!");
     }
 
     @Override
@@ -240,9 +226,9 @@ public final class BlockCamoContent extends CamoContent<BlockCamoContent>
     }
 
     @Override
-    public CamoClientHandler<BlockCamoContent> getClientHandler()
+    public CamoContentClientHandler<BlockCamoContent> getClientHandler()
     {
-        return BlockCamoClientHandler.INSTANCE;
+        return BlockCamoContentClientHandler.INSTANCE;
     }
 
     @Override
@@ -261,5 +247,16 @@ public final class BlockCamoContent extends CamoContent<BlockCamoContent>
     public String toString()
     {
         return "BlockCamoContent{state=" + state + "}";
+    }
+
+    @Override
+    @ApiStatus.Internal
+    public List<BlockTintSource> resolveTintSources(Function<BlockState, List<BlockTintSource>> resolver)
+    {
+        if (tintSources == null)
+        {
+            tintSources = resolver.apply(state);
+        }
+        return tintSources;
     }
 }

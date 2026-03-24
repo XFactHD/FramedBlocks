@@ -1,6 +1,5 @@
 package io.github.xfacthd.framedblocks.common.block.cube;
 
-import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
 import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.api.util.MathUtils;
@@ -21,7 +20,6 @@ import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.Nullable;
 
@@ -37,7 +35,7 @@ public class FramedCornerTubeBlock extends FramedBlock
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        builder.add(PropertyHolder.CORNER_TYPE_ORIENTATION, FramedProperties.SOLID, PropertyHolder.THICK, BlockStateProperties.WATERLOGGED);
+        builder.add(PropertyHolder.CORNER_TYPE_ORIENTATION, PropertyHolder.THICK);
     }
 
     @Override

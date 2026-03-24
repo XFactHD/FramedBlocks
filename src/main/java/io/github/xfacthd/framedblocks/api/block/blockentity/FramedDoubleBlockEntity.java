@@ -24,7 +24,7 @@ import net.minecraft.util.TriState;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.BlockAndTintGetter;
+import net.minecraft.world.level.BlockAndLightGetter;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.EmptyBlockGetter;
 import net.minecraft.world.level.Explosion;
@@ -50,7 +50,7 @@ public class FramedDoubleBlockEntity extends FramedBlockEntity
     private static final ValueMerger<Integer> BEACON_MULT_MERGER = new ValueMerger<>(ARGB::average);
     private static final ValueMerger<Integer> FLAMMABILITY_MERGER = new ValueMerger<>(i -> i == -1, Math::min);
 
-    private final boolean[] culledFaces = new boolean[6];
+    private final CullState cullState = new CullState();
     private CamoContainer<?, ?> camoContainer = EmptyCamoContainer.EMPTY;
     @Nullable
     private Direction camoOrientation = null;
@@ -184,7 +184,7 @@ public class FramedDoubleBlockEntity extends FramedBlockEntity
     }
 
     @Override
-    public boolean shouldCamoDisplayFluidOverlay(BlockAndTintGetter level, BlockPos pos, FluidState fluid)
+    public boolean shouldCamoDisplayFluidOverlay(BlockAndLightGetter level, BlockPos pos, FluidState fluid)
     {
         if (camoContainer.getContent().shouldDisplayFluidOverlay(level, pos, fluid))
         {
@@ -328,11 +328,11 @@ public class FramedDoubleBlockEntity extends FramedBlockEntity
     }
 
     @Override
-    protected boolean updateCulling(Direction side, BlockState state, boolean rerender)
+    boolean updateCulling(Direction side, BlockState state, boolean rerender)
     {
         DoubleBlockParts parts = getStateCache().getParts();
         boolean changed = super.updateCulling(side, parts.stateOne(), rerender);
-        changed |= updateCulling(culledFaces, parts.stateTwo(), side, rerender);
+        changed |= updateCulling(cullState, parts.stateTwo(), side, rerender);
         return changed;
     }
 
@@ -391,12 +391,19 @@ public class FramedDoubleBlockEntity extends FramedBlockEntity
      */
 
     @Override
-    final AbstractFramedBlockData computeBlockData(BlockState state, boolean includeCullInfo)
+    final AbstractFramedBlockData computeBlockData(BlockState state, boolean includeCullInfo, boolean cullNullFace)
     {
-        FramedBlockData modelDataOne = (FramedBlockData) super.computeBlockData(state, includeCullInfo);
-        boolean[] cullData = includeCullInfo ? culledFaces : FramedBlockData.NO_CULLED_FACES;
-        FramedBlockData modelDataTwo = makeBlockData(state, camoContainer, cullData, true);
-        return new FramedDoubleBlockData(getBlock().getCache(state).getParts(), modelDataOne, modelDataTwo);
+        DoubleBlockStateCache stateCache = getBlock().getCache(state);
+        FramedBlockData modelDataOne = (FramedBlockData) super.computeBlockData(state, includeCullInfo, canCullNullFace(stateCache, false));
+        byte cullMask = cullState.computeMask(includeCullInfo, canCullNullFace(stateCache, true));
+        FramedBlockData modelDataTwo = makeBlockData(state, camoContainer, cullMask, true);
+        return new FramedDoubleBlockData(stateCache.getParts(), modelDataOne, modelDataTwo);
+    }
+
+    private boolean canCullNullFace(DoubleBlockStateCache stateCache, boolean secondPart)
+    {
+        // Cull-ability of one part checks against the solidity of the other part's camo
+        return stateCache.mayCullNullFace(secondPart) && getCamo(!secondPart).getContent().isSolid();
     }
 
     /*

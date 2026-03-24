@@ -1,6 +1,5 @@
 package io.github.xfacthd.framedblocks.common.block.cube;
 
-import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
 import io.github.xfacthd.framedblocks.common.blockentity.special.FramedTankBlockEntity;
@@ -15,9 +14,7 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jspecify.annotations.Nullable;
 
@@ -26,14 +23,6 @@ public class FramedTankBlock extends FramedBlock
     public FramedTankBlock(Properties props)
     {
         super(BlockType.FRAMED_TANK, props);
-        registerDefaultState(defaultBlockState().setValue(FramedProperties.SOLID, false));
-    }
-
-    @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
-    {
-        super.createBlockStateDefinition(builder);
-        builder.add(FramedProperties.SOLID);
     }
 
     @Override

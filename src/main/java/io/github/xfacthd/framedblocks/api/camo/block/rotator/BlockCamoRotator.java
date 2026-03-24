@@ -14,8 +14,6 @@ public interface BlockCamoRotator
     @Nullable
     BlockState rotate(BlockState state);
 
-
-
     static BlockCamoRotator of(Block block)
     {
         return InternalAPI.INSTANCE.getCamoRotator(block);

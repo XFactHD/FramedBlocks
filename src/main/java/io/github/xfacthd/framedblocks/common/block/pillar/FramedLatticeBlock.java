@@ -64,10 +64,7 @@ public class FramedLatticeBlock extends FramedBlock implements IPillarLikeBlock,
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        builder.add(
-                FramedProperties.X_AXIS, FramedProperties.Y_AXIS, FramedProperties.Z_AXIS,
-                BlockStateProperties.WATERLOGGED, FramedProperties.STATE_LOCKED
-        );
+        builder.add(FramedProperties.X_AXIS, FramedProperties.Y_AXIS, FramedProperties.Z_AXIS);
     }
 
     @Override
@@ -200,8 +197,6 @@ public class FramedLatticeBlock extends FramedBlock implements IPillarLikeBlock,
     {
         return state.getValue(getPropFromAxis(side)) ? pillarConnection : PillarConnection.NONE;
     }
-
-
 
     public static BooleanProperty getPropFromAxis(Direction dir)
     {

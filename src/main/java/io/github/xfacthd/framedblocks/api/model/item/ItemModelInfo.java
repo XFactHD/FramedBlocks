@@ -4,6 +4,7 @@ import io.github.xfacthd.framedblocks.api.block.overlay.BlockOverlay;
 import io.github.xfacthd.framedblocks.api.camo.CamoList;
 import io.github.xfacthd.framedblocks.api.model.data.AbstractFramedBlockData;
 import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
+import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.core.Holder;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
@@ -38,4 +39,7 @@ public interface ItemModelInfo
     {
         return null;
     }
+
+    /// Append additional tint values for quads unrelated to the block's camo(s)
+    default void appendTintValues(ItemStack stack, IntList tints) { }
 }

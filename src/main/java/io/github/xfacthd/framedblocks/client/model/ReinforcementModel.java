@@ -1,13 +1,13 @@
 package io.github.xfacthd.framedblocks.client.model;
 
-import io.github.xfacthd.framedblocks.api.model.data.QuadMapBuilder;
 import io.github.xfacthd.framedblocks.api.model.util.ModelUtils;
 import io.github.xfacthd.framedblocks.api.util.Utils;
-import net.minecraft.client.renderer.block.model.BlockModelPart;
-import net.minecraft.client.renderer.block.model.SimpleModelWrapper;
-import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
-import net.minecraft.client.resources.model.BlockModelRotation;
+import io.github.xfacthd.framedblocks.client.model.quadmap.QuadMapBuilderInternal;
+import net.minecraft.client.renderer.block.dispatch.BlockModelRotation;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModelPart;
 import net.minecraft.client.resources.model.ModelBaker;
+import net.minecraft.client.resources.model.SimpleModelWrapper;
+import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.TriState;
@@ -23,27 +23,29 @@ public final class ReinforcementModel
             baker -> new ReinforcementModel(SimpleModelWrapper.bake(baker, ReinforcementModel.MODEL_ID, BlockModelRotation.IDENTITY))
     );
     private static final Direction[] DIRECTIONS = Direction.values();
-    private final BlockModelPart baseModel;
-    private final @Nullable BlockModelPart[] cachedFilteredParts = new BlockModelPart[256];
+    private final BlockStateModelPart baseModel;
+    private final Material.Baked particleMaterial;
+    private final @Nullable BlockStateModelPart[] cachedFilteredParts = new BlockStateModelPart[256];
 
     public static ReinforcementModel getOrCreate(ModelBaker baker)
     {
         return baker.compute(REINFORCEMENT_KEY);
     }
 
-    private ReinforcementModel(BlockModelPart baseModel)
+    private ReinforcementModel(BlockStateModelPart baseModel)
     {
         this.baseModel = baseModel;
+        this.particleMaterial = baseModel.particleMaterial();
     }
 
-    public BlockModelPart getFiltered(int faceMask, TriState ambientOcclusion)
+    public BlockStateModelPart getFiltered(int faceMask, TriState ambientOcclusion)
     {
         faceMask |= ambientOcclusion.ordinal() << 6;
 
-        BlockModelPart part = cachedFilteredParts[faceMask];
+        BlockStateModelPart part = cachedFilteredParts[faceMask];
         if (part == null)
         {
-            QuadMapBuilder quadMap = new QuadMapImpl();
+            QuadMapBuilderInternal quadMap = QuadMapBuilderInternal.create();
             for (Direction side : DIRECTIONS)
             {
                 if ((faceMask & (1 << side.ordinal())) != 0)
@@ -51,13 +53,7 @@ public final class ReinforcementModel
                     quadMap.getOrCreate(side).add(baseModel.getQuads(side).getFirst());
                 }
             }
-            cachedFilteredParts[faceMask] = part = ModelUtils.makeModelPart(
-                    quadMap,
-                    ambientOcclusion,
-                    baseModel.particleIcon(),
-                    ChunkSectionLayer.CUTOUT,
-                    SHADER_STATE
-            );
+            cachedFilteredParts[faceMask] = part = new FramedBlockStateModelPart(quadMap.build(), ambientOcclusion, particleMaterial, SHADER_STATE);
         }
         return part;
     }

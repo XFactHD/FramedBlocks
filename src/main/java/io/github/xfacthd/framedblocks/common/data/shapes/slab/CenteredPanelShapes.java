@@ -27,7 +27,5 @@ public final class CenteredPanelShapes
         return ShapeContainer.of(map);
     }
 
-
-
     private CenteredPanelShapes() { }
 }

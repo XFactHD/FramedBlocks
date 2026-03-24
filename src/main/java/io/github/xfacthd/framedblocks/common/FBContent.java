@@ -76,21 +76,18 @@ import io.github.xfacthd.framedblocks.common.util.registration.*;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeBookCategory;
 import net.minecraft.world.item.crafting.display.RecipeDisplay;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
-import net.minecraft.world.level.storage.loot.providers.number.LootNumberProviderType;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.common.crafting.IngredientType;
@@ -124,9 +121,9 @@ public final class FBContent
     private static final DeferredRegister<IngredientType<?>> INGREDIENT_TYPES = register(NeoForgeRegistries.Keys.INGREDIENT_TYPES);
     private static final DeferredRegister<CreativeModeTab> CREATIVE_TABS = register(Registries.CREATIVE_MODE_TAB);
     private static final DeferredParticleTypeRegister PARTICLE_TYPES = DeferredParticleTypeRegister.create(FramedConstants.MOD_ID);
-    private static final DeferredRegister<LootItemConditionType> LOOT_CONDITIONS = register(Registries.LOOT_CONDITION_TYPE);
-    private static final DeferredLootFunctionRegister LOOT_FUNCTIONS = DeferredLootFunctionRegister.create(FramedConstants.MOD_ID);
-    private static final DeferredRegister<LootNumberProviderType> LOOT_NUMBER_PROVIDERS = register(Registries.LOOT_NUMBER_PROVIDER_TYPE);
+    private static final DeferredMapCodecRegister<LootItemCondition> LOOT_CONDITIONS = mapCodecRegister(Registries.LOOT_CONDITION_TYPE);
+    private static final DeferredMapCodecRegister<LootItemFunction> LOOT_FUNCTIONS = mapCodecRegister(Registries.LOOT_FUNCTION_TYPE);
+    private static final DeferredMapCodecRegister<NumberProvider> LOOT_NUMBER_PROVIDERS = mapCodecRegister(Registries.LOOT_NUMBER_PROVIDER_TYPE);
     private static final DeferredRegister<CamoContainerFactory<?>> CAMO_CONTAINER_FACTORIES = register(FramedConstants.CAMO_CONTAINER_FACTORY_REGISTRY_KEY);
 
     private static final Map<BlockType, Holder<Block>> BLOCKS_BY_TYPE = new EnumMap<>(BlockType.class);
@@ -146,10 +143,10 @@ public final class FBContent
     public static final Holder<Block> BLOCK_FRAMED_INNER_CORNER_SLOPE = registerBlock(FramedCornerSlopeBlock::new, BlockType.FRAMED_INNER_CORNER_SLOPE);
     public static final Holder<Block> BLOCK_FRAMED_DOUBLE_CORNER = registerBlock(FramedDoubleCornerBlock::new, BlockType.FRAMED_DOUBLE_CORNER);
     public static final Holder<Block> BLOCK_FRAMED_PRISM_CORNER = registerBlock(FramedPrismCornerBlock::new, BlockType.FRAMED_PRISM_CORNER);
-    public static final Holder<Block> BLOCK_FRAMED_INNER_PRISM_CORNER = registerBlock(FramedInnerPrismCornerBlock::new, BlockType.FRAMED_INNER_PRISM_CORNER);
+    public static final Holder<Block> BLOCK_FRAMED_INNER_PRISM_CORNER = registerBlock(FramedPrismCornerBlock::new, BlockType.FRAMED_INNER_PRISM_CORNER);
     public static final Holder<Block> BLOCK_FRAMED_DOUBLE_PRISM_CORNER = registerBlock(FramedDoublePrismCornerBlock::new, BlockType.FRAMED_DOUBLE_PRISM_CORNER);
     public static final Holder<Block> BLOCK_FRAMED_THREEWAY_CORNER = registerBlock(FramedThreewayCornerBlock::new, BlockType.FRAMED_THREEWAY_CORNER);
-    public static final Holder<Block> BLOCK_FRAMED_INNER_THREEWAY_CORNER = registerBlock(FramedInnerThreewayCornerBlock::new, BlockType.FRAMED_INNER_THREEWAY_CORNER);
+    public static final Holder<Block> BLOCK_FRAMED_INNER_THREEWAY_CORNER = registerBlock(FramedThreewayCornerBlock::new, BlockType.FRAMED_INNER_THREEWAY_CORNER);
     public static final Holder<Block> BLOCK_FRAMED_DOUBLE_THREEWAY_CORNER = registerBlock(FramedDoubleThreewayCornerBlock::new, BlockType.FRAMED_DOUBLE_THREEWAY_CORNER);
     public static final Holder<Block> BLOCK_FRAMED_SLOPE_EDGE = registerBlock(FramedSlopeEdgeBlock::new, BlockType.FRAMED_SLOPE_EDGE);
     public static final Holder<Block> BLOCK_FRAMED_ELEVATED_SLOPE_EDGE = registerBlock(FramedElevatedSlopeEdgeBlock::new, BlockType.FRAMED_ELEVATED_SLOPE_EDGE);
@@ -317,14 +314,14 @@ public final class FBContent
     public static final Holder<Block> BLOCK_FRAMED_LARGE_CORNER_SLOPE_PANEL_WALL = registerBlock(FramedCornerSlopePanelWallBlock::new, BlockType.FRAMED_LARGE_CORNER_SLOPE_PANEL_W);
     public static final Holder<Block> BLOCK_FRAMED_SMALL_INNER_CORNER_SLOPE_PANEL = registerBlock(FramedCornerSlopePanelBlock::new, BlockType.FRAMED_SMALL_INNER_CORNER_SLOPE_PANEL);
     public static final Holder<Block> BLOCK_FRAMED_SMALL_INNER_CORNER_SLOPE_PANEL_WALL = registerBlock(FramedCornerSlopePanelWallBlock::new, BlockType.FRAMED_SMALL_INNER_CORNER_SLOPE_PANEL_W);
-    public static final Holder<Block> BLOCK_FRAMED_LARGE_INNER_CORNER_SLOPE_PANEL = registerBlock(FramedLargeInnerCornerSlopePanelBlock::new, BlockType.FRAMED_LARGE_INNER_CORNER_SLOPE_PANEL);
-    public static final Holder<Block> BLOCK_FRAMED_LARGE_INNER_CORNER_SLOPE_PANEL_WALL = registerBlock(FramedLargeInnerCornerSlopePanelWallBlock::new, BlockType.FRAMED_LARGE_INNER_CORNER_SLOPE_PANEL_W);
+    public static final Holder<Block> BLOCK_FRAMED_LARGE_INNER_CORNER_SLOPE_PANEL = registerBlock(FramedCornerSlopePanelBlock::new, BlockType.FRAMED_LARGE_INNER_CORNER_SLOPE_PANEL);
+    public static final Holder<Block> BLOCK_FRAMED_LARGE_INNER_CORNER_SLOPE_PANEL_WALL = registerBlock(FramedCornerSlopePanelWallBlock::new, BlockType.FRAMED_LARGE_INNER_CORNER_SLOPE_PANEL_W);
     public static final Holder<Block> BLOCK_FRAMED_EXTENDED_CORNER_SLOPE_PANEL = registerBlock(FramedExtendedCornerSlopePanelBlock::new, BlockType.FRAMED_EXT_CORNER_SLOPE_PANEL);
     public static final Holder<Block> BLOCK_FRAMED_EXTENDED_CORNER_SLOPE_PANEL_WALL = registerBlock(FramedExtendedCornerSlopePanelWallBlock::new, BlockType.FRAMED_EXT_CORNER_SLOPE_PANEL_W);
     public static final Holder<Block> BLOCK_FRAMED_EXTENDED_INNER_CORNER_SLOPE_PANEL = registerBlock(FramedExtendedCornerSlopePanelBlock::new, BlockType.FRAMED_EXT_INNER_CORNER_SLOPE_PANEL);
     public static final Holder<Block> BLOCK_FRAMED_EXTENDED_INNER_CORNER_SLOPE_PANEL_WALL = registerBlock(FramedExtendedCornerSlopePanelWallBlock::new, BlockType.FRAMED_EXT_INNER_CORNER_SLOPE_PANEL_W);
-    public static final Holder<Block> BLOCK_FRAMED_SMALL_DOUBLE_CORNER_SLOPE_PANEL = registerBlock(FramedSmallDoubleCornerSlopePanelBlock::new, BlockType.FRAMED_SMALL_DOUBLE_CORNER_SLOPE_PANEL);
-    public static final Holder<Block> BLOCK_FRAMED_SMALL_DOUBLE_CORNER_SLOPE_PANEL_WALL = registerBlock(FramedSmallDoubleCornerSlopePanelWallBlock::new, BlockType.FRAMED_SMALL_DOUBLE_CORNER_SLOPE_PANEL_W);
+    public static final Holder<Block> BLOCK_FRAMED_SMALL_DOUBLE_CORNER_SLOPE_PANEL = registerBlock(FramedDoubleCornerSlopePanelBlock::new, BlockType.FRAMED_SMALL_DOUBLE_CORNER_SLOPE_PANEL);
+    public static final Holder<Block> BLOCK_FRAMED_SMALL_DOUBLE_CORNER_SLOPE_PANEL_WALL = registerBlock(FramedDoubleCornerSlopePanelWallBlock::new, BlockType.FRAMED_SMALL_DOUBLE_CORNER_SLOPE_PANEL_W);
     public static final Holder<Block> BLOCK_FRAMED_LARGE_DOUBLE_CORNER_SLOPE_PANEL = registerBlock(FramedDoubleCornerSlopePanelBlock::new, BlockType.FRAMED_LARGE_DOUBLE_CORNER_SLOPE_PANEL);
     public static final Holder<Block> BLOCK_FRAMED_LARGE_DOUBLE_CORNER_SLOPE_PANEL_WALL = registerBlock(FramedDoubleCornerSlopePanelWallBlock::new, BlockType.FRAMED_LARGE_DOUBLE_CORNER_SLOPE_PANEL_W);
     public static final Holder<Block> BLOCK_FRAMED_INVERSE_DOUBLE_CORNER_SLOPE_PANEL = registerBlock(FramedInverseDoubleCornerSlopePanelBlock::new, BlockType.FRAMED_INV_DOUBLE_CORNER_SLOPE_PANEL);
@@ -339,12 +336,12 @@ public final class FBContent
     public static final Holder<Block> BLOCK_FRAMED_STACKED_INNER_CORNER_SLOPE_PANEL_WALL = registerBlock(FramedStackedCornerSlopePanelWallBlock::new, BlockType.FRAMED_STACKED_INNER_CORNER_SLOPE_PANEL_W);
     public static final Holder<Block> BLOCK_FRAMED_SMALL_PRISM_SLOPE_PANEL_CORNER = registerBlock(FramedPrismSlopePanelCornerBlock::new, BlockType.FRAMED_SMALL_PRISM_CORNER_SLOPE_PANEL);
     public static final Holder<Block> BLOCK_FRAMED_SMALL_PRISM_SLOPE_PANEL_CORNER_WALL = registerBlock(FramedPrismSlopePanelCornerWallBlock::new, BlockType.FRAMED_SMALL_PRISM_CORNER_SLOPE_PANEL_W);
-    public static final Holder<Block> BLOCK_FRAMED_LARGE_PRISM_SLOPE_PANEL_CORNER = registerBlock(FramedSolidPrismSlopePanelCornerBlock::new, BlockType.FRAMED_LARGE_PRISM_CORNER_SLOPE_PANEL);
-    public static final Holder<Block> BLOCK_FRAMED_LARGE_PRISM_SLOPE_PANEL_CORNER_WALL = registerBlock(FramedSolidPrismSlopePanelCornerWallBlock::new, BlockType.FRAMED_LARGE_PRISM_CORNER_SLOPE_PANEL_W);
-    public static final Holder<Block> BLOCK_FRAMED_SMALL_INNER_PRISM_SLOPE_PANEL_CORNER = registerBlock(FramedSolidPrismSlopePanelCornerBlock::new, BlockType.FRAMED_SMALL_INNER_PRISM_CORNER_SLOPE_PANEL);
-    public static final Holder<Block> BLOCK_FRAMED_SMALL_INNER_PRISM_SLOPE_PANEL_CORNER_WALL = registerBlock(FramedSolidPrismSlopePanelCornerWallBlock::new, BlockType.FRAMED_SMALL_INNER_PRISM_CORNER_SLOPE_PANEL_W);
-    public static final Holder<Block> BLOCK_FRAMED_LARGE_INNER_PRISM_SLOPE_PANEL_CORNER = registerBlock(FramedSolidPrismSlopePanelCornerBlock::new, BlockType.FRAMED_LARGE_INNER_PRISM_CORNER_SLOPE_PANEL);
-    public static final Holder<Block> BLOCK_FRAMED_LARGE_INNER_PRISM_SLOPE_PANEL_CORNER_WALL = registerBlock(FramedSolidPrismSlopePanelCornerWallBlock::new, BlockType.FRAMED_LARGE_INNER_PRISM_CORNER_SLOPE_PANEL_W);
+    public static final Holder<Block> BLOCK_FRAMED_LARGE_PRISM_SLOPE_PANEL_CORNER = registerBlock(FramedPrismSlopePanelCornerBlock::new, BlockType.FRAMED_LARGE_PRISM_CORNER_SLOPE_PANEL);
+    public static final Holder<Block> BLOCK_FRAMED_LARGE_PRISM_SLOPE_PANEL_CORNER_WALL = registerBlock(FramedPrismSlopePanelCornerWallBlock::new, BlockType.FRAMED_LARGE_PRISM_CORNER_SLOPE_PANEL_W);
+    public static final Holder<Block> BLOCK_FRAMED_SMALL_INNER_PRISM_SLOPE_PANEL_CORNER = registerBlock(FramedPrismSlopePanelCornerBlock::new, BlockType.FRAMED_SMALL_INNER_PRISM_CORNER_SLOPE_PANEL);
+    public static final Holder<Block> BLOCK_FRAMED_SMALL_INNER_PRISM_SLOPE_PANEL_CORNER_WALL = registerBlock(FramedPrismSlopePanelCornerWallBlock::new, BlockType.FRAMED_SMALL_INNER_PRISM_CORNER_SLOPE_PANEL_W);
+    public static final Holder<Block> BLOCK_FRAMED_LARGE_INNER_PRISM_SLOPE_PANEL_CORNER = registerBlock(FramedPrismSlopePanelCornerBlock::new, BlockType.FRAMED_LARGE_INNER_PRISM_CORNER_SLOPE_PANEL);
+    public static final Holder<Block> BLOCK_FRAMED_LARGE_INNER_PRISM_SLOPE_PANEL_CORNER_WALL = registerBlock(FramedPrismSlopePanelCornerWallBlock::new, BlockType.FRAMED_LARGE_INNER_PRISM_CORNER_SLOPE_PANEL_W);
     public static final Holder<Block> BLOCK_FRAMED_PYRAMID = registerBlock(FramedConnectingPyramidBlock::new, BlockType.FRAMED_PYRAMID);
     public static final Holder<Block> BLOCK_FRAMED_PYRAMID_SLAB = registerBlock(FramedPyramidBlock::new, BlockType.FRAMED_PYRAMID_SLAB);
     public static final Holder<Block> BLOCK_FRAMED_ELEVATED_PYRAMID_SLAB = registerBlock(FramedConnectingPyramidBlock::new, BlockType.FRAMED_ELEVATED_PYRAMID_SLAB);
@@ -387,49 +384,38 @@ public final class FBContent
     // endregion
 
     // region DataComponentTypes
-    public static final DeferredDataComponentType<CamoList> DC_TYPE_CAMO_LIST = DATA_COMPONENTS.registerComponentType(
-            "camo_list",
-            builder -> builder.persistent(CamoList.CODEC).networkSynchronized(CamoList.STREAM_CODEC).cacheEncoding()
+    public static final DeferredDataComponentType<CamoList> DC_TYPE_CAMO_LIST = DATA_COMPONENTS.registerCachedComponentType(
+            "camo_list", CamoList.CODEC, CamoList.STREAM_CODEC
     );
-    public static final DeferredDataComponentType<FrameConfig> DC_TYPE_FRAME_CONFIG = DATA_COMPONENTS.registerComponentType(
-            "frame_config",
-            builder -> builder.persistent(FrameConfig.CODEC).networkSynchronized(FrameConfig.STREAM_CODEC)
+    public static final DeferredDataComponentType<FrameConfig> DC_TYPE_FRAME_CONFIG = DATA_COMPONENTS.registerSimpleComponentType(
+            "frame_config", FrameConfig.CODEC, FrameConfig.STREAM_CODEC
     );
-    public static final DeferredDataComponentType<BlueprintData> DC_TYPE_BLUEPRINT_DATA = DATA_COMPONENTS.registerComponentType(
-            "blueprint_data",
-            builder -> builder.persistent(BlueprintData.CODEC).networkSynchronized(BlueprintData.STREAM_CODEC).cacheEncoding()
+    public static final DeferredDataComponentType<BlueprintData> DC_TYPE_BLUEPRINT_DATA = DATA_COMPONENTS.registerCachedComponentType(
+            "blueprint_data", BlueprintData.CODEC, BlueprintData.STREAM_CODEC
     );
-    public static final DeferredDataComponentType<FramedMap> DC_TYPE_FRAMED_MAP = DATA_COMPONENTS.registerComponentType(
-            "framed_map",
-            builder -> builder.persistent(FramedMap.CODEC).networkSynchronized(FramedMap.STREAM_CODEC)
+    public static final DeferredDataComponentType<FramedMap> DC_TYPE_FRAMED_MAP = DATA_COMPONENTS.registerSimpleComponentType(
+            "framed_map", FramedMap.CODEC, FramedMap.STREAM_CODEC
     );
-    public static final DeferredDataComponentType<CollapsibleBlockData> DC_TYPE_COLLAPSIBLE_BLOCK_DATA = DATA_COMPONENTS.registerComponentType(
-            "collapsible_block",
-            builder -> builder.persistent(CollapsibleBlockData.CODEC).networkSynchronized(CollapsibleBlockData.STREAM_CODEC)
+    public static final DeferredDataComponentType<CollapsibleBlockData> DC_TYPE_COLLAPSIBLE_BLOCK_DATA = DATA_COMPONENTS.registerSimpleComponentType(
+            "collapsible_block", CollapsibleBlockData.CODEC, CollapsibleBlockData.STREAM_CODEC
     );
-    public static final DeferredDataComponentType<CollapsibleCopycatBlockData> DC_TYPE_COLLAPSIBLE_COPYCAT_BLOCK_DATA = DATA_COMPONENTS.registerComponentType(
-            "collapsible_copycat_block",
-            builder -> builder.persistent(CollapsibleCopycatBlockData.CODEC).networkSynchronized(CollapsibleCopycatBlockData.STREAM_CODEC)
+    public static final DeferredDataComponentType<CollapsibleCopycatBlockData> DC_TYPE_COLLAPSIBLE_COPYCAT_BLOCK_DATA = DATA_COMPONENTS.registerSimpleComponentType(
+            "collapsible_copycat_block", CollapsibleCopycatBlockData.CODEC, CollapsibleCopycatBlockData.STREAM_CODEC
     );
-    public static final DeferredDataComponentType<PottedFlower> DC_TYPE_POTTED_FLOWER = DATA_COMPONENTS.registerComponentType(
-            "potted_flower",
-            builder -> builder.persistent(PottedFlower.CODEC).networkSynchronized(PottedFlower.STREAM_CODEC)
+    public static final DeferredDataComponentType<PottedFlower> DC_TYPE_POTTED_FLOWER = DATA_COMPONENTS.registerSimpleComponentType(
+            "potted_flower", PottedFlower.CODEC, PottedFlower.STREAM_CODEC
     );
-    public static final DeferredDataComponentType<TargetColor> DC_TYPE_TARGET_COLOR = DATA_COMPONENTS.registerComponentType(
-            "target_color",
-            builder -> builder.persistent(TargetColor.CODEC).networkSynchronized(TargetColor.STREAM_CODEC)
+    public static final DeferredDataComponentType<DyeColor> DC_TYPE_TARGET_COLOR = DATA_COMPONENTS.registerSimpleComponentType(
+            "target_color", DyeColor.CODEC, DyeColor.STREAM_CODEC
     );
-    public static final DeferredDataComponentType<AdjustableDoubleBlockData> DC_TYPE_ADJ_DOUBLE_BLOCK_DATA = DATA_COMPONENTS.registerComponentType(
-            "adjustable_double_block",
-            builder -> builder.persistent(AdjustableDoubleBlockData.CODEC).networkSynchronized(AdjustableDoubleBlockData.STREAM_CODEC)
+    public static final DeferredDataComponentType<AdjustableDoubleBlockData> DC_TYPE_ADJ_DOUBLE_BLOCK_DATA = DATA_COMPONENTS.registerSimpleComponentType(
+            "adjustable_double_block", AdjustableDoubleBlockData.CODEC, AdjustableDoubleBlockData.STREAM_CODEC
     );
-    public static final DeferredDataComponentType<SimpleFluidContent> DC_TYPE_TANK_CONTENTS = DATA_COMPONENTS.registerComponentType(
-            "tank_contents",
-            builder -> builder.persistent(SimpleFluidContent.CODEC).networkSynchronized(SimpleFluidContent.STREAM_CODEC)
+    public static final DeferredDataComponentType<SimpleFluidContent> DC_TYPE_TANK_CONTENTS = DATA_COMPONENTS.registerSimpleComponentType(
+            "tank_contents", SimpleFluidContent.CODEC, SimpleFluidContent.STREAM_CODEC
     );
-    public static final DeferredDataComponentType<WrenchRotationMode> DC_TYPE_WRENCH_MODE = DATA_COMPONENTS.registerComponentType(
-            "wrench_mode",
-            builder -> builder.persistent(WrenchRotationMode.CODEC).networkSynchronized(WrenchRotationMode.STREAM_CODEC)
+    public static final DeferredDataComponentType<WrenchRotationMode> DC_TYPE_WRENCH_MODE = DATA_COMPONENTS.registerSimpleComponentType(
+            "wrench_mode", WrenchRotationMode.CODEC, WrenchRotationMode.STREAM_CODEC
     );
     public static final DeferredDataComponentType<Holder<BlockOverlay>> DC_TYPE_BLOCK_OVERLAY = DATA_COMPONENTS.registerComponentType(
             "block_overlay",
@@ -689,20 +675,20 @@ public final class FBContent
     // endregion
 
     // region RecipeTypes
-    public static final DeferredRecipeType<FramingSawRecipe> RECIPE_TYPE_FRAMING_SAW_RECIPE = registerRecipeType("frame");
+    public static final DeferredRecipeType<FramingSawRecipe> RECIPE_TYPE_FRAMING_SAW_RECIPE = RECIPE_TYPES.registerRecipeType("frame");
     // endregion
 
     // region RecipeSerializers
-    public static final DeferredRecipeSerializer<FramingSawRecipe> RECIPE_SERIALIZER_FRAMING_SAW_RECIPE = registerRecipeSerializer(
+    public static final DeferredRecipeSerializer<FramingSawRecipe> RECIPE_SERIALIZER_FRAMING_SAW_RECIPE = RECIPE_SERIALIZERS.registerRecipeSerializer(
             "frame", FramingSawRecipe.CODEC, FramingSawRecipe.STREAM_CODEC
     );
-    public static final DeferredRecipeSerializer<CamoApplicationRecipe> RECIPE_SERIALIZER_APPLY_CAMO = registerRecipeSerializer(
+    public static final DeferredRecipeSerializer<CamoApplicationRecipe> RECIPE_SERIALIZER_APPLY_CAMO = RECIPE_SERIALIZERS.registerRecipeSerializer(
             "apply_camo", CamoApplicationRecipe.CODEC, CamoApplicationRecipe.STREAM_CODEC
     );
-    public static final DeferredRecipeSerializer<JeiCamoApplicationRecipe> RECIPE_SERIALIZER_JEI_CAMO = registerRecipeSerializer(
+    public static final DeferredRecipeSerializer<JeiCamoApplicationRecipe> RECIPE_SERIALIZER_JEI_CAMO = RECIPE_SERIALIZERS.registerRecipeSerializer(
             "jei_camo", JeiCamoApplicationRecipe.CODEC, JeiCamoApplicationRecipe.STREAM_CODEC
     );
-    public static final DeferredRecipeSerializer<ShapeRotationRecipe> RECIPE_SERIALIZER_SHAPE_ROTATION = registerRecipeSerializer(
+    public static final DeferredRecipeSerializer<ShapeRotationRecipe> RECIPE_SERIALIZER_SHAPE_ROTATION = RECIPE_SERIALIZERS.registerRecipeSerializer(
             "rotate_shape", ShapeRotationRecipe.CODEC, ShapeRotationRecipe.STREAM_CODEC
     );
     // endregion
@@ -741,22 +727,22 @@ public final class FBContent
     // endregion
 
     // region LootItemConditions
-    public static final Holder<LootItemConditionType> NON_TRIVIAL_CAMO_LOOT_CONDITION = registerLootCondition(
+    public static final DeferredMapCodec<RetainCamoLootCondition> NON_TRIVIAL_CAMO_LOOT_CONDITION = LOOT_CONDITIONS.registerCodec(
             "retain_camo", RetainCamoLootCondition.MAP_CODEC
     );
     // endregion
 
     // region LootItemFunctions
-    public static final DeferredLootFunction<SplitCamoLootFunction> SPLIT_CAMO_LOOT_FUNCTION = LOOT_FUNCTIONS.registerLootFunction(
+    public static final DeferredMapCodec<SplitCamoLootFunction> SPLIT_CAMO_LOOT_FUNCTION = LOOT_FUNCTIONS.registerCodec(
             "split_camo", SplitCamoLootFunction.MAP_CODEC
     );
     // endregion
 
     // region LootNumberProviderTypes
-    public static final Holder<LootNumberProviderType> BOARD_ADDITIONAL_ITEM_COUNT_NUMBER_PROVIDER = registerLootNumberProvider(
+    public static final DeferredMapCodec<BoardAdditionalItemCountNumberProvider> BOARD_ADDITIONAL_ITEM_COUNT_NUMBER_PROVIDER = LOOT_NUMBER_PROVIDERS.registerCodec(
             "board", MapCodec.unit(BoardAdditionalItemCountNumberProvider.INSTANCE)
     );
-    public static final Holder<LootNumberProviderType> LAYERED_CUBE_ADDITIONAL_ITEM_COUNT_NUMBER_PROVIDER = registerLootNumberProvider(
+    public static final DeferredMapCodec<LayeredCubeAdditionalItemCountNumberProvider> LAYERED_CUBE_ADDITIONAL_ITEM_COUNT_NUMBER_PROVIDER = LOOT_NUMBER_PROVIDERS.registerCodec(
             "layered_cube", MapCodec.unit(LayeredCubeAdditionalItemCountNumberProvider.INSTANCE)
     );
     // endregion
@@ -929,33 +915,14 @@ public final class FBContent
         return result;
     }
 
-    @SuppressWarnings("SameParameterValue")
-    private static <T extends Recipe<?>> DeferredRecipeType<T> registerRecipeType(String name)
-    {
-        return RECIPE_TYPES.registerRecipeType(name);
-    }
-
-    private static <T extends Recipe<?>> DeferredRecipeSerializer<T> registerRecipeSerializer(
-            String name, MapCodec<T> codec, StreamCodec<RegistryFriendlyByteBuf, T> streamCodec
-    )
-    {
-        return RECIPE_SERIALIZERS.registerRecipeSerializer(name, codec, streamCodec);
-    }
-
-    @SuppressWarnings("SameParameterValue")
-    private static Holder<LootItemConditionType> registerLootCondition(String name, MapCodec<? extends LootItemCondition> codec)
-    {
-        return LOOT_CONDITIONS.register(name, () -> new LootItemConditionType(codec));
-    }
-
-    private static Holder<LootNumberProviderType> registerLootNumberProvider(String name, MapCodec<? extends NumberProvider> codec)
-    {
-        return LOOT_NUMBER_PROVIDERS.register(name, () -> new LootNumberProviderType(codec));
-    }
-
     private static <T> DeferredRegister<T> register(ResourceKey<Registry<T>> key)
     {
         return DeferredRegister.create(key, FramedConstants.MOD_ID);
+    }
+
+    private static <T> DeferredMapCodecRegister<T> mapCodecRegister(ResourceKey<Registry<MapCodec<? extends T>>> key)
+    {
+        return DeferredMapCodecRegister.createMapCodecs(key, FramedConstants.MOD_ID);
     }
 
     @FunctionalInterface

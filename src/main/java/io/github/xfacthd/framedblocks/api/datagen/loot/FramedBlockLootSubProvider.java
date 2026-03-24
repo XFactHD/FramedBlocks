@@ -49,7 +49,7 @@ public abstract class FramedBlockLootSubProvider extends BlockLootSubProvider
     @SuppressWarnings("SameParameterValue")
     protected void dropMultipleWithCamo(Block block, Block drop, int count)
     {
-        add(block, funcBlock ->
+        add(block, _ ->
         {
             LootTable.Builder table = LootTable.lootTable();
             for (int i = 0; i < count; i++)
@@ -77,7 +77,7 @@ public abstract class FramedBlockLootSubProvider extends BlockLootSubProvider
 
     protected final void dropWithCamo(Block block, Block drop)
     {
-        dropWithCamo(block, drop, builder -> {});
+        dropWithCamo(block, drop, _ -> {});
     }
 
     protected final void dropWithCamo(Block block, Block drop, Consumer<LootPoolSingletonContainer.Builder<?>> itemModifier)
@@ -90,7 +90,7 @@ public abstract class FramedBlockLootSubProvider extends BlockLootSubProvider
 
     protected final LootPool.Builder createDropWithCamoPool(Block block)
     {
-        return createDropWithCamoPool(block, block, builder -> {});
+        return createDropWithCamoPool(block, block, _ -> {});
     }
 
     protected final LootPool.Builder createDropWithCamoPool(Block block, Block drop, Consumer<LootPoolSingletonContainer.Builder<?>> itemModifier)

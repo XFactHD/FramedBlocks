@@ -1,6 +1,5 @@
 package io.github.xfacthd.framedblocks.client.data;
 
-import io.github.xfacthd.framedblocks.api.render.outline.ModelBasedOutlineRenderer;
 import io.github.xfacthd.framedblocks.api.render.outline.OutlineRenderer;
 import io.github.xfacthd.framedblocks.api.render.outline.RegisterOutlineRenderersEvent;
 import io.github.xfacthd.framedblocks.client.data.outline.*;
@@ -15,7 +14,7 @@ public final class BlockOutlineRenderers
         {
             if (type.useModelBasedOutline())
             {
-                event.register(type, new ModelBasedOutlineRenderer(FBContent.byType(type)));
+                event.registerModelBased(FBContent.byType(type));
             }
         }
 

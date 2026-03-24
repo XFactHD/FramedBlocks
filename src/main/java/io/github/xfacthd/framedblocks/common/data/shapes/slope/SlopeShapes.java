@@ -86,7 +86,5 @@ public final class SlopeShapes implements ShapeGenerator
         });
     }
 
-
-
     private record ShapeKey(Direction dir, SlopeType type) { }
 }

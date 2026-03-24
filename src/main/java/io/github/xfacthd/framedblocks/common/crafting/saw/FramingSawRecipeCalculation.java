@@ -2,6 +2,7 @@ package io.github.xfacthd.framedblocks.common.crafting.saw;
 
 import io.github.xfacthd.framedblocks.api.util.MathUtils;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.RecipeInput;
 
 public final class FramingSawRecipeCalculation
@@ -32,8 +33,6 @@ public final class FramingSawRecipeCalculation
         return getAdditiveCount(recipe, recipe.getAdditives().get(idx), lcm);
     }
 
-
-
     static int getInputValue(ItemStack input, boolean client)
     {
         FramingSawRecipeCache cache = FramingSawRecipeCache.get(client);
@@ -45,9 +44,9 @@ public final class FramingSawRecipeCalculation
         return MathUtils.lcm(inputValue, recipe.getMaterialAmount());
     }
 
-    static int getOutputCount(int materialAmount, ItemStack result, long lcm)
+    static int getOutputCount(int materialAmount, ItemStackTemplate result, long lcm)
     {
-        return (int) (lcm / materialAmount * result.getCount());
+        return (int) (lcm / materialAmount * result.count());
     }
 
     static int getAdditiveCount(FramingSawRecipe recipe, FramingSawRecipeAdditive additive, long lcm)

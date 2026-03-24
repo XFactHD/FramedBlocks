@@ -26,6 +26,5 @@ public final class LockingPropertyConsistency
         reporter.endTest();
     }
 
-
     private LockingPropertyConsistency() { }
 }

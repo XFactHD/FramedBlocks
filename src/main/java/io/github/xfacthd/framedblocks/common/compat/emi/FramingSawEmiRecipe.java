@@ -104,8 +104,6 @@ public final class FramingSawEmiRecipe extends BasicEmiRecipe
         return outputs.getFirst().getItemStack();
     }
 
-
-
     public static FramingSawEmiRecipe make(RecipeHolder<FramingSawRecipe> recipe, EmiStack input, List<EmiIngredient> additives, EmiStack output)
     {
         boolean showOnRecipeRequest = input.getItemStack().is(FBContent.BLOCK_FRAMED_CUBE.value().asItem());

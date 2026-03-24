@@ -40,7 +40,5 @@ public final class VerticalHalfStairsShapes
         return ShapeContainer.of(map);
     }
 
-
-
     private VerticalHalfStairsShapes() { }
 }

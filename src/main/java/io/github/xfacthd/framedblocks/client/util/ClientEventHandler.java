@@ -11,7 +11,5 @@ public final class ClientEventHandler
         CacheCleaner.clearModelCaches(CacheCleaner.Reason.DISCONNECT);
     }
 
-
-
     private ClientEventHandler() { }
 }

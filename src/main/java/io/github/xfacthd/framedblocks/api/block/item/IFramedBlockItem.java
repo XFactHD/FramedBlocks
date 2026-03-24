@@ -2,6 +2,7 @@ package io.github.xfacthd.framedblocks.api.block.item;
 
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedDoubleBlockEntity;
 import io.github.xfacthd.framedblocks.api.block.blockentity.IFramedBlockEntity;
+import io.github.xfacthd.framedblocks.api.camo.CamoContent;
 import io.github.xfacthd.framedblocks.api.camo.CamoPrinter;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.api.util.sound.SoundEventType;
@@ -12,6 +13,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
@@ -42,16 +44,31 @@ public interface IFramedBlockItem
         BlockPos pos = context.getClickedPos();
         if (!(level.getBlockEntity(pos) instanceof IFramedBlockEntity be)) return;
 
-        SoundType soundOne = be.getCamo().getContent().getSoundType();
+        SoundType soundOne = resolveSound(be.getCamo().getContent());
         SoundUtils.playPlaceSound(context, soundOne, false);
 
         if (!(be instanceof FramedDoubleBlockEntity dbe)) return;
 
-        SoundType soundTwo = dbe.getCamoTwo().getContent().getSoundType();
+        SoundType soundTwo = resolveSound(dbe.getCamoTwo().getContent());
         if (!SoundUtils.isSameSound(soundOne, soundTwo, SoundEventType.PLACE))
         {
             SoundUtils.playPlaceSound(context, soundTwo, false);
         }
+    }
+
+    default boolean useCustomEmptyPlaceSound()
+    {
+        return false;
+    }
+
+    @SuppressWarnings("deprecation")
+    private SoundType resolveSound(CamoContent<?> camo)
+    {
+        if (useCustomEmptyPlaceSound() && camo.isEmpty())
+        {
+            return ((BlockItem) this).getBlock().defaultBlockState().getSoundType();
+        }
+        return camo.getSoundType();
     }
 
     @ApiStatus.NonExtendable

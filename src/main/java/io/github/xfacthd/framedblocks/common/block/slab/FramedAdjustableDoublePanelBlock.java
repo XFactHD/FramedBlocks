@@ -96,8 +96,6 @@ public class FramedAdjustableDoublePanelBlock extends FramedAdjustableDoubleBloc
         return state.getValue(FramedProperties.FACING_HOR);
     }
 
-
-
     public static FramedAdjustableDoublePanelBlock standard(Properties props)
     {
         return new FramedAdjustableDoublePanelBlock(

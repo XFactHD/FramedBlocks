@@ -46,8 +46,6 @@ public class FramedLargeButtonBlock extends FramedButtonBlock
         return state.getValue(FACE) != AttachFace.WALL;
     }
 
-
-
     public static VoxelShape getShape(BlockState state)
     {
         boolean pressed = state.getValue(POWERED);
@@ -91,18 +89,14 @@ public class FramedLargeButtonBlock extends FramedButtonBlock
         );
     }
 
-
-
     public static final class LargeButtonStateMerger implements StateMerger
     {
-        private final StateMerger ignoringMerger = StateMerger.ignoring(WrapHelper.IGNORE_ALWAYS);
-
         private LargeButtonStateMerger() { }
 
         @Override
         public BlockState apply(BlockState state)
         {
-            state = ignoringMerger.apply(state);
+            state = WrapHelper.DEFAULT_MERGER.apply(state);
 
             AttachFace face = state.getValue(FramedLargeButtonBlock.FACE);
             if (face != AttachFace.WALL)
@@ -116,7 +110,7 @@ public class FramedLargeButtonBlock extends FramedButtonBlock
         public Set<Property<?>> getHandledProperties(Holder<Block> block)
         {
             return Utils.concat(
-                    ignoringMerger.getHandledProperties(block),
+                    WrapHelper.DEFAULT_MERGER.getHandledProperties(block),
                     Set.of(FramedLargeButtonBlock.FACING)
             );
         }

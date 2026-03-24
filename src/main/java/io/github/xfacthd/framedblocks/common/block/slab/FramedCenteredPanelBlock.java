@@ -11,7 +11,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.jspecify.annotations.Nullable;
 
 public class FramedCenteredPanelBlock extends FramedBlock
@@ -25,7 +24,7 @@ public class FramedCenteredPanelBlock extends FramedBlock
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        builder.add(FramedProperties.FACING_NE, FramedProperties.SOLID, BlockStateProperties.WATERLOGGED);
+        builder.add(FramedProperties.FACING_NE);
     }
 
     @Override

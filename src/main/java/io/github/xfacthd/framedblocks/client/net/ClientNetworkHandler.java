@@ -28,10 +28,9 @@ public final class ClientNetworkHandler
         {
             Minecraft.getInstance().setScreen(switch (be.getBlockState().getBlock())
             {
-                case FramedStandingSignBlock block -> FramedSignScreen.standing(be, payload.frontText());
-                case FramedWallSignBlock block -> FramedSignScreen.wall(be, payload.frontText());
-                case FramedCeilingHangingSignBlock block -> FramedSignScreen.hanging(be, payload.frontText());
-                case FramedWallHangingSignBlock block -> FramedSignScreen.hanging(be, payload.frontText());
+                case FramedStandingSignBlock _ -> FramedSignScreen.standing(be, payload.frontText());
+                case FramedWallSignBlock _ -> FramedSignScreen.wall(be, payload.frontText());
+                case FramedCeilingHangingSignBlock _, FramedWallHangingSignBlock _ -> FramedSignScreen.hanging(be, payload.frontText());
                 default -> throw new IllegalStateException("Unsupported sign block: " + be.getBlockState());
             });
         }

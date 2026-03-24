@@ -1,7 +1,7 @@
 package io.github.xfacthd.framedblocks.api.camo.empty;
 
 import io.github.xfacthd.framedblocks.api.FramedBlocksAPI;
-import io.github.xfacthd.framedblocks.api.camo.CamoClientHandler;
+import io.github.xfacthd.framedblocks.api.camo.CamoContentClientHandler;
 import io.github.xfacthd.framedblocks.api.camo.CamoContent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -11,8 +11,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.util.TriState;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.BlockAndTintGetter;
+import net.minecraft.world.level.BlockAndLightGetter;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.LevelReader;
@@ -90,7 +89,7 @@ public final class EmptyCamoContent extends CamoContent<EmptyCamoContent>
     }
 
     @Override
-    public boolean shouldDisplayFluidOverlay(BlockAndTintGetter level, BlockPos pos, FluidState fluid)
+    public boolean shouldDisplayFluidOverlay(BlockAndLightGetter level, BlockPos pos, FluidState fluid)
     {
         return true;
     }
@@ -118,18 +117,6 @@ public final class EmptyCamoContent extends CamoContent<EmptyCamoContent>
     public MapColor getMapColor(BlockGetter level, BlockPos pos)
     {
         return null;
-    }
-
-    @Override
-    public int getTintColor(BlockAndTintGetter level, BlockPos pos, int tintIdx)
-    {
-        return -1;
-    }
-
-    @Override
-    public int getTintColor(ItemStack stack, int tintIdx)
-    {
-        return -1;
     }
 
     @Override
@@ -200,9 +187,9 @@ public final class EmptyCamoContent extends CamoContent<EmptyCamoContent>
     }
 
     @Override
-    public CamoClientHandler<EmptyCamoContent> getClientHandler()
+    public CamoContentClientHandler<EmptyCamoContent> getClientHandler()
     {
-        return EmptyCamoClientHandler.INSTANCE;
+        return EmptyCamoContentClientHandler.INSTANCE;
     }
 
     @Override

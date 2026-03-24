@@ -7,7 +7,9 @@ import io.github.xfacthd.framedblocks.api.FramedBlocksAPI;
 import io.github.xfacthd.framedblocks.api.camo.empty.EmptyCamoContainer;
 import io.github.xfacthd.framedblocks.api.internal.InternalAPI;
 import io.github.xfacthd.framedblocks.api.util.network.ValidatingDecoder;
-import net.minecraft.client.renderer.block.model.BlockStateModel;
+import it.unimi.dsi.fastutil.ints.IntList;
+import net.minecraft.client.renderer.block.BlockAndTintGetter;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Registry;
@@ -186,8 +188,6 @@ public final class CamoContainerHelper
         return camo;
     }
 
-
-
     public static final class Client
     {
         /**
@@ -196,16 +196,33 @@ public final class CamoContainerHelper
         @SuppressWarnings({ "rawtypes", "unchecked" })
         public static BlockStateModel getOrCreateModel(CamoContent<?> content)
         {
-            CamoClientHandler clientHandler = content.getClientHandler();
+            CamoContentClientHandler clientHandler = content.getClientHandler();
             return clientHandler.getOrCreateModel(content);
         }
 
+        @SuppressWarnings({ "rawtypes", "unchecked" })
+        public static int getTintCount(CamoContainer<?, ?> container)
+        {
+            CamoContainerClientHandler clientHandler = container.getClientHandler();
+            return clientHandler.getTintCount(container);
+        }
 
+        @SuppressWarnings({ "rawtypes", "unchecked" })
+        public static void collectTintValues(CamoContainer<?, ?> container, BlockAndTintGetter level, BlockPos pos, IntList tintList)
+        {
+            CamoContainerClientHandler clientHandler = container.getClientHandler();
+            clientHandler.collectTintValues(container, level, pos, tintList);
+        }
+
+        @SuppressWarnings({ "rawtypes", "unchecked" })
+        public static void collectTintValues(CamoContainer<?, ?> container, ItemStack stack, IntList tintList)
+        {
+            CamoContainerClientHandler clientHandler = container.getClientHandler();
+            clientHandler.collectTintValues(container, stack, tintList);
+        }
 
         private Client() { }
     }
-
-
 
     private CamoContainerHelper() { }
 }

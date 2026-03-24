@@ -2,7 +2,6 @@ package io.github.xfacthd.framedblocks.common.util.registration;
 
 import com.mojang.serialization.MapCodec;
 import io.github.xfacthd.framedblocks.api.util.registration.DeferredRecipeSerializer;
-import io.github.xfacthd.framedblocks.common.util.SimpleRecipeSerializer;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
@@ -23,7 +22,7 @@ public final class DeferredRecipeSerializerRegister extends DeferredRegister<Rec
     }
 
     @Override
-    @SuppressWarnings({ "unchecked", "NullableProblems" })
+    @SuppressWarnings("unchecked")
     protected <I extends RecipeSerializer<?>> DeferredHolder<RecipeSerializer<?>, I> createHolder(
             ResourceKey<? extends Registry<RecipeSerializer<?>>> registryKey, Identifier key
     )
@@ -35,7 +34,7 @@ public final class DeferredRecipeSerializerRegister extends DeferredRegister<Rec
             String name, MapCodec<R> codec, StreamCodec<RegistryFriendlyByteBuf, R> streamCodec
     )
     {
-        Holder<RecipeSerializer<?>> holder = register(name, () -> new SimpleRecipeSerializer<>(codec, streamCodec));
+        Holder<RecipeSerializer<?>> holder = register(name, () -> new RecipeSerializer<>(codec, streamCodec));
         return (DeferredRecipeSerializer<R>) holder;
     }
 

@@ -2,22 +2,21 @@ package io.github.xfacthd.framedblocks.api.model.geometry;
 
 import io.github.xfacthd.framedblocks.api.block.blockentity.IFramedBlockEntity;
 import io.github.xfacthd.framedblocks.api.camo.CamoContent;
-import io.github.xfacthd.framedblocks.api.model.data.AbstractFramedBlockData;
 import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
 import io.github.xfacthd.framedblocks.api.model.data.QuadMapBuilder;
 import io.github.xfacthd.framedblocks.api.model.item.ItemModelInfo;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
 import io.github.xfacthd.framedblocks.api.predicate.fullface.FullFacePredicate;
 import io.github.xfacthd.framedblocks.api.util.ConfigView;
-import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.block.model.BlockModelPart;
-import net.minecraft.client.renderer.block.model.BlockStateModel;
+import net.minecraft.client.renderer.block.BlockAndTintGetter;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModelPart;
+import net.minecraft.client.resources.model.geometry.BakedQuad;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.client.extensions.BlockModelPartExtension;
+import net.neoforged.neoforge.client.extensions.BlockStateModelPartExtension;
 import net.neoforged.neoforge.model.data.ModelData;
 import org.jspecify.annotations.Nullable;
 
@@ -75,7 +74,7 @@ public abstract class Geometry
     }
 
     /**
-     * Return true if this geometry may add additional parts in {@link #collectAdditionalPartsUncached(PartConsumer, BlockAndTintGetter, BlockPos, RandomSource, ModelData)}.
+     * Return true if this geometry may add additional parts in {@link #collectAdditionalPartsUncached(PartConsumer, BlockAndTintGetter, BlockPos, RandomSource, FramedBlockData, ModelData)}.
      */
     public boolean hasAdditionalUncachedParts()
     {
@@ -83,20 +82,21 @@ public abstract class Geometry
     }
 
     /**
-     * Add additional {@link BlockModelPart}s which should not be cached.
+     * Add additional {@link BlockStateModelPart}s which should not be cached.
      * The result of this method will NOT be cached, execution should therefore be as fast as possible.
      * Only called if {@link #hasAdditionalUncachedParts()} returns true.
      *
-     * @param consumer The {@link PartConsumer} to pass the additional parts to
-     * @param level    The {@linkplain BlockAndTintGetter level} the block is being rendered in
-     * @param pos      The {@link BlockPos} the block is being rendered at
-     * @param random   The {@link RandomSource} to use for randomization
-     * @param data     The {@link ModelData} from the {@link IFramedBlockEntity}
+     * @param consumer  The {@link PartConsumer} to pass the additional parts to
+     * @param level     The {@linkplain BlockAndTintGetter level} the block is being rendered in
+     * @param pos       The {@link BlockPos} the block is being rendered at
+     * @param random    The {@link RandomSource} to use for randomization
+     * @param blockData The {@link FramedBlockData} holding the block's camo and related metadata
+     * @param data      The {@link ModelData} from the {@link IFramedBlockEntity}
      */
-    public void collectAdditionalPartsUncached(PartConsumer consumer, BlockAndTintGetter level, BlockPos pos, RandomSource random, ModelData data) { }
+    public void collectAdditionalPartsUncached(PartConsumer consumer, BlockAndTintGetter level, BlockPos pos, RandomSource random, FramedBlockData blockData, ModelData data) { }
 
     /**
-     * Add additional {@link BlockModelPart}s which should be cached.
+     * Add additional {@link BlockStateModelPart}s which should be cached.
      * The result of this method will be cached, processing time is therefore not critical
      *
      * @param consumer         The {@link PartConsumer} to pass the additional parts to
@@ -153,25 +153,31 @@ public abstract class Geometry
         return false;
     }
 
-    /**
-     * Compute the default AO behavior which is used unless the source {@link BlockModelPart} specifies something else
-     * @see BlockModelPartExtension#ambientOcclusion()
-     */
-    public DefaultAO computeDefaultAmbientOcclusion(BlockState state, ModelData data)
+    /// Returns material flags from additional parts added by this geometry
+    ///
+    /// @param level     The level this geometry is being rendered in
+    /// @param pos       The position this geometry is being rendered at
+    /// @param modelData The model data this geometry is being rendered with
+    /// @param blockData The {@link FramedBlockData} holding the block's camo and related metadata
+    public int getMaterialFlags(BlockAndTintGetter level, BlockPos pos, ModelData modelData, FramedBlockData blockData)
     {
-        FramedBlockData fbData = AbstractFramedBlockData.getOrDefault(data, state, null);
-        if (fbData != null)
-        {
-            if (fbData.isEmissive())
-            {
-                return DefaultAO.FORCE_DISABLE;
-            }
+        return 0;
+    }
 
-            CamoContent<?> camoContent = fbData.getCamoContent();
-            if (!camoContent.isEmpty() && (camoContent.getLightEmission() != 0 || camoContent.isEmissive()))
-            {
-                return DefaultAO.DISABLE;
-            }
+    /**
+     * Compute the default AO behavior which is used unless the source {@link BlockStateModelPart} specifies something else
+     * @see BlockStateModelPartExtension#ambientOcclusion()
+     */
+    public DefaultAO computeDefaultAmbientOcclusion(FramedBlockData blockData, ModelData data)
+    {
+        if (blockData.isEmissive())
+        {
+            return DefaultAO.FORCE_DISABLE;
+        }
+        CamoContent<?> camoContent = blockData.getCamoContent();
+        if (!camoContent.isEmpty() && (camoContent.getLightEmission() != 0 || camoContent.isEmissive()))
+        {
+            return DefaultAO.DISABLE;
         }
         if (ConfigView.Client.INSTANCE.shouldForceAmbientOcclusionOnGlowingBlocks())
         {

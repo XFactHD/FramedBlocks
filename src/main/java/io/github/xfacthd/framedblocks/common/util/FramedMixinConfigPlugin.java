@@ -13,7 +13,6 @@ import java.util.Set;
 public final class FramedMixinConfigPlugin implements IMixinConfigPlugin
 {
     private static final Set<String> DEV_ONLY_MIXINS = Set.of(
-            "xfacthd.framedblocks.mixin.client.DevMixinLevelRenderer"
     );
 
     @Override
@@ -51,8 +50,6 @@ public final class FramedMixinConfigPlugin implements IMixinConfigPlugin
 
     @Override
     public void postApply(String targetClassName, ClassNode targetClass, String mixinClassName, IMixinInfo mixinInfo) { }
-
-
 
     @SuppressWarnings({ "SameParameterValue", "unused" })
     private static boolean checkClassExists(String className)

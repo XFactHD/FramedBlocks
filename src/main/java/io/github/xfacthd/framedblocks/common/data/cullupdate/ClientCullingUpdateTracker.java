@@ -32,7 +32,5 @@ public final class ClientCullingUpdateTracker
         });
     }
 
-
-
     private ClientCullingUpdateTracker() { }
 }

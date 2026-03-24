@@ -13,6 +13,7 @@ import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeMap;
 import net.neoforged.neoforge.client.event.RecipesReceivedEvent;
@@ -50,9 +51,9 @@ public final class FramingSawRecipeCache
         recipes.forEach(holder ->
         {
             FramingSawRecipe recipe = holder.value();
-            ItemStack result = recipe.getResult();
+            ItemStackTemplate result = recipe.getResult();
             int materialValue = recipe.getMaterialAmount();
-            materialValues.put(result.getItem(), materialValue / result.getCount());
+            materialValues.put(result.item().value(), materialValue / result.count());
         });
 
         // Remove disabled recipes after extracting material values
@@ -62,12 +63,12 @@ public final class FramingSawRecipeCache
         {
             FramingSawRecipe recipe = holder.value();
 
-            ItemStack result = recipe.getResult();
-            recipesByResult.put(result.getItem(), holder);
+            ItemStackTemplate result = recipe.getResult();
+            recipesByResult.put(result.item().value(), holder);
 
             if (!recipe.getAdditives().isEmpty())
             {
-                recipesWithAdditives.put(result.getItem(), holder);
+                recipesWithAdditives.put(result.item().value(), holder);
             }
         });
 
@@ -126,8 +127,6 @@ public final class FramingSawRecipeCache
                 .toList();
     }
 
-
-
     public static FramingSawRecipeCache get(boolean client)
     {
         return client ? CLIENT_INSTANCE : SERVER_INSTANCE;
@@ -155,10 +154,10 @@ public final class FramingSawRecipeCache
         return sortRecipes(r1.getResult(), r2.getResult(), r1.getResultType(), r2.getResultType());
     }
 
-    public static int sortRecipes(ItemStack resultOne, ItemStack resultTwo, IBlockType typeOne, IBlockType typeTwo)
+    public static int sortRecipes(ItemStackTemplate resultOne, ItemStackTemplate resultTwo, IBlockType typeOne, IBlockType typeTwo)
     {
-        String ns1 = BuiltInRegistries.ITEM.getKey(resultOne.getItem()).getNamespace();
-        String ns2 = BuiltInRegistries.ITEM.getKey(resultTwo.getItem()).getNamespace();
+        String ns1 = BuiltInRegistries.ITEM.getKey(resultOne.item().value()).getNamespace();
+        String ns2 = BuiltInRegistries.ITEM.getKey(resultTwo.item().value()).getNamespace();
 
         if (!ns1.equals(ns2))
         {
@@ -176,8 +175,6 @@ public final class FramingSawRecipeCache
         // Assume that items from the same namespace use the same IBlockType implementation and are therefore comparable
         return typeOne.compareTo(typeTwo);
     }
-
-
 
     private record Reloader(ReloadableServerResources serverResources) implements ResourceManagerReloadListener
     {

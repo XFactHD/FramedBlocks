@@ -21,7 +21,5 @@ public final class ClientAccess
         gameMode.framedblocks$setDestroyDelay(DEFAULT_DESTROY_DELAY);
     }
 
-
-
     private ClientAccess() { }
 }

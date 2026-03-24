@@ -16,15 +16,15 @@ public final class SimpleBlockCamoContainer extends AbstractBlockCamoContainer<S
     @Override
     public int hashCode()
     {
-        return content.hashCode();
+        return content.hashCode() * 13 + System.identityHashCode(factory);
     }
 
     @Override
     public boolean equals(@Nullable Object obj)
     {
         if (obj == this) return true;
-        if (obj == null || obj.getClass() != SimpleBlockCamoContainer.class) return false;
-        return content.equals(((SimpleBlockCamoContainer) obj).content);
+        if (!(obj instanceof SimpleBlockCamoContainer other)) return false;
+        return content.equals(other.content) && factory == other.factory;
     }
 
     @Override

@@ -28,8 +28,6 @@ public final class AdjustableDoubleBlockGhostRenderBehaviour implements DoubleBl
         return data.derive().with(PackedCollapsibleBlockOffsets.PROPERTY, offsetPacker.packDouble(renderState, firstHeight)).build();
     }
 
-
-
     public static AdjustableDoubleBlockGhostRenderBehaviour standard()
     {
         return new AdjustableDoubleBlockGhostRenderBehaviour(

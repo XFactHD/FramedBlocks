@@ -38,7 +38,7 @@ public class FramedElevatedDoubleSlopeEdgeBlock extends FramedDoubleBlock implem
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        builder.add(FramedProperties.FACING_HOR, PropertyHolder.SLOPE_TYPE, FramedProperties.ALT_SLOPE);
+        builder.add(FramedProperties.FACING_HOR, PropertyHolder.SLOPE_TYPE);
     }
 
     @Override

@@ -17,13 +17,13 @@ public final class CapabilitySetup
         event.registerBlockEntity(
                 Capabilities.Item.BLOCK,
                 FBContent.BE_TYPE_FRAMED_SECRET_STORAGE.value(),
-                (be, side) -> be.getItemHandler()
+                (be, _) -> be.getItemHandler()
         );
 
         event.registerBlockEntity(
                 Capabilities.Item.BLOCK,
                 FBContent.BE_TYPE_FRAMED_CHEST.value(),
-                (be, side) -> be.getChestItemHandler(true)
+                (be, _) -> be.getChestItemHandler(true)
         );
 
         event.registerBlockEntity(
@@ -40,24 +40,24 @@ public final class CapabilitySetup
         event.registerBlockEntity(
                 Capabilities.Item.BLOCK,
                 FBContent.BE_TYPE_FRAMED_CHISELED_BOOKSHELF.value(),
-                (be, side) -> VanillaContainerWrapper.of(be)
+                (be, _) -> VanillaContainerWrapper.of(be)
         );
 
         event.registerBlockEntity(
                 Capabilities.Fluid.BLOCK,
                 FBContent.BE_TYPE_FRAMED_TANK.value(),
-                (be, side) -> be.getFluidHandler()
+                (be, _) -> be.getFluidHandler()
         );
 
         event.registerBlockEntity(
                 Capabilities.Item.BLOCK,
                 FBContent.BE_TYPE_FRAMED_HOPPER.value(),
-                (be, side) -> VanillaContainerWrapper.of(be)
+                (be, _) -> VanillaContainerWrapper.of(be)
         );
 
         event.registerItem(
                 Capabilities.Fluid.ITEM,
-                (stack, itemAccess) -> new ItemAccessFluidHandler(
+                (_, itemAccess) -> new ItemAccessFluidHandler(
                         Objects.requireNonNull(itemAccess),
                         FBContent.DC_TYPE_TANK_CONTENTS.value(),
                         TankFluidResourceHandler.CAPACITY
@@ -65,8 +65,6 @@ public final class CapabilitySetup
                 FBContent.BLOCK_FRAMED_TANK.value()
         );
     }
-
-
 
     private CapabilitySetup() { }
 }

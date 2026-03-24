@@ -82,8 +82,6 @@ public enum CornerDir
         return dir;
     }
 
-
-
     private static CornerDir[][][] makeDirTable()
     {
         CornerDir[][][] table = new CornerDir[6][6][6];

@@ -3,7 +3,6 @@ package io.github.xfacthd.framedblocks.common.compat.diagonalblocks;
 import fuzs.diagonalblocks.api.v2.block.type.DiagonalBlockType;
 import fuzs.diagonalblocks.api.v2.block.type.DiagonalBlockTypes;
 import io.github.xfacthd.framedblocks.FramedBlocks;
-import io.github.xfacthd.framedblocks.api.block.render.FramedBlockColor;
 import io.github.xfacthd.framedblocks.api.block.render.FramedClientBlockExtensions;
 import io.github.xfacthd.framedblocks.api.model.wrapping.RegisterModelWrappersEvent;
 import io.github.xfacthd.framedblocks.api.model.wrapping.WrapHelper;
@@ -20,7 +19,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModList;
-import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import net.neoforged.neoforge.event.BlockEntityTypeAddBlocksEvent;
 
@@ -66,11 +64,11 @@ public final class DiagonalBlocksCompat
         {
             DiagonalBlockTypes.FENCE.registerBlockFactory(
                     Utils.getKeyOrThrow(FBContent.BLOCK_FRAMED_FENCE).identifier(),
-                    block -> FramedDiagonalFenceBlock::new
+                    _ -> FramedDiagonalFenceBlock::new
             );
             DiagonalBlockTypes.WINDOW.registerBlockFactory(
                     Utils.getKeyOrThrow(FBContent.BLOCK_FRAMED_PANE).identifier(),
-                    block -> FramedDiagonalGlassPaneBlock::new
+                    _ -> FramedDiagonalGlassPaneBlock::new
             );
             DiagonalBlockTypes.WINDOW.disableBlockFactory(Utils.getKeyOrThrow(FBContent.BLOCK_FRAMED_BARS).identifier());
             DiagonalBlockTypes.WALL.disableBlockFactory(Utils.getKeyOrThrow(FBContent.BLOCK_FRAMED_WALL).identifier());
@@ -113,27 +111,16 @@ public final class DiagonalBlocksCompat
         public static void init(IEventBus modBus)
         {
             modBus.addListener(GuardedClientAccess::onRegisterModelWrappers);
-            modBus.addListener(GuardedClientAccess::onRegisterBlockColors);
             modBus.addListener(GuardedClientAccess::onRegisterClientExtensions);
         }
 
         private static void onRegisterModelWrappers(RegisterModelWrappersEvent event)
         {
             GuardedAccess.getBlock(DiagonalBlockTypes.FENCE, FBContent.BLOCK_FRAMED_FENCE).ifPresent(
-                    holder -> WrapHelper.wrap(holder, FramedDiagonalFenceGeometry::new, WrapHelper.IGNORE_WATERLOGGED_LOCK)
+                    holder -> WrapHelper.wrap(holder, FramedDiagonalFenceGeometry::new, WrapHelper.DEFAULT_MERGER)
             );
             GuardedAccess.getBlock(DiagonalBlockTypes.WINDOW, FBContent.BLOCK_FRAMED_PANE).ifPresent(
-                    holder -> WrapHelper.wrap(holder, FramedDiagonalPaneGeometry::new, WrapHelper.IGNORE_WATERLOGGED_LOCK)
-            );
-        }
-
-        private static void onRegisterBlockColors(RegisterColorHandlersEvent.Block event)
-        {
-            GuardedAccess.getBlock(DiagonalBlockTypes.FENCE, FBContent.BLOCK_FRAMED_FENCE).ifPresent(
-                    holder -> event.register(FramedBlockColor.INSTANCE, holder.value())
-            );
-            GuardedAccess.getBlock(DiagonalBlockTypes.WINDOW, FBContent.BLOCK_FRAMED_PANE).ifPresent(
-                    holder -> event.register(FramedBlockColor.INSTANCE, holder.value())
+                    holder -> WrapHelper.wrap(holder, FramedDiagonalPaneGeometry::new, WrapHelper.DEFAULT_MERGER)
             );
         }
 

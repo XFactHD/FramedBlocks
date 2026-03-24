@@ -43,7 +43,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.component.BlockItemStateProperties;
-import net.minecraft.world.level.BlockAndTintGetter;
+import net.minecraft.world.level.BlockAndLightGetter;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
@@ -94,7 +94,7 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
     protected static final int FLAG_REINFORCED = 1 << 2;
     protected static final int FLAG_EMISSIVE = 1 << 3;
 
-    private final boolean[] culledFaces = new boolean[6];
+    private final CullState cullState = new CullState();
     private StateCache stateCache;
     private CamoContainer<?, ?> camoContainer = EmptyCamoContainer.EMPTY;
     /** Holds the horizontal orientation this block had when the camo was applied ("applications" for the purpose of updating an existing camo don't update this) */
@@ -642,18 +642,18 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
         }
     }
 
-    protected boolean updateCulling(Direction side, BlockState state, boolean rerender)
+    boolean updateCulling(Direction side, BlockState state, boolean rerender)
     {
-        return updateCulling(culledFaces, state, side, rerender);
+        return updateCulling(cullState, state, side, rerender);
     }
 
-    protected final boolean updateCulling(boolean[] culledFaces, BlockState testState, Direction side, boolean rerender)
+    final boolean updateCulling(CullState culledFaces, BlockState testState, Direction side, boolean rerender)
     {
-        boolean wasHidden = culledFaces[side.ordinal()];
+        boolean wasHidden = culledFaces.get(side);
         boolean hidden = CullingHelper.isSideHidden(level(), worldPosition, testState, side);
         if (wasHidden != hidden)
         {
-            culledFaces[side.ordinal()] = hidden;
+            culledFaces.set(side, hidden);
             requestModelDataUpdate();
             if (rerender)
             {
@@ -977,7 +977,7 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
     }
 
     @Override
-    public boolean shouldCamoDisplayFluidOverlay(BlockAndTintGetter level, BlockPos pos, FluidState fluid)
+    public boolean shouldCamoDisplayFluidOverlay(BlockAndLightGetter level, BlockPos pos, FluidState fluid)
     {
         return camoContainer.getContent().shouldDisplayFluidOverlay(level, pos, fluid);
     }
@@ -1185,7 +1185,7 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
     @Override
     public final ModelData getModelData(boolean includeCullInfo, BlockState state)
     {
-        AbstractFramedBlockData modelData = computeBlockData(state, includeCullInfo);
+        AbstractFramedBlockData modelData = computeBlockData(state, includeCullInfo, false);
         ModelData.Builder builder = ModelData.builder().with(AbstractFramedBlockData.PROPERTY, modelData);
         attachAdditionalModelData(builder);
         return builder.build();
@@ -1194,19 +1194,19 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
     /**
      * @param state           The {@link BlockState} with which the model data is used for rendering (usually {@link #getBlockState()})
      * @param includeCullInfo Whether culling data should be included
+     * @param cullNullFace    Whether "uncullable" faces should be culled
      */
-    AbstractFramedBlockData computeBlockData(BlockState state, boolean includeCullInfo)
+    AbstractFramedBlockData computeBlockData(BlockState state, boolean includeCullInfo, boolean cullNullFace)
     {
-        boolean[] cullData = includeCullInfo ? culledFaces : FramedBlockData.NO_CULLED_FACES;
-        return makeBlockData(state, camoContainer, cullData, false);
+        return makeBlockData(state, camoContainer, cullState.computeMask(includeCullInfo, cullNullFace), false);
     }
 
-    final FramedBlockData makeBlockData(BlockState state, CamoContainer<?, ?> camo, boolean[] cullData, boolean secondPart)
+    final FramedBlockData makeBlockData(BlockState state, CamoContainer<?, ?> camo, byte cullMask, boolean secondPart)
     {
         // The view-blocking value is never resolved from the second part, no point in computing it twice
         TriState viewBlocking = secondPart ? TriState.DEFAULT : Utils.toTriState(state.isSuffocating(level(), worldPosition));
         CamoContainer<?, ?> adjustedCamo = adjustCamoOrientation(camo, state, secondPart);
-        return new FramedBlockData(state, adjustedCamo, cullData, secondPart, reinforced, emissive, viewBlocking, overlay);
+        return new FramedBlockData(state, adjustedCamo, cullMask, secondPart, reinforced, emissive, viewBlocking, overlay);
     }
 
     private CamoContainer<?, ?> adjustCamoOrientation(CamoContainer<?, ?> camo, BlockState state, boolean secondPart)
@@ -1391,5 +1391,41 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
         }
         forceLightUpdate |= camo.getContent().getLightEmission() > 0;
         return camo;
+    }
+
+    static final class CullState
+    {
+        private byte mask = 0;
+
+        private void set(Direction side, boolean occluded)
+        {
+            if (occluded)
+            {
+                mask |= (byte) (1 << side.ordinal());
+            }
+            else
+            {
+                mask &= (byte) ~(1 << side.ordinal());
+            }
+        }
+
+        private boolean get(Direction side)
+        {
+            return (mask & (1 << side.ordinal())) != 0;
+        }
+
+        byte computeMask(boolean includeCullInfo, boolean cullNullFace)
+        {
+            byte mask = 0;
+            if (includeCullInfo)
+            {
+                mask = this.mask;
+            }
+            if (cullNullFace)
+            {
+                mask |= 0b01000000;
+            }
+            return mask;
+        }
     }
 }

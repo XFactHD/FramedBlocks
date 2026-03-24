@@ -7,7 +7,7 @@ import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import org.jetbrains.annotations.ApiStatus;
@@ -19,7 +19,7 @@ public class ExtShapelessRecipeBuilder extends ShapelessRecipeBuilder implements
 
     public ExtShapelessRecipeBuilder(RecipeProvider provider, HolderGetter<Item> itemRegistry, RecipeCategory category, ItemLike result, int count)
     {
-        super(itemRegistry, category, new ItemStack(result, count));
+        super(itemRegistry, category, new ItemStackTemplate(result.asItem(), count));
         this.provider = provider;
     }
 

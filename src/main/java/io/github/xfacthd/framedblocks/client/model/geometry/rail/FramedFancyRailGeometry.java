@@ -8,13 +8,13 @@ import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
 import io.github.xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
 import io.github.xfacthd.framedblocks.api.util.DirUtils;
-import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.block.model.BlockStateModel;
+import net.minecraft.client.renderer.block.BlockAndTintGetter;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
+import net.minecraft.client.resources.model.geometry.BakedQuad;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.Util;
-import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -87,7 +87,7 @@ public class FramedFancyRailGeometry extends Geometry
         if (DirUtils.isY(quadDir))
         {
             Direction targetDir = cullFaceMod.apply(quadDir == Direction.UP ? null : quadDir);
-            forAllSleepers((i, distDir, distOpp) ->
+            forAllSleepers((_, distDir, distOpp) ->
                     QuadModifier.of(quad)
                             .apply(Modifiers.cut(dir, distDir))
                             .apply(Modifiers.cut(dir.getOpposite(), distOpp))
@@ -98,7 +98,7 @@ public class FramedFancyRailGeometry extends Geometry
         }
         else if (quadDir.getAxis() == dir.getAxis())
         {
-            forAllSleepers((i, distDir, distOpp) ->
+            forAllSleepers((_, distDir, _) ->
                     QuadModifier.of(quad)
                             .apply(Modifiers.cut(Direction.UP, SLEEPER_HEIGHT))
                             .apply(Modifiers.setPosition(distDir))
@@ -109,7 +109,7 @@ public class FramedFancyRailGeometry extends Geometry
         else
         {
             Direction targetDir = cullFaceMod.apply(quadDir);
-            forAllSleepers((i, distDir, distOpp) ->
+            forAllSleepers((_, distDir, distOpp) ->
                     QuadModifier.of(quad)
                             .apply(Modifiers.cut(Direction.UP, SLEEPER_HEIGHT))
                             .apply(Modifiers.cut(dir, distDir))
@@ -211,7 +211,7 @@ public class FramedFancyRailGeometry extends Geometry
     @Override
     public void collectAdditionalPartsCached(PartConsumer consumer, BlockAndTintGetter level, BlockPos pos, RandomSource random, FramedBlockData blockData, @Nullable Object cacheKeyUserData)
     {
-        consumer.acceptAll(baseModel, level, pos, random, state, true, false, false, false, auxShaderState, null);
+        consumer.acceptAll(baseModel, level, pos, random, state, true, false, false, auxShaderState, null);
     }
 
     @Override

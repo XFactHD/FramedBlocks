@@ -18,8 +18,8 @@ import io.github.xfacthd.framedblocks.api.camo.CamoList;
 import io.github.xfacthd.framedblocks.api.ghost.GhostRenderBehaviour;
 import io.github.xfacthd.framedblocks.api.ghost.RegisterGhostRenderBehavioursEvent;
 import io.github.xfacthd.framedblocks.api.model.util.ModelUtils;
+import io.github.xfacthd.framedblocks.api.render.fakelevel.DelegatingBlockRenderFakeLevel;
 import io.github.xfacthd.framedblocks.api.util.FramedConstants;
-import io.github.xfacthd.framedblocks.api.util.SingleBlockFakeLevel;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.client.render.util.GhostVertexConsumer;
 import io.github.xfacthd.framedblocks.common.config.ClientConfig;
@@ -28,10 +28,13 @@ import net.minecraft.CrashReport;
 import net.minecraft.CrashReportCategory;
 import net.minecraft.ReportedException;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.block.model.BlockModelPart;
-import net.minecraft.client.renderer.block.model.BlockStateModel;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.renderer.block.BlockQuadOutput;
+import net.minecraft.client.renderer.block.ModelBlockRenderer;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModelPart;
 import net.minecraft.client.renderer.rendertype.RenderType;
-import net.minecraft.client.renderer.state.LevelRenderState;
+import net.minecraft.client.renderer.state.level.LevelRenderState;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.util.RandomSource;
@@ -43,7 +46,6 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
@@ -74,7 +76,7 @@ public final class GhostBlockRenderer
     private static final GhostRenderBehaviour DEFAULT_BEHAVIOUR = new GhostRenderBehaviour() {};
     private static final String DEBUG_NAME = FramedConstants.MOD_ID + "_ghost_block";
     private static final float SCALE = 1.0001F;
-    private static final List<BlockModelPart> PART_SCRATCH_LIST = new ObjectArrayList<>();
+    private static final List<BlockStateModelPart> PART_SCRATCH_LIST = new ObjectArrayList<>();
     private static final ByteBufferBuilder BUFFER_BUILDER = new ByteBufferBuilder(RenderType.TRANSIENT_BUFFER_SIZE);
     private static final ContextKey<List<GhostRenderState>> DATA_KEY = new ContextKey<>(Utils.id("placement_preview"));
 
@@ -211,12 +213,12 @@ public final class GhostBlockRenderer
         Vector3fc renderOffset = behaviour.getRenderOffset(stack, proxiedStack, context, renderState, renderPass, modelData);
         profiler.pop(); //get_render_offset
 
-        renderStates.add(new GhostRenderState(renderPos, renderState, renderOffset, modelData));
+        renderStates.add(new GhostRenderState(mc().level, renderPos, renderState, renderOffset, modelData));
 
         return true;
     }
 
-    private static void onRenderLevelStage(RenderLevelStageEvent.AfterParticles event)
+    private static void onRenderLevelStage(RenderLevelStageEvent.AfterTranslucentParticles event)
     {
         ProfilerFiller profiler = Profiler.get();
         profiler.push(DEBUG_NAME);
@@ -235,11 +237,16 @@ public final class GhostBlockRenderer
         VertexConsumer ghostBuffer = new GhostVertexConsumer(buffer, ClientConfig.VIEW.getGhostRenderOpacity());
         profiler.pop(); //setup_buffer
 
+        profiler.push("get_renderer");
+        boolean ao = mc().options.ambientOcclusion().get();
+        ModelBlockRenderer blockRenderer = new ModelBlockRenderer(ao, false, mc().getBlockColors());
+        profiler.pop(); // get_renderer
+
         profiler.push("render_all");
         PoseStack poseStack = event.getPoseStack();
         for (GhostRenderState renderState : renderStates)
         {
-            doRenderGhostBlock(ghostBuffer, poseStack, profiler, renderState);
+            doRenderGhostBlock(blockRenderer, ghostBuffer, poseStack, profiler, renderState);
         }
         profiler.pop(); // render_all
 
@@ -257,13 +264,14 @@ public final class GhostBlockRenderer
         profiler.pop();
     }
 
-    private static void doRenderGhostBlock(VertexConsumer builder, PoseStack poseStack, ProfilerFiller profiler, GhostRenderState renderState)
+    private static void doRenderGhostBlock(ModelBlockRenderer blockRenderer, VertexConsumer builder, PoseStack poseStack, ProfilerFiller profiler, GhostRenderState renderState)
     {
         profiler.push("prepare");
         BlockPos pos = renderState.pos;
         BlockState state = renderState.state;
         Vec3 offset = Vec3.atLowerCornerOf(pos).subtract(mc().gameRenderer.getMainCamera().position());
-        BlockAndTintGetter level = SingleBlockFakeLevel.atPos(mc().level, pos, state, renderState.modelData);
+        BlockQuadOutput output = (_, _, _, quad, instance) ->
+                builder.putBakedQuad(poseStack.last(), quad, instance);
         profiler.pop(); //prepare
 
         profiler.push("render");
@@ -274,8 +282,8 @@ public final class GhostBlockRenderer
         poseStack.translate(offset.x + .5, offset.y + .5, offset.z + .5);
         poseStack.scale(SCALE, SCALE, SCALE); // Scale up very slightly to avoid z-fighting with replaceable blocks like snow layers
         poseStack.translate(-.5F, -.5F, -.5F);
-        model.collectParts(level, pos, state, RANDOM, PART_SCRATCH_LIST);
-        mc().getBlockRenderer().renderBatched(state, pos, level, poseStack, type -> builder, false, PART_SCRATCH_LIST);
+        model.collectParts(renderState, pos, state, RANDOM, PART_SCRATCH_LIST);
+        blockRenderer.tesselateBlock(output, 0, 0, 0, renderState, pos, state, model, 0);
         PART_SCRATCH_LIST.clear();
         poseStack.popPose();
         profiler.pop(); //render
@@ -373,7 +381,13 @@ public final class GhostBlockRenderer
         return Minecraft.getInstance();
     }
 
-    private record GhostRenderState(BlockPos pos, BlockState state, Vector3fc offset, ModelData modelData) {}
+    private record GhostRenderState(
+            ClientLevel realLevel,
+            BlockPos pos,
+            BlockState state,
+            Vector3fc offset,
+            ModelData modelData
+    ) implements DelegatingBlockRenderFakeLevel { }
 
     private GhostBlockRenderer() { }
 }

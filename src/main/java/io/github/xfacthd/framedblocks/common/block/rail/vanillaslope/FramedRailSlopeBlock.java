@@ -39,7 +39,6 @@ import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.block.state.properties.RailShape;
 import net.minecraft.world.level.redstone.Orientation;
@@ -62,8 +61,8 @@ public class FramedRailSlopeBlock<BE extends FramedBlockEntity> extends BaseRail
 
     protected FramedRailSlopeBlock(BlockType type, Properties props, BlockEntityType.BlockEntitySupplier<BE> beFactory)
     {
-        super(true, IFramedBlock.applyDefaultProperties(props, type));
         this.type = type;
+        super(true, IFramedBlock.applyDefaultProperties(props, type));
         this.shapes = ShapeLookup.of(this);
         this.beFactory = beFactory;
         BlockUtils.configureStandardProperties(this);
@@ -72,11 +71,8 @@ public class FramedRailSlopeBlock<BE extends FramedBlockEntity> extends BaseRail
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
-        BlockUtils.addRequiredProperties(builder);
-        builder.add(
-                PropertyHolder.ASCENDING_RAIL_SHAPE, BlockStateProperties.WATERLOGGED, FramedProperties.SOLID,
-                FramedProperties.ALT_SLOPE
-        );
+        BlockUtils.addStandardProperties(this, builder);
+        builder.add(PropertyHolder.ASCENDING_RAIL_SHAPE);
     }
 
     @Override
@@ -277,8 +273,6 @@ public class FramedRailSlopeBlock<BE extends FramedBlockEntity> extends BaseRail
     {
         return getItemModelSource();
     }
-
-
 
     public static FramedRailSlopeBlock<FramedBlockEntity> normal(Properties props)
     {

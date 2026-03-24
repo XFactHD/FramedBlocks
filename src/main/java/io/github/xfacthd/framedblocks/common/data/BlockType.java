@@ -2,6 +2,7 @@ package io.github.xfacthd.framedblocks.common.data;
 
 import com.google.common.base.Preconditions;
 import io.github.xfacthd.framedblocks.api.block.IBlockType;
+import io.github.xfacthd.framedblocks.api.block.render.NullCullPredicate;
 import io.github.xfacthd.framedblocks.api.predicate.contex.ConTexMode;
 import io.github.xfacthd.framedblocks.api.predicate.contex.ConnectionPredicate;
 import io.github.xfacthd.framedblocks.api.predicate.cull.SideSkipPredicate;
@@ -368,6 +369,12 @@ public enum BlockType implements IBlockType
     public BlockOverlayPredicate getBlockOverlayPredicate()
     {
         return BlockOverlayPredicates.PREDICATES.get(this);
+    }
+
+    @Override
+    public NullCullPredicate getNullCullPredicate()
+    {
+        return NullCullPredicates.PREDICATES.get(this);
     }
 
     @Override

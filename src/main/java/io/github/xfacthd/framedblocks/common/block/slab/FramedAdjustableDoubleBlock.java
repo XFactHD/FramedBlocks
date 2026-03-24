@@ -80,8 +80,6 @@ public abstract class FramedAdjustableDoubleBlock extends FramedDoubleBlock
         return defaultBlockState();
     }
 
-
-
     protected static DoubleBlockParts makeStandardParts(BlockState state)
     {
         Direction facing = ((FramedAdjustableDoubleBlock) state.getBlock()).getFacing(state);

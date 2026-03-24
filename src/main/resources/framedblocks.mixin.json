@@ -1,7 +1,7 @@
 {
     "required": true,
     "package": "io.github.xfacthd.framedblocks.mixin",
-    "compatibilityLevel": "JAVA_21",
+    "compatibilityLevel": "JAVA_25",
     "plugin": "io.github.xfacthd.framedblocks.common.util.FramedMixinConfigPlugin",
     "mixins": [
         "InvokerBlock",
@@ -12,14 +12,16 @@
         "MixinStateDefinitionBuilder"
     ],
     "client": [
-        "client.AccessorBlockModelShaper",
+        "client.AccessorBlockStateModelSet",
         "client.AccessorModelManager",
         "client.AccessorMultiPlayerGameMode",
-        "client.MixinLevelRenderer",
-        "client.MixinWeightedVariants"
+        "client.MixinLevelRenderer"
     ],
     "injectors": {
         "defaultRequire": 1
+    },
+    "mixinextras": {
+        "minVersion": "0.5.0"
     },
     "minVersion": "0.8"
 }

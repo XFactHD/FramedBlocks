@@ -78,11 +78,7 @@ public final class VerticalStairsShapes
         return ShapeContainer.of(map);
     }
 
-
-
     public record ShapeKey(Direction dir, StairsType type) { }
-
-
 
     private VerticalStairsShapes() { }
 }

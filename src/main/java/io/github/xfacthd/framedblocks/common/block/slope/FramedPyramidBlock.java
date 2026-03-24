@@ -1,7 +1,6 @@
 package io.github.xfacthd.framedblocks.common.block.slope;
 
 import io.github.xfacthd.framedblocks.api.block.BlockUtils;
-import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
 import io.github.xfacthd.framedblocks.api.block.SlopeToggleBlock;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
@@ -31,10 +30,7 @@ public class FramedPyramidBlock extends FramedBlock implements SlopeToggleBlock
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        builder.add(
-                BlockStateProperties.FACING, FramedProperties.SOLID, BlockStateProperties.WATERLOGGED,
-                FramedProperties.ALT_SLOPE
-        );
+        builder.add(BlockStateProperties.FACING);
     }
 
     @Override

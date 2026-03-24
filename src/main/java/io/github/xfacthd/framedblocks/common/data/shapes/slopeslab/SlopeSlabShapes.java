@@ -85,7 +85,5 @@ public final class SlopeSlabShapes implements ShapeGenerator
         });
     }
 
-
-
     public record ShapeKey(boolean top, boolean topHalf) { }
 }

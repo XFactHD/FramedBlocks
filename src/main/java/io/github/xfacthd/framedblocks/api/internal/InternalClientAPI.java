@@ -1,26 +1,25 @@
 package io.github.xfacthd.framedblocks.api.internal;
 
 import com.mojang.datafixers.util.Either;
-import io.github.xfacthd.framedblocks.api.block.render.NullCullPredicate;
-import io.github.xfacthd.framedblocks.api.model.ExtendedBlockModelPart;
+import io.github.xfacthd.framedblocks.api.model.ExtendedBlockStateModelPart;
 import io.github.xfacthd.framedblocks.api.model.data.QuadMapBuilder;
 import io.github.xfacthd.framedblocks.api.model.item.ItemModelInfo;
 import io.github.xfacthd.framedblocks.api.model.item.block.BlockItemModelProvider;
-import io.github.xfacthd.framedblocks.api.model.item.tint.DynamicItemTintProvider;
 import io.github.xfacthd.framedblocks.api.model.standalone.CachingModel;
 import io.github.xfacthd.framedblocks.api.model.standalone.StandaloneModelFactory;
 import io.github.xfacthd.framedblocks.api.model.standalone.StandaloneWrapperKey;
 import io.github.xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
+import io.github.xfacthd.framedblocks.api.model.wrapping.MaterialLookup;
 import io.github.xfacthd.framedblocks.api.model.wrapping.ModelFactory;
 import io.github.xfacthd.framedblocks.api.model.wrapping.statemerger.StateMerger;
+import io.github.xfacthd.framedblocks.api.render.outline.OutlineRenderer;
 import io.github.xfacthd.framedblocks.api.util.Utils;
-import net.minecraft.client.renderer.block.model.BlockModelDefinition;
-import net.minecraft.client.renderer.block.model.BlockStateModel;
-import net.minecraft.client.renderer.block.model.SingleVariant;
-import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModelDispatcher;
+import net.minecraft.client.renderer.block.dispatch.SingleVariant;
 import net.minecraft.client.renderer.item.ItemModel;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.ModelBaker;
+import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.TriState;
@@ -38,11 +37,9 @@ public interface InternalClientAPI
 {
     InternalClientAPI INSTANCE = Utils.loadService(InternalClientAPI.class);
 
-
-
     void registerModelWrapper(Holder<Block> block, GeometryFactory geometryFactory, StateMerger stateMerger);
 
-    void registerDoubleModelWrapper(Holder<Block> block, NullCullPredicate nullCullPredicate, ItemModelInfo itemModelInfo, StateMerger stateMerger);
+    void registerDoubleModelWrapper(Holder<Block> block, ItemModelInfo itemModelInfo, StateMerger stateMerger);
 
     void registerSpecialModelWrapper(Holder<Block> block, ModelFactory modelFactory, StateMerger stateMerger);
 
@@ -57,15 +54,19 @@ public interface InternalClientAPI
 
     void enqueueClientTask(int delay, Runnable task);
 
-    ItemModel.Unbaked createFramedBlockItemModel(Block block, BlockItemModelProvider modelProvider, DynamicItemTintProvider tintProvider, Identifier baseModel);
+    ItemModel.Unbaked createFramedBlockItemModel(Block block, BlockItemModelProvider modelProvider, Identifier baseModel);
 
-    ExtendedBlockModelPart makeBlockModelPart(QuadMapBuilder quadMap, TriState partAO, TextureAtlasSprite particleSprite, ChunkSectionLayer chunkLayer, @Nullable BlockState shaderState);
+    ExtendedBlockStateModelPart makeBlockModelPart(QuadMapBuilder quadMap, TriState partAO, Material.Baked particleMaterial, @Nullable BlockState shaderState);
 
-    BlockModelDefinition createFramedBlockDefinition(
-            Either<BlockModelDefinition, SingleVariant.Unbaked> wrapped,
+    BlockStateModelDispatcher createFramedBlockDefinition(
+            Either<BlockStateModelDispatcher, SingleVariant.Unbaked> wrapped,
             Map<String, SingleVariant.Unbaked> auxModels,
             Optional<StandaloneWrapperKey<?>> wrapperKey
     );
 
     Supplier<BlockStateModel> createBlockItemModelProviderForGeometry(BlockState state, BlockState srcState, GeometryFactory geometry, ModelBaker baker);
+
+    OutlineRenderer<?> createModelBasedOutlineRenderer(Block block);
+
+    MaterialLookup getRuntimeMaterialLookup();
 }

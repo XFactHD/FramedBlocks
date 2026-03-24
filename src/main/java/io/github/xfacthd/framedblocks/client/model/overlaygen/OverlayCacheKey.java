@@ -1,7 +1,7 @@
 package io.github.xfacthd.framedblocks.client.model.overlaygen;
 
-import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.resources.model.geometry.BakedQuad;
+import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.core.Direction;
 import net.neoforged.neoforge.client.model.quad.BakedNormals;
 import org.joml.Vector3fc;
@@ -13,13 +13,14 @@ record OverlayCacheKey(
         Vector3fc pos2,
         Vector3fc pos3,
         BakedNormals normals,
-        TextureAtlasSprite sprite,
+        Material.Baked material,
+        boolean forceTranslucent,
         boolean forceEmissive
 ) implements OverlayQuadGenerator.VertexCoordProvider
 {
-    public OverlayCacheKey(BakedQuad quad, TextureAtlasSprite sprite, boolean forceEmissive)
+    public OverlayCacheKey(BakedQuad quad, Material.Baked material, boolean forceTranslucent, boolean forceEmissive)
     {
-        this(quad.direction(), quad.position0(), quad.position1(), quad.position2(), quad.position3(), quad.bakedNormals(), sprite, forceEmissive);
+        this(quad.direction(), quad.position0(), quad.position1(), quad.position2(), quad.position3(), quad.bakedNormals(), material, forceTranslucent, forceEmissive);
     }
 
     @Override

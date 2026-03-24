@@ -29,14 +29,10 @@ public record FramedMap(BlockPos pos, int yRot)
         this(pos, dir.get2DDataValue() * 90);
     }
 
-
-
     public static String makeFrameId(BlockPos pos)
     {
         return FramedConstants.MOD_ID + ":" + MapFrame.frameId(pos);
     }
-
-
 
     public interface MarkerRemover
     {

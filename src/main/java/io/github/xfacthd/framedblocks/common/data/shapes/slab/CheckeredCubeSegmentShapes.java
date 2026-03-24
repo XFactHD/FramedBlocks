@@ -33,7 +33,5 @@ public final class CheckeredCubeSegmentShapes
         return ShapeContainer.of(map);
     }
 
-
-
     private CheckeredCubeSegmentShapes() { }
 }

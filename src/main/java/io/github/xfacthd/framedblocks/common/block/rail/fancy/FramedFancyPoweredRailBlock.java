@@ -38,11 +38,11 @@ public class FramedFancyPoweredRailBlock extends PoweredRailBlock implements IFr
 
     private FramedFancyPoweredRailBlock(BlockType type, Properties props, boolean isPoweredRail)
     {
+        this.type = type;
         super(IFramedBlock.applyDefaultProperties(props, type)
                 .noCollision(),
                 isPoweredRail
         );
-        this.type = type;
         BlockUtils.configureStandardProperties(this);
     }
 
@@ -50,7 +50,7 @@ public class FramedFancyPoweredRailBlock extends PoweredRailBlock implements IFr
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        BlockUtils.addRequiredProperties(builder);
+        BlockUtils.addStandardProperties(this, builder);
     }
 
     @Override
@@ -154,8 +154,6 @@ public class FramedFancyPoweredRailBlock extends PoweredRailBlock implements IFr
     {
         return defaultBlockState();
     }
-
-
 
     public static FramedFancyPoweredRailBlock powered(Properties props)
     {

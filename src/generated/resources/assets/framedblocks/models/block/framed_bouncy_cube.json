@@ -78,10 +78,15 @@
       ]
     }
   ],
-  "render_type": "minecraft:cutout",
   "textures": {
-    "frame": "framedblocks:block/framed_block",
-    "particle": "framedblocks:block/framed_block",
+    "frame": {
+      "force_translucent": true,
+      "sprite": "framedblocks:block/framed_block"
+    },
+    "particle": {
+      "force_translucent": true,
+      "sprite": "framedblocks:block/framed_block"
+    },
     "underlay": "minecraft:block/slime_block"
   }
 }

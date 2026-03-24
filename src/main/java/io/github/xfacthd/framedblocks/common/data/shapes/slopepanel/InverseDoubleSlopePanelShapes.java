@@ -67,7 +67,5 @@ public final class InverseDoubleSlopePanelShapes implements ShapeGenerator
         });
     }
 
-
-
     private record ShapeKey(Direction dir, HorizontalRotation rot) { }
 }

@@ -12,7 +12,7 @@ import java.util.function.Function;
 
 public enum CamoGetter
 {
-    NONE(be -> EmptyCamoContainer.EMPTY, data -> FramedBlockData.EMPTY, parts -> null),
+    NONE(_ -> EmptyCamoContainer.EMPTY, _ -> FramedBlockData.EMPTY, _ -> null),
     FIRST(FramedDoubleBlockEntity::getCamo, data -> data.unwrap(false), DoubleBlockParts::stateOne),
     SECOND(FramedDoubleBlockEntity::getCamoTwo, data -> data.unwrap(true), DoubleBlockParts::stateTwo),
     ;
@@ -47,8 +47,6 @@ public enum CamoGetter
     {
         return partGetter.apply(parts);
     }
-
-
 
     public static CamoGetter get(boolean first, boolean second)
     {

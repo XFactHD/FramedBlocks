@@ -11,9 +11,9 @@ import java.util.function.BiPredicate;
 
 public interface FullFacePredicate extends BiPredicate<BlockState, Direction>
 {
-    FullFacePredicate TRUE = (state, dir) -> true;
-    FullFacePredicate FALSE = (state, dir) -> false;
-    FullFacePredicate Y_AXIS = (state, dir) -> DirUtils.isY(dir);
+    FullFacePredicate TRUE = (_, _) -> true;
+    FullFacePredicate FALSE = (_, _) -> false;
+    FullFacePredicate Y_AXIS = (_, dir) -> DirUtils.isY(dir);
     FullFacePredicate TOP = (state, dir) -> state.getValue(FramedProperties.TOP) ? dir == Direction.UP : dir == Direction.DOWN;
     FullFacePredicate DIR = (state, dir) -> dir == state.getValue(BlockStateProperties.FACING);
     FullFacePredicate DIR_OPPOSITE = (state, dir) -> dir == state.getValue(BlockStateProperties.FACING).getOpposite();
@@ -25,7 +25,7 @@ public interface FullFacePredicate extends BiPredicate<BlockState, Direction>
     FullFacePredicate NOT_HOR_DIR = (state, side) -> side != state.getValue(FramedProperties.FACING_HOR);
     FullFacePredicate AXIS = (state, side) -> side.getAxis() == state.getValue(BlockStateProperties.AXIS);
     FullFacePredicate NOT_AXIS = (state, side) -> side.getAxis() != state.getValue(BlockStateProperties.AXIS);
-    FullFacePredicate DOWN = (state, side) -> side == Direction.DOWN;
+    FullFacePredicate DOWN = (_, side) -> side == Direction.DOWN;
 
     @Override
     boolean test(BlockState state, Direction side);

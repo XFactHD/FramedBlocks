@@ -235,8 +235,6 @@ public class FramedCollapsibleCopycatBlockEntity extends FramedBlockEntity imple
         updateBeaconOcclusion();
     }
 
-
-
     public static byte[] unpackOffsets(int packed, Rotation rotation)
     {
         byte[] offsets = new byte[DIRECTIONS.length];

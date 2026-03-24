@@ -39,10 +39,7 @@ public class FramedVerticalStairsBlock extends FramedBlock implements ShapeLocka
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        builder.add(
-                FramedProperties.FACING_HOR, PropertyHolder.STAIRS_TYPE, BlockStateProperties.WATERLOGGED,
-                FramedProperties.SOLID, FramedProperties.STATE_LOCKED
-        );
+        builder.add(FramedProperties.FACING_HOR, PropertyHolder.STAIRS_TYPE);
     }
 
     @Override

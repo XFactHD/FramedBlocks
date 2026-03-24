@@ -58,7 +58,5 @@ public final class HalfStairsShapes
         return ShapeContainer.of(map);
     }
 
-
-
     private HalfStairsShapes() { }
 }

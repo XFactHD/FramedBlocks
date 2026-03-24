@@ -33,8 +33,6 @@ public final class AmendmentsCompat
         return false;
     }
 
-
-
     private static final class GuardedAccess
     {
         private static boolean failedPreviously = false;
@@ -61,8 +59,6 @@ public final class AmendmentsCompat
             }
         }
     }
-
-
 
     private AmendmentsCompat() { }
 }

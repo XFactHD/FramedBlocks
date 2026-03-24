@@ -35,7 +35,5 @@ public final class JadeRenderStateErrors
         reporter.endTest();
     }
 
-
-
     private JadeRenderStateErrors() { }
 }

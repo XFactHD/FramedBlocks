@@ -12,6 +12,7 @@ import io.github.xfacthd.framedblocks.api.util.Utils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -50,7 +51,7 @@ public interface InternalAPI
 
     BlockCamoRotator getCamoRotator(Block block);
 
-    Recipe<?> makeFramingSawRecipe(int materialAmount, List<FramingSawRecipeBuilder.Additive> additives, ItemStack result, boolean disabled);
+    Recipe<?> makeFramingSawRecipe(int materialAmount, List<FramingSawRecipeBuilder.Additive> additives, ItemStackTemplate result, boolean disabled);
 
     BlueprintCopyBehaviour getBlueprintCopyBehavior(Block block);
 }

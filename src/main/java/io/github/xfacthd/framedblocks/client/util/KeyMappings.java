@@ -74,7 +74,7 @@ public final class KeyMappings
                         ));
 
                 //noinspection ConstantConditions
-                Minecraft.getInstance().player.displayClientMessage(msg, true);
+                Minecraft.getInstance().player.sendOverlayMessage(msg);
             }
         }
 
@@ -83,11 +83,9 @@ public final class KeyMappings
             CacheCleaner.clearModelCaches(CacheCleaner.Reason.MANUAL);
 
             //noinspection ConstantConditions
-            Minecraft.getInstance().player.displayClientMessage(Component.literal("Model cache cleared"), true);
+            Minecraft.getInstance().player.sendOverlayMessage(Component.literal("Model cache cleared"));
         }
     }
-
-
 
     private KeyMappings() { }
 }

@@ -175,14 +175,12 @@ public final class FramedStandingSignBlock extends StandingSignBlock implements 
     {
         public static final RotatingSignStateMerger INSTANCE = new RotatingSignStateMerger();
 
-        private final StateMerger ignoringMerger = StateMerger.ignoring(WrapHelper.IGNORE_WATERLOGGED);
-
         private RotatingSignStateMerger() { }
 
         @Override
         public BlockState apply(BlockState state)
         {
-            state = ignoringMerger.apply(state);
+            state = WrapHelper.DEFAULT_MERGER.apply(state);
             int rot = state.getValue(BlockStateProperties.ROTATION_16);
             if (rot > 7)
             {
@@ -195,7 +193,7 @@ public final class FramedStandingSignBlock extends StandingSignBlock implements 
         public Set<Property<?>> getHandledProperties(Holder<Block> block)
         {
             return Utils.concat(
-                    ignoringMerger.getHandledProperties(block),
+                    WrapHelper.DEFAULT_MERGER.getHandledProperties(block),
                     Set.of(BlockStateProperties.ROTATION_16)
             );
         }

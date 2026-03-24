@@ -39,7 +39,5 @@ public final class HalfPillarShapes
         return ShapeContainer.of(map);
     }
 
-
-
     private HalfPillarShapes() { }
 }

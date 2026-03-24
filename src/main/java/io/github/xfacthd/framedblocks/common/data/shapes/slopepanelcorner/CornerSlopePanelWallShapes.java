@@ -229,7 +229,5 @@ public final class CornerSlopePanelWallShapes
         });
     }
 
-
-
     private CornerSlopePanelWallShapes() { }
 }

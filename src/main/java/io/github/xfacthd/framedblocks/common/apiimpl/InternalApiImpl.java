@@ -22,6 +22,7 @@ import io.github.xfacthd.framedblocks.common.item.FramedBlueprintItem;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -87,7 +88,7 @@ public final class InternalApiImpl implements InternalAPI
     }
 
     @Override
-    public Recipe<?> makeFramingSawRecipe(int materialAmount, List<FramingSawRecipeBuilder.Additive> additives, ItemStack result, boolean disabled)
+    public Recipe<?> makeFramingSawRecipe(int materialAmount, List<FramingSawRecipeBuilder.Additive> additives, ItemStackTemplate result, boolean disabled)
     {
         List<FramingSawRecipeAdditive> builtAdditives = additives.stream().map(FramingSawRecipeAdditive::of).toList();
         return new FramingSawRecipe(materialAmount, builtAdditives, result, disabled);

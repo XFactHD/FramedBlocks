@@ -9,10 +9,8 @@ import io.github.xfacthd.framedblocks.api.util.Utils;
 import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.renderer.LightTexture;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.state.LevelRenderState;
-import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.client.renderer.SubmitNodeCollector;
+import net.minecraft.client.renderer.state.level.LevelRenderState;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.context.ContextKey;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -21,7 +19,7 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.fml.ModLoader;
 import net.neoforged.neoforge.client.event.ExtractLevelRenderStateEvent;
-import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
+import net.neoforged.neoforge.client.event.SubmitCustomGeometryEvent;
 import net.neoforged.neoforge.common.NeoForge;
 
 import java.util.IdentityHashMap;
@@ -38,7 +36,7 @@ public final class FramedBlockDebugRenderer
     @SuppressWarnings("unchecked")
     private static void onExtractRenderState(ExtractLevelRenderStateEvent event)
     {
-        Set<BlockDebugRenderer<?>> activeRenderers = new ReferenceOpenHashSet<>();
+        Set<BlockDebugRenderer<?>> activeRenderers = new ReferenceOpenHashSet<>(RENDERERS.size());
         for (BlockDebugRenderer<?> renderer : RENDERERS)
         {
             if (renderer.isEnabled())
@@ -65,13 +63,12 @@ public final class FramedBlockDebugRenderer
         float partialTick = event.getDeltaTracker().getGameTimeDeltaPartialTick(false);
         for (BlockDebugRenderer<?> renderer : renderers)
         {
-            //noinspection NullableProblems - IDEA's nullability checks are broken
             ((BlockDebugRenderer<IFramedBlockEntity>) renderer).extract(be, blockHit, partialTick, renderState);
         }
         renderState.setRenderData(DATA_KEY, new DebugRenderState(pos, renderers));
     }
 
-    private static void onRenderLevelStage(RenderLevelStageEvent.AfterEntities event)
+    private static void onSubmitCustomGeometry(SubmitCustomGeometryEvent event)
     {
         LevelRenderState levelRenderState = event.getLevelRenderState();
         DebugRenderState renderState = levelRenderState.getRenderData(DATA_KEY);
@@ -83,15 +80,14 @@ public final class FramedBlockDebugRenderer
         poseStack.pushPose();
         poseStack.translate(offset.x, offset.y, offset.z);
 
-        MultiBufferSource.BufferSource buffer = Minecraft.getInstance().renderBuffers().bufferSource();
+        SubmitNodeCollector submitNodeCollector = event.getSubmitNodeCollector();
         for (BlockDebugRenderer<?> renderer : renderState.renderers)
         {
             poseStack.pushPose();
-            renderer.render(levelRenderState, poseStack, buffer, LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY);
+            renderer.submit(levelRenderState, poseStack, submitNodeCollector);
             poseStack.popPose();
         }
         poseStack.popPose();
-        buffer.endBatch();
     }
 
     public static void init()
@@ -100,12 +96,12 @@ public final class FramedBlockDebugRenderer
 
         ModLoader.postEvent(new AttachDebugRenderersEvent((type, renderer) ->
         {
-            RENDERERS_BY_TYPE.computeIfAbsent(type, $ -> new ReferenceOpenHashSet<>()).add(renderer);
+            RENDERERS_BY_TYPE.computeIfAbsent(type, _ -> new ReferenceOpenHashSet<>()).add(renderer);
             RENDERERS.add(renderer);
         }));
 
         NeoForge.EVENT_BUS.addListener(FramedBlockDebugRenderer::onExtractRenderState);
-        NeoForge.EVENT_BUS.addListener(FramedBlockDebugRenderer::onRenderLevelStage);
+        NeoForge.EVENT_BUS.addListener(FramedBlockDebugRenderer::onSubmitCustomGeometry);
     }
 
     private record DebugRenderState(BlockPos pos, Set<BlockDebugRenderer<?>> renderers) { }

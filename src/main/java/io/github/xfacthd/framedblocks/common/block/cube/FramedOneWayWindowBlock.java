@@ -18,7 +18,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.BlockAndTintGetter;
+import net.minecraft.world.level.BlockAndLightGetter;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -146,7 +146,7 @@ public class FramedOneWayWindowBlock extends FramedBlock
     }
 
     @Override
-    public BlockState getAppearance(BlockState state, BlockAndTintGetter level, BlockPos pos, Direction side, @Nullable BlockState queryState, @Nullable BlockPos queryPos)
+    public BlockState getAppearance(BlockState state, BlockAndLightGetter level, BlockPos pos, Direction side, @Nullable BlockState queryState, @Nullable BlockPos queryPos)
     {
         Direction dir = state.getValue(PropertyHolder.NULLABLE_FACE).toNullableDirection();
         if (dir == side && queryPos != null)
@@ -192,8 +192,6 @@ public class FramedOneWayWindowBlock extends FramedBlock
     {
         return state.setValue(PropertyHolder.NULLABLE_FACE, NullableDirection.EAST);
     }
-
-
 
     public static boolean isOwnedBy(BlockGetter level, BlockPos pos, Player player)
     {

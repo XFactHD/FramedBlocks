@@ -38,7 +38,7 @@ public class FramedHalfPillarBlock extends FramedBlock implements IPillarLikeBlo
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        builder.add(BlockStateProperties.FACING, BlockStateProperties.WATERLOGGED);
+        builder.add(BlockStateProperties.FACING);
     }
 
     @Override

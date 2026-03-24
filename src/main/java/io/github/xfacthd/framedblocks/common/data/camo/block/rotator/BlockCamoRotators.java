@@ -21,6 +21,7 @@ import net.minecraft.world.level.block.RedstoneLampBlock;
 import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.DefaultDataComponentsBoundEvent;
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.slf4j.Logger;
 
@@ -38,6 +39,15 @@ public final class BlockCamoRotators
         synchronized (ROTATORS)
         {
             return ROTATORS.getOrDefault(block, BlockCamoRotator.DEFAULT);
+        }
+    }
+
+    public static void onDefaultComponentsBound(DefaultDataComponentsBoundEvent event)
+    {
+        // Default data components are bound after data maps finish loading on the server
+        if (event.getUpdateCause() == DefaultDataComponentsBoundEvent.UpdateCause.SERVER_DATA_LOAD)
+        {
+            reload();
         }
     }
 
@@ -108,8 +118,6 @@ public final class BlockCamoRotators
             ROTATORS.put(block, rotator);
         }
     }
-
-
 
     private BlockCamoRotators() { }
 }

@@ -1,11 +1,8 @@
 package io.github.xfacthd.framedblocks.common.crafting.rotation;
 
 import io.github.xfacthd.framedblocks.api.datagen.recipes.builders.ExtShapelessRecipeBuilder;
-import net.minecraft.advancements.Advancement;
-import net.minecraft.advancements.AdvancementRequirements;
-import net.minecraft.advancements.AdvancementRewards;
-import net.minecraft.advancements.criterion.RecipeUnlockedTrigger;
 import net.minecraft.core.HolderGetter;
+import net.minecraft.data.recipes.RecipeBuilder;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
@@ -76,16 +73,13 @@ public final class ShapeRotationRecipeBuilder extends ExtShapelessRecipeBuilder
     @Override
     public void save(RecipeOutput output, ResourceKey<Recipe<?>> key)
     {
-        Advancement.Builder advancement = output.advancement()
-                .addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(key))
-                .rewards(AdvancementRewards.Builder.recipe(key))
-                .requirements(AdvancementRequirements.Strategy.OR);
-        criteria.forEach(advancement::addCriterion);
-
-        String recipeGroup = Objects.requireNonNullElse(group, "");
-        Objects.requireNonNull(tool, "No tool specified");
-        Objects.requireNonNull(block, "No block specified");
-        ShapeRotationRecipe recipe = new ShapeRotationRecipe(recipeGroup, result, tool, block);
-        output.accept(key, recipe, advancement.build(key.identifier().withPrefix("recipes/" + category.getFolderName() + "/")));
+        ShapeRotationRecipe recipe = new ShapeRotationRecipe(
+                RecipeBuilder.createCraftingCommonInfo(true),
+                RecipeBuilder.createCraftingBookInfo(category, group),
+                result,
+                Objects.requireNonNull(tool, "No tool specified"),
+                Objects.requireNonNull(block, "No block specified")
+        );
+        output.accept(key, recipe, advancementBuilder.build(output, key, category));
     }
 }

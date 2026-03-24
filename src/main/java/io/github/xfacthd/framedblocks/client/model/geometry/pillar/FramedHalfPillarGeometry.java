@@ -7,7 +7,7 @@ import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
 import io.github.xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
 import io.github.xfacthd.framedblocks.api.util.DirUtils;
-import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.resources.model.geometry.BakedQuad;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.jspecify.annotations.Nullable;
@@ -25,10 +25,7 @@ public class FramedHalfPillarGeometry extends Geometry
     public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
     {
         QuadModifier mod = FramedPillarGeometry.createPillarQuad(quad, face.getAxis(), 4F / 16F, 12F / 16F, 12F / 16F);
-        if (mod.hasFailed())
-        {
-            return;
-        }
+        if (mod.isFailed()) return;
 
         Direction quadDir = quad.direction();
         if (quadDir == face)

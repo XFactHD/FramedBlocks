@@ -40,7 +40,5 @@ public final class GateShapes
         return ShapeContainer.of(map);
     }
 
-
-
     private GateShapes() { }
 }

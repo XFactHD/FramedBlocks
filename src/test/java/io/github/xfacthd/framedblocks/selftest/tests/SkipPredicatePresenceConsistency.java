@@ -21,7 +21,7 @@ public final class SkipPredicatePresenceConsistency
     {
         reporter.startTest("skip predicate consistency");
 
-        SideSkipPredicates.PREDICATES.forEach((type, pred) ->
+        SideSkipPredicates.PREDICATES.forEach((_, pred) ->
         {
             Class<?> clazz = pred.getClass();
             CullTest cullTest = clazz.getAnnotation(CullTest.class);

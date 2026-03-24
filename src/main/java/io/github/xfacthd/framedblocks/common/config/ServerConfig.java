@@ -140,8 +140,6 @@ public final class ServerConfig
 
     private ServerConfig() { }
 
-
-
     public static final class ViewImpl implements ExtConfigView.Server
     {
         @Override

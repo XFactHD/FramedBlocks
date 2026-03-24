@@ -39,8 +39,8 @@ public class FramedTrapDoorBlock extends TrapDoorBlock implements IFramedBlockIn
 
     private FramedTrapDoorBlock(BlockType type, BlockSetType blockSet, Properties props)
     {
-        super(blockSet, props);
         this.type = type;
+        super(blockSet, props);
         BlockUtils.configureStandardProperties(this);
         registerDefaultState(defaultBlockState().setValue(PropertyHolder.ROTATE_TEXTURE, false));
     }
@@ -49,8 +49,8 @@ public class FramedTrapDoorBlock extends TrapDoorBlock implements IFramedBlockIn
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        BlockUtils.addRequiredProperties(builder);
-        builder.add(FramedProperties.SOLID, PropertyHolder.ROTATE_TEXTURE);
+        BlockUtils.addStandardProperties(this, builder);
+        builder.add(PropertyHolder.ROTATE_TEXTURE);
     }
 
     @Override
@@ -175,8 +175,6 @@ public class FramedTrapDoorBlock extends TrapDoorBlock implements IFramedBlockIn
     {
         return defaultBlockState();
     }
-
-
 
     public static FramedTrapDoorBlock wood(Properties props)
     {

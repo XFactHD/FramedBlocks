@@ -1,13 +1,18 @@
 package io.github.xfacthd.framedblocks.client.screen;
 
-import io.github.xfacthd.framedblocks.client.screen.pip.SignBlockPictureInPictureRenderer;
+import com.mojang.blaze3d.platform.Lighting;
+import com.mojang.math.Axis;
+import io.github.xfacthd.framedblocks.api.render.Quaternions;
+import io.github.xfacthd.framedblocks.client.screen.pip.BlockPictureInPictureRenderer;
 import io.github.xfacthd.framedblocks.common.blockentity.special.FramedSignBlockEntity;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.AbstractSignEditScreen;
 import net.minecraft.client.gui.screens.inventory.HangingSignEditScreen;
 import net.minecraft.client.gui.screens.inventory.SignEditScreen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.util.Mth;
+import net.minecraft.util.Util;
 import net.minecraft.world.level.block.SignBlock;
 import org.joml.Vector3f;
 
@@ -15,6 +20,25 @@ public final class FramedSignScreen extends AbstractSignEditScreen
 {
     private static final Component TITLE_NORMAL = Component.translatable("sign.edit");
     private static final Component TITLE_HANGING = Component.translatable("hanging_sign.edit");
+    private static final BlockPictureInPictureRenderer.RenderConfig[] TRANSFORMS = Util.make(() ->
+    {
+        BlockPictureInPictureRenderer.RenderConfig[] transforms = new BlockPictureInPictureRenderer.RenderConfig[16];
+        for (int i = 0; i < 16; i++)
+        {
+            float yRot = 22.5F * i;
+            transforms[i] = new BlockPictureInPictureRenderer.RenderConfig(
+                    poseStack ->
+                    {
+                        poseStack.mulPose(Axis.YN.rotationDegrees(yRot));
+                        poseStack.mulPose(Quaternions.ZP_180);
+                        poseStack.translate(-.5, -.55, -.5);
+                    },
+                    Lighting.Entry.ITEMS_FLAT,
+                    true
+            );
+        }
+        return transforms;
+    });
 
     private final SignBlock signBlock;
     private final int signTopY;
@@ -44,14 +68,15 @@ public final class FramedSignScreen extends AbstractSignEditScreen
     }
 
     @Override
-    protected void renderSignBackground(GuiGraphics graphics)
+    protected void extractSignBackground(GuiGraphicsExtractor graphics)
     {
         int centerX = width / 2;
         int x0 = centerX - 48;
         int x1 = centerX + 48;
-        float yRot = signBlock.getYRotationDegrees(sign.getBlockState());
-        graphics.submitPictureInPictureRenderState(SignBlockPictureInPictureRenderer.RenderState.create(
-                (FramedSignBlockEntity) sign, yRot, x0, signTopY, x1, signBottomY, signScale, graphics.peekScissorStack()
+        float yRot = Mth.positiveModulo(signBlock.getYRotationDegrees(sign.getBlockState()), 360F);
+        BlockPictureInPictureRenderer.RenderConfig transform = TRANSFORMS[(int) (yRot * 16 / 360)];
+        graphics.submitPictureInPictureRenderState(BlockPictureInPictureRenderer.RenderState.create(
+                (FramedSignBlockEntity) sign, transform, x0, signTopY, x1, signBottomY, signScale, graphics.peekScissorStack()
         ));
     }
 

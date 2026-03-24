@@ -54,8 +54,6 @@ public final class BoardSkipPredicate implements SideSkipPredicate
         return getHalfDir(edgeMask, side).isEqualTo(CornerStripSkipPredicate.getHalfDir(adjDir, adjType, side.getOpposite()));
     }
 
-
-
     public static HalfDir getHalfDir(int edgeMask, Direction side)
     {
         if (Integer.bitCount(edgeMask) == 1)

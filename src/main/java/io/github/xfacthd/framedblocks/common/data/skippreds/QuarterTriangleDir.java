@@ -80,8 +80,6 @@ public enum QuarterTriangleDir
         return dir;
     }
 
-
-
     private static QuarterTriangleDir[][][] makeDirTable()
     {
         QuarterTriangleDir[][][] table = new QuarterTriangleDir[6][6][2];

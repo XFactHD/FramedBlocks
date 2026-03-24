@@ -2,28 +2,24 @@ package io.github.xfacthd.framedblocks.client.render.block;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
-import io.github.xfacthd.framedblocks.api.render.RenderUtils;
+import io.github.xfacthd.framedblocks.api.util.ClientUtils;
 import io.github.xfacthd.framedblocks.client.render.block.state.FramedTankRenderState;
 import io.github.xfacthd.framedblocks.common.blockentity.special.FramedTankBlockEntity;
 import io.github.xfacthd.framedblocks.common.capability.fluid.TankFluidResourceHandler;
-import net.minecraft.client.renderer.ItemBlockRenderTypes;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.SubmitNodeCollector;
+import net.minecraft.client.renderer.block.FluidModel;
+import net.minecraft.client.renderer.block.FluidStateModelSet;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
-import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
 import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
 import net.minecraft.client.renderer.rendertype.RenderType;
-import net.minecraft.client.renderer.state.CameraRenderState;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.core.BlockPos;
-import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
-import net.neoforged.neoforge.client.textures.FluidSpriteCache;
+import net.neoforged.neoforge.client.fluid.FluidTintSource;
 import net.neoforged.neoforge.fluids.FluidStack;
 import org.jspecify.annotations.Nullable;
 
@@ -33,7 +29,12 @@ public class FramedTankRenderer implements BlockEntityRenderer<FramedTankBlockEn
     private static final float MIN_XZ = OFFSET;
     private static final float MAX_XZ = 1F - OFFSET;
 
-    public FramedTankRenderer(@SuppressWarnings("unused") BlockEntityRendererProvider.Context ctx) { }
+    private final FluidStateModelSet fluidModels;
+
+    public FramedTankRenderer(@SuppressWarnings("unused") BlockEntityRendererProvider.Context ctx)
+    {
+        this.fluidModels = Minecraft.getInstance().getModelManager().getFluidStateModelSet();
+    }
 
     @Override
     public void submit(FramedTankRenderState renderState, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, CameraRenderState camera)
@@ -41,12 +42,7 @@ public class FramedTankRenderer implements BlockEntityRenderer<FramedTankBlockEn
         int fluidAmount = renderState.fluidAmount;
         if (fluidAmount == 0) return;
 
-        ChunkSectionLayer chunkLayer = renderState.chunkLayer;
-        int light = renderState.lightCoords;
-        Identifier stillTex = renderState.stillTex;
-        Identifier flowTex = renderState.flowTex;
-        int tint = renderState.tint;
-        renderContents(poseStack, submitNodeCollector, chunkLayer, light, fluidAmount, stillTex, flowTex, tint);
+        submitContents(poseStack, submitNodeCollector, renderState.fluidModel, fluidAmount, renderState.tint, renderState.lightCoords);
     }
 
     @Override
@@ -67,41 +63,29 @@ public class FramedTankRenderer implements BlockEntityRenderer<FramedTankBlockEn
         BlockEntityRenderer.super.extractRenderState(blockEntity, renderState, partialTick, cameraPos, crumblingOverlay);
 
         FluidStack fluid = blockEntity.getContents();
-        Level level = blockEntity.getLevel();
-        if (fluid.isEmpty() || level == null) return;
+        if (fluid.isEmpty()) return;
 
-        BlockPos pos = blockEntity.getBlockPos();
-        IClientFluidTypeExtensions fluidExt = IClientFluidTypeExtensions.of(fluid.getFluid());
-        FluidState fluidState = fluid.getFluid().defaultFluidState();
-        renderState.tint = fluidExt.getTintColor(fluidState, level, pos);
-        renderState.stillTex = fluidExt.getStillTexture(fluidState, level, pos);
-        renderState.flowTex = fluidExt.getFlowingTexture(fluidState, level, pos);
-        renderState.chunkLayer = ItemBlockRenderTypes.getRenderLayer(fluidState);
+        FluidModel fluidModel = fluidModels.get(fluid.getFluid().defaultFluidState());
+        renderState.fluidModel = fluidModel;
         renderState.fluidAmount = fluid.getAmount();
+        FluidTintSource tintSource = fluidModel.fluidTintSource();
+        renderState.tint = tintSource != null ? tintSource.colorAsStack(fluid) : -1;
     }
 
-    public static void renderContents(
-            PoseStack poseStack,
-            SubmitNodeCollector submitNodeCollector,
-            ChunkSectionLayer chunkLayer,
-            int light,
-            int fluidAmount,
-            Identifier stillTex,
-            Identifier flowTex,
-            int tint
-    )
+    public static void submitContents(PoseStack poseStack, SubmitNodeCollector collector, FluidModel fluidModel, int fluidAmount, int tint, int light)
     {
+        TextureAtlasSprite stillTex = fluidModel.stillMaterial().sprite();
+        TextureAtlasSprite flowTex = fluidModel.flowingMaterial().sprite();
         float height = Mth.clamp(fluidAmount / (float) TankFluidResourceHandler.CAPACITY, OFFSET, 1F - OFFSET);
-        boolean sameTex = stillTex.equals(flowTex);
+        boolean sameTex = stillTex == flowTex;
 
-        RenderType bufferType = RenderUtils.getEntityRenderType(chunkLayer);
-        submitNodeCollector.submitCustomGeometry(poseStack, bufferType, (pose, consumer) ->
+        RenderType bufferType = ClientUtils.getEntityRenderType(fluidModel.layer());
+        collector.submitCustomGeometry(poseStack, bufferType, (pose, consumer) ->
         {
-            TextureAtlasSprite sprite = FluidSpriteCache.getSprite(flowTex);
-            float minU = sprite.getU(MIN_XZ);
-            float maxU = sameTex ? sprite.getU(MAX_XZ) : sprite.getU(8F / 16F - OFFSET);
-            float minV = sameTex ? sprite.getV(1F - height) : sprite.getV(8F / 16F * (1F - height));
-            float maxV = sameTex ? sprite.getV(MAX_XZ) : sprite.getV(8F / 16F - OFFSET);
+            float minU = flowTex.getU(MIN_XZ);
+            float maxU = sameTex ? flowTex.getU(MAX_XZ) : flowTex.getU(8F / 16F - OFFSET);
+            float minV = sameTex ? flowTex.getV(1F - height) : flowTex.getV(8F / 16F * (1F - height));
+            float maxV = sameTex ? flowTex.getV(MAX_XZ) : flowTex.getV(8F / 16F - OFFSET);
 
             // West
             consumer.addVertex(pose, MIN_XZ, height, MIN_XZ).setColor(tint).setUv(minU, minV).setOverlay(OverlayTexture.NO_OVERLAY).setLight(light).setNormal(pose, -1F, 0F, 0F);
@@ -127,14 +111,10 @@ public class FramedTankRenderer implements BlockEntityRenderer<FramedTankBlockEn
             consumer.addVertex(pose, MAX_XZ, OFFSET, MAX_XZ).setColor(tint).setUv(maxU, maxV).setOverlay(OverlayTexture.NO_OVERLAY).setLight(light).setNormal(pose, 0F, 0F, 1F);
             consumer.addVertex(pose, MAX_XZ, height, MAX_XZ).setColor(tint).setUv(maxU, minV).setOverlay(OverlayTexture.NO_OVERLAY).setLight(light).setNormal(pose, 0F, 0F, 1F);
 
-            if (!sameTex)
-            {
-                sprite = FluidSpriteCache.getSprite(stillTex);
-            }
-            minU = sprite.getU(MIN_XZ);
-            maxU = sprite.getU(MAX_XZ);
-            minV = sprite.getV(MIN_XZ);
-            maxV = sprite.getV(MAX_XZ);
+            minU = stillTex.getU(MIN_XZ);
+            maxU = stillTex.getU(MAX_XZ);
+            minV = stillTex.getV(MIN_XZ);
+            maxV = stillTex.getV(MAX_XZ);
 
             // Up
             consumer.addVertex(pose, MAX_XZ, height, MAX_XZ).setColor(tint).setUv(maxU, maxV).setOverlay(OverlayTexture.NO_OVERLAY).setLight(light).setNormal(pose, 0F, 1F, 0F);

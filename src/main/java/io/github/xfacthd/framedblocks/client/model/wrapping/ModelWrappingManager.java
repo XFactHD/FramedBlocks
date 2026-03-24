@@ -2,7 +2,7 @@ package io.github.xfacthd.framedblocks.client.model.wrapping;
 
 import com.google.common.base.Stopwatch;
 import com.mojang.logging.LogUtils;
-import io.github.xfacthd.framedblocks.api.model.AbstractFramedBlockModel;
+import io.github.xfacthd.framedblocks.api.model.AbstractFramedBlockStateModel;
 import io.github.xfacthd.framedblocks.api.model.standalone.CachingModel;
 import io.github.xfacthd.framedblocks.api.model.standalone.StandaloneWrapperKey;
 import io.github.xfacthd.framedblocks.api.model.wrapping.RegisterModelWrappersEvent;
@@ -13,13 +13,14 @@ import io.github.xfacthd.framedblocks.common.config.DevToolsConfig;
 import io.github.xfacthd.framedblocks.common.util.MarkdownTable;
 import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
-import net.minecraft.client.renderer.block.model.BlockStateModel;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
 import net.minecraft.core.Holder;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.neoforged.fml.ModLoader;
 import net.neoforged.neoforge.client.event.ModelEvent;
+import net.neoforged.neoforge.client.event.RegisterBlockModelsEvent;
 import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 
@@ -75,6 +76,11 @@ public final class ModelWrappingManager
         );
     }
 
+    public static void onRegisterBlockModels(RegisterBlockModelsEvent event)
+    {
+        HANDLERS.values().forEach(handler -> handler.registerBlockModelFactory(event));
+    }
+
     public static void register(Holder<Block> block, ModelWrappingHandler handler)
     {
         if (locked)
@@ -106,12 +112,6 @@ public final class ModelWrappingManager
 
         StandaloneWrapperKeys.registerKey(wrapperKey);
         debugStateMerger(wrapperKey.block(), wrapperKey.definitionFile().toString(), handler.getStateMerger());
-    }
-
-    public static void reset()
-    {
-        HANDLERS.values().forEach(ModelWrappingHandler::reset);
-        STANDALONE_HANDLERS.values().forEach(ModelWrappingHandler::reset);
     }
 
     public static ModelWrappingHandler getHandler(Block block)
@@ -177,7 +177,7 @@ public final class ModelWrappingManager
                 for (BlockState state : states)
                 {
                     BlockStateModel model = models.get(state);
-                    if (!(model instanceof AbstractFramedBlockModel))
+                    if (!(model instanceof AbstractFramedBlockStateModel))
                     {
                         nonWrappedModels.put(model, state.getBlock());
                     }
@@ -236,8 +236,6 @@ public final class ModelWrappingManager
                 .sorted()
                 .collect(Collectors.joining(", "));
     }
-
-
 
     private ModelWrappingManager() { }
 }

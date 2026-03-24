@@ -9,7 +9,6 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jspecify.annotations.Nullable;
 
-@SuppressWarnings("NullableProblems") // IDEA's nullability analysis is broken on generics
 public final class FramedSpecialDoubleBlockItemRequirements implements SchematicRequirementRegistries.BlockRequirement
 {
     private final Holder<Block> itemBlock;

@@ -19,8 +19,6 @@ public interface StateMerger extends UnaryOperator<BlockState>
 
     Set<Property<?>> getHandledProperties(Holder<Block> block);
 
-
-
     static StateMerger ignoring(@Nullable Set<Property<?>> ignoredProps)
     {
         if (ignoredProps == null || ignoredProps.isEmpty())

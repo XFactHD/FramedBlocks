@@ -1,8 +1,8 @@
 package io.github.xfacthd.framedblocks.api.datagen.models;
 
 import com.google.common.collect.ImmutableMap;
-import net.minecraft.client.renderer.block.model.ItemTransform;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
+import net.minecraft.client.resources.model.cuboid.ItemTransform;
+import net.minecraft.client.resources.model.cuboid.ItemTransforms;
 import org.joml.Vector3f;
 
 @SuppressWarnings({ "unused", "UnusedReturnValue" })
@@ -76,8 +76,6 @@ final class ItemTransformsBuilder
     {
         return new ItemTransforms(thirdPersonLeftHand, thirdPersonRightHand, firstPersonLeftHand, firstPersonRightHand, head, gui, ground, fixed, fixedFromBottom, ImmutableMap.of());
     }
-
-
 
     public static final class TransformBuilder
     {

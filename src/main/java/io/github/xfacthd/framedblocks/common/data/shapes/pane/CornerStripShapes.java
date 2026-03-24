@@ -46,7 +46,5 @@ public final class CornerStripShapes
         return ShapeContainer.of(map);
     }
 
-
-
     private CornerStripShapes() { }
 }

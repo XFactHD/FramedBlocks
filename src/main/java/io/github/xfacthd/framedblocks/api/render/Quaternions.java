@@ -20,7 +20,5 @@ public final class Quaternions
     public static final Quaternionfc ZP_180 = Axis.ZP.rotationDegrees(180);
     public static final Quaternionfc ZN_90 = Axis.ZN.rotationDegrees(90);
 
-
-
     private Quaternions() { }
 }

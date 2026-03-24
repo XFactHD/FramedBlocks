@@ -35,7 +35,7 @@ public class FramedElevatedDoubleSlopedPrismBlock extends FramedDoubleBlock impl
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        builder.add(PropertyHolder.FACING_DIR, FramedProperties.ALT_SLOPE);
+        builder.add(PropertyHolder.FACING_DIR);
     }
 
     @Override

@@ -2,7 +2,6 @@
   "model": {
     "type": "framedblocks:block",
     "base_model": "framedblocks:block/framed_cube",
-    "block": "framedblocks:framed_flat_stacked_inner_slope_panel_corner",
-    "tint_provider": "framedblocks:double"
+    "block": "framedblocks:framed_flat_stacked_inner_slope_panel_corner"
   }
 }

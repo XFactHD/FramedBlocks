@@ -102,8 +102,6 @@ public enum CompoundDirection implements StringRepresentable
         return name;
     }
 
-
-
     public static CompoundDirection of(Direction direction, Direction orientation)
     {
         CompoundDirection dirAxis = FROM_DIRS[direction.ordinal()][orientation.ordinal()];

@@ -49,8 +49,8 @@ public class FramedWeightedPressurePlateBlock extends WeightedPressurePlateBlock
 
     protected FramedWeightedPressurePlateBlock(BlockType type, int maxWeight, BlockSetType blockSet, Properties props)
     {
-        super(maxWeight, blockSet, props);
         this.type = type;
+        super(maxWeight, blockSet, props);
         BlockUtils.configureStandardProperties(this);
     }
 
@@ -58,7 +58,7 @@ public class FramedWeightedPressurePlateBlock extends WeightedPressurePlateBlock
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        BlockUtils.addRequiredProperties(builder);
+        BlockUtils.addStandardProperties(this, builder);
     }
 
     @Override
@@ -153,8 +153,6 @@ public class FramedWeightedPressurePlateBlock extends WeightedPressurePlateBlock
         return defaultBlockState();
     }
 
-
-
     public static FramedWeightedPressurePlateBlock gold(Properties props)
     {
         return new FramedWeightedPressurePlateBlock(
@@ -205,16 +203,12 @@ public class FramedWeightedPressurePlateBlock extends WeightedPressurePlateBlock
         );
     }
 
-
-
     public static final class WeightedStateMerger implements StateMerger
     {
-        private final StateMerger ignoringMerger = StateMerger.ignoring(WrapHelper.IGNORE_ALWAYS);
-
         @Override
         public BlockState apply(BlockState state)
         {
-            state = ignoringMerger.apply(state);
+            state = WrapHelper.DEFAULT_MERGER.apply(state);
             if (state.hasProperty(BlockStateProperties.WATERLOGGED))
             {
                 state = state.setValue(BlockStateProperties.WATERLOGGED, false);
@@ -231,7 +225,7 @@ public class FramedWeightedPressurePlateBlock extends WeightedPressurePlateBlock
         public Set<Property<?>> getHandledProperties(Holder<Block> block)
         {
             return Utils.concat(
-                    ignoringMerger.getHandledProperties(block),
+                    WrapHelper.DEFAULT_MERGER.getHandledProperties(block),
                     Set.of(BlockStateProperties.WATERLOGGED, WeightedPressurePlateBlock.POWER)
             );
         }

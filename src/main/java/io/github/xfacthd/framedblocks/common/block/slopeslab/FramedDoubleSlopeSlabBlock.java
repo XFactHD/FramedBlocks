@@ -25,7 +25,6 @@ import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.jspecify.annotations.Nullable;
 
 public class FramedDoubleSlopeSlabBlock extends FramedDoubleBlock implements SlopeToggleBlock
@@ -48,10 +47,7 @@ public class FramedDoubleSlopeSlabBlock extends FramedDoubleBlock implements Slo
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        builder.add(
-                FramedProperties.FACING_HOR, PropertyHolder.TOP_HALF, BlockStateProperties.WATERLOGGED,
-                FramedProperties.ALT_SLOPE
-        );
+        builder.add(FramedProperties.FACING_HOR, PropertyHolder.TOP_HALF);
     }
 
     @Override

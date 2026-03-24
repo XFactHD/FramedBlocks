@@ -98,7 +98,5 @@ public final class HalfSlopeShapes implements ShapeGenerator
         return ShapeContainer.of(map);
     }
 
-
-
     public record ShapeKey(boolean top, boolean right) { }
 }

@@ -37,7 +37,7 @@ public class FramedPillarBlock extends FramedBlock implements IPillarLikeBlock, 
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        builder.add(BlockStateProperties.AXIS, BlockStateProperties.WATERLOGGED);
+        builder.add(BlockStateProperties.AXIS);
     }
 
     @Override

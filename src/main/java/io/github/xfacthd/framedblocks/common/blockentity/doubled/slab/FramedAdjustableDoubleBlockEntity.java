@@ -224,8 +224,6 @@ public class FramedAdjustableDoubleBlockEntity extends FramedDoubleBlockEntity i
         firstHeight = valueInput.getIntOr("first_height", CENTER_PART_HEIGHT);
     }
 
-
-
     public static FramedAdjustableDoubleBlockEntity standard(BlockPos pos, BlockState state)
     {
         return new FramedAdjustableDoubleBlockEntity(

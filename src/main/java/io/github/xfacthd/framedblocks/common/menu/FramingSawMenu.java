@@ -210,7 +210,7 @@ public class FramingSawMenu extends AbstractContainerMenu implements IFramingSaw
                 FramingSawRecipe recipe = holder.getRecipe();
                 FramingSawRecipeCalculation calc = recipe.makeCraftingCalculation(inputContainer, level.isClientSide());
 
-                ItemStack result = recipe.assemble(inputContainer, level.registryAccess());
+                ItemStack result = recipe.assemble(inputContainer);
                 result.setCount(calc.getOutputCount());
                 resultContainer.setRecipeUsed(holder.vanillaHolder);
                 resultSlot.set(result);
@@ -243,7 +243,7 @@ public class FramingSawMenu extends AbstractContainerMenu implements IFramingSaw
     {
         super.removed(player);
         resultContainer.removeItemNoUpdate(1);
-        levelAccess.execute((level, pos) -> clearContainer(player, inputContainer));
+        levelAccess.execute((_, _) -> clearContainer(player, inputContainer));
     }
 
     @Override

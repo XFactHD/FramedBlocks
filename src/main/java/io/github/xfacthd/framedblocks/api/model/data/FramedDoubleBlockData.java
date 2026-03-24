@@ -16,6 +16,7 @@ public final class FramedDoubleBlockData extends AbstractFramedBlockData
     private final BlockState partStateTwo;
     private final FramedBlockData dataOne;
     private final FramedBlockData dataTwo;
+    private final int postCamoTintIndexOffset;
 
     public FramedDoubleBlockData(DoubleBlockParts parts, FramedBlockData dataOne, FramedBlockData dataTwo)
     {
@@ -23,6 +24,7 @@ public final class FramedDoubleBlockData extends AbstractFramedBlockData
         this.partStateTwo = parts.stateTwo();
         this.dataOne = dataOne;
         this.dataTwo = dataTwo;
+        this.postCamoTintIndexOffset = dataOne.getPostCamoTintIndexOffset() + dataTwo.getPostCamoTintIndexOffset();
     }
 
     @Override
@@ -69,5 +71,17 @@ public final class FramedDoubleBlockData extends AbstractFramedBlockData
     public Holder<BlockOverlay> getBlockOverlay()
     {
         return dataOne.getBlockOverlay();
+    }
+
+    @Override
+    public int getCamoTintIndexOffset(boolean secondPart)
+    {
+        return secondPart ? dataOne.getPostCamoTintIndexOffset() : 0;
+    }
+
+    @Override
+    public int getPostCamoTintIndexOffset()
+    {
+        return postCamoTintIndexOffset;
     }
 }

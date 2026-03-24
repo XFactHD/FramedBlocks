@@ -1,6 +1,7 @@
 package io.github.xfacthd.framedblocks.client.model.geometry.rail;
 
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
+import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
 import io.github.xfacthd.framedblocks.api.model.geometry.PartConsumer;
 import io.github.xfacthd.framedblocks.api.model.util.ModelUtils;
 import io.github.xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
@@ -8,11 +9,11 @@ import io.github.xfacthd.framedblocks.client.model.geometry.slope.FramedSlopeGeo
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import io.github.xfacthd.framedblocks.common.util.FramedUtils;
-import net.minecraft.client.renderer.block.model.BlockStateModel;
+import net.minecraft.client.renderer.block.BlockAndTintGetter;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -39,10 +40,10 @@ public class FramedRailSlopeGeometry extends FramedSlopeGeometry
     }
 
     @Override
-    public void collectAdditionalPartsUncached(PartConsumer consumer, BlockAndTintGetter level, BlockPos pos, RandomSource random, ModelData data)
+    public void collectAdditionalPartsUncached(PartConsumer consumer, BlockAndTintGetter level, BlockPos pos, RandomSource random, FramedBlockData blockData, ModelData data)
     {
         BlockStateModel model = ModelUtils.getModel(railState);
-        consumer.acceptAll(model, level, pos, random, railState, true, false, false, false, railState, null);
+        consumer.acceptAll(model, level, pos, random, railState, true, false, false, railState, null);
     }
 
     private static BlockState getSlopeState(BlockState state)
@@ -56,8 +57,6 @@ public class FramedRailSlopeGeometry extends FramedSlopeGeometry
                 .setValue(FramedProperties.FACING_HOR, dir)
                 .setValue(FramedProperties.ALT_SLOPE, altSlope);
     }
-
-
 
     public static FramedRailSlopeGeometry normal(GeometryFactory.Context ctx)
     {

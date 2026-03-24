@@ -7,7 +7,7 @@ import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
 import io.github.xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
 import io.github.xfacthd.framedblocks.api.util.DirUtils;
-import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.resources.model.geometry.BakedQuad;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.jspecify.annotations.Nullable;
@@ -69,11 +69,11 @@ public class FramedFenceGateGeometry extends Geometry
             QuadModifier mod = QuadModifier.of(quad)
                     .apply(Modifiers.cutSide(7F/16F, 5F/16F - yOff, 9F/16F, 1F - yOff));
 
-            mod.export(quadMap, quadDir);
-
             mod.derive()
                     .apply(Modifiers.setPosition(2F/16F))
                     .export(quadMap, null);
+
+            mod.export(quadMap, quadDir);
         }
 
         if (open)
@@ -114,10 +114,7 @@ public class FramedFenceGateGeometry extends Geometry
                     .apply(Modifiers.cut(dir.getClockWise(), 14F/16F))
                     .apply(Modifiers.cut(dir.getCounterClockWise(), 14F/16F));
 
-            if (mod.hasFailed())
-            {
-                return;
-            }
+            if (mod.isFailed()) return;
 
             boolean up = quadDir == Direction.UP;
             float height = up ? 9F / 16F - yOff : 4F / 16F + yOff;

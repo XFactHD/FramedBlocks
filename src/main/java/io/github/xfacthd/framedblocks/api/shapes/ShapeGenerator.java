@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface ShapeGenerator
 {
-    ShapeGenerator EMPTY = states -> EmptyShapeContainer.INSTANCE;
+    ShapeGenerator EMPTY = _ -> EmptyShapeContainer.INSTANCE;
 
     ShapeContainer generatePrimary(List<BlockState> states);
 

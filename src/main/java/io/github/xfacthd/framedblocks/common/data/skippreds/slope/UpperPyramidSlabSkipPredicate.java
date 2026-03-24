@@ -64,7 +64,6 @@ public final class UpperPyramidSlabSkipPredicate implements SideSkipPredicate
         return false;
     }
 
-
     @CullTest.TestTarget(BlockType.FRAMED_WALL)
     private static boolean testAgainstWall(
             Direction dir, PillarConnection connection, BlockState adjState, Direction side

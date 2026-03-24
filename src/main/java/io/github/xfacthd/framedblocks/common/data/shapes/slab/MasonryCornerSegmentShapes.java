@@ -38,7 +38,5 @@ public final class MasonryCornerSegmentShapes
         return ShapeContainer.of(map);
     }
 
-
-
     private MasonryCornerSegmentShapes() { }
 }

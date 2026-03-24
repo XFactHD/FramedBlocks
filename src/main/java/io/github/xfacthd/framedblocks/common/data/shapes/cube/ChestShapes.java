@@ -44,7 +44,5 @@ public final class ChestShapes
         return ShapeContainer.of(map);
     }
 
-
-
     private ChestShapes() { }
 }

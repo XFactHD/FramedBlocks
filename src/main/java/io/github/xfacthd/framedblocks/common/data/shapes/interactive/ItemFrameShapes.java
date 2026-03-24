@@ -42,11 +42,7 @@ public final class ItemFrameShapes
         return ShapeContainer.of(map);
     }
 
-
-
     private record ShapeKey(Direction dir, boolean map) { }
-
-
 
     private ItemFrameShapes() { }
 }

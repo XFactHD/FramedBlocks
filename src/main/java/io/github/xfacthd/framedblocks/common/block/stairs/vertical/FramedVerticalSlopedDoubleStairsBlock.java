@@ -1,6 +1,5 @@
 package io.github.xfacthd.framedblocks.common.block.stairs.vertical;
 
-import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedDoubleBlockEntity;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.CamoGetter;
@@ -15,11 +14,8 @@ import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import io.github.xfacthd.framedblocks.common.data.property.HorizontalRotation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.jspecify.annotations.Nullable;
 
 public class FramedVerticalSlopedDoubleStairsBlock extends FramedVerticalSlopedStairsBlock implements IFramedDoubleBlockInternal
@@ -27,13 +23,6 @@ public class FramedVerticalSlopedDoubleStairsBlock extends FramedVerticalSlopedS
     public FramedVerticalSlopedDoubleStairsBlock(Properties props)
     {
         super(BlockType.FRAMED_VERTICAL_SLOPED_DOUBLE_STAIRS, props);
-    }
-
-    @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
-    {
-        super.createBlockStateDefinition(builder);
-        BlockUtils.removeProperty(builder, BlockStateProperties.WATERLOGGED);
     }
 
     @Override

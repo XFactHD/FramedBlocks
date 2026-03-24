@@ -94,10 +94,8 @@ public abstract sealed class FramingSawTransferHandler<C extends AbstractContain
             // TODO: return null instead of "transfer not implemented" when the suggestion is implemented
             return new RecipeTransferErrorTransferNotImplemented();
         }
-        return transferHelper.createUserErrorWithTooltip(JeiConstants.MSG_INVALID_RECIPE);
+        return transferHelper.createUserErrorWithTooltip(JeiCompat.MSG_INVALID_RECIPE);
     }
-
-
 
     public static final class FramingSaw extends FramingSawTransferHandler<FramingSawMenu>
     {

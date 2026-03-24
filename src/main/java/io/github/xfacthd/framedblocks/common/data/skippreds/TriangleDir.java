@@ -63,8 +63,6 @@ public enum TriangleDir
         return dir;
     }
 
-
-
     private static TriangleDir[][] makeDirTable()
     {
         TriangleDir[][] table = new TriangleDir[6][6];

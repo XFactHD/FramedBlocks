@@ -17,7 +17,5 @@ public final class BlockItemModelProviders
         ModLoader.postEvent(new RegisterBlockItemModelProvidersEvent(MODEL_PROVIDERS::put));
     }
 
-
-
     private BlockItemModelProviders() { }
 }

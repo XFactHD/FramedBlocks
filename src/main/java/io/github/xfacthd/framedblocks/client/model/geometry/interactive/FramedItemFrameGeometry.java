@@ -10,12 +10,12 @@ import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
 import io.github.xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
 import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
-import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.block.model.BlockStateModel;
+import net.minecraft.client.renderer.block.BlockAndTintGetter;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
+import net.minecraft.client.resources.model.geometry.BakedQuad;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.jspecify.annotations.Nullable;
@@ -25,7 +25,7 @@ import java.util.Objects;
 public class FramedItemFrameGeometry extends Geometry
 {
     private static final int GLOWING_BRIGHTNESS = 5;
-    private static final QuadListModifier GLOWING_LEATHER_MODIFIER = (quadMap, quads, side) ->
+    private static final QuadListModifier GLOWING_LEATHER_MODIFIER = (_, quads, _) ->
             quads.replaceAll(quad -> Objects.requireNonNull(QuadModifier.of(quad).apply(Modifiers.setLightEmission(GLOWING_BRIGHTNESS, false)).exportDirect()));
 
     private final BlockState state;
@@ -254,7 +254,7 @@ public class FramedItemFrameGeometry extends Geometry
     {
         if (leather)
         {
-            consumer.acceptAll(baseModel, level, pos, random, state, true, false, false, false, null, leatherModifier);
+            consumer.acceptAll(baseModel, level, pos, random, state, true, false, false, null, leatherModifier);
         }
     }
 

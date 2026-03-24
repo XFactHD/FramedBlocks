@@ -4,12 +4,12 @@ import com.mojang.blaze3d.pipeline.RenderPipeline;
 import com.mojang.blaze3d.pipeline.RenderTarget;
 import com.mojang.blaze3d.systems.RenderPass;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.textures.AddressMode;
 import com.mojang.blaze3d.textures.FilterMode;
 import io.github.xfacthd.framedblocks.api.util.ClientUtils;
 import io.github.xfacthd.framedblocks.common.config.ClientConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderPipelines;
-import net.minecraft.client.renderer.rendertype.RenderTypes;
 
 abstract sealed class GhostBlockRenderConfig
 {
@@ -26,11 +26,11 @@ abstract sealed class GhostBlockRenderConfig
         renderPass.bindTexture(
                 "Sampler0",
                 Minecraft.getInstance().getTextureManager().getTexture(ClientUtils.BLOCK_ATLAS).getTextureView(),
-                RenderTypes.MOVING_BLOCK_SAMPLER.get()
+                RenderSystem.getSamplerCache().getSampler(AddressMode.CLAMP_TO_EDGE, AddressMode.CLAMP_TO_EDGE, FilterMode.LINEAR, FilterMode.NEAREST, true)
         );
         renderPass.bindTexture(
                 "Sampler2",
-                Minecraft.getInstance().gameRenderer.lightTexture().getTextureView(),
+                Minecraft.getInstance().gameRenderer.lightmap(),
                 RenderSystem.getSamplerCache().getClampToEdge(FilterMode.LINEAR)
         );
     }
@@ -51,7 +51,7 @@ abstract sealed class GhostBlockRenderConfig
         @Override
         RenderPipeline getPipeline()
         {
-            return RenderPipelines.TRANSLUCENT_MOVING_BLOCK;
+            return RenderPipelines.TRANSLUCENT_BLOCK;
         }
 
         @Override
@@ -78,7 +78,7 @@ abstract sealed class GhostBlockRenderConfig
         @Override
         RenderPipeline getPipeline()
         {
-            return RenderPipelines.ITEM_ENTITY_TRANSLUCENT_CULL;
+            return RenderPipelines.ITEM_TRANSLUCENT;
         }
 
         @Override

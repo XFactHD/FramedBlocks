@@ -9,12 +9,11 @@ import io.github.xfacthd.framedblocks.api.model.util.ModelUtils;
 import io.github.xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import io.github.xfacthd.framedblocks.common.data.property.NullableDirection;
-import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.block.model.BlockModelPart;
-import net.minecraft.client.renderer.block.model.BlockStateModel;
+import net.minecraft.client.renderer.block.BlockAndTintGetter;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
+import net.minecraft.client.resources.model.geometry.BakedQuad;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.model.data.ModelData;
@@ -45,10 +44,12 @@ public class FramedOneWayWindowGeometry extends Geometry
     {
         if (face != NullableDirection.NONE)
         {
-            for (BlockModelPart part : ModelUtils.collectModelParts(tintedGlassModel.get(), level, pos, GLASS_STATE, random, cacheKeyUserData != null))
+            if (cacheKeyUserData == null)
             {
-                consumer.accept(part, GLASS_STATE, true, false, false, false, GLASS_STATE, faceFilter);
+                level = BlockAndTintGetter.EMPTY;
+                pos = BlockPos.ZERO;
             }
+            consumer.acceptAll(tintedGlassModel.get(), level, pos, random, GLASS_STATE, true, false, false, GLASS_STATE, faceFilter);
         }
     }
 
@@ -56,15 +57,28 @@ public class FramedOneWayWindowGeometry extends Geometry
     @Nullable
     public Object computeCacheKeyUserData(BlockAndTintGetter level, BlockPos pos, RandomSource random, ModelData data)
     {
-        BlockStateModel model = tintedGlassModel.get();
-        Object geometryKey = model.createGeometryKey(level, pos, GLASS_STATE, random);
-        // Only include the geometry key if it's not the SingleVariant's default value (i.e. the model itself)
-        return geometryKey != model ? geometryKey : null;
+        if (face != NullableDirection.NONE)
+        {
+            BlockStateModel model = tintedGlassModel.get();
+            Object geometryKey = model.createGeometryKey(level, pos, GLASS_STATE, random);
+            // Only include the geometry key if it's not the SingleVariant's default value (i.e. the model itself)
+            if (geometryKey != model)
+            {
+                return geometryKey;
+            }
+        }
+        return null;
     }
 
     @Override
     public boolean useBaseModel()
     {
         return true;
+    }
+
+    @Override
+    public int getMaterialFlags(BlockAndTintGetter level, BlockPos pos, ModelData modelData, FramedBlockData blockData)
+    {
+        return face != NullableDirection.NONE ? tintedGlassModel.get().materialFlags(level, pos, GLASS_STATE) : 0;
     }
 }

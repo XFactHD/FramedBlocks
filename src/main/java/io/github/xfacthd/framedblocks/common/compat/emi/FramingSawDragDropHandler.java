@@ -1,4 +1,5 @@
-package io.github.xfacthd.framedblocks.common.compat.emi;
+// FIXME: GuiGraphics->GuiGraphicsExtractor
+/*package io.github.xfacthd.framedblocks.common.compat.emi;
 
 import dev.emi.emi.api.EmiDragDropHandler;
 import dev.emi.emi.api.stack.EmiIngredient;
@@ -8,7 +9,7 @@ import io.github.xfacthd.framedblocks.common.crafting.saw.FramingSawRecipe;
 import io.github.xfacthd.framedblocks.common.crafting.saw.FramingSawRecipeAdditive;
 import io.github.xfacthd.framedblocks.common.crafting.saw.FramingSawRecipeCache;
 import io.github.xfacthd.framedblocks.common.menu.FramingSawMenu;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
@@ -18,7 +19,7 @@ import java.util.List;
 public final class FramingSawDragDropHandler implements EmiDragDropHandler<FramingSawWithEncoderScreen>
 {
     @Override
-    public void render(FramingSawWithEncoderScreen screen, EmiIngredient dragged, GuiGraphics graphics, int mouseX, int mouseY, float delta)
+    public void render(FramingSawWithEncoderScreen screen, EmiIngredient dragged, GuiGraphicsExtractor graphics, int mouseX, int mouseY, float delta)
     {
         if (isFramedBlock(dragged))
         {
@@ -88,4 +89,4 @@ public final class FramingSawDragDropHandler implements EmiDragDropHandler<Frami
         }
         return false;
     }
-}
+}*/

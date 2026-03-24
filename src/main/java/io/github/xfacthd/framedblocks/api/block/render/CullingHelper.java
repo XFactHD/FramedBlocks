@@ -127,7 +127,5 @@ public final class CullingHelper
         return block.isSolidSide(level, pos, state, side);
     }
 
-
-
     private CullingHelper() { }
 }

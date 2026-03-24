@@ -149,7 +149,7 @@ public class FramingSawWithEncoderMenu extends FramingSawMenu
     public void removed(Player player)
     {
         super.removed(player);
-        levelAccess.execute((level, pos) -> clearContainer(player, encoderContainer));
+        levelAccess.execute((_, _) -> clearContainer(player, encoderContainer));
     }
 
     @Override
@@ -173,7 +173,7 @@ public class FramingSawWithEncoderMenu extends FramingSawMenu
         if (!patternInputSlot.hasItem() && !patternOutputSlot.hasItem()) return;
 
         ItemStack[] additives = Arrays.copyOfRange(inputs, 1, inputs.length);
-        ItemStack pattern = AppliedEnergisticsCompat.tryEncodePattern(inputs[0], additives, recipe.getResult());
+        ItemStack pattern = AppliedEnergisticsCompat.tryEncodePattern(inputs[0], additives, recipe.getResultStack());
 
         if (pattern != null)
         {
@@ -185,8 +185,6 @@ public class FramingSawWithEncoderMenu extends FramingSawMenu
             broadcastChanges();
         }
     }
-
-
 
     private static class EncoderSlot extends Slot
     {

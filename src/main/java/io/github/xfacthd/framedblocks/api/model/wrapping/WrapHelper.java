@@ -5,7 +5,6 @@ import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.api.block.IFramedDoubleBlock;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockParts;
-import io.github.xfacthd.framedblocks.api.block.render.NullCullPredicate;
 import io.github.xfacthd.framedblocks.api.internal.InternalClientAPI;
 import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.item.ItemModelInfo;
@@ -24,20 +23,18 @@ import java.util.Set;
 @SuppressWarnings("unused")
 public final class WrapHelper
 {
-    /** List of properties which are always present and always need to be ignored */
-    public static final Set<Property<?>> IGNORE_ALWAYS = BlockUtils.REQUIRED_STATE_PROPERTIES;
-    /** {@link WrapHelper#IGNORE_ALWAYS} + waterlogged */
-    public static final Set<Property<?>> IGNORE_WATERLOGGED = Utils.concat(Set.of(BlockStateProperties.WATERLOGGED), IGNORE_ALWAYS);
-    /** {@link WrapHelper#IGNORE_ALWAYS} + waterlogged + state-lock */
-    public static final Set<Property<?>> IGNORE_WATERLOGGED_LOCK = Utils.concat(Set.of(FramedProperties.STATE_LOCKED), IGNORE_WATERLOGGED);
-    /** {@link WrapHelper#IGNORE_ALWAYS} + solid */
-    public static final Set<Property<?>> IGNORE_SOLID = Utils.concat(Set.of(FramedProperties.SOLID), IGNORE_ALWAYS);
-    /** {@link WrapHelper#IGNORE_ALWAYS} + solid + state-lock */
-    public static final Set<Property<?>> IGNORE_SOLID_LOCK = Utils.concat(Set.of(FramedProperties.STATE_LOCKED), IGNORE_SOLID);
-    /** {@link WrapHelper#IGNORE_ALWAYS} + solid + waterlogged */
-    public static final Set<Property<?>> IGNORE_DEFAULT = Utils.concat(Set.of(BlockStateProperties.WATERLOGGED), IGNORE_SOLID);
-    /** {@link WrapHelper#IGNORE_ALWAYS} + solid + waterlogged + state-lock */
-    public static final Set<Property<?>> IGNORE_DEFAULT_LOCK = Utils.concat(Set.of(FramedProperties.STATE_LOCKED), IGNORE_DEFAULT);
+    /// Set of properties that all blocks should ignore when wrapping models
+    public static final Set<Property<?>> IGNORED_PROPS = Utils.concat(BlockUtils.REQUIRED_STATE_PROPERTIES, Set.of(
+            FramedProperties.SOLID,
+            FramedProperties.PROPAGATES_SKYLIGHT,
+            FramedProperties.GLOWING,
+            BlockStateProperties.WATERLOGGED,
+            FramedProperties.STATE_LOCKED
+    ));
+    /// Default [StateMerger] to use for all blocks which only need to ignore the above properties
+    public static final StateMerger DEFAULT_MERGER = StateMerger.ignoring(IGNORED_PROPS);
+    /// [StateMerger] for blocks which need to ignore the default properties and [BlockStateProperties#POWERED]
+    public static final StateMerger POWERED_MERGER = StateMerger.ignoring(Utils.concat(IGNORED_PROPS, Set.of(BlockStateProperties.POWERED)));
 
     /**
      * Wrap the models of all states of the given block with models generated from {@link Geometry}s created by
@@ -79,13 +76,12 @@ public final class WrapHelper
      * will re-use the existing wrapped model.
      *
      * @param block             The block whose models to wrap (must implement {@link IFramedDoubleBlock})
-     * @param nullCullPredicate The {@link NullCullPredicate} to use for culling "uncullable" quads on the part models
      * @param itemModelInfo     The {@link ItemModelInfo} to use for controlling item model geometry caching
      * @param ignoredProps      The state properties to ignore during wrapping
      */
-    public static void wrapDouble(Holder<Block> block, NullCullPredicate nullCullPredicate, ItemModelInfo itemModelInfo, Set<Property<?>> ignoredProps)
+    public static void wrapDouble(Holder<Block> block, ItemModelInfo itemModelInfo, Set<Property<?>> ignoredProps)
     {
-        wrapDouble(block, nullCullPredicate, itemModelInfo, StateMerger.ignoring(ignoredProps));
+        wrapDouble(block, itemModelInfo, StateMerger.ignoring(ignoredProps));
     }
 
     /**
@@ -96,13 +92,12 @@ public final class WrapHelper
      * existing wrapped model.
      *
      * @param block             The block whose models to wrap (must implement {@link IFramedDoubleBlock})
-     * @param nullCullPredicate The {@link NullCullPredicate} to use for culling "uncullable" quads on the part models
      * @param itemModelInfo     The {@link ItemModelInfo} to use for controlling item model geometry caching
      * @param stateMerger       The {@link StateMerger} to use for merging visually redundant states during wrapping
      */
-    public static void wrapDouble(Holder<Block> block, NullCullPredicate nullCullPredicate, ItemModelInfo itemModelInfo, StateMerger stateMerger)
+    public static void wrapDouble(Holder<Block> block, ItemModelInfo itemModelInfo, StateMerger stateMerger)
     {
-        InternalClientAPI.INSTANCE.registerDoubleModelWrapper(block, nullCullPredicate, itemModelInfo, stateMerger);
+        InternalClientAPI.INSTANCE.registerDoubleModelWrapper(block, itemModelInfo, stateMerger);
     }
 
     /**
@@ -186,8 +181,6 @@ public final class WrapHelper
     {
         InternalClientAPI.INSTANCE.registerStandaloneModelWrapper(wrapperKey, blockGeometryFactory, modelFactory, stateMerger);
     }
-
-
 
     private WrapHelper() { }
 }

@@ -52,7 +52,5 @@ public final class BlockEntityPresence
         reporter.endTest();
     }
 
-
-
     private BlockEntityPresence() { }
 }

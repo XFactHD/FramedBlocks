@@ -14,7 +14,7 @@ import io.github.xfacthd.framedblocks.common.menu.FramingSawWithEncoderMenu;
 import io.github.xfacthd.framedblocks.common.net.payload.serverbound.ServerboundEncodeFramingSawPatternPayload;
 import io.github.xfacthd.framedblocks.common.util.ArrayBackedRecipeInput;
 import net.minecraft.Optionull;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.components.WidgetSprites;
@@ -105,23 +105,23 @@ public class FramingSawWithEncoderScreen extends FramingSawScreen
     }
 
     @Override
-    protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY)
+    public void extractBackground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick)
     {
-        super.renderBg(graphics, partialTick, mouseX, mouseY);
+        super.extractBackground(graphics, mouseX, mouseY, partialTick);
 
         Identifier rlTop = encoding ? TAB_ICON : TAB_SELECTED_ICON;
         graphics.blitSprite(RenderPipelines.GUI_TEXTURED, rlTop, leftPos + TAB_X, topPos + TAB_TOP_Y, TAB_WIDTH, TAB_HEIGHT);
-        graphics.renderFakeItem(tableStack, leftPos + TAB_ICON_X, topPos + TAB_ICON_TOP_Y);
+        graphics.fakeItem(tableStack, leftPos + TAB_ICON_X, topPos + TAB_ICON_TOP_Y);
 
         Identifier rlBot = encoding ? TAB_SELECTED_ICON : TAB_ICON;
         graphics.blitSprite(RenderPipelines.GUI_TEXTURED, rlBot, leftPos + TAB_X, topPos + TAB_BOT_Y, TAB_WIDTH, TAB_HEIGHT);
-        graphics.renderFakeItem(sawPatternStack, leftPos + TAB_ICON_X, topPos + TAB_ICON_BOT_Y);
+        graphics.fakeItem(sawPatternStack, leftPos + TAB_ICON_X, topPos + TAB_ICON_BOT_Y);
 
         if (encoding)
         {
             FramingSawRecipe recipe = cache.getRecipes().get(menu.getSelectedRecipeIndex()).value();
 
-            ClientUtils.renderTransparentFakeItem(graphics, recipe.getResult(), leftPos + 223, topPos + 31);
+            ClientUtils.renderTransparentFakeItem(graphics, recipe.getResultStack(), leftPos + 223, topPos + 31);
             int count = Optionull.mapOrDefault(encoderCalculation, FramingSawRecipeCalculation::getOutputCount, 1);
             drawItemCount(graphics, count, leftPos + 223, topPos + 31);
 
@@ -172,11 +172,11 @@ public class FramingSawWithEncoderScreen extends FramingSawScreen
     }
 
     @Override
-    protected boolean drawInputStackHint(GuiGraphics graphics, ItemStack input)
+    protected boolean drawInputStackHint(GuiGraphicsExtractor graphics, ItemStack input)
     {
         if (!super.drawInputStackHint(graphics, input) && encoding)
         {
-            graphics.renderFakeItem(input, leftPos + 20, topPos + 28);
+            graphics.fakeItem(input, leftPos + 20, topPos + 28);
             int count = Optionull.mapOrDefault(encoderCalculation, FramingSawRecipeCalculation::getInputCount, 1);
             drawItemCount(graphics, count, leftPos + 20, topPos + 28);
         }
@@ -184,14 +184,14 @@ public class FramingSawWithEncoderScreen extends FramingSawScreen
     }
 
     @Override
-    protected boolean drawAdditiveStackHint(GuiGraphics graphics, int index, ItemStack additive, List<FramingSawRecipeAdditive> additives, int y)
+    protected boolean drawAdditiveStackHint(GuiGraphicsExtractor graphics, int index, ItemStack additive, List<FramingSawRecipeAdditive> additives, int y)
     {
         boolean superResult = super.drawAdditiveStackHint(graphics, index, additive, additives, y);
         if (encoding)
         {
             if (!superResult)
             {
-                graphics.renderFakeItem(additive, leftPos + 20, y);
+                graphics.fakeItem(additive, leftPos + 20, y);
             }
 
             int count = Optionull.mapOrDefault(encoderCalculation, calc -> calc.getAdditiveCount(index), 1);
@@ -206,19 +206,19 @@ public class FramingSawWithEncoderScreen extends FramingSawScreen
         return !encoding;
     }
 
-    private void drawItemCount(GuiGraphics graphics, int count, int x, int y)
+    private void drawItemCount(GuiGraphicsExtractor graphics, int count, int x, int y)
     {
         if (count != 1)
         {
             String text = String.valueOf(count);
-            graphics.drawString(font, text, x + 19 - 2 - font.width(text), y + 6 + 3, 0xFFFFFFFF, true);
+            graphics.text(font, text, x + 19 - 2 - font.width(text), y + 6 + 3, 0xFFFFFFFF, true);
         }
     }
 
     @Override
-    protected void renderTooltip(GuiGraphics graphics, int mouseX, int mouseY)
+    protected void extractTooltip(GuiGraphicsExtractor graphics, int mouseX, int mouseY)
     {
-        super.renderTooltip(graphics, mouseX, mouseY);
+        super.extractTooltip(graphics, mouseX, mouseY);
 
         if (mouseX >= leftPos + TAB_X && mouseX <= leftPos)
         {
@@ -252,7 +252,7 @@ public class FramingSawWithEncoderScreen extends FramingSawScreen
                         case FramingSawMenu.SLOT_RESULT -> menu.getRecipes()
                                 .get(menu.getSelectedRecipeIndex())
                                 .getRecipe()
-                                .getResult();
+                                .getResultStack();
                         default -> getAdditiveStack(i - 1);
                     };
                     if (!stack.isEmpty())

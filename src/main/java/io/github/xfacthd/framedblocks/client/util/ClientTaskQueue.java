@@ -59,7 +59,5 @@ public final class ClientTaskQueue
 
     private record ClientTask(long time, Runnable task) { }
 
-
-
     private ClientTaskQueue() { }
 }

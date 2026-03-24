@@ -1,15 +1,15 @@
 package io.github.xfacthd.framedblocks.client.model.geometry.cube;
 
-import io.github.xfacthd.framedblocks.api.model.data.AbstractFramedBlockData;
+import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
 import io.github.xfacthd.framedblocks.api.model.geometry.PartConsumer;
 import io.github.xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.common.config.ClientConfig;
-import net.minecraft.client.renderer.block.model.BlockStateModel;
+import net.minecraft.client.renderer.block.BlockAndTintGetter;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.model.data.ModelData;
@@ -39,16 +39,13 @@ public class FramedMarkedCubeGeometry extends FramedCubeGeometry
     }
 
     @Override
-    public void collectAdditionalPartsUncached(PartConsumer consumer, BlockAndTintGetter level, BlockPos pos, RandomSource random, ModelData data)
+    public void collectAdditionalPartsUncached(PartConsumer consumer, BlockAndTintGetter level, BlockPos pos, RandomSource random, FramedBlockData blockData, ModelData data)
     {
-        AbstractFramedBlockData fbData = data.get(AbstractFramedBlockData.PROPERTY);
-        if (fbData != null && !fbData.unwrap(false).getCamoContent().isEmpty())
+        if (!blockData.getCamoContent().isEmpty())
         {
-            consumer.acceptAll(frameModel, level, pos, random, state, false, false, true, false, frameShaderState, null);
+            consumer.acceptAll(frameModel, level, pos, random, state, false, false, true, frameShaderState, null);
         }
     }
-
-
 
     public static FramedCubeGeometry slime(GeometryFactory.Context ctx)
     {

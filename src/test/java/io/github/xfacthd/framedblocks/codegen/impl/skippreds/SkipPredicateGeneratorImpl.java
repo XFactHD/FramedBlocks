@@ -286,7 +286,7 @@ public final class SkipPredicateGeneratorImpl
             if (!prop.hasSpecialLookup()) continue;
 
             SpecialPropLookup lookup = Objects.requireNonNull(prop.specialPropLookup());
-            SequencedSet<Property> varProps = specialLookupVars.computeIfAbsent(lookup.varName(), $ -> new LinkedHashSet<>());
+            SequencedSet<Property> varProps = specialLookupVars.computeIfAbsent(lookup.varName(), _ -> new LinkedHashSet<>());
             if (!varProps.isEmpty())
             {
                 specialLookupVarsFoundTwice.add(lookup.varName());
@@ -471,6 +471,7 @@ public final class SkipPredicateGeneratorImpl
             propsByTestTarget.put(sourceType, selfUsedProps);
         }
 
+        boolean omitLeadingLinebreak = selfTestExec == null;
         for (Type type : targetTypes)
         {
             Set<Property> srcUsedProps = new HashSet<>();
@@ -509,7 +510,10 @@ public final class SkipPredicateGeneratorImpl
                 propLookupList = buildPropertyLookupList(type, properties, imports, PropertyLookupLocation.TEST_METHOD);
             }
 
-            builder.append("\n");
+            if (!omitLeadingLinebreak)
+            {
+                builder.append("\n");
+            }
             builder.append(buildTestMethod(type, propParamsList, propLookupList, testExec, sourceTestDirs, isOneWayTest));
 
             propsByTestTarget.put(type, srcUsedProps);
@@ -517,6 +521,8 @@ public final class SkipPredicateGeneratorImpl
             {
                 imports.add(SKIP_PREDS_ROOT_PKG + type.subPackage() + "." + getTestDirComputeClass(type, false));
             }
+
+            omitLeadingLinebreak = false;
         }
         return builder.toString().stripTrailing();
     }

@@ -15,12 +15,12 @@ public final class FramedBlockOverlayProvider
 {
     public static void buildBlockOverlayEntries(BootstrapContext<BlockOverlay> context)
     {
-        overlay(context, "moss", (builder, name) -> builder
+        overlay(context, "moss", (builder, _) -> builder
                 .solidTexture("moss")
                 .solidFace(BlockOverlay.SolidFace.ALL)
                 .sourceItem(Items.MOSS_CARPET)
         );
-        overlay(context, "grass", (builder, name) -> builder
+        overlay(context, "grass", (builder, _) -> builder
                 .solidTexture(Utils.id("minecraft", "block/grass_block_top"))
                 .edgeTexture(Utils.id("minecraft", "block/grass_block_side_overlay"))
                 .solidFace(BlockOverlay.SolidFace.TOP)
@@ -66,7 +66,7 @@ public final class FramedBlockOverlayProvider
         for (DyeColor color : DyeColor.values())
         {
             String colName = color.getName();
-            overlay(context, colName + "_carpet", (builder, name) -> builder
+            overlay(context, colName + "_carpet", (builder, _) -> builder
                     .solidTexture(Utils.id("minecraft", "block/" + colName + "_wool"))
                     .edgeTexture(colName + "_carpet")
                     .solidFace(BlockOverlay.SolidFace.TOP)

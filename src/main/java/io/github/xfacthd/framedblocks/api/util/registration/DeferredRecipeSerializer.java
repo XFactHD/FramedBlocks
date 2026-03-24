@@ -14,8 +14,6 @@ public final class DeferredRecipeSerializer<T extends Recipe<?>> extends Deferre
         super(key);
     }
 
-
-
     public static <T extends Recipe<?>> DeferredRecipeSerializer<T> createRecipeSerializer(Identifier name)
     {
         return createRecipeSerializer(ResourceKey.create(Registries.RECIPE_SERIALIZER, name));

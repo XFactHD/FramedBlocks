@@ -138,7 +138,5 @@ public final class FramedUtils
         }
     }
 
-
-
     private FramedUtils() { }
 }

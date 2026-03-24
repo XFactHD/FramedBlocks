@@ -23,7 +23,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -40,17 +39,14 @@ public class FramedCollapsibleBlock extends FramedBlock
     public FramedCollapsibleBlock(BlockType blockType, Properties props)
     {
         super(blockType, props.dynamicShape());
-        registerDefaultState(defaultBlockState()
-                .setValue(BlockStateProperties.WATERLOGGED, false)
-                .setValue(PropertyHolder.ROTATE_SPLIT_LINE, false)
-        );
+        registerDefaultState(defaultBlockState().setValue(PropertyHolder.ROTATE_SPLIT_LINE, false));
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        builder.add(PropertyHolder.NULLABLE_FACE, BlockStateProperties.WATERLOGGED, PropertyHolder.ROTATE_SPLIT_LINE);
+        builder.add(PropertyHolder.NULLABLE_FACE, PropertyHolder.ROTATE_SPLIT_LINE);
     }
 
     @Override
@@ -149,8 +145,6 @@ public class FramedCollapsibleBlock extends FramedBlock
     {
         return state;
     }
-
-
 
     @SuppressWarnings("SuspiciousNameCombination")
     private static VoxelShape buildShape(Integer packedData)

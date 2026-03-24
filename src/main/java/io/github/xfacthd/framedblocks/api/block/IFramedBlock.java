@@ -31,7 +31,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.BlockAndTintGetter;
+import net.minecraft.world.level.BlockAndLightGetter;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.EmptyBlockGetter;
 import net.minecraft.world.level.Explosion;
@@ -64,6 +64,9 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension
     String CAMO_LABEL_MULTI = Utils.translationKey("desc", "block.stored_camo_multi");
     Identifier DYNAMIC_DROPS = Utils.id("dynamic_drops");
 
+    /**
+     * @implNote The value returned by this method must either be constant or originate from a field that is initialized before super
+     */
     IBlockType getBlockType();
 
     static Block.Properties applyDefaultProperties(BlockBehaviour.Properties props, IBlockType type)
@@ -201,7 +204,7 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension
     @Override
     default BlockState getAppearance(
             BlockState state,
-            BlockAndTintGetter level,
+            BlockAndLightGetter level,
             BlockPos pos,
             Direction side,
             @Nullable BlockState queryState,
@@ -368,8 +371,7 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension
 
     default boolean useCamoOcclusionShapeForLightOcclusion(BlockState state)
     {
-        //noinspection ConstantValue
-        if (getBlockType() != null && !getBlockType().canOccludeWithSolidCamo())
+        if (!getBlockType().canOccludeWithSolidCamo())
         {
             return false;
         }
@@ -546,7 +548,7 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension
     }
 
     @Override
-    default boolean shouldDisplayFluidOverlay(BlockState state, BlockAndTintGetter level, BlockPos pos, FluidState fluid)
+    default boolean shouldDisplayFluidOverlay(BlockState state, BlockAndLightGetter level, BlockPos pos, FluidState fluid)
     {
         if (!getBlockType().canOccludeWithSolidCamo())
         {
@@ -569,6 +571,7 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension
         return IBlockExtension.super.canEntityDestroy(state, level, pos, entity);
     }
 
+    /// Create a new [BlockEntity] for this block. BEs returned from this method must implement [IFramedBlockEntity]
     @Override
     BlockEntity newBlockEntity(BlockPos pos, BlockState state);
 

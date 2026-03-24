@@ -61,8 +61,8 @@ public class FramedPoweredRailSlopeBlock<BE extends FramedBlockEntity> extends P
 
     protected FramedPoweredRailSlopeBlock(BlockType type, Properties props, boolean isPoweredRail, BlockEntityType.BlockEntitySupplier<BE> beFactory)
     {
-        super(IFramedBlock.applyDefaultProperties(props, type), isPoweredRail);
         this.type = type;
+        super(IFramedBlock.applyDefaultProperties(props, type), isPoweredRail);
         this.shapes = ShapeLookup.of(this);
         this.beFactory = beFactory;
         BlockUtils.configureStandardProperties(this);
@@ -75,11 +75,8 @@ public class FramedPoweredRailSlopeBlock<BE extends FramedBlockEntity> extends P
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
-        BlockUtils.addRequiredProperties(builder);
-        builder.add(
-                PropertyHolder.ASCENDING_RAIL_SHAPE, BlockStateProperties.POWERED, BlockStateProperties.WATERLOGGED,
-                FramedProperties.SOLID, FramedProperties.ALT_SLOPE
-        );
+        BlockUtils.addStandardProperties(this, builder);
+        builder.add(PropertyHolder.ASCENDING_RAIL_SHAPE, BlockStateProperties.POWERED);
     }
 
     @Override
@@ -289,8 +286,6 @@ public class FramedPoweredRailSlopeBlock<BE extends FramedBlockEntity> extends P
     {
         return getItemModelSource();
     }
-
-
 
     public static FramedPoweredRailSlopeBlock<FramedBlockEntity> powered(Properties props)
     {

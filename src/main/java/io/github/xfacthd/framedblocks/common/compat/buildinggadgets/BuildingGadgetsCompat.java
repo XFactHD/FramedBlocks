@@ -71,12 +71,8 @@ public final class BuildingGadgetsCompat
             };
         }*/
 
-
-
         private GuardedAccess() { }
     }
-
-
 
     private BuildingGadgetsCompat() { }
 }

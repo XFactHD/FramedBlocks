@@ -14,8 +14,6 @@ public final class DeferredRecipeType<T extends Recipe<?>> extends DeferredHolde
         super(key);
     }
 
-
-
     public static <T extends Recipe<?>> DeferredRecipeType<T> createRecipeType(Identifier name)
     {
         return createRecipeType(ResourceKey.create(Registries.RECIPE_TYPE, name));

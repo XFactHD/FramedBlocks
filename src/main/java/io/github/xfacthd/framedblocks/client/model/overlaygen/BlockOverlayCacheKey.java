@@ -5,9 +5,8 @@ import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.client.model.wrapping.ModelWrappingManager;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.block.model.BlockModelPart;
-import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModelPart;
+import net.minecraft.client.resources.model.geometry.BakedQuad;
 import net.minecraft.core.Direction;
 import net.minecraft.util.TriState;
 import net.minecraft.world.level.block.state.BlockState;
@@ -27,10 +26,11 @@ record BlockOverlayCacheKey(
         @Nullable BlockState partState,
         boolean secondPart,
         BlockOverlay overlay,
-        ChunkSectionLayer chunkLayer,
+        boolean forceTranslucent,
         TriState ambientOcclusion,
         boolean emissive,
-        List<Bounds> bounds
+        List<Bounds> bounds,
+        int tintIndex
 )
 {
     private static final Direction[] DIRECTIONS = Direction.values();
@@ -42,9 +42,10 @@ record BlockOverlayCacheKey(
             BlockState partState,
             boolean secondPart,
             BlockOverlay overlay,
-            List<BlockModelPart> sourceParts,
+            List<BlockStateModelPart> sourceParts,
             boolean emissive,
-            boolean fastPath
+            boolean fastPath,
+            int tintIndex
     )
     {
         BlockOverlayMetaCache.Entry metadata = BlockOverlayMetaCache.get(overlay, partState);
@@ -56,30 +57,30 @@ record BlockOverlayCacheKey(
             outerState = ModelWrappingManager.tryGetStateMerger(outerState.getBlock()).apply(outerState);
         }
         BlockState keyPartState = metadata.stateDependent() ? partState : null;
-        ChunkSectionLayer chunkLayer = computeChunkLayer(partState, overlay, sourceParts);
+        boolean forceTranslucent = computeForceTranslucent(overlay, sourceParts);
         TriState ambientOcclusion = computeAmbientOcclusion(sourceParts);
-        return new BlockOverlayCacheKey(outerState, keyPartState, secondPart, overlay, chunkLayer, ambientOcclusion, emissive, bounds);
+        return new BlockOverlayCacheKey(outerState, keyPartState, secondPart, overlay, forceTranslucent, ambientOcclusion, emissive, bounds, tintIndex);
     }
 
-    private static ChunkSectionLayer computeChunkLayer(BlockState state, BlockOverlay overlay, List<BlockModelPart> parts)
+    private static boolean computeForceTranslucent(BlockOverlay overlay, List<BlockStateModelPart> parts)
     {
         if (overlay.translucent())
         {
-            return ChunkSectionLayer.TRANSLUCENT;
+            return true;
         }
-        for (BlockModelPart part : parts)
+        for (BlockStateModelPart part : parts)
         {
-            if (part.getRenderType(state) == ChunkSectionLayer.TRANSLUCENT)
+            if ((part.materialFlags() & BakedQuad.FLAG_TRANSLUCENT) != 0)
             {
-                return ChunkSectionLayer.TRANSLUCENT;
+                return true;
             }
         }
-        return ChunkSectionLayer.CUTOUT;
+        return false;
     }
 
-    private static TriState computeAmbientOcclusion(List<BlockModelPart> parts)
+    private static TriState computeAmbientOcclusion(List<BlockStateModelPart> parts)
     {
-        for (BlockModelPart part : parts)
+        for (BlockStateModelPart part : parts)
         {
             TriState ao = part.ambientOcclusion();
             if (ao != TriState.DEFAULT)
@@ -90,10 +91,10 @@ record BlockOverlayCacheKey(
         return TriState.DEFAULT;
     }
 
-    private static List<Bounds> computeBounds(BlockOverlayMetaCache.Entry metadata, List<BlockModelPart> parts, boolean fastPath)
+    private static List<Bounds> computeBounds(BlockOverlayMetaCache.Entry metadata, List<BlockStateModelPart> parts, boolean fastPath)
     {
         Object2ObjectMap<QuadSetKey, List<BakedQuad>> quadsByNormal = null;
-        for (BlockModelPart part : parts)
+        for (BlockStateModelPart part : parts)
         {
             for (Direction face : fastPath ? DIRECTIONS : DIRECTIONS_WITH_NULL)
             {
@@ -114,7 +115,7 @@ record BlockOverlayCacheKey(
                     {
                         quadsByNormal = new Object2ObjectOpenHashMap<>();
                     }
-                    quadsByNormal.computeIfAbsent(new QuadSetKey(face, normalDir, normal), $ -> new ArrayList<>()).add(quad);
+                    quadsByNormal.computeIfAbsent(new QuadSetKey(face, normalDir, normal), _ -> new ArrayList<>()).add(quad);
                 }
             }
         }

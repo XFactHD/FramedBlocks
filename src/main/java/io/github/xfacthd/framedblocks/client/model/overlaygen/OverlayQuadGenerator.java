@@ -1,12 +1,12 @@
 package io.github.xfacthd.framedblocks.client.model.overlaygen;
 
-import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import com.mojang.blaze3d.platform.Transparency;
+import net.minecraft.client.resources.model.geometry.BakedQuad;
+import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.lighting.LightEngine;
-import net.neoforged.neoforge.client.model.pipeline.QuadBakingVertexConsumer;
+import net.neoforged.neoforge.client.model.quad.MutableQuad;
 import net.neoforged.neoforge.client.model.quad.BakedNormals;
-import org.joml.Vector3f;
 import org.joml.Vector3fc;
 
 import java.util.ArrayList;
@@ -25,8 +25,9 @@ public final class OverlayQuadGenerator
     public static void generate(
             List<BakedQuad> srcQuads,
             ArrayList<BakedQuad> outQuads,
-            Function<Direction, TextureAtlasSprite> spriteGetter,
+            Function<Direction, Material.Baked> spriteGetter,
             Predicate<Direction> filter,
+            boolean forceTranslucent,
             boolean forceEmissive
     )
     {
@@ -36,8 +37,8 @@ public final class OverlayQuadGenerator
         {
             if (!filter.test(quad.direction())) continue;
 
-            TextureAtlasSprite sprite = spriteGetter.apply(quad.direction());
-            OverlayCacheKey key = new OverlayCacheKey(quad, sprite, forceEmissive);
+            Material.Baked spriteInfo = spriteGetter.apply(quad.direction());
+            OverlayCacheKey key = new OverlayCacheKey(quad, spriteInfo, forceTranslucent, forceEmissive);
             if (uniqueKeys.add(key))
             {
                 outQuads.add(OVERLAY_CACHE.computeIfAbsent(key, OverlayQuadGenerator::generateOverlayQuad));
@@ -47,42 +48,41 @@ public final class OverlayQuadGenerator
 
     private static BakedQuad generateOverlayQuad(OverlayCacheKey key)
     {
-        return generateOverlayQuad(key, key.face(), key.normals(), key.sprite(), key.forceEmissive(), -1);
+        Material.Baked material = key.material();
+        boolean forceTranslucent = material.forceTranslucent() || key.forceTranslucent();
+        Transparency transparency = forceTranslucent ? Transparency.TRANSLUCENT : material.sprite().transparency();
+        return generateOverlayQuad(key, key.face(), key.normals(), material, transparency, key.forceEmissive(), -1);
     }
 
-    static BakedQuad generateOverlayQuad(VertexCoordProvider coords, Direction face, BakedNormals normals, TextureAtlasSprite sprite, boolean emissive, int tintIndex)
+    static BakedQuad generateOverlayQuad(
+            VertexCoordProvider coords,
+            Direction face,
+            BakedNormals normals,
+            Material.Baked material,
+            Transparency transparency,
+            boolean emissive,
+            int tintIndex
+    )
     {
-        QuadBakingVertexConsumer baker = new QuadBakingVertexConsumer();
+        MutableQuad quad = new MutableQuad();
 
-        UVInfo uvInfo = UVInfo.get(face);
-        Vector3f scratch = new Vector3f();
-
-        baker.setDirection(face);
-        baker.setSprite(sprite);
-        baker.setHasAmbientOcclusion(!emissive);
-        baker.setShade(!emissive);
-        baker.setTintIndex(tintIndex);
+        quad.setSprite(material, transparency);
+        quad.setDirection(face);
+        quad.setAmbientOcclusion(!emissive);
+        quad.setShade(!emissive);
+        quad.setTintIndex(tintIndex);
         if (emissive)
         {
-            baker.setLightEmission(LightEngine.MAX_LEVEL);
+            quad.setLightEmission(LightEngine.MAX_LEVEL);
         }
-
         for (int i = 0; i < 4; i++)
         {
-            Vector3fc pos = coords.pos(i);
-            baker.addVertex(pos.x(), pos.y(), pos.z());
-
-            float uSrc = pos.get(uvInfo.uIdx());
-            float vSrc = pos.get(uvInfo.vIdx());
-            float u = uvInfo.uInv() ? (1F - uSrc) : uSrc;
-            float v = uvInfo.vInv() ? (1F - vSrc) : vSrc;
-            baker.setUv(sprite.getU(u), sprite.getV(v));
-
-            BakedNormals.unpack(normals.normal(i), scratch);
-            baker.setNormal(scratch.x, scratch.y, scratch.z).setColor(-1);
+            quad.setPosition(i, coords.pos(i));
         }
+        quad.setNormal(normals);
+        quad.bakeUvsFromPosition();
 
-        return baker.bakeQuad();
+        return quad.toBakedQuad();
     }
 
     public static void clearCaches()

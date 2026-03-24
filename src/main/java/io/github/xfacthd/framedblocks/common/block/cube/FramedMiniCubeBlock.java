@@ -36,7 +36,7 @@ public class FramedMiniCubeBlock extends FramedBlock
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        builder.add(BlockStateProperties.ROTATION_16, FramedProperties.TOP, BlockStateProperties.WATERLOGGED);
+        builder.add(BlockStateProperties.ROTATION_16, FramedProperties.TOP);
     }
 
     @Override
@@ -98,20 +98,16 @@ public class FramedMiniCubeBlock extends FramedBlock
         return defaultBlockState();
     }
 
-
-
     public static final class MiniCubeStateMerger implements StateMerger
     {
         public static final MiniCubeStateMerger INSTANCE = new MiniCubeStateMerger();
-
-        private final StateMerger ignoringMerger = StateMerger.ignoring(WrapHelper.IGNORE_WATERLOGGED);
 
         private MiniCubeStateMerger() { }
 
         @Override
         public BlockState apply(BlockState state)
         {
-            state = ignoringMerger.apply(state);
+            state = WrapHelper.DEFAULT_MERGER.apply(state);
             int rot = state.getValue(BlockStateProperties.ROTATION_16);
             if (rot > 3)
             {
@@ -124,7 +120,7 @@ public class FramedMiniCubeBlock extends FramedBlock
         public Set<Property<?>> getHandledProperties(Holder<Block> block)
         {
             return Utils.concat(
-                    ignoringMerger.getHandledProperties(block),
+                    WrapHelper.DEFAULT_MERGER.getHandledProperties(block),
                     Set.of(BlockStateProperties.ROTATION_16)
             );
         }

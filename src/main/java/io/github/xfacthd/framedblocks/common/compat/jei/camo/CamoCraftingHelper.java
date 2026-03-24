@@ -2,7 +2,7 @@ package io.github.xfacthd.framedblocks.common.compat.jei.camo;
 
 import com.mojang.datafixers.util.Pair;
 import io.github.xfacthd.framedblocks.api.camo.CamoContainerFactory;
-import io.github.xfacthd.framedblocks.common.compat.jei.JeiConstants;
+import io.github.xfacthd.framedblocks.common.compat.jei.JeiCompat;
 import io.github.xfacthd.framedblocks.common.crafting.camo.CamoApplicationRecipe;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
@@ -12,11 +12,10 @@ import mezz.jei.api.gui.ingredient.IRecipeSlotRichTooltipCallback;
 import mezz.jei.api.gui.ingredient.IRecipeSlotView;
 import mezz.jei.api.runtime.IIngredientManager;
 import net.minecraft.client.Minecraft;
-import net.minecraft.core.RegistryAccess;
 import net.minecraft.util.context.ContextMap;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.display.SlotDisplay;
@@ -32,7 +31,7 @@ import java.util.Optional;
 public final class CamoCraftingHelper
 {
     private static final int MAX_CAMO_EXAMPLE_INGREDIENTS_COUNT = 100;
-    private static final CamoApplicationRecipe DUMMY_RECIPE = new CamoApplicationRecipe(CraftingBookCategory.MISC, Ingredient.of(Items.BRUSH));
+    private static final CamoApplicationRecipe DUMMY_RECIPE = new CamoApplicationRecipe(Ingredient.of(Items.BRUSH));
 
     private CamoApplicationRecipe helperRecipe;
     private final Ingredient fakeEmptyIngredient;
@@ -102,11 +101,9 @@ public final class CamoCraftingHelper
 
     public ItemStack calculateOutput(ItemStack frame, ItemStack inputOne, ItemStack inputTwo)
     {
-        RegistryAccess registryAccess = Objects.requireNonNull(Minecraft.getInstance().level).registryAccess();
-
         ItemStack copyToolItem = helperRecipe.getCopyTool().display().resolveForFirstStack(makeSlotDisplayContext());
         CraftingInput craftingInput = CraftingInput.of(2, 2, List.of(frame, copyToolItem, inputOne, inputTwo));
-        return helperRecipe.assemble(craftingInput, registryAccess);
+        return helperRecipe.assemble(craftingInput);
     }
 
     private List<ItemStack> getCamoExampleStacks(Ingredient ingredient, int count)
@@ -199,7 +196,7 @@ public final class CamoCraftingHelper
             slotBuilder.addRichTooltipCallback(tooltipCallback);
         }
 
-        Optional<ItemStack> result = recipe.result();
+        Optional<ItemStack> result = recipe.result().map(ItemStackTemplate::create);
         if (result.isEmpty())
         {
             // For bookmarking, the recipe must have at least one known output.
@@ -229,6 +226,7 @@ public final class CamoCraftingHelper
         if (stacks.isEmpty()) return SlotDisplay.Empty.INSTANCE;
 
         List<SlotDisplay> displays = stacks.stream()
+                .map(ItemStackTemplate::fromNonEmptyStack)
                 .map(SlotDisplay.ItemStackSlotDisplay::new)
                 .map(SlotDisplay.class::cast)
                 .toList();
@@ -258,7 +256,7 @@ public final class CamoCraftingHelper
                     if (recipeSlotView.getItemStacks().count() > 1)
                     {
                         tooltip.clear();
-                        tooltip.add(JeiConstants.MSG_SUPPORTS_MOST_CAMOS);
+                        tooltip.add(JeiCompat.MSG_SUPPORTS_MOST_CAMOS);
                     }
                 }
             });

@@ -44,8 +44,6 @@ public final class FramingSawGhostIngredientHandler implements IGhostIngredientH
     @Override
     public void onComplete() { }
 
-
-
     private record InputTarget(FramingSawWithEncoderScreen screen, int slot, Rect2i area) implements Target<ItemStack>
     {
         public InputTarget(FramingSawWithEncoderScreen screen, int slot)

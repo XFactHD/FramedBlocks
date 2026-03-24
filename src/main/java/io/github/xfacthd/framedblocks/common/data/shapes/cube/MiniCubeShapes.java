@@ -26,7 +26,5 @@ public final class MiniCubeShapes
         return ShapeContainer.of(map);
     }
 
-
-
     private MiniCubeShapes() { }
 }

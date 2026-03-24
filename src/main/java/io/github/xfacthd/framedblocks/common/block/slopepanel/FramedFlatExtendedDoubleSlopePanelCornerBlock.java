@@ -40,7 +40,7 @@ public class FramedFlatExtendedDoubleSlopePanelCornerBlock extends FramedDoubleB
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        builder.add(FramedProperties.FACING_HOR, PropertyHolder.ROTATION, FramedProperties.ALT_SLOPE);
+        builder.add(FramedProperties.FACING_HOR, PropertyHolder.ROTATION);
     }
 
     @Override

@@ -165,7 +165,5 @@ public final class SpecialTestCommand
         void run(CommandContext<CommandSourceStack> ctx, Consumer<Component> msgQueueAppender);
     }
 
-
-
     private SpecialTestCommand() { }
 }

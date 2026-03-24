@@ -24,7 +24,7 @@ import io.github.xfacthd.framedblocks.common.blockentity.special.FramedHopperBlo
 import io.github.xfacthd.framedblocks.common.blockentity.special.FramedStorageBlockEntity;
 import io.github.xfacthd.framedblocks.common.compat.atlasviewer.AtlasViewerCompat;
 import io.github.xfacthd.framedblocks.common.compat.jade.JadeCompat;
-import io.github.xfacthd.framedblocks.common.compat.jei.JeiConstants;
+import io.github.xfacthd.framedblocks.common.compat.jei.JeiCompat;
 import io.github.xfacthd.framedblocks.common.config.ClientConfig;
 import io.github.xfacthd.framedblocks.common.config.DevToolsConfig;
 import io.github.xfacthd.framedblocks.common.config.ServerConfig;
@@ -364,9 +364,9 @@ public final class FramedLanguageProvider extends LanguageProvider
 
         add(EmptyCamoContainer.CAMO_NAME, "Empty");
 
-        add(JeiConstants.MSG_INVALID_RECIPE, "Invalid recipe");
-        add(JeiConstants.MSG_TRANSFER_NOT_IMPLEMENTED, "Transfer not implemented, no items will be transferred");
-        add(JeiConstants.MSG_SUPPORTS_MOST_CAMOS, "Supports most items that can be used to apply camos by block interaction");
+        add(JeiCompat.MSG_INVALID_RECIPE, "Invalid recipe");
+        add(JeiCompat.MSG_TRANSFER_NOT_IMPLEMENTED, "Transfer not implemented, no items will be transferred");
+        add(JeiCompat.MSG_SUPPORTS_MOST_CAMOS, "Supports most items that can be used to apply camos by block interaction");
 
         add(AtlasViewerCompat.LABEL_TEXTURE, "Texture");
         add(AtlasViewerCompat.LABEL_FRAMES, "Frames");
@@ -601,7 +601,6 @@ public final class FramedLanguageProvider extends LanguageProvider
         addConfigValue(ClientConfig.CAMO_MESSAGE_VERBOSITY_VALUE, "Disallowed camo message verbosity");
         addConfigValue(ClientConfig.FORCE_AO_ON_GLOWING_BLOCKS_VALUE, "Force ambient occlusion on glowing framed blocks");
         addConfigValue(ClientConfig.RENDER_ITEM_MODELS_WITH_CAMO_VALUE, "Render item models with camo");
-        addConfigValue(ClientConfig.SUPPORT_WEIGHTED_VARIANTS_VALUE, "Support weighted variant models");
         addConfigValue(ClientConfig.SHOW_ALL_RECIPE_PERMUTATIONS_IN_EMI_VALUE, "Show all Framing Saw recipe permutations in EMI");
         addConfigValue(ClientConfig.SOLID_FRAME_MODE_VALUE, "Solid frame mode");
         addConfigValue(ClientConfig.SHOW_BUTTON_PLATE_OVERLAY_VALUE, "Show button and pressure plate type overlay");

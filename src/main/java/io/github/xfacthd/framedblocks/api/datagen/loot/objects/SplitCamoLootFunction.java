@@ -7,14 +7,11 @@ import io.github.xfacthd.framedblocks.api.camo.CamoContainer;
 import io.github.xfacthd.framedblocks.api.camo.CamoList;
 import io.github.xfacthd.framedblocks.api.camo.empty.EmptyCamoContainer;
 import io.github.xfacthd.framedblocks.api.util.Utils;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
-import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.neoforged.neoforge.registries.DeferredHolder;
 
 import java.util.List;
 
@@ -23,8 +20,6 @@ public final class SplitCamoLootFunction extends LootItemConditionalFunction
     public static final MapCodec<SplitCamoLootFunction> MAP_CODEC = RecordCodecBuilder.mapCodec(inst -> commonFields(inst).and(
             Codec.intRange(0, Integer.MAX_VALUE).fieldOf("camo_index").forGetter(func -> func.camoIndex)
     ).apply(inst, SplitCamoLootFunction::new));
-    private static final DeferredHolder<LootItemFunctionType<?>, LootItemFunctionType<SplitCamoLootFunction>> TYPE =
-            DeferredHolder.create(Registries.LOOT_FUNCTION_TYPE, Utils.id("split_camo"));
 
     private final int camoIndex;
 
@@ -50,19 +45,15 @@ public final class SplitCamoLootFunction extends LootItemConditionalFunction
     }
 
     @Override
-    public LootItemFunctionType<SplitCamoLootFunction> getType()
+    public MapCodec<SplitCamoLootFunction> codec()
     {
-        return TYPE.value();
+        return MAP_CODEC;
     }
-
-
 
     public static SplitCamoLootFunction.Builder split(int camoIndex)
     {
         return new Builder(camoIndex);
     }
-
-
 
     public static final class Builder extends LootItemConditionalFunction.Builder<Builder>
     {

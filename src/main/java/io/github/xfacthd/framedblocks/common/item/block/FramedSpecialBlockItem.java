@@ -70,8 +70,6 @@ public abstract class FramedSpecialBlockItem extends FramedBlockItem
 
     protected abstract boolean shouldWriteToCamoTwo(BlockPlaceContext ctx, BlockState originalState);
 
-
-
     public static abstract class Single extends FramedSpecialBlockItem
     {
         public Single(Block block, Properties props)

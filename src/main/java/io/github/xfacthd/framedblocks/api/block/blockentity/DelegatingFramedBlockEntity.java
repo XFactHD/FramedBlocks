@@ -18,7 +18,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.BlockAndTintGetter;
+import net.minecraft.world.level.BlockAndLightGetter;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
@@ -295,7 +295,7 @@ public non-sealed interface DelegatingFramedBlockEntity extends IFramedBlockEnti
 
     @Override
     @ApiStatus.NonExtendable
-    default boolean shouldCamoDisplayFluidOverlay(BlockAndTintGetter level, BlockPos pos, FluidState fluid)
+    default boolean shouldCamoDisplayFluidOverlay(BlockAndLightGetter level, BlockPos pos, FluidState fluid)
     {
         return unwrap().shouldCamoDisplayFluidOverlay(level, pos, fluid);
     }

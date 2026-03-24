@@ -34,7 +34,5 @@ public final class CeilingHangingSignShapes
         return ShapeContainer.of(map);
     }
 
-
-
     private CeilingHangingSignShapes() { }
 }

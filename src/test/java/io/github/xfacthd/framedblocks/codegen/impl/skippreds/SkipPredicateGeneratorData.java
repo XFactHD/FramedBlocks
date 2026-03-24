@@ -1003,8 +1003,6 @@ final class SkipPredicateGeneratorData
         }
     }
 
-
-
     private static final class EntryBuilder
     {
         private final String type;
@@ -1233,8 +1231,6 @@ final class SkipPredicateGeneratorData
     }
 
     record TestType(@Nullable String type) { }
-
-
 
     private SkipPredicateGeneratorData() { }
 }

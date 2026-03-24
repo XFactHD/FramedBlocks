@@ -9,12 +9,12 @@ import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
 import io.github.xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
 import io.github.xfacthd.framedblocks.api.util.DirUtils;
-import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.block.model.BlockStateModel;
+import net.minecraft.client.renderer.block.BlockAndTintGetter;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
+import net.minecraft.client.resources.model.geometry.BakedQuad;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jspecify.annotations.Nullable;
@@ -72,14 +72,12 @@ public class FramedBookshelfGeometry extends Geometry
     @Override
     public void collectAdditionalPartsCached(PartConsumer consumer, BlockAndTintGetter level, BlockPos pos, RandomSource random, FramedBlockData blockData, @Nullable Object cacheKeyUserData)
     {
-        consumer.acceptAll(baseModel, level, pos, random, state, false, false, false, false, AUX_SHADER_STATE, null);
+        consumer.acceptAll(baseModel, level, pos, random, state, false, false, false, AUX_SHADER_STATE, null);
     }
-
-
 
     public static FramedBookshelfGeometry normal(GeometryFactory.Context ctx)
     {
-        return new FramedBookshelfGeometry(ctx, dir -> true);
+        return new FramedBookshelfGeometry(ctx, _ -> true);
     }
 
     public static FramedBookshelfGeometry chiseled(GeometryFactory.Context ctx)

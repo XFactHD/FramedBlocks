@@ -29,7 +29,7 @@ public sealed class FramedSignBlockEntity extends SignBlockEntity implements Del
         this(FBContent.BE_TYPE_FRAMED_SIGN.value(), pos, state);
     }
 
-    private FramedSignBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
+    private FramedSignBlockEntity(BlockEntityType<? extends SignBlockEntity> type, BlockPos pos, BlockState state)
     {
         super(type, pos, state);
         this.delegate = new WrappedFramedBlockEntity(this);

@@ -33,7 +33,5 @@ public final class BlueprintBehaviours
         event.register(new TubeCopyBehaviour(), FBContent.BLOCK_FRAMED_TUBE);
     }
 
-
-
     private BlueprintBehaviours() { }
 }

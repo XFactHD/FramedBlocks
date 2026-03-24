@@ -2,7 +2,7 @@ package io.github.xfacthd.framedblocks.client.screen;
 
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.common.menu.FramedStorageMenu;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
@@ -17,24 +17,17 @@ public class FramedStorageScreen extends AbstractContainerScreen<FramedStorageMe
 
     public FramedStorageScreen(FramedStorageMenu menu, Inventory inv, Component title)
     {
-        super(menu, inv, title);
-
         int rows = menu.getRowCount();
-        this.imageHeight = 114 + rows * 18;
+        super(menu, inv, title, DEFAULT_IMAGE_WIDTH, 114 + rows * 18);
         this.inventoryLabelY = imageHeight - 94;
         this.invHeight = rows * 18 + 17;
     }
 
     @Override
-    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks)
+    public void extractBackground(GuiGraphicsExtractor graphics, int x, int y, float partialTicks)
     {
-        super.render(graphics, mouseX, mouseY, partialTicks);
-        this.renderTooltip(graphics, mouseX, mouseY);
-    }
+        super.extractBackground(graphics, x, y, partialTicks);
 
-    @Override
-    protected void renderBg(GuiGraphics graphics, float partialTicks, int x, int y)
-    {
         int left = (this.width - this.imageWidth) / 2;
         int top = (this.height - this.imageHeight) / 2;
 

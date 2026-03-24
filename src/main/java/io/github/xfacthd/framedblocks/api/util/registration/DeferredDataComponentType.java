@@ -13,8 +13,6 @@ public final class DeferredDataComponentType<T> extends DeferredHolder<DataCompo
         super(key);
     }
 
-
-
     public static <T> DeferredDataComponentType<T> createDataComponent(Identifier name)
     {
         return createDataComponent(ResourceKey.create(Registries.DATA_COMPONENT_TYPE, name));

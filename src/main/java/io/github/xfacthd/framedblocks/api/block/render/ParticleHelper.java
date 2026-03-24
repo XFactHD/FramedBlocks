@@ -1,7 +1,7 @@
 package io.github.xfacthd.framedblocks.api.block.render;
 
 import io.github.xfacthd.framedblocks.api.block.overlay.BlockOverlay;
-import io.github.xfacthd.framedblocks.api.camo.CamoClientHandler;
+import io.github.xfacthd.framedblocks.api.camo.CamoContentClientHandler;
 import io.github.xfacthd.framedblocks.api.camo.CamoContainer;
 import io.github.xfacthd.framedblocks.api.camo.CamoContent;
 import io.github.xfacthd.framedblocks.client.render.particle.BlockOverlayParticle;
@@ -109,8 +109,6 @@ public final class ParticleHelper
         level.addParticle(options, x, entity.getY() + 0.1D, z, delta.x * -4D, 1.5D, delta.z * -4D);
     }
 
-
-
     public static final class Client
     {
         @SuppressWarnings({ "rawtypes", "unchecked" })
@@ -131,15 +129,15 @@ public final class ParticleHelper
 
             switch (side)
             {
-                case DOWN ->  y = by + aabb.minY - (double)0.1F;
-                case UP ->    y = by + aabb.maxY + (double)0.1F;
-                case NORTH -> z = bz + aabb.minZ - (double)0.1F;
-                case SOUTH -> z = bz + aabb.maxZ + (double)0.1F;
-                case WEST ->  x = bx + aabb.minX - (double)0.1F;
-                case EAST ->  x = bx + aabb.maxX + (double)0.1F;
+                case DOWN ->  y = by + aabb.minY - 0.1D;
+                case UP ->    y = by + aabb.maxY + 0.1D;
+                case NORTH -> z = bz + aabb.minZ - 0.1D;
+                case SOUTH -> z = bz + aabb.maxZ + 0.1D;
+                case WEST ->  x = bx + aabb.minX - 0.1D;
+                case EAST ->  x = bx + aabb.maxX + 0.1D;
             }
 
-            CamoClientHandler handler = camo.getClientHandler();
+            CamoContentClientHandler handler = camo.getClientHandler();
             engine.add(handler.makeHitDestroyParticle(clientLevel, x, y, z, 0.0D, 0.0D, 0.0D, camo, pos)
                     .setPower(0.2F)
                     .scale(0.6F)
@@ -153,7 +151,7 @@ public final class ParticleHelper
         @SuppressWarnings({ "rawtypes", "unchecked" })
         public static void addDestroyEffects(BlockState state, Level level, BlockPos pos, CamoContent<?> camo, @Nullable Holder<BlockOverlay> overlay, ParticleEngine engine)
         {
-            CamoClientHandler handler = camo.getClientHandler();
+            CamoContentClientHandler handler = camo.getClientHandler();
             ClientLevel clientLevel = (ClientLevel) level;
 
             List<AABB> boxes = state.getShape(level, pos).toAabbs();
@@ -193,12 +191,8 @@ public final class ParticleHelper
             }
         }
 
-
-
         private Client() { }
     }
-
-
 
     private ParticleHelper() { }
 }

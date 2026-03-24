@@ -4,23 +4,18 @@ import com.google.common.base.Preconditions;
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.api.internal.InternalClientAPI;
 import io.github.xfacthd.framedblocks.api.model.item.block.BlockItemModelProvider;
-import io.github.xfacthd.framedblocks.api.model.item.tint.DynamicItemTintProvider;
-import io.github.xfacthd.framedblocks.api.model.item.tint.FramedBlockItemTintProvider;
-import net.minecraft.client.renderer.block.model.BlockStateModel;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
 import net.minecraft.client.renderer.item.ItemModel;
+import net.minecraft.client.resources.model.cuboid.ItemTransforms;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
-import org.jspecify.annotations.Nullable;
 
 @SuppressWarnings({ "unused", "UnusedReturnValue" })
 public final class FramedItemModelBuilder
 {
     private final Holder<Block> block;
     private BlockItemModelProvider modelProvider = BlockItemModelProvider.DEFAULT;
-    @Nullable
-    private DynamicItemTintProvider tintProvider = null;
     private Identifier itemBaseModel = AbstractFramedBlockModelProvider.FRAMED_CUBE_MODEL;
 
     FramedItemModelBuilder(Holder<Block> block)
@@ -50,15 +45,6 @@ public final class FramedItemModelBuilder
     }
 
     /**
-     * Specify the {@link DynamicItemTintProvider} to use for tint computation
-     */
-    public FramedItemModelBuilder tintProvider(DynamicItemTintProvider tintProvider)
-    {
-        this.tintProvider = tintProvider;
-        return this;
-    }
-
-    /**
      * Specify the model from which the {@link ItemTransforms} should be pulled
      */
     public FramedItemModelBuilder itemBaseModel(Identifier itemBaseModel)
@@ -69,10 +55,6 @@ public final class FramedItemModelBuilder
 
     public ItemModel.Unbaked build()
     {
-        if (tintProvider == null)
-        {
-            tintProvider = FramedBlockItemTintProvider.of((IFramedBlock) block.value());
-        }
-        return InternalClientAPI.INSTANCE.createFramedBlockItemModel(block.value(), modelProvider, tintProvider, itemBaseModel);
+        return InternalClientAPI.INSTANCE.createFramedBlockItemModel(block.value(), modelProvider, itemBaseModel);
     }
 }

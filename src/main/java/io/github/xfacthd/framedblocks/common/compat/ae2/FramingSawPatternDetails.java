@@ -111,8 +111,6 @@ final class FramingSawPatternDetails implements IPatternDetails
         return obj != null && obj.getClass() == getClass() && ((FramingSawPatternDetails) obj).definition.equals(definition);
     }
 
-
-
     public static void encode(ItemStack stack, ItemStack input, ItemStack[] additives, ItemStack output)
     {
         stack.set(AppliedEnergisticsCompat.GuardedAccess.DC_TYPE_ENCODED_SAW_PATTERN, new EncodedFramingSawPattern(
@@ -150,8 +148,6 @@ final class FramingSawPatternDetails implements IPatternDetails
         }
         return tooltip;
     }
-
-
 
     private static final class Input implements IInput
     {

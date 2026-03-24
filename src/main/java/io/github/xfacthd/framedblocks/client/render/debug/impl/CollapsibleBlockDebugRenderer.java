@@ -16,11 +16,13 @@ import io.github.xfacthd.framedblocks.common.data.collapsible.TargetCalculator;
 import net.minecraft.Optionull;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.renderer.LightTexture;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.state.LevelRenderState;
+import net.minecraft.client.renderer.SubmitNodeCollector;
+import net.minecraft.client.renderer.state.level.LevelRenderState;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Style;
+import net.minecraft.util.FormattedCharSequence;
+import net.minecraft.util.LightCoordsUtil;
 import net.minecraft.util.context.ContextKey;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.BlockHitResult;
@@ -48,7 +50,7 @@ public final class CollapsibleBlockDebugRenderer implements BlockDebugRenderer<F
     }
 
     @Override
-    public void render(LevelRenderState renderState, PoseStack poseStack, MultiBufferSource buffer, int light, int overlay)
+    public void submit(LevelRenderState renderState, PoseStack poseStack, SubmitNodeCollector collector)
     {
         DebugInfo data = renderState.getRenderData(DATA_KEY);
         if (data == null) return;
@@ -72,18 +74,18 @@ public final class CollapsibleBlockDebugRenderer implements BlockDebugRenderer<F
 
             Font font = Minecraft.getInstance().font;
 
-            drawVertIndex(buffer, poseStack, font, -2.5F / 16F, -3.5F / 16F, heights[0], 0);
-            drawVertIndex(buffer, poseStack, font, -2.5F / 16F, 19.5F / 16F, heights[1], 1);
-            drawVertIndex(buffer, poseStack, font, 18.5F / 16F, 19.5F / 16F, heights[2], 2);
-            drawVertIndex(buffer, poseStack, font, 18.5F / 16F, -3.5F / 16F, heights[3], 3);
+            submitVertIndex(collector, poseStack, -2.5F / 16F, -3.5F / 16F, heights[0], 0);
+            submitVertIndex(collector, poseStack, -2.5F / 16F, 19.5F / 16F, heights[1], 1);
+            submitVertIndex(collector, poseStack, 18.5F / 16F, 19.5F / 16F, heights[2], 2);
+            submitVertIndex(collector, poseStack, 18.5F / 16F, -3.5F / 16F, heights[3], 3);
 
             String text = Optionull.mapOrDefault(data.target(), v -> String.format("%6.3f %6.3f %6.3f", v.x, v.y, v.z), "<null>");
             float x = .5F - (font.width(text) / (TARGET_TEXT_SCALE * 2F));
-            drawText(buffer, poseStack, font, x, 25F/16F, 1F, 0F, TARGET_TEXT_SCALE, text, TARGET_COLOR);
+            submitText(collector, poseStack, x, 25F/16F, 1F, 0F, TARGET_TEXT_SCALE, text, TARGET_COLOR);
 
             text = data.rotated() ? "true" : "false";
             x = .5F - (font.width(text) / (TARGET_TEXT_SCALE * 2F));
-            drawText(buffer, poseStack, font, x, 22/16F, 1F, 0F, TARGET_TEXT_SCALE, text, TARGET_COLOR);
+            submitText(collector, poseStack, x, 22/16F, 1F, 0F, TARGET_TEXT_SCALE, text, TARGET_COLOR);
         }
         poseStack.popPose();
 
@@ -91,39 +93,39 @@ public final class CollapsibleBlockDebugRenderer implements BlockDebugRenderer<F
         {
             poseStack.translate(data.face().getUnitVec3().scale(.001F));
 
-            VertexConsumer builder = buffer.getBuffer(FramedRenderTypes.DEBUG_QUADS_DEPTH);
-            PoseStack.Pose pose = poseStack.last();
-
-            drawTriangle(builder, pose, data.pos(), data.tri1(),  0xAAFF0000);
-            drawTriangle(builder, pose, data.pos(), data.tri2(), 0xAA00FF00);
-            drawTarget(builder, poseStack, data.target(), TARGET_COLOR);
+            collector.submitCustomGeometry(poseStack, FramedRenderTypes.DEBUG_QUADS_DEPTH, (pose, builder) ->
+            {
+                drawTriangle(builder, pose, data.pos(), data.tri1(), 0xAAFF0000);
+                drawTriangle(builder, pose, data.pos(), data.tri2(), 0xAA00FF00);
+            });
+            submitTarget(collector, poseStack, data.target(), TARGET_COLOR);
         }
         poseStack.popPose();
     }
 
-    private static void drawVertIndex(MultiBufferSource buffer, PoseStack poseStack, Font font, float x, float z, float y, int vert)
+    private static void submitVertIndex(SubmitNodeCollector collector, PoseStack poseStack, float x, float z, float y, int vert)
     {
-        drawText(buffer, poseStack, font, x, z, y, -2.5F, VERT_TEXT_SCALE, Integer.toString(vert), 0xFFFFFFFF);
+        submitText(collector, poseStack, x, z, y, -2.5F, VERT_TEXT_SCALE, Integer.toString(vert), 0xFFFFFFFF);
     }
 
-    private static void drawText(MultiBufferSource buffer, PoseStack poseStack, Font font, float x, float z, float y, float xOff, float scale, String text, int color)
+    private static void submitText(SubmitNodeCollector collector, PoseStack poseStack, float x, float z, float y, float xOff, float scale, String text, int color)
     {
         poseStack.pushPose();
         poseStack.translate(x, y, z);
         poseStack.mulPose(Axis.XP.rotationDegrees(90));
         poseStack.scale(1F / scale, 1F / scale, 1F / scale);
 
-        font.drawInBatch(
-                text,
+        collector.submitText(
+                poseStack,
                 xOff,
                 -3.5F,
-                color,
+                FormattedCharSequence.forward(text, Style.EMPTY),
                 false,
-                poseStack.last().pose(),
-                buffer,
                 Font.DisplayMode.NORMAL,
+                LightCoordsUtil.FULL_BRIGHT,
+                color,
                 0x00000000,
-                LightTexture.FULL_BRIGHT
+                0
         );
 
         poseStack.popPose();
@@ -138,15 +140,14 @@ public final class CollapsibleBlockDebugRenderer implements BlockDebugRenderer<F
     }
 
     @SuppressWarnings("SameParameterValue")
-    private static void drawTarget(VertexConsumer builder, PoseStack poseStack, @Nullable Vec3 target, int color)
+    private static void submitTarget(SubmitNodeCollector collector, PoseStack poseStack, @Nullable Vec3 target, int color)
     {
         if (target == null) return;
 
         poseStack.pushPose();
+        poseStack.translate(target);
+        collector.submitCustomGeometry(poseStack, FramedRenderTypes.DEBUG_QUADS_DEPTH, (pose, builder) ->
         {
-            poseStack.translate(target);
-            PoseStack.Pose pose = poseStack.last();
-
             // Top
             vertex(builder, pose, -.025F,  .025F, -.025F, color);
             vertex(builder, pose, -.025F,  .025F,  .025F, color);
@@ -182,7 +183,7 @@ public final class CollapsibleBlockDebugRenderer implements BlockDebugRenderer<F
             vertex(builder, pose,  .025F, -.025F,  .025F, color);
             vertex(builder, pose,  .025F,  .025F,  .025F, color);
             vertex(builder, pose,  .025F,  .025F, -.025F, color);
-        }
+        });
         poseStack.popPose();
     }
 

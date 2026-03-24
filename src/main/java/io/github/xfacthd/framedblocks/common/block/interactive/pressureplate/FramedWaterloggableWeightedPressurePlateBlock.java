@@ -1,6 +1,5 @@
 package io.github.xfacthd.framedblocks.common.block.interactive.pressureplate;
 
-import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -10,10 +9,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ScheduledTickAccess;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockSetType;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.material.FluidState;
@@ -24,18 +21,6 @@ public class FramedWaterloggableWeightedPressurePlateBlock extends FramedWeighte
     FramedWaterloggableWeightedPressurePlateBlock(BlockType type, int maxWeight, BlockSetType blockSet, Properties props)
     {
         super(type, maxWeight, blockSet, props);
-        registerDefaultState(defaultBlockState().setValue(BlockStateProperties.WATERLOGGED, false));
-    }
-
-    @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
-    {
-        super.createBlockStateDefinition(builder);
-        if (!BlockUtils.hasProperty(builder, BlockStateProperties.WATERLOGGED))
-        {
-            // Some mods unconditionally add the WATERLOGGED property to pressure plates and FramedBlocks gets blamed...
-            builder.add(BlockStateProperties.WATERLOGGED);
-        }
     }
 
     @Override

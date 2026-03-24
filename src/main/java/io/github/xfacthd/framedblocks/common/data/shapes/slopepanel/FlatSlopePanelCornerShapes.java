@@ -93,7 +93,5 @@ public final class FlatSlopePanelCornerShapes implements ShapeGenerator
         });
     }
 
-
-
     public record ShapeKey(HorizontalRotation rot, boolean front) { }
 }

@@ -2,14 +2,18 @@ package io.github.xfacthd.framedblocks.client.model.wrapping;
 
 import io.github.xfacthd.framedblocks.api.model.wrapping.ModelFactory;
 import io.github.xfacthd.framedblocks.api.model.wrapping.statemerger.StateMerger;
-import net.minecraft.client.renderer.block.model.BlockStateModel;
-import net.minecraft.client.renderer.block.model.SingleVariant;
+import io.github.xfacthd.framedblocks.client.model.block.FramedBlockModel;
+import net.minecraft.client.renderer.block.BuiltInBlockModels;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
+import net.minecraft.client.renderer.block.dispatch.SingleVariant;
 import net.minecraft.core.Holder;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.client.event.RegisterBlockModelsEvent;
 
 import java.util.IdentityHashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public sealed class ModelWrappingHandler permits StandaloneModelWrappingHandler
 {
@@ -25,11 +29,14 @@ public sealed class ModelWrappingHandler permits StandaloneModelWrappingHandler
         this.stateMerger = stateMerger;
     }
 
-    public synchronized BlockStateModel.UnbakedRoot wrapBlockModel(
-            BlockState state,
-            BlockStateModel.UnbakedRoot srcModel,
-            Map<String, SingleVariant.Unbaked> auxModels
-    )
+    public final void wrapAllBlockStateModels(Map<BlockState, BlockStateModel.UnbakedRoot> models, Map<String, SingleVariant.Unbaked> auxModels)
+    {
+        visitedStates.clear();
+        blockModelFactory.reset();
+        models.replaceAll((state, model) -> wrapBlockStateModel(state, model, auxModels));
+    }
+
+    private BlockStateModel.UnbakedRoot wrapBlockStateModel(BlockState state, BlockStateModel.UnbakedRoot srcModel, Map<String, SingleVariant.Unbaked> auxModels)
     {
         BlockState mergedState = stateMerger.apply(state);
         return visitedStates.computeIfAbsent(mergedState, keyState ->
@@ -37,23 +44,27 @@ public sealed class ModelWrappingHandler permits StandaloneModelWrappingHandler
         );
     }
 
-    public Block getBlock()
+    final void registerBlockModelFactory(RegisterBlockModelsEvent event)
+    {
+        Map<BlockState, FramedBlockModel.Unbaked> handled = new IdentityHashMap<>();
+        BuiltInBlockModels.ModelFactory factory = (_, state) -> handled.computeIfAbsent(
+                stateMerger.apply(state),
+                key -> new FramedBlockModel.Unbaked(key, Optional.empty())
+        );
+        event.register(factory, block.value());
+    }
+
+    public final Block getBlock()
     {
         return block.value();
     }
 
-    public synchronized void reset()
-    {
-        visitedStates.clear();
-        blockModelFactory.reset();
-    }
-
-    public StateMerger getStateMerger()
+    public final StateMerger getStateMerger()
     {
         return stateMerger;
     }
 
-    public int getVisitedStateCount()
+    public final int getVisitedStateCount()
     {
         return visitedStates.size();
     }

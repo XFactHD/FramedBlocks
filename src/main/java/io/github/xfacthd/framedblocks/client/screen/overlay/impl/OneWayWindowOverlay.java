@@ -10,7 +10,7 @@ import io.github.xfacthd.framedblocks.common.data.property.NullableDirection;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
@@ -80,7 +80,7 @@ public final class OneWayWindowOverlay extends BlockInteractOverlay
     }
 
     @Override
-    public void renderAfterIcon(GuiGraphics graphics, Texture tex, int texX, int texY, Target target)
+    public void renderAfterIcon(GuiGraphicsExtractor graphics, Texture tex, int texX, int texY, Target target)
     {
         NullableDirection face = target.state().getValue(PropertyHolder.NULLABLE_FACE);
 
@@ -93,10 +93,8 @@ public final class OneWayWindowOverlay extends BlockInteractOverlay
         Font font = Minecraft.getInstance().font;
         int x = texX + (tex.width() / 2);
         int y = texY + (tex.height() * 3 / 4) - (font.lineHeight / 2);
-        graphics.drawCenteredString(font, FACE_VALUE_ABBRS[face.ordinal()], x, y, -1/*0x555555*/);
+        graphics.centeredText(font, FACE_VALUE_ABBRS[face.ordinal()], x, y, -1/*0x555555*/);
     }
-
-
 
     private static List<Component> packLineList()
     {

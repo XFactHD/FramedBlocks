@@ -37,7 +37,7 @@ public class FramedDoubleThreewayCornerBlock extends FramedDoubleBlock implement
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        builder.add(FramedProperties.FACING_HOR, FramedProperties.TOP, FramedProperties.ALT_SLOPE);
+        builder.add(FramedProperties.FACING_HOR, FramedProperties.TOP);
     }
 
     @Override

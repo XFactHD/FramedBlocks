@@ -53,8 +53,6 @@ public final class ShapeCache<K>
         cache = map;
     }
 
-
-
     public static <T> ShapeCache<T> create(Consumer<Map<T, VoxelShape>> generator)
     {
         return new ShapeCache<>(HashMap::new, generator);

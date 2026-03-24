@@ -45,6 +45,7 @@ public class FramedButtonBlock extends ButtonBlock implements IFramedBlockIntern
 
     protected FramedButtonBlock(BlockType type, Properties props, BlockSetType blockSet, int pressTime)
     {
+        this.type = type;
         super(blockSet, pressTime, props
                 .pushReaction(PushReaction.DESTROY)
                 .noCollision()
@@ -52,7 +53,6 @@ public class FramedButtonBlock extends ButtonBlock implements IFramedBlockIntern
                 .sound(SoundType.WOOD)
                 .noOcclusion()
         );
-        this.type = type;
         this.jadeScale = (type == BlockType.FRAMED_BUTTON || type == BlockType.FRAMED_STONE_BUTTON) ? 2F : 1F;
         BlockUtils.configureStandardProperties(this);
     }
@@ -61,7 +61,7 @@ public class FramedButtonBlock extends ButtonBlock implements IFramedBlockIntern
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        BlockUtils.addRequiredProperties(builder);
+        BlockUtils.addStandardProperties(this, builder);
     }
 
     @Override
@@ -155,8 +155,6 @@ public class FramedButtonBlock extends ButtonBlock implements IFramedBlockIntern
         return jadeScale;
     }
 
-
-
     public static FramedButtonBlock wood(Properties props)
     {
         return new FramedButtonBlock(
@@ -177,18 +175,14 @@ public class FramedButtonBlock extends ButtonBlock implements IFramedBlockIntern
         );
     }
 
-
-
     public static final class ButtonStateMerger implements StateMerger
     {
-        private final StateMerger ignoringMerger = StateMerger.ignoring(WrapHelper.IGNORE_ALWAYS);
-
         private ButtonStateMerger() { }
 
         @Override
         public BlockState apply(BlockState state)
         {
-            state = ignoringMerger.apply(state);
+            state = WrapHelper.DEFAULT_MERGER.apply(state);
 
             AttachFace face = state.getValue(FACE);
             if (face != AttachFace.WALL)
@@ -206,7 +200,7 @@ public class FramedButtonBlock extends ButtonBlock implements IFramedBlockIntern
         public Set<Property<?>> getHandledProperties(Holder<Block> block)
         {
             return Utils.concat(
-                    ignoringMerger.getHandledProperties(block),
+                    WrapHelper.DEFAULT_MERGER.getHandledProperties(block),
                     Set.of(FramedLargeButtonBlock.FACING)
             );
         }

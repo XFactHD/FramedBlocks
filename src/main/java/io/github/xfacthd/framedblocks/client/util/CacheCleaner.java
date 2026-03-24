@@ -1,12 +1,13 @@
 package io.github.xfacthd.framedblocks.client.util;
 
-import io.github.xfacthd.framedblocks.api.model.AbstractFramedBlockModel;
+import io.github.xfacthd.framedblocks.api.model.AbstractFramedBlockStateModel;
 import io.github.xfacthd.framedblocks.api.model.item.AbstractFramedBlockItemModel;
-import io.github.xfacthd.framedblocks.api.render.outline.ModelBasedOutlineRenderer;
+import io.github.xfacthd.framedblocks.client.model.FluidCubeModel;
+import io.github.xfacthd.framedblocks.client.model.RuntimeMaterialBaker;
 import io.github.xfacthd.framedblocks.client.model.overlaygen.BlockOverlayGenerator;
 import io.github.xfacthd.framedblocks.client.model.overlaygen.OverlayQuadGenerator;
 import io.github.xfacthd.framedblocks.client.model.unbaked.UnbakedStandaloneFramedBlockModel;
-import io.github.xfacthd.framedblocks.common.data.camo.fluid.FluidCamoClientHandler;
+import io.github.xfacthd.framedblocks.client.render.special.ModelBasedOutlineRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.model.ModelManager;
 
@@ -16,13 +17,13 @@ public final class CacheCleaner
     {
         ModelManager modelManager = Minecraft.getInstance().getModelManager();
 
-        modelManager.getBlockModelShaper()
-                .framedblocks$getModelByStateCache()
+        modelManager.getBlockStateModelSet()
+                .framedblocks$getModelByState()
                 .values()
                 .stream()
-                .filter(AbstractFramedBlockModel.class::isInstance)
-                .map(AbstractFramedBlockModel.class::cast)
-                .forEach(AbstractFramedBlockModel::clearCache);
+                .filter(AbstractFramedBlockStateModel.class::isInstance)
+                .map(AbstractFramedBlockStateModel.class::cast)
+                .forEach(AbstractFramedBlockStateModel::clearCache);
 
         modelManager.framedblocks$getBakedItemStackModels()
                 .values()
@@ -38,7 +39,8 @@ public final class CacheCleaner
 
     public static void clearExternalGeometryCaches(Reason reason)
     {
-        FluidCamoClientHandler.clearModelCache();
+        FluidCubeModel.clearCaches();
+        RuntimeMaterialBaker.clear(reason);
         ModelBasedOutlineRenderer.clearCaches();
         OverlayQuadGenerator.clearCaches();
         BlockOverlayGenerator.clearCaches(reason);

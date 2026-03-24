@@ -32,7 +32,5 @@ public final class SlabCornerShapes
         return ShapeContainer.of(map);
     }
 
-
-
     private SlabCornerShapes() { }
 }

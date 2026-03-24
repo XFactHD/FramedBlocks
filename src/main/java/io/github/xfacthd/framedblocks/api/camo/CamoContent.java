@@ -1,16 +1,13 @@
 package io.github.xfacthd.framedblocks.api.camo;
 
 import io.github.xfacthd.framedblocks.api.camo.empty.EmptyCamoContent;
-import net.minecraft.client.color.block.BlockColor;
-import net.minecraft.client.color.item.ItemTintSource;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.util.TriState;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.BlockAndTintGetter;
+import net.minecraft.world.level.BlockAndLightGetter;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.LevelReader;
@@ -87,9 +84,9 @@ public abstract class CamoContent<C extends CamoContent<C>>
 
     /**
      * {@return whether fluids rendered next to this camo should display a fluid overlay}
-     * @see IBlockStateExtension#shouldDisplayFluidOverlay(BlockAndTintGetter, BlockPos, FluidState)
+     * @see IBlockStateExtension#shouldDisplayFluidOverlay(BlockAndLightGetter, BlockPos, FluidState)
      */
-    public abstract boolean shouldDisplayFluidOverlay(BlockAndTintGetter level, BlockPos pos, FluidState fluid);
+    public abstract boolean shouldDisplayFluidOverlay(BlockAndLightGetter level, BlockPos pos, FluidState fluid);
 
     /**
      * {@return the slipperiness of this camo}
@@ -115,16 +112,6 @@ public abstract class CamoContent<C extends CamoContent<C>>
      */
     @Nullable
     public abstract MapColor getMapColor(BlockGetter level, BlockPos pos);
-
-    /**
-     * {@return the tint color corresponding to the given tint index for use with {@link BlockColor}}
-     */
-    public abstract int getTintColor(BlockAndTintGetter level, BlockPos pos, int tintIdx);
-
-    /**
-     * {@return the tint color corresponding to the given tint index for use with {@link ItemTintSource}}
-     */
-    public abstract int getTintColor(ItemStack stack, int tintIdx);
 
     /**
      * {@return the beacon color multiplier of this camo}
@@ -197,11 +184,11 @@ public abstract class CamoContent<C extends CamoContent<C>>
     }
 
     /**
-     * {@return the {@link CamoClientHandler} for this camo content}
+     * {@return the {@link CamoContentClientHandler} for this camo content}
      * @apiNote This method must not be called on the server
      * @implNote This method must return a constant value
      */
-    public abstract CamoClientHandler<C> getClientHandler();
+    public abstract CamoContentClientHandler<C> getClientHandler();
 
     @Override
     public abstract int hashCode();

@@ -16,7 +16,7 @@ public final class FramedCreativeTab
                 .title(Component.translatable("itemGroup.framed_blocks"))
                 .icon(() -> new ItemStack(FBContent.BLOCK_FRAMED_CUBE.value()))
                 .withTabsBefore(CreativeModeTabs.SPAWN_EGGS)
-                .displayItems((params, output) ->
+                .displayItems((_, output) ->
                 {
                     for (BlockType type : BlockType.values())
                     {

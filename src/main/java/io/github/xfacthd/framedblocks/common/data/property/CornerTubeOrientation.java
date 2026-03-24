@@ -77,8 +77,6 @@ public enum CornerTubeOrientation implements StringRepresentable
         return name;
     }
 
-
-
     public static CornerTubeOrientation of(Direction dirOne, Direction dirTwo)
     {
         CornerTubeOrientation orientationOne = FROM_DIRS[dirOne.ordinal()][dirTwo.ordinal()];

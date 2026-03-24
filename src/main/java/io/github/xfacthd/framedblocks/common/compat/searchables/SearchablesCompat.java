@@ -52,8 +52,6 @@ public final class SearchablesCompat
         }
     }
 
-
-
     @FunctionalInterface
     public interface ValueSupplier extends Supplier<List<FramingSawMenu.FramedRecipeHolder>> { }
 
@@ -65,7 +63,7 @@ public final class SearchablesCompat
         private static final SearchableType<FramingSawMenu.FramedRecipeHolder> SEARCH_TYPE = new SearchableType.Builder<FramingSawMenu.FramedRecipeHolder>()
                 .defaultComponent(SearchableComponent.create(
                         "result",
-                        holder -> Optional.of(holder.getRecipe().getResult().getItemName().getString())
+                        holder -> Optional.of(holder.getRecipe().getResultStack().getItemName().getString())
                 ))
                 .build();
 

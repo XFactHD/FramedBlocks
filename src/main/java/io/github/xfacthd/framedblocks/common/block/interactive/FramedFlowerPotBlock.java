@@ -181,8 +181,6 @@ public class FramedFlowerPotBlock extends FramedBlock
         return state;
     }
 
-
-
     public static BlockState getFlowerPotState(Block flower)
     {
         Map<Identifier, Supplier<? extends Block>> fullPots = ((FlowerPotBlock) Blocks.FLOWER_POT).getFullPotsView();

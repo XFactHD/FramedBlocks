@@ -1,12 +1,10 @@
 package io.github.xfacthd.framedblocks.api.camo;
 
-import io.github.xfacthd.framedblocks.api.model.item.tint.DynamicItemTintProvider;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
@@ -49,29 +47,6 @@ public abstract class CamoContainer<C extends CamoContent<C>, T extends CamoCont
     public MapColor getMapColor(BlockGetter level, BlockPos pos)
     {
         return content.getMapColor(level, pos);
-    }
-
-    /**
-     * Returns the tint color for use in {@link net.minecraft.client.color.block.BlockColor}
-     * @param level The current level
-     * @param pos The position of the framed block
-     * @param tintIdx The tint index for which the color was requested
-     * @return The tint color for the given index
-     */
-    public int getTintColor(BlockAndTintGetter level, BlockPos pos, int tintIdx)
-    {
-        return content.getTintColor(level, pos, tintIdx);
-    }
-
-    /**
-     * Returns the tint color for use in {@link DynamicItemTintProvider}
-     * @param stack The stack whose tint is being requested
-     * @param tintIdx The tint index for which the color was requested
-     * @return The tint color for the given index
-     */
-    public int getTintColor(ItemStack stack, int tintIdx)
-    {
-        return content.getTintColor(stack, tintIdx);
     }
 
     /**
@@ -132,6 +107,12 @@ public abstract class CamoContainer<C extends CamoContent<C>, T extends CamoCont
     public final boolean isEmpty()
     {
         return content.isEmpty();
+    }
+
+    @SuppressWarnings("unchecked")
+    public CamoContainerClientHandler<C, T> getClientHandler()
+    {
+        return (CamoContainerClientHandler<C, T>) CamoContainerClientHandler.Default.INSTANCE;
     }
 
     @Override

@@ -18,6 +18,7 @@ import net.minecraft.world.entity.ItemOwner;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.fluids.SimpleFluidContent;
+import org.joml.Matrix4fc;
 import org.jspecify.annotations.Nullable;
 
 public final class TankItemModel<T> implements ItemModel
@@ -58,12 +59,14 @@ public final class TankItemModel<T> implements ItemModel
                 specialLayer.setFoilType(ItemStackRenderState.FoilType.STANDARD);
             }
             specialLayer.setUsesBlockLight(true);
-            specialLayer.setTransform(baseModel.getItemTransforms().getTransform(ctx));
+            specialLayer.setItemTransform(baseModel.getItemTransforms().getTransform(ctx));
             specialLayer.setupSpecialModel(renderer, renderer.extractArgument(stack));
+
+            state.appendModelIdentityElement(fluid);
         }
     }
 
-    public record Unbaked(FramedBlockItemModel.Unbaked base, SpecialModelRenderer.Unbaked specialModel) implements ItemModel.Unbaked
+    public record Unbaked(FramedBlockItemModel.Unbaked base, SpecialModelRenderer.Unbaked<?> specialModel) implements ItemModel.Unbaked
     {
         public static final Identifier ID = Utils.id("tank");
         public static final MapCodec<TankItemModel.Unbaked> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
@@ -72,12 +75,12 @@ public final class TankItemModel<T> implements ItemModel
         ).apply(inst, TankItemModel.Unbaked::new));
 
         @Override
-        public ItemModel bake(BakingContext ctx)
+        public ItemModel bake(BakingContext ctx, Matrix4fc transformation)
         {
             SpecialModelRenderer<?> renderer = specialModel.bake(ctx);
             if (renderer != null)
             {
-                return new TankItemModel<>(base.bake(ctx), renderer);
+                return new TankItemModel<>(base.bake(ctx, transformation), renderer);
             }
             return ctx.missingItemModel();
         }

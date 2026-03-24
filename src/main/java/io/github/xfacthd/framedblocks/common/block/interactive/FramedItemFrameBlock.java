@@ -3,6 +3,7 @@ package io.github.xfacthd.framedblocks.common.block.interactive;
 import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
+import io.github.xfacthd.framedblocks.api.block.item.FramedBlockItem;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.api.util.RotationDirection;
@@ -21,6 +22,8 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
@@ -55,8 +58,8 @@ public class FramedItemFrameBlock extends FramedBlock
     {
         super(type, props, modProps -> modProps.instabreak()
                 .noCollision()
-                .isSuffocating((s, l, p) -> false)
-                .isViewBlocking((s, l, p) -> false)
+                .isSuffocating((_, _, _) -> false)
+                .isViewBlocking((_, _, _) -> false)
                 .sound(type == BlockType.FRAMED_ITEM_FRAME ? NORMAL_SOUND : GLOWING_SOUND)
         );
         registerDefaultState(defaultBlockState()
@@ -69,7 +72,7 @@ public class FramedItemFrameBlock extends FramedBlock
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        builder.add(BlockStateProperties.FACING, PropertyHolder.LEATHER, PropertyHolder.MAP_FRAME, BlockStateProperties.WATERLOGGED);
+        builder.add(BlockStateProperties.FACING, PropertyHolder.LEATHER, PropertyHolder.MAP_FRAME);
     }
 
     @Override
@@ -217,10 +220,16 @@ public class FramedItemFrameBlock extends FramedBlock
         if (!level.isClientSide() && state.getValue(PropertyHolder.MAP_FRAME))
         {
             return BlockUtils.createBlockEntityTicker(
-                    type, FBContent.BE_TYPE_FRAMED_ITEM_FRAME.value(), (l, p, s, be) -> be.tickWithMap()
+                    type, FBContent.BE_TYPE_FRAMED_ITEM_FRAME.value(), (_, _, _, be) -> be.tickWithMap()
             );
         }
         return null;
+    }
+
+    @Override
+    public BlockItem createBlockItem(Item.Properties props)
+    {
+        return new FramedBlockItem(this, props, true);
     }
 
     @Override

@@ -26,7 +26,6 @@ public final class ClientConfig
     private static final String KEY_CAMO_MESSAGE_VERBOSITY = "camoMessageVerbosity";
     private static final String KEY_FORCE_AO_ON_GLOWING_BLOCKS = "forceAoOnGlowingBlocks";
     private static final String KEY_RENDER_ITEM_MODELS_WITH_CAMO = "renderItemModelsWithCamo";
-    private static final String KEY_SUPPORT_WEIGHTED_VARIANTS = "supportWeightedVariants";
     private static final String KEY_SHOW_ALL_RECIPE_PERMUTATIONS_IN_EMI = "showAllRecipePermutationsInEmi";
     private static final String KEY_SOLID_FRAME_MODE = "solidFrameMode";
     private static final String KEY_SHOW_BUTTON_PLATE_OVERLAY = "showButtonPlateTypeOverlay";
@@ -64,7 +63,6 @@ public final class ClientConfig
     public static final ModConfigSpec.EnumValue<CamoMessageVerbosity> CAMO_MESSAGE_VERBOSITY_VALUE;
     public static final ModConfigSpec.BooleanValue FORCE_AO_ON_GLOWING_BLOCKS_VALUE;
     public static final ModConfigSpec.BooleanValue RENDER_ITEM_MODELS_WITH_CAMO_VALUE;
-    public static final ModConfigSpec.BooleanValue SUPPORT_WEIGHTED_VARIANTS_VALUE;
     public static final ModConfigSpec.BooleanValue SHOW_ALL_RECIPE_PERMUTATIONS_IN_EMI_VALUE;
     public static final ModConfigSpec.EnumValue<SolidFrameMode> SOLID_FRAME_MODE_VALUE;
     public static final ModConfigSpec.BooleanValue SHOW_BUTTON_PLATE_OVERLAY_VALUE;
@@ -94,7 +92,6 @@ public final class ClientConfig
     private static CamoMessageVerbosity camoMessageVerbosity = CamoMessageVerbosity.DEFAULT;
     private static boolean forceAoOnGlowingBlocks = false;
     private static boolean renderItemModelsWithCamo = false;
-    private static boolean supportWeightedVariants = false;
     private static boolean showAllRecipePermutationsInEmi = false;
     private static SolidFrameMode solidFrameMode = SolidFrameMode.DEFAULT;
     private static boolean showButtonPlateOverlay = false;
@@ -181,13 +178,6 @@ public final class ClientConfig
                 )
                 .translation(translate(KEY_RENDER_ITEM_MODELS_WITH_CAMO))
                 .define(KEY_RENDER_ITEM_MODELS_WITH_CAMO, true);
-        SUPPORT_WEIGHTED_VARIANTS_VALUE = builder
-                .comment(
-                        "If true, randomization in weighted models such as stone and grass will be taken into account.",
-                        "This may increase RAM usage by framed block models."
-                )
-                .translation(translate(KEY_SUPPORT_WEIGHTED_VARIANTS))
-                .define(KEY_SUPPORT_WEIGHTED_VARIANTS, true);
         SHOW_ALL_RECIPE_PERMUTATIONS_IN_EMI_VALUE = builder
                 .comment("If true, all possible recipes of the Framing Saw will be added to EMI, else only the permutations using the Framed Cube will be added.")
                 .comment("This setting only has an effect when EMI is installed.")
@@ -317,7 +307,6 @@ public final class ClientConfig
             camoMessageVerbosity = CAMO_MESSAGE_VERBOSITY_VALUE.get();
             forceAoOnGlowingBlocks = FORCE_AO_ON_GLOWING_BLOCKS_VALUE.get();
             renderItemModelsWithCamo = RENDER_ITEM_MODELS_WITH_CAMO_VALUE.get();
-            supportWeightedVariants = SUPPORT_WEIGHTED_VARIANTS_VALUE.get();
             showAllRecipePermutationsInEmi = SHOW_ALL_RECIPE_PERMUTATIONS_IN_EMI_VALUE.get();
             solidFrameMode = SOLID_FRAME_MODE_VALUE.get();
             showButtonPlateOverlay = SHOW_BUTTON_PLATE_OVERLAY_VALUE.get();
@@ -341,8 +330,6 @@ public final class ClientConfig
     }
 
     private ClientConfig() { }
-
-
 
     public static final class ViewImpl implements ExtConfigView.Client
     {
@@ -398,12 +385,6 @@ public final class ClientConfig
         public boolean shouldRenderItemModelsWithCamo()
         {
             return renderItemModelsWithCamo;
-        }
-
-        @Override
-        public boolean supportWeightedVariants()
-        {
-            return supportWeightedVariants;
         }
 
         @Override

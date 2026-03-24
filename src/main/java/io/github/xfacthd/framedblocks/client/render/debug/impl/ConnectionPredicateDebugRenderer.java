@@ -12,8 +12,8 @@ import io.github.xfacthd.framedblocks.api.render.debug.BlockDebugRenderer;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.client.render.util.FramedRenderTypes;
 import io.github.xfacthd.framedblocks.common.config.DevToolsConfig;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.state.LevelRenderState;
+import net.minecraft.client.renderer.SubmitNodeCollector;
+import net.minecraft.client.renderer.state.level.LevelRenderState;
 import net.minecraft.core.Direction;
 import net.minecraft.util.context.ContextKey;
 import net.minecraft.world.phys.BlockHitResult;
@@ -34,7 +34,7 @@ public class ConnectionPredicateDebugRenderer implements BlockDebugRenderer<IFra
     }
 
     @Override
-    public void render(LevelRenderState renderState, PoseStack poseStack, MultiBufferSource buffer, int light, int overlay)
+    public void submit(LevelRenderState renderState, PoseStack poseStack, SubmitNodeCollector collector)
     {
         ConnectionPredicateRenderState data = renderState.getRenderData(DATA_KEY);
         if (data == null) return;
@@ -48,23 +48,23 @@ public class ConnectionPredicateDebugRenderer implements BlockDebugRenderer<IFra
             case UP ->
             {
                 poseStack.mulPose(Quaternions.XN_90);
-                renderIndicators(buffer, poseStack, cache, face, Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST);
+                submitIndicators(collector, poseStack, cache, face, Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST);
             }
             case DOWN ->
             {
                 poseStack.mulPose(Quaternions.XP_90);
-                renderIndicators(buffer, poseStack, cache, face, Direction.SOUTH, Direction.NORTH, Direction.EAST, Direction.WEST);
+                submitIndicators(collector, poseStack, cache, face, Direction.SOUTH, Direction.NORTH, Direction.EAST, Direction.WEST);
             }
             default ->
             {
                 poseStack.mulPose(Axis.YN.rotationDegrees(face.toYRot()));
-                renderIndicators(buffer, poseStack, cache, face, Direction.UP, Direction.DOWN, face.getCounterClockWise(), face.getClockWise());
+                submitIndicators(collector, poseStack, cache, face, Direction.UP, Direction.DOWN, face.getCounterClockWise(), face.getClockWise());
             }
         }
     }
 
-    private static void renderIndicators(
-            MultiBufferSource bufferSource,
+    private static void submitIndicators(
+            SubmitNodeCollector collector,
             PoseStack poseStack,
             StateCache cache,
             Direction face,
@@ -75,63 +75,63 @@ public class ConnectionPredicateDebugRenderer implements BlockDebugRenderer<IFra
     )
     {
         DoubleBlockStateCache doubleCache = cache instanceof DoubleBlockStateCache dbCache ? dbCache : null;
-        VertexConsumer buffer = bufferSource.getBuffer(FramedRenderTypes.DEBUG_QUADS_DEPTH);
 
-        // Null / all edges
-        int color = cache.canConnectFullEdge(face, null) ? 0xFF00FF00 : 0xFFFF0000;
-        renderBorderedIndicator(buffer, poseStack, -.125F, .125F, -.125F, .125F, .501F, color);
-        if (doubleCache != null)
+        collector.submitCustomGeometry(poseStack, FramedRenderTypes.DEBUG_QUADS_DEPTH, (pose, buffer) ->
         {
-            color = doubleCache.getCamoGetter(face, null) != CamoGetter.NONE ? 0xFF00FF00 : 0xFFFF0000;
-            renderBorderedIndicator(buffer, poseStack, -.1875F, .1875F, -.1875F, .1875F, color);
-        }
+            // Null / all edges
+            int color = cache.canConnectFullEdge(face, null) ? 0xFF00FF00 : 0xFFFF0000;
+            renderBorderedIndicator(buffer, pose, -.125F, .125F, -.125F, .125F, .501F, color);
+            if (doubleCache != null)
+            {
+                color = doubleCache.getCamoGetter(face, null) != CamoGetter.NONE ? 0xFF00FF00 : 0xFFFF0000;
+                renderBorderedIndicator(buffer, pose, -.1875F, .1875F, -.1875F, .1875F, color);
+            }
 
-        // Up edge
-        color = cache.canConnectFullEdge(face, upEdge) ? 0xFF00FF00 : (cache.canConnectDetailed(face, upEdge) ? 0xFFFFAA00 : 0xFFFF0000);
-        renderBorderedIndicator(buffer, poseStack, -.375F, .375F, .375F, .5F, color);
-        if (doubleCache != null)
-        {
-            color = doubleCache.getCamoGetter(face, upEdge) != CamoGetter.NONE ? 0xFF00FF00 : 0xFFFF0000;
-            renderBorderedIndicator(buffer, poseStack, -.25F, .25F, .3125F, .375F, color);
-        }
+            // Up edge
+            color = cache.canConnectFullEdge(face, upEdge) ? 0xFF00FF00 : (cache.canConnectDetailed(face, upEdge) ? 0xFFFFAA00 : 0xFFFF0000);
+            renderBorderedIndicator(buffer, pose, -.375F, .375F, .375F, .5F, color);
+            if (doubleCache != null)
+            {
+                color = doubleCache.getCamoGetter(face, upEdge) != CamoGetter.NONE ? 0xFF00FF00 : 0xFFFF0000;
+                renderBorderedIndicator(buffer, pose, -.25F, .25F, .3125F, .375F, color);
+            }
 
-        // Down edge
-        color = cache.canConnectFullEdge(face, downEdge) ? 0xFF00FF00 : (cache.canConnectDetailed(face, downEdge) ? 0xFFFFAA00 : 0xFFFF0000);
-        renderBorderedIndicator(buffer, poseStack, -.375F, .375F, -.5F, -.375F, color);
-        if (doubleCache != null)
-        {
-            color = doubleCache.getCamoGetter(face, downEdge) != CamoGetter.NONE ? 0xFF00FF00 : 0xFFFF0000;
-            renderBorderedIndicator(buffer, poseStack, -.25F, .25F, -.375F, -.3125F, color);
-        }
+            // Down edge
+            color = cache.canConnectFullEdge(face, downEdge) ? 0xFF00FF00 : (cache.canConnectDetailed(face, downEdge) ? 0xFFFFAA00 : 0xFFFF0000);
+            renderBorderedIndicator(buffer, pose, -.375F, .375F, -.5F, -.375F, color);
+            if (doubleCache != null)
+            {
+                color = doubleCache.getCamoGetter(face, downEdge) != CamoGetter.NONE ? 0xFF00FF00 : 0xFFFF0000;
+                renderBorderedIndicator(buffer, pose, -.25F, .25F, -.375F, -.3125F, color);
+            }
 
-        // Counterclockwise edge
-        color = cache.canConnectFullEdge(face, ccwEdge) ? 0xFF00FF00 : (cache.canConnectDetailed(face, ccwEdge) ? 0xFFFFAA00 : 0xFFFF0000);
-        renderBorderedIndicator(buffer, poseStack, .375F, .5F, -.375F, .375F, color);
-        if (doubleCache != null)
-        {
-            color = doubleCache.getCamoGetter(face, ccwEdge) != CamoGetter.NONE ? 0xFF00FF00 : 0xFFFF0000;
-            renderBorderedIndicator(buffer, poseStack, .3125F, .375F, -.25F, .25F, color);
-        }
+            // Counterclockwise edge
+            color = cache.canConnectFullEdge(face, ccwEdge) ? 0xFF00FF00 : (cache.canConnectDetailed(face, ccwEdge) ? 0xFFFFAA00 : 0xFFFF0000);
+            renderBorderedIndicator(buffer, pose, .375F, .5F, -.375F, .375F, color);
+            if (doubleCache != null)
+            {
+                color = doubleCache.getCamoGetter(face, ccwEdge) != CamoGetter.NONE ? 0xFF00FF00 : 0xFFFF0000;
+                renderBorderedIndicator(buffer, pose, .3125F, .375F, -.25F, .25F, color);
+            }
 
-        // Clockwise edge
-        color = cache.canConnectFullEdge(face, cwEdge) ? 0xFF00FF00 : (cache.canConnectDetailed(face, cwEdge) ? 0xFFFFAA00 : 0xFFFF0000);
-        renderBorderedIndicator(buffer, poseStack, -.5F, -.375F, -.375F, .375F, color);
-        if (doubleCache != null)
-        {
-            color = doubleCache.getCamoGetter(face, cwEdge) != CamoGetter.NONE ? 0xFF00FF00 : 0xFFFF0000;
-            renderBorderedIndicator(buffer, poseStack, -.375F, -.3125F, -.25F, .25F, color);
-        }
+            // Clockwise edge
+            color = cache.canConnectFullEdge(face, cwEdge) ? 0xFF00FF00 : (cache.canConnectDetailed(face, cwEdge) ? 0xFFFFAA00 : 0xFFFF0000);
+            renderBorderedIndicator(buffer, pose, -.5F, -.375F, -.375F, .375F, color);
+            if (doubleCache != null)
+            {
+                color = doubleCache.getCamoGetter(face, cwEdge) != CamoGetter.NONE ? 0xFF00FF00 : 0xFFFF0000;
+                renderBorderedIndicator(buffer, pose, -.375F, -.3125F, -.25F, .25F, color);
+            }
+        });
     }
 
-    private static void renderBorderedIndicator(VertexConsumer buffer, PoseStack poseStack, float minX, float maxX, float minY, float maxY, int color)
+    private static void renderBorderedIndicator(VertexConsumer buffer, PoseStack.Pose pose, float minX, float maxX, float minY, float maxY, int color)
     {
-        renderBorderedIndicator(buffer, poseStack, minX, maxX, minY, maxY, .5F, color);
+        renderBorderedIndicator(buffer, pose, minX, maxX, minY, maxY, .5F, color);
     }
 
-    private static void renderBorderedIndicator(VertexConsumer buffer, PoseStack poseStack, float minX, float maxX, float minY, float maxY, float z, int color)
+    private static void renderBorderedIndicator(VertexConsumer buffer, PoseStack.Pose pose, float minX, float maxX, float minY, float maxY, float z, int color)
     {
-        PoseStack.Pose pose = poseStack.last();
-
         vertex(buffer, pose, minX, maxY, z + .0005F, 0xFF000000);
         vertex(buffer, pose, minX, minY, z + .0005F, 0xFF000000);
         vertex(buffer, pose, maxX, minY, z + .0005F, 0xFF000000);

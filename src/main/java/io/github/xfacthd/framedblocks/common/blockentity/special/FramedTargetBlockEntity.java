@@ -4,7 +4,6 @@ import io.github.xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import io.github.xfacthd.framedblocks.api.block.blockentity.NetworkValueInput;
 import io.github.xfacthd.framedblocks.api.blueprint.BlueprintData;
 import io.github.xfacthd.framedblocks.common.FBContent;
-import io.github.xfacthd.framedblocks.common.data.component.TargetColor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponentGetter;
 import net.minecraft.core.component.DataComponentMap;
@@ -86,13 +85,13 @@ public class FramedTargetBlockEntity extends FramedBlockEntity
     @Override
     protected BlueprintData appendCustomBlueprintData(BlueprintData blueprintData)
     {
-        return blueprintData.withCustomData(FBContent.DC_TYPE_TARGET_COLOR, new TargetColor(overlayColor));
+        return blueprintData.withCustomData(FBContent.DC_TYPE_TARGET_COLOR, overlayColor);
     }
 
     @Override
     protected void applyCustomDataFromBlueprint(TypedDataComponent<?> auxData)
     {
-        if (auxData.value() instanceof TargetColor(DyeColor color))
+        if (auxData.value() instanceof DyeColor color)
         {
             overlayColor = color;
         }
@@ -108,14 +107,13 @@ public class FramedTargetBlockEntity extends FramedBlockEntity
     @Override
     protected void collectMiscComponents(DataComponentMap.Builder builder)
     {
-        builder.set(FBContent.DC_TYPE_TARGET_COLOR, new TargetColor(overlayColor));
+        builder.set(FBContent.DC_TYPE_TARGET_COLOR, overlayColor);
     }
 
     @Override
     protected void applyMiscComponents(DataComponentGetter input)
     {
-        TargetColor color = input.getOrDefault(FBContent.DC_TYPE_TARGET_COLOR, TargetColor.DEFAULT);
-        overlayColor = color.color();
+        overlayColor = input.getOrDefault(FBContent.DC_TYPE_TARGET_COLOR, DEFAULT_COLOR);
     }
 
     @Override

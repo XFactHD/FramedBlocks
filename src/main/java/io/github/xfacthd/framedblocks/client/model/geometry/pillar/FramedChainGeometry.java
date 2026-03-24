@@ -9,7 +9,7 @@ import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
 import io.github.xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
 import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.common.block.pillar.FramedChainBlock;
-import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.resources.model.geometry.BakedQuad;
 import net.minecraft.core.Direction;
 import org.joml.Vector3f;
 import org.jspecify.annotations.Nullable;
@@ -47,12 +47,12 @@ public class FramedChainGeometry extends Geometry
             {
                 Direction.Axis perpAxis = axis == Direction.Axis.X ? Direction.Axis.Z : Direction.Axis.X;
 
-                createChainEdgeParts(quadMap, quad, quadDir, quadPerpAxis, dir -> axis == Direction.Axis.Z, Modifiers::cut, Modifiers::cut);
+                createChainEdgeParts(quadMap, quad, quadDir, quadPerpAxis, _ -> axis == Direction.Axis.Z, Modifiers::cut, Modifiers::cut);
                 createChainCenterParts(quadMap, quad, Modifiers::cut, len -> Modifiers.cut(perpAxis, len));
             }
             else
             {
-                createChainEdgeParts(quadMap, quad, quadDir, quadPerpAxis, dir -> axis == Direction.Axis.X, Modifiers::cut, Modifiers::cut);
+                createChainEdgeParts(quadMap, quad, quadDir, quadPerpAxis, _ -> axis == Direction.Axis.X, Modifiers::cut, Modifiers::cut);
                 createChainCenterParts(quadMap, quad, Modifiers::cut, length -> Modifiers.cut(Direction.Axis.Y, length));
             }
         }
@@ -125,6 +125,8 @@ public class FramedChainGeometry extends Geometry
                     .apply(Modifiers.rotate(axis, ROT_ORIGIN, 45, false))
                     .export(quadMap, null);
         }
+
+        baseMod.discard();
     }
 
     private void createChainCenterParts(
@@ -160,8 +162,6 @@ public class FramedChainGeometry extends Geometry
     {
         return true;
     }
-
-
 
     @FunctionalInterface
     private interface CutterFactory

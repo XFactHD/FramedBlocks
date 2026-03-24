@@ -8,8 +8,11 @@ import com.mojang.serialization.JsonOps;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.BlockModel;
-import net.minecraft.client.resources.model.MissingBlockModel;
 import net.minecraft.client.resources.model.UnbakedModel;
+import net.minecraft.client.resources.model.cuboid.MissingCuboidModel;
+import net.minecraft.client.resources.model.geometry.UnbakedGeometry;
+import net.minecraft.client.resources.model.sprite.Material;
+import net.minecraft.client.resources.model.sprite.TextureSlots;
 import net.minecraft.resources.FileToIdConverter;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.Resource;
@@ -27,6 +30,7 @@ public final class FallbackLoader implements UnbakedModelLoader<UnbakedModel>
 {
     public static final Identifier ID = Utils.id("fallback");
     private static final FileToIdConverter MODEL_LISTER = FileToIdConverter.json("models");
+    public static final Identifier EMPTY_FALLBACK = Utils.id("builtin/empty");
 
     @Override
     public UnbakedModel read(JsonObject json, JsonDeserializationContext ctx) throws JsonParseException
@@ -43,10 +47,14 @@ public final class FallbackLoader implements UnbakedModelLoader<UnbakedModel>
         }
 
         Identifier fallback = Identifier.parse(GsonHelper.getAsString(json, "fallback"));
-        // Missing model must be special-cased as it's a "synthetic" model and cannot be loaded from a file
-        if (fallback.equals(MissingBlockModel.LOCATION))
+        // Missing model cannot be used as fallback due to sprite resolution of minecraft:missingno incorrectly selecting the item atlas
+        if (fallback.equals(MissingCuboidModel.LOCATION))
         {
-            return MissingBlockModel.missingModel();
+            throw new JsonParseException("Cannot use minecraft:builtin/missing as fallback model");
+        }
+        if (fallback.equals(EMPTY_FALLBACK))
+        {
+            return EmptyModel.INSTANCE;
         }
         fallback = MODEL_LISTER.idToFile(fallback);
         try
@@ -60,6 +68,26 @@ public final class FallbackLoader implements UnbakedModelLoader<UnbakedModel>
         catch (IOException e)
         {
             throw new JsonParseException("Failed to parse fallback model", e);
+        }
+    }
+
+    private static final class EmptyModel implements UnbakedModel
+    {
+        static final EmptyModel INSTANCE = new EmptyModel();
+        private static final TextureSlots.Data TEXTURE_SLOTS = new TextureSlots.Data.Builder()
+                .addTexture("particle", new Material(Utils.id("neoforge", "white")))
+                .build();
+
+        @Override
+        public UnbakedGeometry geometry()
+        {
+            return UnbakedGeometry.EMPTY;
+        }
+
+        @Override
+        public TextureSlots.Data textureSlots()
+        {
+            return TEXTURE_SLOTS;
         }
     }
 }

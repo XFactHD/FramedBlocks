@@ -38,15 +38,15 @@ public class FramedTorchBlock extends TorchBlock implements IFramedBlockInternal
 
     private FramedTorchBlock(BlockType type, SimpleParticleType particle, Properties props)
     {
+        this.type = type;
         super(particle, props
                 .pushReaction(PushReaction.DESTROY)
                 .noCollision()
                 .strength(0.5F)
                 .sound(SoundType.WOOD)
-                .lightLevel(state -> 14)
+                .lightLevel(_ -> 14)
                 .noOcclusion()
         );
-        this.type = type;
         BlockUtils.configureStandardProperties(this);
     }
 
@@ -54,7 +54,7 @@ public class FramedTorchBlock extends TorchBlock implements IFramedBlockInternal
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        BlockUtils.addRequiredProperties(builder);
+        BlockUtils.addStandardProperties(this, builder);
     }
 
     @Override

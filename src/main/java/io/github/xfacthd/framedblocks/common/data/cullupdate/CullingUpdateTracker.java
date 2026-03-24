@@ -39,7 +39,7 @@ public final class CullingUpdateTracker
                 long chunk = entry.getLongKey();
                 PacketDistributor.sendToPlayersTrackingChunk(
                         (ServerLevel) level,
-                        new ChunkPos(chunk),
+                        ChunkPos.unpack(chunk),
                         new ClientboundCullingUpdatePayload(chunk, entry.getValue())
                 );
             }
@@ -54,12 +54,10 @@ public final class CullingUpdateTracker
 
     public static void enqueueCullingUpdate(Level level, BlockPos pos)
     {
-        UPDATED_POSITIONS.computeIfAbsent(level.dimension(), $ -> new Long2ObjectOpenHashMap<>())
-                .computeIfAbsent(ChunkPos.asLong(pos), $ -> new LongArraySet())
+        UPDATED_POSITIONS.computeIfAbsent(level.dimension(), _ -> new Long2ObjectOpenHashMap<>())
+                .computeIfAbsent(ChunkPos.pack(pos), _ -> new LongArraySet())
                 .add(pos.asLong());
     }
-
-
 
     private CullingUpdateTracker() { }
 }

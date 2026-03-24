@@ -89,7 +89,7 @@ public abstract class CamoContainerFactory<T extends CamoContainer<?, T>>
 
         if (ConfigView.Client.INSTANCE.getCamoMessageVerbosity().isAtLeast(verbosity))
         {
-            player.displayClientMessage(message, true);
+            player.sendOverlayMessage(message);
         }
     }
 

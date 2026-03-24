@@ -7,9 +7,10 @@ import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.common.config.ClientConfig;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.fml.ModLoader;
 import net.neoforged.neoforge.client.gui.GuiLayer;
@@ -24,10 +25,11 @@ import java.util.Objects;
 public final class BlockInteractOverlayLayer implements GuiLayer
 {
     public static final Identifier LISTENER_ID = Utils.id("block_interact_overlay");
+    public static final ResourceManagerReloadListener RELOAD_LISTENER = BlockInteractOverlayLayer::onResourceReload;
     private static final List<BlockInteractOverlayWrapper> OVERLAYS = new ArrayList<>();
 
     @Override
-    public void render(GuiGraphics graphics, DeltaTracker delta)
+    public void render(GuiGraphicsExtractor graphics, DeltaTracker delta)
     {
         Player player = Objects.requireNonNull(Minecraft.getInstance().player);
         if (player.isSpectator() || Minecraft.getInstance().options.hideGui) return;
@@ -68,7 +70,7 @@ public final class BlockInteractOverlayLayer implements GuiLayer
         ));
     }
 
-    public static void onResourceReload(@SuppressWarnings("unused") ResourceManager manager)
+    private static void onResourceReload(@SuppressWarnings("unused") ResourceManager manager)
     {
         OVERLAYS.forEach(overlay -> overlay.textWidthValid = false);
     }

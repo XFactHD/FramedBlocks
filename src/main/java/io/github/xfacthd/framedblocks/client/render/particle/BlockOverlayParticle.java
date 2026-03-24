@@ -1,13 +1,13 @@
 package io.github.xfacthd.framedblocks.client.render.particle;
 
 import io.github.xfacthd.framedblocks.api.block.overlay.BlockOverlay;
-import io.github.xfacthd.framedblocks.api.util.ClientUtils;
+import io.github.xfacthd.framedblocks.api.block.overlay.TintSource;
+import io.github.xfacthd.framedblocks.api.model.util.TintUtils;
 import io.github.xfacthd.framedblocks.common.particle.BlockOverlayParticleOptions;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleProvider;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.block.state.BlockState;
 
 public final class BlockOverlayParticle extends BlockAtlasSpriteParticle
 {
@@ -15,10 +15,10 @@ public final class BlockOverlayParticle extends BlockAtlasSpriteParticle
     {
         super(level, x, y, z, xSpeed, ySpeed, zSpeed, overlay.solidTexture());
 
-        if (overlay.tintSource() != null)
+        TintSource tintSource = overlay.tintSource();
+        if (tintSource != null)
         {
-            BlockState tintSourceState = overlay.tintSource().value().defaultBlockState();
-            int tint = ClientUtils.getBlockColor(level, pos, tintSourceState, 1);
+            int tint = TintUtils.getOverlayTintSource(tintSource).colorInWorld(tintSource.defaultBlockState(), level, pos);
             this.rCol = .6F * (float) (tint >> 16 & 0xFF) / 255F;
             this.gCol = .6F * (float) (tint >> 8 & 0xFF) / 255F;
             this.bCol = .6F * (float) (tint & 0xFF) / 255F;

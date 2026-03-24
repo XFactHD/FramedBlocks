@@ -94,8 +94,6 @@ public enum DirectionAxis implements StringRepresentable
         return name;
     }
 
-
-
     public static DirectionAxis of(Direction dir, Direction.Axis axis)
     {
         DirectionAxis dirAxis = FROM_DIR_AXIS[dir.ordinal()][axis.ordinal()];

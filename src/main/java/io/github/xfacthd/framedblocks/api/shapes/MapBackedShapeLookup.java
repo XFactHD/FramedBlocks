@@ -60,8 +60,8 @@ final class MapBackedShapeLookup implements ShapeLookup
             hasTrue[0] |= occludes;
             beamColorMasking.put(state, occludes);
         });
-        if (!hasFalse[0]) return $ -> true;
-        if (!hasTrue[0]) return $ -> false;
+        if (!hasFalse[0]) return _ -> true;
+        if (!hasTrue[0]) return _ -> false;
         return beamColorMasking;
     }
 }

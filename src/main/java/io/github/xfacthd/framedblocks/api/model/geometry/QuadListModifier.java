@@ -1,7 +1,7 @@
 package io.github.xfacthd.framedblocks.api.model.geometry;
 
 import io.github.xfacthd.framedblocks.api.model.data.QuadMapBuilder;
-import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.resources.model.geometry.BakedQuad;
 import net.minecraft.core.Direction;
 import org.jspecify.annotations.Nullable;
 
@@ -26,11 +26,9 @@ public interface QuadListModifier
      */
     void modify(QuadMapBuilder quadMap, ArrayList<BakedQuad> quads, @Nullable Direction side);
 
-
-
     static QuadListModifier filteringCullFace(Predicate<Direction> filter)
     {
-        return (quadMap, quads, side) ->
+        return (_, quads, side) ->
         {
             if (side != null && filter.test(side)) quads.clear();
         };
@@ -38,12 +36,12 @@ public interface QuadListModifier
 
     static QuadListModifier filtering(Predicate<BakedQuad> filter)
     {
-        return (quadMap, quads, side) -> quads.removeIf(filter);
+        return (_, quads, _) -> quads.removeIf(filter);
     }
 
     static QuadListModifier replacing(Function<BakedQuad, @Nullable BakedQuad> modifier)
     {
-        return (quadMap, quads, side) ->
+        return (_, quads, _) ->
         {
             ListIterator<BakedQuad> it = quads.listIterator();
             while (it.hasNext())

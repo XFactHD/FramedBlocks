@@ -1,14 +1,18 @@
 package io.github.xfacthd.framedblocks.client.model.overlaygen;
 
+import com.mojang.blaze3d.platform.Transparency;
 import io.github.xfacthd.framedblocks.api.block.overlay.BlockOverlay;
 import io.github.xfacthd.framedblocks.api.model.wrapping.statemerger.StateMerger;
+import io.github.xfacthd.framedblocks.client.model.RuntimeMaterialBaker;
 import io.github.xfacthd.framedblocks.client.model.wrapping.ModelWrappingManager;
 import io.github.xfacthd.framedblocks.client.util.CacheCleaner;
 import net.minecraft.client.renderer.texture.SpriteContents;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.core.Direction;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.client.textures.FluidSpriteCache;
+import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.Nullable;
 
 import java.util.EnumMap;
@@ -85,7 +89,7 @@ final class BlockOverlayMetaCache
                 {
                     if (dir.getAxis() != fullFace.getAxis() && !fullFaces.contains(dir))
                     {
-                        edges.computeIfAbsent(dir, $ -> EnumSet.noneOf(Direction.class)).add(fullFace);
+                        edges.computeIfAbsent(dir, _ -> EnumSet.noneOf(Direction.class)).add(fullFace);
                     }
                 }
             }
@@ -95,17 +99,23 @@ final class BlockOverlayMetaCache
             edges = Map.of();
         }
 
-        TextureAtlasSprite solidSprite = FluidSpriteCache.getSprite(overlay.solidTexture());
-        TextureAtlasSprite edgeSprite = null;
+        Material.Baked solidMaterial = getMaterial(overlay.solidTexture());
+        SpriteInfo solidSpriteInfo = makeSpriteSpec(solidMaterial, false);
+        SpriteInfo solidSpriteInfoTranslucent = makeSpriteSpec(solidMaterial, true);
+        SpriteInfo edgeSpriteInfo = null;
+        SpriteInfo edgeSpriteInfoTranslucent = null;
         float edgeHeight = 0F;
         if (overlay.edgeTexture() != null)
         {
-            edgeSprite = FluidSpriteCache.getSprite(overlay.edgeTexture());
+            Material.Baked edgeMaterial = getMaterial(overlay.edgeTexture());
+            edgeSpriteInfo = makeSpriteSpec(edgeMaterial, false);
+            edgeSpriteInfoTranslucent = makeSpriteSpec(edgeMaterial, true);
 
-            SpriteContents contents = edgeSprite.contents();
+            SpriteContents contents = edgeMaterial.sprite().contents();
             if (contents.isAnimated())
             {
                 edgeHeight = (float) contents.getUniqueFrames()
+                        .intStream()
                         .mapToDouble(frame -> computeSpriteHeight(contents, frame))
                         .max()
                         .orElse(0D);
@@ -116,7 +126,26 @@ final class BlockOverlayMetaCache
             }
         }
 
-        return new Entry(fullFaces, edges, solidSprite, edgeSprite, edgeHeight, stateDependent);
+        return new Entry(fullFaces, edges, solidMaterial, solidSpriteInfo, solidSpriteInfoTranslucent, edgeSpriteInfo, edgeSpriteInfoTranslucent, edgeHeight, stateDependent);
+    }
+
+    private static Material.Baked getMaterial(Identifier texture)
+    {
+        TextureAtlasSprite sprite = RuntimeMaterialBaker.getSprite(texture);
+        return new Material.Baked(sprite, sprite.transparency().hasTranslucent());
+    }
+
+    @Nullable
+    @Contract("_,false->!null")
+    private static SpriteInfo makeSpriteSpec(Material.Baked material, boolean forceTranslucent)
+    {
+        if (material.forceTranslucent() && forceTranslucent)
+        {
+            return null;
+        }
+        forceTranslucent |= material.forceTranslucent();
+        Transparency transparency = forceTranslucent ? Transparency.TRANSLUCENT : Transparency.TRANSPARENT;
+        return new SpriteInfo(material, transparency);
     }
 
     private static float computeSpriteHeight(SpriteContents contents, int frame)
@@ -147,8 +176,11 @@ final class BlockOverlayMetaCache
     record Entry(
             Set<Direction> solidFaces,
             Map<Direction, Set<Direction>> edgesByFace,
-            TextureAtlasSprite solidSprite,
-            @Nullable TextureAtlasSprite edgeSprite,
+            Material.Baked solidMaterial,
+            SpriteInfo solidSpriteInfo,
+            @Nullable SpriteInfo solidSpriteInfoTranslucent,
+            @Nullable SpriteInfo edgeSpriteInfo,
+            @Nullable SpriteInfo edgeSpriteInfoTranslucent,
             float edgeHeight,
             boolean stateDependent
     )
@@ -156,6 +188,29 @@ final class BlockOverlayMetaCache
         boolean isFaceAffected(Direction face)
         {
             return solidFaces.contains(face) || edgesByFace.containsKey(face);
+        }
+
+        SpriteInfo solidSpriteInfo(boolean forceTranslucent)
+        {
+            if (solidSpriteInfoTranslucent == null || !forceTranslucent)
+            {
+                return solidSpriteInfo;
+            }
+            return solidSpriteInfoTranslucent;
+        }
+
+        @Nullable
+        SpriteInfo edgeSpriteInfo(boolean forceTranslucent)
+        {
+            if (edgeSpriteInfo == null)
+            {
+                return null;
+            }
+            if (edgeSpriteInfoTranslucent == null || !forceTranslucent)
+            {
+                return edgeSpriteInfo;
+            }
+            return edgeSpriteInfoTranslucent;
         }
     }
 

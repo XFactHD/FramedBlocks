@@ -48,8 +48,8 @@ public class FramedStairsBlock extends StairBlock implements IFramedBlockInterna
 
     public FramedStairsBlock(BlockType type, Properties props)
     {
-        super(FBContent.BLOCK_FRAMED_CUBE.value().defaultBlockState(), IFramedBlock.applyDefaultProperties(props, type));
         this.type = type;
+        super(FBContent.BLOCK_FRAMED_CUBE.value().defaultBlockState(), IFramedBlock.applyDefaultProperties(props, type));
         BlockUtils.configureStandardProperties(this);
     }
 
@@ -57,8 +57,7 @@ public class FramedStairsBlock extends StairBlock implements IFramedBlockInterna
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        BlockUtils.addRequiredProperties(builder);
-        builder.add(FramedProperties.SOLID, FramedProperties.STATE_LOCKED);
+        BlockUtils.addStandardProperties(this, builder);
     }
 
     @Override
@@ -189,16 +188,12 @@ public class FramedStairsBlock extends StairBlock implements IFramedBlockInterna
         return defaultBlockState().setValue(FACING, Direction.SOUTH);
     }
 
-
-
     private static final class StairStateMerger implements StateMerger
     {
-        private final StateMerger ignoringMerger = StateMerger.ignoring(WrapHelper.IGNORE_DEFAULT_LOCK);
-
         @Override
         public BlockState apply(BlockState state)
         {
-            state = ignoringMerger.apply(state);
+            state = WrapHelper.DEFAULT_MERGER.apply(state);
             StairsShape shape = state.getValue(SHAPE);
             if (shape == StairsShape.INNER_RIGHT)
             {
@@ -217,7 +212,7 @@ public class FramedStairsBlock extends StairBlock implements IFramedBlockInterna
         public Set<Property<?>> getHandledProperties(Holder<Block> block)
         {
             return Utils.concat(
-                    ignoringMerger.getHandledProperties(block),
+                    WrapHelper.DEFAULT_MERGER.getHandledProperties(block),
                     Set.of(SHAPE)
             );
         }

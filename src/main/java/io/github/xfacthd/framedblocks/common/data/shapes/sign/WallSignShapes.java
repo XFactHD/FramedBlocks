@@ -30,7 +30,5 @@ public final class WallSignShapes
         return ShapeContainer.of(map);
     }
 
-
-
     private WallSignShapes() { }
 }

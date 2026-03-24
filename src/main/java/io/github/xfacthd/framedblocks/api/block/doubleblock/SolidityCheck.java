@@ -14,7 +14,7 @@ import java.util.function.Predicate;
 
 public enum SolidityCheck
 {
-    NONE(data -> false, null),
+    NONE(_ -> false, null),
     FIRST(data -> data.unwrap(false).getCamoContent().isSolid(), FramedDoubleBlockEntity::getCamo),
     SECOND(data -> data.unwrap(true).getCamoContent().isSolid(), FramedDoubleBlockEntity::getCamoTwo),
     BOTH(data -> FIRST.isSolid(data) && SECOND.isSolid(data), null);

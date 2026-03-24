@@ -1,10 +1,8 @@
 package io.github.xfacthd.framedblocks.common.data.camo.fluid;
 
-import io.github.xfacthd.framedblocks.api.camo.CamoClientHandler;
+import io.github.xfacthd.framedblocks.api.camo.CamoContentClientHandler;
 import io.github.xfacthd.framedblocks.api.camo.CamoContainerHelper;
 import io.github.xfacthd.framedblocks.api.camo.CamoContent;
-import io.github.xfacthd.framedblocks.api.util.ClientUtils;
-import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.common.particle.FluidParticleOptions;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -13,8 +11,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.util.TriState;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.BlockAndTintGetter;
+import net.minecraft.world.level.BlockAndLightGetter;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.LevelReader;
@@ -108,7 +105,7 @@ public final class FluidCamoContent extends CamoContent<FluidCamoContent>
     }
 
     @Override
-    public boolean shouldDisplayFluidOverlay(BlockAndTintGetter level, BlockPos pos, FluidState fluidState)
+    public boolean shouldDisplayFluidOverlay(BlockAndLightGetter level, BlockPos pos, FluidState fluidState)
     {
         return fluidState.getFluidType() != fluid.getFluidType();
     }
@@ -138,26 +135,6 @@ public final class FluidCamoContent extends CamoContent<FluidCamoContent>
     {
         BlockState state = fluid.defaultFluidState().createLegacyBlock();
         return state.isAir() ? null : state.getMapColor(level, pos);
-    }
-
-    @Override
-    public int getTintColor(BlockAndTintGetter level, BlockPos pos, int tintIdx)
-    {
-        if (Utils.CLIENT_DIST)
-        {
-            return ClientUtils.getFluidColor(level, pos, fluid.defaultFluidState());
-        }
-        throw new UnsupportedOperationException("Block color is not available on the server!");
-    }
-
-    @Override
-    public int getTintColor(ItemStack stack, int tintIdx)
-    {
-        if (Utils.CLIENT_DIST)
-        {
-            return ClientUtils.getFluidColor(fluid.defaultFluidState());
-        }
-        throw new UnsupportedOperationException("Block color is not available on the server!");
     }
 
     @Override
@@ -228,9 +205,9 @@ public final class FluidCamoContent extends CamoContent<FluidCamoContent>
     }
 
     @Override
-    public CamoClientHandler<FluidCamoContent> getClientHandler()
+    public CamoContentClientHandler<FluidCamoContent> getClientHandler()
     {
-        return FluidCamoClientHandler.INSTANCE;
+        return FluidCamoContentClientHandler.INSTANCE;
     }
 
     @Override

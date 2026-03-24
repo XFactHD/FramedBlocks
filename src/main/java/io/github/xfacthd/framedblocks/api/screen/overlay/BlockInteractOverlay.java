@@ -1,7 +1,7 @@
 package io.github.xfacthd.framedblocks.api.screen.overlay;
 
 import io.github.xfacthd.framedblocks.api.util.Utils;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -57,7 +57,7 @@ public abstract class BlockInteractOverlay
         return state ? linesTrue : linesFalse;
     }
 
-    public void renderAfterIcon(GuiGraphics graphics, Texture tex, int texX, int texY, Target target) { }
+    public void renderAfterIcon(GuiGraphicsExtractor graphics, Texture tex, int texX, int texY, Target target) { }
 
     @ApiStatus.Internal
     public final OverlayDisplayMode getDisplayMode()
@@ -75,7 +75,7 @@ public abstract class BlockInteractOverlay
 
     public record Texture(Identifier location, int xOff, int yOff, int width, int height, int texWidth, int texHeight)
     {
-        public void draw(GuiGraphics graphics, int x, int y)
+        public void draw(GuiGraphicsExtractor graphics, int x, int y)
         {
             graphics.blit(RenderPipelines.GUI_TEXTURED, location, x, y, xOff, yOff, width, height, texWidth, texHeight);
         }

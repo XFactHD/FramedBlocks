@@ -44,7 +44,7 @@ public final class CollapsibleBlockIndicatorRenderer
         Vec3 offset = Vec3.atLowerCornerOf(pos).subtract(event.getCamera().position());
         float[] vY = TargetCalculator.getVertexHeights(be, be.getCollapsedFace());
 
-        event.addCustomRenderer((renderState, buffer, poseStack, translucentPass, levelRenderState) ->
+        event.addCustomRenderer((_, buffer, poseStack, translucentPass, _) ->
         {
             if (translucentPass)
             {

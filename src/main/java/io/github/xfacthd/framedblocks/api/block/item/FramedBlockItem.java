@@ -20,9 +20,17 @@ import java.util.function.Consumer;
 
 public class FramedBlockItem extends BlockItem implements IFramedBlockItem
 {
+    private final boolean customEmptyPlaceSound;
+
     public FramedBlockItem(Block block, Properties props)
     {
+        this(block, props, false);
+    }
+
+    public FramedBlockItem(Block block, Properties props, boolean customEmptyPlaceSound)
+    {
         super(block, props);
+        this.customEmptyPlaceSound = customEmptyPlaceSound;
         Preconditions.checkArgument(block instanceof IFramedBlock);
     }
 
@@ -30,6 +38,12 @@ public class FramedBlockItem extends BlockItem implements IFramedBlockItem
     public InteractionResult place(BlockPlaceContext context)
     {
         return handlePlace(context, super::place);
+    }
+
+    @Override
+    public boolean useCustomEmptyPlaceSound()
+    {
+        return customEmptyPlaceSound;
     }
 
     @Override

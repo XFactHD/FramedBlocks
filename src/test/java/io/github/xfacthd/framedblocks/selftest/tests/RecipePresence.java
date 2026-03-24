@@ -47,7 +47,7 @@ public final class RecipePresence
         Set<ItemLike> craftResults = fbRecipes.stream()
                 .filter(CraftingRecipe.class::isInstance)
                 .map(CraftingRecipe.class::cast)
-                .peek(r -> craftCount.increment())
+                .peek(_ -> craftCount.increment())
                 .map(RecipePresence::unpackResult)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
@@ -58,8 +58,8 @@ public final class RecipePresence
         Set<ItemLike> sawResults = fbRecipes.stream()
                 .filter(FramingSawRecipe.class::isInstance)
                 .map(FramingSawRecipe.class::cast)
-                .peek(r -> sawCount.increment())
-                .map(FramingSawRecipe::getResult)
+                .peek(_ -> sawCount.increment())
+                .map(FramingSawRecipe::getResultStack)
                 .map(ItemStack::getItem)
                 .map(ItemLike.class::cast)
                 .collect(Collectors.toSet());
@@ -92,8 +92,8 @@ public final class RecipePresence
     {
         return switch (recipe)
         {
-            case ShapedRecipe shaped -> Optional.of(shaped.result);
-            case ShapelessRecipe shapeless -> Optional.of(shapeless.result);
+            case ShapedRecipe shaped -> Optional.of(shaped.result.create());
+            case ShapelessRecipe shapeless -> Optional.of(shapeless.result.create());
             default -> Optional.empty();
         };
     }

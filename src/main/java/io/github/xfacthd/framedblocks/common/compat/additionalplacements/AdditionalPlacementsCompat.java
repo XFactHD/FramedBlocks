@@ -37,7 +37,7 @@ public final class AdditionalPlacementsCompat
                 //@Override
                 //public void addGlobalBlacklisters(Consumer<IBlockBlacklister<Block>> register)
                 //{
-                //    register.accept((block, blockId) -> block instanceof IFramedBlock);
+                //    register.accept((block, _) -> block instanceof IFramedBlock);
                 //}
             });
         }

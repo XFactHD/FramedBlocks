@@ -38,7 +38,5 @@ public final class CheckeredSlabSegmentShapes
         return ShapeContainer.of(map);
     }
 
-
-
     private CheckeredSlabSegmentShapes() { }
 }

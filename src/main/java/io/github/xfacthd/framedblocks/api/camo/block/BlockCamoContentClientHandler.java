@@ -1,0 +1,59 @@
+package io.github.xfacthd.framedblocks.api.camo.block;
+
+import io.github.xfacthd.framedblocks.api.camo.CamoContentClientHandler;
+import io.github.xfacthd.framedblocks.api.model.util.ModelUtils;
+import io.github.xfacthd.framedblocks.api.model.util.TintUtils;
+import it.unimi.dsi.fastutil.ints.IntList;
+import net.minecraft.client.color.block.BlockTintSource;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.particle.Particle;
+import net.minecraft.client.particle.TerrainParticle;
+import net.minecraft.client.renderer.block.BlockAndTintGetter;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.item.ItemStack;
+
+final class BlockCamoContentClientHandler extends CamoContentClientHandler<BlockCamoContent>
+{
+    static final CamoContentClientHandler<BlockCamoContent> INSTANCE = new BlockCamoContentClientHandler();
+
+    private BlockCamoContentClientHandler() { }
+
+    @Override
+    public BlockStateModel getOrCreateModel(BlockCamoContent camo)
+    {
+        return ModelUtils.getModel(camo.getState());
+    }
+
+    @Override
+    public Particle makeHitDestroyParticle(
+            ClientLevel level, double x, double y, double z, double sx, double sy, double sz, BlockCamoContent camo, BlockPos pos
+    )
+    {
+        return new TerrainParticle(level, x, y, z, 0.0D, 0.0D, 0.0D, camo.getState(), pos);
+    }
+
+    @Override
+    public int getTintCount(BlockCamoContent camo)
+    {
+        return TintUtils.getTintSources(camo).size();
+    }
+
+    @Override
+    public void collectTintValues(BlockCamoContent camo, BlockAndTintGetter level, BlockPos pos, IntList tintList)
+    {
+        for (BlockTintSource tintSource : TintUtils.getTintSources(camo))
+        {
+            tintList.add(tintSource.colorInWorld(camo.getState(), level, pos));
+        }
+    }
+
+    @Override
+    public void collectTintValues(BlockCamoContent camo, ItemStack stack, IntList tintList)
+    {
+        for (BlockTintSource tintSource : TintUtils.getTintSources(camo))
+        {
+            tintList.add(tintSource.color(camo.getState()));
+        }
+    }
+}

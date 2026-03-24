@@ -2,7 +2,6 @@
   "model": {
     "type": "framedblocks:block",
     "base_model": "framedblocks:block/framed_cube",
-    "block": "framedblocks:framed_vertical_double_half_stairs",
-    "tint_provider": "framedblocks:double"
+    "block": "framedblocks:framed_vertical_double_half_stairs"
   }
 }

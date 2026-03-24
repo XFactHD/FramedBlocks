@@ -84,7 +84,5 @@ public final class RotateMirrorErrors
         BlockState perform(BlockState state, T modifier);
     }
 
-
-
     private RotateMirrorErrors() { }
 }

@@ -3,11 +3,11 @@ package io.github.xfacthd.framedblocks.common.compat.jei.camo;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.xfacthd.framedblocks.common.FBContent;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CraftingInput;
@@ -29,7 +29,7 @@ public record JeiCamoApplicationRecipe(
         Ingredient copyTool,
         Ingredient camoOne,
         Ingredient camoTwo,
-        Optional<ItemStack> result
+        Optional<ItemStackTemplate> result
 ) implements CraftingRecipe
 {
     public static final MapCodec<JeiCamoApplicationRecipe> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
@@ -37,7 +37,7 @@ public record JeiCamoApplicationRecipe(
             Ingredient.CODEC.fieldOf("copy_tool").forGetter(JeiCamoApplicationRecipe::copyTool),
             Ingredient.CODEC.fieldOf("camo_one").forGetter(JeiCamoApplicationRecipe::camoOne),
             Ingredient.CODEC.fieldOf("camo_two").forGetter(JeiCamoApplicationRecipe::camoTwo),
-            ItemStack.CODEC.optionalFieldOf("result").forGetter(JeiCamoApplicationRecipe::result)
+            ItemStackTemplate.CODEC.optionalFieldOf("result").forGetter(JeiCamoApplicationRecipe::result)
     ).apply(inst, JeiCamoApplicationRecipe::new));
     public static final StreamCodec<RegistryFriendlyByteBuf, JeiCamoApplicationRecipe> STREAM_CODEC = StreamCodec.composite(
             Ingredient.CONTENTS_STREAM_CODEC,
@@ -48,7 +48,7 @@ public record JeiCamoApplicationRecipe(
             JeiCamoApplicationRecipe::camoOne,
             Ingredient.CONTENTS_STREAM_CODEC,
             JeiCamoApplicationRecipe::camoTwo,
-            ByteBufCodecs.optional(ItemStack.STREAM_CODEC),
+            ByteBufCodecs.optional(ItemStackTemplate.STREAM_CODEC),
             JeiCamoApplicationRecipe::result,
             JeiCamoApplicationRecipe::new
     );
@@ -66,9 +66,21 @@ public record JeiCamoApplicationRecipe(
     }
 
     @Override
-    public ItemStack assemble(CraftingInput craftingInput, HolderLookup.Provider provider)
+    public ItemStack assemble(CraftingInput craftingInput)
     {
         return ItemStack.EMPTY;
+    }
+
+    @Override
+    public boolean showNotification()
+    {
+        return false;
+    }
+
+    @Override
+    public String group()
+    {
+        return "";
     }
 
     @Override

@@ -6,32 +6,32 @@
         "down": {
           "cullface": "down",
           "texture": "#all",
-          "tintindex": 1024
+          "tintindex": 0
         },
         "east": {
           "cullface": "east",
           "texture": "#all",
-          "tintindex": 1024
+          "tintindex": 0
         },
         "north": {
           "cullface": "north",
           "texture": "#all",
-          "tintindex": 1024
+          "tintindex": 0
         },
         "south": {
           "cullface": "south",
           "texture": "#all",
-          "tintindex": 1024
+          "tintindex": 0
         },
         "up": {
           "cullface": "up",
           "texture": "#all",
-          "tintindex": 1024
+          "tintindex": 0
         },
         "west": {
           "cullface": "west",
           "texture": "#all",
-          "tintindex": 1024
+          "tintindex": 0
         }
       },
       "from": [
@@ -46,7 +46,6 @@
       ]
     }
   ],
-  "render_type": "minecraft:cutout",
   "textures": {
     "all": "framedblocks:block/target_overlay"
   },

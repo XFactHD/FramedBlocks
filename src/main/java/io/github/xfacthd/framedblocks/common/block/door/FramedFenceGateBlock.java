@@ -25,7 +25,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.FenceGateBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.block.state.properties.WoodType;
 import net.minecraft.world.level.redstone.Orientation;
@@ -48,7 +47,7 @@ public class FramedFenceGateBlock extends FenceGateBlock implements IFramedBlock
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        BlockUtils.addRequiredProperties(builder);
+        BlockUtils.addStandardProperties(this, builder);
     }
 
     @Override
@@ -134,23 +133,16 @@ public class FramedFenceGateBlock extends FenceGateBlock implements IFramedBlock
         return defaultBlockState();
     }
 
-
-
     public static final class FenceGateStateMerger implements StateMerger
     {
         public static final FenceGateStateMerger INSTANCE = new FenceGateStateMerger();
-
-        private final StateMerger ignoringMerger = StateMerger.ignoring(Utils.concat(
-                Set.of(BlockStateProperties.POWERED),
-                WrapHelper.IGNORE_ALWAYS
-        ));
 
         private FenceGateStateMerger() { }
 
         @Override
         public BlockState apply(BlockState state)
         {
-            state = ignoringMerger.apply(state);
+            state = WrapHelper.POWERED_MERGER.apply(state);
             if (!state.getValue(OPEN))
             {
                 Direction dir = state.getValue(FACING);
@@ -166,7 +158,7 @@ public class FramedFenceGateBlock extends FenceGateBlock implements IFramedBlock
         public Set<Property<?>> getHandledProperties(Holder<Block> block)
         {
             return Utils.concat(
-                    ignoringMerger.getHandledProperties(block),
+                    WrapHelper.POWERED_MERGER.getHandledProperties(block),
                     Set.of(FACING)
             );
         }

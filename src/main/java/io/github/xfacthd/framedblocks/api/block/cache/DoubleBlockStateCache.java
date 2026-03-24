@@ -6,6 +6,7 @@ import io.github.xfacthd.framedblocks.api.block.doubleblock.CamoGetter;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockParts;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockTopInteractionMode;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.SolidityCheck;
+import io.github.xfacthd.framedblocks.api.block.render.NullCullPredicate;
 import io.github.xfacthd.framedblocks.api.predicate.overlay.BlockOverlayPredicate;
 import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import net.minecraft.core.Direction;
@@ -23,6 +24,8 @@ public class DoubleBlockStateCache extends StateCache
     private final CamoGetter[] camoGetters = new CamoGetter[DIR_COUNT * DIR_COUNT_N];
     private final byte solidOverlay;
     private final EdgeOverlayMask edgeOverlay;
+    private final boolean mayCullNullFacePartOne;
+    private final boolean mayCullNullFacePartTwo;
 
     public DoubleBlockStateCache(BlockState state, IBlockType type)
     {
@@ -59,6 +62,9 @@ public class DoubleBlockStateCache extends StateCache
         }
         this.solidOverlay = solidOverlay;
         this.edgeOverlay = supportsOverlay ? EdgeOverlayMask.compute(state, overlayPredicate, true) : EdgeOverlayMask.NEVER;
+        NullCullPredicate nullCullPredicate = type.getNullCullPredicate();
+        this.mayCullNullFacePartOne = nullCullPredicate.testPartOne(state);
+        this.mayCullNullFacePartTwo = nullCullPredicate.testPartTwo(state);
     }
 
     public final DoubleBlockTopInteractionMode getTopInteractionMode()
@@ -97,6 +103,11 @@ public class DoubleBlockStateCache extends StateCache
         return super.supportsEdgeOverlay(side, edge, false, nullCullFace, unaligned);
     }
 
+    public final boolean mayCullNullFace(boolean secondPart)
+    {
+        return secondPart ? mayCullNullFacePartTwo : mayCullNullFacePartOne;
+    }
+
     @Override
     public boolean equals(Object other)
     {
@@ -111,7 +122,9 @@ public class DoubleBlockStateCache extends StateCache
                 Arrays.equals(solidityChecks, that.solidityChecks) &&
                 Arrays.equals(camoGetters, that.camoGetters) &&
                 solidOverlay == that.solidOverlay &&
-                edgeOverlay.equals(that.edgeOverlay);
+                edgeOverlay.equals(that.edgeOverlay) &&
+                mayCullNullFacePartOne == that.mayCullNullFacePartOne &&
+                mayCullNullFacePartTwo == that.mayCullNullFacePartTwo;
     }
 
     @Override
@@ -125,6 +138,8 @@ public class DoubleBlockStateCache extends StateCache
         result = 31 * result + Arrays.hashCode(camoGetters);
         result = 31 * result + Byte.hashCode(solidOverlay);
         result = 31 * result + edgeOverlay.hashCode();
+        result = 31 * result + Boolean.hashCode(mayCullNullFacePartOne);
+        result = 31 * result + Boolean.hashCode(mayCullNullFacePartTwo);
         return result;
     }
 }

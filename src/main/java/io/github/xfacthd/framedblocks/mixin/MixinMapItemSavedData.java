@@ -1,6 +1,9 @@
 package io.github.xfacthd.framedblocks.mixin;
 
+import com.llamalad7.mixinextras.expression.Definition;
+import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -11,6 +14,7 @@ import io.github.xfacthd.framedblocks.common.data.component.FramedMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.decoration.ItemFrame;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.LevelAccessor;
@@ -38,28 +42,36 @@ public abstract class MixinMapItemSavedData implements FramedMap.MarkerRemover
     @Unique
     private final Map<String, FramedMap> framedblocks$frameMarkers = new HashMap<>();
 
-    @Shadow @Final private boolean trackingPosition;
+    @Shadow
+    @Final
+    private boolean trackingPosition;
 
-    @Shadow protected abstract void addDecoration(Holder<MapDecorationType> pType, @Nullable LevelAccessor pLevel, String pDecorationName, double pLevelX, double pLevelZ, double pRotation, @Nullable Component pName);
-    @Shadow protected abstract void removeDecoration(String pIdentifier);
+    @Shadow
+    @SuppressWarnings("SameParameterValue")
+    protected abstract void addDecoration(Holder<MapDecorationType> pType, @Nullable LevelAccessor pLevel, String pDecorationName, double pLevelX, double pLevelZ, double pRotation, @Nullable Component pName);
+    @Shadow
+    protected abstract void removeDecoration(String pIdentifier);
 
-    @ModifyExpressionValue(method = "tickCarriedBy", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;isFramed()Z", ordinal = 0))
+    @Definition(id = "placedInFrame", local = @Local(name = "placedInFrame", type = ItemFrame.class))
+    @Expression("placedInFrame != null")
+    @ModifyExpressionValue(method = "tickCarriedBy", at = @At(value = "MIXINEXTRAS:EXPRESSION", ordinal = 0))
     private boolean framedblocks$checkVanillaFramedOrCustomFramed(boolean isFramed, Player player, ItemStack stack)
     {
         return isFramed || stack.get(FBContent.DC_TYPE_FRAMED_MAP) != null;
     }
 
-    @ModifyExpressionValue(method = "tickCarriedBy", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;isFramed()Z", ordinal = 1))
-    private boolean framedblocks$checkNotVanillaFramedAndNotCustomFramed(boolean isFramed, Player player, ItemStack stack)
+    @Definition(id = "placedInFrame", local = @Local(name = "placedInFrame", type = ItemFrame.class))
+    @Expression("placedInFrame == null")
+    @ModifyExpressionValue(method = "tickCarriedBy", at = @At(value = "MIXINEXTRAS:EXPRESSION", ordinal = 1))
+    private boolean framedblocks$checkNotVanillaFramedAndNotCustomFramed(boolean isNotFramed, Player player, ItemStack stack)
     {
-        return isFramed || stack.get(FBContent.DC_TYPE_FRAMED_MAP) != null;
+        return isNotFramed && stack.get(FBContent.DC_TYPE_FRAMED_MAP) == null;
     }
 
     @Inject(method = "tickCarriedBy", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;getOrDefault(Lnet/minecraft/core/component/DataComponentType;Ljava/lang/Object;)Ljava/lang/Object;"))
-    private void framedblocks$updateFramedItemFrameMarker(Player player, ItemStack mapStack, CallbackInfo ci)
+    private void framedblocks$updateFramedItemFrameMarker(Player player, ItemStack mapStack, @Nullable ItemFrame placedInFrame, CallbackInfo ci)
     {
         FramedMap framedMap;
-        //noinspection ConstantConditions
         if (trackingPosition && (framedMap = mapStack.get(FBContent.DC_TYPE_FRAMED_MAP)) != null)
         {
             String frameId = FramedMap.makeFrameId(framedMap.pos());

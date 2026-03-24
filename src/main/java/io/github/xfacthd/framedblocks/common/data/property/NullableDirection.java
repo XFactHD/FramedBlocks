@@ -64,8 +64,6 @@ public enum NullableDirection implements StringRepresentable
         return toString().toLowerCase(Locale.ROOT);
     }
 
-
-
     public static NullableDirection fromDirection(@Nullable Direction dir)
     {
         if (dir == null)

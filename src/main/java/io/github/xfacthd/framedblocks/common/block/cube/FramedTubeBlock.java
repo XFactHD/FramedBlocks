@@ -1,6 +1,5 @@
 package io.github.xfacthd.framedblocks.common.block.cube;
 
-import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
 import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.api.util.Utils;
@@ -33,7 +32,7 @@ public class FramedTubeBlock extends FramedBlock
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        builder.add(BlockStateProperties.AXIS, FramedProperties.SOLID, PropertyHolder.THICK, BlockStateProperties.WATERLOGGED);
+        builder.add(BlockStateProperties.AXIS, PropertyHolder.THICK);
     }
 
     @Override

@@ -91,7 +91,5 @@ public final class StateCacheValidity
         reporter.endTest();
     }
 
-
-
     private StateCacheValidity() { }
 }

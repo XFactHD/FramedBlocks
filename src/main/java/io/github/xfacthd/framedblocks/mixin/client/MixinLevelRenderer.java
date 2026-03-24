@@ -7,7 +7,7 @@ import net.minecraft.client.renderer.RenderBuffers;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.feature.FeatureRenderDispatcher;
-import net.minecraft.client.renderer.state.LevelRenderState;
+import net.minecraft.client.renderer.state.GameRenderState;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -32,7 +32,7 @@ public class MixinLevelRenderer
             EntityRenderDispatcher entityRenderDispatcher,
             BlockEntityRenderDispatcher blockEntityRenderDispatcher,
             RenderBuffers buffers,
-            LevelRenderState levelRenderState,
+            GameRenderState gameRenderState,
             FeatureRenderDispatcher featureRenderDispatcher,
             CallbackInfo ci
     )

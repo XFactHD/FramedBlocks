@@ -137,7 +137,7 @@ public final class CamoContainerFactories
         @Override
         public void registerRemovalItem(Item item)
         {
-            Set<CamoContainerFactory<?>> factories = REMOVAL_ITEMS.computeIfAbsent(item, $ -> new ReferenceOpenHashSet<>());
+            Set<CamoContainerFactory<?>> factories = REMOVAL_ITEMS.computeIfAbsent(item, _ -> new ReferenceOpenHashSet<>());
             if (factories.contains(factory))
             {
                 String factoryName = Objects.requireNonNull(FramedRegistries.CAMO_CONTAINER_FACTORIES.getKey(factory)).toString();
@@ -149,7 +149,7 @@ public final class CamoContainerFactories
         @Override
         public void registerRemovalPredicate(Predicate<ItemStack> predicate)
         {
-            REMOVAL_PREDICATES.computeIfAbsent(factory, $ -> new ArrayList<>()).add(predicate);
+            REMOVAL_PREDICATES.computeIfAbsent(factory, _ -> new ArrayList<>()).add(predicate);
         }
     }
 

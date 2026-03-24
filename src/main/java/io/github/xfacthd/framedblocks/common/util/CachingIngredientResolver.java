@@ -45,7 +45,7 @@ public final class CachingIngredientResolver
         public Multi(Level level, int size)
         {
             this.resolvers = new CachingIngredientResolver[size];
-            Arrays.setAll(resolvers, $ -> new CachingIngredientResolver(level));
+            Arrays.setAll(resolvers, _ -> new CachingIngredientResolver(level));
         }
 
         public List<ItemStack> getStacks(int idx, Ingredient ingredient)

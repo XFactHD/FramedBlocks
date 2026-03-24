@@ -37,12 +37,12 @@ import java.util.List;
 public abstract class AbstractFramedBlock extends Block implements IFramedBlock, SimpleWaterloggedBlock
 {
     private final IBlockType blockType;
-    private final ShapeLookup shapes;
+    protected final ShapeLookup shapes;
 
     public AbstractFramedBlock(IBlockType blockType, Properties props)
     {
-        super(props);
         this.blockType = blockType;
+        super(props);
         this.shapes = ShapeLookup.of(this);
 
         BlockUtils.configureStandardProperties(this);
@@ -51,7 +51,7 @@ public abstract class AbstractFramedBlock extends Block implements IFramedBlock,
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
-        BlockUtils.addRequiredProperties(builder);
+        BlockUtils.addStandardProperties(this, builder);
     }
 
     @Override

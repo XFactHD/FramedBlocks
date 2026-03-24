@@ -2,18 +2,20 @@ package io.github.xfacthd.framedblocks.api.util;
 
 import io.github.xfacthd.framedblocks.api.internal.InternalClientAPI;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.renderer.Sheets;
+import net.minecraft.client.renderer.block.BlockAndTintGetter;
+import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
+import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.core.BlockPos;
+import net.minecraft.client.resources.model.geometry.BakedQuad;
+import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.data.AtlasIds;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.BlockAndTintGetter;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.FluidState;
-import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
+import net.minecraft.world.level.BlockAndLightGetter;
+import net.neoforged.neoforge.client.NeoForgeRenderTypes;
 import org.jspecify.annotations.Nullable;
 
 public final class ClientUtils
@@ -21,6 +23,7 @@ public final class ClientUtils
     @SuppressWarnings("deprecation")
     public static final Identifier BLOCK_ATLAS = TextureAtlas.LOCATION_BLOCKS;
     public static final Identifier DUMMY_TEXTURE = Utils.id("neoforge", "white");
+    public static final Material DUMMY_MATERIAL = new Material(DUMMY_TEXTURE);
 
     public static void enqueueClientTask(Runnable task)
     {
@@ -32,19 +35,9 @@ public final class ClientUtils
         InternalClientAPI.INSTANCE.enqueueClientTask(delay, task);
     }
 
-    public static int getBlockColor(@Nullable BlockAndTintGetter level, @Nullable BlockPos pos, BlockState state, int tintIdx)
+    public static BlockAndTintGetter asTintGetter(@Nullable BlockAndLightGetter level)
     {
-        return Minecraft.getInstance().getBlockColors().getColor(state, level, pos, tintIdx);
-    }
-
-    public static int getFluidColor(BlockAndTintGetter level, BlockPos pos, FluidState fluid)
-    {
-        return IClientFluidTypeExtensions.of(fluid).getTintColor(fluid, level, pos);
-    }
-
-    public static int getFluidColor(FluidState fluid)
-    {
-        return IClientFluidTypeExtensions.of(fluid).getTintColor();
+        return level instanceof BlockAndTintGetter tintGetter ? tintGetter : BlockAndTintGetter.EMPTY;
     }
 
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
@@ -55,12 +48,12 @@ public final class ClientUtils
 
     public static boolean isTexture(BakedQuad quad, Identifier texture)
     {
-        return quad.sprite().contents().name().equals(texture);
+        return quad.materialInfo().sprite().contents().name().equals(texture);
     }
 
-    public static void renderTransparentFakeItem(GuiGraphics graphics, ItemStack stack, int x, int y)
+    public static void renderTransparentFakeItem(GuiGraphicsExtractor graphics, ItemStack stack, int x, int y)
     {
-        graphics.renderFakeItem(stack, x, y, 0);
+        graphics.fakeItem(stack, x, y, 0);
         graphics.fill(x, y, x + 16, y + 16, 0x80888888);
     }
 
@@ -69,7 +62,15 @@ public final class ClientUtils
         return Minecraft.getInstance().getAtlasManager().getAtlasOrThrow(AtlasIds.BLOCKS).getSprite(id);
     }
 
-
+    public static RenderType getEntityRenderType(ChunkSectionLayer chunkLayer)
+    {
+        return switch (chunkLayer)
+        {
+            case SOLID -> NeoForgeRenderTypes.SOLID_BLOCK_SHEET;
+            case CUTOUT -> Sheets.cutoutBlockSheet();
+            case TRANSLUCENT -> Sheets.translucentBlockSheet();
+        };
+    }
 
     private ClientUtils() { }
 }

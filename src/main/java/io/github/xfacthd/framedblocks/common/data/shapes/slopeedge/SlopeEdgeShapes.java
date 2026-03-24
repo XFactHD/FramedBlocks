@@ -100,7 +100,5 @@ public final class SlopeEdgeShapes implements ShapeGenerator
         });
     }
 
-
-
     public record ShapeKey(SlopeType type, boolean altType) { }
 }

@@ -40,22 +40,14 @@ public final class BlockUtils
 
     /**
      * Adds the {@link Property}s which are required to be present on all blocks implementing {@link IFramedBlock}
-     * to the given {@link StateDefinition.Builder}
-     */
-    public static void addRequiredProperties(StateDefinition.Builder<Block, BlockState> builder)
-    {
-        REQUIRED_STATE_PROPERTIES.forEach(builder::add);
-    }
-
-    /**
-     * Adds the {@link Property}s which are required to be present on all blocks implementing {@link IFramedBlock}
      * and properties that depend on the {@link IBlockType}'s configuration to the given {@link StateDefinition.Builder}
      *
      * @apiNote This method must only be used by blocks which return a constant value from {@link IFramedBlock#getBlockType()}
+     *          or initialize the returned field before the super constructor.
      */
     public static <T extends Block & IFramedBlock> void addStandardProperties(T block, StateDefinition.Builder<Block, BlockState> builder)
     {
-        addRequiredProperties(builder);
+        REQUIRED_STATE_PROPERTIES.forEach(builder::add);
 
         if (block.getBlockType().canOccludeWithSolidCamo())
         {
@@ -114,21 +106,6 @@ public final class BlockUtils
     }
 
     /**
-     * Copies the {@link Property}s which are required to be present on all blocks implementing {@link IFramedBlock}
-     * between two {@link BlockState}s of the same {@link Block}
-     */
-    public static BlockState copyRequiredProperties(BlockState from, BlockState to)
-    {
-        Preconditions.checkArgument(from.getBlock() == to.getBlock(), "Both states must be from the same block");
-
-        for (Property<?> property : REQUIRED_STATE_PROPERTIES)
-        {
-            to = Block.copyProperty(from, to, property);
-        }
-        return to;
-    }
-
-    /**
      * Copies all standard {@link Property}s between two {@link BlockState}s of the same {@link IFramedBlock}
      *
      * @param block The block owning the two states
@@ -140,7 +117,10 @@ public final class BlockUtils
     {
         Preconditions.checkArgument(from.getBlock() == block, "The provided states must be owned by the provided block");
 
-        to = copyRequiredProperties(from, to);
+        for (Property<?> property : REQUIRED_STATE_PROPERTIES)
+        {
+            to = Block.copyProperty(from, to, property);
+        }
         if (block.getBlockType().canOccludeWithSolidCamo())
         {
             to = Block.copyProperty(from, to, FramedProperties.SOLID);

@@ -30,7 +30,5 @@ public final class CompatHandler
         CreateCompat.commonSetup();
     }
 
-
-
     private CompatHandler() { }
 }

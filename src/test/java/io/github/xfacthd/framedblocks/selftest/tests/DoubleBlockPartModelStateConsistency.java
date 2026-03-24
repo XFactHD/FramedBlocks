@@ -49,7 +49,5 @@ public final class DoubleBlockPartModelStateConsistency
         }
     }
 
-
-
     private DoubleBlockPartModelStateConsistency() { }
 }

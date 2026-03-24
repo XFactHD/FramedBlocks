@@ -14,8 +14,6 @@ public final class DeferredBlockEntity<T extends BlockEntity> extends DeferredHo
         super(key);
     }
 
-
-
     public static <T extends BlockEntity> DeferredBlockEntity<T> createBlockEntity(Identifier name)
     {
         return createBlockEntity(ResourceKey.create(Registries.BLOCK_ENTITY_TYPE, name));

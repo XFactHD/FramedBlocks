@@ -186,8 +186,6 @@ public final class CamoList implements Iterable<CamoContainer<?, ?>>
         return camos;
     }
 
-
-
     public static CamoList of(CamoContainer<?, ?> camo)
     {
         return camo.isEmpty() ? EMPTY : new CamoList(new CamoContainer[] { camo });

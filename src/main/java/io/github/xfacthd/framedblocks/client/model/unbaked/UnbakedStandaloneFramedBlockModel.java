@@ -9,8 +9,8 @@ import io.github.xfacthd.framedblocks.api.model.standalone.StandaloneModelFactor
 import io.github.xfacthd.framedblocks.api.model.standalone.StandaloneWrapperKey;
 import io.github.xfacthd.framedblocks.api.model.util.ModelUtils;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.block.model.BlockModelDefinition;
-import net.minecraft.client.renderer.block.model.BlockStateModel;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModelDispatcher;
 import net.minecraft.client.resources.model.ModelBaker;
 import net.minecraft.resources.FileToIdConverter;
 import net.minecraft.resources.Identifier;
@@ -56,7 +56,7 @@ public final class UnbakedStandaloneFramedBlockModel<T extends CachingModel> imp
         if (unbakedModels.isEmpty())
         {
             BlockStateModel missing = baker.compute(ModelUtils.MISSING_MODEL_KEY);
-            modelProvider = $ -> missing;
+            modelProvider = _ -> missing;
         }
         else
         {
@@ -92,7 +92,7 @@ public final class UnbakedStandaloneFramedBlockModel<T extends CachingModel> imp
         {
             try (Reader reader = resource.openAsReader())
             {
-                BlockModelDefinition definition = BlockModelDefinition.CODEC
+                BlockStateModelDispatcher definition = BlockStateModelDispatcher.CODEC
                         .parse(JsonOps.INSTANCE, StrictJsonParser.parse(reader))
                         .getOrThrow(JsonParseException::new);
                 definitions.add(new LoadedDefinition(resource.sourcePackId(), definition));
@@ -117,5 +117,5 @@ public final class UnbakedStandaloneFramedBlockModel<T extends CachingModel> imp
         BAKED_MODELS.values().forEach(CachingModel::clearCache);
     }
 
-    private record LoadedDefinition(String source, BlockModelDefinition contents) {}
+    private record LoadedDefinition(String source, BlockStateModelDispatcher contents) {}
 }

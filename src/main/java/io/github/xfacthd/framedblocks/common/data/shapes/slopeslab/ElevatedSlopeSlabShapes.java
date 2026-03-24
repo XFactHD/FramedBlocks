@@ -89,7 +89,5 @@ public final class ElevatedSlopeSlabShapes implements ShapeGenerator
         return ShapeContainer.of(map);
     }
 
-
-
     private record ShapeKey(Direction dir, boolean top) { }
 }

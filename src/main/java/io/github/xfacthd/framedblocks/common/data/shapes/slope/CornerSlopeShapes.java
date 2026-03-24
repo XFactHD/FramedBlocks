@@ -95,7 +95,5 @@ public final class CornerSlopeShapes implements ShapeGenerator
         return ShapeContainer.of(map);
     }
 
-
-
     private record ShapeKey(Direction dir, CornerType type) { }
 }

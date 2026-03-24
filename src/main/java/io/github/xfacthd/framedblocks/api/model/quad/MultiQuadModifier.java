@@ -58,4 +58,13 @@ public final class MultiQuadModifier
     {
         return new MultiQuadModifier(modOne.derive(), modTwo.derive());
     }
+
+    /**
+     * Discard both wrapped {@link QuadModifier}s to return them to the pool without exporting them.
+     */
+    public void discard()
+    {
+        modOne.discard();
+        modTwo.discard();
+    }
 }

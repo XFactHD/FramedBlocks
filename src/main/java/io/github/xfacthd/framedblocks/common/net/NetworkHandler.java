@@ -36,7 +36,5 @@ public final class NetworkHandler
                 );
     }
 
-
-
     private NetworkHandler() { }
 }

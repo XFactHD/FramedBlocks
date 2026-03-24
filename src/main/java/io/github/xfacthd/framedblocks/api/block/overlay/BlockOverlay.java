@@ -40,7 +40,7 @@ public record BlockOverlay(
         Identifier solidTexture,
         @Nullable Identifier edgeTexture,
         SolidFace solidFace,
-        @Nullable Holder<Block> tintSource,
+        @Nullable TintSource tintSource,
         Holder<Item> sourceItem,
         boolean translucent
 )
@@ -50,20 +50,19 @@ public record BlockOverlay(
             Identifier.CODEC.fieldOf("solid_texture").forGetter(BlockOverlay::solidTexture),
             Identifier.CODEC.optionalFieldOf("edge_texture").forGetter(BlockOverlay::edgeTextureForSerialization),
             SolidFace.CODEC.fieldOf("solid_face").forGetter(BlockOverlay::solidFace),
-            BuiltInRegistries.BLOCK.holderByNameCodec().optionalFieldOf("tint_source").forGetter(BlockOverlay::tintSourceForSerialization),
+            TintSource.CODEC.optionalFieldOf("tint_source").forGetter(BlockOverlay::tintSourceForSerialization),
             BuiltInRegistries.ITEM.holderByNameCodec().fieldOf("source_item").forGetter(BlockOverlay::sourceItem),
             Codec.BOOL.optionalFieldOf("translucent", false).forGetter(BlockOverlay::translucent)
     ).apply(inst, BlockOverlay::new)).validate(BlockOverlay::validate);
     public static final Codec<Holder<BlockOverlay>> CODEC = RegistryFixedCodec.create(FramedConstants.BLOCK_OVERLAY_REGISTRY_KEY);
     public static final StreamCodec<RegistryFriendlyByteBuf, Holder<BlockOverlay>> STREAM_CODEC = ByteBufCodecs.holderRegistry(FramedConstants.BLOCK_OVERLAY_REGISTRY_KEY);
     public static final String TEXTURE_PREFIX = "block/overlay/";
-    public static final int OVERLAY_TINT_INDEX = Integer.MAX_VALUE;
 
     private BlockOverlay(
             Identifier solidTexture,
             Optional<Identifier> edgeTexture,
             SolidFace solidFace,
-            Optional<Holder<Block>> tintSource,
+            Optional<TintSource> tintSource,
             Holder<Item> sourceItem,
             boolean translucent
     )
@@ -80,14 +79,12 @@ public record BlockOverlay(
         return solidFace.directions.contains(side);
     }
 
-    @SuppressWarnings("NullableProblems")
     private Optional<Identifier> edgeTextureForSerialization()
     {
         return Optional.ofNullable(edgeTexture);
     }
 
-    @SuppressWarnings("NullableProblems")
-    private Optional<Holder<Block>> tintSourceForSerialization()
+    private Optional<TintSource> tintSourceForSerialization()
     {
         return Optional.ofNullable(tintSource);
     }

@@ -203,7 +203,5 @@ public final class CornerSlopeEdgeShapes implements ShapeGenerator
         }
     }
 
-
-
     public record ShapeKey(CornerType type, boolean altType) { }
 }

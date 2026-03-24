@@ -36,15 +36,15 @@ public class FramedLanternBlock extends LanternBlock implements IFramedBlockInte
 
     public FramedLanternBlock(BlockType type, Properties props)
     {
+        this.type = type;
         super(IFramedBlock.applyDefaultProperties(props, type)
                 .mapColor(MapColor.METAL)
                 .forceSolidOn()
                 .strength(3.5F)
                 .sound(SoundType.LANTERN)
-                .lightLevel(type == BlockType.FRAMED_SOUL_LANTERN ? (state -> 10) : (state -> 15))
+                .lightLevel(type == BlockType.FRAMED_SOUL_LANTERN ? (_ -> 10) : (_ -> 15))
                 .pushReaction(PushReaction.DESTROY)
         );
-        this.type = type;
         BlockUtils.configureStandardProperties(this);
     }
 
@@ -52,7 +52,7 @@ public class FramedLanternBlock extends LanternBlock implements IFramedBlockInte
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        BlockUtils.addRequiredProperties(builder);
+        BlockUtils.addStandardProperties(this, builder);
         builder.add(PropertyHolder.CHAIN_TYPE);
     }
 

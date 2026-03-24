@@ -41,7 +41,7 @@ public class FramedStackedCornerSlopeEdgeBlock extends FramedDoubleBlock impleme
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        builder.add(FramedProperties.FACING_HOR, PropertyHolder.CORNER_TYPE, FramedProperties.ALT_SLOPE, BlockStateProperties.WATERLOGGED);
+        builder.add(FramedProperties.FACING_HOR, PropertyHolder.CORNER_TYPE);
     }
 
     @Override

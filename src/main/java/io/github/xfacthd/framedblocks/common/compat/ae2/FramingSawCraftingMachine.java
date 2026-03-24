@@ -78,21 +78,22 @@ final class FramingSawCraftingMachine implements ICraftingMachine
                 }
             }
             blockEntity.selectRecipe(sawPattern.getRecipe());
-            for (int i = 0; i < inputs.length; i++)
+            try (Transaction tx = Transaction.open(null))
             {
-                var entry = inputs[i].getFirstEntry();
-                if (entry == null)
+                for (int i = 0; i < inputs.length; i++)
                 {
-                    continue;
-                }
+                    var entry = inputs[i].getFirstEntry();
+                    if (entry == null)
+                    {
+                        continue;
+                    }
 
-                try (Transaction tx = Transaction.open(null))
-                {
                     int count = Ints.saturatedCast(entry.getLongValue());
                     ItemStack stack = ((AEItemKey) entry.getKey()).toStack(count);
                     inv.insert(i, ItemResource.of(stack), count, tx);
                     inputs[i].remove(entry.getKey(), count);
                 }
+                tx.commit();
             }
 
             return true;

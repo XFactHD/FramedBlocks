@@ -64,8 +64,6 @@ public final class AsyncTypeTest
         return new Stats(watch.elapsed(TimeUnit.MILLISECONDS), combinations.longValue());
     }
 
-
-
     @FunctionalInterface
     public interface TypeTestFunction<T> extends BiFunction<BlockType, LongConsumer, T>
     {
@@ -81,8 +79,6 @@ public final class AsyncTypeTest
     }
 
     public record Stats(long time, long combinations) { }
-
-
 
     private AsyncTypeTest() { }
 }

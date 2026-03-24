@@ -1,69 +1,77 @@
 package io.github.xfacthd.framedblocks.client.screen.pip;
 
+import com.mojang.blaze3d.platform.Lighting;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Axis;
-import io.github.xfacthd.framedblocks.api.render.RenderUtils;
-import io.github.xfacthd.framedblocks.api.util.SingleBlockFakeLevel;
+import io.github.xfacthd.framedblocks.api.block.blockentity.IFramedBlockEntity;
+import io.github.xfacthd.framedblocks.api.model.block.FramedBlockDisplayContext;
+import io.github.xfacthd.framedblocks.api.model.data.AbstractFramedBlockData;
+import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
+import io.github.xfacthd.framedblocks.api.util.ClientUtils;
+import io.github.xfacthd.framedblocks.client.model.block.AdvancedBlockModelRenderState;
+import io.github.xfacthd.framedblocks.client.render.util.FramedPipelineModifiers;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.client.gui.render.pip.PictureInPictureRenderer;
-import net.minecraft.client.gui.render.state.pip.PictureInPictureRenderState;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.block.BlockRenderDispatcher;
-import net.minecraft.client.renderer.block.model.BlockModelPart;
-import net.minecraft.client.renderer.block.model.BlockStateModel;
-import net.minecraft.client.renderer.block.model.ItemTransform;
+import net.minecraft.client.renderer.SubmitNodeCollector;
+import net.minecraft.client.renderer.block.BlockAndTintGetter;
+import net.minecraft.client.renderer.block.model.BlockDisplayContext;
+import net.minecraft.client.renderer.feature.FeatureRenderDispatcher;
+import net.minecraft.client.renderer.state.gui.pip.PictureInPictureRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
-import net.minecraft.util.RandomSource;
+import net.minecraft.util.LightCoordsUtil;
 import net.minecraft.world.level.block.state.BlockState;
-import org.joml.Quaternionfc;
-import org.joml.Vector3f;
+import net.neoforged.neoforge.model.data.ModelData;
+import org.jspecify.annotations.Nullable;
 
-import javax.annotation.Nullable;
-import java.util.List;
+import java.util.function.Consumer;
 
 public final class BlockPictureInPictureRenderer extends PictureInPictureRenderer<BlockPictureInPictureRenderer.RenderState>
 {
-    private static final float RENDER_SIZE = 16F;
-    private static final ItemTransform DEFAULT_TRANSFORM = new ItemTransform(
-            new Vector3f(30, 225, 0), new Vector3f(), new Vector3f(0.625F, 0.625F, 0.625F)
-    );
-    private static final Quaternionfc LIGHT_FIX_ROT = Axis.YP.rotationDegrees(285);
-    private static final RandomSource RANDOM = RandomSource.create();
+    private final FeatureRenderDispatcher featureRenderDispatcher;
+    private final SubmitNodeCollector collector;
+    private RenderConfig lastConfig = RenderConfig.DEFAULT;
+    @Nullable
+    private BlockState lastSignState;
+    private BlockPos lastSignPos = BlockPos.ZERO;
+    private FramedBlockData lastBlockData = FramedBlockData.EMPTY;
 
     public BlockPictureInPictureRenderer(MultiBufferSource.BufferSource bufferSource)
     {
         super(bufferSource);
+        this.featureRenderDispatcher = Minecraft.getInstance().gameRenderer.getFeatureRenderDispatcher();
+        this.collector = featureRenderDispatcher.getSubmitNodeStorage();
     }
 
     @Override
     protected void renderToTexture(RenderState renderState, PoseStack poseStack)
     {
-        float scale = renderState.scale;
-        BlockState state = renderState.state;
-        SingleBlockFakeLevel fakeLevel = renderState.fakeLevel;
+        RenderConfig config = renderState.config;
+        config.poseTransform.accept(poseStack);
 
-        poseStack.scale(RENDER_SIZE * scale, -RENDER_SIZE * scale, -RENDER_SIZE * scale);
-        DEFAULT_TRANSFORM.apply(false, poseStack.last());
-        poseStack.translate(.5, .5, .5);
-        poseStack.last().normal().rotate(LIGHT_FIX_ROT);
-        poseStack.translate(-.5, -.5, -.5);
+        Minecraft.getInstance().gameRenderer.getLighting().setupFor(config.lighting);
+        renderState.modelRenderState.submitMultiLayer(poseStack, collector, LightCoordsUtil.FULL_BRIGHT, OverlayTexture.NO_OVERLAY, 0);
+        RenderSystem.pushPipelineModifier(FramedPipelineModifiers.FORCE_ENTITY_SOLID);
+        featureRenderDispatcher.renderAllFeatures();
+        bufferSource.endBatch();
+        RenderSystem.popPipelineModifier();
 
-        BlockRenderDispatcher blockRenderer = Minecraft.getInstance().getBlockRenderer();
-        BlockStateModel model = blockRenderer.getBlockModel(state);
-        List<BlockModelPart> modelParts = model.collectParts(fakeLevel, BlockPos.ZERO, state, RANDOM);
-        RANDOM.setSeed(state.getSeed(BlockPos.ZERO));
-        blockRenderer.getModelRenderer().tesselateBlock(
-                fakeLevel,
-                modelParts,
-                state,
-                BlockPos.ZERO,
-                poseStack,
-                renderType -> bufferSource.getBuffer(RenderUtils.getEntityRenderType(renderType)),
-                false,
-                OverlayTexture.NO_OVERLAY
-        );
+        lastConfig = config;
+        lastSignState = renderState.state;
+        lastSignPos = renderState.pos;
+        lastBlockData = renderState.blockData;
+    }
+
+    @Override
+    protected boolean textureIsReadyToBlit(RenderState renderState)
+    {
+        if (renderState.modelRenderState.isAnimated()) return false;
+        if (lastConfig != renderState.config) return false;
+        if (lastSignState != renderState.state) return false;
+        if (!lastSignPos.equals(renderState.pos)) return false;
+        return lastBlockData.equals(renderState.blockData);
     }
 
     @Override
@@ -85,8 +93,11 @@ public final class BlockPictureInPictureRenderer extends PictureInPictureRendere
     }
 
     public record RenderState(
+            AdvancedBlockModelRenderState modelRenderState,
             BlockState state,
-            SingleBlockFakeLevel fakeLevel,
+            BlockPos pos,
+            FramedBlockData blockData,
+            RenderConfig config,
             int x0,
             int y0,
             int x1,
@@ -96,9 +107,9 @@ public final class BlockPictureInPictureRenderer extends PictureInPictureRendere
             @Nullable ScreenRectangle bounds
     ) implements PictureInPictureRenderState
     {
-        public static RenderState of(
-                BlockState state,
-                SingleBlockFakeLevel fakeLevel,
+        public static RenderState create(
+                IFramedBlockEntity be,
+                RenderConfig transform,
                 int x0,
                 int y0,
                 int x1,
@@ -107,8 +118,63 @@ public final class BlockPictureInPictureRenderer extends PictureInPictureRendere
                 @Nullable ScreenRectangle scissorArea
         )
         {
-            ScreenRectangle bounds = PictureInPictureRenderState.getBounds(x0, y0, x1, y1, scissorArea);
-            return new RenderState(state, fakeLevel, x0, y0, x1, y1, scale, scissorArea, bounds);
+            return create(be, be.getBlockState(), transform, x0, y0, x1, y1, scale, scissorArea);
+        }
+
+        public static RenderState create(
+                IFramedBlockEntity be,
+                BlockState state,
+                RenderConfig config,
+                int x0,
+                int y0,
+                int x1,
+                int y1,
+                float scale,
+                @Nullable ScreenRectangle scissorArea
+        )
+        {
+            AdvancedBlockModelRenderState modelRenderState = new AdvancedBlockModelRenderState();
+            ModelData modelData = config.useModelData ? be.getModelData(false, state) : ModelData.EMPTY;
+            BlockAndTintGetter level = ClientUtils.asTintGetter(be.getLevel());
+            BlockDisplayContext context = new FramedBlockDisplayContext(level, be.getBlockPos(), state, modelData);
+            Minecraft.getInstance().getBlockModelResolver().update(modelRenderState, state, context);
+            return new RenderState(
+                    modelRenderState,
+                    state,
+                    be.getBlockPos(),
+                    unpackData(modelData),
+                    config,
+                    x0,
+                    y0,
+                    x1,
+                    y1,
+                    scale,
+                    scissorArea,
+                    PictureInPictureRenderState.getBounds(x0, y0, x1, y1, scissorArea)
+            );
+        }
+
+        private static FramedBlockData unpackData(ModelData modelData)
+        {
+            AbstractFramedBlockData data = modelData.get(AbstractFramedBlockData.PROPERTY);
+            return data != null ? data.unwrap(false) : FramedBlockData.EMPTY;
+        }
+    }
+
+    public record RenderConfig(Consumer<PoseStack> poseTransform, Lighting.Entry lighting, boolean useModelData)
+    {
+        public static final RenderConfig DEFAULT = new RenderConfig(_ -> {}, Lighting.Entry.ITEMS_3D, true);
+
+        @Override
+        public boolean equals(Object obj)
+        {
+            return obj == this;
+        }
+
+        @Override
+        public int hashCode()
+        {
+            return System.identityHashCode(this);
         }
     }
 }

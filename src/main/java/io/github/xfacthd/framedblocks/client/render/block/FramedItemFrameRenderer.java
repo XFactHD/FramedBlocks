@@ -13,8 +13,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
 import net.minecraft.client.renderer.item.ItemModelResolver;
-import net.minecraft.client.renderer.state.CameraRenderState;
-import net.minecraft.client.renderer.state.MapRenderState;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
@@ -37,7 +36,6 @@ public class FramedItemFrameRenderer implements BlockEntityRenderer<FramedItemFr
     private static final double MAX_NAMETAG_DIST_SQR = 64D * 64D;
 
     private final ItemModelResolver itemModelResolver;
-    private final MapRenderState mapRenderState = new MapRenderState();
     private final MapRenderer mapRenderer;
 
     public FramedItemFrameRenderer(BlockEntityRendererProvider.Context ctx)
@@ -67,7 +65,6 @@ public class FramedItemFrameRenderer implements BlockEntityRenderer<FramedItemFr
         }
         poseStack.mulPose(Axis.YP.rotationDegrees(180.0F - yRot));
 
-        //noinspection ConstantConditions
         poseStack.translate(0.0D, 0.0D, ITEM_Z_OFF);
         float itemRotation = renderState.mapId != null ? (renderState.rotation % 4 * 2) : renderState.rotation;
         poseStack.mulPose(Axis.ZP.rotationDegrees(itemRotation * 360.0F / 8.0F));
@@ -80,7 +77,7 @@ public class FramedItemFrameRenderer implements BlockEntityRenderer<FramedItemFr
             poseStack.translate(-64.0D, -64.0D, -1.0D);
 
             int mapLight = renderState.isGlowFrame ? 0x00F000D2 : renderState.lightCoords;
-            mapRenderer.render(mapRenderState, poseStack, submitNodeCollector, true, mapLight);
+            mapRenderer.render(renderState.mapRenderState, poseStack, submitNodeCollector, true, mapLight);
         }
         else if (!renderState.item.isEmpty())
         {

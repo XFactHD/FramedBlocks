@@ -4,22 +4,25 @@ import com.google.common.base.Stopwatch;
 import com.mojang.brigadier.context.CommandContext;
 import io.github.xfacthd.framedblocks.api.block.IFramedDoubleBlock;
 import io.github.xfacthd.framedblocks.api.block.overlay.BlockOverlay;
+import io.github.xfacthd.framedblocks.api.block.overlay.TintSource;
 import io.github.xfacthd.framedblocks.api.camo.CamoContainer;
 import io.github.xfacthd.framedblocks.api.camo.block.SimpleBlockCamoContainer;
 import io.github.xfacthd.framedblocks.api.camo.empty.EmptyCamoContainer;
 import io.github.xfacthd.framedblocks.api.model.data.AbstractFramedBlockData;
 import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
 import io.github.xfacthd.framedblocks.api.model.data.FramedDoubleBlockData;
-import io.github.xfacthd.framedblocks.api.util.SingleBlockFakeLevel;
+import io.github.xfacthd.framedblocks.api.model.util.ModelUtils;
+import io.github.xfacthd.framedblocks.api.render.fakelevel.FreestandingBlockRenderFakeLevel;
 import io.github.xfacthd.framedblocks.api.util.Utils;
-import io.github.xfacthd.framedblocks.client.model.baked.FramedBlockModel;
+import io.github.xfacthd.framedblocks.client.model.baked.FramedBlockStateModel;
 import io.github.xfacthd.framedblocks.cmdtests.SpecialTestCommand;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import io.github.xfacthd.framedblocks.common.util.MarkdownTable;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.block.model.BlockModelPart;
-import net.minecraft.client.renderer.block.model.BlockStateModel;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.minecraft.client.renderer.block.BlockAndTintGetter;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModelPart;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -29,7 +32,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.TriState;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.RandomSupport;
@@ -52,6 +54,7 @@ public final class ModelPerformanceTest
     private static final String PREFIX = "[" + NAME + "] ";
     private static final int RUNS = 10;
     private static final int SAMPLE_COUNT = 10_000;
+    private static final List<BlockStateModelPart> PART_SCRATCH_LIST = new ObjectArrayList<>();
     private static final Direction[] DIRECTIONS = Arrays.copyOf(Direction.values(), 7);
     private static final RandomSource RANDOM = new SingleThreadedRandomSource(RandomSupport.generateUniqueSeed());
     private static final CamoContainer<?, ?> TEST_CAMO_CONTAINER = new SimpleBlockCamoContainer(Blocks.STONE.defaultBlockState(), FBContent.FACTORY_BLOCK.get());
@@ -59,7 +62,7 @@ public final class ModelPerformanceTest
             Utils.id("minecraft", "block/grass_block_top"),
             Utils.id("minecraft", "block/grass_block_side_overlay"),
             BlockOverlay.SolidFace.TOP,
-            Holder.direct(Blocks.GRASS_BLOCK),
+            new TintSource(Holder.direct(Blocks.GRASS_BLOCK)),
             Holder.direct(Items.SHORT_GRASS),
             false
     ));
@@ -101,7 +104,7 @@ public final class ModelPerformanceTest
                 long timeCamo = stone ? 0 : testModel(state, makeModelData(state, TEST_CAMO_CONTAINER, false, null));
                 long timeCamoEmissive = stone ? 0 : testModel(state, makeModelData(state, TEST_CAMO_CONTAINER, true, null));
                 long timeCamoOverlay = stone ? 0 : testModel(state, makeModelData(state, TEST_CAMO_CONTAINER, true, TEST_OVERLAY));
-                results.computeIfAbsent(entry.getKey(), $ -> new ArrayList<>()).add(new Result(timeEmpty, timeCamo, timeCamoEmissive, timeCamoOverlay));
+                results.computeIfAbsent(entry.getKey(), _ -> new ArrayList<>()).add(new Result(timeEmpty, timeCamo, timeCamoEmissive, timeCamoOverlay));
             }
         }
 
@@ -216,25 +219,27 @@ public final class ModelPerformanceTest
 
     private static long testModel(BlockState state, ModelData data)
     {
-        BlockStateModel model = Minecraft.getInstance().getBlockRenderer().getBlockModel(state);
-        if (model instanceof FramedBlockModel framedModel)
+        BlockStateModel model = ModelUtils.getModel(state);
+        if (model instanceof FramedBlockStateModel framedModel)
         {
             framedModel.clearCache();
         }
 
-        BlockAndTintGetter level = SingleBlockFakeLevel.withoutRealLevel(state, data);
+        BlockAndTintGetter level = new FreestandingBlockRenderFakeLevel.Simple(state, data);
 
         Stopwatch watch = Stopwatch.createStarted();
 
         for (int i = 0; i < SAMPLE_COUNT; i++)
         {
-            for (BlockModelPart part : model.collectParts(level, BlockPos.ZERO, state, RANDOM))
+            model.collectParts(level, BlockPos.ZERO, state, RANDOM, PART_SCRATCH_LIST);
+            for (BlockStateModelPart part : PART_SCRATCH_LIST)
             {
                 for (Direction side : DIRECTIONS)
                 {
                     part.getQuads(side);
                 }
             }
+            PART_SCRATCH_LIST.clear();
         }
 
         watch.stop();
@@ -246,13 +251,13 @@ public final class ModelPerformanceTest
         AbstractFramedBlockData fbData;
         if (state.getBlock() instanceof IFramedDoubleBlock doubleBlock)
         {
-            FramedBlockData dataOne = new FramedBlockData(state, camo, FramedBlockData.NO_CULLED_FACES, false, false, emissive, TriState.DEFAULT, overlay);
-            FramedBlockData dataTwo = new FramedBlockData(state, camo, FramedBlockData.NO_CULLED_FACES, true, false, emissive, TriState.DEFAULT, null);
+            FramedBlockData dataOne = new FramedBlockData(state, camo, (byte) 0, false, false, emissive, TriState.DEFAULT, overlay);
+            FramedBlockData dataTwo = new FramedBlockData(state, camo, (byte) 0, true, false, emissive, TriState.DEFAULT, null);
             fbData = new FramedDoubleBlockData(doubleBlock.getCache(state).getParts(), dataOne, dataTwo);
         }
         else
         {
-            fbData = new FramedBlockData(state, camo, FramedBlockData.NO_CULLED_FACES, false, false, emissive, TriState.DEFAULT, overlay);
+            fbData = new FramedBlockData(state, camo, (byte) 0, false, false, emissive, TriState.DEFAULT, overlay);
         }
         return ModelData.of(AbstractFramedBlockData.PROPERTY, fbData);
     }

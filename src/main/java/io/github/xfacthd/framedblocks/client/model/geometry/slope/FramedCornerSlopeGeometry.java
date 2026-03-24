@@ -10,7 +10,7 @@ import io.github.xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
 import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import io.github.xfacthd.framedblocks.common.data.property.CornerType;
-import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.resources.model.geometry.BakedQuad;
 import net.minecraft.core.Direction;
 import org.jspecify.annotations.Nullable;
 
@@ -40,7 +40,6 @@ public class FramedCornerSlopeGeometry extends Geometry
         }
     }
 
-    @SuppressWarnings("ConstantConditions")
     private void createHorizontalCornerSlope(QuadMapBuilder quadMap, BakedQuad quad)
     {
         Direction quadDir = quad.direction();
