@@ -30,8 +30,7 @@ final class FramedBlockComponentProvider implements IBlockComponentProvider
         if (!block.shouldRenderAsBlockInJadeTooltip()) return null;
         if (!(accessor.getBlockEntity() instanceof IFramedBlockEntity blockEntity)) return null;
 
-        // FIXME: GuiGraphics->GuiGraphicsExtractor
-        return null;//return new FramedBlockElement(accessor.getBlockState(), blockEntity);
+        return new FramedBlockElement(accessor.getBlockState(), blockEntity);
     }
 
     @Override

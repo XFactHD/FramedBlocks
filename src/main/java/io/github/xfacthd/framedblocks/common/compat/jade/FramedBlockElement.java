@@ -1,5 +1,4 @@
-// FIXME: GuiGraphics->GuiGraphicsExtractor
-/*package io.github.xfacthd.framedblocks.common.compat.jade;
+package io.github.xfacthd.framedblocks.common.compat.jade;
 
 import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.math.Axis;
@@ -54,7 +53,7 @@ final class FramedBlockElement extends Element
     }
 
     @Override
-    public void render(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick)
+    public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick)
     {
         if (!state.isAir())
         {
@@ -71,4 +70,4 @@ final class FramedBlockElement extends Element
     {
         return state.isAir() ? null : state.getBlock().getName();
     }
-}*/
+}
