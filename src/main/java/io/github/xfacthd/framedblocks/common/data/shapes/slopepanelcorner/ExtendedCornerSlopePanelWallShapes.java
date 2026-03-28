@@ -19,8 +19,7 @@ import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 
-public final class ExtendedCornerSlopePanelWallShapes implements ShapeGenerator
-{
+public final class ExtendedCornerSlopePanelWallShapes implements ShapeGenerator {
     public static final ShapeCache<HorizontalRotation> SHAPES = makeCache(ElevatedSlopeSlabShapes.SHAPES, ExtendedSlopePanelShapes.SHAPES, false);
     public static final ShapeCache<HorizontalRotation> OCCLUSION_SHAPES = makeCache(ElevatedSlopeSlabShapes.OCCLUSION_SHAPES, ExtendedSlopePanelShapes.OCCLUSION_SHAPES, false);
     public static final ShapeCache<HorizontalRotation> INNER_SHAPES = makeCache(ElevatedSlopeSlabShapes.SHAPES, ExtendedSlopePanelShapes.SHAPES, true);
@@ -35,30 +34,25 @@ public final class ExtendedCornerSlopePanelWallShapes implements ShapeGenerator
     private final ShapeCache<ShapeKey> shapes;
     private final ShapeCache<ShapeKey> occlusionShapes;
 
-    private ExtendedCornerSlopePanelWallShapes(ShapeCache<ShapeKey> shapes, ShapeCache<ShapeKey> occlusionShapes)
-    {
+    private ExtendedCornerSlopePanelWallShapes(ShapeCache<ShapeKey> shapes, ShapeCache<ShapeKey> occlusionShapes) {
         this.shapes = shapes;
         this.occlusionShapes = occlusionShapes;
     }
 
     @Override
-    public ShapeContainer generatePrimary(List<BlockState> states)
-    {
+    public ShapeContainer generatePrimary(List<BlockState> states) {
         return generate(states, shapes);
     }
 
     @Override
-    public ShapeContainer generateOcclusion(List<BlockState> states)
-    {
+    public ShapeContainer generateOcclusion(List<BlockState> states) {
         return generate(states, occlusionShapes);
     }
 
-    private static ShapeContainer generate(List<BlockState> states, ShapeCache<ShapeKey> cache)
-    {
+    private static ShapeContainer generate(List<BlockState> states, ShapeCache<ShapeKey> cache) {
         Map<BlockState, VoxelShape> map = new IdentityHashMap<>(states.size());
 
-        for (BlockState state : states)
-        {
+        for (BlockState state : states) {
             Direction dir = state.getValue(FramedProperties.FACING_HOR);
             HorizontalRotation rot = state.getValue(PropertyHolder.ROTATION);
             map.put(state, cache.get(new ShapeKey(dir, rot)));
@@ -69,10 +63,8 @@ public final class ExtendedCornerSlopePanelWallShapes implements ShapeGenerator
 
     private static ShapeCache<HorizontalRotation> makeCache(
             ShapeCache<Boolean> slabCache, ShapeCache<HorizontalRotation> panelCache, boolean inner
-    )
-    {
-        return ShapeCache.createEnum(HorizontalRotation.class, map ->
-        {
+    ) {
+        return ShapeCache.createEnum(HorizontalRotation.class, map -> {
             VoxelShape leftPanel = panelCache.get(HorizontalRotation.LEFT);
             VoxelShape rightPanel = panelCache.get(HorizontalRotation.RIGHT);
             VoxelShape shapeOneUpLeft = ShapeUtils.rotateShapeUnoptimizedAroundY(
@@ -82,16 +74,13 @@ public final class ExtendedCornerSlopePanelWallShapes implements ShapeGenerator
                     Direction.NORTH, inner ? Direction.WEST : Direction.EAST, inner ? leftPanel : rightPanel
             );
 
-            for (HorizontalRotation rot : HorizontalRotation.values())
-            {
-                VoxelShape shapeOne = switch (rot)
-                {
+            for (HorizontalRotation rot : HorizontalRotation.values()) {
+                VoxelShape shapeOne = switch (rot) {
                     case UP, LEFT -> shapeOneUpLeft;
                     case DOWN, RIGHT -> shapeOneDownRight;
                 };
-                VoxelShape shapeTwo = switch (rot)
-                {
-                    case UP, RIGHT ->  slabCache.get(!inner);
+                VoxelShape shapeTwo = switch (rot) {
+                    case UP, RIGHT -> slabCache.get(!inner);
                     case DOWN, LEFT -> slabCache.get(inner);
                 };
                 map.put(rot, Shapes.joinUnoptimized(shapeOne, shapeTwo, inner ? BooleanOp.OR : BooleanOp.AND));
@@ -99,12 +88,9 @@ public final class ExtendedCornerSlopePanelWallShapes implements ShapeGenerator
         });
     }
 
-    private static ShapeCache<ShapeKey> makeFinalCache(ShapeCache<HorizontalRotation> cache)
-    {
-        return ShapeCache.create(map ->
-        {
-            for (HorizontalRotation rot : HorizontalRotation.values())
-            {
+    private static ShapeCache<ShapeKey> makeFinalCache(ShapeCache<HorizontalRotation> cache) {
+        return ShapeCache.create(map -> {
+            for (HorizontalRotation rot : HorizontalRotation.values()) {
                 ShapeUtils.makeHorizontalRotations(cache.get(rot), Direction.NORTH, map, rot, ShapeKey::new);
             }
         });

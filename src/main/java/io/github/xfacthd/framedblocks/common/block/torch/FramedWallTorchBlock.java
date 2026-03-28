@@ -31,12 +31,10 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
-public class FramedWallTorchBlock extends WallTorchBlock implements IFramedBlockInternal
-{
+public class FramedWallTorchBlock extends WallTorchBlock implements IFramedBlockInternal {
     private final BlockType type;
 
-    private FramedWallTorchBlock(BlockType type, SimpleParticleType particle, Properties props)
-    {
+    private FramedWallTorchBlock(BlockType type, SimpleParticleType particle, Properties props) {
         this.type = type;
         super(particle, props
                 .pushReaction(PushReaction.DESTROY)
@@ -50,107 +48,87 @@ public class FramedWallTorchBlock extends WallTorchBlock implements IFramedBlock
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
-    {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
         BlockUtils.addStandardProperties(this, builder);
     }
 
     @Override
-    protected InteractionResult useItemOn(
-            ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit
-    )
-    {
+    protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         return handleUse(state, level, pos, player, hand, hit);
     }
 
     @Override
-    public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)
-    {
+    public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
         tryApplyCamoImmediately(level, pos, placer, stack);
     }
 
     @Override
-    protected float getShadeBrightness(BlockState state, BlockGetter level, BlockPos pos)
-    {
+    protected float getShadeBrightness(BlockState state, BlockGetter level, BlockPos pos) {
         return getCamoShadeBrightness(state, level, pos, super.getShadeBrightness(state, level, pos));
     }
 
     @Override
-    protected boolean propagatesSkylightDown(BlockState state)
-    {
+    protected boolean propagatesSkylightDown(BlockState state) {
         return state.getValue(FramedProperties.PROPAGATES_SKYLIGHT);
     }
 
     @Override
     @SuppressWarnings("deprecation")
-    public int getLightEmission(BlockState state, BlockGetter level, BlockPos pos)
-    {
+    public int getLightEmission(BlockState state, BlockGetter level, BlockPos pos) {
         return Math.max(state.getLightEmission(), super.getLightEmission(state, level, pos));
     }
 
     @Override
-    protected List<ItemStack> getDrops(BlockState state, LootParams.Builder builder)
-    {
+    protected List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {
         return super.getDrops(state, getCamoDrops(builder));
     }
 
     @Override
-    public BlockState rotate(BlockState state, RotationDirection direction, WrenchRotationMode mode)
-    {
+    public BlockState rotate(BlockState state, RotationDirection direction, WrenchRotationMode mode) {
         //Not rotatable by wrench
         return state;
     }
 
     @Override
-    public BlockType getBlockType()
-    {
+    public BlockType getBlockType() {
         return type;
     }
 
     @Override
-    @Nullable
-    public BlockState getItemModelSource()
-    {
+    public @Nullable BlockState getItemModelSource() {
         return null;
     }
 
     @Override
-    public Direction getHorizontalOrientation(BlockState state)
-    {
+    public Direction getHorizontalOrientation(BlockState state) {
         return state.getValue(FACING);
     }
 
     @Override
-    public Class<? extends Block> getJadeTargetClass()
-    {
+    public Class<? extends Block> getJadeTargetClass() {
         return FramedWallTorchBlock.class;
     }
 
     @Override
-    public BlockState getJadeRenderState(BlockState state)
-    {
+    public BlockState getJadeRenderState(BlockState state) {
         return ((IFramedBlock) FBContent.BLOCK_FRAMED_TORCH.value()).getJadeRenderState(state);
     }
 
     @Override
-    public float getJadeRenderScale(BlockState state)
-    {
+    public float getJadeRenderScale(BlockState state) {
         return ((IFramedBlock) FBContent.BLOCK_FRAMED_TORCH.value()).getJadeRenderScale(state);
     }
 
-    public static FramedWallTorchBlock normal(Properties props)
-    {
+    public static FramedWallTorchBlock normal(Properties props) {
         return new FramedWallTorchBlock(BlockType.FRAMED_WALL_TORCH, ParticleTypes.FLAME, props);
     }
 
-    public static FramedWallTorchBlock soul(Properties props)
-    {
+    public static FramedWallTorchBlock soul(Properties props) {
         return new FramedWallTorchBlock(BlockType.FRAMED_SOUL_WALL_TORCH, ParticleTypes.SOUL_FIRE_FLAME, props);
     }
 
-    public static FramedWallTorchBlock copper(Properties props)
-    {
+    public static FramedWallTorchBlock copper(Properties props) {
         return new FramedWallTorchBlock(BlockType.FRAMED_COPPER_WALL_TORCH, ParticleTypes.COPPER_FIRE_FLAME, props);
     }
 }

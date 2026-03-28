@@ -7,18 +7,14 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
 import java.util.List;
 
-public final class WaterloggingPropertyConsistency
-{
-    public static void checkWaterloggingProperty(SelfTestReporter reporter, List<Block> blocks)
-    {
+public final class WaterloggingPropertyConsistency {
+    public static void checkWaterloggingProperty(SelfTestReporter reporter, List<Block> blocks) {
         reporter.startTest("waterlogging property");
 
-        blocks.forEach(block ->
-        {
+        blocks.forEach(block -> {
             boolean onType = ((IFramedBlock) block).getBlockType().supportsWaterLogging();
             boolean onBlock = block.defaultBlockState().hasProperty(BlockStateProperties.WATERLOGGED);
-            if (onType != onBlock)
-            {
+            if (onType != onBlock) {
                 reporter.warn("Block '{}' has inconsistent waterlogging configuration", block);
             }
         });

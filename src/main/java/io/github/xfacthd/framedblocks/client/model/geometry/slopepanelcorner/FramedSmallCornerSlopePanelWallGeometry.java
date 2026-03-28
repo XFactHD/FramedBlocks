@@ -16,15 +16,13 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.Rotation;
 import org.jspecify.annotations.Nullable;
 
-public class FramedSmallCornerSlopePanelWallGeometry extends Geometry
-{
+public class FramedSmallCornerSlopePanelWallGeometry extends Geometry {
     private final Direction dir;
     private final Direction horRotDir;
     private final Direction vertRotDir;
     private final boolean altSlope;
 
-    public FramedSmallCornerSlopePanelWallGeometry(GeometryFactory.Context ctx)
-    {
+    public FramedSmallCornerSlopePanelWallGeometry(GeometryFactory.Context ctx) {
         this.dir = ctx.state().getValue(FramedProperties.FACING_HOR);
         HorizontalRotation rot = ctx.state().getValue(PropertyHolder.ROTATION);
         Direction rotDir = rot.withFacing(dir);
@@ -35,47 +33,35 @@ public class FramedSmallCornerSlopePanelWallGeometry extends Geometry
     }
 
     @Override
-    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
-    {
+    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData) {
         Direction quadDir = quad.direction();
         boolean cw = horRotDir == dir.getClockWise();
         boolean up = vertRotDir == Direction.UP;
-        if (quadDir == dir)
-        {
+        if (quadDir == dir) {
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(horRotDir.getOpposite(), .5F))
                     .apply(Modifiers.cut(vertRotDir.getOpposite(), .5F))
                     .export(quadMap, quadDir);
-        }
-        else if (quadDir == horRotDir)
-        {
+        } else if (quadDir == horRotDir) {
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(vertRotDir.getOpposite(), cw ? 0F : .5F, cw ? .5F : 0F))
                     .export(quadMap, quadDir);
-        }
-        else if (quadDir == vertRotDir)
-        {
+        } else if (quadDir == vertRotDir) {
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(horRotDir.getOpposite(), cw ? .5F : 0F, cw ? 0F : .5F))
                     .export(quadMap, quadDir);
-        }
-        else if (quadDir == horRotDir.getOpposite())
-        {
+        } else if (quadDir == horRotDir.getOpposite()) {
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(vertRotDir.getOpposite(), cw ? .5F : 0F, cw ? 0F : .5F))
                     .apply(Modifiers.makeHorizontalSlope(!cw, FramedSlopePanelGeometry.SLOPE_ANGLE))
                     .apply(Modifiers.offset(horRotDir, .5F))
                     .export(quadMap, null);
-        }
-        else if (!altSlope && quadDir == dir.getOpposite())
-        {
+        } else if (!altSlope && quadDir == dir.getOpposite()) {
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(horRotDir.getOpposite(), up ? 0F : .5F, up ? .5F : 0F))
                     .apply(Modifiers.makeVerticalSlope(!up, FramedSlopePanelGeometry.SLOPE_ANGLE_VERT))
                     .export(quadMap, null);
-        }
-        else if (altSlope && quadDir == vertRotDir.getOpposite())
-        {
+        } else if (altSlope && quadDir == vertRotDir.getOpposite()) {
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(horRotDir.getOpposite(), cw ? .5F : 0F, cw ? 0F : .5F))
                     .apply(Modifiers.makeVerticalSlope(dir.getOpposite(), FramedSlopePanelGeometry.SLOPE_ANGLE))

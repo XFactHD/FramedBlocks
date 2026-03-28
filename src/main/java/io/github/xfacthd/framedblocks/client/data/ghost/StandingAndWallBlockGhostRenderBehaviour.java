@@ -9,19 +9,16 @@ import net.minecraft.world.phys.BlockHitResult;
 import org.jspecify.annotations.Nullable;
 
 public sealed class StandingAndWallBlockGhostRenderBehaviour implements GhostRenderBehaviour
-        permits StandingAndWallDoubleBlockGhostRenderBehaviour
-{
+        permits StandingAndWallDoubleBlockGhostRenderBehaviour {
     @Override
-    @Nullable
-    public BlockState getRenderState(
+    public @Nullable BlockState getRenderState(
             ItemStack stack,
             @Nullable ItemStack proxiedStack,
             BlockHitResult hit,
             BlockPlaceContext ctx,
             BlockState hitState,
             int renderPass
-    )
-    {
+    ) {
         return ((InvokerBlockItem) stack.getItem()).framedblocks$callGetPlacementState(ctx);
     }
 }

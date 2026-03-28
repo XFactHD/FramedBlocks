@@ -8,114 +8,86 @@ import net.minecraft.world.level.block.state.properties.Half;
 import net.minecraft.world.level.block.state.properties.StairsShape;
 import org.jspecify.annotations.Nullable;
 
-public final class StairsConnectionPredicate implements ConnectionPredicate
-{
+public final class StairsConnectionPredicate implements ConnectionPredicate {
     @Override
-    public boolean canConnectFullEdge(BlockState state, Direction side, @Nullable Direction edge)
-    {
+    public boolean canConnectFullEdge(BlockState state, Direction side, @Nullable Direction edge) {
         Direction facing = state.getValue(BlockStateProperties.HORIZONTAL_FACING);
         StairsShape shape = state.getValue(BlockStateProperties.STAIRS_SHAPE);
         boolean top = state.getValue(BlockStateProperties.HALF) == Half.TOP;
         Direction dirTwo = top ? Direction.UP : Direction.DOWN;
 
-        return switch (shape)
-        {
-            case STRAIGHT ->
-            {
-                if (side == facing || side == dirTwo)
-                {
+        return switch (shape) {
+            case STRAIGHT -> {
+                if (side == facing || side == dirTwo) {
                     yield true;
                 }
-                else if (side.getAxis() == facing.getClockWise().getAxis())
-                {
+                if (side.getAxis() == facing.getClockWise().getAxis()) {
                     yield edge == facing || edge == dirTwo;
                 }
-                else if (side == dirTwo.getOpposite())
-                {
+                if (side == dirTwo.getOpposite()) {
                     yield edge == facing;
                 }
-                else if (side == facing.getOpposite())
-                {
+                if (side == facing.getOpposite()) {
                     yield edge == dirTwo;
                 }
                 yield false;
             }
-            case INNER_LEFT ->
-            {
-                if (side == facing || side == facing.getCounterClockWise() || side == dirTwo)
-                {
+            case INNER_LEFT -> {
+                if (side == facing || side == facing.getCounterClockWise() || side == dirTwo) {
                     yield true;
                 }
-                else if (side == facing.getClockWise())
-                {
+                if (side == facing.getClockWise()) {
                     yield edge == facing || edge == dirTwo;
                 }
-                else if (side == facing.getOpposite())
-                {
+                if (side == facing.getOpposite()) {
                     yield edge == facing.getCounterClockWise() || edge == dirTwo;
                 }
-                else if (side == dirTwo.getOpposite())
-                {
+                if (side == dirTwo.getOpposite()) {
                     yield edge == facing || edge == facing.getCounterClockWise();
                 }
                 yield false;
             }
-            case INNER_RIGHT ->
-            {
-                if (side == facing || side == facing.getClockWise() || side == dirTwo)
-                {
+            case INNER_RIGHT -> {
+                if (side == facing || side == facing.getClockWise() || side == dirTwo) {
                     yield true;
                 }
-                else if (side == facing.getCounterClockWise())
-                {
+                if (side == facing.getCounterClockWise()) {
                     yield edge == facing || edge == dirTwo;
                 }
-                else if (side == facing.getOpposite())
-                {
+                if (side == facing.getOpposite()) {
                     yield edge == facing.getClockWise() || edge == dirTwo;
                 }
-                else if (side == dirTwo.getOpposite())
-                {
+                if (side == dirTwo.getOpposite()) {
                     yield edge == facing || edge == facing.getClockWise();
                 }
                 yield false;
             }
-            case OUTER_LEFT ->
-            {
-                if (side == dirTwo)
-                {
+            case OUTER_LEFT -> {
+                if (side == dirTwo) {
                     yield true;
                 }
-                else if (side == facing)
-                {
+                if (side == facing) {
                     yield edge == facing.getCounterClockWise() || edge == dirTwo;
                 }
-                else if (side == facing.getCounterClockWise())
-                {
+                if (side == facing.getCounterClockWise()) {
                     yield edge == facing || edge == dirTwo;
                 }
-                else if (side == facing.getClockWise() || side == facing.getOpposite())
-                {
+                if (side == facing.getClockWise() || side == facing.getOpposite()) {
                     yield edge == dirTwo;
                 }
                 yield false;
             }
-            case OUTER_RIGHT ->
-            {
-                if (side == dirTwo)
-                {
+            case OUTER_RIGHT -> {
+                if (side == dirTwo) {
                     yield true;
                 }
-                else if (side == facing)
-                {
+                if (side == facing) {
                     yield edge == facing.getClockWise() || edge == dirTwo;
                 }
-                else if (side == facing.getClockWise())
-                {
+                if (side == facing.getClockWise()) {
                     yield edge == facing || edge == dirTwo;
                 }
-                else if (side == facing.getCounterClockWise() || side == facing.getOpposite())
-                {
+                if (side == facing.getCounterClockWise() || side == facing.getOpposite()) {
                     yield edge == dirTwo;
                 }
                 yield false;
@@ -124,99 +96,75 @@ public final class StairsConnectionPredicate implements ConnectionPredicate
     }
 
     @Override
-    public boolean canConnectDetailed(BlockState state, Direction side, Direction edge)
-    {
+    public boolean canConnectDetailed(BlockState state, Direction side, Direction edge) {
         Direction facing = state.getValue(BlockStateProperties.HORIZONTAL_FACING);
         StairsShape shape = state.getValue(BlockStateProperties.STAIRS_SHAPE);
         boolean top = state.getValue(BlockStateProperties.HALF) == Half.TOP;
         Direction dirTwo = top ? Direction.UP : Direction.DOWN;
 
-        return switch (shape)
-        {
-            case STRAIGHT ->
-            {
-                if (side == dirTwo.getOpposite())
-                {
+        return switch (shape) {
+            case STRAIGHT -> {
+                if (side == dirTwo.getOpposite()) {
                     yield edge != facing;
                 }
-                else if (side == facing.getOpposite())
-                {
+                if (side == facing.getOpposite()) {
                     yield edge != dirTwo;
                 }
-                else if (side.getAxis() == facing.getClockWise().getAxis())
-                {
+                if (side.getAxis() == facing.getClockWise().getAxis()) {
                     yield edge == dirTwo.getOpposite() || edge == facing.getOpposite();
                 }
                 yield false;
             }
-            case INNER_LEFT ->
-            {
-                if (side == dirTwo.getOpposite())
-                {
+            case INNER_LEFT -> {
+                if (side == dirTwo.getOpposite()) {
                     yield edge == facing.getOpposite() || edge == facing.getClockWise();
                 }
-                else if (side == facing.getOpposite())
-                {
+                if (side == facing.getOpposite()) {
                     yield edge == facing.getClockWise() || edge == dirTwo.getOpposite();
                 }
-                else if (side == facing.getClockWise())
-                {
+                if (side == facing.getClockWise()) {
                     yield edge == facing.getOpposite() || edge == dirTwo.getOpposite();
                 }
                 yield false;
             }
-            case INNER_RIGHT ->
-            {
-                if (side == dirTwo.getOpposite())
-                {
+            case INNER_RIGHT -> {
+                if (side == dirTwo.getOpposite()) {
                     yield edge == facing.getOpposite() || edge == facing.getCounterClockWise();
                 }
-                else if (side == facing.getOpposite())
-                {
+                if (side == facing.getOpposite()) {
                     yield edge == facing.getCounterClockWise() || edge == dirTwo.getOpposite();
                 }
-                else if (side == facing.getCounterClockWise())
-                {
+                if (side == facing.getCounterClockWise()) {
                     yield edge == facing.getOpposite() || edge == dirTwo.getOpposite();
                 }
                 yield false;
             }
-            case OUTER_LEFT ->
-            {
-                if (side == dirTwo.getOpposite())
-                {
+            case OUTER_LEFT -> {
+                if (side == dirTwo.getOpposite()) {
                     yield true;
                 }
-                else if (side == facing.getOpposite() || side == facing.getClockWise())
-                {
+                if (side == facing.getOpposite() || side == facing.getClockWise()) {
                     yield edge != dirTwo;
                 }
-                else if (side == facing)
-                {
+                if (side == facing) {
                     yield edge == dirTwo.getOpposite() || edge == facing.getClockWise();
                 }
-                else if (side == facing.getCounterClockWise())
-                {
+                if (side == facing.getCounterClockWise()) {
                     yield edge == dirTwo.getOpposite() || edge == facing.getOpposite();
                 }
                 yield false;
             }
-            case OUTER_RIGHT ->
-            {
-                if (side == dirTwo.getOpposite())
-                {
+            case OUTER_RIGHT -> {
+                if (side == dirTwo.getOpposite()) {
                     yield true;
                 }
-                else if (side == facing.getOpposite() || side == facing.getCounterClockWise())
-                {
+                if (side == facing.getOpposite() || side == facing.getCounterClockWise()) {
                     yield edge != dirTwo;
                 }
-                else if (side == facing)
-                {
+                if (side == facing) {
                     yield edge == dirTwo.getOpposite() || edge == facing.getCounterClockWise();
                 }
-                else if (side == facing.getClockWise())
-                {
+                if (side == facing.getClockWise()) {
                     yield edge == dirTwo.getOpposite() || edge == facing.getOpposite();
                 }
                 yield false;

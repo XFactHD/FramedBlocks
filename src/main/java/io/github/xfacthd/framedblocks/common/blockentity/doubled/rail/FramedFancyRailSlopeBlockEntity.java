@@ -3,38 +3,33 @@ package io.github.xfacthd.framedblocks.common.blockentity.doubled.rail;
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedDoubleBlockEntity;
 import io.github.xfacthd.framedblocks.api.camo.CamoContainer;
 import io.github.xfacthd.framedblocks.common.FBContent;
-import io.github.xfacthd.framedblocks.common.block.ISlopeBlock;
+import io.github.xfacthd.framedblocks.common.block.SlopeBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 
-public class FramedFancyRailSlopeBlockEntity extends FramedDoubleBlockEntity
-{
-    public FramedFancyRailSlopeBlockEntity(BlockPos pos, BlockState state)
-    {
+public class FramedFancyRailSlopeBlockEntity extends FramedDoubleBlockEntity {
+    public FramedFancyRailSlopeBlockEntity(BlockPos pos, BlockState state) {
         super(FBContent.BE_TYPE_FRAMED_FANCY_RAIL_SLOPE.value(), pos, state);
     }
 
     @Override
-    protected boolean hitSecondary(BlockHitResult hit, Vec3 lookVec, Vec3 eyePos)
-    {
+    protected boolean hitSecondary(BlockHitResult hit, Vec3 lookVec, Vec3 eyePos) {
         Direction side = hit.getDirection();
         BlockState state = getBlockState();
-        return side == Direction.UP || side == ((ISlopeBlock) state.getBlock()).getFacing(state).getOpposite();
+        return side == Direction.UP || side == ((SlopeBlock) state.getBlock()).getFacing(state).getOpposite();
     }
 
     @Override
-    public CamoContainer<?, ?> getCamo(BlockState state)
-    {
+    public CamoContainer<?, ?> getCamo(BlockState state) {
         //The primary camo is the only camo needed in skip predicates
         return getCamo();
     }
 
     @Override
-    protected boolean isCamoSolid()
-    {
+    protected boolean isCamoSolid() {
         CamoContainer<?, ?> camo = getCamo();
         return !camo.isEmpty() && camo.getContent().isSolid();
     }

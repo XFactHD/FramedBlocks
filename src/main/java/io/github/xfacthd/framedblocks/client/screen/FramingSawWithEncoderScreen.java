@@ -38,8 +38,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-public class FramingSawWithEncoderScreen extends FramingSawScreen
-{
+public class FramingSawWithEncoderScreen extends FramingSawScreen {
     public static final Component TOOLTIP_TAB_CRAFTING = Utils.translate("tooltip", "framing_saw.mode.crafting");
     public static final Component TOOLTIP_TAB_PATTERN = Utils.translate("tooltip", "framing_saw.mode.pattern_encode");
     private static final Identifier BACKGROUND_ENCODER = Utils.id("textures/gui/framing_saw_encoder.png");
@@ -73,31 +72,25 @@ public class FramingSawWithEncoderScreen extends FramingSawScreen
     @Nullable
     private FramingSawRecipeMatchResult encoderMatchResult = null;
 
-    FramingSawWithEncoderScreen(FramingSawMenu menu, Inventory inv, Component title)
-    {
+    FramingSawWithEncoderScreen(FramingSawMenu menu, Inventory inv, Component title) {
         super(menu, inv, title);
         Preconditions.checkState(AppliedEnergisticsCompat.isLoaded(), "FramingSawWithEncoderScreen requires AE2, how did we get here???");
         resetEncoderInputs(((FramingSawWithEncoderMenu) menu).isInEncoderMode());
     }
 
     @Override
-    protected void init()
-    {
+    protected void init() {
         super.init();
 
         encodeButton = addRenderableWidget(new ImageButton(leftPos + 224, topPos + 92, 14, 14, ENCODE_BTN_SPRITES, this::onEncodePressed));
-        ((FramingSawWithEncoderMenu) menu).setEncoderModeListener(encoder ->
-        {
+        ((FramingSawWithEncoderMenu) menu).setEncoderModeListener(encoder -> {
             encoding = encoder;
             encodeButton.visible = encoder;
             resetEncoderInputs(encoder);
 
-            if (encoder)
-            {
+            if (encoder) {
                 updateEncoderCalculation();
-            }
-            else
-            {
+            } else {
                 encoderCalculation = null;
                 encoderMatchResult = null;
             }
@@ -105,8 +98,7 @@ public class FramingSawWithEncoderScreen extends FramingSawScreen
     }
 
     @Override
-    public void extractBackground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick)
-    {
+    public void extractBackground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
         super.extractBackground(graphics, mouseX, mouseY, partialTick);
 
         Identifier rlTop = encoding ? TAB_ICON : TAB_SELECTED_ICON;
@@ -117,65 +109,54 @@ public class FramingSawWithEncoderScreen extends FramingSawScreen
         graphics.blitSprite(RenderPipelines.GUI_TEXTURED, rlBot, leftPos + TAB_X, topPos + TAB_BOT_Y, TAB_WIDTH, TAB_HEIGHT);
         graphics.fakeItem(sawPatternStack, leftPos + TAB_ICON_X, topPos + TAB_ICON_BOT_Y);
 
-        if (encoding)
-        {
+        if (encoding) {
             FramingSawRecipe recipe = cache.getRecipes().get(menu.getSelectedRecipeIndex()).value();
 
             ClientUtils.renderTransparentFakeItem(graphics, recipe.getResultStack(), leftPos + 223, topPos + 31);
             int count = Optionull.mapOrDefault(encoderCalculation, FramingSawRecipeCalculation::getOutputCount, 1);
             drawItemCount(graphics, count, leftPos + 223, topPos + 31);
 
-            if (!menu.getSlot(FramingSawWithEncoderMenu.SLOT_PATTERN_INPUT).hasItem())
-            {
+            if (!menu.getSlot(FramingSawWithEncoderMenu.SLOT_PATTERN_INPUT).hasItem()) {
                 ClientUtils.renderTransparentFakeItem(graphics, blankPatternStack, leftPos + 223, topPos + 73);
             }
-            if (!menu.getSlot(FramingSawWithEncoderMenu.SLOT_PATTERN_OUTPUT).hasItem())
-            {
+            if (!menu.getSlot(FramingSawWithEncoderMenu.SLOT_PATTERN_OUTPUT).hasItem()) {
                 ClientUtils.renderTransparentFakeItem(graphics, sawPatternStack, leftPos + 223, topPos + 109);
             }
         }
     }
 
     @Override
-    protected Identifier getBackground()
-    {
+    protected Identifier getBackground() {
         return encoding ? BACKGROUND_ENCODER : super.getBackground();
     }
 
     @Override
-    public ItemStack getInputStack()
-    {
+    public ItemStack getInputStack() {
         return encoding ? encodingInputs[0] : super.getInputStack();
     }
 
     @Override
-    public ItemStack getAdditiveStack(int slot)
-    {
+    public ItemStack getAdditiveStack(int slot) {
         return encoding ? encodingInputs[slot + 1] : super.getAdditiveStack(slot);
     }
 
     @Override
-    public RecipeInput getRecipeInput()
-    {
+    public RecipeInput getRecipeInput() {
         return encoding ? encodingRecipeInput : super.getRecipeInput();
     }
 
     @Override
-    protected void handleRecipeChange()
-    {
+    protected void handleRecipeChange() {
         super.handleRecipeChange();
-        if (encoding)
-        {
+        if (encoding) {
             resetEncoderInputs(true);
             updateEncoderCalculation();
         }
     }
 
     @Override
-    protected boolean drawInputStackHint(GuiGraphicsExtractor graphics, ItemStack input)
-    {
-        if (!super.drawInputStackHint(graphics, input) && encoding)
-        {
+    protected boolean drawInputStackHint(GuiGraphicsExtractor graphics, ItemStack input) {
+        if (!super.drawInputStackHint(graphics, input) && encoding) {
             graphics.fakeItem(input, leftPos + 20, topPos + 28);
             int count = Optionull.mapOrDefault(encoderCalculation, FramingSawRecipeCalculation::getInputCount, 1);
             drawItemCount(graphics, count, leftPos + 20, topPos + 28);
@@ -184,13 +165,10 @@ public class FramingSawWithEncoderScreen extends FramingSawScreen
     }
 
     @Override
-    protected boolean drawAdditiveStackHint(GuiGraphicsExtractor graphics, int index, ItemStack additive, List<FramingSawRecipeAdditive> additives, int y)
-    {
+    protected boolean drawAdditiveStackHint(GuiGraphicsExtractor graphics, int index, ItemStack additive, List<FramingSawRecipeAdditive> additives, int y) {
         boolean superResult = super.drawAdditiveStackHint(graphics, index, additive, additives, y);
-        if (encoding)
-        {
-            if (!superResult)
-            {
+        if (encoding) {
+            if (!superResult) {
                 graphics.fakeItem(additive, leftPos + 20, y);
             }
 
@@ -201,53 +179,38 @@ public class FramingSawWithEncoderScreen extends FramingSawScreen
     }
 
     @Override
-    protected boolean displayRecipeErrors()
-    {
+    protected boolean displayRecipeErrors() {
         return !encoding;
     }
 
-    private void drawItemCount(GuiGraphicsExtractor graphics, int count, int x, int y)
-    {
-        if (count != 1)
-        {
+    private void drawItemCount(GuiGraphicsExtractor graphics, int count, int x, int y) {
+        if (count != 1) {
             String text = String.valueOf(count);
             graphics.text(font, text, x + 19 - 2 - font.width(text), y + 6 + 3, 0xFFFFFFFF, true);
         }
     }
 
     @Override
-    protected void extractTooltip(GuiGraphicsExtractor graphics, int mouseX, int mouseY)
-    {
+    protected void extractTooltip(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
         super.extractTooltip(graphics, mouseX, mouseY);
 
-        if (mouseX >= leftPos + TAB_X && mouseX <= leftPos)
-        {
-            if (mouseY >= topPos + TAB_TOP_Y && mouseY <= topPos + TAB_BOT_Y)
-            {
+        if (mouseX >= leftPos + TAB_X && mouseX <= leftPos) {
+            if (mouseY >= topPos + TAB_TOP_Y && mouseY <= topPos + TAB_BOT_Y) {
                 graphics.setTooltipForNextFrame(font, TOOLTIP_TAB_CRAFTING, mouseX, mouseY);
-            }
-            else if (mouseY >= topPos + TAB_BOT_Y && mouseY <= topPos + (TAB_BOT_Y + TAB_HEIGHT))
-            {
+            } else if (mouseY >= topPos + TAB_BOT_Y && mouseY <= topPos + (TAB_BOT_Y + TAB_HEIGHT)) {
                 graphics.setTooltipForNextFrame(font, TOOLTIP_TAB_PATTERN, mouseX, mouseY);
             }
-        }
-        else if (encodeButton.isMouseOver(mouseX, mouseY) && encoderMatchResult != null && !encoderMatchResult.success())
-        {
+        } else if (encodeButton.isMouseOver(mouseX, mouseY) && encoderMatchResult != null && !encoderMatchResult.success()) {
             List<Component> lines = new ArrayList<>();
             FramingSawMenu.FramedRecipeHolder recipe = menu.getRecipes().get(menu.getSelectedRecipeIndex());
             appendRecipeFailure(lines, cache, additiveResolver, recipe.getRecipe(), encoderMatchResult, this);
             graphics.setTooltipForNextFrame(font, lines, Optional.empty(), mouseX, mouseY);
-        }
-        else if (encoding)
-        {
-            for (int i = 0; i <= FramingSawMenu.SLOT_RESULT; i++)
-            {
+        } else if (encoding) {
+            for (int i = 0; i <= FramingSawMenu.SLOT_RESULT; i++) {
                 Slot slot = menu.getSlot(i);
                 int sy = i == FramingSawMenu.SLOT_RESULT ? ENCODER_RESULT_SLOT_Y : slot.y;
-                if (isHovering(slot.x, sy, 16, 16, mouseX, mouseY))
-                {
-                    ItemStack stack = switch (i)
-                    {
+                if (isHovering(slot.x, sy, 16, 16, mouseX, mouseY)) {
+                    ItemStack stack = switch (i) {
                         case FramingSawMenu.SLOT_INPUT -> getInputStack();
                         case FramingSawMenu.SLOT_RESULT -> menu.getRecipes()
                                 .get(menu.getSelectedRecipeIndex())
@@ -255,8 +218,7 @@ public class FramingSawWithEncoderScreen extends FramingSawScreen
                                 .getResultStack();
                         default -> getAdditiveStack(i - 1);
                     };
-                    if (!stack.isEmpty())
-                    {
+                    if (!stack.isEmpty()) {
                         renderItemTooltip(graphics, mouseX, mouseY, stack, null);
                     }
                     break;
@@ -266,43 +228,31 @@ public class FramingSawWithEncoderScreen extends FramingSawScreen
     }
 
     @Override
-    public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick)
-    {
-        if (event.button() == InputConstants.MOUSE_BUTTON_LEFT)
-        {
-            if (event.x() >= leftPos + TAB_X && event.x() <= leftPos)
-            {
+    public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
+        if (event.button() == InputConstants.MOUSE_BUTTON_LEFT) {
+            if (event.x() >= leftPos + TAB_X && event.x() <= leftPos) {
                 int value = 0;
                 boolean hit = false;
-                if (event.y() >= topPos + TAB_TOP_Y && event.y() <= topPos + TAB_BOT_Y)
-                {
+                if (event.y() >= topPos + TAB_TOP_Y && event.y() <= topPos + TAB_BOT_Y) {
                     value = FramingSawWithEncoderMenu.MENU_BUTTON_MODE_CRAFTING;
                     hit = true;
-                }
-                else if (event.y() >= topPos + TAB_BOT_Y && event.y() <= topPos + (TAB_BOT_Y + TAB_HEIGHT))
-                {
+                } else if (event.y() >= topPos + TAB_BOT_Y && event.y() <= topPos + (TAB_BOT_Y + TAB_HEIGHT)) {
                     value = FramingSawWithEncoderMenu.MENU_BUTTON_MODE_ENCODING;
                     hit = true;
                 }
-                if (hit)
-                {
+                if (hit) {
                     minecraft.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1F));
                     //noinspection ConstantConditions
                     minecraft.gameMode.handleInventoryButtonClick(menu.containerId, value);
                     return true;
                 }
-            }
-            else if (encoding)
-            {
+            } else if (encoding) {
                 ItemStack carried = menu.getCarried();
                 FramingSawRecipe recipe = cache.getRecipes().get(menu.getSelectedRecipeIndex()).value();
-                for (int i = 0; i < 1 + recipe.getAdditives().size(); i++)
-                {
+                for (int i = 0; i < 1 + recipe.getAdditives().size(); i++) {
                     Slot slot = menu.getSlot(i);
-                    if (isHovering(slot.x, slot.y, 16, 16, event.x(), event.y()))
-                    {
-                        if (isValidEncodingInput(recipe, i, carried))
-                        {
+                    if (isHovering(slot.x, slot.y, 16, 16, event.x(), event.y())) {
+                        if (isValidEncodingInput(recipe, i, carried)) {
                             acceptEncodingInput(i, carried.copyWithCount(1));
                         }
                         return true;
@@ -314,58 +264,49 @@ public class FramingSawWithEncoderScreen extends FramingSawScreen
         return super.mouseClicked(event, doubleClick);
     }
 
-    private boolean isValidEncodingInput(FramingSawRecipe recipe, int slot, ItemStack stack)
-    {
-        if (slot == 0)
-        {
+    private boolean isValidEncodingInput(FramingSawRecipe recipe, int slot, ItemStack stack) {
+        if (slot == 0) {
             return cache.getMaterialValue(stack.getItem()) > 0;
         }
         return recipe.getAdditives().get(slot - 1).ingredient().test(stack);
     }
 
-    public void acceptEncodingInput(int slot, ItemStack stack)
-    {
+    public void acceptEncodingInput(int slot, ItemStack stack) {
         encodingInputs[slot] = stack;
-        if (slot == 0)
-        {
-            if (stack.isEmpty())
-            {
+        if (slot == 0) {
+            if (stack.isEmpty()) {
                 encodingInputs[0] = cubeStack.copyWithCount(1);
             }
             updateEncoderCalculation();
         }
     }
 
-    private void resetEncoderInputs(boolean encoding)
-    {
+    private void resetEncoderInputs(boolean encoding) {
         Arrays.fill(encodingInputs, ItemStack.EMPTY);
-        if (encoding)
-        {
+        if (encoding) {
             encodingInputs[0] = cubeStack.copyWithCount(1);
             List<FramingSawRecipeAdditive> additives = cache.getRecipes().get(menu.getSelectedRecipeIndex()).value().getAdditives();
-            for (int i = 0; i < additives.size(); i++)
-            {
+            for (int i = 0; i < additives.size(); i++) {
                 encodingInputs[i + 1] = additiveResolver.getFirstStack(i, additives.get(i).ingredient()).copy();
             }
         }
     }
 
-    private void updateEncoderCalculation()
-    {
+    private void updateEncoderCalculation() {
         FramingSawRecipe recipe = cache.getRecipes().get(menu.getSelectedRecipeIndex()).value();
         encoderCalculation = recipe.makeCraftingCalculation(encodingRecipeInput, true);
         encodingInputs[0].setCount(encoderCalculation.getInputCount());
-        for (int i = 0; i < recipe.getAdditives().size(); i++)
-        {
+        for (int i = 0; i < recipe.getAdditives().size(); i++) {
             encodingInputs[i + 1].setCount(encoderCalculation.getAdditiveCount(i));
         }
         //noinspection ConstantConditions
         encoderMatchResult = recipe.matchWithResult(encodingRecipeInput, minecraft.level);
     }
 
-    private void onEncodePressed(Button btn)
-    {
-        if (encoderMatchResult == null || !encoderMatchResult.success()) return;
+    private void onEncodePressed(Button btn) {
+        if (encoderMatchResult == null || !encoderMatchResult.success()) {
+            return;
+        }
 
         ClientPacketDistributor.sendToServer(new ServerboundEncodeFramingSawPatternPayload(
                 menu.containerId,
@@ -374,19 +315,16 @@ public class FramingSawWithEncoderScreen extends FramingSawScreen
         ));
     }
 
-    public int getInputSlotX()
-    {
+    public int getInputSlotX() {
         return leftPos + menu.getSlot(FramingSawMenu.SLOT_INPUT).x;
     }
 
-    public int getInputSlotY(int slot)
-    {
+    public int getInputSlotY(int slot) {
         return topPos + menu.getSlot(slot).y;
     }
 
     @Override
-    public FramingSawWithEncoderMenu getMenu()
-    {
+    public FramingSawWithEncoderMenu getMenu() {
         return (FramingSawWithEncoderMenu) super.getMenu();
     }
 }

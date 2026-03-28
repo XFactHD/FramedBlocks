@@ -20,20 +20,17 @@ import java.util.function.Consumer;
  * the respective implementation. Additional data stored in this container must be immutable to make it eligible
  * for use in {@linkplain DataComponentType data components}
  */
-public abstract class CamoContainer<C extends CamoContent<C>, T extends CamoContainer<C, T>>
-{
+public abstract class CamoContainer<C extends CamoContent<C>, T extends CamoContainer<C, T>> {
     protected final C content;
 
-    protected CamoContainer(C content)
-    {
+    protected CamoContainer(C content) {
         this.content = content;
     }
 
     /**
      * {@return this container's camo content}
      */
-    public final C getContent()
-    {
+    public final C getContent() {
         return content;
     }
 
@@ -43,9 +40,7 @@ public abstract class CamoContainer<C extends CamoContent<C>, T extends CamoCont
      * @param pos The position of the framed block
      * @return The map color
      */
-    @Nullable
-    public MapColor getMapColor(BlockGetter level, BlockPos pos)
-    {
+    public @Nullable MapColor getMapColor(BlockGetter level, BlockPos pos) {
         return content.getMapColor(level, pos);
     }
 
@@ -56,8 +51,7 @@ public abstract class CamoContainer<C extends CamoContent<C>, T extends CamoCont
      * @param beaconPos The position of the beacon where the beam originates from
      * @return An array of R, G and B values to be used as the color multiplier
      */
-    @Nullable
-    public Integer getBeaconColorMultiplier(LevelReader level, BlockPos pos, BlockPos beaconPos)
+    public @Nullable Integer getBeaconColorMultiplier(LevelReader level, BlockPos pos, BlockPos beaconPos)
     {
         return content.getBeaconColorMultiplier(level, pos, beaconPos);
     }
@@ -69,8 +63,7 @@ public abstract class CamoContainer<C extends CamoContent<C>, T extends CamoCont
      * not support camo rotation
      * @return A new container with the rotated camo if the rotation was successful, null otherwise
      */
-    @Nullable
-    public abstract T rotateCamo();
+    public abstract @Nullable T rotateCamo();
 
     /**
      * Rotate the camo to follow the containing framed block's horizontal rotation,
@@ -84,8 +77,7 @@ public abstract class CamoContainer<C extends CamoContent<C>, T extends CamoCont
     /**
      * {@return whether this camo can be converted to an {@link ItemStack} without consuming another item}
      */
-    public final boolean canTriviallyConvertToItemStack()
-    {
+    public final boolean canTriviallyConvertToItemStack() {
         return getFactory().canTriviallyConvertToItemStack();
     }
 
@@ -104,14 +96,12 @@ public abstract class CamoContainer<C extends CamoContent<C>, T extends CamoCont
     /**
      * {@return whether this container represents a non-existent camo}
      */
-    public final boolean isEmpty()
-    {
+    public final boolean isEmpty() {
         return content.isEmpty();
     }
 
     @SuppressWarnings("unchecked")
-    public CamoContainerClientHandler<C, T> getClientHandler()
-    {
+    public CamoContainerClientHandler<C, T> getClientHandler() {
         return (CamoContainerClientHandler<C, T>) CamoContainerClientHandler.Default.INSTANCE;
     }
 

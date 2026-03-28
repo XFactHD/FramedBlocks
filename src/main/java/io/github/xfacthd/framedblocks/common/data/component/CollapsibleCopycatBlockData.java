@@ -5,8 +5,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 
-public record CollapsibleCopycatBlockData(int offsets)
-{
+public record CollapsibleCopycatBlockData(int offsets) {
     public static final Codec<CollapsibleCopycatBlockData> CODEC = Codec.INT
             .xmap(CollapsibleCopycatBlockData::new, CollapsibleCopycatBlockData::offsets);
     public static final StreamCodec<ByteBuf, CollapsibleCopycatBlockData> STREAM_CODEC = ByteBufCodecs.VAR_INT

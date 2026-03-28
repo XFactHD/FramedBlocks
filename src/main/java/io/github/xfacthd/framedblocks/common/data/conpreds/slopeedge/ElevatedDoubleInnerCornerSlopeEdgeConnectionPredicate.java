@@ -8,42 +8,33 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jspecify.annotations.Nullable;
 
-public final class ElevatedDoubleInnerCornerSlopeEdgeConnectionPredicate extends NonDetailedConnectionPredicate
-{
+public final class ElevatedDoubleInnerCornerSlopeEdgeConnectionPredicate extends NonDetailedConnectionPredicate {
     @Override
-    public boolean canConnectFullEdge(BlockState state, Direction side, @Nullable Direction edge)
-    {
+    public boolean canConnectFullEdge(BlockState state, Direction side, @Nullable Direction edge) {
         Direction dir = state.getValue(FramedProperties.FACING_HOR);
         CornerType type = state.getValue(PropertyHolder.CORNER_TYPE);
-        Direction baseFace = switch (type)
-        {
+        Direction baseFace = switch (type) {
             case BOTTOM -> Direction.DOWN;
             case TOP -> Direction.UP;
             default -> dir;
         };
         Direction xBack;
         Direction yBack;
-        if (type.isHorizontal())
-        {
+        if (type.isHorizontal()) {
             xBack = type.isRight() ? dir.getClockWise() : dir.getCounterClockWise();
             yBack = type.isTop() ? Direction.UP : Direction.DOWN;
-        }
-        else
-        {
+        } else {
             xBack = dir;
             yBack = dir.getCounterClockWise();
         }
 
-        if (side == baseFace || side == xBack || side == yBack || edge == baseFace)
-        {
+        if (side == baseFace || side == xBack || side == yBack || edge == baseFace) {
             return true;
         }
-        if ((side == xBack.getOpposite() && edge == yBack) || (side == yBack.getOpposite() && edge == xBack))
-        {
+        if ((side == xBack.getOpposite() && edge == yBack) || (side == yBack.getOpposite() && edge == xBack)) {
             return true;
         }
-        if (side == baseFace.getOpposite() && (edge == xBack || edge == yBack))
-        {
+        if (side == baseFace.getOpposite() && (edge == xBack || edge == yBack)) {
             return true;
         }
         return false;

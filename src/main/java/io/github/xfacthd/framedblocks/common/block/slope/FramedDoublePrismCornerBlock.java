@@ -14,37 +14,32 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import org.jspecify.annotations.Nullable;
 
-public class FramedDoublePrismCornerBlock extends FramedDoubleThreewayCornerBlock
-{
-    public FramedDoublePrismCornerBlock(Properties props)
-    {
+public class FramedDoublePrismCornerBlock extends FramedDoubleThreewayCornerBlock {
+    public FramedDoublePrismCornerBlock(Properties props) {
         super(BlockType.FRAMED_DOUBLE_PRISM_CORNER, props);
         registerDefaultState(defaultBlockState().setValue(FramedProperties.OFFSET, false));
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
-    {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
         builder.add(FramedProperties.OFFSET);
     }
 
     @Override
-    @Nullable
-    public BlockState getStateForPlacement(BlockPlaceContext context)
-    {
+    public @Nullable BlockState getStateForPlacement(BlockPlaceContext context) {
         BlockState state = super.getStateForPlacement(context);
-        if (state == null) { return null; }
+        if (state == null) {
+            return null;
+        }
 
         state = state.setValue(FramedProperties.OFFSET, context.getClickedPos().getY() % 2 == 0);
         return state;
     }
 
     @Override
-    public boolean handleBlockLeftClick(BlockState state, Level level, BlockPos pos, Player player)
-    {
-        if (player.getMainHandItem().getItem() == FBContent.ITEM_FRAMED_HAMMER.value())
-        {
+    public boolean handleBlockLeftClick(BlockState state, Level level, BlockPos pos, Player player) {
+        if (player.getMainHandItem().getItem() == FBContent.ITEM_FRAMED_HAMMER.value()) {
             level.setBlockAndUpdate(pos, state.setValue(FramedProperties.OFFSET, !state.getValue(FramedProperties.OFFSET)));
             return true;
         }
@@ -52,8 +47,7 @@ public class FramedDoublePrismCornerBlock extends FramedDoubleThreewayCornerBloc
     }
 
     @Override
-    public DoubleBlockParts calculateParts(BlockState state)
-    {
+    public DoubleBlockParts calculateParts(BlockState state) {
         Direction facing = state.getValue(FramedProperties.FACING_HOR);
         boolean top = state.getValue(FramedProperties.TOP);
         boolean offset = state.getValue(FramedProperties.OFFSET);

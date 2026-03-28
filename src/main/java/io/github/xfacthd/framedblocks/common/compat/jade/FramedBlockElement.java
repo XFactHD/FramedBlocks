@@ -16,8 +16,7 @@ import org.joml.Vector3f;
 import org.jspecify.annotations.Nullable;
 import snownee.jade.api.ui.Element;
 
-final class FramedBlockElement extends Element
-{
+final class FramedBlockElement extends Element {
     private static final int SIZE = 18;
     private static final float RENDER_SIZE = 16F;
     private static final ItemTransform DEFAULT_TRANSFORM = new ItemTransform(
@@ -30,8 +29,7 @@ final class FramedBlockElement extends Element
     private final BlockPictureInPictureRenderer.RenderConfig config;
     private final float scale;
 
-    FramedBlockElement(BlockState state, IFramedBlockEntity blockEntity)
-    {
+    FramedBlockElement(BlockState state, IFramedBlockEntity blockEntity) {
         this.width = SIZE;
         this.height = SIZE;
         IFramedBlock block = (IFramedBlock) state.getBlock();
@@ -39,8 +37,7 @@ final class FramedBlockElement extends Element
         this.blockEntity = blockEntity;
         this.scale = block.getJadeRenderScale(this.state);
         this.config = new BlockPictureInPictureRenderer.RenderConfig(
-                poseStack ->
-                {
+                poseStack -> {
                     poseStack.scale(RENDER_SIZE * scale, -RENDER_SIZE * scale, -RENDER_SIZE * scale);
                     DEFAULT_TRANSFORM.apply(false, poseStack.last());
                     poseStack.translate(.5, .5, .5);
@@ -53,10 +50,8 @@ final class FramedBlockElement extends Element
     }
 
     @Override
-    public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick)
-    {
-        if (!state.isAir())
-        {
+    public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
+        if (!state.isAir()) {
             ScreenRectangle bounds = new ScreenRectangle(getX(), getY(), SIZE, SIZE).transformMaxBounds(graphics.pose());
             graphics.submitPictureInPictureRenderState(BlockPictureInPictureRenderer.RenderState.create(
                     blockEntity, state, config, bounds.left(), bounds.top(), bounds.right(), bounds.bottom(), scale, graphics.peekScissorStack()
@@ -65,9 +60,7 @@ final class FramedBlockElement extends Element
     }
 
     @Override
-    @Nullable
-    public Component getNarration()
-    {
+    public @Nullable Component getNarration() {
         return state.isAir() ? null : state.getBlock().getName();
     }
 }

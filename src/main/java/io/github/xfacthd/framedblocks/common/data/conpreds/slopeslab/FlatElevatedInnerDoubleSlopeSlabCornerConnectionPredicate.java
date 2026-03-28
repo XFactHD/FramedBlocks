@@ -7,15 +7,12 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jspecify.annotations.Nullable;
 
-public final class FlatElevatedInnerDoubleSlopeSlabCornerConnectionPredicate extends NonDetailedConnectionPredicate
-{
+public final class FlatElevatedInnerDoubleSlopeSlabCornerConnectionPredicate extends NonDetailedConnectionPredicate {
     @Override
-    public boolean canConnectFullEdge(BlockState state, Direction side, @Nullable Direction edge)
-    {
+    public boolean canConnectFullEdge(BlockState state, Direction side, @Nullable Direction edge) {
         Direction facing = state.getValue(FramedProperties.FACING_HOR);
 
-        if (DirUtils.isY(side) || side == facing || side == facing.getCounterClockWise())
-        {
+        if (DirUtils.isY(side) || side == facing || side == facing.getCounterClockWise()) {
             return true;
         }
         return edge != null && DirUtils.isY(edge);

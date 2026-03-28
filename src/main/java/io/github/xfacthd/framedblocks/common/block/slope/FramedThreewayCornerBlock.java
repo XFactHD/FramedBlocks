@@ -17,25 +17,20 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import org.jspecify.annotations.Nullable;
 
-public class FramedThreewayCornerBlock extends FramedBlock implements SlopeToggleBlock
-{
-    public FramedThreewayCornerBlock(BlockType type, Properties props)
-    {
+public class FramedThreewayCornerBlock extends FramedBlock implements SlopeToggleBlock {
+    public FramedThreewayCornerBlock(BlockType type, Properties props) {
         super(type, props);
         registerDefaultState(defaultBlockState().setValue(FramedProperties.TOP, false));
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
-    {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
         builder.add(FramedProperties.FACING_HOR, FramedProperties.TOP);
     }
 
     @Override
-    @Nullable
-    public BlockState getStateForPlacement(BlockPlaceContext ctx)
-    {
+    public @Nullable BlockState getStateForPlacement(BlockPlaceContext ctx) {
         return PlacementStateBuilder.of(this, ctx)
                 .withHalfFacing()
                 .withTop()
@@ -44,42 +39,35 @@ public class FramedThreewayCornerBlock extends FramedBlock implements SlopeToggl
     }
 
     @Override
-    public BlockState rotate(BlockState state, RotationDirection direction, WrenchRotationMode mode)
-    {
-        return switch (mode)
-        {
+    public BlockState rotate(BlockState state, RotationDirection direction, WrenchRotationMode mode) {
+        return switch (mode) {
             case PRIMARY -> super.rotate(state, direction, mode);
             case SECONDARY -> state.cycle(FramedProperties.TOP);
         };
     }
 
     @Override
-    protected BlockState rotate(BlockState state, Rotation rotation)
-    {
+    protected BlockState rotate(BlockState state, Rotation rotation) {
         return BlockUtils.rotate(state, rotation);
     }
 
     @Override
-    protected BlockState mirror(BlockState state, Mirror mirror)
-    {
+    protected BlockState mirror(BlockState state, Mirror mirror) {
         return BlockUtils.mirrorCornerBlock(state, mirror);
     }
 
     @Override
-    public BlockState getItemModelSource()
-    {
+    public BlockState getItemModelSource() {
         return defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
     }
 
     @Override
-    public Direction getHorizontalOrientation(BlockState state)
-    {
+    public Direction getHorizontalOrientation(BlockState state) {
         return state.getValue(FramedProperties.FACING_HOR);
     }
 
     @Override
-    public BlockState getJadeRenderState(BlockState state)
-    {
+    public BlockState getJadeRenderState(BlockState state) {
         return defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.WEST);
     }
 }

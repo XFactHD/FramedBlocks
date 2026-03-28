@@ -14,8 +14,7 @@ import net.minecraft.world.item.ItemStack;
 
 import java.util.List;
 
-public final class FrameBackgroundOverlay extends BlockInteractOverlay
-{
+public final class FrameBackgroundOverlay extends BlockInteractOverlay {
     private static final Identifier SYMBOL_TEXTURE = Utils.id("textures/overlay/frame_background_symbols.png");
     private static final Identifier LEATHER_TEXTURE = Utils.id("minecraft", "textures/item/leather.png");
     private static final Texture TEXTURE_BG = new Texture(SYMBOL_TEXTURE, 0, 0, 22, 22, 38, 22);
@@ -28,35 +27,29 @@ public final class FrameBackgroundOverlay extends BlockInteractOverlay
     private static final List<Component> LINES_FALSE = List.of(LINE_USE_CAMO_BG, LINE_SET_LEATHER_BG);
     private static final List<Component> LINES_TRUE = List.of(LINE_USE_LEATHER_BG, LINE_SET_CAMO_BG);
 
-    public FrameBackgroundOverlay()
-    {
+    public FrameBackgroundOverlay() {
         super(LINES_FALSE, LINES_TRUE, TEXTURE_BG, TEXTURE_BG, ClientConfig.VIEW::getFrameBackgroundMode);
     }
 
     @Override
-    public boolean isValidTool(Player player, ItemStack stack)
-    {
+    public boolean isValidTool(Player player, ItemStack stack) {
         return stack.is(FBContent.ITEM_FRAMED_HAMMER.value());
     }
 
     @Override
-    public boolean isValidTarget(Target target)
-    {
+    public boolean isValidTarget(Target target) {
         return target.state().getBlock() instanceof FramedItemFrameBlock;
     }
 
     @Override
-    public boolean getState(Target target)
-    {
+    public boolean getState(Target target) {
         return target.state().getValue(PropertyHolder.LEATHER);
     }
 
     @Override
-    public void renderAfterIcon(GuiGraphicsExtractor graphics, Texture tex, int texX, int texY, Target target)
-    {
+    public void renderAfterIcon(GuiGraphicsExtractor graphics, Texture tex, int texX, int texY, Target target) {
         TEXTURE_LEATHER.draw(graphics, texX + 3, texY + 3);
-        if (!target.state().getValue(PropertyHolder.LEATHER))
-        {
+        if (!target.state().getValue(PropertyHolder.LEATHER)) {
             TEXTURE_CROSS.draw(graphics, texX + 3, texY + 3);
         }
     }

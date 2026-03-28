@@ -7,20 +7,16 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.neoforge.registries.DeferredHolder;
 
-public final class DeferredBlockEntity<T extends BlockEntity> extends DeferredHolder<BlockEntityType<?>, BlockEntityType<T>>
-{
-    private DeferredBlockEntity(ResourceKey<BlockEntityType<?>> key)
-    {
+public final class DeferredBlockEntity<T extends BlockEntity> extends DeferredHolder<BlockEntityType<?>, BlockEntityType<T>> {
+    private DeferredBlockEntity(ResourceKey<BlockEntityType<?>> key) {
         super(key);
     }
 
-    public static <T extends BlockEntity> DeferredBlockEntity<T> createBlockEntity(Identifier name)
-    {
+    public static <T extends BlockEntity> DeferredBlockEntity<T> createBlockEntity(Identifier name) {
         return createBlockEntity(ResourceKey.create(Registries.BLOCK_ENTITY_TYPE, name));
     }
 
-    public static <T extends BlockEntity> DeferredBlockEntity<T> createBlockEntity(ResourceKey<BlockEntityType<?>> key)
-    {
+    public static <T extends BlockEntity> DeferredBlockEntity<T> createBlockEntity(ResourceKey<BlockEntityType<?>> key) {
         return new DeferredBlockEntity<>(key);
     }
 }

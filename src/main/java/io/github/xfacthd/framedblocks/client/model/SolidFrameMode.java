@@ -1,28 +1,21 @@
 package io.github.xfacthd.framedblocks.client.model;
 
-public enum SolidFrameMode
-{
-    NEVER
-    {
+public enum SolidFrameMode {
+    NEVER {
         @Override
-        public boolean useSolidFrame(boolean solidDesired)
-        {
+        public boolean useSolidFrame(boolean solidDesired) {
             return false;
         }
     },
-    DEFAULT
-    {
+    DEFAULT {
         @Override
-        public boolean useSolidFrame(boolean solidDesired)
-        {
+        public boolean useSolidFrame(boolean solidDesired) {
             return solidDesired;
         }
     },
-    ALWAYS
-    {
+    ALWAYS {
         @Override
-        public boolean useSolidFrame(boolean solidDesired)
-        {
+        public boolean useSolidFrame(boolean solidDesired) {
             return true;
         }
     };

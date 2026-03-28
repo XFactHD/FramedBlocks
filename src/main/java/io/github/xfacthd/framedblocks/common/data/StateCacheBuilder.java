@@ -16,18 +16,13 @@ import net.minecraft.world.level.block.state.StateDefinition;
 
 import java.util.Map;
 
-public final class StateCacheBuilder
-{
+public final class StateCacheBuilder {
     private static volatile boolean cachesBuilt = false;
 
-    public static void ensureStateCachesInitialized()
-    {
-        if (!cachesBuilt)
-        {
-            synchronized (StateCacheBuilder.class)
-            {
-                if (!cachesBuilt)
-                {
+    public static void ensureStateCachesInitialized() {
+        if (!cachesBuilt) {
+            synchronized (StateCacheBuilder.class) {
+                if (!cachesBuilt) {
                     initializeStateCaches();
                     cachesBuilt = true;
                 }
@@ -35,8 +30,7 @@ public final class StateCacheBuilder
         }
     }
 
-    private static void initializeStateCaches()
-    {
+    private static void initializeStateCaches() {
         FramedBlocks.LOGGER.debug("Initializing custom state metadata caches");
         Stopwatch watch = Stopwatch.createStarted();
         long[] stateCount = new long[] { 0 };
@@ -48,10 +42,8 @@ public final class StateCacheBuilder
                 .filter(block -> block instanceof IFramedBlock)
                 .map(Block::getStateDefinition)
                 .map(StateDefinition::getPossibleStates)
-                .forEach(states ->
-                {
-                    for (BlockState state : states)
-                    {
+                .forEach(states -> {
+                    for (BlockState state : states) {
                         StateCache cache = ((IFramedBlock) state.getBlock()).initCache(state);
                         cache = cacheDedup.addOrGet(cache);
                         state.framedblocks$initCache(cache);
@@ -62,16 +54,14 @@ public final class StateCacheBuilder
         FramedBlocks.LOGGER.debug("Initialized {} unique caches for {} states in {}", cacheDedup.size(), stateCount[0], watch);
     }
 
-    public static final class CacheReloader implements ResourceManagerReloadListener
-    {
+    public static final class CacheReloader implements ResourceManagerReloadListener {
         public static final CacheReloader INSTANCE = new CacheReloader();
         public static final Identifier LISTENER_ID = Utils.id("state_caches");
 
         private CacheReloader() { }
 
         @Override
-        public void onResourceManagerReload(ResourceManager mgr)
-        {
+        public void onResourceManagerReload(ResourceManager mgr) {
             initializeStateCaches();
         }
     }

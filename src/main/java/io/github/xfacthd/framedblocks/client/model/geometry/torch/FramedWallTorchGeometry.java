@@ -20,8 +20,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.joml.Vector3f;
 import org.jspecify.annotations.Nullable;
 
-public class FramedWallTorchGeometry extends Geometry
-{
+public class FramedWallTorchGeometry extends Geometry {
     private static final Vector3f ROTATION_ORIGIN = new Vector3f(0, 3.5F/16F, 8F/16F);
     private static final float MIN = 7F/16F;
     private static final float MAX = 9F/16F;
@@ -35,8 +34,7 @@ public class FramedWallTorchGeometry extends Geometry
     private final BlockState auxShaderState;
     private final float height;
 
-    private FramedWallTorchGeometry(GeometryFactory.Context ctx, BlockState auxShaderState, float height)
-    {
+    private FramedWallTorchGeometry(GeometryFactory.Context ctx, BlockState auxShaderState, float height) {
         this.state = ctx.state();
         this.baseModel = ctx.baseModel();
         this.yAngle = 270F - ctx.state().getValue(BlockStateProperties.HORIZONTAL_FACING).toYRot();
@@ -45,14 +43,12 @@ public class FramedWallTorchGeometry extends Geometry
     }
 
     @Override
-    public void collectAdditionalPartsCached(PartConsumer consumer, BlockAndTintGetter level, BlockPos pos, RandomSource random, FramedBlockData blockData, @Nullable Object cacheKeyUserData)
-    {
+    public void collectAdditionalPartsCached(PartConsumer consumer, BlockAndTintGetter level, BlockPos pos, RandomSource random, FramedBlockData blockData, @Nullable Object cacheKeyUserData) {
         consumer.acceptAll(baseModel, level, pos, random, state, true, false, false, auxShaderState, null);
     }
 
     @Override
-    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
-    {
+    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData) {
         /*
         "from": [-1, 3.5, 7],
 		"to": [1, 11.5, 9],
@@ -60,17 +56,14 @@ public class FramedWallTorchGeometry extends Geometry
         */
 
         Direction quadDir = quad.direction();
-        if (quadDir == Direction.DOWN)
-        {
+        if (quadDir == Direction.DOWN) {
             QuadModifier.of(quad)
                     .apply(Modifiers.cutTopBottom(MIN, MIN, MAX, MAX))
                     .apply(Modifiers.setPosition(BOTTOM))
                     .apply(Modifiers.offset(Direction.WEST, .5F))
                     .apply(applyRotation(yAngle))
                     .export(quadMap, null);
-        }
-        else if (quadDir != Direction.UP)
-        {
+        } else if (quadDir != Direction.UP) {
             boolean xAxis = DirUtils.isX(quadDir);
             boolean east = quadDir == Direction.EAST;
             QuadModifier.of(quad)
@@ -85,35 +78,29 @@ public class FramedWallTorchGeometry extends Geometry
     }
 
     @Override
-    public boolean useSolidNoCamoModel()
-    {
+    public boolean useSolidNoCamoModel() {
         return true;
     }
 
-    private static QuadModifier.Modifier applyRotation(float yAngle)
-    {
+    private static QuadModifier.Modifier applyRotation(float yAngle) {
         return data ->
                 Modifiers.rotate(Direction.Axis.Z, ROTATION_ORIGIN, -22.5F, false).accept(data) &&
                         Modifiers.rotateCentered(Direction.Axis.Y, yAngle, false).accept(data);
     }
 
-    public static FramedWallTorchGeometry normal(GeometryFactory.Context ctx)
-    {
+    public static FramedWallTorchGeometry normal(GeometryFactory.Context ctx) {
         return new FramedWallTorchGeometry(ctx, Blocks.WALL_TORCH.defaultBlockState(), HEIGHT);
     }
 
-    public static FramedWallTorchGeometry soul(GeometryFactory.Context ctx)
-    {
+    public static FramedWallTorchGeometry soul(GeometryFactory.Context ctx) {
         return new FramedWallTorchGeometry(ctx, Blocks.SOUL_WALL_TORCH.defaultBlockState(), HEIGHT);
     }
 
-    public static FramedWallTorchGeometry copper(GeometryFactory.Context ctx)
-    {
+    public static FramedWallTorchGeometry copper(GeometryFactory.Context ctx) {
         return new FramedWallTorchGeometry(ctx, Blocks.COPPER_WALL_TORCH.defaultBlockState(), HEIGHT);
     }
 
-    public static FramedWallTorchGeometry redstone(GeometryFactory.Context ctx)
-    {
+    public static FramedWallTorchGeometry redstone(GeometryFactory.Context ctx) {
         float topHeight = ctx.state().getValue(BlockStateProperties.LIT) ? HEIGHT_REDSTONE_LIT : HEIGHT;
         return new FramedWallTorchGeometry(ctx, Blocks.REDSTONE_WALL_TORCH.defaultBlockState(), topHeight);
     }

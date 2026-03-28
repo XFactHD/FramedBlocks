@@ -30,154 +30,127 @@ import org.jspecify.annotations.Nullable;
 import java.util.List;
 import java.util.function.Function;
 
-public final class BlockCamoContent extends CamoContent<BlockCamoContent> implements BlockTintSourceCache
-{
+public final class BlockCamoContent extends CamoContent<BlockCamoContent> implements BlockTintSourceCache {
     private final BlockState state;
     @Nullable
     private List<BlockTintSource> tintSources = null;
 
-    public BlockCamoContent(BlockState state)
-    {
+    public BlockCamoContent(BlockState state) {
         this.state = state;
     }
 
-    public BlockState getState()
-    {
+    public BlockState getState() {
         return state;
     }
 
     @Override
-    public boolean propagatesSkylightDown()
-    {
+    public boolean propagatesSkylightDown() {
         return state.propagatesSkylightDown();
     }
 
     @Override
-    public float getExplosionResistance(BlockGetter level, BlockPos pos, Explosion explosion)
-    {
+    public float getExplosionResistance(BlockGetter level, BlockPos pos, Explosion explosion) {
         return state.getExplosionResistance(level, pos, explosion);
     }
 
     @Override
-    public boolean isFlammable(BlockGetter level, BlockPos pos, Direction face)
-    {
+    public boolean isFlammable(BlockGetter level, BlockPos pos, Direction face) {
         return state.isFlammable(level, pos, face);
     }
 
     @Override
-    public int getFlammability(BlockGetter level, BlockPos pos, Direction face)
-    {
+    public int getFlammability(BlockGetter level, BlockPos pos, Direction face) {
         return state.getFlammability(level, pos, face);
     }
 
     @Override
-    public int getFireSpreadSpeed(BlockGetter level, BlockPos pos, Direction face)
-    {
+    public int getFireSpreadSpeed(BlockGetter level, BlockPos pos, Direction face) {
         return state.getFireSpreadSpeed(level, pos, face);
     }
 
     @Override
-    public boolean isIgnitedByLava(BlockGetter level, BlockPos pos, Direction face)
-    {
+    public boolean isIgnitedByLava(BlockGetter level, BlockPos pos, Direction face) {
         return state.ignitedByLava(level, pos, face);
     }
 
     @Override
-    public float getShadeBrightness(BlockGetter level, BlockPos pos, float frameShade)
-    {
+    public float getShadeBrightness(BlockGetter level, BlockPos pos, float frameShade) {
         return Math.max(state.getShadeBrightness(level, pos), frameShade);
     }
 
     @Override
     @SuppressWarnings("deprecation")
-    public int getLightEmission()
-    {
+    public int getLightEmission() {
         return state.getLightEmission();
     }
 
     @Override
-    public boolean isEmissive()
-    {
+    public boolean isEmissive() {
         return state.emissiveRendering(EmptyBlockGetter.INSTANCE, BlockPos.ZERO);
     }
 
     @Override
     @SuppressWarnings("deprecation")
-    public SoundType getSoundType()
-    {
+    public SoundType getSoundType() {
         return state.getSoundType();
     }
 
     @Override
-    public boolean shouldDisplayFluidOverlay(BlockAndLightGetter level, BlockPos pos, FluidState fluid)
-    {
+    public boolean shouldDisplayFluidOverlay(BlockAndLightGetter level, BlockPos pos, FluidState fluid) {
         return state.shouldDisplayFluidOverlay(level, pos, fluid);
     }
 
     @Override
-    public float getFriction(LevelReader level, BlockPos pos, @Nullable Entity entity, float frameFriction)
-    {
+    public float getFriction(LevelReader level, BlockPos pos, @Nullable Entity entity, float frameFriction) {
         return state.getFriction(level, pos, entity);
     }
 
     @Override
-    public TriState canSustainPlant(BlockGetter level, BlockPos pos, Direction side, BlockState plant)
-    {
+    public TriState canSustainPlant(BlockGetter level, BlockPos pos, Direction side, BlockState plant) {
         return CamoContainerHelper.canPlantSurviveOnCamo(state, level, pos, side, plant);
     }
 
     @Override
-    public boolean canEntityDestroy(BlockGetter level, BlockPos pos, Entity entity)
-    {
+    public boolean canEntityDestroy(BlockGetter level, BlockPos pos, Entity entity) {
         return state.canEntityDestroy(level, pos, entity);
     }
 
     @Override
-    public MapColor getMapColor(BlockGetter level, BlockPos pos)
-    {
+    public MapColor getMapColor(BlockGetter level, BlockPos pos) {
         return state.getMapColor(level, pos);
     }
 
     @Override
-    @Nullable
-    public Integer getBeaconColorMultiplier(LevelReader level, BlockPos pos, BlockPos beaconPos)
-    {
+    public @Nullable Integer getBeaconColorMultiplier(LevelReader level, BlockPos pos, BlockPos beaconPos) {
         return state.getBeaconColorMultiplier(level, pos, beaconPos);
     }
 
     @Override
-    public boolean isSolid()
-    {
+    public boolean isSolid() {
         return state.isSolidRender();
     }
 
     @Override
-    public boolean canOcclude()
-    {
+    public boolean canOcclude() {
         return state.canOcclude();
     }
 
     @Override
-    public BlockState getAsBlockState()
-    {
+    public BlockState getAsBlockState() {
         return state;
     }
 
     @Override
-    public BlockState getAppearanceState()
-    {
+    public BlockState getAppearanceState() {
         return state;
     }
 
     @Override
-    public boolean isOccludedBy(BlockState adjState, BlockGetter level, BlockPos pos, BlockPos adjPos, Direction side)
-    {
-        if (adjState.isSolidRender())
-        {
+    public boolean isOccludedBy(BlockState adjState, BlockGetter level, BlockPos pos, BlockPos adjPos, Direction side) {
+        if (adjState.isSolidRender()) {
             return true;
         }
-        if (adjState.getBlock() == state.getBlock())
-        {
+        if (adjState.getBlock() == state.getBlock()) {
             return !adjState.is(Utils.NON_OCCLUDEABLE);
         }
         return state.skipRendering(adjState, side);
@@ -186,75 +159,62 @@ public final class BlockCamoContent extends CamoContent<BlockCamoContent> implem
     @Override
     public boolean isOccludedBy(CamoContent<?> adjCamo, BlockGetter level, BlockPos pos, BlockPos adjPos, Direction side)
     {
-        if (adjCamo instanceof BlockCamoContent blockCamo)
-        {
+        if (adjCamo instanceof BlockCamoContent blockCamo) {
             return isOccludedBy(blockCamo.state, level, pos, adjPos, side);
         }
         return adjCamo.isSolid();
     }
 
     @Override
-    public boolean occludes(BlockState adjState, BlockGetter level, BlockPos pos, BlockPos adjPos, Direction side)
-    {
-        if (state.isSolidRender())
-        {
+    public boolean occludes(BlockState adjState, BlockGetter level, BlockPos pos, BlockPos adjPos, Direction side) {
+        if (state.isSolidRender()) {
             return true;
         }
-        if (adjState.getBlock() == state.getBlock())
-        {
+        if (adjState.getBlock() == state.getBlock()) {
             return !adjState.is(Utils.NON_OCCLUDEABLE);
         }
         return adjState.skipRendering(state, side.getOpposite());
     }
 
     @Override
-    public ParticleOptions makeRunningLandingParticles(BlockPos pos)
-    {
+    public ParticleOptions makeRunningLandingParticles(BlockPos pos) {
         return new BlockParticleOption(ParticleTypes.BLOCK, state);
     }
 
     @Override
-    public String getCamoId()
-    {
+    public String getCamoId() {
         return BuiltInRegistries.BLOCK.getKey(state.getBlock()).toString();
     }
 
     @Override
-    public MutableComponent getCamoName()
-    {
+    public MutableComponent getCamoName() {
         return state.getBlock().getName();
     }
 
     @Override
-    public CamoContentClientHandler<BlockCamoContent> getClientHandler()
-    {
+    public CamoContentClientHandler<BlockCamoContent> getClientHandler() {
         return BlockCamoContentClientHandler.INSTANCE;
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         return state.hashCode();
     }
 
     @Override
-    public boolean equals(@Nullable Object obj)
-    {
+    public boolean equals(@Nullable Object obj) {
         return obj == this || (obj instanceof BlockCamoContent camo && state == camo.state);
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "BlockCamoContent{state=" + state + "}";
     }
 
     @Override
     @ApiStatus.Internal
-    public List<BlockTintSource> resolveTintSources(Function<BlockState, List<BlockTintSource>> resolver)
-    {
-        if (tintSources == null)
-        {
+    public List<BlockTintSource> resolveTintSources(Function<BlockState, List<BlockTintSource>> resolver) {
+        if (tintSources == null) {
             tintSources = resolver.apply(state);
         }
         return tintSources;

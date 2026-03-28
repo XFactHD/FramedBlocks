@@ -18,33 +18,26 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.jspecify.annotations.Nullable;
 
-public class FramedStackedPyramidSlabBlock extends FramedConnectingPyramidBlock implements IFramedDoubleBlockInternal
-{
-    public FramedStackedPyramidSlabBlock(BlockType type, Properties props)
-    {
+public class FramedStackedPyramidSlabBlock extends FramedConnectingPyramidBlock implements IFramedDoubleBlockInternal {
+    public FramedStackedPyramidSlabBlock(BlockType type, Properties props) {
         super(type, props);
     }
 
     @Override
-    public FramedDoubleBlockEntity newBlockEntity(BlockPos pos, BlockState state)
-    {
+    public FramedDoubleBlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return IFramedDoubleBlockInternal.super.newBlockEntity(pos, state);
     }
 
     @Override
-    public DoubleBlockParts calculateParts(BlockState state)
-    {
+    public DoubleBlockParts calculateParts(BlockState state) {
         Direction facing = state.getValue(BlockStateProperties.FACING);
         PillarConnection connection = state.getValue(PropertyHolder.PILLAR_CONNECTION);
         boolean altSlope = state.getValue(FramedProperties.ALT_SLOPE);
         BlockState stateOne;
-        if (DirUtils.isY(facing))
-        {
+        if (DirUtils.isY(facing)) {
             stateOne = FBContent.BLOCK_FRAMED_SLAB.value().defaultBlockState()
                     .setValue(FramedProperties.TOP, facing == Direction.DOWN);
-        }
-        else
-        {
+        } else {
             stateOne = FBContent.BLOCK_FRAMED_PANEL.value().defaultBlockState()
                     .setValue(FramedProperties.FACING_HOR, facing.getOpposite());
         }
@@ -58,10 +51,8 @@ public class FramedStackedPyramidSlabBlock extends FramedConnectingPyramidBlock 
     }
 
     @Override
-    public DoubleBlockTopInteractionMode calculateTopInteractionMode(BlockState state)
-    {
-        return switch (state.getValue(BlockStateProperties.FACING))
-        {
+    public DoubleBlockTopInteractionMode calculateTopInteractionMode(BlockState state) {
+        return switch (state.getValue(BlockStateProperties.FACING)) {
             case UP -> DoubleBlockTopInteractionMode.SECOND;
             case DOWN -> DoubleBlockTopInteractionMode.FIRST;
             default -> DoubleBlockTopInteractionMode.EITHER;
@@ -69,18 +60,15 @@ public class FramedStackedPyramidSlabBlock extends FramedConnectingPyramidBlock 
     }
 
     @Override
-    public SolidityCheck calculateSolidityCheck(BlockState state, Direction side)
-    {
+    public SolidityCheck calculateSolidityCheck(BlockState state, Direction side) {
         Direction facing = state.getValue(BlockStateProperties.FACING);
         return side == facing.getOpposite() ? SolidityCheck.FIRST : SolidityCheck.NONE;
     }
 
     @Override
-    public CamoGetter calculateCamoGetter(BlockState state, Direction side, @Nullable Direction edge)
-    {
+    public CamoGetter calculateCamoGetter(BlockState state, Direction side, @Nullable Direction edge) {
         Direction facing = state.getValue(BlockStateProperties.FACING);
-        if (side == facing.getOpposite() || (side != facing && edge == facing.getOpposite()))
-        {
+        if (side == facing.getOpposite() || (side != facing && edge == facing.getOpposite())) {
             return CamoGetter.FIRST;
         }
         return CamoGetter.NONE;

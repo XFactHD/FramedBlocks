@@ -13,16 +13,13 @@ import net.neoforged.neoforge.common.data.DataMapProvider;
 
 import java.util.concurrent.CompletableFuture;
 
-public final class FramedDataMapProvider extends DataMapProvider
-{
-    public FramedDataMapProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registries)
-    {
+public final class FramedDataMapProvider extends DataMapProvider {
+    public FramedDataMapProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
         super(output, registries);
     }
 
     @Override
-    protected void gather(HolderLookup.Provider provider)
-    {
+    protected void gather(HolderLookup.Provider provider) {
         SoundEventGroup stoneLikeStep = new SoundEventGroup(SoundEventType.STEP, "stone_like");
         SoundEventGroup stoneLikePlace = new SoundEventGroup(SoundEventType.PLACE, "stone_like");
         SoundEventGroup stoneLikeHit = new SoundEventGroup(SoundEventType.HIT, "stone_like");
@@ -39,8 +36,7 @@ public final class FramedDataMapProvider extends DataMapProvider
                 .add(key(SoundEvents.GLASS_FALL), stoneLikeFall, false);
     }
 
-    private static ResourceKey<SoundEvent> key(SoundEvent event)
-    {
+    private static ResourceKey<SoundEvent> key(SoundEvent event) {
         return BuiltInRegistries.SOUND_EVENT.getResourceKey(event).orElseThrow();
     }
 }

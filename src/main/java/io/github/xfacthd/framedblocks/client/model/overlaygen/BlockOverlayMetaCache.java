@@ -21,45 +21,34 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-final class BlockOverlayMetaCache
-{
+final class BlockOverlayMetaCache {
     private static final Direction[] DIRECTIONS = Direction.values();
     private static final Map<Object, Entry> META_CACHE = new ConcurrentHashMap<>();
 
-    static Entry get(BlockOverlay overlay, @Nullable BlockState state)
-    {
+    static Entry get(BlockOverlay overlay, @Nullable BlockState state) {
         Object key;
-        if (state != null && overlay.solidFace().isDynamic())
-        {
+        if (state != null && overlay.solidFace().isDynamic()) {
             StateMerger stateMerger = ModelWrappingManager.tryGetStateMerger(state.getBlock());
             key = new DynamicKey(overlay, stateMerger.apply(state));
-        }
-        else
-        {
+        } else {
             key = overlay;
         }
         return META_CACHE.computeIfAbsent(key, BlockOverlayMetaCache::computeMetadata);
     }
 
-    static void clear(CacheCleaner.Reason reason)
-    {
-        if (reason == CacheCleaner.Reason.RELOAD || reason == CacheCleaner.Reason.DISCONNECT)
-        {
+    static void clear(CacheCleaner.Reason reason) {
+        if (reason == CacheCleaner.Reason.RELOAD || reason == CacheCleaner.Reason.DISCONNECT) {
             META_CACHE.clear();
         }
     }
 
-    private static Entry computeMetadata(Object key)
-    {
+    private static Entry computeMetadata(Object key) {
         BlockOverlay overlay;
         BlockState state;
-        if (key instanceof DynamicKey(BlockOverlay keyOverlay, BlockState keyState))
-        {
+        if (key instanceof DynamicKey(BlockOverlay keyOverlay, BlockState keyState)) {
             overlay = keyOverlay;
             state = keyState;
-        }
-        else
-        {
+        } else {
             overlay = (BlockOverlay) key;
             state = null;
         }
@@ -67,35 +56,26 @@ final class BlockOverlayMetaCache
         BlockOverlay.SolidFace solidFace = overlay.solidFace();
         Set<Direction> fullFaces = Set.of();
         boolean stateDependent = false;
-        if (state != null && solidFace.isDynamic())
-        {
+        if (state != null && solidFace.isDynamic()) {
             fullFaces = solidFace.getDynamicDirections(state);
-            if (!fullFaces.isEmpty())
-            {
+            if (!fullFaces.isEmpty()) {
                 stateDependent = true;
             }
         }
-        if (fullFaces.isEmpty())
-        {
+        if (fullFaces.isEmpty()) {
             fullFaces = solidFace.getDirections();
         }
         Map<Direction, Set<Direction>> edges;
-        if (overlay.edgeTexture() != null)
-        {
+        if (overlay.edgeTexture() != null) {
             edges = new EnumMap<>(Direction.class);
-            for (Direction fullFace : fullFaces)
-            {
-                for (Direction dir : DIRECTIONS)
-                {
-                    if (dir.getAxis() != fullFace.getAxis() && !fullFaces.contains(dir))
-                    {
+            for (Direction fullFace : fullFaces) {
+                for (Direction dir : DIRECTIONS) {
+                    if (dir.getAxis() != fullFace.getAxis() && !fullFaces.contains(dir)) {
                         edges.computeIfAbsent(dir, _ -> EnumSet.noneOf(Direction.class)).add(fullFace);
                     }
                 }
             }
-        }
-        else
-        {
+        } else {
             edges = Map.of();
         }
 
@@ -105,23 +85,19 @@ final class BlockOverlayMetaCache
         SpriteInfo edgeSpriteInfo = null;
         SpriteInfo edgeSpriteInfoTranslucent = null;
         float edgeHeight = 0F;
-        if (overlay.edgeTexture() != null)
-        {
+        if (overlay.edgeTexture() != null) {
             Material.Baked edgeMaterial = getMaterial(overlay.edgeTexture());
             edgeSpriteInfo = makeSpriteSpec(edgeMaterial, false);
             edgeSpriteInfoTranslucent = makeSpriteSpec(edgeMaterial, true);
 
             SpriteContents contents = edgeMaterial.sprite().contents();
-            if (contents.isAnimated())
-            {
+            if (contents.isAnimated()) {
                 edgeHeight = (float) contents.getUniqueFrames()
                         .intStream()
                         .mapToDouble(frame -> computeSpriteHeight(contents, frame))
                         .max()
                         .orElse(0D);
-            }
-            else
-            {
+            } else {
                 edgeHeight = computeSpriteHeight(contents, 0);
             }
         }
@@ -129,18 +105,15 @@ final class BlockOverlayMetaCache
         return new Entry(fullFaces, edges, solidMaterial, solidSpriteInfo, solidSpriteInfoTranslucent, edgeSpriteInfo, edgeSpriteInfoTranslucent, edgeHeight, stateDependent);
     }
 
-    private static Material.Baked getMaterial(Identifier texture)
-    {
+    private static Material.Baked getMaterial(Identifier texture) {
         TextureAtlasSprite sprite = RuntimeMaterialBaker.getSprite(texture);
         return new Material.Baked(sprite, sprite.transparency().hasTranslucent());
     }
 
-    @Nullable
     @Contract("_,false->!null")
-    private static SpriteInfo makeSpriteSpec(Material.Baked material, boolean forceTranslucent)
+    private static @Nullable SpriteInfo makeSpriteSpec(Material.Baked material, boolean forceTranslucent)
     {
-        if (material.forceTranslucent() && forceTranslucent)
-        {
+        if (material.forceTranslucent() && forceTranslucent) {
             return null;
         }
         forceTranslucent |= material.forceTranslucent();
@@ -148,22 +121,16 @@ final class BlockOverlayMetaCache
         return new SpriteInfo(material, transparency);
     }
 
-    private static float computeSpriteHeight(SpriteContents contents, int frame)
-    {
+    private static float computeSpriteHeight(SpriteContents contents, int frame) {
         int width = contents.width();
         int height = contents.height();
         int maxV = 0;
-        outer: for (int y = 0; y < height; y++)
-        {
-            for (int x = 0; x < width; x++)
-            {
-                if (!contents.isTransparent(frame, x, y))
-                {
+        outer: for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                if (!contents.isTransparent(frame, x, y)) {
                     maxV++;
                     continue outer;
-                }
-                else if (x == width - 1)
-                {
+                } else if (x == width - 1) {
                     break outer;
                 }
             }
@@ -183,31 +150,23 @@ final class BlockOverlayMetaCache
             @Nullable SpriteInfo edgeSpriteInfoTranslucent,
             float edgeHeight,
             boolean stateDependent
-    )
-    {
-        boolean isFaceAffected(Direction face)
-        {
+    ) {
+        boolean isFaceAffected(Direction face) {
             return solidFaces.contains(face) || edgesByFace.containsKey(face);
         }
 
-        SpriteInfo solidSpriteInfo(boolean forceTranslucent)
-        {
-            if (solidSpriteInfoTranslucent == null || !forceTranslucent)
-            {
+        SpriteInfo solidSpriteInfo(boolean forceTranslucent) {
+            if (solidSpriteInfoTranslucent == null || !forceTranslucent) {
                 return solidSpriteInfo;
             }
             return solidSpriteInfoTranslucent;
         }
 
-        @Nullable
-        SpriteInfo edgeSpriteInfo(boolean forceTranslucent)
-        {
-            if (edgeSpriteInfo == null)
-            {
+        @Nullable SpriteInfo edgeSpriteInfo(boolean forceTranslucent) {
+            if (edgeSpriteInfo == null) {
                 return null;
             }
-            if (edgeSpriteInfoTranslucent == null || !forceTranslucent)
-            {
+            if (edgeSpriteInfoTranslucent == null || !forceTranslucent) {
                 return edgeSpriteInfo;
             }
             return edgeSpriteInfoTranslucent;

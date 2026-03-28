@@ -12,8 +12,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
-public final class TintSource
-{
+public final class TintSource {
     public static final Codec<TintSource> CODEC = BuiltInRegistries.BLOCK.holderByNameCodec()
             .xmap(TintSource::new, src -> src.block);
 
@@ -22,26 +21,21 @@ public final class TintSource
     @SuppressWarnings("OptionalAssignedToNull")
     private Optional<BlockTintSource> tintSource = null;
 
-    public TintSource(Holder<Block> block)
-    {
+    public TintSource(Holder<Block> block) {
         this.block = block;
     }
 
-    public Block value()
-    {
+    public Block value() {
         return block.value();
     }
 
-    public BlockState defaultBlockState()
-    {
+    public BlockState defaultBlockState() {
         return block.value().defaultBlockState();
     }
 
-    public Optional<BlockTintSource> resolveTintSource(Function<BlockState, List<BlockTintSource>> resolver)
-    {
+    public Optional<BlockTintSource> resolveTintSource(Function<BlockState, List<BlockTintSource>> resolver) {
         //noinspection OptionalAssignedToNull
-        if (tintSource == null)
-        {
+        if (tintSource == null) {
             List<BlockTintSource> sources = resolver.apply(defaultBlockState());
             tintSource = sources.isEmpty() ? Optional.empty() : Optional.of(sources.getFirst());
         }

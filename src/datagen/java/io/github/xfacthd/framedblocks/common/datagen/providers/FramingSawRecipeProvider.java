@@ -14,16 +14,13 @@ import net.neoforged.neoforge.common.Tags;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-public final class FramingSawRecipeProvider extends AbstractFramingSawRecipeProvider
-{
-    private FramingSawRecipeProvider(HolderLookup.Provider registries, RecipeOutput output)
-    {
+public final class FramingSawRecipeProvider extends AbstractFramingSawRecipeProvider {
+    private FramingSawRecipeProvider(HolderLookup.Provider registries, RecipeOutput output) {
         super(registries, output);
     }
 
     @Override
-    protected void buildRecipes()
-    {
+    protected void buildRecipes() {
         sawRecipe(FBContent.BLOCK_FRAMED_CUBE)
                 .material(CUBE_MATERIAL_VALUE)
                 .save(output);
@@ -932,22 +929,18 @@ public final class FramingSawRecipeProvider extends AbstractFramingSawRecipeProv
                 .save(output);
     }
 
-    public static final class Runner extends RecipeProvider.Runner
-    {
-        public Runner(PackOutput output, CompletableFuture<HolderLookup.Provider> registries)
-        {
+    public static final class Runner extends RecipeProvider.Runner {
+        public Runner(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
             super(output, registries);
         }
 
         @Override
-        protected RecipeProvider createRecipeProvider(HolderLookup.Provider registries, RecipeOutput output)
-        {
+        protected RecipeProvider createRecipeProvider(HolderLookup.Provider registries, RecipeOutput output) {
             return new FramingSawRecipeProvider(registries, output);
         }
 
         @Override
-        public String getName()
-        {
+        public String getName() {
             return "Framing Saw Recipes";
         }
     }

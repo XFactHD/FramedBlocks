@@ -28,8 +28,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-public final class CamoCraftingHelper
-{
+public final class CamoCraftingHelper {
     private static final int MAX_CAMO_EXAMPLE_INGREDIENTS_COUNT = 100;
     private static final CamoApplicationRecipe DUMMY_RECIPE = new CamoApplicationRecipe(Ingredient.of(Items.BRUSH));
 
@@ -42,8 +41,7 @@ public final class CamoCraftingHelper
     private List<ItemStack> emptyFramedBlocks = new ArrayList<>();
     private List<ItemStack> emptyDoubleFramedBlocks = new ArrayList<>();
 
-    public CamoCraftingHelper()
-    {
+    public CamoCraftingHelper() {
         this.helperRecipe = DUMMY_RECIPE;
         this.fakeEmptyIngredient = makeDummyIngredient(DummyIngredientType.EMPTY);
         this.camoExamplesIngredient = makeDummyIngredient(DummyIngredientType.CAMO_EXAMPLES);
@@ -51,38 +49,30 @@ public final class CamoCraftingHelper
         this.emptyDoubleFramesIngredient = makeDummyIngredient(DummyIngredientType.EMPTY_DOUBLE_FRAMES);
     }
 
-    public void captureRecipe(Optional<CamoApplicationRecipe> recipe)
-    {
+    public void captureRecipe(Optional<CamoApplicationRecipe> recipe) {
         helperRecipe = recipe.orElse(DUMMY_RECIPE);
     }
 
-    public Ingredient getCopyToolIngredient()
-    {
+    public Ingredient getCopyToolIngredient() {
         return helperRecipe.getCopyTool();
     }
 
-    public void scanForItems(IIngredientManager ingredientManager)
-    {
+    public void scanForItems(IIngredientManager ingredientManager) {
         List<ItemStack> camoExamples = new ArrayList<>();
         List<ItemStack> emptyFramedBlocks = new ArrayList<>();
         List<ItemStack> emptyDoubleFramedBlocks = new ArrayList<>();
 
-        for (ItemStack stack : ingredientManager.getAllItemStacks())
-        {
-            if (camoExamples.size() < MAX_CAMO_EXAMPLE_INGREDIENTS_COUNT)
-            {
+        for (ItemStack stack : ingredientManager.getAllItemStacks()) {
+            if (camoExamples.size() < MAX_CAMO_EXAMPLE_INGREDIENTS_COUNT) {
                 CamoContainerFactory<?> factory = CamoItemStackHelper.getCamoContainerFactory(stack);
-                if (factory != null)
-                {
+                if (factory != null) {
                     camoExamples.add(stack);
                 }
             }
 
-            if (CamoItemStackHelper.isEmptyFramedBlock(stack))
-            {
+            if (CamoItemStackHelper.isEmptyFramedBlock(stack)) {
                 emptyFramedBlocks.add(stack);
-                if (CamoItemStackHelper.isDoubleFramedBlock(stack))
-                {
+                if (CamoItemStackHelper.isDoubleFramedBlock(stack)) {
                     emptyDoubleFramedBlocks.add(stack);
                 }
             }
@@ -94,29 +84,23 @@ public final class CamoCraftingHelper
         this.emptyDoubleFramedBlocks = List.copyOf(emptyDoubleFramedBlocks);
     }
 
-    public List<ItemStack> getEmptyFramedBlocks()
-    {
+    public List<ItemStack> getEmptyFramedBlocks() {
         return emptyFramedBlocks;
     }
 
-    public ItemStack calculateOutput(ItemStack frame, ItemStack inputOne, ItemStack inputTwo)
-    {
+    public ItemStack calculateOutput(ItemStack frame, ItemStack inputOne, ItemStack inputTwo) {
         ItemStack copyToolItem = helperRecipe.getCopyTool().display().resolveForFirstStack(makeSlotDisplayContext());
         CraftingInput craftingInput = CraftingInput.of(2, 2, List.of(frame, copyToolItem, inputOne, inputTwo));
         return helperRecipe.assemble(craftingInput);
     }
 
-    private List<ItemStack> getCamoExampleStacks(Ingredient ingredient, int count)
-    {
-        if (ingredient.equals(fakeEmptyIngredient))
-        {
+    private List<ItemStack> getCamoExampleStacks(Ingredient ingredient, int count) {
+        if (ingredient.equals(fakeEmptyIngredient)) {
             return List.of();
         }
-        if (ingredient.equals(camoExamplesIngredient))
-        {
+        if (ingredient.equals(camoExamplesIngredient)) {
             Collections.shuffle(camoExamples);
-            if (count < this.camoExamples.size())
-            {
+            if (count < this.camoExamples.size()) {
                 return new ArrayList<>(this.camoExamples.subList(0, count));
             }
             return new ArrayList<>(this.camoExamples);
@@ -124,26 +108,20 @@ public final class CamoCraftingHelper
         return asStackList(ingredient);
     }
 
-    private List<ItemStack> getDoubleCamoExampleStacks(Ingredient ingredient, int count)
-    {
-        if (ingredient.equals(fakeEmptyIngredient))
-        {
+    private List<ItemStack> getDoubleCamoExampleStacks(Ingredient ingredient, int count) {
+        if (ingredient.equals(fakeEmptyIngredient)) {
             return List.of();
         }
-        if (ingredient.equals(camoExamplesIngredient))
-        {
+        if (ingredient.equals(camoExamplesIngredient)) {
             Collections.shuffle(this.camoExamples);
             List<ItemStack> results = new ArrayList<>();
 
             results.add(ItemStack.EMPTY);
             count--;
 
-            if (count < this.camoExamples.size())
-            {
+            if (count < this.camoExamples.size()) {
                 results.addAll(this.camoExamples.subList(0, count));
-            }
-            else
-            {
+            } else {
                 results.addAll(this.camoExamples);
             }
             return results;
@@ -151,25 +129,19 @@ public final class CamoCraftingHelper
         return asStackList(ingredient);
     }
 
-    private List<ItemStack> getEmptyFrameStacks(Ingredient ingredient)
-    {
-        if (ingredient.equals(fakeEmptyIngredient))
-        {
+    private List<ItemStack> getEmptyFrameStacks(Ingredient ingredient) {
+        if (ingredient.equals(fakeEmptyIngredient)) {
             return List.of();
         }
-        if (ingredient.equals(emptyFramesIngredient))
-        {
+        if (ingredient.equals(emptyFramesIngredient)) {
             return emptyFramedBlocks;
-        }
-        else if (ingredient.equals(emptyDoubleFramesIngredient))
-        {
+        } else if (ingredient.equals(emptyDoubleFramesIngredient)) {
             return emptyDoubleFramedBlocks;
         }
         return asStackList(ingredient);
     }
 
-    public List<SlotDisplay> getIngredients(JeiCamoApplicationRecipe recipe)
-    {
+    public List<SlotDisplay> getIngredients(JeiCamoApplicationRecipe recipe) {
         return List.of(
                 asSlotDisplay(getEmptyFrameStacks(recipe.frame())),
                 recipe.copyTool().display(),
@@ -178,8 +150,7 @@ public final class CamoCraftingHelper
         );
     }
 
-    public void setRecipe(JeiCamoApplicationRecipe recipe, IRecipeLayoutBuilder builder, ICraftingGridHelper craftingGridHelper)
-    {
+    public void setRecipe(JeiCamoApplicationRecipe recipe, IRecipeLayoutBuilder builder, ICraftingGridHelper craftingGridHelper) {
         List<Pair<String, List<ItemStack>>> namedInputs = List.of(
                 Pair.of("frames", getEmptyFrameStacks(recipe.frame())),
                 Pair.of("copyTool", asStackList(recipe.copyTool())),
@@ -191,14 +162,12 @@ public final class CamoCraftingHelper
         List<IRecipeSlotBuilder> inputSlots = craftingGridHelper.createAndSetNamedInputs(builder, namedInputs, 2, 2);
 
         IRecipeSlotRichTooltipCallback tooltipCallback = new InputSlotTooltipCallback();
-        for (IRecipeSlotBuilder slotBuilder : inputSlots)
-        {
+        for (IRecipeSlotBuilder slotBuilder : inputSlots) {
             slotBuilder.addRichTooltipCallback(tooltipCallback);
         }
 
         Optional<ItemStack> result = recipe.result().map(ItemStackTemplate::create);
-        if (result.isEmpty())
-        {
+        if (result.isEmpty()) {
             // For bookmarking, the recipe must have at least one known output.
             // Outputs are mostly calculated and displayed using onDisplayedIngredientsUpdate,
             // but we calculate one here to support bookmarking.
@@ -215,15 +184,15 @@ public final class CamoCraftingHelper
         craftingGridHelper.createAndSetOutputs(builder, List.of(result.get()));
     }
 
-    private static List<ItemStack> asStackList(Ingredient ingredient)
-    {
+    private static List<ItemStack> asStackList(Ingredient ingredient) {
         ContextMap context = makeSlotDisplayContext();
         return ingredient.display().resolveForStacks(context);
     }
 
-    private static SlotDisplay asSlotDisplay(List<ItemStack> stacks)
-    {
-        if (stacks.isEmpty()) return SlotDisplay.Empty.INSTANCE;
+    private static SlotDisplay asSlotDisplay(List<ItemStack> stacks) {
+        if (stacks.isEmpty()) {
+            return SlotDisplay.Empty.INSTANCE;
+        }
 
         List<SlotDisplay> displays = stacks.stream()
                 .map(ItemStackTemplate::fromNonEmptyStack)
@@ -233,28 +202,21 @@ public final class CamoCraftingHelper
         return new SlotDisplay.Composite(displays);
     }
 
-    public static Ingredient makeDummyIngredient(DummyIngredientType dummyType)
-    {
+    public static Ingredient makeDummyIngredient(DummyIngredientType dummyType) {
         return new JeiCamoApplicationDummyIngredient(dummyType).toVanilla();
     }
 
-    public static ContextMap makeSlotDisplayContext()
-    {
+    public static ContextMap makeSlotDisplayContext() {
         Level level = Objects.requireNonNull(Minecraft.getInstance().level);
         return SlotDisplayContext.fromLevel(level);
     }
 
-    private static class InputSlotTooltipCallback implements IRecipeSlotRichTooltipCallback
-    {
+    private static class InputSlotTooltipCallback implements IRecipeSlotRichTooltipCallback {
         @Override
-        public void onRichTooltip(IRecipeSlotView recipeSlotView, ITooltipBuilder tooltip)
-        {
-            recipeSlotView.getSlotName().ifPresent(name ->
-            {
-                if (name.equals("camoOne") || name.equals("camoTwo"))
-                {
-                    if (recipeSlotView.getItemStacks().count() > 1)
-                    {
+        public void onRichTooltip(IRecipeSlotView recipeSlotView, ITooltipBuilder tooltip) {
+            recipeSlotView.getSlotName().ifPresent(name -> {
+                if (name.equals("camoOne") || name.equals("camoTwo")) {
+                    if (recipeSlotView.getItemStacks().count() > 1) {
                         tooltip.clear();
                         tooltip.add(JeiCompat.MSG_SUPPORTS_MOST_CAMOS);
                     }

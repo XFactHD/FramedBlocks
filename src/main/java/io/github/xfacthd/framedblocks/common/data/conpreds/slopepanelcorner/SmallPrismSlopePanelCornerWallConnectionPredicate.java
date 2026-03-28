@@ -9,32 +9,26 @@ import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jspecify.annotations.Nullable;
 
-public final class SmallPrismSlopePanelCornerWallConnectionPredicate implements ConnectionPredicate
-{
+public final class SmallPrismSlopePanelCornerWallConnectionPredicate implements ConnectionPredicate {
     @Override
-    public boolean canConnectFullEdge(BlockState state, Direction side, @Nullable Direction edge)
-    {
+    public boolean canConnectFullEdge(BlockState state, Direction side, @Nullable Direction edge) {
         Direction dir = state.getValue(FramedProperties.FACING_HOR);
         HorizontalRotation rot = state.getValue(PropertyHolder.ROTATION);
         Direction backDirOne = rot.withFacing(dir);
         Direction backDirTwo = rot.rotate(Rotation.COUNTERCLOCKWISE_90).withFacing(dir);
-        if (side == backDirOne)
-        {
+        if (side == backDirOne) {
             return edge == backDirTwo;
         }
-        if (side == backDirTwo)
-        {
+        if (side == backDirTwo) {
             return edge == backDirOne;
         }
         return false;
     }
 
     @Override
-    public boolean canConnectDetailed(BlockState state, Direction side, Direction edge)
-    {
+    public boolean canConnectDetailed(BlockState state, Direction side, Direction edge) {
         Direction dir = state.getValue(FramedProperties.FACING_HOR);
-        if (side.getAxis() != dir.getAxis())
-        {
+        if (side.getAxis() != dir.getAxis()) {
             return edge.getAxis() == dir.getAxis();
         }
         return false;

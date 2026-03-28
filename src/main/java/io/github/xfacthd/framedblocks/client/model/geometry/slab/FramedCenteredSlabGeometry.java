@@ -11,22 +11,17 @@ import net.minecraft.client.resources.model.geometry.BakedQuad;
 import net.minecraft.core.Direction;
 import org.jspecify.annotations.Nullable;
 
-public class FramedCenteredSlabGeometry extends Geometry
-{
+public class FramedCenteredSlabGeometry extends Geometry {
     public FramedCenteredSlabGeometry(@SuppressWarnings("unused") GeometryFactory.Context ctx) { }
 
     @Override
-    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
-    {
+    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData) {
         Direction quadDir = quad.direction();
-        if (DirUtils.isY(quadDir))
-        {
+        if (DirUtils.isY(quadDir)) {
             QuadModifier.of(quad)
                     .apply(Modifiers.setPosition(12F/16F))
                     .export(quadMap, null);
-        }
-        else
-        {
+        } else {
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(Direction.Axis.Y, 12F/16F))
                     .export(quadMap, quadDir);

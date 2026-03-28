@@ -11,8 +11,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin(StairBlock.class)
-public class MixinStairBlock
-{
+public class MixinStairBlock {
     @WrapOperation(
             method = "<init>",
             at = @At(
@@ -21,10 +20,8 @@ public class MixinStairBlock
             )
     )
     @SuppressWarnings({ "ConstantValue", "rawtypes" })
-    private Object framedblocks$preventWaterloggedDefaultValue(BlockState instance, Property<?> property, Comparable<?> comparable, Operation<Object> original)
-    {
-        if (property != BlockStateProperties.WATERLOGGED || ((Class) this.getClass()) != FramedDoubleStairsBlock.class)
-        {
+    private Object framedblocks$preventWaterloggedDefaultValue(BlockState instance, Property<?> property, Comparable<?> comparable, Operation<Object> original) {
+        if (property != BlockStateProperties.WATERLOGGED || ((Class) this.getClass()) != FramedDoubleStairsBlock.class) {
             return original.call(instance, property, comparable);
         }
         return instance;
@@ -38,8 +35,7 @@ public class MixinStairBlock
             )
     )
     @SuppressWarnings("MethodMayBeStatic")
-    private Comparable<?> framedblocks$preventWaterloggedUpdateShape(BlockState instance, Property<?> property, Operation<Comparable<?>> original)
-    {
+    private Comparable<?> framedblocks$preventWaterloggedUpdateShape(BlockState instance, Property<?> property, Operation<Comparable<?>> original) {
         return instance.hasProperty(property) ? instance.getValue(property) : Boolean.FALSE;
     }
 }

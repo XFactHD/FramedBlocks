@@ -23,8 +23,7 @@ import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.transfer.ResourceHandlerUtil;
 import org.jspecify.annotations.Nullable;
 
-public class FramedStorageBlockEntity extends FramedBlockEntity implements MenuProvider, Nameable, Clearable
-{
+public class FramedStorageBlockEntity extends FramedBlockEntity implements MenuProvider, Nameable, Clearable {
     public static final Component TITLE = Utils.translate("title", "framed_secret_storage");
     public static final int SLOTS = 9 * 3;
     public static final String INVENTORY_NBT_KEY = "inventory";
@@ -33,112 +32,91 @@ public class FramedStorageBlockEntity extends FramedBlockEntity implements MenuP
     @Nullable
     private Component customName = null;
 
-    public FramedStorageBlockEntity(BlockPos pos, BlockState state)
-    {
+    public FramedStorageBlockEntity(BlockPos pos, BlockState state) {
         super(FBContent.BE_TYPE_FRAMED_SECRET_STORAGE.value(), pos, state);
     }
 
-    protected FramedStorageBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
-    {
+    protected FramedStorageBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
     }
 
-    public void open(ServerPlayer player)
-    {
+    public void open(ServerPlayer player) {
         player.openMenu(this);
     }
 
-    public boolean isUsableByPlayer(Player player)
-    {
-        if (level().getBlockEntity(worldPosition) != this)
-        {
+    public boolean isUsableByPlayer(Player player) {
+        if (level().getBlockEntity(worldPosition) != this) {
             return false;
         }
-        return !(player.distanceToSqr((double)worldPosition.getX() + 0.5D, (double)worldPosition.getY() + 0.5D, (double)worldPosition.getZ() + 0.5D) > 64.0D);
+        return !(player.distanceToSqr((double) worldPosition.getX() + 0.5D, (double) worldPosition.getY() + 0.5D, (double) worldPosition.getZ() + 0.5D) > 64.0D);
     }
 
     @Override
-    public void clearContent()
-    {
+    public void clearContent() {
         Utils.clearItemResourceHandler(itemHandler);
     }
 
     @Override
-    public void preRemoveSideEffects(BlockPos pos, BlockState state)
-    {
+    public void preRemoveSideEffects(BlockPos pos, BlockState state) {
         super.preRemoveSideEffects(pos, state);
-        if (level != null)
-        {
+        if (level != null) {
             Utils.dropItemResourceHandlerContents(level, pos, itemHandler);
             clearContent();
         }
     }
 
-    public int getAnalogOutputSignal()
-    {
+    public int getAnalogOutputSignal() {
         return ResourceHandlerUtil.getRedstoneSignalFromResourceHandler(itemHandler);
     }
 
-    public IStorageBlockItemResourceHandler getItemHandler()
-    {
+    public IStorageBlockItemResourceHandler getItemHandler() {
         return itemHandler;
     }
 
-    public void setCustomName(Component customName)
-    {
+    public void setCustomName(Component customName) {
         this.customName = customName;
         setChangedWithoutSignalUpdate();
     }
 
     @Override
-    public Component getName()
-    {
+    public Component getName() {
         return customName != null ? customName : getDefaultName();
     }
 
     @Override
-    @Nullable
-    public Component getCustomName()
-    {
+    public @Nullable Component getCustomName() {
         return customName;
     }
 
     @Override
-    public void saveAdditional(ValueOutput valueOutput)
-    {
+    public void saveAdditional(ValueOutput valueOutput) {
         itemHandler.serialize(valueOutput.child(INVENTORY_NBT_KEY));
         valueOutput.storeNullable("custom_name", ComponentSerialization.CODEC, customName);
         super.saveAdditional(valueOutput);
     }
 
     @Override
-    public void loadAdditional(ValueInput valueInput)
-    {
+    public void loadAdditional(ValueInput valueInput) {
         super.loadAdditional(valueInput);
         itemHandler.deserialize(valueInput.childOrEmpty(INVENTORY_NBT_KEY));
         customName = parseCustomNameSafe(valueInput, "custom_name");
     }
 
-    protected Component getDefaultName()
-    {
+    protected Component getDefaultName() {
         return TITLE;
     }
 
     @Override
-    public Component getDisplayName()
-    {
+    public Component getDisplayName() {
         return getName();
     }
 
     @Override
-    @Nullable
-    public AbstractContainerMenu createMenu(int windowId, Inventory inv, Player player)
-    {
+    public @Nullable AbstractContainerMenu createMenu(int windowId, Inventory inv, Player player) {
         return FramedStorageMenu.createSingle(windowId, inv, itemHandler);
     }
 
-    public static StorageBlockItemResourceHandler createItemHandler(@Nullable FramedStorageBlockEntity be, boolean doubleChest)
-    {
+    public static StorageBlockItemResourceHandler createItemHandler(@Nullable FramedStorageBlockEntity be, boolean doubleChest) {
         return new StorageBlockItemResourceHandler(be, SLOTS * (doubleChest ? 2 : 1));
     }
 }

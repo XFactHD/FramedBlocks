@@ -6,8 +6,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 
-public record CollapsibleBlockData(int offsets)
-{
+public record CollapsibleBlockData(int offsets) {
     public static final Codec<CollapsibleBlockData> CODEC = RecordCodecBuilder.create(inst -> inst.group(
             Codec.INT.fieldOf("offsets").forGetter(CollapsibleBlockData::offsets)
     ).apply(inst, CollapsibleBlockData::new));

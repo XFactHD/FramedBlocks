@@ -13,8 +13,7 @@ import net.neoforged.neoforge.common.crafting.IngredientType;
 
 import java.util.stream.Stream;
 
-public record JeiCamoApplicationDummyIngredient(DummyIngredientType dummyType) implements ICustomIngredient
-{
+public record JeiCamoApplicationDummyIngredient(DummyIngredientType dummyType) implements ICustomIngredient {
     public static final MapCodec<JeiCamoApplicationDummyIngredient> CODEC = DummyIngredientType.CODEC
             .xmap(JeiCamoApplicationDummyIngredient::new, JeiCamoApplicationDummyIngredient::dummyType)
             .fieldOf("dummy_type");
@@ -22,32 +21,27 @@ public record JeiCamoApplicationDummyIngredient(DummyIngredientType dummyType) i
             .map(JeiCamoApplicationDummyIngredient::new, JeiCamoApplicationDummyIngredient::dummyType);
 
     @Override
-    public boolean test(ItemStack stack)
-    {
+    public boolean test(ItemStack stack) {
         return false;
     }
 
     @Override
-    public Stream<Holder<Item>> items()
-    {
+    public Stream<Holder<Item>> items() {
         return Stream.empty();
     }
 
     @Override
-    public boolean isSimple()
-    {
+    public boolean isSimple() {
         return false;
     }
 
     @Override
-    public IngredientType<?> getType()
-    {
+    public IngredientType<?> getType() {
         return FBContent.INGREDIENT_TYPE_JEI_CAMO_DUMMY.value();
     }
 
     @Override
-    public SlotDisplay display()
-    {
+    public SlotDisplay display() {
         return SlotDisplay.Empty.INSTANCE;
     }
 }

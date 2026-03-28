@@ -25,7 +25,6 @@ import net.minecraft.world.level.block.CrossCollisionBlock;
 import net.minecraft.world.level.block.FenceBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.redstone.Orientation;
 import net.minecraft.world.level.storage.loot.LootParams;
@@ -35,33 +34,26 @@ import org.jspecify.annotations.Nullable;
 import java.util.List;
 import java.util.Set;
 
-public class FramedFenceBlock extends FenceBlock implements IFramedBlockInternal, ShapeLockableBlock
-{
-    public FramedFenceBlock(Properties props)
-    {
+public class FramedFenceBlock extends FenceBlock implements IFramedBlockInternal, ShapeLockableBlock {
+    public FramedFenceBlock(Properties props) {
         super(IFramedBlock.applyDefaultProperties(props, BlockType.FRAMED_FENCE));
         BlockUtils.configureStandardProperties(this);
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
-    {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
         BlockUtils.addStandardProperties(this, builder);
     }
 
     @Override
-    protected InteractionResult useItemOn(
-            ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit
-    )
-    {
+    protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         InteractionResult result = handleUse(state, level, pos, player, hand, hit);
         return result.consumesAction() ? result : super.useItemOn(stack, state, level, pos, player, hand, hit);
     }
 
     @Override
-    public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)
-    {
+    public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
         tryApplyCamoImmediately(level, pos, placer, stack);
     }
 
@@ -75,30 +67,23 @@ public class FramedFenceBlock extends FenceBlock implements IFramedBlockInternal
             BlockPos adjPos,
             BlockState adjState,
             RandomSource random
-    )
-    {
+    ) {
         BlockState newState = updateShapeLockable(state, level, tickAccess, pos, side, adjPos, adjState, random, super::updateShape);
-        if (newState == state)
-        {
+        if (newState == state) {
             updateCulling(level, pos);
         }
         return newState;
     }
 
     @Override
-    protected boolean shouldChangedStateKeepBlockEntity(BlockState state)
-    {
+    protected boolean shouldChangedStateKeepBlockEntity(BlockState state) {
         return DiagonalBlocksCompat.isFramedFence(state);
     }
 
     @Override
-    public boolean connectsTo(BlockState adjState, boolean sideSolid, Direction adjSide)
-    {
-        if (!DirUtils.isY(adjSide) && DiagonalBlocksCompat.isFramedFence(adjState) && adjState.getValue(FramedProperties.STATE_LOCKED))
-        {
-            BooleanProperty prop = CrossCollisionBlock.PROPERTY_BY_DIRECTION.get(adjSide);
-            if (!adjState.getValue(prop))
-            {
+    public boolean connectsTo(BlockState adjState, boolean sideSolid, Direction adjSide) {
+        if (!DirUtils.isY(adjSide) && DiagonalBlocksCompat.isFramedFence(adjState) && adjState.getValue(FramedProperties.STATE_LOCKED)) {
+            if (!adjState.getValue(CrossCollisionBlock.PROPERTY_BY_DIRECTION.get(adjSide))) {
                 return false;
             }
         }
@@ -106,58 +91,47 @@ public class FramedFenceBlock extends FenceBlock implements IFramedBlockInternal
     }
 
     @Override
-    protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, @Nullable Orientation orientation, boolean isMoving)
-    {
+    protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, @Nullable Orientation orientation, boolean isMoving) {
         updateCulling(level, pos);
     }
 
     @Override
-    protected float getShadeBrightness(BlockState state, BlockGetter level, BlockPos pos)
-    {
+    protected float getShadeBrightness(BlockState state, BlockGetter level, BlockPos pos) {
         return getCamoShadeBrightness(state, level, pos, super.getShadeBrightness(state, level, pos));
     }
 
     @Override
-    protected boolean propagatesSkylightDown(BlockState state)
-    {
+    protected boolean propagatesSkylightDown(BlockState state) {
         return state.getValue(FramedProperties.PROPAGATES_SKYLIGHT);
     }
 
     @Override
-    protected List<ItemStack> getDrops(BlockState state, LootParams.Builder builder)
-    {
+    protected List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {
         return super.getDrops(state, getCamoDrops(builder));
     }
 
     @Override
-    public BlockType getBlockType()
-    {
+    public BlockType getBlockType() {
         return BlockType.FRAMED_FENCE;
     }
 
     @Override
-    public Set<Property<?>> getPropertiesToCopy()
-    {
+    public Set<Property<?>> getPropertiesToCopy() {
         return Set.of(NORTH, EAST, SOUTH, WEST);
     }
 
     @Override
-    @Nullable
-    public BlockState getItemModelSource()
-    {
+    public @Nullable BlockState getItemModelSource() {
         return defaultBlockState();
     }
 
     @Override
-    @Nullable
-    public Direction getHorizontalOrientation(BlockState state)
-    {
+    public @Nullable Direction getHorizontalOrientation(BlockState state) {
         return null;
     }
 
     @Override
-    public BlockState getJadeRenderState(BlockState state)
-    {
+    public BlockState getJadeRenderState(BlockState state) {
         return defaultBlockState().setValue(EAST, true).setValue(WEST, true);
     }
 }

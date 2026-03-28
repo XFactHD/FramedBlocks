@@ -18,8 +18,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
-final class BlockInteractOverlayWrapper
-{
+final class BlockInteractOverlayWrapper {
     private static final int LINE_DIST = 3;
     private static final int ICON_MARGIN = 20;
     private static final int TOOLTIP_MARGIN = 10;
@@ -31,29 +30,24 @@ final class BlockInteractOverlayWrapper
     private int textWidth = 0;
     boolean textWidthValid = false;
 
-    BlockInteractOverlayWrapper(String name, BlockInteractOverlay overlay)
-    {
+    BlockInteractOverlayWrapper(String name, BlockInteractOverlay overlay) {
         this.name = name;
         this.overlay = overlay;
     }
 
-    boolean render(GuiGraphicsExtractor graphics, Player player, OverlayDisplayMode cfgMode)
-    {
+    boolean render(GuiGraphicsExtractor graphics, Player player, OverlayDisplayMode cfgMode) {
         OverlayDisplayMode mode = cfgMode.constrain(overlay.getDisplayMode());
-        if (mode == OverlayDisplayMode.HIDDEN)
-        {
+        if (mode == OverlayDisplayMode.HIDDEN) {
             return false;
         }
 
         ItemStack stack = player.getMainHandItem();
-        if (!overlay.isValidTool(player, stack))
-        {
+        if (!overlay.isValidTool(player, stack)) {
             return false;
         }
 
         BlockInteractOverlay.Target target = getTargettedBlock(player);
-        if (target == null || !overlay.isValidTarget(target))
-        {
+        if (target == null || !overlay.isValidTarget(target)) {
             return false;
         }
 
@@ -69,8 +63,7 @@ final class BlockInteractOverlayWrapper
         tex.draw(graphics, texX, texY);
         overlay.renderAfterIcon(graphics, tex, texX, texY, target);
 
-        if (isDetailedVisible(mode, player))
-        {
+        if (isDetailedVisible(mode, player)) {
             List<Component> lines = overlay.getLines(target, state);
             renderDetailed(graphics, tex, lines, centerX, screenHeight, target);
         }
@@ -78,10 +71,8 @@ final class BlockInteractOverlayWrapper
         return true;
     }
 
-    private static boolean isDetailedVisible(OverlayDisplayMode mode, Player player)
-    {
-        return switch (mode)
-        {
+    private static boolean isDetailedVisible(OverlayDisplayMode mode, Player player) {
+        return switch (mode) {
             case HIDDEN, ICON -> false;
             case DETAILED_TOGGLE -> player.isShiftKeyDown();
             case DETAILED_ALWAYS -> true;
@@ -95,11 +86,9 @@ final class BlockInteractOverlayWrapper
             int centerX,
             int screenHeight,
             BlockInteractOverlay.Target target
-    )
-    {
+    ) {
         Font font = Minecraft.getInstance().font;
-        if (!textWidthValid)
-        {
+        if (!textWidthValid) {
             updateTextWidth(font);
         }
 
@@ -114,8 +103,7 @@ final class BlockInteractOverlayWrapper
         int maxY = screenHeight - Math.min(gui.leftHeight, gui.rightHeight);
         int x = centerX - (width / 2);
         int y = Math.max(screenHeight - DEFAULT_Y_OFF - height, minY + TOOLTIP_MARGIN);
-        if (y + height > maxY - TOOLTIP_MARGIN)
-        {
+        if (y + height > maxY - TOOLTIP_MARGIN) {
             return;
         }
 
@@ -123,8 +111,7 @@ final class BlockInteractOverlayWrapper
 
         int textX = x + tex.width() + PADDING;
         int yBaseOff = tex.height() > contentHeight ? ((tex.height() - contentHeight) / 2) : 0;
-        for (int i = 0; i < count; i++)
-        {
+        for (int i = 0; i < count; i++) {
             Component text = lines.get(i);
             int yOff = yBaseOff + lineHeight * i;
             graphics.text(font, text, textX, y + yOff, -1);
@@ -135,26 +122,21 @@ final class BlockInteractOverlayWrapper
         overlay.renderAfterIcon(graphics, tex, x, texY, target);
     }
 
-    private void updateTextWidth(Font font)
-    {
+    private void updateTextWidth(Font font) {
         textWidth = 0;
-        for (Component line : overlay.getAllLines())
-        {
+        for (Component line : overlay.getAllLines()) {
             textWidth = Math.max(textWidth, font.width(line));
         }
         textWidthValid = true;
     }
 
-    String getName()
-    {
+    String getName() {
         return name;
     }
 
-    private static BlockInteractOverlay.@Nullable Target getTargettedBlock(Player player)
-    {
+    private static BlockInteractOverlay.@Nullable Target getTargettedBlock(Player player) {
         HitResult hit = Minecraft.getInstance().hitResult;
-        if (hit instanceof BlockHitResult blockHit)
-        {
+        if (hit instanceof BlockHitResult blockHit) {
             Level level = player.level();
             BlockPos pos = blockHit.getBlockPos();
             return new BlockInteractOverlay.Target(level, pos, level.getBlockState(pos), blockHit.getDirection(), player);
@@ -162,8 +144,7 @@ final class BlockInteractOverlayWrapper
         return null;
     }
 
-    private static void drawTooltipBackground(GuiGraphicsExtractor graphics, int x, int y, int width, int height)
-    {
+    private static void drawTooltipBackground(GuiGraphicsExtractor graphics, int x, int y, int width, int height) {
         TooltipRenderUtil.extractTooltipBackground(graphics, x - 2, y - 2, width + 4, height + 4, null);
     }
 }

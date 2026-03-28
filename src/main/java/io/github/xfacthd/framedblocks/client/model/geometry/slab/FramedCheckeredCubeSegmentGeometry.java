@@ -12,21 +12,17 @@ import net.minecraft.client.resources.model.geometry.BakedQuad;
 import net.minecraft.core.Direction;
 import org.jspecify.annotations.Nullable;
 
-public class FramedCheckeredCubeSegmentGeometry extends Geometry
-{
+public class FramedCheckeredCubeSegmentGeometry extends Geometry {
     private final boolean second;
 
-    public FramedCheckeredCubeSegmentGeometry(GeometryFactory.Context ctx)
-    {
+    public FramedCheckeredCubeSegmentGeometry(GeometryFactory.Context ctx) {
         this.second = ctx.state().getValue(PropertyHolder.SECOND);
     }
 
     @Override
-    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
-    {
+    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData) {
         Direction quadDir = quad.direction();
-        if (DirUtils.isY(quadDir))
-        {
+        if (DirUtils.isY(quadDir)) {
             boolean up = quadDir == Direction.UP;
             Direction xDir = (second ^ up) ? Direction.WEST : Direction.EAST;
 
@@ -51,9 +47,7 @@ public class FramedCheckeredCubeSegmentGeometry extends Geometry
                     .apply(Modifiers.cut(xDir, .5F))
                     .apply(Modifiers.setPosition(.5F))
                     .export(quadMap, null);
-        }
-        else
-        {
+        } else {
             Direction horDir = DirUtils.isX(quadDir) ^ second ? quadDir.getCounterClockWise() : quadDir.getClockWise();
 
             QuadModifier.of(quad)

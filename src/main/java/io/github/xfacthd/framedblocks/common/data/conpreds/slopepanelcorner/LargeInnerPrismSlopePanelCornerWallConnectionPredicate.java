@@ -9,47 +9,38 @@ import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jspecify.annotations.Nullable;
 
-public final class LargeInnerPrismSlopePanelCornerWallConnectionPredicate implements ConnectionPredicate
-{
+public final class LargeInnerPrismSlopePanelCornerWallConnectionPredicate implements ConnectionPredicate {
     @Override
-    public boolean canConnectFullEdge(BlockState state, Direction side, @Nullable Direction edge)
-    {
+    public boolean canConnectFullEdge(BlockState state, Direction side, @Nullable Direction edge) {
         Direction dir = state.getValue(FramedProperties.FACING_HOR);
         HorizontalRotation rot = state.getValue(PropertyHolder.ROTATION);
         Direction backDirOne = rot.withFacing(dir);
         Direction backDirTwo = rot.rotate(Rotation.COUNTERCLOCKWISE_90).withFacing(dir);
-        if (side.getAxis() == dir.getAxis())
-        {
+        if (side.getAxis() == dir.getAxis()) {
             return edge == backDirOne || edge == backDirTwo;
         }
-        if (side == backDirOne || side == backDirTwo)
-        {
+        if (side == backDirOne || side == backDirTwo) {
             return true;
         }
-        if (side == backDirOne.getOpposite())
-        {
+        if (side == backDirOne.getOpposite()) {
             return edge == backDirTwo;
         }
-        if (side == backDirTwo.getOpposite())
-        {
+        if (side == backDirTwo.getOpposite()) {
             return edge == backDirOne;
         }
         return false;
     }
 
     @Override
-    public boolean canConnectDetailed(BlockState state, Direction side, Direction edge)
-    {
+    public boolean canConnectDetailed(BlockState state, Direction side, Direction edge) {
         Direction dir = state.getValue(FramedProperties.FACING_HOR);
         HorizontalRotation rot = state.getValue(PropertyHolder.ROTATION);
         Direction backDirOne = rot.withFacing(dir);
         Direction backDirTwo = rot.rotate(Rotation.COUNTERCLOCKWISE_90).withFacing(dir);
-        if (side == dir)
-        {
+        if (side == dir) {
             return edge == backDirOne.getOpposite() || edge == backDirTwo.getOpposite();
         }
-        if (side == backDirOne.getOpposite() || side == backDirTwo.getOpposite())
-        {
+        if (side == backDirOne.getOpposite() || side == backDirTwo.getOpposite()) {
             return edge.getAxis() == dir.getAxis();
         }
         return false;

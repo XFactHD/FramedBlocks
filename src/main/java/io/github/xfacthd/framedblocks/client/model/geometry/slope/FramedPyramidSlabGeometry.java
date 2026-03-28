@@ -14,42 +14,36 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.joml.Vector3f;
 import org.jspecify.annotations.Nullable;
 
-public class FramedPyramidSlabGeometry extends Geometry
-{
+public class FramedPyramidSlabGeometry extends Geometry {
     private static final Vector3f ZERO = new Vector3f();
 
     private final Direction facing;
     private final boolean altSlope;
 
-    public FramedPyramidSlabGeometry(GeometryFactory.Context ctx)
-    {
+    public FramedPyramidSlabGeometry(GeometryFactory.Context ctx) {
         this.facing = ctx.state().getValue(BlockStateProperties.FACING);
         this.altSlope = ctx.state().getValue(FramedProperties.ALT_SLOPE);
     }
 
     @Override
-    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
-    {
+    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData) {
         Direction quadDir = quad.direction();
-        if (DirUtils.isY(facing))
-        {
+        if (DirUtils.isY(facing)) {
             boolean up = facing == Direction.UP;
-            if (!altSlope && quadDir.getAxis() != facing.getAxis())
-            {
+            if (!altSlope && quadDir.getAxis() != facing.getAxis()) {
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(facing, .5F))
                         .apply(Modifiers.cut(quadDir.getCounterClockWise(), up ? 0 : 1, up ? 1 : 0))
                         .apply(Modifiers.cut(quadDir.getClockWise(), up ? 0 : 1, up ? 1 : 0))
                         .apply(Modifiers.makeVerticalSlope(up, 45))
                         .export(quadMap, null);
-            }
-            else if (altSlope && quadDir == facing)
-            {
-                for (Direction dir : Direction.Plane.HORIZONTAL)
-                {
+            } else if (altSlope && quadDir == facing) {
+                for (Direction dir : Direction.Plane.HORIZONTAL) {
                     boolean northeast = dir == Direction.NORTH || dir == Direction.EAST;
                     float angle = up ? -45 : 45;
-                    if (northeast) { angle *= -1F; }
+                    if (northeast) {
+                        angle *= -1F;
+                    }
                     QuadModifier.of(quad)
                             .apply(Modifiers.cut(dir, .5F))
                             .apply(Modifiers.cut(dir.getCounterClockWise(), 0, 1))
@@ -59,11 +53,8 @@ public class FramedPyramidSlabGeometry extends Geometry
                             .export(quadMap, null);
                 }
             }
-        }
-        else
-        {
-            if (!altSlope && quadDir.getAxis() == facing.getAxis())
-            {
+        } else {
+            if (!altSlope && quadDir.getAxis() == facing.getAxis()) {
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(Direction.DOWN, .5F))
                         .apply(Modifiers.cut(facing.getClockWise(), 1, 0))
@@ -77,20 +68,16 @@ public class FramedPyramidSlabGeometry extends Geometry
                         .apply(Modifiers.cut(facing.getCounterClockWise(), 0, 1))
                         .apply(Modifiers.makeVerticalSlope(false, 45))
                         .export(quadMap, null);
-            }
-            else if (altSlope && DirUtils.isY(quadDir))
-            {
+            } else if (altSlope && DirUtils.isY(quadDir)) {
                 boolean up = quadDir == Direction.UP;
 
                 float angle = up ? 45 : -45;
-                if (facing == Direction.NORTH || facing == Direction.EAST)
-                {
+                if (facing == Direction.NORTH || facing == Direction.EAST) {
                     angle *= -1F;
                 }
 
                 Vector3f origin = facing.getOpposite().step().max(ZERO);
-                if (up)
-                {
+                if (up) {
                     origin.add(0, 1, 0);
                 }
 
@@ -100,9 +87,7 @@ public class FramedPyramidSlabGeometry extends Geometry
                         .apply(Modifiers.cut(facing.getClockWise(), 1, 0))
                         .apply(Modifiers.rotate(facing.getClockWise().getAxis(), origin, angle, true))
                         .export(quadMap, null);
-            }
-            else if (quadDir.getAxis() == facing.getClockWise().getAxis())
-            {
+            } else if (quadDir.getAxis() == facing.getClockWise().getAxis()) {
                 boolean right = quadDir == facing.getClockWise();
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(facing, .5F))

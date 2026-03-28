@@ -7,22 +7,16 @@ import io.github.xfacthd.framedblocks.common.data.property.StairsType;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 
-public final class VerticalSlicedStairsFullFacePredicate implements FullFacePredicate
-{
+public final class VerticalSlicedStairsFullFacePredicate implements FullFacePredicate {
     @Override
-    public boolean test(BlockState state, Direction side)
-    {
+    public boolean test(BlockState state, Direction side) {
         Direction dir = state.getValue(FramedProperties.FACING_HOR);
         StairsType type = state.getValue(PropertyHolder.STAIRS_TYPE);
         boolean right = state.getValue(PropertyHolder.RIGHT);
 
-        if (right)
-        {
+        if (right) {
             return side == dir.getCounterClockWise() && !type.isCounterClockwise();
         }
-        else
-        {
-            return side == dir && !type.isForward();
-        }
+        return side == dir && !type.isForward();
     }
 }

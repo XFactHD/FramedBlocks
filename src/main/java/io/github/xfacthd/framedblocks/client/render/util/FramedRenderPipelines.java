@@ -7,8 +7,7 @@ import io.github.xfacthd.framedblocks.api.util.Utils;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.neoforged.neoforge.client.event.RegisterRenderPipelinesEvent;
 
-public final class FramedRenderPipelines
-{
+public final class FramedRenderPipelines {
     public static final RenderPipeline LINES_NO_DEPTH = RenderPipeline.builder(RenderPipelines.LINES_SNIPPET)
             .withLocation(Utils.id("pipeline/lines_no_depth"))
             .withDepthStencilState(new DepthStencilState(CompareOp.ALWAYS_PASS, false))
@@ -19,8 +18,7 @@ public final class FramedRenderPipelines
             .withDepthStencilState(DepthStencilState.DEFAULT)
             .build();
 
-    public static void onRegisterRenderPipelines(RegisterRenderPipelinesEvent event)
-    {
+    public static void onRegisterRenderPipelines(RegisterRenderPipelinesEvent event) {
         event.registerPipeline(LINES_NO_DEPTH);
         event.registerPipeline(DEBUG_QUADS_DEPTH);
     }

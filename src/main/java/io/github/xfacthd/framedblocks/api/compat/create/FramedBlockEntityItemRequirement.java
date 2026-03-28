@@ -15,38 +15,30 @@ import net.minecraft.world.level.block.state.BlockState;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FramedBlockEntityItemRequirement implements SchematicRequirementRegistries.BlockEntityRequirement
-{
+public class FramedBlockEntityItemRequirement implements SchematicRequirementRegistries.BlockEntityRequirement {
     public static final FramedBlockEntityItemRequirement INSTANCE = new FramedBlockEntityItemRequirement();
     private static final FrameModifier[] MODIFIERS = FrameModifier.values();
 
     protected FramedBlockEntityItemRequirement() { }
 
     @Override
-    public final ItemRequirement getRequiredItems(BlockEntity blockEntity, BlockState state)
-    {
-        if (blockEntity instanceof IFramedBlockEntity fbe)
-        {
+    public final ItemRequirement getRequiredItems(BlockEntity blockEntity, BlockState state) {
+        if (blockEntity instanceof IFramedBlockEntity fbe) {
             List<ItemRequirement.StackRequirement> requirements = new ArrayList<>();
 
             CamoContainer<?, ?> camoOne = fbe.getCamo();
-            if (!camoOne.isEmpty() && camoOne.canTriviallyConvertToItemStack())
-            {
+            if (!camoOne.isEmpty() && camoOne.canTriviallyConvertToItemStack()) {
                 requirements.add(consume(CamoContainerHelper.dropCamo(camoOne)));
             }
-            if (fbe instanceof FramedDoubleBlockEntity fdbe)
-            {
+            if (fbe instanceof FramedDoubleBlockEntity fdbe) {
                 CamoContainer<?, ?> camoTwo = fdbe.getCamoTwo();
-                if (!camoTwo.isEmpty() && camoTwo.canTriviallyConvertToItemStack())
-                {
+                if (!camoTwo.isEmpty() && camoTwo.canTriviallyConvertToItemStack()) {
                     requirements.add(consume(CamoContainerHelper.dropCamo(camoTwo)));
                 }
             }
 
-            for (FrameModifier modifier : MODIFIERS)
-            {
-                if (modifier.isActive(fbe))
-                {
+            for (FrameModifier modifier : MODIFIERS) {
+                if (modifier.isActive(fbe)) {
                     requirements.add(consume(modifier.getDefaultStack()));
                 }
             }
@@ -60,18 +52,15 @@ public class FramedBlockEntityItemRequirement implements SchematicRequirementReg
 
     protected void collectAdditionalRequirements(IFramedBlockEntity blockEntity, List<ItemRequirement.StackRequirement> requirements) { }
 
-    protected static ItemRequirement.StackRequirement consume(ItemLike item)
-    {
+    protected static ItemRequirement.StackRequirement consume(ItemLike item) {
         return consume(new ItemStack(item));
     }
 
-    protected static ItemRequirement.StackRequirement consume(ItemStack stack)
-    {
+    protected static ItemRequirement.StackRequirement consume(ItemStack stack) {
         return new ItemRequirement.StackRequirement(stack, ItemRequirement.ItemUseType.CONSUME);
     }
 
-    protected static ItemRequirement.StackRequirement consumeStrict(ItemStack stack)
-    {
+    protected static ItemRequirement.StackRequirement consumeStrict(ItemStack stack) {
         return new ItemRequirement.StrictNbtStackRequirement(stack, ItemRequirement.ItemUseType.CONSUME);
     }
 }

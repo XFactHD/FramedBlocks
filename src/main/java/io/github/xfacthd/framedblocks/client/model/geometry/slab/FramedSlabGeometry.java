@@ -12,27 +12,21 @@ import net.minecraft.client.resources.model.geometry.BakedQuad;
 import net.minecraft.core.Direction;
 import org.jspecify.annotations.Nullable;
 
-public class FramedSlabGeometry extends Geometry
-{
+public class FramedSlabGeometry extends Geometry {
     private final boolean top;
 
-    public FramedSlabGeometry(GeometryFactory.Context ctx)
-    {
+    public FramedSlabGeometry(GeometryFactory.Context ctx) {
         this.top = ctx.state().getValue(FramedProperties.TOP);
     }
 
     @Override
-    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
-    {
+    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData) {
         Direction quadDir = quad.direction();
-        if ((top && quadDir == Direction.DOWN) || (!top && quadDir == Direction.UP))
-        {
+        if ((top && quadDir == Direction.DOWN) || (!top && quadDir == Direction.UP)) {
             QuadModifier.of(quad)
                     .apply(Modifiers.setPosition(.5F))
                     .export(quadMap, null);
-        }
-        else if (!DirUtils.isY(quadDir))
-        {
+        } else if (!DirUtils.isY(quadDir)) {
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(top ? Direction.DOWN : Direction.UP, .5F))
                     .export(quadMap, quadDir);

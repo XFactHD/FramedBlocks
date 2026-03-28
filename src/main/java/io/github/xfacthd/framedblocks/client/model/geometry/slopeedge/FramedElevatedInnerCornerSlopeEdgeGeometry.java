@@ -13,33 +13,27 @@ import net.minecraft.client.resources.model.geometry.BakedQuad;
 import net.minecraft.core.Direction;
 import org.jspecify.annotations.Nullable;
 
-public class FramedElevatedInnerCornerSlopeEdgeGeometry extends Geometry
-{
+public class FramedElevatedInnerCornerSlopeEdgeGeometry extends Geometry {
     private final Direction dir;
     private final CornerType type;
     private final boolean altSlope;
 
-    public FramedElevatedInnerCornerSlopeEdgeGeometry(GeometryFactory.Context ctx)
-    {
+    public FramedElevatedInnerCornerSlopeEdgeGeometry(GeometryFactory.Context ctx) {
         this.dir = ctx.state().getValue(FramedProperties.FACING_HOR);
         this.type = ctx.state().getValue(PropertyHolder.CORNER_TYPE);
         this.altSlope = ctx.state().getValue(FramedProperties.ALT_SLOPE);
     }
 
     @Override
-    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
-    {
+    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData) {
         Direction quadDir = quad.direction();
-        if (type.isHorizontal())
-        {
+        if (type.isHorizontal()) {
             boolean top = type.isTop();
             boolean right = type.isRight();
             Direction xBackFace = right ? dir.getClockWise() : dir.getCounterClockWise();
             Direction yBackFace = top ? Direction.UP : Direction.DOWN;
-            if (quadDir == dir.getOpposite())
-            {
-                if (!altSlope)
-                {
+            if (quadDir == dir.getOpposite()) {
+                if (!altSlope) {
                     QuadModifier.of(quad)
                             .apply(Modifiers.cut(xBackFace, .5F))
                             .apply(Modifiers.cut(yBackFace, .5F))
@@ -65,11 +59,8 @@ public class FramedElevatedInnerCornerSlopeEdgeGeometry extends Geometry
                         .apply(Modifiers.cut(yBackFace, .5F))
                         .apply(Modifiers.cut(xBackFace.getOpposite(), .5F))
                         .export(quadMap, quadDir);
-            }
-            else if (quadDir == xBackFace.getOpposite())
-            {
-                if (altSlope)
-                {
+            } else if (quadDir == xBackFace.getOpposite()) {
+                if (altSlope) {
                     QuadModifier.of(quad)
                             .apply(Modifiers.cut(dir, .5F))
                             .apply(Modifiers.cut(yBackFace, .5F))
@@ -87,11 +78,8 @@ public class FramedElevatedInnerCornerSlopeEdgeGeometry extends Geometry
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(yBackFace.getOpposite(), .5F))
                         .export(quadMap, quadDir);
-            }
-            else if (quadDir == yBackFace.getOpposite())
-            {
-                if (altSlope)
-                {
+            } else if (quadDir == yBackFace.getOpposite()) {
+                if (altSlope) {
                     QuadModifier.of(quad)
                             .apply(Modifiers.cut(dir, .5F))
                             .apply(Modifiers.cut(xBackFace, .5F))
@@ -110,15 +98,11 @@ public class FramedElevatedInnerCornerSlopeEdgeGeometry extends Geometry
                         .apply(Modifiers.cut(xBackFace.getOpposite(), .5F))
                         .export(quadMap, quadDir);
             }
-        }
-        else
-        {
+        } else {
             boolean top = type == CornerType.TOP;
             Direction topDir = top ? Direction.DOWN : Direction.UP;
-            if (quadDir == dir.getOpposite())
-            {
-                if (!altSlope)
-                {
+            if (quadDir == dir.getOpposite()) {
+                if (!altSlope) {
                     QuadModifier.of(quad)
                             .apply(Modifiers.cut(topDir.getOpposite(), .5F))
                             .apply(Modifiers.cut(dir.getCounterClockWise(), top ? -.5F : .5F, top ? .5F : -.5F))
@@ -135,11 +119,8 @@ public class FramedElevatedInnerCornerSlopeEdgeGeometry extends Geometry
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(topDir, .5F))
                         .export(quadMap, quadDir);
-            }
-            else if (quadDir == dir.getClockWise())
-            {
-                if (!altSlope)
-                {
+            } else if (quadDir == dir.getClockWise()) {
+                if (!altSlope) {
                     QuadModifier.of(quad)
                             .apply(Modifiers.cut(topDir.getOpposite(), .5F))
                             .apply(Modifiers.cut(dir, top ? -.5F : .5F, top ? .5F : -.5F))
@@ -156,11 +137,8 @@ public class FramedElevatedInnerCornerSlopeEdgeGeometry extends Geometry
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(topDir, .5F))
                         .export(quadMap, quadDir);
-            }
-            else if (quadDir == topDir)
-            {
-                if (altSlope)
-                {
+            } else if (quadDir == topDir) {
+                if (altSlope) {
                     QuadModifier.of(quad)
                             .apply(Modifiers.cut(dir.getCounterClockWise(), .5F))
                             .apply(Modifiers.cut(dir, 0F, 1F))

@@ -15,30 +15,23 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.function.Supplier;
 
-public final class BuildingGadgetsCompat
-{
-    public static void init(IEventBus modBus)
-    {
-        if (ModList.get().isLoaded("buildinggadgets"))
-        {
+public final class BuildingGadgetsCompat {
+    public static void init(IEventBus modBus) {
+        if (ModList.get().isLoaded("buildinggadgets")) {
             /* Safeguard against potential API changes in Building Gadgets
              * Providing a config option is not possible because the integration requires registering
              * a custom registry object which happens before configs load
              */
 
-            try
-            {
+            try {
                 //GuardedAccess.init(modBus);
-            }
-            catch (Throwable e)
-            {
+            } catch (Throwable e) {
                 FramedBlocks.LOGGER.warn("An error occured while initializing Building Gadgets integration!", e);
             }
         }
     }
 
-    static final class GuardedAccess
-    {
+    static final class GuardedAccess {
         /*private static final DeferredRegister<ITileDataSerializer> SERIALIZERS = DeferredRegister.create(
                 Reference.TileDataSerializerReference.REGISTRY_ID_TILE_DATA_SERIALIZER,
                 FramedConstants.MOD_ID
@@ -47,21 +40,17 @@ public final class BuildingGadgetsCompat
                 "framed_serializer", FramedBlockEntityDataSerializer::new
         );
 
-        public static void init(IEventBus modBus)
-        {
+        public static void init(IEventBus modBus) {
             SERIALIZERS.register(modBus);
             modBus.addListener(GuardedAccess::sendCompatImc);
         }
 
-        private static void sendCompatImc(@SuppressWarnings("unused") InterModEnqueueEvent event)
-        {
+        private static void sendCompatImc(@SuppressWarnings("unused") InterModEnqueueEvent event) {
             InterModComms.sendTo("buildinggadgets", "imc_tile_data_factory", GuardedAccess::createDataFactory);
         }
 
-        private static Supplier<TopologicalRegistryBuilder<ITileDataFactory>> createDataFactory()
-        {
-            return () ->
-            {
+        private static Supplier<TopologicalRegistryBuilder<ITileDataFactory>> createDataFactory() {
+            return () -> {
                 TopologicalRegistryBuilder<ITileDataFactory> factory = TopologicalRegistryBuilder.create();
                 factory.addValue(
                         Utils.rl("framed_block_data_factory"),

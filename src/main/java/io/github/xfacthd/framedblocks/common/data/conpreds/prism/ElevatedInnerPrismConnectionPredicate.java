@@ -7,29 +7,24 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jspecify.annotations.Nullable;
 
-public final class ElevatedInnerPrismConnectionPredicate implements ConnectionPredicate
-{
+public final class ElevatedInnerPrismConnectionPredicate implements ConnectionPredicate {
     @Override
-    public boolean canConnectFullEdge(BlockState state, Direction side, @Nullable Direction edge)
-    {
+    public boolean canConnectFullEdge(BlockState state, Direction side, @Nullable Direction edge) {
         DirectionAxis dirAxis = state.getValue(PropertyHolder.FACING_AXIS);
         Direction facing = dirAxis.direction();
         Direction.Axis axis = dirAxis.axis();
 
-        if (side == facing.getOpposite() || side.getAxis() == facing.getClockWise(axis).getAxis())
-        {
+        if (side == facing.getOpposite() || side.getAxis() == facing.getClockWise(axis).getAxis()) {
             return true;
         }
-        else if (side.getAxis() == axis)
-        {
+        if (side.getAxis() == axis) {
             return edge != facing;
         }
         return false;
     }
 
     @Override
-    public boolean canConnectDetailed(BlockState state, Direction side, Direction edge)
-    {
+    public boolean canConnectDetailed(BlockState state, Direction side, Direction edge) {
         DirectionAxis dirAxis = state.getValue(PropertyHolder.FACING_AXIS);
         return side == dirAxis.direction() && edge.getAxis() == dirAxis.axis();
     }

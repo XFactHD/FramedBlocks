@@ -15,10 +15,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 
-public class FramedVerticalSlicedSlopedStairsPanelBlockEntity extends FramedDoubleBlockEntity
-{
-    static final Triangle[] TRIANGLES = Util.make(new Triangle[16], arr ->
-    {
+public class FramedVerticalSlicedSlopedStairsPanelBlockEntity extends FramedDoubleBlockEntity {
+    static final Triangle[] TRIANGLES = Util.make(new Triangle[16], arr -> {
         arr[triIndex(Direction.NORTH, HorizontalRotation.UP)] = new Triangle(new Vec3(0, 1, .5), new Vec3(1, 1, .5), new Vec3(0, 0, .5));
         arr[triIndex(Direction.NORTH, HorizontalRotation.DOWN)] = new Triangle(new Vec3(1, 0, .5), new Vec3(0, 0, .5), new Vec3(1, 1, .5));
         arr[triIndex(Direction.NORTH, HorizontalRotation.RIGHT)] = new Triangle(new Vec3(1, 1, .5), new Vec3(0, 1, .5), new Vec3(1, 0, .5));
@@ -40,14 +38,12 @@ public class FramedVerticalSlicedSlopedStairsPanelBlockEntity extends FramedDoub
         arr[triIndex(Direction.EAST, HorizontalRotation.LEFT)] = arr[triIndex(Direction.WEST, HorizontalRotation.DOWN)];
     });
 
-    public FramedVerticalSlicedSlopedStairsPanelBlockEntity(BlockPos pos, BlockState state)
-    {
+    public FramedVerticalSlicedSlopedStairsPanelBlockEntity(BlockPos pos, BlockState state) {
         super(FBContent.BE_TYPE_FRAMED_VERTICAL_SLICED_SLOPED_DOUBLE_STAIRS_PANEL.value(), pos, state);
     }
 
     @Override
-    protected boolean hitSecondary(BlockHitResult hit, Vec3 lookVec, Vec3 eyePos)
-    {
+    protected boolean hitSecondary(BlockHitResult hit, Vec3 lookVec, Vec3 eyePos) {
         Direction facing = getBlockState().getValue(FramedProperties.FACING_HOR);
         HorizontalRotation rot = getBlockState().getValue(PropertyHolder.ROTATION);
         Direction dirTwo = rot.getOpposite().withFacing(facing);
@@ -55,28 +51,21 @@ public class FramedVerticalSlicedSlopedStairsPanelBlockEntity extends FramedDoub
         Direction side = hit.getDirection();
         Vec3 hitVec = hit.getLocation();
 
-        if (side == facing)
-        {
+        if (side == facing) {
             return false;
         }
-        if (side == dirTwo || side == dirThree)
-        {
+        if (side == dirTwo || side == dirThree) {
             return MathUtils.fractionInDir(hitVec, facing) < .5;
         }
 
-        if (side == dirTwo.getOpposite() || side == dirThree.getOpposite())
-        {
-            if (MathUtils.fractionInDir(hitVec, facing) > .5) // Crosshair is definitely on panel's half-width faces
-            {
+        if (side == dirTwo.getOpposite() || side == dirThree.getOpposite()) {
+            if (MathUtils.fractionInDir(hitVec, facing) > .5) { // Crosshair is definitely on panel's half-width faces
                 return false;
             }
-        }
-        else if (side == facing.getOpposite())
-        {
+        } else if (side == facing.getOpposite()) {
             double par = MathUtils.fractionInDir(hitVec, dirTwo.getOpposite());
             double perp = MathUtils.fractionInDir(hitVec, dirThree);
-            if (perp > par) // Crosshair is definitely on half slope's triangle face
-            {
+            if (perp > par) { // Crosshair is definitely on half slope's triangle face
                 return true;
             }
         }
@@ -86,13 +75,11 @@ public class FramedVerticalSlicedSlopedStairsPanelBlockEntity extends FramedDoub
         return !tri.intersects(origin, lookVec.normalize());
     }
 
-    static Triangle getTriangle(Direction facing, HorizontalRotation rot)
-    {
+    static Triangle getTriangle(Direction facing, HorizontalRotation rot) {
         return TRIANGLES[triIndex(facing, rot)];
     }
 
-    private static int triIndex(Direction facing, HorizontalRotation rot)
-    {
+    private static int triIndex(Direction facing, HorizontalRotation rot) {
         return (facing.get2DDataValue() << 2) | rot.ordinal();
     }
 }

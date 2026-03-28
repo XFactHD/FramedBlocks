@@ -17,15 +17,11 @@ final class FramedBlockMovementChecks implements
         BlockMovementChecks.MovementAllowedCheck,
         BlockMovementChecks.BrittleCheck,
         BlockMovementChecks.AttachedCheck,
-        BlockMovementChecks.NotSupportiveCheck
-{
+        BlockMovementChecks.NotSupportiveCheck {
     @Override
-    public BlockMovementChecks.CheckResult isBlockAttachedTowards(BlockState state, Level level, BlockPos pos, Direction side)
-    {
-        if (state.getBlock() instanceof IFramedBlock block && block.getBlockType() instanceof BlockType type)
-        {
-            return switch (type)
-            {
+    public BlockMovementChecks.CheckResult isBlockAttachedTowards(BlockState state, Level level, BlockPos pos, Direction side) {
+        if (state.getBlock() instanceof IFramedBlock block && block.getBlockType() instanceof BlockType type) {
+            return switch (type) {
                 case FRAMED_SIGN, FRAMED_FLOWER_POT -> result(side == Direction.DOWN);
                 case FRAMED_WALL_SIGN -> result(state.getValue(FramedProperties.FACING_HOR) == side.getOpposite());
                 case FRAMED_BOARD -> result(FramedBoardBlock.isFacePresent(state, side));
@@ -36,36 +32,30 @@ final class FramedBlockMovementChecks implements
     }
 
     @Override
-    public BlockMovementChecks.CheckResult isBrittle(BlockState state)
-    {
+    public BlockMovementChecks.CheckResult isBrittle(BlockState state) {
         Block block = state.getBlock();
-        if (block instanceof SignBlock && block instanceof IFramedBlock)
-        {
+        if (block instanceof SignBlock && block instanceof IFramedBlock) {
             return BlockMovementChecks.CheckResult.SUCCESS;
         }
         return BlockMovementChecks.CheckResult.PASS;
     }
 
     @Override
-    public BlockMovementChecks.CheckResult isMovementAllowed(BlockState state, Level level, BlockPos pos)
-    {
+    public BlockMovementChecks.CheckResult isMovementAllowed(BlockState state, Level level, BlockPos pos) {
         return BlockMovementChecks.CheckResult.PASS;
     }
 
     @Override
-    public BlockMovementChecks.CheckResult isMovementNecessary(BlockState state, Level level, BlockPos pos)
-    {
+    public BlockMovementChecks.CheckResult isMovementNecessary(BlockState state, Level level, BlockPos pos) {
         return BlockMovementChecks.CheckResult.PASS;
     }
 
     @Override
-    public BlockMovementChecks.CheckResult isNotSupportive(BlockState state, Direction side)
-    {
+    public BlockMovementChecks.CheckResult isNotSupportive(BlockState state, Direction side) {
         return BlockMovementChecks.CheckResult.PASS;
     }
 
-    private static BlockMovementChecks.CheckResult result(boolean value)
-    {
+    private static BlockMovementChecks.CheckResult result(boolean value) {
         return BlockMovementChecks.CheckResult.of(value);
     }
 }

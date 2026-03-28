@@ -8,31 +8,25 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DoorHingeSide;
 import org.jspecify.annotations.Nullable;
 
-public final class DoorConnectionPredicate implements ConnectionPredicate
-{
+public final class DoorConnectionPredicate implements ConnectionPredicate {
     public static final DoorConnectionPredicate INSTANCE = new DoorConnectionPredicate();
 
     private DoorConnectionPredicate() { }
 
     @Override
-    public boolean canConnectFullEdge(BlockState state, Direction side, @Nullable Direction edge)
-    {
+    public boolean canConnectFullEdge(BlockState state, Direction side, @Nullable Direction edge) {
         Direction facing = state.getValue(BlockStateProperties.HORIZONTAL_FACING);
         boolean open = state.getValue(BlockStateProperties.OPEN);
 
         Direction fullFace = facing.getOpposite();
-        if (open)
-        {
+        if (open) {
             DoorHingeSide hinge = state.getValue(BlockStateProperties.DOOR_HINGE);
             fullFace = hinge == DoorHingeSide.LEFT ? facing.getCounterClockWise() : facing.getClockWise();
         }
 
-        if (side == fullFace)
-        {
+        if (side == fullFace) {
             return true;
-        }
-        else if (side.getAxis() != fullFace.getAxis())
-        {
+        } else if (side.getAxis() != fullFace.getAxis()) {
             return edge == fullFace;
         }
 
@@ -40,24 +34,19 @@ public final class DoorConnectionPredicate implements ConnectionPredicate
     }
 
     @Override
-    public boolean canConnectDetailed(BlockState state, Direction side, Direction edge)
-    {
+    public boolean canConnectDetailed(BlockState state, Direction side, Direction edge) {
         Direction facing = state.getValue(BlockStateProperties.HORIZONTAL_FACING);
         boolean open = state.getValue(BlockStateProperties.OPEN);
 
         Direction fullFace = facing;
-        if (open)
-        {
+        if (open) {
             DoorHingeSide hinge = state.getValue(BlockStateProperties.DOOR_HINGE);
             fullFace = hinge == DoorHingeSide.LEFT ? facing.getClockWise() : facing.getCounterClockWise();
         }
 
-        if (side == fullFace)
-        {
+        if (side == fullFace) {
             return edge.getAxis() != fullFace.getAxis();
-        }
-        else if (side.getAxis() == fullFace.getClockWise().getAxis())
-        {
+        } else if (side.getAxis() == fullFace.getClockWise().getAxis()) {
             return DirUtils.isY(edge);
         }
         return false;

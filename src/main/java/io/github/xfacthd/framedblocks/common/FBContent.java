@@ -107,8 +107,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @SuppressWarnings("unused")
-public final class FBContent
-{
+public final class FBContent {
     private static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(FramedConstants.MOD_ID);
     private static final DeferredDataComponentTypeRegister DATA_COMPONENTS = DeferredDataComponentTypeRegister.create(FramedConstants.MOD_ID);
     private static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(FramedConstants.MOD_ID);
@@ -759,8 +758,7 @@ public final class FBContent
     );
     // endregion
 
-    public static void init(IEventBus modBus)
-    {
+    public static void init(IEventBus modBus) {
         modBus.addListener(FramedRegistries::onRegisterNewRegistries);
 
         BLOCKS.register(modBus);
@@ -781,34 +779,28 @@ public final class FBContent
         CAMO_CONTAINER_FACTORIES.register(modBus);
     }
 
-    public static Collection<DeferredHolder<Block, ? extends Block>> getRegisteredBlocks()
-    {
+    public static Collection<DeferredHolder<Block, ? extends Block>> getRegisteredBlocks() {
         return BLOCKS.getEntries();
     }
 
-    public static Block byType(BlockType type)
-    {
+    public static Block byType(BlockType type) {
         return BLOCKS_BY_TYPE.get(type).value();
     }
 
-    public static Collection<DeferredHolder<Item, ? extends Item>> getRegisteredItems()
-    {
+    public static Collection<DeferredHolder<Item, ? extends Item>> getRegisteredItems() {
         return ITEMS.getEntries();
     }
 
-    public static Item toolByType(FramedToolType type)
-    {
+    public static Item toolByType(FramedToolType type) {
         return TOOLS_BY_TYPE.get(type).value();
     }
 
-    public static Stream<DeferredBlockEntity<? extends IFramedBlockEntity>> getBlockEntities()
-    {
+    public static Stream<DeferredBlockEntity<? extends IFramedBlockEntity>> getBlockEntities() {
         return BLOCK_ENTITIES_BY_TYPE.values().stream();
     }
 
     @SuppressWarnings("unchecked")
-    public static Stream<DeferredBlockEntity<? extends FramedDoubleBlockEntity>> getDoubleBlockEntities()
-    {
+    public static Stream<DeferredBlockEntity<? extends FramedDoubleBlockEntity>> getDoubleBlockEntities() {
         return BLOCK_ENTITIES_BY_TYPE.entrySet()
                 .stream()
                 .filter(entry -> entry.getKey().isDoubleBlock())
@@ -816,18 +808,15 @@ public final class FBContent
                 .map(holder -> (DeferredBlockEntity<? extends FramedDoubleBlockEntity>) holder);
     }
 
-    public static BlockEntityType.BlockEntitySupplier<FramedBlockEntity> getDefaultBlockEntityFactory()
-    {
+    public static BlockEntityType.BlockEntitySupplier<FramedBlockEntity> getDefaultBlockEntityFactory() {
         return (pos, state) -> new FramedBlockEntity(BE_TYPE_FRAMED_BLOCK.value(), pos, state);
     }
 
-    private static BlockEntityType.BlockEntitySupplier<FramedBlockEntity> getDefaultDoubleBlockEntityFactory()
-    {
+    private static BlockEntityType.BlockEntitySupplier<FramedBlockEntity> getDefaultDoubleBlockEntityFactory() {
         return (pos, state) -> new FramedDoubleBlockEntity(BE_TYPE_FRAMED_DOUBLE_BLOCK.value(), pos, state);
     }
 
-    private static BlockType[] getDefaultEntityBlockTypes(boolean _double)
-    {
+    private static BlockType[] getDefaultEntityBlockTypes(boolean _double) {
         return Arrays.stream(BlockType.values())
                 .filter(type -> !type.hasSpecialTile() && (type.isDoubleBlock() == _double))
                 .toArray(BlockType[]::new);
@@ -835,24 +824,18 @@ public final class FBContent
 
     private static <T extends Block & IFramedBlock> Holder<Block> registerBlock(
             FramedBlockFactory<T> blockFactory, BlockType type
-    )
-    {
+    ) {
         return registerBlock(props -> blockFactory.create(type, props), type);
     }
 
     private static <T extends Block & IFramedBlock> Holder<Block> registerBlock(
             Function<BlockBehaviour.Properties, T> blockFactory, BlockType type
-    )
-    {
-        Holder<Block> result = BLOCKS.registerBlock(type.getName(), props ->
-        {
+    ) {
+        Holder<Block> result = BLOCKS.registerBlock(type.getName(), props -> {
             T block;
-            try
-            {
+            try {
                 block = blockFactory.apply(props);
-            }
-            catch (Throwable t)
-            {
+            } catch (Throwable t) {
                 throw new IllegalStateException("Failed to construct block of type " + type, t);
             }
             Preconditions.checkArgument(block.getBlockType() == type, "Inconsistent block type, expected %s, got %s", type, block.getBlockType());
@@ -860,8 +843,7 @@ public final class FBContent
         });
         BLOCKS_BY_TYPE.put(type, result);
 
-        if (type.hasBlockItem())
-        {
+        if (type.hasBlockItem()) {
             ITEMS.registerItem(type.getName(), props ->
                     ((IFramedBlock) result.value()).createBlockItem(props.useBlockDescriptionPrefix())
             );
@@ -871,15 +853,13 @@ public final class FBContent
     }
 
     @SuppressWarnings("SameParameterValue")
-    private static Holder<Block> registerBlock(String name, Function<BlockBehaviour.Properties, ? extends Block> blockFactory)
-    {
+    private static Holder<Block> registerBlock(String name, Function<BlockBehaviour.Properties, ? extends Block> blockFactory) {
         Holder<Block> result = BLOCKS.registerBlock(name, blockFactory);
         ITEMS.registerSimpleBlockItem(result);
         return result;
     }
 
-    private static Holder<Item> registerToolItem(ToolItemFactory itemFactory, FramedToolType type)
-    {
+    private static Holder<Item> registerToolItem(ToolItemFactory itemFactory, FramedToolType type) {
         Holder<Item> result = ITEMS.registerItem(type.getName(), props -> itemFactory.create(type, props));
         TOOLS_BY_TYPE.put(type, result);
         return result;
@@ -887,53 +867,45 @@ public final class FBContent
 
     private static <T extends BlockEntity & IFramedBlockEntity> DeferredBlockEntity<T> registerBlockEntity(
             BlockEntityType.BlockEntitySupplier<T> factory, BlockType... types
-    )
-    {
+    ) {
         return registerBlockEntity(factory, false, types);
     }
 
     private static <T extends BlockEntity & IFramedBlockEntity> DeferredBlockEntity<T> registerBlockEntity(
             BlockEntityType.BlockEntitySupplier<T> factory, boolean opOnlyNbt, BlockType... types
-    )
-    {
+    ) {
         return registerBlockEntity(types[0].getName(), factory, opOnlyNbt, types);
     }
 
     private static <T extends BlockEntity & IFramedBlockEntity> DeferredBlockEntity<T> registerBlockEntity(
             String name, BlockEntityType.BlockEntitySupplier<T> factory, boolean opOnlyNbt, BlockType... types
-    )
-    {
+    ) {
         Supplier<Set<Block>> blocks = () -> Arrays.stream(types)
                 .map(BLOCKS_BY_TYPE::get)
                 .map(Holder::value)
                 .collect(Collectors.toSet());
         DeferredBlockEntity<T> result = BE_TYPES.registerBlockEntity(name, factory, blocks, opOnlyNbt);
-        for (BlockType type : types)
-        {
+        for (BlockType type : types) {
             BLOCK_ENTITIES_BY_TYPE.put(type, result);
         }
         return result;
     }
 
-    private static <T> DeferredRegister<T> register(ResourceKey<Registry<T>> key)
-    {
+    private static <T> DeferredRegister<T> register(ResourceKey<Registry<T>> key) {
         return DeferredRegister.create(key, FramedConstants.MOD_ID);
     }
 
-    private static <T> DeferredMapCodecRegister<T> mapCodecRegister(ResourceKey<Registry<MapCodec<? extends T>>> key)
-    {
+    private static <T> DeferredMapCodecRegister<T> mapCodecRegister(ResourceKey<Registry<MapCodec<? extends T>>> key) {
         return DeferredMapCodecRegister.createMapCodecs(key, FramedConstants.MOD_ID);
     }
 
     @FunctionalInterface
-    private interface FramedBlockFactory<T extends Block & IFramedBlock>
-    {
+    private interface FramedBlockFactory<T extends Block & IFramedBlock> {
         T create(BlockType type, BlockBehaviour.Properties properties);
     }
 
     @FunctionalInterface
-    private interface ToolItemFactory
-    {
+    private interface ToolItemFactory {
         Item create(FramedToolType type, Item.Properties properties);
     }
 

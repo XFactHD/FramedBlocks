@@ -30,8 +30,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.Set;
 
-public final class BlockUtils
-{
+public final class BlockUtils {
     public static final Set<Property<?>> REQUIRED_STATE_PROPERTIES = Set.of(
             FramedProperties.GLOWING,
             FramedProperties.PROPAGATES_SKYLIGHT
@@ -45,33 +44,26 @@ public final class BlockUtils
      * @apiNote This method must only be used by blocks which return a constant value from {@link IFramedBlock#getBlockType()}
      *          or initialize the returned field before the super constructor.
      */
-    public static <T extends Block & IFramedBlock> void addStandardProperties(T block, StateDefinition.Builder<Block, BlockState> builder)
-    {
+    public static <T extends Block & IFramedBlock> void addStandardProperties(T block, StateDefinition.Builder<Block, BlockState> builder) {
         REQUIRED_STATE_PROPERTIES.forEach(builder::add);
 
-        if (block.getBlockType().canOccludeWithSolidCamo())
-        {
+        if (block.getBlockType().canOccludeWithSolidCamo()) {
             builder.add(FramedProperties.SOLID);
         }
 
         boolean hasWaterlogging = hasProperty(builder, BlockStateProperties.WATERLOGGED);
         boolean needsWaterlogging = block.getBlockType().supportsWaterLogging();
-        if (needsWaterlogging && !hasWaterlogging)
-        {
+        if (needsWaterlogging && !hasWaterlogging) {
             builder.add(BlockStateProperties.WATERLOGGED);
-        }
-        else if (!needsWaterlogging && hasWaterlogging)
-        {
+        } else if (!needsWaterlogging && hasWaterlogging) {
             removeProperty(builder, BlockStateProperties.WATERLOGGED);
         }
 
-        if (block instanceof ShapeLockableBlock)
-        {
+        if (block instanceof ShapeLockableBlock) {
             builder.add(FramedProperties.STATE_LOCKED);
         }
 
-        if (block instanceof SlopeToggleBlock)
-        {
+        if (block instanceof SlopeToggleBlock) {
             builder.add(FramedProperties.ALT_SLOPE);
         }
     }
@@ -81,25 +73,20 @@ public final class BlockUtils
      *
      * @param block The block to configure the default state for
      */
-    public static <T extends Block & IFramedBlock> void configureStandardProperties(T block)
-    {
+    public static <T extends Block & IFramedBlock> void configureStandardProperties(T block) {
         BlockState state = block.defaultBlockState()
                 .setValue(FramedProperties.GLOWING, false)
                 .setValue(FramedProperties.PROPAGATES_SKYLIGHT, false);
-        if (block.getBlockType().canOccludeWithSolidCamo())
-        {
+        if (block.getBlockType().canOccludeWithSolidCamo()) {
             state = state.setValue(FramedProperties.SOLID, false);
         }
-        if (block.getBlockType().supportsWaterLogging())
-        {
+        if (block.getBlockType().supportsWaterLogging()) {
             state = state.setValue(BlockStateProperties.WATERLOGGED, false);
         }
-        if (block instanceof ShapeLockableBlock)
-        {
+        if (block instanceof ShapeLockableBlock) {
             state = state.setValue(FramedProperties.STATE_LOCKED, false);
         }
-        if (block instanceof SlopeToggleBlock)
-        {
+        if (block instanceof SlopeToggleBlock) {
             state = state.setValue(FramedProperties.ALT_SLOPE, false);
         }
         ((InvokerBlock) block).framedblocks$callRegisterDefaultState(state);
@@ -113,20 +100,16 @@ public final class BlockUtils
      * @param to The state to apply the properties to
      * @param copyWaterlogging Whether the {@link BlockStateProperties#WATERLOGGED} property should be copied
      */
-    public static <T extends Block & IFramedBlock> BlockState copyStandardProperties(T block, BlockState from, BlockState to, boolean copyWaterlogging)
-    {
+    public static <T extends Block & IFramedBlock> BlockState copyStandardProperties(T block, BlockState from, BlockState to, boolean copyWaterlogging) {
         Preconditions.checkArgument(from.getBlock() == block, "The provided states must be owned by the provided block");
 
-        for (Property<?> property : REQUIRED_STATE_PROPERTIES)
-        {
+        for (Property<?> property : REQUIRED_STATE_PROPERTIES) {
             to = Block.copyProperty(from, to, property);
         }
-        if (block.getBlockType().canOccludeWithSolidCamo())
-        {
+        if (block.getBlockType().canOccludeWithSolidCamo()) {
             to = Block.copyProperty(from, to, FramedProperties.SOLID);
         }
-        if (copyWaterlogging && block.getBlockType().supportsWaterLogging())
-        {
+        if (copyWaterlogging && block.getBlockType().supportsWaterLogging()) {
             to = Block.copyProperty(from, to, BlockStateProperties.WATERLOGGED);
         }
         return to;
@@ -139,8 +122,7 @@ public final class BlockUtils
      * @param property The property to check for
      * @return whether the builder contains the property
      */
-    public static boolean hasProperty(StateDefinition.Builder<Block, BlockState> builder, Property<?> property)
-    {
+    public static boolean hasProperty(StateDefinition.Builder<Block, BlockState> builder, Property<?> property) {
         return builder.framedblocks$hasProperty(property);
     }
 
@@ -150,27 +132,22 @@ public final class BlockUtils
      * @param builder The builder to remove the property from
      * @param property The property to remove, if present
      */
-    public static void removeProperty(StateDefinition.Builder<Block, BlockState> builder, Property<?> property)
-    {
+    public static void removeProperty(StateDefinition.Builder<Block, BlockState> builder, Property<?> property) {
         builder.framedblocks$removeProperty(property);
     }
 
-    @Nullable
     @SuppressWarnings("unchecked")
-    public static <E extends BlockEntity, A extends BlockEntity> BlockEntityTicker<A> createBlockEntityTicker(
+    public static <E extends BlockEntity, A extends BlockEntity> @Nullable BlockEntityTicker<A> createBlockEntityTicker(
             BlockEntityType<A> type, BlockEntityType<E> actualType, BlockEntityTicker<? super E> ticker
-    )
-    {
+    ) {
         return actualType == type ? (BlockEntityTicker<A>) ticker : null;
     }
 
-    public static BlockState rotate(BlockState state, Rotation rotation)
-    {
+    public static BlockState rotate(BlockState state, Rotation rotation) {
         return rotate(state, FramedProperties.FACING_HOR, rotation);
     }
 
-    public static BlockState rotate(BlockState state, EnumProperty<Direction> property, Rotation rotation)
-    {
+    public static BlockState rotate(BlockState state, EnumProperty<Direction> property, Rotation rotation) {
         return state.setValue(property, rotation.rotate(state.getValue(property)));
     }
 
@@ -180,8 +157,7 @@ public final class BlockUtils
      * @param mirror The {@link Mirror} to apply to the state
      * @apiNote The given state must have the {@link FramedProperties#FACING_HOR} property
      */
-    public static BlockState mirrorFaceBlock(BlockState state, Mirror mirror)
-    {
+    public static BlockState mirrorFaceBlock(BlockState state, Mirror mirror) {
         return mirrorFaceBlock(state, FramedProperties.FACING_HOR, mirror);
     }
 
@@ -192,17 +168,14 @@ public final class BlockUtils
      * @param mirror The {@link Mirror} to apply to the state
      * @apiNote The given property must support at least all four cardinal directions
      */
-    public static BlockState mirrorFaceBlock(BlockState state, EnumProperty<Direction> property, Mirror mirror)
-    {
-        if (mirror == Mirror.NONE)
-        {
+    public static BlockState mirrorFaceBlock(BlockState state, EnumProperty<Direction> property, Mirror mirror) {
+        if (mirror == Mirror.NONE) {
             return state;
         }
 
         Direction dir = state.getValue(property);
         //Y directions are inherently ignored
-        if ((mirror == Mirror.FRONT_BACK && DirUtils.isX(dir)) || (mirror == Mirror.LEFT_RIGHT && DirUtils.isZ(dir)))
-        {
+        if ((mirror == Mirror.FRONT_BACK && DirUtils.isX(dir)) || (mirror == Mirror.LEFT_RIGHT && DirUtils.isZ(dir))) {
             return state.setValue(property, dir.getOpposite());
         }
         return state;
@@ -214,8 +187,7 @@ public final class BlockUtils
      * @param mirror The {@link Mirror} to apply to the state
      * @apiNote The given state must have the {@link FramedProperties#FACING_HOR} property
      */
-    public static BlockState mirrorCornerBlock(BlockState state, Mirror mirror)
-    {
+    public static BlockState mirrorCornerBlock(BlockState state, Mirror mirror) {
         return mirrorCornerBlock(state, FramedProperties.FACING_HOR, mirror);
     }
 
@@ -226,34 +198,26 @@ public final class BlockUtils
      * @param mirror The {@link Mirror} to apply to the state
      * @apiNote The given property must support at least all four cardinal directions
      */
-    public static BlockState mirrorCornerBlock(BlockState state, EnumProperty<Direction> property, Mirror mirror)
-    {
-        if (mirror == Mirror.NONE)
-        {
+    public static BlockState mirrorCornerBlock(BlockState state, EnumProperty<Direction> property, Mirror mirror) {
+        if (mirror == Mirror.NONE) {
             return state;
         }
 
         Direction dir = state.getValue(property);
-        if (DirUtils.isY(dir))
-        {
+        if (DirUtils.isY(dir)) {
             return state;
         }
 
-        if (mirror == Mirror.LEFT_RIGHT)
-        {
-            dir = switch (dir)
-            {
+        if (mirror == Mirror.LEFT_RIGHT) {
+            dir = switch (dir) {
                 case NORTH -> Direction.WEST;
                 case EAST -> Direction.SOUTH;
                 case SOUTH -> Direction.EAST;
                 case WEST -> Direction.NORTH;
                 default -> throw new IllegalArgumentException("Unreachable!");
             };
-        }
-        else
-        {
-            dir = switch (dir)
-            {
+        } else {
+            dir = switch (dir) {
                 case NORTH -> Direction.EAST;
                 case EAST -> Direction.NORTH;
                 case SOUTH -> Direction.WEST;
@@ -272,38 +236,32 @@ public final class BlockUtils
             boolean writeToCamoTwo,
             boolean consumeItem,
             Runnable action
-    )
-    {
+    ) {
         CamoContainer<?, ?> camo = EmptyCamoContainer.EMPTY;
         CamoOrientation camoOrientation = CamoOrientation.UNKNOWN;
         Holder<BlockOverlay> overlay = null;
         boolean[] modifiers = new boolean[MODIFIERS.length];
 
-        if (level.getBlockEntity(pos) instanceof IFramedBlockEntity be)
-        {
+        if (level.getBlockEntity(pos) instanceof IFramedBlockEntity be) {
             camo = be.getCamo();
             camoOrientation = CamoOrientation.of(be.getCamoOrientation(false));
             overlay = be.getOverlay();
-            for (FrameModifier modifier : MODIFIERS)
-            {
+            for (FrameModifier modifier : MODIFIERS) {
                 modifiers[modifier.ordinal()] = modifier.isActive(be);
             }
         }
 
         action.run();
 
-        if (consumeItem && !player.isCreative())
-        {
+        if (consumeItem && !player.isCreative()) {
             stack.shrink(1);
             player.getInventory().setChanged();
         }
 
-        if (level.getBlockEntity(pos) instanceof IFramedBlockEntity be)
-        {
+        if (level.getBlockEntity(pos) instanceof IFramedBlockEntity be) {
             be.setCamo(camo, writeToCamoTwo, camoOrientation);
             be.setOverlay(overlay);
-            for (FrameModifier modifier : MODIFIERS)
-            {
+            for (FrameModifier modifier : MODIFIERS) {
                 modifier.setActive(be, modifiers[modifier.ordinal()]);
             }
         }

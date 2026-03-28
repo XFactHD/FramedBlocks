@@ -10,10 +10,8 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.common.NeoForge;
 
 @Mod(value = FramedConstants.MOD_ID, dist = Dist.CLIENT)
-public final class FramedBlocksTest
-{
-    public FramedBlocksTest(IEventBus modBus)
-    {
+public final class FramedBlocksTest {
+    public FramedBlocksTest(IEventBus modBus) {
         modBus.addListener(SelfTest::runStartupSelfTest);
 
         NeoForge.EVENT_BUS.addListener(SpecialTestCommand::registerCommands);

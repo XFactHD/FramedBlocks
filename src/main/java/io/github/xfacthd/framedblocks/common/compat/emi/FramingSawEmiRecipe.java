@@ -19,8 +19,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
-public final class FramingSawEmiRecipe extends BasicEmiRecipe
-{
+public final class FramingSawEmiRecipe extends BasicEmiRecipe {
     private static final int WIDTH = 120;
     private static final int HEIGHT = 43;
     private static final int WARNING_X = 38;
@@ -38,10 +37,7 @@ public final class FramingSawEmiRecipe extends BasicEmiRecipe
     private final boolean showOnRecipeRequest;
     private final boolean inputWithAdditives;
 
-    private FramingSawEmiRecipe(
-            RecipeHolder<FramingSawRecipe> recipe, @Nullable ResourceKey<Recipe<?>> id, EmiStack input, List<EmiIngredient> additives, EmiStack output
-    )
-    {
+    private FramingSawEmiRecipe(RecipeHolder<FramingSawRecipe> recipe, @Nullable ResourceKey<Recipe<?>> id, EmiStack input, List<EmiIngredient> additives, EmiStack output) {
         super(FramedEmiPlugin.SAW_CATEGORY.get(), id != null ? id.identifier() : null, WIDTH, HEIGHT);
         this.recipe = recipe;
         this.showOnRecipeRequest = input.getItemStack().is(FBContent.BLOCK_FRAMED_CUBE.value().asItem());
@@ -52,33 +48,26 @@ public final class FramingSawEmiRecipe extends BasicEmiRecipe
     }
 
     @Override
-    public List<EmiStack> getOutputs()
-    {
+    public List<EmiStack> getOutputs() {
         return showOnRecipeRequest ? super.getOutputs() : List.of();
     }
 
     @Override
-    public void addWidgets(WidgetHolder widgets)
-    {
+    public void addWidgets(WidgetHolder widgets) {
         widgets.addSlot(inputs.getFirst(), 19, 1);
-        for (int i = 0; i < FramingSawRecipe.MAX_ADDITIVE_COUNT; i++)
-        {
+        for (int i = 0; i < FramingSawRecipe.MAX_ADDITIVE_COUNT; i++) {
             int x = 1 + (i * 18);
             int idx = i + 1;
-            if (idx < inputs.size())
-            {
+            if (idx < inputs.size()) {
                 widgets.addSlot(inputs.get(idx), x, 24);
-            }
-            else
-            {
+            } else {
                 widgets.addTexture(EmiTexture.SLOT, x, 24);
             }
         }
         widgets.addSlot(outputs.getFirst(), 93, 9).large(true).recipeContext(this);
 
         widgets.addTexture(EmiTexture.EMPTY_ARROW, 60, 12);
-        if (inputWithAdditives)
-        {
+        if (inputWithAdditives) {
             widgets.addTexture(TEXTURE_WARNING, WARNING_X, WARNING_Y);
             widgets.add(widgets.addTooltipText(
                     List.of(FramingSawScreen.TOOLTIP_LOOSE_ADDITIVE),
@@ -88,24 +77,20 @@ public final class FramingSawEmiRecipe extends BasicEmiRecipe
         }
     }
 
-    public IBlockType getResultType()
-    {
+    public IBlockType getResultType() {
         return recipe.value().getResultType();
     }
 
     @Override
-    public RecipeHolder<FramingSawRecipe> getBackingRecipe()
-    {
+    public RecipeHolder<FramingSawRecipe> getBackingRecipe() {
         return recipe;
     }
 
-    public ItemStack getOutputInternal()
-    {
+    public ItemStack getOutputInternal() {
         return outputs.getFirst().getItemStack();
     }
 
-    public static FramingSawEmiRecipe make(RecipeHolder<FramingSawRecipe> recipe, EmiStack input, List<EmiIngredient> additives, EmiStack output)
-    {
+    public static FramingSawEmiRecipe make(RecipeHolder<FramingSawRecipe> recipe, EmiStack input, List<EmiIngredient> additives, EmiStack output) {
         boolean showOnRecipeRequest = input.getItemStack().is(FBContent.BLOCK_FRAMED_CUBE.value().asItem());
         ResourceKey<Recipe<?>> id = showOnRecipeRequest ? recipe.id() : null;
         return new FramingSawEmiRecipe(recipe, id, input, additives, output);

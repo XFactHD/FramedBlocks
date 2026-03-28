@@ -7,8 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
 
-public sealed interface ShapeContainer permits EmptyShapeContainer, SingleShapeContainer, MapBackedShapeContainer
-{
+public sealed interface ShapeContainer permits EmptyShapeContainer, SingleShapeContainer, MapBackedShapeContainer {
     ShapeContainer EMPTY = EmptyShapeContainer.INSTANCE;
 
     VoxelShape get(BlockState state);
@@ -17,13 +16,11 @@ public sealed interface ShapeContainer permits EmptyShapeContainer, SingleShapeC
 
     void forEach(BiConsumer<BlockState, VoxelShape> consumer);
 
-    static ShapeContainer of(Map<BlockState, VoxelShape> shapes)
-    {
+    static ShapeContainer of(Map<BlockState, VoxelShape> shapes) {
         return new MapBackedShapeContainer(shapes);
     }
 
-    static ShapeContainer singleShape(List<BlockState> states, VoxelShape shape)
-    {
+    static ShapeContainer singleShape(List<BlockState> states, VoxelShape shape) {
         return new SingleShapeContainer(states, shape);
     }
 }

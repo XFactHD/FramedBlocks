@@ -19,8 +19,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @SuppressWarnings("SameParameterValue")
-final class SkipPredicateGeneratorData
-{
+final class SkipPredicateGeneratorData {
     private static final String IGNORED_PKG = "ignored";
     static final Map<String, String> TEST_DIR_COMPUTE_CLASS_NAME_OVERRIDES = Map.of(
             "slopeedge", "SlopeEdge",
@@ -366,7 +365,7 @@ final class SkipPredicateGeneratorData
             entry("FRAMED_RAIL_SLOPE", "slope")
                     .props(
                             Property.api("Direction", "dir", "FACING_HOR", PropType.PRIMITIVE)
-                                    .withPropLookup("io/github/xfacthd/framedblocks/common/block/ISlopeBlock", "slopeBlock", "getFacing")
+                                    .withPropLookup("io/github/xfacthd/framedblocks/common/block/SlopeBlock", "slopeBlock", "getFacing")
                     )
                     .dirs(new TestDir("TriangleDir", "Tri", null, TestDirIds.SLOPE_TRI_XZ))
                     .altTypes(
@@ -635,7 +634,7 @@ final class SkipPredicateGeneratorData
                             new TestDir("HalfTriangleDir", "Tri", null, TestDirIds.ELEV_SLOPE_SLAB_TRI, TestDirIds.EXT_SLOPE_PANEL_TRI_Y),
                             new TestDir("TriangleDir", "Stair", null, TestDirIds.STAIR_XZ)
                     ),
-            entry("FRAMED_SMALL_PRISM_SLOPE_PANEL_CORNER", "slopepanelcorner")
+            entry("FRAMED_SMALL_PRISM_CORNER_SLOPE_PANEL", "slopepanelcorner")
                     .props(
                             Property.api("Direction", "dir", "FACING_HOR", PropType.PRIMITIVE),
                             Property.api("boolean", "top", "TOP", PropType.PRIMITIVE)
@@ -644,7 +643,7 @@ final class SkipPredicateGeneratorData
                             new TestDir("HalfTriangleDir", "SideTri", null, TestDirIds.SLOPE_PANEL_TRI_XZ_BACK),
                             new TestDir("QuarterTriangleDir", "BottomTri", null, TestDirIds.SLOPE_EDGE_TRI_Y)
                     ),
-            entry("FRAMED_SMALL_PRISM_SLOPE_PANEL_CORNER_W", "slopepanelcorner")
+            entry("FRAMED_SMALL_PRISM_CORNER_SLOPE_PANEL_W", "slopepanelcorner")
                     .props(
                             Property.api("Direction", "dir", "FACING_HOR", PropType.PRIMITIVE),
                             Property.internal("HorizontalRotation", "rot", "ROTATION", PropType.CUSTOM)
@@ -653,7 +652,7 @@ final class SkipPredicateGeneratorData
                             new TestDir("HalfTriangleDir", "SideTri", null, TestDirIds.SLOPE_SLAB_TRI_BOT, TestDirIds.SLOPE_PANEL_TRI_Y_BACK),
                             new TestDir("QuarterTriangleDir", "BackTri", null, TestDirIds.SLOPE_EDGE_TRI_XZ)
                     ),
-            entry("FRAMED_LARGE_PRISM_SLOPE_PANEL_CORNER", "slopepanelcorner")
+            entry("FRAMED_LARGE_PRISM_CORNER_SLOPE_PANEL", "slopepanelcorner")
                     .props(
                             Property.api("Direction", "dir", "FACING_HOR", PropType.PRIMITIVE),
                             Property.api("boolean", "top", "TOP", PropType.PRIMITIVE)
@@ -663,7 +662,7 @@ final class SkipPredicateGeneratorData
                             new TestDir("TriangleDir", "BottomTri", null, TestDirIds.SLOPE_TRI_Y),
                             new TestDir("QuarterTriangleDir", "TopTri", null, TestDirIds.SLOPE_EDGE_TRI_Y)
                     ),
-            entry("FRAMED_LARGE_PRISM_SLOPE_PANEL_CORNER_W", "slopepanelcorner")
+            entry("FRAMED_LARGE_PRISM_CORNER_SLOPE_PANEL_W", "slopepanelcorner")
                     .props(
                             Property.api("Direction", "dir", "FACING_HOR", PropType.PRIMITIVE),
                             Property.internal("HorizontalRotation", "rot", "ROTATION", PropType.CUSTOM)
@@ -673,7 +672,7 @@ final class SkipPredicateGeneratorData
                             new TestDir("TriangleDir", "BackTri", null, TestDirIds.SLOPE_TRI_XZ),
                             new TestDir("QuarterTriangleDir", "FrontTri", null, TestDirIds.SLOPE_EDGE_TRI_XZ)
                     ),
-            entry("FRAMED_SMALL_INNER_PRISM_SLOPE_PANEL_CORNER", "slopepanelcorner")
+            entry("FRAMED_SMALL_INNER_PRISM_CORNER_SLOPE_PANEL", "slopepanelcorner")
                     .props(
                             Property.api("Direction", "dir", "FACING_HOR", PropType.PRIMITIVE),
                             Property.api("boolean", "top", "TOP", PropType.PRIMITIVE)
@@ -682,7 +681,7 @@ final class SkipPredicateGeneratorData
                             new TestDir("HalfTriangleDir", "SideTri", null, TestDirIds.EXT_SLOPE_PANEL_TRI_XZ),
                             new TestDir("TriangleDir", "TopTri", null, TestDirIds.PRISM_SLOPE_PANEL_CORNER_TRI_Y)
                     ),
-            entry("FRAMED_SMALL_INNER_PRISM_SLOPE_PANEL_CORNER_W", "slopepanelcorner")
+            entry("FRAMED_SMALL_INNER_PRISM_CORNER_SLOPE_PANEL_W", "slopepanelcorner")
                     .props(
                             Property.api("Direction", "dir", "FACING_HOR", PropType.PRIMITIVE),
                             Property.internal("HorizontalRotation", "rot", "ROTATION", PropType.CUSTOM)
@@ -691,7 +690,7 @@ final class SkipPredicateGeneratorData
                             new TestDir("HalfTriangleDir", "SideTri", null, TestDirIds.ELEV_SLOPE_SLAB_TRI, TestDirIds.EXT_SLOPE_PANEL_TRI_Y),
                             new TestDir("TriangleDir", "FrontTri", null, TestDirIds.PRISM_SLOPE_PANEL_CORNER_TRI_XZ)
                     ),
-            entry("FRAMED_LARGE_INNER_PRISM_SLOPE_PANEL_CORNER", "slopepanelcorner")
+            entry("FRAMED_LARGE_INNER_PRISM_CORNER_SLOPE_PANEL", "slopepanelcorner")
                     .props(
                             Property.api("Direction", "dir", "FACING_HOR", PropType.PRIMITIVE),
                             Property.api("boolean", "top", "TOP", PropType.PRIMITIVE)
@@ -701,7 +700,7 @@ final class SkipPredicateGeneratorData
                             new TestDir("TriangleDir", "BottomTri", null, TestDirIds.PRISM_SLOPE_PANEL_CORNER_TRI_Y),
                             new TestDir("TriangleDir", "TopTri", null, TestDirIds.SLOPE_TRI_Y)
                     ),
-            entry("FRAMED_LARGE_INNER_PRISM_SLOPE_PANEL_CORNER_W", "slopepanelcorner")
+            entry("FRAMED_LARGE_INNER_PRISM_CORNER_SLOPE_PANEL_W", "slopepanelcorner")
                     .props(
                             Property.api("Direction", "dir", "FACING_HOR", PropType.PRIMITIVE),
                             Property.internal("HorizontalRotation", "rot", "ROTATION", PropType.CUSTOM)
@@ -835,45 +834,35 @@ final class SkipPredicateGeneratorData
             entry("FRAMED_PATH", IGNORED_PKG)
     );
 
-    private static EntryBuilder entry(String type, String subPackage)
-    {
+    private static EntryBuilder entry(String type, String subPackage) {
         return new EntryBuilder(type, subPackage);
     }
 
-    private static Map<String, Type> ofEntries(EntryBuilder... entries)
-    {
+    private static Map<String, Type> ofEntries(EntryBuilder... entries) {
         Map<String, Type> types = new LinkedHashMap<>();
-        for (EntryBuilder entry : entries)
-        {
+        for (EntryBuilder entry : entries) {
             types.put(entry.type, entry.build());
         }
         return Collections.unmodifiableMap(validate(types));
     }
 
-    private static Map<String, Type> validate(Map<String, Type> map)
-    {
+    private static Map<String, Type> validate(Map<String, Type> map) {
         Map<String, TestType> dirTypeById = new HashMap<>();
         Map<String, Type> specialDirIdToOwingType = new HashMap<>();
-        for (Type type : map.values())
-        {
-            for (TestDir dir : type.testDirs)
-            {
-                for (String id : dir.identifiers)
-                {
+        for (Type type : map.values()) {
+            for (TestDir dir : type.testDirs) {
+                for (String id : dir.identifiers) {
                     TestType prevType = dirTypeById.put(id, dir.type);
-                    if (prevType != null && !prevType.equals(dir.type))
-                    {
+                    if (prevType != null && !prevType.equals(dir.type)) {
                         throw new IllegalStateException(
                                 "BlockType '%s' specifies type '%s' for dir '%s', previously found with type '%s'".formatted(
                                         type.type, dir.type, id, prevType
                                 )
                         );
                     }
-                    if (dir.isSpecial())
-                    {
+                    if (dir.isSpecial()) {
                         Type owningType = specialDirIdToOwingType.put(id, type);
-                        if (owningType != null && owningType != type)
-                        {
+                        if (owningType != null && owningType != type) {
                             throw new IllegalStateException(
                                     "BlockType '%s' uses special dir with id '%s', previously found on BlockType '%s'. Special tests are only supported for same-type tests".formatted(
                                             type.type, id, owningType.type
@@ -886,12 +875,9 @@ final class SkipPredicateGeneratorData
         }
 
         Map<String, String> altTypesReverse = new HashMap<>();
-        map.forEach((name, type) ->
-        {
-            for (String altType : type.altTypes)
-            {
-                if (altTypesReverse.putIfAbsent(altType, name) != null)
-                {
+        map.forEach((name, type) -> {
+            for (String altType : type.altTypes) {
+                if (altTypesReverse.putIfAbsent(altType, name) != null) {
                     throw new IllegalStateException("BlockType." + altType + " specified as alt type on multiple types");
                 }
             }
@@ -899,16 +885,13 @@ final class SkipPredicateGeneratorData
         validateTypePresence(map, altTypesReverse);
 
         Set<String> oneWayTargets = new HashSet<>();
-        for (Type type : map.values())
-        {
+        for (Type type : map.values()) {
             oneWayTargets.addAll(type.oneWayTests.keySet());
         }
         Iterator<Map.Entry<String, Type>> iterator = map.entrySet().iterator();
-        while (iterator.hasNext())
-        {
+        while (iterator.hasNext()) {
             Type type = iterator.next().getValue();
-            if (type.testDirs.isEmpty() && !oneWayTargets.contains(type.type))
-            {
+            if (type.testDirs.isEmpty() && !oneWayTargets.contains(type.type)) {
                 iterator.remove();
             }
         }
@@ -916,16 +899,12 @@ final class SkipPredicateGeneratorData
         return map;
     }
 
-    private static void validateTypePresence(Map<String, Type> map, Map<String, String> altTypesReverse)
-    {
+    private static void validateTypePresence(Map<String, Type> map, Map<String, String> altTypesReverse) {
         Path enumPath = Path.of("./src/main/java/io/github/xfacthd/framedblocks/common/data/BlockType.java");
         List<String> lines;
-        try
-        {
+        try {
             lines = Files.readAllLines(enumPath);
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             throw new UncheckedIOException("Failed to read enum for validation", e);
         }
 
@@ -933,24 +912,25 @@ final class SkipPredicateGeneratorData
 
         List<Entry> entries = new ArrayList<>();
         boolean startFound = false;
-        for (String line : lines)
-        {
-            if (!startFound)
-            {
-                startFound = line.equals("{");
+        for (String line : lines) {
+            if (!startFound) {
+                startFound = line.equals("public enum BlockType implements IBlockType {");
                 continue;
             }
-            if (line.contains(";")) break;
+            if (line.contains(";")) {
+                break;
+            }
             // Ignore comments
-            if (line.trim().startsWith("//")) continue;
+            if (line.trim().startsWith("//")) {
+                continue;
+            }
 
             int paramStart = line.indexOf("(");
             int paramEnd = line.lastIndexOf(")");
             int commentStart = line.indexOf("/");
             int nameEnd = commentStart > -1 ? Math.min(commentStart, paramStart) : paramStart;
             String name = line.substring(0, nameEnd).trim();
-            if (name.startsWith("//"))
-            {
+            if (name.startsWith("//")) {
                 continue;
             }
             String params = line.substring(paramStart + 1, paramEnd);
@@ -960,51 +940,40 @@ final class SkipPredicateGeneratorData
         }
 
         List<String> relevantLoadedEntries = new ArrayList<>(entries.size());
-        for (Entry entry : entries)
-        {
+        for (Entry entry : entries) {
             boolean altType = altTypesReverse.containsKey(entry.name);
             boolean present = map.containsKey(entry.name) || altType;
-            if (!present && !entry.doubleBlock)
-            {
+            if (!present && !entry.doubleBlock) {
                 Entry prevEntry = entry;
-                do
-                {
+                do {
                     prevEntry = entries.get(entries.indexOf(prevEntry) - 1);
                 }
                 while (prevEntry.doubleBlock);
                 throw new IllegalStateException("BlockType." + entry.name + " missing from KNOWN_TYPES, expected after BlockType." + prevEntry.name);
-            }
-            else if (present && entry.doubleBlock)
-            {
+            } else if (present && entry.doubleBlock) {
                 throw new IllegalStateException("BlockType." + entry.name + " is a double block and must not be in KNOWN_TYPES");
             }
-            if (!entry.doubleBlock && !altType)
-            {
+            if (!entry.doubleBlock && !altType) {
                 relevantLoadedEntries.add(entry.name);
             }
         }
         Set<String> loadedEntriesSet = new HashSet<>(relevantLoadedEntries);
-        for (String entry : map.keySet())
-        {
-            if (!loadedEntriesSet.contains(entry))
-            {
+        for (String entry : map.keySet()) {
+            if (!loadedEntriesSet.contains(entry)) {
                 throw new IllegalStateException("Found unrecognized type BlockType." + entry);
             }
         }
         List<String> knownEntries = new ArrayList<>(map.keySet());
-        for (int i = 0; i < relevantLoadedEntries.size(); i++)
-        {
+        for (int i = 0; i < relevantLoadedEntries.size(); i++) {
             String entry = relevantLoadedEntries.get(i);
             int idx = knownEntries.indexOf(entry);
-            if (idx != i)
-            {
+            if (idx != i) {
                 throw new IllegalStateException("Expected BlockType." + entry + " at index " + i + ", found it at index " + idx);
             }
         }
     }
 
-    private static final class EntryBuilder
-    {
+    private static final class EntryBuilder {
         private final String type;
         private final String subPackage;
         private String shortName;
@@ -1013,15 +982,12 @@ final class SkipPredicateGeneratorData
         private List<String> altTypes = List.of();
         private final Map<String, TestDir> oneWayTests = new HashMap<>();
 
-        private EntryBuilder(String type, String subPackage)
-        {
+        private EntryBuilder(String type, String subPackage) {
             this.type = type;
             this.subPackage = subPackage;
             StringBuilder builder = new StringBuilder();
-            for (String part : type.replace("FRAMED_", "").split("_"))
-            {
-                builder.append(switch (part)
-                {
+            for (String part : type.replace("FRAMED_", "").split("_")) {
+                builder.append(switch (part) {
                     case "EXT" -> "Extended";
                     case "ELEV" -> "Elevated";
                     case "W" -> "Wall";
@@ -1031,53 +997,43 @@ final class SkipPredicateGeneratorData
             shortName = builder.toString();
         }
 
-        public EntryBuilder shortName(String shortName)
-        {
-            if (shortName.equals(this.shortName))
-            {
+        public EntryBuilder shortName(String shortName) {
+            if (shortName.equals(this.shortName)) {
                 throw new IllegalStateException("Unnecessary explicit short name on BlockType." + type);
             }
             this.shortName = shortName;
             return this;
         }
 
-        public EntryBuilder props(Property... props)
-        {
+        public EntryBuilder props(Property... props) {
             this.properties = List.of(props);
             return this;
         }
 
-        public EntryBuilder dirs(TestDir... dirs)
-        {
+        public EntryBuilder dirs(TestDir... dirs) {
             this.testDirs = List.of(dirs);
             return this;
         }
 
-        public EntryBuilder altTypes(String... altTypes)
-        {
+        public EntryBuilder altTypes(String... altTypes) {
             this.altTypes = List.of(altTypes);
             return this;
         }
 
-        public EntryBuilder oneWayTest(String targetType, TestDir dir)
-        {
-            if (!dir.isSpecial())
-            {
+        public EntryBuilder oneWayTest(String targetType, TestDir dir) {
+            if (!dir.isSpecial()) {
                 throw new IllegalArgumentException("One-way test on BlockType." + type + " against BlockType." + targetType + " must be special");
             }
             oneWayTests.put(targetType, dir);
             return this;
         }
 
-        Type build()
-        {
+        Type build() {
             Map<String, Property> propertyMap = properties.stream().collect(Collectors.toMap(Property::name, p -> p));
             List<TestDir> newTestDirs = new ArrayList<>(testDirs.size());
             List<String> propNames = List.copyOf(properties.stream().map(Property::name).toList());
-            for (TestDir dir : testDirs)
-            {
-                if (dir.props == null)
-                {
+            for (TestDir dir : testDirs) {
+                if (dir.props == null) {
                     dir = new TestDir(dir.type, dir.name, propNames, dir.identifiers, dir.excludedTypes, dir.comparison);
                 }
                 newTestDirs.add(dir);
@@ -1095,15 +1051,12 @@ final class SkipPredicateGeneratorData
             Map<String, Property> propertyMap,
             List<TestDir> testDirs,
             Map<String, TestDir> oneWayTests
-    )
-    {
-        public List<String> allTypes(@Nullable List<TestDir> targetTestDirs)
-        {
+    ) {
+        public List<String> allTypes(@Nullable List<TestDir> targetTestDirs) {
             List<String> types = new ArrayList<>();
             types.add(type);
             types.addAll(altTypes);
-            if (targetTestDirs != null)
-            {
+            if (targetTestDirs != null) {
                 types.removeIf(type ->
                         targetTestDirs.stream().allMatch(dir -> dir.isExcluded(type))
                 );
@@ -1111,45 +1064,36 @@ final class SkipPredicateGeneratorData
             return types;
         }
 
-        public boolean hasSelfTest()
-        {
+        public boolean hasSelfTest() {
             return !testDirs.stream().allMatch(dir -> dir.isExcluded(this));
         }
 
-        public boolean hasSpecialTests()
-        {
+        public boolean hasSpecialTests() {
             return testDirs.stream().anyMatch(TestDir::isSpecial);
         }
 
-        public boolean hasOneWayTestAgainst(Type type)
-        {
+        public boolean hasOneWayTestAgainst(Type type) {
             return oneWayTests.containsKey(type.type);
         }
     }
 
-    record Property(String typeName, String name, String propHolder, String propName, PropType type, @Nullable SpecialPropLookup specialPropLookup, boolean earlyExit)
-    {
-        static Property vanilla(String typeName, String name, String propName, PropType type)
-        {
+    record Property(String typeName, String name, String propHolder, String propName, PropType type, @Nullable SpecialPropLookup specialPropLookup, boolean earlyExit) {
+        static Property vanilla(String typeName, String name, String propName, PropType type) {
             return new Property(typeName, name, "BlockStateProperties", propName, type, null, false);
         }
 
-        static Property api(String typeName, String name, String propName, PropType type)
-        {
+        static Property api(String typeName, String name, String propName, PropType type) {
             return new Property(typeName, name, "FramedProperties", propName, type, null, false);
         }
 
-        static Property internal(String typeName, String name, String propName, PropType type)
-        {
+        static Property internal(String typeName, String name, String propName, PropType type) {
             return new Property(typeName, name, "PropertyHolder", propName, type, null, false);
         }
 
-        Property withPropLookup(String classFqn, String varName, String method)
-        {
+        Property withPropLookup(String classFqn, String varName, String method) {
             String importLine = classFqn.replace("/", ".");
             int dollarIdx = importLine.indexOf('$');
-            if (dollarIdx != -1)
-            {
+            if (dollarIdx != -1) {
                 importLine = importLine.substring(0, dollarIdx);
             }
             int lastSlash = classFqn.lastIndexOf("/");
@@ -1157,71 +1101,58 @@ final class SkipPredicateGeneratorData
             return new Property(typeName, name, propHolder, propName, type, new SpecialPropLookup(importLine, varType, varName, method), false);
         }
 
-        Property withEarlyExit()
-        {
+        Property withEarlyExit() {
             return new Property(typeName, name, propHolder, propName, type, specialPropLookup, true);
         }
 
-        boolean hasSpecialLookup()
-        {
+        boolean hasSpecialLookup() {
             return specialPropLookup != null;
         }
     }
 
     record SpecialPropLookup(String classImport, String varType, String varName, String method) { }
 
-    enum PropType
-    {
+    enum PropType {
         PRIMITIVE,
         VANILLA,
         CUSTOM
     }
 
-    record TestDir(TestType type, String name, @Nullable List<String> props, Set<String> identifiers, Set<String> excludedTypes, ComparisonType comparison)
-    {
-        TestDir(@Nullable String type, String name, @Nullable List<String> props, String... identifiers)
-        {
+    record TestDir(TestType type, String name, @Nullable List<String> props, Set<String> identifiers, Set<String> excludedTypes, ComparisonType comparison) {
+        TestDir(@Nullable String type, String name, @Nullable List<String> props, String... identifiers) {
             this(new TestType(type), name, props, Set.of(identifiers), Set.of(), ComparisonType.of(type));
         }
 
-        List<String> getProps()
-        {
+        List<String> getProps() {
             return Objects.requireNonNull(props);
         }
 
-        TestDir withExcludedTypes(String... types)
-        {
+        TestDir withExcludedTypes(String... types) {
             return new TestDir(type, name, props, identifiers, Set.of(types), comparison);
         }
 
-        boolean isExcluded(Type type)
-        {
+        boolean isExcluded(Type type) {
             return isExcluded(type.type);
         }
 
-        boolean isExcluded(String type)
-        {
+        boolean isExcluded(String type) {
             return excludedTypes.contains(type);
         }
 
-        boolean isSpecial()
-        {
+        boolean isSpecial() {
             return comparison == ComparisonType.SPECIAL;
         }
     }
 
-    enum ComparisonType
-    {
+    enum ComparisonType {
         TEST_DIR,
         BOOLEAN,
         IDENTITY,
         EQUALS,
         SPECIAL;
 
-        private static ComparisonType of(@Nullable String type)
-        {
-            return switch (type)
-            {
+        private static ComparisonType of(@Nullable String type) {
+            return switch (type) {
                 case null -> SPECIAL;
                 case "boolean" -> BOOLEAN;
                 case "int" -> IDENTITY;

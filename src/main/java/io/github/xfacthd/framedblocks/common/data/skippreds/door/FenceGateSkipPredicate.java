@@ -13,19 +13,15 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.WallSide;
 
 @CullTest(BlockType.FRAMED_FENCE_GATE)
-public final class FenceGateSkipPredicate implements SideSkipPredicate
-{
+public final class FenceGateSkipPredicate implements SideSkipPredicate {
     @Override
-    public boolean test(BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side)
-    {
+    public boolean test(BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side) {
         Direction dir = state.getValue(FenceGateBlock.FACING);
         boolean perp = dir.getClockWise().getAxis() == side.getAxis();
-        if (perp && adjState.getBlock() instanceof IFramedBlock block && block.getBlockType() instanceof BlockType type)
-        {
+        if (perp && adjState.getBlock() instanceof IFramedBlock block && block.getBlockType() instanceof BlockType type) {
             boolean inWall = state.getValue(FenceGateBlock.IN_WALL);
 
-            return switch (type)
-            {
+            return switch (type) {
                 case FRAMED_FENCE_GATE -> testAgainstFenceGate(
                         dir, inWall, adjState
                 );
@@ -39,15 +35,13 @@ public final class FenceGateSkipPredicate implements SideSkipPredicate
     }
 
     @CullTest.TestTarget(BlockType.FRAMED_FENCE_GATE)
-    private static boolean testAgainstFenceGate(Direction dir, boolean inWall, BlockState adjState)
-    {
+    private static boolean testAgainstFenceGate(Direction dir, boolean inWall, BlockState adjState) {
         Direction adjDir = adjState.getValue(FenceGateBlock.FACING);
         return adjDir.getAxis() == dir.getAxis() && inWall == adjState.getValue(FenceGateBlock.IN_WALL);
     }
 
     @CullTest.TestTarget(value = BlockType.FRAMED_WALL, oneWay = true)
-    private static boolean testAgainstWall(boolean inWall, BlockState adjState, Direction side)
-    {
+    private static boolean testAgainstWall(boolean inWall, BlockState adjState, Direction side) {
         return inWall && PillarDirs.Wall.getWallSide(adjState, side.getOpposite()) != WallSide.NONE;
     }
 }

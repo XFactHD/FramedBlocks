@@ -6,21 +6,18 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 import java.util.function.BiConsumer;
 
-final class EmptyShapeContainer implements ShapeContainer
-{
+final class EmptyShapeContainer implements ShapeContainer {
     static final EmptyShapeContainer INSTANCE = new EmptyShapeContainer();
 
     private EmptyShapeContainer() { }
 
     @Override
-    public VoxelShape get(BlockState state)
-    {
+    public VoxelShape get(BlockState state) {
         return Shapes.empty();
     }
 
     @Override
-    public boolean isEmpty()
-    {
+    public boolean isEmpty() {
         return true;
     }
 

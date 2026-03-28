@@ -9,8 +9,7 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-public @interface CullTest
-{
+public @interface CullTest {
     /**
      * The type(s) using this test
      */
@@ -20,8 +19,7 @@ public @interface CullTest
 
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.METHOD)
-    @interface TestTarget
-    {
+    @interface TestTarget {
         /**
          * The type(s) tested against
          */

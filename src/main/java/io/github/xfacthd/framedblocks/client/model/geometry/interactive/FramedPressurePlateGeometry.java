@@ -12,38 +12,31 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.jspecify.annotations.Nullable;
 
-public class FramedPressurePlateGeometry extends Geometry
-{
+public class FramedPressurePlateGeometry extends Geometry {
     private final boolean pressed;
     private final boolean useBaseModel;
 
-    public FramedPressurePlateGeometry(GeometryFactory.Context ctx)
-    {
+    public FramedPressurePlateGeometry(GeometryFactory.Context ctx) {
         this(ctx.state().getValue(BlockStateProperties.POWERED), false);
     }
 
-    protected FramedPressurePlateGeometry(boolean powered, boolean useBaseModel)
-    {
+    protected FramedPressurePlateGeometry(boolean powered, boolean useBaseModel) {
         this.pressed = powered;
         this.useBaseModel = useBaseModel;
     }
 
     @Override
-    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
-    {
+    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData) {
         Direction quadDir = quad.direction();
         float height = pressed ? .5F / 16F : 1F / 16F;
 
-        if (DirUtils.isY(quadDir))
-        {
+        if (DirUtils.isY(quadDir)) {
             boolean up = quadDir == Direction.UP;
             QuadModifier.of(quad)
                     .apply(Modifiers.cutTopBottom(1F/16F, 1F/16F, 15F/16F, 15F/16F))
                     .applyIf(Modifiers.setPosition(height), up)
                     .export(quadMap, up ? null : Direction.DOWN);
-        }
-        else
-        {
+        } else {
             QuadModifier.of(quad)
                     .apply(Modifiers.cutSide(1F/16F, 0F, 15F/16F, height))
                     .apply(Modifiers.setPosition(15F/16F))
@@ -52,8 +45,7 @@ public class FramedPressurePlateGeometry extends Geometry
     }
 
     @Override
-    public boolean useBaseModel()
-    {
+    public boolean useBaseModel() {
         return useBaseModel;
     }
 }

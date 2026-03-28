@@ -9,8 +9,7 @@ import org.jetbrains.annotations.ApiStatus;
 
 @ApiStatus.NonExtendable
 @SuppressWarnings("unused")
-public interface FramedBlocksAPI
-{
+public interface FramedBlocksAPI {
     FramedBlocksAPI INSTANCE = Utils.loadService(FramedBlocksAPI.class);
 
     /**

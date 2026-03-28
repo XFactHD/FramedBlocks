@@ -6,8 +6,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
-public abstract sealed class QuadMap permits QuadMapImpl
-{
+public abstract sealed class QuadMap permits QuadMapImpl {
     public abstract List<BakedQuad> get(@Nullable Direction cullFace);
 
     public abstract int materialFlags();

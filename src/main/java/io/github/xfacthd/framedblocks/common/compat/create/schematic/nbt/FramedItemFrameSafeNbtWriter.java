@@ -6,11 +6,9 @@ import io.github.xfacthd.framedblocks.common.blockentity.special.FramedItemFrame
 import net.createmod.catnip.nbt.NBTProcessors;
 import net.minecraft.nbt.CompoundTag;
 
-public final class FramedItemFrameSafeNbtWriter extends FramedBlockSafeNbtWriter
-{
+public final class FramedItemFrameSafeNbtWriter extends FramedBlockSafeNbtWriter {
     @Override
-    protected void cleanupTag(IFramedBlockEntity fbe, CompoundTag tag)
-    {
+    protected void cleanupTag(IFramedBlockEntity fbe, CompoundTag tag) {
         NBTProcessors.itemProcessor(FramedItemFrameBlockEntity.ITEM_NBT_KEY).apply(tag);
     }
 }

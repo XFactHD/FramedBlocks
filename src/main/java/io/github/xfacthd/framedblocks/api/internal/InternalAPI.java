@@ -24,12 +24,10 @@ import org.jspecify.annotations.Nullable;
 import java.util.List;
 
 @ApiStatus.Internal
-public interface InternalAPI
-{
+public interface InternalAPI {
     InternalAPI INSTANCE = Utils.loadService(InternalAPI.class);
 
-    @Nullable
-    CamoContainerFactory<?> findCamoFactory(ItemStack stack);
+    @Nullable CamoContainerFactory<?> findCamoFactory(ItemStack stack);
 
     boolean isValidRemovalTool(CamoContainer<?, ?> container, ItemStack stack);
 

@@ -11,8 +11,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 @FunctionalInterface
-public interface QuadListModifier
-{
+public interface QuadListModifier {
     /**
      * Allows modifying the quads for a particular side before they are copied to the {@link QuadMapBuilder}.
      * <p>
@@ -26,33 +25,24 @@ public interface QuadListModifier
      */
     void modify(QuadMapBuilder quadMap, ArrayList<BakedQuad> quads, @Nullable Direction side);
 
-    static QuadListModifier filteringCullFace(Predicate<Direction> filter)
-    {
-        return (_, quads, side) ->
-        {
+    static QuadListModifier filteringCullFace(Predicate<Direction> filter) {
+        return (_, quads, side) -> {
             if (side != null && filter.test(side)) quads.clear();
         };
     }
 
-    static QuadListModifier filtering(Predicate<BakedQuad> filter)
-    {
+    static QuadListModifier filtering(Predicate<BakedQuad> filter) {
         return (_, quads, _) -> quads.removeIf(filter);
     }
 
-    static QuadListModifier replacing(Function<BakedQuad, @Nullable BakedQuad> modifier)
-    {
-        return (_, quads, _) ->
-        {
+    static QuadListModifier replacing(Function<BakedQuad, @Nullable BakedQuad> modifier) {
+        return (_, quads, _) -> {
             ListIterator<BakedQuad> it = quads.listIterator();
-            while (it.hasNext())
-            {
+            while (it.hasNext()) {
                 BakedQuad newQuad = modifier.apply(it.next());
-                if (newQuad != null)
-                {
+                if (newQuad != null) {
                     it.set(newQuad);
-                }
-                else
-                {
+                } else {
                     it.remove();
                 }
             }

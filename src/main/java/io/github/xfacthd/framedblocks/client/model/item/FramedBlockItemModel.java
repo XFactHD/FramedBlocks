@@ -66,8 +66,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.Supplier;
 
-public final class FramedBlockItemModel extends AbstractFramedBlockItemModel
-{
+public final class FramedBlockItemModel extends AbstractFramedBlockItemModel {
     private static final RandomSource RANDOM = RandomSource.create();
     private static final Direction[] DIRECTIONS = Arrays.copyOf(Direction.values(), 7);
     private static final Identifier ERROR_MODEL_LOCATION = Utils.id("item/error");
@@ -87,19 +86,16 @@ public final class FramedBlockItemModel extends AbstractFramedBlockItemModel
             boolean nonStandardModelProvider,
             ItemTransforms itemTransforms,
             ItemModel errorModel
-    )
-    {
+    ) {
         this.state = state;
         this.modelSupplier = Lazy.of(modelSupplier);
         this.nonStandardModelProvider = nonStandardModelProvider;
         this.itemTransforms = itemTransforms;
         this.errorModel = errorModel;
-        this.extents = Suppliers.memoize(() ->
-        {
+        this.extents = Suppliers.memoize(() -> {
             BlockStateModel model = this.modelSupplier.get();
             ItemModelInfo modelInfo = ItemModelInfo.DEFAULT;
-            if (model instanceof AbstractFramedBlockStateModel blockModel)
-            {
+            if (model instanceof AbstractFramedBlockStateModel blockModel) {
                 modelInfo = Objects.requireNonNullElse(blockModel.getItemModelInfo(), ItemModelInfo.DEFAULT);
             }
             ModelEntry modelEntry = getOrCreateModelEntry(ItemStack.EMPTY, CamoList.EMPTY, null, modelInfo);
@@ -116,12 +112,10 @@ public final class FramedBlockItemModel extends AbstractFramedBlockItemModel
             @Nullable ClientLevel level,
             @Nullable ItemOwner owner,
             int seed
-    )
-    {
+    ) {
         BlockStateModel model = modelSupplier.get();
         ItemModelInfo itemModelInfo;
-        if (!(model instanceof AbstractFramedBlockStateModel blockModel) || (itemModelInfo = blockModel.getItemModelInfo()) == null)
-        {
+        if (!(model instanceof AbstractFramedBlockStateModel blockModel) || (itemModelInfo = blockModel.getItemModelInfo()) == null) {
             errorModel.update(renderState, stack, resolver, ctx, level, owner, seed);
             return;
         }
@@ -131,31 +125,24 @@ public final class FramedBlockItemModel extends AbstractFramedBlockItemModel
         Holder<BlockOverlay> overlay = showCamo ? stack.get(Utils.DC_TYPE_BLOCK_OVERLAY) : null;
 
         ModelEntry modelEntry;
-        try
-        {
+        try {
             modelEntry = getOrCreateModelEntry(stack, camos, overlay, itemModelInfo);
-        }
-        catch (Throwable ignored)
-        {
+        } catch (Throwable ignored) {
             errorModel.update(renderState, stack, resolver, ctx, level, owner, seed);
             return;
         }
 
         renderState.appendModelIdentityElement(this);
-        if (!modelEntry.camos.isEmpty())
-        {
+        if (!modelEntry.camos.isEmpty()) {
             renderState.appendModelIdentityElement(modelEntry.camos);
         }
-        if (modelEntry.overlay != null)
-        {
+        if (modelEntry.overlay != null) {
             renderState.appendModelIdentityElement(modelEntry.overlay);
         }
-        if (modelEntry.userData != null)
-        {
+        if (modelEntry.userData != null) {
             renderState.appendModelIdentityElement(modelEntry.userData);
         }
-        if (modelEntry.animated)
-        {
+        if (modelEntry.animated) {
             renderState.setAnimated();
         }
 
@@ -163,19 +150,16 @@ public final class FramedBlockItemModel extends AbstractFramedBlockItemModel
         layer.setExtents(extents);
         layer.prepareQuadList().addAll(modelEntry.quads);
         modelEntry.properties.applyToLayer(layer, ctx);
-        if (!modelEntry.tints.isEmpty())
-        {
+        if (!modelEntry.tints.isEmpty()) {
             layer.tintLayers().addAll(modelEntry.tints);
         }
     }
 
-    private ModelEntry getOrCreateModelEntry(ItemStack stack, CamoList camos, @Nullable Holder<BlockOverlay> overlay, ItemModelInfo itemModelInfo)
-    {
+    private ModelEntry getOrCreateModelEntry(ItemStack stack, CamoList camos, @Nullable Holder<BlockOverlay> overlay, ItemModelInfo itemModelInfo) {
         Object userData = itemModelInfo.computeCacheKey(stack);
         Object cacheKey = userData != null || overlay != null ? new CompoundCacheKey(camos, overlay, userData) : camos;
         ModelEntry modelEntry = itemModelCache.get(cacheKey);
-        if (modelEntry == null)
-        {
+        if (modelEntry == null) {
             BlockStateModel model = modelSupplier.get();
             ModelData data = itemModelInfo.isDataRequired() || !camos.isEmpty() ? itemModelInfo.buildItemModelData(state, camos, overlay) : ModelData.EMPTY;
             BlockAndTintGetter level = new FreestandingBlockRenderFakeLevel.Simple(state, data);
@@ -185,11 +169,9 @@ public final class FramedBlockItemModel extends AbstractFramedBlockItemModel
 
             RANDOM.setSeed(42);
             model.collectParts(level, BlockPos.ZERO, state, RANDOM, partScratchList);
-            for (BlockStateModelPart modelPart : partScratchList)
-            {
+            for (BlockStateModelPart modelPart : partScratchList) {
                 animated |= (modelPart.materialFlags() & BakedQuad.FLAG_ANIMATED) != 0;
-                for (Direction face : DIRECTIONS)
-                {
+                for (Direction face : DIRECTIONS) {
                     RANDOM.setSeed(42);
                     Utils.copyAll(modelPart.getQuads(face), allQuads);
                 }
@@ -198,16 +180,13 @@ public final class FramedBlockItemModel extends AbstractFramedBlockItemModel
 
             int tintCount = camos.stream().mapToInt(CamoContainerHelper.Client::getTintCount).sum();
             IntArrayList tints = new IntArrayList(tintCount);
-            if (tintCount > 0)
-            {
-                for (CamoContainer<?, ?> camo : camos)
-                {
+            if (tintCount > 0) {
+                for (CamoContainer<?, ?> camo : camos) {
                     CamoContainerHelper.Client.collectTintValues(camo, stack, tints);
                 }
             }
             TintSource overlayTintSource;
-            if (overlay != null && (overlayTintSource = overlay.value().tintSource()) != null)
-            {
+            if (overlay != null && (overlayTintSource = overlay.value().tintSource()) != null) {
                 tints.add(TintUtils.getOverlayTintSource(overlayTintSource).color(overlayTintSource.defaultBlockState()));
             }
             itemModelInfo.appendTintValues(stack, tints);
@@ -219,19 +198,16 @@ public final class FramedBlockItemModel extends AbstractFramedBlockItemModel
         return modelEntry;
     }
 
-    public ItemTransforms getItemTransforms()
-    {
+    public ItemTransforms getItemTransforms() {
         return itemTransforms;
     }
 
     @Override
-    public void clearCache()
-    {
+    public void clearCache() {
         itemModelCache.clear();
         // Assume that models provided by non-standard providers are "freestanding" and therefore don't get caught by
         // the clearCache() call on all AbstractFramedBlockModels in the block model "registry"
-        if (nonStandardModelProvider && modelSupplier.get() instanceof AbstractFramedBlockStateModel framedModel)
-        {
+        if (nonStandardModelProvider && modelSupplier.get() instanceof AbstractFramedBlockStateModel framedModel) {
             framedModel.clearCache();
         }
     }
@@ -248,16 +224,14 @@ public final class FramedBlockItemModel extends AbstractFramedBlockItemModel
             boolean animated
     ) { }
 
-    public record Unbaked(Block block, BlockItemModelProvider modelProvider, Identifier baseModel) implements ItemModel.Unbaked
-    {
+    public record Unbaked(Block block, BlockItemModelProvider modelProvider, Identifier baseModel) implements ItemModel.Unbaked {
         public static final Identifier ID = Utils.id("block");
         public static final MapCodec<FramedBlockItemModel.Unbaked> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
                 BuiltInRegistries.BLOCK.byNameCodec().fieldOf("block").validate(FramedBlockItemModel.Unbaked::validateBlock).forGetter(FramedBlockItemModel.Unbaked::block),
                 BlockItemModelProviders.CODEC.optionalFieldOf("model_provider", BlockItemModelProvider.DEFAULT).forGetter(FramedBlockItemModel.Unbaked::modelProvider),
                 Identifier.CODEC.fieldOf("base_model").forGetter(FramedBlockItemModel.Unbaked::baseModel)
         ).apply(inst, FramedBlockItemModel.Unbaked::new));
-        private static final ModelBaker.SharedOperationKey<ItemModel> ERROR_MODEL_KEY = ModelUtils.makeSharedOpsKey(baker ->
-        {
+        private static final ModelBaker.SharedOperationKey<ItemModel> ERROR_MODEL_KEY = ModelUtils.makeSharedOpsKey(baker -> {
             ResolvedModel model = baker.getModel(ERROR_MODEL_LOCATION);
             TextureSlots textureslots = model.getTopTextureSlots();
             QuadCollection quads = model.bakeTopGeometry(textureslots, baker, BlockModelRotation.IDENTITY);
@@ -265,14 +239,12 @@ public final class FramedBlockItemModel extends AbstractFramedBlockItemModel
             return new CuboidItemModelWrapper(List.of(), quads, renderProps, new Matrix4f());
         });
 
-        public Unbaked
-        {
+        public Unbaked {
             Preconditions.checkArgument(block instanceof IFramedBlock, "Expected IFramedBlock, got %s", block);
         }
 
         @Override
-        public FramedBlockItemModel bake(BakingContext context, Matrix4fc transformation)
-        {
+        public FramedBlockItemModel bake(BakingContext context, Matrix4fc transformation) {
             BlockState state = Objects.requireNonNull(((IFramedBlock) block).getItemModelSource());
             Supplier<BlockStateModel> modelSupplier = modelProvider.create(state, context.blockModelBaker());
             boolean nonStandardModelProvider = modelProvider != BlockItemModelProvider.DEFAULT;
@@ -282,22 +254,18 @@ public final class FramedBlockItemModel extends AbstractFramedBlockItemModel
         }
 
         @Override
-        public void resolveDependencies(Resolver resolver)
-        {
+        public void resolveDependencies(Resolver resolver) {
             resolver.markDependency(baseModel);
             resolver.markDependency(ERROR_MODEL_LOCATION);
         }
 
         @Override
-        public MapCodec<? extends ItemModel.Unbaked> type()
-        {
+        public MapCodec<? extends ItemModel.Unbaked> type() {
             return CODEC;
         }
 
-        private static DataResult<Block> validateBlock(Block block)
-        {
-            if (block instanceof IFramedBlock)
-            {
+        private static DataResult<Block> validateBlock(Block block) {
+            if (block instanceof IFramedBlock) {
                 return DataResult.success(block);
             }
             return DataResult.error(() -> "Expected IFramedBlock, got " + block);

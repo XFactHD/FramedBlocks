@@ -16,46 +16,34 @@ import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.common.util.Lazy;
 import org.lwjgl.glfw.GLFW;
 
-public final class KeyMappings
-{
+public final class KeyMappings {
     public static final KeyMapping.Category KEY_CATEGORY = new KeyMapping.Category(Utils.id("main"));
     public static final Lazy<KeyMapping> KEYMAPPING_UPDATE_CULLING = makeKeyMapping("update_cull", GLFW.GLFW_KEY_F9);
     public static final Lazy<KeyMapping> KEYMAPPING_WIPE_CACHE = makeKeyMapping("wipe_cache", -1);
 
-    private static Lazy<KeyMapping> makeKeyMapping(String name, int key)
-    {
-        return Lazy.of(() ->
-                new KeyMapping(FramedConstants.MOD_ID + ".key." + name, key, KEY_CATEGORY)
-        );
+    private static Lazy<KeyMapping> makeKeyMapping(String name, int key) {
+        return Lazy.of(() -> new KeyMapping(FramedConstants.MOD_ID + ".key." + name, key, KEY_CATEGORY));
     }
 
-    public static void onRegisterKeyMappings(RegisterKeyMappingsEvent event)
-    {
+    public static void onRegisterKeyMappings(RegisterKeyMappingsEvent event) {
         event.registerCategory(KEY_CATEGORY);
 
         event.register(KEYMAPPING_UPDATE_CULLING.get());
         event.register(KEYMAPPING_WIPE_CACHE.get());
     }
 
-    public static void onClientTick(@SuppressWarnings("unused") ClientTickEvent.Pre event)
-    {
+    public static void onClientTick(@SuppressWarnings("unused") ClientTickEvent.Pre event) {
         Level level = Minecraft.getInstance().level;
-        if (level == null || Minecraft.getInstance().screen != null)
-        {
+        if (level == null || Minecraft.getInstance().screen != null) {
             return;
         }
 
-        if (KEYMAPPING_UPDATE_CULLING.get().consumeClick())
-        {
+        if (KEYMAPPING_UPDATE_CULLING.get().consumeClick()) {
             HitResult hit = Minecraft.getInstance().hitResult;
-            if (hit instanceof BlockHitResult blockHit && level.getBlockEntity(blockHit.getBlockPos()) instanceof IFramedBlockEntity be)
-            {
-                try
-                {
+            if (hit instanceof BlockHitResult blockHit && level.getBlockEntity(blockHit.getBlockPos()) instanceof IFramedBlockEntity be) {
+                try {
                     be.updateCulling(true, true);
-                }
-                catch (Throwable throwable)
-                {
+                } catch (Throwable throwable) {
                     FramedBlocks.LOGGER.error(
                             "Encountered unexpected exception while updating culling of '{}'",
                             be.getBlockState().getBlock(),
@@ -78,8 +66,7 @@ public final class KeyMappings
             }
         }
 
-        if (KEYMAPPING_WIPE_CACHE.get().consumeClick())
-        {
+        if (KEYMAPPING_WIPE_CACHE.get().consumeClick()) {
             CacheCleaner.clearModelCaches(CacheCleaner.Reason.MANUAL);
 
             //noinspection ConstantConditions

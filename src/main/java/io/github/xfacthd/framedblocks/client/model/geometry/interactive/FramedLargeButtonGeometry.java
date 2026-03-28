@@ -14,16 +14,14 @@ import net.minecraft.world.level.block.state.properties.AttachFace;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.jspecify.annotations.Nullable;
 
-public class FramedLargeButtonGeometry extends Geometry
-{
+public class FramedLargeButtonGeometry extends Geometry {
     protected final Direction dir;
     protected final AttachFace face;
     protected final Direction facing;
     protected final boolean pressed;
     private final boolean useBaseModel;
 
-    public FramedLargeButtonGeometry(GeometryFactory.Context ctx)
-    {
+    public FramedLargeButtonGeometry(GeometryFactory.Context ctx) {
         this.dir = ctx.state().getValue(BlockStateProperties.HORIZONTAL_FACING);
         this.face = ctx.state().getValue(BlockStateProperties.ATTACH_FACE);
         this.facing = getFacing(dir, face);
@@ -32,30 +30,22 @@ public class FramedLargeButtonGeometry extends Geometry
     }
 
     @Override
-    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
-    {
+    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData) {
         Direction quadDir = quad.direction();
-        if (DirUtils.isY(facing))
-        {
+        if (DirUtils.isY(facing)) {
             generateVerticalButton(quadMap, quad, quadDir);
-        }
-        else
-        {
+        } else {
             generateHorizontalButton(quadMap, quad, quadDir);
         }
     }
 
-    private void generateVerticalButton(QuadMapBuilder quadMap, BakedQuad quad, Direction quadDir)
-    {
-        if (quadDir.getAxis() == facing.getAxis())
-        {
+    private void generateVerticalButton(QuadMapBuilder quadMap, BakedQuad quad, Direction quadDir) {
+        if (quadDir.getAxis() == facing.getAxis()) {
             QuadModifier.of(quad)
                     .apply(Modifiers.cutTopBottom(1F/16F, 1F/16F, 15F/16F, 15F/16F))
                     .applyIf(Modifiers.setPosition(pressed ? 1F/16F : 2F/16F), quadDir == facing)
                     .export(quadMap, quadDir == facing ? null : quadDir);
-        }
-        else
-        {
+        } else {
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(facing, pressed ? 1F/16F : 2F/16F))
                     .apply(Modifiers.cut(quadDir.getClockWise().getAxis(), 15F/16F))
@@ -64,26 +54,20 @@ public class FramedLargeButtonGeometry extends Geometry
         }
     }
 
-    private void generateHorizontalButton(QuadMapBuilder quadMap, BakedQuad quad, Direction quadDir)
-    {
+    private void generateHorizontalButton(QuadMapBuilder quadMap, BakedQuad quad, Direction quadDir) {
         float height = pressed ? 1F/16F : 2F/16F;
-        if (quadDir.getAxis() == facing.getAxis())
-        {
+        if (quadDir.getAxis() == facing.getAxis()) {
             QuadModifier.of(quad)
                     .apply(Modifiers.cutSide(1F/16F, 1F/16F, 15F/16F, 15F/16F))
                     .applyIf(Modifiers.setPosition(height), quadDir == facing)
                     .export(quadMap, quadDir == facing ? null : quadDir);
-        }
-        else if (DirUtils.isY(quadDir))
-        {
+        } else if (DirUtils.isY(quadDir)) {
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(dir, height))
                     .apply(Modifiers.cut(dir.getClockWise().getAxis(), 15F/16F))
                     .apply(Modifiers.setPosition(15F/16F))
                     .export(quadMap, null);
-        }
-        else
-        {
+        } else {
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(dir, height))
                     .apply(Modifiers.cut(Direction.Axis.Y, 15F/16F))
@@ -93,15 +77,12 @@ public class FramedLargeButtonGeometry extends Geometry
     }
 
     @Override
-    public boolean useBaseModel()
-    {
+    public boolean useBaseModel() {
         return useBaseModel;
     }
 
-    private static Direction getFacing(Direction dir, AttachFace face)
-    {
-        return switch (face)
-        {
+    private static Direction getFacing(Direction dir, AttachFace face) {
+        return switch (face) {
             case FLOOR -> Direction.UP;
             case CEILING -> Direction.DOWN;
             case WALL -> dir;

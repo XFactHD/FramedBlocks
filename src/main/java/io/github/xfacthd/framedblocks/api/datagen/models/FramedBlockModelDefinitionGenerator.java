@@ -13,47 +13,40 @@ import java.util.Map;
 import java.util.Optional;
 
 @SuppressWarnings("UnusedReturnValue")
-public final class FramedBlockModelDefinitionGenerator implements BlockModelDefinitionGenerator
-{
+public final class FramedBlockModelDefinitionGenerator implements BlockModelDefinitionGenerator {
     private final Block block;
     private final Either<BlockStateModelDispatcher, SingleVariant.Unbaked> baseModel;
     private final Optional<StandaloneWrapperKey<?>> wrapperKey;
     private final Map<String, SingleVariant.Unbaked> auxModels = new HashMap<>();
 
-    FramedBlockModelDefinitionGenerator(Block block, BlockStateModelDispatcher definition, Optional<StandaloneWrapperKey<?>> wrapperKey)
-    {
+    FramedBlockModelDefinitionGenerator(Block block, BlockStateModelDispatcher definition, Optional<StandaloneWrapperKey<?>> wrapperKey) {
         this.block = block;
         this.baseModel = Either.left(definition);
         this.wrapperKey = wrapperKey;
     }
 
-    FramedBlockModelDefinitionGenerator(Block block, SingleVariant.Unbaked variant, Optional<StandaloneWrapperKey<?>> wrapperKey)
-    {
+    FramedBlockModelDefinitionGenerator(Block block, SingleVariant.Unbaked variant, Optional<StandaloneWrapperKey<?>> wrapperKey) {
         this.block = block;
         this.baseModel = Either.right(variant);
         this.wrapperKey = wrapperKey;
     }
 
-    public FramedBlockModelDefinitionGenerator addAuxModel(String key, SingleVariant.Unbaked model)
-    {
+    public FramedBlockModelDefinitionGenerator addAuxModel(String key, SingleVariant.Unbaked model) {
         auxModels.put(key, model);
         return this;
     }
 
     @Override
-    public Block block()
-    {
+    public Block block() {
         return block;
     }
 
     @Override
-    public BlockStateModelDispatcher create()
-    {
+    public BlockStateModelDispatcher create() {
         return InternalClientAPI.INSTANCE.createFramedBlockDefinition(baseModel, auxModels, wrapperKey);
     }
 
-    StandaloneWrapperKey<?> getWrapperKey()
-    {
+    StandaloneWrapperKey<?> getWrapperKey() {
         return wrapperKey.orElseThrow();
     }
 }

@@ -7,18 +7,14 @@ import net.minecraft.world.level.block.Block;
 
 import java.util.List;
 
-public final class OcclusionPropertyConsistency
-{
-    public static void checkOcclusionProperty(SelfTestReporter reporter, List<Block> blocks)
-    {
+public final class OcclusionPropertyConsistency {
+    public static void checkOcclusionProperty(SelfTestReporter reporter, List<Block> blocks) {
         reporter.startTest("occlusion property");
 
-        blocks.forEach(block ->
-        {
+        blocks.forEach(block -> {
             boolean onType = ((IFramedBlock) block).getBlockType().canOccludeWithSolidCamo();
             boolean onBlock = block.defaultBlockState().hasProperty(FramedProperties.SOLID);
-            if (onType != onBlock)
-            {
+            if (onType != onBlock) {
                 reporter.warn("Block '{}' has inconsistent occlusion configuration", block);
             }
         });

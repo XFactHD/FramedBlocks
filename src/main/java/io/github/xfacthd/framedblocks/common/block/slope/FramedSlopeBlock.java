@@ -13,7 +13,7 @@ import io.github.xfacthd.framedblocks.api.util.RotationDirection;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.block.ExtPlacementStateBuilder;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
-import io.github.xfacthd.framedblocks.common.block.ISlopeBlock;
+import io.github.xfacthd.framedblocks.common.block.SlopeBlock;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import io.github.xfacthd.framedblocks.common.data.property.SlopeType;
@@ -38,24 +38,19 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jspecify.annotations.Nullable;
 
-public class FramedSlopeBlock extends FramedBlock implements ISlopeBlock, SlopeToggleBlock
-{
-    public FramedSlopeBlock(Properties props)
-    {
+public class FramedSlopeBlock extends FramedBlock implements SlopeBlock, SlopeToggleBlock {
+    public FramedSlopeBlock(Properties props) {
         super(BlockType.FRAMED_SLOPE, props);
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
-    {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
         builder.add(FramedProperties.FACING_HOR, PropertyHolder.SLOPE_TYPE);
     }
 
     @Override
-    @Nullable
-    public BlockState getStateForPlacement(BlockPlaceContext ctx)
-    {
+    public @Nullable BlockState getStateForPlacement(BlockPlaceContext ctx) {
         return ExtPlacementStateBuilder.of(this, ctx)
                 .withHorizontalFacingAndSlopeType()
                 .withWater()
@@ -64,27 +59,23 @@ public class FramedSlopeBlock extends FramedBlock implements ISlopeBlock, SlopeT
 
     @Override
     @SuppressWarnings("deprecation")
-    protected InteractionResult useItemOn(
-            ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit
-    )
-    {
-        if (!stack.isEmpty() && FramedUtils.isRailItem(stack.getItem()))
-        {
+    protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+        if (!stack.isEmpty() && FramedUtils.isRailItem(stack.getItem())) {
             Direction dir = state.getValue(FramedProperties.FACING_HOR);
             SlopeType type = state.getValue(PropertyHolder.SLOPE_TYPE);
             Direction face = hit.getDirection();
 
-            if (type == SlopeType.BOTTOM && (face == dir.getOpposite() || face == Direction.UP))
-            {
+            if (type == SlopeType.BOTTOM && (face == dir.getOpposite() || face == Direction.UP)) {
                 Block railSlope = FramedUtils.getRailSlopeBlock(stack.getItem());
                 BlockState newState = railSlope.defaultBlockState()
                         .setValue(PropertyHolder.ASCENDING_RAIL_SHAPE, FramedUtils.getAscendingRailShapeFromDirection(dir))
                         .setValue(BlockStateProperties.WATERLOGGED, state.getValue(BlockStateProperties.WATERLOGGED));
 
-                if (!newState.canSurvive(level, pos)) { return InteractionResult.FAIL; }
+                if (!newState.canSurvive(level, pos)) {
+                    return InteractionResult.FAIL;
+                }
 
-                if (!level.isClientSide())
-                {
+                if (!level.isClientSide()) {
                     boolean fancy = railSlope instanceof IFramedDoubleBlock;
                     CamoList camos = fancy ? stack.get(FBContent.DC_TYPE_CAMO_LIST) : null;
                     BlockUtils.wrapInStateCopy(level, pos, player, stack, false, true, () ->
@@ -92,8 +83,7 @@ public class FramedSlopeBlock extends FramedBlock implements ISlopeBlock, SlopeT
                     );
 
                     CamoContainer<?, ?> camo = EmptyCamoContainer.EMPTY;
-                    if (fancy && camos != null && !camos.isEmpty() && level.getBlockEntity(pos) instanceof FramedDoubleBlockEntity be)
-                    {
+                    if (fancy && camos != null && !camos.isEmpty() && level.getBlockEntity(pos) instanceof FramedDoubleBlockEntity be) {
                         camo = camos.getCamo(0);
                         be.setCamo(camo, true);
                     }
@@ -109,67 +99,54 @@ public class FramedSlopeBlock extends FramedBlock implements ISlopeBlock, SlopeT
     }
 
     @Override
-    public BlockState rotate(BlockState state, RotationDirection direction, WrenchRotationMode mode)
-    {
-        return switch (mode)
-        {
+    public BlockState rotate(BlockState state, RotationDirection direction, WrenchRotationMode mode) {
+        return switch (mode) {
             case PRIMARY -> super.rotate(state, direction, mode);
             case SECONDARY -> direction.cycle(state, PropertyHolder.SLOPE_TYPE);
         };
     }
 
     @Override
-    protected BlockState rotate(BlockState state, Rotation rotation)
-    {
+    protected BlockState rotate(BlockState state, Rotation rotation) {
         return BlockUtils.rotate(state, rotation);
     }
 
     @Override
-    protected BlockState mirror(BlockState state, Mirror mirror)
-    {
-        if (state.getValue(PropertyHolder.SLOPE_TYPE) == SlopeType.HORIZONTAL)
-        {
+    protected BlockState mirror(BlockState state, Mirror mirror) {
+        if (state.getValue(PropertyHolder.SLOPE_TYPE) == SlopeType.HORIZONTAL) {
             return BlockUtils.mirrorCornerBlock(state, mirror);
-        }
-        else
-        {
+        } else {
             return BlockUtils.mirrorFaceBlock(state, mirror);
         }
     }
 
     @Override
-    public Direction getFacing(BlockState state)
-    {
+    public Direction getFacing(BlockState state) {
         return state.getValue(FramedProperties.FACING_HOR);
     }
 
     @Override
-    public SlopeType getSlopeType(BlockState state)
-    {
+    public SlopeType getSlopeType(BlockState state) {
         return state.getValue(PropertyHolder.SLOPE_TYPE);
     }
 
     @Override
-    public BlockState getItemModelSource()
-    {
+    public BlockState getItemModelSource() {
         return defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
     }
 
     @Override
-    public Direction getHorizontalOrientation(BlockState state)
-    {
+    public Direction getHorizontalOrientation(BlockState state) {
         return state.getValue(FramedProperties.FACING_HOR);
     }
 
     @Override
-    public BlockState getJadeRenderState(BlockState state)
-    {
+    public BlockState getJadeRenderState(BlockState state) {
         return getItemModelSource();
     }
 
     @Override
-    public SlopeOrientation getSlopeOrientation(BlockState state)
-    {
+    public SlopeOrientation getSlopeOrientation(BlockState state) {
         return state.getValue(PropertyHolder.SLOPE_TYPE).getOrientation();
     }
 }

@@ -24,24 +24,19 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import org.jspecify.annotations.Nullable;
 
-public class FramedStackedSlopePanelBlock extends FramedDoubleBlock implements SlopeToggleBlock
-{
-    public FramedStackedSlopePanelBlock(Properties props)
-    {
+public class FramedStackedSlopePanelBlock extends FramedDoubleBlock implements SlopeToggleBlock {
+    public FramedStackedSlopePanelBlock(Properties props) {
         super(BlockType.FRAMED_STACKED_SLOPE_PANEL, props);
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
-    {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
         builder.add(FramedProperties.FACING_HOR, PropertyHolder.ROTATION);
     }
 
     @Override
-    @Nullable
-    public BlockState getStateForPlacement(BlockPlaceContext ctx)
-    {
+    public @Nullable BlockState getStateForPlacement(BlockPlaceContext ctx) {
         return ExtPlacementStateBuilder.of(this, ctx)
                 .withHorizontalFacing()
                 .withCrossOrSideRotation()
@@ -50,30 +45,25 @@ public class FramedStackedSlopePanelBlock extends FramedDoubleBlock implements S
     }
 
     @Override
-    public BlockState rotate(BlockState state, RotationDirection direction, WrenchRotationMode mode)
-    {
-        return switch (mode)
-        {
+    public BlockState rotate(BlockState state, RotationDirection direction, WrenchRotationMode mode) {
+        return switch (mode) {
             case PRIMARY -> HorizontalRotation.rotate(state, direction);
             case SECONDARY -> super.rotate(state, direction, mode);
         };
     }
 
     @Override
-    protected BlockState rotate(BlockState state, Rotation rotation)
-    {
+    protected BlockState rotate(BlockState state, Rotation rotation) {
         return BlockUtils.rotate(state, rotation);
     }
 
     @Override
-    protected BlockState mirror(BlockState state, Mirror mirror)
-    {
+    protected BlockState mirror(BlockState state, Mirror mirror) {
         return FramedSlopePanelBlock.mirrorPanel(state, mirror);
     }
 
     @Override
-    public DoubleBlockParts calculateParts(BlockState state)
-    {
+    public DoubleBlockParts calculateParts(BlockState state) {
         Direction facing = state.getValue(FramedProperties.FACING_HOR);
         HorizontalRotation rotation = state.getValue(PropertyHolder.ROTATION);
         boolean altSlope = state.getValue(FramedProperties.ALT_SLOPE);
@@ -92,25 +82,20 @@ public class FramedStackedSlopePanelBlock extends FramedDoubleBlock implements S
     }
 
     @Override
-    public DoubleBlockTopInteractionMode calculateTopInteractionMode(BlockState state)
-    {
+    public DoubleBlockTopInteractionMode calculateTopInteractionMode(BlockState state) {
         return DoubleBlockTopInteractionMode.EITHER;
     }
 
     @Override
-    public CamoGetter calculateCamoGetter(BlockState state, Direction side, @Nullable Direction edge)
-    {
+    public CamoGetter calculateCamoGetter(BlockState state, Direction side, @Nullable Direction edge) {
         Direction facing = state.getValue(FramedProperties.FACING_HOR);
-        if (side == facing || (side.getAxis() != facing.getAxis() && edge == facing))
-        {
+        if (side == facing || (side.getAxis() != facing.getAxis() && edge == facing)) {
             return CamoGetter.FIRST;
         }
 
-        if (edge == facing.getOpposite())
-        {
+        if (edge == facing.getOpposite()) {
             HorizontalRotation rot = state.getValue(PropertyHolder.ROTATION);
-            if (side == rot.withFacing(facing).getOpposite())
-            {
+            if (side == rot.withFacing(facing).getOpposite()) {
                 return CamoGetter.SECOND;
             }
         }
@@ -118,37 +103,31 @@ public class FramedStackedSlopePanelBlock extends FramedDoubleBlock implements S
     }
 
     @Override
-    public SolidityCheck calculateSolidityCheck(BlockState state, Direction side)
-    {
+    public SolidityCheck calculateSolidityCheck(BlockState state, Direction side) {
         Direction facing = state.getValue(FramedProperties.FACING_HOR);
-        if (side == facing)
-        {
+        if (side == facing) {
             return SolidityCheck.FIRST;
         }
 
         HorizontalRotation rot = state.getValue(PropertyHolder.ROTATION);
-        if (side == rot.withFacing(facing).getOpposite())
-        {
+        if (side == rot.withFacing(facing).getOpposite()) {
             return SolidityCheck.BOTH;
         }
         return SolidityCheck.NONE;
     }
 
     @Override
-    public BlockState getItemModelSource()
-    {
+    public BlockState getItemModelSource() {
         return defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
     }
 
     @Override
-    public Direction getHorizontalOrientation(BlockState state)
-    {
+    public Direction getHorizontalOrientation(BlockState state) {
         return state.getValue(FramedProperties.FACING_HOR);
     }
 
     @Override
-    public BlockState getJadeRenderState(BlockState state)
-    {
+    public BlockState getJadeRenderState(BlockState state) {
         return getItemModelSource();
     }
 }

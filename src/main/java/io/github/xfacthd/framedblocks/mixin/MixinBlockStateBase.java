@@ -14,8 +14,7 @@ import org.spongepowered.asm.mixin.Unique;
 import java.util.Objects;
 
 @Mixin(BlockBehaviour.BlockStateBase.class)
-public abstract class MixinBlockStateBase implements StateCacheAccessor
-{
+public abstract class MixinBlockStateBase implements StateCacheAccessor {
     @Unique
     @Nullable
     private StateCache framedblocks$cache = null;
@@ -24,8 +23,7 @@ public abstract class MixinBlockStateBase implements StateCacheAccessor
     protected abstract BlockState asState();
 
     @Override
-    public void framedblocks$initCache(StateCache cache)
-    {
+    public void framedblocks$initCache(StateCache cache) {
         Preconditions.checkState(
                 asState().getBlock() instanceof IFramedBlock,
                 "IStateCacheAccessor#initCache() must only be called on blocks implementing IFramedBlock"
@@ -34,8 +32,7 @@ public abstract class MixinBlockStateBase implements StateCacheAccessor
     }
 
     @Override
-    public StateCache framedblocks$getCache()
-    {
+    public StateCache framedblocks$getCache() {
         return Objects.requireNonNull(framedblocks$cache, "IStateCacheAccessor#framedblocks$getCache() called too early");
     }
 }

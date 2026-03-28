@@ -10,8 +10,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-final class QuadMapImpl extends QuadMap implements QuadMapBuilderInternal
-{
+final class QuadMapImpl extends QuadMap implements QuadMapBuilderInternal {
     private static final int SIDE_COUNT = Direction.values().length + 1;
 
     @SuppressWarnings("unchecked")
@@ -19,28 +18,23 @@ final class QuadMapImpl extends QuadMap implements QuadMapBuilderInternal
     private int materialFlags = -1;
 
     @Override
-    public List<BakedQuad> get(@Nullable Direction side)
-    {
+    public List<BakedQuad> get(@Nullable Direction side) {
         int idx = DirUtils.maskNullDirection(side);
         return Objects.requireNonNull(quads[idx]);
     }
 
     @Override
-    public ArrayList<BakedQuad> getOrCreate(@Nullable Direction side)
-    {
+    public ArrayList<BakedQuad> getOrCreate(@Nullable Direction side) {
         int idx = DirUtils.maskNullDirection(side);
         ArrayList<BakedQuad> list = (ArrayList<BakedQuad>) quads[idx];
-        if (list == null)
-        {
+        if (list == null) {
             quads[idx] = list = new ArrayList<>();
         }
         return list;
     }
 
     @Override
-    @Nullable
-    public ArrayList<BakedQuad> tryGet(@Nullable Direction side)
-    {
+    public @Nullable ArrayList<BakedQuad> tryGet(@Nullable Direction side) {
         int idx = DirUtils.maskNullDirection(side);
         return (ArrayList<BakedQuad>) quads[idx];
     }
@@ -50,18 +44,14 @@ final class QuadMapImpl extends QuadMap implements QuadMapBuilderInternal
      * is known to never be retrieved via {@link #getOrCreate(Direction)} after this operation!
      */
     @Override
-    public void set(@Nullable Direction side, List<BakedQuad> list)
-    {
+    public void set(@Nullable Direction side, List<BakedQuad> list) {
         quads[DirUtils.maskNullDirection(side)] = list;
     }
 
     @Override
-    public boolean isEmpty()
-    {
-        for (List<BakedQuad> list : quads)
-        {
-            if (list != null && !list.isEmpty())
-            {
+    public boolean isEmpty() {
+        for (List<BakedQuad> list : quads) {
+            if (list != null && !list.isEmpty()) {
                 return false;
             }
         }
@@ -69,13 +59,10 @@ final class QuadMapImpl extends QuadMap implements QuadMapBuilderInternal
     }
 
     @Override
-    public QuadMap build()
-    {
-        for (int i = 0; i < quads.length; i++)
-        {
+    public QuadMap build() {
+        for (int i = 0; i < quads.length; i++) {
             List<BakedQuad> list = quads[i];
-            if (list == null || list.isEmpty())
-            {
+            if (list == null || list.isEmpty()) {
                 quads[i] = Collections.emptyList();
             }
         }
@@ -83,22 +70,17 @@ final class QuadMapImpl extends QuadMap implements QuadMapBuilderInternal
     }
 
     @Override
-    public int materialFlags()
-    {
-        if (materialFlags == -1)
-        {
+    public int materialFlags() {
+        if (materialFlags == -1) {
             materialFlags = computeMaterialFlags();
         }
         return materialFlags;
     }
 
-    private int computeMaterialFlags()
-    {
+    private int computeMaterialFlags() {
         int flags = 0;
-        for (List<BakedQuad> list : quads)
-        {
-            for (BakedQuad quad : Objects.requireNonNull(list))
-            {
+        for (List<BakedQuad> list : quads) {
+            for (BakedQuad quad : Objects.requireNonNull(list)) {
                 flags |= quad.materialInfo().flags();
             }
         }

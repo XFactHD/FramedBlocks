@@ -28,8 +28,7 @@ import net.neoforged.neoforge.transfer.access.ItemAccess;
 
 import java.util.Optional;
 
-public final class ModelBenchmarkCube
-{
+public final class ModelBenchmarkCube {
     private static final String CONFIRMATION_KEY = "confirm";
     private static final Component MSG_NO_CONFIRM = Component.literal("Incorrect confirmation key, expected '" + CONFIRMATION_KEY + "'");
     private static final Component MSG_NOT_A_PLAYER = Component.literal("This command can only be executed by a real player");
@@ -37,17 +36,14 @@ public final class ModelBenchmarkCube
     private static final Component MSG_OVERLAY_FAILED = Component.literal("Failed to resolve BlockOverlay for test blocks");
     private static final ResourceKey<BlockOverlay> OVERLAY_KEY = ResourceKey.create(FramedConstants.BLOCK_OVERLAY_REGISTRY_KEY, Utils.id("grass"));
 
-    public static int buildBenchmarkCube(CommandContext<CommandSourceStack> ctx)
-    {
+    public static int buildBenchmarkCube(CommandContext<CommandSourceStack> ctx) {
         String confirmation = ctx.getArgument("confirm", String.class);
-        if (!confirmation.equals(CONFIRMATION_KEY))
-        {
+        if (!confirmation.equals(CONFIRMATION_KEY)) {
             ctx.getSource().sendFailure(MSG_NO_CONFIRM);
             return 0;
         }
 
-        if (!(ctx.getSource().getPlayer() instanceof ServerPlayer player) || player instanceof FakePlayer)
-        {
+        if (!(ctx.getSource().getPlayer() instanceof ServerPlayer player) || player instanceof FakePlayer) {
             ctx.getSource().sendFailure(MSG_NOT_A_PLAYER);
             return 0;
         }
@@ -58,18 +54,15 @@ public final class ModelBenchmarkCube
         BlockState state = FBContent.BLOCK_FRAMED_SLAB.value().defaultBlockState();
         BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
         CamoContainer<?, ?> camo = FBContent.FACTORY_BLOCK.value().applyCamo(level, BlockPos.ZERO, player, ItemAccess.forStack(new ItemStack(Blocks.STONE)));
-        if (camo == null)
-        {
+        if (camo == null) {
             ctx.getSource().sendFailure(MSG_CAMO_FAILED);
             return 0;
         }
 
         Holder<BlockOverlay> blockOverlay = null;
-        if (ctx.getArgument("overlays", Boolean.class))
-        {
+        if (ctx.getArgument("overlays", Boolean.class)) {
             Optional<Holder.Reference<BlockOverlay>> optional = level.registryAccess().get(OVERLAY_KEY);
-            if (optional.isEmpty())
-            {
+            if (optional.isEmpty()) {
                 ctx.getSource().sendFailure(MSG_OVERLAY_FAILED);
                 return 0;
             }
@@ -79,19 +72,15 @@ public final class ModelBenchmarkCube
         int minX = chunk.minBlockX();
         int minY = chunk.minBlockY();
         int minZ = chunk.minBlockZ();
-        for (int y = 0; y < 16; y++)
-        {
-            for (int x = 0; x < 16; x++)
-            {
-                for (int z = 0; z < 16; z++)
-                {
+        for (int y = 0; y < 16; y++) {
+            for (int x = 0; x < 16; x++) {
+                for (int z = 0; z < 16; z++) {
                     pos.set(minX + x, minY + y, minZ + z);
                     boolean top = ((x % 2) ^ (z % 2)) != 0;
                     top |= y == 14 && x >= 7 && x <= 8 && z >= 7 && z <= 9;
 
                     level.setBlockAndUpdate(pos, state.setValue(FramedProperties.TOP, top));
-                    if (level.getBlockEntity(pos) instanceof IFramedBlockEntity be)
-                    {
+                    if (level.getBlockEntity(pos) instanceof IFramedBlockEntity be) {
                         be.setCamo(camo, false);
                         be.setOverlay(blockOverlay);
                     }

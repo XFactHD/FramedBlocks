@@ -32,12 +32,10 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
-public class FramedFancyPoweredRailBlock extends PoweredRailBlock implements IFramedBlockInternal
-{
+public class FramedFancyPoweredRailBlock extends PoweredRailBlock implements IFramedBlockInternal {
     private final BlockType type;
 
-    private FramedFancyPoweredRailBlock(BlockType type, Properties props, boolean isPoweredRail)
-    {
+    private FramedFancyPoweredRailBlock(BlockType type, Properties props, boolean isPoweredRail) {
         this.type = type;
         super(IFramedBlock.applyDefaultProperties(props, type)
                 .noCollision(),
@@ -47,8 +45,7 @@ public class FramedFancyPoweredRailBlock extends PoweredRailBlock implements IFr
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
-    {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
         BlockUtils.addStandardProperties(this, builder);
     }
@@ -63,105 +60,85 @@ public class FramedFancyPoweredRailBlock extends PoweredRailBlock implements IFr
             BlockPos adjPos,
             BlockState adjState,
             RandomSource random
-    )
-    {
+    ) {
         BlockState newState = super.updateShape(state, level, tickAccess, pos, side, adjPos, adjState, random);
-        if (newState == state)
-        {
+        if (newState == state) {
             updateCulling(level, pos);
         }
         return newState;
     }
 
     @Override
-    protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, @Nullable Orientation orientation, boolean isMoving)
-    {
+    protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, @Nullable Orientation orientation, boolean isMoving) {
         super.neighborChanged(state, level, pos, block, orientation, isMoving);
         updateCulling(level, pos);
     }
 
     @Override
-    protected InteractionResult useItemOn(
-            ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit
-    )
-    {
+    protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         return handleUse(state, level, pos, player, hand, hit);
     }
 
     @Override
-    public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)
-    {
+    public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
         tryApplyCamoImmediately(level, pos, placer, stack);
     }
 
     @Override
-    protected boolean useShapeForLightOcclusion(BlockState state)
-    {
+    protected boolean useShapeForLightOcclusion(BlockState state) {
         return useCamoOcclusionShapeForLightOcclusion(state);
     }
 
     @Override
-    protected VoxelShape getOcclusionShape(BlockState state)
-    {
+    protected VoxelShape getOcclusionShape(BlockState state) {
         return getCamoOcclusionShape(state, null);
     }
 
     @Override
-    protected VoxelShape getVisualShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext ctx)
-    {
+    protected VoxelShape getVisualShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext ctx) {
         return getCamoVisualShape(state, level, pos, ctx);
     }
 
     @Override
-    protected float getShadeBrightness(BlockState state, BlockGetter level, BlockPos pos)
-    {
+    protected float getShadeBrightness(BlockState state, BlockGetter level, BlockPos pos) {
         return getCamoShadeBrightness(state, level, pos, super.getShadeBrightness(state, level, pos));
     }
 
     @Override
-    protected boolean propagatesSkylightDown(BlockState state)
-    {
+    protected boolean propagatesSkylightDown(BlockState state) {
         return state.getValue(FramedProperties.PROPAGATES_SKYLIGHT);
     }
 
     @Override
-    protected List<ItemStack> getDrops(BlockState state, LootParams.Builder builder)
-    {
+    protected List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {
         return super.getDrops(state, getCamoDrops(builder));
     }
 
     @Override
-    public IBlockType getBlockType()
-    {
+    public IBlockType getBlockType() {
         return type;
     }
 
     @Override
-    public BlockState getItemModelSource()
-    {
+    public BlockState getItemModelSource() {
         return defaultBlockState();
     }
 
     @Override
-    @Nullable
-    public Direction getHorizontalOrientation(BlockState state)
-    {
+    public @Nullable Direction getHorizontalOrientation(BlockState state) {
         return FramedUtils.getDirectionFromStraightRailShape(state.getValue(SHAPE));
     }
 
     @Override
-    public BlockState getJadeRenderState(BlockState state)
-    {
+    public BlockState getJadeRenderState(BlockState state) {
         return defaultBlockState();
     }
 
-    public static FramedFancyPoweredRailBlock powered(Properties props)
-    {
+    public static FramedFancyPoweredRailBlock powered(Properties props) {
         return new FramedFancyPoweredRailBlock(BlockType.FRAMED_FANCY_POWERED_RAIL, props, true);
     }
 
-    public static FramedFancyPoweredRailBlock activator(Properties props)
-    {
+    public static FramedFancyPoweredRailBlock activator(Properties props) {
         return new FramedFancyPoweredRailBlock(BlockType.FRAMED_FANCY_ACTIVATOR_RAIL, props, false);
     }
 }

@@ -21,24 +21,19 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jspecify.annotations.Nullable;
 
-public class FramedLadderBlock extends FramedBlock
-{
-    public FramedLadderBlock(Properties props)
-    {
+public class FramedLadderBlock extends FramedBlock {
+    public FramedLadderBlock(Properties props) {
         super(BlockType.FRAMED_LADDER, props);
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
-    {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
         builder.add(FramedProperties.FACING_HOR);
     }
 
     @Override
-    @Nullable
-    public BlockState getStateForPlacement(BlockPlaceContext ctx)
-    {
+    public @Nullable BlockState getStateForPlacement(BlockPlaceContext ctx) {
         return PlacementStateBuilder.of(this, ctx)
                 .withHorizontalFacing()
                 .withWater()
@@ -46,69 +41,58 @@ public class FramedLadderBlock extends FramedBlock
     }
 
     @Override
-    protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
-    {
+    protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         return shapes.getShape(state);
     }
 
     @Override
-    protected VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
-    {
+    protected VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         // Misuse separate occlusion shape handling for collision shapes
         return shapes.getOcclusionShape(state);
     }
 
     @Override
-    protected VoxelShape getOcclusionShape(BlockState state)
-    {
+    protected VoxelShape getOcclusionShape(BlockState state) {
         return getCamoOcclusionShape(state, null);
     }
 
     @Override
-    public boolean doesBlockOccludeBeaconBeam(BlockState state, LevelReader level, BlockPos pos)
-    {
+    public boolean doesBlockOccludeBeaconBeam(BlockState state, LevelReader level, BlockPos pos) {
         return false;
     }
 
     @Override
-    public boolean isLadder(BlockState state, LevelReader level, BlockPos pos, LivingEntity entity)
-    {
+    public boolean isLadder(BlockState state, LevelReader level, BlockPos pos, LivingEntity entity) {
         return true;
     }
 
     @Override
-    public boolean makesOpenTrapdoorAboveClimbable(BlockState state, LevelReader level, BlockPos pos, BlockState trapdoorState)
-    {
+    public boolean makesOpenTrapdoorAboveClimbable(BlockState state, LevelReader level, BlockPos pos, BlockState trapdoorState) {
         return state.getValue(FramedProperties.FACING_HOR) == trapdoorState.getValue(TrapDoorBlock.FACING).getOpposite();
     }
 
     @Override
-    protected BlockState rotate(BlockState state, Rotation rotation)
-    {
+    protected BlockState rotate(BlockState state, Rotation rotation) {
         return BlockUtils.rotate(state, rotation);
     }
 
     @Override
-    protected BlockState mirror(BlockState state, Mirror mirror)
-    {
+    protected BlockState mirror(BlockState state, Mirror mirror) {
         return BlockUtils.mirrorFaceBlock(state, mirror);
     }
 
     @Override
-    public BlockState getItemModelSource()
-    {
+    public BlockState getItemModelSource() {
         return defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
     }
 
     @Override
-    public Direction getHorizontalOrientation(BlockState state)
-    {
+    public Direction getHorizontalOrientation(BlockState state) {
         return state.getValue(FramedProperties.FACING_HOR);
     }
 
     @Override
-    public BlockState getJadeRenderState(BlockState state)
-    {
+    public BlockState getJadeRenderState(BlockState state) {
         return getItemModelSource();
     }
 }

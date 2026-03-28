@@ -13,34 +13,28 @@ import net.minecraft.client.resources.model.geometry.BakedQuad;
 import net.minecraft.core.Direction;
 import org.jspecify.annotations.Nullable;
 
-public class FramedHalfStairsGeometry extends Geometry
-{
+public class FramedHalfStairsGeometry extends Geometry {
     private final Direction dir;
     private final boolean top;
     private final boolean right;
 
-    public FramedHalfStairsGeometry(GeometryFactory.Context ctx)
-    {
+    public FramedHalfStairsGeometry(GeometryFactory.Context ctx) {
         this.dir = ctx.state().getValue(FramedProperties.FACING_HOR);
         this.top = ctx.state().getValue(FramedProperties.TOP);
         this.right = ctx.state().getValue(PropertyHolder.RIGHT);
     }
 
     @Override
-    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
-    {
+    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData) {
         Direction face = quad.direction();
         Direction horCut = right ? dir.getCounterClockWise() : dir.getClockWise();
         Direction vertCut = top ? Direction.DOWN : Direction.UP;
 
-        if (face == dir)
-        {
+        if (face == dir) {
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(horCut, .5F))
                     .export(quadMap, face);
-        }
-        else if (face == dir.getOpposite())
-        {
+        } else if (face == dir.getOpposite()) {
             QuadModifier mod = QuadModifier.of(quad)
                     .apply(Modifiers.cut(horCut, .5F));
 
@@ -50,9 +44,7 @@ public class FramedHalfStairsGeometry extends Geometry
 
             mod.apply(Modifiers.cut(vertCut, .5F))
                     .export(quadMap, face);
-        }
-        else if (!DirUtils.isY(face) && face.getAxis() != dir.getAxis())
-        {
+        } else if (!DirUtils.isY(face) && face.getAxis() != dir.getAxis()) {
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(dir.getOpposite(), .5F))
                     .applyIf(Modifiers.setPosition(.5F), face == horCut)
@@ -63,9 +55,7 @@ public class FramedHalfStairsGeometry extends Geometry
                     .apply(Modifiers.cut(vertCut, .5F))
                     .applyIf(Modifiers.setPosition(.5F), face == horCut)
                     .export(quadMap, face == horCut ? null : face);
-        }
-        else if (DirUtils.isY(face))
-        {
+        } else if (DirUtils.isY(face)) {
             boolean base = (face == Direction.UP && top) || (face == Direction.DOWN && !top);
 
             QuadModifier mod = QuadModifier.of(quad)

@@ -8,26 +8,22 @@ import io.github.xfacthd.framedblocks.client.model.baked.FramedBlockStateModel;
 import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
 import net.minecraft.client.resources.model.ModelBaker;
 
-public final class UnbakedFramedBlockStateModel extends AbstractUnbakedFramedBlockStateModel
-{
+public final class UnbakedFramedBlockStateModel extends AbstractUnbakedFramedBlockStateModel {
     private final GeometryFactory geometryFactory;
 
-    public UnbakedFramedBlockStateModel(ModelFactory.Context ctx, GeometryFactory geometryFactory)
-    {
+    public UnbakedFramedBlockStateModel(ModelFactory.Context ctx, GeometryFactory geometryFactory) {
         super(ctx);
         this.geometryFactory = geometryFactory;
     }
 
     @Override
-    protected BlockStateModel bakeCached(GeometryFactory.Context context, ModelBaker baker)
-    {
+    protected BlockStateModel bakeCached(GeometryFactory.Context context, ModelBaker baker) {
         ReinforcementModel reinforcement = ReinforcementModel.getOrCreate(baker);
         return new FramedBlockStateModel(context, geometryFactory.create(context), reinforcement);
     }
 
     @Override
-    protected void resolveSpecialDependencies(Resolver resolver)
-    {
+    protected void resolveSpecialDependencies(Resolver resolver) {
         resolver.markDependency(ReinforcementModel.MODEL_ID);
     }
 }

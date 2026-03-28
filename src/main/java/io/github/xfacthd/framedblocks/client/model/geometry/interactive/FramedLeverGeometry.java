@@ -22,8 +22,7 @@ import net.minecraft.world.level.block.state.properties.AttachFace;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.jspecify.annotations.Nullable;
 
-public class FramedLeverGeometry extends Geometry
-{
+public class FramedLeverGeometry extends Geometry {
     private static final QuadListModifier HANDLE_FILTER = QuadListModifier.filtering(ClientUtils::isDummyTexture);
     private static final BlockState AUX_SHADER_STATE = Blocks.LEVER.defaultBlockState();
 
@@ -38,8 +37,7 @@ public class FramedLeverGeometry extends Geometry
     private final Direction dir;
     private final AttachFace face;
 
-    public FramedLeverGeometry(GeometryFactory.Context ctx)
-    {
+    public FramedLeverGeometry(GeometryFactory.Context ctx) {
         this.state = ctx.state();
         this.baseModel = ctx.baseModel();
         this.dir = ctx.state().getValue(BlockStateProperties.HORIZONTAL_FACING);
@@ -47,30 +45,24 @@ public class FramedLeverGeometry extends Geometry
     }
 
     @Override
-    public void collectAdditionalPartsCached(PartConsumer consumer, BlockAndTintGetter level, BlockPos pos, RandomSource random, FramedBlockData blockData, @Nullable Object cacheKeyUserData)
-    {
+    public void collectAdditionalPartsCached(PartConsumer consumer, BlockAndTintGetter level, BlockPos pos, RandomSource random, FramedBlockData blockData, @Nullable Object cacheKeyUserData) {
         consumer.acceptAll(baseModel, level, pos, random, state, true, false, false, AUX_SHADER_STATE, HANDLE_FILTER);
     }
 
     @Override
-    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
-    {
+    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData) {
         Direction quadDir = quad.direction();
         Direction facing = getFacing();
         boolean quadInDir = quadDir == facing;
-
         if (DirUtils.isY(facing))
         {
-            if (quadDir.getAxis() == facing.getAxis())
-            {
+            if (quadDir.getAxis() == facing.getAxis()) {
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(dir.getAxis(), MAX_LARGE))
                         .apply(Modifiers.cut(dir.getClockWise().getAxis(), MAX_SMALL))
                         .applyIf(Modifiers.setPosition(HEIGHT), quadInDir)
                         .export(quadMap, quadInDir ? null : quadDir);
-            }
-            else
-            {
+            } else {
                 boolean smallSide = dir.getAxis() == quadDir.getAxis();
 
                 QuadModifier.of(quad)
@@ -79,26 +71,19 @@ public class FramedLeverGeometry extends Geometry
                         .apply(Modifiers.setPosition(smallSide ? MAX_LARGE : MAX_SMALL))
                         .export(quadMap, null);
             }
-        }
-        else
-        {
-            if (quadDir.getAxis() == facing.getAxis())
-            {
+        } else {
+            if (quadDir.getAxis() == facing.getAxis()) {
                 QuadModifier.of(quad)
                         .apply(Modifiers.cutSide(MIN_SMALL, MIN_LARGE, MAX_SMALL, MAX_LARGE))
                         .applyIf(Modifiers.setPosition(HEIGHT), quadInDir)
                         .export(quadMap, quadInDir ? null : quadDir);
-            }
-            else if (DirUtils.isY(quadDir))
-            {
+            } else if (DirUtils.isY(quadDir)) {
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(dir, HEIGHT))
                         .apply(Modifiers.cut(dir.getClockWise().getAxis(), MAX_SMALL))
                         .apply(Modifiers.setPosition(MAX_LARGE))
                         .export(quadMap, null);
-            }
-            else
-            {
+            } else {
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(dir, HEIGHT))
                         .apply(Modifiers.cut(Direction.Axis.Y, MAX_LARGE))
@@ -108,10 +93,8 @@ public class FramedLeverGeometry extends Geometry
         }
     }
 
-    private Direction getFacing()
-    {
-        return switch (face)
-        {
+    private Direction getFacing() {
+        return switch (face) {
             case FLOOR -> Direction.UP;
             case WALL -> dir;
             case CEILING -> Direction.DOWN;
@@ -119,8 +102,7 @@ public class FramedLeverGeometry extends Geometry
     }
 
     @Override
-    public boolean useSolidNoCamoModel()
-    {
+    public boolean useSolidNoCamoModel() {
         return true;
     }
 }

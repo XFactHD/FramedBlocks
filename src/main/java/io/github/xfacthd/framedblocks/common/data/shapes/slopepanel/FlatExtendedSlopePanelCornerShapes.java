@@ -18,8 +18,7 @@ import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 
-public final class FlatExtendedSlopePanelCornerShapes implements ShapeGenerator
-{
+public final class FlatExtendedSlopePanelCornerShapes implements ShapeGenerator {
     private static final ShapeCache<ShapeKey> FINAL_SHAPES = makeCache(ExtendedSlopePanelShapes.SHAPES, BooleanOp.AND);
     private static final ShapeCache<ShapeKey> FINAL_OCCLUSION_SHAPES = makeCache(ExtendedSlopePanelShapes.OCCLUSION_SHAPES, BooleanOp.AND);
     private static final ShapeCache<ShapeKey> FINAL_INNER_SHAPES = makeCache(ExtendedSlopePanelShapes.SHAPES, BooleanOp.OR);
@@ -30,30 +29,25 @@ public final class FlatExtendedSlopePanelCornerShapes implements ShapeGenerator
     private final ShapeCache<ShapeKey> shapes;
     private final ShapeCache<ShapeKey> occlusionShapes;
 
-    private FlatExtendedSlopePanelCornerShapes(ShapeCache<ShapeKey> shapes, ShapeCache<ShapeKey> occlusionShapes)
-    {
+    private FlatExtendedSlopePanelCornerShapes(ShapeCache<ShapeKey> shapes, ShapeCache<ShapeKey> occlusionShapes) {
         this.shapes = shapes;
         this.occlusionShapes = occlusionShapes;
     }
 
     @Override
-    public ShapeContainer generatePrimary(List<BlockState> states)
-    {
+    public ShapeContainer generatePrimary(List<BlockState> states) {
         return generate(states, shapes);
     }
 
     @Override
-    public ShapeContainer generateOcclusion(List<BlockState> states)
-    {
+    public ShapeContainer generateOcclusion(List<BlockState> states) {
         return generate(states, occlusionShapes);
     }
 
-    private static ShapeContainer generate(List<BlockState> states, ShapeCache<ShapeKey> cache)
-    {
+    private static ShapeContainer generate(List<BlockState> states, ShapeCache<ShapeKey> cache) {
         Map<BlockState, VoxelShape> map = new IdentityHashMap<>(states.size());
 
-        for (BlockState state : states)
-        {
+        for (BlockState state : states) {
             Direction dir = state.getValue(FramedProperties.FACING_HOR);
             HorizontalRotation rot = state.getValue(PropertyHolder.ROTATION);
             map.put(state, cache.get(new ShapeKey(dir, rot)));
@@ -62,12 +56,9 @@ public final class FlatExtendedSlopePanelCornerShapes implements ShapeGenerator
         return ShapeContainer.of(map);
     }
 
-    private static ShapeCache<ShapeKey> makeCache(ShapeCache<HorizontalRotation> cache, BooleanOp joinOp)
-    {
-        return ShapeCache.create(map ->
-        {
-            for (HorizontalRotation rot : HorizontalRotation.values())
-            {
+    private static ShapeCache<ShapeKey> makeCache(ShapeCache<HorizontalRotation> cache, BooleanOp joinOp) {
+        return ShapeCache.create(map -> {
+            for (HorizontalRotation rot : HorizontalRotation.values()) {
                 VoxelShape shape = Shapes.joinUnoptimized(
                         cache.get(rot), cache.get(rot.rotate(Rotation.COUNTERCLOCKWISE_90)), joinOp
                 );

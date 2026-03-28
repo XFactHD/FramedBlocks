@@ -35,8 +35,7 @@ import java.util.Objects;
  * Must be registered in {@link RegisterGhostRenderBehavioursEvent}
  * </p>
  */
-public interface GhostRenderBehaviour
-{
+public interface GhostRenderBehaviour {
     Vector3fc OFFSET_ZERO = new Vector3f();
 
     /**
@@ -48,9 +47,7 @@ public interface GhostRenderBehaviour
      * @param stack The {@link ItemStack} in the players main hand
      * @return An {@link ItemStack} of the proxied item or null if not applicable
      */
-    @Nullable
-    default ItemStack getProxiedStack(ItemStack stack)
-    {
+    default @Nullable ItemStack getProxiedStack(ItemStack stack) {
         return null;
     }
 
@@ -62,8 +59,7 @@ public interface GhostRenderBehaviour
      * @param proxiedStack The proxied {@code ItemStack} as returned from {@link GhostRenderBehaviour#getProxiedStack(ItemStack)}
      * @return True if the given {@code ItemStack} may render a block
      */
-    default boolean mayRender(ItemStack stack, @Nullable ItemStack proxiedStack)
-    {
+    default boolean mayRender(ItemStack stack, @Nullable ItemStack proxiedStack) {
         return stack.getItem() instanceof BlockItem item && item.getBlock() instanceof IFramedBlock;
     }
 
@@ -74,8 +70,7 @@ public interface GhostRenderBehaviour
      * @param proxiedStack The proxied {@code ItemStack} as returned from {@link GhostRenderBehaviour#getProxiedStack(ItemStack)}
      * @return The amount of separate blocks to be rendered for the held item
      */
-    default int getPassCount(ItemStack stack, @Nullable ItemStack proxiedStack)
-    {
+    default int getPassCount(ItemStack stack, @Nullable ItemStack proxiedStack) {
         return 1;
     }
 
@@ -91,16 +86,14 @@ public interface GhostRenderBehaviour
      * @param renderPass The current render pass index
      * @return The {@code BlockState} to render or null when none could be determined
      */
-    @Nullable
-    default BlockState getRenderState(
+    default @Nullable BlockState getRenderState(
             ItemStack stack,
             @Nullable ItemStack proxiedStack,
             BlockHitResult hit,
             BlockPlaceContext ctx,
             BlockState hitState,
             int renderPass
-    )
-    {
+    ) {
         Block block = ((BlockItem) stack.getItem()).getBlock();
         return block.getStateForPlacement(ctx);
     }
@@ -125,8 +118,7 @@ public interface GhostRenderBehaviour
             BlockState hitState,
             BlockPos defaultPos,
             int renderPass
-    )
-    {
+    ) {
         return defaultPos;
     }
 
@@ -153,8 +145,7 @@ public interface GhostRenderBehaviour
             BlockState hitState,
             BlockState renderState,
             BlockPos renderPos
-    )
-    {
+    ) {
         Level level = ctx.getLevel();
         Player player = Objects.requireNonNull(ctx.getPlayer());
 
@@ -169,8 +160,7 @@ public interface GhostRenderBehaviour
      * @param renderPass   The current render pass index
      * @return The camo(s) stored to apply to the rendered block
      */
-    default CamoList readCamo(ItemStack stack, @Nullable ItemStack proxiedStack, int renderPass)
-    {
+    default CamoList readCamo(ItemStack stack, @Nullable ItemStack proxiedStack, int renderPass) {
         return stack.getOrDefault(Utils.DC_TYPE_CAMO_LIST, CamoList.EMPTY);
     }
 
@@ -194,8 +184,7 @@ public interface GhostRenderBehaviour
             BlockState renderState,
             int renderPass,
             CamoList camo
-    )
-    {
+    ) {
         return camo;
     }
 
@@ -207,9 +196,7 @@ public interface GhostRenderBehaviour
      * @param renderPass   The current render pass index
      * @return The stored overlay to apply to the rendered block
      */
-    @Nullable
-    default Holder<BlockOverlay> readBlockOverlay(ItemStack stack, @Nullable ItemStack proxiedStack, int renderPass)
-    {
+    default @Nullable Holder<BlockOverlay> readBlockOverlay(ItemStack stack, @Nullable ItemStack proxiedStack, int renderPass) {
         return stack.get(Utils.DC_TYPE_BLOCK_OVERLAY);
     }
 
@@ -234,8 +221,7 @@ public interface GhostRenderBehaviour
             int renderPass,
             CamoList camo,
             @Nullable Holder<BlockOverlay> overlay
-    )
-    {
+    ) {
         return ModelData.of(AbstractFramedBlockData.PROPERTY, new FramedBlockData(renderState, camo.getCamo(0), false, overlay));
     }
 
@@ -257,8 +243,7 @@ public interface GhostRenderBehaviour
             BlockState renderState,
             int renderPass,
             ModelData data
-    )
-    {
+    ) {
         return data;
     }
 
@@ -280,8 +265,7 @@ public interface GhostRenderBehaviour
             BlockState renderState,
             int renderPass,
             ModelData data
-    )
-    {
+    ) {
         return OFFSET_ZERO;
     }
 }

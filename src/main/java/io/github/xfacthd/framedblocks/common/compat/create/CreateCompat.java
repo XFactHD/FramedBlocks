@@ -31,25 +31,18 @@ import net.neoforged.fml.ModList;
 
 import java.util.Map;
 
-public final class CreateCompat
-{
-    public static void commonSetup()
-    {
-        if (ModList.get().isLoaded("create"))
-        {
-            try
-            {
+public final class CreateCompat {
+    public static void commonSetup() {
+        if (ModList.get().isLoaded("create")) {
+            try {
                 GuardedAccess.init();
-            }
-            catch (Throwable e)
-            {
+            } catch (Throwable e) {
                 FramedBlocks.LOGGER.warn("An error occured while initializing Create integration!", e);
             }
         }
     }
 
-    private static final class GuardedAccess
-    {
+    private static final class GuardedAccess {
         private static final Map<Holder<BlockEntityType<?>>, SchematicRequirementRegistries.BlockEntityRequirement> SPECIAL_REQUIREMENT_BLOCK_ENTITIES = Map.of(
                 FBContent.BE_TYPE_FRAMED_FLOWER_POT, new FramedFlowerPotBlockEntityItemRequirement(),
                 FBContent.BE_TYPE_FRAMED_ITEM_FRAME, new FramedItemFrameBlockEntityItemRequirement()
@@ -63,18 +56,14 @@ public final class CreateCompat
                 FBContent.BE_TYPE_FRAMED_HOPPER, new FramedBlockSafeNbtWriter(ContainerHelper.TAG_ITEMS, FramedHopperBlockEntity.COOLDOWN_NBT_KEY)
         );
 
-        public static void init()
-        {
+        public static void init() {
             // The interaction behavior implementations are not exposed as API
-            try
-            {
+            try {
                 registerInteractionBehaviour(FBContent.BLOCK_FRAMED_LEVER, new LeverMovingInteraction());
                 registerInteractionBehaviour(FBContent.BLOCK_FRAMED_DOOR, new DoorMovingInteraction());
                 registerInteractionBehaviour(FBContent.BLOCK_FRAMED_TRAP_DOOR, new TrapdoorMovingInteraction());
                 registerInteractionBehaviour(FBContent.BLOCK_FRAMED_FENCE_GATE, new FenceGateMovingInteraction());
-            }
-            catch (Throwable t)
-            {
+            } catch (Throwable t) {
                 FramedBlocks.LOGGER.warn("An error occured while registering MovingInteractions for Create contraptions!", t);
             }
 
@@ -97,8 +86,7 @@ public final class CreateCompat
             registerBlockItemRequirement(FBContent.BLOCK_FRAMED_DOOR, FramedDoorBlockItemRequirement.INSTANCE);
             registerBlockItemRequirement(FBContent.BLOCK_FRAMED_IRON_DOOR, FramedDoorBlockItemRequirement.INSTANCE);
 
-            FBContent.getBlockEntities().forEach(blockEntity ->
-            {
+            FBContent.getBlockEntities().forEach(blockEntity -> {
                 registerBlockEntityItemRequirement(blockEntity, SPECIAL_REQUIREMENT_BLOCK_ENTITIES.getOrDefault(
                         blockEntity, FramedBlockEntityItemRequirement.INSTANCE
                 ));
@@ -110,28 +98,23 @@ public final class CreateCompat
             registerStateFilter(FBContent.BLOCK_FRAMED_CHISELED_BOOKSHELF, new FramedChiseledBookshelfStateFilter());
         }
 
-        private static void registerInteractionBehaviour(Holder<Block> block, MovingInteractionBehaviour behaviour)
-        {
+        private static void registerInteractionBehaviour(Holder<Block> block, MovingInteractionBehaviour behaviour) {
             MovingInteractionBehaviour.REGISTRY.register(block.value(), behaviour);
         }
 
-        private static void registerBlockItemRequirement(Holder<Block> type, SchematicRequirementRegistries.BlockRequirement itemRequirement)
-        {
+        private static void registerBlockItemRequirement(Holder<Block> type, SchematicRequirementRegistries.BlockRequirement itemRequirement) {
             SchematicRequirementRegistries.BLOCKS.register(type.value(), itemRequirement);
         }
 
-        private static void registerBlockEntityItemRequirement(Holder<BlockEntityType<?>> type, SchematicRequirementRegistries.BlockEntityRequirement itemRequirement)
-        {
+        private static void registerBlockEntityItemRequirement(Holder<BlockEntityType<?>> type, SchematicRequirementRegistries.BlockEntityRequirement itemRequirement) {
             SchematicRequirementRegistries.BLOCK_ENTITIES.register(type.value(), itemRequirement);
         }
 
-        private static void registerSafeNbtWriter(Holder<BlockEntityType<?>> type, SafeNbtWriterRegistry.SafeNbtWriter writer)
-        {
+        private static void registerSafeNbtWriter(Holder<BlockEntityType<?>> type, SafeNbtWriterRegistry.SafeNbtWriter writer) {
             SafeNbtWriterRegistry.REGISTRY.register(type.value(), writer);
         }
 
-        private static void registerStateFilter(Holder<Block> block, SchematicStateFilterRegistry.StateFilter filter)
-        {
+        private static void registerStateFilter(Holder<Block> block, SchematicStateFilterRegistry.StateFilter filter) {
             SchematicStateFilterRegistry.REGISTRY.register(block.value(), filter);
         }
     }

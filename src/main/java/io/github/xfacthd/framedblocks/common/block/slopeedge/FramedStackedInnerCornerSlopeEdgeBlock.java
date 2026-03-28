@@ -29,24 +29,19 @@ import net.minecraft.world.level.block.state.properties.Half;
 import net.minecraft.world.level.block.state.properties.StairsShape;
 import org.jspecify.annotations.Nullable;
 
-public class FramedStackedInnerCornerSlopeEdgeBlock extends FramedDoubleBlock implements SlopeToggleBlock
-{
-    public FramedStackedInnerCornerSlopeEdgeBlock(Properties props)
-    {
+public class FramedStackedInnerCornerSlopeEdgeBlock extends FramedDoubleBlock implements SlopeToggleBlock {
+    public FramedStackedInnerCornerSlopeEdgeBlock(Properties props) {
         super(BlockType.FRAMED_STACKED_INNER_CORNER_SLOPE_EDGE, props);
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
-    {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
         builder.add(FramedProperties.FACING_HOR, PropertyHolder.CORNER_TYPE);
     }
 
     @Override
-    @Nullable
-    public BlockState getStateForPlacement(BlockPlaceContext ctx)
-    {
+    public @Nullable BlockState getStateForPlacement(BlockPlaceContext ctx) {
         return ExtPlacementStateBuilder.of(this, ctx)
                 .withHorizontalFacingAndCornerType()
                 .withWater()
@@ -54,68 +49,55 @@ public class FramedStackedInnerCornerSlopeEdgeBlock extends FramedDoubleBlock im
     }
 
     @Override
-    public BlockState rotate(BlockState state, RotationDirection direction, WrenchRotationMode mode)
-    {
+    public BlockState rotate(BlockState state, RotationDirection direction, WrenchRotationMode mode) {
         return FramedCornerSlopeBlock.rotateCorner(state, direction, mode);
     }
 
     @Override
-    protected BlockState rotate(BlockState state, Rotation rotation)
-    {
+    protected BlockState rotate(BlockState state, Rotation rotation) {
         return BlockUtils.rotate(state, rotation);
     }
 
     @Override
-    protected BlockState mirror(BlockState state, Mirror mirror)
-    {
+    protected BlockState mirror(BlockState state, Mirror mirror) {
         CornerType type = state.getValue(PropertyHolder.CORNER_TYPE);
-        if (type.isHorizontal())
-        {
+        if (type.isHorizontal()) {
             BlockState newState = BlockUtils.mirrorFaceBlock(state, mirror);
-            if (newState != state)
-            {
+            if (newState != state) {
                 return newState.setValue(PropertyHolder.CORNER_TYPE, type.horizontalOpposite());
             }
             return state;
-        }
-        else
-        {
+        } else {
             return BlockUtils.mirrorCornerBlock(state, mirror);
         }
     }
 
     @Override
-    public BlockState getItemModelSource()
-    {
+    public BlockState getItemModelSource() {
         return defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
     }
 
     @Override
-    public Direction getHorizontalOrientation(BlockState state)
-    {
+    public Direction getHorizontalOrientation(BlockState state) {
         return state.getValue(FramedProperties.FACING_HOR);
     }
 
     @Override
-    public BlockState getJadeRenderState(BlockState state)
-    {
+    public BlockState getJadeRenderState(BlockState state) {
         return defaultBlockState();
     }
 
     @Override
-    public DoubleBlockTopInteractionMode calculateTopInteractionMode(BlockState state)
-    {
+    public DoubleBlockTopInteractionMode calculateTopInteractionMode(BlockState state) {
         CornerType type = state.getValue(PropertyHolder.CORNER_TYPE);
-        if (type == CornerType.BOTTOM || (type.isHorizontal() && type.isTop()))
-        {
+        if (type == CornerType.BOTTOM || (type.isHorizontal() && type.isTop())) {
             return DoubleBlockTopInteractionMode.FIRST;
         }
         return DoubleBlockTopInteractionMode.EITHER;
     }
 
     @Override
-    public DoubleBlockParts calculateParts(BlockState state)
-    {
+    public DoubleBlockParts calculateParts(BlockState state) {
         Direction dir = state.getValue(FramedProperties.FACING_HOR);
         CornerType type = state.getValue(PropertyHolder.CORNER_TYPE);
         boolean altSlope = state.getValue(FramedProperties.ALT_SLOPE);
@@ -136,28 +118,25 @@ public class FramedStackedInnerCornerSlopeEdgeBlock extends FramedDoubleBlock im
     }
 
     @Override
-    public SolidityCheck calculateSolidityCheck(BlockState state, Direction side)
-    {
+    public SolidityCheck calculateSolidityCheck(BlockState state, Direction side) {
         Direction dir = state.getValue(FramedProperties.FACING_HOR);
         CornerType type = state.getValue(PropertyHolder.CORNER_TYPE);
-        Direction baseFace = switch (type)
-        {
+        Direction baseFace = switch (type) {
             case BOTTOM -> Direction.DOWN;
             case TOP -> Direction.UP;
             default -> dir;
         };
 
-        if (side == baseFace) return SolidityCheck.FIRST;
+        if (side == baseFace) {
+            return SolidityCheck.FIRST;
+        }
 
         Direction xBack;
         Direction yBack;
-        if (type.isHorizontal())
-        {
+        if (type.isHorizontal()) {
             xBack = type.isRight() ? dir.getClockWise() : dir.getCounterClockWise();
             yBack = type.isTop() ? Direction.UP : Direction.DOWN;
-        }
-        else
-        {
+        } else {
             xBack = dir.getCounterClockWise();
             yBack = dir;
         }
@@ -165,38 +144,30 @@ public class FramedStackedInnerCornerSlopeEdgeBlock extends FramedDoubleBlock im
     }
 
     @Override
-    public CamoGetter calculateCamoGetter(BlockState state, Direction side, @Nullable Direction edge)
-    {
+    public CamoGetter calculateCamoGetter(BlockState state, Direction side, @Nullable Direction edge) {
         Direction dir = state.getValue(FramedProperties.FACING_HOR);
         CornerType type = state.getValue(PropertyHolder.CORNER_TYPE);
-        Direction baseFace = switch (type)
-        {
+        Direction baseFace = switch (type) {
             case BOTTOM -> Direction.DOWN;
             case TOP -> Direction.UP;
             default -> dir;
         };
         Direction xBack;
         Direction yBack;
-        if (type.isHorizontal())
-        {
+        if (type.isHorizontal()) {
             xBack = type.isRight() ? dir.getClockWise() : dir.getCounterClockWise();
             yBack = type.isTop() ? Direction.UP : Direction.DOWN;
-        }
-        else
-        {
+        } else {
             xBack = dir;
             yBack = dir.getCounterClockWise();
         }
-        if (side == baseFace || side == xBack || side == yBack || edge == baseFace)
-        {
+        if (side == baseFace || side == xBack || side == yBack || edge == baseFace) {
             return CamoGetter.FIRST;
         }
-        if ((side == xBack.getOpposite() && edge == yBack) || (side == yBack.getOpposite() && edge == xBack))
-        {
+        if ((side == xBack.getOpposite() && edge == yBack) || (side == yBack.getOpposite() && edge == xBack)) {
             return CamoGetter.FIRST;
         }
-        if (side == baseFace.getOpposite() && (edge == xBack || edge == yBack))
-        {
+        if (side == baseFace.getOpposite() && (edge == xBack || edge == yBack)) {
             return CamoGetter.FIRST;
         }
         return CamoGetter.NONE;

@@ -1,7 +1,7 @@
 package io.github.xfacthd.framedblocks.common.data.skippreds.misc;
 
 import io.github.xfacthd.framedblocks.api.predicate.cull.SideSkipPredicate;
-import io.github.xfacthd.framedblocks.common.blockentity.special.ICollapsibleBlockEntity;
+import io.github.xfacthd.framedblocks.common.blockentity.special.CollapsibleBlockEntity;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import io.github.xfacthd.framedblocks.common.data.collapsible.VertexMappings;
@@ -32,7 +32,7 @@ public final class CollapsibleBlockSkipPredicate implements SideSkipPredicate
             BlockEntity be = level.getBlockEntity(pos);
             BlockEntity adjBe = level.getBlockEntity(pos.relative(side));
 
-            if (be instanceof ICollapsibleBlockEntity cbe && adjBe instanceof ICollapsibleBlockEntity adjCbe)
+            if (be instanceof CollapsibleBlockEntity cbe && adjBe instanceof CollapsibleBlockEntity adjCbe)
             {
                 Direction faceDir = face.toDirection();
                 VertexPair verts = VertexMappings.getEdgeVertices(faceDir, side);

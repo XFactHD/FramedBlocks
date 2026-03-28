@@ -4,8 +4,7 @@ import net.minecraft.client.renderer.block.FluidModel;
 import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
 import org.jetbrains.annotations.UnknownNullability;
 
-public final class FramedTankRenderState extends BlockEntityRenderState
-{
+public final class FramedTankRenderState extends BlockEntityRenderState {
     @UnknownNullability
     public FluidModel fluidModel;
     public int fluidAmount;

@@ -6,21 +6,17 @@ import io.github.xfacthd.framedblocks.common.data.BlockType;
 
 import java.util.function.UnaryOperator;
 
-public abstract class FramedBlock extends AbstractFramedBlock implements IFramedBlockInternal
-{
-    protected FramedBlock(BlockType blockType, Properties props)
-    {
+public abstract class FramedBlock extends AbstractFramedBlock implements IFramedBlockInternal {
+    protected FramedBlock(BlockType blockType, Properties props) {
         this(blockType, props, UnaryOperator.identity());
     }
 
-    protected FramedBlock(BlockType blockType, Properties props, UnaryOperator<Properties> propertyModifier)
-    {
+    protected FramedBlock(BlockType blockType, Properties props, UnaryOperator<Properties> propertyModifier) {
         super(blockType, propertyModifier.apply(IFramedBlock.applyDefaultProperties(props, blockType)));
     }
 
     @Override
-    public BlockType getBlockType()
-    {
+    public BlockType getBlockType() {
         return (BlockType) super.getBlockType();
     }
 }

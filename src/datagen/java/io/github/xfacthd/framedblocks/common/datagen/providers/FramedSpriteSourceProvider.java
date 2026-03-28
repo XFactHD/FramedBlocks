@@ -14,18 +14,15 @@ import net.neoforged.neoforge.client.data.SpriteSourceProvider;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-public final class FramedSpriteSourceProvider extends SpriteSourceProvider
-{
+public final class FramedSpriteSourceProvider extends SpriteSourceProvider {
     public static final Identifier SPRITE_SAW_STILL = Utils.id("block/stonecutter_saw_still");
 
-    public FramedSpriteSourceProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookup)
-    {
+    public FramedSpriteSourceProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookup) {
         super(output, lookup, FramedConstants.MOD_ID);
     }
 
     @Override
-    protected void gather()
-    {
+    protected void gather() {
         atlas(AtlasIds.BLOCKS)
                 .addSource(new AnimationSplitterSource(
                         Utils.id("minecraft", "block/stonecutter_saw"),
@@ -33,8 +30,7 @@ public final class FramedSpriteSourceProvider extends SpriteSourceProvider
                 ));
 
         SourceList sources = atlas(AtlasIds.BLOCKS);
-        for (DyeColor color : DyeColor.values())
-        {
+        for (DyeColor color : DyeColor.values()) {
             String colorName = color.getName();
             sources.addSource(new AreaMaskSource(
                     Utils.id("minecraft", "block/" + colorName + "_wool"),

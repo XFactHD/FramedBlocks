@@ -10,8 +10,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
-public record ServerboundSelectFramingSawRecipePayload(int containerId, int recipeIdx) implements CustomPacketPayload
-{
+public record ServerboundSelectFramingSawRecipePayload(int containerId, int recipeIdx) implements CustomPacketPayload {
     public static final CustomPacketPayload.Type<ServerboundSelectFramingSawRecipePayload> TYPE = Utils.payloadType("select_framing_saw_recipe");
     public static final StreamCodec<FriendlyByteBuf, ServerboundSelectFramingSawRecipePayload> CODEC = StreamCodec.composite(
             ByteBufCodecs.VAR_INT,
@@ -22,17 +21,14 @@ public record ServerboundSelectFramingSawRecipePayload(int containerId, int reci
     );
 
     @Override
-    public CustomPacketPayload.Type<ServerboundSelectFramingSawRecipePayload> type()
-    {
+    public CustomPacketPayload.Type<ServerboundSelectFramingSawRecipePayload> type() {
         return TYPE;
     }
 
-    public void handle(IPayloadContext ctx)
-    {
+    public void handle(IPayloadContext ctx) {
         Player player = ctx.player();
         AbstractContainerMenu menu = player.containerMenu;
-        if (menu.containerId == containerId && menu instanceof IFramingSawMenu)
-        {
+        if (menu.containerId == containerId && menu instanceof IFramingSawMenu) {
             menu.clickMenuButton(player, recipeIdx);
         }
     }

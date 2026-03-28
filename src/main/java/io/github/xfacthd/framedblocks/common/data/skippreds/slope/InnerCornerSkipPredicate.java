@@ -3,7 +3,7 @@ package io.github.xfacthd.framedblocks.common.data.skippreds.slope;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.api.predicate.cull.SideSkipPredicate;
-import io.github.xfacthd.framedblocks.common.block.ISlopeBlock;
+import io.github.xfacthd.framedblocks.common.block.SlopeBlock;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import io.github.xfacthd.framedblocks.common.data.property.CornerType;
@@ -21,18 +21,14 @@ import net.minecraft.world.level.block.state.BlockState;
  This class is machine-generated, any manual changes to this class will be overwritten.
  */
 @CullTest(BlockType.FRAMED_INNER_CORNER_SLOPE)
-public final class InnerCornerSkipPredicate implements SideSkipPredicate
-{
+public final class InnerCornerSkipPredicate implements SideSkipPredicate {
     @Override
-    public boolean test(BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side)
-    {
-        if (adjState.getBlock() instanceof IFramedBlock block && block.getBlockType() instanceof BlockType blockType)
-        {
+    public boolean test(BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side) {
+        if (adjState.getBlock() instanceof IFramedBlock block && block.getBlockType() instanceof BlockType blockType) {
             Direction dir = state.getValue(FramedProperties.FACING_HOR);
             CornerType type = state.getValue(PropertyHolder.CORNER_TYPE);
 
-            return switch (blockType)
-            {
+            return switch (blockType) {
                 case FRAMED_INNER_CORNER_SLOPE -> testAgainstInnerCorner(
                         dir, type, adjState, side
                 );
@@ -68,16 +64,16 @@ public final class InnerCornerSkipPredicate implements SideSkipPredicate
                      FRAMED_ACTIVATOR_RAIL_SLOPE -> testAgainstRailSlope(
                         dir, type, adjState, side
                 );
-                case FRAMED_LARGE_PRISM_CORNER_SLOPE_PANEL -> testAgainstLargePrismSlopePanelCorner(
+                case FRAMED_LARGE_PRISM_CORNER_SLOPE_PANEL -> testAgainstLargePrismCornerSlopePanel(
                         dir, type, adjState, side
                 );
-                case FRAMED_LARGE_PRISM_CORNER_SLOPE_PANEL_W -> testAgainstLargePrismSlopePanelCornerWall(
+                case FRAMED_LARGE_PRISM_CORNER_SLOPE_PANEL_W -> testAgainstLargePrismCornerSlopePanelWall(
                         dir, type, adjState, side
                 );
-                case FRAMED_LARGE_INNER_PRISM_CORNER_SLOPE_PANEL -> testAgainstLargeInnerPrismSlopePanelCorner(
+                case FRAMED_LARGE_INNER_PRISM_CORNER_SLOPE_PANEL -> testAgainstLargeInnerPrismCornerSlopePanel(
                         dir, type, adjState, side
                 );
-                case FRAMED_LARGE_INNER_PRISM_CORNER_SLOPE_PANEL_W -> testAgainstLargeInnerPrismSlopePanelCornerWall(
+                case FRAMED_LARGE_INNER_PRISM_CORNER_SLOPE_PANEL_W -> testAgainstLargeInnerPrismCornerSlopePanelWall(
                         dir, type, adjState, side
                 );
                 default -> false;
@@ -89,8 +85,7 @@ public final class InnerCornerSkipPredicate implements SideSkipPredicate
     @CullTest.TestTarget(BlockType.FRAMED_INNER_CORNER_SLOPE)
     private static boolean testAgainstInnerCorner(
             Direction dir, CornerType type, BlockState adjState, Direction side
-    )
-    {
+    ) {
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         CornerType adjType = adjState.getValue(PropertyHolder.CORNER_TYPE);
 
@@ -100,8 +95,7 @@ public final class InnerCornerSkipPredicate implements SideSkipPredicate
     @CullTest.TestTarget(BlockType.FRAMED_SLOPE)
     private static boolean testAgainstSlope(
             Direction dir, CornerType type, BlockState adjState, Direction side
-    )
-    {
+    ) {
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         SlopeType adjType = adjState.getValue(PropertyHolder.SLOPE_TYPE);
 
@@ -111,8 +105,7 @@ public final class InnerCornerSkipPredicate implements SideSkipPredicate
     @CullTest.TestTarget(BlockType.FRAMED_HALF_SLOPE)
     private static boolean testAgainstHalfSlope(
             Direction dir, CornerType type, BlockState adjState, Direction side
-    )
-    {
+    ) {
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         boolean adjTop = adjState.getValue(FramedProperties.TOP);
         boolean adjRight = adjState.getValue(PropertyHolder.RIGHT);
@@ -123,8 +116,7 @@ public final class InnerCornerSkipPredicate implements SideSkipPredicate
     @CullTest.TestTarget(BlockType.FRAMED_VERTICAL_HALF_SLOPE)
     private static boolean testAgainstVerticalHalfSlope(
             Direction dir, CornerType type, BlockState adjState, Direction side
-    )
-    {
+    ) {
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         boolean adjTop = adjState.getValue(FramedProperties.TOP);
 
@@ -134,8 +126,7 @@ public final class InnerCornerSkipPredicate implements SideSkipPredicate
     @CullTest.TestTarget(BlockType.FRAMED_CORNER_SLOPE)
     private static boolean testAgainstCorner(
             Direction dir, CornerType type, BlockState adjState, Direction side
-    )
-    {
+    ) {
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         CornerType adjType = adjState.getValue(PropertyHolder.CORNER_TYPE);
 
@@ -148,8 +139,7 @@ public final class InnerCornerSkipPredicate implements SideSkipPredicate
     })
     private static boolean testAgainstThreewayCorner(
             Direction dir, CornerType type, BlockState adjState, Direction side
-    )
-    {
+    ) {
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         boolean adjTop = adjState.getValue(FramedProperties.TOP);
 
@@ -162,8 +152,7 @@ public final class InnerCornerSkipPredicate implements SideSkipPredicate
     })
     private static boolean testAgainstInnerThreewayCorner(
             Direction dir, CornerType type, BlockState adjState, Direction side
-    )
-    {
+    ) {
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         boolean adjTop = adjState.getValue(FramedProperties.TOP);
 
@@ -173,8 +162,7 @@ public final class InnerCornerSkipPredicate implements SideSkipPredicate
     @CullTest.TestTarget(BlockType.FRAMED_SLOPED_STAIRS)
     private static boolean testAgainstSlopedStairs(
             Direction dir, CornerType type, BlockState adjState, Direction side
-    )
-    {
+    ) {
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         boolean adjTop = adjState.getValue(FramedProperties.TOP);
 
@@ -184,8 +172,7 @@ public final class InnerCornerSkipPredicate implements SideSkipPredicate
     @CullTest.TestTarget(BlockType.FRAMED_VERTICAL_SLOPED_STAIRS)
     private static boolean testAgainstVerticalSlopedStairs(
             Direction dir, CornerType type, BlockState adjState, Direction side
-    )
-    {
+    ) {
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         HorizontalRotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
 
@@ -200,53 +187,48 @@ public final class InnerCornerSkipPredicate implements SideSkipPredicate
     })
     private static boolean testAgainstRailSlope(
             Direction dir, CornerType type, BlockState adjState, Direction side
-    )
-    {
-        Direction adjDir = ((ISlopeBlock) adjState.getBlock()).getFacing(adjState);
+    ) {
+        Direction adjDir = ((SlopeBlock) adjState.getBlock()).getFacing(adjState);
         return SlopeDirs.InnerCorner.getTriDir(dir, type, side).isEqualTo(SlopeDirs.RailSlope.getTriDir(adjDir, side.getOpposite()));
     }
 
     @CullTest.TestTarget(BlockType.FRAMED_LARGE_PRISM_CORNER_SLOPE_PANEL)
-    private static boolean testAgainstLargePrismSlopePanelCorner(
+    private static boolean testAgainstLargePrismCornerSlopePanel(
             Direction dir, CornerType type, BlockState adjState, Direction side
-    )
-    {
+    ) {
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         boolean adjTop = adjState.getValue(FramedProperties.TOP);
 
-        return SlopeDirs.InnerCorner.getTriDir(dir, type, side).isEqualTo(SlopePanelCornerDirs.LargePrismSlopePanelCorner.getBottomTriDir(adjDir, adjTop, side.getOpposite()));
+        return SlopeDirs.InnerCorner.getTriDir(dir, type, side).isEqualTo(SlopePanelCornerDirs.LargePrismCornerSlopePanel.getBottomTriDir(adjDir, adjTop, side.getOpposite()));
     }
 
     @CullTest.TestTarget(BlockType.FRAMED_LARGE_PRISM_CORNER_SLOPE_PANEL_W)
-    private static boolean testAgainstLargePrismSlopePanelCornerWall(
+    private static boolean testAgainstLargePrismCornerSlopePanelWall(
             Direction dir, CornerType type, BlockState adjState, Direction side
-    )
-    {
+    ) {
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         HorizontalRotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
 
-        return SlopeDirs.InnerCorner.getTriDir(dir, type, side).isEqualTo(SlopePanelCornerDirs.LargePrismSlopePanelCornerWall.getBackTriDir(adjDir, adjRot, side.getOpposite()));
+        return SlopeDirs.InnerCorner.getTriDir(dir, type, side).isEqualTo(SlopePanelCornerDirs.LargePrismCornerSlopePanelWall.getBackTriDir(adjDir, adjRot, side.getOpposite()));
     }
 
     @CullTest.TestTarget(BlockType.FRAMED_LARGE_INNER_PRISM_CORNER_SLOPE_PANEL)
-    private static boolean testAgainstLargeInnerPrismSlopePanelCorner(
+    private static boolean testAgainstLargeInnerPrismCornerSlopePanel(
             Direction dir, CornerType type, BlockState adjState, Direction side
-    )
-    {
+    ) {
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         boolean adjTop = adjState.getValue(FramedProperties.TOP);
 
-        return SlopeDirs.InnerCorner.getTriDir(dir, type, side).isEqualTo(SlopePanelCornerDirs.LargeInnerPrismSlopePanelCorner.getTopTriDir(adjDir, adjTop, side.getOpposite()));
+        return SlopeDirs.InnerCorner.getTriDir(dir, type, side).isEqualTo(SlopePanelCornerDirs.LargeInnerPrismCornerSlopePanel.getTopTriDir(adjDir, adjTop, side.getOpposite()));
     }
 
     @CullTest.TestTarget(BlockType.FRAMED_LARGE_INNER_PRISM_CORNER_SLOPE_PANEL_W)
-    private static boolean testAgainstLargeInnerPrismSlopePanelCornerWall(
+    private static boolean testAgainstLargeInnerPrismCornerSlopePanelWall(
             Direction dir, CornerType type, BlockState adjState, Direction side
-    )
-    {
+    ) {
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         HorizontalRotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
 
-        return SlopeDirs.InnerCorner.getTriDir(dir, type, side).isEqualTo(SlopePanelCornerDirs.LargeInnerPrismSlopePanelCornerWall.getFrontTriDir(adjDir, adjRot, side.getOpposite()));
+        return SlopeDirs.InnerCorner.getTriDir(dir, type, side).isEqualTo(SlopePanelCornerDirs.LargeInnerPrismCornerSlopePanelWall.getFrontTriDir(adjDir, adjRot, side.getOpposite()));
     }
 }

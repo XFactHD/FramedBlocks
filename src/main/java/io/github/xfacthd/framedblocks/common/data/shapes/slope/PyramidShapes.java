@@ -17,8 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
-public final class PyramidShapes implements ShapeGenerator
-{
+public final class PyramidShapes implements ShapeGenerator {
     public static final PyramidShapes FULL = new PyramidShapes(
             () -> ShapeUtils.orUnoptimized(
                     Block.box(0, 0, 8, 16, 16, 16),
@@ -114,8 +113,7 @@ public final class PyramidShapes implements ShapeGenerator
             Supplier<VoxelShape> northOcclusionShape,
             @Nullable Supplier<VoxelShape> northOcclusionShapePost,
             @Nullable Supplier<VoxelShape> northOcclusionShapePillar
-    )
-    {
+    ) {
         this.northShape = northShape;
         this.northOcclusionShape = northOcclusionShape;
         this.northOcclusionShapePost = northOcclusionShapePost;
@@ -123,14 +121,12 @@ public final class PyramidShapes implements ShapeGenerator
     }
 
     @Override
-    public ShapeContainer generatePrimary(List<BlockState> states)
-    {
+    public ShapeContainer generatePrimary(List<BlockState> states) {
         return generate(states, northShape, null, null);
     }
 
     @Override
-    public ShapeContainer generateOcclusion(List<BlockState> states)
-    {
+    public ShapeContainer generateOcclusion(List<BlockState> states) {
         return generate(states, northOcclusionShape, northOcclusionShapePost, northOcclusionShapePillar);
     }
 
@@ -139,8 +135,7 @@ public final class PyramidShapes implements ShapeGenerator
             Supplier<VoxelShape> northShape,
             @Nullable Supplier<VoxelShape> northShapePost,
             @Nullable Supplier<VoxelShape> northShapePillar
-    )
-    {
+    ) {
         VoxelShape shapeNorth = northShape.get();
         VoxelShape shapeNorthPost = northShapePost != null ? northShapePost.get() : null;
         VoxelShape shapeNorthPillar = northShapePillar != null ? northShapePillar.get() : null;
@@ -167,12 +162,10 @@ public final class PyramidShapes implements ShapeGenerator
 
         Map<BlockState, VoxelShape> map = new IdentityHashMap<>(states.size());
 
-        for (BlockState state : states)
-        {
+        for (BlockState state : states) {
             Direction facing = state.getValue(BlockStateProperties.FACING);
             int conIndex = state.getValueOrElse(PropertyHolder.PILLAR_CONNECTION, PillarConnection.NONE).ordinal();
-            VoxelShape shape = switch (facing)
-            {
+            VoxelShape shape = switch (facing) {
                 case UP -> upShapes[conIndex];
                 case DOWN -> downShapes[conIndex];
                 default -> horShapes[conIndex][facing.get2DDataValue()];

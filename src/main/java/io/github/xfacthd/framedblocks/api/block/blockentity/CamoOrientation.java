@@ -8,8 +8,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.Locale;
 
-public enum CamoOrientation implements StringRepresentable
-{
+public enum CamoOrientation implements StringRepresentable {
     UNKNOWN(null),
     UNSPECIFIED(null),
     NORTH(Direction.NORTH),
@@ -23,15 +22,14 @@ public enum CamoOrientation implements StringRepresentable
     @Nullable
     private final Direction dir;
 
-    CamoOrientation(@Nullable Direction dir)
-    {
+    CamoOrientation(@Nullable Direction dir) {
         this.dir = dir;
     }
 
-    @Nullable
-    public Direction resolve(IFramedBlockEntity be)
-    {
-        if (this != UNKNOWN) return dir;
+    public @Nullable Direction resolve(IFramedBlockEntity be) {
+        if (this != UNKNOWN) {
+            return dir;
+        }
 
         IFramedBlock block = be.getBlock();
         BlockState state = be.getBlockState();
@@ -39,14 +37,14 @@ public enum CamoOrientation implements StringRepresentable
     }
 
     @Override
-    public String getSerializedName()
-    {
+    public String getSerializedName() {
         return name;
     }
 
-    public static CamoOrientation of(@Nullable Direction dir)
-    {
-        if (dir == null) return UNSPECIFIED;
+    public static CamoOrientation of(@Nullable Direction dir) {
+        if (dir == null) {
+            return UNSPECIFIED;
+        }
         return VALUES[dir.get2DDataValue() + 1];
     }
 }

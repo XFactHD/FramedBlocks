@@ -15,22 +15,19 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.state.BlockState;
 
 @CullTest(BlockType.FRAMED_BOARD)
-public final class BoardSkipPredicate implements SideSkipPredicate
-{
+public final class BoardSkipPredicate implements SideSkipPredicate {
     @Override
-    public boolean test(BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side)
-    {
-        if (!FramedBoardBlock.isFacePresent(state, side))
-        {
+    public boolean test(BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side) {
+        if (!FramedBoardBlock.isFacePresent(state, side)) {
             int edgeMask = FramedBoardBlock.computeEdgeMask(state, side);
-            if (edgeMask == 0) return false;
+            if (edgeMask == 0) {
+                return false;
+            }
 
-            if (adjState.getBlock() == state.getBlock())
-            {
+            if (adjState.getBlock() == state.getBlock()) {
                 return testAgainstBoard(edgeMask, adjState, side);
             }
-            else if (adjState.getBlock() == FBContent.BLOCK_FRAMED_CORNER_STRIP.value())
-            {
+            if (adjState.getBlock() == FBContent.BLOCK_FRAMED_CORNER_STRIP.value()) {
                 return testAgainstCornerStrip(edgeMask, adjState, side);
             }
         }
@@ -39,25 +36,21 @@ public final class BoardSkipPredicate implements SideSkipPredicate
     }
 
     @CullTest.TestTarget(BlockType.FRAMED_BOARD)
-    private static boolean testAgainstBoard(int edgeMask, BlockState adjState, Direction side)
-    {
+    private static boolean testAgainstBoard(int edgeMask, BlockState adjState, Direction side) {
         boolean faceAbsent = !FramedBoardBlock.isFacePresent(adjState, side.getOpposite());
         return faceAbsent && edgeMask == FramedBoardBlock.computeEdgeMask(adjState, side.getOpposite());
     }
 
     @CullTest.TestTarget(BlockType.FRAMED_CORNER_STRIP)
-    private static boolean testAgainstCornerStrip(int edgeMask, BlockState adjState, Direction side)
-    {
+    private static boolean testAgainstCornerStrip(int edgeMask, BlockState adjState, Direction side) {
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         SlopeType adjType = adjState.getValue(PropertyHolder.SLOPE_TYPE);
 
         return getHalfDir(edgeMask, side).isEqualTo(CornerStripSkipPredicate.getHalfDir(adjDir, adjType, side.getOpposite()));
     }
 
-    public static HalfDir getHalfDir(int edgeMask, Direction side)
-    {
-        if (Integer.bitCount(edgeMask) == 1)
-        {
+    public static HalfDir getHalfDir(int edgeMask, Direction side) {
+        if (Integer.bitCount(edgeMask) == 1) {
             int face = Integer.numberOfTrailingZeros(edgeMask);
             return HalfDir.fromDirections(side, Direction.from3DDataValue(face));
         }

@@ -11,8 +11,7 @@ import net.minecraft.world.level.material.FluidState;
 import net.neoforged.neoforge.model.data.ModelData;
 import org.jspecify.annotations.Nullable;
 
-public sealed interface BlockRenderFakeLevel extends BlockAndTintGetter permits DelegatingBlockRenderFakeLevel, FreestandingBlockRenderFakeLevel
-{
+public sealed interface BlockRenderFakeLevel extends BlockAndTintGetter permits DelegatingBlockRenderFakeLevel, FreestandingBlockRenderFakeLevel {
     /// Returns the [BlockPos] at which the [BlockState] and [ModelData] should "appear"
     BlockPos pos();
 
@@ -23,39 +22,31 @@ public sealed interface BlockRenderFakeLevel extends BlockAndTintGetter permits 
     ModelData modelData();
 
     @Override
-    default BlockState getBlockState(BlockPos pos)
-    {
-        if (pos.equals(pos()))
-        {
+    default BlockState getBlockState(BlockPos pos) {
+        if (pos.equals(pos())) {
             return state();
         }
         return Blocks.AIR.defaultBlockState();
     }
 
-    @Nullable
     @Override
-    default BlockEntity getBlockEntity(BlockPos pos)
-    {
+    default @Nullable BlockEntity getBlockEntity(BlockPos pos) {
         return null;
     }
 
     @Override
-    default FluidState getFluidState(BlockPos pos)
-    {
+    default FluidState getFluidState(BlockPos pos) {
         return getBlockState(pos).getFluidState();
     }
 
     @Override
-    default int getBrightness(LightLayer layer, BlockPos pos)
-    {
+    default int getBrightness(LightLayer layer, BlockPos pos) {
         return LightEngine.MAX_LEVEL;
     }
 
     @Override
-    default ModelData getModelData(BlockPos pos)
-    {
-        if (pos.equals(pos()))
-        {
+    default ModelData getModelData(BlockPos pos) {
+        if (pos.equals(pos())) {
             return modelData();
         }
         return ModelData.EMPTY;

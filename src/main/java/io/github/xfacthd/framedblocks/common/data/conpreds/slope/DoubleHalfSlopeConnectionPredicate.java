@@ -8,21 +8,17 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jspecify.annotations.Nullable;
 
-public final class DoubleHalfSlopeConnectionPredicate extends NonDetailedConnectionPredicate
-{
+public final class DoubleHalfSlopeConnectionPredicate extends NonDetailedConnectionPredicate {
     @Override
-    public boolean canConnectFullEdge(BlockState state, Direction side, @Nullable Direction edge)
-    {
+    public boolean canConnectFullEdge(BlockState state, Direction side, @Nullable Direction edge) {
         Direction facing = state.getValue(FramedProperties.FACING_HOR);
         boolean right = state.getValue(PropertyHolder.RIGHT);
         Direction dirTwo = right ? facing.getClockWise() : facing.getCounterClockWise();
 
-        if (side.getAxis() == facing.getAxis() || DirUtils.isY(side))
-        {
+        if (side.getAxis() == facing.getAxis() || DirUtils.isY(side)) {
             return edge == dirTwo;
         }
-        else if (side == dirTwo)
-        {
+        if (side == dirTwo) {
             return edge != null;
         }
         return false;

@@ -28,10 +28,8 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public final class RecipePresence
-{
-    public static void checkRecipePresence(SelfTestReporter reporter, Level level)
-    {
+public final class RecipePresence {
+    public static void checkRecipePresence(SelfTestReporter reporter, Level level) {
         reporter.startTest("recipe presence");
 
         MutableInt craftCount = new MutableInt(0);
@@ -67,39 +65,31 @@ public final class RecipePresence
         Set<ItemLike> blockItems = collectBlockTypedItems();
         Set<ItemLike> craftDiff = Sets.difference(blockItems, craftResults);
         Set<ItemLike> sawDiff = Sets.difference(blockItems, sawResults);
-        for (ItemLike item : sawDiff)
-        {
-            if (craftDiff.contains(item))
-            {
+        for (ItemLike item : sawDiff) {
+            if (craftDiff.contains(item)) {
                 reporter.warn("Block {} is uncraftable", item);
-            }
-            else
-            {
+            } else {
                 reporter.warn("Block {} has no saw recipe", item);
             }
         }
 
         Set<ItemLike> miscCraftDiff = Sets.difference(collectMiscItems(), craftResults);
-        for (ItemLike item : miscCraftDiff)
-        {
+        for (ItemLike item : miscCraftDiff) {
             reporter.warn("Item {} is uncraftable", item);
         }
 
         reporter.endTest();
     }
 
-    private static Optional<ItemStack> unpackResult(CraftingRecipe recipe)
-    {
-        return switch (recipe)
-        {
+    private static Optional<ItemStack> unpackResult(CraftingRecipe recipe) {
+        return switch (recipe) {
             case ShapedRecipe shaped -> Optional.of(shaped.result.create());
             case ShapelessRecipe shapeless -> Optional.of(shapeless.result.create());
             default -> Optional.empty();
         };
     }
 
-    private static Set<ItemLike> collectMiscItems()
-    {
+    private static Set<ItemLike> collectMiscItems() {
         return FBContent.getRegisteredItems()
                 .stream()
                 .map(Holder::value)
@@ -107,8 +97,7 @@ public final class RecipePresence
                 .collect(Collectors.toSet());
     }
 
-    private static Set<ItemLike> collectBlockTypedItems()
-    {
+    private static Set<ItemLike> collectBlockTypedItems() {
         return Arrays.stream(BlockType.values())
                 .filter(BlockType::hasBlockItem)
                 .map(FBContent::byType)

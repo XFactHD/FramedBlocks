@@ -16,35 +16,30 @@ import org.jspecify.annotations.Nullable;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 
-public class PlacementStateBuilder<T extends PlacementStateBuilder<T>>
-{
+public class PlacementStateBuilder<T extends PlacementStateBuilder<T>> {
     protected final Block block;
     protected final BlockPlaceContext ctx;
     @Nullable
     protected BlockState state;
 
-    protected PlacementStateBuilder(Block block, @Nullable BlockState state, BlockPlaceContext ctx)
-    {
+    protected PlacementStateBuilder(Block block, @Nullable BlockState state, BlockPlaceContext ctx) {
         this.block = block;
         this.ctx = ctx;
         this.state = state;
     }
 
-    public static PlacementStateBuilder<?> of(Block block, BlockPlaceContext ctx)
-    {
+    public static PlacementStateBuilder<?> of(Block block, BlockPlaceContext ctx) {
         return of(block, block.defaultBlockState(), ctx);
     }
 
-    public static PlacementStateBuilder<?> of(Block block, @Nullable BlockState state, BlockPlaceContext ctx)
-    {
+    public static PlacementStateBuilder<?> of(Block block, @Nullable BlockState state, BlockPlaceContext ctx) {
         return new PlacementStateBuilder<>(block, state, ctx);
     }
 
     /**
      * Set the state's {@link FramedProperties#FACING_HOR} property to the player's horizontal looking direction
      */
-    public final T withHorizontalFacing()
-    {
+    public final T withHorizontalFacing() {
         return withHorizontalFacing(false);
     }
 
@@ -53,13 +48,13 @@ public class PlacementStateBuilder<T extends PlacementStateBuilder<T>>
      *
      * @param opposite Whether the direction should be inverted
      */
-    public final T withHorizontalFacing(boolean opposite)
-    {
-        if (state == null) return self();
+    public final T withHorizontalFacing(boolean opposite) {
+        if (state == null) {
+            return self();
+        }
 
         Direction dir = ctx.getHorizontalDirection();
-        if (opposite)
-        {
+        if (opposite) {
             dir = dir.getOpposite();
         }
         state = state.setValue(FramedProperties.FACING_HOR, dir);
@@ -70,8 +65,7 @@ public class PlacementStateBuilder<T extends PlacementStateBuilder<T>>
      * Set the state's {@link FramedProperties#FACING_HOR} property to the players horizontal looking direction
      * when looking at a vertical face or the inverse of the faces direction when looking at a horizontal face
      */
-    public final T withTargetOrHorizontalFacing()
-    {
+    public final T withTargetOrHorizontalFacing() {
         return withTargetOrHorizontalFacing(false);
     }
 
@@ -81,15 +75,14 @@ public class PlacementStateBuilder<T extends PlacementStateBuilder<T>>
      *
      * @param opposite Whether the final direction should be inverted
      */
-    public final T withTargetOrHorizontalFacing(boolean opposite)
-    {
-        if (state == null) return self();
+    public final T withTargetOrHorizontalFacing(boolean opposite) {
+        if (state == null) {
+            return self();
+        }
 
         Direction face = ctx.getClickedFace();
-        if (!DirUtils.isY(face))
-        {
-            if (!opposite)
-            {
+        if (!DirUtils.isY(face)) {
+            if (!opposite) {
                 face = face.getOpposite();
             }
             state = state.setValue(FramedProperties.FACING_HOR, face);
@@ -103,8 +96,7 @@ public class PlacementStateBuilder<T extends PlacementStateBuilder<T>>
      * when looking at a horizontal face. If the face being looked at is vertical, the builder will short-circuit all
      * subsequent modifications and return a {@code null} state from {@link #build()}
      */
-    public final T withHorizontalTargetFacing()
-    {
+    public final T withHorizontalTargetFacing() {
         return withHorizontalTargetFacing(false);
     }
 
@@ -115,19 +107,18 @@ public class PlacementStateBuilder<T extends PlacementStateBuilder<T>>
      *
      * @param opposite Whether the direction should be inverted
      */
-    public final T withHorizontalTargetFacing(boolean opposite)
-    {
-        if (state == null) return self();
+    public final T withHorizontalTargetFacing(boolean opposite) {
+        if (state == null) {
+            return self();
+        }
 
         Direction face = ctx.getClickedFace();
-        if (DirUtils.isY(face))
-        {
+        if (DirUtils.isY(face)) {
             state = null;
             return self();
         }
 
-        if (!opposite)
-        {
+        if (!opposite) {
             face = face.getOpposite();
         }
         state = state.setValue(FramedProperties.FACING_HOR, face);
@@ -137,8 +128,7 @@ public class PlacementStateBuilder<T extends PlacementStateBuilder<T>>
     /**
      * Set the state's {@link BlockStateProperties#FACING} property to the inverse of the face being looked at
      */
-    public final T withTargetFacing()
-    {
+    public final T withTargetFacing() {
         return withTargetFacing(false);
     }
 
@@ -147,13 +137,13 @@ public class PlacementStateBuilder<T extends PlacementStateBuilder<T>>
      *
      * @param opposite Whether the direction should be inverted
      */
-    public final T withTargetFacing(boolean opposite)
-    {
-        if (state == null) return self();
+    public final T withTargetFacing(boolean opposite) {
+        if (state == null) {
+            return self();
+        }
 
         Direction face = ctx.getClickedFace();
-        if (!opposite)
-        {
+        if (!opposite) {
             face = face.getOpposite();
         }
         state = state.setValue(BlockStateProperties.FACING, face);
@@ -164,21 +154,17 @@ public class PlacementStateBuilder<T extends PlacementStateBuilder<T>>
      * Set the state's {@link FramedProperties#FACING_HOR} property depending on the targeted horizontal half when
      * looking at a horizontal face or to the player's horizontal looking direction when looking at a vertical face
      */
-    public final T withHalfOrHorizontalFacing()
-    {
-        if (state == null) return self();
+    public final T withHalfOrHorizontalFacing() {
+        if (state == null) {
+            return self();
+        }
 
         Direction side = ctx.getClickedFace();
-        if (DirUtils.isY(side))
-        {
+        if (DirUtils.isY(side)) {
             state = state.setValue(FramedProperties.FACING_HOR, ctx.getHorizontalDirection());
-        }
-        else if (MathUtils.fractionInDir(ctx.getClickLocation(), side.getCounterClockWise()) > .5)
-        {
+        } else if (MathUtils.fractionInDir(ctx.getClickLocation(), side.getCounterClockWise()) > .5) {
             state = state.setValue(FramedProperties.FACING_HOR, side.getOpposite().getClockWise());
-        }
-        else
-        {
+        } else {
             state = state.setValue(FramedProperties.FACING_HOR, side.getOpposite());
         }
         return self();
@@ -188,20 +174,19 @@ public class PlacementStateBuilder<T extends PlacementStateBuilder<T>>
      * Set the state's {@link FramedProperties#FACING_HOR} property depending on the targeted XZ quarter when
      * looking at a vertical face or depending on the targeted horizontal half when looking at a horizontal face
      */
-    public final T withHalfOrQuarterFacing()
-    {
-        if (state == null) return self();
+    public final T withHalfOrQuarterFacing() {
+        if (state == null) {
+            return self();
+        }
 
         Direction side = ctx.getClickedFace();
-        if (DirUtils.isY(side))
-        {
+        if (DirUtils.isY(side)) {
             Vec3 hitVec = ctx.getClickLocation();
             double x = MathUtils.fractionInDir(hitVec, Direction.EAST);
             double z = MathUtils.fractionInDir(hitVec, Direction.SOUTH);
 
             Direction dir = z > .5D ? Direction.SOUTH : Direction.NORTH;
-            if ((x > .5D) != DirUtils.isPositive(dir))
-            {
+            if ((x > .5D) != DirUtils.isPositive(dir)) {
                 dir = dir.getClockWise();
             }
             state = state.setValue(FramedProperties.FACING_HOR, dir);
@@ -216,17 +201,16 @@ public class PlacementStateBuilder<T extends PlacementStateBuilder<T>>
      * horizontal looking direction when looking at a vertical face or depending on the targeted horizontal half
      * when looking at a horizontal face
      */
-    public final T withHalfFacing()
-    {
-        if (state == null) return self();
+    public final T withHalfFacing() {
+        if (state == null) {
+            return self();
+        }
 
         Direction side = ctx.getClickedFace();
-        if (DirUtils.isY(side))
-        {
+        if (DirUtils.isY(side)) {
             Direction dir = ctx.getHorizontalDirection();
             double xz = MathUtils.fractionInDir(ctx.getClickLocation(), dir.getClockWise());
-            if (xz > .5D)
-            {
+            if (xz > .5D) {
                 dir = dir.getClockWise();
             }
             state = state.setValue(FramedProperties.FACING_HOR, dir);
@@ -240,10 +224,8 @@ public class PlacementStateBuilder<T extends PlacementStateBuilder<T>>
      * Set the state's {@link BlockStateProperties#AXIS} property to the {@link Direction.Axis} of
      * the face the player clicked on
      */
-    public final T withClickedAxis()
-    {
-        if (state != null)
-        {
+    public final T withClickedAxis() {
+        if (state != null) {
             state = state.setValue(BlockStateProperties.AXIS, ctx.getClickedFace().getAxis());
         }
         return self();
@@ -253,8 +235,7 @@ public class PlacementStateBuilder<T extends PlacementStateBuilder<T>>
      * Set the state's {@link FramedProperties#TOP} property depending on the face when looking at a vertical face or
      * depending on the targeted vertical half when looking at a horizontal face
      */
-    public final T withTop()
-    {
+    public final T withTop() {
         return withTop(FramedProperties.TOP);
     }
 
@@ -262,21 +243,17 @@ public class PlacementStateBuilder<T extends PlacementStateBuilder<T>>
      * Set the given property on the state depending on the face when looking at a vertical face or
      * depending on the targeted vertical half when looking at a horizontal face
      */
-    public final T withTop(BooleanProperty prop)
-    {
-        if (state == null) return self();
+    public final T withTop(BooleanProperty prop) {
+        if (state == null) {
+            return self();
+        }
 
         Direction side = ctx.getClickedFace();
-        if (side == Direction.DOWN)
-        {
+        if (side == Direction.DOWN) {
             state = state.setValue(prop, true);
-        }
-        else if (side == Direction.UP)
-        {
+        } else if (side == Direction.UP) {
             state = state.setValue(prop, false);
-        }
-        else
-        {
+        } else {
             double y = MathUtils.fractionInDir(ctx.getClickLocation(), Direction.UP);
             state = state.setValue(prop, y >= .5D);
         }
@@ -286,10 +263,8 @@ public class PlacementStateBuilder<T extends PlacementStateBuilder<T>>
     /**
      * Set the state's {@link BlockStateProperties#WATERLOGGED} property if the state has said property
      */
-    public final T tryWithWater()
-    {
-        if (state != null && state.hasProperty(BlockStateProperties.WATERLOGGED))
-        {
+    public final T tryWithWater() {
+        if (state != null && state.hasProperty(BlockStateProperties.WATERLOGGED)) {
             return withWater();
         }
         return self();
@@ -298,9 +273,10 @@ public class PlacementStateBuilder<T extends PlacementStateBuilder<T>>
     /**
      * Set the state's {@link BlockStateProperties#WATERLOGGED} property
      */
-    public final T withWater()
-    {
-        if (state == null) return self();
+    public final T withWater() {
+        if (state == null) {
+            return self();
+        }
 
         FluidState fluidState = ctx.getLevel().getFluidState(ctx.getClickedPos());
         state = state.setValue(BlockStateProperties.WATERLOGGED, fluidState.getType() == Fluids.WATER);
@@ -310,9 +286,10 @@ public class PlacementStateBuilder<T extends PlacementStateBuilder<T>>
     /**
      * Set the state's {@link FramedProperties#ALT_SLOPE} property to the given value
      */
-    public final T withAltSlope(boolean altSlope)
-    {
-        if (state == null) return self();
+    public final T withAltSlope(boolean altSlope) {
+        if (state == null) {
+            return self();
+        }
 
         state = state.setValue(FramedProperties.ALT_SLOPE, altSlope);
         return self();
@@ -323,9 +300,10 @@ public class PlacementStateBuilder<T extends PlacementStateBuilder<T>>
      * the block unplaceable in the given environment, in which case the builder will short-circuit all
      * subsequent modifications and return a {@code null} state from {@link #build()}
      */
-    public final T withCustom(BiFunction<BlockState, BlockPlaceContext, @Nullable BlockState> modifier)
-    {
-        if (state == null) return self();
+    public final T withCustom(BiFunction<BlockState, BlockPlaceContext, @Nullable BlockState> modifier) {
+        if (state == null) {
+            return self();
+        }
 
         state = modifier.apply(state, ctx);
         return self();
@@ -335,10 +313,8 @@ public class PlacementStateBuilder<T extends PlacementStateBuilder<T>>
      * Validate the calculated state in the given environment. If the validator returns false, the builder will
      * short-circuit all subsequent modifications and return a {@code null} state from {@link #build()}
      */
-    public final T validate(BiPredicate<BlockState, BlockPlaceContext> validator)
-    {
-        if (state != null && !validator.test(state, ctx))
-        {
+    public final T validate(BiPredicate<BlockState, BlockPlaceContext> validator) {
+        if (state != null && !validator.test(state, ctx)) {
             state = null;
         }
         return self();
@@ -348,15 +324,12 @@ public class PlacementStateBuilder<T extends PlacementStateBuilder<T>>
      * Get the final state from the builder. Due to states being immutable, the builder can theoretically be
      * re-used after calling this
      */
-    @Nullable
-    public final BlockState build()
-    {
+    public final @Nullable BlockState build() {
         return state;
     }
 
     @SuppressWarnings("unchecked")
-    protected final T self()
-    {
+    protected final T self() {
         return (T) this;
     }
 }

@@ -13,28 +13,23 @@ import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 
-public final class LadderShapes implements ShapeGenerator
-{
+public final class LadderShapes implements ShapeGenerator {
     @Override
-    public ShapeContainer generatePrimary(List<BlockState> states)
-    {
+    public ShapeContainer generatePrimary(List<BlockState> states) {
         return generateShapes(states, 2F);
     }
 
     @Override
-    public ShapeContainer generateOcclusion(List<BlockState> states)
-    {
+    public ShapeContainer generateOcclusion(List<BlockState> states) {
         // Misuse separate occlusion shape handling for collision shapes
         return generateShapes(states, 3F);
     }
 
-    private static ShapeContainer generateShapes(List<BlockState> states, float depth)
-    {
+    private static ShapeContainer generateShapes(List<BlockState> states, float depth) {
         VoxelShape[] shapes = ShapeUtils.makeHorizontalRotations(Block.box(0, 0, 0, 16, 16, depth), Direction.NORTH);
 
         Map<BlockState, VoxelShape> map = new IdentityHashMap<>();
-        for (BlockState state : states)
-        {
+        for (BlockState state : states) {
             Direction dir = state.getValue(FramedProperties.FACING_HOR);
             map.put(state, shapes[dir.get2DDataValue()]);
         }

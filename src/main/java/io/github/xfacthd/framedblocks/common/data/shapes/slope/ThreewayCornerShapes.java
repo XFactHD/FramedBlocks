@@ -16,32 +16,27 @@ import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 
-public final class ThreewayCornerShapes implements ShapeGenerator
-{
+public final class ThreewayCornerShapes implements ShapeGenerator {
     public static final ThreewayCornerShapes OUTER = new ThreewayCornerShapes(BooleanOp.AND);
     public static final ThreewayCornerShapes INNER = new ThreewayCornerShapes(BooleanOp.OR);
 
     private final BooleanOp joinOp;
 
-    private ThreewayCornerShapes(BooleanOp joinOp)
-    {
+    private ThreewayCornerShapes(BooleanOp joinOp) {
         this.joinOp = joinOp;
     }
 
     @Override
-    public ShapeContainer generatePrimary(List<BlockState> states)
-    {
+    public ShapeContainer generatePrimary(List<BlockState> states) {
         return generate(states, SlopeShapes.SHAPES);
     }
 
     @Override
-    public ShapeContainer generateOcclusion(List<BlockState> states)
-    {
+    public ShapeContainer generateOcclusion(List<BlockState> states) {
         return generate(states, SlopeShapes.OCCLUSION_SHAPES);
     }
 
-    private ShapeContainer generate(List<BlockState> states, ShapeCache<SlopeType> shapeCache)
-    {
+    private ShapeContainer generate(List<BlockState> states, ShapeCache<SlopeType> shapeCache) {
         Map<BlockState, VoxelShape> map = new IdentityHashMap<>(states.size());
 
         VoxelShape shapeTop = Shapes.joinUnoptimized(
@@ -70,8 +65,7 @@ public final class ThreewayCornerShapes implements ShapeGenerator
 
         VoxelShape[] shapes = ShapeUtils.makeHorizontalRotationsWithFlag(shapeBottom, shapeTop, Direction.NORTH);
 
-        for (BlockState state : states)
-        {
+        for (BlockState state : states) {
             Direction dir = state.getValue(FramedProperties.FACING_HOR);
             boolean top = state.getValue(FramedProperties.TOP);
             map.put(state, shapes[dir.get2DDataValue() + (top ? 4 : 0)]);

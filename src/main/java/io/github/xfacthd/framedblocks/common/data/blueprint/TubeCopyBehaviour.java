@@ -7,11 +7,9 @@ import net.minecraft.world.level.block.state.properties.Property;
 
 import java.util.Set;
 
-public final class TubeCopyBehaviour implements BlueprintCopyBehaviour
-{
+public final class TubeCopyBehaviour implements BlueprintCopyBehaviour {
     @Override
-    public Set<Property<?>> getPropertiesToCopy(BlockState state)
-    {
+    public Set<Property<?>> getPropertiesToCopy(BlockState state) {
         return Set.of(PropertyHolder.THICK);
     }
 }

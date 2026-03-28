@@ -7,8 +7,7 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.Identifier;
 
-public abstract class BlockAtlasSpriteParticle extends SingleQuadParticle
-{
+public abstract class BlockAtlasSpriteParticle extends SingleQuadParticle {
     private final SingleQuadParticle.Layer layer;
     protected final BlockPos pos;
     private final float uo;
@@ -23,8 +22,7 @@ public abstract class BlockAtlasSpriteParticle extends SingleQuadParticle
             double ySpeed,
             double zSpeed,
             Identifier sprite
-    )
-    {
+    ) {
         this(level, x, y, z, xSpeed, ySpeed, zSpeed, ClientUtils.getBlockSprite(sprite));
     }
 
@@ -37,8 +35,7 @@ public abstract class BlockAtlasSpriteParticle extends SingleQuadParticle
             double ySpeed,
             double zSpeed,
             TextureAtlasSprite sprite
-    )
-    {
+    ) {
         super(level, x, y, z, xSpeed, ySpeed, zSpeed, sprite);
         this.pos = BlockPos.containing(x, y, z);
         this.gravity = 1F;
@@ -49,32 +46,27 @@ public abstract class BlockAtlasSpriteParticle extends SingleQuadParticle
     }
 
     @Override
-    public Layer getLayer()
-    {
+    public Layer getLayer() {
         return layer;
     }
 
     @Override
-    protected float getU0()
-    {
+    protected float getU0() {
         return sprite.getU((uo + 1.0F) / 4.0F);
     }
 
     @Override
-    protected float getU1()
-    {
+    protected float getU1() {
         return sprite.getU(uo / 4.0F);
     }
 
     @Override
-    protected float getV0()
-    {
+    protected float getV0() {
         return sprite.getV(vo / 4.0F);
     }
 
     @Override
-    protected float getV1()
-    {
+    protected float getV1() {
         return sprite.getV((vo + 1.0F) / 4.0F);
     }
 }

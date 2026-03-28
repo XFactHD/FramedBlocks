@@ -13,10 +13,8 @@ import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 
-public final class ChestShapes
-{
-    public static ShapeContainer generate(List<BlockState> states)
-    {
+public final class ChestShapes {
+    public static ShapeContainer generate(List<BlockState> states) {
         VoxelShape shapeSingle = Block.box(1D, 0D, 1D, 15D, 14D, 15D);
         VoxelShape[] conShapes = new VoxelShape[] {
                 Block.box(1D, 0D, 1D, 15D, 14D, 16D),
@@ -27,15 +25,11 @@ public final class ChestShapes
 
         Map<BlockState, VoxelShape> map = new IdentityHashMap<>(states.size());
 
-        for (BlockState state : states)
-        {
+        for (BlockState state : states) {
             ChestType type = state.getValue(BlockStateProperties.CHEST_TYPE);
-            if (type == ChestType.SINGLE)
-            {
+            if (type == ChestType.SINGLE) {
                 map.put(state, shapeSingle);
-            }
-            else
-            {
+            } else {
                 Direction conDir = FramedChestBlock.getConnectionDirection(state);
                 map.put(state, conShapes[conDir.get2DDataValue()]);
             }

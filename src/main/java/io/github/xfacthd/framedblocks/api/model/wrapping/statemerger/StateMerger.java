@@ -9,8 +9,7 @@ import org.jspecify.annotations.Nullable;
 import java.util.Set;
 import java.util.function.UnaryOperator;
 
-public interface StateMerger extends UnaryOperator<BlockState>
-{
+public interface StateMerger extends UnaryOperator<BlockState> {
     StateMerger PASSTHROUGH = new PassthroughStateMerger();
     StateMerger IGNORE_ALL = new IgnoreAllStateMerger();
 
@@ -19,10 +18,8 @@ public interface StateMerger extends UnaryOperator<BlockState>
 
     Set<Property<?>> getHandledProperties(Holder<Block> block);
 
-    static StateMerger ignoring(@Nullable Set<Property<?>> ignoredProps)
-    {
-        if (ignoredProps == null || ignoredProps.isEmpty())
-        {
+    static StateMerger ignoring(@Nullable Set<Property<?>> ignoredProps) {
+        if (ignoredProps == null || ignoredProps.isEmpty()) {
             return PASSTHROUGH;
         }
         return new IgnoringStateMerger(ignoredProps);

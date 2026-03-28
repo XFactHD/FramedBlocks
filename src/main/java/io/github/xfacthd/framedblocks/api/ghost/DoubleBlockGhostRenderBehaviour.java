@@ -13,8 +13,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.model.data.ModelData;
 import org.jspecify.annotations.Nullable;
 
-public interface DoubleBlockGhostRenderBehaviour extends GhostRenderBehaviour
-{
+public interface DoubleBlockGhostRenderBehaviour extends GhostRenderBehaviour {
     DoubleBlockGhostRenderBehaviour INSTANCE = new DoubleBlockGhostRenderBehaviour() {};
 
     @Override
@@ -26,8 +25,7 @@ public interface DoubleBlockGhostRenderBehaviour extends GhostRenderBehaviour
             int renderPass,
             CamoList camo,
             @Nullable Holder<BlockOverlay> overlay
-    )
-    {
+    ) {
         return ModelData.of(AbstractFramedBlockData.PROPERTY, new FramedDoubleBlockData(
                 ((IFramedDoubleBlock) renderState.getBlock()).getCache(renderState).getParts(),
                 new FramedBlockData(renderState, camo.getCamo(0), false, overlay),

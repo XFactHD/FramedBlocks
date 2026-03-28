@@ -1,7 +1,7 @@
 package io.github.xfacthd.framedblocks.common.data.skippreds.misc;
 
 import io.github.xfacthd.framedblocks.api.predicate.cull.SideSkipPredicate;
-import io.github.xfacthd.framedblocks.common.blockentity.special.ICollapsibleCopycatBlockEntity;
+import io.github.xfacthd.framedblocks.common.blockentity.special.CollapsibleCopycatBlockEntity;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import io.github.xfacthd.framedblocks.common.data.skippreds.CullTest;
@@ -33,11 +33,11 @@ public final class CollapsibleCopycatBlockSkipPredicate implements SideSkipPredi
                 return false;
             }
 
-            if (!(level.getBlockEntity(pos) instanceof ICollapsibleCopycatBlockEntity be))
+            if (!(level.getBlockEntity(pos) instanceof CollapsibleCopycatBlockEntity be))
             {
                 return false;
             }
-            if (!(level.getBlockEntity(pos.relative(side)) instanceof ICollapsibleCopycatBlockEntity adjBe))
+            if (!(level.getBlockEntity(pos.relative(side)) instanceof CollapsibleCopycatBlockEntity adjBe))
             {
                 return false;
             }

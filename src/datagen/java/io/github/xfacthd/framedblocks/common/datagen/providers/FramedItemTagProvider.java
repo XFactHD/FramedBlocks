@@ -11,22 +11,18 @@ import net.neoforged.neoforge.common.data.ItemTagsProvider;
 
 import java.util.concurrent.CompletableFuture;
 
-public final class FramedItemTagProvider extends ItemTagsProvider
-{
-    public FramedItemTagProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider)
-    {
+public final class FramedItemTagProvider extends ItemTagsProvider {
+    public FramedItemTagProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider) {
         super(output, lookupProvider, FramedConstants.MOD_ID);
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return super.getName() + ": " + FramedConstants.MOD_ID;
     }
 
     @Override
-    protected void addTags(HolderLookup.Provider provider)
-    {
+    protected void addTags(HolderLookup.Provider provider) {
         tag(ItemTags.SLABS).add(FBContent.BLOCK_FRAMED_SLAB.value().asItem());
         tag(ItemTags.STAIRS).add(FBContent.BLOCK_FRAMED_STAIRS.value().asItem());
         tag(ItemTags.WALLS).add(FBContent.BLOCK_FRAMED_WALL.value().asItem());

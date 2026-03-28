@@ -17,26 +17,22 @@ import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 
-public final class PrismShapes implements ShapeGenerator
-{
+public final class PrismShapes implements ShapeGenerator {
     public static final PrismShapes OUTER = new PrismShapes();
 
     private PrismShapes() { }
 
     @Override
-    public ShapeContainer generatePrimary(List<BlockState> states)
-    {
+    public ShapeContainer generatePrimary(List<BlockState> states) {
         return generateShapes(states, SlopeShapes.SHAPES);
     }
 
     @Override
-    public ShapeContainer generateOcclusion(List<BlockState> states)
-    {
+    public ShapeContainer generateOcclusion(List<BlockState> states) {
         return generateShapes(states, SlopeShapes.OCCLUSION_SHAPES);
     }
 
-    private static ShapeContainer generateShapes(List<BlockState> states, ShapeCache<SlopeType> shapeCache)
-    {
+    private static ShapeContainer generateShapes(List<BlockState> states, ShapeCache<SlopeType> shapeCache) {
         Map<BlockState, VoxelShape> map = new IdentityHashMap<>(states.size());
 
         VoxelShape shapeBottom = ShapeUtils.andUnoptimized(
@@ -57,21 +53,17 @@ public final class PrismShapes implements ShapeGenerator
         );
 
         VoxelShape[] shapes = new VoxelShape[DirectionAxis.COUNT];
-        for (DirectionAxis dirAxis : DirectionAxis.values())
-        {
+        for (DirectionAxis dirAxis : DirectionAxis.values()) {
             Direction facing = dirAxis.direction();
             Direction.Axis axis = dirAxis.axis();
 
-            if (DirUtils.isY(facing))
-            {
+            if (DirUtils.isY(facing)) {
                 shapes[dirAxis.ordinal()] = ShapeUtils.rotateShapeAroundY(
                         Direction.EAST,
                         Direction.fromAxisAndDirection(axis, Direction.AxisDirection.NEGATIVE),
                         facing == Direction.UP ? shapeBottom : shapeTop
                 );
-            }
-            else
-            {
+            } else {
                 shapes[dirAxis.ordinal()] = ShapeUtils.rotateShapeAroundY(
                         Direction.SOUTH,
                         facing,
@@ -80,8 +72,7 @@ public final class PrismShapes implements ShapeGenerator
             }
         }
 
-        for (BlockState state : states)
-        {
+        for (BlockState state : states) {
             DirectionAxis dirAxis = state.getValue(PropertyHolder.FACING_AXIS);
             map.put(state, shapes[dirAxis.ordinal()]);
         }

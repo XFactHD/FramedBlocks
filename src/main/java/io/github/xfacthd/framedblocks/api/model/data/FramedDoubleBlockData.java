@@ -10,16 +10,14 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jspecify.annotations.Nullable;
 
-public final class FramedDoubleBlockData extends AbstractFramedBlockData
-{
+public final class FramedDoubleBlockData extends AbstractFramedBlockData {
     private final BlockState partStateOne;
     private final BlockState partStateTwo;
     private final FramedBlockData dataOne;
     private final FramedBlockData dataTwo;
     private final int postCamoTintIndexOffset;
 
-    public FramedDoubleBlockData(DoubleBlockParts parts, FramedBlockData dataOne, FramedBlockData dataTwo)
-    {
+    public FramedDoubleBlockData(DoubleBlockParts parts, FramedBlockData dataOne, FramedBlockData dataTwo) {
         this.partStateOne = parts.stateOne();
         this.partStateTwo = parts.stateTwo();
         this.dataOne = dataOne;
@@ -28,32 +26,31 @@ public final class FramedDoubleBlockData extends AbstractFramedBlockData
     }
 
     @Override
-    public FramedBlockData unwrap(BlockState partState)
-    {
-        if (partState == partStateOne) return dataOne;
-        if (partState == partStateTwo) return dataTwo;
-        if (!Utils.PRODUCTION)
-        {
+    public FramedBlockData unwrap(BlockState partState) {
+        if (partState == partStateOne) {
+            return dataOne;
+        }
+        if (partState == partStateTwo) {
+            return dataTwo;
+        }
+        if (!Utils.PRODUCTION) {
             throw new IllegalArgumentException("Received invalid part state " + partState + ", expected " + partStateOne + " or " + partStateTwo);
         }
         return FramedBlockData.EMPTY;
     }
 
     @Override
-    public FramedBlockData unwrap(boolean secondary)
-    {
+    public FramedBlockData unwrap(boolean secondary) {
         return secondary ? dataTwo : dataOne;
     }
 
     @Override
-    public boolean isCamoEmissive()
-    {
+    public boolean isCamoEmissive() {
         return dataOne.isCamoEmissive() || dataTwo.isCamoEmissive();
     }
 
     @Override
-    public float getCamoShadeBrightness(BlockGetter level, BlockPos pos, float frameShade)
-    {
+    public float getCamoShadeBrightness(BlockGetter level, BlockPos pos, float frameShade) {
         return Math.max(
                 dataOne.getCamoShadeBrightness(level, pos, frameShade),
                 dataTwo.getCamoShadeBrightness(level, pos, frameShade)
@@ -61,27 +58,22 @@ public final class FramedDoubleBlockData extends AbstractFramedBlockData
     }
 
     @Override
-    public TriState isViewBlocking()
-    {
+    public TriState isViewBlocking() {
         return dataOne.isViewBlocking();
     }
 
     @Override
-    @Nullable
-    public Holder<BlockOverlay> getBlockOverlay()
-    {
+    public @Nullable Holder<BlockOverlay> getBlockOverlay() {
         return dataOne.getBlockOverlay();
     }
 
     @Override
-    public int getCamoTintIndexOffset(boolean secondPart)
-    {
+    public int getCamoTintIndexOffset(boolean secondPart) {
         return secondPart ? dataOne.getPostCamoTintIndexOffset() : 0;
     }
 
     @Override
-    public int getPostCamoTintIndexOffset()
-    {
+    public int getPostCamoTintIndexOffset() {
         return postCamoTintIndexOffset;
     }
 }

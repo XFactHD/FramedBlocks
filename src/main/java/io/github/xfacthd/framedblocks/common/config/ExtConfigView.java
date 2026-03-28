@@ -7,10 +7,8 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.regex.Pattern;
 
-public final class ExtConfigView
-{
-    public interface Server extends ConfigView.Server
-    {
+public final class ExtConfigView {
+    public interface Server extends ConfigView.Server {
         int getPoweredSawEnergyCapacity();
 
         int getPoweredSawMaxInput();
@@ -20,8 +18,7 @@ public final class ExtConfigView
         int getPoweredSawCraftingDuration();
     }
 
-    public interface Client extends ConfigView.Client
-    {
+    public interface Client extends ConfigView.Client {
         int getGhostRenderOpacity();
 
         /**
@@ -64,8 +61,7 @@ public final class ExtConfigView
         OverlayDisplayMode getCopycatStyleMode();
     }
 
-    public interface DevTools extends ConfigView.DevTools
-    {
+    public interface DevTools extends ConfigView.DevTools {
         boolean isDoubleBlockPartHitDebugRendererEnabled();
 
         boolean isConnectionDebugRendererEnabled();
@@ -74,8 +70,7 @@ public final class ExtConfigView
 
         boolean isStateMergerDebugLoggingEnabled();
 
-        @Nullable
-        Pattern getStateMergerDebugFilter();
+        @Nullable Pattern getStateMergerDebugFilter();
 
         boolean isOcclusionShapeDebugRenderingEnabled();
 

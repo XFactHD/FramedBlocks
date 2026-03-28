@@ -8,36 +8,30 @@ import net.neoforged.neoforge.transfer.resource.ResourceStack;
 import net.neoforged.neoforge.transfer.transaction.TransactionContext;
 import org.jspecify.annotations.Nullable;
 
-final class FluidCamoCraftingItemAccess implements ItemAccess
-{
+final class FluidCamoCraftingItemAccess implements ItemAccess {
     private final ItemAccess stackAccess;
     private final Item item;
     @Nullable
     private ResourceStack<ItemResource> capturedRemainder = null;
 
-    public FluidCamoCraftingItemAccess(ItemStack stack)
-    {
+    public FluidCamoCraftingItemAccess(ItemStack stack) {
         this.stackAccess = ItemAccess.forStack(stack);
         this.item = stack.getItem();
     }
 
     @Override
-    public ItemResource getResource()
-    {
+    public ItemResource getResource() {
         return stackAccess.getResource();
     }
 
     @Override
-    public int getAmount()
-    {
+    public int getAmount() {
         return stackAccess.getAmount();
     }
 
     @Override
-    public int insert(ItemResource resource, int amount, TransactionContext transaction)
-    {
-        if (resource.is(item))
-        {
+    public int insert(ItemResource resource, int amount, TransactionContext transaction) {
+        if (resource.is(item)) {
             return stackAccess.insert(resource, amount, transaction);
         }
 
@@ -47,15 +41,12 @@ final class FluidCamoCraftingItemAccess implements ItemAccess
     }
 
     @Override
-    public int extract(ItemResource resource, int amount, TransactionContext transaction)
-    {
+    public int extract(ItemResource resource, int amount, TransactionContext transaction) {
         return stackAccess.extract(resource, amount, transaction);
     }
 
-    public ItemStack computeRemainder()
-    {
-        if (capturedRemainder != null)
-        {
+    public ItemStack computeRemainder() {
+        if (capturedRemainder != null) {
             return capturedRemainder.resource().toStack(capturedRemainder.amount());
         }
         return stackAccess.getResource().toStack();

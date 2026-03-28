@@ -9,8 +9,7 @@ import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 
-public record FrameConfig(boolean glowing, boolean intangible, boolean reinforced, boolean emissive)
-{
+public record FrameConfig(boolean glowing, boolean intangible, boolean reinforced, boolean emissive) {
     public static final Codec<FrameConfig> CODEC = RecordCodecBuilder.create(inst -> inst.group(
             Codec.BOOL.fieldOf("glowing").forGetter(FrameConfig::glowing),
             Codec.BOOL.fieldOf("intangible").forGetter(FrameConfig::intangible),
@@ -30,17 +29,14 @@ public record FrameConfig(boolean glowing, boolean intangible, boolean reinforce
     );
     public static final FrameConfig DEFAULT = new FrameConfig(false, false, false, false);
 
-    public static void collect(DataComponentMap.Builder builder, IFramedBlockEntity be)
-    {
+    public static void collect(DataComponentMap.Builder builder, IFramedBlockEntity be) {
         FrameConfig cfg = new FrameConfig(be.isGlowing(), be.isMarkedIntangible(), be.isReinforced(), be.isEmissive());
-        if (!cfg.equals(FrameConfig.DEFAULT))
-        {
+        if (!cfg.equals(FrameConfig.DEFAULT)) {
             builder.set(Utils.DC_TYPE_FRAME_CONFIG, cfg);
         }
     }
 
-    public void apply(IFramedBlockEntity be)
-    {
+    public void apply(IFramedBlockEntity be) {
         be.setGlowing(glowing);
         be.setIntangible(intangible);
         be.setReinforced(reinforced);

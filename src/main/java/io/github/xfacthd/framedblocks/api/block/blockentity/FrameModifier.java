@@ -20,8 +20,7 @@ import java.util.Locale;
 import java.util.function.IntFunction;
 import java.util.function.Supplier;
 
-public enum FrameModifier implements StringRepresentable
-{
+public enum FrameModifier implements StringRepresentable {
     GLOWING(
             IFramedBlockEntity::isGlowing,
             IFramedBlockEntity::setGlowing,
@@ -64,8 +63,7 @@ public enum FrameModifier implements StringRepresentable
     private final Supplier<ItemResource> defaultResourceProvider;
     private final BlueprintReader blueprintReader;
 
-    FrameModifier(FlagGetter flagGetter, FlagSetter flagSetter, ItemPredicate itemPredicate, Supplier<ItemResource> defaultResourceProvider, BlueprintReader blueprintReader)
-    {
+    FrameModifier(FlagGetter flagGetter, FlagSetter flagSetter, ItemPredicate itemPredicate, Supplier<ItemResource> defaultResourceProvider, BlueprintReader blueprintReader) {
         this.flagGetter = flagGetter;
         this.flagSetter = flagSetter;
         this.itemPredicate = itemPredicate;
@@ -73,86 +71,66 @@ public enum FrameModifier implements StringRepresentable
         this.blueprintReader = blueprintReader;
     }
 
-    public boolean isActive(IFramedBlockEntity be)
-    {
+    public boolean isActive(IFramedBlockEntity be) {
         return flagGetter.getFlag(be);
     }
 
-    public void setActive(IFramedBlockEntity be, boolean active)
-    {
+    public void setActive(IFramedBlockEntity be, boolean active) {
         flagSetter.setFlag(be, active);
     }
 
-    public boolean matches(ItemResource resource)
-    {
+    public boolean matches(ItemResource resource) {
         return itemPredicate.test(resource);
     }
 
-    public boolean matches(ItemStack stack)
-    {
+    public boolean matches(ItemStack stack) {
         return itemPredicate.test(stack);
     }
 
-    public ItemResource getDefaultResource()
-    {
+    public ItemResource getDefaultResource() {
         return defaultResourceProvider.get();
     }
 
-    public ItemStack getDefaultStack()
-    {
+    public ItemStack getDefaultStack() {
         return defaultResourceProvider.get().toStack();
     }
 
-    public ItemStack getDefaultStack(int count)
-    {
+    public ItemStack getDefaultStack(int count) {
         return defaultResourceProvider.get().toStack(count);
     }
 
-    public void collectForBlueprint(BlueprintCopyBehaviour behaviour, BlueprintData data, List<ItemStack> output)
-    {
+    public void collectForBlueprint(BlueprintCopyBehaviour behaviour, BlueprintData data, List<ItemStack> output) {
         int count = blueprintReader.getCount(behaviour, data);
-        if (count > 0)
-        {
+        if (count > 0) {
             output.add(getDefaultStack(count));
         }
     }
 
     @Override
-    public String getSerializedName()
-    {
+    public String getSerializedName() {
         return name;
     }
 
-    public static boolean matchesAny(ItemResource resource)
-    {
+    public static boolean matchesAny(ItemResource resource) {
         return findMatching(resource) != null;
     }
 
-    public static boolean matchesAny(ItemStack stack)
-    {
+    public static boolean matchesAny(ItemStack stack) {
         return findMatching(stack) != null;
     }
 
-    @Nullable
-    public static FrameModifier findMatching(ItemResource resource)
-    {
-        for (FrameModifier modifier : MODIFIERS)
-        {
-            if (modifier.itemPredicate.test(resource))
-            {
+    public static @Nullable FrameModifier findMatching(ItemResource resource) {
+        for (FrameModifier modifier : MODIFIERS) {
+            if (modifier.itemPredicate.test(resource)) {
                 return modifier;
             }
         }
         return null;
     }
 
-    @Nullable
-    public static FrameModifier findMatching(ItemStack stack)
-    {
-        for (FrameModifier modifier : MODIFIERS)
-        {
-            if (modifier.itemPredicate.test(stack))
-            {
+    public static @Nullable FrameModifier findMatching(ItemStack stack) {
+        for (FrameModifier modifier : MODIFIERS) {
+            if (modifier.itemPredicate.test(stack)) {
                 return modifier;
             }
         }
@@ -160,20 +138,17 @@ public enum FrameModifier implements StringRepresentable
     }
 
     @FunctionalInterface
-    private interface FlagGetter
-    {
+    private interface FlagGetter {
         boolean getFlag(IFramedBlockEntity be);
     }
 
     @FunctionalInterface
-    private interface FlagSetter
-    {
+    private interface FlagSetter {
         void setFlag(IFramedBlockEntity be, boolean flag);
     }
 
     @FunctionalInterface
-    private interface BlueprintReader
-    {
+    private interface BlueprintReader {
         int getCount(BlueprintCopyBehaviour behaviour, BlueprintData data);
     }
 }

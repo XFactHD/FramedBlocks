@@ -40,8 +40,7 @@ import java.util.Locale;
 import java.util.Objects;
 
 @SuppressWarnings("SameParameterValue")
-public enum BlockType implements IBlockType
-{
+public enum BlockType implements IBlockType {
     FRAMED_CUBE                                     ( true, false, false,  true,  true, false,  true, ConTexMode.FULL_FACE, Outline.SIMPLE, Shapes.block()),
     FRAMED_SLOPE                                    ( true, false,  true,  true,  true, false,  true, ConTexMode.FULL_FACE, Outline.MODEL, SlopeShapes.INSTANCE),
     FRAMED_DOUBLE_SLOPE                             ( true,  true, false,  true,  true,  true,  true, ConTexMode.FULL_FACE, Outline.SIMPLE, Shapes.block()),
@@ -303,19 +302,16 @@ public enum BlockType implements IBlockType
     private final ConTexMode minCTMode;
     private final ShapeGenerator shapeGen;
 
-    BlockType(boolean canOcclude, boolean specialTile, boolean waterloggable, boolean blockItem, boolean allowIntangible, boolean doubleBlock, boolean supportsOverlays, @Nullable ConTexMode minCTMode, Outline outline)
-    {
+    BlockType(boolean canOcclude, boolean specialTile, boolean waterloggable, boolean blockItem, boolean allowIntangible, boolean doubleBlock, boolean supportsOverlays, @Nullable ConTexMode minCTMode, Outline outline) {
         this(canOcclude, specialTile, waterloggable, blockItem, allowIntangible, doubleBlock, supportsOverlays, minCTMode, outline, ShapeGenerator.EMPTY);
     }
 
-    BlockType(boolean canOcclude, boolean specialTile, boolean waterloggable, boolean blockItem, boolean allowIntangible, boolean doubleBlock, boolean supportsOverlays, @Nullable ConTexMode minCTMode, Outline outline, VoxelShape shape)
-    {
+    BlockType(boolean canOcclude, boolean specialTile, boolean waterloggable, boolean blockItem, boolean allowIntangible, boolean doubleBlock, boolean supportsOverlays, @Nullable ConTexMode minCTMode, Outline outline, VoxelShape shape) {
         this(canOcclude, specialTile, waterloggable, blockItem, allowIntangible, doubleBlock, supportsOverlays, minCTMode, outline, ShapeGenerator.singleShape(shape, null));
         Preconditions.checkArgument(!waterloggable || !Shapes.joinUnoptimized(shape, Shapes.block(), BooleanOp.NOT_SAME).isEmpty(), "Blocks with full cube shape can't be waterloggable");
     }
 
-    BlockType(boolean canOcclude, boolean specialTile, boolean waterloggable, boolean blockItem, boolean allowIntangible, boolean doubleBlock, boolean supportsOverlays, @Nullable ConTexMode minCTMode, Outline outline, ShapeGenerator shapeGen)
-    {
+    BlockType(boolean canOcclude, boolean specialTile, boolean waterloggable, boolean blockItem, boolean allowIntangible, boolean doubleBlock, boolean supportsOverlays, @Nullable ConTexMode minCTMode, Outline outline, ShapeGenerator shapeGen) {
         this.canOcclude = canOcclude;
         this.specialOutline = outline != Outline.SIMPLE;
         this.modelBasedOutline = outline == Outline.MODEL;
@@ -331,130 +327,108 @@ public enum BlockType implements IBlockType
     }
 
     @Override
-    public boolean canOccludeWithSolidCamo()
-    {
+    public boolean canOccludeWithSolidCamo() {
         return canOcclude;
     }
 
     @Override
-    public boolean hasSpecialOutline()
-    {
+    public boolean hasSpecialOutline() {
         return specialOutline;
     }
 
-    public boolean useModelBasedOutline()
-    {
+    public boolean useModelBasedOutline() {
         return modelBasedOutline;
     }
 
     @Override
-    public FullFacePredicate getFullFacePredicate()
-    {
+    public FullFacePredicate getFullFacePredicate() {
         return FullFacePredicates.PREDICATES.get(this);
     }
 
     @Override
-    public SideSkipPredicate getSideSkipPredicate()
-    {
+    public SideSkipPredicate getSideSkipPredicate() {
         return SideSkipPredicates.PREDICATES.get(this);
     }
 
     @Override
-    public ConnectionPredicate getConnectionPredicate()
-    {
+    public ConnectionPredicate getConnectionPredicate() {
         return ConnectionPredicates.PREDICATES.get(this);
     }
 
     @Override
-    public BlockOverlayPredicate getBlockOverlayPredicate()
-    {
+    public BlockOverlayPredicate getBlockOverlayPredicate() {
         return BlockOverlayPredicates.PREDICATES.get(this);
     }
 
     @Override
-    public NullCullPredicate getNullCullPredicate()
-    {
+    public NullCullPredicate getNullCullPredicate() {
         return NullCullPredicates.PREDICATES.get(this);
     }
 
     @Override
-    public ShapeGenerator getShapeGenerator()
-    {
+    public ShapeGenerator getShapeGenerator() {
         return shapeGen;
     }
 
     @Override
-    public boolean hasSpecialTile()
-    {
+    public boolean hasSpecialTile() {
         return specialTile;
     }
 
     @Override
-    public boolean hasBlockItem()
-    {
+    public boolean hasBlockItem() {
         return blockItem;
     }
 
     @Override
-    public boolean supportsWaterLogging()
-    {
+    public boolean supportsWaterLogging() {
         return waterloggable;
     }
 
     @Override
-    public boolean supportsConnectedTextures()
-    {
+    public boolean supportsConnectedTextures() {
         return supportsCT;
     }
 
     @Override
-    public ConTexMode getMinimumConTexMode()
-    {
+    public ConTexMode getMinimumConTexMode() {
         return minCTMode;
     }
 
     @Override
-    public boolean allowMakingIntangible()
-    {
+    public boolean allowMakingIntangible() {
         return allowIntangible;
     }
 
     @Override
-    public boolean isDoubleBlock()
-    {
+    public boolean isDoubleBlock() {
         return doubleBlock;
     }
 
     @Override
-    public boolean consumesTwoCamosInCamoApplicationRecipe()
-    {
+    public boolean consumesTwoCamosInCamoApplicationRecipe() {
         return doubleBlock || this == FRAMED_DOOR || this == FRAMED_IRON_DOOR;
     }
 
     @Override
-    public boolean supportsBlockOverlays()
-    {
+    public boolean supportsBlockOverlays() {
         return supportsOverlays;
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return name;
     }
 
     @Override
-    public int compareTo(IBlockType other)
-    {
-        if (!(other instanceof BlockType type))
-        {
+    public int compareTo(IBlockType other) {
+        if (!(other instanceof BlockType type)) {
             return 1;
         }
         return compareTo(type);
     }
 
-    private enum Outline
-    {
+    private enum Outline {
         SIMPLE,
         MODEL,
         CUSTOM,

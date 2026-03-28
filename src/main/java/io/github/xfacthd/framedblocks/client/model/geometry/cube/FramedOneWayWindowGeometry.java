@@ -21,16 +21,14 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.function.Supplier;
 
-public class FramedOneWayWindowGeometry extends Geometry
-{
+public class FramedOneWayWindowGeometry extends Geometry {
     private static final BlockState GLASS_STATE = Blocks.TINTED_GLASS.defaultBlockState();
 
     private final Supplier<BlockStateModel> tintedGlassModel;
     private final NullableDirection face;
     private final QuadListModifier faceFilter;
 
-    public FramedOneWayWindowGeometry(GeometryFactory.Context ctx)
-    {
+    public FramedOneWayWindowGeometry(GeometryFactory.Context ctx) {
         this.face = ctx.state().getValue(PropertyHolder.NULLABLE_FACE);
         this.tintedGlassModel = ModelUtils.getModelDeferred(GLASS_STATE);
         this.faceFilter = QuadListModifier.filteringCullFace(side -> side != face.toNullableDirection());
@@ -40,12 +38,9 @@ public class FramedOneWayWindowGeometry extends Geometry
     public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData) { }
 
     @Override
-    public void collectAdditionalPartsCached(PartConsumer consumer, BlockAndTintGetter level, BlockPos pos, RandomSource random, FramedBlockData blockData, @Nullable Object cacheKeyUserData)
-    {
-        if (face != NullableDirection.NONE)
-        {
-            if (cacheKeyUserData == null)
-            {
+    public void collectAdditionalPartsCached(PartConsumer consumer, BlockAndTintGetter level, BlockPos pos, RandomSource random, FramedBlockData blockData, @Nullable Object cacheKeyUserData) {
+        if (face != NullableDirection.NONE) {
+            if (cacheKeyUserData == null) {
                 level = BlockAndTintGetter.EMPTY;
                 pos = BlockPos.ZERO;
             }
@@ -54,16 +49,12 @@ public class FramedOneWayWindowGeometry extends Geometry
     }
 
     @Override
-    @Nullable
-    public Object computeCacheKeyUserData(BlockAndTintGetter level, BlockPos pos, RandomSource random, ModelData data)
-    {
-        if (face != NullableDirection.NONE)
-        {
+    public @Nullable Object computeCacheKeyUserData(BlockAndTintGetter level, BlockPos pos, RandomSource random, ModelData data) {
+        if (face != NullableDirection.NONE) {
             BlockStateModel model = tintedGlassModel.get();
             Object geometryKey = model.createGeometryKey(level, pos, GLASS_STATE, random);
             // Only include the geometry key if it's not the SingleVariant's default value (i.e. the model itself)
-            if (geometryKey != model)
-            {
+            if (geometryKey != model) {
                 return geometryKey;
             }
         }
@@ -71,14 +62,12 @@ public class FramedOneWayWindowGeometry extends Geometry
     }
 
     @Override
-    public boolean useBaseModel()
-    {
+    public boolean useBaseModel() {
         return true;
     }
 
     @Override
-    public int getMaterialFlags(BlockAndTintGetter level, BlockPos pos, ModelData modelData, FramedBlockData blockData)
-    {
+    public int getMaterialFlags(BlockAndTintGetter level, BlockPos pos, ModelData modelData, FramedBlockData blockData) {
         return face != NullableDirection.NONE ? tintedGlassModel.get().materialFlags(level, pos, GLASS_STATE) : 0;
     }
 }

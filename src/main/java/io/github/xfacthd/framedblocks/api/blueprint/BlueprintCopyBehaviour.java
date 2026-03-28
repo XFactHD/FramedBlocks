@@ -26,8 +26,7 @@ import java.util.Set;
  * Must be registered in {@link RegisterBlueprintCopyBehavioursEvent}
  * </p>
  */
-public interface BlueprintCopyBehaviour
-{
+public interface BlueprintCopyBehaviour {
     /**
      * Allows semi-custom storage of blueprint data, i.e. storing camo data from a second block like the Framed Door does
      *
@@ -37,8 +36,7 @@ public interface BlueprintCopyBehaviour
      * @param be The {@link IFramedBlockEntity} of the Block to store
      * @return the {@link BlueprintData} to be stored on the blueprint stack
      */
-    default BlueprintData writeToBlueprint(Level level, BlockPos pos, BlockState state, IFramedBlockEntity be)
-    {
+    default BlueprintData writeToBlueprint(Level level, BlockPos pos, BlockState state, IFramedBlockEntity be) {
         return be.writeToBlueprint();
     }
 
@@ -47,8 +45,7 @@ public interface BlueprintCopyBehaviour
      * used to place the block. Used by Framed Double Slabs and Framed Double Panels to consume two of the single
      * blocks instead of one double block
      */
-    default ItemStack getBlockItem(BlueprintData data)
-    {
+    default ItemStack getBlockItem(BlueprintData data) {
         return new ItemStack(data.block());
     }
 
@@ -58,15 +55,12 @@ public interface BlueprintCopyBehaviour
      * @param state The {@link BlockState} of the block being copied
      * @return the set of blockstate properties to copy
      */
-    default Set<Property<?>> getPropertiesToCopy(BlockState state)
-    {
+    default Set<Property<?>> getPropertiesToCopy(BlockState state) {
         Set<Property<?>> properties = Set.of();
-        if (state.hasProperty(FramedProperties.ALT_SLOPE))
-        {
+        if (state.hasProperty(FramedProperties.ALT_SLOPE)) {
             properties = Set.of(FramedProperties.ALT_SLOPE);
         }
-        if (state.getBlock() instanceof ShapeLockableBlock lockable && lockable.isLocked(state))
-        {
+        if (state.getBlock() instanceof ShapeLockableBlock lockable && lockable.isLocked(state)) {
             properties = new HashSet<>(properties);
             properties.addAll(lockable.getPropertiesToCopy());
             properties.add(FramedProperties.STATE_LOCKED);
@@ -82,8 +76,7 @@ public interface BlueprintCopyBehaviour
      * @param data The {@link BlueprintData} stored on the held blueprint stack
      * @return The List of CamoContainers to consume when the {@link Block} is placed
      */
-    default CamoList getCamos(BlueprintData data)
-    {
+    default CamoList getCamos(BlueprintData data) {
         return data.camos();
     }
 
@@ -94,8 +87,7 @@ public interface BlueprintCopyBehaviour
      * @param data The {@link BlueprintData} stored on the held blueprint stack
      * @return The amount of items to consume
      */
-    default int getGlowstoneCount(BlueprintData data)
-    {
+    default int getGlowstoneCount(BlueprintData data) {
         return data.glowing() ? 1 : 0;
     }
 
@@ -106,8 +98,7 @@ public interface BlueprintCopyBehaviour
      * @param data The {@link BlueprintData} stored on the held blueprint stack
      * @return The amount of items to consume
      */
-    default int getIntangibleCount(BlueprintData data)
-    {
+    default int getIntangibleCount(BlueprintData data) {
         return data.intangible() ? 1 : 0;
     }
 
@@ -118,8 +109,7 @@ public interface BlueprintCopyBehaviour
      * @param data The {@link BlueprintData} stored on the held blueprint stack
      * @return The amount of items to consume
      */
-    default int getReinforcementCount(BlueprintData data)
-    {
+    default int getReinforcementCount(BlueprintData data) {
         return data.reinforced() ? 1 : 0;
     }
 
@@ -130,8 +120,7 @@ public interface BlueprintCopyBehaviour
      * @param data The {@link BlueprintData} stored on the held blueprint stack
      * @return The amount of items to consume
      */
-    default int getEmissiveCount(BlueprintData data)
-    {
+    default int getEmissiveCount(BlueprintData data) {
         return data.emissive() ? 1 : 0;
     }
 
@@ -141,8 +130,7 @@ public interface BlueprintCopyBehaviour
      * @param data The {@link BlueprintData} stored on the held blueprint stack
      * @return The list of additional materials to consume
      */
-    default List<ItemStack> getAdditionalConsumedMaterials(BlueprintData data)
-    {
+    default List<ItemStack> getAdditionalConsumedMaterials(BlueprintData data) {
         return List.of();
     }
 

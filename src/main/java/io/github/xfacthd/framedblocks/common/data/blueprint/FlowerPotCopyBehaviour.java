@@ -8,22 +8,18 @@ import net.minecraft.world.item.ItemStack;
 
 import java.util.List;
 
-public final class FlowerPotCopyBehaviour implements BlueprintCopyBehaviour
-{
+public final class FlowerPotCopyBehaviour implements BlueprintCopyBehaviour {
     @Override
-    public List<ItemStack> getAdditionalConsumedMaterials(BlueprintData data)
-    {
+    public List<ItemStack> getAdditionalConsumedMaterials(BlueprintData data) {
         PottedFlower flower = data.getCustomDataOrDefault(FBContent.DC_TYPE_POTTED_FLOWER, PottedFlower.EMPTY);
-        if (!flower.isEmpty())
-        {
+        if (!flower.isEmpty()) {
             return List.of(new ItemStack(flower.flower()));
         }
         return List.of();
     }
 
     @Override
-    public void attachDataToDummyRenderStack(ItemStack stack, BlueprintData data)
-    {
+    public void attachDataToDummyRenderStack(ItemStack stack, BlueprintData data) {
         PottedFlower flower = data.getCustomDataOrDefault(FBContent.DC_TYPE_POTTED_FLOWER, PottedFlower.EMPTY);
         stack.set(FBContent.DC_TYPE_POTTED_FLOWER, flower);
     }

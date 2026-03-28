@@ -17,28 +17,23 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.function.Supplier;
 
-public final class FenceBlockItemModelProvider implements BlockItemModelProvider
-{
+public final class FenceBlockItemModelProvider implements BlockItemModelProvider {
     public static final FenceBlockItemModelProvider INSTANCE = new FenceBlockItemModelProvider();
 
     private FenceBlockItemModelProvider() { }
 
     @Override
-    public Supplier<BlockStateModel> create(BlockState state, ModelBaker baker)
-    {
+    public Supplier<BlockStateModel> create(BlockState state, ModelBaker baker) {
         return BlockItemModelProvider.forGeometry(state, state, FenceItemGeometry::new, baker);
     }
 
-    private static final class FenceItemGeometry extends Geometry
-    {
+    private static final class FenceItemGeometry extends Geometry {
         private FenceItemGeometry(GeometryFactory.Context ctx) { }
 
         @Override
-        public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
-        {
+        public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData) {
             Direction quadDir = quad.direction();
-            if (DirUtils.isY(quadDir))
-            {
+            if (DirUtils.isY(quadDir)) {
                 QuadModifier.of(quad)
                         .apply(Modifiers.cutTopBottom(6F/16F, 0F, 10F/16F, 4F/16F))
                         .export(quadMap, quadDir);
@@ -79,9 +74,7 @@ public final class FenceBlockItemModelProvider implements BlockItemModelProvider
                         .apply(Modifiers.setPosition(posTwo))
                         .apply(Modifiers.offset(Direction.NORTH, 1F))
                         .export(quadMap, null);
-            }
-            else if (DirUtils.isX(quadDir))
-            {
+            } else if (DirUtils.isX(quadDir)) {
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(Direction.SOUTH, 4F/16F))
                         .apply(Modifiers.setPosition(10F/16F))
@@ -132,9 +125,7 @@ public final class FenceBlockItemModelProvider implements BlockItemModelProvider
                         .apply(Modifiers.setPosition(9F/16F))
                         .apply(Modifiers.offset(Direction.NORTH, 1F))
                         .export(quadMap, null);
-            }
-            else
-            {
+            } else {
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(quadDir.getClockWise().getAxis(), 10F/16F))
                         .export(quadMap, quadDir);
@@ -155,8 +146,7 @@ public final class FenceBlockItemModelProvider implements BlockItemModelProvider
         }
 
         @Override
-        public boolean useSolidNoCamoModel()
-        {
+        public boolean useSolidNoCamoModel() {
             return true;
         }
     }

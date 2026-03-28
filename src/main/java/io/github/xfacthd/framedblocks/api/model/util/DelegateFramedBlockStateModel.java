@@ -11,16 +11,13 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.List;
 
-final class DelegateFramedBlockStateModel extends AbstractFramedBlockStateModel
-{
-    DelegateFramedBlockStateModel(BlockStateModel baseModel, BlockState state)
-    {
+final class DelegateFramedBlockStateModel extends AbstractFramedBlockStateModel {
+    DelegateFramedBlockStateModel(BlockStateModel baseModel, BlockState state) {
         super(baseModel, state, ItemModelInfo.DEFAULT);
     }
 
     @Override
-    public int collectParts(BlockAndTintGetter level, BlockPos pos, BlockState state, RandomSource random, List<BlockStateModelPart> parts, int miscTintOffset)
-    {
+    public int collectParts(BlockAndTintGetter level, BlockPos pos, BlockState state, RandomSource random, List<BlockStateModelPart> parts, int miscTintOffset) {
         delegate.collectParts(level, pos, state, random, parts);
         return miscTintOffset;
     }

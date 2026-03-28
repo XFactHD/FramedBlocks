@@ -3,8 +3,7 @@ package io.github.xfacthd.framedblocks.common.menu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeInput;
 
-public interface IFramingSawMenu
-{
+public interface IFramingSawMenu {
     ItemStack getInputStack();
 
     RecipeInput getRecipeInput();

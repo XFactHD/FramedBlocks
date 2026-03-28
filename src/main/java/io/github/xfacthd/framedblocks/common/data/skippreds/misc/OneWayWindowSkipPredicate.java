@@ -11,14 +11,11 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.state.BlockState;
 
 @CullTest(BlockType.FRAMED_ONE_WAY_WINDOW)
-public final class OneWayWindowSkipPredicate implements SideSkipPredicate
-{
+public final class OneWayWindowSkipPredicate implements SideSkipPredicate {
     @Override
     @CullTest.TestTarget(BlockType.FRAMED_ONE_WAY_WINDOW)
-    public boolean test(BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side)
-    {
-        if (adjState.getBlock() == state.getBlock())
-        {
+    public boolean test(BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side) {
+        if (adjState.getBlock() == state.getBlock()) {
             NullableDirection face = state.getValue(PropertyHolder.NULLABLE_FACE);
             NullableDirection adjFace = adjState.getValue(PropertyHolder.NULLABLE_FACE);
             return face == adjFace;

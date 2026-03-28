@@ -15,8 +15,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jspecify.annotations.Nullable;
 
-public final class ReinforcementModel
-{
+public final class ReinforcementModel {
     public static final BlockState SHADER_STATE = Blocks.OBSIDIAN.defaultBlockState();
     public static final Identifier MODEL_ID = Utils.id("block/framed_reinforcement");
     private static final ModelBaker.SharedOperationKey<ReinforcementModel> REINFORCEMENT_KEY = ModelUtils.makeSharedOpsKey(
@@ -27,29 +26,23 @@ public final class ReinforcementModel
     private final Material.Baked particleMaterial;
     private final @Nullable BlockStateModelPart[] cachedFilteredParts = new BlockStateModelPart[256];
 
-    public static ReinforcementModel getOrCreate(ModelBaker baker)
-    {
+    public static ReinforcementModel getOrCreate(ModelBaker baker) {
         return baker.compute(REINFORCEMENT_KEY);
     }
 
-    private ReinforcementModel(BlockStateModelPart baseModel)
-    {
+    private ReinforcementModel(BlockStateModelPart baseModel) {
         this.baseModel = baseModel;
         this.particleMaterial = baseModel.particleMaterial();
     }
 
-    public BlockStateModelPart getFiltered(int faceMask, TriState ambientOcclusion)
-    {
+    public BlockStateModelPart getFiltered(int faceMask, TriState ambientOcclusion) {
         faceMask |= ambientOcclusion.ordinal() << 6;
 
         BlockStateModelPart part = cachedFilteredParts[faceMask];
-        if (part == null)
-        {
+        if (part == null) {
             QuadMapBuilderInternal quadMap = QuadMapBuilderInternal.create();
-            for (Direction side : DIRECTIONS)
-            {
-                if ((faceMask & (1 << side.ordinal())) != 0)
-                {
+            for (Direction side : DIRECTIONS) {
+                if ((faceMask & (1 << side.ordinal())) != 0) {
                     quadMap.getOrCreate(side).add(baseModel.getQuads(side).getFirst());
                 }
             }

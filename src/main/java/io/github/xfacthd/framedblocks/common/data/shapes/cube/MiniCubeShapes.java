@@ -10,16 +10,13 @@ import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 
-public final class MiniCubeShapes
-{
-    public static ShapeContainer generate(List<BlockState> states)
-    {
+public final class MiniCubeShapes {
+    public static ShapeContainer generate(List<BlockState> states) {
         VoxelShape bottomShape = Block.box(4, 0, 4, 12, 8, 12);
         VoxelShape topShape = Block.box(4, 8, 4, 12, 16, 12);
 
         Map<BlockState, VoxelShape> map = new IdentityHashMap<>(states.size());
-        for (BlockState state : states)
-        {
+        for (BlockState state : states) {
             boolean top = state.getValue(FramedProperties.TOP);
             map.put(state, top ? topShape : bottomShape);
         }

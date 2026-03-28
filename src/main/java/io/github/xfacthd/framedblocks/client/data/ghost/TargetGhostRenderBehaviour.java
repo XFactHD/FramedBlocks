@@ -10,11 +10,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.model.data.ModelData;
 import org.jspecify.annotations.Nullable;
 
-public final class TargetGhostRenderBehaviour implements GhostRenderBehaviour
-{
+public final class TargetGhostRenderBehaviour implements GhostRenderBehaviour {
     @Override
-    public ModelData appendModelData(ItemStack stack, @Nullable ItemStack proxiedStack, BlockPlaceContext ctx, BlockState renderState, int renderPass, ModelData data)
-    {
+    public ModelData appendModelData(ItemStack stack, @Nullable ItemStack proxiedStack, BlockPlaceContext ctx, BlockState renderState, int renderPass, ModelData data) {
         DyeColor targetColor = stack.getOrDefault(FBContent.DC_TYPE_TARGET_COLOR, FramedTargetBlockEntity.DEFAULT_COLOR);
         return data.derive().with(FramedTargetBlockEntity.COLOR_PROPERTY, targetColor).build();
     }

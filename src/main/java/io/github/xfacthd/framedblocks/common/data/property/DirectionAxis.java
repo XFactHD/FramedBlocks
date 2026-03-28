@@ -8,8 +8,7 @@ import net.minecraft.world.level.block.Rotation;
 
 import java.util.Locale;
 
-public enum DirectionAxis implements StringRepresentable
-{
+public enum DirectionAxis implements StringRepresentable {
     DOWN_X  (Direction.DOWN, Direction.Axis.X),
     DOWN_Z  (Direction.DOWN, Direction.Axis.Z),
 
@@ -35,53 +34,41 @@ public enum DirectionAxis implements StringRepresentable
     private final Direction dir;
     private final Direction.Axis axis;
 
-    DirectionAxis(Direction dir, Direction.Axis axis)
-    {
+    DirectionAxis(Direction dir, Direction.Axis axis) {
         this.dir = dir;
         this.axis = axis;
     }
 
-    public Direction direction()
-    {
+    public Direction direction() {
         return dir;
     }
 
-    public Direction.Axis axis()
-    {
+    public Direction.Axis axis() {
         return axis;
     }
 
-    public DirectionAxis rotate(Rotation rot)
-    {
-        if (rot == Rotation.NONE)
-        {
+    public DirectionAxis rotate(Rotation rot) {
+        if (rot == Rotation.NONE) {
             return this;
         }
 
-        if (DirUtils.isY(dir))
-        {
-            if (rot == Rotation.CLOCKWISE_180)
-            {
+        if (DirUtils.isY(dir)) {
+            if (rot == Rotation.CLOCKWISE_180) {
                 return this;
             }
 
             return of(dir, DirUtils.getPerpendicularAxis(axis, dir.getAxis()));
         }
-        else
-        {
-            Direction.Axis newAxis = axis;
-            if (axis != Direction.Axis.Y && rot != Rotation.CLOCKWISE_180)
-            {
-                newAxis = DirUtils.getPerpendicularAxis(axis, Direction.Axis.Y);
-            }
-            return of(rot.rotate(dir), newAxis);
+
+        Direction.Axis newAxis = axis;
+        if (axis != Direction.Axis.Y && rot != Rotation.CLOCKWISE_180) {
+            newAxis = DirUtils.getPerpendicularAxis(axis, Direction.Axis.Y);
         }
+        return of(rot.rotate(dir), newAxis);
     }
 
-    public DirectionAxis mirror(Mirror mirror)
-    {
-        return switch (mirror)
-        {
+    public DirectionAxis mirror(Mirror mirror) {
+        return switch (mirror) {
             case NONE -> this;
             case FRONT_BACK -> DirUtils.isX(dir) ? of(dir.getOpposite(), axis) : this;
             case LEFT_RIGHT -> DirUtils.isZ(dir) ? of(dir.getOpposite(), axis) : this;
@@ -89,26 +76,21 @@ public enum DirectionAxis implements StringRepresentable
     }
 
     @Override
-    public String getSerializedName()
-    {
+    public String getSerializedName() {
         return name;
     }
 
-    public static DirectionAxis of(Direction dir, Direction.Axis axis)
-    {
+    public static DirectionAxis of(Direction dir, Direction.Axis axis) {
         DirectionAxis dirAxis = FROM_DIR_AXIS[dir.ordinal()][axis.ordinal()];
-        if (dirAxis == null)
-        {
+        if (dirAxis == null) {
             throw new IllegalArgumentException("Invalid dir/axis pair! Direction: " + dir + ", Axis: " + axis);
         }
         return dirAxis;
     }
 
-    private static DirectionAxis[][] makeDirTable()
-    {
+    private static DirectionAxis[][] makeDirTable() {
         DirectionAxis[][] table = new DirectionAxis[6][3];
-        for (DirectionAxis dirAxis : values())
-        {
+        for (DirectionAxis dirAxis : values()) {
             Direction dir = dirAxis.dir;
             Direction.Axis axis = dirAxis.axis;
             table[dir.ordinal()][axis.ordinal()] = dirAxis;

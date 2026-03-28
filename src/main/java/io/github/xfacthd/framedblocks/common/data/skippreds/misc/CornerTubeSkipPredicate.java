@@ -16,23 +16,18 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
  This class is machine-generated, any manual changes to this class will be overwritten.
  */
 @CullTest(BlockType.FRAMED_CORNER_TUBE)
-public final class CornerTubeSkipPredicate implements SideSkipPredicate
-{
+public final class CornerTubeSkipPredicate implements SideSkipPredicate {
     @Override
-    public boolean test(BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side)
-    {
+    public boolean test(BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side) {
         CornerTubeOrientation orientation = state.getValue(PropertyHolder.CORNER_TYPE_ORIENTATION);
-        if (MiscDirs.CornerTube.testEarlyExit(orientation, side))
-        {
+        if (MiscDirs.CornerTube.testEarlyExit(orientation, side)) {
             return false;
         }
 
-        if (adjState.getBlock() instanceof IFramedBlock block && block.getBlockType() instanceof BlockType blockType)
-        {
+        if (adjState.getBlock() instanceof IFramedBlock block && block.getBlockType() instanceof BlockType blockType) {
             boolean thick = state.getValue(PropertyHolder.THICK);
 
-            return switch (blockType)
-            {
+            return switch (blockType) {
                 case FRAMED_CORNER_TUBE -> testAgainstCornerTube(
                         orientation, thick, adjState, side
                 );
@@ -51,8 +46,7 @@ public final class CornerTubeSkipPredicate implements SideSkipPredicate
     @CullTest.TestTarget(BlockType.FRAMED_CORNER_TUBE)
     private static boolean testAgainstCornerTube(
             CornerTubeOrientation orientation, boolean thick, BlockState adjState, Direction side
-    )
-    {
+    ) {
         CornerTubeOrientation adjOrientation = adjState.getValue(PropertyHolder.CORNER_TYPE_ORIENTATION);
         boolean adjThick = adjState.getValue(PropertyHolder.THICK);
 
@@ -62,8 +56,7 @@ public final class CornerTubeSkipPredicate implements SideSkipPredicate
     @CullTest.TestTarget(BlockType.FRAMED_TUBE)
     private static boolean testAgainstTube(
             CornerTubeOrientation orientation, boolean thick, BlockState adjState, Direction side
-    )
-    {
+    ) {
         Direction.Axis adjAxis = adjState.getValue(BlockStateProperties.AXIS);
         boolean adjThick = adjState.getValue(PropertyHolder.THICK);
 
@@ -73,8 +66,7 @@ public final class CornerTubeSkipPredicate implements SideSkipPredicate
     @CullTest.TestTarget(BlockType.FRAMED_HOPPER)
     private static boolean testAgainstHopper(
             CornerTubeOrientation orientation, boolean thick, Direction side
-    )
-    {
+    ) {
         return MiscDirs.CornerTube.getOpeningDir(orientation, thick, side).isEqualTo(MiscDirs.Hopper.getOpeningDir(side.getOpposite()));
     }
 }

@@ -8,7 +8,7 @@ import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.api.util.RotationDirection;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
-import io.github.xfacthd.framedblocks.common.block.IPillarLikeBlock;
+import io.github.xfacthd.framedblocks.common.block.PillarLikeBlock;
 import io.github.xfacthd.framedblocks.common.block.slope.FramedConnectingPyramidBlock;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import io.github.xfacthd.framedblocks.common.data.property.PillarConnection;
@@ -32,13 +32,11 @@ import org.jspecify.annotations.Nullable;
 import java.util.Set;
 import java.util.function.BiPredicate;
 
-public class FramedLatticeBlock extends FramedBlock implements IPillarLikeBlock, ShapeLockableBlock
-{
+public class FramedLatticeBlock extends FramedBlock implements PillarLikeBlock, ShapeLockableBlock {
     private final BiPredicate<Direction, BlockState> connectionTest;
     private final PillarConnection pillarConnection;
 
-    public FramedLatticeBlock(BlockType type, Properties props)
-    {
+    public FramedLatticeBlock(BlockType type, Properties props) {
         super(type, props);
         registerDefaultState(defaultBlockState()
                 .setValue(FramedProperties.X_AXIS, false)
@@ -46,14 +44,12 @@ public class FramedLatticeBlock extends FramedBlock implements IPillarLikeBlock,
                 .setValue(FramedProperties.Z_AXIS, false)
                 .setValue(FramedProperties.STATE_LOCKED, false)
         );
-        this.connectionTest = switch (type)
-        {
+        this.connectionTest = switch (type) {
             case FRAMED_LATTICE_BLOCK -> FramedLatticeBlock::canConnectThin;
             case FRAMED_THICK_LATTICE -> FramedLatticeBlock::canConnectThick;
             default -> throw new IllegalArgumentException("Unexpected lattice type: " + type);
         };
-        this.pillarConnection = switch (type)
-        {
+        this.pillarConnection = switch (type) {
             case FRAMED_LATTICE_BLOCK -> PillarConnection.POST;
             case FRAMED_THICK_LATTICE -> PillarConnection.PILLAR;
             default -> throw new IllegalArgumentException("Unexpected BlockType in FramedLatticeBlock: " + type);
@@ -61,19 +57,15 @@ public class FramedLatticeBlock extends FramedBlock implements IPillarLikeBlock,
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
-    {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
         builder.add(FramedProperties.X_AXIS, FramedProperties.Y_AXIS, FramedProperties.Z_AXIS);
     }
 
     @Override
-    @Nullable
-    public BlockState getStateForPlacement(BlockPlaceContext ctx)
-    {
+    public @Nullable BlockState getStateForPlacement(BlockPlaceContext ctx) {
         return PlacementStateBuilder.of(this, ctx)
-                .withCustom((state, modCtx) ->
-                {
+                .withCustom((state, modCtx) -> {
                     Level level = modCtx.getLevel();
                     BlockPos pos = modCtx.getClickedPos();
 
@@ -106,10 +98,8 @@ public class FramedLatticeBlock extends FramedBlock implements IPillarLikeBlock,
             BlockPos adjPos,
             BlockState adjState,
             RandomSource random
-    )
-    {
-        if (!state.getValue(FramedProperties.STATE_LOCKED))
-        {
+    ) {
+        if (!state.getValue(FramedProperties.STATE_LOCKED)) {
             Direction opposite = side.getOpposite();
             state = state.setValue(
                     getPropFromAxis(side),
@@ -120,37 +110,30 @@ public class FramedLatticeBlock extends FramedBlock implements IPillarLikeBlock,
         return super.updateShape(state, level, tickAccess, pos, side, adjPos, adjState, random);
     }
 
-    private boolean canConnectTo(LevelReader level, BlockPos pos, Direction side)
-    {
+    private boolean canConnectTo(LevelReader level, BlockPos pos, Direction side) {
         BlockState state = level.getBlockState(pos.relative(side));
         return canConnectTo(state, side);
     }
 
-    private boolean canConnectTo(BlockState state, Direction side)
-    {
-        if (state.is(this) || connectionTest.test(side, state))
-        {
+    private boolean canConnectTo(BlockState state, Direction side) {
+        if (state.is(this) || connectionTest.test(side, state)) {
             return true;
         }
-        if (state.getBlock() instanceof FramedConnectingPyramidBlock)
-        {
+        if (state.getBlock() instanceof FramedConnectingPyramidBlock) {
             return state.getValue(BlockStateProperties.FACING) == side.getOpposite();
         }
         return false;
     }
 
     @Override
-    public BlockState rotate(BlockState state, RotationDirection direction, WrenchRotationMode mode)
-    {
+    public BlockState rotate(BlockState state, RotationDirection direction, WrenchRotationMode mode) {
         //Not rotatable by wrench
         return state;
     }
 
     @Override
-    protected BlockState rotate(BlockState state, Rotation rotation)
-    {
-        if (DirUtils.isNinetyDegree(rotation))
-        {
+    protected BlockState rotate(BlockState state, Rotation rotation) {
+        if (DirUtils.isNinetyDegree(rotation)) {
             boolean xAxis = state.getValue(FramedProperties.Z_AXIS);
             boolean zAxis = state.getValue(FramedProperties.X_AXIS);
 
@@ -162,8 +145,7 @@ public class FramedLatticeBlock extends FramedBlock implements IPillarLikeBlock,
     }
 
     @Override
-    public BlockState getItemModelSource()
-    {
+    public BlockState getItemModelSource() {
         return defaultBlockState()
                 .setValue(FramedProperties.X_AXIS, true)
                 .setValue(FramedProperties.Y_AXIS, true)
@@ -171,21 +153,17 @@ public class FramedLatticeBlock extends FramedBlock implements IPillarLikeBlock,
     }
 
     @Override
-    @Nullable
-    public Direction getHorizontalOrientation(BlockState state)
-    {
+    public @Nullable Direction getHorizontalOrientation(BlockState state) {
         return null;
     }
 
     @Override
-    public Set<Property<?>> getPropertiesToCopy()
-    {
+    public Set<Property<?>> getPropertiesToCopy() {
         return Set.of(FramedProperties.X_AXIS, FramedProperties.Y_AXIS, FramedProperties.Z_AXIS);
     }
 
     @Override
-    public BlockState getJadeRenderState(BlockState state)
-    {
+    public BlockState getJadeRenderState(BlockState state) {
         return defaultBlockState()
                 .setValue(FramedProperties.X_AXIS, true)
                 .setValue(FramedProperties.Y_AXIS, true)
@@ -193,47 +171,37 @@ public class FramedLatticeBlock extends FramedBlock implements IPillarLikeBlock,
     }
 
     @Override
-    public PillarConnection getPillarConnection(BlockState state, Direction side)
-    {
+    public PillarConnection getPillarConnection(BlockState state, Direction side) {
         return state.getValue(getPropFromAxis(side)) ? pillarConnection : PillarConnection.NONE;
     }
 
-    public static BooleanProperty getPropFromAxis(Direction dir)
-    {
-        return switch (dir.getAxis())
-        {
+    public static BooleanProperty getPropFromAxis(Direction dir) {
+        return switch (dir.getAxis()) {
             case X -> FramedProperties.X_AXIS;
             case Y -> FramedProperties.Y_AXIS;
             case Z -> FramedProperties.Z_AXIS;
         };
     }
 
-    private static boolean canConnectThin(Direction side, BlockState state)
-    {
-        if (state.is(FBContent.BLOCK_FRAMED_POST.value()))
-        {
+    private static boolean canConnectThin(Direction side, BlockState state) {
+        if (state.is(FBContent.BLOCK_FRAMED_POST.value())) {
             return side.getAxis() == state.getValue(BlockStateProperties.AXIS);
         }
         return DirUtils.isY(side) && state.is(BlockTags.FENCES);
     }
 
-    private static boolean canConnectThick(Direction side, BlockState state)
-    {
-        if (state.is(BlockTags.WALLS))
-        {
+    private static boolean canConnectThick(Direction side, BlockState state) {
+        if (state.is(BlockTags.WALLS)) {
             // Work around mods incorrectly tagging non-WallBlock blocks as walls
-            if (!state.hasProperty(BlockStateProperties.UP))
-            {
+            if (!state.hasProperty(BlockStateProperties.UP)) {
                 return false;
             }
             return side == Direction.DOWN || (side == Direction.UP && state.getValue(BlockStateProperties.UP));
         }
-        if (state.is(FBContent.BLOCK_FRAMED_PILLAR.value()))
-        {
+        if (state.is(FBContent.BLOCK_FRAMED_PILLAR.value())) {
             return side.getAxis() == state.getValue(BlockStateProperties.AXIS);
         }
-        if (state.is(FBContent.BLOCK_FRAMED_HALF_PILLAR.value()))
-        {
+        if (state.is(FBContent.BLOCK_FRAMED_HALF_PILLAR.value())) {
             return side == state.getValue(BlockStateProperties.FACING).getOpposite();
         }
         return false;

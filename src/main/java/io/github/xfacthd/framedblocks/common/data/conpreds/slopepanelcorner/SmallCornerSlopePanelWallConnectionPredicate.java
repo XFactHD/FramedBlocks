@@ -9,11 +9,9 @@ import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jspecify.annotations.Nullable;
 
-public final class SmallCornerSlopePanelWallConnectionPredicate implements ConnectionPredicate
-{
+public final class SmallCornerSlopePanelWallConnectionPredicate implements ConnectionPredicate {
     @Override
-    public boolean canConnectFullEdge(BlockState state, Direction side, @Nullable Direction edge)
-    {
+    public boolean canConnectFullEdge(BlockState state, Direction side, @Nullable Direction edge) {
         Direction dir = state.getValue(FramedProperties.FACING_HOR);
         HorizontalRotation rot = state.getValue(PropertyHolder.ROTATION);
         Direction rotDir = rot.withFacing(dir);
@@ -23,23 +21,19 @@ public final class SmallCornerSlopePanelWallConnectionPredicate implements Conne
     }
 
     @Override
-    public boolean canConnectDetailed(BlockState state, Direction side, Direction edge)
-    {
+    public boolean canConnectDetailed(BlockState state, Direction side, Direction edge) {
         Direction dir = state.getValue(FramedProperties.FACING_HOR);
         HorizontalRotation rot = state.getValue(PropertyHolder.ROTATION);
         Direction rotDir = rot.withFacing(dir);
         Direction perpRotDir = rot.rotate(Rotation.COUNTERCLOCKWISE_90).withFacing(dir);
 
-        if (side == dir)
-        {
+        if (side == dir) {
             return edge == rotDir || edge == perpRotDir;
         }
-        else if (side == rotDir || side == perpRotDir)
-        {
+        if (side == rotDir || side == perpRotDir) {
             return edge == dir;
         }
-        else if (side == dir.getOpposite() || side == rotDir.getOpposite() || side == perpRotDir.getOpposite())
-        {
+        if (side == dir.getOpposite() || side == rotDir.getOpposite() || side == perpRotDir.getOpposite()) {
             return edge == rotDir || edge == perpRotDir;
         }
         return false;

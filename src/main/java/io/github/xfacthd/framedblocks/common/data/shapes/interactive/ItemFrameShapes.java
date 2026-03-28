@@ -14,10 +14,8 @@ import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 
-public final class ItemFrameShapes
-{
-    private static final ShapeCache<ShapeKey> SHAPES = ShapeCache.create(map ->
-    {
+public final class ItemFrameShapes {
+    private static final ShapeCache<ShapeKey> SHAPES = ShapeCache.create(map -> {
         map.put(new ShapeKey(Direction.UP,   false), Block.box(2, 15, 2, 14, 16, 14));
         map.put(new ShapeKey(Direction.UP,   true),  Block.box(0, 15, 0, 16, 16, 16));
         map.put(new ShapeKey(Direction.DOWN, false), Block.box(2,  0, 2, 14,  1, 14));
@@ -28,12 +26,10 @@ public final class ItemFrameShapes
         ShapeUtils.makeHorizontalRotationsWithFlag(northShape, northMapShape, Direction.NORTH, map, ShapeKey::new);
     });
 
-    public static ShapeContainer generate(List<BlockState> states)
-    {
+    public static ShapeContainer generate(List<BlockState> states) {
         Map<BlockState, VoxelShape> map = new IdentityHashMap<>(states.size());
 
-        for (BlockState state : states)
-        {
+        for (BlockState state : states) {
             Direction dir = state.getValue(BlockStateProperties.FACING);
             boolean mapFrame = state.getValue(PropertyHolder.MAP_FRAME);
             map.put(state, SHAPES.get(new ShapeKey(dir, mapFrame)));

@@ -17,8 +17,7 @@ import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 
-public final class CornerSlopePanelShapes implements ShapeGenerator
-{
+public final class CornerSlopePanelShapes implements ShapeGenerator {
     public static final CornerSlopePanelShapes SMALL_OUTER = new CornerSlopePanelShapes(CornerSlopePanelShape.SMALL_BOTTOM, CornerSlopePanelShape.SMALL_TOP, Direction.NORTH);
     public static final CornerSlopePanelShapes LARGE_OUTER = new CornerSlopePanelShapes(CornerSlopePanelShape.LARGE_BOTTOM, CornerSlopePanelShape.LARGE_TOP, Direction.NORTH);
     public static final CornerSlopePanelShapes SMALL_INNER = new CornerSlopePanelShapes(CornerSlopePanelShape.SMALL_INNER_BOTTOM, CornerSlopePanelShape.SMALL_INNER_TOP, Direction.SOUTH);
@@ -30,33 +29,28 @@ public final class CornerSlopePanelShapes implements ShapeGenerator
     private final CornerSlopePanelShape topShape;
     private final Direction srcDir;
 
-    private CornerSlopePanelShapes(CornerSlopePanelShape bottomShape, CornerSlopePanelShape topShape, Direction srcDir)
-    {
+    private CornerSlopePanelShapes(CornerSlopePanelShape bottomShape, CornerSlopePanelShape topShape, Direction srcDir) {
         this.bottomShape = bottomShape;
         this.topShape = topShape;
         this.srcDir = srcDir;
     }
 
     @Override
-    public ShapeContainer generatePrimary(List<BlockState> states)
-    {
+    public ShapeContainer generatePrimary(List<BlockState> states) {
         return generate(states, SHAPES);
     }
 
     @Override
-    public ShapeContainer generateOcclusion(List<BlockState> states)
-    {
+    public ShapeContainer generateOcclusion(List<BlockState> states) {
         return generate(states, OCCLUSION_SHAPES);
     }
 
-    private ShapeContainer generate(List<BlockState> states, ShapeCache<CornerSlopePanelShape> cache)
-    {
+    private ShapeContainer generate(List<BlockState> states, ShapeCache<CornerSlopePanelShape> cache) {
         Map<BlockState, VoxelShape> map = new IdentityHashMap<>(states.size());
 
         VoxelShape[] shapes = ShapeUtils.makeHorizontalRotationsWithFlag(cache.get(bottomShape), cache.get(topShape), srcDir);
 
-        for (BlockState state : states)
-        {
+        for (BlockState state : states) {
             Direction dir = state.getValue(FramedProperties.FACING_HOR);
             boolean top = state.getValue(FramedProperties.TOP);
             map.put(state, shapes[dir.get2DDataValue() + (top ? 4 : 0)]);
@@ -65,10 +59,8 @@ public final class CornerSlopePanelShapes implements ShapeGenerator
         return ShapeContainer.of(map);
     }
 
-    private static ShapeCache<CornerSlopePanelShape> makeCache(ShapeCache<SlopePanelShape> cache)
-    {
-        return ShapeCache.createEnum(CornerSlopePanelShape.class, map ->
-        {
+    private static ShapeCache<CornerSlopePanelShape> makeCache(ShapeCache<SlopePanelShape> cache) {
+        return ShapeCache.createEnum(CornerSlopePanelShape.class, map -> {
             {
                 VoxelShape panelShapeBottom = cache.get(SlopePanelShape.UP_BACK);
                 map.put(CornerSlopePanelShape.SMALL_BOTTOM, ShapeUtils.andUnoptimized(

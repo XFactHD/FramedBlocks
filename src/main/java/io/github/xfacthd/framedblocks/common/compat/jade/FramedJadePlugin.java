@@ -13,13 +13,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 @WailaPlugin
-public final class FramedJadePlugin implements IWailaPlugin
-{
+public final class FramedJadePlugin implements IWailaPlugin {
     @Override
-    public void registerClient(IWailaClientRegistration registration)
-    {
-        for (Class<? extends Block> target : collectTargetClasses())
-        {
+    public void registerClient(IWailaClientRegistration registration) {
+        for (Class<? extends Block> target : collectTargetClasses()) {
             registration.registerBlockIcon(FramedBlockComponentProvider.INSTANCE, target);
             registration.registerBlockComponent(FramedBlockComponentProvider.INSTANCE, target);
         }
@@ -30,8 +27,7 @@ public final class FramedJadePlugin implements IWailaPlugin
         registration.addRayTraceCallback(new FramedOneWayWindowRayTraceCallback(registration));
     }
 
-    private static Set<Class<? extends Block>> collectTargetClasses()
-    {
+    private static Set<Class<? extends Block>> collectTargetClasses() {
         Set<Class<? extends Block>> targets = new HashSet<>();
         targets.add(AbstractFramedBlock.class);
 
@@ -39,12 +35,10 @@ public final class FramedJadePlugin implements IWailaPlugin
                 .filter(IFramedBlock.class::isInstance)
                 .filter(block -> !(block instanceof AbstractFramedBlock))
                 .map(IFramedBlock.class::cast)
-                .map(block ->
-                {
+                .map(block -> {
                     Class<? extends Block> target = block.getJadeTargetClass();
-                    if (!target.isInstance(block))
-                    {
-                        throw new IllegalArgumentException("Block '" + block + "' specifies invalid Jade target class '"  + target + "'");
+                    if (!target.isInstance(block)) {
+                        throw new IllegalArgumentException("Block '" + block + "' specifies invalid Jade target class '" + target + "'");
                     }
                     return target;
                 })

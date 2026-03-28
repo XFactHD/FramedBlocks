@@ -24,16 +24,14 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
-public final class FramedDoubleBlockStateModel extends AbstractFramedBlockStateModel
-{
+public final class FramedDoubleBlockStateModel extends AbstractFramedBlockStateModel {
     private final BlockAndTintGetter dummyLevel;
     private final DoubleBlockTopInteractionMode particleMode;
     private final DoubleBlockParts parts;
     @Nullable
     private PartModels models = null;
 
-    public FramedDoubleBlockStateModel(GeometryFactory.Context ctx, ItemModelInfo itemModelInfo)
-    {
+    public FramedDoubleBlockStateModel(GeometryFactory.Context ctx, ItemModelInfo itemModelInfo) {
         super(ctx.baseModel(), ctx.state(), itemModelInfo);
         BlockState state = ctx.state();
         DoubleBlockStateCache cache = ((IFramedDoubleBlock) state.getBlock()).getCache(state);
@@ -48,11 +46,9 @@ public final class FramedDoubleBlockStateModel extends AbstractFramedBlockStateM
     }
 
     @Override
-    public int collectParts(BlockAndTintGetter level, BlockPos pos, BlockState state, RandomSource random, List<BlockStateModelPart> outParts, int miscTintOffset)
-    {
+    public int collectParts(BlockAndTintGetter level, BlockPos pos, BlockState state, RandomSource random, List<BlockStateModelPart> outParts, int miscTintOffset) {
         AbstractFramedBlockData fbData = level.getModelData(pos).get(AbstractFramedBlockData.PROPERTY);
-        if (fbData == null)
-        {
+        if (fbData == null) {
             level = dummyLevel;
             pos = BlockPos.ZERO;
         }
@@ -65,24 +61,19 @@ public final class FramedDoubleBlockStateModel extends AbstractFramedBlockStateM
 
     @Override
     @SuppressWarnings("deprecation")
-    public Material.Baked particleMaterial(BlockAndTintGetter level, BlockPos pos, BlockState state)
-    {
+    public Material.Baked particleMaterial(BlockAndTintGetter level, BlockPos pos, BlockState state) {
         AbstractFramedBlockData fbData = level.getModelData(pos).get(AbstractFramedBlockData.PROPERTY);
-        return switch (particleMode)
-        {
+        return switch (particleMode) {
             case FIRST -> getMaterialOrDefault(level, pos, state, fbData, false);
             case SECOND -> getMaterialOrDefault(level, pos, state, fbData, true);
-            case EITHER ->
-            {
+            case EITHER -> {
                 Material.Baked sprite = getMaterial(level, pos, state, fbData, false);
-                if (sprite != null)
-                {
+                if (sprite != null) {
                     yield sprite;
                 }
 
                 sprite = getMaterial(level, pos, state, fbData, true);
-                if (sprite != null)
-                {
+                if (sprite != null) {
                     yield sprite;
                 }
 
@@ -92,16 +83,13 @@ public final class FramedDoubleBlockStateModel extends AbstractFramedBlockStateM
     }
 
     @Override
-    public int materialFlags(BlockAndTintGetter level, BlockPos pos, BlockState state)
-    {
+    public int materialFlags(BlockAndTintGetter level, BlockPos pos, BlockState state) {
         PartModels models = getModels();
         return models.modelOne.materialFlags(level, pos, state) | models.modelTwo.materialFlags(level, pos, state);
     }
 
-    private PartModels getModels()
-    {
-        if (models == null)
-        {
+    private PartModels getModels() {
+        if (models == null) {
             models = new PartModels(
                     ModelUtils.getFramedBlockModel(parts.stateOne()),
                     ModelUtils.getFramedBlockModel(parts.stateTwo())
@@ -115,19 +103,15 @@ public final class FramedDoubleBlockStateModel extends AbstractFramedBlockStateM
      * else returns the basic "framed block" sprite
      */
     @SuppressWarnings("deprecation")
-    private Material.Baked getMaterialOrDefault(BlockAndTintGetter level, BlockPos pos, BlockState state, @Nullable AbstractFramedBlockData data, boolean secondary)
-    {
+    private Material.Baked getMaterialOrDefault(BlockAndTintGetter level, BlockPos pos, BlockState state, @Nullable AbstractFramedBlockData data, boolean secondary) {
         Material.Baked material = getMaterial(level, pos, state, data, secondary);
         return material != null ? material : delegate.particleMaterial();
     }
 
-    private Material.@Nullable Baked getMaterial(BlockAndTintGetter level, BlockPos pos, BlockState state, @Nullable AbstractFramedBlockData data, boolean secondary)
-    {
-        if (data != null)
-        {
+    private Material.@Nullable Baked getMaterial(BlockAndTintGetter level, BlockPos pos, BlockState state, @Nullable AbstractFramedBlockData data, boolean secondary) {
+        if (data != null) {
             FramedBlockData fbData = data.unwrap(secondary);
-            if (!fbData.getCamoContent().isEmpty())
-            {
+            if (!fbData.getCamoContent().isEmpty()) {
                 AbstractFramedBlockStateModel model = secondary ? getModels().modelTwo : getModels().modelOne;
                 return model.particleMaterial(level, pos, state);
             }

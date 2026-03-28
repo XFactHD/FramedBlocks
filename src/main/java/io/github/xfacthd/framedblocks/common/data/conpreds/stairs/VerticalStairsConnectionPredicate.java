@@ -8,11 +8,9 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jspecify.annotations.Nullable;
 
-public final class VerticalStairsConnectionPredicate implements ConnectionPredicate
-{
+public final class VerticalStairsConnectionPredicate implements ConnectionPredicate {
     @Override
-    public boolean canConnectFullEdge(BlockState state, Direction side, @Nullable Direction edge)
-    {
+    public boolean canConnectFullEdge(BlockState state, Direction side, @Nullable Direction edge) {
         Direction facing = state.getValue(FramedProperties.FACING_HOR);
         StairsType type = state.getValue(PropertyHolder.STAIRS_TYPE);
 
@@ -21,42 +19,32 @@ public final class VerticalStairsConnectionPredicate implements ConnectionPredic
         boolean fwd = type.isForward();
         boolean ccw = type.isCounterClockwise();
 
-        if (side == facing)
-        {
-            if (!fwd)
-            {
+        if (side == facing) {
+            if (!fwd) {
                 return true;
             }
             return edge != facing.getClockWise() && ((top && edge != Direction.UP) || (bottom && edge != Direction.DOWN));
         }
-        else if (side == facing.getCounterClockWise())
-        {
-            if (!ccw)
-            {
+        if (side == facing.getCounterClockWise()) {
+            if (!ccw) {
                 return true;
             }
             return edge != facing.getOpposite() && ((top && edge != Direction.UP) || (bottom && edge != Direction.DOWN));
         }
-        else if (side == facing.getOpposite())
-        {
+        if (side == facing.getOpposite()) {
             return !ccw && edge == facing.getCounterClockWise();
         }
-        else if (side == facing.getClockWise())
-        {
+        if (side == facing.getClockWise()) {
             return !fwd && edge == facing;
         }
-        else if (side == Direction.UP)
-        {
-            if (!top)
-            {
+        if (side == Direction.UP) {
+            if (!top) {
                 return edge == facing || edge == facing.getCounterClockWise();
             }
             return (!fwd && edge == facing) || (!ccw && edge == facing.getCounterClockWise());
         }
-        else if (side == Direction.DOWN)
-        {
-            if (!bottom)
-            {
+        if (side == Direction.DOWN) {
+            if (!bottom) {
                 return edge == facing || edge == facing.getCounterClockWise();
             }
             return (!fwd && edge == facing) || (!ccw && edge == facing.getCounterClockWise());
@@ -65,8 +53,7 @@ public final class VerticalStairsConnectionPredicate implements ConnectionPredic
     }
 
     @Override
-    public boolean canConnectDetailed(BlockState state, Direction side, Direction edge)
-    {
+    public boolean canConnectDetailed(BlockState state, Direction side, Direction edge) {
         Direction facing = state.getValue(FramedProperties.FACING_HOR);
         StairsType type = state.getValue(PropertyHolder.STAIRS_TYPE);
 
@@ -75,34 +62,26 @@ public final class VerticalStairsConnectionPredicate implements ConnectionPredic
         boolean fwd = type.isForward();
         boolean ccw = type.isCounterClockwise();
 
-        if (side == facing && fwd)
-        {
+        if (side == facing && fwd) {
             return edge == facing.getClockWise() || (top && edge == Direction.UP) || (bottom && edge == Direction.DOWN);
         }
-        else if (side == facing.getCounterClockWise() && ccw)
-        {
+        if (side == facing.getCounterClockWise() && ccw) {
             return edge == facing.getOpposite() || (top && edge == Direction.UP) || (bottom && edge == Direction.DOWN);
         }
-        else if (side == facing.getOpposite())
-        {
+        if (side == facing.getOpposite()) {
             return ccw || edge != facing.getCounterClockWise();
         }
-        else if (side == facing.getClockWise())
-        {
+        if (side == facing.getClockWise()) {
             return fwd || edge != facing;
         }
-        else if (side == Direction.UP)
-        {
-            if (edge == facing.getOpposite() || edge == facing.getClockWise())
-            {
+        if (side == Direction.UP) {
+            if (edge == facing.getOpposite() || edge == facing.getClockWise()) {
                 return true;
             }
             return top && ((fwd && edge == facing) || (ccw && edge == facing.getCounterClockWise()));
         }
-        else if (side == Direction.DOWN)
-        {
-            if (edge == facing.getOpposite() || edge == facing.getClockWise())
-            {
+        if (side == Direction.DOWN) {
+            if (edge == facing.getOpposite() || edge == facing.getClockWise()) {
                 return true;
             }
             return bottom && ((fwd && edge == facing) || (ccw && edge == facing.getCounterClockWise()));

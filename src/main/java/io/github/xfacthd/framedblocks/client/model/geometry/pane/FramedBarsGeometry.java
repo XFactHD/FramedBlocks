@@ -10,81 +10,63 @@ import net.minecraft.client.resources.model.geometry.BakedQuad;
 import net.minecraft.core.Direction;
 import org.jspecify.annotations.Nullable;
 
-public class FramedBarsGeometry extends FramedPaneGeometry
-{
-    public FramedBarsGeometry(GeometryFactory.Context ctx)
-    {
+public class FramedBarsGeometry extends FramedPaneGeometry {
+    public FramedBarsGeometry(GeometryFactory.Context ctx) {
         super(ctx);
     }
 
     @Override
-    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
-    {
+    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData) {
         Direction face = quad.direction();
-        if (DirUtils.isY(face))
-        {
+        if (DirUtils.isY(face)) {
             createTopBottomCenterQuad(quadMap, quad, false);
             createTopBottomCenterQuad(quadMap, quad, true);
 
-            if (north)
-            {
+            if (north) {
                 createTopBottomEdgeQuad(quadMap, quad, Direction.NORTH, false);
                 createTopBottomEdgeQuad(quadMap, quad, Direction.NORTH, true);
             }
-            if (east)
-            {
+            if (east) {
                 createTopBottomEdgeQuad(quadMap, quad, Direction.EAST, false);
                 createTopBottomEdgeQuad(quadMap, quad, Direction.EAST, true);
             }
-            if (south)
-            {
+            if (south) {
                 createTopBottomEdgeQuad(quadMap, quad, Direction.SOUTH, false);
                 createTopBottomEdgeQuad(quadMap, quad, Direction.SOUTH, true);
             }
-            if (west)
-            {
+            if (west) {
                 createTopBottomEdgeQuad(quadMap, quad, Direction.WEST, false);
                 createTopBottomEdgeQuad(quadMap, quad, Direction.WEST, true);
             }
-        }
-        else
-        {
-            if (!isSideInset(face))
-            {
+        } else {
+            if (!isSideInset(face)) {
                 createSideEdgeQuad(quadMap, quad, false, false);
             }
-            if (!isSideInset(face.getOpposite()))
-            {
+            if (!isSideInset(face.getOpposite())) {
                 createSideEdgeQuad(quadMap, quad, false, true);
             }
 
-            if (DirUtils.isX(face))
-            {
+            if (DirUtils.isX(face)) {
                 createCenterPillarQuad(quadMap, quad, east, west, south, north);
 
-                if (north)
-                {
+                if (north) {
                     createPillarQuad(quadMap, quad, Direction.NORTH);
                     createBarQuads(quadMap, quad, Direction.NORTH);
                 }
-                if (south)
-                {
+                if (south) {
                     createPillarQuad(quadMap, quad, Direction.SOUTH);
                     createBarQuads(quadMap, quad, Direction.SOUTH);
                 }
             }
 
-            if (DirUtils.isZ(face))
-            {
+            if (DirUtils.isZ(face)) {
                 createCenterPillarQuad(quadMap, quad, south, north, east, west);
 
-                if (east)
-                {
+                if (east) {
                     createPillarQuad(quadMap, quad, Direction.EAST);
                     createBarQuads(quadMap, quad, Direction.EAST);
                 }
-                if (west)
-                {
+                if (west) {
                     createPillarQuad(quadMap, quad, Direction.WEST);
                     createBarQuads(quadMap, quad, Direction.WEST);
                 }
@@ -93,8 +75,7 @@ public class FramedBarsGeometry extends FramedPaneGeometry
     }
 
     @Override
-    public boolean useSolidNoCamoModel()
-    {
+    public boolean useSolidNoCamoModel() {
         return true;
     }
 
@@ -104,10 +85,8 @@ public class FramedBarsGeometry extends FramedPaneGeometry
      * @param parNeg Connection state in the negative direction in the same plane as the quad
      * @param parPos Connection state in the positive direction in the same plane as the quad
      */
-    private static void createCenterPillarQuad(QuadMapBuilder quadMap, BakedQuad quad, boolean perpNeg, boolean perpPos, boolean parNeg, boolean parPos)
-    {
-        if (perpNeg && perpPos && !parNeg && !parPos)
-        {
+    private static void createCenterPillarQuad(QuadMapBuilder quadMap, BakedQuad quad, boolean perpNeg, boolean perpPos, boolean parNeg, boolean parPos) {
+        if (perpNeg && perpPos && !parNeg && !parPos) {
             return;
         }
 
@@ -118,16 +97,12 @@ public class FramedBarsGeometry extends FramedPaneGeometry
         float maxXZ = perpendicular && oneParallel && !parNeg ? 8F/16F : 9F/16F;
 
         float offset;
-        if (parNeg || parPos)
-        {
+        if (parNeg || parPos) {
             offset = .5F;
-        }
-        else
-        {
+        } else {
             offset = perpNeg ? 9F/16F : (perpPos ? 7F/16F : .5F);
 
-            if (DirUtils.isPositive(quad.direction()))
-            {
+            if (DirUtils.isPositive(quad.direction())) {
                 offset = 1F - offset;
             }
         }
@@ -138,10 +113,8 @@ public class FramedBarsGeometry extends FramedPaneGeometry
                 .export(quadMap, null);
     }
 
-    private static void createPillarQuad(QuadMapBuilder quadMap, BakedQuad quad, Direction dir)
-    {
-        if (DirUtils.isY(dir))
-        {
+    private static void createPillarQuad(QuadMapBuilder quadMap, BakedQuad quad, Direction dir) {
+        if (DirUtils.isY(dir)) {
             throw new IllegalArgumentException(String.format("Invalid direction: %s!", dir));
         }
 
@@ -155,10 +128,8 @@ public class FramedBarsGeometry extends FramedPaneGeometry
                 .export(quadMap, null);
     }
 
-    private static void createBarQuads(QuadMapBuilder quadMap, BakedQuad quad, Direction dir)
-    {
-        if (DirUtils.isY(dir))
-        {
+    private static void createBarQuads(QuadMapBuilder quadMap, BakedQuad quad, Direction dir) {
+        if (DirUtils.isY(dir)) {
             throw new IllegalArgumentException(String.format("Invalid direction: %s!", dir));
         }
 

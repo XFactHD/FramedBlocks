@@ -14,22 +14,18 @@ import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 
-public final class InverseDoubleCornerSlopePanelShapes implements ShapeGenerator
-{
+public final class InverseDoubleCornerSlopePanelShapes implements ShapeGenerator {
     @Override
-    public ShapeContainer generatePrimary(List<BlockState> states)
-    {
+    public ShapeContainer generatePrimary(List<BlockState> states) {
         return generate(states, CornerSlopePanelShapes.SHAPES);
     }
 
     @Override
-    public ShapeContainer generateOcclusion(List<BlockState> states)
-    {
+    public ShapeContainer generateOcclusion(List<BlockState> states) {
         return generate(states, CornerSlopePanelShapes.OCCLUSION_SHAPES);
     }
 
-    private static ShapeContainer generate(List<BlockState> states, ShapeCache<CornerSlopePanelShape> cache)
-    {
+    private static ShapeContainer generate(List<BlockState> states, ShapeCache<CornerSlopePanelShape> cache) {
         Map<BlockState, VoxelShape> map = new IdentityHashMap<>(states.size());
 
         VoxelShape shapeBottom = ShapeUtils.orUnoptimized(
@@ -49,8 +45,7 @@ public final class InverseDoubleCornerSlopePanelShapes implements ShapeGenerator
         );
         VoxelShape[] shapes = ShapeUtils.makeHorizontalRotationsWithFlag(shapeBottom, shapeTop, Direction.NORTH);
 
-        for (BlockState state : states)
-        {
+        for (BlockState state : states) {
             Direction dir = state.getValue(FramedProperties.FACING_HOR);
             boolean top = state.getValue(FramedProperties.TOP);
             map.put(state, shapes[dir.get2DDataValue() + (top ? 4 : 0)]);

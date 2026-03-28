@@ -11,39 +11,31 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 
-public class FramedElevatedDoublePrismBlockEntity extends FramedDoubleBlockEntity
-{
-    public FramedElevatedDoublePrismBlockEntity(BlockPos pos, BlockState state)
-    {
+public class FramedElevatedDoublePrismBlockEntity extends FramedDoubleBlockEntity {
+    public FramedElevatedDoublePrismBlockEntity(BlockPos pos, BlockState state) {
         this(FBContent.BE_TYPE_FRAMED_ELEVATED_DOUBLE_PRISM.value(), pos, state);
     }
 
-    protected FramedElevatedDoublePrismBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
-    {
+    protected FramedElevatedDoublePrismBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
     }
 
     @Override
-    protected boolean hitSecondary(BlockHitResult hit, Vec3 lookVec, Vec3 eyePos)
-    {
+    protected boolean hitSecondary(BlockHitResult hit, Vec3 lookVec, Vec3 eyePos) {
         Direction side = hit.getDirection();
 
         Direction facing = getFacing(getBlockState());
-        if (side == facing)
-        {
+        if (side == facing) {
             return true;
         }
-        if (side == facing.getOpposite())
-        {
+        if (side == facing.getOpposite()) {
             return false;
         }
-        if (!isDoubleSide(side) && side.getAxis() != facing.getAxis())
-        {
+        if (!isDoubleSide(side) && side.getAxis() != facing.getAxis()) {
             return false;
         }
 
-        if (isDoubleSide(side))
-        {
+        if (isDoubleSide(side)) {
             Direction horDir = side.getClockWise(facing.getAxis());
             double hor = MathUtils.fractionInDir(hit.getLocation(), horDir);
             hor = Math.abs(hor - .5);
@@ -56,13 +48,11 @@ public class FramedElevatedDoublePrismBlockEntity extends FramedDoubleBlockEntit
         return false;
     }
 
-    protected boolean isDoubleSide(Direction side)
-    {
+    protected boolean isDoubleSide(Direction side) {
         return side.getAxis() == getBlockState().getValue(PropertyHolder.FACING_AXIS).axis();
     }
 
-    protected Direction getFacing(BlockState state)
-    {
+    protected Direction getFacing(BlockState state) {
         return state.getValue(PropertyHolder.FACING_AXIS).direction();
     }
 }

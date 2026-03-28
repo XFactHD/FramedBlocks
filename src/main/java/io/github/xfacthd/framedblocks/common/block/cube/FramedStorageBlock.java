@@ -18,20 +18,15 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jspecify.annotations.Nullable;
 
-public class FramedStorageBlock extends FramedBlock
-{
-    public FramedStorageBlock(BlockType type, Properties props)
-    {
+public class FramedStorageBlock extends FramedBlock {
+    public FramedStorageBlock(BlockType type, Properties props) {
         super(type, props);
     }
 
     @Override
-    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit)
-    {
-        if (!level.isClientSide())
-        {
-            if (level.getBlockEntity(pos) instanceof FramedStorageBlockEntity be)
-            {
+    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
+        if (!level.isClientSide()) {
+            if (level.getBlockEntity(pos) instanceof FramedStorageBlockEntity be) {
                 be.open((ServerPlayer) player);
             }
         }
@@ -39,61 +34,50 @@ public class FramedStorageBlock extends FramedBlock
     }
 
     @Override
-    protected void affectNeighborsAfterRemoval(BlockState p_394424_, ServerLevel level, BlockPos pos, boolean isMoving)
-    {
+    protected void affectNeighborsAfterRemoval(BlockState p_394424_, ServerLevel level, BlockPos pos, boolean isMoving) {
         level.updateNeighbourForOutputSignal(pos, this);
     }
 
     @Override
-    public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)
-    {
+    public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
         super.setPlacedBy(level, pos, state, placer, stack);
 
         var customName = stack.get(DataComponents.CUSTOM_NAME);
-        if (customName != null && level.getBlockEntity(pos) instanceof FramedStorageBlockEntity be)
-        {
+        if (customName != null && level.getBlockEntity(pos) instanceof FramedStorageBlockEntity be) {
             be.setCustomName(customName);
         }
     }
 
     @Override
-    protected boolean hasAnalogOutputSignal(BlockState state)
-    {
+    protected boolean hasAnalogOutputSignal(BlockState state) {
         return true;
     }
 
     @Override
-    protected int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos, Direction side)
-    {
-        if (level.getBlockEntity(pos) instanceof FramedStorageBlockEntity be)
-        {
+    protected int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos, Direction side) {
+        if (level.getBlockEntity(pos) instanceof FramedStorageBlockEntity be) {
             return be.getAnalogOutputSignal();
         }
         return 0;
     }
 
     @Override
-    public FramedBlockEntity newBlockEntity(BlockPos pos, BlockState state)
-    {
+    public FramedBlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return new FramedStorageBlockEntity(pos, state);
     }
 
     @Override
-    public BlockState getItemModelSource()
-    {
+    public BlockState getItemModelSource() {
         return defaultBlockState();
     }
 
     @Override
-    @Nullable
-    public Direction getHorizontalOrientation(BlockState state)
-    {
+    public @Nullable Direction getHorizontalOrientation(BlockState state) {
         return null;
     }
 
     @Override
-    public BlockState getJadeRenderState(BlockState state)
-    {
+    public BlockState getJadeRenderState(BlockState state) {
         return state;
     }
 }

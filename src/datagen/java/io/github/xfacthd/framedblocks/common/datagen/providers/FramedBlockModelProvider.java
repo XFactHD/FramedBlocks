@@ -56,22 +56,19 @@ import java.util.Objects;
 import java.util.function.Function;
 
 @SuppressWarnings({ "MethodMayBeStatic", "SameParameterValue" })
-public final class FramedBlockModelProvider extends AbstractFramedBlockModelProvider
-{
+public final class FramedBlockModelProvider extends AbstractFramedBlockModelProvider {
     private static final Material TEXTURE = new Material(Utils.id("block/framed_block"));
     private static final Material TEXTURE_ALT = new Material(Utils.id("block/framed_block_alt"));
     private static final Material TEXTURE_UNDERLAY = new Material(Identifier.withDefaultNamespace("block/stripped_dark_oak_log"));
     private static final Identifier TRAPDOOR_TEMPLATE_LOC = Identifier.withDefaultNamespace("block/template_orientable_trapdoor_bottom");
     private static final Identifier THIN_BLOCK_LOC = Identifier.withDefaultNamespace("block/thin_block");
 
-    public FramedBlockModelProvider(PackOutput output)
-    {
+    public FramedBlockModelProvider(PackOutput output) {
         super(output, FramedConstants.MOD_ID);
     }
 
     @Override
-    protected void registerModels(BlockModelGenerators blockModels, ItemModelGenerators itemModels)
-    {
+    protected void registerModels(BlockModelGenerators blockModels, ItemModelGenerators itemModels) {
         Identifier cube = ModelTemplates.CUBE_ALL.create(FBContent.BLOCK_FRAMED_CUBE.value(), TextureMapping.cube(TEXTURE), blockModels.modelOutput);
         Identifier stoneCube = makeUnderlayedCube(blockModels, Utils.id("block/framed_stone_cube"), TEXTURE, mcMaterial("block/stone"), _ -> {});
         Identifier obsidianCube = makeUnderlayedCube(blockModels, Utils.id("block/framed_obsidian_cube"), TEXTURE, mcMaterial("block/obsidian"), _ -> {});
@@ -324,8 +321,7 @@ public final class FramedBlockModelProvider extends AbstractFramedBlockModelProv
         registerPoweredFramingSaw(blockModels);
     }
 
-    private void registerFramedCube(BlockModelGenerators blockModels, Identifier cube)
-    {
+    private void registerFramedCube(BlockModelGenerators blockModels, Identifier cube) {
         Identifier solidUnderlay = ModelTemplates.CUBE_ALL.create(
                 Utils.id("block/framed_underlay"),
                 new TextureMapping()
@@ -366,68 +362,59 @@ public final class FramedBlockModelProvider extends AbstractFramedBlockModelProv
         framedBlockItemModel(blockModels, FBContent.BLOCK_FRAMED_CUBE);
     }
 
-    private void registerFramedFence(BlockModelGenerators blockModels, Identifier cube)
-    {
+    private void registerFramedFence(BlockModelGenerators blockModels, Identifier cube) {
         simpleFramedBlockWithItem(blockModels, FBContent.BLOCK_FRAMED_FENCE, cube, builder ->
                 builder.modelProvider(FenceBlockItemModelProvider.INSTANCE)
                         .itemBaseModel(mcLocation("block/fence_inventory"))
         );
     }
 
-    private void registerFramedDoor(BlockModelGenerators blockModels, Identifier cube)
-    {
+    private void registerFramedDoor(BlockModelGenerators blockModels, Identifier cube) {
         simpleFramedBlock(blockModels, FBContent.BLOCK_FRAMED_DOOR, cube);
         blockModels.registerSimpleFlatItemModel(FBContent.BLOCK_FRAMED_DOOR.value().asItem());
     }
 
-    private void registerFramedIronDoor(BlockModelGenerators blockModels, Identifier cube)
-    {
+    private void registerFramedIronDoor(BlockModelGenerators blockModels, Identifier cube) {
         simpleFramedBlock(blockModels, FBContent.BLOCK_FRAMED_IRON_DOOR, cube);
         blockModels.registerSimpleFlatItemModel(FBContent.BLOCK_FRAMED_IRON_DOOR.value().asItem());
     }
 
-    private void registerFramedPressurePlate(BlockModelGenerators blockModels, Identifier cube)
-    {
+    private void registerFramedPressurePlate(BlockModelGenerators blockModels, Identifier cube) {
         simpleFramedBlock(blockModels, FBContent.BLOCK_FRAMED_PRESSURE_PLATE, cube);
         simpleFramedBlock(blockModels, FBContent.BLOCK_FRAMED_WATERLOGGABLE_PRESSURE_PLATE, cube);
 
         framedBlockItemModel(blockModels, FBContent.BLOCK_FRAMED_PRESSURE_PLATE, builder -> builder.itemBaseModel(THIN_BLOCK_LOC));
     }
 
-    private void registerFramedStonePressurePlate(BlockModelGenerators blockModels, Identifier cube)
-    {
+    private void registerFramedStonePressurePlate(BlockModelGenerators blockModels, Identifier cube) {
         simpleFramedBlock(blockModels, FBContent.BLOCK_FRAMED_STONE_PRESSURE_PLATE, cube);
         simpleFramedBlock(blockModels, FBContent.BLOCK_FRAMED_WATERLOGGABLE_STONE_PRESSURE_PLATE, cube);
 
         framedBlockItemModel(blockModels, FBContent.BLOCK_FRAMED_STONE_PRESSURE_PLATE, builder -> builder.itemBaseModel(THIN_BLOCK_LOC));
     }
 
-    private void registerFramedObsidianPressurePlate(BlockModelGenerators blockModels, Identifier cube)
-    {
+    private void registerFramedObsidianPressurePlate(BlockModelGenerators blockModels, Identifier cube) {
         simpleFramedBlock(blockModels, FBContent.BLOCK_FRAMED_OBSIDIAN_PRESSURE_PLATE, cube);
         simpleFramedBlock(blockModels, FBContent.BLOCK_FRAMED_WATERLOGGABLE_OBSIDIAN_PRESSURE_PLATE, cube);
 
         framedBlockItemModel(blockModels, FBContent.BLOCK_FRAMED_OBSIDIAN_PRESSURE_PLATE, builder -> builder.itemBaseModel(THIN_BLOCK_LOC));
     }
 
-    private void registerFramedGoldPressurePlate(BlockModelGenerators blockModels, Identifier cube)
-    {
+    private void registerFramedGoldPressurePlate(BlockModelGenerators blockModels, Identifier cube) {
         simpleFramedBlock(blockModels, FBContent.BLOCK_FRAMED_GOLD_PRESSURE_PLATE, cube);
         simpleFramedBlock(blockModels, FBContent.BLOCK_FRAMED_WATERLOGGABLE_GOLD_PRESSURE_PLATE, cube);
 
         framedBlockItemModel(blockModels, FBContent.BLOCK_FRAMED_GOLD_PRESSURE_PLATE, builder -> builder.itemBaseModel(THIN_BLOCK_LOC));
     }
 
-    private void registerFramedIronPressurePlate(BlockModelGenerators blockModels, Identifier cube)
-    {
+    private void registerFramedIronPressurePlate(BlockModelGenerators blockModels, Identifier cube) {
         simpleFramedBlock(blockModels, FBContent.BLOCK_FRAMED_IRON_PRESSURE_PLATE, cube);
         simpleFramedBlock(blockModels, FBContent.BLOCK_FRAMED_WATERLOGGABLE_IRON_PRESSURE_PLATE, cube);
 
         framedBlockItemModel(blockModels, FBContent.BLOCK_FRAMED_IRON_PRESSURE_PLATE, builder -> builder.itemBaseModel(THIN_BLOCK_LOC));
     }
 
-    private void registerFramedLever(BlockModelGenerators blockModels)
-    {
+    private void registerFramedLever(BlockModelGenerators blockModels) {
         TextureSlot slotBase = TextureSlot.create("base");
 
         Identifier lever = blockModelFromTemplate(
@@ -454,8 +441,7 @@ public final class FramedBlockModelProvider extends AbstractFramedBlockModelProv
                         BlockModelGenerators.plainVariant(leverOn)
                 ))
                 .with(PropertyDispatch.modify(BlockStateProperties.ATTACH_FACE, BlockStateProperties.HORIZONTAL_FACING)
-                        .generate((face, dir)->
-                        {
+                        .generate((face, dir)-> {
                             int yRot = (dir.get2DDataValue() + (face != AttachFace.CEILING ? 2 : 0)) % 4;
                             return VariantMutator.X_ROT.withValue(rotByIdx(face.ordinal()))
                                     .then(VariantMutator.Y_ROT.withValue(rotByIdx(yRot)));
@@ -466,14 +452,12 @@ public final class FramedBlockModelProvider extends AbstractFramedBlockModelProv
         blockModels.registerSimpleFlatItemModel(FBContent.BLOCK_FRAMED_LEVER.value().asItem());
     }
 
-    private void registerFramedSign(BlockModelGenerators blockModels, Identifier cube)
-    {
+    private void registerFramedSign(BlockModelGenerators blockModels, Identifier cube) {
         simpleFramedBlock(blockModels, FBContent.BLOCK_FRAMED_SIGN, cube);
         blockModels.registerSimpleFlatItemModel(FBContent.BLOCK_FRAMED_SIGN.value().asItem());
     }
 
-    private void registerFramedHangingSign(BlockModelGenerators blockModels)
-    {
+    private void registerFramedHangingSign(BlockModelGenerators blockModels) {
         Identifier model = Utils.id("block/framed_hanging_sign");
         Identifier modelAttached = Utils.id("block/framed_hanging_sign_attached");
 
@@ -489,8 +473,7 @@ public final class FramedBlockModelProvider extends AbstractFramedBlockModelProv
         blockModels.registerSimpleFlatItemModel(FBContent.BLOCK_FRAMED_HANGING_SIGN.value().asItem());
     }
 
-    private void registerFramedWallHangingSign(BlockModelGenerators blockModels)
-    {
+    private void registerFramedWallHangingSign(BlockModelGenerators blockModels) {
         framedVariant(
                 blockModels,
                 FBContent.BLOCK_FRAMED_WALL_HANGING_SIGN,
@@ -499,14 +482,12 @@ public final class FramedBlockModelProvider extends AbstractFramedBlockModelProv
         );
     }
 
-    private void registerFramedTorch(BlockModelGenerators blockModels)
-    {
+    private void registerFramedTorch(BlockModelGenerators blockModels) {
         simpleFramedBlock(blockModels, FBContent.BLOCK_FRAMED_TORCH);
         blockModels.registerSimpleFlatItemModel(FBContent.BLOCK_FRAMED_TORCH.value());
     }
 
-    private void registerFramedWallTorch(BlockModelGenerators blockModels)
-    {
+    private void registerFramedWallTorch(BlockModelGenerators blockModels) {
         framedVariant(
                 blockModels,
                 FBContent.BLOCK_FRAMED_WALL_TORCH,
@@ -515,8 +496,7 @@ public final class FramedBlockModelProvider extends AbstractFramedBlockModelProv
         );
     }
 
-    private void registerFramedSoulTorch(BlockModelGenerators blockModels)
-    {
+    private void registerFramedSoulTorch(BlockModelGenerators blockModels) {
         framedBlockFromTemplate(
                 blockModels,
                 FBContent.BLOCK_FRAMED_SOUL_TORCH,
@@ -528,8 +508,7 @@ public final class FramedBlockModelProvider extends AbstractFramedBlockModelProv
         blockModels.registerSimpleFlatItemModel(FBContent.BLOCK_FRAMED_SOUL_TORCH.value());
     }
 
-    private void registerFramedSoulWallTorch(BlockModelGenerators blockModels)
-    {
+    private void registerFramedSoulWallTorch(BlockModelGenerators blockModels) {
         Identifier wallTorch = blockModelFromTemplate(
                 blockModels,
                 FBContent.BLOCK_FRAMED_SOUL_WALL_TORCH,
@@ -546,8 +525,7 @@ public final class FramedBlockModelProvider extends AbstractFramedBlockModelProv
         );
     }
 
-    private void registerFramedCopperTorch(BlockModelGenerators blockModels)
-    {
+    private void registerFramedCopperTorch(BlockModelGenerators blockModels) {
         framedBlockFromTemplate(
                 blockModels,
                 FBContent.BLOCK_FRAMED_COPPER_TORCH,
@@ -559,8 +537,7 @@ public final class FramedBlockModelProvider extends AbstractFramedBlockModelProv
         blockModels.registerSimpleFlatItemModel(FBContent.BLOCK_FRAMED_COPPER_TORCH.value());
     }
 
-    private void registerFramedCopperWallTorch(BlockModelGenerators blockModels)
-    {
+    private void registerFramedCopperWallTorch(BlockModelGenerators blockModels) {
         Identifier wallTorch = blockModelFromTemplate(
                 blockModels,
                 FBContent.BLOCK_FRAMED_COPPER_WALL_TORCH,
@@ -577,8 +554,7 @@ public final class FramedBlockModelProvider extends AbstractFramedBlockModelProv
         );
     }
 
-    private void registerFramedRedstoneTorch(BlockModelGenerators blockModels)
-    {
+    private void registerFramedRedstoneTorch(BlockModelGenerators blockModels) {
         Identifier torch = Utils.id("block/framed_redstone_torch");
         Identifier torchOff = blockModelFromTemplate(
                 blockModels,
@@ -599,8 +575,7 @@ public final class FramedBlockModelProvider extends AbstractFramedBlockModelProv
         blockModels.registerSimpleFlatItemModel(FBContent.BLOCK_FRAMED_REDSTONE_TORCH.value());
     }
 
-    private void registerFramedRedstoneWallTorch(BlockModelGenerators blockModels)
-    {
+    private void registerFramedRedstoneWallTorch(BlockModelGenerators blockModels) {
         Identifier wallTorch = Utils.id("block/framed_redstone_wall_torch");
         Identifier wallTorchOff = blockModelFromTemplate(
                 blockModels,
@@ -620,8 +595,7 @@ public final class FramedBlockModelProvider extends AbstractFramedBlockModelProv
         );
     }
 
-    private void registerFramedCornerStrip(BlockModelGenerators blockModels, Identifier cube)
-    {
+    private void registerFramedCornerStrip(BlockModelGenerators blockModels, Identifier cube) {
         simpleFramedBlock(blockModels, FBContent.BLOCK_FRAMED_CORNER_STRIP, cube);
 
         Identifier cornerStripItem = ExtendedModelTemplateBuilder.builder()
@@ -641,8 +615,7 @@ public final class FramedBlockModelProvider extends AbstractFramedBlockModelProv
         framedBlockItemModel(blockModels, FBContent.BLOCK_FRAMED_CORNER_STRIP, builder -> builder.itemBaseModel(cornerStripItem));
     }
 
-    private void registerFramedChest(BlockModelGenerators blockModels)
-    {
+    private void registerFramedChest(BlockModelGenerators blockModels) {
         Identifier chest = Utils.id("block/framed_chest");
         Identifier chestLeft = Utils.id("block/framed_chest_left");
         Identifier chestRight = Utils.id("block/framed_chest_right");
@@ -660,8 +633,7 @@ public final class FramedBlockModelProvider extends AbstractFramedBlockModelProv
         framedBlockItemModel(blockModels, FBContent.BLOCK_FRAMED_CHEST);
     }
 
-    private void registerFramedSecretStorage(BlockModelGenerators blockModels)
-    {
+    private void registerFramedSecretStorage(BlockModelGenerators blockModels) {
         TextureSlot slotBarrelSide = TextureSlot.create("barrel");
         TextureSlot slotBarrelTop = TextureSlot.create("barrel_top");
         TextureSlot slotBarrelBottom = TextureSlot.create("barrel_bottom");
@@ -696,8 +668,7 @@ public final class FramedBlockModelProvider extends AbstractFramedBlockModelProv
         simpleFramedBlockWithItem(blockModels, FBContent.BLOCK_FRAMED_SECRET_STORAGE, block);
     }
 
-    private void registerFramedTank(BlockModelGenerators blockModels)
-    {
+    private void registerFramedTank(BlockModelGenerators blockModels) {
         TextureSlot slotGlass = TextureSlot.create("glass");
 
         ModelTemplate template = ExtendedModelTemplateBuilder.builder()
@@ -727,14 +698,12 @@ public final class FramedBlockModelProvider extends AbstractFramedBlockModelProv
         );
     }
 
-    private void registerFramedBarsBlock(BlockModelGenerators blockModels, Identifier cube)
-    {
+    private void registerFramedBarsBlock(BlockModelGenerators blockModels, Identifier cube) {
         simpleFramedBlock(blockModels, FBContent.BLOCK_FRAMED_BARS, cube);
         blockModels.registerSimpleFlatItemModel(FBContent.BLOCK_FRAMED_BARS.value().asItem());
     }
 
-    private void registerFramedPaneBlock(BlockModelGenerators blockModels, Identifier cube)
-    {
+    private void registerFramedPaneBlock(BlockModelGenerators blockModels, Identifier cube) {
         simpleFramedBlock(blockModels, FBContent.BLOCK_FRAMED_PANE, cube);
         blockModels.registerSimpleItemModel(
                 FBContent.BLOCK_FRAMED_PANE.value().asItem(),
@@ -746,8 +715,7 @@ public final class FramedBlockModelProvider extends AbstractFramedBlockModelProv
         );
     }
 
-    private void registerFramedFlowerPotBlock(BlockModelGenerators blockModels, Identifier cube)
-    {
+    private void registerFramedFlowerPotBlock(BlockModelGenerators blockModels, Identifier cube) {
         simpleFramedBlock(blockModels, FBContent.BLOCK_FRAMED_FLOWER_POT, cube)
                 .addAuxModel(FramedFlowerPotGeometry.HANGING_MODEL_KEY, singleVariant(FramedFlowerPotGeometry.HANGING_MODEL_LOCATION));
         blockModels.registerSimpleFlatItemModel(FBContent.BLOCK_FRAMED_FLOWER_POT.value().asItem());
@@ -762,24 +730,21 @@ public final class FramedBlockModelProvider extends AbstractFramedBlockModelProv
                 .create(FramedFlowerPotGeometry.HANGING_MODEL_LOCATION, new TextureMapping(), blockModels.modelOutput);
     }
 
-    private void registerFramedCollapsibleBlock(BlockModelGenerators blockModels)
-    {
+    private void registerFramedCollapsibleBlock(BlockModelGenerators blockModels) {
         Identifier block = makeUnderlayedCube(blockModels, FBContent.BLOCK_FRAMED_COLLAPSIBLE_BLOCK, TEXTURE, mcMaterial("block/oak_planks"), _ -> {});
         Identifier altCube = makeUnderlayedCube(blockModels, FBContent.BLOCK_FRAMED_COLLAPSIBLE_BLOCK, TEXTURE_ALT, mcMaterial("block/spruce_planks"), builder -> builder.suffix("_alt"));
         simpleFramedBlockWithItem(blockModels, FBContent.BLOCK_FRAMED_COLLAPSIBLE_BLOCK, block)
                 .addAuxModel(FramedCollapsibleBlockGeometry.ALT_BASE_MODEL_KEY, singleVariant(altCube));
     }
 
-    private void registerFramedCollapsibleCopycatBlock(BlockModelGenerators blockModels)
-    {
+    private void registerFramedCollapsibleCopycatBlock(BlockModelGenerators blockModels) {
         Identifier block = makeUnderlayedCube(blockModels, FBContent.BLOCK_FRAMED_COLLAPSIBLE_COPYCAT_BLOCK, TEXTURE, mcMaterial("block/copper_block"), _ -> {});
         Identifier altCube = makeUnderlayedCube(blockModels, FBContent.BLOCK_FRAMED_COLLAPSIBLE_COPYCAT_BLOCK, TEXTURE_ALT, mcMaterial("block/copper_block"), builder -> builder.suffix("_alt"));
         simpleFramedBlockWithItem(blockModels, FBContent.BLOCK_FRAMED_COLLAPSIBLE_COPYCAT_BLOCK, block)
                 .addAuxModel(FramedCollapsibleCopycatBlockGeometry.ALT_BASE_MODEL_KEY, singleVariant(altCube));
     }
 
-    private void registerFramedBouncyBlock(BlockModelGenerators blockModels)
-    {
+    private void registerFramedBouncyBlock(BlockModelGenerators blockModels) {
         Identifier block = makeUnderlayedCube(blockModels, FBContent.BLOCK_FRAMED_BOUNCY_CUBE, TEXTURE.withForceTranslucent(true), mcMaterial("block/slime_block"), _ -> {});
         simpleFramedBlockWithItem(blockModels, FBContent.BLOCK_FRAMED_BOUNCY_CUBE, block)
                 .addAuxModel(FramedMarkedCubeGeometry.FRAME_KEY, singleVariant(FramedMarkedCubeGeometry.SLIME_FRAME_LOCATION));
@@ -787,8 +752,7 @@ public final class FramedBlockModelProvider extends AbstractFramedBlockModelProv
         makeOverlayCube(blockModels, FramedMarkedCubeGeometry.SLIME_FRAME_LOCATION, new Material(FramedMarkedCubeGeometry.SLIME_FRAME_LOCATION));
     }
 
-    private void registerFramedRedstoneBlock(BlockModelGenerators blockModels)
-    {
+    private void registerFramedRedstoneBlock(BlockModelGenerators blockModels) {
         Identifier block = makeUnderlayedCube(blockModels, FBContent.BLOCK_FRAMED_REDSTONE_BLOCK, TEXTURE, mcMaterial("block/redstone_block"), _ -> {});
         simpleFramedBlockWithItem(blockModels, FBContent.BLOCK_FRAMED_REDSTONE_BLOCK, block)
                 .addAuxModel(FramedMarkedCubeGeometry.FRAME_KEY, singleVariant(FramedMarkedCubeGeometry.REDSTONE_FRAME_LOCATION));
@@ -796,8 +760,7 @@ public final class FramedBlockModelProvider extends AbstractFramedBlockModelProv
         makeOverlayCube(blockModels, FramedMarkedCubeGeometry.REDSTONE_FRAME_LOCATION, new Material(FramedMarkedCubeGeometry.REDSTONE_FRAME_LOCATION));
     }
 
-    private void registerFramedTarget(BlockModelGenerators blockModels, Identifier cube)
-    {
+    private void registerFramedTarget(BlockModelGenerators blockModels, Identifier cube) {
         simpleFramedBlockWithItem(blockModels, FBContent.BLOCK_FRAMED_TARGET, cube)
                 .addAuxModel(FramedTargetGeometry.OVERLAY_KEY, singleVariant(FramedTargetGeometry.OVERLAY_LOCATION));
 
@@ -809,8 +772,7 @@ public final class FramedBlockModelProvider extends AbstractFramedBlockModelProv
         );
     }
 
-    private void registerFramedItemFrame(BlockModelGenerators blockModels)
-    {
+    private void registerFramedItemFrame(BlockModelGenerators blockModels) {
         ModelTemplate templateItemFrame = ModelTemplates.create(
                 "framedblocks:template_framed_item_frame",
                 TextureSlot.FRONT, TextureSlot.PARTICLE
@@ -880,28 +842,19 @@ public final class FramedBlockModelProvider extends AbstractFramedBlockModelProv
             Identifier normalRail,
             Identifier ascendingRail,
             @Nullable Identifier curvedRail
-    )
-    {
+    ) {
         Direction dir = FramedFancyRailGeometry.getDirectionFromRailShape(shape);
         Identifier model;
-        if (shape.isSlope())
-        {
+        if (shape.isSlope()) {
             model = ascendingRail;
             dir = dir.getOpposite();
-        }
-        else if (shape == RailShape.NORTH_SOUTH || shape == RailShape.EAST_WEST)
-        {
+        } else if (shape == RailShape.NORTH_SOUTH || shape == RailShape.EAST_WEST) {
             model = normalRail;
-        }
-        else
-        {
+        } else {
             model = Objects.requireNonNull(curvedRail, "Encountered unsupported curve shape on " + normalRail);
-            if (shape == RailShape.NORTH_WEST || shape == RailShape.SOUTH_EAST)
-            {
+            if (shape == RailShape.NORTH_WEST || shape == RailShape.SOUTH_EAST) {
                 dir = dir.getClockWise();
-            }
-            else
-            {
+            } else {
                 dir = dir.getOpposite();
             }
         }
@@ -909,8 +862,7 @@ public final class FramedBlockModelProvider extends AbstractFramedBlockModelProv
         return BlockModelGenerators.plainVariant(model).with(horDirToVariant(dir));
     }
 
-    private void registerFramedFancyRail(BlockModelGenerators blockModels)
-    {
+    private void registerFramedFancyRail(BlockModelGenerators blockModels) {
         Identifier normalRail = ModelLocationUtils.getModelLocation(FBContent.BLOCK_FRAMED_FANCY_RAIL.value());
         Identifier ascendingRail = ModelLocationUtils.getModelLocation(FBContent.BLOCK_FRAMED_FANCY_RAIL.value(), "_ascending");
         Identifier curvedRail = ModelLocationUtils.getModelLocation(FBContent.BLOCK_FRAMED_FANCY_RAIL.value(), "_curved");
@@ -923,8 +875,7 @@ public final class FramedBlockModelProvider extends AbstractFramedBlockModelProv
         framedBlockItemModel(blockModels, FBContent.BLOCK_FRAMED_FANCY_RAIL, builder -> builder.itemBaseModel(THIN_BLOCK_LOC));
     }
 
-    private void registerFramedFancyPoweredRail(BlockModelGenerators blockModels)
-    {
+    private void registerFramedFancyPoweredRail(BlockModelGenerators blockModels) {
         Identifier normalRail = ModelLocationUtils.getModelLocation(FBContent.BLOCK_FRAMED_FANCY_POWERED_RAIL.value());
         Identifier normalRailOn = blockModelFromTemplate(
                 blockModels,
@@ -955,8 +906,7 @@ public final class FramedBlockModelProvider extends AbstractFramedBlockModelProv
         framedBlockItemModel(blockModels, FBContent.BLOCK_FRAMED_FANCY_POWERED_RAIL, builder -> builder.itemBaseModel(THIN_BLOCK_LOC));
     }
 
-    private void registerFramedFancyDetectorRail(BlockModelGenerators blockModels)
-    {
+    private void registerFramedFancyDetectorRail(BlockModelGenerators blockModels) {
         Identifier normalRail = ModelLocationUtils.getModelLocation(FBContent.BLOCK_FRAMED_FANCY_DETECTOR_RAIL.value());
         Identifier normalRailOn = blockModelFromTemplate(
                 blockModels,
@@ -987,8 +937,7 @@ public final class FramedBlockModelProvider extends AbstractFramedBlockModelProv
         framedBlockItemModel(blockModels, FBContent.BLOCK_FRAMED_FANCY_DETECTOR_RAIL, builder -> builder.itemBaseModel(THIN_BLOCK_LOC));
     }
 
-    private void registerFramedFancyActivatorRail(BlockModelGenerators blockModels)
-    {
+    private void registerFramedFancyActivatorRail(BlockModelGenerators blockModels) {
         Identifier normalRail = ModelLocationUtils.getModelLocation(FBContent.BLOCK_FRAMED_FANCY_ACTIVATOR_RAIL.value());
         Identifier normalRailOn = blockModelFromTemplate(
                 blockModels,
@@ -1019,19 +968,16 @@ public final class FramedBlockModelProvider extends AbstractFramedBlockModelProv
         framedBlockItemModel(blockModels, FBContent.BLOCK_FRAMED_FANCY_ACTIVATOR_RAIL, builder -> builder.itemBaseModel(THIN_BLOCK_LOC));
     }
 
-    private void registerFramedOneWayWindow(BlockModelGenerators blockModels)
-    {
+    private void registerFramedOneWayWindow(BlockModelGenerators blockModels) {
         Identifier model = makeUnderlayedCube(blockModels, FBContent.BLOCK_FRAMED_ONE_WAY_WINDOW, TEXTURE, mcMaterial("block/moss_block"), _ -> {});
         simpleFramedBlockWithItem(blockModels, FBContent.BLOCK_FRAMED_ONE_WAY_WINDOW, model);
     }
 
-    private void registerFramedBookshelf(BlockModelGenerators blockModels)
-    {
+    private void registerFramedBookshelf(BlockModelGenerators blockModels) {
         simpleFramedBlockWithItem(blockModels, FBContent.BLOCK_FRAMED_BOOKSHELF, Utils.id("block/framed_bookshelf"));
     }
 
-    private void registerFramedChiseledBookshelf(BlockModelGenerators blockModels)
-    {
+    private void registerFramedChiseledBookshelf(BlockModelGenerators blockModels) {
         String[] bookSlots = new String[] { "top_left", "top_mid", "top_right", "bottom_left", "bottom_mid", "bottom_right" };
         ModelTemplate[] bookSlotTemplates = Arrays.stream(bookSlots)
                 .map(slot -> ModelTemplates.create("framedblocks:template_framed_chiseled_bookshelf_slot_" + slot, TextureSlot.TEXTURE))
@@ -1040,8 +986,7 @@ public final class FramedBlockModelProvider extends AbstractFramedBlockModelProv
         String baseName = "block/framed_chiseled_bookshelf";
         Identifier[] modelsEmpty = new Identifier[6];
         Identifier[] modelsFilled = new Identifier[6];
-        for (int i = 0; i < ChiseledBookShelfBlockEntity.MAX_BOOKS_IN_STORAGE; i++)
-        {
+        for (int i = 0; i < ChiseledBookShelfBlockEntity.MAX_BOOKS_IN_STORAGE; i++) {
             String slot = bookSlots[i];
 
             modelsEmpty[i] = bookSlotTemplates[i].create(
@@ -1062,13 +1007,10 @@ public final class FramedBlockModelProvider extends AbstractFramedBlockModelProv
                 TextureMapping.particle(TEXTURE)
         );
 
-        framedMultiPart(blockModels, FBContent.BLOCK_FRAMED_CHISELED_BOOKSHELF, gen ->
-        {
+        framedMultiPart(blockModels, FBContent.BLOCK_FRAMED_CHISELED_BOOKSHELF, gen -> {
             gen.with(BlockModelGenerators.plainVariant(baseModel));
-            for (Direction dir : Direction.Plane.HORIZONTAL)
-            {
-                for (int i = 0; i < ChiseledBookShelfBlockEntity.MAX_BOOKS_IN_STORAGE; i++)
-                {
+            for (Direction dir : Direction.Plane.HORIZONTAL) {
+                for (int i = 0; i < ChiseledBookShelfBlockEntity.MAX_BOOKS_IN_STORAGE; i++) {
                     BooleanProperty prop = ChiseledBookShelfBlock.SLOT_OCCUPIED_PROPERTIES.get(i);
                     ConditionBuilder facingCondition = BlockModelGenerators.condition().term(BlockStateProperties.HORIZONTAL_FACING, dir);
 
@@ -1088,14 +1030,12 @@ public final class FramedBlockModelProvider extends AbstractFramedBlockModelProv
         framedBlockItemModel(blockModels, FBContent.BLOCK_FRAMED_CHISELED_BOOKSHELF);
     }
 
-    private void registerFramedChain(BlockModelGenerators blockModels, Identifier cube)
-    {
+    private void registerFramedChain(BlockModelGenerators blockModels, Identifier cube) {
         simpleFramedBlock(blockModels, FBContent.BLOCK_FRAMED_CHAIN, cube);
         blockModels.registerSimpleFlatItemModel(FBContent.BLOCK_FRAMED_CHAIN.value().asItem());
     }
 
-    private void registerFramedLantern(BlockModelGenerators blockModels)
-    {
+    private void registerFramedLantern(BlockModelGenerators blockModels) {
         Identifier standing = ModelLocationUtils.getModelLocation(FBContent.BLOCK_FRAMED_LANTERN.value());
         Identifier hanging = ModelLocationUtils.getModelLocation(FBContent.BLOCK_FRAMED_LANTERN.value(), "_hanging");
         Identifier chainStanding = modLocation("block/framed_lantern_chain_standing");
@@ -1114,8 +1054,7 @@ public final class FramedBlockModelProvider extends AbstractFramedBlockModelProv
         blockModels.registerSimpleFlatItemModel(FBContent.BLOCK_FRAMED_LANTERN.value().asItem());
     }
 
-    private void registerFramedSoulLantern(BlockModelGenerators blockModels)
-    {
+    private void registerFramedSoulLantern(BlockModelGenerators blockModels) {
         Identifier standing = ModelLocationUtils.getModelLocation(FBContent.BLOCK_FRAMED_SOUL_LANTERN.value());
         Identifier hanging = ModelLocationUtils.getModelLocation(FBContent.BLOCK_FRAMED_SOUL_LANTERN.value(), "_hanging");
         Identifier chainStanding = modLocation("block/framed_lantern_chain_standing");
@@ -1134,8 +1073,7 @@ public final class FramedBlockModelProvider extends AbstractFramedBlockModelProv
         blockModels.registerSimpleFlatItemModel(FBContent.BLOCK_FRAMED_SOUL_LANTERN.value().asItem());
     }
 
-    private void registerFramedCopperLantern(BlockModelGenerators blockModels)
-    {
+    private void registerFramedCopperLantern(BlockModelGenerators blockModels) {
         Identifier standing = ModelLocationUtils.getModelLocation(FBContent.BLOCK_FRAMED_COPPER_LANTERN.value());
         Identifier hanging = ModelLocationUtils.getModelLocation(FBContent.BLOCK_FRAMED_COPPER_LANTERN.value(), "_hanging");
         Identifier chainStanding = modLocation("block/framed_lantern_chain_standing");
@@ -1154,8 +1092,7 @@ public final class FramedBlockModelProvider extends AbstractFramedBlockModelProv
         blockModels.registerSimpleFlatItemModel(FBContent.BLOCK_FRAMED_COPPER_LANTERN.value().asItem());
     }
 
-    private void registerFramingSaw(BlockModelGenerators blockModels)
-    {
+    private void registerFramingSaw(BlockModelGenerators blockModels) {
         Identifier model = Utils.id("block/framing_saw");
         Identifier modelEncoder = Utils.id("block/framing_saw_encoder");
         variant(blockModels, FBContent.BLOCK_FRAMING_SAW, gen ->
@@ -1169,8 +1106,7 @@ public final class FramedBlockModelProvider extends AbstractFramedBlockModelProv
         blockModels.registerSimpleItemModel(FBContent.BLOCK_FRAMING_SAW.value(), model);
     }
 
-    private void registerPoweredFramingSaw(BlockModelGenerators blockModels)
-    {
+    private void registerPoweredFramingSaw(BlockModelGenerators blockModels) {
         TextureSlot slotSaw = TextureSlot.create("saw");
         ModelTemplate templatePoweredSaw = ModelTemplates.create("framedblocks:powered_framing_saw", slotSaw);
 

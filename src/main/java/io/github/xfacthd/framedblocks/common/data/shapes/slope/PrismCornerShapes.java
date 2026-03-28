@@ -14,8 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
-public final class PrismCornerShapes implements ShapeGenerator
-{
+public final class PrismCornerShapes implements ShapeGenerator {
     public static final PrismCornerShapes OUTER = new PrismCornerShapes(
             () -> ShapeUtils.orUnoptimized(
                     Block.box(0,  0,  0, 16,  4,  4),
@@ -81,26 +80,22 @@ public final class PrismCornerShapes implements ShapeGenerator
     private final Supplier<VoxelShape> bottomShape;
     private final Supplier<VoxelShape> bottomOcclusionShape;
 
-    public PrismCornerShapes(Supplier<VoxelShape> bottomShape, Supplier<VoxelShape> bottomOcclusionShape)
-    {
+    public PrismCornerShapes(Supplier<VoxelShape> bottomShape, Supplier<VoxelShape> bottomOcclusionShape) {
         this.bottomShape = bottomShape;
         this.bottomOcclusionShape = bottomOcclusionShape;
     }
 
     @Override
-    public ShapeContainer generatePrimary(List<BlockState> states)
-    {
+    public ShapeContainer generatePrimary(List<BlockState> states) {
         return generate(states, bottomShape);
     }
 
     @Override
-    public ShapeContainer generateOcclusion(List<BlockState> states)
-    {
+    public ShapeContainer generateOcclusion(List<BlockState> states) {
         return generate(states, bottomOcclusionShape);
     }
 
-    private static ShapeContainer generate(List<BlockState> states, Supplier<VoxelShape> bottomShape)
-    {
+    private static ShapeContainer generate(List<BlockState> states, Supplier<VoxelShape> bottomShape) {
         VoxelShape shapeBottom = bottomShape.get();
         VoxelShape shapeTop = ShapeUtils.rotateShapeAroundY(
                 Direction.NORTH, Direction.WEST, ShapeUtils.rotateShapeUnoptimizedAroundZ(
@@ -112,8 +107,7 @@ public final class PrismCornerShapes implements ShapeGenerator
 
         Map<BlockState, VoxelShape> map = new IdentityHashMap<>(states.size());
 
-        for (BlockState state : states)
-        {
+        for (BlockState state : states) {
             Direction dir = state.getValue(FramedProperties.FACING_HOR);
             boolean top = state.getValue(FramedProperties.TOP);
             map.put(state, shapes[dir.get2DDataValue() + (top ? 4 : 0)]);

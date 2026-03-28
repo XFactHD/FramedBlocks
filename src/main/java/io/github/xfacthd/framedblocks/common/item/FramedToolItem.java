@@ -11,22 +11,18 @@ import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.level.LevelReader;
 import net.neoforged.neoforge.common.ItemAbility;
 
-public class FramedToolItem extends Item
-{
+public class FramedToolItem extends Item {
     private final FramedToolType type;
 
-    public FramedToolItem(FramedToolType type, Properties props)
-    {
+    public FramedToolItem(FramedToolType type, Properties props) {
         super(props.stacksTo(1));
         this.type = type;
     }
 
     @Override
-    public ItemStackTemplate getCraftingRemainder(ItemInstance inst)
-    {
+    public ItemStackTemplate getCraftingRemainder(ItemInstance inst) {
         // TODO: this sucks, the parameter should probably just be a stack instead of the super-interface
-        DataComponentPatch patch = switch (inst)
-        {
+        DataComponentPatch patch = switch (inst) {
             case ItemStack stack -> stack.getComponentsPatch();
             case ItemStackTemplate template -> template.components();
             default -> DataComponentPatch.EMPTY;
@@ -35,19 +31,16 @@ public class FramedToolItem extends Item
     }
 
     @Override
-    public boolean doesSneakBypassUse(ItemStack stack, LevelReader level, BlockPos pos, Player player)
-    {
+    public boolean doesSneakBypassUse(ItemStack stack, LevelReader level, BlockPos pos, Player player) {
         return true;
     }
 
     @Override
-    public boolean canPerformAction(ItemInstance stack, ItemAbility ability)
-    {
+    public boolean canPerformAction(ItemInstance stack, ItemAbility ability) {
         return type.hasAbility() && ability == type.getAbility();
     }
 
-    public final FramedToolType getType()
-    {
+    public final FramedToolType getType() {
         return type;
     }
 }

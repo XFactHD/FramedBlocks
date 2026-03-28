@@ -7,8 +7,7 @@ import net.neoforged.neoforge.registries.datamaps.DataMapType;
 import org.jetbrains.annotations.ApiStatus;
 
 @ApiStatus.NonExtendable
-public interface FramedDataMaps
-{
+public interface FramedDataMaps {
     FramedDataMaps INSTANCE = Utils.loadService(FramedDataMaps.class);
 
     DataMapType<Block, BlockCamoRotatorPrototype> blockCamoRotators();

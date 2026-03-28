@@ -5,52 +5,43 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.RecipeInput;
 
-public final class FramingSawRecipeCalculation
-{
+public final class FramingSawRecipeCalculation {
     private final FramingSawRecipe recipe;
     private final int inputValue;
     private final long lcm;
 
-    FramingSawRecipeCalculation(FramingSawRecipe recipe, RecipeInput container, boolean client)
-    {
+    FramingSawRecipeCalculation(FramingSawRecipe recipe, RecipeInput container, boolean client) {
         this.recipe = recipe;
         this.inputValue = getInputValue(container.getItem(0), client);
         this.lcm = getMaterialLCM(recipe, inputValue);
     }
 
-    public int getInputCount()
-    {
+    public int getInputCount() {
         return (int) (lcm / inputValue);
     }
 
-    public int getOutputCount()
-    {
+    public int getOutputCount() {
         return getOutputCount(recipe.getMaterialAmount(), recipe.getResult(), lcm);
     }
 
-    public int getAdditiveCount(int idx)
-    {
+    public int getAdditiveCount(int idx) {
         return getAdditiveCount(recipe, recipe.getAdditives().get(idx), lcm);
     }
 
-    static int getInputValue(ItemStack input, boolean client)
-    {
+    static int getInputValue(ItemStack input, boolean client) {
         FramingSawRecipeCache cache = FramingSawRecipeCache.get(client);
         return cache.getMaterialValue(input.getItem());
     }
 
-    static long getMaterialLCM(FramingSawRecipe recipe, int inputValue)
-    {
+    static long getMaterialLCM(FramingSawRecipe recipe, int inputValue) {
         return MathUtils.lcm(inputValue, recipe.getMaterialAmount());
     }
 
-    static int getOutputCount(int materialAmount, ItemStackTemplate result, long lcm)
-    {
+    static int getOutputCount(int materialAmount, ItemStackTemplate result, long lcm) {
         return (int) (lcm / materialAmount * result.count());
     }
 
-    static int getAdditiveCount(FramingSawRecipe recipe, FramingSawRecipeAdditive additive, long lcm)
-    {
+    static int getAdditiveCount(FramingSawRecipe recipe, FramingSawRecipeAdditive additive, long lcm) {
         return (int) (lcm / recipe.getMaterialAmount()) * additive.count();
     }
 }

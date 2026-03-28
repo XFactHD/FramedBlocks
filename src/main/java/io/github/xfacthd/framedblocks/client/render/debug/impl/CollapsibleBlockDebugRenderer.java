@@ -31,8 +31,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 
-public final class CollapsibleBlockDebugRenderer implements BlockDebugRenderer<FramedCollapsibleBlockEntity>
-{
+public final class CollapsibleBlockDebugRenderer implements BlockDebugRenderer<FramedCollapsibleBlockEntity> {
     public static final CollapsibleBlockDebugRenderer INSTANCE = new CollapsibleBlockDebugRenderer();
     private static final ContextKey<DebugInfo> DATA_KEY = new ContextKey<>(Utils.id("collapsible_block_debug_renderer"));
     private static final float VERT_TEXT_SCALE = 16F;
@@ -42,18 +41,18 @@ public final class CollapsibleBlockDebugRenderer implements BlockDebugRenderer<F
     private CollapsibleBlockDebugRenderer() { }
 
     @Override
-    public void extract(FramedCollapsibleBlockEntity be, BlockHitResult blockHit, float partialTick, LevelRenderState renderState)
-    {
+    public void extract(FramedCollapsibleBlockEntity be, BlockHitResult blockHit, float partialTick, LevelRenderState renderState) {
         Player player = Objects.requireNonNull(Minecraft.getInstance().player);
         DebugInfo debugInfo = TargetCalculator.computeDebugInfo(be, player, blockHit, partialTick);
         renderState.setRenderData(DATA_KEY, debugInfo);
     }
 
     @Override
-    public void submit(LevelRenderState renderState, PoseStack poseStack, SubmitNodeCollector collector)
-    {
+    public void submit(LevelRenderState renderState, PoseStack poseStack, SubmitNodeCollector collector) {
         DebugInfo data = renderState.getRenderData(DATA_KEY);
-        if (data == null) return;
+        if (data == null) {
+            return;
+        }
 
         poseStack.pushPose();
         {
@@ -61,12 +60,9 @@ public final class CollapsibleBlockDebugRenderer implements BlockDebugRenderer<F
             float[] heights = data.heights();
 
             poseStack.translate(.5, .5, .5);
-            if (face == Direction.DOWN)
-            {
+            if (face == Direction.DOWN) {
                 poseStack.mulPose(Quaternions.XP_180);
-            }
-            else if (face != Direction.UP)
-            {
+            } else if (face != Direction.UP) {
                 poseStack.mulPose(OutlineRenderer.YN_DIR[face.get2DDataValue()]);
                 poseStack.mulPose(Quaternions.XP_90);
             }
@@ -93,8 +89,7 @@ public final class CollapsibleBlockDebugRenderer implements BlockDebugRenderer<F
         {
             poseStack.translate(data.face().getUnitVec3().scale(.001F));
 
-            collector.submitCustomGeometry(poseStack, FramedRenderTypes.DEBUG_QUADS_DEPTH, (pose, builder) ->
-            {
+            collector.submitCustomGeometry(poseStack, FramedRenderTypes.DEBUG_QUADS_DEPTH, (pose, builder) -> {
                 drawTriangle(builder, pose, data.pos(), data.tri1(), 0xAAFF0000);
                 drawTriangle(builder, pose, data.pos(), data.tri2(), 0xAA00FF00);
             });
@@ -103,13 +98,11 @@ public final class CollapsibleBlockDebugRenderer implements BlockDebugRenderer<F
         poseStack.popPose();
     }
 
-    private static void submitVertIndex(SubmitNodeCollector collector, PoseStack poseStack, float x, float z, float y, int vert)
-    {
+    private static void submitVertIndex(SubmitNodeCollector collector, PoseStack poseStack, float x, float z, float y, int vert) {
         submitText(collector, poseStack, x, z, y, -2.5F, VERT_TEXT_SCALE, Integer.toString(vert), 0xFFFFFFFF);
     }
 
-    private static void submitText(SubmitNodeCollector collector, PoseStack poseStack, float x, float z, float y, float xOff, float scale, String text, int color)
-    {
+    private static void submitText(SubmitNodeCollector collector, PoseStack poseStack, float x, float z, float y, float xOff, float scale, String text, int color) {
         poseStack.pushPose();
         poseStack.translate(x, y, z);
         poseStack.mulPose(Axis.XP.rotationDegrees(90));
@@ -131,8 +124,7 @@ public final class CollapsibleBlockDebugRenderer implements BlockDebugRenderer<F
         poseStack.popPose();
     }
 
-    private static void drawTriangle(VertexConsumer builder, PoseStack.Pose pose, BlockPos pos, Triangle tri, int color)
-    {
+    private static void drawTriangle(VertexConsumer builder, PoseStack.Pose pose, BlockPos pos, Triangle tri, int color) {
         vertex(builder, pose, pos, tri.vertex0(), color);
         vertex(builder, pose, pos, tri.vertex1(), color);
         vertex(builder, pose, pos, tri.vertex2(), color);
@@ -140,14 +132,14 @@ public final class CollapsibleBlockDebugRenderer implements BlockDebugRenderer<F
     }
 
     @SuppressWarnings("SameParameterValue")
-    private static void submitTarget(SubmitNodeCollector collector, PoseStack poseStack, @Nullable Vec3 target, int color)
-    {
-        if (target == null) return;
+    private static void submitTarget(SubmitNodeCollector collector, PoseStack poseStack, @Nullable Vec3 target, int color) {
+        if (target == null) {
+            return;
+        }
 
         poseStack.pushPose();
         poseStack.translate(target);
-        collector.submitCustomGeometry(poseStack, FramedRenderTypes.DEBUG_QUADS_DEPTH, (pose, builder) ->
-        {
+        collector.submitCustomGeometry(poseStack, FramedRenderTypes.DEBUG_QUADS_DEPTH, (pose, builder) -> {
             // Top
             vertex(builder, pose, -.025F,  .025F, -.025F, color);
             vertex(builder, pose, -.025F,  .025F,  .025F, color);
@@ -187,22 +179,19 @@ public final class CollapsibleBlockDebugRenderer implements BlockDebugRenderer<F
         poseStack.popPose();
     }
 
-    private static void vertex(VertexConsumer builder, PoseStack.Pose pose, BlockPos pos, Vec3 vec, int color)
-    {
+    private static void vertex(VertexConsumer builder, PoseStack.Pose pose, BlockPos pos, Vec3 vec, int color) {
         float x = (float) (vec.x - pos.getX());
         float y = (float) (vec.y - pos.getY());
         float z = (float) (vec.z - pos.getZ());
         vertex(builder, pose, x, y, z, color);
     }
 
-    private static void vertex(VertexConsumer builder, PoseStack.Pose pose, float x, float y, float z, int color)
-    {
+    private static void vertex(VertexConsumer builder, PoseStack.Pose pose, float x, float y, float z, int color) {
         builder.addVertex(pose, x, y, z).setColor(color);
     }
 
     @Override
-    public boolean isEnabled()
-    {
+    public boolean isEnabled() {
         return DevToolsConfig.VIEW.isCollapsibleBlockDebugRendererEnabled();
     }
 }

@@ -32,8 +32,7 @@ import java.util.function.LongConsumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public final class SkipPredicateConsistency
-{
+public final class SkipPredicateConsistency {
     private static final BlockType[] TYPES = BlockType.values();
     private static final Direction[] SIDES = Direction.values();
     public static final String NAME = "SkipPredicatesConsistency";
@@ -48,8 +47,7 @@ public final class SkipPredicateConsistency
 
     public static void testSkipPredicates(
             @SuppressWarnings("unused") CommandContext<CommandSourceStack> ctx, Consumer<Component> msgQueueAppender
-    )
-    {
+    ) {
         List<Inconsistency> inconsistencies = new ArrayList<>();
         AsyncTypeTest.Stats stats = AsyncTypeTest.execute(
                 SkipPredicateConsistency::testTypeAgainstAll,
@@ -61,14 +59,11 @@ public final class SkipPredicateConsistency
         MutableComponent resultMsg = Component.literal("No issues found");
         ChatFormatting color = ChatFormatting.DARK_GREEN;
 
-        if (!inconsistencies.isEmpty())
-        {
+        if (!inconsistencies.isEmpty()) {
             StringBuilder testResult = new StringBuilder("Encountered inconsistencies while testing skip predicates (deduplicated):");
             Set<Inconsistency> deduplicated = new HashSet<>();
-            for (Inconsistency inconsistency : inconsistencies)
-            {
-                if (!deduplicated.add(inconsistency) || !deduplicated.add(inconsistency.mirror()))
-                {
+            for (Inconsistency inconsistency : inconsistencies) {
+                if (!deduplicated.add(inconsistency) || !deduplicated.add(inconsistency.mirror())) {
                     continue;
                 }
 
@@ -95,30 +90,22 @@ public final class SkipPredicateConsistency
         msgQueueAppender.accept(resultMsg);
     }
 
-    private static Result testTypeAgainstAll(BlockType type, LongConsumer combinationCollector)
-    {
+    private static Result testTypeAgainstAll(BlockType type, LongConsumer combinationCollector) {
         List<Inconsistency> inconsistencies = new ArrayList<>();
         Block block = FBContent.byType(type);
         SideSkipPredicate skipPredicate = type.getSideSkipPredicate();
         long combinations = 0;
         long lastSent = 0;
-        for (BlockState state : block.getStateDefinition().getPossibleStates())
-        {
-            for (BlockType adjType : TYPES)
-            {
+        for (BlockState state : block.getStateDefinition().getPossibleStates()) {
+            for (BlockType adjType : TYPES) {
                 Block adjBlock = FBContent.byType(adjType);
-                for (BlockState adjState : adjBlock.getStateDefinition().getPossibleStates())
-                {
-                    for (Direction side : SIDES)
-                    {
-                        if (!type.isDoubleBlock() && !adjType.isDoubleBlock())
-                        {
+                for (BlockState adjState : adjBlock.getStateDefinition().getPossibleStates()) {
+                    for (Direction side : SIDES) {
+                        if (!type.isDoubleBlock() && !adjType.isDoubleBlock()) {
                             StateCache cache = state.framedblocks$getCache();
                             StateCache adjCache = adjState.framedblocks$getCache();
-                            if (!cache.isFullFace(side) && !adjCache.isFullFace(side.getOpposite()))
-                            {
-                                try
-                                {
+                            if (!cache.isFullFace(side) && !adjCache.isFullFace(side.getOpposite())) {
+                                try {
                                     boolean resultOne = skipPredicate.test(
                                             EmptyBlockGetter.INSTANCE, CENTER, state, adjState, side
                                     );
@@ -126,20 +113,17 @@ public final class SkipPredicateConsistency
                                             EmptyBlockGetter.INSTANCE, CENTER, adjState, state, side.getOpposite()
                                     );
 
-                                    if (resultOne != resultTwo && !isOneWayCombination(type, adjType))
-                                    {
+                                    if (resultOne != resultTwo && !isOneWayCombination(type, adjType)) {
                                         state = resetIgnoredProperties(state);
                                         adjState = resetIgnoredProperties(adjState);
                                         inconsistencies.add(new Inconsistency(state, adjState, side, resultOne, resultTwo));
                                     }
-                                }
-                                catch (Throwable ignored) { }
+                                } catch (Throwable ignored) { }
                             }
                         }
 
                         combinations++;
-                        if (combinations % 100000L == 0)
-                        {
+                        if (combinations % 100000L == 0) {
                             combinationCollector.accept(100000L);
                             lastSent = combinations;
                         }
@@ -152,8 +136,7 @@ public final class SkipPredicateConsistency
         return new Result(combinations, inconsistencies);
     }
 
-    private static boolean isOneWayCombination(BlockType type, BlockType adjType)
-    {
+    private static boolean isOneWayCombination(BlockType type, BlockType adjType) {
         SkipPredicatePresenceConsistency.Test test = SkipPredicatePresenceConsistency.getTestOf(type);
         SkipPredicatePresenceConsistency.Test adjTest = SkipPredicatePresenceConsistency.getTestOf(adjType);
         return Objects.requireNonNull(test).oneWayTargets().contains(adjType) ||
@@ -161,23 +144,18 @@ public final class SkipPredicateConsistency
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    private static BlockState resetIgnoredProperties(BlockState state)
-    {
+    private static BlockState resetIgnoredProperties(BlockState state) {
         BlockState defState = state.getBlock().defaultBlockState();
-        for (Property prop : IGNORED_PROPERTIES)
-        {
-            if (state.hasProperty(prop))
-            {
+        for (Property prop : IGNORED_PROPERTIES) {
+            if (state.hasProperty(prop)) {
                 state = state.setValue(prop, defState.getValue(prop));
             }
         }
         return state;
     }
 
-    private record Inconsistency(BlockState typeOne, BlockState typeTwo, Direction side, boolean resOne, boolean resTwo)
-    {
-        Inconsistency mirror()
-        {
+    private record Inconsistency(BlockState typeOne, BlockState typeTwo, Direction side, boolean resOne, boolean resTwo) {
+        Inconsistency mirror() {
             return new Inconsistency(typeTwo, typeOne, side.getOpposite(), resTwo, resOne);
         }
     }

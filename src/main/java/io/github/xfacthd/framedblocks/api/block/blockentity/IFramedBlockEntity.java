@@ -33,8 +33,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.function.Consumer;
 
-public sealed interface IFramedBlockEntity extends IBlockEntityExtension permits FramedBlockEntity, DelegatingFramedBlockEntity
-{
+public sealed interface IFramedBlockEntity extends IBlockEntityExtension permits FramedBlockEntity, DelegatingFramedBlockEntity {
     InteractionResult handleInteraction(Player player, InteractionHand hand, BlockHitResult hit);
 
     @ApiStatus.Internal
@@ -54,15 +53,13 @@ public sealed interface IFramedBlockEntity extends IBlockEntityExtension permits
 
     CamoContainer<?, ?> getCamo(BlockHitResult hit, Vec3 lookVec, Vec3 eyePos);
 
-    @Nullable
-    Direction getCamoOrientation(boolean secondary);
+    @Nullable Direction getCamoOrientation(boolean secondary);
 
     CamoContainer<?, ?> getCamo();
 
     boolean hasOverlay();
 
-    @Nullable
-    Holder<BlockOverlay> getOverlay();
+    @Nullable Holder<BlockOverlay> getOverlay();
 
     void setOverlay(@Nullable Holder<BlockOverlay> overlay);
 
@@ -96,11 +93,9 @@ public sealed interface IFramedBlockEntity extends IBlockEntityExtension permits
 
     boolean isCamoIgnitedByLava(Direction face);
 
-    @Nullable
-    MapColor getMapColor();
+    @Nullable MapColor getMapColor();
 
-    @Nullable
-    Integer getCamoBeaconColorMultiplier(LevelReader level, BlockPos pos, BlockPos beaconPos);
+    @Nullable Integer getCamoBeaconColorMultiplier(LevelReader level, BlockPos pos, BlockPos beaconPos);
 
     boolean shouldCamoDisplayFluidOverlay(BlockAndLightGetter level, BlockPos pos, FluidState fluid);
 
@@ -135,9 +130,8 @@ public sealed interface IFramedBlockEntity extends IBlockEntityExtension permits
     @ApiStatus.NonExtendable
     BlockPos getBlockPos();
 
-    @Nullable
     @ApiStatus.NonExtendable
-    Level getLevel();
+    @Nullable Level getLevel();
 
     @ApiStatus.Internal
     FramedBlockEntity unwrap();

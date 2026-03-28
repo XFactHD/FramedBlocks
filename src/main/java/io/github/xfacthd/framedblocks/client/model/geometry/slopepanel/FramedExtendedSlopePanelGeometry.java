@@ -14,15 +14,13 @@ import net.minecraft.client.resources.model.geometry.BakedQuad;
 import net.minecraft.core.Direction;
 import org.jspecify.annotations.Nullable;
 
-public class FramedExtendedSlopePanelGeometry extends Geometry
-{
+public class FramedExtendedSlopePanelGeometry extends Geometry {
     private final Direction facing;
     private final HorizontalRotation rotation;
     private final Direction orientation;
     private final boolean altSlope;
 
-    public FramedExtendedSlopePanelGeometry(GeometryFactory.Context ctx)
-    {
+    public FramedExtendedSlopePanelGeometry(GeometryFactory.Context ctx) {
         this.facing = ctx.state().getValue(FramedProperties.FACING_HOR);
         this.rotation = ctx.state().getValue(PropertyHolder.ROTATION);
         this.orientation = rotation.withFacing(facing);
@@ -30,50 +28,37 @@ public class FramedExtendedSlopePanelGeometry extends Geometry
     }
 
     @Override
-    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
-    {
+    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData) {
         Direction face = quad.direction();
         boolean yAxis = DirUtils.isY(orientation);
-        if (face == orientation)
-        {
-            if (DirUtils.isY(orientation))
-            {
+        if (face == orientation) {
+            if (DirUtils.isY(orientation)) {
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(facing.getOpposite(), .5F))
                         .export(quadMap, face);
 
-                if (altSlope)
-                {
+                if (altSlope) {
                     QuadModifier.of(quad)
                             .apply(FramedSlopePanelGeometry.createVerticalSlope(facing, orientation))
                             .apply(Modifiers.offset(facing.getOpposite(), .5F))
                             .export(quadMap, null);
                 }
-            }
-            else
-            {
+            } else {
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(facing.getOpposite(), .5F))
                         .export(quadMap, face);
             }
-        }
-        else if ((!rotation.isVertical() || !altSlope) && face == facing.getOpposite())
-        {
+        } else if ((!rotation.isVertical() || !altSlope) && face == facing.getOpposite()) {
             QuadModifier.of(quad)
                     .apply(FramedSlopePanelGeometry.createSlope(facing, orientation))
                     .export(quadMap, null);
-        }
-        else if (face.getAxis() != facing.getAxis() && face.getAxis() != orientation.getAxis())
-        {
-            if (yAxis)
-            {
+        } else if (face.getAxis() != facing.getAxis() && face.getAxis() != orientation.getAxis()) {
+            if (yAxis) {
                 boolean up = orientation == Direction.UP;
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(facing.getOpposite(), up ? .5F :  1F, up ?  1F : .5F))
                         .export(quadMap, face);
-            }
-            else
-            {
+            } else {
                 boolean rightRot = rotation == HorizontalRotation.RIGHT;
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(facing.getOpposite(), rightRot ?  1F : .5F, rightRot ? .5F :  1F))

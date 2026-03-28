@@ -6,29 +6,23 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jspecify.annotations.Nullable;
 
-public class FramedBookshelfBlock extends FramedBlock
-{
-    public FramedBookshelfBlock(Properties props)
-    {
+public class FramedBookshelfBlock extends FramedBlock {
+    public FramedBookshelfBlock(Properties props) {
         super(BlockType.FRAMED_BOOKSHELF, props);
     }
 
     @Override
-    public BlockState getItemModelSource()
-    {
+    public BlockState getItemModelSource() {
         return defaultBlockState();
     }
 
     @Override
-    @Nullable
-    public Direction getHorizontalOrientation(BlockState state)
-    {
+    public @Nullable Direction getHorizontalOrientation(BlockState state) {
         return null;
     }
 
     @Override
-    public BlockState getJadeRenderState(BlockState state)
-    {
+    public BlockState getJadeRenderState(BlockState state) {
         return state;
     }
 }

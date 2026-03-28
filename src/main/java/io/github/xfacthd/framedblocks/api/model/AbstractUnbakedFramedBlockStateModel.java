@@ -18,8 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-public abstract class AbstractUnbakedFramedBlockStateModel implements BlockStateModel.UnbakedRoot
-{
+public abstract class AbstractUnbakedFramedBlockStateModel implements BlockStateModel.UnbakedRoot {
     private static final Logger LOGGER = LogUtils.getLogger();
 
     protected final BlockState state;
@@ -30,8 +29,7 @@ public abstract class AbstractUnbakedFramedBlockStateModel implements BlockState
     @Nullable
     private volatile BlockStateModel cachedBakingResult = null;
 
-    protected AbstractUnbakedFramedBlockStateModel(ModelFactory.Context ctx)
-    {
+    protected AbstractUnbakedFramedBlockStateModel(ModelFactory.Context ctx) {
         this.state = ctx.state();
         this.baseModel = ctx.baseModel();
         this.debugName = state::toString;
@@ -41,18 +39,13 @@ public abstract class AbstractUnbakedFramedBlockStateModel implements BlockState
     protected abstract BlockStateModel bakeCached(GeometryFactory.Context context, ModelBaker baker);
 
     @Override
-    public final BlockStateModel bake(BlockState ignoredState, ModelBaker baker)
-    {
+    public final BlockStateModel bake(BlockState ignoredState, ModelBaker baker) {
         // This cannot be converted to ModelBaker.SharedOperationKey due to the wrapped model potentially also using that
-        if (cachedBakingResult == null)
-        {
-            synchronized (bakingLock)
-            {
-                if (cachedBakingResult == null)
-                {
+        if (cachedBakingResult == null) {
+            synchronized (bakingLock) {
+                if (cachedBakingResult == null) {
                     Map<String, BlockStateModel> bakedAuxModels = new HashMap<>(auxModels.size());
-                    for (Map.Entry<String, SingleVariant.Unbaked> entry : auxModels.entrySet())
-                    {
+                    for (Map.Entry<String, SingleVariant.Unbaked> entry : auxModels.entrySet()) {
                         bakedAuxModels.put(entry.getKey(), entry.getValue().bake(baker));
                     }
                     BlockStateModel missingModel = baker.compute(ModelUtils.MISSING_MODEL_KEY);
@@ -72,17 +65,14 @@ public abstract class AbstractUnbakedFramedBlockStateModel implements BlockState
     }
 
     @Override
-    public final Object visualEqualityGroup(BlockState state)
-    {
+    public final Object visualEqualityGroup(BlockState state) {
         return this.state;
     }
 
     @Override
-    public final void resolveDependencies(Resolver resolver)
-    {
+    public final void resolveDependencies(Resolver resolver) {
         baseModel.resolveDependencies(resolver);
-        for (SingleVariant.Unbaked auxModel : auxModels.values())
-        {
+        for (SingleVariant.Unbaked auxModel : auxModels.values()) {
             auxModel.resolveDependencies(resolver);
         }
         resolveSpecialDependencies(resolver);
@@ -90,13 +80,13 @@ public abstract class AbstractUnbakedFramedBlockStateModel implements BlockState
 
     protected void resolveSpecialDependencies(Resolver resolver) {}
 
-    private record AuxModelProviderImpl(BlockState state, Map<String, BlockStateModel> auxModels, BlockStateModel missingModel) implements AuxModelProvider
-    {
+    private record AuxModelProviderImpl(BlockState state, Map<String, BlockStateModel> auxModels, BlockStateModel missingModel) implements AuxModelProvider {
         @Override
-        public BlockStateModel getModel(String key)
-        {
+        public BlockStateModel getModel(String key) {
             BlockStateModel model = auxModels.get(key);
-            if (model != null) return model;
+            if (model != null) {
+                return model;
+            }
 
             LOGGER.warn("AbstractUnbakedFramedBlockModel for {} has no aux model with key {}, returning missing model", state, key);
             return missingModel;

@@ -34,13 +34,11 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.Nullable;
 
-public class FramedGateBlock extends FramedBlock
-{
+public class FramedGateBlock extends FramedBlock {
     private final SoundEvent closeSound;
     private final SoundEvent openSound;
 
-    private FramedGateBlock(BlockType blockType, Properties props, SoundEvent closeSound, SoundEvent openSound)
-    {
+    private FramedGateBlock(BlockType blockType, Properties props, SoundEvent closeSound, SoundEvent openSound) {
         super(blockType, props.pushReaction(PushReaction.DESTROY));
         this.closeSound = closeSound;
         this.openSound = openSound;
@@ -51,8 +49,7 @@ public class FramedGateBlock extends FramedBlock
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
-    {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
         builder.add(
                 BlockStateProperties.HORIZONTAL_FACING,
@@ -63,13 +60,10 @@ public class FramedGateBlock extends FramedBlock
     }
 
     @Override
-    @Nullable
-    public BlockState getStateForPlacement(BlockPlaceContext ctx)
-    {
+    public @Nullable BlockState getStateForPlacement(BlockPlaceContext ctx) {
         return PlacementStateBuilder.of(this, ctx)
                 .withHorizontalFacing()
-                .withCustom((state, modCtx) ->
-                {
+                .withCustom((state, modCtx) -> {
                     boolean powered = modCtx.getLevel().hasNeighborSignal(modCtx.getClickedPos());
                     return state.setValue(BlockStateProperties.DOOR_HINGE, getHinge(modCtx))
                             .setValue(BlockStateProperties.POWERED, powered)
@@ -78,8 +72,7 @@ public class FramedGateBlock extends FramedBlock
                 .build();
     }
 
-    private DoorHingeSide getHinge(BlockPlaceContext context)
-    {
+    private DoorHingeSide getHinge(BlockPlaceContext context) {
         BlockGetter level = context.getLevel();
         BlockPos pos = context.getClickedPos();
         Direction dir = context.getHorizontalDirection();
@@ -89,35 +82,29 @@ public class FramedGateBlock extends FramedBlock
         BlockPos posRight = pos.relative(dir.getClockWise());
         BlockState stateRight = level.getBlockState(posRight);
 
-        if (stateLeft.is(this) || stateRight.isCollisionShapeFullBlock(level, posRight))
-        {
+        if (stateLeft.is(this) || stateRight.isCollisionShapeFullBlock(level, posRight)) {
             return DoorHingeSide.RIGHT;
         }
-        if (stateRight.is(this) || stateLeft.isCollisionShapeFullBlock(level, posLeft))
-        {
+        if (stateRight.is(this) || stateLeft.isCollisionShapeFullBlock(level, posLeft)) {
             return DoorHingeSide.LEFT;
         }
 
         Vec3 hitVec = MathUtils.fraction(context.getClickLocation());
         double xz = DirUtils.isX(dir) ? hitVec.z() : hitVec.x();
-        if (DirUtils.isPositive(dir.getCounterClockWise()))
-        {
+        if (DirUtils.isPositive(dir.getCounterClockWise())) {
             xz = 1D - xz;
         }
         return xz > .5D ? DoorHingeSide.RIGHT : DoorHingeSide.LEFT;
     }
 
     @Override
-    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit)
-    {
+    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
         InteractionResult result = super.useWithoutItem(state, level, pos, player, hit);
-        if (result.consumesAction())
-        {
+        if (result.consumesAction()) {
             return result;
         }
 
-        if (this == FBContent.BLOCK_FRAMED_IRON_GATE.value())
-        {
+        if (this == FBContent.BLOCK_FRAMED_IRON_GATE.value()) {
             return InteractionResult.PASS;
         }
 
@@ -132,13 +119,10 @@ public class FramedGateBlock extends FramedBlock
     }
 
     @Override
-    protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, @Nullable Orientation orientation, boolean isMoving)
-    {
+    protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, @Nullable Orientation orientation, boolean isMoving) {
         boolean powered = level.hasNeighborSignal(pos);
-        if (!defaultBlockState().is(block) && powered != state.getValue(BlockStateProperties.POWERED))
-        {
-            if (powered != state.getValue(BlockStateProperties.OPEN))
-            {
+        if (!defaultBlockState().is(block) && powered != state.getValue(BlockStateProperties.POWERED)) {
+            if (powered != state.getValue(BlockStateProperties.OPEN)) {
                 playSound(null, level, pos, powered);
                 level.gameEvent(null, powered ? GameEvent.BLOCK_OPEN : GameEvent.BLOCK_CLOSE, pos);
             }
@@ -152,57 +136,47 @@ public class FramedGateBlock extends FramedBlock
     }
 
     @Override
-    protected BlockState rotate(BlockState state, Rotation rotation)
-    {
+    protected BlockState rotate(BlockState state, Rotation rotation) {
         return BlockUtils.rotate(state, BlockStateProperties.HORIZONTAL_FACING, rotation);
     }
 
     @Override
     @SuppressWarnings("deprecation")
-    protected BlockState mirror(BlockState state, Mirror mirror)
-    {
-        if (mirror == Mirror.NONE)
-        {
+    protected BlockState mirror(BlockState state, Mirror mirror) {
+        if (mirror == Mirror.NONE) {
             return state;
         }
         return state.rotate(mirror.getRotation(state.getValue(BlockStateProperties.HORIZONTAL_FACING))).cycle(BlockStateProperties.DOOR_HINGE);
     }
 
     @Override
-    protected boolean isPathfindable(BlockState state, PathComputationType type)
-    {
-        return switch (type)
-        {
+    protected boolean isPathfindable(BlockState state, PathComputationType type) {
+        return switch (type) {
             case LAND, AIR -> state.getValue(BlockStateProperties.OPEN);
             default -> false;
         };
     }
 
-    private void playSound(@Nullable Entity entity, Level level, BlockPos pos, boolean open)
-    {
+    private void playSound(@Nullable Entity entity, Level level, BlockPos pos, boolean open) {
         level.playSound(entity, pos, open ? openSound : closeSound, SoundSource.BLOCKS, 1F, level.getRandom().nextFloat() * .1F + .9F);
     }
 
     @Override
-    public BlockState getItemModelSource()
-    {
+    public BlockState getItemModelSource() {
         return defaultBlockState();
     }
 
     @Override
-    public Direction getHorizontalOrientation(BlockState state)
-    {
+    public Direction getHorizontalOrientation(BlockState state) {
         return state.getValue(FramedProperties.FACING_HOR);
     }
 
     @Override
-    public BlockState getJadeRenderState(BlockState state)
-    {
+    public BlockState getJadeRenderState(BlockState state) {
         return defaultBlockState();
     }
 
-    public static FramedGateBlock wood(Properties props)
-    {
+    public static FramedGateBlock wood(Properties props) {
         return new FramedGateBlock(
                 BlockType.FRAMED_GATE,
                 props,
@@ -211,8 +185,7 @@ public class FramedGateBlock extends FramedBlock
         );
     }
 
-    public static FramedGateBlock iron(Properties props)
-    {
+    public static FramedGateBlock iron(Properties props) {
         return new FramedGateBlock(
                 BlockType.FRAMED_IRON_GATE,
                 props.requiresCorrectToolForDrops(),

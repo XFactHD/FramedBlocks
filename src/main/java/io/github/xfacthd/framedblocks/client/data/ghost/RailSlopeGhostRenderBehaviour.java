@@ -14,35 +14,29 @@ import net.minecraft.world.level.block.state.properties.RailShape;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jspecify.annotations.Nullable;
 
-public final class RailSlopeGhostRenderBehaviour implements GhostRenderBehaviour
-{
+public final class RailSlopeGhostRenderBehaviour implements GhostRenderBehaviour {
     public static final RailSlopeGhostRenderBehaviour INSTANCE = new RailSlopeGhostRenderBehaviour();
 
     private RailSlopeGhostRenderBehaviour() { }
 
     @Override
-    public boolean mayRender(ItemStack stack, @Nullable ItemStack proxiedStack)
-    {
+    public boolean mayRender(ItemStack stack, @Nullable ItemStack proxiedStack) {
         return FramedUtils.isRailItem(stack.getItem());
     }
 
     @Override
-    @Nullable
     @SuppressWarnings("deprecation")
-    public BlockState getRenderState(
+    public @Nullable BlockState getRenderState(
             ItemStack stack,
             @Nullable ItemStack proxiedStack,
             BlockHitResult hit,
             BlockPlaceContext ctx,
             BlockState hitState,
             int renderPass
-    )
-    {
-        if (hitState.getBlock() == FBContent.BLOCK_FRAMED_SLOPE.value())
-        {
+    ) {
+        if (hitState.getBlock() == FBContent.BLOCK_FRAMED_SLOPE.value()) {
             RailShape shape = FramedUtils.getAscendingRailShapeFromDirection(hitState.getValue(FramedProperties.FACING_HOR));
-            if (!(stack.getItem() instanceof BlockItem item) || !(item.getBlock() instanceof BaseRailBlock block))
-            {
+            if (!(stack.getItem() instanceof BlockItem item) || !(item.getBlock() instanceof BaseRailBlock block)) {
                 return null;
             }
             return block.defaultBlockState().setValue(block.getShapeProperty(), shape);
@@ -59,8 +53,7 @@ public final class RailSlopeGhostRenderBehaviour implements GhostRenderBehaviour
             BlockState hitState,
             BlockPos defaultPos,
             int renderPass
-    )
-    {
+    ) {
         return hit.getBlockPos();
     }
 
@@ -73,8 +66,7 @@ public final class RailSlopeGhostRenderBehaviour implements GhostRenderBehaviour
             BlockState hitState,
             BlockState renderState,
             BlockPos renderPos
-    )
-    {
+    ) {
         return true;
     }
 }

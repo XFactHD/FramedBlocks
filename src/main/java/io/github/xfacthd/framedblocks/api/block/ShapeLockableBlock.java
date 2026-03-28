@@ -29,28 +29,23 @@ import java.util.Set;
  * {@link #updateShapeLockable(BlockState, LevelReader, ScheduledTickAccess, BlockPos, Direction, BlockPos, BlockState, RandomSource, UpdateShapeHandler)}
  * from {@link Block#updateShape(BlockState, LevelReader, ScheduledTickAccess, BlockPos, Direction, BlockPos, BlockState, RandomSource)}.
  */
-public interface ShapeLockableBlock extends IFramedBlock
-{
+public interface ShapeLockableBlock extends IFramedBlock {
     String LOCK_MESSAGE = Utils.translationKey("msg", "lock_state");
     Component STATE_LOCKED = Utils.translate("msg", "lock_state.locked").withStyle(ChatFormatting.RED);
     Component STATE_UNLOCKED = Utils.translate("msg", "lock_state.unlocked").withStyle(ChatFormatting.GREEN);
 
     @ApiStatus.NonExtendable
-    default boolean isLocked(BlockState state)
-    {
+    default boolean isLocked(BlockState state) {
         return state.getValue(FramedProperties.STATE_LOCKED);
     }
 
     @ApiStatus.NonExtendable
-    default boolean lockState(Level level, BlockPos pos, Player player, ItemStack stack)
-    {
-        if (stack.getItem() != Utils.FRAMED_KEY.value())
-        {
+    default boolean lockState(Level level, BlockPos pos, Player player, ItemStack stack) {
+        if (stack.getItem() != Utils.FRAMED_KEY.value()) {
             return false;
         }
 
-        if (!level.isClientSide())
-        {
+        if (!level.isClientSide()) {
             BlockState state = level.getBlockState(pos);
             boolean locked = state.getValue(FramedProperties.STATE_LOCKED);
             player.sendOverlayMessage(Component.translatable(LOCK_MESSAGE, locked ? STATE_UNLOCKED : STATE_LOCKED));
@@ -71,14 +66,11 @@ public interface ShapeLockableBlock extends IFramedBlock
             BlockState adjState,
             RandomSource random,
             UpdateShapeHandler updateShape
-    )
-    {
-        if (!state.getValue(FramedProperties.STATE_LOCKED))
-        {
+    ) {
+        if (!state.getValue(FramedProperties.STATE_LOCKED)) {
             return updateShape.handle(state, level, tickAccess, pos, side, adjPos, adjState, random);
         }
-        if (getBlockType().supportsWaterLogging() && state.getValue(BlockStateProperties.WATERLOGGED))
-        {
+        if (getBlockType().supportsWaterLogging() && state.getValue(BlockStateProperties.WATERLOGGED)) {
             tickAccess.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
         }
         return state;
@@ -88,8 +80,7 @@ public interface ShapeLockableBlock extends IFramedBlock
     Set<Property<?>> getPropertiesToCopy();
 
     @FunctionalInterface
-    interface UpdateShapeHandler
-    {
+    interface UpdateShapeHandler {
         BlockState handle(
                 BlockState state,
                 LevelReader level,

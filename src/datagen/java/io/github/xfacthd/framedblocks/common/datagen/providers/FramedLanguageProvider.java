@@ -55,30 +55,25 @@ import org.jspecify.annotations.Nullable;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
-public final class FramedLanguageProvider extends LanguageProvider
-{
+public final class FramedLanguageProvider extends LanguageProvider {
     private final CompletableFuture<HolderLookup.Provider> registries;
     private HolderLookup.@Nullable Provider lookup;
 
-    public FramedLanguageProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registries)
-    {
+    public FramedLanguageProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
         super(output, FramedConstants.MOD_ID, "en_us");
         this.registries = registries;
     }
 
     @Override
-    public CompletableFuture<?> run(CachedOutput cache)
-    {
-        return registries.thenCompose(lookup ->
-        {
+    public CompletableFuture<?> run(CachedOutput cache) {
+        return registries.thenCompose(lookup -> {
             this.lookup = lookup;
             return super.run(cache);
         });
     }
 
     @Override
-    protected void addTranslations()
-    {
+    protected void addTranslations() {
         addFramedBlockTranslations();
         addSpecialBlockTranslations();
         addItemTranslations();
@@ -90,8 +85,7 @@ public final class FramedLanguageProvider extends LanguageProvider
         addConfigTranslations();
     }
 
-    private void addFramedBlockTranslations()
-    {
+    private void addFramedBlockTranslations() {
         add(FBContent.BLOCK_FRAMED_CUBE.value(), "Framed Cube");
         add(FBContent.BLOCK_FRAMED_SLOPE.value(), "Framed Slope");
         add(FBContent.BLOCK_FRAMED_DOUBLE_SLOPE.value(), "Framed Double Slope");
@@ -335,14 +329,12 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(FBContent.BLOCK_FRAMED_PATH.value(), "Framed Path");
     }
 
-    private void addSpecialBlockTranslations()
-    {
+    private void addSpecialBlockTranslations() {
         add(FBContent.BLOCK_FRAMING_SAW.value(), "Framing Saw");
         add(FBContent.BLOCK_POWERED_FRAMING_SAW.value(), "Powered Framing Saw");
     }
 
-    private void addItemTranslations()
-    {
+    private void addItemTranslations() {
         add(FBContent.ITEM_FRAMED_HAMMER.value(), "Framed Hammer");
         add(FBContent.ITEM_FRAMED_WRENCH.value(), "Framed Wrench");
         add(FBContent.ITEM_FRAMED_BLUEPRINT.value(), "Framed Blueprint");
@@ -354,8 +346,7 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(Objects.requireNonNull(GeneratorHandler.framingSawPattern).value(), "Framing Saw Pattern");
     }
 
-    private void addSpecialTranslations()
-    {
+    private void addSpecialTranslations() {
         add(KeyMappings.KEY_CATEGORY.label(), "FramedBlocks");
         add(KeyMappings.KEYMAPPING_UPDATE_CULLING.get().getName(), "Update culling cache");
         add(KeyMappings.KEYMAPPING_WIPE_CACHE.get().getName(), "Clear model cache");
@@ -397,19 +388,16 @@ public final class FramedLanguageProvider extends LanguageProvider
         addBlockOverlay("warped_nylium", "Warped Nylium");
         addBlockOverlay("snow", "Snow");
         addBlockOverlay("moss", "Moss");
-        for (DyeColor color : DyeColor.values())
-        {
+        for (DyeColor color : DyeColor.values()) {
             StringBuilder name = new StringBuilder();
-            for (String part : color.getName().split("_"))
-            {
+            for (String part : color.getName().split("_")) {
                 name.append(StringUtils.capitalize(part)).append(" ");
             }
             addBlockOverlay(color.getName() + "_carpet", name.append("Carpet").toString());
         }
     }
 
-    private void addStatusMessageTranslations()
-    {
+    private void addStatusMessageTranslations() {
         add(CamoContainerFactory.MSG_BLACKLISTED, "This block is disallowed as a camo!");
         add(SimpleBlockCamoContainerFactory.MSG_BLOCK_ENTITY, "Blocks with BlockEntities cannot be inserted into framed blocks!");
         add(SimpleBlockCamoContainerFactory.MSG_NON_SOLID, "Untagged non-solid blocks cannot be inserted into framed blocks!");
@@ -417,8 +405,7 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(ShapeLockableBlock.LOCK_MESSAGE, "The state of this block is now %s");
     }
 
-    private void addScreenTranslations()
-    {
+    private void addScreenTranslations() {
         add(FramedChestBlockEntity.TITLE, "Framed Chest");
         add(FramedStorageBlockEntity.TITLE, "Framed Secret Storage");
         add(FramedHopperBlockEntity.TITLE, "Framed Item Hopper");
@@ -465,8 +452,7 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(FramingSawRecipeMatchResult.INSUFFICIENT_ADDITIVE_2.translation(), "Insufficient amount of additive ingredient present in the third slot");
     }
 
-    private void addTooltipTranslations()
-    {
+    private void addTooltipTranslations() {
         add(BlueprintData.CONTAINED_BLOCK, "Contained Block: %s");
         add(BlueprintData.STORED_OVERLAY, "Overlay: %s");
         add(BlueprintData.IS_ILLUMINATED, "Illuminated: %s");
@@ -495,8 +481,7 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(WrenchRotationMode.SECONDARY.getTranslatedName(), "Secondary Axis");
     }
 
-    private void addOverlayTranslations()
-    {
+    private void addOverlayTranslations() {
         add(StateLockOverlay.LOCK_MESSAGE, "State %s");
         add(ShapeLockableBlock.STATE_LOCKED, "locked");
         add(ShapeLockableBlock.STATE_UNLOCKED, "unlocked");
@@ -569,8 +554,7 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(CopycatStyleOverlay.LINE_SET_COPYCAT, "Hit with a Framed Hammer to use copycat-style appearance");
     }
 
-    private void addConfigTranslations()
-    {
+    private void addConfigTranslations() {
         add("framedblocks.configuration.title", "FramedBlocks Configuration");
 
         add("framedblocks.configuration.section.framedblocks.server.toml", "Server Settings");
@@ -631,36 +615,29 @@ public final class FramedLanguageProvider extends LanguageProvider
         addConfigValue(DevToolsConfig.COLLAPSIBLE_BLOCK_DEBUG_VALUE, "Collapsible block debug");
     }
 
-    private void add(Component key, String value)
-    {
+    private void add(Component key, String value) {
         ComponentContents contents = key.getContents();
-        if (contents instanceof TranslatableContents translatable)
-        {
+        if (contents instanceof TranslatableContents translatable) {
             add(translatable.getKey(), value);
-        }
-        else
-        {
+        } else {
             add(key.getString(), value);
         }
     }
 
-    private void addConfigCategory(String key, String catValue, String catButtonValue, String catTooltipValue)
-    {
+    private void addConfigCategory(String key, String catValue, String catButtonValue, String catTooltipValue) {
         add(key, catValue);
         add(key + ".button", catButtonValue);
         add(key + ".tooltip", catTooltipValue);
     }
 
-    private void addConfigValue(ModConfigSpec.@UnknownNullability ConfigValue<?> configValue, String value)
-    {
+    private void addConfigValue(ModConfigSpec.@UnknownNullability ConfigValue<?> configValue, String value) {
         Objects.requireNonNull(configValue);
         String translationKey = Objects.requireNonNull(configValue.getSpec().getTranslationKey());
         add(translationKey, value);
         add(translationKey + ".tooltip", Objects.requireNonNull(configValue.getSpec().getComment()));
     }
 
-    private void addBlockOverlay(String id, String name)
-    {
+    private void addBlockOverlay(String id, String name) {
         Holder<BlockOverlay> overlay = Objects.requireNonNull(lookup).getOrThrow(
                 ResourceKey.create(FramedConstants.BLOCK_OVERLAY_REGISTRY_KEY, Utils.id(id))
         );

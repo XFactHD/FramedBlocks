@@ -30,8 +30,7 @@ public record JeiCamoApplicationRecipe(
         Ingredient camoOne,
         Ingredient camoTwo,
         Optional<ItemStackTemplate> result
-) implements CraftingRecipe
-{
+) implements CraftingRecipe {
     public static final MapCodec<JeiCamoApplicationRecipe> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
             Ingredient.CODEC.fieldOf("frame").forGetter(JeiCamoApplicationRecipe::frame),
             Ingredient.CODEC.fieldOf("copy_tool").forGetter(JeiCamoApplicationRecipe::copyTool),
@@ -54,44 +53,37 @@ public record JeiCamoApplicationRecipe(
     );
 
     @Override
-    public CraftingBookCategory category()
-    {
+    public CraftingBookCategory category() {
         return CraftingBookCategory.MISC;
     }
 
     @Override
-    public boolean matches(CraftingInput craftingInput, Level level)
-    {
+    public boolean matches(CraftingInput craftingInput, Level level) {
         return false;
     }
 
     @Override
-    public ItemStack assemble(CraftingInput craftingInput)
-    {
+    public ItemStack assemble(CraftingInput craftingInput) {
         return ItemStack.EMPTY;
     }
 
     @Override
-    public boolean showNotification()
-    {
+    public boolean showNotification() {
         return false;
     }
 
     @Override
-    public String group()
-    {
+    public String group() {
         return "";
     }
 
     @Override
-    public PlacementInfo placementInfo()
-    {
+    public PlacementInfo placementInfo() {
         return PlacementInfo.NOT_PLACEABLE;
     }
 
     @Override
-    public List<RecipeDisplay> display()
-    {
+    public List<RecipeDisplay> display() {
         return List.of(new ShapedCraftingRecipeDisplay(
                 2,
                 2,
@@ -102,8 +94,7 @@ public record JeiCamoApplicationRecipe(
     }
 
     @Override
-    public RecipeSerializer<JeiCamoApplicationRecipe> getSerializer()
-    {
+    public RecipeSerializer<JeiCamoApplicationRecipe> getSerializer() {
         return FBContent.RECIPE_SERIALIZER_JEI_CAMO.value();
     }
 }

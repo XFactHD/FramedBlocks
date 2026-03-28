@@ -31,31 +31,24 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
-public class FramedBouncyCubeBlock extends SlimeBlock implements IFramedBlockInternal
-{
-    public FramedBouncyCubeBlock(Properties props)
-    {
+public class FramedBouncyCubeBlock extends SlimeBlock implements IFramedBlockInternal {
+    public FramedBouncyCubeBlock(Properties props) {
         super(IFramedBlock.applyDefaultProperties(props, BlockType.FRAMED_BOUNCY_CUBE).friction(.8F));
         BlockUtils.configureStandardProperties(this);
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
-    {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         BlockUtils.addStandardProperties(this, builder);
     }
 
     @Override
-    protected InteractionResult useItemOn(
-            ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit
-    )
-    {
+    protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         return handleUse(state, level, pos, player, hand, hit);
     }
 
     @Override
-    public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)
-    {
+    public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
         tryApplyCamoImmediately(level, pos, placer, stack);
     }
 
@@ -69,89 +62,74 @@ public class FramedBouncyCubeBlock extends SlimeBlock implements IFramedBlockInt
             BlockPos adjPos,
             BlockState adjState,
             RandomSource random
-    )
-    {
+    ) {
         updateCulling(level, pos);
         return super.updateShape(state, level, tickAccess, pos, side, adjPos, adjState, random);
     }
 
     @Override
-    protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, @Nullable Orientation orientation, boolean isMoving)
-    {
+    protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, @Nullable Orientation orientation, boolean isMoving) {
         updateCulling(level, pos);
     }
 
     @Override
-    protected boolean useShapeForLightOcclusion(BlockState state)
-    {
+    protected boolean useShapeForLightOcclusion(BlockState state) {
         return useCamoOcclusionShapeForLightOcclusion(state);
     }
 
     @Override
-    protected VoxelShape getOcclusionShape(BlockState state)
-    {
+    protected VoxelShape getOcclusionShape(BlockState state) {
         return getCamoOcclusionShape(state, null);
     }
 
     @Override
-    protected VoxelShape getVisualShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext ctx)
-    {
+    protected VoxelShape getVisualShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext ctx) {
         return getCamoVisualShape(state, level, pos, ctx);
     }
 
     @Override
-    protected float getShadeBrightness(BlockState state, BlockGetter level, BlockPos pos)
-    {
+    protected float getShadeBrightness(BlockState state, BlockGetter level, BlockPos pos) {
         return getCamoShadeBrightness(state, level, pos, super.getShadeBrightness(state, level, pos));
     }
 
     @Override
-    protected boolean propagatesSkylightDown(BlockState state)
-    {
+    protected boolean propagatesSkylightDown(BlockState state) {
         return state.getValue(FramedProperties.PROPAGATES_SKYLIGHT);
     }
 
     @Override
-    protected List<ItemStack> getDrops(BlockState state, LootParams.Builder builder)
-    {
+    protected List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {
         return super.getDrops(state, getCamoDrops(builder));
     }
 
     @Override
-    protected boolean skipRendering(BlockState pState, BlockState pAdjacentBlockState, Direction pSide)
-    {
+    protected boolean skipRendering(BlockState pState, BlockState pAdjacentBlockState, Direction pSide) {
         // This is managed by the SideSkipPredicate
         return false;
     }
 
     @Override
-    public boolean doesBlockOccludeBeaconBeam(BlockState state, LevelReader level, BlockPos pos)
-    {
+    public boolean doesBlockOccludeBeaconBeam(BlockState state, LevelReader level, BlockPos pos) {
         return true;
     }
 
     @Override
-    public IBlockType getBlockType()
-    {
+    public IBlockType getBlockType() {
         return BlockType.FRAMED_BOUNCY_CUBE;
     }
 
     @Override
-    public BlockState getItemModelSource()
-    {
+    public BlockState getItemModelSource() {
         return defaultBlockState();
     }
 
     @Override
-    @Nullable
-    public Direction getHorizontalOrientation(BlockState state)
-    {
+    public @Nullable Direction getHorizontalOrientation(BlockState state) {
         return null;
     }
 
     @Override
-    public BlockState getJadeRenderState(BlockState state)
-    {
+    public BlockState getJadeRenderState(BlockState state) {
         return state;
     }
 }

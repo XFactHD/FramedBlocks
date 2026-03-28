@@ -12,62 +12,52 @@ import net.minecraft.world.level.ItemLike;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.Nullable;
 
-public class ExtShapedRecipeBuilder extends ShapedRecipeBuilder implements AutoUnlockNameBuilder<ExtShapedRecipeBuilder>
-{
+public class ExtShapedRecipeBuilder extends ShapedRecipeBuilder implements AutoUnlockNameBuilder<ExtShapedRecipeBuilder> {
     private final RecipeProvider provider;
 
-    public ExtShapedRecipeBuilder(RecipeProvider provider, HolderGetter<Item> itemRegistry, RecipeCategory category, ItemLike result, int count)
-    {
+    public ExtShapedRecipeBuilder(RecipeProvider provider, HolderGetter<Item> itemRegistry, RecipeCategory category, ItemLike result, int count) {
         super(itemRegistry, category, result, count);
         this.provider = provider;
     }
 
     @Override
-    public ExtShapedRecipeBuilder define(Character pSymbol, TagKey<Item> pTag)
-    {
+    public ExtShapedRecipeBuilder define(Character pSymbol, TagKey<Item> pTag) {
         return (ExtShapedRecipeBuilder) super.define(pSymbol, pTag);
     }
 
     @Override
-    public ExtShapedRecipeBuilder define(Character pSymbol, ItemLike pItem)
-    {
+    public ExtShapedRecipeBuilder define(Character pSymbol, ItemLike pItem) {
         return (ExtShapedRecipeBuilder) super.define(pSymbol, pItem);
     }
 
     @Override
-    public ExtShapedRecipeBuilder define(Character pSymbol, Ingredient pIngredient)
-    {
+    public ExtShapedRecipeBuilder define(Character pSymbol, Ingredient pIngredient) {
         return (ExtShapedRecipeBuilder) super.define(pSymbol, pIngredient);
     }
 
     @Override
-    public ExtShapedRecipeBuilder pattern(String pPattern)
-    {
+    public ExtShapedRecipeBuilder pattern(String pPattern) {
         return (ExtShapedRecipeBuilder) super.pattern(pPattern);
     }
 
     @Override
-    public ExtShapedRecipeBuilder unlockedBy(String pName, Criterion<?> pCriterion)
-    {
+    public ExtShapedRecipeBuilder unlockedBy(String pName, Criterion<?> pCriterion) {
         return (ExtShapedRecipeBuilder) super.unlockedBy(pName, pCriterion);
     }
 
     @Override
-    public ExtShapedRecipeBuilder group(@Nullable String pGroupName)
-    {
+    public ExtShapedRecipeBuilder group(@Nullable String pGroupName) {
         return (ExtShapedRecipeBuilder) super.group(pGroupName);
     }
 
     @Override
-    public ExtShapedRecipeBuilder showNotification(boolean pShowNotification)
-    {
+    public ExtShapedRecipeBuilder showNotification(boolean pShowNotification) {
         return (ExtShapedRecipeBuilder) super.showNotification(pShowNotification);
     }
 
     @Override
     @ApiStatus.Internal
-    public final RecipeProvider provider()
-    {
+    public final RecipeProvider provider() {
         return provider;
     }
 }

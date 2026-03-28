@@ -6,7 +6,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import java.util.List;
 import java.util.function.Function;
 
-public interface BlockTintSourceCache
-{
+public interface BlockTintSourceCache {
     List<BlockTintSource> resolveTintSources(Function<BlockState, List<BlockTintSource>> resolver);
 }

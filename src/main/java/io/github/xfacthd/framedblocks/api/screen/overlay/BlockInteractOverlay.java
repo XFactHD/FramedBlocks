@@ -16,8 +16,7 @@ import org.jetbrains.annotations.ApiStatus;
 import java.util.List;
 import java.util.function.Supplier;
 
-public abstract class BlockInteractOverlay
-{
+public abstract class BlockInteractOverlay {
     private final List<Component> allLines;
     protected final List<Component> linesFalse;
     protected final List<Component> linesTrue;
@@ -31,8 +30,7 @@ public abstract class BlockInteractOverlay
             Texture textureFalse,
             Texture textureTrue,
             Supplier<OverlayDisplayMode> modeGetter
-    )
-    {
+    ) {
         this.allLines = Utils.concat(linesFalse, linesTrue);
         this.linesFalse = linesFalse;
         this.linesTrue = linesTrue;
@@ -47,36 +45,30 @@ public abstract class BlockInteractOverlay
 
     public abstract boolean getState(Target target);
 
-    public Texture getTexture(Target target, boolean state)
-    {
+    public Texture getTexture(Target target, boolean state) {
         return state ? textureTrue : textureFalse;
     }
 
-    public List<Component> getLines(Target target, boolean state)
-    {
+    public List<Component> getLines(Target target, boolean state) {
         return state ? linesTrue : linesFalse;
     }
 
     public void renderAfterIcon(GuiGraphicsExtractor graphics, Texture tex, int texX, int texY, Target target) { }
 
     @ApiStatus.Internal
-    public final OverlayDisplayMode getDisplayMode()
-    {
+    public final OverlayDisplayMode getDisplayMode() {
         return modeGetter.get();
     }
 
     @ApiStatus.Internal
-    public final List<Component> getAllLines()
-    {
+    public final List<Component> getAllLines() {
         return allLines;
     }
 
     public record Target(Level level, BlockPos pos, BlockState state, Direction side, Player player) { }
 
-    public record Texture(Identifier location, int xOff, int yOff, int width, int height, int texWidth, int texHeight)
-    {
-        public void draw(GuiGraphicsExtractor graphics, int x, int y)
-        {
+    public record Texture(Identifier location, int xOff, int yOff, int width, int height, int texWidth, int texHeight) {
+        public void draw(GuiGraphicsExtractor graphics, int x, int y) {
             graphics.blit(RenderPipelines.GUI_TEXTURED, location, x, y, xOff, yOff, width, height, texWidth, texHeight);
         }
     }

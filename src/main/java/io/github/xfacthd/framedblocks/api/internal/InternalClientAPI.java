@@ -33,8 +33,7 @@ import java.util.Optional;
 import java.util.function.Supplier;
 
 @ApiStatus.Internal
-public interface InternalClientAPI
-{
+public interface InternalClientAPI {
     InternalClientAPI INSTANCE = Utils.loadService(InternalClientAPI.class);
 
     void registerModelWrapper(Holder<Block> block, GeometryFactory geometryFactory, StateMerger stateMerger);

@@ -28,8 +28,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.function.Consumer;
 
-public final class BlockPictureInPictureRenderer extends PictureInPictureRenderer<BlockPictureInPictureRenderer.RenderState>
-{
+public final class BlockPictureInPictureRenderer extends PictureInPictureRenderer<BlockPictureInPictureRenderer.RenderState> {
     private final FeatureRenderDispatcher featureRenderDispatcher;
     private final SubmitNodeCollector collector;
     private RenderConfig lastConfig = RenderConfig.DEFAULT;
@@ -38,16 +37,14 @@ public final class BlockPictureInPictureRenderer extends PictureInPictureRendere
     private BlockPos lastSignPos = BlockPos.ZERO;
     private FramedBlockData lastBlockData = FramedBlockData.EMPTY;
 
-    public BlockPictureInPictureRenderer(MultiBufferSource.BufferSource bufferSource)
-    {
+    public BlockPictureInPictureRenderer(MultiBufferSource.BufferSource bufferSource) {
         super(bufferSource);
         this.featureRenderDispatcher = Minecraft.getInstance().gameRenderer.getFeatureRenderDispatcher();
         this.collector = featureRenderDispatcher.getSubmitNodeStorage();
     }
 
     @Override
-    protected void renderToTexture(RenderState renderState, PoseStack poseStack)
-    {
+    protected void renderToTexture(RenderState renderState, PoseStack poseStack) {
         RenderConfig config = renderState.config;
         config.poseTransform.accept(poseStack);
 
@@ -65,30 +62,34 @@ public final class BlockPictureInPictureRenderer extends PictureInPictureRendere
     }
 
     @Override
-    protected boolean textureIsReadyToBlit(RenderState renderState)
-    {
-        if (renderState.modelRenderState.isAnimated()) return false;
-        if (lastConfig != renderState.config) return false;
-        if (lastSignState != renderState.state) return false;
-        if (!lastSignPos.equals(renderState.pos)) return false;
+    protected boolean textureIsReadyToBlit(RenderState renderState) {
+        if (renderState.modelRenderState.isAnimated()) {
+            return false;
+        }
+        if (lastConfig != renderState.config) {
+            return false;
+        }
+        if (lastSignState != renderState.state) {
+            return false;
+        }
+        if (!lastSignPos.equals(renderState.pos)) {
+            return false;
+        }
         return lastBlockData.equals(renderState.blockData);
     }
 
     @Override
-    protected float getTranslateY(int height, int guiScale)
-    {
+    protected float getTranslateY(int height, int guiScale) {
         return height / 2F;
     }
 
     @Override
-    protected String getTextureLabel()
-    {
+    protected String getTextureLabel() {
         return "framedblocks block-in-ui";
     }
 
     @Override
-    public Class<RenderState> getRenderStateClass()
-    {
+    public Class<RenderState> getRenderStateClass() {
         return RenderState.class;
     }
 
@@ -105,8 +106,7 @@ public final class BlockPictureInPictureRenderer extends PictureInPictureRendere
             float scale,
             @Nullable ScreenRectangle scissorArea,
             @Nullable ScreenRectangle bounds
-    ) implements PictureInPictureRenderState
-    {
+    ) implements PictureInPictureRenderState {
         public static RenderState create(
                 IFramedBlockEntity be,
                 RenderConfig transform,
@@ -116,8 +116,7 @@ public final class BlockPictureInPictureRenderer extends PictureInPictureRendere
                 int y1,
                 float scale,
                 @Nullable ScreenRectangle scissorArea
-        )
-        {
+        ) {
             return create(be, be.getBlockState(), transform, x0, y0, x1, y1, scale, scissorArea);
         }
 
@@ -131,8 +130,7 @@ public final class BlockPictureInPictureRenderer extends PictureInPictureRendere
                 int y1,
                 float scale,
                 @Nullable ScreenRectangle scissorArea
-        )
-        {
+        ) {
             AdvancedBlockModelRenderState modelRenderState = new AdvancedBlockModelRenderState();
             ModelData modelData = config.useModelData ? be.getModelData(false, state) : ModelData.EMPTY;
             BlockAndTintGetter level = ClientUtils.asTintGetter(be.getLevel());
@@ -154,26 +152,22 @@ public final class BlockPictureInPictureRenderer extends PictureInPictureRendere
             );
         }
 
-        private static FramedBlockData unpackData(ModelData modelData)
-        {
+        private static FramedBlockData unpackData(ModelData modelData) {
             AbstractFramedBlockData data = modelData.get(AbstractFramedBlockData.PROPERTY);
             return data != null ? data.unwrap(false) : FramedBlockData.EMPTY;
         }
     }
 
-    public record RenderConfig(Consumer<PoseStack> poseTransform, Lighting.Entry lighting, boolean useModelData)
-    {
+    public record RenderConfig(Consumer<PoseStack> poseTransform, Lighting.Entry lighting, boolean useModelData) {
         public static final RenderConfig DEFAULT = new RenderConfig(_ -> {}, Lighting.Entry.ITEMS_3D, true);
 
         @Override
-        public boolean equals(Object obj)
-        {
+        public boolean equals(Object obj) {
             return obj == this;
         }
 
         @Override
-        public int hashCode()
-        {
+        public int hashCode() {
             return System.identityHashCode(this);
         }
     }

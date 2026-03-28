@@ -3,8 +3,7 @@ package io.github.xfacthd.framedblocks.api.predicate.overlay;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 
-public interface BlockOverlayPredicate
-{
+public interface BlockOverlayPredicate {
     BlockOverlayPredicate ALWAYS = new AlwaysBlockOverlayPredicate();
     BlockOverlayPredicate NEVER = new NeverBlockOverlayPredicate();
     BlockOverlayPredicate ONLY_FIRST_PART = new OnlyFirstPartBlockOverlayPredicate();

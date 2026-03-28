@@ -8,10 +8,8 @@ import org.jspecify.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public sealed interface QuadMapBuilderInternal extends QuadMapBuilder permits QuadMapImpl
-{
-    @Nullable
-    ArrayList<BakedQuad> tryGet(@Nullable Direction side);
+public sealed interface QuadMapBuilderInternal extends QuadMapBuilder permits QuadMapImpl {
+    @Nullable ArrayList<BakedQuad> tryGet(@Nullable Direction side);
 
     void set(@Nullable Direction side, List<BakedQuad> list);
 
@@ -19,8 +17,7 @@ public sealed interface QuadMapBuilderInternal extends QuadMapBuilder permits Qu
 
     QuadMap build();
 
-    static QuadMapBuilderInternal create()
-    {
+    static QuadMapBuilderInternal create() {
         return new QuadMapImpl();
     }
 }

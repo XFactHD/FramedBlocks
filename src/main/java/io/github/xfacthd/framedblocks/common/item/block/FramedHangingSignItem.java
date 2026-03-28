@@ -17,29 +17,24 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.function.Consumer;
 
-public final class FramedHangingSignItem extends HangingSignItem implements IFramedBlockItem
-{
-    public FramedHangingSignItem(Properties properties)
-    {
+public final class FramedHangingSignItem extends HangingSignItem implements IFramedBlockItem {
+    public FramedHangingSignItem(Properties properties) {
         super(FBContent.BLOCK_FRAMED_HANGING_SIGN.value(), FBContent.BLOCK_FRAMED_WALL_HANGING_SIGN.value(), properties.stacksTo(16));
     }
 
     @Override
-    public InteractionResult place(BlockPlaceContext context)
-    {
+    public InteractionResult place(BlockPlaceContext context) {
         return handlePlace(context, super::place);
     }
 
     @Override
-    protected SoundEvent getPlaceSound(BlockState state, Level level, BlockPos pos, Player entity)
-    {
+    protected SoundEvent getPlaceSound(BlockState state, Level level, BlockPos pos, Player entity) {
         return getCamoPlaceSound(state, level, pos, entity, super::getPlaceSound);
     }
 
     @Override
     @SuppressWarnings("deprecation")
-    public void appendHoverText(ItemStack stack, TooltipContext ctx, TooltipDisplay display, Consumer<Component> appender, TooltipFlag flag)
-    {
+    public void appendHoverText(ItemStack stack, TooltipContext ctx, TooltipDisplay display, Consumer<Component> appender, TooltipFlag flag) {
         IFramedBlockItem.appendCamoHoverText(stack, appender);
     }
 }

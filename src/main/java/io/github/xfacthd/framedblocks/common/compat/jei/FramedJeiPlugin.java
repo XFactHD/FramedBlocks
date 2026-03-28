@@ -35,8 +35,7 @@ import org.jspecify.annotations.Nullable;
 import java.util.Optional;
 
 @JeiPlugin
-public final class FramedJeiPlugin implements IModPlugin
-{
+public final class FramedJeiPlugin implements IModPlugin {
     private static final Identifier ID = Utils.id("jei_plugin");
     static final IRecipeType<FramingSawRecipe> FRAMING_SAW_RECIPE_TYPE = IRecipeType.create(
             Utils.id("framing_saw"), FramingSawRecipe.class
@@ -46,35 +45,28 @@ public final class FramedJeiPlugin implements IModPlugin
     @Nullable
     private static CamoCraftingHelper camoCraftingHelperInstance;
 
-    private static boolean isCamoCraftingDisplayEnabled()
-    {
-        if (enableCamoCraftingDisplay == null)
-        {
+    private static boolean isCamoCraftingDisplayEnabled() {
+        if (enableCamoCraftingDisplay == null) {
             enableCamoCraftingDisplay = ClientConfig.VIEW.showCamoCraftingInJei();
         }
         return enableCamoCraftingDisplay;
     }
 
-    private static CamoCraftingHelper getCamoCraftingHelper()
-    {
-        if (camoCraftingHelperInstance == null)
-        {
+    private static CamoCraftingHelper getCamoCraftingHelper() {
+        if (camoCraftingHelperInstance == null) {
             camoCraftingHelperInstance = new CamoCraftingHelper();
         }
         return camoCraftingHelperInstance;
     }
 
     @Override
-    public void registerCategories(IRecipeCategoryRegistration registration)
-    {
+    public void registerCategories(IRecipeCategoryRegistration registration) {
         registration.addRecipeCategories(new FramingSawRecipeCategory(registration.getJeiHelpers().getGuiHelper()));
     }
 
     @Override
-    public void registerVanillaCategoryExtensions(IVanillaCategoryExtensionRegistration registration)
-    {
-        if (isCamoCraftingDisplayEnabled())
-        {
+    public void registerVanillaCategoryExtensions(IVanillaCategoryExtensionRegistration registration) {
+        if (isCamoCraftingDisplayEnabled()) {
             CamoCraftingHelper camoCraftingHelper = getCamoCraftingHelper();
             camoCraftingHelper.scanForItems(registration.getJeiHelpers().getIngredientManager());
 
@@ -86,8 +78,7 @@ public final class FramedJeiPlugin implements IModPlugin
     }
 
     @Override
-    public void registerRecipes(IRecipeRegistration registration)
-    {
+    public void registerRecipes(IRecipeRegistration registration) {
         registration.addRecipes(
                 FRAMING_SAW_RECIPE_TYPE,
                 FramingSawRecipeCache.get(true).getRecipes().stream().map(RecipeHolder::value).toList()
@@ -95,8 +86,7 @@ public final class FramedJeiPlugin implements IModPlugin
     }
 
     @Override
-    public void registerRecipeTransferHandlers(IRecipeTransferRegistration registration)
-    {
+    public void registerRecipeTransferHandlers(IRecipeTransferRegistration registration) {
         registration.addRecipeTransferHandler(
                 new FramingSawTransferHandler.FramingSaw(registration.getTransferHelper()),
                 FRAMING_SAW_RECIPE_TYPE
@@ -108,8 +98,7 @@ public final class FramedJeiPlugin implements IModPlugin
     }
 
     @Override
-    public void registerRecipeCatalysts(IRecipeCatalystRegistration registration)
-    {
+    public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
         registration.addCraftingStation(
                 FRAMING_SAW_RECIPE_TYPE,
                 new ItemStack(FBContent.BLOCK_FRAMING_SAW.value())
@@ -121,8 +110,7 @@ public final class FramedJeiPlugin implements IModPlugin
     }
 
     @Override
-    public void registerGuiHandlers(IGuiHandlerRegistration registration)
-    {
+    public void registerGuiHandlers(IGuiHandlerRegistration registration) {
         IIngredientManager ingredientManager = registration.getJeiHelpers().getIngredientManager();
         registration.addGhostIngredientHandler(
                 FramingSawWithEncoderScreen.class,
@@ -147,10 +135,8 @@ public final class FramedJeiPlugin implements IModPlugin
     }
 
     @Override
-    public void registerAdvanced(IAdvancedRegistration registration)
-    {
-        if (isCamoCraftingDisplayEnabled())
-        {
+    public void registerAdvanced(IAdvancedRegistration registration) {
+        if (isCamoCraftingDisplayEnabled()) {
             registration.addSimpleRecipeManagerPlugin(
                     RecipeTypes.CRAFTING,
                     new CamoRecipeManagerPlugin(getCamoCraftingHelper())
@@ -159,21 +145,20 @@ public final class FramedJeiPlugin implements IModPlugin
     }
 
     @Override
-    public void onRuntimeUnavailable()
-    {
+    public void onRuntimeUnavailable() {
         enableCamoCraftingDisplay = null;
         camoCraftingHelperInstance = null;
     }
 
     @Override
-    public Identifier getPluginUid()
-    {
+    public Identifier getPluginUid() {
         return ID;
     }
 
-    static void onRecipesReceived(RecipesReceivedEvent event)
-    {
-        if (!isCamoCraftingDisplayEnabled()) return;
+    static void onRecipesReceived(RecipesReceivedEvent event) {
+        if (!isCamoCraftingDisplayEnabled()) {
+            return;
+        }
 
         Optional<CamoApplicationRecipe> camoRecipe = event.getRecipeMap()
                 .byType(RecipeType.CRAFTING)

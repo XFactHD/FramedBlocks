@@ -7,17 +7,13 @@ import net.minecraft.world.level.block.state.properties.Property;
 
 import java.util.Set;
 
-record IgnoringStateMerger(Set<Property<?>> ignoredProps) implements StateMerger
-{
+record IgnoringStateMerger(Set<Property<?>> ignoredProps) implements StateMerger {
     @Override
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    public BlockState apply(BlockState state)
-    {
+    public BlockState apply(BlockState state) {
         BlockState defaultState = state.getBlock().defaultBlockState();
-        for (Property prop : ignoredProps)
-        {
-            if (state.hasProperty(prop))
-            {
+        for (Property prop : ignoredProps) {
+            if (state.hasProperty(prop)) {
                 state = state.setValue(prop, defaultState.getValue(prop));
             }
         }
@@ -25,8 +21,7 @@ record IgnoringStateMerger(Set<Property<?>> ignoredProps) implements StateMerger
     }
 
     @Override
-    public Set<Property<?>> getHandledProperties(Holder<Block> block)
-    {
+    public Set<Property<?>> getHandledProperties(Holder<Block> block) {
         return ignoredProps;
     }
 }

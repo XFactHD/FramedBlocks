@@ -9,19 +9,16 @@ import net.minecraft.client.resources.model.ModelBaker;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
-public final class UnbakedCopyingFramedBlockStateModel extends AbstractUnbakedFramedBlockStateModel
-{
+public final class UnbakedCopyingFramedBlockStateModel extends AbstractUnbakedFramedBlockStateModel {
     private final Block srcBlock;
 
-    public UnbakedCopyingFramedBlockStateModel(ModelFactory.Context ctx, Block srcBlock)
-    {
+    public UnbakedCopyingFramedBlockStateModel(ModelFactory.Context ctx, Block srcBlock) {
         super(ctx);
         this.srcBlock = srcBlock;
     }
 
     @Override
-    protected BlockStateModel bakeCached(GeometryFactory.Context ctx, ModelBaker baker)
-    {
+    protected BlockStateModel bakeCached(GeometryFactory.Context ctx, ModelBaker baker) {
         BlockState srcState = srcBlock.withPropertiesOf(ctx.state());
         return new CopyingFramedBlockStateModel(ctx.baseModel(), srcState);
     }

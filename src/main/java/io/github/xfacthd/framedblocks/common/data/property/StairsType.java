@@ -4,8 +4,7 @@ import net.minecraft.util.StringRepresentable;
 
 import java.util.Locale;
 
-public enum StairsType implements StringRepresentable
-{
+public enum StairsType implements StringRepresentable {
     VERTICAL,
     TOP_FWD,
     TOP_CCW,
@@ -17,43 +16,34 @@ public enum StairsType implements StringRepresentable
     private final String name = toString().toLowerCase(Locale.ENGLISH);
 
     @Override
-    public String getSerializedName()
-    {
+    public String getSerializedName() {
         return name;
     }
 
-    public boolean isTop()
-    {
+    public boolean isTop() {
         return this == TOP_FWD || this == TOP_CCW || this == TOP_BOTH;
     }
 
-    public boolean isBottom()
-    {
+    public boolean isBottom() {
         return this == BOTTOM_FWD || this == BOTTOM_CCW || this == BOTTOM_BOTH;
     }
 
-    public boolean isForward()
-    {
+    public boolean isForward() {
         return this == TOP_FWD || this == BOTTOM_FWD || this == TOP_BOTH || this == BOTTOM_BOTH;
     }
 
-    public boolean isCounterClockwise()
-    {
+    public boolean isCounterClockwise() {
         return this == TOP_CCW || this == BOTTOM_CCW || this == TOP_BOTH || this == BOTTOM_BOTH;
     }
 
-    public static StairsType get(boolean top, boolean fwd, boolean ccw)
-    {
-        if (fwd && ccw)
-        {
+    public static StairsType get(boolean top, boolean fwd, boolean ccw) {
+        if (fwd && ccw) {
             return top ? TOP_BOTH : BOTTOM_BOTH;
         }
-        if (fwd)
-        {
+        if (fwd) {
             return top ? TOP_FWD : BOTTOM_FWD;
         }
-        if (ccw)
-        {
+        if (ccw) {
             return top ? TOP_CCW : BOTTOM_CCW;
         }
         return VERTICAL;

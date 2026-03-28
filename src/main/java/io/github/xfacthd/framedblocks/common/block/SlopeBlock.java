@@ -7,24 +7,20 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.RailShape;
 
-public interface ISlopeBlock
-{
+public interface SlopeBlock {
     Direction getFacing(BlockState state);
 
     SlopeType getSlopeType(BlockState state);
 
-    interface IRailSlopeBlock extends ISlopeBlock
-    {
+    interface RailSlopeBlock extends SlopeBlock {
         @Override
-        default Direction getFacing(BlockState state)
-        {
+        default Direction getFacing(BlockState state) {
             RailShape shape = state.getValue(PropertyHolder.ASCENDING_RAIL_SHAPE);
             return FramedUtils.getDirectionFromAscendingRailShape(shape);
         }
 
         @Override
-        default SlopeType getSlopeType(BlockState state)
-        {
+        default SlopeType getSlopeType(BlockState state) {
             return SlopeType.BOTTOM;
         }
     }

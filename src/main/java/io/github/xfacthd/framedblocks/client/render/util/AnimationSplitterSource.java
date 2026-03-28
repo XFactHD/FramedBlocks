@@ -25,44 +25,36 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-public record AnimationSplitterSource(Identifier resource, List<Frame> frames) implements SpriteSource
-{
+public record AnimationSplitterSource(Identifier resource, List<Frame> frames) implements SpriteSource {
     public static final MapCodec<AnimationSplitterSource> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
             Identifier.CODEC.fieldOf("resource").forGetter(s -> s.resource),
             ExtraCodecs.nonEmptyList(Frame.CODEC.listOf()).fieldOf("frames").forGetter(s -> s.frames)
     ).apply(inst, AnimationSplitterSource::new));
 
     @Override
-    public void run(ResourceManager mgr, Output out)
-    {
+    public void run(ResourceManager mgr, Output out) {
         run(mgr, out, Set.of());
     }
 
     @Override
-    public void run(ResourceManager mgr, Output out, Set<MetadataSectionType<?>> additionalMetadata)
-    {
+    public void run(ResourceManager mgr, Output out, Set<MetadataSectionType<?>> additionalMetadata) {
         Identifier texPath = TEXTURE_ID_CONVERTER.idToFile(resource);
         Optional<Resource> optResource = mgr.getResource(texPath);
-        if (optResource.isPresent())
-        {
+        if (optResource.isPresent()) {
             Resource res = optResource.get();
             LazyLoadedImage image = new LazyLoadedImage(texPath, res, frames.size());
             frames.forEach(frame -> out.add(frame.outLoc, new FrameInstance(res, texPath, image, frame, additionalMetadata)));
-        }
-        else
-        {
+        } else {
             FramedBlocks.LOGGER.warn("Missing sprite: {}", texPath);
         }
     }
 
     @Override
-    public MapCodec<AnimationSplitterSource> codec()
-    {
+    public MapCodec<AnimationSplitterSource> codec() {
         return CODEC;
     }
 
-    public record Frame(int frameIdx, Identifier outLoc)
-    {
+    public record Frame(int frameIdx, Identifier outLoc) {
         private static final Codec<Frame> CODEC = RecordCodecBuilder.create(inst -> inst.group(
                 Codec.intRange(0, Integer.MAX_VALUE).fieldOf("frame_idx").forGetter(Frame::frameIdx),
                 Identifier.CODEC.fieldOf("sprite").forGetter(Frame::outLoc)
@@ -75,17 +67,13 @@ public record AnimationSplitterSource(Identifier resource, List<Frame> frames) i
             LazyLoadedImage lazyImage,
             Frame frame,
             Set<MetadataSectionType<?>> additionalMetadata
-    ) implements DiscardableLoader
-    {
+    ) implements DiscardableLoader {
         @Override
-        public SpriteContents get(SpriteResourceLoader loader)
-        {
-            try
-            {
+        public SpriteContents get(SpriteResourceLoader loader) {
+            try {
                 ResourceMetadata srcMeta = resource.metadata();
                 Optional<AnimationMetadataSection> optAnim = srcMeta.getSection(AnimationMetadataSection.TYPE);
-                if (optAnim.isEmpty())
-                {
+                if (optAnim.isEmpty()) {
                     throw new IllegalArgumentException("Texture '%s' is not an animated texture".formatted(texPath));
                 }
 
@@ -108,38 +96,27 @@ public record AnimationSplitterSource(Identifier resource, List<Frame> frames) i
                 List<MetadataSectionType.WithValue<?>> metaSections = srcMeta.getTypedSections(additionalMetadata);
                 Optional<TextureMetadataSection> textureMetadata = srcMeta.getSection(TextureMetadataSection.TYPE);
                 return new SpriteContents(frame.outLoc, new FrameSize(frameW, frameH), imageOut, Optional.empty(), metaSections, textureMetadata);
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
                 FramedBlocks.LOGGER.error("Failed to split out frame {}", frame, e);
-            }
-            finally
-            {
+            } finally {
                 lazyImage.release();
             }
             return MissingTextureAtlasSprite.create();
         }
 
-        private static void checkFrameExists(
-                Identifier texPath, AnimationMetadataSection anim, int frameIdx, int frameCount
-        )
-        {
+        private static void checkFrameExists(Identifier texPath, AnimationMetadataSection anim, int frameIdx, int frameCount) {
             boolean frameFound = false;
             int maxIdx = -1;
-            if (anim.frames().isPresent())
-            {
-                for (AnimationFrame frame : anim.frames().get())
-                {
+            if (anim.frames().isPresent()) {
+                for (AnimationFrame frame : anim.frames().get()) {
                     maxIdx = Math.max(maxIdx, frame.index());
-                    if (frame.index() == frameIdx)
-                    {
+                    if (frame.index() == frameIdx) {
                         frameFound = true;
                         break;
                     }
                 }
             }
-            if (!frameFound && (maxIdx != -1 || frameIdx >= frameCount))
-            {
+            if (!frameFound && (maxIdx != -1 || frameIdx >= frameCount)) {
                 int max = maxIdx != -1 ? maxIdx : frameCount;
                 throw new IllegalArgumentException("Texture '%s' has no frame with index %d, max index is %d".formatted(
                         texPath, frameIdx, max
@@ -148,8 +125,7 @@ public record AnimationSplitterSource(Identifier resource, List<Frame> frames) i
         }
 
         @Override
-        public void discard()
-        {
+        public void discard() {
             lazyImage.release();
         }
     }

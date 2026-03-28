@@ -29,8 +29,7 @@ import net.neoforged.neoforge.common.util.Lazy;
 
 import java.util.List;
 
-public final class FramingSawRecipe implements Recipe<RecipeInput>
-{
+public final class FramingSawRecipe implements Recipe<RecipeInput> {
     public static final int CUBE_MATERIAL_VALUE = AbstractFramingSawRecipeProvider.CUBE_MATERIAL_VALUE; // Empirically determined value
     public static final int MAX_ADDITIVE_COUNT = FramingSawRecipeBuilder.MAX_ADDITIVE_COUNT;
     public static final MapCodec<FramingSawRecipe> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
@@ -58,8 +57,7 @@ public final class FramingSawRecipe implements Recipe<RecipeInput>
     private final IBlockType resultType;
     private final boolean disabled;
 
-    public FramingSawRecipe(int materialAmount, List<FramingSawRecipeAdditive> additives, ItemStackTemplate result, boolean disabled)
-    {
+    public FramingSawRecipe(int materialAmount, List<FramingSawRecipeAdditive> additives, ItemStackTemplate result, boolean disabled) {
         this.materialAmount = materialAmount;
         this.additives = additives;
         this.result = result;
@@ -69,136 +67,109 @@ public final class FramingSawRecipe implements Recipe<RecipeInput>
     }
 
     @Override
-    public boolean matches(RecipeInput recipeInput, Level level)
-    {
+    public boolean matches(RecipeInput recipeInput, Level level) {
         return matchWithResult(recipeInput, level).success();
     }
 
-    public FramingSawRecipeMatchResult matchWithResult(RecipeInput recipeInput, Level level)
-    {
+    public FramingSawRecipeMatchResult matchWithResult(RecipeInput recipeInput, Level level) {
         ItemStack input = recipeInput.getItem(0);
-        if (input.isEmpty())
-        {
+        if (input.isEmpty()) {
             return FramingSawRecipeMatchResult.MATERIAL_VALUE;
         }
-        if (!input.getOrDefault(FBContent.DC_TYPE_CAMO_LIST, CamoList.EMPTY).isEmptyOrContentsEmpty())
-        {
+        if (!input.getOrDefault(FBContent.DC_TYPE_CAMO_LIST, CamoList.EMPTY).isEmptyOrContentsEmpty()) {
             return FramingSawRecipeMatchResult.CAMO_PRESENT;
         }
 
         int inputValue = FramingSawRecipeCalculation.getInputValue(input, level.isClientSide());
         int totalInputValue = inputValue * input.getCount();
-        if (totalInputValue < materialAmount)
-        {
+        if (totalInputValue < materialAmount) {
             return FramingSawRecipeMatchResult.MATERIAL_VALUE;
         }
 
         long matLcm = FramingSawRecipeCalculation.getMaterialLCM(this, inputValue);
-        if (matLcm > totalInputValue)
-        {
+        if (matLcm > totalInputValue) {
             return FramingSawRecipeMatchResult.MATERIAL_LCM;
         }
 
-        if (FramingSawRecipeCalculation.getOutputCount(materialAmount, result, matLcm) > result.getMaxStackSize())
-        {
+        if (FramingSawRecipeCalculation.getOutputCount(materialAmount, result, matLcm) > result.getMaxStackSize()) {
             return FramingSawRecipeMatchResult.OUTPUT_SIZE;
         }
 
-        for (int idx = 0; idx < MAX_ADDITIVE_COUNT; idx++)
-        {
+        for (int idx = 0; idx < MAX_ADDITIVE_COUNT; idx++) {
             ItemStack stack = recipeInput.getItem(idx + 1);
             FramingSawRecipeAdditive additive = idx < additives.size() ? additives.get(idx) : null;
 
             boolean empty = stack.isEmpty();
 
-            if (empty && additive == null)
-            {
+            if (empty && additive == null) {
                 continue;
             }
 
-            if (!empty && additive == null)
-            {
+            if (!empty && additive == null) {
                 return FramingSawRecipeMatchResult.UNEXPECTED_ADDITIVE[idx];
-            }
-            else if (empty /* && additive != null*/)
-            {
+            } else if (empty /* && additive != null*/) {
                 return FramingSawRecipeMatchResult.MISSING_ADDITIVE[idx];
-            }
-            else if (!additive.ingredient().test(stack))
-            {
+            } else if (!additive.ingredient().test(stack)) {
                 return FramingSawRecipeMatchResult.INCORRECT_ADDITIVE[idx];
             }
 
-            if (stack.getCount() < FramingSawRecipeCalculation.getAdditiveCount(this, additive, matLcm))
-            {
+            if (stack.getCount() < FramingSawRecipeCalculation.getAdditiveCount(this, additive, matLcm)) {
                 return FramingSawRecipeMatchResult.INSUFFICIENT_ADDITIVE[idx];
             }
         }
         return FramingSawRecipeMatchResult.SUCCESS;
     }
 
-    public FramingSawRecipeCalculation makeCraftingCalculation(RecipeInput container, boolean client)
-    {
+    public FramingSawRecipeCalculation makeCraftingCalculation(RecipeInput container, boolean client) {
         return new FramingSawRecipeCalculation(this, container, client);
     }
 
     @Override
-    public ItemStack assemble(RecipeInput container)
-    {
+    public ItemStack assemble(RecipeInput container) {
         return result.create();
     }
 
-    public int getMaterialAmount()
-    {
+    public int getMaterialAmount() {
         return materialAmount;
     }
 
-    public List<FramingSawRecipeAdditive> getAdditives()
-    {
+    public List<FramingSawRecipeAdditive> getAdditives() {
         return additives;
     }
 
-    public ItemStackTemplate getResult()
-    {
+    public ItemStackTemplate getResult() {
         return result;
     }
 
-    public ItemStack getResultStack()
-    {
+    public ItemStack getResultStack() {
         return resultStack.get();
     }
 
-    public IBlockType getResultType()
-    {
+    public IBlockType getResultType() {
         return resultType;
     }
 
-    public boolean isDisabled()
-    {
+    public boolean isDisabled() {
         return disabled;
     }
 
     @Override
-    public boolean isSpecial()
-    {
+    public boolean isSpecial() {
         return true;
     }
 
     @Override
-    public boolean showNotification()
-    {
+    public boolean showNotification() {
         return false;
     }
 
     @Override
-    public String group()
-    {
+    public String group() {
         return "";
     }
 
     @Override
-    public List<RecipeDisplay> display()
-    {
+    public List<RecipeDisplay> display() {
         return disabled ? List.of() : List.of(new FramingSawRecipeDisplay(
                 materialAmount,
                 additives.stream().map(FramingSawRecipeAdditive::toDisplay).toList(),
@@ -207,37 +178,30 @@ public final class FramingSawRecipe implements Recipe<RecipeInput>
     }
 
     @Override
-    public PlacementInfo placementInfo()
-    {
+    public PlacementInfo placementInfo() {
         return PlacementInfo.NOT_PLACEABLE;
     }
 
     @Override
-    public RecipeBookCategory recipeBookCategory()
-    {
+    public RecipeBookCategory recipeBookCategory() {
         return FBContent.RECIPE_BOOK_CATEGORY_FRAMING_SAW.value();
     }
 
     @Override
-    public RecipeSerializer<FramingSawRecipe> getSerializer()
-    {
+    public RecipeSerializer<FramingSawRecipe> getSerializer() {
         return FBContent.RECIPE_SERIALIZER_FRAMING_SAW_RECIPE.value();
     }
 
     @Override
-    public RecipeType<FramingSawRecipe> getType()
-    {
+    public RecipeType<FramingSawRecipe> getType() {
         return FBContent.RECIPE_TYPE_FRAMING_SAW_RECIPE.value();
     }
 
-    private static IBlockType findResultType(ItemStackTemplate result)
-    {
-        if (!(result.item().value() instanceof BlockItem item))
-        {
+    private static IBlockType findResultType(ItemStackTemplate result) {
+        if (!(result.item().value() instanceof BlockItem item)) {
             throw new JsonSyntaxException("Result items must be BlockItems");
         }
-        if (!(item.getBlock() instanceof IFramedBlock block))
-        {
+        if (!(item.getBlock() instanceof IFramedBlock block)) {
             throw new JsonSyntaxException("Block of result items must be IFramedBlocks");
         }
         return block.getBlockType();

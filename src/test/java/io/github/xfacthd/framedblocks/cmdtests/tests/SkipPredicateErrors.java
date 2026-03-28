@@ -23,8 +23,7 @@ import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.LongConsumer;
 
-public final class SkipPredicateErrors
-{
+public final class SkipPredicateErrors {
     private static final BlockType[] TYPES = BlockType.values();
     private static final Direction[] SIDES = Direction.values();
     public static final String NAME = "SkipPredicatesErrors";
@@ -35,8 +34,7 @@ public final class SkipPredicateErrors
 
     public static void testSkipPredicates(
             @SuppressWarnings("unused") CommandContext<CommandSourceStack> ctx, Consumer<Component> msgQueueAppender
-    )
-    {
+    ) {
         List<Error> errors = new ArrayList<>();
         AsyncTypeTest.Stats stats = AsyncTypeTest.execute(
                 SkipPredicateErrors::testTypeAgainstAll,
@@ -48,14 +46,11 @@ public final class SkipPredicateErrors
         MutableComponent resultMsg = Component.literal("No issues found");
         ChatFormatting color = ChatFormatting.DARK_GREEN;
 
-        if (!errors.isEmpty())
-        {
+        if (!errors.isEmpty()) {
             StringBuilder testResult = new StringBuilder("Encountered errors while testing skip predicates (deduplicated):");
             Set<Error> deduplicated = new HashSet<>();
-            for (Error error : errors)
-            {
-                if (!deduplicated.add(error))
-                {
+            for (Error error : errors) {
+                if (!deduplicated.add(error)) {
                     continue;
                 }
 
@@ -78,34 +73,25 @@ public final class SkipPredicateErrors
         msgQueueAppender.accept(resultMsg);
     }
 
-    private static Result testTypeAgainstAll(BlockType type, LongConsumer combinationCollector)
-    {
+    private static Result testTypeAgainstAll(BlockType type, LongConsumer combinationCollector) {
         List<Error> errors = new ArrayList<>();
         Block block = FBContent.byType(type);
         SideSkipPredicate skipPredicate = type.getSideSkipPredicate();
         long combinations = 0;
         long lastSent = 0;
-        for (BlockState state : block.getStateDefinition().getPossibleStates())
-        {
-            for (BlockType adjType : TYPES)
-            {
+        for (BlockState state : block.getStateDefinition().getPossibleStates()) {
+            for (BlockType adjType : TYPES) {
                 Block adjBlock = FBContent.byType(adjType);
-                for (BlockState adjState : adjBlock.getStateDefinition().getPossibleStates())
-                {
-                    for (Direction side : SIDES)
-                    {
-                        try
-                        {
+                for (BlockState adjState : adjBlock.getStateDefinition().getPossibleStates()) {
+                    for (Direction side : SIDES) {
+                        try {
                             skipPredicate.test(EmptyBlockGetter.INSTANCE, CENTER, state, adjState, side);
-                        }
-                        catch (Throwable t)
-                        {
+                        } catch (Throwable t) {
                             errors.add(new Error(type, adjType, t.getMessage()));
                         }
 
                         combinations++;
-                        if (combinations % 100000L == 0)
-                        {
+                        if (combinations % 100000L == 0) {
                             combinationCollector.accept(100000L);
                             lastSent = combinations;
                         }

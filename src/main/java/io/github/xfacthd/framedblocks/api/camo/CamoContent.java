@@ -19,8 +19,7 @@ import net.minecraft.world.level.material.MapColor;
 import net.neoforged.neoforge.common.extensions.IBlockStateExtension;
 import org.jspecify.annotations.Nullable;
 
-public abstract class CamoContent<C extends CamoContent<C>>
-{
+public abstract class CamoContent<C extends CamoContent<C>> {
     /**
      * {@return whether this camo propagates skylight downwards}
      * @see BlockBehaviour.BlockStateBase#propagatesSkylightDown()
@@ -110,15 +109,13 @@ public abstract class CamoContent<C extends CamoContent<C>>
      * {@return the {@link MapColor} of this camo}
      * @see BlockBehaviour.BlockStateBase#getMapColor(BlockGetter, BlockPos)
      */
-    @Nullable
-    public abstract MapColor getMapColor(BlockGetter level, BlockPos pos);
+    public abstract @Nullable MapColor getMapColor(BlockGetter level, BlockPos pos);
 
     /**
      * {@return the beacon color multiplier of this camo}
      * @see IBlockStateExtension#getBeaconColorMultiplier(LevelReader, BlockPos, BlockPos)
      */
-    @Nullable
-    public abstract Integer getBeaconColorMultiplier(LevelReader level, BlockPos pos, BlockPos beaconPos);
+    public abstract @Nullable Integer getBeaconColorMultiplier(LevelReader level, BlockPos pos, BlockPos beaconPos);
 
     /**
      * {@return whether this camo is fully solid}
@@ -178,8 +175,7 @@ public abstract class CamoContent<C extends CamoContent<C>>
     /**
      * {@return whether this content represents a non-existent camo}
      */
-    public final boolean isEmpty()
-    {
+    public final boolean isEmpty() {
         return this == EmptyCamoContent.EMPTY;
     }
 

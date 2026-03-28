@@ -6,8 +6,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.ApiStatus;
 
-public interface SimpleOutlineRenderer extends OutlineRenderer<Unit>
-{
+public interface SimpleOutlineRenderer extends OutlineRenderer<Unit> {
     /**
      * Draw the outlines of the block. Provides access to the {@link BlockState} of the block being targeted,
      * sufficient for most blocks
@@ -16,15 +15,13 @@ public interface SimpleOutlineRenderer extends OutlineRenderer<Unit>
 
     @Override
     @ApiStatus.NonExtendable
-    default Unit extractOutlineData(BlockState state, Level level, BlockPos pos)
-    {
+    default Unit extractOutlineData(BlockState state, Level level, BlockPos pos) {
         return Unit.INSTANCE;
     }
 
     @Override
     @ApiStatus.NonExtendable
-    default void draw(BlockState state, Unit data, LineDrawer drawer)
-    {
+    default void draw(BlockState state, Unit data, LineDrawer drawer) {
         draw(state, drawer);
     }
 }

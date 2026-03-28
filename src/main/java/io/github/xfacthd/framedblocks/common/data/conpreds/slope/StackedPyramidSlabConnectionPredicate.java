@@ -6,14 +6,11 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.jspecify.annotations.Nullable;
 
-public final class StackedPyramidSlabConnectionPredicate extends NonDetailedConnectionPredicate
-{
+public final class StackedPyramidSlabConnectionPredicate extends NonDetailedConnectionPredicate {
     @Override
-    public boolean canConnectFullEdge(BlockState state, Direction side, @Nullable Direction edge)
-    {
+    public boolean canConnectFullEdge(BlockState state, Direction side, @Nullable Direction edge) {
         Direction facing = state.getValue(BlockStateProperties.FACING);
-        if (side == facing.getOpposite())
-        {
+        if (side == facing.getOpposite()) {
             return true;
         }
         return side.getAxis() != facing.getAxis() && edge == facing.getOpposite();

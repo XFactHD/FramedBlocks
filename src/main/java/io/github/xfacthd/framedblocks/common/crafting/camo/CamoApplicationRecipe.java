@@ -24,8 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public final class CamoApplicationRecipe extends CustomRecipe
-{
+public final class CamoApplicationRecipe extends CustomRecipe {
     public static final MapCodec<CamoApplicationRecipe> CODEC = Ingredient.CODEC.fieldOf("copy_tool")
             .xmap(CamoApplicationRecipe::new, CamoApplicationRecipe::getCopyTool);
     public static final StreamCodec<RegistryFriendlyByteBuf, CamoApplicationRecipe> STREAM_CODEC = StreamCodec.composite(
@@ -36,19 +35,18 @@ public final class CamoApplicationRecipe extends CustomRecipe
 
     private final Ingredient copyTool;
 
-    public CamoApplicationRecipe(Ingredient copyTool)
-    {
+    public CamoApplicationRecipe(Ingredient copyTool) {
         this.copyTool = copyTool;
     }
 
     @Override
-    public boolean matches(CraftingInput input, Level level)
-    {
-        if (input.width() != 2 || input.height() != 2 || !copyTool.test(input.getItem(1, 0))) return false;
+    public boolean matches(CraftingInput input, Level level) {
+        if (input.width() != 2 || input.height() != 2 || !copyTool.test(input.getItem(1, 0))) {
+            return false;
+        }
 
         ItemStack blockStack = input.getItem(0, 0);
-        if (!(blockStack.getItem() instanceof BlockItem item) || !(item.getBlock() instanceof IFramedBlock block))
-        {
+        if (!(blockStack.getItem() instanceof BlockItem item) || !(item.getBlock() instanceof IFramedBlock block)) {
             return false;
         }
 
@@ -56,11 +54,9 @@ public final class CamoApplicationRecipe extends CustomRecipe
 
         ItemStack camoOneStack = input.getItem(0, 1);
         boolean camoOne = false;
-        if (!camoOneStack.isEmpty())
-        {
+        if (!camoOneStack.isEmpty()) {
             CamoCraftingHandler<?> handlerOne = CamoContainerHelper.findCraftingHandler(camoOneStack);
-            if (handlerOne == null || !handlerOne.canApply(camoOneStack, consume))
-            {
+            if (handlerOne == null || !handlerOne.canApply(camoOneStack, consume)) {
                 return false;
             }
             camoOne = true;
@@ -68,11 +64,9 @@ public final class CamoApplicationRecipe extends CustomRecipe
 
         ItemStack camoTwoStack = input.getItem(1, 1);
         boolean camoTwo = false;
-        if (!camoTwoStack.isEmpty())
-        {
+        if (!camoTwoStack.isEmpty()) {
             CamoCraftingHandler<?> handlerTwo = CamoContainerHelper.findCraftingHandler(camoTwoStack);
-            if (handlerTwo == null || !handlerTwo.canApply(camoTwoStack, consume))
-            {
+            if (handlerTwo == null || !handlerTwo.canApply(camoTwoStack, consume)) {
                 return false;
             }
             camoTwo = true;
@@ -83,13 +77,13 @@ public final class CamoApplicationRecipe extends CustomRecipe
     }
 
     @Override
-    public ItemStack assemble(CraftingInput input)
-    {
-        if (input.width() != 2 || input.height() != 2 || !copyTool.test(input.getItem(1, 0))) return ItemStack.EMPTY;
+    public ItemStack assemble(CraftingInput input) {
+        if (input.width() != 2 || input.height() != 2 || !copyTool.test(input.getItem(1, 0))) {
+            return ItemStack.EMPTY;
+        }
 
         ItemStack blockStack = input.getItem(0, 0);
-        if (!(blockStack.getItem() instanceof BlockItem item) || !(item.getBlock() instanceof IFramedBlock block))
-        {
+        if (!(blockStack.getItem() instanceof BlockItem item) || !(item.getBlock() instanceof IFramedBlock block)) {
             return ItemStack.EMPTY;
         }
 
@@ -97,26 +91,20 @@ public final class CamoApplicationRecipe extends CustomRecipe
         List<CamoContainer<?, ?>> camos = new ArrayList<>(2);
 
         ItemStack camoOneStack = input.getItem(0, 1);
-        if (!camoOneStack.isEmpty())
-        {
+        if (!camoOneStack.isEmpty()) {
             CamoCraftingHandler<?> handlerOne = CamoContainerHelper.findCraftingHandler(camoOneStack);
-            if (handlerOne == null || !handlerOne.canApply(camoOneStack, consume))
-            {
+            if (handlerOne == null || !handlerOne.canApply(camoOneStack, consume)) {
                 return ItemStack.EMPTY;
             }
             camos.add(handlerOne.apply(camoOneStack, consume));
-        }
-        else if (block.getBlockType().consumesTwoCamosInCamoApplicationRecipe())
-        {
+        } else if (block.getBlockType().consumesTwoCamosInCamoApplicationRecipe()) {
             camos.add(EmptyCamoContainer.EMPTY);
         }
 
         ItemStack camoTwoStack = input.getItem(1, 1);
-        if (!camoTwoStack.isEmpty())
-        {
+        if (!camoTwoStack.isEmpty()) {
             CamoCraftingHandler<?> handlerTwo = CamoContainerHelper.findCraftingHandler(camoTwoStack);
-            if (handlerTwo == null || !handlerTwo.canApply(camoTwoStack, consume))
-            {
+            if (handlerTwo == null || !handlerTwo.canApply(camoTwoStack, consume)) {
                 return ItemStack.EMPTY;
             }
             camos.add(handlerTwo.apply(camoTwoStack, consume));
@@ -128,26 +116,22 @@ public final class CamoApplicationRecipe extends CustomRecipe
     }
 
     @Override
-    public NonNullList<ItemStack> getRemainingItems(CraftingInput input)
-    {
+    public NonNullList<ItemStack> getRemainingItems(CraftingInput input) {
         NonNullList<ItemStack> remaining = super.getRemainingItems(input);
-        if (remaining.get(1).isEmpty())
-        {
+        if (remaining.get(1).isEmpty()) {
             remaining.set(1, input.getItem(1, 0).copy());
         }
 
         boolean consume = ConfigView.Server.INSTANCE.shouldConsumeCamoItem();
 
         ItemStack camoOneStack = input.getItem(0, 1);
-        if (!camoOneStack.isEmpty())
-        {
+        if (!camoOneStack.isEmpty()) {
             CamoCraftingHandler<?> handlerOne = CamoContainerHelper.findCraftingHandler(camoOneStack);
             remaining.set(2, Objects.requireNonNull(handlerOne).getRemainder(camoOneStack, consume));
         }
 
         ItemStack camoTwoStack = input.getItem(1, 1);
-        if (!camoTwoStack.isEmpty())
-        {
+        if (!camoTwoStack.isEmpty()) {
             CamoCraftingHandler<?> handlerTwo = CamoContainerHelper.findCraftingHandler(camoTwoStack);
             remaining.set(3, Objects.requireNonNull(handlerTwo).getRemainder(camoTwoStack, consume));
         }
@@ -155,14 +139,12 @@ public final class CamoApplicationRecipe extends CustomRecipe
         return remaining;
     }
 
-    public Ingredient getCopyTool()
-    {
+    public Ingredient getCopyTool() {
         return copyTool;
     }
 
     @Override
-    public RecipeSerializer<CamoApplicationRecipe> getSerializer()
-    {
+    public RecipeSerializer<CamoApplicationRecipe> getSerializer() {
         return FBContent.RECIPE_SERIALIZER_APPLY_CAMO.value();
     }
 }

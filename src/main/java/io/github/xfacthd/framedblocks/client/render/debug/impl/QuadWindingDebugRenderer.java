@@ -37,8 +37,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-public class QuadWindingDebugRenderer implements BlockDebugRenderer<IFramedBlockEntity>
-{
+public class QuadWindingDebugRenderer implements BlockDebugRenderer<IFramedBlockEntity> {
     public static final QuadWindingDebugRenderer INSTANCE = new QuadWindingDebugRenderer();
     private static final Direction[] DIRECTIONS = Arrays.copyOf(Direction.values(), 7);
     private static final int[] VERT_INDEX_COLORS = { 0xFFFFFFFF, 0xFFFF0000, 0xFF00FF00, 0xFF0000FF };
@@ -46,8 +45,7 @@ public class QuadWindingDebugRenderer implements BlockDebugRenderer<IFramedBlock
     private static final ContextKey<QuadWindingRenderState> DATA_KEY = new ContextKey<>(Utils.id("quad_winding_debug_renderer"));
 
     @Override
-    public void extract(IFramedBlockEntity be, BlockHitResult blockHit, float partialTick, LevelRenderState renderState)
-    {
+    public void extract(IFramedBlockEntity be, BlockHitResult blockHit, float partialTick, LevelRenderState renderState) {
         BlockPos pos = be.getBlockPos();
         BlockState state = be.getBlockState();
         LocalPlayer player = Objects.requireNonNull(Minecraft.getInstance().player);
@@ -62,10 +60,11 @@ public class QuadWindingDebugRenderer implements BlockDebugRenderer<IFramedBlock
     }
 
     @Override
-    public void submit(LevelRenderState renderState, PoseStack poseStack, SubmitNodeCollector collector)
-    {
+    public void submit(LevelRenderState renderState, PoseStack poseStack, SubmitNodeCollector collector) {
         QuadWindingRenderState renderData = renderState.getRenderData(DATA_KEY);
-        if (renderData == null) return;
+        if (renderData == null) {
+            return;
+        }
 
         Vec3 eyePos = renderData.eyePos;
         Vec3 viewVector = renderData.viewVector;
@@ -73,20 +72,16 @@ public class QuadWindingDebugRenderer implements BlockDebugRenderer<IFramedBlock
         Vector3f vertNorm = new Vector3f();
         List<BlockStateModelPart> srcParts = new ObjectArrayList<>();
         renderData.model.collectParts(renderData, renderData.pos, renderData.state, RANDOM, srcParts);
-        for (BlockStateModelPart part : srcParts)
-        {
-            for (Direction side : DIRECTIONS)
-            {
-                for (BakedQuad quad : part.getQuads(side))
-                {
+        for (BlockStateModelPart part : srcParts) {
+            for (Direction side : DIRECTIONS) {
+                for (BakedQuad quad : part.getQuads(side)) {
                     BakedNormals.unpack(quad.bakedNormals().normal(0), vertNorm);
                     float dot = vertNorm.dot((float) viewVector.x, (float) viewVector.y, (float) viewVector.z);
-                    if (dot > -.75F) continue;
+                    if (dot > -.75F || (!sneak && !checkViewIntersectsQuad(quad, eyePos, viewVector))) {
+                        continue;
+                    }
 
-                    if (!sneak && !checkViewIntersectsQuad(quad, eyePos, viewVector)) continue;
-
-                    for (int i = 0; i < 4; i++)
-                    {
+                    for (int i = 0; i < 4; i++) {
                         Vector3fc vertPos = quad.position(i);
 
                         poseStack.pushPose();
@@ -116,14 +111,15 @@ public class QuadWindingDebugRenderer implements BlockDebugRenderer<IFramedBlock
         }
     }
 
-    private static boolean checkViewIntersectsQuad(BakedQuad quad, Vec3 eyePos, Vec3 viewVector)
-    {
+    private static boolean checkViewIntersectsQuad(BakedQuad quad, Vec3 eyePos, Vec3 viewVector) {
         Triangle triOne = new Triangle(
                 new Vec3(quad.position(0)),
                 new Vec3(quad.position(1)),
                 new Vec3(quad.position(2))
         );
-        if (triOne.intersects(eyePos, viewVector)) return true;
+        if (triOne.intersects(eyePos, viewVector)) {
+            return true;
+        }
 
         Triangle triTwo = new Triangle(
                 new Vec3(quad.position(2)),
@@ -134,8 +130,7 @@ public class QuadWindingDebugRenderer implements BlockDebugRenderer<IFramedBlock
     }
 
     @Override
-    public boolean isEnabled()
-    {
+    public boolean isEnabled() {
         return DevToolsConfig.VIEW.isQuadWindingDebugRendererEnabled();
     }
 

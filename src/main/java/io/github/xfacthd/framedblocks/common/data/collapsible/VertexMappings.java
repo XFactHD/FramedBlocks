@@ -5,24 +5,20 @@ import io.github.xfacthd.framedblocks.common.blockentity.special.FramedCollapsib
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 
-public final class VertexMappings
-{
+public final class VertexMappings {
     private static final VertexPair[][] EDGE_MAPPING = makeEdgeMapping();
     private static final NeighborVertex[][] NEIGHBOR_MAPPING = makeNeighborMapping();
 
-    public static VertexPair getEdgeVertices(Direction collapsedFace, Direction edge)
-    {
+    public static VertexPair getEdgeVertices(Direction collapsedFace, Direction edge) {
         VertexPair pair = EDGE_MAPPING[collapsedFace.ordinal()][edge.ordinal()];
         return Preconditions.checkNotNull(pair, "Invalid face-edge pair: %s %s", collapsedFace, edge);
     }
 
-    public static NeighborVertex[] getNeighbors(Direction collapsedFace, int srcVert)
-    {
+    public static NeighborVertex[] getNeighbors(Direction collapsedFace, int srcVert) {
         return NEIGHBOR_MAPPING[getNeighborMappingIndex(collapsedFace, srcVert)];
     }
 
-    private static VertexPair[][] makeEdgeMapping()
-    {
+    private static VertexPair[][] makeEdgeMapping() {
         VertexPair[][] table = new VertexPair[6][6];
 
         table[Direction.UP.ordinal()][Direction.NORTH.ordinal()] = new VertexPair(0, 3, Direction.EAST);
@@ -58,8 +54,7 @@ public final class VertexMappings
         return table;
     }
 
-    private static NeighborVertex[][] makeNeighborMapping()
-    {
+    private static NeighborVertex[][] makeNeighborMapping() {
         NeighborVertex[][] mappings = new NeighborVertex[FramedCollapsibleBlockEntity.DIRECTIONS * FramedCollapsibleBlockEntity.VERTEX_COUNT][];
 
         putMapping(mappings, Direction.UP, 0, new NeighborVertex(new Vec3i(-1, 0,  0), 3), new NeighborVertex(new Vec3i( 0, 0, -1), 1), new NeighborVertex(new Vec3i(-1, 0, -1), 2));
@@ -102,13 +97,11 @@ public final class VertexMappings
             NeighborVertex vertOne,
             NeighborVertex vertTwo,
             NeighborVertex vertBoth
-    )
-    {
+    ) {
         mappings[getNeighborMappingIndex(face, srcVert)] = new NeighborVertex[] { vertOne, vertTwo, vertBoth };
     }
 
-    private static int getNeighborMappingIndex(Direction face, int srcVert)
-    {
+    private static int getNeighborMappingIndex(Direction face, int srcVert) {
         return face.ordinal() * FramedCollapsibleBlockEntity.VERTEX_COUNT + srcVert;
     }
 

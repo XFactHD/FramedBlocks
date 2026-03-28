@@ -10,45 +10,37 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
-public interface DelegateBlockStateModelPart extends ExtendedBlockStateModelPart
-{
+public interface DelegateBlockStateModelPart extends ExtendedBlockStateModelPart {
     ExtendedBlockStateModelPart wrapped();
 
     @Override
-    default List<BakedQuad> getQuads(@Nullable Direction side)
-    {
+    default List<BakedQuad> getQuads(@Nullable Direction side) {
         return wrapped().getQuads(side);
     }
 
     @Override
     @SuppressWarnings("deprecation")
-    default boolean useAmbientOcclusion()
-    {
+    default boolean useAmbientOcclusion() {
         return wrapped().useAmbientOcclusion();
     }
 
     @Override
-    default TriState ambientOcclusion()
-    {
+    default TriState ambientOcclusion() {
         return wrapped().ambientOcclusion();
     }
 
     @Override
-    default Material.Baked particleMaterial()
-    {
+    default Material.Baked particleMaterial() {
         return wrapped().particleMaterial();
     }
 
     @Override
-    default int materialFlags()
-    {
+    default int materialFlags() {
         return wrapped().materialFlags();
     }
 
-    @Nullable
     @Override
-    default BlockState getBlockAppearance()
-    {
+    default @Nullable BlockState getBlockAppearance() {
         return wrapped().getBlockAppearance();
     }
 }

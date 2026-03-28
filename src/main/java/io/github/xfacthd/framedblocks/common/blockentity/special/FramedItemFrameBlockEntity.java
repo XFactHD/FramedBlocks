@@ -34,8 +34,7 @@ import net.minecraft.world.phys.Vec3;
 import java.util.Objects;
 import java.util.function.Consumer;
 
-public class FramedItemFrameBlockEntity extends FramedBlockEntity implements ItemOwner
-{
+public class FramedItemFrameBlockEntity extends FramedBlockEntity implements ItemOwner {
     public static final int ROTATION_STEPS = 8;
     private static final int MAP_UPDATE_INTERVAL = 10;
     public static final String ITEM_NBT_KEY = "item";
@@ -46,32 +45,25 @@ public class FramedItemFrameBlockEntity extends FramedBlockEntity implements Ite
     private int mapTickOffset = 0;
     private long mapTickCount = 0;
 
-    public FramedItemFrameBlockEntity(BlockPos pos, BlockState state)
-    {
+    public FramedItemFrameBlockEntity(BlockPos pos, BlockState state) {
         super(FBContent.BE_TYPE_FRAMED_ITEM_FRAME.value(), pos, state);
         this.glowing = getBlockType() == BlockType.FRAMED_GLOWING_ITEM_FRAME;
     }
 
-    public void tickWithMap()
-    {
-        if (mapTickCount % MAP_UPDATE_INTERVAL == 0)
-        {
-            if (mapTickCount == 0)
-            {
+    public void tickWithMap() {
+        if (mapTickCount % MAP_UPDATE_INTERVAL == 0) {
+            if (mapTickCount == 0) {
                 // Only start ticking with offset after first tick. Ensures the client will receive the map data ASAP
                 mapTickCount = mapTickOffset;
             }
 
             MapItemSavedData mapData = MapItem.getSavedData(heldItem, level());
-            if (mapData != null)
-            {
+            if (mapData != null) {
                 MapId mapId = Objects.requireNonNull(heldItem.get(DataComponents.MAP_ID));
-                for (Player player : level().players())
-                {
+                for (Player player : level().players()) {
                     mapData.tickCarriedBy(player, heldItem, null);
                     Packet<?> packet = mapData.getUpdatePacket(mapId, player);
-                    if (packet != null)
-                    {
+                    if (packet != null) {
                         ((ServerPlayer) player).connection.send(packet);
                     }
                 }
@@ -80,13 +72,10 @@ public class FramedItemFrameBlockEntity extends FramedBlockEntity implements Ite
         mapTickCount++;
     }
 
-    public InteractionResult handleFrameInteraction(Player player, InteractionHand hand)
-    {
+    public InteractionResult handleFrameInteraction(Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
-        if (hasItem())
-        {
-            if (!level().isClientSide())
-            {
+        if (hasItem()) {
+            if (!level().isClientSide()) {
                 rotation = (rotation + 1) % ROTATION_STEPS;
 
                 playSound(glowing ? SoundEvents.GLOW_ITEM_FRAME_ROTATE_ITEM : SoundEvents.ITEM_FRAME_ROTATE_ITEM);
@@ -95,14 +84,10 @@ public class FramedItemFrameBlockEntity extends FramedBlockEntity implements Ite
                 level().sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
             }
             return InteractionResult.SUCCESS;
-        }
-        else if (!stack.isEmpty() && !hasItem())
-        {
-            if (!level().isClientSide())
-            {
+        } else if (!stack.isEmpty() && !hasItem()) {
+            if (!level().isClientSide()) {
                 setItem(stack);
-                if (!player.isCreative())
-                {
+                if (!player.isCreative()) {
                     stack.shrink(1);
                 }
                 player.getInventory().setChanged();
@@ -114,16 +99,12 @@ public class FramedItemFrameBlockEntity extends FramedBlockEntity implements Ite
         return InteractionResult.TRY_WITH_EMPTY_HAND;
     }
 
-    public void removeItem(Player player)
-    {
-        if (heldItem.getItem() instanceof MapItem)
-        {
+    public void removeItem(Player player) {
+        if (heldItem.getItem() instanceof MapItem) {
             FramedMap map = heldItem.remove(FBContent.DC_TYPE_FRAMED_MAP);
-            if (map != null)
-            {
+            if (map != null) {
                 MapItemSavedData mapData = MapItem.getSavedData(heldItem, level());
-                if (mapData instanceof FramedMap.MarkerRemover remover)
-                {
+                if (mapData instanceof FramedMap.MarkerRemover remover) {
                     remover.framedblocks$removeMapMarker(worldPosition);
                 }
             }
@@ -137,65 +118,52 @@ public class FramedItemFrameBlockEntity extends FramedBlockEntity implements Ite
         playSound(glowing ? SoundEvents.GLOW_ITEM_FRAME_REMOVE_ITEM : SoundEvents.ITEM_FRAME_REMOVE_ITEM);
     }
 
-    private void setItem(ItemStack item)
-    {
-        if (item.isEmpty())
-        {
+    private void setItem(ItemStack item) {
+        if (item.isEmpty()) {
             heldItem = ItemStack.EMPTY;
-        }
-        else
-        {
+        } else {
             heldItem = item.copy();
             heldItem.setCount(1);
 
-            if (heldItem.getItem() instanceof MapItem)
-            {
+            if (heldItem.getItem() instanceof MapItem) {
                 Direction dir = getBlockState().getValue(BlockStateProperties.FACING).getOpposite();
                 heldItem.set(FBContent.DC_TYPE_FRAMED_MAP, new FramedMap(worldPosition, dir));
             }
         }
 
         setChangedWithoutSignalUpdate();
-        if (!changeMapStateIfNeeded())
-        {
+        if (!changeMapStateIfNeeded()) {
             level().sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
         }
     }
 
-    public boolean hasItem()
-    {
+    public boolean hasItem() {
         return !heldItem.isEmpty();
     }
 
-    public ItemStack getItem()
-    {
+    public ItemStack getItem() {
         return heldItem;
     }
 
-    public ItemStack getCloneItem()
-    {
+    public ItemStack getCloneItem() {
         ItemStack stack = heldItem.copy();
         stack.remove(FBContent.DC_TYPE_FRAMED_MAP);
         return stack;
     }
 
-    public int getRotation()
-    {
+    public int getRotation() {
         return rotation;
     }
 
-    public boolean isGlowingFrame()
-    {
+    public boolean isGlowingFrame() {
         return glowing;
     }
 
-    private boolean changeMapStateIfNeeded()
-    {
+    private boolean changeMapStateIfNeeded() {
         boolean mapItem = !heldItem.isEmpty() && heldItem.getItem() instanceof MapItem;
         boolean mapState = getBlockState().getValue(PropertyHolder.MAP_FRAME);
 
-        if (mapItem != mapState)
-        {
+        if (mapItem != mapState) {
             level().setBlockAndUpdate(worldPosition, getBlockState().setValue(PropertyHolder.MAP_FRAME, mapItem));
             mapTickCount = mapTickOffset = mapItem ? level().getRandom().nextInt(MAP_UPDATE_INTERVAL) : 0;
             return true;
@@ -203,30 +171,25 @@ public class FramedItemFrameBlockEntity extends FramedBlockEntity implements Ite
         return false;
     }
 
-    private void playSound(SoundEvent sound)
-    {
+    private void playSound(SoundEvent sound) {
         level().playSound(null, worldPosition.getX(), worldPosition.getY(), worldPosition.getZ(), sound, SoundSource.BLOCKS, 1F, 1F);
     }
 
     @Override
-    public void addAdditionalDrops(Consumer<ItemStack> drops, boolean dropCamo)
-    {
+    public void addAdditionalDrops(Consumer<ItemStack> drops, boolean dropCamo) {
         super.addAdditionalDrops(drops, dropCamo);
-        if (!heldItem.isEmpty())
-        {
+        if (!heldItem.isEmpty()) {
             drops.accept(getCloneItem());
         }
     }
 
     @Override
-    public Vec3 position()
-    {
+    public Vec3 position() {
         return new Vec3(worldPosition);
     }
 
     @Override
-    public float getVisualRotationYInDegrees()
-    {
+    public float getVisualRotationYInDegrees() {
         Direction facing = getBlockState().getValue(BlockStateProperties.FACING).getOpposite();
         int yRot = facing.getAxis().isVertical() ? 90 * facing.getAxisDirection().getStep() : 0;
         return Mth.wrapDegrees(180 + facing.get2DDataValue() * 90 + getRotation() * 45 + yRot);
@@ -235,8 +198,7 @@ public class FramedItemFrameBlockEntity extends FramedBlockEntity implements Ite
     // Network
 
     @Override
-    protected void readFromDataPacket(NetworkValueInput input)
-    {
+    protected void readFromDataPacket(NetworkValueInput input) {
         super.readFromDataPacket(input);
 
         heldItem = input.read(ITEM_NBT_KEY, ItemStack.OPTIONAL_CODEC).orElse(ItemStack.EMPTY);
@@ -244,8 +206,7 @@ public class FramedItemFrameBlockEntity extends FramedBlockEntity implements Ite
     }
 
     @Override
-    protected void writeToDataPacket(ValueOutput valueOutput)
-    {
+    protected void writeToDataPacket(ValueOutput valueOutput) {
         super.writeToDataPacket(valueOutput);
         valueOutput.store(ITEM_NBT_KEY, ItemStack.OPTIONAL_CODEC, heldItem);
         valueOutput.putByte("rotation", (byte) rotation);
@@ -254,8 +215,7 @@ public class FramedItemFrameBlockEntity extends FramedBlockEntity implements Ite
     // NBT
 
     @Override
-    public void loadAdditional(ValueInput valueInput)
-    {
+    public void loadAdditional(ValueInput valueInput) {
         super.loadAdditional(valueInput);
 
         heldItem = valueInput.read(ITEM_NBT_KEY, ItemStack.OPTIONAL_CODEC).orElse(ItemStack.EMPTY);
@@ -264,8 +224,7 @@ public class FramedItemFrameBlockEntity extends FramedBlockEntity implements Ite
     }
 
     @Override
-    public void saveAdditional(ValueOutput valueInput)
-    {
+    public void saveAdditional(ValueOutput valueInput) {
         super.saveAdditional(valueInput);
 
         valueInput.store(ITEM_NBT_KEY, ItemStack.OPTIONAL_CODEC, heldItem);

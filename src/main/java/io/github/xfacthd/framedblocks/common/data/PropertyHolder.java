@@ -7,8 +7,7 @@ import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.block.state.properties.RailShape;
 
-public final class PropertyHolder
-{
+public final class PropertyHolder {
     public static final EnumProperty<SlopeType> SLOPE_TYPE = EnumProperty.create("type", SlopeType.class);
     public static final EnumProperty<CornerType> CORNER_TYPE = EnumProperty.create("type", CornerType.class);
     public static final EnumProperty<StairsType> STAIRS_TYPE = EnumProperty.create("type", StairsType.class);

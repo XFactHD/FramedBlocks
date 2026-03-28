@@ -13,10 +13,8 @@ import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 
-public final class ThreewayCornerPillarShapes
-{
-    public static ShapeContainer generate(List<BlockState> states)
-    {
+public final class ThreewayCornerPillarShapes {
+    public static ShapeContainer generate(List<BlockState> states) {
         VoxelShape[] shapes = ShapeUtils.makeHorizontalRotationsWithFlag(
                 VerticalStairsShapes.SHAPES.get(new VerticalStairsShapes.ShapeKey(Direction.NORTH, StairsType.TOP_BOTH)),
                 VerticalStairsShapes.SHAPES.get(new VerticalStairsShapes.ShapeKey(Direction.NORTH, StairsType.BOTTOM_BOTH)),
@@ -25,8 +23,7 @@ public final class ThreewayCornerPillarShapes
 
         Map<BlockState, VoxelShape> map = new IdentityHashMap<>(states.size());
 
-        for (BlockState state : states)
-        {
+        for (BlockState state : states) {
             Direction dir = state.getValue(FramedProperties.FACING_HOR);
             boolean top = state.getValue(FramedProperties.TOP);
             map.put(state, shapes[dir.get2DDataValue() + (top ? 4 : 0)]);

@@ -4,13 +4,11 @@ import io.github.xfacthd.framedblocks.api.model.data.QuadMapBuilder;
 import net.minecraft.core.Direction;
 import org.jetbrains.annotations.Nullable;
 
-public final class MultiQuadModifier
-{
+public final class MultiQuadModifier {
     private final QuadModifier modOne;
     private final QuadModifier modTwo;
 
-    public MultiQuadModifier(QuadModifier modOne, QuadModifier modTwo)
-    {
+    public MultiQuadModifier(QuadModifier modOne, QuadModifier modTwo) {
         this.modOne = modOne;
         this.modTwo = modTwo;
     }
@@ -19,8 +17,7 @@ public final class MultiQuadModifier
      * Apply the given {@link QuadModifier.Modifier} to both wrapped {@link QuadModifier}s if {@code apply} is true.
      * @see QuadModifier#applyIf(QuadModifier.Modifier,boolean)
      */
-    public MultiQuadModifier applyIf(QuadModifier.Modifier modifier, boolean apply)
-    {
+    public MultiQuadModifier applyIf(QuadModifier.Modifier modifier, boolean apply) {
         modOne.applyIf(modifier, apply);
         modTwo.applyIf(modifier, apply);
         return this;
@@ -30,8 +27,7 @@ public final class MultiQuadModifier
      * Apply the given {@link QuadModifier.Modifier} to both wrapped {@link QuadModifier}s.
      * @see QuadModifier#apply(QuadModifier.Modifier)
      */
-    public MultiQuadModifier apply(QuadModifier.Modifier modifier)
-    {
+    public MultiQuadModifier apply(QuadModifier.Modifier modifier) {
         modOne.apply(modifier);
         modTwo.apply(modifier);
         return this;
@@ -42,8 +38,7 @@ public final class MultiQuadModifier
      * the provided cull face.
      * @see QuadModifier#export(QuadMapBuilder, Direction)
      */
-    public void export(QuadMapBuilder quadMap, @Nullable Direction cullFace)
-    {
+    public void export(QuadMapBuilder quadMap, @Nullable Direction cullFace) {
         modOne.export(quadMap, cullFace);
         modTwo.export(quadMap, cullFace);
     }
@@ -54,16 +49,14 @@ public final class MultiQuadModifier
      * @return a new {@code MultiQuadModifier} with a deep-copy of the current data or an empty,
      * failed modifier if this modifier previously failed
      */
-    public MultiQuadModifier derive()
-    {
+    public MultiQuadModifier derive() {
         return new MultiQuadModifier(modOne.derive(), modTwo.derive());
     }
 
     /**
      * Discard both wrapped {@link QuadModifier}s to return them to the pool without exporting them.
      */
-    public void discard()
-    {
+    public void discard() {
         modOne.discard();
         modTwo.discard();
     }

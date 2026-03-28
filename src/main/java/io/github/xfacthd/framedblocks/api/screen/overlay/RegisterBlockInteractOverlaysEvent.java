@@ -6,18 +6,15 @@ import org.jetbrains.annotations.ApiStatus;
 
 import java.util.function.BiConsumer;
 
-public final class RegisterBlockInteractOverlaysEvent extends Event implements IModBusEvent
-{
+public final class RegisterBlockInteractOverlaysEvent extends Event implements IModBusEvent {
     private final BiConsumer<String, BlockInteractOverlay> registrar;
 
     @ApiStatus.Internal
-    public RegisterBlockInteractOverlaysEvent(BiConsumer<String, BlockInteractOverlay> registrar)
-    {
+    public RegisterBlockInteractOverlaysEvent(BiConsumer<String, BlockInteractOverlay> registrar) {
         this.registrar = registrar;
     }
 
-    public void register(String name, BlockInteractOverlay overlay)
-    {
+    public void register(String name, BlockInteractOverlay overlay) {
         registrar.accept(name, overlay);
     }
 }

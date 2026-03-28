@@ -22,52 +22,43 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import org.jspecify.annotations.Nullable;
 
-public class FramedDoublePanelBlock extends FramedDoubleBlock
-{
-    public FramedDoublePanelBlock(Properties props)
-    {
+public class FramedDoublePanelBlock extends FramedDoubleBlock {
+    public FramedDoublePanelBlock(Properties props) {
         super(BlockType.FRAMED_DOUBLE_PANEL, props);
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
-    {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
         builder.add(FramedProperties.FACING_HOR);
     }
 
     @Override //Used by the blueprint
-    public BlockState getStateForPlacement(BlockPlaceContext context)
-    {
+    public BlockState getStateForPlacement(BlockPlaceContext context) {
         Direction dir = context.getHorizontalDirection();
         return defaultBlockState().setValue(FramedProperties.FACING_HOR, dir);
     }
 
     @Override
-    public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state, boolean includeData, Player player)
-    {
-        if (includeData)
-        {
+    public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state, boolean includeData, Player player) {
+        if (includeData) {
             return super.getCloneItemStack(level, pos, state, true, player);
         }
         return new ItemStack(FBContent.BLOCK_FRAMED_PANEL.value());
     }
 
     @Override
-    protected BlockState rotate(BlockState state, Rotation rotation)
-    {
+    protected BlockState rotate(BlockState state, Rotation rotation) {
         return BlockUtils.rotate(state, rotation);
     }
 
     @Override
-    protected BlockState mirror(BlockState state, Mirror mirror)
-    {
+    protected BlockState mirror(BlockState state, Mirror mirror) {
         return BlockUtils.mirrorFaceBlock(state, mirror);
     }
 
     @Override
-    public DoubleBlockParts calculateParts(BlockState state)
-    {
+    public DoubleBlockParts calculateParts(BlockState state) {
         Direction facing = state.getValue(FramedProperties.FACING_HOR);
 
         BlockState defState = FBContent.BLOCK_FRAMED_PANEL.value().defaultBlockState();
@@ -78,58 +69,46 @@ public class FramedDoublePanelBlock extends FramedDoubleBlock
     }
 
     @Override
-    public DoubleBlockTopInteractionMode calculateTopInteractionMode(BlockState state)
-    {
+    public DoubleBlockTopInteractionMode calculateTopInteractionMode(BlockState state) {
         return DoubleBlockTopInteractionMode.EITHER;
     }
 
     @Override
-    public CamoGetter calculateCamoGetter(BlockState state, Direction side, @Nullable Direction edge)
-    {
+    public CamoGetter calculateCamoGetter(BlockState state, Direction side, @Nullable Direction edge) {
         Direction facing = state.getValue(FramedProperties.FACING_HOR);
         boolean notFacingAxis = side.getAxis() != facing.getAxis();
-        if (side == facing || (notFacingAxis && edge == facing))
-        {
+        if (side == facing || (notFacingAxis && edge == facing)) {
             return CamoGetter.FIRST;
         }
-        if (side == facing.getOpposite() || (notFacingAxis && edge == facing.getOpposite()))
-        {
+        if (side == facing.getOpposite() || (notFacingAxis && edge == facing.getOpposite())) {
             return CamoGetter.SECOND;
         }
         return CamoGetter.NONE;
     }
 
     @Override
-    public SolidityCheck calculateSolidityCheck(BlockState state, Direction side)
-    {
+    public SolidityCheck calculateSolidityCheck(BlockState state, Direction side) {
         Direction facing = state.getValue(FramedProperties.FACING_HOR);
-        if (side == facing)
-        {
+        if (side == facing) {
             return SolidityCheck.FIRST;
-        }
-        else if (side == facing.getOpposite())
-        {
+        } else if (side == facing.getOpposite()) {
             return SolidityCheck.SECOND;
         }
         return SolidityCheck.BOTH;
     }
 
     @Override
-    @Nullable
-    public BlockState getItemModelSource()
-    {
+    public BlockState getItemModelSource() {
         return defaultBlockState();
     }
 
     @Override
-    public Direction getHorizontalOrientation(BlockState state)
-    {
+    public Direction getHorizontalOrientation(BlockState state) {
         return state.getValue(FramedProperties.FACING_HOR);
     }
 
     @Override
-    public BlockState getJadeRenderState(BlockState state)
-    {
+    public BlockState getJadeRenderState(BlockState state) {
         return defaultBlockState();
     }
 }

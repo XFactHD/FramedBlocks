@@ -9,52 +9,44 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
 
-final class MapBackedShapeLookup implements ShapeLookup
-{
+final class MapBackedShapeLookup implements ShapeLookup {
     private final Map<BlockState, VoxelShape> shapes;
     private final Map<BlockState, VoxelShape> occlusionShapes;
     private final Reference2BooleanFunction<BlockState> occludesBeaconBeam;
 
-    MapBackedShapeLookup(MapBackedShapeContainer shapes, @Nullable MapBackedShapeContainer occlusionShapes)
-    {
+    MapBackedShapeLookup(MapBackedShapeContainer shapes, @Nullable MapBackedShapeContainer occlusionShapes) {
         this.shapes = shapes.shapes();
         this.occlusionShapes = occlusionShapes != null ? occlusionShapes.shapes() : this.shapes;
         this.occludesBeaconBeam = computeBeaconBeamOcclusion(shapes);
     }
 
     @Override
-    public VoxelShape getShape(BlockState state)
-    {
+    public VoxelShape getShape(BlockState state) {
         return shapes.get(state);
     }
 
     @Override
-    public VoxelShape getOcclusionShape(BlockState state)
-    {
+    public VoxelShape getOcclusionShape(BlockState state) {
         return occlusionShapes.get(state);
     }
 
     @Override
-    public boolean hasSeparateOcclusionShapes()
-    {
+    public boolean hasSeparateOcclusionShapes() {
         return shapes != occlusionShapes;
     }
 
     @Override
-    public boolean occludesBeaconBeam(BlockState state)
-    {
+    public boolean occludesBeaconBeam(BlockState state) {
         return occludesBeaconBeam.getBoolean(state);
     }
 
-    private static Reference2BooleanFunction<BlockState> computeBeaconBeamOcclusion(ShapeContainer shapes)
-    {
+    private static Reference2BooleanFunction<BlockState> computeBeaconBeamOcclusion(ShapeContainer shapes) {
         Reference2BooleanMap<BlockState> beamColorMasking = new Reference2BooleanOpenHashMap<>();
         Reference2BooleanMap<VoxelShape> encounteredShapes = new Reference2BooleanOpenHashMap<>();
 
         boolean[] hasFalse = new boolean[1];
         boolean[] hasTrue = new boolean[1];
-        shapes.forEach((state, shape) ->
-        {
+        shapes.forEach((state, shape) -> {
             boolean occludes = encounteredShapes.computeIfAbsent(shape, ShapeUtils::occludesBeaconBeam);
             hasFalse[0] |= !occludes;
             hasTrue[0] |= occludes;

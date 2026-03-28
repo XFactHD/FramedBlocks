@@ -5,11 +5,9 @@ import net.minecraft.client.renderer.rendertype.RenderType;
 import org.jetbrains.annotations.ApiStatus;
 
 @SuppressWarnings("unused")
-public final class ConfigView
-{
+public final class ConfigView {
     @ApiStatus.NonExtendable
-    public interface Server
-    {
+    public interface Server {
         Server INSTANCE = Utils.loadService(ConfigView.Server.class);
 
         /**
@@ -44,8 +42,7 @@ public final class ConfigView
     }
 
     @ApiStatus.NonExtendable
-    public interface Client
-    {
+    public interface Client {
         Client INSTANCE = Utils.loadService(ConfigView.Client.class);
 
         /**
@@ -92,8 +89,7 @@ public final class ConfigView
     }
 
     @ApiStatus.NonExtendable
-    public interface DevTools
-    {
+    public interface DevTools {
         DevTools INSTANCE = Utils.loadService(DevTools.class);
     }
 

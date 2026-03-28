@@ -18,40 +18,33 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
-public class FramedChainGeometry extends Geometry
-{
+public class FramedChainGeometry extends Geometry {
     private static final Vector3f ROT_ORIGIN = new Vector3f(.5F, .5F, .5F);
 
     private final Direction.Axis axis;
 
-    public FramedChainGeometry(GeometryFactory.Context ctx)
-    {
+    public FramedChainGeometry(GeometryFactory.Context ctx) {
         this.axis = ctx.state().getValue(FramedChainBlock.AXIS);
     }
 
     @Override
-    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
-    {
+    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData) {
         Direction quadDir = quad.direction();
-        if (quadDir.getAxis() == axis) return;
+        if (quadDir.getAxis() == axis) {
+            return;
+        }
 
         Direction.Axis quadPerpAxis = DirUtils.getPerpendicularAxis(quadDir.getAxis(), axis);
-        if (axis == Direction.Axis.Y)
-        {
+        if (axis == Direction.Axis.Y) {
             createChainEdgeParts(quadMap, quad, quadDir, quadPerpAxis, DirUtils::isX, Modifiers::cut, Modifiers::cut);
             createChainCenterParts(quadMap, quad, Modifiers::cut, length -> Modifiers.cut(quadPerpAxis, length));
-        }
-        else
-        {
-            if (DirUtils.isY(quadDir))
-            {
+        } else {
+            if (DirUtils.isY(quadDir)) {
                 Direction.Axis perpAxis = axis == Direction.Axis.X ? Direction.Axis.Z : Direction.Axis.X;
 
                 createChainEdgeParts(quadMap, quad, quadDir, quadPerpAxis, _ -> axis == Direction.Axis.Z, Modifiers::cut, Modifiers::cut);
                 createChainCenterParts(quadMap, quad, Modifiers::cut, len -> Modifiers.cut(perpAxis, len));
-            }
-            else
-            {
+            } else {
                 createChainEdgeParts(quadMap, quad, quadDir, quadPerpAxis, _ -> axis == Direction.Axis.X, Modifiers::cut, Modifiers::cut);
                 createChainCenterParts(quadMap, quad, Modifiers::cut, length -> Modifiers.cut(Direction.Axis.Y, length));
             }
@@ -66,8 +59,7 @@ public class FramedChainGeometry extends Geometry
             Predicate<Direction> fourSectionPred,
             CutterFactory vertCutterFactory,
             CutterFactory horCutterFactory
-    )
-    {
+    ) {
         Direction dirUp = Direction.fromAxisAndDirection(axis, Direction.AxisDirection.POSITIVE);
         Direction dirDown = Direction.fromAxisAndDirection(axis, Direction.AxisDirection.NEGATIVE);
         Direction dirNeg = Direction.fromAxisAndDirection(quadPerpAxis, Direction.AxisDirection.NEGATIVE);
@@ -86,8 +78,7 @@ public class FramedChainGeometry extends Geometry
                         .apply(Modifiers.offset(dirNeg, .5F/16F))
         );
 
-        if (fourSectionPred.test(quadDir))
-        {
+        if (fourSectionPred.test(quadDir)) {
             modifiers.add(baseMod.derive()
                     .apply(vertCutterFactory.create(dirUp, 2F/16F))
             );
@@ -102,9 +93,7 @@ public class FramedChainGeometry extends Geometry
             modifiers.add(baseMod.derive()
                     .apply(vertCutterFactory.create(dirDown, 2F/16F))
             );
-        }
-        else
-        {
+        } else {
             modifiers.add(baseMod.derive()
                     .apply(vertCutterFactory.create(dirDown, 4F/16F))
                     .apply(vertCutterFactory.create(dirUp, 15F/16F))
@@ -119,8 +108,7 @@ public class FramedChainGeometry extends Geometry
             );
         }
 
-        for (MultiQuadModifier mod : modifiers)
-        {
+        for (MultiQuadModifier mod : modifiers) {
             mod.apply(Modifiers.setPosition(.5F))
                     .apply(Modifiers.rotate(axis, ROT_ORIGIN, 45, false))
                     .export(quadMap, null);
@@ -139,10 +127,8 @@ public class FramedChainGeometry extends Geometry
         Direction dirUp = Direction.fromAxisAndDirection(axis, Direction.AxisDirection.POSITIVE);
         Direction dirDown = Direction.fromAxisAndDirection(axis, Direction.AxisDirection.NEGATIVE);
 
-        for (int i = 0; i < 6; i++)
-        {
-            float height = switch (i)
-            {
+        for (int i = 0; i < 6; i++) {
+            float height = switch (i) {
                 case 0 -> 2F;
                 case 5 -> 15F;
                 default -> 3F * i + 1F;
@@ -158,20 +144,17 @@ public class FramedChainGeometry extends Geometry
     }
 
     @Override
-    public boolean useSolidNoCamoModel()
-    {
+    public boolean useSolidNoCamoModel() {
         return true;
     }
 
     @FunctionalInterface
-    private interface CutterFactory
-    {
+    private interface CutterFactory {
         QuadModifier.Modifier create(Direction dir, float length);
     }
 
     @FunctionalInterface
-    private interface BidirectionalCutterFactory
-    {
+    private interface BidirectionalCutterFactory {
         QuadModifier.Modifier create(float length);
     }
 }

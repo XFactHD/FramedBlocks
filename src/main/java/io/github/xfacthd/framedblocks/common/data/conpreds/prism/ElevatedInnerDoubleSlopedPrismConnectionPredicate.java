@@ -7,11 +7,9 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jspecify.annotations.Nullable;
 
-public final class ElevatedInnerDoubleSlopedPrismConnectionPredicate extends NonDetailedConnectionPredicate
-{
+public final class ElevatedInnerDoubleSlopedPrismConnectionPredicate extends NonDetailedConnectionPredicate {
     @Override
-    public boolean canConnectFullEdge(BlockState state, Direction side, @Nullable Direction edge)
-    {
+    public boolean canConnectFullEdge(BlockState state, Direction side, @Nullable Direction edge) {
         CompoundDirection cmpDir = state.getValue(PropertyHolder.FACING_DIR);
         return side != cmpDir.orientation() || edge != null;
     }

@@ -28,8 +28,7 @@ public record FramedBlockModelDefinition(
         Either<BlockStateModelDispatcher, SingleVariant.Unbaked> baseModel,
         Map<String, SingleVariant.Unbaked> auxModels,
         Optional<StandaloneWrapperKey<?>> wrapperKey
-) implements CustomBlockModelDefinition
-{
+) implements CustomBlockModelDefinition {
     public static final MapCodec<FramedBlockModelDefinition> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
             Codec.mapEither(BlockStateModelDispatcher.VANILLA_CODEC, SingleVariant.Unbaked.MAP_CODEC.fieldOf("base_model"))
                     .forGetter(FramedBlockModelDefinition::baseModel),
@@ -41,12 +40,10 @@ public record FramedBlockModelDefinition(
     ).apply(inst, FramedBlockModelDefinition::new));
 
     @Override
-    public Map<BlockState, BlockStateModel.UnbakedRoot> instantiate(StateDefinition<Block, BlockState> states, Supplier<String> sourceSupplier)
-    {
+    public Map<BlockState, BlockStateModel.UnbakedRoot> instantiate(StateDefinition<Block, BlockState> states, Supplier<String> sourceSupplier) {
         Map<BlockState, BlockStateModel.UnbakedRoot> models = baseModel.map(
                 def -> def.instantiateVanilla(states, sourceSupplier),
-                variant ->
-                {
+                variant -> {
                     BlockStateModel.UnbakedRoot variantRoot = variant.asRoot();
                     return new IdentityHashMap<>(Maps.toMap(states.getPossibleStates(), _ -> variantRoot));
                 }
@@ -59,18 +56,15 @@ public record FramedBlockModelDefinition(
         return models;
     }
 
-    private ModelWrappingHandler getWrappingHandler(Block block)
-    {
-        if (wrapperKey.isPresent())
-        {
+    private ModelWrappingHandler getWrappingHandler(Block block) {
+        if (wrapperKey.isPresent()) {
             return ModelWrappingManager.getHandler(wrapperKey.get());
         }
         return ModelWrappingManager.getHandler(block);
     }
 
     @Override
-    public MapCodec<FramedBlockModelDefinition> codec()
-    {
+    public MapCodec<FramedBlockModelDefinition> codec() {
         return CODEC;
     }
 }

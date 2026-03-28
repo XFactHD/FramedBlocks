@@ -15,8 +15,7 @@ import org.slf4j.Logger;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class ShapeReloader implements ResourceManagerReloadListener
-{
+public final class ShapeReloader implements ResourceManagerReloadListener {
     public static final ShapeReloader INSTANCE = new ShapeReloader();
     public static final Identifier LISTENER_ID = Utils.id("voxel_shapes");
     private static final Logger LOGGER = LogUtils.getLogger();
@@ -25,33 +24,26 @@ public final class ShapeReloader implements ResourceManagerReloadListener
 
     private ShapeReloader() { }
 
-    public static synchronized void addCache(ShapeCache<?> cache)
-    {
+    public static synchronized void addCache(ShapeCache<?> cache) {
         CACHES.add(cache);
     }
 
-    public static synchronized void addLookup(ReloadableShapeLookup provider)
-    {
+    public static synchronized void addLookup(ReloadableShapeLookup provider) {
         LOOKUPS.add(provider);
     }
 
     @Override
-    public void onResourceManagerReload(ResourceManager resourceManager)
-    {
+    public void onResourceManagerReload(ResourceManager resourceManager) {
         reload();
     }
 
-    public static boolean reload()
-    {
+    public static boolean reload() {
         LOGGER.info("Reloading {} caches and {} reloadable shape lookups...", CACHES.size(), LOOKUPS.size());
         Stopwatch watch = Stopwatch.createStarted();
-        try
-        {
+        try {
             CACHES.forEach(ShapeCache::reload);
             LOOKUPS.forEach(ReloadableShapeLookup::reload);
-        }
-        catch (Throwable t)
-        {
+        } catch (Throwable t) {
             LogUtils.getLogger().error("Encountered an error while reloading shapes", t);
             return false;
         }

@@ -7,20 +7,16 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.EmptyBlockGetter;
 import net.minecraft.world.level.block.state.BlockState;
 
-public final class BlockCamoCraftingHandler implements CamoCraftingHandler<SimpleBlockCamoContainer>
-{
+public final class BlockCamoCraftingHandler implements CamoCraftingHandler<SimpleBlockCamoContainer> {
     private final SimpleBlockCamoContainerFactory factory;
 
-    public BlockCamoCraftingHandler(SimpleBlockCamoContainerFactory factory)
-    {
+    public BlockCamoCraftingHandler(SimpleBlockCamoContainerFactory factory) {
         this.factory = factory;
     }
 
     @Override
-    public boolean canApply(ItemStack stack, boolean consume)
-    {
-        if (stack.getItem() instanceof BlockItem item)
-        {
+    public boolean canApply(ItemStack stack, boolean consume) {
+        if (stack.getItem() instanceof BlockItem item) {
             BlockState state = item.getBlock().defaultBlockState();
             return factory.isValidBlock(state, EmptyBlockGetter.INSTANCE, BlockPos.ZERO, null);
         }
@@ -28,13 +24,10 @@ public final class BlockCamoCraftingHandler implements CamoCraftingHandler<Simpl
     }
 
     @Override
-    public SimpleBlockCamoContainer apply(ItemStack stack, boolean consume)
-    {
-        if (stack.getItem() instanceof BlockItem item)
-        {
+    public SimpleBlockCamoContainer apply(ItemStack stack, boolean consume) {
+        if (stack.getItem() instanceof BlockItem item) {
             BlockState state = item.getBlock().defaultBlockState();
-            if (factory.isValidBlock(state, EmptyBlockGetter.INSTANCE, BlockPos.ZERO, null))
-            {
+            if (factory.isValidBlock(state, EmptyBlockGetter.INSTANCE, BlockPos.ZERO, null)) {
                 return new SimpleBlockCamoContainer(item.getBlock().defaultBlockState(), factory);
             }
         }
@@ -42,8 +35,7 @@ public final class BlockCamoCraftingHandler implements CamoCraftingHandler<Simpl
     }
 
     @Override
-    public ItemStack getRemainder(ItemStack stack, boolean consume)
-    {
+    public ItemStack getRemainder(ItemStack stack, boolean consume) {
         return consume ? ItemStack.EMPTY : stack.copyWithCount(1);
     }
 }

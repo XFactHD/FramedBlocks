@@ -52,8 +52,7 @@ import java.util.List;
 import java.util.ServiceLoader;
 import java.util.Set;
 
-public final class Utils
-{
+public final class Utils {
     private static final Identifier RL_TEMPLATE = Utils.id(FramedConstants.MOD_ID, "");
     public static final boolean PRODUCTION = FMLEnvironment.isProduction();
     public static final boolean CLIENT_DIST = FMLEnvironment.getDist().isClient();
@@ -109,40 +108,33 @@ public final class Utils
             Utils.id("wrench_mode")
     );
 
-    public static MutableComponent translate(@Nullable String prefix, @Nullable String postfix, Object... arguments)
-    {
+    public static MutableComponent translate(@Nullable String prefix, @Nullable String postfix, Object... arguments) {
         return Component.translatable(translationKey(prefix, postfix), arguments);
     }
 
-    public static MutableComponent translate(@Nullable String prefix, @Nullable String postfix)
-    {
+    public static MutableComponent translate(@Nullable String prefix, @Nullable String postfix) {
         return Component.translatable(translationKey(prefix, postfix));
     }
 
-    public static String translationKey(@Nullable String prefix, @Nullable String postfix)
-    {
+    public static String translationKey(@Nullable String prefix, @Nullable String postfix) {
         String key = "";
-        if (prefix != null)
-        {
+        if (prefix != null) {
             key = prefix + ".";
         }
         key += FramedConstants.MOD_ID;
-        if (postfix != null)
-        {
+        if (postfix != null) {
             key += "." + postfix;
         }
         return key;
     }
 
-    public static String translateConfig(String type, String key)
-    {
+    public static String translateConfig(String type, String key) {
         return translationKey("config", type + "." + key);
     }
 
     public static <T extends Enum<T> & StringRepresentable> Component[] buildEnumTranslations(
             String prefix, String postfix, T[] values, ChatFormatting... formatting
-    )
-    {
+    ) {
         return Arrays.stream(values)
                 .map(v -> translate(prefix, postfix + "." + v.getSerializedName()))
                 .map(c -> c.withStyle(formatting))
@@ -151,29 +143,29 @@ public final class Utils
 
     public static <T extends Enum<T>> Component[] bindEnumTranslation(
             String key, T[] values, Component[] valueTranslations
-    )
-    {
+    ) {
         Preconditions.checkArgument(
                 values.length == valueTranslations.length, "Value and translation arrays must have the same length"
         );
         Component[] components = new Component[values.length];
-        for (T v : values)
-        {
+        for (T v : values) {
             components[v.ordinal()] = Component.translatable(key, valueTranslations[v.ordinal()]);
         }
         return components;
     }
 
-    public static MutableComponent translateTag(TagKey<?> tag)
-    {
+    public static MutableComponent translateTag(TagKey<?> tag) {
         String key = Tags.getTagTranslationKey(tag);
         return Component.translatableWithFallback(key, "#" + tag.location());
     }
 
-    public static <T> List<T> concat(List<T> listOne, List<T> listTwo)
-    {
-        if (listOne.isEmpty()) return listTwo;
-        if (listTwo.isEmpty()) return listOne;
+    public static <T> List<T> concat(List<T> listOne, List<T> listTwo) {
+        if (listOne.isEmpty()) {
+            return listTwo;
+        }
+        if (listTwo.isEmpty()) {
+            return listOne;
+        }
 
         List<T> list = new ArrayList<>(listOne.size() + listTwo.size());
         list.addAll(listOne);
@@ -181,10 +173,13 @@ public final class Utils
         return List.copyOf(list);
     }
 
-    public static <T> Set<T> concat(Set<T> setOne, Set<T> setTwo)
-    {
-        if (setOne.isEmpty()) return setTwo;
-        if (setTwo.isEmpty()) return setOne;
+    public static <T> Set<T> concat(Set<T> setOne, Set<T> setTwo) {
+        if (setOne.isEmpty()) {
+            return setTwo;
+        }
+        if (setTwo.isEmpty()) {
+            return setOne;
+        }
 
         Set<T> set = new HashSet<>(setOne.size() + setTwo.size());
         set.addAll(setOne);
@@ -197,55 +192,47 @@ public final class Utils
      * (Significantly faster than {@link ArrayList#addAll(Collection)} in benchmarks)
      */
     @SuppressWarnings({ "UseBulkOperation", "ForLoopReplaceableByForEach" })
-    public static <T> ArrayList<T> copyAll(List<T> src, ArrayList<T> dest)
-    {
-        if (src.isEmpty()) return dest;
+    public static <T> ArrayList<T> copyAll(List<T> src, ArrayList<T> dest) {
+        if (src.isEmpty()) {
+            return dest;
+        }
 
         dest.ensureCapacity(dest.size() + src.size());
-        for (int i = 0; i < src.size(); i++)
-        {
+        for (int i = 0; i < src.size(); i++) {
             dest.add(src.get(i));
         }
         return dest;
     }
 
-    public static TagKey<Block> blockTag(String name)
-    {
+    public static TagKey<Block> blockTag(String name) {
         return blockTag(FramedConstants.MOD_ID, name);
     }
 
-    public static TagKey<Block> blockTag(String modid, String name)
-    {
+    public static TagKey<Block> blockTag(String modid, String name) {
         return BlockTags.create(Utils.id(modid, name));
     }
 
-    public static TagKey<Item> itemTag(String name)
-    {
+    public static TagKey<Item> itemTag(String name) {
         return itemTag(FramedConstants.MOD_ID, name);
     }
 
-    public static TagKey<Item> itemTag(String modid, String name)
-    {
+    public static TagKey<Item> itemTag(String modid, String name) {
         return ItemTags.create(Utils.id(modid, name));
     }
 
-    public static Identifier id(String path)
-    {
+    public static Identifier id(String path) {
         return RL_TEMPLATE.withPath(path);
     }
 
-    public static Identifier id(String namespace, String path)
-    {
+    public static Identifier id(String namespace, String path) {
         return Identifier.fromNamespaceAndPath(namespace, path);
     }
 
-    public static <T extends CustomPacketPayload> CustomPacketPayload.Type<T> payloadType(String path)
-    {
+    public static <T extends CustomPacketPayload> CustomPacketPayload.Type<T> payloadType(String path) {
         return new CustomPacketPayload.Type<>(id(path));
     }
 
-    public static <T> ResourceKey<T> getKeyOrThrow(Holder<T> holder)
-    {
+    public static <T> ResourceKey<T> getKeyOrThrow(Holder<T> holder) {
         return holder.unwrapKey().orElseThrow(
                 () -> new IllegalArgumentException("Direct holders and unbound reference holders are not supported")
         );
@@ -260,53 +247,41 @@ public final class Utils
      * @param stack The stack to give to the player
      * @param giveInSurvival Whether the stack should be given to a player in survival mode
      */
-    public static void giveToPlayer(Player player, ItemStack stack, boolean giveInSurvival)
-    {
-        if (stack.isEmpty()) return;
+    public static void giveToPlayer(Player player, ItemStack stack, boolean giveInSurvival) {
+        if (stack.isEmpty()) {
+            return;
+        }
 
         boolean creative = player.isCreative();
-        if (!creative && giveInSurvival)
-        {
-            if (!player.getInventory().add(stack))
-            {
+        if (!creative && giveInSurvival) {
+            if (!player.getInventory().add(stack)) {
                 player.drop(stack, false);
             }
-        }
-        else if (creative && !player.getInventory().contains(stack))
-        {
+        } else if (creative && !player.getInventory().contains(stack)) {
             player.getInventory().add(stack);
         }
     }
 
-    public static void dropItemResourceHandlerContents(Level level, BlockPos pos, ItemStacksResourceHandler itemHandler)
-    {
-        for (int i = 0; i < itemHandler.size(); i++)
-        {
+    public static void dropItemResourceHandlerContents(Level level, BlockPos pos, ItemStacksResourceHandler itemHandler) {
+        for (int i = 0; i < itemHandler.size(); i++) {
             int count = itemHandler.getAmountAsInt(i);
-            if (count > 0)
-            {
+            if (count > 0) {
                 ItemResource resource = itemHandler.getResource(i);
                 Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), resource.toStack(count));
             }
         }
     }
 
-    public static void clearItemResourceHandler(ItemStacksResourceHandler itemHandler)
-    {
-        for (int i = 0; i < itemHandler.size(); i++)
-        {
+    public static void clearItemResourceHandler(ItemStacksResourceHandler itemHandler) {
+        for (int i = 0; i < itemHandler.size(); i++) {
             itemHandler.set(i, ItemResource.EMPTY, 0);
         }
     }
 
-    public static boolean extractOneFromItemAccess(ItemAccess access, boolean commit)
-    {
-        try (Transaction tx = Transaction.openRoot())
-        {
-            if (access.extract(access.getResource(), 1, tx) == 1)
-            {
-                if (commit)
-                {
+    public static boolean extractOneFromItemAccess(ItemAccess access, boolean commit) {
+        try (Transaction tx = Transaction.openRoot()) {
+            if (access.extract(access.getResource(), 1, tx) == 1) {
+                if (commit) {
                     tx.commit();
                 }
                 return true;
@@ -315,63 +290,51 @@ public final class Utils
         }
     }
 
-    public static boolean isWrenchRotationTool(ItemStack stack)
-    {
+    public static boolean isWrenchRotationTool(ItemStack stack) {
         return stack.canPerformAction(ACTION_WRENCH_ROTATE) || (stack.is(TOOL_WRENCH) && !stack.is(COMPLEX_WRENCH));
     }
 
-    public static boolean isConfigurationTool(ItemStack stack)
-    {
+    public static boolean isConfigurationTool(ItemStack stack) {
         return stack.is(FRAMED_SCREWDRIVER) || stack.canPerformAction(ACTION_WRENCH_CONFIGURE);
     }
 
-    public static String formatItemStack(ItemStack stack)
-    {
-        if (stack.isEmpty())
-        {
+    public static String formatItemStack(ItemStack stack) {
+        if (stack.isEmpty()) {
             return "~~EMPTY~~";
         }
 
         String result = stack.getCount() + "x " + stack.getItem() + "[";
         DataComponentPatch patch = stack.getComponentsPatch();
-        if (patch != DataComponentPatch.EMPTY)
-        {
+        if (patch != DataComponentPatch.EMPTY) {
             result += patch;
         }
         return result + "]";
     }
 
-    public static String formatHitResult(@Nullable HitResult hitResult)
-    {
-        if (hitResult == null)
-        {
+    public static String formatHitResult(@Nullable HitResult hitResult) {
+        if (hitResult == null) {
             return "~~NULL~~";
         }
 
         ToStringBuilder result = new ToStringBuilder(hitResult)
                 .append("Type", hitResult.getType())
                 .append("Location", hitResult.getLocation());
-        if (hitResult instanceof BlockHitResult blockHit)
-        {
+        if (hitResult instanceof BlockHitResult blockHit) {
             result.append("Position", blockHit.getBlockPos())
                     .append("Side", blockHit.getDirection())
                     .append("Inside", blockHit.isInside());
-        }
-        else if (hitResult instanceof EntityHitResult entityHit)
-        {
+        } else if (hitResult instanceof EntityHitResult entityHit) {
             result.append("Entity", entityHit.getEntity());
         }
         return result.toString();
     }
 
-    public static TriState toTriState(boolean value)
-    {
+    public static TriState toTriState(boolean value) {
         return value ? TriState.TRUE : TriState.FALSE;
     }
 
     @ApiStatus.Internal
-    public static <T> T loadService(Class<T> clazz)
-    {
+    public static <T> T loadService(Class<T> clazz) {
         return ServiceLoader.load(clazz, Utils.class.getClassLoader())
                 .findFirst()
                 .orElseThrow(() -> new NullPointerException("Failed to load service for " + clazz.getName()));

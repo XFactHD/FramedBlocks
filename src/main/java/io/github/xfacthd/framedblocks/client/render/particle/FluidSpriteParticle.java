@@ -13,12 +13,10 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import org.jspecify.annotations.Nullable;
 
-public final class FluidSpriteParticle extends BlockAtlasSpriteParticle
-{
+public final class FluidSpriteParticle extends BlockAtlasSpriteParticle {
     private final int brightness;
 
-    public FluidSpriteParticle(ClientLevel level, double x, double y, double z, double sx, double sy, double sz, Fluid fluid)
-    {
+    public FluidSpriteParticle(ClientLevel level, double x, double y, double z, double sx, double sy, double sz, Fluid fluid) {
         super(level, x, y, z, sx, sy, sz, ModelUtils.getFluidModel(fluid.defaultFluidState()).stillMaterial().sprite());
         this.brightness = fluid.getFluidType().getLightLevel(fluid.defaultFluidState(), level, pos);
 
@@ -30,18 +28,15 @@ public final class FluidSpriteParticle extends BlockAtlasSpriteParticle
 
     @Override
     @SuppressWarnings("deprecation")
-    protected int getLightCoords(float partialTick)
-    {
+    protected int getLightCoords(float partialTick) {
         int light = level.hasChunkAt(pos) ? LevelRenderer.getLightCoords(level, pos) : 0;
         int block = Math.max(brightness, LightCoordsUtil.block(light));
         return LightCoordsUtil.pack(block, LightCoordsUtil.sky(light));
     }
 
-    public static final class Provider implements ParticleProvider<FluidParticleOptions>
-    {
-        @Nullable
+    public static final class Provider implements ParticleProvider<FluidParticleOptions> {
         @Override
-        public Particle createParticle(
+        public @Nullable Particle createParticle(
                 FluidParticleOptions options,
                 ClientLevel level,
                 double x,
@@ -51,10 +46,8 @@ public final class FluidSpriteParticle extends BlockAtlasSpriteParticle
                 double sy,
                 double sz,
                 RandomSource random
-        )
-        {
-            if (options.fluid() != Fluids.EMPTY)
-            {
+        ) {
+            if (options.fluid() != Fluids.EMPTY) {
                 return new FluidSpriteParticle(level, x, y, z, sx, sy, sz, options.fluid());
             }
             return null;

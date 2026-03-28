@@ -8,17 +8,14 @@ import net.minecraft.resources.Identifier;
 import java.util.Map;
 
 @SuppressWarnings("unused") // Used via interface injection
-public interface DefaultedAccessorModelManager extends AccessorModelManager
-{
+public interface DefaultedAccessorModelManager extends AccessorModelManager {
     @Override
-    default Map<Identifier, ItemModel> framedblocks$getBakedItemStackModels()
-    {
+    default Map<Identifier, ItemModel> framedblocks$getBakedItemStackModels() {
         throw new AssertionError();
     }
 
     @Override
-    default ModelBakery.MissingModels framedblocks$getMissingModels()
-    {
+    default ModelBakery.MissingModels framedblocks$getMissingModels() {
         throw new AssertionError();
     }
 }

@@ -12,24 +12,19 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.jspecify.annotations.Nullable;
 
-public class FramedPillarSocketBlock extends FramedBlock
-{
-    public FramedPillarSocketBlock(BlockType type, Properties props)
-    {
+public class FramedPillarSocketBlock extends FramedBlock {
+    public FramedPillarSocketBlock(BlockType type, Properties props) {
         super(type, props);
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
-    {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
         builder.add(BlockStateProperties.FACING);
     }
 
-    @Nullable
     @Override
-    public BlockState getStateForPlacement(BlockPlaceContext context)
-    {
+    public @Nullable BlockState getStateForPlacement(BlockPlaceContext context) {
         return PlacementStateBuilder.of(this, context)
                 .withTargetFacing()
                 .withWater()
@@ -37,21 +32,18 @@ public class FramedPillarSocketBlock extends FramedBlock
     }
 
     @Override
-    public BlockState getItemModelSource()
-    {
+    public BlockState getItemModelSource() {
         return defaultBlockState().setValue(BlockStateProperties.FACING, Direction.DOWN);
     }
 
     @Override
-    public Direction getHorizontalOrientation(BlockState state)
-    {
+    public Direction getHorizontalOrientation(BlockState state) {
         Direction facing = state.getValue(BlockStateProperties.FACING);
         return DirUtils.isY(facing) ? Direction.NORTH : facing;
     }
 
     @Override
-    public BlockState getJadeRenderState(BlockState state)
-    {
+    public BlockState getJadeRenderState(BlockState state) {
         return defaultBlockState().setValue(BlockStateProperties.FACING, Direction.DOWN);
     }
 }

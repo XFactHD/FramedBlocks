@@ -28,8 +28,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-final class PartConsumerImpl implements PartConsumer
-{
+final class PartConsumerImpl implements PartConsumer {
     private static final Direction[] DIRECTIONS = Direction.values();
     private static final @Nullable Direction[] DIRECTIONS_WITH_NULL = Arrays.copyOfRange(DIRECTIONS, 0, 7);
 
@@ -44,8 +43,7 @@ final class PartConsumerImpl implements PartConsumer
     private int maxTintIndex;
     private boolean countTintIndices = false;
 
-    PartConsumerImpl(List<? super ExtendedBlockStateModelPart> destParts, int cullMask, DefaultAO defaultAO, boolean camoEmissive, boolean forceEmissive)
-    {
+    PartConsumerImpl(List<? super ExtendedBlockStateModelPart> destParts, int cullMask, DefaultAO defaultAO, boolean camoEmissive, boolean forceEmissive) {
         this.destParts = destParts;
         this.cullMask = cullMask;
         this.defaultAO = defaultAO;
@@ -66,11 +64,9 @@ final class PartConsumerImpl implements PartConsumer
             boolean cullNonNull,
             @Nullable BlockState shaderState,
             @Nullable QuadListModifier modifier
-    )
-    {
+    ) {
         model.collectParts(level, pos, state, random, srcParts);
-        for (BlockStateModelPart part : srcParts)
-        {
+        for (BlockStateModelPart part : srcParts) {
             accept(part, state, includeNull, reclaimFromNull, cullNonNull, false, shaderState, modifier);
         }
         srcParts.clear();
@@ -85,11 +81,9 @@ final class PartConsumerImpl implements PartConsumer
             BlockState camoState,
             boolean cullNonNull,
             @Nullable QuadListModifier modifier
-    )
-    {
+    ) {
         model.collectParts(level, pos, framedState, random, srcParts);
-        for (BlockStateModelPart part : srcParts)
-        {
+        for (BlockStateModelPart part : srcParts) {
             accept(part, camoState, false, true, cullNonNull, true, camoState, modifier);
         }
         srcParts.clear();
@@ -104,8 +98,7 @@ final class PartConsumerImpl implements PartConsumer
             boolean cullNonNull,
             @Nullable BlockState shaderState,
             @Nullable QuadListModifier modifier
-    )
-    {
+    ) {
         accept(part, partState, includeNull, reclaimFromNull, cullNonNull, false, shaderState, modifier);
     }
 
@@ -118,8 +111,7 @@ final class PartConsumerImpl implements PartConsumer
             boolean camoPart,
             @Nullable BlockState shaderState,
             @Nullable QuadListModifier modifier
-    )
-    {
+    ) {
         Preconditions.checkArgument(!(includeNull && reclaimFromNull), "Cannot both include null faces and reclaim cullable faces from them");
 
         QuadMapBuilderInternal quadMap = QuadMapBuilderInternal.create();
@@ -132,70 +124,58 @@ final class PartConsumerImpl implements PartConsumer
         boolean countTintIndices = this.countTintIndices;
         boolean canInsertDirect = !(hasListModifier || hasPostModifiers || countTintIndices);
         boolean hasAnyQuads = false;
-        for (Direction side : DIRECTIONS_WITH_NULL)
-        {
+        for (Direction side : DIRECTIONS_WITH_NULL) {
             boolean nullSide = side == null;
-            if (nullSide && !includeNull) continue;
-            if (!nullSide && cullNonNull && FramedBlockStateModel.isSideHidden(cullMask, side)) continue;
-
-            List<BakedQuad> srcQuads = part.getQuads(side);
-            if (!nullSide && srcQuads.isEmpty() && reclaimFromNull)
-            {
-                srcQuads = ModelUtils.getFilteredNullQuads(part, side);
-            }
-            if (srcQuads.isEmpty())
-            {
+            if (nullSide && !includeNull) {
                 continue;
             }
-            if (canInsertDirect)
-            {
+            if (!nullSide && cullNonNull && FramedBlockStateModel.isSideHidden(cullMask, side)) {
+                continue;
+            }
+
+            List<BakedQuad> srcQuads = part.getQuads(side);
+            if (!nullSide && srcQuads.isEmpty() && reclaimFromNull) {
+                srcQuads = ModelUtils.getFilteredNullQuads(part, side);
+            }
+            if (srcQuads.isEmpty()) {
+                continue;
+            }
+            if (canInsertDirect) {
                 quadMap.set(side, srcQuads);
                 hasAnyQuads = true;
                 continue;
             }
-            if (hasListModifier)
-            {
+            if (hasListModifier) {
                 ArrayList<BakedQuad> quads = new ArrayList<>(srcQuads);
                 modifier.modify(quadMap, quads, side);
                 // Copy to final destination at the end in case the modifier wants to iterate or clear the list
                 Utils.copyAll(quads, quadMap.getOrCreate(side));
                 hasAnyQuads |= !quadMap.isEmpty();
-            }
-            else
-            {
+            } else {
                 Utils.copyAll(srcQuads, quadMap.getOrCreate(side));
                 hasAnyQuads = true;
             }
         }
-        if (!hasAnyQuads)
-        {
+        if (!hasAnyQuads) {
             return;
         }
-        if (hasPostModifiers)
-        {
-            for (Direction side : DIRECTIONS_WITH_NULL)
-            {
+        if (hasPostModifiers) {
+            for (Direction side : DIRECTIONS_WITH_NULL) {
                 ArrayList<BakedQuad> quads = quadMap.tryGet(side);
-                if (quads != null && !quads.isEmpty())
-                {
+                if (quads != null && !quads.isEmpty()) {
                     //noinspection Java8ListReplaceAll
-                    for (int i = 0; i < quads.size(); i++)
-                    {
+                    for (int i = 0; i < quads.size(); i++) {
                         quads.set(i, postProcessQuad(quads.get(i), emissive, forceEmissive, forcedOpaque));
                     }
                 }
             }
         }
-        if (countTintIndices)
-        {
+        if (countTintIndices) {
             int maxTintIndex = this.maxTintIndex;
-            for (Direction side : DIRECTIONS_WITH_NULL)
-            {
+            for (Direction side : DIRECTIONS_WITH_NULL) {
                 ArrayList<BakedQuad> quads = quadMap.tryGet(side);
-                if (quads != null && !quads.isEmpty())
-                {
-                    for (BakedQuad quad : quads)
-                    {
+                if (quads != null && !quads.isEmpty()) {
+                    for (BakedQuad quad : quads) {
                         maxTintIndex = Math.max(maxTintIndex, quad.materialInfo().tintIndex());
                     }
                 }
@@ -205,32 +185,27 @@ final class PartConsumerImpl implements PartConsumer
         destParts.add(new FramedBlockStateModelPart(quadMap.build(), defaultAO.apply(part.ambientOcclusion()), part.particleMaterial(), shaderState));
     }
 
-    void setTintIndexOffset(int tintIndexOffset)
-    {
+    void setTintIndexOffset(int tintIndexOffset) {
         this.tintIndexOffset = tintIndexOffset;
         this.maxTintIndex = tintIndexOffset - 1;
     }
 
-    void setCountTintIndices(boolean countTintIndices)
-    {
+    void setCountTintIndices(boolean countTintIndices) {
         this.countTintIndices = countTintIndices;
     }
 
-    int getMaxTintIndex()
-    {
+    int getMaxTintIndex() {
         return maxTintIndex;
     }
 
-    private BakedQuad postProcessQuad(BakedQuad quad, boolean emissive, boolean forceEmissive, boolean forceOpaque)
-    {
+    private BakedQuad postProcessQuad(BakedQuad quad, boolean emissive, boolean forceEmissive, boolean forceOpaque) {
         BakedQuad.MaterialInfo materialInfo = quad.materialInfo();
         ChunkSectionLayer layer = forceOpaque ? ChunkSectionLayer.SOLID : materialInfo.layer();
         int tintIndex = materialInfo.isTinted() ? materialInfo.tintIndex() + tintIndexOffset : materialInfo.tintIndex();
         boolean shade = !forceEmissive && materialInfo.shade();
         int lightEmission = emissive ? LightEngine.MAX_LEVEL : materialInfo.lightEmission();
         boolean ao = !forceEmissive && materialInfo.ambientOcclusion();
-        if (layer != materialInfo.layer() || tintIndex != materialInfo.tintIndex() || shade != materialInfo.shade() || lightEmission != materialInfo.lightEmission() || ao != materialInfo.ambientOcclusion())
-        {
+        if (layer != materialInfo.layer() || tintIndex != materialInfo.tintIndex() || shade != materialInfo.shade() || lightEmission != materialInfo.lightEmission() || ao != materialInfo.ambientOcclusion()) {
             materialInfo = new BakedQuad.MaterialInfo(materialInfo.sprite(), layer, materialInfo.itemRenderType(), tintIndex, shade, lightEmission, ao);
         }
         return new BakedQuad(

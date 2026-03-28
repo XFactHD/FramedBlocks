@@ -35,31 +35,23 @@ import org.jspecify.annotations.Nullable;
 import java.util.Map;
 import java.util.function.Supplier;
 
-public class FramedFlowerPotBlock extends FramedBlock
-{
-    public FramedFlowerPotBlock(Properties props)
-    {
+public class FramedFlowerPotBlock extends FramedBlock {
+    public FramedFlowerPotBlock(Properties props) {
         super(BlockType.FRAMED_FLOWER_POT, props);
         registerDefaultState(defaultBlockState().setValue(PropertyHolder.HANGING, false));
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
-    {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
         builder.add(PropertyHolder.HANGING);
     }
 
     @Override
-    public BlockState getStateForPlacement(BlockPlaceContext context)
-    {
+    public BlockState getStateForPlacement(BlockPlaceContext context) {
         BlockState state = defaultBlockState();
-        if (AmendmentsCompat.isLoaded())
-        {
-            state = state.setValue(
-                    PropertyHolder.HANGING,
-                    context.getClickedFace() == Direction.DOWN
-            );
+        if (AmendmentsCompat.isLoaded()) {
+            state = state.setValue(PropertyHolder.HANGING, context.getClickedFace() == Direction.DOWN);
         }
         return state;
     }
@@ -73,46 +65,34 @@ public class FramedFlowerPotBlock extends FramedBlock
             BlockPos adjPos,
             BlockState adjState,
             RandomSource random
-    )
-    {
-        if (state.getValue(PropertyHolder.HANGING) && side == Direction.UP && !state.canSurvive(level, pos))
-        {
+    ) {
+        if (state.getValue(PropertyHolder.HANGING) && side == Direction.UP && !state.canSurvive(level, pos)) {
             return Blocks.AIR.defaultBlockState();
         }
         return super.updateShape(state, level, tickAccess, pos, side, adjPos, adjState, random);
     }
 
     @Override
-    protected boolean canSurvive(BlockState state, LevelReader level, BlockPos pos)
-    {
-        if (state.getValue(PropertyHolder.HANGING))
-        {
+    protected boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
+        if (state.getValue(PropertyHolder.HANGING)) {
             return AmendmentsCompat.canSurviveHanging(level, pos.relative(Direction.UP));
         }
         return true;
     }
 
     @Override
-    protected InteractionResult useItemOn(
-            ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit
-    )
-    {
+    protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         InteractionResult result = super.useItemOn(stack, state, level, pos, player, hand, hit);
-        if (result.consumesAction() && result != FramedBlockEntity.CONSUME_CAMO_FAILED)
-        {
+        if (result.consumesAction() && result != FramedBlockEntity.CONSUME_CAMO_FAILED) {
             return result;
         }
 
-        if (level.getBlockEntity(pos) instanceof FramedFlowerPotBlockEntity be)
-        {
+        if (level.getBlockEntity(pos) instanceof FramedFlowerPotBlockEntity be) {
             boolean isFlower = stack.getItem() instanceof BlockItem item && !getFlowerPotState(item.getBlock()).isAir();
 
-            if (isFlower != be.hasFlowerBlock())
-            {
-                if (!level.isClientSide())
-                {
-                    if (isFlower && !be.hasFlowerBlock())
-                    {
+            if (isFlower != be.hasFlowerBlock()) {
+                if (!level.isClientSide()) {
+                    if (isFlower && !be.hasFlowerBlock()) {
                         be.setFlowerBlock(((BlockItem) stack.getItem()).getBlock());
 
                         player.awardStat(Stats.POT_FLOWER);
@@ -120,9 +100,7 @@ public class FramedFlowerPotBlock extends FramedBlock
                         {
                             stack.shrink(1);
                         }
-                    }
-                    else
-                    {
+                    } else {
                         ItemStack flowerStack = new ItemStack(be.getFlowerBlock());
                         Utils.giveToPlayer(player, flowerStack, true);
 
@@ -132,9 +110,7 @@ public class FramedFlowerPotBlock extends FramedBlock
 
                 level.gameEvent(player, GameEvent.BLOCK_CHANGE, pos);
                 return InteractionResult.SUCCESS;
-            }
-            else
-            {
+            } else {
                 return InteractionResult.CONSUME;
             }
         }
@@ -143,46 +119,37 @@ public class FramedFlowerPotBlock extends FramedBlock
     }
 
     @Override
-    protected boolean isPathfindable(BlockState state, PathComputationType type)
-    {
+    protected boolean isPathfindable(BlockState state, PathComputationType type) {
         return false;
     }
 
     @Override
-    public boolean doesBlockOccludeBeaconBeam(BlockState state, LevelReader level, BlockPos pos)
-    {
+    public boolean doesBlockOccludeBeaconBeam(BlockState state, LevelReader level, BlockPos pos) {
         //It technically does occlude the beam, but it looks stupid, so we disable it :D
         return false;
     }
 
     @Override
-    public FramedBlockEntity newBlockEntity(BlockPos pos, BlockState state)
-    {
+    public FramedBlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return new FramedFlowerPotBlockEntity(pos, state);
     }
 
     @Override
-    @Nullable
-    public BlockState getItemModelSource()
-    {
+    public @Nullable BlockState getItemModelSource() {
         return null;
     }
 
     @Override
-    @Nullable
-    public Direction getHorizontalOrientation(BlockState state)
-    {
+    public @Nullable Direction getHorizontalOrientation(BlockState state) {
         return null;
     }
 
     @Override
-    public BlockState getJadeRenderState(BlockState state)
-    {
+    public BlockState getJadeRenderState(BlockState state) {
         return state;
     }
 
-    public static BlockState getFlowerPotState(Block flower)
-    {
+    public static BlockState getFlowerPotState(Block flower) {
         Map<Identifier, Supplier<? extends Block>> fullPots = ((FlowerPotBlock) Blocks.FLOWER_POT).getFullPotsView();
         return fullPots.getOrDefault(
                 BuiltInRegistries.BLOCK.getKey(flower),

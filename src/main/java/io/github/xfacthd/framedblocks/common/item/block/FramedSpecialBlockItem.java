@@ -16,29 +16,23 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jspecify.annotations.Nullable;
 
-public abstract class FramedSpecialBlockItem extends FramedBlockItem
-{
+public abstract class FramedSpecialBlockItem extends FramedBlockItem {
     private final boolean doubleBlock;
 
-    public FramedSpecialBlockItem(Block block, boolean doubleBlock, Properties props)
-    {
+    public FramedSpecialBlockItem(Block block, boolean doubleBlock, Properties props) {
         super(block, props);
         this.doubleBlock = doubleBlock;
     }
 
     @Override
-    public InteractionResult place(BlockPlaceContext ctx)
-    {
+    public InteractionResult place(BlockPlaceContext ctx) {
         Level level = ctx.getLevel();
         BlockPos pos = ctx.getClickedPos();
         BlockState originalState = level.getBlockState(pos);
-        if (ctx.canPlace() && originalState.is(getBlock()) && ctx.getPlayer() != null)
-        {
+        if (ctx.canPlace() && originalState.is(getBlock()) && ctx.getPlayer() != null) {
             BlockState newState = getReplacementState(ctx, originalState);
-            if (newState != null)
-            {
-                if (!level.isClientSide())
-                {
+            if (newState != null) {
+                if (!level.isClientSide()) {
                     boolean writeToCamoTwo = shouldWriteToCamoTwo(ctx, originalState);
                     CamoList camos = ctx.getItemInHand().getOrDefault(FBContent.DC_TYPE_CAMO_LIST, CamoList.EMPTY);
                     BlockUtils.wrapInStateCopy(
@@ -52,8 +46,7 @@ public abstract class FramedSpecialBlockItem extends FramedBlockItem
                     );
 
                     CamoContainer<?, ?> camo = EmptyCamoContainer.EMPTY;
-                    if (doubleBlock && !camos.isEmpty() && level.getBlockEntity(pos) instanceof FramedDoubleBlockEntity be)
-                    {
+                    if (doubleBlock && !camos.isEmpty() && level.getBlockEntity(pos) instanceof FramedDoubleBlockEntity be) {
                         camo = camos.getCamo(0);
                         be.setCamo(camo, !writeToCamoTwo);
                     }
@@ -65,21 +58,17 @@ public abstract class FramedSpecialBlockItem extends FramedBlockItem
         return super.place(ctx);
     }
 
-    @Nullable
-    protected abstract BlockState getReplacementState(BlockPlaceContext ctx, BlockState originalState);
+    protected abstract @Nullable BlockState getReplacementState(BlockPlaceContext ctx, BlockState originalState);
 
     protected abstract boolean shouldWriteToCamoTwo(BlockPlaceContext ctx, BlockState originalState);
 
-    public static abstract class Single extends FramedSpecialBlockItem
-    {
-        public Single(Block block, Properties props)
-        {
+    public static abstract class Single extends FramedSpecialBlockItem {
+        public Single(Block block, Properties props) {
             super(block, false, props);
         }
 
         @Override
-        protected boolean shouldWriteToCamoTwo(BlockPlaceContext ctx, BlockState originalState)
-        {
+        protected boolean shouldWriteToCamoTwo(BlockPlaceContext ctx, BlockState originalState) {
             return false;
         }
     }

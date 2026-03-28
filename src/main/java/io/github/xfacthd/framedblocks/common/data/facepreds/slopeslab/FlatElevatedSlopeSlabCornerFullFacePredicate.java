@@ -5,17 +5,12 @@ import io.github.xfacthd.framedblocks.api.predicate.fullface.FullFacePredicate;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 
-public final class FlatElevatedSlopeSlabCornerFullFacePredicate implements FullFacePredicate
-{
+public final class FlatElevatedSlopeSlabCornerFullFacePredicate implements FullFacePredicate {
     @Override
-    public boolean test(BlockState state, Direction side)
-    {
-        if (state.getValue(FramedProperties.TOP))
-        {
+    public boolean test(BlockState state, Direction side) {
+        if (state.getValue(FramedProperties.TOP)) {
             return side == Direction.UP;
-        }
-        else
-        {
+        } else {
             return side == Direction.DOWN;
         }
     }

@@ -12,42 +12,34 @@ import net.minecraft.client.resources.model.geometry.BakedQuad;
 import net.minecraft.core.Direction;
 import org.jspecify.annotations.Nullable;
 
-public class FramedExtendedInnerCornerSlopePanelGeometry extends Geometry
-{
+public class FramedExtendedInnerCornerSlopePanelGeometry extends Geometry {
     private final Direction dir;
     private final boolean top;
     private final boolean altSlope;
 
-    public FramedExtendedInnerCornerSlopePanelGeometry(GeometryFactory.Context ctx)
-    {
+    public FramedExtendedInnerCornerSlopePanelGeometry(GeometryFactory.Context ctx) {
         this.dir = ctx.state().getValue(FramedProperties.FACING_HOR);
         this.top = ctx.state().getValue(FramedProperties.TOP);
         this.altSlope = ctx.state().getValue(FramedProperties.ALT_SLOPE);
     }
 
     @Override
-    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
-    {
+    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData) {
         Direction quadDir = quad.direction();
-        if (quadDir == dir || quadDir == dir.getCounterClockWise())
-        {
+        if (quadDir == dir || quadDir == dir.getCounterClockWise()) {
             Direction cutDir = quadDir == dir ? dir.getClockWise() : dir.getOpposite();
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(cutDir.getOpposite(), top ? 1F : .5F, top ? .5F : 1F))
                     .export(quadMap, quadDir);
 
-            if (!altSlope)
-            {
+            if (!altSlope) {
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(cutDir, top ? 0F : .5F, top ? .5F : 0F))
                         .apply(Modifiers.makeVerticalSlope(!top, FramedSlopePanelGeometry.SLOPE_ANGLE))
                         .export(quadMap, null);
             }
-        }
-        else if ((!top && quadDir == Direction.UP) || (top && quadDir == Direction.DOWN))
-        {
-            if (altSlope)
-            {
+        } else if ((!top && quadDir == Direction.UP) || (top && quadDir == Direction.DOWN)) {
+            if (altSlope) {
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(dir.getOpposite(), 0, .5F))
                         .apply(Modifiers.makeVerticalSlope(dir.getCounterClockWise(), FramedSlopePanelGeometry.SLOPE_ANGLE_VERT))

@@ -7,8 +7,7 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.Map;
 
-public interface ModelFactory
-{
+public interface ModelFactory {
     AbstractUnbakedFramedBlockStateModel create(ModelFactory.Context ctx);
 
     default void reset() { }

@@ -39,12 +39,10 @@ import org.slf4j.Logger;
 
 @Mod(FramedConstants.MOD_ID)
 @SuppressWarnings("UtilityClassWithPublicConstructor")
-public final class FramedBlocks
-{
+public final class FramedBlocks {
     public static final Logger LOGGER = LogUtils.getLogger();
 
-    public FramedBlocks(IEventBus modBus, ModContainer modContainer)
-    {
+    public FramedBlocks(IEventBus modBus, ModContainer modContainer) {
         FBContent.init(modBus);
 
         ClientConfig.init(modBus, modContainer);
@@ -70,8 +68,7 @@ public final class FramedBlocks
         NeoForge.EVENT_BUS.addListener(DataMapsSetup::onDataMapsUpdated);
         NeoForge.EVENT_BUS.addListener(BlockCamoRotators::onDefaultComponentsBound);
 
-        if (!Utils.PRODUCTION)
-        {
+        if (!Utils.PRODUCTION) {
             NeoForge.EVENT_BUS.addListener(FramedBlocks::onAddDebugReloadListener);
         }
 
@@ -90,27 +87,23 @@ public final class FramedBlocks
         );
     }
 
-    private static void onCommonSetup(FMLCommonSetupEvent event)
-    {
+    private static void onCommonSetup(FMLCommonSetupEvent event) {
         StateCacheBuilder.ensureStateCachesInitialized();
         FramedBlueprintItem.init();
         CompatHandler.commonSetup();
         CamoContainerFactories.registerCamoFactories();
     }
 
-    private static void onAddDebugReloadListener(AddServerReloadListenersEvent event)
-    {
+    private static void onAddDebugReloadListener(AddServerReloadListenersEvent event) {
         event.addListener(ShapeReloader.LISTENER_ID, ShapeReloader.INSTANCE);
         event.addListener(StateCacheBuilder.CacheReloader.LISTENER_ID, StateCacheBuilder.CacheReloader.INSTANCE);
     }
 
-    private static void onExtendPoiTypes(ExtendPoiTypesEvent event)
-    {
+    private static void onExtendPoiTypes(ExtendPoiTypesEvent event) {
         event.addBlockToPoi(PoiTypes.LIGHTNING_ROD, FBContent.BLOCK_FRAMED_LIGHTNING_ROD.value());
     }
 
-    private static String getBlockEntityWarning()
-    {
+    private static String getBlockEntityWarning() {
         return """
                
                \t\tThe 'allowBlockEntities' setting in the framedblocks-server.toml config file is enabled.

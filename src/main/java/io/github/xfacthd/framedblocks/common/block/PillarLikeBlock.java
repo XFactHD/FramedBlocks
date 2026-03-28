@@ -4,7 +4,6 @@ import io.github.xfacthd.framedblocks.common.data.property.PillarConnection;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 
-public interface IPillarLikeBlock
-{
+public interface PillarLikeBlock {
     PillarConnection getPillarConnection(BlockState state, Direction side);
 }

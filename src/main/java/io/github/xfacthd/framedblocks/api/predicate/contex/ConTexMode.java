@@ -5,8 +5,7 @@ import io.github.xfacthd.framedblocks.api.predicate.cull.SideSkipPredicate;
 /**
  * Enum of the possible connected texture support modes
  */
-public enum ConTexMode
-{
+public enum ConTexMode {
     /**
      * All support for connected textures is disabled
      */
@@ -29,8 +28,7 @@ public enum ConTexMode
      */
     DETAILED;
 
-    public boolean atleast(ConTexMode mode)
-    {
+    public boolean atleast(ConTexMode mode) {
         return ordinal() >= mode.ordinal();
     }
 }

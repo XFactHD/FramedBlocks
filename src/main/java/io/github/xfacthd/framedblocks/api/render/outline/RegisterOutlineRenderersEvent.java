@@ -10,13 +10,11 @@ import org.jetbrains.annotations.ApiStatus;
 
 import java.util.function.BiConsumer;
 
-public final class RegisterOutlineRenderersEvent extends Event implements IModBusEvent
-{
+public final class RegisterOutlineRenderersEvent extends Event implements IModBusEvent {
     private final BiConsumer<IBlockType, OutlineRenderer<?>> registrar;
 
     @ApiStatus.Internal
-    public RegisterOutlineRenderersEvent(BiConsumer<IBlockType, OutlineRenderer<?>> registrar)
-    {
+    public RegisterOutlineRenderersEvent(BiConsumer<IBlockType, OutlineRenderer<?>> registrar) {
         this.registrar = registrar;
     }
 
@@ -26,8 +24,7 @@ public final class RegisterOutlineRenderersEvent extends Event implements IModBu
      * @param type     The {@link IBlockType}, must return true for {@link IBlockType#hasSpecialOutline()}
      * @param renderer The {@link OutlineRenderer} to register
      */
-    public void register(IBlockType type, OutlineRenderer<?> renderer)
-    {
+    public void register(IBlockType type, OutlineRenderer<?> renderer) {
         registrar.accept(type, renderer);
     }
 
@@ -38,10 +35,8 @@ public final class RegisterOutlineRenderersEvent extends Event implements IModBu
      * @param block The {@link IFramedBlock} to register the renderer for, its {@link IBlockType} must return true
      *              from {@link IBlockType#hasSpecialOutline()}
      */
-    public void registerModelBased(Block block)
-    {
-        if (!(block instanceof IFramedBlock framedBlock))
-        {
+    public void registerModelBased(Block block) {
+        if (!(block instanceof IFramedBlock framedBlock)) {
             throw new IllegalArgumentException("Provided block must implement IFramedBlock");
         }
         register(framedBlock.getBlockType(), InternalClientAPI.INSTANCE.createModelBasedOutlineRenderer(block));

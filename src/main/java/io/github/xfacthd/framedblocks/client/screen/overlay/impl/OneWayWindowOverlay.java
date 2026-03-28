@@ -21,8 +21,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public final class OneWayWindowOverlay extends BlockInteractOverlay
-{
+public final class OneWayWindowOverlay extends BlockInteractOverlay {
     private static final Identifier SYMBOL_TEXTURE = Utils.id("textures/overlay/one_way_window_symbols.png");
     private static final Identifier EYE_TEXTURE = Utils.id("minecraft", "textures/item/ender_eye.png");
     private static final Texture TEXTURE_BG = new Texture(SYMBOL_TEXTURE, 0, 0, 22, 38, 37, 38);
@@ -39,22 +38,18 @@ public final class OneWayWindowOverlay extends BlockInteractOverlay
     private static final Component[] SET_FACE_LINES = Utils.bindEnumTranslation(LINE_SET_FACE, Direction.values(), DIR_VALUE_LINES);
     private static final List<Component> LINES = packLineList();
 
-    public OneWayWindowOverlay()
-    {
+    public OneWayWindowOverlay() {
         super(LINES, List.of(), TEXTURE_BG, TEXTURE_BG, ClientConfig.VIEW::getOneWayWindowMode);
     }
 
     @Override
-    public boolean isValidTool(Player player, ItemStack stack)
-    {
+    public boolean isValidTool(Player player, ItemStack stack) {
         return stack.is(FBContent.ITEM_FRAMED_WRENCH.value());
     }
 
     @Override
-    public boolean isValidTarget(Target target)
-    {
-        if (target.state().getBlock() != FBContent.BLOCK_FRAMED_ONE_WAY_WINDOW.value())
-        {
+    public boolean isValidTarget(Target target) {
+        if (target.state().getBlock() != FBContent.BLOCK_FRAMED_ONE_WAY_WINDOW.value()) {
             return false;
         }
 
@@ -62,14 +57,12 @@ public final class OneWayWindowOverlay extends BlockInteractOverlay
     }
 
     @Override
-    public boolean getState(Target target)
-    {
+    public boolean getState(Target target) {
         return false;
     }
 
     @Override
-    public List<Component> getLines(Target target, boolean state)
-    {
+    public List<Component> getLines(Target target, boolean state) {
         NullableDirection face = target.state().getValue(PropertyHolder.NULLABLE_FACE);
 
         return List.of(
@@ -80,13 +73,11 @@ public final class OneWayWindowOverlay extends BlockInteractOverlay
     }
 
     @Override
-    public void renderAfterIcon(GuiGraphicsExtractor graphics, Texture tex, int texX, int texY, Target target)
-    {
+    public void renderAfterIcon(GuiGraphicsExtractor graphics, Texture tex, int texX, int texY, Target target) {
         NullableDirection face = target.state().getValue(PropertyHolder.NULLABLE_FACE);
 
         TEXTURE_EYE.draw(graphics, texX + 3, texY + 3);
-        if (face == NullableDirection.NONE)
-        {
+        if (face == NullableDirection.NONE) {
             TEXTURE_CROSS.draw(graphics, texX + 4, texY + 4);
         }
 
@@ -96,8 +87,7 @@ public final class OneWayWindowOverlay extends BlockInteractOverlay
         graphics.centeredText(font, FACE_VALUE_ABBRS[face.ordinal()], x, y, -1/*0x555555*/);
     }
 
-    private static List<Component> packLineList()
-    {
+    private static List<Component> packLineList() {
         List<Component> lines = new ArrayList<>();
 
         lines.add(LINE_CLEAR_FACE);

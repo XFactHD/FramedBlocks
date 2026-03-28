@@ -9,8 +9,7 @@ import net.minecraft.core.particles.ParticleType;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 
-public record BlockOverlayParticleOptions(Holder<BlockOverlay> overlay) implements ParticleOptions
-{
+public record BlockOverlayParticleOptions(Holder<BlockOverlay> overlay) implements ParticleOptions {
     public static final MapCodec<BlockOverlayParticleOptions> CODEC = BlockOverlay.CODEC
             .xmap(BlockOverlayParticleOptions::new, BlockOverlayParticleOptions::overlay)
             .fieldOf("fluid");
@@ -18,8 +17,7 @@ public record BlockOverlayParticleOptions(Holder<BlockOverlay> overlay) implemen
             BlockOverlay.STREAM_CODEC.map(BlockOverlayParticleOptions::new, BlockOverlayParticleOptions::overlay);
 
     @Override
-    public ParticleType<?> getType()
-    {
+    public ParticleType<?> getType() {
         return FBContent.BLOCK_OVERLAY_PARTICLE.value();
     }
 }

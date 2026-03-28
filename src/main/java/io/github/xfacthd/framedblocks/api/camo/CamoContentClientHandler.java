@@ -8,8 +8,7 @@ import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemStack;
 
-public abstract class CamoContentClientHandler<T extends CamoContent<T>>
-{
+public abstract class CamoContentClientHandler<T extends CamoContent<T>> {
     /**
      * {@return the {@link BlockStateModel} to be rendered for the given {@link CamoContent}}
      * @implNote this method must be backed by a cache
@@ -19,9 +18,7 @@ public abstract class CamoContentClientHandler<T extends CamoContent<T>>
     /**
      * {@return a {@link Particle} to be spawned when a block with the given {@link CamoContent} is punched or broken}
      */
-    public abstract Particle makeHitDestroyParticle(
-            ClientLevel level, double x, double y, double z, double sx, double sy, double sz, T camo, BlockPos pos
-    );
+    public abstract Particle makeHitDestroyParticle(ClientLevel level, double x, double y, double z, double sx, double sy, double sz, T camo, BlockPos pos);
 
     /// Return the amount of tint layers the provided camo has
     ///

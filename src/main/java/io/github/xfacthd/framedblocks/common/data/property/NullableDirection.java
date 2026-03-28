@@ -15,8 +15,7 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.function.IntFunction;
 
-public enum NullableDirection implements StringRepresentable
-{
+public enum NullableDirection implements StringRepresentable {
     NONE(null),
     DOWN(Direction.DOWN),
     UP(Direction.UP),
@@ -32,47 +31,37 @@ public enum NullableDirection implements StringRepresentable
     @Nullable
     private final Direction dir;
 
-    NullableDirection(@Nullable Direction dir)
-    {
+    NullableDirection(@Nullable Direction dir) {
         this.dir = dir;
     }
 
-    public Direction toDirection()
-    {
+    public Direction toDirection() {
         return Objects.requireNonNull(dir);
     }
 
-    @Nullable
-    public Direction toNullableDirection()
-    {
+    public @Nullable Direction toNullableDirection() {
         return dir;
     }
 
-    public NullableDirection rotate(Rotation rotation)
-    {
+    public NullableDirection rotate(Rotation rotation) {
         return dir != null ? fromDirection(rotation.rotate(dir)) : this;
     }
 
-    public NullableDirection mirror(Mirror mirror)
-    {
+    public NullableDirection mirror(Mirror mirror) {
         return dir != null ? fromDirection(mirror.mirror(dir)) : this;
     }
 
     @Override
-    public String getSerializedName()
-    {
+    public String getSerializedName() {
         return toString().toLowerCase(Locale.ROOT);
     }
 
-    public static NullableDirection fromDirection(@Nullable Direction dir)
-    {
-        if (dir == null)
-        {
+    public static NullableDirection fromDirection(@Nullable Direction dir) {
+        if (dir == null) {
             return NONE;
         }
 
-        return switch (dir)
-        {
+        return switch (dir) {
             case DOWN -> DOWN;
             case UP -> UP;
             case NORTH -> NORTH;

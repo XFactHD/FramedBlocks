@@ -33,12 +33,10 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
-public class FramedTrapDoorBlock extends TrapDoorBlock implements IFramedBlockInternal
-{
+public class FramedTrapDoorBlock extends TrapDoorBlock implements IFramedBlockInternal {
     private final BlockType type;
 
-    private FramedTrapDoorBlock(BlockType type, BlockSetType blockSet, Properties props)
-    {
+    private FramedTrapDoorBlock(BlockType type, BlockSetType blockSet, Properties props) {
         this.type = type;
         super(blockSet, props);
         BlockUtils.configureStandardProperties(this);
@@ -46,35 +44,27 @@ public class FramedTrapDoorBlock extends TrapDoorBlock implements IFramedBlockIn
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
-    {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
         BlockUtils.addStandardProperties(this, builder);
         builder.add(PropertyHolder.ROTATE_TEXTURE);
     }
 
     @Override
-    protected InteractionResult useItemOn(
-            ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit
-    )
-    {
+    protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         return handleUse(state, level, pos, player, hand, hit);
     }
 
     @Override
-    public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)
-    {
+    public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
         tryApplyCamoImmediately(level, pos, placer, stack);
     }
 
     @Override
-    public boolean handleBlockLeftClick(BlockState state, Level level, BlockPos pos, Player player)
-    {
+    public boolean handleBlockLeftClick(BlockState state, Level level, BlockPos pos, Player player) {
         ItemStack stack = player.getMainHandItem();
-        if (stack.is(Utils.FRAMED_HAMMER.value()))
-        {
-            if (!level.isClientSide())
-            {
+        if (stack.is(Utils.FRAMED_HAMMER.value())) {
+            if (!level.isClientSide()) {
                 state = state.setValue(PropertyHolder.ROTATE_TEXTURE, !state.getValue(PropertyHolder.ROTATE_TEXTURE));
                 level.setBlock(pos, state, Block.UPDATE_ALL);
             }
@@ -93,91 +83,76 @@ public class FramedTrapDoorBlock extends TrapDoorBlock implements IFramedBlockIn
             BlockPos adjPos,
             BlockState adjState,
             RandomSource random
-    )
-    {
+    ) {
         BlockState newState = super.updateShape(state, level, tickAccess, pos, side, adjPos, adjState, random);
-        if (newState == state)
-        {
+        if (newState == state) {
             updateCulling(level, pos);
         }
         return newState;
     }
 
     @Override
-    protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, @Nullable Orientation orientation, boolean isMoving)
-    {
+    protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, @Nullable Orientation orientation, boolean isMoving) {
         super.neighborChanged(state, level, pos, block, orientation, isMoving);
         updateCulling(level, pos);
     }
 
     @Override
-    protected boolean useShapeForLightOcclusion(BlockState state)
-    {
+    protected boolean useShapeForLightOcclusion(BlockState state) {
         return useCamoOcclusionShapeForLightOcclusion(state);
     }
 
     @Override
-    protected VoxelShape getOcclusionShape(BlockState state)
-    {
+    protected VoxelShape getOcclusionShape(BlockState state) {
         return getCamoOcclusionShape(state, null);
     }
 
     @Override
-    protected VoxelShape getVisualShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext ctx)
-    {
+    protected VoxelShape getVisualShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext ctx) {
         return getCamoVisualShape(state, level, pos, ctx);
     }
 
     @Override
-    protected float getShadeBrightness(BlockState state, BlockGetter level, BlockPos pos)
-    {
+    protected float getShadeBrightness(BlockState state, BlockGetter level, BlockPos pos) {
         return getCamoShadeBrightness(state, level, pos, super.getShadeBrightness(state, level, pos));
     }
 
     @Override
-    protected boolean propagatesSkylightDown(BlockState state)
-    {
+    protected boolean propagatesSkylightDown(BlockState state) {
         return state.getValue(FramedProperties.PROPAGATES_SKYLIGHT);
     }
 
     @Override
-    protected List<ItemStack> getDrops(BlockState state, LootParams.Builder builder)
-    {
+    protected List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {
         return super.getDrops(state, getCamoDrops(builder));
     }
 
     @Override
-    public boolean doesBlockOccludeBeaconBeam(BlockState state, LevelReader level, BlockPos pos)
-    {
+    public boolean doesBlockOccludeBeaconBeam(BlockState state, LevelReader level, BlockPos pos) {
         return !state.getValue(OPEN);
     }
 
     @Override
-    public BlockType getBlockType()
-    {
+    public BlockType getBlockType() {
         return type;
     }
 
     @Override
-    public BlockState getItemModelSource()
-    {
+    public BlockState getItemModelSource() {
         return defaultBlockState();
     }
 
     @Override
-    public Direction getHorizontalOrientation(BlockState state)
-    {
+    public Direction getHorizontalOrientation(BlockState state) {
         return state.getValue(FACING);
     }
 
     @Override
-    public BlockState getJadeRenderState(BlockState state)
-    {
+    public BlockState getJadeRenderState(BlockState state) {
         return defaultBlockState();
     }
 
-    public static FramedTrapDoorBlock wood(Properties props)
-    {
+    public static FramedTrapDoorBlock wood(Properties props) {
         return new FramedTrapDoorBlock(
                 BlockType.FRAMED_TRAPDOOR,
                 BlockSetType.OAK,
@@ -185,8 +160,7 @@ public class FramedTrapDoorBlock extends TrapDoorBlock implements IFramedBlockIn
         );
     }
 
-    public static FramedTrapDoorBlock iron(Properties props)
-    {
+    public static FramedTrapDoorBlock iron(Properties props) {
         return new FramedTrapDoorBlock(
                 BlockType.FRAMED_IRON_TRAPDOOR,
                 BlockSetType.IRON,

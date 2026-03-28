@@ -7,15 +7,13 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.stream.IntStream;
 
-public final class ColorUtils
-{
+public final class ColorUtils {
     private static final MapColor[] CLOSEST_AVG_MAP_COLORS = computeClosestAverageMapColors();
 
     /**
      * Get the average {@link MapColor} of the two provided {@link MapColor}s
      */
-    public static MapColor average(MapColor colOne, MapColor colTwo)
-    {
+    public static MapColor average(MapColor colOne, MapColor colTwo) {
         return CLOSEST_AVG_MAP_COLORS[avgIndex(colOne, colTwo)];
     }
 
@@ -23,32 +21,27 @@ public final class ColorUtils
      <p>
      <a href="https://github.com/PlatinPython/RGBBlocks/blob/1.21.1/src/main/java/platinpython/rgbblocks/util/Color.java#L161-L166">Adapted from RGBBlocks</a>
      */
-    public static int distanceSquare(int colOne, int colTwo)
-    {
+    public static int distanceSquare(int colOne, int colTwo) {
         int dr = ARGB.red(colTwo) - ARGB.red(colOne);
         int dg = ARGB.green(colTwo) - ARGB.green(colOne);
         int db = ARGB.blue(colTwo) - ARGB.blue(colOne);
         return dr * dr + dg * dg + db * db;
     }
 
-    private static int avgIndex(MapColor colOne, MapColor colTwo)
-    {
+    private static int avgIndex(MapColor colOne, MapColor colTwo) {
         return colOne.id << 6 | colTwo.id;
     }
 
-    private static MapColor[] computeClosestAverageMapColors()
-    {
+    private static MapColor[] computeClosestAverageMapColors() {
         MapColor[] avgColors = new MapColor[64 * 64];
         Arrays.fill(avgColors, MapColor.NONE);
-        for (int i = 1; i < 64; i++)
-        {
+        for (int i = 1; i < 64; i++) {
             MapColor colOne = MapColor.byId(i);
             if (colOne == MapColor.NONE) continue;
 
             avgColors[avgIndex(colOne, colOne)] = colOne;
 
-            for (int j = i + 1; j < 64; j++)
-            {
+            for (int j = i + 1; j < 64; j++) {
                 MapColor colTwo = MapColor.byId(j);
                 if (colTwo == MapColor.NONE) continue;
 

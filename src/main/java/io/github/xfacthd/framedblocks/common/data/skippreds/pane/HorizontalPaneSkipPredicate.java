@@ -10,12 +10,10 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.state.BlockState;
 
 @CullTest(BlockType.FRAMED_HORIZONTAL_PANE)
-public final class HorizontalPaneSkipPredicate implements SideSkipPredicate
-{
+public final class HorizontalPaneSkipPredicate implements SideSkipPredicate {
     @Override
     @CullTest.TestTarget(BlockType.FRAMED_HORIZONTAL_PANE)
-    public boolean test(BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side)
-    {
+    public boolean test(BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side) {
         return adjState.getBlock() == state.getBlock() && !DirUtils.isY(side);
     }
 }

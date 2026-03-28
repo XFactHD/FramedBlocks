@@ -18,17 +18,13 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
  This class is machine-generated, any manual changes to this class will be overwritten.
  */
 @CullTest(BlockType.FRAMED_WALL)
-public final class WallSkipPredicate implements SideSkipPredicate
-{
+public final class WallSkipPredicate implements SideSkipPredicate {
     @Override
-    public boolean test(BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side)
-    {
-        if (adjState.getBlock() instanceof IFramedBlock block && block.getBlockType() instanceof BlockType blockType)
-        {
+    public boolean test(BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side) {
+        if (adjState.getBlock() instanceof IFramedBlock block && block.getBlockType() instanceof BlockType blockType) {
             boolean up = state.getValue(BlockStateProperties.UP);
 
-            return switch (blockType)
-            {
+            return switch (blockType) {
                 case FRAMED_WALL -> testAgainstWall(
                         state, up, adjState, side
                 );
@@ -62,8 +58,7 @@ public final class WallSkipPredicate implements SideSkipPredicate
     @CullTest.TestTarget(BlockType.FRAMED_WALL)
     private static boolean testAgainstWall(
             BlockState state, boolean up, BlockState adjState, Direction side
-    )
-    {
+    ) {
         boolean adjUp = adjState.getValue(BlockStateProperties.UP);
         return PillarDirs.Wall.testWallArmDir(state, adjState, side) ||
                (PillarDirs.Wall.isPillarDir(up, side) && PillarDirs.Wall.isPillarDir(adjUp, side.getOpposite()));
@@ -72,8 +67,7 @@ public final class WallSkipPredicate implements SideSkipPredicate
     @CullTest.TestTarget(BlockType.FRAMED_THICK_LATTICE)
     private static boolean testAgainstThickLattice(
             boolean up, BlockState adjState, Direction side
-    )
-    {
+    ) {
         boolean adjXAxis = adjState.getValue(FramedProperties.X_AXIS);
         boolean adjYAxis = adjState.getValue(FramedProperties.Y_AXIS);
         boolean adjZAxis = adjState.getValue(FramedProperties.Z_AXIS);
@@ -84,8 +78,7 @@ public final class WallSkipPredicate implements SideSkipPredicate
     @CullTest.TestTarget(BlockType.FRAMED_PILLAR)
     private static boolean testAgainstPillar(
             boolean up, BlockState adjState, Direction side
-    )
-    {
+    ) {
         Direction.Axis adjAxis = adjState.getValue(BlockStateProperties.AXIS);
         return (PillarDirs.Wall.isPillarDir(up, side) && PillarDirs.Pillar.isPillarDir(adjAxis, side.getOpposite()));
     }
@@ -93,8 +86,7 @@ public final class WallSkipPredicate implements SideSkipPredicate
     @CullTest.TestTarget(BlockType.FRAMED_HALF_PILLAR)
     private static boolean testAgainstHalfPillar(
             boolean up, BlockState adjState, Direction side
-    )
-    {
+    ) {
         Direction adjDir = adjState.getValue(BlockStateProperties.FACING);
         return (PillarDirs.Wall.isPillarDir(up, side) && PillarDirs.HalfPillar.isPillarDir(adjDir, side.getOpposite()));
     }
@@ -102,8 +94,7 @@ public final class WallSkipPredicate implements SideSkipPredicate
     @CullTest.TestTarget(BlockType.FRAMED_PILLAR_SOCKET)
     private static boolean testAgainstPillarSocket(
             boolean up, BlockState adjState, Direction side
-    )
-    {
+    ) {
         Direction adjDir = adjState.getValue(BlockStateProperties.FACING);
         return (PillarDirs.Wall.isPillarDir(up, side) && PillarDirs.PillarSocket.isPillarDir(adjDir, side.getOpposite()));
     }
@@ -111,8 +102,7 @@ public final class WallSkipPredicate implements SideSkipPredicate
     @CullTest.TestTarget(BlockType.FRAMED_PYRAMID)
     private static boolean testAgainstPyramid(
             boolean up, BlockState adjState, Direction side
-    )
-    {
+    ) {
         Direction adjDir = adjState.getValue(BlockStateProperties.FACING);
         PillarConnection adjConnection = adjState.getValue(PropertyHolder.PILLAR_CONNECTION);
 
@@ -122,8 +112,7 @@ public final class WallSkipPredicate implements SideSkipPredicate
     @CullTest.TestTarget(BlockType.FRAMED_ELEVATED_PYRAMID_SLAB)
     private static boolean testAgainstElevatedPyramidSlab(
             boolean up, BlockState adjState, Direction side
-    )
-    {
+    ) {
         Direction adjDir = adjState.getValue(BlockStateProperties.FACING);
         PillarConnection adjConnection = adjState.getValue(PropertyHolder.PILLAR_CONNECTION);
 
@@ -133,8 +122,7 @@ public final class WallSkipPredicate implements SideSkipPredicate
     @CullTest.TestTarget(BlockType.FRAMED_UPPER_PYRAMID_SLAB)
     private static boolean testAgainstUpperPyramidSlab(
             boolean up, BlockState adjState, Direction side
-    )
-    {
+    ) {
         Direction adjDir = adjState.getValue(BlockStateProperties.FACING);
         PillarConnection adjConnection = adjState.getValue(PropertyHolder.PILLAR_CONNECTION);
 

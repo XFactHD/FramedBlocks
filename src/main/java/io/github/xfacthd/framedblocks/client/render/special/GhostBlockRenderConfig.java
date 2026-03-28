@@ -11,18 +11,15 @@ import io.github.xfacthd.framedblocks.common.config.ClientConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderPipelines;
 
-abstract sealed class GhostBlockRenderConfig
-{
+abstract sealed class GhostBlockRenderConfig {
     private static final GhostBlockRenderConfig DEFAULT = new Default();
     private static final GhostBlockRenderConfig FALLBACK = new Fallback();
 
-    static GhostBlockRenderConfig get()
-    {
+    static GhostBlockRenderConfig get() {
         return ClientConfig.VIEW.useAltGhostRenderer() ? FALLBACK : DEFAULT;
     }
 
-    void setupSamplers(RenderPass renderPass)
-    {
+    void setupSamplers(RenderPass renderPass) {
         renderPass.bindTexture(
                 "Sampler0",
                 Minecraft.getInstance().getTextureManager().getTexture(ClientUtils.BLOCK_ATLAS).getTextureView(),
@@ -39,34 +36,28 @@ abstract sealed class GhostBlockRenderConfig
 
     abstract RenderTarget getRenderTarget();
 
-    private static final class Default extends GhostBlockRenderConfig
-    {
+    private static final class Default extends GhostBlockRenderConfig {
         @Override
-        void setupSamplers(RenderPass renderPass)
-        {
+        void setupSamplers(RenderPass renderPass) {
             super.setupSamplers(renderPass);
             renderPass.bindTexture("Sampler1", null, null);
         }
 
         @Override
-        RenderPipeline getPipeline()
-        {
+        RenderPipeline getPipeline() {
             return RenderPipelines.TRANSLUCENT_BLOCK;
         }
 
         @Override
-        RenderTarget getRenderTarget()
-        {
+        RenderTarget getRenderTarget() {
             RenderTarget particlesTarget = Minecraft.getInstance().levelRenderer.getParticlesTarget();
             return particlesTarget != null ? particlesTarget : Minecraft.getInstance().getMainRenderTarget();
         }
     }
 
-    private static final class Fallback extends GhostBlockRenderConfig
-    {
+    private static final class Fallback extends GhostBlockRenderConfig {
         @Override
-        void setupSamplers(RenderPass renderPass)
-        {
+        void setupSamplers(RenderPass renderPass) {
             super.setupSamplers(renderPass);
             renderPass.bindTexture(
                     "Sampler1",
@@ -76,14 +67,12 @@ abstract sealed class GhostBlockRenderConfig
         }
 
         @Override
-        RenderPipeline getPipeline()
-        {
+        RenderPipeline getPipeline() {
             return RenderPipelines.ITEM_TRANSLUCENT;
         }
 
         @Override
-        RenderTarget getRenderTarget()
-        {
+        RenderTarget getRenderTarget() {
             RenderTarget itemEntityTarget = Minecraft.getInstance().levelRenderer.getItemEntityTarget();
             return itemEntityTarget != null ? itemEntityTarget : Minecraft.getInstance().getMainRenderTarget();
         }

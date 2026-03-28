@@ -13,29 +13,23 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jspecify.annotations.Nullable;
 
-public final class BlockCamoContainerFactory extends SimpleBlockCamoContainerFactory
-{
+public final class BlockCamoContainerFactory extends SimpleBlockCamoContainerFactory {
     @Override
-    protected boolean isValidBlock(BlockState camoState, BlockGetter level, BlockPos pos, @Nullable Player player)
-    {
+    protected boolean isValidBlock(BlockState camoState, BlockGetter level, BlockPos pos, @Nullable Player player) {
         Block block = camoState.getBlock();
-        if (block instanceof IFramedBlock)
-        {
+        if (block instanceof IFramedBlock) {
             return false;
         }
 
-        if (camoState.is(Utils.BLOCK_BLACKLIST))
-        {
+        if (camoState.is(Utils.BLOCK_BLACKLIST)) {
             displayValidationMessage(player, MSG_BLACKLISTED, CamoMessageVerbosity.DEFAULT);
             return false;
         }
-        if (camoState.hasBlockEntity() && !ConfigView.Server.INSTANCE.allowBlockEntities() && !camoState.is(Utils.BE_WHITELIST))
-        {
+        if (camoState.hasBlockEntity() && !ConfigView.Server.INSTANCE.allowBlockEntities() && !camoState.is(Utils.BE_WHITELIST)) {
             displayValidationMessage(player, MSG_BLOCK_ENTITY, CamoMessageVerbosity.DEFAULT);
             return false;
         }
-        if (!camoState.isSolidRender() && !camoState.is(Utils.FRAMEABLE))
-        {
+        if (!camoState.isSolidRender() && !camoState.is(Utils.FRAMEABLE)) {
             displayValidationMessage(player, MSG_NON_SOLID, CamoMessageVerbosity.DETAILED);
             return false;
         }

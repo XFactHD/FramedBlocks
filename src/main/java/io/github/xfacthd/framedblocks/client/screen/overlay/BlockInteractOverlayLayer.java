@@ -22,28 +22,27 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
-public final class BlockInteractOverlayLayer implements GuiLayer
-{
+public final class BlockInteractOverlayLayer implements GuiLayer {
     public static final Identifier LISTENER_ID = Utils.id("block_interact_overlay");
     public static final ResourceManagerReloadListener RELOAD_LISTENER = BlockInteractOverlayLayer::onResourceReload;
     private static final List<BlockInteractOverlayWrapper> OVERLAYS = new ArrayList<>();
 
     @Override
-    public void render(GuiGraphicsExtractor graphics, DeltaTracker delta)
-    {
+    public void render(GuiGraphicsExtractor graphics, DeltaTracker delta) {
         Player player = Objects.requireNonNull(Minecraft.getInstance().player);
-        if (player.isSpectator() || Minecraft.getInstance().options.hideGui) return;
+        if (player.isSpectator() || Minecraft.getInstance().options.hideGui) {
+            return;
+        }
 
         OverlayDisplayMode cfgMode = ClientConfig.VIEW.getMaxOverlayMode();
         String renderedOverlay = null;
-        for (BlockInteractOverlayWrapper overlay : OVERLAYS)
-        {
-            if (overlay.render(graphics, player, cfgMode))
-            {
-                if (Utils.PRODUCTION) break;
+        for (BlockInteractOverlayWrapper overlay : OVERLAYS) {
+            if (overlay.render(graphics, player, cfgMode)) {
+                if (Utils.PRODUCTION) {
+                    break;
+                }
 
-                if (renderedOverlay != null)
-                {
+                if (renderedOverlay != null) {
                     String msg = "Only one overlay may be active at any time, encountered collision between '%s' and '%s'"
                             .formatted(renderedOverlay, overlay.getName());
                     throw new IllegalStateException(msg);
@@ -53,14 +52,11 @@ public final class BlockInteractOverlayLayer implements GuiLayer
         }
     }
 
-    public static void init()
-    {
+    public static void init() {
         Map<String, BlockInteractOverlay> overlays = new HashMap<>();
-        ModLoader.postEvent(new RegisterBlockInteractOverlaysEvent((name, overlay) ->
-        {
+        ModLoader.postEvent(new RegisterBlockInteractOverlaysEvent((name, overlay) -> {
             BlockInteractOverlay prevOverlay = overlays.put(name, overlay);
-            if (prevOverlay != null)
-            {
+            if (prevOverlay != null) {
                 throw new IllegalStateException(String.format(
                         Locale.ROOT, "Duplicate overlay registration for name: %s (old: %s, new: %s)", name, prevOverlay, overlay
                 ));
@@ -70,8 +66,7 @@ public final class BlockInteractOverlayLayer implements GuiLayer
         ));
     }
 
-    private static void onResourceReload(@SuppressWarnings("unused") ResourceManager manager)
-    {
+    private static void onResourceReload(@SuppressWarnings("unused") ResourceManager manager) {
         OVERLAYS.forEach(overlay -> overlay.textWidthValid = false);
     }
 }

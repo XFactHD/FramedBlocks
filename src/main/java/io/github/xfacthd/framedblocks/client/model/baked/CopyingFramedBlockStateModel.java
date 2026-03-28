@@ -15,31 +15,26 @@ import net.neoforged.neoforge.common.util.Lazy;
 import java.util.List;
 import java.util.function.Supplier;
 
-public final class CopyingFramedBlockStateModel extends AbstractFramedBlockStateModel
-{
+public final class CopyingFramedBlockStateModel extends AbstractFramedBlockStateModel {
     private final Supplier<AbstractFramedBlockStateModel> srcModel;
 
-    public CopyingFramedBlockStateModel(BlockStateModel baseModel, BlockState srcState)
-    {
+    public CopyingFramedBlockStateModel(BlockStateModel baseModel, BlockState srcState) {
         super(baseModel, srcState, ItemModelInfo.DEFAULT);
         this.srcModel = Lazy.of(() -> ModelUtils.getFramedBlockModel(srcState));
     }
 
     @Override
-    public int collectParts(BlockAndTintGetter level, BlockPos pos, BlockState state, RandomSource random, List<BlockStateModelPart> parts, int miscTintOffset)
-    {
+    public int collectParts(BlockAndTintGetter level, BlockPos pos, BlockState state, RandomSource random, List<BlockStateModelPart> parts, int miscTintOffset) {
         return srcModel.get().collectParts(level, pos, state, random, parts, miscTintOffset);
     }
 
     @Override
-    public Material.Baked particleMaterial(BlockAndTintGetter level, BlockPos pos, BlockState state)
-    {
+    public Material.Baked particleMaterial(BlockAndTintGetter level, BlockPos pos, BlockState state) {
         return srcModel.get().particleMaterial(level, pos, state);
     }
 
     @Override
-    public int materialFlags(BlockAndTintGetter level, BlockPos pos, BlockState state)
-    {
+    public int materialFlags(BlockAndTintGetter level, BlockPos pos, BlockState state) {
         return srcModel.get().materialFlags(level, pos, state);
     }
 }

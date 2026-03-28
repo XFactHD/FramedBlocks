@@ -19,25 +19,20 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import org.jspecify.annotations.Nullable;
 
-public class FramedCheckeredSlabBlock extends FramedDoubleBlock
-{
-    public FramedCheckeredSlabBlock(Properties props)
-    {
+public class FramedCheckeredSlabBlock extends FramedDoubleBlock {
+    public FramedCheckeredSlabBlock(Properties props) {
         super(BlockType.FRAMED_CHECKERED_SLAB, props);
         registerDefaultState(defaultBlockState().setValue(FramedProperties.TOP, false));
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
-    {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
         builder.add(FramedProperties.TOP);
     }
 
     @Override
-    @Nullable
-    public BlockState getStateForPlacement(BlockPlaceContext ctx)
-    {
+    public @Nullable BlockState getStateForPlacement(BlockPlaceContext ctx) {
         return PlacementStateBuilder.of(this, ctx)
                 .withTop()
                 .withWater()
@@ -45,14 +40,12 @@ public class FramedCheckeredSlabBlock extends FramedDoubleBlock
     }
 
     @Override
-    public BlockState rotate(BlockState state, RotationDirection direction, WrenchRotationMode mode)
-    {
+    public BlockState rotate(BlockState state, RotationDirection direction, WrenchRotationMode mode) {
         return state.cycle(FramedProperties.TOP);
     }
 
     @Override
-    public DoubleBlockParts calculateParts(BlockState state)
-    {
+    public DoubleBlockParts calculateParts(BlockState state) {
         BlockState segmentState = FBContent.BLOCK_FRAMED_CHECKERED_SLAB_SEGMENT.value()
                 .defaultBlockState()
                 .setValue(FramedProperties.TOP, state.getValue(FramedProperties.TOP));
@@ -60,44 +53,36 @@ public class FramedCheckeredSlabBlock extends FramedDoubleBlock
     }
 
     @Override
-    public DoubleBlockTopInteractionMode calculateTopInteractionMode(BlockState state)
-    {
+    public DoubleBlockTopInteractionMode calculateTopInteractionMode(BlockState state) {
         return DoubleBlockTopInteractionMode.EITHER;
     }
 
     @Override
-    public CamoGetter calculateCamoGetter(BlockState state, Direction side, @Nullable Direction edge)
-    {
+    public CamoGetter calculateCamoGetter(BlockState state, Direction side, @Nullable Direction edge) {
         return CamoGetter.NONE;
     }
 
     @Override
-    public SolidityCheck calculateSolidityCheck(BlockState state, Direction side)
-    {
+    public SolidityCheck calculateSolidityCheck(BlockState state, Direction side) {
         boolean top = state.getValue(FramedProperties.TOP);
-        if ((!top && side == Direction.DOWN) || (top && side == Direction.UP))
-        {
+        if ((!top && side == Direction.DOWN) || (top && side == Direction.UP)) {
             return SolidityCheck.BOTH;
         }
         return SolidityCheck.NONE;
     }
 
     @Override
-    public BlockState getItemModelSource()
-    {
+    public BlockState getItemModelSource() {
         return defaultBlockState();
     }
 
     @Override
-    @Nullable
-    public Direction getHorizontalOrientation(BlockState state)
-    {
+    public @Nullable Direction getHorizontalOrientation(BlockState state) {
         return null;
     }
 
     @Override
-    public BlockState getJadeRenderState(BlockState state)
-    {
+    public BlockState getJadeRenderState(BlockState state) {
         return defaultBlockState();
     }
 }

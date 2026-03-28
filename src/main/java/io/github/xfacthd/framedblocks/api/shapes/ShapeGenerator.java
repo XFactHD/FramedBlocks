@@ -6,19 +6,16 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
-public interface ShapeGenerator
-{
+public interface ShapeGenerator {
     ShapeGenerator EMPTY = _ -> EmptyShapeContainer.INSTANCE;
 
     ShapeContainer generatePrimary(List<BlockState> states);
 
-    default ShapeContainer generateOcclusion(List<BlockState> states)
-    {
+    default ShapeContainer generateOcclusion(List<BlockState> states) {
         return ShapeContainer.EMPTY;
     }
 
-    static ShapeGenerator singleShape(VoxelShape shape, @Nullable VoxelShape occlusionShape)
-    {
+    static ShapeGenerator singleShape(VoxelShape shape, @Nullable VoxelShape occlusionShape) {
         return new SingleShapeGenerator(shape, occlusionShape);
     }
 }

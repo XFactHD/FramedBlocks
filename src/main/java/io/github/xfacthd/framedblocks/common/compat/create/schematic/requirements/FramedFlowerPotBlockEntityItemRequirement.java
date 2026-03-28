@@ -8,13 +8,10 @@ import net.minecraft.world.item.ItemStack;
 
 import java.util.List;
 
-public final class FramedFlowerPotBlockEntityItemRequirement extends FramedBlockEntityItemRequirement
-{
+public final class FramedFlowerPotBlockEntityItemRequirement extends FramedBlockEntityItemRequirement {
     @Override
-    protected void collectAdditionalRequirements(IFramedBlockEntity blockEntity, List<ItemRequirement.StackRequirement> requirements)
-    {
-        if (blockEntity instanceof FramedFlowerPotBlockEntity pot && pot.hasFlowerBlock())
-        {
+    protected void collectAdditionalRequirements(IFramedBlockEntity blockEntity, List<ItemRequirement.StackRequirement> requirements) {
+        if (blockEntity instanceof FramedFlowerPotBlockEntity pot && pot.hasFlowerBlock()) {
             requirements.add(consume(new ItemStack(pot.getFlowerBlock())));
         }
     }

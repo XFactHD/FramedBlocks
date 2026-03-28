@@ -5,8 +5,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jspecify.annotations.Nullable;
 
-public interface ConnectionPredicate
-{
+public interface ConnectionPredicate {
     /** Always false for both full edge and detailed checks */
     ConnectionPredicate FALSE = new FalseConnectionPredicate();
     /** Always true for full edge checks */

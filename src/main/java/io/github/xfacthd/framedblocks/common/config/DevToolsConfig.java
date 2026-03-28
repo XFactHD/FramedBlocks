@@ -13,8 +13,7 @@ import java.util.Objects;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
-public final class DevToolsConfig
-{
+public final class DevToolsConfig {
     public static final ExtConfigView.DevTools VIEW = (ExtConfigView.DevTools) ConfigView.DevTools.INSTANCE;
     @Nullable
     private static final ModConfigSpec SPEC;
@@ -44,20 +43,16 @@ public final class DevToolsConfig
     private static boolean occlusionShapeDebug = false;
     private static boolean collapsibleBlockDebug = false;
 
-    public static void init(IEventBus modBus, ModContainer modContainer)
-    {
-        if (!Utils.PRODUCTION)
-        {
+    public static void init(IEventBus modBus, ModContainer modContainer) {
+        if (!Utils.PRODUCTION) {
             modBus.addListener((ModConfigEvent.Loading event) -> onConfigReloaded(event));
             modBus.addListener((ModConfigEvent.Reloading event) -> onConfigReloaded(event));
             modContainer.registerConfig(ModConfig.Type.CLIENT, SPEC, "framedblocks-devtools.toml");
         }
     }
 
-    static
-    {
-        if (Utils.PRODUCTION)
-        {
+    static {
+        if (Utils.PRODUCTION) {
             SPEC = null;
             DOUBLE_BLOCK_PART_DEBUG_VALUE = null;
             CONNECTION_DEBUG_VALUE = null;
@@ -66,9 +61,7 @@ public final class DevToolsConfig
             STATE_MERGER_DEBUG_FILTER_VALUE = null;
             OCCLUSION_SHAPE_DEBUG_VALUE = null;
             COLLAPSIBLE_BLOCK_DEBUG_VALUE = null;
-        }
-        else
-        {
+        } else {
             ModConfigSpec.Builder builder = new ModConfigSpec.Builder();
 
             DOUBLE_BLOCK_PART_DEBUG_VALUE = builder
@@ -117,34 +110,28 @@ public final class DevToolsConfig
         }
     }
 
-    private static boolean validateFilterPattern(Object value)
-    {
-        if (value instanceof String string)
-        {
-            if (string.isBlank()) return true;
-
-            try
-            {
-                Pattern.compile(string);
+    private static boolean validateFilterPattern(Object value) {
+        if (value instanceof String string) {
+            if (string.isBlank()) {
                 return true;
             }
-            catch (PatternSyntaxException e)
-            {
+
+            try {
+                Pattern.compile(string);
+                return true;
+            } catch (PatternSyntaxException e) {
                 return false;
             }
         }
         return false;
     }
 
-    private static String translate(String key)
-    {
+    private static String translate(String key) {
         return Utils.translateConfig("devtools", key);
     }
 
-    private static void onConfigReloaded(ModConfigEvent event)
-    {
-        if (event.getConfig().getType() == ModConfig.Type.CLIENT && event.getConfig().getSpec() == SPEC)
-        {
+    private static void onConfigReloaded(ModConfigEvent event) {
+        if (event.getConfig().getType() == ModConfig.Type.CLIENT && event.getConfig().getSpec() == SPEC) {
             doubleBlockPartDebug = Objects.requireNonNull(DOUBLE_BLOCK_PART_DEBUG_VALUE).get();
             connectionDebug = Objects.requireNonNull(CONNECTION_DEBUG_VALUE).get();
             quadWindingDebug = Objects.requireNonNull(QUAD_WINDING_DEBUG_VALUE).get();
@@ -158,50 +145,41 @@ public final class DevToolsConfig
 
     private DevToolsConfig() { }
 
-    public static final class ViewImpl implements ExtConfigView.DevTools
-    {
+    public static final class ViewImpl implements ExtConfigView.DevTools {
         private static final boolean IN_DEV = !Utils.PRODUCTION;
 
         @Override
-        public boolean isDoubleBlockPartHitDebugRendererEnabled()
-        {
+        public boolean isDoubleBlockPartHitDebugRendererEnabled() {
             return IN_DEV && doubleBlockPartDebug;
         }
 
         @Override
-        public boolean isConnectionDebugRendererEnabled()
-        {
+        public boolean isConnectionDebugRendererEnabled() {
             return IN_DEV && connectionDebug;
         }
 
         @Override
-        public boolean isQuadWindingDebugRendererEnabled()
-        {
+        public boolean isQuadWindingDebugRendererEnabled() {
             return IN_DEV && quadWindingDebug;
         }
 
         @Override
-        public boolean isStateMergerDebugLoggingEnabled()
-        {
+        public boolean isStateMergerDebugLoggingEnabled() {
             return IN_DEV && stateMergerDebug;
         }
 
         @Override
-        @Nullable
-        public Pattern getStateMergerDebugFilter()
-        {
+        public @Nullable Pattern getStateMergerDebugFilter() {
             return IN_DEV ? stateMergerDebugFilter : null;
         }
 
         @Override
-        public boolean isOcclusionShapeDebugRenderingEnabled()
-        {
+        public boolean isOcclusionShapeDebugRenderingEnabled() {
             return IN_DEV && occlusionShapeDebug;
         }
 
         @Override
-        public boolean isCollapsibleBlockDebugRendererEnabled()
-        {
+        public boolean isCollapsibleBlockDebugRendererEnabled() {
             return IN_DEV && collapsibleBlockDebug;
         }
     }

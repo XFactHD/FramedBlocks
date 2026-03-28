@@ -6,11 +6,9 @@ import io.github.xfacthd.framedblocks.common.data.property.CompoundDirection;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 
-public final class ElevatedInnerSlopedPrismFullFacePredicate implements FullFacePredicate
-{
+public final class ElevatedInnerSlopedPrismFullFacePredicate implements FullFacePredicate {
     @Override
-    public boolean test(BlockState state, Direction side)
-    {
+    public boolean test(BlockState state, Direction side) {
         CompoundDirection cmpDir = state.getValue(PropertyHolder.FACING_DIR);
         return side != cmpDir.direction() && side != cmpDir.orientation();
     }

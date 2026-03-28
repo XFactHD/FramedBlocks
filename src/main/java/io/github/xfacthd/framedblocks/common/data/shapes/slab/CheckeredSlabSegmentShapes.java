@@ -13,10 +13,8 @@ import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 
-public final class CheckeredSlabSegmentShapes
-{
-    public static ShapeContainer generate(List<BlockState> states)
-    {
+public final class CheckeredSlabSegmentShapes {
+    public static ShapeContainer generate(List<BlockState> states) {
         VoxelShape shapeBotFirst = ShapeUtils.or(
                 Block.box(0, 0, 0,  8,  8,  8),
                 Block.box(8, 0, 8, 16,  8, 16)
@@ -29,8 +27,7 @@ public final class CheckeredSlabSegmentShapes
         VoxelShape shapeTopSecond = ShapeUtils.rotateShapeAroundY(Direction.NORTH, Direction.EAST, shapeTopFirst);
 
         Map<BlockState, VoxelShape> map = new IdentityHashMap<>(states.size());
-        for (BlockState state : states)
-        {
+        for (BlockState state : states) {
             boolean top = state.getValue(FramedProperties.TOP);
             boolean second = state.getValue(PropertyHolder.SECOND);
             map.put(state, second ? (top ? shapeTopSecond : shapeBotSecond) : (top ? shapeTopFirst : shapeBotFirst));

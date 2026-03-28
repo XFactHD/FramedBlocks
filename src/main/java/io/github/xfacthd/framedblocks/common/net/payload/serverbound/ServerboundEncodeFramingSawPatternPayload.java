@@ -16,8 +16,7 @@ import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
-public record ServerboundEncodeFramingSawPatternPayload(int containerId, ResourceKey<Recipe<?>> recipeId, ItemStack[] inputs) implements CustomPacketPayload
-{
+public record ServerboundEncodeFramingSawPatternPayload(int containerId, ResourceKey<Recipe<?>> recipeId, ItemStack[] inputs) implements CustomPacketPayload {
     public static final CustomPacketPayload.Type<ServerboundEncodeFramingSawPatternPayload> TYPE = Utils.payloadType("encode_saw_pattern");
     public static final StreamCodec<RegistryFriendlyByteBuf, ServerboundEncodeFramingSawPatternPayload> STREAM_CODEC = StreamCodec.composite(
             ByteBufCodecs.VAR_INT,
@@ -30,19 +29,15 @@ public record ServerboundEncodeFramingSawPatternPayload(int containerId, Resourc
     );
 
     @Override
-    public CustomPacketPayload.Type<ServerboundEncodeFramingSawPatternPayload> type()
-    {
+    public CustomPacketPayload.Type<ServerboundEncodeFramingSawPatternPayload> type() {
         return TYPE;
     }
 
-    public void handle(IPayloadContext ctx)
-    {
+    public void handle(IPayloadContext ctx) {
         ServerPlayer player = (ServerPlayer) ctx.player();
-        if (player.containerMenu instanceof FramingSawWithEncoderMenu menu && menu.containerId == containerId)
-        {
+        if (player.containerMenu instanceof FramingSawWithEncoderMenu menu && menu.containerId == containerId) {
             RecipeHolder<?> holder = player.level().recipeAccess().byKey(recipeId).orElse(null);
-            if (holder != null && holder.value() instanceof FramingSawRecipe recipe)
-            {
+            if (holder != null && holder.value() instanceof FramingSawRecipe recipe) {
                 menu.tryEncodePattern(recipe, inputs);
             }
         }

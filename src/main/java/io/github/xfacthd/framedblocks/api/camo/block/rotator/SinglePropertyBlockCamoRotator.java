@@ -3,24 +3,20 @@ package io.github.xfacthd.framedblocks.api.camo.block.rotator;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Property;
 
-public final class SinglePropertyBlockCamoRotator implements BlockCamoRotator
-{
+public final class SinglePropertyBlockCamoRotator implements BlockCamoRotator {
     private final Property<?> property;
 
-    public SinglePropertyBlockCamoRotator(Property<?> property)
-    {
+    public SinglePropertyBlockCamoRotator(Property<?> property) {
         this.property = property;
     }
 
     @Override
-    public boolean canRotate(BlockState state)
-    {
+    public boolean canRotate(BlockState state) {
         return true;
     }
 
     @Override
-    public BlockState rotate(BlockState state)
-    {
+    public BlockState rotate(BlockState state) {
         return state.cycle(property);
     }
 }

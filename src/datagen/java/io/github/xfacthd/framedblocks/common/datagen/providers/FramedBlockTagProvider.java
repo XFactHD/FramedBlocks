@@ -20,17 +20,14 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
-public final class FramedBlockTagProvider extends BlockTagsProvider
-{
-    public FramedBlockTagProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider)
-    {
+public final class FramedBlockTagProvider extends BlockTagsProvider {
+    public FramedBlockTagProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider) {
         super(output, lookupProvider, FramedConstants.MOD_ID);
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    protected void addTags(HolderLookup.Provider provider)
-    {
+    protected void addTags(HolderLookup.Provider provider) {
         tag(BlockTags.SLABS).add(FBContent.BLOCK_FRAMED_SLAB.value());
         tag(BlockTags.STAIRS).add(FBContent.BLOCK_FRAMED_STAIRS.value());
         tag(BlockTags.WALLS).add(FBContent.BLOCK_FRAMED_WALL.value());
@@ -159,8 +156,7 @@ public final class FramedBlockTagProvider extends BlockTagsProvider
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return super.getName() + ": " + FramedConstants.MOD_ID;
     }
 }

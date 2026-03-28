@@ -8,19 +8,16 @@ import io.github.xfacthd.framedblocks.client.model.baked.FramedDoubleBlockStateM
 import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
 import net.minecraft.client.resources.model.ModelBaker;
 
-public final class UnbakedFramedDoubleBlockStateModel extends AbstractUnbakedFramedBlockStateModel
-{
+public final class UnbakedFramedDoubleBlockStateModel extends AbstractUnbakedFramedBlockStateModel {
     private final ItemModelInfo itemModelInfo;
 
-    public UnbakedFramedDoubleBlockStateModel(ModelFactory.Context ctx, ItemModelInfo itemModelInfo)
-    {
+    public UnbakedFramedDoubleBlockStateModel(ModelFactory.Context ctx, ItemModelInfo itemModelInfo) {
         super(ctx);
         this.itemModelInfo = itemModelInfo;
     }
 
     @Override
-    protected BlockStateModel bakeCached(GeometryFactory.Context context, ModelBaker baker)
-    {
+    protected BlockStateModel bakeCached(GeometryFactory.Context context, ModelBaker baker) {
         return new FramedDoubleBlockStateModel(context, itemModelInfo);
     }
 }

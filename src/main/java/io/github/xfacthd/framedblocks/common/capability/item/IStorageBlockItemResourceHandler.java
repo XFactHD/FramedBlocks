@@ -7,8 +7,7 @@ import net.neoforged.neoforge.transfer.IndexModifier;
 import net.neoforged.neoforge.transfer.ResourceHandler;
 import net.neoforged.neoforge.transfer.item.ItemResource;
 
-public interface IStorageBlockItemResourceHandler extends ResourceHandler<ItemResource>
-{
+public interface IStorageBlockItemResourceHandler extends ResourceHandler<ItemResource> {
     FramedStorageMenu createMenu(int windowId, Inventory inv);
 
     boolean stillValid(Player player);

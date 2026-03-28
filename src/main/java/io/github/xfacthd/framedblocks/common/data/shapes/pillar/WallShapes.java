@@ -15,23 +15,19 @@ import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 
-public final class WallShapes implements ShapeGenerator
-{
+public final class WallShapes implements ShapeGenerator {
     @Override
-    public ShapeContainer generatePrimary(List<BlockState> states)
-    {
+    public ShapeContainer generatePrimary(List<BlockState> states) {
         return generateShapes(states, 14F, 16F);
     }
 
     @Override
-    public ShapeContainer generateOcclusion(List<BlockState> states)
-    {
+    public ShapeContainer generateOcclusion(List<BlockState> states) {
         // Misuse separate occlusion shape handling for collision shapes
         return generateShapes(states, 24F, 24F);
     }
 
-    private static ShapeContainer generateShapes(List<BlockState> states, float lowHeight, float tallHeight)
-    {
+    private static ShapeContainer generateShapes(List<BlockState> states, float lowHeight, float tallHeight) {
         boolean sameHeight = lowHeight == tallHeight;
 
         VoxelShape centerLowShape = Block.box(5F, 0F, 5F, 11F, lowHeight, 11F);
@@ -44,14 +40,10 @@ public final class WallShapes implements ShapeGenerator
         VoxelShape[] wallTallShapes = sameHeight ? wallLowShapes : ShapeUtils.makeHorizontalRotations(wallTallShape, Direction.NORTH);
 
         VoxelShape[] shapes = new VoxelShape[512];
-        for (WallSide north : WallBlock.NORTH.getPossibleValues())
-        {
-            for (WallSide east : WallBlock.EAST.getPossibleValues())
-            {
-                for (WallSide south : WallBlock.SOUTH.getPossibleValues())
-                {
-                    for (WallSide west : WallBlock.WEST.getPossibleValues())
-                    {
+        for (WallSide north : WallBlock.NORTH.getPossibleValues()) {
+            for (WallSide east : WallBlock.EAST.getPossibleValues()) {
+                for (WallSide south : WallBlock.SOUTH.getPossibleValues()) {
+                    for (WallSide west : WallBlock.WEST.getPossibleValues()) {
                         int noUpKey = makeShapeKey(false, north, east, south, west);
                         int upKey = makeShapeKey(true, north, east, south, west);
 
@@ -78,8 +70,7 @@ public final class WallShapes implements ShapeGenerator
         shapes[0] = Shapes.block();
 
         Map<BlockState, VoxelShape> map = new IdentityHashMap<>();
-        for (BlockState state : states)
-        {
+        for (BlockState state : states) {
             int key = makeShapeKey(
                     state.getValue(WallBlock.UP),
                     state.getValue(WallBlock.NORTH),
@@ -92,18 +83,15 @@ public final class WallShapes implements ShapeGenerator
         return ShapeContainer.of(map);
     }
 
-    private static VoxelShape getWallShape(WallSide side, Direction dir, VoxelShape[] lowShapes, VoxelShape[] tallShapes)
-    {
-        return switch (side)
-        {
+    private static VoxelShape getWallShape(WallSide side, Direction dir, VoxelShape[] lowShapes, VoxelShape[] tallShapes) {
+        return switch (side) {
             case NONE -> Shapes.empty();
             case LOW -> lowShapes[dir.get2DDataValue()];
             case TALL -> tallShapes[dir.get2DDataValue()];
         };
     }
 
-    private static int makeShapeKey(boolean up, WallSide north, WallSide east, WallSide south, WallSide west)
-    {
+    private static int makeShapeKey(boolean up, WallSide north, WallSide east, WallSide south, WallSide west) {
         return ((up ? 1 : 0) << 8) | (north.ordinal() << 6) | (east.ordinal() << 4) | (south.ordinal() << 2) | west.ordinal();
     }
 }

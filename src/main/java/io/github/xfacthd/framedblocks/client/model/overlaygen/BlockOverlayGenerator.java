@@ -25,8 +25,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-public final class BlockOverlayGenerator
-{
+public final class BlockOverlayGenerator {
     private static final Map<BlockOverlayCacheKey, ExtendedBlockStateModelPart> GEOMETRY_CACHE = new ConcurrentHashMap<>();
 
     public static void generateUncached(
@@ -36,8 +35,7 @@ public final class BlockOverlayGenerator
             List<? super ExtendedBlockStateModelPart> outParts,
             boolean emissive,
             int tintIndex
-    )
-    {
+    ) {
         generate(null, state, false, overlay, sourceParts, outParts, emissive, true, tintIndex);
     }
 
@@ -50,8 +48,7 @@ public final class BlockOverlayGenerator
             List<? super ExtendedBlockStateModelPart> parts,
             boolean emissive,
             int tintIndex
-    )
-    {
+    ) {
         generate(outerState, partState, secondPart, overlay, (List<BlockStateModelPart>) parts, parts, emissive, false, tintIndex);
     }
 
@@ -65,14 +62,11 @@ public final class BlockOverlayGenerator
             boolean emissive,
             boolean fastPath,
             int tintIndex
-    )
-    {
+    ) {
         BlockOverlayCacheKey key = BlockOverlayCacheKey.compute(outerState, partState, secondPart, overlay.value(), sourceParts, emissive, fastPath, tintIndex);
-        if (key != null)
-        {
+        if (key != null) {
             ExtendedBlockStateModelPart part = GEOMETRY_CACHE.get(key);
-            if (part == null)
-            {
+            if (part == null) {
                 part = generateOverlayPart(key);
                 GEOMETRY_CACHE.put(key, part);
             }
@@ -81,8 +75,7 @@ public final class BlockOverlayGenerator
     }
 
     // FIXME: prism shapes (Prism Corner, Prism Corner Slope Panel) produce skewed textures
-    private static ExtendedBlockStateModelPart generateOverlayPart(BlockOverlayCacheKey key)
-    {
+    private static ExtendedBlockStateModelPart generateOverlayPart(BlockOverlayCacheKey key) {
         QuadMapBuilderInternal quads = QuadMapBuilderInternal.create();
 
         StateCache stateCache = Optionull.mapOrDefault(key.outerState(), BlockState::framedblocks$getCache, StateCache.EMPTY);
@@ -95,19 +88,14 @@ public final class BlockOverlayGenerator
         SpriteInfo edgeSpriteInfo = metadata.edgeSpriteInfo(forceTranslucent);
         int tintIndex = overlay.tintSource() != null ? key.tintIndex() : -1;
 
-        for (BlockOverlayCacheKey.Bounds bounds : key.bounds())
-        {
+        for (BlockOverlayCacheKey.Bounds bounds : key.bounds()) {
             Direction dir = bounds.normalDir();
-            if (metadata.solidFaces().contains(dir))
-            {
-                if (bounds.cullFace() != null || stateCache.supportsSolidOverlay(dir, secondPart))
-                {
+            if (metadata.solidFaces().contains(dir)) {
+                if (bounds.cullFace() != null || stateCache.supportsSolidOverlay(dir, secondPart)) {
                     // TODO: filter out faces which have an "occluding" face above them (i.e. all rungs of the ladder except the top one for solid overlay on UP)
                     generateSolidFaceOverlay(quads, bounds, solidSpriteInfo, emissive, tintIndex);
                 }
-            }
-            else if (metadata.edgesByFace().containsKey(dir) && edgeSpriteInfo != null)
-            {
+            } else if (metadata.edgesByFace().containsKey(dir) && edgeSpriteInfo != null) {
                 generateEdgeOverlay(quads, dir, secondPart, stateCache, bounds, edgeSpriteInfo, metadata, emissive, tintIndex);
             }
         }
@@ -115,12 +103,10 @@ public final class BlockOverlayGenerator
         return new FramedBlockStateModelPart(quads.build(), key.ambientOcclusion(), metadata.solidMaterial(), null);
     }
 
-    private static void generateSolidFaceOverlay(QuadMapBuilderInternal quads, BlockOverlayCacheKey.Bounds bounds, SpriteInfo spriteInfo, boolean emissive, int tintIndex)
-    {
+    private static void generateSolidFaceOverlay(QuadMapBuilderInternal quads, BlockOverlayCacheKey.Bounds bounds, SpriteInfo spriteInfo, boolean emissive, int tintIndex) {
         ArrayList<BakedQuad> quadList = quads.getOrCreate(bounds.cullFace());
         BakedNormals normals = BakedNormals.of(bounds.normal());
-        for (BlockOverlayCacheKey.QuadBounds quadBounds : bounds.quadBounds())
-        {
+        for (BlockOverlayCacheKey.QuadBounds quadBounds : bounds.quadBounds()) {
             quadList.add(OverlayQuadGenerator.generateOverlayQuad(quadBounds, bounds.normalDir(), normals, spriteInfo.material(), spriteInfo.transparency(), emissive, tintIndex));
         }
     }
@@ -136,8 +122,7 @@ public final class BlockOverlayGenerator
             BlockOverlayMetaCache.Entry metadata,
             boolean emissive,
             int tintIndex
-    )
-    {
+    ) {
         ArrayList<BakedQuad> quadList = quads.getOrCreate(bounds.cullFace());
         Direction face = bounds.normalDir();
         BakedNormals normals = BakedNormals.of(bounds.normal());
@@ -149,10 +134,8 @@ public final class BlockOverlayGenerator
         MutableQuad quad = new MutableQuad();
         float[] uvCoords = new float[8];
 
-        for (Direction edge : edges)
-        {
-            float vOff = switch (edge)
-            {
+        for (Direction edge : edges) {
+            float vOff = switch (edge) {
                 case DOWN -> surfaceBounds.minY();
                 case UP -> 1F - surfaceBounds.maxY();
                 case NORTH, WEST -> surfaceBounds.minX();
@@ -161,20 +144,16 @@ public final class BlockOverlayGenerator
 
             boolean nullCullFace = bounds.cullFace() == null;
             boolean unaligned = vOff > 0;
-            if (nullCullFace || unaligned)
-            {
-                if (!stateCache.supportsEdgeOverlay(side, edge, secondPart, nullCullFace, unaligned))
-                {
+            if (nullCullFace || unaligned) {
+                if (!stateCache.supportsEdgeOverlay(side, edge, secondPart, nullCullFace, unaligned)) {
                     continue;
                 }
             }
 
             EdgeUVs edgeUVs = EdgeUVs.get(face, edge);
-            for (BlockOverlayCacheKey.QuadBounds quadBounds : bounds.quadBounds())
-            {
+            for (BlockOverlayCacheKey.QuadBounds quadBounds : bounds.quadBounds()) {
                 float minV = 1F;
-                for (int i = 0; i < 4; i++)
-                {
+                for (int i = 0; i < 4; i++) {
                     Vector3fc pos = quadBounds.pos(i);
                     float uSrc = pos.get(edgeUVs.uIdx());
                     float vSrc = pos.get(edgeUVs.vIdx());
@@ -186,19 +165,19 @@ public final class BlockOverlayGenerator
 
                     minV = Math.min(minV, v);
                 }
-                if (minV > edgeHeight) continue;
+                if (minV > edgeHeight) {
+                    continue;
+                }
 
                 quad.setDirection(face);
                 quad.setSprite(spriteInfo.material(), spriteInfo.transparency());
                 quad.setAmbientOcclusion(!emissive);
                 quad.setShade(!emissive);
                 quad.setTintIndex(tintIndex);
-                if (emissive)
-                {
+                if (emissive) {
                     quad.setLightEmission(LightEngine.MAX_LEVEL);
                 }
-                for (int i = 0; i < 4; i++)
-                {
+                for (int i = 0; i < 4; i++) {
                     Vector3fc pos = quadBounds.pos(i);
                     quad.setPosition(i, pos);
                     quad.setUv(i, sprite.getU(uvCoords[i * 2]), sprite.getV(uvCoords[i * 2 + 1]));
@@ -210,8 +189,7 @@ public final class BlockOverlayGenerator
         }
     }
 
-    public static void clearCaches(CacheCleaner.Reason reason)
-    {
+    public static void clearCaches(CacheCleaner.Reason reason) {
         BlockOverlayMetaCache.clear(reason);
         GEOMETRY_CACHE.clear();
     }

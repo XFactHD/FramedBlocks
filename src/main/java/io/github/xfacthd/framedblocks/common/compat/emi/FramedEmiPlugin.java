@@ -30,15 +30,13 @@ import java.util.List;
 import java.util.Set;
 
 @EmiEntrypoint
-public final class FramedEmiPlugin implements EmiPlugin
-{
+public final class FramedEmiPlugin implements EmiPlugin {
     public static final Identifier SAW_ID = Utils.id("framing_saw");
     private static final Lazy<EmiStack> SAW_WORKSTATION = Lazy.of(() -> EmiStack.of(FBContent.BLOCK_FRAMING_SAW.value()));
     public static final Lazy<EmiRecipeCategory> SAW_CATEGORY = Lazy.of(() -> new FramingSawRecipeCategory(SAW_WORKSTATION.get(), SAW_WORKSTATION.get()));
 
     @Override
-    public void register(EmiRegistry registry)
-    {
+    public void register(EmiRegistry registry) {
         registry.addCategory(SAW_CATEGORY.get());
         registry.addWorkstation(SAW_CATEGORY.get(), SAW_WORKSTATION.get());
         registry.addWorkstation(SAW_CATEGORY.get(), EmiStack.of(FBContent.BLOCK_POWERED_FRAMING_SAW.value()));
@@ -52,21 +50,17 @@ public final class FramedEmiPlugin implements EmiPlugin
         registerRecipes(registry);
     }
 
-    private static void registerRecipes(EmiRegistry registry)
-    {
+    private static void registerRecipes(EmiRegistry registry) {
         FramedBlocks.LOGGER.debug("Registering framing saw recipes to EMI...");
         Stopwatch watch = Stopwatch.createStarted();
         int[] recipeCount = new int[1];
 
         FramingSawRecipeCache cache = FramingSawRecipeCache.get(true);
         Set<Item> inputItems = ClientConfig.VIEW.showAllRecipePermutationsInEmi() ? cache.getKnownItems() : Set.of(FBContent.BLOCK_FRAMED_CUBE.value().asItem());
-        cache.getRecipes().forEach(holder ->
-        {
+        cache.getRecipes().forEach(holder -> {
             FramingSawRecipe recipe = holder.value();
-            for (Item item : inputItems)
-            {
-                if (recipe.getResult().is(item))
-                {
+            for (Item item : inputItems) {
+                if (recipe.getResult().is(item)) {
                     continue;
                 }
 
@@ -78,8 +72,7 @@ public final class FramedEmiPlugin implements EmiPlugin
                 EmiStack input = EmiStack.of(inputStack, calc.getInputCount());
                 List<EmiIngredient> additives = recipe.getAdditives()
                         .stream()
-                        .map(additive ->
-                        {
+                        .map(additive -> {
                             int addCount = additive.count() * (outputCount / recipe.getResult().getCount());
                             return EmiIngredient.of(additive.ingredient(), addCount);
                         })
@@ -95,16 +88,13 @@ public final class FramedEmiPlugin implements EmiPlugin
         FramedBlocks.LOGGER.debug("Registered {} framing saw recipes to EMI in {}", recipeCount[0], watch);
     }
 
-    static int compareRecipes(EmiRecipe recipeOne, EmiRecipe recipeTwo)
-    {
+    static int compareRecipes(EmiRecipe recipeOne, EmiRecipe recipeTwo) {
         ItemStack resultOne;
         ItemStack resultTwo;
-        if (!(recipeOne instanceof FramingSawEmiRecipe sawRecipeOne) || (resultOne = sawRecipeOne.getOutputInternal()).isEmpty())
-        {
+        if (!(recipeOne instanceof FramingSawEmiRecipe sawRecipeOne) || (resultOne = sawRecipeOne.getOutputInternal()).isEmpty()) {
             return 1;
         }
-        if (!(recipeTwo instanceof FramingSawEmiRecipe sawRecipeTwo) || (resultTwo = sawRecipeTwo.getOutputInternal()).isEmpty())
-        {
+        if (!(recipeTwo instanceof FramingSawEmiRecipe sawRecipeTwo) || (resultTwo = sawRecipeTwo.getOutputInternal()).isEmpty()) {
             return -1;
         }
         return FramingSawRecipeCache.sortRecipes(resultOne, resultTwo, sawRecipeOne.getResultType(), sawRecipeTwo.getResultType());

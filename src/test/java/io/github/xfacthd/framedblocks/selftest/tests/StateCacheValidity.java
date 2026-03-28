@@ -12,72 +12,59 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import java.util.Arrays;
 import java.util.List;
 
-public final class StateCacheValidity
-{
+public final class StateCacheValidity {
     private static final Direction[] DIRECTIONS = Direction.values();
 
     @SuppressWarnings("ConstantValue") // Technically redundant null-checks are intentional
-    public static void checkStateCacheValid(SelfTestReporter reporter, List<Block> blocks)
-    {
+    public static void checkStateCacheValid(SelfTestReporter reporter, List<Block> blocks) {
         reporter.startTest("state caches validity");
 
         blocks.stream()
                 .map(Block::getStateDefinition)
                 .map(StateDefinition::getPossibleStates)
-                .flatMap(List::stream).forEach(state ->
-                {
+                .flatMap(List::stream).forEach(state -> {
                     StateCache cache = state.framedblocks$getCache();
 
                     boolean anyFullFace = Arrays.stream(DIRECTIONS).anyMatch(cache::isFullFace);
-                    if (anyFullFace != cache.hasAnyFullFace())
-                    {
+                    if (anyFullFace != cache.hasAnyFullFace()) {
                         reporter.warn("StateCache of BlockState '{}' has inconsistency on 'anyFullFace' flag", state);
                     }
 
                     boolean anyDetailedCon = Arrays.stream(DIRECTIONS)
                             .flatMap(dir -> Arrays.stream(DIRECTIONS).map(edge -> Pair.of(dir, edge)))
                             .anyMatch(pair -> cache.canConnectDetailed(pair.getFirst(), pair.getSecond()));
-                    if (anyDetailedCon != cache.hasAnyDetailedConnections())
-                    {
+                    if (anyDetailedCon != cache.hasAnyDetailedConnections()) {
                         reporter.warn("StateCache of BlockState '{}' has inconsistency on 'anyFullFace' flag", state);
                     }
 
-                    if (cache instanceof DoubleBlockStateCache doubleCache)
-                    {
-                        if (doubleCache.getTopInteractionMode() == null)
-                        {
+                    if (cache instanceof DoubleBlockStateCache doubleCache) {
+                        if (doubleCache.getTopInteractionMode() == null) {
                             reporter.error("DoubleBlockStateCache of BlockState '{}' has invalid top interaction mode", state);
                         }
 
                         DoubleBlockParts parts = doubleCache.getParts();
                         //noinspection ConstantConditions
-                        if (parts == null || parts.stateOne() == null || parts.stateTwo() == null)
-                        {
+                        if (parts == null || parts.stateOne() == null || parts.stateTwo() == null) {
                             reporter.error("DoubleBlockStateCache of BlockState '{}' has invalid block pair", state);
                         }
 
-                        for (Direction side : DIRECTIONS)
-                        {
-                            if (doubleCache.getSolidityCheck(side) == null)
-                            {
+                        for (Direction side : DIRECTIONS) {
+                            if (doubleCache.getSolidityCheck(side) == null) {
                                 reporter.error(
                                         "DoubleBlockStateCache of BlockState '{}' has invalid solidity check on side '{}'",
                                         state, side
                                 );
                             }
 
-                            if (doubleCache.getCamoGetter(side, null) == null)
-                            {
+                            if (doubleCache.getCamoGetter(side, null) == null) {
                                 reporter.error(
                                         "DoubleBlockStateCache of BlockState '{}' has invalid camo getter on side '{}' for edge 'null'",
                                         state, side
                                 );
                             }
 
-                            for (Direction edge : DIRECTIONS)
-                            {
-                                if (doubleCache.getCamoGetter(side, edge) == null)
-                                {
+                            for (Direction edge : DIRECTIONS) {
+                                if (doubleCache.getCamoGetter(side, edge) == null) {
                                     reporter.error(
                                             "DoubleBlockStateCache of BlockState '{}' has invalid camo getter on side '{}' for edge '{}'",
                                             state, side, edge

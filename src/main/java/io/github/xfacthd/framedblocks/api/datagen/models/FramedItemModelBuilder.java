@@ -12,14 +12,12 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
 
 @SuppressWarnings({ "unused", "UnusedReturnValue" })
-public final class FramedItemModelBuilder
-{
+public final class FramedItemModelBuilder {
     private final Holder<Block> block;
     private BlockItemModelProvider modelProvider = BlockItemModelProvider.DEFAULT;
     private Identifier itemBaseModel = AbstractFramedBlockModelProvider.FRAMED_CUBE_MODEL;
 
-    FramedItemModelBuilder(Holder<Block> block)
-    {
+    FramedItemModelBuilder(Holder<Block> block) {
         Preconditions.checkArgument(
                 block.value() instanceof IFramedBlock,
                 "Expected IFramedBlock, got %s", block.value()
@@ -38,8 +36,7 @@ public final class FramedItemModelBuilder
      * Allows using dedicated block models with camo awareness when the item model looks different to all variants
      * of the actual block model.
      */
-    public FramedItemModelBuilder modelProvider(BlockItemModelProvider modelProvider)
-    {
+    public FramedItemModelBuilder modelProvider(BlockItemModelProvider modelProvider) {
         this.modelProvider = modelProvider;
         return this;
     }
@@ -47,14 +44,12 @@ public final class FramedItemModelBuilder
     /**
      * Specify the model from which the {@link ItemTransforms} should be pulled
      */
-    public FramedItemModelBuilder itemBaseModel(Identifier itemBaseModel)
-    {
+    public FramedItemModelBuilder itemBaseModel(Identifier itemBaseModel) {
         this.itemBaseModel = itemBaseModel;
         return this;
     }
 
-    public ItemModel.Unbaked build()
-    {
+    public ItemModel.Unbaked build() {
         return InternalClientAPI.INSTANCE.createFramedBlockItemModel(block.value(), modelProvider, itemBaseModel);
     }
 }

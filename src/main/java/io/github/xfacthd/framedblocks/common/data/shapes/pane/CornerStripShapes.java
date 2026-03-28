@@ -14,10 +14,8 @@ import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 
-public final class CornerStripShapes
-{
-    public static ShapeContainer generate(List<BlockState> states)
-    {
+public final class CornerStripShapes {
+    public static ShapeContainer generate(List<BlockState> states) {
         VoxelShape[] shapes = ShapeUtils.makeHorizontalRotationsWithFlag(
                 Block.box(0,  0, 0, 16,  1, 1),
                 Block.box(0, 15, 0, 16, 16, 1),
@@ -29,16 +27,12 @@ public final class CornerStripShapes
         );
 
         Map<BlockState, VoxelShape> map = new IdentityHashMap<>(states.size());
-        for (BlockState state : states)
-        {
+        for (BlockState state : states) {
             Direction dir = state.getValue(FramedProperties.FACING_HOR);
             SlopeType type = state.getValue(PropertyHolder.SLOPE_TYPE);
-            if (type == SlopeType.HORIZONTAL)
-            {
+            if (type == SlopeType.HORIZONTAL) {
                 map.put(state, vertShapes[dir.get2DDataValue()]);
-            }
-            else
-            {
+            } else {
                 int offset = type == SlopeType.TOP ? 4 : 0;
                 map.put(state, shapes[dir.get2DDataValue() + offset]);
             }

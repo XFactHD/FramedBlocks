@@ -12,10 +12,8 @@ import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 
-public final class MasonryCornerSegmentShapes
-{
-    public static ShapeContainer generate(List<BlockState> states)
-    {
+public final class MasonryCornerSegmentShapes {
+    public static ShapeContainer generate(List<BlockState> states) {
         Map<BlockState, VoxelShape> map = new IdentityHashMap<>(states.size());
 
         VoxelShape preShapeBottom = ShapeUtils.orUnoptimized(
@@ -28,8 +26,7 @@ public final class MasonryCornerSegmentShapes
         );
         VoxelShape[] shapes = ShapeUtils.makeHorizontalRotationsWithFlag(preShapeBottom, preShapeTop, Direction.NORTH);
 
-        for (BlockState state : states)
-        {
+        for (BlockState state : states) {
             Direction dir = state.getValue(FramedProperties.FACING_HOR);
             boolean top = state.getValue(FramedProperties.TOP);
             map.put(state, shapes[dir.get2DDataValue() + (top ? 4 : 0)]);

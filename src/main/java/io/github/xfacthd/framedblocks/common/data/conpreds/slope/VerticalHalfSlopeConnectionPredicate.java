@@ -6,47 +6,38 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jspecify.annotations.Nullable;
 
-public final class VerticalHalfSlopeConnectionPredicate implements ConnectionPredicate
-{
+public final class VerticalHalfSlopeConnectionPredicate implements ConnectionPredicate {
     @Override
-    public boolean canConnectFullEdge(BlockState state, Direction side, @Nullable Direction edge)
-    {
+    public boolean canConnectFullEdge(BlockState state, Direction side, @Nullable Direction edge) {
         Direction facing = state.getValue(FramedProperties.FACING_HOR);
         boolean up = state.getValue(FramedProperties.TOP);
         Direction dirTwo = up ? Direction.UP : Direction.DOWN;
 
-        if (side == dirTwo)
-        {
+        if (side == dirTwo) {
             return edge == facing || edge == facing.getCounterClockWise();
         }
-        else if (side == facing || side == facing.getCounterClockWise())
-        {
+        if (side == facing || side == facing.getCounterClockWise()) {
             return edge == dirTwo;
         }
         return false;
     }
 
     @Override
-    public boolean canConnectDetailed(BlockState state, Direction side, Direction edge)
-    {
+    public boolean canConnectDetailed(BlockState state, Direction side, Direction edge) {
         Direction facing = state.getValue(FramedProperties.FACING_HOR);
         boolean up = state.getValue(FramedProperties.TOP);
         Direction dirTwo = up ? Direction.UP : Direction.DOWN;
 
-        if (side == facing)
-        {
+        if (side == facing) {
             return edge.getAxis() == facing.getClockWise().getAxis();
         }
-        else if (side == facing.getCounterClockWise())
-        {
+        if (side == facing.getCounterClockWise()) {
             return edge.getAxis() == facing.getAxis();
         }
-        else if (side == facing.getOpposite() || side == facing.getClockWise())
-        {
+        if (side == facing.getOpposite() || side == facing.getClockWise()) {
             return edge == dirTwo;
         }
-        else if (side == dirTwo.getOpposite())
-        {
+        if (side == dirTwo.getOpposite()) {
             return edge == facing || edge == facing.getCounterClockWise();
         }
         return false;

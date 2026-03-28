@@ -13,8 +13,7 @@ import net.minecraft.client.resources.model.geometry.BakedQuad;
 import net.minecraft.core.Direction;
 import org.jspecify.annotations.Nullable;
 
-public class FramedVerticalStairsGeometry extends Geometry
-{
+public class FramedVerticalStairsGeometry extends Geometry {
     private final boolean vertical;
     private final boolean top;
     private final boolean bottom;
@@ -22,8 +21,7 @@ public class FramedVerticalStairsGeometry extends Geometry
     private final boolean counterClockWise;
     private final Direction dir;
 
-    public FramedVerticalStairsGeometry(GeometryFactory.Context ctx)
-    {
+    public FramedVerticalStairsGeometry(GeometryFactory.Context ctx) {
         StairsType type = ctx.state().getValue(PropertyHolder.STAIRS_TYPE);
         this.vertical = type == StairsType.VERTICAL;
         this.top = type.isTop();
@@ -34,13 +32,11 @@ public class FramedVerticalStairsGeometry extends Geometry
     }
 
     @Override
-    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
-    {
+    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData) {
         Direction quadDir = quad.direction();
         Direction vertEdge = bottom ? Direction.DOWN : Direction.UP;
 
-        if (vertical && (quadDir == dir.getOpposite() || quadDir == dir.getClockWise()))
-        {
+        if (vertical && (quadDir == dir.getOpposite() || quadDir == dir.getClockWise())) {
             Direction cutDir = quadDir == dir.getOpposite() ? dir.getClockWise() : dir.getOpposite();
 
             QuadModifier.of(quad)
@@ -53,8 +49,7 @@ public class FramedVerticalStairsGeometry extends Geometry
                     .export(quadMap, null);
         }
 
-        if ((quadDir == Direction.UP && !top) || (quadDir == Direction.DOWN && !bottom))
-        {
+        if ((quadDir == Direction.UP && !top) || (quadDir == Direction.DOWN && !bottom)) {
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(dir.getOpposite(), .5F))
                     .export(quadMap, quadDir);
@@ -65,8 +60,7 @@ public class FramedVerticalStairsGeometry extends Geometry
                     .export(quadMap, quadDir);
         }
 
-        if (quadDir == dir.getOpposite() && !vertical)
-        {
+        if (quadDir == dir.getOpposite() && !vertical) {
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(dir.getClockWise(), .5F))
                     .applyIf(Modifiers.cut(vertEdge, .5F), counterClockWise)
@@ -78,8 +72,7 @@ public class FramedVerticalStairsGeometry extends Geometry
                     .apply(Modifiers.setPosition(.5F))
                     .export(quadMap, null);
 
-            if (counterClockWise)
-            {
+            if (counterClockWise) {
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(dir.getClockWise(), .5F))
                         .apply(Modifiers.cut(vertEdge.getOpposite(), .5F))
@@ -88,8 +81,7 @@ public class FramedVerticalStairsGeometry extends Geometry
             }
         }
 
-        if (quadDir == dir.getClockWise() && !vertical)
-        {
+        if (quadDir == dir.getClockWise() && !vertical) {
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(dir.getOpposite(), .5F))
                     .applyIf(Modifiers.cut(vertEdge, .5F), forward)
@@ -101,8 +93,7 @@ public class FramedVerticalStairsGeometry extends Geometry
                     .apply(Modifiers.setPosition(.5F))
                     .export(quadMap, null);
 
-            if (forward)
-            {
+            if (forward) {
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(dir.getOpposite(), .5F))
                         .apply(Modifiers.cut(vertEdge.getOpposite(), .5F))
@@ -111,15 +102,13 @@ public class FramedVerticalStairsGeometry extends Geometry
             }
         }
 
-        if ((quadDir == Direction.UP && top) || (quadDir == Direction.DOWN && bottom))
-        {
+        if ((quadDir == Direction.UP && top) || (quadDir == Direction.DOWN && bottom)) {
             QuadModifier.of(quad)
                     .applyIf(Modifiers.cut(dir.getOpposite(), .5F), counterClockWise)
                     .applyIf(Modifiers.cut(dir.getClockWise(), .5F), forward)
                     .export(quadMap, quadDir);
 
-            if (forward)
-            {
+            if (forward) {
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(dir.getOpposite(), .5F))
                         .apply(Modifiers.cut(dir.getCounterClockWise(), .5F))
@@ -127,8 +116,7 @@ public class FramedVerticalStairsGeometry extends Geometry
                         .export(quadMap, null);
             }
 
-            if (counterClockWise)
-            {
+            if (counterClockWise) {
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(dir, .5F))
                         .apply(Modifiers.cut(dir.getClockWise(), .5F))
@@ -137,8 +125,7 @@ public class FramedVerticalStairsGeometry extends Geometry
             }
         }
 
-        if (quadDir == dir && forward)
-        {
+        if (quadDir == dir && forward) {
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(vertEdge, .5F))
                     .export(quadMap, quadDir);
@@ -149,8 +136,7 @@ public class FramedVerticalStairsGeometry extends Geometry
                     .export(quadMap, quadDir);
         }
 
-        if (quadDir == dir.getCounterClockWise() && counterClockWise)
-        {
+        if (quadDir == dir.getCounterClockWise() && counterClockWise) {
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(vertEdge, .5F))
                     .export(quadMap, quadDir);

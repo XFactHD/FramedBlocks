@@ -17,8 +17,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(LevelRenderer.class)
-public class MixinLevelRenderer
-{
+public class MixinLevelRenderer {
     @Shadow
     @Final
     private Minecraft minecraft;
@@ -35,17 +34,14 @@ public class MixinLevelRenderer
             GameRenderState gameRenderState,
             FeatureRenderDispatcher featureRenderDispatcher,
             CallbackInfo ci
-    )
-    {
+    ) {
         framedblocks$lastCutoutLeaves = mc.options.cutoutLeaves().get();
     }
 
     @Inject(method = "allChanged", at = @At("HEAD"))
-    private void framedblocks$handleRedrawOnCutoutLeavesChange(CallbackInfo ci)
-    {
+    private void framedblocks$handleRedrawOnCutoutLeavesChange(CallbackInfo ci) {
         boolean cutoutLeaves = minecraft.options.cutoutLeaves().get();
-        if (cutoutLeaves != framedblocks$lastCutoutLeaves)
-        {
+        if (cutoutLeaves != framedblocks$lastCutoutLeaves) {
             framedblocks$lastCutoutLeaves = cutoutLeaves;
             CacheCleaner.clearModelCaches(CacheCleaner.Reason.SETTINGS_CHANGED);
         }

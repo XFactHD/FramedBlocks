@@ -27,8 +27,7 @@ import org.jspecify.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FramedLanternGeometry extends Geometry
-{
+public class FramedLanternGeometry extends Geometry {
     private static final Vector3f ROT_ORIGIN = new Vector3f(.5F, .5F, .5F);
 
     private final BlockState state;
@@ -38,8 +37,7 @@ public class FramedLanternGeometry extends Geometry
     private final BlockStateModel baseModel;
     private final BlockState auxShaderState;
 
-    private FramedLanternGeometry(GeometryFactory.Context ctx, boolean closedHead, BlockState auxShaderState)
-    {
+    private FramedLanternGeometry(GeometryFactory.Context ctx, boolean closedHead, BlockState auxShaderState) {
         this.state = ctx.state();
         this.hanging = ctx.state().getValue(BlockStateProperties.HANGING);
         this.chain = ctx.state().getValue(PropertyHolder.CHAIN_TYPE);
@@ -49,11 +47,9 @@ public class FramedLanternGeometry extends Geometry
     }
 
     @Override
-    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
-    {
+    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData) {
         Direction quadDir = quad.direction();
-        if (DirUtils.isY(quadDir))
-        {
+        if (DirUtils.isY(quadDir)) {
             boolean up = quadDir == Direction.UP;
 
             QuadModifier.of(quad)
@@ -69,17 +65,14 @@ public class FramedLanternGeometry extends Geometry
                         .apply(Modifiers.setPosition(hanging ? 10F/16F : 9F/16F))
                         .export(quadMap, null);
             }
-        }
-        else
-        {
+        } else {
             List<QuadModifier> sideMods = List.of(
                     QuadModifier.of(quad).apply(Modifiers.cutSide(5F/16F, 0, 6F/16F, 7F/16F)),
                     QuadModifier.of(quad).apply(Modifiers.cutSide(10F/16F, 0, 11F/16F, 7F/16F)),
                     QuadModifier.of(quad).apply(Modifiers.cutSide(6F/16F, 0, 10F/16F, 1F/16F)),
                     QuadModifier.of(quad).apply(Modifiers.cutSide(6F/16F, 6F/16F, 10F/16F, 7F/16F))
             );
-            for (QuadModifier mod : sideMods)
-            {
+            for (QuadModifier mod : sideMods) {
                 mod.applyIf(Modifiers.offset(Direction.UP, 1F/16F), hanging)
                         .apply(Modifiers.setPosition(11F/16F))
                         .export(quadMap, null);
@@ -90,15 +83,13 @@ public class FramedLanternGeometry extends Geometry
                     .apply(Modifiers.setPosition(10F/16F))
                     .export(quadMap, null);
 
-            if (chain == ChainType.CAMO)
-            {
+            if (chain == ChainType.CAMO) {
                 createCamoChain(quadMap, quad, quadDir);
             }
         }
     }
 
-    private void createCamoChain(QuadMapBuilder quadMap, BakedQuad quad, Direction quadDir)
-    {
+    private void createCamoChain(QuadMapBuilder quadMap, BakedQuad quad, Direction quadDir) {
         Direction.Axis quadPerpAxis = DirUtils.isX(quadDir) ? Direction.Axis.Z : Direction.Axis.X;
         Direction dirNeg = quadPerpAxis.getNegative();
         Direction dirPos = quadPerpAxis.getPositive();
@@ -115,16 +106,14 @@ public class FramedLanternGeometry extends Geometry
                         .apply(Modifiers.offset(dirNeg, .5F/16F))
         );
 
-        if (DirUtils.isX(quadDir) || !hanging)
-        {
+        if (DirUtils.isX(quadDir) || !hanging) {
             modifiers.add(
                     baseEdgeMod.derive()
                             .apply(Modifiers.cut(Direction.DOWN, hanging ? 6F/16F : 7F/16F))
                             .apply(Modifiers.cut(Direction.UP, hanging ? 12F/16F : 11F/16F))
             );
         }
-        for (int i = 0; i < 2; i++)
-        {
+        for (int i = 0; i < 2; i++) {
             if (!hanging && i == 0) continue;
 
             float height = i == 0 ? 2 : (hanging ? 5 : 6);
@@ -137,17 +126,13 @@ public class FramedLanternGeometry extends Geometry
                     .export(quadMap, null);
         }
 
-        if (hanging)
-        {
-            if (DirUtils.isX(quadDir))
-            {
+        if (hanging) {
+            if (DirUtils.isX(quadDir)) {
                 modifiers.add(
                         baseEdgeMod.derive()
                                 .apply(Modifiers.cut(Direction.DOWN, 2F/16F))
                 );
-            }
-            else if (DirUtils.isZ(quadDir))
-            {
+            } else if (DirUtils.isZ(quadDir)) {
                 modifiers.add(
                         baseEdgeMod.derive()
                                 .apply(Modifiers.cut(Direction.DOWN, 5F/16F))
@@ -157,8 +142,7 @@ public class FramedLanternGeometry extends Geometry
             }
         }
 
-        for (MultiQuadModifier mod : modifiers)
-        {
+        for (MultiQuadModifier mod : modifiers) {
             mod.apply(Modifiers.setPosition(.5F))
                     .apply(Modifiers.rotate(Direction.Axis.Y, ROT_ORIGIN, 45, false))
                     .export(quadMap, null);
@@ -168,35 +152,29 @@ public class FramedLanternGeometry extends Geometry
     }
 
     @Override
-    public void collectAdditionalPartsCached(PartConsumer consumer, BlockAndTintGetter level, BlockPos pos, RandomSource random, FramedBlockData blockData, @Nullable Object cacheKeyUserData)
-    {
+    public void collectAdditionalPartsCached(PartConsumer consumer, BlockAndTintGetter level, BlockPos pos, RandomSource random, FramedBlockData blockData, @Nullable Object cacheKeyUserData) {
         consumer.acceptAll(baseModel, level, pos, random, state, true, false, false, auxShaderState, null);
     }
 
     @Override
-    public boolean useSolidNoCamoModel()
-    {
+    public boolean useSolidNoCamoModel() {
         return true;
     }
 
     @Override
-    public int getMaterialFlags(BlockAndTintGetter level, BlockPos pos, ModelData modelData, FramedBlockData blockData)
-    {
+    public int getMaterialFlags(BlockAndTintGetter level, BlockPos pos, ModelData modelData, FramedBlockData blockData) {
         return baseModel.materialFlags(level, pos, state);
     }
 
-    public static FramedLanternGeometry normal(GeometryFactory.Context ctx)
-    {
+    public static FramedLanternGeometry normal(GeometryFactory.Context ctx) {
         return new FramedLanternGeometry(ctx, false, Blocks.LANTERN.defaultBlockState());
     }
 
-    public static FramedLanternGeometry soul(GeometryFactory.Context ctx)
-    {
+    public static FramedLanternGeometry soul(GeometryFactory.Context ctx) {
         return new FramedLanternGeometry(ctx, true, Blocks.SOUL_LANTERN.defaultBlockState());
     }
 
-    public static FramedLanternGeometry copper(GeometryFactory.Context ctx)
-    {
+    public static FramedLanternGeometry copper(GeometryFactory.Context ctx) {
         return new FramedLanternGeometry(ctx, true, Blocks.COPPER_LANTERN.unaffected().defaultBlockState());
     }
 }

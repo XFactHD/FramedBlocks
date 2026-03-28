@@ -5,11 +5,9 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
-public final class LayeredCubeFullFacePredicate implements FullFacePredicate
-{
+public final class LayeredCubeFullFacePredicate implements FullFacePredicate {
     @Override
-    public boolean test(BlockState state, Direction side)
-    {
+    public boolean test(BlockState state, Direction side) {
         int layers = state.getValue(BlockStateProperties.LAYERS);
         return layers == 8 || side == state.getValue(BlockStateProperties.FACING).getOpposite();
     }

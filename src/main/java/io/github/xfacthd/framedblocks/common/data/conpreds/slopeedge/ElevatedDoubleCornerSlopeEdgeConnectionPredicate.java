@@ -8,45 +8,35 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jspecify.annotations.Nullable;
 
-public final class ElevatedDoubleCornerSlopeEdgeConnectionPredicate extends NonDetailedConnectionPredicate
-{
+public final class ElevatedDoubleCornerSlopeEdgeConnectionPredicate extends NonDetailedConnectionPredicate {
     @Override
-    public boolean canConnectFullEdge(BlockState state, Direction side, @Nullable Direction edge)
-    {
+    public boolean canConnectFullEdge(BlockState state, Direction side, @Nullable Direction edge) {
         Direction dir = state.getValue(FramedProperties.FACING_HOR);
         CornerType type = state.getValue(PropertyHolder.CORNER_TYPE);
-        Direction baseFace = switch (type)
-        {
+        Direction baseFace = switch (type) {
             case BOTTOM -> Direction.DOWN;
             case TOP -> Direction.UP;
             default -> dir;
         };
-        if (side == baseFace || edge == baseFace)
-        {
+        if (side == baseFace || edge == baseFace) {
             return true;
         }
         Direction xBack;
         Direction yBack;
-        if (type.isHorizontal())
-        {
+        if (type.isHorizontal()) {
             xBack = type.isRight() ? dir.getClockWise() : dir.getCounterClockWise();
             yBack = type.isTop() ? Direction.UP : Direction.DOWN;
-        }
-        else
-        {
+        } else {
             xBack = dir;
             yBack = dir.getCounterClockWise();
         }
-        if ((side == xBack && edge == yBack) || (side == yBack && edge == xBack))
-        {
+        if ((side == xBack && edge == yBack) || (side == yBack && edge == xBack)) {
             return true;
         }
-        if ((side == xBack.getOpposite() || side == yBack.getOpposite()) && edge == baseFace.getOpposite())
-        {
+        if ((side == xBack.getOpposite() || side == yBack.getOpposite()) && edge == baseFace.getOpposite()) {
             return true;
         }
-        if (side == baseFace.getOpposite() && (edge == xBack.getOpposite() || edge == yBack.getOpposite()))
-        {
+        if (side == baseFace.getOpposite() && (edge == xBack.getOpposite() || edge == yBack.getOpposite())) {
             return true;
         }
         return false;

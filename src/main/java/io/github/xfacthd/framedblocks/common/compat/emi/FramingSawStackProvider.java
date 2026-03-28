@@ -7,14 +7,11 @@ import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.stack.EmiStackInteraction;
 import io.github.xfacthd.framedblocks.client.screen.FramingSawScreen;
 
-public final class FramingSawStackProvider implements EmiStackProvider<FramingSawScreen>
-{
+public final class FramingSawStackProvider implements EmiStackProvider<FramingSawScreen> {
     @Override
-    public EmiStackInteraction getStackAt(FramingSawScreen screen, int x, int y)
-    {
+    public EmiStackInteraction getStackAt(FramingSawScreen screen, int x, int y) {
         FramingSawScreen.PointedRecipe recipe = screen.getRecipeAt(x, y);
-        if (recipe != null)
-        {
+        if (recipe != null) {
             return new EmiStackInteraction(
                     EmiStack.of(recipe.recipe().getResult()),
                     EmiApi.getRecipeManager().getRecipe(recipe.id().identifier()),

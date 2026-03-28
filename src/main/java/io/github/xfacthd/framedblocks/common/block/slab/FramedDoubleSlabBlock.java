@@ -16,26 +16,21 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jspecify.annotations.Nullable;
 
-public class FramedDoubleSlabBlock extends FramedDoubleBlock
-{
-    public FramedDoubleSlabBlock(Properties props)
-    {
+public class FramedDoubleSlabBlock extends FramedDoubleBlock {
+    public FramedDoubleSlabBlock(Properties props) {
         super(BlockType.FRAMED_DOUBLE_SLAB, props);
     }
 
     @Override
-    public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state, boolean includeData, Player player)
-    {
-        if (includeData)
-        {
+    public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state, boolean includeData, Player player) {
+        if (includeData) {
             return super.getCloneItemStack(level, pos, state, true, player);
         }
         return new ItemStack(FBContent.BLOCK_FRAMED_SLAB.value());
     }
 
     @Override
-    public DoubleBlockParts calculateParts(BlockState state)
-    {
+    public DoubleBlockParts calculateParts(BlockState state) {
         BlockState defState = FBContent.BLOCK_FRAMED_SLAB.value().defaultBlockState();
         return new DoubleBlockParts(
                 defState.setValue(FramedProperties.TOP, false),
@@ -44,38 +39,27 @@ public class FramedDoubleSlabBlock extends FramedDoubleBlock
     }
 
     @Override
-    public DoubleBlockTopInteractionMode calculateTopInteractionMode(BlockState state)
-    {
+    public DoubleBlockTopInteractionMode calculateTopInteractionMode(BlockState state) {
         return DoubleBlockTopInteractionMode.SECOND;
     }
 
     @Override
-    public CamoGetter calculateCamoGetter(BlockState state, Direction side, @Nullable Direction edge)
-    {
-        if (side == Direction.UP)
-        {
+    public CamoGetter calculateCamoGetter(BlockState state, Direction side, @Nullable Direction edge) {
+        if (side == Direction.UP) {
             return CamoGetter.SECOND;
-        }
-        else if (side == Direction.DOWN)
-        {
+        } else if (side == Direction.DOWN) {
             return CamoGetter.FIRST;
-        }
-        else if (edge == Direction.UP)
-        {
+        } else if (edge == Direction.UP) {
             return CamoGetter.SECOND;
-        }
-        else if (edge == Direction.DOWN)
-        {
+        } else if (edge == Direction.DOWN) {
             return CamoGetter.FIRST;
         }
         return CamoGetter.NONE;
     }
 
     @Override
-    public SolidityCheck calculateSolidityCheck(BlockState state, Direction side)
-    {
-        return switch (side)
-        {
+    public SolidityCheck calculateSolidityCheck(BlockState state, Direction side) {
+        return switch (side) {
             case DOWN -> SolidityCheck.FIRST;
             case UP -> SolidityCheck.SECOND;
             default -> SolidityCheck.BOTH;
@@ -83,22 +67,17 @@ public class FramedDoubleSlabBlock extends FramedDoubleBlock
     }
 
     @Override
-    @Nullable
-    public BlockState getItemModelSource()
-    {
+    public @Nullable BlockState getItemModelSource() {
         return defaultBlockState();
     }
 
     @Override
-    @Nullable
-    public Direction getHorizontalOrientation(BlockState state)
-    {
+    public @Nullable Direction getHorizontalOrientation(BlockState state) {
         return null;
     }
 
     @Override
-    public BlockState getJadeRenderState(BlockState state)
-    {
+    public BlockState getJadeRenderState(BlockState state) {
         return defaultBlockState();
     }
 }

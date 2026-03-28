@@ -25,8 +25,7 @@ import net.neoforged.neoforge.event.DefaultDataComponentsBoundEvent;
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.slf4j.Logger;
 
-public final class BlockCamoRotators
-{
+public final class BlockCamoRotators {
     private static final Logger LOGGER = LogUtils.getLogger();
     private static final Reference2ObjectMap<Block, BlockCamoRotator> ROTATORS = new Reference2ObjectOpenHashMap<>();
     private static final BlockCamoRotator AXIS = new SinglePropertyBlockCamoRotator(RotatedPillarBlock.AXIS);
@@ -34,70 +33,64 @@ public final class BlockCamoRotators
     private static final BlockCamoRotator HOR_DIR = new SinglePropertyBlockCamoRotator(HorizontalDirectionalBlock.FACING);
     private static final BlockCamoRotator REDSTONE_LAMP = new SinglePropertyBlockCamoRotator(RedstoneLampBlock.LIT);
 
-    public static BlockCamoRotator get(Block block)
-    {
-        synchronized (ROTATORS)
-        {
+    public static BlockCamoRotator get(Block block) {
+        synchronized (ROTATORS) {
             return ROTATORS.getOrDefault(block, BlockCamoRotator.DEFAULT);
         }
     }
 
-    public static void onDefaultComponentsBound(DefaultDataComponentsBoundEvent event)
-    {
+    public static void onDefaultComponentsBound(DefaultDataComponentsBoundEvent event) {
         // Default data components are bound after data maps finish loading on the server
-        if (event.getUpdateCause() == DefaultDataComponentsBoundEvent.UpdateCause.SERVER_DATA_LOAD)
-        {
+        if (event.getUpdateCause() == DefaultDataComponentsBoundEvent.UpdateCause.SERVER_DATA_LOAD) {
             reload();
         }
     }
 
-    public static void reload()
-    {
-        synchronized (ROTATORS)
-        {
+    public static void reload() {
+        synchronized (ROTATORS) {
             reloadSync();
         }
     }
 
-    private static void reloadSync()
-    {
+    private static void reloadSync() {
         ROTATORS.clear();
 
         Stopwatch stopwatch = Stopwatch.createStarted();
-        BuiltInRegistries.BLOCK.forEach(block ->
-        {
+        BuiltInRegistries.BLOCK.forEach(block -> {
             ItemStack stack = block.asItem().getDefaultInstance();
-            if (stack.isEmpty()) return;
+            if (stack.isEmpty()) {
+                return;
+            }
 
             CamoContainerFactory<?> factory = CamoContainerFactories.findCamoFactory(stack);
-            if (!(factory instanceof AbstractBlockCamoContainerFactory<?> blockFactory)) return;
-            if (!blockFactory.isValidBlockInternal(block.defaultBlockState())) return;
+            if (!(factory instanceof AbstractBlockCamoContainerFactory<?> blockFactory)) {
+                return;
+            }
+            if (!blockFactory.isValidBlockInternal(block.defaultBlockState())) {
+                return;
+            }
 
-            switch (block)
-            {
+            switch (block) {
                 case RotatedPillarBlock ignored -> addIfPropPresent(block, RotatedPillarBlock.AXIS, AXIS);
                 case InfestedRotatedPillarBlock ignored -> addIfPropPresent(block, RotatedPillarBlock.AXIS, AXIS);
                 case DirectionalBlock ignored -> addIfPropPresent(block, DirectionalBlock.FACING, DIR);
                 case HorizontalDirectionalBlock ignored -> addIfPropPresent(block, HorizontalDirectionalBlock.FACING, HOR_DIR);
                 case RedstoneLampBlock ignored -> addIfPropPresent(block, RedstoneLampBlock.LIT, REDSTONE_LAMP);
-                default -> {}
+                default -> { }
             }
         });
         int defaultCount = ROTATORS.size();
 
         MutableInt customCount = new MutableInt();
-        NeoForge.EVENT_BUS.post(new RegisterBlockCamoRotatorsEvent((key, value) ->
-        {
+        NeoForge.EVENT_BUS.post(new RegisterBlockCamoRotatorsEvent((key, value) -> {
             ROTATORS.put(key, value);
             customCount.increment();
         }));
 
         MutableInt datapackCount = new MutableInt();
-        BuiltInRegistries.BLOCK.getDataMap(DataMapsSetup.BLOCK_CAMO_ROTATORS).forEach((key, prototype) ->
-        {
+        BuiltInRegistries.BLOCK.getDataMap(DataMapsSetup.BLOCK_CAMO_ROTATORS).forEach((key, prototype) -> {
             Block block = BuiltInRegistries.BLOCK.getValueOrThrow(key);
-            if (!prototype.isApplicableTo(block))
-            {
+            if (!prototype.isApplicableTo(block)) {
                 LOGGER.error("BlockCamoRotator with properties {} from datamap cannot be applied to {}, dropping!", prototype.properties(), block);
                 return;
             }
@@ -111,10 +104,8 @@ public final class BlockCamoRotators
         LOGGER.debug("Collected {} camo rotators ({} default, {} custom, {} datamap) in {}", totalCount, defaultCount, customCount.intValue(), datapackCount.intValue(), stopwatch);
     }
 
-    private static void addIfPropPresent(Block block, Property<?> property, BlockCamoRotator rotator)
-    {
-        if (block.defaultBlockState().hasProperty(property))
-        {
+    private static void addIfPropPresent(Block block, Property<?> property, BlockCamoRotator rotator) {
+        if (block.defaultBlockState().hasProperty(property)) {
             ROTATORS.put(block, rotator);
         }
     }

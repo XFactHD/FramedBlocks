@@ -6,11 +6,9 @@ import io.github.xfacthd.framedblocks.common.data.property.NullableDirection;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 
-public final class OneWayWindowFullFacePredicate implements FullFacePredicate
-{
+public final class OneWayWindowFullFacePredicate implements FullFacePredicate {
     @Override
-    public boolean test(BlockState state, Direction side)
-    {
+    public boolean test(BlockState state, Direction side) {
         NullableDirection face = state.getValue(PropertyHolder.NULLABLE_FACE);
         return face == NullableDirection.NONE || side != face.toDirection();
     }

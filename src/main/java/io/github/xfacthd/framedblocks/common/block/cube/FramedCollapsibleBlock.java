@@ -31,47 +31,36 @@ import org.jspecify.annotations.Nullable;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class FramedCollapsibleBlock extends FramedBlock
-{
+public class FramedCollapsibleBlock extends FramedBlock {
     private static final Map<Integer, VoxelShape> SHAPE_CACHE = new ConcurrentHashMap<>();
     private static final double MIN_DEPTH = Mth.EPSILON * 2D;
 
-    public FramedCollapsibleBlock(BlockType blockType, Properties props)
-    {
+    public FramedCollapsibleBlock(BlockType blockType, Properties props) {
         super(blockType, props.dynamicShape());
         registerDefaultState(defaultBlockState().setValue(PropertyHolder.ROTATE_SPLIT_LINE, false));
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
-    {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
         builder.add(PropertyHolder.NULLABLE_FACE, PropertyHolder.ROTATE_SPLIT_LINE);
     }
 
     @Override
-    @Nullable
-    public BlockState getStateForPlacement(BlockPlaceContext ctx)
-    {
+    public @Nullable BlockState getStateForPlacement(BlockPlaceContext ctx) {
         return PlacementStateBuilder.of(this, ctx).withWater().build();
     }
 
     @Override
-    public boolean handleBlockLeftClick(BlockState state, Level level, BlockPos pos, Player player)
-    {
+    public boolean handleBlockLeftClick(BlockState state, Level level, BlockPos pos, Player player) {
         ItemStack heldItem = player.getMainHandItem();
-        if (heldItem.getItem() == FBContent.ITEM_FRAMED_WRENCH.value())
-        {
+        if (heldItem.getItem() == FBContent.ITEM_FRAMED_WRENCH.value()) {
             boolean rotSplitLine = state.getValue(PropertyHolder.ROTATE_SPLIT_LINE);
             level.setBlockAndUpdate(pos, state.setValue(PropertyHolder.ROTATE_SPLIT_LINE, !rotSplitLine));
             return true;
-        }
-        else if (heldItem.getItem() == FBContent.ITEM_FRAMED_HAMMER.value())
-        {
-            if (level.getBlockEntity(pos) instanceof FramedCollapsibleBlockEntity be)
-            {
-                if (!level.isClientSide())
-                {
+        } else if (heldItem.getItem() == FBContent.ITEM_FRAMED_HAMMER.value()) {
+            if (level.getBlockEntity(pos) instanceof FramedCollapsibleBlockEntity be) {
+                if (!level.isClientSide()) {
                     be.handleDeform(player);
                 }
                 return true;
@@ -81,18 +70,14 @@ public class FramedCollapsibleBlock extends FramedBlock
     }
 
     @Override
-    protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext ctx)
-    {
-        if (isIntangible(state, level, pos, ctx))
-        {
+    protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext ctx) {
+        if (isIntangible(state, level, pos, ctx)) {
             return Shapes.empty();
         }
 
         NullableDirection face = state.getValue(PropertyHolder.NULLABLE_FACE);
-        if (face != NullableDirection.NONE)
-        {
-            if (level.getBlockEntity(pos) instanceof FramedCollapsibleBlockEntity be)
-            {
+        if (face != NullableDirection.NONE) {
+            if (level.getBlockEntity(pos) instanceof FramedCollapsibleBlockEntity be) {
                 int offsets = be.getPackedOffsets(state);
                 offsets |= (face.toDirection().get3DDataValue() << 20);
                 return SHAPE_CACHE.computeIfAbsent(offsets, FramedCollapsibleBlock::buildShape);
@@ -102,53 +87,44 @@ public class FramedCollapsibleBlock extends FramedBlock
     }
 
     @Override
-    protected VoxelShape getOcclusionShape(BlockState state)
-    {
+    protected VoxelShape getOcclusionShape(BlockState state) {
         return Shapes.empty();
     }
 
     @Override
-    protected BlockState rotate(BlockState state, Rotation rotation)
-    {
+    protected BlockState rotate(BlockState state, Rotation rotation) {
         NullableDirection collapsedFace = state.getValue(PropertyHolder.NULLABLE_FACE);
         return state.setValue(PropertyHolder.NULLABLE_FACE, collapsedFace.rotate(rotation));
     }
 
     @Override
-    public boolean doesBlockOccludeBeaconBeam(BlockState state, LevelReader level, BlockPos pos)
-    {
+    public boolean doesBlockOccludeBeaconBeam(BlockState state, LevelReader level, BlockPos pos) {
         NullableDirection face = state.getValue(PropertyHolder.NULLABLE_FACE);
         return face == NullableDirection.NONE || DirUtils.isY(face.toDirection());
     }
 
     @Override
-    public FramedBlockEntity newBlockEntity(BlockPos pos, BlockState state)
-    {
+    public FramedBlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return new FramedCollapsibleBlockEntity(pos, state);
     }
 
     @Override
-    public BlockState getItemModelSource()
-    {
+    public BlockState getItemModelSource() {
         return defaultBlockState();
     }
 
     @Override
-    @Nullable
-    public Direction getHorizontalOrientation(BlockState state)
-    {
+    public @Nullable Direction getHorizontalOrientation(BlockState state) {
         return null;
     }
 
     @Override
-    public BlockState getJadeRenderState(BlockState state)
-    {
+    public BlockState getJadeRenderState(BlockState state) {
         return state;
     }
 
     @SuppressWarnings("SuspiciousNameCombination")
-    private static VoxelShape buildShape(Integer packedData)
-    {
+    private static VoxelShape buildShape(Integer packedData) {
         Direction face = Direction.from3DDataValue(packedData >> 20);
         byte[] offsets = FramedCollapsibleBlockEntity.unpackOffsets(packedData & 0xFFFFF);
 
@@ -157,10 +133,8 @@ public class FramedCollapsibleBlock extends FramedBlock
         boolean flipZ = face != Direction.UP;
 
         VoxelShape result = Shapes.empty();
-        for (int x = 0; x < 4; x++)
-        {
-            for (int z = 0; z < 4; z++)
-            {
+        for (int x = 0; x < 4; x++) {
+            for (int z = 0; z < 4; z++) {
                 double x0 = flipX ? (1D - x / 4D) : (x / 4D);
                 double x1 = flipX ? (1D - (x + 1) / 4D) : ((x + 1) / 4D);
                 double z0 = flipZ ? (1D - z / 4D) : (z / 4D);
@@ -172,8 +146,7 @@ public class FramedCollapsibleBlock extends FramedBlock
                 double y = Math.min(y0, y1);
                 y = positive ? Math.max(16D - y, MIN_DEPTH) : Math.min(y, 16D - MIN_DEPTH);
 
-                VoxelShape shape = switch (face)
-                {
+                VoxelShape shape = switch (face) {
                     case NORTH -> box(x * 4, z * 4, y, (x + 1) * 4, (z + 1) * 4, 16);
                     case EAST -> box(0, z * 4, x * 4, y, (z + 1) * 4, (x + 1) * 4);
                     case SOUTH -> box(x * 4, z * 4, 0, (x + 1) * 4, (z + 1) * 4, y);

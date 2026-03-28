@@ -17,25 +17,20 @@ import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.Map;
 
-public final class CullingUpdateTracker
-{
+public final class CullingUpdateTracker {
     private static final Map<ResourceKey<Level>, Long2ObjectMap<LongSet>> UPDATED_POSITIONS = new Reference2ObjectOpenHashMap<>();
 
     // Send updates at the start of the next tick to ensure receipt after block update packet
-    public static void onServerLevelTick(LevelTickEvent.Pre event)
-    {
+    public static void onServerLevelTick(LevelTickEvent.Pre event) {
         Level level = event.getLevel();
-        if (level.isClientSide())
-        {
+        if (level.isClientSide()) {
             return;
         }
 
         ResourceKey<Level> dim = level.dimension();
         Long2ObjectMap<LongSet> chunks = UPDATED_POSITIONS.get(dim);
-        if (chunks != null && !chunks.isEmpty())
-        {
-            for (Long2ObjectMap.Entry<LongSet> entry : chunks.long2ObjectEntrySet())
-            {
+        if (chunks != null && !chunks.isEmpty()) {
+            for (Long2ObjectMap.Entry<LongSet> entry : chunks.long2ObjectEntrySet()) {
                 long chunk = entry.getLongKey();
                 PacketDistributor.sendToPlayersTrackingChunk(
                         (ServerLevel) level,
@@ -47,13 +42,11 @@ public final class CullingUpdateTracker
         }
     }
 
-    public static void onServerShutdown(@SuppressWarnings("unused") ServerStoppedEvent event)
-    {
+    public static void onServerShutdown(@SuppressWarnings("unused") ServerStoppedEvent event) {
         UPDATED_POSITIONS.clear();
     }
 
-    public static void enqueueCullingUpdate(Level level, BlockPos pos)
-    {
+    public static void enqueueCullingUpdate(Level level, BlockPos pos) {
         UPDATED_POSITIONS.computeIfAbsent(level.dimension(), _ -> new Long2ObjectOpenHashMap<>())
                 .computeIfAbsent(ChunkPos.pack(pos), _ -> new LongArraySet())
                 .add(pos.asLong());

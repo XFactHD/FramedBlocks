@@ -8,43 +8,33 @@ import java.util.IdentityHashMap;
 import java.util.Map;
 import java.util.function.BiConsumer;
 
-record MapBackedShapeContainer(Map<BlockState, VoxelShape> shapes) implements ShapeContainer
-{
-    MapBackedShapeContainer
-    {
-        if (!(shapes instanceof IdentityHashMap<BlockState, VoxelShape>))
-        {
+record MapBackedShapeContainer(Map<BlockState, VoxelShape> shapes) implements ShapeContainer {
+    MapBackedShapeContainer {
+        if (!(shapes instanceof IdentityHashMap<BlockState, VoxelShape>)) {
             shapes = new IdentityHashMap<>(shapes);
         }
     }
 
     @Override
-    public VoxelShape get(BlockState state)
-    {
+    public VoxelShape get(BlockState state) {
         return shapes.get(state);
     }
 
     @Override
-    public boolean isEmpty()
-    {
+    public boolean isEmpty() {
         return shapes.isEmpty();
     }
 
     @Override
-    public void forEach(BiConsumer<BlockState, VoxelShape> consumer)
-    {
+    public void forEach(BiConsumer<BlockState, VoxelShape> consumer) {
         shapes.forEach(consumer);
     }
 
-    @Nullable
-    static MapBackedShapeContainer unwrap(@Nullable ShapeContainer provider)
-    {
-        if (provider == null || provider.isEmpty())
-        {
+    static @Nullable MapBackedShapeContainer unwrap(@Nullable ShapeContainer provider) {
+        if (provider == null || provider.isEmpty()) {
             return null;
         }
-        if (provider instanceof MapBackedShapeContainer mapBacked)
-        {
+        if (provider instanceof MapBackedShapeContainer mapBacked) {
             return mapBacked;
         }
         throw new IllegalArgumentException("Expected MapBackedShapeProvider, got " + provider);

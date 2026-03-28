@@ -13,8 +13,7 @@ import net.minecraft.world.item.ItemStack;
 
 import java.util.List;
 
-public final class StateLockOverlay extends BlockInteractOverlay
-{
+public final class StateLockOverlay extends BlockInteractOverlay {
     public static final String LOCK_MESSAGE = Utils.translationKey("tooltip", "lock_state");
     private static final List<Component> LINES_FALSE = List.of(
             Component.translatable(LOCK_MESSAGE, ShapeLockableBlock.STATE_UNLOCKED)
@@ -27,26 +26,22 @@ public final class StateLockOverlay extends BlockInteractOverlay
     private static final Texture TEXTURE_FALSE = new Texture(SYMBOL_TEXTURE, 0, 0, 22, 22, 44, 22);
     private static final Texture TEXTURE_TRUE = new Texture(SYMBOL_TEXTURE, 22, 0, 22, 22, 44, 22);
 
-    public StateLockOverlay()
-    {
+    public StateLockOverlay() {
         super(LINES_FALSE, LINES_TRUE, TEXTURE_FALSE, TEXTURE_TRUE, ClientConfig.VIEW::getStateLockMode);
     }
 
     @Override
-    public boolean isValidTool(Player player, ItemStack stack)
-    {
+    public boolean isValidTool(Player player, ItemStack stack) {
         return stack.is(FBContent.ITEM_FRAMED_KEY.value());
     }
 
     @Override
-    public boolean isValidTarget(Target target)
-    {
+    public boolean isValidTarget(Target target) {
         return target.state().getBlock() instanceof ShapeLockableBlock;
     }
 
     @Override
-    public boolean getState(Target target)
-    {
+    public boolean getState(Target target) {
         return target.state().getValue(FramedProperties.STATE_LOCKED);
     }
 }

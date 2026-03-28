@@ -15,8 +15,7 @@ import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 
-public final class PrismCornerSlopePanelShapes implements ShapeGenerator
-{
+public final class PrismCornerSlopePanelShapes implements ShapeGenerator {
     public static final PrismCornerSlopePanelShapes SMALL_OUTER = new PrismCornerSlopePanelShapes(PrismCornerShape.SMALL_OUTER);
     public static final PrismCornerSlopePanelShapes LARGE_OUTER = new PrismCornerSlopePanelShapes(PrismCornerShape.LARGE_OUTER);
     public static final PrismCornerSlopePanelShapes SMALL_INNER = new PrismCornerSlopePanelShapes(PrismCornerShape.SMALL_INNER);
@@ -26,35 +25,32 @@ public final class PrismCornerSlopePanelShapes implements ShapeGenerator
 
     private final PrismCornerShape cornerShape;
 
-    private PrismCornerSlopePanelShapes(PrismCornerShape cornerShape)
-    {
+    private PrismCornerSlopePanelShapes(PrismCornerShape cornerShape) {
         this.cornerShape = cornerShape;
     }
 
     @Override
-    public ShapeContainer generatePrimary(List<BlockState> states)
-    {
+    public ShapeContainer generatePrimary(List<BlockState> states) {
         return generate(states, SHAPES);
     }
 
     @Override
-    public ShapeContainer generateOcclusion(List<BlockState> states)
-    {
+    public ShapeContainer generateOcclusion(List<BlockState> states) {
         return generate(states, OCCLUSION_SHAPES);
     }
 
-    private ShapeContainer generate(List<BlockState> states, ShapeCache<PrismCornerShape> cache)
-    {
+    private ShapeContainer generate(List<BlockState> states, ShapeCache<PrismCornerShape> cache) {
         VoxelShape baseShape = cache.get(cornerShape);
-        if (baseShape.isEmpty()) return ShapeContainer.EMPTY;
+        if (baseShape.isEmpty()) {
+            return ShapeContainer.EMPTY;
+        }
 
         Map<BlockState, VoxelShape> map = new IdentityHashMap<>(states.size());
 
         VoxelShape invBaseShape = ShapeUtils.mirrorShapeUnoptimizedAlongY(baseShape);
         VoxelShape[] shapes = ShapeUtils.makeHorizontalRotationsWithFlag(baseShape, invBaseShape, Direction.NORTH);
 
-        for (BlockState state : states)
-        {
+        for (BlockState state : states) {
             Direction dir = state.getValue(FramedProperties.FACING_HOR);
             boolean top = state.getValue(FramedProperties.TOP);
             map.put(state, shapes[dir.get2DDataValue() + (top ? 4 : 0)]);
@@ -63,10 +59,8 @@ public final class PrismCornerSlopePanelShapes implements ShapeGenerator
         return ShapeContainer.of(map);
     }
 
-    private static ShapeCache<PrismCornerShape> makeCache()
-    {
-        return ShapeCache.createEnum(PrismCornerShape.class, map ->
-        {
+    private static ShapeCache<PrismCornerShape> makeCache() {
+        return ShapeCache.createEnum(PrismCornerShape.class, map -> {
             map.put(PrismCornerShape.SMALL_OUTER, ShapeUtils.orUnoptimized(
                     Block.box(0, 0, 0, 4, 16, 4),
                     Block.box(0, 0, 0, 4,  8, 8),
@@ -96,10 +90,8 @@ public final class PrismCornerSlopePanelShapes implements ShapeGenerator
         });
     }
 
-    private static ShapeCache<PrismCornerShape> makeOcclusionCache()
-    {
-        return ShapeCache.createEnum(PrismCornerShape.class, map ->
-        {
+    private static ShapeCache<PrismCornerShape> makeOcclusionCache() {
+        return ShapeCache.createEnum(PrismCornerShape.class, map -> {
             map.put(PrismCornerShape.SMALL_OUTER, Shapes.empty());
             map.put(PrismCornerShape.LARGE_OUTER, ShapeUtils.orUnoptimized(
                     Block.box(0, 0, 0,  8, .5,  8),
@@ -121,8 +113,7 @@ public final class PrismCornerSlopePanelShapes implements ShapeGenerator
         });
     }
 
-    enum PrismCornerShape
-    {
+    enum PrismCornerShape {
         SMALL_OUTER,
         LARGE_OUTER,
         SMALL_INNER,

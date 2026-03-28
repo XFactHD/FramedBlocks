@@ -4,8 +4,7 @@ import com.mojang.math.Axis;
 import org.joml.Quaternionf;
 import org.joml.Quaternionfc;
 
-public final class Quaternions
-{
+public final class Quaternions {
     public static final Quaternionfc ONE = new Quaternionf();
 
     public static final Quaternionfc XP_90 = Axis.XP.rotationDegrees(90);

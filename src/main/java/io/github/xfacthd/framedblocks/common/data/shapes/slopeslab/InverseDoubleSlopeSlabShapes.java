@@ -14,8 +14,7 @@ import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 
-public final class InverseDoubleSlopeSlabShapes implements ShapeGenerator
-{
+public final class InverseDoubleSlopeSlabShapes implements ShapeGenerator {
     public static final InverseDoubleSlopeSlabShapes INSTANCE = new InverseDoubleSlopeSlabShapes();
     private static final ShapeCache<Direction> SHAPES = makeCache(SlopeSlabShapes.SHAPES);
     private static final ShapeCache<Direction> OCCLUSION_SHAPES = makeCache(SlopeSlabShapes.OCCLUSION_SHAPES);
@@ -23,23 +22,19 @@ public final class InverseDoubleSlopeSlabShapes implements ShapeGenerator
     private InverseDoubleSlopeSlabShapes() { }
 
     @Override
-    public ShapeContainer generatePrimary(List<BlockState> states)
-    {
+    public ShapeContainer generatePrimary(List<BlockState> states) {
         return generate(states, SHAPES);
     }
 
     @Override
-    public ShapeContainer generateOcclusion(List<BlockState> states)
-    {
+    public ShapeContainer generateOcclusion(List<BlockState> states) {
         return generate(states, OCCLUSION_SHAPES);
     }
 
-    private static ShapeContainer generate(List<BlockState> states, ShapeCache<Direction> cache)
-    {
+    private static ShapeContainer generate(List<BlockState> states, ShapeCache<Direction> cache) {
         Map<BlockState, VoxelShape> map = new IdentityHashMap<>(states.size());
 
-        for (BlockState state : states)
-        {
+        for (BlockState state : states) {
             Direction dir = state.getValue(FramedProperties.FACING_HOR);
             map.put(state, cache.get(dir));
         }
@@ -47,10 +42,8 @@ public final class InverseDoubleSlopeSlabShapes implements ShapeGenerator
         return ShapeContainer.of(map);
     }
 
-    private static ShapeCache<Direction> makeCache(ShapeCache<SlopeSlabShape> cache)
-    {
-        return ShapeCache.createEnum(Direction.class, map ->
-        {
+    private static ShapeCache<Direction> makeCache(ShapeCache<SlopeSlabShape> cache) {
+        return ShapeCache.createEnum(Direction.class, map -> {
             VoxelShape shape = ShapeUtils.orUnoptimized(
                     cache.get(SlopeSlabShape.BOTTOM_TOP_HALF),
                     ShapeUtils.rotateShapeUnoptimizedAroundY(

@@ -14,23 +14,19 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.neoforged.neoforge.model.data.ModelData;
 import org.jspecify.annotations.Nullable;
 
-public final class CollapsibleCopycatBlockGhostRenderBehaviour implements GhostRenderBehaviour
-{
+public final class CollapsibleCopycatBlockGhostRenderBehaviour implements GhostRenderBehaviour {
     @Override
-    @Nullable
-    public BlockState getRenderState(
+    public @Nullable BlockState getRenderState(
             ItemStack stack,
             @Nullable ItemStack proxiedStack,
             BlockHitResult hit,
             BlockPlaceContext ctx,
             BlockState hitState,
             int renderPass
-    )
-    {
+    ) {
         BlockState state = GhostRenderBehaviour.super.getRenderState(stack, proxiedStack, hit, ctx, hitState, renderPass);
         CollapsibleCopycatBlockData blockData = stack.get(FBContent.DC_TYPE_COLLAPSIBLE_COPYCAT_BLOCK_DATA);
-        if (state != null && blockData != null)
-        {
+        if (state != null && blockData != null) {
             Rotation rotation = state.getValue(PropertyHolder.COPYCAT_ROTATION);
             int solidFaces = FramedCollapsibleCopycatBlockEntity.computeSolidFaces(blockData.offsets(), rotation);
             state = state.setValue(PropertyHolder.SOLID_FACES, solidFaces);
@@ -46,11 +42,9 @@ public final class CollapsibleCopycatBlockGhostRenderBehaviour implements GhostR
             BlockState renderState,
             int renderPass,
             ModelData data
-    )
-    {
+    ) {
         CollapsibleCopycatBlockData blockData = stack.get(FBContent.DC_TYPE_COLLAPSIBLE_COPYCAT_BLOCK_DATA);
-        if (blockData != null)
-        {
+        if (blockData != null) {
             PackedCollapsibleBlockOffsets.Single offsets = new PackedCollapsibleBlockOffsets.Single(blockData.offsets());
             return data.derive().with(PackedCollapsibleBlockOffsets.PROPERTY, offsets).build();
         }

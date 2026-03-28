@@ -14,30 +14,24 @@ import net.minecraft.world.level.block.state.properties.Half;
 import net.minecraft.world.level.block.state.properties.StairsShape;
 import org.jspecify.annotations.Nullable;
 
-public class FramedStairsGeometry extends Geometry
-{
+public class FramedStairsGeometry extends Geometry {
     private final Direction dir;
     private final boolean top;
     private final StairsShape shape;
 
-    public FramedStairsGeometry(GeometryFactory.Context ctx)
-    {
+    public FramedStairsGeometry(GeometryFactory.Context ctx) {
         this.dir = ctx.state().getValue(BlockStateProperties.HORIZONTAL_FACING);
         this.top = ctx.state().getValue(BlockStateProperties.HALF) == Half.TOP;
         this.shape = ctx.state().getValue(BlockStateProperties.STAIRS_SHAPE);
     }
 
     @Override
-    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
-    {
+    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData) {
         Direction quadDir = quad.direction();
-        if ((top && quadDir == Direction.DOWN) || (!top && quadDir == Direction.UP))
-        {
+        if ((top && quadDir == Direction.DOWN) || (!top && quadDir == Direction.UP)) {
             createCenterQuads(quadMap, quad);
             createTopBottomQuads(quadMap, quadDir, quad);
-        }
-        else if (!DirUtils.isY(quadDir))
-        {
+        } else if (!DirUtils.isY(quadDir)) {
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(top ? Direction.DOWN : Direction.UP, .5F))
                     .export(quadMap, quadDir);
@@ -46,18 +40,15 @@ public class FramedStairsGeometry extends Geometry
         }
     }
 
-    private void createCenterQuads(QuadMapBuilder quadMap, BakedQuad quad)
-    {
-        if (shape == StairsShape.STRAIGHT || shape == StairsShape.OUTER_LEFT || shape == StairsShape.OUTER_RIGHT)
-        {
+    private void createCenterQuads(QuadMapBuilder quadMap, BakedQuad quad) {
+        if (shape == StairsShape.STRAIGHT || shape == StairsShape.OUTER_LEFT || shape == StairsShape.OUTER_RIGHT) {
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(dir, .5F))
                     .apply(Modifiers.setPosition(.5F))
                     .export(quadMap, null);
         }
 
-        if (shape != StairsShape.STRAIGHT)
-        {
+        if (shape != StairsShape.STRAIGHT) {
             boolean opposite = shape == StairsShape.OUTER_LEFT || shape == StairsShape.OUTER_RIGHT;
             boolean left = shape == StairsShape.OUTER_LEFT || shape == StairsShape.INNER_LEFT;
 
@@ -69,17 +60,14 @@ public class FramedStairsGeometry extends Geometry
         }
     }
 
-    private void createTopBottomQuads(QuadMapBuilder quadMap, Direction quadDir, BakedQuad quad)
-    {
-        if (shape == StairsShape.STRAIGHT || shape == StairsShape.INNER_LEFT || shape == StairsShape.INNER_RIGHT)
-        {
+    private void createTopBottomQuads(QuadMapBuilder quadMap, Direction quadDir, BakedQuad quad) {
+        if (shape == StairsShape.STRAIGHT || shape == StairsShape.INNER_LEFT || shape == StairsShape.INNER_RIGHT) {
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(dir.getOpposite(), .5F))
                     .export(quadMap, quadDir);
         }
 
-        if (shape != StairsShape.STRAIGHT)
-        {
+        if (shape != StairsShape.STRAIGHT) {
             boolean outer = shape == StairsShape.OUTER_LEFT || shape == StairsShape.OUTER_RIGHT;
             boolean left = shape == StairsShape.OUTER_LEFT || shape == StairsShape.INNER_LEFT;
 
@@ -90,14 +78,12 @@ public class FramedStairsGeometry extends Geometry
         }
     }
 
-    private void createSideQuads(QuadMapBuilder quadMap, BakedQuad quad, Direction quadDir)
-    {
+    private void createSideQuads(QuadMapBuilder quadMap, BakedQuad quad, Direction quadDir) {
         boolean inner = shape == StairsShape.INNER_LEFT || shape == StairsShape.INNER_RIGHT;
         boolean left = shape == StairsShape.OUTER_LEFT || shape == StairsShape.INNER_LEFT;
         Direction vertEdge = top ? Direction.UP : Direction.DOWN;
 
-        if (quadDir == dir.getOpposite())
-        {
+        if (quadDir == dir.getOpposite()) {
             Direction cutDir = left != inner ? dir.getClockWise() : dir.getCounterClockWise();
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(vertEdge, .5F))
@@ -105,31 +91,25 @@ public class FramedStairsGeometry extends Geometry
                     .apply(Modifiers.setPosition(.5F))
                     .export(quadMap, null);
 
-            if (inner)
-            {
+            if (inner) {
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(vertEdge, .5F))
                         .apply(Modifiers.cut(left ? dir.getClockWise() : dir.getCounterClockWise(), .5F))
                         .export(quadMap, quadDir);
             }
-        }
-        else if (quadDir == dir && !inner)
-        {
+        } else if (quadDir == dir && !inner) {
             Direction cutDir = left ? dir.getClockWise() : dir.getCounterClockWise();
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(vertEdge, .5F))
                     .apply(Modifiers.cut(cutDir, .5F))
                     .export(quadMap, quadDir);
-        }
-        else if (quadDir.getAxis() != dir.getAxis())
-        {
+        } else if (quadDir.getAxis() != dir.getAxis()) {
             boolean outerLeft = shape == StairsShape.OUTER_LEFT && quadDir == dir.getClockWise();
             boolean outerRight = shape == StairsShape.OUTER_RIGHT && quadDir == dir.getCounterClockWise();
             boolean innerLeft = shape == StairsShape.INNER_LEFT && quadDir == dir.getClockWise();
             boolean innerRight = shape == StairsShape.INNER_RIGHT && quadDir == dir.getCounterClockWise();
 
-            if (shape == StairsShape.STRAIGHT || !inner || innerLeft || innerRight)
-            {
+            if (shape == StairsShape.STRAIGHT || !inner || innerLeft || innerRight) {
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(vertEdge, .5F))
                         .apply(Modifiers.cut(dir.getOpposite(), .5F))
@@ -137,8 +117,7 @@ public class FramedStairsGeometry extends Geometry
                         .export(quadMap, outerLeft || outerRight ? null : quadDir);
             }
 
-            if (innerLeft || innerRight)
-            {
+            if (innerLeft || innerRight) {
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(vertEdge, .5F))
                         .apply(Modifiers.cut(dir, .5F))

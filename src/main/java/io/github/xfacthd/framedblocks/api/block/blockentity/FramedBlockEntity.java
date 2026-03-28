@@ -77,8 +77,7 @@ import java.util.Optional;
 import java.util.function.Consumer;
 
 @SuppressWarnings("deprecation")
-public non-sealed class FramedBlockEntity extends BlockEntity implements IFramedBlockEntity
-{
+public non-sealed class FramedBlockEntity extends BlockEntity implements IFramedBlockEntity {
     private static final Logger LOGGER = LogUtils.getLogger();
     public static final String CAMO_NBT_KEY = "camo";
     public static final String CAMO_DIR_NBT_KEY = "camo_dir";
@@ -110,64 +109,51 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
     private boolean forceLightUpdate = false;
     private boolean cullStateDirty = false;
 
-    public FramedBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
-    {
+    public FramedBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
         this.stateCache = state.framedblocks$getCache();
     }
 
     @Override
-    public final InteractionResult handleInteraction(Player player, InteractionHand hand, BlockHitResult hit)
-    {
+    public final InteractionResult handleInteraction(Player player, InteractionHand hand, BlockHitResult hit) {
         ItemStack stack = player.getItemInHand(hand);
         boolean secondary = hitSecondary(hit, player);
         CamoContainer<?, ?> camo = getCamo(secondary);
 
-        if (camo.isEmpty())
-        {
+        if (camo.isEmpty()) {
             CamoApplicator applicator;
-            if ((applicator = stack.getCapability(CamoApplicator.CAPABILITY)) != null)
-            {
+            if ((applicator = stack.getCapability(CamoApplicator.CAPABILITY)) != null) {
                 boolean success = applicator.apply(this, player, hand, makeApplicatorCamoHandler(player, secondary), this::tryApplyModifierFromApplicator);
                 // Return fail to fully consume the interaction, preventing any UIs from opening to ensure ability to quickly apply camos to lots of blocks
                 return success ? InteractionResult.SUCCESS : InteractionResult.FAIL;
             }
 
             CamoContainerFactory<?> camoFactory;
-            if ((camoFactory = CamoContainerHelper.findCamoFactory(stack)) != null)
-            {
+            if ((camoFactory = CamoContainerHelper.findCamoFactory(stack)) != null) {
                 return setCamo(player, ItemAccess.forPlayerInteraction(player, hand), camoFactory, secondary);
             }
-        }
-        else
-        {
-            if (CamoContainerHelper.isValidRemovalTool(camo, stack))
-            {
+        } else {
+            if (CamoContainerHelper.isValidRemovalTool(camo, stack)) {
                 return clearCamo(player, ItemAccess.forPlayerInteraction(player, hand), camo, secondary);
             }
-            if (!player.isShiftKeyDown() && Utils.isConfigurationTool(stack))
-            {
+            if (!player.isShiftKeyDown() && Utils.isConfigurationTool(stack)) {
                 return rotateCamo(camo, secondary);
             }
         }
 
         InteractionResult applyResult = tryApplyModifier(ItemAccess.forPlayerInteraction(player, hand));
-        if (applyResult != InteractionResult.PASS)
-        {
+        if (applyResult != InteractionResult.PASS) {
             return applyResult;
         }
 
         InteractionResult removeResult = tryRemoveModifier(player, stack, hand);
-        if (removeResult != InteractionResult.PASS)
-        {
+        if (removeResult != InteractionResult.PASS) {
             return removeResult;
         }
 
         CamoContainer<?, ?> newCamo = CamoContainerHelper.handleCamoInteraction(level(), worldPosition, player, camo, stack, hand);
-        if (camo != newCamo)
-        {
-            if (!level().isClientSide())
-            {
+        if (camo != newCamo) {
+            if (!level().isClientSide()) {
                 setCamo(newCamo, secondary);
             }
             return InteractionResult.SUCCESS;
@@ -178,59 +164,48 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
 
     @Override
     @ApiStatus.Internal
-    public final void tryApplyCamoImmediately(Player player)
-    {
+    public final void tryApplyCamoImmediately(Player player) {
         ItemStack stack = player.getItemInHand(InteractionHand.OFF_HAND);
-        if (stack.isEmpty()) return;
+        if (stack.isEmpty()) {
+            return;
+        }
 
         CamoApplicator applicator = stack.getCapability(CamoApplicator.CAPABILITY);
-        if (applicator != null)
-        {
+        if (applicator != null) {
             applicator.apply(this, player, InteractionHand.OFF_HAND, makeApplicatorCamoHandler(player, false), this::tryApplyModifierFromApplicator);
             return;
         }
 
         CamoContainerFactory<?> factory = CamoContainerHelper.findCamoFactory(stack);
-        if (factory != null)
-        {
-            if (canAutoApplyCamoOnPlacement() && camoContainer.isEmpty())
-            {
+        if (factory != null) {
+            if (canAutoApplyCamoOnPlacement() && camoContainer.isEmpty()) {
                 setCamo(player, ItemAccess.forPlayerInteraction(player, InteractionHand.OFF_HAND), factory, false);
             }
-        }
-        else
-        {
+        } else {
             tryApplyModifier(ItemAccess.forPlayerInteraction(player, InteractionHand.OFF_HAND));
         }
     }
 
-    private CamoApplicator.CamoHandler makeApplicatorCamoHandler(Player player, boolean secondary)
-    {
+    private CamoApplicator.CamoHandler makeApplicatorCamoHandler(Player player, boolean secondary) {
         return (factory, itemAccess) -> setCamo(player, itemAccess, factory, secondary) == InteractionResult.SUCCESS;
     }
 
-    private boolean tryApplyModifierFromApplicator(ItemAccess itemAccess)
-    {
+    private boolean tryApplyModifierFromApplicator(ItemAccess itemAccess) {
         return tryApplyModifier(itemAccess) == InteractionResult.SUCCESS;
     }
 
-    private InteractionResult tryApplyModifier(ItemAccess itemAccess)
-    {
+    private InteractionResult tryApplyModifier(ItemAccess itemAccess) {
         ItemResource resource = itemAccess.getResource();
-        if (!glowing && FrameModifier.GLOWING.matches(resource))
-        {
+        if (!glowing && FrameModifier.GLOWING.matches(resource)) {
             return applyGlowstone(itemAccess);
         }
-        if (!intangible && canMakeIntangible(resource))
-        {
+        if (!intangible && canMakeIntangible(resource)) {
             return applyIntangibility(itemAccess);
         }
-        if (!reinforced && FrameModifier.REINFORCED.matches(resource))
-        {
+        if (!reinforced && FrameModifier.REINFORCED.matches(resource)) {
             return applyReinforcement(itemAccess);
         }
-        if (!emissive && FrameModifier.EMISSIVE.matches(resource))
-        {
+        if (!emissive && FrameModifier.EMISSIVE.matches(resource)) {
             return applyEmissivity(itemAccess);
         }
         return InteractionResult.PASS;
@@ -238,41 +213,32 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
 
     private InteractionResult tryRemoveModifier(Player player, ItemStack stack, InteractionHand hand)
     {
-        if (stack.is(Items.BRUSH))
-        {
+        if (stack.is(Items.BRUSH)) {
             return glowing ? removeGlowstone(player) : InteractionResult.FAIL;
         }
-        if (player.isShiftKeyDown() && Utils.isConfigurationTool(stack))
-        {
+        if (player.isShiftKeyDown() && Utils.isConfigurationTool(stack)) {
             return intangible ? removeIntangibility(player) : InteractionResult.FAIL;
         }
-        if (stack.isCorrectToolForDrops(Blocks.OBSIDIAN.defaultBlockState()))
-        {
+        if (stack.isCorrectToolForDrops(Blocks.OBSIDIAN.defaultBlockState())) {
             return reinforced ? removeReinforcement(player, stack, hand) : InteractionResult.FAIL;
         }
-        if (stack.canPerformAction(ItemAbilities.AXE_SCRAPE))
-        {
+        if (stack.canPerformAction(ItemAbilities.AXE_SCRAPE)) {
             return emissive ? removeEmissivity(player) : InteractionResult.FAIL;
         }
         return InteractionResult.PASS;
     }
 
-    private boolean canMakeIntangible(ItemResource resource)
-    {
-        if (!ConfigView.Server.INSTANCE.enableIntangibility())
-        {
+    private boolean canMakeIntangible(ItemResource resource) {
+        if (!ConfigView.Server.INSTANCE.enableIntangibility()) {
             return false;
         }
         return FrameModifier.INTANGIBLE.matches(resource) && getBlockType().allowMakingIntangible();
     }
 
-    private InteractionResult setCamo(Player player, ItemAccess itemAccess, CamoContainerFactory<?> factory, boolean secondary)
-    {
+    private InteractionResult setCamo(Player player, ItemAccess itemAccess, CamoContainerFactory<?> factory, boolean secondary) {
         CamoContainer<?, ?> camo = factory.applyCamo(level(), worldPosition, player, itemAccess);
-        if (camo != null)
-        {
-            if (!level().isClientSide())
-            {
+        if (camo != null) {
+            if (!level().isClientSide()) {
                 setCamo(camo, secondary);
             }
             return InteractionResult.SUCCESS;
@@ -281,12 +247,9 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
         return CONSUME_CAMO_FAILED;
     }
 
-    private InteractionResult clearCamo(Player player, ItemAccess itemAccess, CamoContainer<?, ?> camo, boolean secondary)
-    {
-        if (CamoContainerHelper.removeCamo(camo, level(), worldPosition, player, itemAccess))
-        {
-            if (!level().isClientSide())
-            {
+    private InteractionResult clearCamo(Player player, ItemAccess itemAccess, CamoContainer<?, ?> camo, boolean secondary) {
+        if (CamoContainerHelper.removeCamo(camo, level(), worldPosition, player, itemAccess)) {
+            if (!level().isClientSide()) {
                 setCamo(EmptyCamoContainer.EMPTY, secondary);
             }
             return InteractionResult.SUCCESS;
@@ -295,12 +258,9 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
         return CONSUME_CAMO_FAILED;
     }
 
-    private InteractionResult rotateCamo(CamoContainer<?, ?> camo, boolean secondary)
-    {
-        if (camo.canRotateCamo())
-        {
-            if (!level().isClientSide())
-            {
+    private InteractionResult rotateCamo(CamoContainer<?, ?> camo, boolean secondary) {
+        if (camo.canRotateCamo()) {
+            if (!level().isClientSide()) {
                 CamoContainer<?, ?> newCamo = camo.rotateCamo();
                 Objects.requireNonNull(newCamo, "CamoContainer#rotateCamo() must not return null if CamoContainer#canRotateCamo() returns true");
                 setCamo(newCamo, secondary);
@@ -310,23 +270,18 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
         return InteractionResult.FAIL;
     }
 
-    private InteractionResult applyGlowstone(ItemAccess itemAccess)
-    {
-        if (!Utils.extractOneFromItemAccess(itemAccess, !level().isClientSide()))
-        {
+    private InteractionResult applyGlowstone(ItemAccess itemAccess) {
+        if (!Utils.extractOneFromItemAccess(itemAccess, !level().isClientSide())) {
             return InteractionResult.FAIL;
         }
-        if (!level().isClientSide())
-        {
+        if (!level().isClientSide()) {
             setGlowing(true);
         }
         return InteractionResult.SUCCESS;
     }
 
-    private InteractionResult removeGlowstone(Player player)
-    {
-        if (!level().isClientSide())
-        {
+    private InteractionResult removeGlowstone(Player player) {
+        if (!level().isClientSide()) {
             setGlowing(false);
 
             Utils.giveToPlayer(player, FrameModifier.GLOWING.getDefaultStack(), true);
@@ -334,23 +289,18 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
         return InteractionResult.SUCCESS;
     }
 
-    private InteractionResult applyIntangibility(ItemAccess itemAccess)
-    {
-        if (!Utils.extractOneFromItemAccess(itemAccess, !level().isClientSide()))
-        {
+    private InteractionResult applyIntangibility(ItemAccess itemAccess) {
+        if (!Utils.extractOneFromItemAccess(itemAccess, !level().isClientSide())) {
             return InteractionResult.FAIL;
         }
-        if (!level().isClientSide())
-        {
+        if (!level().isClientSide()) {
             setIntangible(true);
         }
         return InteractionResult.SUCCESS;
     }
 
-    private InteractionResult removeIntangibility(Player player)
-    {
-        if (!level().isClientSide())
-        {
+    private InteractionResult removeIntangibility(Player player) {
+        if (!level().isClientSide()) {
             setIntangible(false);
 
             Utils.giveToPlayer(player, FrameModifier.INTANGIBLE.getDefaultStack(), true);
@@ -358,27 +308,21 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
         return InteractionResult.SUCCESS;
     }
 
-    private InteractionResult applyReinforcement(ItemAccess itemAccess)
-    {
-        if (!Utils.extractOneFromItemAccess(itemAccess, !level().isClientSide()))
-        {
+    private InteractionResult applyReinforcement(ItemAccess itemAccess) {
+        if (!Utils.extractOneFromItemAccess(itemAccess, !level().isClientSide())) {
             return InteractionResult.FAIL;
         }
-        if (!level().isClientSide())
-        {
+        if (!level().isClientSide()) {
             setReinforced(true);
         }
         return InteractionResult.SUCCESS;
     }
 
-    private InteractionResult removeReinforcement(Player player, ItemStack stack, InteractionHand hand)
-    {
-        if (!level().isClientSide())
-        {
+    private InteractionResult removeReinforcement(Player player, ItemStack stack, InteractionHand hand) {
+        if (!level().isClientSide()) {
             setReinforced(false);
 
-            if (!player.isCreative())
-            {
+            if (!player.isCreative()) {
                 stack.hurtAndBreak(1, player, hand.asEquipmentSlot());
             }
 
@@ -387,23 +331,18 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
         return InteractionResult.SUCCESS;
     }
 
-    private InteractionResult applyEmissivity(ItemAccess itemAccess)
-    {
-        if (!Utils.extractOneFromItemAccess(itemAccess, !level().isClientSide()))
-        {
+    private InteractionResult applyEmissivity(ItemAccess itemAccess) {
+        if (!Utils.extractOneFromItemAccess(itemAccess, !level().isClientSide())) {
             return InteractionResult.FAIL;
         }
-        if (!level().isClientSide())
-        {
+        if (!level().isClientSide()) {
             setEmissive(true);
         }
         return InteractionResult.SUCCESS;
     }
 
-    private InteractionResult removeEmissivity(Player player)
-    {
-        if (!level().isClientSide())
-        {
+    private InteractionResult removeEmissivity(Player player) {
+        if (!level().isClientSide()) {
             setEmissive(false);
 
             Utils.giveToPlayer(player, FrameModifier.EMISSIVE.getDefaultStack(), true);
@@ -416,8 +355,7 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
      * @param hit The result of the raycast against this block
      * @param player The player from which the raycast originated
      */
-    protected final boolean hitSecondary(BlockHitResult hit, Player player)
-    {
+    protected final boolean hitSecondary(BlockHitResult hit, Player player) {
         return hitSecondary(hit, player.getLookAngle(), player.getEyePosition());
     }
 
@@ -427,8 +365,7 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
      * @param lookVec The look vector used for the raycast (usually {@link Player#getLookAngle()})
      * @param eyePos The eye position from which the raycast originated (usually {@link Player#getEyePosition()})
      */
-    protected boolean hitSecondary(BlockHitResult hit, Vec3 lookVec, Vec3 eyePos)
-    {
+    protected boolean hitSecondary(BlockHitResult hit, Vec3 lookVec, Vec3 eyePos) {
         return false;
     }
 
@@ -437,20 +374,17 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
      * on the given {@link BlockHitResult} and {@link Player}
      */
     @Override
-    public final void setCamo(CamoContainer<?, ?> camo, BlockHitResult hit, Player player)
-    {
+    public final void setCamo(CamoContainer<?, ?> camo, BlockHitResult hit, Player player) {
         setCamo(camo, hitSecondary(hit, player));
     }
 
     @Override
-    public final void setCamo(CamoContainer<?, ?> camo, boolean secondary)
-    {
+    public final void setCamo(CamoContainer<?, ?> camo, boolean secondary) {
         setCamo(camo, secondary, CamoOrientation.UNKNOWN);
     }
 
     @Override
-    public final void setCamo(CamoContainer<?, ?> camo, boolean secondary, CamoOrientation orientation)
-    {
+    public final void setCamo(CamoContainer<?, ?> camo, boolean secondary, CamoOrientation orientation) {
         int light = getLightValue();
 
         boolean forceOrientation = orientation != CamoOrientation.UNKNOWN;
@@ -458,35 +392,33 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
         setCamoInternal(camo, secondary, camoOrientation, forceOrientation);
 
         setChangedWithoutSignalUpdate();
-        if (getLightValue() != light)
-        {
+        if (getLightValue() != light) {
             doLightUpdate();
         }
 
-        if (!updateDynamicStates(true, true, true))
-        {
+        if (!updateDynamicStates(true, true, true)) {
             level().sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
         }
     }
 
-    void setCamoNoUpdate(CamoContainer<?, ?> camo, boolean secondary)
-    {
+    void setCamoNoUpdate(CamoContainer<?, ?> camo, boolean secondary) {
         camoContainer = camo;
     }
 
-    void setCamoInternal(CamoContainer<?, ?> camo, boolean secondary, @Nullable Direction orientation, boolean forceOrientation)
-    {
+    void setCamoInternal(CamoContainer<?, ?> camo, boolean secondary, @Nullable Direction orientation, boolean forceOrientation) {
         camoOrientation = updateOrientation(camo, orientation, false, forceOrientation);
         camoContainer = camo;
     }
 
-    @Nullable
-    Direction updateOrientation(CamoContainer<?, ?> newCamo, @Nullable Direction newDir, boolean second, boolean force)
-    {
-        if (newCamo.isEmpty()) return null;
+    @Nullable Direction updateOrientation(CamoContainer<?, ?> newCamo, @Nullable Direction newDir, boolean second, boolean force) {
+        if (newCamo.isEmpty()) {
+            return null;
+        }
 
         CamoContainer<?, ?> oldCamo = getCamo(second);
-        if (oldCamo.isEmpty() || force) return newDir;
+        if (oldCamo.isEmpty() || force) {
+            return newDir;
+        }
 
         // Keep previous orientation
         return getCamoOrientation(second);
@@ -497,8 +429,7 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
      * with the same underlying shape(s) don't use the same side to return the camo for a given "sub-state".
      */
     @Override
-    public CamoContainer<?, ?> getCamo(BlockState state)
-    {
+    public CamoContainer<?, ?> getCamo(BlockState state) {
         return camoContainer;
     }
 
@@ -506,8 +437,7 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
      * Returns the camo for the given edge of the given side or for the full face if a null edge is provided
      */
     @Override
-    public CamoContainer<?, ?> getCamo(Direction side, @Nullable Direction edge)
-    {
+    public CamoContainer<?, ?> getCamo(Direction side, @Nullable Direction edge) {
         return camoContainer;
     }
 
@@ -517,8 +447,7 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
      * @param player The player from which the raycast originated
      */
     @Override
-    public final CamoContainer<?, ?> getCamo(BlockHitResult hit, Player player)
-    {
+    public final CamoContainer<?, ?> getCamo(BlockHitResult hit, Player player) {
         return getCamo(hitSecondary(hit, player));
     }
 
@@ -529,13 +458,11 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
      * @param eyePos The eye position from which the raycast originated (usually {@link Player#getEyePosition()})
      */
     @Override
-    public final CamoContainer<?, ?> getCamo(BlockHitResult hit, Vec3 lookVec, Vec3 eyePos)
-    {
+    public final CamoContainer<?, ?> getCamo(BlockHitResult hit, Vec3 lookVec, Vec3 eyePos) {
         return getCamo(hitSecondary(hit, lookVec, eyePos));
     }
 
-    CamoContainer<?, ?> getCamo(boolean secondary)
-    {
+    CamoContainer<?, ?> getCamo(boolean secondary) {
         return camoContainer;
     }
 
@@ -545,118 +472,95 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
      * @param secondary Whether the orientation of the first or second camo should be returned
      */
     @Override
-    @Nullable
-    public Direction getCamoOrientation(boolean secondary)
-    {
+    public @Nullable Direction getCamoOrientation(boolean secondary) {
         return camoOrientation;
     }
 
     @Override
-    public final CamoContainer<?, ?> getCamo()
-    {
+    public final CamoContainer<?, ?> getCamo() {
         return camoContainer;
     }
 
-    protected boolean isCamoSolid()
-    {
+    protected boolean isCamoSolid() {
         return camoContainer.getContent().isSolid();
     }
 
-    protected boolean doesCamoPropagateSkylightDown()
-    {
+    protected boolean doesCamoPropagateSkylightDown() {
         return camoContainer.getContent().propagatesSkylightDown();
     }
 
-    protected final boolean updateDynamicStates(boolean updateSolid, boolean updateLight, boolean updateSkylight)
-    {
+    protected final boolean updateDynamicStates(boolean updateSolid, boolean updateLight, boolean updateSkylight) {
         BlockState state = getBlockState();
         boolean changed = false;
 
-        if (updateSolid && getBlock().getBlockType().canOccludeWithSolidCamo())
-        {
+        if (updateSolid && getBlock().getBlockType().canOccludeWithSolidCamo()) {
             boolean wasSolid = getBlockState().getValue(FramedProperties.SOLID);
             boolean solid = !intangible && isCamoSolid();
 
-            if (solid != wasSolid)
-            {
+            if (solid != wasSolid) {
                 state = state.setValue(FramedProperties.SOLID, solid);
                 changed = true;
             }
         }
 
-        if (updateLight)
-        {
+        if (updateLight) {
             boolean isGlowing = getLightValue() > 0;
 
-            if (isGlowing != state.getValue(FramedProperties.GLOWING))
-            {
+            if (isGlowing != state.getValue(FramedProperties.GLOWING)) {
                 state = state.setValue(FramedProperties.GLOWING, isGlowing);
                 changed = true;
             }
         }
 
-        if (updateSkylight)
-        {
+        if (updateSkylight) {
             boolean propagatesSkylight = doesCamoPropagateSkylightDown();
 
-            if (propagatesSkylight != state.getValue(FramedProperties.PROPAGATES_SKYLIGHT))
-            {
+            if (propagatesSkylight != state.getValue(FramedProperties.PROPAGATES_SKYLIGHT)) {
                 state = state.setValue(FramedProperties.PROPAGATES_SKYLIGHT, propagatesSkylight);
                 changed = true;
             }
         }
 
-        if (changed)
-        {
+        if (changed) {
             level().setBlock(worldPosition, state, Block.UPDATE_ALL);
         }
         return changed;
     }
 
-    void markCullStateDirty()
-    {
+    void markCullStateDirty() {
         cullStateDirty = true;
     }
 
     @Override
-    public final void updateCulling(boolean neighbors, boolean rerender)
-    {
+    public final void updateCulling(boolean neighbors, boolean rerender) {
         boolean changed = false;
-        for (Direction dir : DIRECTIONS)
-        {
+        for (Direction dir : DIRECTIONS) {
             BlockState state = getBlockState();
             changed |= updateCulling(dir, state, false);
-            if (neighbors && level().getBlockEntity(worldPosition.relative(dir)) instanceof IFramedBlockEntity be)
-            {
+            if (neighbors && level().getBlockEntity(worldPosition.relative(dir)) instanceof IFramedBlockEntity be) {
                 be.unwrap().updateCulling(dir.getOpposite(), be.getBlockState(), true);
             }
         }
 
-        if (changed)
-        {
+        if (changed) {
             requestModelDataUpdate();
-            if (rerender)
-            {
+            if (rerender) {
                 level().sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
             }
         }
     }
 
-    boolean updateCulling(Direction side, BlockState state, boolean rerender)
-    {
+    boolean updateCulling(Direction side, BlockState state, boolean rerender) {
         return updateCulling(cullState, state, side, rerender);
     }
 
-    final boolean updateCulling(CullState culledFaces, BlockState testState, Direction side, boolean rerender)
-    {
+    final boolean updateCulling(CullState culledFaces, BlockState testState, Direction side, boolean rerender) {
         boolean wasHidden = culledFaces.get(side);
         boolean hidden = CullingHelper.isSideHidden(level(), worldPosition, testState, side);
-        if (wasHidden != hidden)
-        {
+        if (wasHidden != hidden) {
             culledFaces.set(side, hidden);
             requestModelDataUpdate();
-            if (rerender)
-            {
+            if (rerender) {
                 level().sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
             }
             return true;
@@ -665,70 +569,59 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
     }
 
     @Override
-    public float getCamoExplosionResistance(Explosion explosion)
-    {
+    public float getCamoExplosionResistance(Explosion explosion) {
         float camoRes = camoContainer.getContent().getExplosionResistance(level(), worldPosition, explosion);
-        if (reinforced)
-        {
+        if (reinforced) {
             camoRes = Math.max(camoRes, Blocks.OBSIDIAN.getExplosionResistance());
         }
         return camoRes;
     }
 
     @Override
-    public boolean isCamoFlammable(Direction face)
-    {
-        if (reinforced)
-        {
-            return false;
-        }
-        return camoContainer.isEmpty() || camoContainer.getContent().isFlammable(level(), worldPosition, face);
+    public boolean isCamoFlammable(Direction face) {
+        return !reinforced && (camoContainer.isEmpty() || camoContainer.getContent().isFlammable(level(), worldPosition, face));
     }
 
     @Override
-    public int getCamoFlammability(Direction face)
-    {
-        if (reinforced)
-        {
+    public int getCamoFlammability(Direction face) {
+        if (reinforced) {
             return 0;
         }
-        return camoContainer.isEmpty() ? -1 : camoContainer.getContent().getFlammability(level(), worldPosition, face);
+        if (camoContainer.isEmpty()) {
+            return -1;
+        }
+        return camoContainer.getContent().getFlammability(level(), worldPosition, face);
     }
 
     @Override
-    public int getCamoFireSpreadSpeed(Direction face)
-    {
-        if (reinforced)
-        {
+    public int getCamoFireSpreadSpeed(Direction face) {
+        if (reinforced) {
             return 0;
         }
-        return camoContainer.isEmpty() ? -1 : camoContainer.getContent().getFireSpreadSpeed(level(), worldPosition, face);
+        if (camoContainer.isEmpty()) {
+            return -1;
+        }
+        return camoContainer.getContent().getFireSpreadSpeed(level(), worldPosition, face);
     }
 
     @Override
-    public boolean isCamoIgnitedByLava(Direction face)
-    {
+    public boolean isCamoIgnitedByLava(Direction face) {
         return !reinforced && camoContainer.getContent().isIgnitedByLava(level(), worldPosition, face);
     }
 
     @Override
-    public boolean hasOverlay()
-    {
+    public boolean hasOverlay() {
         return overlay != null;
     }
 
     @Override
-    @Nullable
-    public Holder<BlockOverlay> getOverlay()
-    {
+    public @Nullable Holder<BlockOverlay> getOverlay() {
         return overlay;
     }
 
     @Override
-    public void setOverlay(@Nullable Holder<BlockOverlay> overlay)
-    {
-        if (overlay != this.overlay)
-        {
+    public void setOverlay(@Nullable Holder<BlockOverlay> overlay) {
+        if (overlay != this.overlay) {
             this.overlay = overlay;
             setChangedWithoutSignalUpdate();
             level().sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
@@ -736,48 +629,39 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
     }
 
     @Override
-    public final void setGlowing(boolean glowing)
-    {
-        if (this.glowing != glowing)
-        {
+    public final void setGlowing(boolean glowing) {
+        if (this.glowing != glowing) {
             int oldLight = getLightValue();
             this.glowing = glowing;
-            if (oldLight != getLightValue())
-            {
+            if (oldLight != getLightValue()) {
                 doLightUpdate();
             }
 
             setChangedWithoutSignalUpdate();
-            if (!updateDynamicStates(false, true, false))
-            {
+            if (!updateDynamicStates(false, true, false)) {
                 level().sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
             }
         }
     }
 
     @Override
-    public final boolean isGlowing()
-    {
+    public final boolean isGlowing() {
         return glowing;
     }
 
-    protected int getLightValue()
-    {
+    protected int getLightValue() {
         int baseLight = glowing ? ConfigView.Server.INSTANCE.getGlowstoneLightLevel() : 0;
         return Math.max(baseLight, camoContainer.getContent().getLightEmission());
     }
 
     @Override
-    public final void setIntangible(boolean intangible)
-    {
-        if (this.intangible != intangible)
-        {
+    public final void setIntangible(boolean intangible) {
+        if (this.intangible != intangible) {
             this.intangible = intangible;
 
             setChangedWithoutSignalUpdate();
 
-            if (!updateDynamicStates(true, false, false))
-            {
+            if (!updateDynamicStates(true, false, false)) {
                 level().sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
             }
         }
@@ -792,32 +676,25 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
      * @return whether this block is marked as intangible
      */
     @Override
-    public final boolean isMarkedIntangible()
-    {
+    public final boolean isMarkedIntangible() {
         return intangible;
     }
 
     @Override
-    public final boolean isIntangible(@Nullable CollisionContext ctx)
-    {
-        if (!ConfigView.Server.INSTANCE.enableIntangibility() || !intangible)
-        {
+    public final boolean isIntangible(@Nullable CollisionContext ctx) {
+        if (!ConfigView.Server.INSTANCE.enableIntangibility() || !intangible) {
             return false;
         }
 
-        if (ctx instanceof EntityCollisionContext ectx && ectx.getEntity() instanceof Player player)
-        {
+        if (ctx instanceof EntityCollisionContext ectx && ectx.getEntity() instanceof Player player) {
             ItemStack mainItem = player.getMainHandItem();
-            if (mainItem.isEmpty())
-            {
+            if (mainItem.isEmpty()) {
                 return true;
             }
-            if (mainItem.is(Utils.DISABLE_INTANGIBLE) || Utils.isWrenchRotationTool(mainItem) || Utils.isConfigurationTool(mainItem))
-            {
+            if (mainItem.is(Utils.DISABLE_INTANGIBLE) || Utils.isWrenchRotationTool(mainItem) || Utils.isConfigurationTool(mainItem)) {
                 return false;
             }
-            if (mainItem.getCapability(CamoApplicator.CAPABILITY) != null)
-            {
+            if (mainItem.getCapability(CamoApplicator.CAPABILITY) != null) {
                 return false;
             }
             return !isValidRemovalToolForAnyCamo(mainItem);
@@ -829,16 +706,13 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
     /**
      * {@return whether any of the camos applied to this block can be removed with the given item}
      */
-    protected boolean isValidRemovalToolForAnyCamo(ItemStack stack)
-    {
+    protected boolean isValidRemovalToolForAnyCamo(ItemStack stack) {
         return CamoContainerHelper.isValidRemovalTool(camoContainer, stack);
     }
 
     @Override
-    public final void setReinforced(boolean reinforced)
-    {
-        if (this.reinforced != reinforced)
-        {
+    public final void setReinforced(boolean reinforced) {
+        if (this.reinforced != reinforced) {
             this.reinforced = reinforced;
 
             level().sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
@@ -847,16 +721,13 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
     }
 
     @Override
-    public final boolean isReinforced()
-    {
+    public final boolean isReinforced() {
         return reinforced;
     }
 
     @Override
-    public final void setEmissive(boolean emissive)
-    {
-        if (this.emissive != emissive)
-        {
+    public final void setEmissive(boolean emissive) {
+        if (this.emissive != emissive) {
             this.emissive = emissive;
 
             level().sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
@@ -865,49 +736,40 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
     }
 
     @Override
-    public final boolean isEmissive()
-    {
+    public final boolean isEmissive() {
         return emissive;
     }
 
-    final void doLightUpdate()
-    {
+    final void doLightUpdate() {
         AuxiliaryLightManager lightManager = level().getAuxLightManager(worldPosition);
-        if (lightManager != null)
-        {
+        if (lightManager != null) {
             lightManager.setLightAt(worldPosition, getLightValue());
         }
     }
 
     @Override
-    public IFramedBlock getBlock()
-    {
+    public IFramedBlock getBlock() {
         return (IFramedBlock) getBlockState().getBlock();
     }
 
     @Override
-    public final IBlockType getBlockType()
-    {
+    public final IBlockType getBlockType() {
         return getBlock().getBlockType();
     }
 
-    public final Level level()
-    {
+    public final Level level() {
         return Objects.requireNonNull(level, "BlockEntity#level accessed before it was set");
     }
 
-    protected final void setChangedWithoutSignalUpdate()
-    {
+    protected final void setChangedWithoutSignalUpdate() {
         level().blockEntityChanged(worldPosition);
     }
 
-    protected StateCache getStateCache()
-    {
+    protected StateCache getStateCache() {
         return stateCache;
     }
 
-    protected boolean canAutoApplyCamoOnPlacement()
-    {
+    protected boolean canAutoApplyCamoOnPlacement() {
         return true;
     }
 
@@ -915,8 +777,7 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
      * {@return whether all camos applied to this block can be trivially converted to {@link ItemStack}s for dropping}
      */
     @Override
-    public boolean canTriviallyDropAllCamos()
-    {
+    public boolean canTriviallyDropAllCamos() {
         return camoContainer.canTriviallyConvertToItemStack();
     }
 
@@ -926,102 +787,79 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
      * @param dropCamo Whether the camo item should be dropped
      */
     @Override
-    public void addAdditionalDrops(Consumer<ItemStack> drops, boolean dropCamo)
-    {
-        if (dropCamo && canTriviallyDropAllCamos())
-        {
+    public void addAdditionalDrops(Consumer<ItemStack> drops, boolean dropCamo) {
+        if (dropCamo && canTriviallyDropAllCamos()) {
             addCamoDrops(drops);
         }
-        for (FrameModifier modifier : FrameModifier.MODIFIERS)
-        {
-            if (modifier.isActive(this))
-            {
+        for (FrameModifier modifier : FrameModifier.MODIFIERS) {
+            if (modifier.isActive(this)) {
                 drops.accept(modifier.getDefaultStack());
             }
         }
-        if (overlay != null)
-        {
+        if (overlay != null) {
             drops.accept(overlay.value().sourceItem().value().getDefaultInstance());
         }
     }
 
-    void addCamoDrops(Consumer<ItemStack> drops)
-    {
+    void addCamoDrops(Consumer<ItemStack> drops) {
         dropCamo(drops, camoContainer);
     }
 
-    static void dropCamo(Consumer<ItemStack> drops, CamoContainer<?, ?> camo)
-    {
-        if (!camo.isEmpty())
-        {
+    static void dropCamo(Consumer<ItemStack> drops, CamoContainer<?, ?> camo) {
+        if (!camo.isEmpty()) {
             ItemStack stack = CamoContainerHelper.dropCamo(camo);
-            if (!stack.isEmpty())
-            {
+            if (!stack.isEmpty()) {
                 drops.accept(stack);
             }
         }
     }
 
     @Override
-    @Nullable
-    public MapColor getMapColor()
-    {
+    public @Nullable MapColor getMapColor() {
         return camoContainer.getMapColor(level(), worldPosition);
     }
 
     @Override
-    @Nullable
-    public Integer getCamoBeaconColorMultiplier(LevelReader level, BlockPos pos, BlockPos beaconPos)
-    {
+    public @Nullable Integer getCamoBeaconColorMultiplier(LevelReader level, BlockPos pos, BlockPos beaconPos) {
         return camoContainer.getBeaconColorMultiplier(level, pos, beaconPos);
     }
 
     @Override
-    public boolean shouldCamoDisplayFluidOverlay(BlockAndLightGetter level, BlockPos pos, FluidState fluid)
-    {
+    public boolean shouldCamoDisplayFluidOverlay(BlockAndLightGetter level, BlockPos pos, FluidState fluid) {
         return camoContainer.getContent().shouldDisplayFluidOverlay(level, pos, fluid);
     }
 
     @Override
-    public float getCamoFriction(BlockState state, @Nullable Entity entity, float frameFriction)
-    {
+    public float getCamoFriction(BlockState state, @Nullable Entity entity, float frameFriction) {
         return camoContainer.getContent().getFriction(level(), worldPosition, entity, frameFriction);
     }
 
     @Override
-    public TriState canCamoSustainPlant(BlockGetter level, Direction side, BlockState plant)
-    {
+    public TriState canCamoSustainPlant(BlockGetter level, Direction side, BlockState plant) {
         return camoContainer.getContent().canSustainPlant(level, worldPosition, side, plant);
     }
 
     @Override
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    public boolean canEntityDestroyCamo(Entity entity)
-    {
-        if (reinforced && !Blocks.OBSIDIAN.defaultBlockState().canEntityDestroy(level(), worldPosition, entity))
-        {
+    public boolean canEntityDestroyCamo(Entity entity) {
+        if (reinforced && !Blocks.OBSIDIAN.defaultBlockState().canEntityDestroy(level(), worldPosition, entity)) {
             return false;
         }
         return camoContainer.getContent().canEntityDestroy(level(), worldPosition, entity);
     }
 
     @Override
-    public void onLoad()
-    {
+    public void onLoad() {
         onLoadInternal();
         super.onLoad();
     }
 
-    void onLoadInternal()
-    {
-        if (!level().isClientSide())
-        {
-            if (recheckStates)
-            {
+    void onLoadInternal() {
+        if (!level().isClientSide()) {
+            if (recheckStates) {
                 updateDynamicStates(true, true, true);
             }
-            if (forceLightUpdate)
-            {
+            if (forceLightUpdate) {
                 // Ensure blocks placed by exactly copying BlockState and BlockEntity correctly store their light emission
                 doLightUpdate();
             }
@@ -1029,19 +867,16 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
     }
 
     @Override
-    public void setBlockState(BlockState state)
-    {
+    public void setBlockState(BlockState state) {
         BlockState oldState = getBlockState();
         super.setBlockState(state);
         this.stateCache = state.framedblocks$getCache();
-        if (level != null && level.isClientSide() && needsModelDataUpdateAfterStateChange(oldState))
-        {
+        if (level != null && level.isClientSide() && needsModelDataUpdateAfterStateChange(oldState)) {
             requestModelDataUpdate();
         }
     }
 
-    protected boolean needsModelDataUpdateAfterStateChange(BlockState oldState)
-    {
+    protected boolean needsModelDataUpdateAfterStateChange(BlockState oldState) {
         IFramedBlock block = getBlock();
         Direction oldOrientation = block.getHorizontalOrientation(oldState);
         Direction newOrientation = block.getHorizontalOrientation(getBlockState());
@@ -1049,8 +884,7 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
     }
 
     @Override
-    public final FramedBlockEntity unwrap()
-    {
+    public final FramedBlockEntity unwrap() {
         return this;
     }
 
@@ -1059,58 +893,49 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
      */
 
     @Override
-    public final CompoundTag getUpdateTag(HolderLookup.Provider registries)
-    {
+    public final CompoundTag getUpdateTag(HolderLookup.Provider registries) {
         return appendUpdateTag(new CompoundTag(), registries);
     }
 
-    final CompoundTag appendUpdateTag(CompoundTag tag, HolderLookup.Provider registries)
-    {
+    final CompoundTag appendUpdateTag(CompoundTag tag, HolderLookup.Provider registries) {
         TagValueOutput valueOutput = new TagValueOutput(ProblemReporter.DISCARDING, registries.createSerializationContext(NbtOps.INSTANCE), tag);
         writeToDataPacket(valueOutput);
         return valueOutput.buildResult();
     }
 
     @Override
-    public final ClientboundBlockEntityDataPacket getUpdatePacket()
-    {
+    public final ClientboundBlockEntityDataPacket getUpdatePacket() {
         return ClientboundBlockEntityDataPacket.create(this);
     }
 
     @Override
-    public final void handleUpdateTag(ValueInput valueInput)
-    {
+    public final void handleUpdateTag(ValueInput valueInput) {
         NetworkValueInput.handleUpdateTag(this, valueInput);
     }
 
     @Override
-    public final void onDataPacket(Connection net, ValueInput valueInput)
-    {
+    public final void onDataPacket(Connection net, ValueInput valueInput) {
         NetworkValueInput.handleUpdatePacket(this, valueInput);
     }
 
-    protected void writeToDataPacket(ValueOutput valueOutput)
-    {
+    protected void writeToDataPacket(ValueOutput valueOutput) {
         CamoContainerHelper.writeToNetwork(valueOutput.child(CAMO_NBT_KEY), camoContainer);
         valueOutput.storeNullable(CAMO_DIR_NBT_KEY, FramedCodecs.DIRECTION_BY_INT, camoOrientation);
         valueOutput.storeNullable(OVERLAY_NBT_KEY, BlockOverlay.CODEC, overlay);
         valueOutput.putByte("flags", writeFlags());
     }
 
-    protected void readFromDataPacket(NetworkValueInput input)
-    {
+    protected void readFromDataPacket(NetworkValueInput input) {
         camoContainer = input.readCamo(CAMO_NBT_KEY, false);
 
         Direction newOrientation = input.read(CAMO_DIR_NBT_KEY, FramedCodecs.DIRECTION_BY_INT).orElse(null);
-        if (newOrientation != camoOrientation)
-        {
+        if (newOrientation != camoOrientation) {
             camoOrientation = newOrientation;
             input.requestRenderUpdate();
         }
 
         Holder<BlockOverlay> newOverlay = input.read(OVERLAY_NBT_KEY, BlockOverlay.CODEC).orElse(null);
-        if (newOverlay != overlay)
-        {
+        if (newOverlay != overlay) {
             overlay = newOverlay;
             input.requestRenderUpdate();
         }
@@ -1118,38 +943,33 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
         byte flags = input.getByteOr("flags", (byte) 0);
 
         boolean newGlow = readFlag(flags, FLAG_GLOWING);
-        if (newGlow != glowing)
-        {
+        if (newGlow != glowing) {
             glowing = newGlow;
             input.requestRenderUpdate();
             input.requestLightUpdate();
         }
 
         boolean newIntangible = readFlag(flags, FLAG_INTANGIBLE);
-        if (newIntangible != intangible)
-        {
+        if (newIntangible != intangible) {
             intangible = newIntangible;
             input.requestRenderUpdate();
             input.requestCullingUpdate();
         }
 
         boolean newReinforced = readFlag(flags, FLAG_REINFORCED);
-        if (newReinforced != reinforced)
-        {
+        if (newReinforced != reinforced) {
             reinforced = newReinforced;
             input.requestRenderUpdate();
         }
 
         boolean newEmissive = readFlag(flags, FLAG_EMISSIVE);
-        if (newEmissive != emissive)
-        {
+        if (newEmissive != emissive) {
             emissive = newEmissive;
             input.requestRenderUpdate();
         }
     }
 
-    private byte writeFlags()
-    {
+    private byte writeFlags() {
         byte flags = 0;
         if (glowing) flags |= FLAG_GLOWING;
         if (intangible) flags |= FLAG_INTANGIBLE;
@@ -1158,8 +978,7 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
         return flags;
     }
 
-    protected static boolean readFlag(byte flags, int flag)
-    {
+    protected static boolean readFlag(byte flags, int flag) {
         return (flags & flag) != 0;
     }
 
@@ -1168,10 +987,8 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
      */
 
     @Override
-    public final ModelData getModelData()
-    {
-        if (cullStateDirty)
-        {
+    public final ModelData getModelData() {
+        if (cullStateDirty) {
             updateCulling(false, false);
             cullStateDirty = false;
         }
@@ -1183,8 +1000,7 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
      * @param state           The {@link BlockState} with which the model data is used for rendering (usually {@link #getBlockState()})
      */
     @Override
-    public final ModelData getModelData(boolean includeCullInfo, BlockState state)
-    {
+    public final ModelData getModelData(boolean includeCullInfo, BlockState state) {
         AbstractFramedBlockData modelData = computeBlockData(state, includeCullInfo, false);
         ModelData.Builder builder = ModelData.builder().with(AbstractFramedBlockData.PROPERTY, modelData);
         attachAdditionalModelData(builder);
@@ -1196,26 +1012,27 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
      * @param includeCullInfo Whether culling data should be included
      * @param cullNullFace    Whether "uncullable" faces should be culled
      */
-    AbstractFramedBlockData computeBlockData(BlockState state, boolean includeCullInfo, boolean cullNullFace)
-    {
+    AbstractFramedBlockData computeBlockData(BlockState state, boolean includeCullInfo, boolean cullNullFace) {
         return makeBlockData(state, camoContainer, cullState.computeMask(includeCullInfo, cullNullFace), false);
     }
 
-    final FramedBlockData makeBlockData(BlockState state, CamoContainer<?, ?> camo, byte cullMask, boolean secondPart)
-    {
+    final FramedBlockData makeBlockData(BlockState state, CamoContainer<?, ?> camo, byte cullMask, boolean secondPart) {
         // The view-blocking value is never resolved from the second part, no point in computing it twice
         TriState viewBlocking = secondPart ? TriState.DEFAULT : Utils.toTriState(state.isSuffocating(level(), worldPosition));
         CamoContainer<?, ?> adjustedCamo = adjustCamoOrientation(camo, state, secondPart);
         return new FramedBlockData(state, adjustedCamo, cullMask, secondPart, reinforced, emissive, viewBlocking, overlay);
     }
 
-    private CamoContainer<?, ?> adjustCamoOrientation(CamoContainer<?, ?> camo, BlockState state, boolean secondPart)
-    {
+    private CamoContainer<?, ?> adjustCamoOrientation(CamoContainer<?, ?> camo, BlockState state, boolean secondPart) {
         Direction camoOrientation = getCamoOrientation(secondPart);
-        if (camoOrientation == null) return camo;
+        if (camoOrientation == null) {
+            return camo;
+        }
 
         Direction blockOrientation = getBlock().getHorizontalOrientation(state);
-        if (blockOrientation == null) return camo;
+        if (blockOrientation == null) {
+            return camo;
+        }
 
         Rotation rotation = DirUtils.getRotationBetween(camoOrientation, blockOrientation);
         return camo.adjustForCarrierRotation(rotation);
@@ -1228,8 +1045,7 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
      */
 
     @Override
-    public final BlueprintData writeToBlueprint()
-    {
+    public final BlueprintData writeToBlueprint() {
         return appendCustomBlueprintData(new BlueprintData(
                 getBlockState().getBlock(),
                 collectCamosForBlueprint(),
@@ -1243,19 +1059,16 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
         ));
     }
 
-    CamoList collectCamosForBlueprint()
-    {
+    CamoList collectCamosForBlueprint() {
         return CamoList.of(camoContainer);
     }
 
-    protected BlueprintData appendCustomBlueprintData(BlueprintData blueprintData)
-    {
+    protected BlueprintData appendCustomBlueprintData(BlueprintData blueprintData) {
         return blueprintData;
     }
 
     @Override
-    public final void applyBlueprintData(BlueprintData blueprintData)
-    {
+    public final void applyBlueprintData(BlueprintData blueprintData) {
         applyCamosFromBlueprint(blueprintData);
         setOverlay(blueprintData.overlay().orElse(null));
         setGlowing(blueprintData.glowing());
@@ -1265,8 +1078,7 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
         blueprintData.customData().ifPresent(this::applyCustomDataFromBlueprint);
     }
 
-    void applyCamosFromBlueprint(BlueprintData blueprintData)
-    {
+    void applyCamosFromBlueprint(BlueprintData blueprintData) {
         setCamo(blueprintData.camos().getCamo(0), false);
     }
 
@@ -1290,29 +1102,25 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
     }
 
     @Override
-    protected final void collectImplicitComponents(DataComponentMap.Builder builder)
-    {
+    protected final void collectImplicitComponents(DataComponentMap.Builder builder) {
         collectCamoComponents(builder);
         collectMiscComponents(builder);
 
         FrameConfig.collect(builder, this);
 
-        if (overlay != null)
-        {
+        if (overlay != null) {
             builder.set(Utils.DC_TYPE_BLOCK_OVERLAY, overlay);
         }
     }
 
-    protected void collectCamoComponents(DataComponentMap.Builder builder)
-    {
+    protected void collectCamoComponents(DataComponentMap.Builder builder) {
         builder.set(Utils.DC_TYPE_CAMO_LIST, CamoList.of(camoContainer));
     }
 
     protected void collectMiscComponents(DataComponentMap.Builder builder) { }
 
     @Override
-    protected final void applyImplicitComponents(DataComponentGetter input)
-    {
+    protected final void applyImplicitComponents(DataComponentGetter input) {
         applyCamoComponents(input);
         applyMiscComponents(input);
 
@@ -1320,8 +1128,7 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
         overlay = input.get(Utils.DC_TYPE_BLOCK_OVERLAY);
     }
 
-    protected void applyCamoComponents(DataComponentGetter input)
-    {
+    protected void applyCamoComponents(DataComponentGetter input) {
         setCamo(input.getOrDefault(Utils.DC_TYPE_CAMO_LIST, CamoList.EMPTY).getCamo(0), false);
     }
 
@@ -1332,14 +1139,12 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
      */
 
     @Override
-    public void saveAdditional(ValueOutput valueOutput)
-    {
+    public void saveAdditional(ValueOutput valueOutput) {
         super.saveAdditional(valueOutput);
         saveAdditionalInternal(valueOutput);
     }
 
-    void saveAdditionalInternal(ValueOutput valueOutput)
-    {
+    void saveAdditionalInternal(ValueOutput valueOutput) {
         valueOutput.store(CAMO_NBT_KEY, CamoContainerHelper.CODEC, camoContainer);
         valueOutput.storeNullable(CAMO_DIR_NBT_KEY, Direction.CODEC, camoOrientation);
         valueOutput.storeNullable(OVERLAY_NBT_KEY, BlockOverlay.CODEC, overlay);
@@ -1351,14 +1156,12 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
     }
 
     @Override
-    public void loadAdditional(ValueInput valueInput)
-    {
+    public void loadAdditional(ValueInput valueInput) {
         super.loadAdditional(valueInput);
         loadAdditionalInternal(valueInput);
     }
 
-    void loadAdditionalInternal(ValueInput valueInput)
-    {
+    void loadAdditionalInternal(ValueInput valueInput) {
         camoContainer = loadAndValidateCamo(valueInput, CAMO_NBT_KEY);
         camoOrientation = valueInput.read(CAMO_DIR_NBT_KEY, Direction.CODEC).orElse(null);
         overlay = valueInput.read(OVERLAY_NBT_KEY, BlockOverlay.CODEC).orElse(null);
@@ -1374,11 +1177,9 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
         }
     }
 
-    final CamoContainer<?, ?> loadAndValidateCamo(ValueInput valueInput, String key)
-    {
+    final CamoContainer<?, ?> loadAndValidateCamo(ValueInput valueInput, String key) {
         CamoContainer<?, ?> camo = valueInput.read(key, CamoContainerHelper.CODEC).orElse(EmptyCamoContainer.EMPTY);
-        if (!CamoContainerHelper.validateCamo(camo))
-        {
+        if (!CamoContainerHelper.validateCamo(camo)) {
             recheckStates = true;
             LOGGER.warn(
                     "Framed Block of type \"{}\" at position {} contains an invalid camo of type \"{}\" containing \"{}\", removing camo! This might be caused by a config or tag change!",
@@ -1393,36 +1194,27 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
         return camo;
     }
 
-    static final class CullState
-    {
+    static final class CullState {
         private byte mask = 0;
 
-        private void set(Direction side, boolean occluded)
-        {
-            if (occluded)
-            {
+        private void set(Direction side, boolean occluded) {
+            if (occluded) {
                 mask |= (byte) (1 << side.ordinal());
-            }
-            else
-            {
+            } else {
                 mask &= (byte) ~(1 << side.ordinal());
             }
         }
 
-        private boolean get(Direction side)
-        {
+        private boolean get(Direction side) {
             return (mask & (1 << side.ordinal())) != 0;
         }
 
-        byte computeMask(boolean includeCullInfo, boolean cullNullFace)
-        {
+        byte computeMask(boolean includeCullInfo, boolean cullNullFace) {
             byte mask = 0;
-            if (includeCullInfo)
-            {
+            if (includeCullInfo) {
                 mask = this.mask;
             }
-            if (cullNullFace)
-            {
+            if (cullNullFace) {
                 mask |= 0b01000000;
             }
             return mask;

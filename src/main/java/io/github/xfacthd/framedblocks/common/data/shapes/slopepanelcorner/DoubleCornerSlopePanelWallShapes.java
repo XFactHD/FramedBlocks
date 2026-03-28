@@ -16,22 +16,18 @@ import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 
-public final class DoubleCornerSlopePanelWallShapes
-{
-    public static ShapeContainer generateSmall(List<BlockState> states)
-    {
+public final class DoubleCornerSlopePanelWallShapes {
+    public static ShapeContainer generateSmall(List<BlockState> states) {
         Map<BlockState, VoxelShape> map = new IdentityHashMap<>(states.size());
 
-        for (BlockState state : states)
-        {
+        for (BlockState state : states) {
             Direction dir = state.getValue(FramedProperties.FACING_HOR);
             HorizontalRotation rot = state.getValue(PropertyHolder.ROTATION);
-            CommonShapes.DirBoolKey key = switch (rot)
-            {
-                case UP ->    new CommonShapes.DirBoolKey(dir.getCounterClockWise(), true);
-                case DOWN ->  new CommonShapes.DirBoolKey(dir.getClockWise(), false);
+            CommonShapes.DirBoolKey key = switch (rot) {
+                case UP -> new CommonShapes.DirBoolKey(dir.getCounterClockWise(), true);
+                case DOWN -> new CommonShapes.DirBoolKey(dir.getClockWise(), false);
                 case RIGHT -> new CommonShapes.DirBoolKey(dir.getClockWise(), true);
-                case LEFT ->  new CommonShapes.DirBoolKey(dir.getCounterClockWise(), false);
+                case LEFT -> new CommonShapes.DirBoolKey(dir.getCounterClockWise(), false);
             };
             map.put(state, CommonShapes.SLAB_EDGE.get(key));
         }
@@ -39,19 +35,16 @@ public final class DoubleCornerSlopePanelWallShapes
         return ShapeContainer.of(map);
     }
 
-    public static ShapeContainer generateLarge(List<BlockState> states)
-    {
+    public static ShapeContainer generateLarge(List<BlockState> states) {
         Map<BlockState, VoxelShape> map = new IdentityHashMap<>(states.size());
 
         VoxelShape[] shapes = new VoxelShape[4 * 4];
-        for (HorizontalRotation rot : HorizontalRotation.values())
-        {
+        for (HorizontalRotation rot : HorizontalRotation.values()) {
             VoxelShape preShape = Shapes.joinUnoptimized(rot.getCornerShape(), Shapes.block(), BooleanOp.NOT_SAME);
             ShapeUtils.makeHorizontalRotations(preShape, Direction.NORTH, shapes, rot.ordinal() << 2);
         }
 
-        for (BlockState state : states)
-        {
+        for (BlockState state : states) {
             Direction dir = state.getValue(FramedProperties.FACING_HOR);
             HorizontalRotation rot = state.getValue(PropertyHolder.ROTATION);
             int idx = dir.get2DDataValue() | (rot.ordinal() << 2);

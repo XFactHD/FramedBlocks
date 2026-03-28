@@ -21,8 +21,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.Optional;
 
-public abstract class CamoContainerFactory<T extends CamoContainer<?, T>>
-{
+public abstract class CamoContainerFactory<T extends CamoContainer<?, T>> {
     public static final Component MSG_BLACKLISTED = Utils.translate("msg", "camo.blacklisted");
 
     /**
@@ -49,8 +48,7 @@ public abstract class CamoContainerFactory<T extends CamoContainer<?, T>>
      *
      * @return A new {@code CamoContainer} if successful, otherwise null
      */
-    @Nullable
-    public abstract T applyCamo(Level level, BlockPos pos, Player player, ItemAccess itemAccess);
+    public abstract @Nullable T applyCamo(Level level, BlockPos pos, Player player, ItemAccess itemAccess);
 
     /**
      * Remove the camo and refund the resources to the player. Must take
@@ -83,12 +81,11 @@ public abstract class CamoContainerFactory<T extends CamoContainer<?, T>>
     /**
      * Display a validation error message to the player if present and their verbosity setting allows it
      */
-    protected static void displayValidationMessage(@Nullable Player player, Component message, CamoMessageVerbosity verbosity)
-    {
-        if (player == null || !player.level().isClientSide()) return;
-
-        if (ConfigView.Client.INSTANCE.getCamoMessageVerbosity().isAtLeast(verbosity))
-        {
+    protected static void displayValidationMessage(@Nullable Player player, Component message, CamoMessageVerbosity verbosity) {
+        if (player == null || !player.level().isClientSide()) {
+            return;
+        }
+        if (ConfigView.Client.INSTANCE.getCamoMessageVerbosity().isAtLeast(verbosity)) {
             player.sendOverlayMessage(message);
         }
     }
@@ -106,8 +103,7 @@ public abstract class CamoContainerFactory<T extends CamoContainer<?, T>>
      *
      * @return a new camo container if the camo data changes from this interaction, otherwise the given one
      */
-    public T handleInteraction(Level level, BlockPos pos, Player player, T camo, ItemStack stack, InteractionHand hand)
-    {
+    public T handleInteraction(Level level, BlockPos pos, Player player, T camo, ItemStack stack, InteractionHand hand) {
         return camo;
     }
 
@@ -115,9 +111,7 @@ public abstract class CamoContainerFactory<T extends CamoContainer<?, T>>
      * {@return a non-null {@link CamoCraftingHandler} if the camo containers handled by this factory may be applied
      * in a crafting recipe}
      */
-    @Nullable
-    public CamoCraftingHandler<T> getCraftingHandler()
-    {
+    public @Nullable CamoCraftingHandler<T> getCraftingHandler() {
         return null;
     }
 

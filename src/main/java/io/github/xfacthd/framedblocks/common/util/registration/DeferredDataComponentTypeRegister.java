@@ -14,10 +14,8 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.function.UnaryOperator;
 
-public final class DeferredDataComponentTypeRegister extends DeferredRegister.DataComponents
-{
-    private DeferredDataComponentTypeRegister(String namespace)
-    {
+public final class DeferredDataComponentTypeRegister extends DeferredRegister.DataComponents {
+    private DeferredDataComponentTypeRegister(String namespace) {
         super(Registries.DATA_COMPONENT_TYPE, namespace);
     }
 
@@ -25,29 +23,24 @@ public final class DeferredDataComponentTypeRegister extends DeferredRegister.Da
     @SuppressWarnings("unchecked")
     protected <I extends DataComponentType<?>> DeferredHolder<DataComponentType<?>, I> createHolder(
             ResourceKey<? extends Registry<DataComponentType<?>>> registryKey, Identifier key
-    )
-    {
+    ) {
         return (DeferredHolder<DataComponentType<?>, I>) DeferredDataComponentType.createDataComponent(ResourceKey.create(registryKey, key));
     }
 
     @Override
-    public <D> DeferredDataComponentType<D> registerComponentType(String name, UnaryOperator<DataComponentType.Builder<D>> builder)
-    {
+    public <D> DeferredDataComponentType<D> registerComponentType(String name, UnaryOperator<DataComponentType.Builder<D>> builder) {
         return (DeferredDataComponentType<D>) super.registerComponentType(name, builder);
     }
 
-    public <D> DeferredDataComponentType<D> registerSimpleComponentType(String name, Codec<D> codec, StreamCodec<? super RegistryFriendlyByteBuf, D> streamCodec)
-    {
+    public <D> DeferredDataComponentType<D> registerSimpleComponentType(String name, Codec<D> codec, StreamCodec<? super RegistryFriendlyByteBuf, D> streamCodec) {
         return registerComponentType(name, builder -> builder.persistent(codec).networkSynchronized(streamCodec));
     }
 
-    public <D> DeferredDataComponentType<D> registerCachedComponentType(String name, Codec<D> codec, StreamCodec<? super RegistryFriendlyByteBuf, D> streamCodec)
-    {
+    public <D> DeferredDataComponentType<D> registerCachedComponentType(String name, Codec<D> codec, StreamCodec<? super RegistryFriendlyByteBuf, D> streamCodec) {
         return registerComponentType(name, builder -> builder.persistent(codec).networkSynchronized(streamCodec).cacheEncoding());
     }
 
-    public static DeferredDataComponentTypeRegister create(String namespace)
-    {
+    public static DeferredDataComponentTypeRegister create(String namespace) {
         return new DeferredDataComponentTypeRegister(namespace);
     }
 }

@@ -5,19 +5,15 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.Half;
 
-public final class StairsBlockOverlayPredicate extends AbstractStairsBlockOverlayPredicate
-{
+public final class StairsBlockOverlayPredicate extends AbstractStairsBlockOverlayPredicate {
     @Override
-    public boolean supportsSolid(BlockState state, Direction side, boolean secondPart)
-    {
+    public boolean supportsSolid(BlockState state, Direction side, boolean secondPart) {
         return true;
     }
 
     @Override
-    public boolean supportsEdge(BlockState state, Direction side, Direction edge, boolean secondPart, boolean nullCullFace, boolean unaligned)
-    {
-        return switch (state.getValue(BlockStateProperties.STAIRS_SHAPE))
-        {
+    public boolean supportsEdge(BlockState state, Direction side, Direction edge, boolean secondPart, boolean nullCullFace, boolean unaligned) {
+        return switch (state.getValue(BlockStateProperties.STAIRS_SHAPE)) {
             case STRAIGHT -> supportsEdgeStraight(state, side, edge, nullCullFace);
             case INNER_LEFT -> supportsEdgeInnerLeft(state, side, edge, nullCullFace);
             case INNER_RIGHT -> supportsEdgeInnerRight(state, side, edge, nullCullFace);
@@ -27,8 +23,7 @@ public final class StairsBlockOverlayPredicate extends AbstractStairsBlockOverla
     }
 
     @Override
-    protected boolean isTopHalf(BlockState state)
-    {
+    protected boolean isTopHalf(BlockState state) {
         return state.getValue(BlockStateProperties.HALF) == Half.TOP;
     }
 }

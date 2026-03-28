@@ -3,8 +3,7 @@ package io.github.xfacthd.framedblocks.api.camo;
 import io.github.xfacthd.framedblocks.api.util.ConfigView;
 import net.minecraft.world.item.ItemStack;
 
-public interface CamoCraftingHandler<T extends CamoContainer<?, T>>
-{
+public interface CamoCraftingHandler<T extends CamoContainer<?, T>> {
     /**
      * {@return whether a camo can be created from the provided stack in a crafting recipe without level and player context}
      *

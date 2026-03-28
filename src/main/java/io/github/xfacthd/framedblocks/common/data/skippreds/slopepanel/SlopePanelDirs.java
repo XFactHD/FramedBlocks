@@ -7,25 +7,19 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.Rotation;
 
 @SuppressWarnings("JavaExistingMethodCanBeUsed")
-public final class SlopePanelDirs
-{
-    public static final class SlopePanel
-    {
-        public static HalfTriangleDir getTriDir(Direction dir, HorizontalRotation rot, boolean front, Direction side)
-        {
+public final class SlopePanelDirs {
+    public static final class SlopePanel {
+        public static HalfTriangleDir getTriDir(Direction dir, HorizontalRotation rot, boolean front, Direction side) {
             Direction perpRotDir = rot.rotate(Rotation.CLOCKWISE_90).withFacing(dir);
-            if (side.getAxis() == perpRotDir.getAxis())
-            {
+            if (side.getAxis() == perpRotDir.getAxis()) {
                 Direction shortEdge = rot.getOpposite().withFacing(dir);
                 return HalfTriangleDir.fromDirections(dir, shortEdge, !front);
             }
             return HalfTriangleDir.NULL;
         }
 
-        public static HalfDir getHalfDir(Direction dir, HorizontalRotation rot, boolean front, Direction side)
-        {
-            if (side == rot.withFacing(dir).getOpposite())
-            {
+        public static HalfDir getHalfDir(Direction dir, HorizontalRotation rot, boolean front, Direction side) {
+            if (side == rot.withFacing(dir).getOpposite()) {
                 return HalfDir.fromDirections(
                         side,
                         front ? dir.getOpposite() : dir
@@ -37,23 +31,18 @@ public final class SlopePanelDirs
         private SlopePanel() { }
     }
 
-    public static final class ExtendedSlopePanel
-    {
-        public static HalfTriangleDir getTriDir(Direction dir, HorizontalRotation rot, Direction side)
-        {
+    public static final class ExtendedSlopePanel {
+        public static HalfTriangleDir getTriDir(Direction dir, HorizontalRotation rot, Direction side) {
             Direction perpRotDir = rot.rotate(Rotation.CLOCKWISE_90).withFacing(dir);
-            if (side.getAxis() == perpRotDir.getAxis())
-            {
+            if (side.getAxis() == perpRotDir.getAxis()) {
                 Direction shortEdge = rot.getOpposite().withFacing(dir);
                 return HalfTriangleDir.fromDirections(dir, shortEdge, false);
             }
             return HalfTriangleDir.NULL;
         }
 
-        public static HalfDir getHalfDir(Direction dir, HorizontalRotation rot, Direction side)
-        {
-            if (side == rot.withFacing(dir))
-            {
+        public static HalfDir getHalfDir(Direction dir, HorizontalRotation rot, Direction side) {
+            if (side == rot.withFacing(dir)) {
                 return HalfDir.fromDirections(side, dir);
             }
             return HalfDir.NULL;
@@ -62,28 +51,22 @@ public final class SlopePanelDirs
         private ExtendedSlopePanel() { }
     }
 
-    public static final class CompoundSlopePanel
-    {
-        public static HalfTriangleDir getTriDir(Direction dir, HorizontalRotation rot, Direction side)
-        {
+    public static final class CompoundSlopePanel {
+        public static HalfTriangleDir getTriDir(Direction dir, HorizontalRotation rot, Direction side) {
             Direction perpRotDir = rot.rotate(Rotation.CLOCKWISE_90).withFacing(dir);
-            if (side.getAxis() == perpRotDir.getAxis())
-            {
+            if (side.getAxis() == perpRotDir.getAxis()) {
                 Direction shortEdge = rot.getOpposite().withFacing(dir);
                 return HalfTriangleDir.fromDirections(dir, shortEdge, false);
             }
             return HalfTriangleDir.NULL;
         }
 
-        public static HalfDir getHalfDir(Direction dir, HorizontalRotation rot, Direction side)
-        {
+        public static HalfDir getHalfDir(Direction dir, HorizontalRotation rot, Direction side) {
             Direction rotDir = rot.withFacing(dir);
-            if (side == rotDir)
-            {
+            if (side == rotDir) {
                 return HalfDir.fromDirections(side, dir);
             }
-            if (side == rotDir.getOpposite())
-            {
+            if (side == rotDir.getOpposite()) {
                 return HalfDir.fromDirections(side, dir.getOpposite());
             }
             return HalfDir.NULL;
@@ -92,14 +75,11 @@ public final class SlopePanelDirs
         private CompoundSlopePanel() { }
     }
 
-    public static final class FlatSlopePanelCorner
-    {
-        public static HalfTriangleDir getTriDir(Direction dir, HorizontalRotation rot, boolean front, Direction side)
-        {
+    public static final class FlatSlopePanelCorner {
+        public static HalfTriangleDir getTriDir(Direction dir, HorizontalRotation rot, boolean front, Direction side) {
             Direction rotDir = rot.withFacing(dir);
             Direction perpRotDir = rot.rotate(Rotation.COUNTERCLOCKWISE_90).withFacing(dir);
-            if (side == rotDir.getOpposite() || side == perpRotDir.getOpposite())
-            {
+            if (side == rotDir.getOpposite() || side == perpRotDir.getOpposite()) {
                 Direction shortEdge = side == rotDir.getOpposite() ? perpRotDir.getOpposite() : rotDir.getOpposite();
                 return HalfTriangleDir.fromDirections(dir, shortEdge, !front);
             }
@@ -109,24 +89,19 @@ public final class SlopePanelDirs
         private FlatSlopePanelCorner() { }
     }
 
-    public static final class FlatInnerSlopePanelCorner
-    {
-        public static HalfTriangleDir getTriDir(Direction dir, HorizontalRotation rot, boolean front, Direction side)
-        {
+    public static final class FlatInnerSlopePanelCorner {
+        public static HalfTriangleDir getTriDir(Direction dir, HorizontalRotation rot, boolean front, Direction side) {
             Direction rotDir = rot.withFacing(dir);
             Direction perpRotDir = rot.rotate(Rotation.COUNTERCLOCKWISE_90).withFacing(dir);
-            if (side == rotDir || side == perpRotDir)
-            {
+            if (side == rotDir || side == perpRotDir) {
                 Direction shortEdge = side == rotDir ? perpRotDir.getOpposite() : rotDir.getOpposite();
                 return HalfTriangleDir.fromDirections(dir, shortEdge, !front);
             }
             return HalfTriangleDir.NULL;
         }
 
-        public static HalfDir getHalfDir(Direction dir, HorizontalRotation rot, boolean front, Direction side)
-        {
-            if (side == rot.withFacing(dir).getOpposite() || side == rot.rotate(Rotation.CLOCKWISE_90).withFacing(dir))
-            {
+        public static HalfDir getHalfDir(Direction dir, HorizontalRotation rot, boolean front, Direction side) {
+            if (side == rot.withFacing(dir).getOpposite() || side == rot.rotate(Rotation.CLOCKWISE_90).withFacing(dir)) {
                 return HalfDir.fromDirections(
                         side,
                         front ? dir.getOpposite() : dir
@@ -138,24 +113,19 @@ public final class SlopePanelDirs
         private FlatInnerSlopePanelCorner() { }
     }
 
-    public static final class FlatExtendedSlopePanelCorner
-    {
-        public static HalfTriangleDir getTriDir(Direction dir, HorizontalRotation rot, Direction side)
-        {
+    public static final class FlatExtendedSlopePanelCorner {
+        public static HalfTriangleDir getTriDir(Direction dir, HorizontalRotation rot, Direction side) {
             Direction rotDir = rot.withFacing(dir);
             Direction perpRotDir = rot.rotate(Rotation.COUNTERCLOCKWISE_90).withFacing(dir);
-            if (side == rotDir.getOpposite() || side == perpRotDir.getOpposite())
-            {
+            if (side == rotDir.getOpposite() || side == perpRotDir.getOpposite()) {
                 Direction shortEdge = side == rotDir.getOpposite() ? perpRotDir.getOpposite() : rotDir.getOpposite();
                 return HalfTriangleDir.fromDirections(dir, shortEdge, false);
             }
             return HalfTriangleDir.NULL;
         }
 
-        public static HalfDir getHalfDir(Direction dir, HorizontalRotation rot, Direction side)
-        {
-            if (side == rot.withFacing(dir) || side == rot.rotate(Rotation.COUNTERCLOCKWISE_90).withFacing(dir))
-            {
+        public static HalfDir getHalfDir(Direction dir, HorizontalRotation rot, Direction side) {
+            if (side == rot.withFacing(dir) || side == rot.rotate(Rotation.COUNTERCLOCKWISE_90).withFacing(dir)) {
                 return HalfDir.fromDirections(side, dir);
             }
             return HalfDir.NULL;
@@ -164,14 +134,11 @@ public final class SlopePanelDirs
         private FlatExtendedSlopePanelCorner() { }
     }
 
-    public static final class FlatExtendedInnerSlopePanelCorner
-    {
-        public static HalfTriangleDir getTriDir(Direction dir, HorizontalRotation rot, Direction side)
-        {
+    public static final class FlatExtendedInnerSlopePanelCorner {
+        public static HalfTriangleDir getTriDir(Direction dir, HorizontalRotation rot, Direction side) {
             Direction rotDir = rot.withFacing(dir);
             Direction perpRotDir = rot.rotate(Rotation.COUNTERCLOCKWISE_90).withFacing(dir);
-            if (side == rotDir || side == perpRotDir)
-            {
+            if (side == rotDir || side == perpRotDir) {
                 Direction shortEdge = side == rotDir ? perpRotDir.getOpposite() : rotDir.getOpposite();
                 return HalfTriangleDir.fromDirections(dir, shortEdge, false);
             }

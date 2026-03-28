@@ -35,32 +35,25 @@ import org.jspecify.annotations.Nullable;
 import java.util.List;
 import java.util.Set;
 
-public class FramedFenceGateBlock extends FenceGateBlock implements IFramedBlockInternal
-{
-    public FramedFenceGateBlock(Properties props)
-    {
+public class FramedFenceGateBlock extends FenceGateBlock implements IFramedBlockInternal {
+    public FramedFenceGateBlock(Properties props) {
         super(WoodType.OAK, IFramedBlock.applyDefaultProperties(props, BlockType.FRAMED_FENCE_GATE));
         BlockUtils.configureStandardProperties(this);
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
-    {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
         BlockUtils.addStandardProperties(this, builder);
     }
 
     @Override
-    protected InteractionResult useItemOn(
-            ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit
-    )
-    {
+    protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         return handleUse(state, level, pos, player, hand, hit);
     }
 
     @Override
-    public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)
-    {
+    public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
         tryApplyCamoImmediately(level, pos, placer, stack);
     }
 
@@ -74,80 +67,66 @@ public class FramedFenceGateBlock extends FenceGateBlock implements IFramedBlock
             BlockPos adjPos,
             BlockState adjState,
             RandomSource random
-    )
-    {
+    ) {
         BlockState newState = super.updateShape(state, level, tickAccess, pos, side, adjPos, adjState, random);
-        if (newState == state)
-        {
+        if (newState == state) {
             updateCulling(level, pos);
         }
         return newState;
     }
 
     @Override
-    protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, @Nullable Orientation orientation, boolean isMoving)
-    {
+    protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, @Nullable Orientation orientation, boolean isMoving) {
         super.neighborChanged(state, level, pos, block, orientation, isMoving);
         updateCulling(level, pos);
     }
 
     @Override
-    protected float getShadeBrightness(BlockState state, BlockGetter level, BlockPos pos)
-    {
+    protected float getShadeBrightness(BlockState state, BlockGetter level, BlockPos pos) {
         return getCamoShadeBrightness(state, level, pos, super.getShadeBrightness(state, level, pos));
     }
 
     @Override
-    protected boolean propagatesSkylightDown(BlockState state)
-    {
+    protected boolean propagatesSkylightDown(BlockState state) {
         return state.getValue(FramedProperties.PROPAGATES_SKYLIGHT);
     }
 
     @Override
-    protected List<ItemStack> getDrops(BlockState state, LootParams.Builder builder)
-    {
+    protected List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {
         return super.getDrops(state, getCamoDrops(builder));
     }
 
     @Override
-    public BlockType getBlockType()
-    {
+    public BlockType getBlockType() {
         return BlockType.FRAMED_FENCE_GATE;
     }
 
     @Override
-    public BlockState getItemModelSource()
-    {
+    public BlockState getItemModelSource() {
         return defaultBlockState();
     }
 
     @Override
-    public Direction getHorizontalOrientation(BlockState state)
-    {
+    public Direction getHorizontalOrientation(BlockState state) {
         return state.getValue(FACING);
     }
 
     @Override
-    public BlockState getJadeRenderState(BlockState state)
-    {
+    public BlockState getJadeRenderState(BlockState state) {
         return defaultBlockState();
     }
 
-    public static final class FenceGateStateMerger implements StateMerger
-    {
+    public static final class FenceGateStateMerger implements StateMerger {
         public static final FenceGateStateMerger INSTANCE = new FenceGateStateMerger();
 
         private FenceGateStateMerger() { }
 
         @Override
-        public BlockState apply(BlockState state)
-        {
+        public BlockState apply(BlockState state) {
             state = WrapHelper.POWERED_MERGER.apply(state);
-            if (!state.getValue(OPEN))
-            {
+            if (!state.getValue(OPEN)) {
                 Direction dir = state.getValue(FACING);
-                if (dir == Direction.SOUTH || dir == Direction.WEST)
-                {
+                if (dir == Direction.SOUTH || dir == Direction.WEST) {
                     state = state.setValue(FACING, dir.getOpposite());
                 }
             }
@@ -155,8 +134,7 @@ public class FramedFenceGateBlock extends FenceGateBlock implements IFramedBlock
         }
 
         @Override
-        public Set<Property<?>> getHandledProperties(Holder<Block> block)
-        {
+        public Set<Property<?>> getHandledProperties(Holder<Block> block) {
             return Utils.concat(
                     WrapHelper.POWERED_MERGER.getHandledProperties(block),
                     Set.of(FACING)

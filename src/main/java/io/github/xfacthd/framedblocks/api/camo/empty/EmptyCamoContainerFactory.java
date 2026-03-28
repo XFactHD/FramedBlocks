@@ -14,8 +14,7 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.transfer.access.ItemAccess;
 
-public final class EmptyCamoContainerFactory extends CamoContainerFactory<EmptyCamoContainer>
-{
+public final class EmptyCamoContainerFactory extends CamoContainerFactory<EmptyCamoContainer> {
     private static final MapCodec<EmptyCamoContainer> CODEC = MapCodec.unit(EmptyCamoContainer.EMPTY);
     private static final StreamCodec<ByteBuf, EmptyCamoContainer> STREAM_CODEC = StreamCodec.unit(EmptyCamoContainer.EMPTY);
 
@@ -23,50 +22,42 @@ public final class EmptyCamoContainerFactory extends CamoContainerFactory<EmptyC
     protected void writeToNetwork(ValueOutput valueOutput, EmptyCamoContainer container) { }
 
     @Override
-    protected EmptyCamoContainer readFromNetwork(ValueInput valueInput)
-    {
+    protected EmptyCamoContainer readFromNetwork(ValueInput valueInput) {
         return EmptyCamoContainer.EMPTY;
     }
 
     @Override
-    public EmptyCamoContainer applyCamo(Level level, BlockPos pos, Player player, ItemAccess itemAccess)
-    {
+    public EmptyCamoContainer applyCamo(Level level, BlockPos pos, Player player, ItemAccess itemAccess) {
         throw new UnsupportedOperationException("Empty camo container cannot be created from an ItemStack");
     }
 
     @Override
-    public boolean removeCamo(Level level, BlockPos pos, Player player, ItemAccess itemAccess, EmptyCamoContainer container)
-    {
+    public boolean removeCamo(Level level, BlockPos pos, Player player, ItemAccess itemAccess, EmptyCamoContainer container) {
         throw new UnsupportedOperationException("Empty camo container cannot be removed");
     }
 
     @Override
-    public boolean canTriviallyConvertToItemStack()
-    {
+    public boolean canTriviallyConvertToItemStack() {
         return true;
     }
 
     @Override
-    public ItemStack dropCamo(EmptyCamoContainer container)
-    {
+    public ItemStack dropCamo(EmptyCamoContainer container) {
         return ItemStack.EMPTY;
     }
 
     @Override
-    public boolean validateCamo(EmptyCamoContainer container)
-    {
+    public boolean validateCamo(EmptyCamoContainer container) {
         return true;
     }
 
     @Override
-    public MapCodec<EmptyCamoContainer> codec()
-    {
+    public MapCodec<EmptyCamoContainer> codec() {
         return CODEC;
     }
 
     @Override
-    public StreamCodec<? super RegistryFriendlyByteBuf, EmptyCamoContainer> streamCodec()
-    {
+    public StreamCodec<? super RegistryFriendlyByteBuf, EmptyCamoContainer> streamCodec() {
         return STREAM_CODEC;
     }
 

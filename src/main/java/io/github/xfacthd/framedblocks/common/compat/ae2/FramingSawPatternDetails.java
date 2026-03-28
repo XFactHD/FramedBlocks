@@ -22,20 +22,17 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-final class FramingSawPatternDetails implements IPatternDetails
-{
+final class FramingSawPatternDetails implements IPatternDetails {
     private final AEItemKey definition;
     private final RecipeHolder<FramingSawRecipe> recipe;
     private final IInput[] inputs;
     private final List<GenericStack> outputs;
 
-    FramingSawPatternDetails(AEItemKey definition, Level level)
-    {
+    FramingSawPatternDetails(AEItemKey definition, Level level) {
         this.definition = definition;
 
         EncodedFramingSawPattern pattern = definition.get(AppliedEnergisticsCompat.GuardedAccess.DC_TYPE_ENCODED_SAW_PATTERN.get());
-        if (pattern == null)
-        {
+        if (pattern == null) {
             throw new IllegalArgumentException("Given item does not encode a processing pattern: " + definition);
         }
 
@@ -48,16 +45,13 @@ final class FramingSawPatternDetails implements IPatternDetails
         this.inputs = new IInput[1 + additives.size()];
         this.inputs[0] = new Input(pattern.input(), calc.getInputCount());
         List<ItemStack> loadedAdditives = pattern.additives();
-        if (additives.size() != loadedAdditives.size())
-        {
+        if (additives.size() != loadedAdditives.size()) {
             throw new IllegalArgumentException("Additive count does not match. Pattern: %d Recipe: %d".formatted(
                     loadedAdditives.size(), additives.size()
             ));
         }
-        for (int i = 0; i < additives.size(); i++)
-        {
-            if (!additives.get(i).ingredient().test(loadedAdditives.get(i)))
-            {
+        for (int i = 0; i < additives.size(); i++) {
+            if (!additives.get(i).ingredient().test(loadedAdditives.get(i))) {
                 throw new IllegalArgumentException("Invalid additive '%s' in slot '%d' for recipe '%s'".formatted(
                         loadedAdditives.get(i), i, this.recipe.id()
                 ));
@@ -71,77 +65,61 @@ final class FramingSawPatternDetails implements IPatternDetails
     }
 
     @Override
-    public AEItemKey getDefinition()
-    {
+    public AEItemKey getDefinition() {
         return definition;
     }
 
     @Override
-    public IInput[] getInputs()
-    {
+    public IInput[] getInputs() {
         return inputs;
     }
 
     @Override
-    public List<GenericStack> getOutputs()
-    {
+    public List<GenericStack> getOutputs() {
         return outputs;
     }
 
     @Override
-    public boolean supportsPushInputsToExternalInventory()
-    {
+    public boolean supportsPushInputsToExternalInventory() {
         return false;
     }
 
-    public RecipeHolder<FramingSawRecipe> getRecipe()
-    {
+    public RecipeHolder<FramingSawRecipe> getRecipe() {
         return recipe;
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         return definition.hashCode();
     }
 
     @Override
-    public boolean equals(Object obj)
-    {
+    public boolean equals(Object obj) {
         return obj != null && obj.getClass() == getClass() && ((FramingSawPatternDetails) obj).definition.equals(definition);
     }
 
-    public static void encode(ItemStack stack, ItemStack input, ItemStack[] additives, ItemStack output)
-    {
+    public static void encode(ItemStack stack, ItemStack input, ItemStack[] additives, ItemStack output) {
         stack.set(AppliedEnergisticsCompat.GuardedAccess.DC_TYPE_ENCODED_SAW_PATTERN, new EncodedFramingSawPattern(
                 input, Arrays.stream(additives).filter(additive -> !additive.isEmpty()).toList(), output
         ));
     }
 
-    public static PatternDetailsTooltip makeInvalidPatternTooltip(
-            ItemStack stack, Level level, @SuppressWarnings("unused") @Nullable Exception cause, TooltipFlag flags
-    )
-    {
+    public static PatternDetailsTooltip makeInvalidPatternTooltip(ItemStack stack, Level level, @SuppressWarnings("unused") @Nullable Exception cause, TooltipFlag flags) {
         PatternDetailsTooltip tooltip = new PatternDetailsTooltip(PatternDetailsTooltip.OUTPUT_TEXT_PRODUCES);
         EncodedFramingSawPattern pattern = stack.get(AppliedEnergisticsCompat.GuardedAccess.DC_TYPE_ENCODED_SAW_PATTERN);
-        if (pattern != null)
-        {
+        if (pattern != null) {
             tooltip.addInput(AEItemKey.of(pattern.input()), 1L);
-            pattern.additives().forEach(additive ->
-            {
-                if (!additive.isEmpty())
-                {
+            pattern.additives().forEach(additive -> {
+                if (!additive.isEmpty()) {
                     tooltip.addInput(AEItemKey.of(additive), additive.getCount());
                 }
             });
             tooltip.addOutput(AEItemKey.of(pattern.output()), 1L);
 
-            if (flags.isAdvanced() && !pattern.output().isEmpty())
-            {
+            if (flags.isAdvanced() && !pattern.output().isEmpty()) {
                 RecipeHolder<FramingSawRecipe> recipe = FramingSawRecipeCache.get(level.isClientSide())
                         .findRecipeFor(pattern.output());
-                if (recipe != null)
-                {
+                if (recipe != null) {
                     tooltip.addProperty(Component.literal("Recipe"), Component.literal(recipe.id().toString()));
                 }
             }
@@ -149,39 +127,32 @@ final class FramingSawPatternDetails implements IPatternDetails
         return tooltip;
     }
 
-    private static final class Input implements IInput
-    {
+    private static final class Input implements IInput {
         private final GenericStack[] input = new GenericStack[1];
         private final long multiplier;
 
-        public Input(ItemStack input, int multiplier)
-        {
+        public Input(ItemStack input, int multiplier) {
             this.input[0] = new GenericStack(Objects.requireNonNull(AEItemKey.of(input)), 1);
             this.multiplier = multiplier;
         }
 
         @Override
-        public GenericStack[] getPossibleInputs()
-        {
+        public GenericStack[] getPossibleInputs() {
             return input;
         }
 
         @Override
-        public long getMultiplier()
-        {
+        public long getMultiplier() {
             return multiplier;
         }
 
         @Override
-        public boolean isValid(AEKey input, Level level)
-        {
+        public boolean isValid(AEKey input, Level level) {
             return input.matches(this.input[0]);
         }
 
         @Override
-        @Nullable
-        public AEKey getRemainingKey(AEKey template)
-        {
+        public @Nullable AEKey getRemainingKey(AEKey template) {
             return null;
         }
     }

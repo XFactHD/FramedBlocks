@@ -10,8 +10,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.model.data.ModelData;
 import org.jspecify.annotations.Nullable;
 
-public final class FlowerPotGhostRenderBehaviour implements GhostRenderBehaviour
-{
+public final class FlowerPotGhostRenderBehaviour implements GhostRenderBehaviour {
     @Override
     public ModelData appendModelData(
             ItemStack stack,
@@ -20,11 +19,9 @@ public final class FlowerPotGhostRenderBehaviour implements GhostRenderBehaviour
             BlockState renderState,
             int renderPass,
             ModelData data
-    )
-    {
+    ) {
         PottedFlower flower = stack.getOrDefault(FBContent.DC_TYPE_POTTED_FLOWER, PottedFlower.EMPTY);
-        if (!flower.isEmpty())
-        {
+        if (!flower.isEmpty()) {
             return data.derive().with(FramedFlowerPotBlockEntity.FLOWER_BLOCK, flower.flower()).build();
         }
         return data;

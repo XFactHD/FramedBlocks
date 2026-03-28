@@ -6,8 +6,7 @@ import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.state.level.LevelRenderState;
 import net.minecraft.world.phys.BlockHitResult;
 
-public interface BlockDebugRenderer<T extends IFramedBlockEntity>
-{
+public interface BlockDebugRenderer<T extends IFramedBlockEntity> {
     void extract(T be, BlockHitResult blockHit, float partialTick, LevelRenderState renderState);
 
     void submit(LevelRenderState renderState, PoseStack poseStack, SubmitNodeCollector collector);

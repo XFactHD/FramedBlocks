@@ -11,22 +11,18 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jspecify.annotations.Nullable;
 
-public final class PanelGhostRenderBehaviour implements GhostRenderBehaviour
-{
+public final class PanelGhostRenderBehaviour implements GhostRenderBehaviour {
     @Override
-    @Nullable
-    public BlockState getRenderState(
+    public @Nullable BlockState getRenderState(
             ItemStack stack,
             @Nullable ItemStack proxiedStack,
             BlockHitResult hit,
             BlockPlaceContext ctx,
             BlockState hitState,
             int renderPass
-    )
-    {
+    ) {
         BlockState state = ctx.getLevel().getBlockState(ctx.getClickedPos());
-        if (state.getBlock() == FBContent.BLOCK_FRAMED_PANEL.value())
-        {
+        if (state.getBlock() == FBContent.BLOCK_FRAMED_PANEL.value()) {
             Direction dir = state.getValue(FramedProperties.FACING_HOR);
             return state.setValue(FramedProperties.FACING_HOR, dir.getOpposite());
         }
@@ -42,11 +38,9 @@ public final class PanelGhostRenderBehaviour implements GhostRenderBehaviour
             BlockState hitState,
             BlockPos defaultPos,
             int renderPass
-    )
-    {
+    ) {
         BlockState state = ctx.getLevel().getBlockState(ctx.getClickedPos());
-        if (state.getBlock() == FBContent.BLOCK_FRAMED_PANEL.value())
-        {
+        if (state.getBlock() == FBContent.BLOCK_FRAMED_PANEL.value()) {
             return ctx.getClickedPos();
         }
         return defaultPos;
@@ -61,10 +55,8 @@ public final class PanelGhostRenderBehaviour implements GhostRenderBehaviour
             BlockState hitState,
             BlockState renderState,
             BlockPos renderPos
-    )
-    {
-        if (renderPos.equals(hit.getBlockPos()))
-        {
+    ) {
+        if (renderPos.equals(hit.getBlockPos())) {
             return true;
         }
         return GhostRenderBehaviour.super.canRenderAt(stack, proxiedStack, hit, ctx, hitState, renderState, renderPos);

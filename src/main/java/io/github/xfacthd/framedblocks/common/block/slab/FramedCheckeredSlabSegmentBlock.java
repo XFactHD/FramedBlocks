@@ -17,10 +17,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import org.jspecify.annotations.Nullable;
 
-public class FramedCheckeredSlabSegmentBlock extends FramedBlock
-{
-    public FramedCheckeredSlabSegmentBlock(Properties props)
-    {
+public class FramedCheckeredSlabSegmentBlock extends FramedBlock {
+    public FramedCheckeredSlabSegmentBlock(Properties props) {
         super(BlockType.FRAMED_CHECKERED_SLAB_SEGMENT, props);
         registerDefaultState(defaultBlockState()
                 .setValue(FramedProperties.TOP, false)
@@ -29,16 +27,13 @@ public class FramedCheckeredSlabSegmentBlock extends FramedBlock
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
-    {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
         builder.add(FramedProperties.TOP, PropertyHolder.SECOND);
     }
 
     @Override
-    @Nullable
-    public BlockState getStateForPlacement(BlockPlaceContext ctx)
-    {
+    public @Nullable BlockState getStateForPlacement(BlockPlaceContext ctx) {
         return PlacementStateBuilder.of(this, ctx)
                 .withTop()
                 .withCustom((state, modCtx) -> state.setValue(
@@ -49,48 +44,38 @@ public class FramedCheckeredSlabSegmentBlock extends FramedBlock
     }
 
     @Override
-    public BlockState rotate(BlockState state, RotationDirection direction, WrenchRotationMode mode)
-    {
-        return switch (mode)
-        {
+    public BlockState rotate(BlockState state, RotationDirection direction, WrenchRotationMode mode) {
+        return switch (mode) {
             case PRIMARY -> rotate(state, direction.toVanillaRotation());
             case SECONDARY -> state.cycle(FramedProperties.TOP);
         };
     }
 
     @Override
-    protected BlockState rotate(BlockState state, Rotation rotation)
-    {
+    protected BlockState rotate(BlockState state, Rotation rotation) {
         return DirUtils.isNinetyDegree(rotation) ? state.cycle(PropertyHolder.SECOND) : state;
     }
 
     @Override
-    protected BlockState mirror(BlockState state, Mirror mirror)
-    {
-        if (mirror != Mirror.NONE)
-        {
+    protected BlockState mirror(BlockState state, Mirror mirror) {
+        if (mirror != Mirror.NONE) {
             return state.cycle(PropertyHolder.SECOND);
         }
         return super.mirror(state, mirror);
     }
 
     @Override
-    @Nullable
-    public BlockState getItemModelSource()
-    {
+    public @Nullable BlockState getItemModelSource() {
         return null;
     }
 
     @Override
-    @Nullable
-    public Direction getHorizontalOrientation(BlockState state)
-    {
+    public @Nullable Direction getHorizontalOrientation(BlockState state) {
         return null;
     }
 
     @Override
-    public BlockState getJadeRenderState(BlockState state)
-    {
+    public BlockState getJadeRenderState(BlockState state) {
         return state;
     }
 }

@@ -15,8 +15,7 @@ import net.neoforged.neoforge.common.util.ConcatenatedListView;
 
 import java.util.List;
 
-public final class ToggleAltSlopeOverlay extends BlockInteractOverlay
-{
+public final class ToggleAltSlopeOverlay extends BlockInteractOverlay {
     public static final String SLOPE_MESSAGE_VERT = Utils.translationKey("tooltip", "alt_slope");
     public static final String TOGGLE_MESSAGE_VERT = Utils.translationKey("tooltip", "alt_slope.toggle");
     public static final String SLOPE_MESSAGE_HOR = Utils.translationKey("tooltip", "alt_slope.alt");
@@ -50,54 +49,43 @@ public final class ToggleAltSlopeOverlay extends BlockInteractOverlay
     private static final Texture TEXTURE_ALT_FALSE = new Texture(SYMBOL_TEXTURE, 40, 0, 20, 40, 80, 40);
     private static final Texture TEXTURE_ALT_TRUE = new Texture(SYMBOL_TEXTURE, 60, 0, 20, 40, 80, 40);
 
-    public ToggleAltSlopeOverlay()
-    {
+    public ToggleAltSlopeOverlay() {
         super(LINES_FALSE_ALL, LINES_TRUE_ALL, TEXTURE_FALSE, TEXTURE_TRUE, ClientConfig.VIEW::getToggleAltSlopeMode);
     }
 
     @Override
-    public boolean isValidTool(Player player, ItemStack stack)
-    {
+    public boolean isValidTool(Player player, ItemStack stack) {
         return stack.getItem() == FBContent.ITEM_FRAMED_WRENCH.value();
     }
 
     @Override
-    public boolean isValidTarget(Target target)
-    {
+    public boolean isValidTarget(Target target) {
         return target.state().getBlock() instanceof SlopeToggleBlock;
     }
 
     @Override
-    public boolean getState(Target target)
-    {
+    public boolean getState(Target target) {
         return target.state().getValue(FramedProperties.ALT_SLOPE);
     }
 
     @Override
-    public Texture getTexture(Target target, boolean state)
-    {
-        if (isHorizontalSlopeSurface(target.state()))
-        {
+    public Texture getTexture(Target target, boolean state) {
+        if (isHorizontalSlopeSurface(target.state())) {
             return state ? TEXTURE_ALT_TRUE : TEXTURE_ALT_FALSE;
         }
         return super.getTexture(target, state);
     }
 
     @Override
-    public List<Component> getLines(Target target, boolean state)
-    {
-        if (isHorizontalSlopeSurface(target.state()))
-        {
+    public List<Component> getLines(Target target, boolean state) {
+        if (isHorizontalSlopeSurface(target.state())) {
             return state ? LINES_TRUE_ALT : LINES_FALSE_ALT;
-        }
-        else
-        {
+        } else {
             return state ? LINES_TRUE : LINES_FALSE;
         }
     }
 
-    private static boolean isHorizontalSlopeSurface(BlockState state)
-    {
+    private static boolean isHorizontalSlopeSurface(BlockState state) {
         return state.getBlock() instanceof SlopeToggleBlock block && block.getSlopeOrientation(state) == SlopeToggleBlock.SlopeOrientation.HORIZONTAL;
     }
 }

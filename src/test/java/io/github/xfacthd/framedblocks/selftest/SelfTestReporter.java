@@ -7,63 +7,51 @@ import org.slf4j.event.Level;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class SelfTestReporter
-{
+public final class SelfTestReporter {
     private final List<Entry> lines = new ArrayList<>();
     private final Stopwatch stopwatch = Stopwatch.createUnstarted();
     private State state = State.ROOT;
 
-    public SelfTestReporter()
-    {
+    public SelfTestReporter() {
         info("=======================================");
         info("Running self-test");
         stopwatch.start();
         state = State.IDLE;
     }
 
-    public void startTest(String name)
-    {
+    public void startTest(String name) {
         entry(Level.INFO, "Checking " + name);
-        if (state != State.IDLE)
-        {
+        if (state != State.IDLE) {
             throw new IllegalStateException("Encountered invalid state %s when starting test '%s'".formatted(state, name));
         }
         state = State.IN_TEST;
     }
 
-    public void endTest()
-    {
+    public void endTest() {
         state = State.IDLE;
     }
 
-    public void info(String text, @Nullable Object... params)
-    {
+    public void info(String text, @Nullable Object... params) {
         entry(Level.INFO, text, params);
     }
 
-    public void warn(String text, @Nullable Object... params)
-    {
+    public void warn(String text, @Nullable Object... params) {
         entry(Level.WARN, text, params);
     }
 
-    public void error(String text, @Nullable Object... params)
-    {
+    public void error(String text, @Nullable Object... params) {
         entry(Level.ERROR, text, params);
     }
 
-    public void entry(Level logLevel, String text, @Nullable Object... params)
-    {
-        if (state != State.ROOT)
-        {
+    public void entry(Level logLevel, String text, @Nullable Object... params) {
+        if (state != State.ROOT) {
             text = "  ".repeat(state.indent) + text;
         }
         lines.add(new Entry(logLevel, text, params));
     }
 
-    public void finish()
-    {
-        if (state != State.IDLE)
-        {
+    public void finish() {
+        if (state != State.IDLE) {
             throw new IllegalStateException("Encountered invalid state %s when finishing".formatted(state));
         }
         state = State.ROOT;
@@ -76,16 +64,14 @@ public final class SelfTestReporter
 
     private record Entry(Level logLevel, String text, Object... params) { }
 
-    private enum State
-    {
+    private enum State {
         ROOT(0),
         IDLE(1),
         IN_TEST(2);
 
         private final int indent;
 
-        State(int indent)
-        {
+        State(int indent) {
             this.indent = indent;
         }
     }

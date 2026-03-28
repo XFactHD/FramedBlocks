@@ -8,16 +8,11 @@ import net.minecraft.world.item.ItemStack;
 
 import java.util.Optional;
 
-public sealed class FramingSawGuiContainerHandler<T extends FramingSawScreen> implements IGuiContainerHandler<T> permits FramingSawWithEncoderGuiContainerHandler
-{
+public sealed class FramingSawGuiContainerHandler<T extends FramingSawScreen> implements IGuiContainerHandler<T> permits FramingSawWithEncoderGuiContainerHandler {
     @Override
-    public Optional<IClickableIngredient<ItemStack>> getClickableIngredientUnderMouse(
-            IClickableIngredientFactory factory, T screen, double mouseX, double mouseY
-    )
-    {
+    public Optional<IClickableIngredient<ItemStack>> getClickableIngredientUnderMouse(IClickableIngredientFactory factory, T screen, double mouseX, double mouseY) {
         FramingSawScreen.PointedRecipe recipe = screen.getRecipeAt(mouseX, mouseY);
-        if (recipe != null)
-        {
+        if (recipe != null) {
             return factory.createBuilder(recipe.recipe().getResultStack()).buildWithArea(recipe.area());
         }
         return Optional.empty();

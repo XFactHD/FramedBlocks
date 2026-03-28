@@ -11,59 +11,48 @@ import net.neoforged.neoforge.transfer.item.ItemResource;
 import net.neoforged.neoforge.transfer.item.ItemStacksResourceHandler;
 import org.jspecify.annotations.Nullable;
 
-public final class StorageBlockItemResourceHandler extends ItemStacksResourceHandler implements IStorageBlockItemResourceHandler
-{
+public final class StorageBlockItemResourceHandler extends ItemStacksResourceHandler implements IStorageBlockItemResourceHandler {
     @Nullable
     private final FramedStorageBlockEntity be;
 
-    public StorageBlockItemResourceHandler(@Nullable FramedStorageBlockEntity be, int slots)
-    {
+    public StorageBlockItemResourceHandler(@Nullable FramedStorageBlockEntity be, int slots) {
         super(slots);
         this.be = be;
     }
 
     @Override
-    protected void onContentsChanged(int slot, ItemStack prevContents)
-    {
-        if (be != null)
-        {
+    protected void onContentsChanged(int slot, ItemStack prevContents) {
+        if (be != null) {
             be.setChanged();
         }
     }
 
     @Override
-    public FramedStorageMenu createMenu(int windowId, Inventory inv)
-    {
+    public FramedStorageMenu createMenu(int windowId, Inventory inv) {
         return FramedStorageMenu.createSingle(windowId, inv, this);
     }
 
     @Override
-    public boolean stillValid(Player player)
-    {
+    public boolean stillValid(Player player) {
         return be != null && be.isUsableByPlayer(player);
     }
 
     @Override
-    public void open()
-    {
-        if (be instanceof FramedChestBlockEntity chest)
-        {
+    public void open() {
+        if (be instanceof FramedChestBlockEntity chest) {
             chest.doOpen();
         }
     }
 
     @Override
-    public void close()
-    {
-        if (be instanceof FramedChestBlockEntity chest)
-        {
+    public void close() {
+        if (be instanceof FramedChestBlockEntity chest) {
             chest.close();
         }
     }
 
     @Override
-    public IndexModifier<ItemResource> getIndexModifier()
-    {
+    public IndexModifier<ItemResource> getIndexModifier() {
         return this::set;
     }
 }

@@ -22,40 +22,41 @@ import net.neoforged.neoforge.client.event.ExtractBlockOutlineRenderStateEvent;
 
 import java.util.Objects;
 
-public final class CollapsibleBlockIndicatorRenderer
-{
+public final class CollapsibleBlockIndicatorRenderer {
     private static final int LINE_COLOR = ARGB.color(153, 255, 0, 0);
 
-    public static void onRenderBlockHighlight(ExtractBlockOutlineRenderStateEvent event)
-    {
+    public static void onRenderBlockHighlight(ExtractBlockOutlineRenderStateEvent event) {
         Player player = Objects.requireNonNull(Minecraft.getInstance().player);
-        if (!player.getMainHandItem().is(FBContent.ITEM_FRAMED_HAMMER)) return;
+        if (!player.getMainHandItem().is(FBContent.ITEM_FRAMED_HAMMER)) {
+            return;
+        }
 
         Level level = Objects.requireNonNull(Minecraft.getInstance().level);
         BlockHitResult hit = event.getHitResult();
         BlockPos pos = hit.getBlockPos();
         BlockState state = level.getBlockState(pos);
-        if (!state.is(FBContent.BLOCK_FRAMED_COLLAPSIBLE_BLOCK)) return;
-        if (!(level.getBlockEntity(pos) instanceof FramedCollapsibleBlockEntity be)) return;
+        if (!state.is(FBContent.BLOCK_FRAMED_COLLAPSIBLE_BLOCK)) {
+            return;
+        }
+        if (!(level.getBlockEntity(pos) instanceof FramedCollapsibleBlockEntity be)) {
+            return;
+        }
 
         HammerTarget target = TargetCalculator.computeTarget(be, player, hit, true, 1F);
-        if (target == null) return;
+        if (target == null) {
+            return;
+        }
 
         Vec3 offset = Vec3.atLowerCornerOf(pos).subtract(event.getCamera().position());
         float[] vY = TargetCalculator.getVertexHeights(be, be.getCollapsedFace());
 
-        event.addCustomRenderer((_, buffer, poseStack, translucentPass, _) ->
-        {
-            if (translucentPass)
-            {
+        event.addCustomRenderer((_, buffer, poseStack, translucentPass, _) -> {
+            if (translucentPass) {
                 poseStack.pushPose();
                 poseStack.translate(offset.x + .5, offset.y + .5, offset.z + .5);
-                if (target.face() == Direction.DOWN)
-                {
+                if (target.face() == Direction.DOWN) {
                     poseStack.mulPose(Quaternions.XP_180);
-                }
-                else if (target.face() != Direction.UP)
-                {
+                } else if (target.face() != Direction.UP) {
                     poseStack.mulPose(OutlineRenderer.YN_DIR[target.face().get2DDataValue()]);
                     poseStack.mulPose(Quaternions.XP_90);
                 }
@@ -73,8 +74,7 @@ public final class CollapsibleBlockIndicatorRenderer
         });
     }
 
-    private static void drawSectionOverlay(OutlineRenderer.LineDrawer drawer, float[] vY)
-    {
+    private static void drawSectionOverlay(OutlineRenderer.LineDrawer drawer, float[] vY) {
         float cenx = Mth.lerp(.5F, vY[0], vY[1]); // center edge negative X
         float cepx = Mth.lerp(.5F, vY[3], vY[2]); // center edge positive X
         float cenz = Mth.lerp(.5F, vY[0], vY[3]); // center edge negative Z
@@ -96,29 +96,23 @@ public final class CollapsibleBlockIndicatorRenderer
         drawer.drawLine(.5F, cipz, .75F, .75F, cipx, .5F);
     }
 
-    private static void drawCornerMarkers(OutlineRenderer.LineDrawer drawer, Direction faceDir, Vec3 hitLocation, float[] vY)
-    {
+    private static void drawCornerMarkers(OutlineRenderer.LineDrawer drawer, Direction faceDir, Vec3 hitLocation, float[] vY) {
         int vert = FramedCollapsibleBlockEntity.vertexFromHit(faceDir, MathUtils.fraction(hitLocation));
-        if (vert == 0 || vert == 4)
-        {
+        if (vert == 0 || vert == 4) {
             drawCubeFrame(drawer,  0.25F/16F,  0.25F/16F, vY[0]);
         }
-        if (vert == 1 || vert == 4)
-        {
+        if (vert == 1 || vert == 4) {
             drawCubeFrame(drawer,  0.25F/16F, 15.75F/16F, vY[1]);
         }
-        if (vert == 2 || vert == 4)
-        {
+        if (vert == 2 || vert == 4) {
             drawCubeFrame(drawer, 15.75F/16F, 15.75F/16F, vY[2]);
         }
-        if (vert == 3 || vert == 4)
-        {
+        if (vert == 3 || vert == 4) {
             drawCubeFrame(drawer, 15.75F/16F,  0.25F/16F, vY[3]);
         }
     }
 
-    private static void drawCubeFrame(OutlineRenderer.LineDrawer drawer, float x, float z, float vY)
-    {
+    private static void drawCubeFrame(OutlineRenderer.LineDrawer drawer, float x, float z, float vY) {
         float minX = x - .5F/16F;
         float maxX = x + .5F/16F;
         float minZ = z - .5F/16F;

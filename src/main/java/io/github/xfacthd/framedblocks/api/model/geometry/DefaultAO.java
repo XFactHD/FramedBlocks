@@ -2,45 +2,34 @@ package io.github.xfacthd.framedblocks.api.model.geometry;
 
 import net.minecraft.util.TriState;
 
-public enum DefaultAO
-{
-    FORCE_DISABLE
-    {
+public enum DefaultAO {
+    FORCE_DISABLE {
         @Override
-        public TriState apply(TriState partAO)
-        {
+        public TriState apply(TriState partAO) {
             return TriState.FALSE;
         }
     },
-    DISABLE
-    {
+    DISABLE {
         @Override
-        public TriState apply(TriState partAO)
-        {
+        public TriState apply(TriState partAO) {
             return partAO != TriState.DEFAULT ? partAO : TriState.FALSE;
         }
     },
-    DEFAULT
-    {
+    DEFAULT {
         @Override
-        public TriState apply(TriState partAO)
-        {
+        public TriState apply(TriState partAO) {
             return partAO;
         }
     },
-    ENABLE
-    {
+    ENABLE {
         @Override
-        public TriState apply(TriState partAO)
-        {
+        public TriState apply(TriState partAO) {
             return partAO != TriState.DEFAULT ? partAO : TriState.TRUE;
         }
     },
-    FORCE_ENABLE
-    {
+    FORCE_ENABLE {
         @Override
-        public TriState apply(TriState partAO)
-        {
+        public TriState apply(TriState partAO) {
             return TriState.TRUE;
         }
     };

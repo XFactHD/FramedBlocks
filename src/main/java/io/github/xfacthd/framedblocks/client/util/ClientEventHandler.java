@@ -3,10 +3,8 @@ package io.github.xfacthd.framedblocks.client.util;
 import io.github.xfacthd.framedblocks.common.crafting.saw.FramingSawRecipeCache;
 import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
 
-public final class ClientEventHandler
-{
-    public static void onClientDisconnect(@SuppressWarnings("unused") ClientPlayerNetworkEvent.LoggingOut event)
-    {
+public final class ClientEventHandler {
+    public static void onClientDisconnect(@SuppressWarnings("unused") ClientPlayerNetworkEvent.LoggingOut event) {
         FramingSawRecipeCache.get(true).clear();
         CacheCleaner.clearModelCaches(CacheCleaner.Reason.DISCONNECT);
     }

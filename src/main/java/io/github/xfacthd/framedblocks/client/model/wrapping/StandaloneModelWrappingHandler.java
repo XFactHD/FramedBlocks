@@ -7,8 +7,7 @@ import io.github.xfacthd.framedblocks.api.model.wrapping.statemerger.StateMerger
 import net.minecraft.core.Holder;
 import net.minecraft.world.level.block.Block;
 
-public final class StandaloneModelWrappingHandler<T extends CachingModel> extends ModelWrappingHandler
-{
+public final class StandaloneModelWrappingHandler<T extends CachingModel> extends ModelWrappingHandler {
     private final StandaloneModelFactory<T> modelFactory;
 
     public StandaloneModelWrappingHandler(
@@ -16,14 +15,12 @@ public final class StandaloneModelWrappingHandler<T extends CachingModel> extend
             ModelFactory blockModelFactory,
             StateMerger stateMerger,
             StandaloneModelFactory<T> modelFactory
-    )
-    {
+    ) {
         super(block, blockModelFactory, stateMerger);
         this.modelFactory = modelFactory;
     }
 
-    public StandaloneModelFactory<T> getModelFactory()
-    {
+    public StandaloneModelFactory<T> getModelFactory() {
         return modelFactory;
     }
 }

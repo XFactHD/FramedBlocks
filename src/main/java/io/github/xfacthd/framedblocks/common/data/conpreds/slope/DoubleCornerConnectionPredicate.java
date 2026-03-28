@@ -9,25 +9,19 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jspecify.annotations.Nullable;
 
-public final class DoubleCornerConnectionPredicate extends NonDetailedConnectionPredicate
-{
+public final class DoubleCornerConnectionPredicate extends NonDetailedConnectionPredicate {
     @Override
-    public boolean canConnectFullEdge(BlockState state, Direction side, @Nullable Direction edge)
-    {
+    public boolean canConnectFullEdge(BlockState state, Direction side, @Nullable Direction edge) {
         Direction facing = state.getValue(FramedProperties.FACING_HOR);
         CornerType type = state.getValue(PropertyHolder.CORNER_TYPE);
 
-        if (type.isHorizontal())
-        {
+        if (type.isHorizontal()) {
             Direction dirTwo = type.isTop() ? Direction.UP : Direction.DOWN;
             Direction dirThree = type.isRight() ? facing.getClockWise() : facing.getCounterClockWise();
-            if (side.getAxis() == facing.getAxis() || side == dirTwo || side == dirThree)
-            {
+            if (side.getAxis() == facing.getAxis() || side == dirTwo || side == dirThree) {
                 return true;
             }
-        }
-        else if (side == facing || side == facing.getCounterClockWise() || DirUtils.isY(side))
-        {
+        } else if (side == facing || side == facing.getCounterClockWise() || DirUtils.isY(side)) {
             return true;
         }
         return edge != null;

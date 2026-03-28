@@ -17,11 +17,10 @@ import org.jspecify.annotations.Nullable;
  * @apiNote Custom implementations must override {@link #equals(Object)} and {@link #hashCode()}
  * in order for cache deduplication to work properly
  */
-public class StateCache
-{
+public class StateCache {
     protected static final Direction[] DIRECTIONS = Direction.values();
-    protected static final @Nullable Direction[] DIRECTIONS_WITH_NULL = Util.make(() ->
-    {
+    protected static final @Nullable Direction[] DIRECTIONS_WITH_NULL = Util.make(() -> {
+        // Don't replace with Arrays.copyOf(DIRECTIONS, DIRECTIONS.length + 1), null is intentionally the first value in the array
         Direction[] directions = new Direction[DIRECTIONS.length + 1];
         System.arraycopy(DIRECTIONS, 0, directions, 1, DIRECTIONS.length);
         return directions;
@@ -37,8 +36,7 @@ public class StateCache
     private final byte solidOverlay;
     private final EdgeOverlayMask edgeOverlay;
 
-    public StateCache(BlockState state, IBlockType type)
-    {
+    public StateCache(BlockState state, IBlockType type) {
         byte fullFace = 0;
         byte mayConnect = 0;
         long conFullEdge = 0;
@@ -51,50 +49,40 @@ public class StateCache
         boolean supportsCt = type.supportsConnectedTextures();
         boolean supportsOverlay = type.supportsBlockOverlays();
 
-        for (Direction side : DIRECTIONS)
-        {
+        for (Direction side : DIRECTIONS) {
             byte sideBit = (byte) (1 << side.ordinal());
-            if (facePred.test(state, side))
-            {
+            if (facePred.test(state, side)) {
                 fullFace |= sideBit;
             }
-            if (supportsOverlay && overlayPredicate.supportsSolid(state, side, false))
-            {
+            if (supportsOverlay && overlayPredicate.supportsSolid(state, side, false)) {
                 solidOverlay |= sideBit;
             }
 
-            if (!supportsCt)
-            {
+            if (!supportsCt) {
                 continue;
             }
 
             boolean fullEdgeNull = conPred.canConnectFullEdge(state, side, null);
-            if (fullEdgeNull)
-            {
+            if (fullEdgeNull) {
                 conFullEdge |= getSideEdgeNullableMask(side, null);
                 mayConnect |= sideBit;
             }
 
-            for (Direction edge : DIRECTIONS)
-            {
+            for (Direction edge : DIRECTIONS) {
                 long feMask = getSideEdgeNullableMask(side, edge);
-                if (edge.getAxis() == side.getAxis())
-                {
-                    if (fullEdgeNull)
-                    {
+                if (edge.getAxis() == side.getAxis()) {
+                    if (fullEdgeNull) {
                         conFullEdge |= feMask;
                     }
                     continue;
                 }
 
-                if (conPred.canConnectFullEdge(state, side, edge))
-                {
+                if (conPred.canConnectFullEdge(state, side, edge)) {
                     conFullEdge |= feMask;
                     mayConnect |= sideBit;
                 }
 
-                if (conPred.canConnectDetailed(state, side, edge))
-                {
+                if (conPred.canConnectDetailed(state, side, edge)) {
                     conDetailed |= getSideEdgeMask(side, edge);
                     mayConnect |= sideBit;
                 }
@@ -109,8 +97,7 @@ public class StateCache
         this.edgeOverlay = supportsOverlay ? EdgeOverlayMask.compute(state, overlayPredicate, false) : EdgeOverlayMask.NEVER;
     }
 
-    private StateCache()
-    {
+    private StateCache() {
         this.fullFace = 0;
         this.mayConnect = 0;
         this.conFullEdge = 0;
@@ -119,64 +106,52 @@ public class StateCache
         this.edgeOverlay = EdgeOverlayMask.NEVER;
     }
 
-    public final boolean hasAnyFullFace()
-    {
+    public final boolean hasAnyFullFace() {
         return fullFace != 0;
     }
 
-    public final boolean isFullFace(@Nullable Direction side)
-    {
+    public final boolean isFullFace(@Nullable Direction side) {
         return side != null && fullFace != 0 && (fullFace & (1 << side.ordinal())) != 0;
     }
 
-    public final byte getFullFaceMask()
-    {
+    public final byte getFullFaceMask() {
         return fullFace;
     }
 
-    public final boolean mayConnect(Direction side)
-    {
+    public final boolean mayConnect(Direction side) {
         return mayConnect != 0 && (mayConnect & 1 << side.ordinal()) != 0;
     }
 
-    public final boolean canConnectFullEdge(Direction side, @Nullable Direction edge)
-    {
+    public final boolean canConnectFullEdge(Direction side, @Nullable Direction edge) {
         return conFullEdge != 0 && (conFullEdge & getSideEdgeNullableMask(side, edge)) != 0;
     }
 
-    public final boolean canConnectDetailed(Direction side, Direction edge)
-    {
+    public final boolean canConnectDetailed(Direction side, Direction edge) {
         return conDetailed != 0 && (conDetailed & getSideEdgeMask(side, edge)) != 0;
     }
 
     @VisibleForTesting
     @ApiStatus.Internal
-    public final boolean hasAnyDetailedConnections()
-    {
+    public final boolean hasAnyDetailedConnections() {
         return conDetailed != 0;
     }
 
     @ApiStatus.NonExtendable
-    public boolean supportsSolidOverlay(Direction side, boolean secondPart)
-    {
+    public boolean supportsSolidOverlay(Direction side, boolean secondPart) {
         return (solidOverlay & (1 << side.ordinal())) != 0;
     }
 
     @ApiStatus.NonExtendable
-    public boolean supportsEdgeOverlay(Direction side, Direction edge, boolean secondPart, boolean nullCullFace, boolean unaligned)
-    {
+    public boolean supportsEdgeOverlay(Direction side, Direction edge, boolean secondPart, boolean nullCullFace, boolean unaligned) {
         return edgeOverlay.isSet(side, edge, nullCullFace, unaligned);
     }
 
     @Override
-    public boolean equals(Object other)
-    {
-        if (this == other)
-        {
+    public boolean equals(Object other) {
+        if (this == other) {
             return true;
         }
-        if (other == null || getClass() != other.getClass())
-        {
+        if (other == null || getClass() != other.getClass()) {
             return false;
         }
         StateCache that = (StateCache) other;
@@ -188,8 +163,7 @@ public class StateCache
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         int result = Byte.hashCode(fullFace);
         result = 31 * result + Long.hashCode(conFullEdge);
         result = 31 * result + Long.hashCode(conDetailed);
@@ -198,13 +172,11 @@ public class StateCache
         return result;
     }
 
-    protected static long getSideEdgeNullableMask(Direction side, @Nullable Direction edge)
-    {
+    protected static long getSideEdgeNullableMask(Direction side, @Nullable Direction edge) {
         return 1L << (side.ordinal() * DIR_COUNT_N + DirUtils.maskNullDirection(edge));
     }
 
-    protected static long getSideEdgeMask(Direction side, Direction edge)
-    {
+    protected static long getSideEdgeMask(Direction side, Direction edge) {
         return 1L << (side.ordinal() * DIR_COUNT + edge.ordinal());
     }
 }

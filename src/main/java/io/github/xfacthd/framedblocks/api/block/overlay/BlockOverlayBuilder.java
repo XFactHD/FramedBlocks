@@ -11,8 +11,7 @@ import org.jspecify.annotations.Nullable;
 import java.util.Objects;
 
 @SuppressWarnings({ "unused", "UnusedReturnValue" })
-public final class BlockOverlayBuilder
-{
+public final class BlockOverlayBuilder {
     private final String namespace;
     @Nullable
     private Identifier solidTexture;
@@ -25,61 +24,51 @@ public final class BlockOverlayBuilder
     private Holder<Item> sourceItem;
     private boolean translucent;
 
-    BlockOverlayBuilder(String namespace)
-    {
+    BlockOverlayBuilder(String namespace) {
         this.namespace = namespace;
     }
 
-    public BlockOverlayBuilder solidTexture(String solidTexture)
-    {
+    public BlockOverlayBuilder solidTexture(String solidTexture) {
         return solidTexture(Utils.id(namespace, BlockOverlay.TEXTURE_PREFIX + solidTexture));
     }
 
-    public BlockOverlayBuilder solidTexture(Identifier solidTexture)
-    {
+    public BlockOverlayBuilder solidTexture(Identifier solidTexture) {
         this.solidTexture = solidTexture;
         return this;
     }
 
-    public BlockOverlayBuilder edgeTexture(String edgeTexture)
-    {
+    public BlockOverlayBuilder edgeTexture(String edgeTexture) {
         return edgeTexture(Utils.id(namespace, BlockOverlay.TEXTURE_PREFIX + edgeTexture + "_edge"));
     }
 
-    public BlockOverlayBuilder edgeTexture(Identifier edgeTexture)
-    {
+    public BlockOverlayBuilder edgeTexture(Identifier edgeTexture) {
         this.edgeTexture = edgeTexture;
         return this;
     }
 
-    public BlockOverlayBuilder solidFace(BlockOverlay.SolidFace solidFace)
-    {
+    public BlockOverlayBuilder solidFace(BlockOverlay.SolidFace solidFace) {
         this.solidFace = solidFace;
         return this;
     }
 
     @SuppressWarnings("deprecation")
-    public BlockOverlayBuilder tintSource(Block tintSource)
-    {
+    public BlockOverlayBuilder tintSource(Block tintSource) {
         this.tintSource = tintSource.builtInRegistryHolder();
         return this;
     }
 
     @SuppressWarnings("deprecation")
-    public BlockOverlayBuilder sourceItem(Item sourceItem)
-    {
+    public BlockOverlayBuilder sourceItem(Item sourceItem) {
         this.sourceItem = sourceItem.builtInRegistryHolder();
         return this;
     }
 
-    public BlockOverlayBuilder translucent()
-    {
+    public BlockOverlayBuilder translucent() {
         this.translucent = true;
         return this;
     }
 
-    public BlockOverlay build()
-    {
+    public BlockOverlay build() {
         Objects.requireNonNull(solidTexture, "No solid texture specified");
         Objects.requireNonNull(solidFace, "No solid face specified");
         Objects.requireNonNull(sourceItem, "No source item specified");

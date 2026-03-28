@@ -6,18 +6,13 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jspecify.annotations.Nullable;
 
-public final class CollapsibleBlockConnectionPredicate implements ConnectionPredicate
-{
+public final class CollapsibleBlockConnectionPredicate implements ConnectionPredicate {
     @Override
-    public boolean canConnectFullEdge(BlockState state, Direction side, @Nullable Direction edge)
-    {
+    public boolean canConnectFullEdge(BlockState state, Direction side, @Nullable Direction edge) {
         Direction face = state.getValue(PropertyHolder.NULLABLE_FACE).toNullableDirection();
-        if (face == null || side == face.getOpposite())
-        {
+        if (face == null || side == face.getOpposite()) {
             return true;
-        }
-        else if (side.getAxis() != face.getAxis())
-        {
+        } else if (side.getAxis() != face.getAxis()) {
             return edge == face.getOpposite();
         }
 
@@ -25,11 +20,9 @@ public final class CollapsibleBlockConnectionPredicate implements ConnectionPred
     }
 
     @Override
-    public boolean canConnectDetailed(BlockState state, Direction side, Direction edge)
-    {
+    public boolean canConnectDetailed(BlockState state, Direction side, Direction edge) {
         Direction face = state.getValue(PropertyHolder.NULLABLE_FACE).toNullableDirection();
-        if (face != null && (side == face || side.getAxis() != face.getAxis()))
-        {
+        if (face != null && (side == face || side.getAxis() != face.getAxis())) {
             return edge.getAxis() != face.getAxis();
         }
         return false;

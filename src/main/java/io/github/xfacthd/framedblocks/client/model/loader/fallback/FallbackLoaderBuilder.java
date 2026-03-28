@@ -13,26 +13,22 @@ import org.jspecify.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class FallbackLoaderBuilder extends CustomLoaderBuilder
-{
+public final class FallbackLoaderBuilder extends CustomLoaderBuilder {
     private final List<ICondition> conditions = new ArrayList<>();
     @Nullable
     private Identifier fallback;
 
-    public FallbackLoaderBuilder()
-    {
+    public FallbackLoaderBuilder() {
         super(FallbackLoader.ID, true);
     }
 
-    public FallbackLoaderBuilder addCondition(ICondition condition)
-    {
+    public FallbackLoaderBuilder addCondition(ICondition condition) {
         Preconditions.checkNotNull(condition, "Condition must not be null");
         conditions.add(condition);
         return this;
     }
 
-    public FallbackLoaderBuilder setFallback(Identifier fallback)
-    {
+    public FallbackLoaderBuilder setFallback(Identifier fallback) {
         Preconditions.checkNotNull(fallback, "Fallback must not be null");
         Preconditions.checkArgument(
                 !fallback.equals(MissingCuboidModel.LOCATION),
@@ -43,8 +39,7 @@ public final class FallbackLoaderBuilder extends CustomLoaderBuilder
     }
 
     @Override
-    protected CustomLoaderBuilder copyInternal()
-    {
+    protected CustomLoaderBuilder copyInternal() {
         FallbackLoaderBuilder builder = new FallbackLoaderBuilder();
         builder.conditions.addAll(conditions);
         builder.fallback = fallback;
@@ -52,8 +47,7 @@ public final class FallbackLoaderBuilder extends CustomLoaderBuilder
     }
 
     @Override
-    public JsonObject toJson(JsonObject json)
-    {
+    public JsonObject toJson(JsonObject json) {
         Preconditions.checkNotNull(fallback, "No fallback model set");
         Preconditions.checkState(!conditions.isEmpty(), "No conditions specified");
 

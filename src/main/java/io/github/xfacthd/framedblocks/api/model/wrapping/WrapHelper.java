@@ -21,8 +21,7 @@ import net.minecraft.world.level.block.state.properties.Property;
 import java.util.Set;
 
 @SuppressWarnings("unused")
-public final class WrapHelper
-{
+public final class WrapHelper {
     /// Set of properties that all blocks should ignore when wrapping models
     public static final Set<Property<?>> IGNORED_PROPS = Utils.concat(BlockUtils.REQUIRED_STATE_PROPERTIES, Set.of(
             FramedProperties.SOLID,
@@ -47,8 +46,7 @@ public final class WrapHelper
      * @param blockGeometryFactory The {@link GeometryFactory} to generate the wrapping models with
      * @param ignoredProps         The state properties to ignore during wrapping
      */
-    public static void wrap(Holder<Block> block, GeometryFactory blockGeometryFactory, Set<Property<?>> ignoredProps)
-    {
+    public static void wrap(Holder<Block> block, GeometryFactory blockGeometryFactory, Set<Property<?>> ignoredProps) {
         wrap(block, blockGeometryFactory, StateMerger.ignoring(ignoredProps));
     }
 
@@ -63,8 +61,7 @@ public final class WrapHelper
      * @param blockGeometryFactory The {@link GeometryFactory} to generate the wrapping models with
      * @param stateMerger          The {@link StateMerger} to use for merging visually redundant states during wrapping
      */
-    public static void wrap(Holder<Block> block, GeometryFactory blockGeometryFactory, StateMerger stateMerger)
-    {
+    public static void wrap(Holder<Block> block, GeometryFactory blockGeometryFactory, StateMerger stateMerger) {
         InternalClientAPI.INSTANCE.registerModelWrapper(block, blockGeometryFactory, stateMerger);
     }
 
@@ -79,8 +76,7 @@ public final class WrapHelper
      * @param itemModelInfo     The {@link ItemModelInfo} to use for controlling item model geometry caching
      * @param ignoredProps      The state properties to ignore during wrapping
      */
-    public static void wrapDouble(Holder<Block> block, ItemModelInfo itemModelInfo, Set<Property<?>> ignoredProps)
-    {
+    public static void wrapDouble(Holder<Block> block, ItemModelInfo itemModelInfo, Set<Property<?>> ignoredProps) {
         wrapDouble(block, itemModelInfo, StateMerger.ignoring(ignoredProps));
     }
 
@@ -95,8 +91,7 @@ public final class WrapHelper
      * @param itemModelInfo     The {@link ItemModelInfo} to use for controlling item model geometry caching
      * @param stateMerger       The {@link StateMerger} to use for merging visually redundant states during wrapping
      */
-    public static void wrapDouble(Holder<Block> block, ItemModelInfo itemModelInfo, StateMerger stateMerger)
-    {
+    public static void wrapDouble(Holder<Block> block, ItemModelInfo itemModelInfo, StateMerger stateMerger) {
         InternalClientAPI.INSTANCE.registerDoubleModelWrapper(block, itemModelInfo, stateMerger);
     }
 
@@ -110,8 +105,7 @@ public final class WrapHelper
      * @param modelFactory The {@link ModelFactory} to generate the wrapping models with
      * @param ignoredProps The state properties to ignore during wrapping
      */
-    public static void wrapSpecial(Holder<Block> block, ModelFactory modelFactory, Set<Property<?>> ignoredProps)
-    {
+    public static void wrapSpecial(Holder<Block> block, ModelFactory modelFactory, Set<Property<?>> ignoredProps) {
         wrapSpecial(block, modelFactory, StateMerger.ignoring(ignoredProps));
     }
 
@@ -125,8 +119,7 @@ public final class WrapHelper
      * @param modelFactory The {@link ModelFactory} to generate the wrapping models with
      * @param stateMerger  The {@link StateMerger} to use for merging visually redundant states during wrapping
      */
-    public static void wrapSpecial(Holder<Block> block, ModelFactory modelFactory, StateMerger stateMerger)
-    {
+    public static void wrapSpecial(Holder<Block> block, ModelFactory modelFactory, StateMerger stateMerger) {
         InternalClientAPI.INSTANCE.registerSpecialModelWrapper(block, modelFactory, stateMerger);
     }
 
@@ -141,8 +134,7 @@ public final class WrapHelper
      * @param ignoredProps The state properties to ignore during copying before applying the target block's properties
      *                     to the source block for retrieving the wrapped model
      */
-    public static void copy(Holder<Block> block, Holder<Block> srcBlock, Set<Property<?>> ignoredProps)
-    {
+    public static void copy(Holder<Block> block, Holder<Block> srcBlock, Set<Property<?>> ignoredProps) {
         copy(block, srcBlock, StateMerger.ignoring(ignoredProps));
     }
 
@@ -157,8 +149,7 @@ public final class WrapHelper
      * @param stateMerger The {@link StateMerger} to use for merging visually redundant during copying before applying
      *                    the target block's properties to the source block for retrieving the wrapped model
      */
-    public static void copy(Holder<Block> block, Holder<Block> srcBlock, StateMerger stateMerger)
-    {
+    public static void copy(Holder<Block> block, Holder<Block> srcBlock, StateMerger stateMerger) {
         InternalClientAPI.INSTANCE.registerCopyingModelWrapper(block, srcBlock, stateMerger);
     }
 
@@ -167,8 +158,7 @@ public final class WrapHelper
             GeometryFactory blockGeometryFactory,
             StandaloneModelFactory<T> modelFactory,
             Set<Property<?>> ignoredProps
-    )
-    {
+    ) {
         wrapStandalone(wrapperKey, blockGeometryFactory, modelFactory, StateMerger.ignoring(ignoredProps));
     }
 
@@ -177,8 +167,7 @@ public final class WrapHelper
             GeometryFactory blockGeometryFactory,
             StandaloneModelFactory<T> modelFactory,
             StateMerger stateMerger
-    )
-    {
+    ) {
         InternalClientAPI.INSTANCE.registerStandaloneModelWrapper(wrapperKey, blockGeometryFactory, modelFactory, stateMerger);
     }
 

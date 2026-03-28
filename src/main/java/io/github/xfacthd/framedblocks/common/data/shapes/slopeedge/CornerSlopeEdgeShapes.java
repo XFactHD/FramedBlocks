@@ -19,8 +19,7 @@ import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 
-public final class CornerSlopeEdgeShapes implements ShapeGenerator
-{
+public final class CornerSlopeEdgeShapes implements ShapeGenerator {
     public static final ShapeCache<ShapeKey> OUTER_SHAPES = makeCache(SlopeEdgeShapes.SHAPES, false);
     public static final ShapeCache<ShapeKey> OUTER_OCCLUSION_SHAPES = makeCache(SlopeEdgeShapes.OCCLUSION_SHAPES, false);
     public static final ShapeCache<ShapeKey> INNER_SHAPES = makeCache(SlopeEdgeShapes.SHAPES, true);
@@ -33,29 +32,24 @@ public final class CornerSlopeEdgeShapes implements ShapeGenerator
 
     private final boolean inner;
 
-    private CornerSlopeEdgeShapes(boolean inner)
-    {
+    private CornerSlopeEdgeShapes(boolean inner) {
         this.inner = inner;
     }
 
     @Override
-    public ShapeContainer generatePrimary(List<BlockState> states)
-    {
+    public ShapeContainer generatePrimary(List<BlockState> states) {
         return generate(states, inner ? INNER_SHAPES : OUTER_SHAPES);
     }
 
     @Override
-    public ShapeContainer generateOcclusion(List<BlockState> states)
-    {
+    public ShapeContainer generateOcclusion(List<BlockState> states) {
         return generate(states, inner ? INNER_OCCLUSION_SHAPES : OUTER_OCCLUSION_SHAPES);
     }
 
-    private static ShapeContainer generate(List<BlockState> states, ShapeCache<ShapeKey> cache)
-    {
+    private static ShapeContainer generate(List<BlockState> states, ShapeCache<ShapeKey> cache) {
         VoxelShape[] shapes = new VoxelShape[4 * 2 * 6];
 
-        for (CornerType type : TYPES)
-        {
+        for (CornerType type : TYPES) {
             ShapeUtils.makeHorizontalRotations(
                     cache.get(new ShapeKey(type, false)),
                     Direction.NORTH,
@@ -74,8 +68,7 @@ public final class CornerSlopeEdgeShapes implements ShapeGenerator
 
         Map<BlockState, VoxelShape> map = new IdentityHashMap<>(states.size());
 
-        for (BlockState state : states)
-        {
+        for (BlockState state : states) {
             Direction dir = state.getValue(FramedProperties.FACING_HOR);
             CornerType type = state.getValue(PropertyHolder.CORNER_TYPE);
             boolean altType = state.getValue(PropertyHolder.ALT_TYPE);
@@ -85,15 +78,12 @@ public final class CornerSlopeEdgeShapes implements ShapeGenerator
         return ShapeContainer.of(map);
     }
 
-    private static int makeShapeIndex(Direction dir, CornerType type, boolean altType)
-    {
+    private static int makeShapeIndex(Direction dir, CornerType type, boolean altType) {
         return (type.ordinal() << 3) | (dir.get2DDataValue() << 1) | (altType ? 1 : 0);
     }
 
-    private static ShapeCache<ShapeKey> makeCache(ShapeCache<SlopeEdgeShapes.ShapeKey> cache, boolean inner)
-    {
-        return ShapeCache.create(map ->
-        {
+    private static ShapeCache<ShapeKey> makeCache(ShapeCache<SlopeEdgeShapes.ShapeKey> cache, boolean inner) {
+        return ShapeCache.create(map -> {
             VoxelShape edgeShapeBottom = cache.get(new SlopeEdgeShapes.ShapeKey(SlopeType.BOTTOM, false));
             map.put(new ShapeKey(CornerType.BOTTOM, false), makeCornerShape(edgeShapeBottom, inner));
 
@@ -124,8 +114,7 @@ public final class CornerSlopeEdgeShapes implements ShapeGenerator
 
             VoxelShape edgeShapeHorAlt = cache.get(new SlopeEdgeShapes.ShapeKey(SlopeType.HORIZONTAL, true));
             VoxelShape edgeBotLeftAlt;
-            if (inner)
-            {
+            if (inner) {
                 edgeBotLeftAlt = ShapeUtils.andUnoptimized(
                         ShapeUtils.orUnoptimized(
                                 edgeShapeBottomAlt,
@@ -133,9 +122,7 @@ public final class CornerSlopeEdgeShapes implements ShapeGenerator
                         ),
                         CommonShapes.SLAB_EDGE.get(new CommonShapes.DirBoolKey(Direction.EAST, true))
                 );
-            }
-            else
-            {
+            } else {
                 edgeBotLeftAlt = ShapeUtils.orUnoptimized(
                         ShapeUtils.andUnoptimized(
                                 edgeShapeBottomAlt,
@@ -163,8 +150,7 @@ public final class CornerSlopeEdgeShapes implements ShapeGenerator
         });
     }
 
-    private static VoxelShape makeCornerShape(VoxelShape edgeShape, boolean inner)
-    {
+    private static VoxelShape makeCornerShape(VoxelShape edgeShape, boolean inner) {
         return Shapes.joinUnoptimized(
                 edgeShape,
                 ShapeUtils.rotateShapeUnoptimizedAroundY(Direction.NORTH, Direction.WEST, edgeShape),
@@ -172,10 +158,8 @@ public final class CornerSlopeEdgeShapes implements ShapeGenerator
         );
     }
 
-    private static VoxelShape makeAltCornerShape(VoxelShape edgeShape, boolean inner)
-    {
-        if (inner)
-        {
+    private static VoxelShape makeAltCornerShape(VoxelShape edgeShape, boolean inner) {
+        if (inner) {
             return ShapeUtils.andUnoptimized(
                     ShapeUtils.orUnoptimized(
                             edgeShape,
@@ -183,9 +167,7 @@ public final class CornerSlopeEdgeShapes implements ShapeGenerator
                     ),
                     CommonShapes.CORNER_PILLAR.get(Direction.SOUTH)
             );
-        }
-        else
-        {
+        } else {
             VoxelShape edgeShapeRot = ShapeUtils.rotateShapeUnoptimizedAroundY(Direction.NORTH, Direction.WEST, edgeShape);
             return ShapeUtils.orUnoptimized(
                     ShapeUtils.andUnoptimized(

@@ -11,8 +11,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.Nullable;
 
 @ApiStatus.NonExtendable
-public interface PartConsumer
-{
+public interface PartConsumer {
     /**
      * @param part            The {@link BlockStateModelPart} to add
      * @param state           The {@link BlockState} the part is from (required for {@link ChunkSectionLayer} lookup)

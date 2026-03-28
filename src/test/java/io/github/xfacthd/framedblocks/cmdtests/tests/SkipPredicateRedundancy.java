@@ -25,8 +25,7 @@ import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.LongConsumer;
 
-public final class SkipPredicateRedundancy
-{
+public final class SkipPredicateRedundancy {
     private static final BlockType[] TYPES = BlockType.values();
     private static final Direction[] SIDES = Direction.values();
     public static final String NAME = "SkipPredicatesRedundancy";
@@ -42,8 +41,7 @@ public final class SkipPredicateRedundancy
 
     public static void testSkipPredicates(
             @SuppressWarnings("unused") CommandContext<CommandSourceStack> ctx, Consumer<Component> msgQueueAppender
-    )
-    {
+    ) {
         List<Redundancy> redundancies = new ArrayList<>();
         AsyncTypeTest.Stats stats = AsyncTypeTest.execute(
                 SkipPredicateRedundancy::testTypeAgainstAll,
@@ -55,14 +53,11 @@ public final class SkipPredicateRedundancy
         MutableComponent resultMsg = Component.literal("No issues found");
         ChatFormatting color = ChatFormatting.DARK_GREEN;
 
-        if (!redundancies.isEmpty())
-        {
+        if (!redundancies.isEmpty()) {
             StringBuilder testResult = new StringBuilder("Encountered redundant tests while testing skip predicates (deduplicated):");
             Set<Redundancy> deduplicated = new HashSet<>();
-            for (Redundancy redundancy : redundancies)
-            {
-                if (!deduplicated.add(redundancy))
-                {
+            for (Redundancy redundancy : redundancies) {
+                if (!deduplicated.add(redundancy)) {
                     continue;
                 }
 
@@ -83,23 +78,19 @@ public final class SkipPredicateRedundancy
         msgQueueAppender.accept(resultMsg);
     }
 
-    private static Result testTypeAgainstAll(BlockType type, LongConsumer combinationCollector)
-    {
+    private static Result testTypeAgainstAll(BlockType type, LongConsumer combinationCollector) {
         List<Redundancy> redundancies = new ArrayList<>();
         Block block = FBContent.byType(type);
         SideSkipPredicate skipPredicate = type.getSideSkipPredicate();
         long[] combinations = new long[1];
         long[] lastSent = new long[1];
-        for (BlockType adjType : TYPES)
-        {
-            if (type == adjType && IGNORED_SELF_TESTS.contains(type))
-            {
+        for (BlockType adjType : TYPES) {
+            if (type == adjType && IGNORED_SELF_TESTS.contains(type)) {
                 continue;
             }
 
             SkipPredicatePresenceConsistency.Test test = SkipPredicatePresenceConsistency.getTestOf(type);
-            if (test == null || !test.targets().contains(adjType) )
-            {
+            if (test == null || !test.targets().contains(adjType)) {
                 // No point in checking for redundancy if no test is present -> bail out early
                 continue;
             }
@@ -107,8 +98,7 @@ public final class SkipPredicateRedundancy
             Block adjBlock = FBContent.byType(adjType);
             boolean result = testTypeAgainstType(block, adjBlock, skipPredicate, combinations, lastSent, combinationCollector);
 
-            if (!result)
-            {
+            if (!result) {
                 redundancies.add(new Redundancy(type, adjType));
             }
         }
@@ -124,23 +114,17 @@ public final class SkipPredicateRedundancy
             long[] combinations,
             long[] lastSent,
             LongConsumer combinationCollector
-    )
-    {
-        for (BlockState state : block.getStateDefinition().getPossibleStates())
-        {
-            for (BlockState adjState : adjBlock.getStateDefinition().getPossibleStates())
-            {
-                for (Direction side : SIDES)
-                {
-                    if (skipPredicate.test(EmptyBlockGetter.INSTANCE, CENTER, state, adjState, side))
-                    {
+    ) {
+        for (BlockState state : block.getStateDefinition().getPossibleStates()) {
+            for (BlockState adjState : adjBlock.getStateDefinition().getPossibleStates()) {
+                for (Direction side : SIDES) {
+                    if (skipPredicate.test(EmptyBlockGetter.INSTANCE, CENTER, state, adjState, side)) {
                         // Bail out early on the first test that returns true, no point in checking further
                         return true;
                     }
 
                     combinations[0]++;
-                    if (combinations[0] % 100000L == 0)
-                    {
+                    if (combinations[0] % 100000L == 0) {
                         combinationCollector.accept(100000L);
                         lastSent[0] = combinations[0];
                     }

@@ -8,20 +8,15 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.ItemStack;
 
-public final class FramedCreativeTab
-{
-    public static CreativeModeTab makeTab()
-    {
+public final class FramedCreativeTab {
+    public static CreativeModeTab makeTab() {
         return CreativeModeTab.builder()
                 .title(Component.translatable("itemGroup.framed_blocks"))
                 .icon(() -> new ItemStack(FBContent.BLOCK_FRAMED_CUBE.value()))
                 .withTabsBefore(CreativeModeTabs.SPAWN_EGGS)
-                .displayItems((_, output) ->
-                {
-                    for (BlockType type : BlockType.values())
-                    {
-                        if (type.hasBlockItem())
-                        {
+                .displayItems((_, output) -> {
+                    for (BlockType type : BlockType.values()) {
+                        if (type.hasBlockItem()) {
                             output.accept(FBContent.byType(type));
                         }
                     }
@@ -29,8 +24,7 @@ public final class FramedCreativeTab
                     output.accept(FBContent.BLOCK_FRAMING_SAW.value());
                     output.accept(FBContent.BLOCK_POWERED_FRAMING_SAW.value());
 
-                    for (FramedToolType tool : FramedToolType.values())
-                    {
+                    for (FramedToolType tool : FramedToolType.values()) {
                         output.accept(FBContent.toolByType(tool));
                     }
 

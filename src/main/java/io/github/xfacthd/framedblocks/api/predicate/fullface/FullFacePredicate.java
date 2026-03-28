@@ -9,8 +9,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import java.util.Objects;
 import java.util.function.BiPredicate;
 
-public interface FullFacePredicate extends BiPredicate<BlockState, Direction>
-{
+public interface FullFacePredicate extends BiPredicate<BlockState, Direction> {
     FullFacePredicate TRUE = (_, _) -> true;
     FullFacePredicate FALSE = (_, _) -> false;
     FullFacePredicate Y_AXIS = (_, dir) -> DirUtils.isY(dir);
@@ -31,15 +30,13 @@ public interface FullFacePredicate extends BiPredicate<BlockState, Direction>
     boolean test(BlockState state, Direction side);
 
     @Override
-    default FullFacePredicate and(BiPredicate<? super BlockState, ? super Direction> other)
-    {
+    default FullFacePredicate and(BiPredicate<? super BlockState, ? super Direction> other) {
         Objects.requireNonNull(other);
         return (state, side) -> test(state, side) && other.test(state, side);
     }
 
     @Override
-    default FullFacePredicate or(BiPredicate<? super BlockState, ? super Direction> other)
-    {
+    default FullFacePredicate or(BiPredicate<? super BlockState, ? super Direction> other) {
         Objects.requireNonNull(other);
         return (state, side) -> test(state, side) || other.test(state, side);
     }

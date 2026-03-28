@@ -10,16 +10,12 @@ import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 
-public final class WallSignShapes
-{
-    public static ShapeContainer generate(List<BlockState> states)
-    {
+public final class WallSignShapes {
+    public static ShapeContainer generate(List<BlockState> states) {
         Map<BlockState, VoxelShape> map = new IdentityHashMap<>(states.size());
 
-        for (BlockState state : states)
-        {
-            switch (state.getValue(FramedProperties.FACING_HOR))
-            {
+        for (BlockState state : states) {
+            switch (state.getValue(FramedProperties.FACING_HOR)) {
                 case NORTH -> map.put(state, Block.box(0.0D, 4.5D, 14.0D, 16.0D, 12.5D, 16.0D));
                 case EAST -> map.put(state, Block.box(0.0D, 4.5D, 0.0D, 2.0D, 12.5D, 16.0D));
                 case SOUTH -> map.put(state, Block.box(0.0D, 4.5D, 0.0D, 16.0D, 12.5D, 2.0D));

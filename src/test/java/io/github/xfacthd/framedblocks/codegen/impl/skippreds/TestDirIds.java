@@ -1,7 +1,6 @@
 package io.github.xfacthd.framedblocks.codegen.impl.skippreds;
 
-final class TestDirIds
-{
+final class TestDirIds {
     /** Left/right face of a Slope angled up or down */
     static final String SLOPE_TRI_XZ = "slope_tri_xz";
     /** Top/bottom face of a Slope angled horizontally */

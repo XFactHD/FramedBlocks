@@ -9,11 +9,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jspecify.annotations.Nullable;
 
-public final class FancyRailGhostRenderBehaviour implements GhostRenderBehaviour
-{
+public final class FancyRailGhostRenderBehaviour implements GhostRenderBehaviour {
     @Override
-    public boolean mayRender(ItemStack stack, @Nullable ItemStack proxiedStack)
-    {
+    public boolean mayRender(ItemStack stack, @Nullable ItemStack proxiedStack) {
         return RailSlopeGhostRenderBehaviour.INSTANCE.mayRender(stack, proxiedStack) ||
                 GhostRenderBehaviour.super.mayRender(stack, proxiedStack);
     }
@@ -26,8 +24,7 @@ public final class FancyRailGhostRenderBehaviour implements GhostRenderBehaviour
             BlockPlaceContext ctx,
             BlockState hitState,
             int renderPass
-    )
-    {
+    ) {
         BlockState state = RailSlopeGhostRenderBehaviour.INSTANCE.getRenderState(stack, proxiedStack, hit, ctx, hitState, renderPass);
         if (state != null)
         {
@@ -45,10 +42,8 @@ public final class FancyRailGhostRenderBehaviour implements GhostRenderBehaviour
             BlockState hitState,
             BlockPos defaultPos,
             int renderPass
-    )
-    {
-        if (hitState.getBlock() == FBContent.BLOCK_FRAMED_SLOPE.value())
-        {
+    ) {
+        if (hitState.getBlock() == FBContent.BLOCK_FRAMED_SLOPE.value()) {
             return RailSlopeGhostRenderBehaviour.INSTANCE.getRenderPos(stack, proxiedStack, hit, ctx, hitState, defaultPos, renderPass);
         }
         return GhostRenderBehaviour.super.getRenderPos(stack, proxiedStack, hit, ctx, hitState, defaultPos, renderPass);
@@ -63,10 +58,8 @@ public final class FancyRailGhostRenderBehaviour implements GhostRenderBehaviour
             BlockState hitState,
             BlockState renderState,
             BlockPos renderPos
-    )
-    {
-        if (renderPos.equals(hit.getBlockPos()))
-        {
+    ) {
+        if (renderPos.equals(hit.getBlockPos())) {
             return RailSlopeGhostRenderBehaviour.INSTANCE.canRenderAt(stack, proxiedStack, hit, ctx, hitState, renderState, renderPos);
         }
         return GhostRenderBehaviour.super.canRenderAt(stack, proxiedStack, hit, ctx, hitState, renderState, renderPos);

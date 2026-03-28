@@ -1,11 +1,9 @@
 package io.github.xfacthd.framedblocks.common.blockentity.special;
 
-import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 
-public interface ICollapsibleCopycatBlockEntity
-{
-    int getFaceOffset(BlockState state, Direction side);
+public interface CollapsibleBlockEntity {
+    int getVertexOffset(BlockState state, int vertex);
 
     int getPackedOffsets(BlockState state);
 }

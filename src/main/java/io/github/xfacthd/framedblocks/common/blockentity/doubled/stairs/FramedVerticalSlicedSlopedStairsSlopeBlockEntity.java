@@ -14,16 +14,13 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 
-public class FramedVerticalSlicedSlopedStairsSlopeBlockEntity extends FramedDoubleBlockEntity
-{
-    public FramedVerticalSlicedSlopedStairsSlopeBlockEntity(BlockPos pos, BlockState state)
-    {
+public class FramedVerticalSlicedSlopedStairsSlopeBlockEntity extends FramedDoubleBlockEntity {
+    public FramedVerticalSlicedSlopedStairsSlopeBlockEntity(BlockPos pos, BlockState state) {
         super(FBContent.BE_TYPE_FRAMED_VERTICAL_SLICED_SLOPED_DOUBLE_STAIRS_SLOPE.value(), pos, state);
     }
 
     @Override
-    protected boolean hitSecondary(BlockHitResult hit, Vec3 lookVec, Vec3 eyePos)
-    {
+    protected boolean hitSecondary(BlockHitResult hit, Vec3 lookVec, Vec3 eyePos) {
         Direction facing = getBlockState().getValue(FramedProperties.FACING_HOR);
         HorizontalRotation rot = getBlockState().getValue(PropertyHolder.ROTATION);
         Direction dirTwo = rot.getOpposite().withFacing(facing);
@@ -31,30 +28,23 @@ public class FramedVerticalSlicedSlopedStairsSlopeBlockEntity extends FramedDoub
         Direction side = hit.getDirection();
         Vec3 hitVec = hit.getLocation();
 
-        if (side == facing)
-        {
+        if (side == facing) {
             double par = MathUtils.fractionInDir(hitVec, dirTwo);
             double perp = MathUtils.fractionInDir(hitVec, dirThree.getOpposite());
             return perp > par;
         }
-        if (side == dirTwo || side == dirThree)
-        {
+        if (side == dirTwo || side == dirThree) {
             return false;
         }
 
-        if (side == dirTwo.getOpposite() || side == dirThree.getOpposite())
-        {
-            if (MathUtils.fractionInDir(hitVec, facing) > .5) // Crosshair is definitely on half slope's half-width faces
-            {
+        if (side == dirTwo.getOpposite() || side == dirThree.getOpposite()) {
+            if (MathUtils.fractionInDir(hitVec, facing) > .5) { // Crosshair is definitely on half slope's half-width faces
                 return true;
             }
-        }
-        else if (side == facing.getOpposite())
-        {
+        } else if (side == facing.getOpposite()) {
             double par = MathUtils.fractionInDir(hitVec, dirTwo.getOpposite());
             double perp = MathUtils.fractionInDir(hitVec, dirThree);
-            if (perp > par) // Crosshair is definitely on slope's triangle face
-            {
+            if (perp > par) { // Crosshair is definitely on slope's triangle face
                 return false;
             }
         }

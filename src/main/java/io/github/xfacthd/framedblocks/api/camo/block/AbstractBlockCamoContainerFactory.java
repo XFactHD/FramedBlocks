@@ -17,22 +17,15 @@ import net.neoforged.neoforge.transfer.transaction.Transaction;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.Nullable;
 
-public abstract class AbstractBlockCamoContainerFactory<T extends AbstractBlockCamoContainer<T>> extends CamoContainerFactory<T>
-{
+public abstract class AbstractBlockCamoContainerFactory<T extends AbstractBlockCamoContainer<T>> extends CamoContainerFactory<T> {
     @Override
-    @Nullable
-    public final T applyCamo(Level level, BlockPos pos, Player player, ItemAccess itemAccess)
-    {
+    public final @Nullable T applyCamo(Level level, BlockPos pos, Player player, ItemAccess itemAccess) {
         BlockState state = getStateFromItemStack(level, pos, player, itemAccess);
-        if (state != null && !(state.getBlock() instanceof IFramedBlock) && isValidBlock(state, level, pos, player))
-        {
-            try (Transaction tx = Transaction.open(null))
-            {
+        if (state != null && !(state.getBlock() instanceof IFramedBlock) && isValidBlock(state, level, pos, player)) {
+            try (Transaction tx = Transaction.open(null)) {
                 T container = createContainer(state, level, pos, player, itemAccess);
-                if (!level.isClientSide() && !player.isCreative() && ConfigView.Server.INSTANCE.shouldConsumeCamoItem())
-                {
-                    if (itemAccess.extract(itemAccess.getResource(), 1, tx) != 1)
-                    {
+                if (!level.isClientSide() && !player.isCreative() && ConfigView.Server.INSTANCE.shouldConsumeCamoItem()) {
+                    if (itemAccess.extract(itemAccess.getResource(), 1, tx) != 1) {
                         return null;
                     }
                     tx.commit();
@@ -45,15 +38,11 @@ public abstract class AbstractBlockCamoContainerFactory<T extends AbstractBlockC
     }
 
     @Override
-    public final boolean removeCamo(Level level, BlockPos pos, Player player, ItemAccess itemAccess, T container)
-    {
-        if (!level.isClientSide() && (player.isCreative() || ConfigView.Server.INSTANCE.shouldConsumeCamoItem()))
-        {
+    public final boolean removeCamo(Level level, BlockPos pos, Player player, ItemAccess itemAccess, T container) {
+        if (!level.isClientSide() && (player.isCreative() || ConfigView.Server.INSTANCE.shouldConsumeCamoItem())) {
             ItemStack result = createItemStack(level, pos, player, itemAccess, container);
-            try (Transaction tx = Transaction.open(null))
-            {
-                if (itemAccess.insert(ItemResource.of(result), result.getCount(), tx) != result.getCount())
-                {
+            try (Transaction tx = Transaction.open(null)) {
+                if (itemAccess.insert(ItemResource.of(result), result.getCount(), tx) != result.getCount()) {
                     return false;
                 }
                 tx.commit();
@@ -63,20 +52,18 @@ public abstract class AbstractBlockCamoContainerFactory<T extends AbstractBlockC
     }
 
     @Override
-    public final boolean validateCamo(T container)
-    {
-        if (container.getState().getBlock() instanceof IFramedBlock) return false;
+    public final boolean validateCamo(T container) {
+        if (container.getState().getBlock() instanceof IFramedBlock) {
+            return false;
+        }
         return isValidBlock(container.getState(), EmptyBlockGetter.INSTANCE, BlockPos.ZERO, null);
     }
 
     /**
      * {@return the {@linkplain BlockState camo state} resulting from the stack in the given {@link ItemAccess} and context}
      */
-    @Nullable
-    protected BlockState getStateFromItemStack(Level level, BlockPos pos, Player player, ItemAccess itemAccess)
-    {
-        if (itemAccess.getResource().getItem() instanceof BlockItem item)
-        {
+    protected @Nullable BlockState getStateFromItemStack(Level level, BlockPos pos, Player player, ItemAccess itemAccess) {
+        if (itemAccess.getResource().getItem() instanceof BlockItem item) {
             return item.getBlock().defaultBlockState();
         }
         return null;
@@ -104,8 +91,7 @@ public abstract class AbstractBlockCamoContainerFactory<T extends AbstractBlockC
     protected abstract boolean isValidBlock(BlockState camoState, BlockGetter level, BlockPos pos, @Nullable Player player);
 
     @ApiStatus.Internal
-    public final boolean isValidBlockInternal(BlockState camoState)
-    {
+    public final boolean isValidBlockInternal(BlockState camoState) {
         return isValidBlock(camoState, EmptyBlockGetter.INSTANCE, BlockPos.ZERO, null);
     }
 }

@@ -7,20 +7,16 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jspecify.annotations.Nullable;
 
-public final class VerticalDoubleHalfSlopeConnectionPredicate extends NonDetailedConnectionPredicate
-{
+public final class VerticalDoubleHalfSlopeConnectionPredicate extends NonDetailedConnectionPredicate {
     @Override
-    public boolean canConnectFullEdge(BlockState state, Direction side, @Nullable Direction edge)
-    {
+    public boolean canConnectFullEdge(BlockState state, Direction side, @Nullable Direction edge) {
         boolean top = state.getValue(FramedProperties.TOP);
         Direction dir = top ? Direction.UP : Direction.DOWN;
 
-        if (!DirUtils.isY(side))
-        {
+        if (!DirUtils.isY(side)) {
             return edge == dir;
         }
-        else if (side == dir)
-        {
+        if (side == dir) {
             return edge != null;
         }
         return false;

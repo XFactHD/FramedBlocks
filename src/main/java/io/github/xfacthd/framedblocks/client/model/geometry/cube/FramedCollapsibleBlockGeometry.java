@@ -22,8 +22,7 @@ import net.neoforged.neoforge.model.data.ModelData;
 import org.joml.Vector3f;
 import org.jspecify.annotations.Nullable;
 
-public class FramedCollapsibleBlockGeometry extends Geometry
-{
+public class FramedCollapsibleBlockGeometry extends Geometry {
     public static final String ALT_BASE_MODEL_KEY = "alt_base";
     private static final float MIN_DEPTH = .001F;
 
@@ -33,8 +32,7 @@ public class FramedCollapsibleBlockGeometry extends Geometry
     private final boolean rotSplitLine;
     private final BlockStateModel altBaseModel;
 
-    public FramedCollapsibleBlockGeometry(GeometryFactory.Context ctx)
-    {
+    public FramedCollapsibleBlockGeometry(GeometryFactory.Context ctx) {
         this.state = ctx.state();
         this.collapsedFace = ctx.state().getValue(PropertyHolder.NULLABLE_FACE).toNullableDirection();
         this.rotSplitLine = ctx.state().getValue(PropertyHolder.ROTATE_SPLIT_LINE);
@@ -42,11 +40,9 @@ public class FramedCollapsibleBlockGeometry extends Geometry
     }
 
     @Override
-    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object cacheKeyUserData)
-    {
+    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object cacheKeyUserData) {
         Direction quadDir = quad.direction();
-        if (collapsedFace == null || quadDir == collapsedFace.getOpposite())
-        {
+        if (collapsedFace == null || quadDir == collapsedFace.getOpposite()) {
             quadMap.getOrCreate(quadDir).add(quad);
             return;
         }
@@ -54,21 +50,17 @@ public class FramedCollapsibleBlockGeometry extends Geometry
         int offsets = PackedCollapsibleBlockOffsets.unwrap(cacheKeyUserData, state);
         float[] vertexPos = new float[] { 1F, 1F, 1F, 1F };
         boolean allSame = true;
-        if (offsets != 0)
-        {
+        if (offsets != 0) {
             byte[] relOff = FramedCollapsibleBlockEntity.unpackOffsets(offsets);
             allSame = relOff[0] == relOff[1] && relOff[0] == relOff[2] && relOff[0] == relOff[3];
-            for (int i = 0; i < 4; i++)
-            {
+            for (int i = 0; i < 4; i++) {
                 vertexPos[i] = Math.max(1F - ((float) relOff[i] / 16F), allSame ? MIN_DEPTH : 0F);
             }
         }
 
-        if (quadDir == collapsedFace)
-        {
+        if (quadDir == collapsedFace) {
             boolean planar = true;
-            if (!allSame)
-            {
+            if (!allSame) {
                 Vector3f v0 = new Vector3f(0, vertexPos[0], 0);
                 Vector3f v1 = new Vector3f(0, vertexPos[1], 1);
                 Vector3f v2 = new Vector3f(1, vertexPos[2], 1);
@@ -80,8 +72,7 @@ public class FramedCollapsibleBlockGeometry extends Geometry
 
                 planar = Mth.equal(0F, v3.sub(v0).dot(n1));
             }
-            if (planar)
-            {
+            if (planar) {
                 QuadModifier.of(quad).apply(Modifiers.setPosition(vertexPos)).export(quadMap, null);
                 return;
             }
@@ -92,13 +83,10 @@ public class FramedCollapsibleBlockGeometry extends Geometry
 
             float[] vertexPosTwo = new float[] { 1F, 1F, 1F, 1F };
             System.arraycopy(vertexPos, 0, vertexPosTwo, 0, vertexPos.length);
-            if (rotate)
-            {
+            if (rotate) {
                 vertexPos[2] = vertexPos[1] + vertexPos[3] - vertexPos[0];
                 vertexPosTwo[0] = vertexPosTwo[1] + vertexPosTwo[3] - vertexPosTwo[2];
-            }
-            else
-            {
+            } else {
                 vertexPos[3] = vertexPos[0] + vertexPos[2] - vertexPos[1];
                 vertexPosTwo[1] = vertexPosTwo[0] + vertexPosTwo[2] - vertexPosTwo[3];
             }
@@ -106,8 +94,7 @@ public class FramedCollapsibleBlockGeometry extends Geometry
             // FIXME: certain configurations cause holes on the sides (i.e. one corner on 16, other corner between 1 and 7)
             //        when "undersized" quads (i.e. connected textures quads) are involved, needs improved quad cutting
             //        which interpolates on two axis instead of only one
-            if (DirUtils.isY(collapsedFace))
-            {
+            if (DirUtils.isY(collapsedFace)) {
                 rotate ^= collapsedFace == Direction.DOWN;
                 float left = rotate ? 0F : 1F;
                 float right = rotate ? 1F : 0F;
@@ -121,9 +108,7 @@ public class FramedCollapsibleBlockGeometry extends Geometry
                         .apply(Modifiers.cut(Direction.WEST, left, right))
                         .apply(Modifiers.setPosition(vertexPosTwo))
                         .export(quadMap, null);
-            }
-            else
-            {
+            } else {
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(quadDir.getCounterClockWise(), rotate ? 1F : 0F, rotate ? 0F : 1F))
                         .apply(Modifiers.setPosition(vertexPos))
@@ -134,11 +119,8 @@ public class FramedCollapsibleBlockGeometry extends Geometry
                         .apply(Modifiers.setPosition(vertexPosTwo))
                         .export(quadMap, null);
             }
-        }
-        else
-        {
-            if (DirUtils.isY(collapsedFace))
-            {
+        } else {
+            if (DirUtils.isY(collapsedFace)) {
                 boolean top = collapsedFace == Direction.UP;
                 int idxOne = getYCollapsedIndexOffset(quadDir);
                 int idxTwo = Math.floorMod(idxOne + (top ? 1 : -1), 4);
@@ -148,9 +130,7 @@ public class FramedCollapsibleBlockGeometry extends Geometry
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(collapsedFace, posOne, posTwo))
                         .export(quadMap, quadDir);
-            }
-            else if (DirUtils.isY(quadDir))
-            {
+            } else if (DirUtils.isY(quadDir)) {
                 boolean top = quad.direction() == Direction.UP;
                 float posOne = vertexPos[top ? 0 : 1];
                 float posTwo = vertexPos[top ? 3 : 2];
@@ -158,9 +138,7 @@ public class FramedCollapsibleBlockGeometry extends Geometry
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(collapsedFace, posOne, posTwo))
                         .export(quadMap, quadDir);
-            }
-            else
-            {
+            } else {
                 boolean right = collapsedFace == quadDir.getClockWise();
                 float posTop = vertexPos[right ? 3 : 0];
                 float posBot = vertexPos[right ? 2 : 1];
@@ -173,29 +151,23 @@ public class FramedCollapsibleBlockGeometry extends Geometry
     }
 
     @Override
-    public boolean useBaseModel()
-    {
+    public boolean useBaseModel() {
         return true;
     }
 
     @Override
-    public BlockStateModel getBaseModel(BlockStateModel baseModel, boolean useAltModel)
-    {
+    public BlockStateModel getBaseModel(BlockStateModel baseModel, boolean useAltModel) {
         return useAltModel ? altBaseModel : baseModel;
     }
 
     @Override
-    @Nullable
-    public Object computeCacheKeyUserData(BlockAndTintGetter level, BlockPos pos, RandomSource random, ModelData data)
-    {
+    public @Nullable Object computeCacheKeyUserData(BlockAndTintGetter level, BlockPos pos, RandomSource random, ModelData data) {
         return data.get(PackedCollapsibleBlockOffsets.PROPERTY);
     }
 
-    private int getYCollapsedIndexOffset(Direction quadFace)
-    {
+    private int getYCollapsedIndexOffset(Direction quadFace) {
         boolean top = collapsedFace == Direction.UP;
-        return switch (quadFace)
-        {
+        return switch (quadFace) {
             case NORTH -> top ? 3 : 2;
             case EAST -> top ? 2 : 3;
             case SOUTH -> top ? 1 : 0;

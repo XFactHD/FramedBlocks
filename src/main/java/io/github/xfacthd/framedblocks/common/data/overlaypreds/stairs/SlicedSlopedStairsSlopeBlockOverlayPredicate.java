@@ -6,13 +6,10 @@ import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 
-public final class SlicedSlopedStairsSlopeBlockOverlayPredicate implements BlockOverlayPredicate
-{
+public final class SlicedSlopedStairsSlopeBlockOverlayPredicate implements BlockOverlayPredicate {
     @Override
-    public boolean supportsSolid(BlockState state, Direction side, boolean secondPart)
-    {
-        if (secondPart)
-        {
+    public boolean supportsSolid(BlockState state, Direction side, boolean secondPart) {
+        if (secondPart) {
             Direction facing = state.getValue(FramedProperties.FACING_HOR);
             return side != facing && side != facing.getCounterClockWise();
         }
@@ -20,21 +17,17 @@ public final class SlicedSlopedStairsSlopeBlockOverlayPredicate implements Block
     }
 
     @Override
-    public boolean supportsEdge(BlockState state, Direction side, Direction edge, boolean secondPart, boolean nullCullFace, boolean unaligned)
-    {
+    public boolean supportsEdge(BlockState state, Direction side, Direction edge, boolean secondPart, boolean nullCullFace, boolean unaligned) {
         Direction facing = state.getValue(FramedProperties.FACING_HOR);
         Direction baseDir = state.getValue(FramedProperties.TOP) ? Direction.UP : Direction.DOWN;
-        if (secondPart)
-        {
+        if (secondPart) {
             return !DirUtils.isY(side) || (edge != facing && edge != facing.getCounterClockWise());
         }
 
-        if (side == baseDir)
-        {
+        if (side == baseDir) {
             return edge != facing.getOpposite() && edge != facing.getClockWise();
         }
-        if (side == facing.getOpposite() || side == facing.getClockWise())
-        {
+        if (side == facing.getOpposite() || side == facing.getClockWise()) {
             return edge != baseDir;
         }
         return true;

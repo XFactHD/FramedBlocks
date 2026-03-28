@@ -12,20 +12,17 @@ import org.jspecify.annotations.Nullable;
 public final class BoardGhostRenderBehaviour implements GhostRenderBehaviour
 {
     @Override
-    @Nullable
-    public BlockState getRenderState(
+    public @Nullable BlockState getRenderState(
             ItemStack stack,
             @Nullable ItemStack proxiedStack,
             BlockHitResult hit,
             BlockPlaceContext ctx,
             BlockState hitState,
             int renderPass
-    )
-    {
+    ) {
         BlockState renderState = GhostRenderBehaviour.super.getRenderState(stack, proxiedStack, hit, ctx, hitState, renderPass);
         BlockState state = ctx.getLevel().getBlockState(ctx.getClickedPos());
-        if (renderState != null && state.getBlock() == FBContent.BLOCK_FRAMED_BOARD.value())
-        {
+        if (renderState != null && state.getBlock() == FBContent.BLOCK_FRAMED_BOARD.value()) {
             int faces = renderState.getValue(PropertyHolder.FACES);
             faces &= ~state.getValue(PropertyHolder.FACES);
             return faces == 0 ? null : renderState.setValue(PropertyHolder.FACES, faces);

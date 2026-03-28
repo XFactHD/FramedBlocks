@@ -5,11 +5,9 @@ import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 
-public final class PrismFullFacePredicate implements FullFacePredicate
-{
+public final class PrismFullFacePredicate implements FullFacePredicate {
     @Override
-    public boolean test(BlockState state, Direction side)
-    {
+    public boolean test(BlockState state, Direction side) {
         return side == state.getValue(PropertyHolder.FACING_AXIS).direction().getOpposite();
     }
 }

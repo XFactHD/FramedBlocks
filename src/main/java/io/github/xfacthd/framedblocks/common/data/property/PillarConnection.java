@@ -4,8 +4,7 @@ import net.minecraft.util.StringRepresentable;
 
 import java.util.Locale;
 
-public enum PillarConnection implements StringRepresentable
-{
+public enum PillarConnection implements StringRepresentable {
     NONE,
     POST,
     PILLAR;
@@ -13,8 +12,7 @@ public enum PillarConnection implements StringRepresentable
     private final String name = toString().toLowerCase(Locale.ROOT);
 
     @Override
-    public String getSerializedName()
-    {
+    public String getSerializedName() {
         return name;
     }
 }

@@ -4,8 +4,7 @@ import net.minecraft.util.StringRepresentable;
 
 import java.util.Locale;
 
-public enum ChainType implements StringRepresentable
-{
+public enum ChainType implements StringRepresentable {
     CAMO,
     METAL,
     NONE;
@@ -13,15 +12,12 @@ public enum ChainType implements StringRepresentable
     private final String name = toString().toLowerCase(Locale.ROOT);
 
     @Override
-    public String getSerializedName()
-    {
+    public String getSerializedName() {
         return name;
     }
 
-    public ChainType next()
-    {
-        return switch (this)
-        {
+    public ChainType next() {
+        return switch (this) {
             case CAMO -> METAL;
             case METAL -> NONE;
             case NONE -> CAMO;

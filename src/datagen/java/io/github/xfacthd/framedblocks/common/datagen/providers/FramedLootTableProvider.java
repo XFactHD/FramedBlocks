@@ -24,25 +24,20 @@ import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
-public final class FramedLootTableProvider extends LootTableProvider
-{
-    public FramedLootTableProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> providerFuture)
-    {
+public final class FramedLootTableProvider extends LootTableProvider {
+    public FramedLootTableProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> providerFuture) {
         super(output, Set.of(), List.of(
                 new LootTableProvider.SubProviderEntry(BlockLootTable::new, LootContextParamSets.BLOCK)
         ), providerFuture);
     }
 
-    private static class BlockLootTable extends FramedBlockLootSubProvider
-    {
-        public BlockLootTable(HolderLookup.Provider lookupProvider)
-        {
+    private static class BlockLootTable extends FramedBlockLootSubProvider {
+        public BlockLootTable(HolderLookup.Provider lookupProvider) {
             super(lookupProvider);
         }
 
         @Override
-        protected Iterable<Block> getKnownBlocks()
-        {
+        protected Iterable<Block> getKnownBlocks() {
             return FBContent.getRegisteredBlocks()
                     .stream()
                     .map(Holder::value)
@@ -50,8 +45,7 @@ public final class FramedLootTableProvider extends LootTableProvider
         }
 
         @Override
-        protected void generate()
-        {
+        protected void generate() {
             dropOtherWithCamo(FBContent.BLOCK_FRAMED_WATERLOGGABLE_PRESSURE_PLATE.value(), FBContent.BLOCK_FRAMED_PRESSURE_PLATE.value());
             dropOtherWithCamo(FBContent.BLOCK_FRAMED_WATERLOGGABLE_STONE_PRESSURE_PLATE.value(), FBContent.BLOCK_FRAMED_STONE_PRESSURE_PLATE.value());
             dropOtherWithCamo(FBContent.BLOCK_FRAMED_WATERLOGGABLE_OBSIDIAN_PRESSURE_PLATE.value(), FBContent.BLOCK_FRAMED_OBSIDIAN_PRESSURE_PLATE.value());

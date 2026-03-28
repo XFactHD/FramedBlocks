@@ -23,10 +23,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import org.jspecify.annotations.Nullable;
 
-public class FramedHalfSlopeBlock extends FramedBlock implements SlopeToggleBlock
-{
-    public FramedHalfSlopeBlock(Properties props)
-    {
+public class FramedHalfSlopeBlock extends FramedBlock implements SlopeToggleBlock {
+    public FramedHalfSlopeBlock(Properties props) {
         super(BlockType.FRAMED_HALF_SLOPE, props);
         registerDefaultState(defaultBlockState()
                 .setValue(FramedProperties.TOP, false)
@@ -35,16 +33,13 @@ public class FramedHalfSlopeBlock extends FramedBlock implements SlopeToggleBloc
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
-    {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
         builder.add(FramedProperties.FACING_HOR, FramedProperties.TOP, PropertyHolder.RIGHT);
     }
 
     @Override
-    @Nullable
-    public BlockState getStateForPlacement(BlockPlaceContext ctx)
-    {
+    public @Nullable BlockState getStateForPlacement(BlockPlaceContext ctx) {
         return ExtPlacementStateBuilder.of(this, ctx)
                 .withHorizontalFacing()
                 .withTop()
@@ -54,13 +49,10 @@ public class FramedHalfSlopeBlock extends FramedBlock implements SlopeToggleBloc
     }
 
     @Override
-    public BlockState rotate(BlockState state, RotationDirection direction, WrenchRotationMode mode)
-    {
-        return switch (mode)
-        {
+    public BlockState rotate(BlockState state, RotationDirection direction, WrenchRotationMode mode) {
+        return switch (mode) {
             case PRIMARY -> super.rotate(state, direction, mode);
-            case SECONDARY -> state.cycle(switch (direction)
-            {
+            case SECONDARY -> state.cycle(switch (direction) {
                 case CLOCKWISE -> FramedProperties.TOP;
                 case COUNTERCLOCKWISE -> PropertyHolder.RIGHT;
             });
@@ -68,27 +60,25 @@ public class FramedHalfSlopeBlock extends FramedBlock implements SlopeToggleBloc
     }
 
     @Override
-    protected BlockState rotate(BlockState state, Rotation rotation)
-    {
+    protected BlockState rotate(BlockState state, Rotation rotation) {
         return BlockUtils.rotate(state, rotation);
     }
 
     @Override
-    protected BlockState mirror(BlockState state, Mirror mirror)
-    {
-        if (mirror == Mirror.NONE) { return state; }
+    protected BlockState mirror(BlockState state, Mirror mirror) {
+        if (mirror == Mirror.NONE) {
+            return state;
+        }
 
         Direction dir = state.getValue(FramedProperties.FACING_HOR);
-        if ((mirror == Mirror.FRONT_BACK && DirUtils.isX(dir)) || (mirror == Mirror.LEFT_RIGHT && DirUtils.isZ(dir)))
-        {
+        if ((mirror == Mirror.FRONT_BACK && DirUtils.isX(dir)) || (mirror == Mirror.LEFT_RIGHT && DirUtils.isZ(dir))) {
             state = state.setValue(FramedProperties.FACING_HOR, dir.getOpposite());
         }
         return state.cycle(PropertyHolder.RIGHT);
     }
 
     @Override
-    public BlockItem createBlockItem(Item.Properties props)
-    {
+    public BlockItem createBlockItem(Item.Properties props) {
         return new VerticalAndWallBlockItem(
                 this,
                 FBContent.BLOCK_FRAMED_VERTICAL_HALF_SLOPE.value(),
@@ -97,20 +87,17 @@ public class FramedHalfSlopeBlock extends FramedBlock implements SlopeToggleBloc
     }
 
     @Override
-    public BlockState getItemModelSource()
-    {
+    public BlockState getItemModelSource() {
         return defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
     }
 
     @Override
-    public Direction getHorizontalOrientation(BlockState state)
-    {
+    public Direction getHorizontalOrientation(BlockState state) {
         return state.getValue(FramedProperties.FACING_HOR);
     }
 
     @Override
-    public BlockState getJadeRenderState(BlockState state)
-    {
+    public BlockState getJadeRenderState(BlockState state) {
         return getItemModelSource();
     }
 }

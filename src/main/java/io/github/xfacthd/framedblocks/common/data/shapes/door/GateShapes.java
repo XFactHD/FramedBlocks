@@ -14,23 +14,18 @@ import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 
-public final class GateShapes
-{
-    private static final ShapeCache<Direction> SHAPES = ShapeCache.createEnum(Direction.class, map ->
-    {
+public final class GateShapes {
+    private static final ShapeCache<Direction> SHAPES = ShapeCache.createEnum(Direction.class, map -> {
         VoxelShape shape = Block.box(0.0D, 0.0D, 13.0D, 16.0D, 16.0D, 16.0D);
         ShapeUtils.makeHorizontalRotations(shape, Direction.NORTH, map);
     });
 
-    public static ShapeContainer generate(List<BlockState> states)
-    {
+    public static ShapeContainer generate(List<BlockState> states) {
         Map<BlockState, VoxelShape> map = new IdentityHashMap<>(states.size());
 
-        for (BlockState state : states)
-        {
+        for (BlockState state : states) {
             Direction dir = state.getValue(BlockStateProperties.HORIZONTAL_FACING);
-            if (state.getValue(BlockStateProperties.OPEN))
-            {
+            if (state.getValue(BlockStateProperties.OPEN)) {
                 boolean rightHinge = state.getValue(BlockStateProperties.DOOR_HINGE) == DoorHingeSide.RIGHT;
                 dir = rightHinge ? dir.getCounterClockWise() : dir.getClockWise();
             }

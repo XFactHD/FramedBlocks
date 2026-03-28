@@ -41,38 +41,30 @@ import org.jspecify.annotations.Nullable;
 import java.util.List;
 import java.util.Set;
 
-public class FramedDoorBlock extends DoorBlock implements IFramedBlockInternal
-{
+public class FramedDoorBlock extends DoorBlock implements IFramedBlockInternal {
     private final BlockType type;
 
-    private FramedDoorBlock(BlockType type, BlockSetType blockSet, Properties props)
-    {
+    private FramedDoorBlock(BlockType type, BlockSetType blockSet, Properties props) {
         this.type = type;
         super(blockSet, props);
         BlockUtils.configureStandardProperties(this);
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
-    {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
         BlockUtils.addStandardProperties(this, builder);
     }
 
     @Override
-    protected InteractionResult useItemOn(
-            ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit
-    )
-    {
+    protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         return handleUse(state, level, pos, player, hand, hit);
     }
 
     @Override
-    public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)
-    {
+    public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
         super.setPlacedBy(level, pos, state, placer, stack);
-        if (level.getBlockEntity(pos.above()) instanceof FramedDoorBlockEntity be)
-        {
+        if (level.getBlockEntity(pos.above()) instanceof FramedDoorBlockEntity be) {
             be.applyComponentsFromItemStack(stack);
         }
 
@@ -90,102 +82,84 @@ public class FramedDoorBlock extends DoorBlock implements IFramedBlockInternal
             BlockPos adjPos,
             BlockState adjState,
             RandomSource random
-    )
-    {
+    ) {
         BlockState newState = super.updateShape(state, level, tickAccess, pos, side, adjPos, adjState, random);
-        if (newState.getBlock() == this)
-        {
+        if (newState.getBlock() == this) {
             newState = BlockUtils.copyStandardProperties(this, state, newState, false);
         }
-        if (newState == state)
-        {
+        if (newState == state) {
             updateCulling(level, pos);
         }
         return newState;
     }
 
     @Override
-    protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, @Nullable Orientation orientation, boolean isMoving)
-    {
+    protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, @Nullable Orientation orientation, boolean isMoving) {
         super.neighborChanged(state, level, pos, block, orientation, isMoving);
         updateCulling(level, pos);
     }
 
     @Override
-    protected boolean useShapeForLightOcclusion(BlockState state)
-    {
+    protected boolean useShapeForLightOcclusion(BlockState state) {
         return useCamoOcclusionShapeForLightOcclusion(state);
     }
 
     @Override
-    protected VoxelShape getOcclusionShape(BlockState state)
-    {
+    protected VoxelShape getOcclusionShape(BlockState state) {
         return getCamoOcclusionShape(state, null);
     }
 
     @Override
-    protected VoxelShape getVisualShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext ctx)
-    {
+    protected VoxelShape getVisualShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext ctx) {
         return getCamoVisualShape(state, level, pos, ctx);
     }
 
     @Override
-    protected float getShadeBrightness(BlockState state, BlockGetter level, BlockPos pos)
-    {
+    protected float getShadeBrightness(BlockState state, BlockGetter level, BlockPos pos) {
         return getCamoShadeBrightness(state, level, pos, super.getShadeBrightness(state, level, pos));
     }
 
     @Override
-    protected boolean propagatesSkylightDown(BlockState state)
-    {
+    protected boolean propagatesSkylightDown(BlockState state) {
         return state.getValue(FramedProperties.PROPAGATES_SKYLIGHT);
     }
 
     @Override
-    protected List<ItemStack> getDrops(BlockState state, LootParams.Builder builder)
-    {
+    protected List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {
         return super.getDrops(state, getCamoDrops(builder));
     }
 
     @Override
-    public BlockType getBlockType()
-    {
+    public BlockType getBlockType() {
         return type;
     }
 
     @Override
-    public FramedBlockEntity newBlockEntity(BlockPos pos, BlockState state)
-    {
+    public FramedBlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return new FramedDoorBlockEntity(pos, state);
     }
 
     @Override
-    @Nullable
-    public BlockState getItemModelSource()
-    {
+    public @Nullable BlockState getItemModelSource() {
         return null;
     }
 
     @Override
-    public Direction getHorizontalOrientation(BlockState state)
-    {
+    public Direction getHorizontalOrientation(BlockState state) {
         return state.getValue(FACING);
     }
 
     @Override
-    public boolean shouldRenderAsBlockInJadeTooltip()
-    {
+    public boolean shouldRenderAsBlockInJadeTooltip() {
         return false;
     }
 
     @Override
-    public BlockState getJadeRenderState(BlockState state)
-    {
+    public BlockState getJadeRenderState(BlockState state) {
         return state;
     }
 
-    public static FramedDoorBlock wood(Properties props)
-    {
+    public static FramedDoorBlock wood(Properties props) {
         return new FramedDoorBlock(
                 BlockType.FRAMED_DOOR,
                 BlockSetType.OAK,
@@ -193,8 +167,7 @@ public class FramedDoorBlock extends DoorBlock implements IFramedBlockInternal
         );
     }
 
-    public static FramedDoorBlock iron(Properties props)
-    {
+    public static FramedDoorBlock iron(Properties props) {
         return new FramedDoorBlock(
                 BlockType.FRAMED_IRON_DOOR,
                 BlockSetType.IRON,
@@ -203,18 +176,15 @@ public class FramedDoorBlock extends DoorBlock implements IFramedBlockInternal
         );
     }
 
-    public static final class DoorStateMerger implements StateMerger
-    {
+    public static final class DoorStateMerger implements StateMerger {
         public static final DoorStateMerger INSTANCE = new DoorStateMerger();
 
         private DoorStateMerger() { }
 
         @Override
-        public BlockState apply(BlockState state)
-        {
+        public BlockState apply(BlockState state) {
             state = WrapHelper.POWERED_MERGER.apply(state);
-            if (state.getValue(BlockStateProperties.OPEN))
-            {
+            if (state.getValue(BlockStateProperties.OPEN)) {
                 Direction dir = state.getValue(BlockStateProperties.HORIZONTAL_FACING);
                 DoorHingeSide hinge = state.getValue(BlockStateProperties.DOOR_HINGE);
                 boolean right = hinge == DoorHingeSide.RIGHT;
@@ -232,8 +202,7 @@ public class FramedDoorBlock extends DoorBlock implements IFramedBlockInternal
         }
 
         @Override
-        public Set<Property<?>> getHandledProperties(Holder<Block> block)
-        {
+        public Set<Property<?>> getHandledProperties(Holder<Block> block) {
             return Utils.concat(
                     WrapHelper.POWERED_MERGER.getHandledProperties(block),
                     Set.of(BlockStateProperties.OPEN, BlockStateProperties.DOOR_HINGE)

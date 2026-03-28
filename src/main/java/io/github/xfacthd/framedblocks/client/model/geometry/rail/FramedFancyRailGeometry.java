@@ -26,8 +26,7 @@ import org.jspecify.annotations.Nullable;
 import java.util.Objects;
 import java.util.function.UnaryOperator;
 
-public class FramedFancyRailGeometry extends Geometry
-{
+public class FramedFancyRailGeometry extends Geometry {
     private static final int SLEEPER_COUNT = 4;
     private static final int SLEEPER_COUNT_CURVE = 3;
     private static final float SLEEPER_BASE_OFFSET = 1F/16F;
@@ -38,8 +37,7 @@ public class FramedFancyRailGeometry extends Geometry
     private static final float SLEEPER_DIAGONAL_OFFSET = 1.85F/16F;
     private static final Vector3f SCALE_X = new Vector3f(1, 0, 0);
     private static final Vector3f SCALE_Z = new Vector3f(0, 0, 1);
-    private static final Vector3f[] SLOPE_ORIGINS = Util.make(new Vector3f[4], arr ->
-    {
+    private static final Vector3f[] SLOPE_ORIGINS = Util.make(new Vector3f[4], arr -> {
         arr[Direction.NORTH.get2DDataValue()] = new Vector3f(0, 0, 1);
         arr[Direction.EAST.get2DDataValue()] =  new Vector3f(0, 0, 0);
         arr[Direction.SOUTH.get2DDataValue()] = new Vector3f(0, 0, 0);
@@ -54,8 +52,7 @@ public class FramedFancyRailGeometry extends Geometry
     private final Direction secDir;
     private final BlockState auxShaderState;
 
-    private FramedFancyRailGeometry(GeometryFactory.Context ctx, Property<RailShape> shapeProperty, BlockState auxShaderState)
-    {
+    private FramedFancyRailGeometry(GeometryFactory.Context ctx, Property<RailShape> shapeProperty, BlockState auxShaderState) {
         this.state = ctx.state();
         this.baseModel = ctx.baseModel();
         this.auxShaderState = auxShaderState;
@@ -65,27 +62,19 @@ public class FramedFancyRailGeometry extends Geometry
     }
 
     @Override
-    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
-    {
-        if (shape.isSlope())
-        {
+    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData) {
+        if (shape.isSlope()) {
             makeAscendingRailSleepers(quadMap, quad, mainDir);
-        }
-        else if (shape == RailShape.NORTH_SOUTH || shape == RailShape.EAST_WEST)
-        {
+        } else if (shape == RailShape.NORTH_SOUTH || shape == RailShape.EAST_WEST) {
             makeStraightRailSleepers(quadMap, quad, mainDir, Modifiers.noop(), UnaryOperator.identity());
-        }
-        else
-        {
+        } else {
             makeCurvedRailSleepers(quadMap, quad, mainDir, Objects.requireNonNull(secDir));
         }
     }
 
-    private static void makeStraightRailSleepers(QuadMapBuilder quadMap, BakedQuad quad, Direction dir, QuadModifier.Modifier lastMod, UnaryOperator<@Nullable Direction> cullFaceMod)
-    {
+    private static void makeStraightRailSleepers(QuadMapBuilder quadMap, BakedQuad quad, Direction dir, QuadModifier.Modifier lastMod, UnaryOperator<@Nullable Direction> cullFaceMod) {
         Direction quadDir = quad.direction();
-        if (DirUtils.isY(quadDir))
-        {
+        if (DirUtils.isY(quadDir)) {
             Direction targetDir = cullFaceMod.apply(quadDir == Direction.UP ? null : quadDir);
             forAllSleepers((_, distDir, distOpp) ->
                     QuadModifier.of(quad)
@@ -95,9 +84,7 @@ public class FramedFancyRailGeometry extends Geometry
                             .apply(lastMod)
                             .export(quadMap, targetDir)
             );
-        }
-        else if (quadDir.getAxis() == dir.getAxis())
-        {
+        } else if (quadDir.getAxis() == dir.getAxis()) {
             forAllSleepers((_, distDir, _) ->
                     QuadModifier.of(quad)
                             .apply(Modifiers.cut(Direction.UP, SLEEPER_HEIGHT))
@@ -105,9 +92,7 @@ public class FramedFancyRailGeometry extends Geometry
                             .apply(lastMod)
                             .export(quadMap, null)
             );
-        }
-        else
-        {
+        } else {
             Direction targetDir = cullFaceMod.apply(quadDir);
             forAllSleepers((_, distDir, distOpp) ->
                     QuadModifier.of(quad)
@@ -120,8 +105,7 @@ public class FramedFancyRailGeometry extends Geometry
         }
     }
 
-    private static void makeAscendingRailSleepers(QuadMapBuilder quadMap, BakedQuad quad, Direction dir)
-    {
+    private static void makeAscendingRailSleepers(QuadMapBuilder quadMap, BakedQuad quad, Direction dir) {
         Direction.Axis axis = dir.getClockWise().getAxis();
         Vector3f origin = SLOPE_ORIGINS[dir.get2DDataValue()];
         float angle = DirUtils.isPositive(dir) == DirUtils.isX(dir) ? 45F : -45F;
@@ -130,14 +114,11 @@ public class FramedFancyRailGeometry extends Geometry
         makeStraightRailSleepers(quadMap, quad, dir, Modifiers.rotate(axis, origin, angle, true, scaleVec), cullFace -> cullFace == Direction.DOWN ? null : cullFace);
     }
 
-    private static void makeCurvedRailSleepers(QuadMapBuilder quadMap, BakedQuad quad, Direction dir, Direction secDir)
-    {
+    private static void makeCurvedRailSleepers(QuadMapBuilder quadMap, BakedQuad quad, Direction dir, Direction secDir) {
         Direction quadDir = quad.direction();
-        if (DirUtils.isY(quadDir))
-        {
+        if (DirUtils.isY(quadDir)) {
             Direction targetDir = quadDir == Direction.UP ? null : quadDir;
-            forAllSleepersCurve((i, distDir, distOpp) ->
-            {
+            forAllSleepersCurve((i, distDir, distOpp) -> {
                 boolean nonDiagUp = quadDir == Direction.UP && i != 1;
                 float height = nonDiagUp ? (SLEEPER_HEIGHT - .001F) : SLEEPER_HEIGHT;
                 QuadModifier.of(quad)
@@ -149,9 +130,7 @@ public class FramedFancyRailGeometry extends Geometry
                         .applyIf(Modifiers.offset(secDir, SLEEPER_DIAGONAL_OFFSET), i == 1)
                         .export(quadMap, targetDir);
             });
-        }
-        else if (quadDir.getAxis() == dir.getAxis())
-        {
+        } else if (quadDir.getAxis() == dir.getAxis()) {
             boolean inDir = quadDir == dir;
             forAllSleepersCurve((i, distDir, distOpp) ->
                     QuadModifier.of(quad)
@@ -162,9 +141,7 @@ public class FramedFancyRailGeometry extends Geometry
                             .applyIf(Modifiers.offset(secDir, SLEEPER_DIAGONAL_OFFSET), i == 1)
                             .export(quadMap, null)
             );
-        }
-        else
-        {
+        } else {
             forAllSleepersCurve((i, distDir, distOpp) ->
                     QuadModifier.of(quad)
                             .apply(Modifiers.cut(Direction.UP, SLEEPER_HEIGHT))
@@ -178,30 +155,24 @@ public class FramedFancyRailGeometry extends Geometry
         }
     }
 
-    private static QuadModifier.Modifier rotateCurveSleeper(Direction dir, Direction secDir, int i)
-    {
+    private static QuadModifier.Modifier rotateCurveSleeper(Direction dir, Direction secDir, int i) {
         float angle = 45F * (SLEEPER_COUNT_CURVE - 1 - i);
-        if (secDir == dir.getCounterClockWise())
-        {
+        if (secDir == dir.getCounterClockWise()) {
             angle *= -1F;
         }
         return Modifiers.rotateCentered(Direction.Axis.Y, angle, false);
     }
 
-    private static void forAllSleepers(SleeperConsumer consumer)
-    {
-        for (int i = 0; i < SLEEPER_COUNT; i++)
-        {
+    private static void forAllSleepers(SleeperConsumer consumer) {
+        for (int i = 0; i < SLEEPER_COUNT; i++) {
             float distDir = SLEEPER_BASE_OFFSET + (i * SLEEPER_DIST) + SLEEPER_WIDTH;
             float distOpp = 1F - distDir + SLEEPER_WIDTH;
             consumer.accept(i, distDir, distOpp);
         }
     }
 
-    private static void forAllSleepersCurve(SleeperConsumer consumer)
-    {
-        for (int i = 0; i < SLEEPER_COUNT_CURVE; i++)
-        {
+    private static void forAllSleepersCurve(SleeperConsumer consumer) {
+        for (int i = 0; i < SLEEPER_COUNT_CURVE; i++) {
             float distDir = SLEEPER_BASE_OFFSET + (i * SLEEPER_DIST_CURVE) + SLEEPER_WIDTH;
             float distOpp = 1F - distDir + SLEEPER_WIDTH;
             consumer.accept(i, distDir, distOpp);
@@ -209,22 +180,18 @@ public class FramedFancyRailGeometry extends Geometry
     }
 
     @Override
-    public void collectAdditionalPartsCached(PartConsumer consumer, BlockAndTintGetter level, BlockPos pos, RandomSource random, FramedBlockData blockData, @Nullable Object cacheKeyUserData)
-    {
+    public void collectAdditionalPartsCached(PartConsumer consumer, BlockAndTintGetter level, BlockPos pos, RandomSource random, FramedBlockData blockData, @Nullable Object cacheKeyUserData) {
         consumer.acceptAll(baseModel, level, pos, random, state, true, false, false, auxShaderState, null);
     }
 
     @Override
-    public boolean useSolidNoCamoModel()
-    {
+    public boolean useSolidNoCamoModel() {
         return true;
     }
 
     @SuppressWarnings("DuplicateBranchesInSwitch")
-    public static Direction getDirectionFromRailShape(RailShape shape)
-    {
-        return switch (shape)
-        {
+    public static Direction getDirectionFromRailShape(RailShape shape) {
+        return switch (shape) {
             case NORTH_SOUTH -> Direction.NORTH;
             case EAST_WEST -> Direction.EAST;
             case ASCENDING_NORTH -> Direction.NORTH;
@@ -236,40 +203,32 @@ public class FramedFancyRailGeometry extends Geometry
         };
     }
 
-    @Nullable
-    private static Direction getSecondaryDirectionFromRailShape(RailShape shape)
-    {
-        return switch (shape)
-        {
+    private static @Nullable Direction getSecondaryDirectionFromRailShape(RailShape shape) {
+        return switch (shape) {
             case NORTH_EAST, SOUTH_EAST -> Direction.EAST;
             case NORTH_WEST, SOUTH_WEST -> Direction.WEST;
             default -> null;
         };
     }
 
-    public static FramedFancyRailGeometry normal(GeometryFactory.Context ctx)
-    {
+    public static FramedFancyRailGeometry normal(GeometryFactory.Context ctx) {
         return new FramedFancyRailGeometry(ctx, BlockStateProperties.RAIL_SHAPE, Blocks.RAIL.defaultBlockState());
     }
 
-    public static FramedFancyRailGeometry powered(GeometryFactory.Context ctx)
-    {
+    public static FramedFancyRailGeometry powered(GeometryFactory.Context ctx) {
         return new FramedFancyRailGeometry(ctx, BlockStateProperties.RAIL_SHAPE_STRAIGHT, Blocks.POWERED_RAIL.defaultBlockState());
     }
 
-    public static FramedFancyRailGeometry detector(GeometryFactory.Context ctx)
-    {
+    public static FramedFancyRailGeometry detector(GeometryFactory.Context ctx) {
         return new FramedFancyRailGeometry(ctx, BlockStateProperties.RAIL_SHAPE_STRAIGHT, Blocks.DETECTOR_RAIL.defaultBlockState());
     }
 
-    public static FramedFancyRailGeometry activator(GeometryFactory.Context ctx)
-    {
+    public static FramedFancyRailGeometry activator(GeometryFactory.Context ctx) {
         return new FramedFancyRailGeometry(ctx, BlockStateProperties.RAIL_SHAPE_STRAIGHT, Blocks.ACTIVATOR_RAIL.defaultBlockState());
     }
 
     @FunctionalInterface
-    public interface SleeperConsumer
-    {
+    public interface SleeperConsumer {
         void accept(int index, float distDir, float distOpp);
     }
 }

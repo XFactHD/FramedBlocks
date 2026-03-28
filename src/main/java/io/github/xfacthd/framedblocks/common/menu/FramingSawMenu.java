@@ -25,8 +25,7 @@ import org.jspecify.annotations.Nullable;
 import java.util.Arrays;
 import java.util.List;
 
-public class FramingSawMenu extends AbstractContainerMenu implements IFramingSawMenu
-{
+public class FramingSawMenu extends AbstractContainerMenu implements IFramingSawMenu {
     public static final int SLOT_INPUT = 0;
     public static final int SLOT_ADDITIVE_FIRST = SLOT_INPUT + 1;
     public static final int SLOT_RESULT = SLOT_ADDITIVE_FIRST + FramingSawRecipe.MAX_ADDITIVE_COUNT;
@@ -50,30 +49,25 @@ public class FramingSawMenu extends AbstractContainerMenu implements IFramingSaw
     private FramingSawRecipe selectedRecipe = null;
     private boolean recipeChanged = false;
 
-    public static FramingSawMenu createClient(int containerId, Inventory inv)
-    {
+    public static FramingSawMenu createClient(int containerId, Inventory inv) {
         return create(containerId, inv, ContainerLevelAccess.NULL);
     }
 
-    public static FramingSawMenu create(int containerId, Inventory inv, ContainerLevelAccess levelAccess)
-    {
-        if (AppliedEnergisticsCompat.isLoaded())
-        {
+    public static FramingSawMenu create(int containerId, Inventory inv, ContainerLevelAccess levelAccess) {
+        if (AppliedEnergisticsCompat.isLoaded()) {
             return new FramingSawWithEncoderMenu(containerId, inv, levelAccess);
         }
         return new FramingSawMenu(containerId, inv, levelAccess);
     }
 
-    protected FramingSawMenu(int containerId, Inventory inv, ContainerLevelAccess levelAccess)
-    {
+    protected FramingSawMenu(int containerId, Inventory inv, ContainerLevelAccess levelAccess) {
         super(FBContent.MENU_TYPE_FRAMING_SAW.value(), containerId);
 
         this.level = inv.player.level();
         this.levelAccess = levelAccess;
         this.inputSlot = addSlot(new CraftingSlot(this, inputContainer, SLOT_INPUT, 20, 28));
         this.additiveSlots = new CraftingSlot[FramingSawRecipe.MAX_ADDITIVE_COUNT];
-        for (int i = 0; i < additiveSlots.length; i++)
-        {
+        for (int i = 0; i < additiveSlots.length; i++) {
             int y = 64 + (i * 18);
             additiveSlots[i] = addSlot(new CraftingSlot(this, inputContainer, SLOT_ADDITIVE_FIRST + i, 20, y));
         }
@@ -94,55 +88,39 @@ public class FramingSawMenu extends AbstractContainerMenu implements IFramingSaw
     }
 
     @Override
-    public ItemStack quickMoveStack(Player player, int index)
-    {
+    public ItemStack quickMoveStack(Player player, int index) {
         ItemStack remainder = ItemStack.EMPTY;
         Slot slot = slots.get(index);
-        if (slot.hasItem())
-        {
+        if (slot.hasItem()) {
             ItemStack stack = slot.getItem();
             remainder = stack.copy();
 
-            if (index == SLOT_RESULT)
-            {
+            if (index == SLOT_RESULT) {
                 stack.getItem().onCraftedBy(stack, player);
-                if (!moveItemStackTo(stack, SLOT_INV_FIRST, slots.size(), true))
-                {
+                if (!moveItemStackTo(stack, SLOT_INV_FIRST, slots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
 
                 slot.onQuickCraft(stack, remainder);
-            }
-            else if (index < SLOT_INV_FIRST)
-            {
-                if (!moveItemStackTo(stack, SLOT_INV_FIRST, SLOT_INV_FIRST + INV_SLOT_COUNT, true))
-                {
+            } else if (index < SLOT_INV_FIRST) {
+                if (!moveItemStackTo(stack, SLOT_INV_FIRST, SLOT_INV_FIRST + INV_SLOT_COUNT, true)) {
                     return ItemStack.EMPTY;
                 }
-            }
-            else if (cache.getMaterialValue(stack.getItem()) > 0)
-            {
-                if (!moveItemStackTo(stack, SLOT_INPUT, SLOT_INPUT + 1, false))
-                {
+            } else if (cache.getMaterialValue(stack.getItem()) > 0) {
+                if (!moveItemStackTo(stack, SLOT_INPUT, SLOT_INPUT + 1, false)) {
                     return ItemStack.EMPTY;
                 }
-            }
-            else if (!moveItemStackTo(stack, SLOT_ADDITIVE_FIRST, SLOT_ADDITIVE_FIRST + FramingSawRecipe.MAX_ADDITIVE_COUNT, false))
-            {
+            } else if (!moveItemStackTo(stack, SLOT_ADDITIVE_FIRST, SLOT_ADDITIVE_FIRST + FramingSawRecipe.MAX_ADDITIVE_COUNT, false)) {
                 return ItemStack.EMPTY;
             }
 
-            if (stack.isEmpty())
-            {
+            if (stack.isEmpty()) {
                 slot.set(ItemStack.EMPTY);
-            }
-            else
-            {
+            } else {
                 slot.setChanged();
             }
 
-            if (stack.getCount() == remainder.getCount())
-            {
+            if (stack.getCount() == remainder.getCount()) {
                 return ItemStack.EMPTY;
             }
 
@@ -153,14 +131,11 @@ public class FramingSawMenu extends AbstractContainerMenu implements IFramingSaw
     }
 
     @Override
-    public boolean clickMenuButton(Player player, int id)
-    {
-        if (isValidRecipeIndex(id))
-        {
+    public boolean clickMenuButton(Player player, int id) {
+        if (isValidRecipeIndex(id)) {
             selectedRecipeIdx.set(id);
             selectedRecipe = recipes.get(id).getRecipe();
-            if (isCraftingEnabled())
-            {
+            if (isCraftingEnabled()) {
                 setupResultSlot();
             }
             recipeChanged = true;
@@ -169,44 +144,35 @@ public class FramingSawMenu extends AbstractContainerMenu implements IFramingSaw
     }
 
     @Override
-    public void slotsChanged(Container inventory)
-    {
+    public void slotsChanged(Container inventory) {
         boolean changed = false;
 
         ItemStack input = inputSlot.getItem();
-        if (!input.is(lastInput.getItem()) || input.getCount() != lastInput.getCount())
-        {
+        if (!input.is(lastInput.getItem()) || input.getCount() != lastInput.getCount()) {
             lastInput = input.copy();
             changed = true;
         }
 
-        for (int i = 0; i < additiveSlots.length; i++)
-        {
+        for (int i = 0; i < additiveSlots.length; i++) {
             ItemStack additive = additiveSlots[i].getItem();
-            if (!additive.is(lastAdditives[i].getItem()) || additive.getCount() != lastAdditives[i].getCount())
-            {
+            if (!additive.is(lastAdditives[i].getItem()) || additive.getCount() != lastAdditives[i].getCount()) {
                 lastAdditives[i] = additive.copy();
                 changed = true;
             }
         }
 
-        if (changed)
-        {
-            for (FramedRecipeHolder holder : recipes)
-            {
+        if (changed) {
+            for (FramedRecipeHolder holder : recipes) {
                 holder.matchResult = holder.getRecipe().matchWithResult(inputContainer, level);
             }
             setupResultSlot();
         }
     }
 
-    private void setupResultSlot()
-    {
-        if (isValidRecipeIndex(selectedRecipeIdx.get()))
-        {
+    private void setupResultSlot() {
+        if (isValidRecipeIndex(selectedRecipeIdx.get())) {
             FramedRecipeHolder holder = recipes.get(selectedRecipeIdx.get());
-            if (holder.matchResult.success())
-            {
+            if (holder.matchResult.success()) {
                 FramingSawRecipe recipe = holder.getRecipe();
                 FramingSawRecipeCalculation calc = recipe.makeCraftingCalculation(inputContainer, level.isClientSide());
 
@@ -227,131 +193,109 @@ public class FramingSawMenu extends AbstractContainerMenu implements IFramingSaw
     }
 
     @Override
-    public boolean canTakeItemForPickAll(ItemStack stack, Slot slot)
-    {
+    public boolean canTakeItemForPickAll(ItemStack stack, Slot slot) {
         return slot.index != SLOT_RESULT && slot.isActive();
     }
 
     @Override
-    public boolean stillValid(Player player)
-    {
+    public boolean stillValid(Player player) {
         return stillValid(this.levelAccess, player, FBContent.BLOCK_FRAMING_SAW.value());
     }
 
     @Override
-    public void removed(Player player)
-    {
+    public void removed(Player player) {
         super.removed(player);
         resultContainer.removeItemNoUpdate(1);
         levelAccess.execute((_, _) -> clearContainer(player, inputContainer));
     }
 
     @Override
-    public RecipeInput getRecipeInput()
-    {
+    public RecipeInput getRecipeInput() {
         return inputContainer;
     }
 
     @Override
-    public ItemStack getInputStack()
-    {
+    public ItemStack getInputStack() {
         return inputSlot.getItem();
     }
 
     @Override
-    public ItemStack getAdditiveStack(int slot)
-    {
+    public ItemStack getAdditiveStack(int slot) {
         return additiveSlots[slot].getItem();
     }
 
-    public List<FramedRecipeHolder> getRecipes()
-    {
+    public List<FramedRecipeHolder> getRecipes() {
         return recipes;
     }
 
-    public int getSelectedRecipeIndex()
-    {
+    public int getSelectedRecipeIndex() {
         return selectedRecipeIdx.get();
     }
 
-    public boolean hasRecipeChanged()
-    {
+    public boolean hasRecipeChanged() {
         boolean changed = recipeChanged;
         recipeChanged = false;
         return changed;
     }
 
     @Override
-    public boolean isValidRecipeIndex(int idx)
-    {
+    public boolean isValidRecipeIndex(int idx) {
         return idx >= 0 && idx < recipes.size();
     }
 
-    protected boolean isCraftingEnabled()
-    {
+    protected boolean isCraftingEnabled() {
         return true;
     }
 
-    protected static class FrameCrafterContainer extends SimpleContainer implements RecipeInput
-    {
+    protected static class FrameCrafterContainer extends SimpleContainer implements RecipeInput {
         private final FramingSawMenu menu;
 
-        FrameCrafterContainer(FramingSawMenu menu)
-        {
+        FrameCrafterContainer(FramingSawMenu menu) {
             super(FramingSawRecipe.MAX_ADDITIVE_COUNT + 1);
             this.menu = menu;
         }
 
         @Override
-        public void setChanged()
-        {
+        public void setChanged() {
             super.setChanged();
             menu.slotsChanged(this);
         }
 
         @Override
-        public int size()
-        {
+        public int size() {
             return getContainerSize();
         }
     }
 
-    private static class CraftingSlot extends Slot
-    {
+    private static class CraftingSlot extends Slot {
         private final FramingSawMenu menu;
 
-        public CraftingSlot(FramingSawMenu menu, Container pContainer, int pSlot, int pX, int pY)
-        {
+        public CraftingSlot(FramingSawMenu menu, Container pContainer, int pSlot, int pX, int pY) {
             super(pContainer, pSlot, pX, pY);
             this.menu = menu;
         }
 
         @Override
-        public boolean isActive()
-        {
+        public boolean isActive() {
             return menu.isCraftingEnabled();
         }
     }
 
-    private static class ResultSlot extends CraftingSlot
-    {
+    private static class ResultSlot extends CraftingSlot {
         private final FramingSawMenu menu;
 
-        ResultSlot(FramingSawMenu menu, Container container, int index, int x, int y)
-        {
+        ResultSlot(FramingSawMenu menu, Container container, int index, int x, int y) {
             super(menu, container, index, x, y);
             this.menu = menu;
         }
 
         @Override
-        public boolean mayPlace(ItemStack stack)
-        {
+        public boolean mayPlace(ItemStack stack) {
             return false;
         }
 
         @Override
-        public void onTake(Player player, ItemStack stack)
-        {
+        public void onTake(Player player, ItemStack stack) {
             stack.onCraftedBy(player, stack.getCount());
             menu.resultContainer.awardUsedRecipes(player, List.of(
                     menu.inputSlot.getItem(),
@@ -360,16 +304,14 @@ public class FramingSawMenu extends AbstractContainerMenu implements IFramingSaw
                     menu.additiveSlots[2].getItem()
             ));
 
-            if (menu.selectedRecipe != null)
-            {
+            if (menu.selectedRecipe != null) {
                 FramingSawRecipeCalculation calc = menu.selectedRecipe.makeCraftingCalculation(
                         menu.inputContainer, menu.level.isClientSide()
                 );
                 int additiveCount = menu.selectedRecipe.getAdditives().size();
 
                 menu.inputSlot.remove(calc.getInputCount());
-                for (int i = 0; i < additiveCount; i++)
-                {
+                for (int i = 0; i < additiveCount; i++) {
                     menu.additiveSlots[i].remove(calc.getAdditiveCount(i));
                 }
             }
@@ -378,48 +320,39 @@ public class FramingSawMenu extends AbstractContainerMenu implements IFramingSaw
         }
     }
 
-    public static final class FramedRecipeHolder
-    {
+    public static final class FramedRecipeHolder {
         private final RecipeHolder<FramingSawRecipe> vanillaHolder;
         private FramingSawRecipeMatchResult matchResult = FramingSawRecipeMatchResult.MATERIAL_VALUE;
 
-        private FramedRecipeHolder(RecipeHolder<FramingSawRecipe> holder)
-        {
+        private FramedRecipeHolder(RecipeHolder<FramingSawRecipe> holder) {
             this.vanillaHolder = holder;
         }
 
-        public RecipeHolder<FramingSawRecipe> toVanilla()
-        {
+        public RecipeHolder<FramingSawRecipe> toVanilla() {
             return vanillaHolder;
         }
 
-        public FramingSawRecipe getRecipe()
-        {
+        public FramingSawRecipe getRecipe() {
             return vanillaHolder.value();
         }
 
-        public FramingSawRecipeMatchResult getMatchResult()
-        {
+        public FramingSawRecipeMatchResult getMatchResult() {
             return matchResult;
         }
 
         @Override
-        public boolean equals(Object obj)
-        {
-            if (obj == this)
-            {
+        public boolean equals(Object obj) {
+            if (obj == this) {
                 return true;
             }
-            if (obj != null && obj.getClass() == this.getClass())
-            {
+            if (obj != null && obj.getClass() == this.getClass()) {
                 return vanillaHolder.id().equals(((FramedRecipeHolder) obj).vanillaHolder.id());
             }
             return false;
         }
 
         @Override
-        public int hashCode()
-        {
+        public int hashCode() {
             return vanillaHolder.id().hashCode();
         }
     }

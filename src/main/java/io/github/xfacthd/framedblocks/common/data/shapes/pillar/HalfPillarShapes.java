@@ -10,10 +10,8 @@ import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 
-public final class HalfPillarShapes
-{
-    public static ShapeContainer generate(List<BlockState> states)
-    {
+public final class HalfPillarShapes {
+    public static ShapeContainer generate(List<BlockState> states) {
         Map<BlockState, VoxelShape> map = new IdentityHashMap<>(states.size());
 
         VoxelShape shapeNorth = Block.box(4, 4, 0, 12, 12,  8);
@@ -23,10 +21,8 @@ public final class HalfPillarShapes
         VoxelShape shapeUp =    Block.box(4, 8, 4, 12, 16, 12);
         VoxelShape shapeDown =  Block.box(4, 0, 4, 12,  8, 12);
 
-        for (BlockState state : states)
-        {
-            map.put(state, switch (state.getValue(BlockStateProperties.FACING))
-            {
+        for (BlockState state : states) {
+            map.put(state, switch (state.getValue(BlockStateProperties.FACING)) {
                 case NORTH -> shapeNorth;
                 case EAST -> shapeEast;
                 case SOUTH -> shapeSouth;

@@ -14,67 +14,51 @@ import net.minecraft.client.resources.model.geometry.BakedQuad;
 import net.minecraft.core.Direction;
 import org.jspecify.annotations.Nullable;
 
-public class FramedCornerStripGeometry extends Geometry
-{
+public class FramedCornerStripGeometry extends Geometry {
     private final Direction dir;
     private final SlopeType type;
 
-    public FramedCornerStripGeometry(GeometryFactory.Context ctx)
-    {
+    public FramedCornerStripGeometry(GeometryFactory.Context ctx) {
         this.dir = ctx.state().getValue(FramedProperties.FACING_HOR);
         this.type = ctx.state().getValue(PropertyHolder.SLOPE_TYPE);
     }
 
     @Override
-    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
-    {
+    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData) {
         Direction quadDir = quad.direction();
-        if (type == SlopeType.HORIZONTAL)
-        {
-            if (DirUtils.isY(quadDir))
-            {
+        if (type == SlopeType.HORIZONTAL) {
+            if (DirUtils.isY(quadDir)) {
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(dir.getOpposite(), 1F/16F))
                         .apply(Modifiers.cut(dir.getClockWise(), 1F/16F))
                         .export(quadMap, quadDir);
-            }
-            else if (quadDir.getAxis() == dir.getAxis())
-            {
+            } else if (quadDir.getAxis() == dir.getAxis()) {
                 boolean onFace = quadDir == dir;
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(dir.getClockWise(), 1F/16F))
                         .applyIf(Modifiers.setPosition(1F/16F), !onFace)
                         .export(quadMap, onFace ? quadDir : null);
-            }
-            else if (quadDir.getAxis() == dir.getClockWise().getAxis())
-            {
+            } else if (quadDir.getAxis() == dir.getClockWise().getAxis()) {
                 boolean onFace = quadDir == dir.getCounterClockWise();
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(dir.getOpposite(), 1F/16F))
                         .applyIf(Modifiers.setPosition(1F/16F), !onFace)
                         .export(quadMap, onFace ? quadDir : null);
             }
-        }
-        else
-        {
+        } else {
             boolean top = type == SlopeType.TOP;
-            if (quadDir.getAxis() == dir.getClockWise().getAxis())
-            {
+            if (quadDir.getAxis() == dir.getClockWise().getAxis()) {
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(dir.getOpposite(), 1F/16F))
                         .apply(Modifiers.cut(top ? Direction.DOWN : Direction.UP, 1F/16F))
                         .export(quadMap, quadDir);
-            }
-            else if (quadDir.getAxis() == dir.getAxis())
-            {
+            } else if (quadDir.getAxis() == dir.getAxis()) {
                 boolean onFace = quadDir == dir;
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(top ? Direction.DOWN : Direction.UP, 1F/16F))
                         .applyIf(Modifiers.setPosition(1F/16F), !onFace)
                         .export(quadMap, onFace ? quadDir : null);
-            }
-            else if (DirUtils.isY(quadDir))
-            {
+            } else if (DirUtils.isY(quadDir)) {
                 boolean onFace = top ? quadDir == Direction.UP : quadDir == Direction.DOWN;
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(dir.getOpposite(), 1F/16F))

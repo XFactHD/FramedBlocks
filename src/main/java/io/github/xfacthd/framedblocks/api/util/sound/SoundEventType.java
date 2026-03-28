@@ -8,8 +8,7 @@ import net.minecraft.world.level.block.SoundType;
 import java.util.Locale;
 import java.util.function.Function;
 
-public enum SoundEventType implements StringRepresentable
-{
+public enum SoundEventType implements StringRepresentable {
     BREAK(SoundType::getBreakSound),
     STEP(SoundType::getStepSound),
     PLACE(SoundType::getPlaceSound),
@@ -22,19 +21,16 @@ public enum SoundEventType implements StringRepresentable
     private final String name = toString().toLowerCase(Locale.ROOT);
     private final Function<SoundType, SoundEvent> eventResolver;
 
-    SoundEventType(Function<SoundType, SoundEvent> eventResolver)
-    {
+    SoundEventType(Function<SoundType, SoundEvent> eventResolver) {
         this.eventResolver = eventResolver;
     }
 
-    public SoundEvent resolve(SoundType type)
-    {
+    public SoundEvent resolve(SoundType type) {
         return eventResolver.apply(type);
     }
 
     @Override
-    public String getSerializedName()
-    {
+    public String getSerializedName() {
         return name;
     }
 }

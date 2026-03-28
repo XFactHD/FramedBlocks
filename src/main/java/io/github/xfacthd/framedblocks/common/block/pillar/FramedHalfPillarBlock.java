@@ -7,7 +7,7 @@ import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.api.util.RotationDirection;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
-import io.github.xfacthd.framedblocks.common.block.IPillarLikeBlock;
+import io.github.xfacthd.framedblocks.common.block.PillarLikeBlock;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import io.github.xfacthd.framedblocks.common.data.property.PillarConnection;
 import net.minecraft.core.Direction;
@@ -20,31 +20,25 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.jspecify.annotations.Nullable;
 
-public class FramedHalfPillarBlock extends FramedBlock implements IPillarLikeBlock, AxisOverlayCarrier
-{
+public class FramedHalfPillarBlock extends FramedBlock implements PillarLikeBlock, AxisOverlayCarrier {
     private final PillarConnection pillarConnection;
 
-    public FramedHalfPillarBlock(BlockType blockType, Properties props)
-    {
+    public FramedHalfPillarBlock(BlockType blockType, Properties props) {
         super(blockType, props);
-        this.pillarConnection = switch (blockType)
-        {
+        this.pillarConnection = switch (blockType) {
             case FRAMED_HALF_PILLAR -> PillarConnection.PILLAR;
             default -> throw new IllegalArgumentException("Unexpected BlockType in FramedHalfPillarBlock: " + blockType);
         };
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
-    {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
         builder.add(BlockStateProperties.FACING);
     }
 
     @Override
-    @Nullable
-    public BlockState getStateForPlacement(BlockPlaceContext ctx)
-    {
+    public @Nullable BlockState getStateForPlacement(BlockPlaceContext ctx) {
         return PlacementStateBuilder.of(this, ctx)
                 .withTargetFacing()
                 .withWater()
@@ -52,51 +46,43 @@ public class FramedHalfPillarBlock extends FramedBlock implements IPillarLikeBlo
     }
 
     @Override
-    public BlockState rotate(BlockState state, RotationDirection direction, WrenchRotationMode mode)
-    {
+    public BlockState rotate(BlockState state, RotationDirection direction, WrenchRotationMode mode) {
         return direction.cycle(state, BlockStateProperties.FACING);
     }
 
     @Override
-    protected BlockState rotate(BlockState state, Rotation rotation)
-    {
+    protected BlockState rotate(BlockState state, Rotation rotation) {
         return BlockUtils.rotate(state, BlockStateProperties.FACING, rotation);
     }
 
     @Override
-    protected BlockState mirror(BlockState state, Mirror mirror)
-    {
+    protected BlockState mirror(BlockState state, Mirror mirror) {
         return BlockUtils.mirrorFaceBlock(state, BlockStateProperties.FACING, mirror);
     }
 
     @Override
-    public BlockState getItemModelSource()
-    {
+    public BlockState getItemModelSource() {
         return defaultBlockState().setValue(BlockStateProperties.FACING, Direction.DOWN);
     }
 
     @Override
-    public Direction getHorizontalOrientation(BlockState state)
-    {
+    public Direction getHorizontalOrientation(BlockState state) {
         Direction facing = state.getValue(BlockStateProperties.FACING);
         return DirUtils.isY(facing) ? Direction.NORTH : facing;
     }
 
     @Override
-    public BlockState getJadeRenderState(BlockState state)
-    {
+    public BlockState getJadeRenderState(BlockState state) {
         return state.setValue(BlockStateProperties.FACING, Direction.DOWN);
     }
 
     @Override
-    public PillarConnection getPillarConnection(BlockState state, Direction side)
-    {
+    public PillarConnection getPillarConnection(BlockState state, Direction side) {
         return side == state.getValue(BlockStateProperties.FACING) ? pillarConnection : PillarConnection.NONE;
     }
 
     @Override
-    public Direction.Axis getAxis(BlockState state)
-    {
+    public Direction.Axis getAxis(BlockState state) {
         return state.getValue(BlockStateProperties.FACING).getAxis();
     }
 }

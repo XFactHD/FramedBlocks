@@ -6,11 +6,9 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jspecify.annotations.Nullable;
 
-public final class FlatElevatedDoubleSlopeSlabCornerConnectionPredicate extends NonDetailedConnectionPredicate
-{
+public final class FlatElevatedDoubleSlopeSlabCornerConnectionPredicate extends NonDetailedConnectionPredicate {
     @Override
-    public boolean canConnectFullEdge(BlockState state, Direction side, @Nullable Direction edge)
-    {
+    public boolean canConnectFullEdge(BlockState state, Direction side, @Nullable Direction edge) {
         return DirUtils.isY(side) || (edge != null && DirUtils.isY(edge));
     }
 }

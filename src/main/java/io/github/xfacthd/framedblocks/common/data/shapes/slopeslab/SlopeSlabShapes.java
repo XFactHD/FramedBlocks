@@ -17,8 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
-public final class SlopeSlabShapes implements ShapeGenerator
-{
+public final class SlopeSlabShapes implements ShapeGenerator {
     public static final ShapeCache<SlopeSlabShape> SHAPES = makeCache(() -> ShapeUtils.orUnoptimized(
             Block.box(0, 0, 0, 16, 4, 16),
             Block.box(0, 0, 0, 16, 8,  8)
@@ -31,19 +30,16 @@ public final class SlopeSlabShapes implements ShapeGenerator
     ));
 
     @Override
-    public ShapeContainer generatePrimary(List<BlockState> states)
-    {
+    public ShapeContainer generatePrimary(List<BlockState> states) {
         return generate(states, SHAPES);
     }
 
     @Override
-    public ShapeContainer generateOcclusion(List<BlockState> states)
-    {
+    public ShapeContainer generateOcclusion(List<BlockState> states) {
         return generate(states, OCCLUSION_SHAPES);
     }
 
-    private static ShapeContainer generate(List<BlockState> states, ShapeCache<SlopeSlabShape> cache)
-    {
+    private static ShapeContainer generate(List<BlockState> states, ShapeCache<SlopeSlabShape> cache) {
         Map<BlockState, VoxelShape> map = new IdentityHashMap<>(states.size());
 
         VoxelShape shapeBottomBottomHalf = cache.get(SlopeSlabShape.BOTTOM_BOTTOM_HALF);
@@ -59,8 +55,7 @@ public final class SlopeSlabShapes implements ShapeGenerator
         ShapeUtils.makeHorizontalRotations(shapeTopBottomHalf, Direction.NORTH, shapes, maskTop);
         ShapeUtils.makeHorizontalRotations(shapeTopTopHalf, Direction.NORTH, shapes, maskTop | maskTopHalf);
 
-        for (BlockState state : states)
-        {
+        for (BlockState state : states) {
             Direction dir = state.getValue(FramedProperties.FACING_HOR);
             int top = state.getValue(FramedProperties.TOP) ? maskTop : 0;
             int topHalf = state.getValue(PropertyHolder.TOP_HALF) ? maskTopHalf : 0;
@@ -71,10 +66,8 @@ public final class SlopeSlabShapes implements ShapeGenerator
         return ShapeContainer.of(map);
     }
 
-    private static ShapeCache<SlopeSlabShape> makeCache(Supplier<VoxelShape> bottomShapeFactory)
-    {
-        return ShapeCache.createEnum(SlopeSlabShape.class, map ->
-        {
+    private static ShapeCache<SlopeSlabShape> makeCache(Supplier<VoxelShape> bottomShapeFactory) {
+        return ShapeCache.createEnum(SlopeSlabShape.class, map -> {
             VoxelShape shapeBottom = bottomShapeFactory.get();
             map.put(SlopeSlabShape.BOTTOM_BOTTOM_HALF, shapeBottom);
             map.put(SlopeSlabShape.BOTTOM_TOP_HALF, shapeBottom.move(0, .5, 0));

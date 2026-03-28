@@ -11,10 +11,8 @@ import io.github.xfacthd.framedblocks.common.compat.jei.JeiCompat;
 import io.github.xfacthd.framedblocks.common.compat.searchables.SearchablesCompat;
 import net.neoforged.bus.api.IEventBus;
 
-public final class CompatHandler
-{
-    public static void init(IEventBus modBus)
-    {
+public final class CompatHandler {
+    public static void init(IEventBus modBus) {
         AdditionalPlacementsCompat.init();
         AppliedEnergisticsCompat.init(modBus);
         AmendmentsCompat.init();
@@ -25,8 +23,7 @@ public final class CompatHandler
         SearchablesCompat.init();
     }
 
-    public static void commonSetup()
-    {
+    public static void commonSetup() {
         CreateCompat.commonSetup();
     }
 

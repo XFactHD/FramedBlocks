@@ -6,34 +6,27 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jspecify.annotations.Nullable;
 
-public final class SmallInnerCornerSlopePanelConnectionPredicate implements ConnectionPredicate
-{
+public final class SmallInnerCornerSlopePanelConnectionPredicate implements ConnectionPredicate {
     @Override
-    public boolean canConnectFullEdge(BlockState state, Direction side, @Nullable Direction edge)
-    {
+    public boolean canConnectFullEdge(BlockState state, Direction side, @Nullable Direction edge) {
         return false;
     }
 
     @Override
-    public boolean canConnectDetailed(BlockState state, Direction side, Direction edge)
-    {
+    public boolean canConnectDetailed(BlockState state, Direction side, Direction edge) {
         Direction dir = state.getValue(FramedProperties.FACING_HOR);
         Direction dirTwo = state.getValue(FramedProperties.TOP) ? Direction.UP : Direction.DOWN;
 
-        if (side == dirTwo)
-        {
+        if (side == dirTwo) {
             return edge == dir || edge == dir.getCounterClockWise();
         }
-        else if (side == dir.getClockWise())
-        {
+        if (side == dir.getClockWise()) {
             return edge != dir.getOpposite();
         }
-        else if (side == dir.getOpposite())
-        {
+        if (side == dir.getOpposite()) {
             return edge != dir.getClockWise();
         }
-        else if (side == dir || side == dir.getCounterClockWise() || side == dirTwo.getOpposite())
-        {
+        if (side == dir || side == dir.getCounterClockWise() || side == dirTwo.getOpposite()) {
             return edge == dir || edge == dir.getCounterClockWise() || edge == dirTwo;
         }
         return false;

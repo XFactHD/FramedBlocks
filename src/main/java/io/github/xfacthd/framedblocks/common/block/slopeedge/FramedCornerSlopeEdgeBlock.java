@@ -20,25 +20,20 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import org.jspecify.annotations.Nullable;
 
-public class FramedCornerSlopeEdgeBlock extends FramedBlock implements SlopeToggleBlock
-{
-    public FramedCornerSlopeEdgeBlock(BlockType blockType, Properties props)
-    {
+public class FramedCornerSlopeEdgeBlock extends FramedBlock implements SlopeToggleBlock {
+    public FramedCornerSlopeEdgeBlock(BlockType blockType, Properties props) {
         super(blockType, props);
         registerDefaultState(defaultBlockState().setValue(PropertyHolder.ALT_TYPE, false));
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
-    {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
         builder.add(FramedProperties.FACING_HOR, PropertyHolder.CORNER_TYPE, PropertyHolder.ALT_TYPE);
     }
 
     @Override
-    @Nullable
-    public BlockState getStateForPlacement(BlockPlaceContext ctx)
-    {
+    public @Nullable BlockState getStateForPlacement(BlockPlaceContext ctx) {
         return ExtPlacementStateBuilder.of(this, ctx)
                 .withHorizontalFacingAndCornerType()
                 .withWater()
@@ -46,51 +41,41 @@ public class FramedCornerSlopeEdgeBlock extends FramedBlock implements SlopeTogg
     }
 
     @Override
-    public BlockState rotate(BlockState state, RotationDirection direction, WrenchRotationMode mode)
-    {
+    public BlockState rotate(BlockState state, RotationDirection direction, WrenchRotationMode mode) {
         return FramedCornerSlopeBlock.rotateCorner(state, direction, mode);
     }
 
     @Override
-    protected BlockState rotate(BlockState state, Rotation rotation)
-    {
+    protected BlockState rotate(BlockState state, Rotation rotation) {
         return BlockUtils.rotate(state, rotation);
     }
 
     @Override
-    protected BlockState mirror(BlockState state, Mirror mirror)
-    {
+    protected BlockState mirror(BlockState state, Mirror mirror) {
         CornerType type = state.getValue(PropertyHolder.CORNER_TYPE);
-        if (type.isHorizontal())
-        {
+        if (type.isHorizontal()) {
             BlockState newState = BlockUtils.mirrorFaceBlock(state, mirror);
-            if (newState != state)
-            {
+            if (newState != state) {
                 return newState.setValue(PropertyHolder.CORNER_TYPE, type.horizontalOpposite());
             }
             return state;
-        }
-        else
-        {
+        } else {
             return BlockUtils.mirrorCornerBlock(state, mirror);
         }
     }
 
     @Override
-    public BlockState getItemModelSource()
-    {
+    public BlockState getItemModelSource() {
         return defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
     }
 
     @Override
-    public Direction getHorizontalOrientation(BlockState state)
-    {
+    public Direction getHorizontalOrientation(BlockState state) {
         return state.getValue(FramedProperties.FACING_HOR);
     }
 
     @Override
-    public BlockState getJadeRenderState(BlockState state)
-    {
+    public BlockState getJadeRenderState(BlockState state) {
         return getItemModelSource();
     }
 }

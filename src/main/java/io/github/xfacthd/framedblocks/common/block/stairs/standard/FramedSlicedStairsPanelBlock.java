@@ -17,27 +17,22 @@ import net.minecraft.world.level.block.state.properties.Half;
 import net.minecraft.world.level.block.state.properties.StairsShape;
 import org.jspecify.annotations.Nullable;
 
-public class FramedSlicedStairsPanelBlock extends FramedStairsBlock implements IFramedDoubleBlockInternal
-{
-    public FramedSlicedStairsPanelBlock(Properties props)
-    {
+public class FramedSlicedStairsPanelBlock extends FramedStairsBlock implements IFramedDoubleBlockInternal {
+    public FramedSlicedStairsPanelBlock(Properties props) {
         super(BlockType.FRAMED_SLICED_STAIRS_PANEL, props);
     }
 
     @Override
-    public DoubleBlockTopInteractionMode calculateTopInteractionMode(BlockState state)
-    {
+    public DoubleBlockTopInteractionMode calculateTopInteractionMode(BlockState state) {
         return DoubleBlockTopInteractionMode.EITHER;
     }
 
     @Override
-    public DoubleBlockParts calculateParts(BlockState state)
-    {
+    public DoubleBlockParts calculateParts(BlockState state) {
         Direction dir = state.getValue(FACING);
         boolean top = state.getValue(HALF) == Half.TOP;
 
-        return switch (state.getValue(SHAPE))
-        {
+        return switch (state.getValue(SHAPE)) {
             case STRAIGHT -> new DoubleBlockParts(
                     FBContent.BLOCK_FRAMED_PANEL.value()
                             .defaultBlockState()
@@ -87,117 +82,85 @@ public class FramedSlicedStairsPanelBlock extends FramedStairsBlock implements I
     }
 
     @Override
-    public SolidityCheck calculateSolidityCheck(BlockState state, Direction side)
-    {
+    public SolidityCheck calculateSolidityCheck(BlockState state, Direction side) {
         Direction dir = state.getValue(FACING);
         StairsShape shape = state.getValue(SHAPE);
         boolean top = state.getValue(HALF) == Half.TOP;
         Direction dirTwo = top ? Direction.UP : Direction.DOWN;
 
-        if (side == dir && shape != StairsShape.OUTER_LEFT && shape != StairsShape.OUTER_RIGHT)
-        {
+        if (side == dir && shape != StairsShape.OUTER_LEFT && shape != StairsShape.OUTER_RIGHT) {
             return SolidityCheck.FIRST;
-        }
-        else if (side == dir.getCounterClockWise() && shape == StairsShape.INNER_LEFT)
-        {
+        } else if (side == dir.getCounterClockWise() && shape == StairsShape.INNER_LEFT) {
             return SolidityCheck.FIRST;
-        }
-        else if (side == dir.getClockWise() && shape == StairsShape.INNER_RIGHT)
-        {
+        } else if (side == dir.getClockWise() && shape == StairsShape.INNER_RIGHT) {
             return SolidityCheck.FIRST;
-        }
-        else if (side == dirTwo)
-        {
+        } else if (side == dirTwo) {
             return SolidityCheck.BOTH;
         }
         return SolidityCheck.NONE;
     }
 
     @Override
-    public CamoGetter calculateCamoGetter(BlockState state, Direction side, @Nullable Direction edge)
-    {
+    public CamoGetter calculateCamoGetter(BlockState state, Direction side, @Nullable Direction edge) {
         Direction dir = state.getValue(FACING);
         boolean top = state.getValue(HALF) == Half.TOP;
         Direction dirTwo = top ? Direction.UP : Direction.DOWN;
 
-        return switch (state.getValue(SHAPE))
-        {
-            case STRAIGHT ->
-            {
-                if (side == dir || (side.getAxis() != dir.getAxis() && edge == dir))
-                {
+        return switch (state.getValue(SHAPE)) {
+            case STRAIGHT -> {
+                if (side == dir || (side.getAxis() != dir.getAxis() && edge == dir)) {
                     yield CamoGetter.FIRST;
-                }
-                else if (side == dirTwo && edge == dir.getOpposite())
-                {
+                } else if (side == dirTwo && edge == dir.getOpposite()) {
                     yield CamoGetter.SECOND;
-                }
-                else if (side == dir.getOpposite() && edge == dirTwo)
-                {
+                } else if (side == dir.getOpposite() && edge == dirTwo) {
                     yield CamoGetter.SECOND;
                 }
                 yield CamoGetter.NONE;
             }
-            case INNER_LEFT ->
-            {
-                if (side == dir || side == dir.getCounterClockWise())
-                {
+            case INNER_LEFT -> {
+                if (side == dir || side == dir.getCounterClockWise()) {
                     yield CamoGetter.FIRST;
                 }
-                if (DirUtils.isY(side) && (edge == dir || edge == dir.getCounterClockWise()))
-                {
+                if (DirUtils.isY(side) && (edge == dir || edge == dir.getCounterClockWise())) {
                     yield CamoGetter.FIRST;
                 }
-                if ((side == dir.getClockWise() && edge == dir) || (side == dir.getOpposite() && edge == dir.getCounterClockWise()))
-                {
+                if ((side == dir.getClockWise() && edge == dir) || (side == dir.getOpposite() && edge == dir.getCounterClockWise())) {
                     yield CamoGetter.FIRST;
                 }
                 yield CamoGetter.NONE;
             }
-            case INNER_RIGHT ->
-            {
-                if (side == dir || side == dir.getClockWise())
-                {
+            case INNER_RIGHT -> {
+                if (side == dir || side == dir.getClockWise()) {
                     yield CamoGetter.FIRST;
                 }
-                if (DirUtils.isY(side) && (edge == dir || edge == dir.getClockWise()))
-                {
+                if (DirUtils.isY(side) && (edge == dir || edge == dir.getClockWise())) {
                     yield CamoGetter.FIRST;
                 }
-                if ((side == dir.getCounterClockWise() && edge == dir) || (side == dir.getOpposite() && edge == dir.getClockWise()))
-                {
+                if ((side == dir.getCounterClockWise() && edge == dir) || (side == dir.getOpposite() && edge == dir.getClockWise())) {
                     yield CamoGetter.FIRST;
                 }
                 yield CamoGetter.NONE;
             }
-            case OUTER_LEFT ->
-            {
-                if ((side == dir && edge == dir.getCounterClockWise()) || (side == dir.getCounterClockWise() && edge == dir))
-                {
+            case OUTER_LEFT -> {
+                if ((side == dir && edge == dir.getCounterClockWise()) || (side == dir.getCounterClockWise() && edge == dir)) {
                     yield CamoGetter.FIRST;
                 }
-                if (side == dirTwo && (edge == dir.getClockWise() || edge == dir.getOpposite()))
-                {
+                if (side == dirTwo && (edge == dir.getClockWise() || edge == dir.getOpposite())) {
                     yield CamoGetter.SECOND;
                 }
-                if ((side == dir.getClockWise() || side == dir.getOpposite()) && edge == dirTwo)
-                {
+                if ((side == dir.getClockWise() || side == dir.getOpposite()) && edge == dirTwo) {
                     yield CamoGetter.SECOND;
                 }
                 yield CamoGetter.NONE;
             }
-            case OUTER_RIGHT ->
-            {
-                if ((side == dir && edge == dir.getClockWise()) || (side == dir.getClockWise() && edge == dir))
-                {
+            case OUTER_RIGHT -> {
+                if ((side == dir && edge == dir.getClockWise()) || (side == dir.getClockWise() && edge == dir)) {
                     yield CamoGetter.FIRST;
                 }
-                if (side == dirTwo && (edge == dir.getCounterClockWise() || edge == dir.getOpposite()))
-                {
+                if (side == dirTwo && (edge == dir.getCounterClockWise() || edge == dir.getOpposite())) {
                     yield CamoGetter.SECOND;
                 }
-                if ((side == dir.getCounterClockWise() || side == dir.getOpposite()) && edge == dirTwo)
-                {
+                if ((side == dir.getCounterClockWise() || side == dir.getOpposite()) && edge == dirTwo) {
                     yield CamoGetter.SECOND;
                 }
                 yield CamoGetter.NONE;
@@ -206,26 +169,22 @@ public class FramedSlicedStairsPanelBlock extends FramedStairsBlock implements I
     }
 
     @Override
-    public FramedDoubleBlockEntity newBlockEntity(BlockPos pos, BlockState state)
-    {
+    public FramedDoubleBlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return IFramedDoubleBlockInternal.super.newBlockEntity(pos, state);
     }
 
     @Override
-    public BlockState getItemModelSource()
-    {
+    public BlockState getItemModelSource() {
         return defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
     }
 
     @Override
-    public Direction getHorizontalOrientation(BlockState state)
-    {
+    public Direction getHorizontalOrientation(BlockState state) {
         return state.getValue(FramedProperties.FACING_HOR);
     }
 
     @Override
-    public BlockState getJadeRenderState(BlockState state)
-    {
+    public BlockState getJadeRenderState(BlockState state) {
         return getItemModelSource();
     }
 }

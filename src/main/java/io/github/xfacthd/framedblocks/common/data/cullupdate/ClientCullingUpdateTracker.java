@@ -10,21 +10,15 @@ import net.minecraft.world.level.Level;
 
 import java.util.Objects;
 
-public final class ClientCullingUpdateTracker
-{
-    public static void handleCullingUpdates(long chunkPos, LongSet positions)
-    {
-        ClientTaskQueue.enqueueClientTask(1, () ->
-        {
+public final class ClientCullingUpdateTracker {
+    public static void handleCullingUpdates(long chunkPos, LongSet positions) {
+        ClientTaskQueue.enqueueClientTask(1, () -> {
             Level level = Objects.requireNonNull(Minecraft.getInstance().level);
             BlockPos.MutableBlockPos blockPos = new BlockPos.MutableBlockPos();
-            if (level.hasChunk(ChunkPos.getX(chunkPos), ChunkPos.getZ(chunkPos)))
-            {
-                positions.forEach(pos ->
-                {
+            if (level.hasChunk(ChunkPos.getX(chunkPos), ChunkPos.getZ(chunkPos))) {
+                positions.forEach(pos -> {
                     blockPos.set(pos);
-                    if (level.getBlockEntity(blockPos) instanceof IFramedBlockEntity be)
-                    {
+                    if (level.getBlockEntity(blockPos) instanceof IFramedBlockEntity be) {
                         be.updateCulling(true, true);
                     }
                 });

@@ -9,18 +9,15 @@ import io.github.xfacthd.framedblocks.common.data.overlaypreds.slopeedge.*;
 import io.github.xfacthd.framedblocks.common.data.overlaypreds.stairs.*;
 import io.github.xfacthd.framedblocks.common.util.BlockTypeMap;
 
-public final class BlockOverlayPredicates extends BlockTypeMap<BlockOverlayPredicate>
-{
+public final class BlockOverlayPredicates extends BlockTypeMap<BlockOverlayPredicate> {
     public static final BlockOverlayPredicates PREDICATES = new BlockOverlayPredicates();
 
-    private BlockOverlayPredicates()
-    {
+    private BlockOverlayPredicates() {
         super(BlockOverlayPredicate.NEVER, type -> !type.supportsBlockOverlays());
     }
 
     @Override
-    protected void fill()
-    {
+    protected void fill() {
         put(BlockType.FRAMED_CUBE, BlockOverlayPredicate.ALWAYS);
         put(BlockType.FRAMED_SLOPE, BlockOverlayPredicate.ALWAYS);
         put(BlockType.FRAMED_DOUBLE_SLOPE, BlockOverlayPredicate.NEVER);

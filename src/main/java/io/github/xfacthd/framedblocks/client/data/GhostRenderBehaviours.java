@@ -11,10 +11,8 @@ import net.minecraft.world.level.block.Block;
 
 import java.util.List;
 
-public final class GhostRenderBehaviours
-{
-    public static void onRegisterGhostRenderBehaviours(RegisterGhostRenderBehavioursEvent event)
-    {
+public final class GhostRenderBehaviours {
+    public static void onRegisterGhostRenderBehaviours(RegisterGhostRenderBehavioursEvent event) {
         //noinspection SuspiciousToArrayCall
         event.registerBlocks(DoubleBlockGhostRenderBehaviour.INSTANCE, FBContent.getRegisteredBlocks()
                 .stream()

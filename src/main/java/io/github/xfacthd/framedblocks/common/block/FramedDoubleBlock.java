@@ -8,27 +8,22 @@ import net.minecraft.world.level.pathfinder.PathComputationType;
 
 import java.util.function.UnaryOperator;
 
-public abstract class FramedDoubleBlock extends AbstractFramedDoubleBlock implements IFramedDoubleBlockInternal
-{
-    protected FramedDoubleBlock(BlockType blockType, Properties props)
-    {
+public abstract class FramedDoubleBlock extends AbstractFramedDoubleBlock implements IFramedDoubleBlockInternal {
+    protected FramedDoubleBlock(BlockType blockType, Properties props) {
         this(blockType, props, UnaryOperator.identity());
     }
 
-    protected FramedDoubleBlock(BlockType blockType, Properties props, UnaryOperator<Properties> propertyModifier)
-    {
+    protected FramedDoubleBlock(BlockType blockType, Properties props, UnaryOperator<Properties> propertyModifier) {
         super(blockType, propertyModifier.apply(IFramedBlock.applyDefaultProperties(props, blockType)));
     }
 
     @Override
-    protected boolean isPathfindable(BlockState state, PathComputationType pathComputationType)
-    {
+    protected boolean isPathfindable(BlockState state, PathComputationType pathComputationType) {
         return false;
     }
 
     @Override
-    public BlockType getBlockType()
-    {
+    public BlockType getBlockType() {
         return (BlockType) super.getBlockType();
     }
 }

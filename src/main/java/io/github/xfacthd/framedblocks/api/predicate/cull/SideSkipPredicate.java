@@ -5,8 +5,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockGetter;
 
-public interface SideSkipPredicate
-{
+public interface SideSkipPredicate {
     SideSkipPredicate FALSE = (_, _, _, _, _) -> false;
 
     /**

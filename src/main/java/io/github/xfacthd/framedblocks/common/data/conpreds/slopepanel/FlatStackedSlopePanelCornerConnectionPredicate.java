@@ -6,11 +6,9 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jspecify.annotations.Nullable;
 
-public final class FlatStackedSlopePanelCornerConnectionPredicate extends NonDetailedConnectionPredicate
-{
+public final class FlatStackedSlopePanelCornerConnectionPredicate extends NonDetailedConnectionPredicate {
     @Override
-    public boolean canConnectFullEdge(BlockState state, Direction side, @Nullable Direction edge)
-    {
+    public boolean canConnectFullEdge(BlockState state, Direction side, @Nullable Direction edge) {
         Direction facing = state.getValue(FramedProperties.FACING_HOR);
         return side == facing || (side.getAxis() != facing.getAxis() && edge == facing);
     }

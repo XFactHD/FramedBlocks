@@ -5,11 +5,9 @@ import io.github.xfacthd.framedblocks.api.predicate.fullface.FullFacePredicate;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 
-public final class LargeInnerCornerSlopePanelFullFacePredicate implements FullFacePredicate
-{
+public final class LargeInnerCornerSlopePanelFullFacePredicate implements FullFacePredicate {
     @Override
-    public boolean test(BlockState state, Direction side)
-    {
+    public boolean test(BlockState state, Direction side) {
         Direction dir = state.getValue(FramedProperties.FACING_HOR);
         return side == dir.getOpposite() || side == dir.getClockWise();
     }

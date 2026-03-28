@@ -28,8 +28,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public final class FramingSawRecipeCache
-{
+public final class FramingSawRecipeCache {
     private static final FramingSawRecipeCache SERVER_INSTANCE = new FramingSawRecipeCache();
     private static final FramingSawRecipeCache CLIENT_INSTANCE = new FramingSawRecipeCache();
     private static final Identifier LISTENER_ID = Utils.id("framing_saw_recipes");
@@ -41,15 +40,13 @@ public final class FramingSawRecipeCache
     private final Reference2IntMap<Item> materialValues = new Reference2IntOpenHashMap<>();
     private boolean recipesPopulated = false;
 
-    private void update(RecipeMap recipeMap)
-    {
+    private void update(RecipeMap recipeMap) {
         clear();
 
         recipes.addAll(recipeMap.byType(FBContent.RECIPE_TYPE_FRAMING_SAW_RECIPE.value()));
         recipes.sort(FramingSawRecipeCache::sortRecipes);
 
-        recipes.forEach(holder ->
-        {
+        recipes.forEach(holder -> {
             FramingSawRecipe recipe = holder.value();
             ItemStackTemplate result = recipe.getResult();
             int materialValue = recipe.getMaterialAmount();
@@ -59,15 +56,13 @@ public final class FramingSawRecipeCache
         // Remove disabled recipes after extracting material values
         recipes.removeIf(h -> h.value().isDisabled());
 
-        recipes.forEach(holder ->
-        {
+        recipes.forEach(holder -> {
             FramingSawRecipe recipe = holder.value();
 
             ItemStackTemplate result = recipe.getResult();
             recipesByResult.put(result.item().value(), holder);
 
-            if (!recipe.getAdditives().isEmpty())
-            {
+            if (!recipe.getAdditives().isEmpty()) {
                 recipesWithAdditives.put(result.item().value(), holder);
             }
         });
@@ -75,8 +70,7 @@ public final class FramingSawRecipeCache
         recipesPopulated = true;
     }
 
-    public void clear()
-    {
+    public void clear() {
         recipesPopulated = false;
         recipes.clear();
         recipesByResult.clear();
@@ -84,39 +78,31 @@ public final class FramingSawRecipeCache
         materialValues.clear();
     }
 
-    public boolean isPopulated()
-    {
+    public boolean isPopulated() {
         return recipesPopulated;
     }
 
-    public List<RecipeHolder<FramingSawRecipe>> getRecipes()
-    {
+    public List<RecipeHolder<FramingSawRecipe>> getRecipes() {
         return recipesView;
     }
 
-    @Nullable
-    public RecipeHolder<FramingSawRecipe> findRecipeFor(ItemStack result)
-    {
+    public @Nullable RecipeHolder<FramingSawRecipe> findRecipeFor(ItemStack result) {
         return recipesByResult.get(result.getItem());
     }
 
-    public Set<Item> getKnownItems()
-    {
+    public Set<Item> getKnownItems() {
         return materialValues.keySet();
     }
 
-    public int getMaterialValue(Item item)
-    {
+    public int getMaterialValue(Item item) {
         return materialValues.getOrDefault(item, -1);
     }
 
-    public boolean containsAdditive(Item item)
-    {
+    public boolean containsAdditive(Item item) {
         return recipesWithAdditives.containsKey(item);
     }
 
-    public List<RecipeHolder<FramingSawRecipe>> getRecipesWithAdditive(ItemStack additive)
-    {
+    public List<RecipeHolder<FramingSawRecipe>> getRecipesWithAdditive(ItemStack additive) {
         return recipesWithAdditives.values()
                 .stream()
                 .filter(recipe -> recipe.value().getAdditives()
@@ -127,46 +113,37 @@ public final class FramingSawRecipeCache
                 .toList();
     }
 
-    public static FramingSawRecipeCache get(boolean client)
-    {
+    public static FramingSawRecipeCache get(boolean client) {
         return client ? CLIENT_INSTANCE : SERVER_INSTANCE;
     }
 
-    public static void onAddReloadListener(AddServerReloadListenersEvent event)
-    {
+    public static void onAddReloadListener(AddServerReloadListenersEvent event) {
         event.addListener(LISTENER_ID, new Reloader(event.getServerResources()));
     }
 
-    public static void onDataPackSync(OnDatapackSyncEvent event)
-    {
+    public static void onDataPackSync(OnDatapackSyncEvent event) {
         event.sendRecipes(FBContent.RECIPE_TYPE_FRAMING_SAW_RECIPE.value());
     }
 
-    public static void onRecipesReceived(RecipesReceivedEvent event)
-    {
+    public static void onRecipesReceived(RecipesReceivedEvent event) {
         CLIENT_INSTANCE.update(event.getRecipeMap());
     }
 
-    private static int sortRecipes(RecipeHolder<FramingSawRecipe> holder1, RecipeHolder<FramingSawRecipe> holder2)
-    {
+    private static int sortRecipes(RecipeHolder<FramingSawRecipe> holder1, RecipeHolder<FramingSawRecipe> holder2) {
         FramingSawRecipe r1 = holder1.value();
         FramingSawRecipe r2 = holder2.value();
         return sortRecipes(r1.getResult(), r2.getResult(), r1.getResultType(), r2.getResultType());
     }
 
-    public static int sortRecipes(ItemStackTemplate resultOne, ItemStackTemplate resultTwo, IBlockType typeOne, IBlockType typeTwo)
-    {
+    public static int sortRecipes(ItemStackTemplate resultOne, ItemStackTemplate resultTwo, IBlockType typeOne, IBlockType typeTwo) {
         String ns1 = BuiltInRegistries.ITEM.getKey(resultOne.item().value()).getNamespace();
         String ns2 = BuiltInRegistries.ITEM.getKey(resultTwo.item().value()).getNamespace();
 
-        if (!ns1.equals(ns2))
-        {
-            if (ns1.equals(FramedConstants.MOD_ID))
-            {
+        if (!ns1.equals(ns2)) {
+            if (ns1.equals(FramedConstants.MOD_ID)) {
                 return -1;
             }
-            if (ns2.equals(FramedConstants.MOD_ID))
-            {
+            if (ns2.equals(FramedConstants.MOD_ID)) {
                 return 1;
             }
             return ns1.compareTo(ns2);
@@ -176,11 +153,9 @@ public final class FramingSawRecipeCache
         return typeOne.compareTo(typeTwo);
     }
 
-    private record Reloader(ReloadableServerResources serverResources) implements ResourceManagerReloadListener
-    {
+    private record Reloader(ReloadableServerResources serverResources) implements ResourceManagerReloadListener {
         @Override
-        public void onResourceManagerReload(ResourceManager resourceManager)
-        {
+        public void onResourceManagerReload(ResourceManager resourceManager) {
             FramingSawRecipeCache.SERVER_INSTANCE.update(serverResources.getRecipeManager().recipeMap());
         }
     }

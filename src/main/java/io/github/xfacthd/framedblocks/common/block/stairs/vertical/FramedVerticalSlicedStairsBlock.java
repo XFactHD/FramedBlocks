@@ -21,27 +21,24 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import org.jspecify.annotations.Nullable;
 
-public class FramedVerticalSlicedStairsBlock extends FramedVerticalStairsBlock implements IFramedDoubleBlockInternal
-{
-    public FramedVerticalSlicedStairsBlock(BlockType type, Properties props)
-    {
+public class FramedVerticalSlicedStairsBlock extends FramedVerticalStairsBlock implements IFramedDoubleBlockInternal {
+    public FramedVerticalSlicedStairsBlock(BlockType type, Properties props) {
         super(type, props);
         registerDefaultState(defaultBlockState().setValue(PropertyHolder.RIGHT, false));
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
-    {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
         builder.add(PropertyHolder.RIGHT);
     }
 
     @Override
-    @Nullable
-    public BlockState getStateForPlacement(BlockPlaceContext ctx)
-    {
+    public @Nullable BlockState getStateForPlacement(BlockPlaceContext ctx) {
         BlockState state = super.getStateForPlacement(ctx);
-        if (state == null) return null;
+        if (state == null) {
+            return null;
+        }
 
         Direction face = ctx.getClickedFace();
         Direction fracDir = DirUtils.isY(face) ? ctx.getHorizontalDirection().getClockWise() : face.getCounterClockWise();
@@ -50,20 +47,16 @@ public class FramedVerticalSlicedStairsBlock extends FramedVerticalStairsBlock i
     }
 
     @Override
-    public DoubleBlockTopInteractionMode calculateTopInteractionMode(BlockState state)
-    {
+    public DoubleBlockTopInteractionMode calculateTopInteractionMode(BlockState state) {
         return DoubleBlockTopInteractionMode.EITHER;
     }
 
     @Override
-    public DoubleBlockParts calculateParts(BlockState state)
-    {
+    public DoubleBlockParts calculateParts(BlockState state) {
         Direction dir = state.getValue(FramedProperties.FACING_HOR);
         boolean right = state.getValue(PropertyHolder.RIGHT);
-        if (right)
-        {
-            return switch (state.getValue(PropertyHolder.STAIRS_TYPE))
-            {
+        if (right) {
+            return switch (state.getValue(PropertyHolder.STAIRS_TYPE)) {
                 case VERTICAL -> new DoubleBlockParts(
                         FBContent.BLOCK_FRAMED_PANEL.value()
                                 .defaultBlockState()
@@ -129,11 +122,8 @@ public class FramedVerticalSlicedStairsBlock extends FramedVerticalStairsBlock i
                                 .setValue(FramedProperties.TOP, true)
                 );
             };
-        }
-        else
-        {
-            return switch (state.getValue(PropertyHolder.STAIRS_TYPE))
-            {
+        } else {
+            return switch (state.getValue(PropertyHolder.STAIRS_TYPE)) {
                 case VERTICAL -> new DoubleBlockParts(
                         FBContent.BLOCK_FRAMED_PANEL.value()
                                 .defaultBlockState()
@@ -199,142 +189,108 @@ public class FramedVerticalSlicedStairsBlock extends FramedVerticalStairsBlock i
     }
 
     @Override
-    public SolidityCheck calculateSolidityCheck(BlockState state, Direction side)
-    {
+    public SolidityCheck calculateSolidityCheck(BlockState state, Direction side) {
         Direction facing = state.getValue(FramedProperties.FACING_HOR);
         StairsType type = state.getValue(PropertyHolder.STAIRS_TYPE);
         boolean right = state.getValue(PropertyHolder.RIGHT);
 
-        if (side == facing && !type.isForward())
-        {
+        if (side == facing && !type.isForward()) {
             return right ? SolidityCheck.FIRST : SolidityCheck.BOTH;
         }
-        if (side == facing.getCounterClockWise() && !type.isCounterClockwise())
-        {
+        if (side == facing.getCounterClockWise() && !type.isCounterClockwise()) {
             return right ? SolidityCheck.BOTH : SolidityCheck.FIRST;
         }
         return SolidityCheck.NONE;
     }
 
     @Override
-    public CamoGetter calculateCamoGetter(BlockState state, Direction side, @Nullable Direction edge)
-    {
+    public CamoGetter calculateCamoGetter(BlockState state, Direction side, @Nullable Direction edge) {
         Direction facing = state.getValue(FramedProperties.FACING_HOR);
         StairsType type = state.getValue(PropertyHolder.STAIRS_TYPE);
         boolean right = state.getValue(PropertyHolder.RIGHT);
 
-        if (side == facing)
-        {
-            return switch (type)
-            {
-                case VERTICAL, TOP_CCW, BOTTOM_CCW ->
-                {
-                    if (!right)
-                    {
-                        if (edge == facing.getCounterClockWise())
-                        {
+        if (side == facing) {
+            return switch (type) {
+                case VERTICAL, TOP_CCW, BOTTOM_CCW -> {
+                    if (!right) {
+                        if (edge == facing.getCounterClockWise()) {
                             yield CamoGetter.FIRST;
                         }
-                        if (edge == facing.getClockWise())
-                        {
+                        if (edge == facing.getClockWise()) {
                             yield CamoGetter.SECOND;
                         }
                         yield CamoGetter.NONE;
                     }
                     yield CamoGetter.FIRST;
                 }
-                case TOP_FWD, TOP_BOTH ->
-                {
-                    if (edge == facing.getCounterClockWise() || (right && edge == Direction.DOWN))
-                    {
+                case TOP_FWD, TOP_BOTH -> {
+                    if (edge == facing.getCounterClockWise() || (right && edge == Direction.DOWN)) {
                         yield CamoGetter.FIRST;
                     }
                     yield CamoGetter.NONE;
                 }
-                case BOTTOM_FWD, BOTTOM_BOTH ->
-                {
-                    if (edge == facing.getCounterClockWise() || (right && edge == Direction.UP))
-                    {
+                case BOTTOM_FWD, BOTTOM_BOTH -> {
+                    if (edge == facing.getCounterClockWise() || (right && edge == Direction.UP)) {
                         yield CamoGetter.FIRST;
                     }
                     yield CamoGetter.NONE;
                 }
             };
         }
-        if (side == facing.getCounterClockWise())
-        {
-            return switch (type)
-            {
-                case VERTICAL, TOP_FWD, BOTTOM_FWD ->
-                {
-                    if (right)
-                    {
-                        if (edge == facing)
-                        {
+        if (side == facing.getCounterClockWise()) {
+            return switch (type) {
+                case VERTICAL, TOP_FWD, BOTTOM_FWD -> {
+                    if (right) {
+                        if (edge == facing) {
                             yield CamoGetter.FIRST;
                         }
-                        if (edge == facing.getOpposite())
-                        {
+                        if (edge == facing.getOpposite()) {
                             yield CamoGetter.SECOND;
                         }
                         yield CamoGetter.NONE;
                     }
                     yield CamoGetter.FIRST;
                 }
-                case TOP_CCW, TOP_BOTH ->
-                {
-                    if (edge == facing || (!right && edge == Direction.DOWN))
-                    {
+                case TOP_CCW, TOP_BOTH -> {
+                    if (edge == facing || (!right && edge == Direction.DOWN)) {
                         yield CamoGetter.FIRST;
                     }
                     yield CamoGetter.NONE;
                 }
-                case BOTTOM_CCW, BOTTOM_BOTH ->
-                {
-                    if (edge == facing || (!right && edge == Direction.UP))
-                    {
+                case BOTTOM_CCW, BOTTOM_BOTH -> {
+                    if (edge == facing || (!right && edge == Direction.UP)) {
                         yield CamoGetter.FIRST;
                     }
                     yield CamoGetter.NONE;
                 }
             };
         }
-        if (side == Direction.UP)
-        {
-            if (!right && (!type.isTop() || !type.isCounterClockwise()) && edge == facing.getCounterClockWise())
-            {
+        if (side == Direction.UP) {
+            if (!right && (!type.isTop() || !type.isCounterClockwise()) && edge == facing.getCounterClockWise()) {
                 return CamoGetter.FIRST;
             }
-            if (right && (!type.isTop() || !type.isForward()) && edge == facing)
-            {
+            if (right && (!type.isTop() || !type.isForward()) && edge == facing) {
                 return CamoGetter.FIRST;
             }
             return CamoGetter.NONE;
         }
-        if (side == Direction.DOWN)
-        {
-            if (!right && (!type.isBottom() || !type.isCounterClockwise()) && edge == facing.getCounterClockWise())
-            {
+        if (side == Direction.DOWN) {
+            if (!right && (!type.isBottom() || !type.isCounterClockwise()) && edge == facing.getCounterClockWise()) {
                 return CamoGetter.FIRST;
             }
-            if (right && (!type.isBottom() || !type.isForward()) && edge == facing)
-            {
+            if (right && (!type.isBottom() || !type.isForward()) && edge == facing) {
                 return CamoGetter.FIRST;
             }
             return CamoGetter.NONE;
         }
-        if (side == facing.getOpposite())
-        {
-            if (edge == facing.getCounterClockWise() && !type.isCounterClockwise())
-            {
+        if (side == facing.getOpposite()) {
+            if (edge == facing.getCounterClockWise() && !type.isCounterClockwise()) {
                 return right ? CamoGetter.SECOND : CamoGetter.FIRST;
             }
             return CamoGetter.NONE;
         }
-        if (side == facing.getClockWise())
-        {
-            if (edge == facing && !type.isForward())
-            {
+        if (side == facing.getClockWise()) {
+            if (edge == facing && !type.isForward()) {
                 return right ? CamoGetter.SECOND : CamoGetter.FIRST;
             }
             return CamoGetter.NONE;
@@ -343,28 +299,24 @@ public class FramedVerticalSlicedStairsBlock extends FramedVerticalStairsBlock i
     }
 
     @Override
-    public FramedDoubleBlockEntity newBlockEntity(BlockPos pos, BlockState state)
-    {
+    public FramedDoubleBlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return IFramedDoubleBlockInternal.super.newBlockEntity(pos, state);
     }
 
     @Override
-    public BlockState getItemModelSource()
-    {
+    public BlockState getItemModelSource() {
         return defaultBlockState()
                 .setValue(FramedProperties.FACING_HOR, Direction.SOUTH)
                 .setValue(PropertyHolder.RIGHT, true);
     }
 
     @Override
-    public Direction getHorizontalOrientation(BlockState state)
-    {
+    public Direction getHorizontalOrientation(BlockState state) {
         return state.getValue(FramedProperties.FACING_HOR);
     }
 
     @Override
-    public BlockState getJadeRenderState(BlockState state)
-    {
+    public BlockState getJadeRenderState(BlockState state) {
         return defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.WEST);
     }
 }

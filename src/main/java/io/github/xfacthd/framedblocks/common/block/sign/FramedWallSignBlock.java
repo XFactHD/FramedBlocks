@@ -37,10 +37,8 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
-public final class FramedWallSignBlock extends WallSignBlock implements IFramedBlockInternal
-{
-    public FramedWallSignBlock(Properties properties)
-    {
+public final class FramedWallSignBlock extends WallSignBlock implements IFramedBlockInternal {
+    public FramedWallSignBlock(Properties properties) {
         super(WoodType.OAK, IFramedBlock.applyDefaultProperties(properties, BlockType.FRAMED_WALL_SIGN)
                 .forceSolidOn()
                 .noCollision()
@@ -50,24 +48,23 @@ public final class FramedWallSignBlock extends WallSignBlock implements IFramedB
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
-    {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
         BlockUtils.addStandardProperties(this, builder);
     }
 
     @Override
-    protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult)
-    {
+    protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
         InteractionResult result = handleUse(state, level, pos, player, hand, hitResult);
-        if (result.consumesAction()) return result;
+        if (result.consumesAction()) {
+            return result;
+        }
 
         return super.useItemOn(stack, state, level, pos, player, hand, hitResult);
     }
 
     @Override
-    public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)
-    {
+    public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
         tryApplyCamoImmediately(level, pos, placer, stack);
     }
 
@@ -81,76 +78,62 @@ public final class FramedWallSignBlock extends WallSignBlock implements IFramedB
             BlockPos adjPos,
             BlockState adjState,
             RandomSource random
-    )
-    {
+    ) {
         BlockState newState = super.updateShape(state, level, tickAccess, pos, side, adjPos, adjState, random);
-        if (!newState.isAir())
-        {
+        if (!newState.isAir()) {
             updateCulling(level, pos);
         }
         return newState;
     }
 
     @Override
-    protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, @Nullable Orientation orientation, boolean isMoving)
-    {
+    protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, @Nullable Orientation orientation, boolean isMoving) {
         updateCulling(level, pos);
     }
 
     @Override
-    protected boolean propagatesSkylightDown(BlockState state)
-    {
+    protected boolean propagatesSkylightDown(BlockState state) {
         return state.getValue(FramedProperties.PROPAGATES_SKYLIGHT);
     }
 
     @Override
-    protected List<ItemStack> getDrops(BlockState state, LootParams.Builder builder)
-    {
+    protected List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {
         return super.getDrops(state, getCamoDrops(builder));
     }
 
     @Override
-    public void openTextEdit(Player player, SignBlockEntity signEntity, boolean isFrontText)
-    {
+    public void openTextEdit(Player player, SignBlockEntity signEntity, boolean isFrontText) {
         signEntity.setAllowedPlayerEditor(player.getUUID());
         PacketDistributor.sendToPlayer((ServerPlayer) player, new ClientboundOpenSignScreenPayload(signEntity.getBlockPos(), isFrontText));
     }
 
     @Override
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
-    {
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return new FramedSignBlockEntity(pos, state);
     }
 
     @Override
-    @Nullable
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type)
-    {
+    public <T extends BlockEntity> @Nullable BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
         return createTickerHelper(type, FBContent.BE_TYPE_FRAMED_SIGN.value(), FramedSignBlockEntity::tick);
     }
 
     @Override
-    public BlockType getBlockType()
-    {
+    public BlockType getBlockType() {
         return BlockType.FRAMED_WALL_SIGN;
     }
 
-    @Nullable
     @Override
-    public BlockState getItemModelSource()
-    {
+    public @Nullable BlockState getItemModelSource() {
         return null;
     }
 
     @Override
-    public Direction getHorizontalOrientation(BlockState state)
-    {
+    public Direction getHorizontalOrientation(BlockState state) {
         return state.getValue(FramedProperties.FACING_HOR);
     }
 
     @Override
-    public BlockState getJadeRenderState(BlockState state)
-    {
+    public BlockState getJadeRenderState(BlockState state) {
         return defaultBlockState();
     }
 }

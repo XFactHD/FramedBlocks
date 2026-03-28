@@ -7,21 +7,18 @@ import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent
 import net.minecraft.client.renderer.item.TrackingItemStackRenderState;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 
-public final class BlockPreviewTooltipComponent implements TooltipComponent, ClientTooltipComponent
-{
+public final class BlockPreviewTooltipComponent implements TooltipComponent, ClientTooltipComponent {
     private static final int SIZE = 36;
     private static final float STACK_SCALE = 48;
 
     private final TrackingItemStackRenderState renderState;
 
-    public BlockPreviewTooltipComponent(TrackingItemStackRenderState renderState)
-    {
+    public BlockPreviewTooltipComponent(TrackingItemStackRenderState renderState) {
         this.renderState = renderState;
     }
 
     @Override
-    public void extractImage(Font font, int x, int y, int width, int height, GuiGraphicsExtractor graphics)
-    {
+    public void extractImage(Font font, int x, int y, int width, int height, GuiGraphicsExtractor graphics) {
         graphics.submitPictureInPictureRenderState(new SpinningItemPictureInPictureRenderer.RenderState(
                 renderState,
                 (int) (System.currentTimeMillis() / 20 % 360),
@@ -30,14 +27,12 @@ public final class BlockPreviewTooltipComponent implements TooltipComponent, Cli
     }
 
     @Override
-    public int getWidth(Font font)
-    {
+    public int getWidth(Font font) {
         return SIZE;
     }
 
     @Override
-    public int getHeight(Font font)
-    {
+    public int getHeight(Font font) {
         return SIZE;
     }
 }

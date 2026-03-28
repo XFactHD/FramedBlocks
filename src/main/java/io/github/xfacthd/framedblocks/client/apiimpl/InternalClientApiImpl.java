@@ -53,33 +53,28 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-public final class InternalClientApiImpl implements InternalClientAPI
-{
+public final class InternalClientApiImpl implements InternalClientAPI {
     private static final BlockState AIR = Blocks.AIR.defaultBlockState();
 
     @Override
-    public void registerModelWrapper(Holder<Block> block, GeometryFactory geometryFactory, StateMerger stateMerger)
-    {
+    public void registerModelWrapper(Holder<Block> block, GeometryFactory geometryFactory, StateMerger stateMerger) {
         Preconditions.checkArgument(block.value() instanceof IFramedBlock, "Cannot register model wrapper for non-IFramedBlock");
         registerSpecialModelWrapper(block, ctx -> new UnbakedFramedBlockStateModel(ctx, geometryFactory), stateMerger);
     }
 
     @Override
-    public void registerDoubleModelWrapper(Holder<Block> block, ItemModelInfo itemModelInfo, StateMerger stateMerger)
-    {
+    public void registerDoubleModelWrapper(Holder<Block> block, ItemModelInfo itemModelInfo, StateMerger stateMerger) {
         Preconditions.checkArgument(block.value() instanceof IFramedDoubleBlock, "Cannot register double model wrapper for non-IFramedDoubleBlock");
         registerSpecialModelWrapper(block, ctx -> new UnbakedFramedDoubleBlockStateModel(ctx, itemModelInfo), stateMerger);
     }
 
     @Override
-    public void registerSpecialModelWrapper(Holder<Block> block, ModelFactory modelFactory, StateMerger stateMerger)
-    {
+    public void registerSpecialModelWrapper(Holder<Block> block, ModelFactory modelFactory, StateMerger stateMerger) {
         ModelWrappingManager.register(block, new ModelWrappingHandler(block, modelFactory, stateMerger));
     }
 
     @Override
-    public void registerCopyingModelWrapper(Holder<Block> block, Holder<Block> srcBlock, StateMerger stateMerger)
-    {
+    public void registerCopyingModelWrapper(Holder<Block> block, Holder<Block> srcBlock, StateMerger stateMerger) {
         registerSpecialModelWrapper(block, ctx -> new UnbakedCopyingFramedBlockStateModel(ctx, srcBlock.value()), stateMerger);
     }
 
@@ -89,8 +84,7 @@ public final class InternalClientApiImpl implements InternalClientAPI
             GeometryFactory geometryFactory,
             StandaloneModelFactory<T> modelFactory,
             StateMerger stateMerger
-    )
-    {
+    ) {
         Holder<Block> block = wrapperKey.block();
         Preconditions.checkArgument(block.value() instanceof IFramedBlock, "Cannot register model wrapper for non-IFramedBlock");
         ModelFactory blockModelFactory = ctx -> new UnbakedFramedBlockStateModel(ctx, geometryFactory);
@@ -98,22 +92,18 @@ public final class InternalClientApiImpl implements InternalClientAPI
     }
 
     @Override
-    public void enqueueClientTask(int delay, Runnable task)
-    {
+    public void enqueueClientTask(int delay, Runnable task) {
         ClientTaskQueue.enqueueClientTask(delay, task);
     }
 
     @Override
-    public ItemModel.Unbaked createFramedBlockItemModel(Block block, BlockItemModelProvider modelProvider, Identifier baseModel)
-    {
+    public ItemModel.Unbaked createFramedBlockItemModel(Block block, BlockItemModelProvider modelProvider, Identifier baseModel) {
         return new FramedBlockItemModel.Unbaked(block, modelProvider, baseModel);
     }
 
     @Override
-    public ExtendedBlockStateModelPart makeBlockModelPart(QuadMapBuilder quadMap, TriState partAO, Material.Baked particleMaterial, @Nullable BlockState shaderState)
-    {
-        if (shaderState == AIR)
-        {
+    public ExtendedBlockStateModelPart makeBlockModelPart(QuadMapBuilder quadMap, TriState partAO, Material.Baked particleMaterial, @Nullable BlockState shaderState) {
+        if (shaderState == AIR) {
             shaderState = null;
         }
         return new FramedBlockStateModelPart(((QuadMapBuilderInternal) quadMap).build(), partAO, particleMaterial, shaderState);
@@ -124,19 +114,15 @@ public final class InternalClientApiImpl implements InternalClientAPI
             Either<BlockStateModelDispatcher, SingleVariant.Unbaked> wrapped,
             Map<String, SingleVariant.Unbaked> auxModels,
             Optional<StandaloneWrapperKey<?>> wrapperKey
-    )
-    {
+    ) {
         return new BlockStateModelDispatcher(new FramedBlockModelDefinition(wrapped, auxModels, wrapperKey));
     }
 
     @Override
-    public Supplier<BlockStateModel> createBlockItemModelProviderForGeometry(BlockState state, BlockState srcState, GeometryFactory geometry, ModelBaker baker)
-    {
-        return () ->
-        {
+    public Supplier<BlockStateModel> createBlockItemModelProviderForGeometry(BlockState state, BlockState srcState, GeometryFactory geometry, ModelBaker baker) {
+        return () -> {
             BlockStateModel baseModel = ModelUtils.getModel(srcState);
-            if (baseModel instanceof AbstractFramedBlockStateModel framedModel)
-            {
+            if (baseModel instanceof AbstractFramedBlockStateModel framedModel) {
                 baseModel = framedModel.getBaseModel();
             }
             GeometryFactory.Context ctx = new GeometryFactory.Context(state, baseModel, AuxModelProvider.invalid(), MaterialLookup.runtime());
@@ -146,14 +132,12 @@ public final class InternalClientApiImpl implements InternalClientAPI
     }
 
     @Override
-    public OutlineRenderer<?> createModelBasedOutlineRenderer(Block block)
-    {
+    public OutlineRenderer<?> createModelBasedOutlineRenderer(Block block) {
         return new ModelBasedOutlineRenderer(block);
     }
 
     @Override
-    public MaterialLookup getRuntimeMaterialLookup()
-    {
+    public MaterialLookup getRuntimeMaterialLookup() {
         return RuntimeMaterialBaker.INSTANCE;
     }
 }

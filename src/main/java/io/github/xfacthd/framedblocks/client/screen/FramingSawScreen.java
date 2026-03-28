@@ -54,8 +54,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu> implements IFramingSawScreen
-{
+public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu> implements IFramingSawScreen {
     public static final String TOOLTIP_MATERIAL = Utils.translationKey("tooltip", "framing_saw.material");
     public static final Component TOOLTIP_LOOSE_ADDITIVE = Utils.translate("tooltip", "framing_saw.loose_additive");
     public static final String TOOLTIP_HAVE_X_BUT_NEED_Y_ITEM = Utils.translationKey("tooltip", "framing_saw.have_x_but_need_y_item");
@@ -104,8 +103,7 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu> im
     private float scrollOffset = 0F;
     private boolean hasEffectiveSearchQuery = false;
 
-    protected FramingSawScreen(FramingSawMenu menu, Inventory inv, Component title)
-    {
+    protected FramingSawScreen(FramingSawMenu menu, Inventory inv, Component title) {
         super(menu, inv, title, IMAGE_WIDTH, IMAGE_HEIGHT);
         this.titleLabelY -= 1;
         this.inventoryLabelX = 47;
@@ -116,8 +114,7 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu> im
     }
 
     @Override
-    protected void init()
-    {
+    protected void init() {
         super.init();
 
         int searchX = leftPos + SEARCH_X;
@@ -130,8 +127,7 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu> im
     }
 
     @Override
-    public void extractBackground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick)
-    {
+    public void extractBackground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
         super.extractBackground(graphics, mouseX, mouseY, partialTick);
 
         graphics.blit(RenderPipelines.GUI_TEXTURED, getBackground(), leftPos, topPos, 0, 0, imageWidth, imageHeight, 256, 256);
@@ -140,14 +136,12 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu> im
         graphics.blit(RenderPipelines.GUI_TEXTURED, BACKGROUND, leftPos + SCROLL_BAR_X, topPos + SCROLL_BAR_Y + offset, scrollU, imageHeight, SCROLL_BTN_WIDTH, SCROLL_BTN_HEIGHT, 256, 256);
 
         ItemStack input = getInputStack();
-        if (!input.isEmpty() && cache.containsAdditive(input.getItem()))
-        {
+        if (!input.isEmpty() && cache.containsAdditive(input.getItem())) {
             graphics.blit(RenderPipelines.GUI_TEXTURED, WARNING_ICON, leftPos + WARNING_X, topPos + WARNING_Y, 8, 8, 24, 24, 32, 32);
         }
 
         int idx = menu.getSelectedRecipeIndex();
-        if (menu.hasRecipeChanged())
-        {
+        if (menu.hasRecipeChanged()) {
             handleRecipeChange();
         }
 
@@ -158,14 +152,12 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu> im
         renderRecipes(graphics, recX, recY, lastIndex);
 
         List<RecipeHolder<FramingSawRecipe>> recipes = cache.getRecipes();
-        if (idx >= 0 && idx < recipes.size())
-        {
+        if (idx >= 0 && idx < recipes.size()) {
             FramingSawRecipe recipe = recipes.get(idx).value();
             drawInputStackHint(graphics, input);
 
             List<FramingSawRecipeAdditive> additives = recipe.getAdditives();
-            for (int i = 0; i < additives.size(); i++)
-            {
+            for (int i = 0; i < additives.size(); i++) {
                 ItemStack additive = getAdditiveStack(i);
                 int y = topPos + 64 + (18 * i);
                 drawAdditiveStackHint(graphics, i, additive, additives, y);
@@ -173,48 +165,39 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu> im
         }
     }
 
-    protected Identifier getBackground()
-    {
+    protected Identifier getBackground() {
         return BACKGROUND;
     }
 
     @Override
-    public ItemStack getInputStack()
-    {
+    public ItemStack getInputStack() {
         return menu.getInputStack();
     }
 
     @Override
-    public ItemStack getAdditiveStack(int slot)
-    {
+    public ItemStack getAdditiveStack(int slot) {
         return menu.getAdditiveStack(slot);
     }
 
     @Override
-    public RecipeInput getRecipeInput()
-    {
+    public RecipeInput getRecipeInput() {
         return menu.getRecipeInput();
     }
 
-    protected void handleRecipeChange()
-    {
+    protected void handleRecipeChange() {
         tryScrollToRecipe(menu.getSelectedRecipeIndex());
     }
 
-    protected boolean drawInputStackHint(GuiGraphicsExtractor graphics, ItemStack input)
-    {
-        if (input.isEmpty())
-        {
+    protected boolean drawInputStackHint(GuiGraphicsExtractor graphics, ItemStack input) {
+        if (input.isEmpty()) {
             ClientUtils.renderTransparentFakeItem(graphics, cubeStack, leftPos + 20, topPos + 28);
             return true;
         }
         return false;
     }
 
-    protected boolean drawAdditiveStackHint(GuiGraphicsExtractor graphics, int index, ItemStack additive, List<FramingSawRecipeAdditive> additives, int y)
-    {
-        if (additive.isEmpty())
-        {
+    protected boolean drawAdditiveStackHint(GuiGraphicsExtractor graphics, int index, ItemStack additive, List<FramingSawRecipeAdditive> additives, int y) {
+        if (additive.isEmpty()) {
             List<ItemStack> items = additiveResolver.getStacks(index, additives.get(index).ingredient());
             int t = (int) (System.currentTimeMillis() / 1700) % items.size();
             ClientUtils.renderTransparentFakeItem(graphics, items.get(t), leftPos + 20, y);
@@ -223,44 +206,35 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu> im
         return false;
     }
 
-    protected boolean displayRecipeErrors()
-    {
+    protected boolean displayRecipeErrors() {
         return true;
     }
 
-    private void tryScrollToRecipe(int idx)
-    {
-        if (idx != -1 && hasEffectiveSearchQuery)
-        {
+    private void tryScrollToRecipe(int idx) {
+        if (idx != -1 && hasEffectiveSearchQuery) {
             FramingSawMenu.FramedRecipeHolder recipe = menu.getRecipes().get(idx);
             idx = filteredRecipes.indexOf(recipe);
         }
-        if (idx != -1 && (idx < firstIndex || idx >= firstIndex + RECIPE_COUNT))
-        {
+        if (idx != -1 && (idx < firstIndex || idx >= firstIndex + RECIPE_COUNT)) {
             int row = (idx / RECIPE_COLS) - 2; // Center the selected recipe if possible
             int hidden = getHiddenRows();
             scrollOffset = (float) row / (float) hidden;
             scrollOffset = Mth.clamp(scrollOffset, 0, 1);
             firstIndex = calculateFirstIndex(hidden);
-        }
-        else if (idx == -1)
-        {
+        } else if (idx == -1) {
             firstIndex = 0;
         }
     }
 
     @Override
-    protected void extractTooltip(GuiGraphicsExtractor graphics, int mouseX, int mouseY)
-    {
-        if (menu.getCarried().isEmpty() && hoveredSlot != null && hoveredSlot.hasItem())
-        {
+    protected void extractTooltip(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
+        if (menu.getCarried().isEmpty() && hoveredSlot != null && hoveredSlot.hasItem()) {
             renderItemTooltip(graphics, mouseX, mouseY, hoveredSlot.getItem(), null);
             return;
         }
 
         ItemStack input = getInputStack();
-        if (!input.isEmpty() && isHovering(WARNING_X, WARNING_Y, 16, 16, mouseX, mouseY) && cache.containsAdditive(input.getItem()))
-        {
+        if (!input.isEmpty() && isHovering(WARNING_X, WARNING_Y, 16, 16, mouseX, mouseY) && cache.containsAdditive(input.getItem())) {
             graphics.setTooltipForNextFrame(font, TOOLTIP_LOOSE_ADDITIVE, mouseX, mouseY);
             return;
         }
@@ -269,13 +243,11 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu> im
         int y = topPos + RECIPES_Y;
         int last = firstIndex + RECIPE_COUNT;
 
-        for (int idx = firstIndex; idx < last && idx < filteredRecipes.size(); idx++)
-        {
+        for (int idx = firstIndex; idx < last && idx < filteredRecipes.size(); idx++) {
             int relIdx = idx - firstIndex;
             int recX = x + relIdx % RECIPE_COLS * RECIPE_WIDTH;
             int recY = y + relIdx / RECIPE_COLS * RECIPE_HEIGHT;
-            if (mouseX >= recX && mouseX < recX + RECIPE_WIDTH && mouseY >= recY && mouseY < recY + RECIPE_HEIGHT)
-            {
+            if (mouseX >= recX && mouseX < recX + RECIPE_WIDTH && mouseY >= recY && mouseY < recY + RECIPE_HEIGHT) {
                 FramingSawMenu.FramedRecipeHolder recipe = filteredRecipes.get(idx);
                 ItemStack result = recipe.getRecipe().getResultStack();
                 renderItemTooltip(graphics, mouseX, mouseY, result, recipe);
@@ -284,27 +256,22 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu> im
         }
     }
 
-    protected void renderItemTooltip(GuiGraphicsExtractor graphics, int mouseX, int mouseY, ItemStack stack, FramingSawMenu.@Nullable FramedRecipeHolder recipeHolder)
-    {
+    protected void renderItemTooltip(GuiGraphicsExtractor graphics, int mouseX, int mouseY, ItemStack stack, FramingSawMenu.@Nullable FramedRecipeHolder recipeHolder) {
         List<Component> components = new ArrayList<>(getTooltipFromItem(minecraft, stack));
         Optional<TooltipComponent> tooltip = stack.getTooltipImage();
 
         int material = cache.getMaterialValue(stack.getItem());
-        if (material > 0)
-        {
+        if (material > 0) {
             components.add(Component.translatable(TOOLTIP_MATERIAL, material));
         }
 
-        if (recipeHolder != null && displayRecipeErrors())
-        {
+        if (recipeHolder != null && displayRecipeErrors()) {
             appendRecipeFailure(components, recipeHolder);
         }
-        if (recipeHolder != null)
-        {
+        if (recipeHolder != null) {
             TrackingItemStackRenderState renderState = new TrackingItemStackRenderState();
             minecraft.getItemModelResolver().updateForTopItem(renderState, stack, ItemDisplayContext.FIXED, null, null, 0);
-            if (renderState.usesBlockLight())
-            {
+            if (renderState.usesBlockLight()) {
                 tooltip = Optional.of(new BlockPreviewTooltipComponent(renderState));
             }
         }
@@ -312,8 +279,7 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu> im
         graphics.setTooltipForNextFrame(font, components, tooltip, stack, mouseX, mouseY);
     }
 
-    private void appendRecipeFailure(List<Component> components, FramingSawMenu.FramedRecipeHolder recipeHolder)
-    {
+    private void appendRecipeFailure(List<Component> components, FramingSawMenu.FramedRecipeHolder recipeHolder) {
         appendRecipeFailure(components, cache, additiveResolver, recipeHolder.getRecipe(), recipeHolder.getMatchResult(), this);
     }
 
@@ -324,128 +290,119 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu> im
             FramingSawRecipe recipe,
             FramingSawRecipeMatchResult matchResult,
             IFramingSawScreen screen
-    )
-    {
-        if (!matchResult.success())
+    ) {
+        if (matchResult.success()) {
+            return components;
+        }
+
+        components.add(matchResult.translation());
+
+        ItemStack input = screen.getInputStack();
+        int listAdditives = -1;
+        List<MutableComponent> detail = switch (matchResult)
         {
-            components.add(matchResult.translation());
-
-            ItemStack input = screen.getInputStack();
-            int listAdditives = -1;
-            List<MutableComponent> detail = switch (matchResult)
-            {
-                case CAMO_PRESENT -> List.of();
-                case MATERIAL_VALUE ->
-                {
-                    int matIn = input.isEmpty() ? 0 : cache.getMaterialValue(input.getItem()) * input.getCount();
-                    int matReq = recipe.getMaterialAmount();
-                    yield List.of(Component.translatable(
-                            TOOLTIP_HAVE_X_BUT_NEED_Y_MATERIAL_COUNT,
-                            Component.literal(Integer.toString(matIn)).withStyle(ChatFormatting.GOLD),
-                            Component.literal(Integer.toString(matReq)).withStyle(ChatFormatting.GOLD)
-                    ));
-                }
-                case MATERIAL_LCM ->
-                {
-                    if (input.isEmpty()) yield List.of();
-
-                    FramingSawRecipeCalculation calc = recipe.makeCraftingCalculation(
-                            screen.getRecipeInput(), true
-                    );
-                    yield List.of(Component.translatable(
-                            TOOLTIP_HAVE_X_BUT_NEED_Y_ITEM_COUNT,
-                            Component.literal(Integer.toString(input.getCount())).withStyle(ChatFormatting.GOLD),
-                            Component.literal(Integer.toString(calc.getInputCount())).withStyle(ChatFormatting.GOLD)
-                    ));
-                }
-                case OUTPUT_SIZE ->
-                {
-                    if (input.isEmpty()) yield List.of();
-
-                    FramingSawRecipeCalculation calc = recipe.makeCraftingCalculation(
-                            screen.getRecipeInput(), true
-                    );
-                    int maxSize = recipe.getResult().getMaxStackSize();
-                    yield List.of(
-                            Component.translatable(TOOLTIP_OUTPUT_COUNT, calc.getOutputCount(), maxSize),
-                            Component.translatable(TOOLTIP_USE_INTERMEDIATE)
-                    );
-                }
-                case MISSING_ADDITIVE_0, MISSING_ADDITIVE_1, MISSING_ADDITIVE_2 ->
-                {
-                    listAdditives = matchResult.additiveSlot();
-                    FramingSawRecipeAdditive additive = recipe.getAdditives().get(matchResult.additiveSlot());
-                    yield List.of(makeHaveButNeedTooltip(TOOLTIP_HAVE_ITEM_NONE, additive, listAdditives, additiveResolver));
-                }
-                case UNEXPECTED_ADDITIVE_0, UNEXPECTED_ADDITIVE_1, UNEXPECTED_ADDITIVE_2 ->
-                {
-                    Item itemIn = screen.getAdditiveStack(matchResult.additiveSlot()).getItem();
-                    yield List.of(Component.translatable(
-                            TOOLTIP_HAVE_X_BUT_NEED_Y_ITEM,
-                            Component.translatable(itemIn.getDescriptionId()).withStyle(ChatFormatting.GOLD),
-                            TOOLTIP_HAVE_ITEM_NONE
-                    ));
-                }
-                case INCORRECT_ADDITIVE_0, INCORRECT_ADDITIVE_1, INCORRECT_ADDITIVE_2 ->
-                {
-                    listAdditives = matchResult.additiveSlot();
-                    Item itemIn = screen.getAdditiveStack(matchResult.additiveSlot()).getItem();
-                    yield List.of(makeHaveButNeedTooltip(
-                            Component.translatable(itemIn.getDescriptionId()).withStyle(ChatFormatting.GOLD),
-                            recipe.getAdditives().get(matchResult.additiveSlot()),
-                            listAdditives,
-                            additiveResolver
-                    ));
-                }
-                case INSUFFICIENT_ADDITIVE_0, INSUFFICIENT_ADDITIVE_1, INSUFFICIENT_ADDITIVE_2 ->
-                {
-                    if (input.isEmpty()) yield List.of();
-
-                    FramingSawRecipeCalculation calc = recipe.makeCraftingCalculation(
-                            screen.getRecipeInput(), true
-                    );
-                    int cntIn = screen.getAdditiveStack(matchResult.additiveSlot()).getCount();
-                    int cntReq = calc.getAdditiveCount(matchResult.additiveSlot());
-                    yield List.of(Component.translatable(
-                            TOOLTIP_HAVE_X_BUT_NEED_Y_ITEM_COUNT,
-                            Component.literal(Integer.toString(cntIn)).withStyle(ChatFormatting.GOLD),
-                            Component.literal(Integer.toString(cntReq)).withStyle(ChatFormatting.GOLD)
-                    ));
-                }
-                case SUCCESS -> throw new IllegalStateException("Unreachable");
-            };
-            for (MutableComponent component : detail)
-            {
-                components.add(component.withStyle(ChatFormatting.RED));
+            case CAMO_PRESENT -> List.of();
+            case MATERIAL_VALUE -> {
+                int matIn = input.isEmpty() ? 0 : cache.getMaterialValue(input.getItem()) * input.getCount();
+                int matReq = recipe.getMaterialAmount();
+                yield List.of(Component.translatable(
+                        TOOLTIP_HAVE_X_BUT_NEED_Y_MATERIAL_COUNT,
+                        Component.literal(Integer.toString(matIn)).withStyle(ChatFormatting.GOLD),
+                        Component.literal(Integer.toString(matReq)).withStyle(ChatFormatting.GOLD)
+                ));
             }
+            case MATERIAL_LCM -> {
+                if (input.isEmpty()) {
+                    yield List.of();
+                }
 
-            if (listAdditives > -1)
-            {
-                appendAdditiveItemOptions(components, recipe, listAdditives, additiveResolver);
+                FramingSawRecipeCalculation calc = recipe.makeCraftingCalculation(
+                        screen.getRecipeInput(), true
+                );
+                yield List.of(Component.translatable(
+                        TOOLTIP_HAVE_X_BUT_NEED_Y_ITEM_COUNT,
+                        Component.literal(Integer.toString(input.getCount())).withStyle(ChatFormatting.GOLD),
+                        Component.literal(Integer.toString(calc.getInputCount())).withStyle(ChatFormatting.GOLD)
+                ));
             }
+            case OUTPUT_SIZE -> {
+                if (input.isEmpty()) {
+                    yield List.of();
+                }
+
+                FramingSawRecipeCalculation calc = recipe.makeCraftingCalculation(
+                        screen.getRecipeInput(), true
+                );
+                int maxSize = recipe.getResult().getMaxStackSize();
+                yield List.of(
+                        Component.translatable(TOOLTIP_OUTPUT_COUNT, calc.getOutputCount(), maxSize),
+                        Component.translatable(TOOLTIP_USE_INTERMEDIATE)
+                );
+            }
+            case MISSING_ADDITIVE_0, MISSING_ADDITIVE_1, MISSING_ADDITIVE_2 -> {
+                listAdditives = matchResult.additiveSlot();
+                FramingSawRecipeAdditive additive = recipe.getAdditives().get(matchResult.additiveSlot());
+                yield List.of(makeHaveButNeedTooltip(TOOLTIP_HAVE_ITEM_NONE, additive, listAdditives, additiveResolver));
+            }
+            case UNEXPECTED_ADDITIVE_0, UNEXPECTED_ADDITIVE_1, UNEXPECTED_ADDITIVE_2 -> {
+                Item itemIn = screen.getAdditiveStack(matchResult.additiveSlot()).getItem();
+                yield List.of(Component.translatable(
+                        TOOLTIP_HAVE_X_BUT_NEED_Y_ITEM,
+                        Component.translatable(itemIn.getDescriptionId()).withStyle(ChatFormatting.GOLD),
+                        TOOLTIP_HAVE_ITEM_NONE
+                ));
+            }
+            case INCORRECT_ADDITIVE_0, INCORRECT_ADDITIVE_1, INCORRECT_ADDITIVE_2 -> {
+                listAdditives = matchResult.additiveSlot();
+                Item itemIn = screen.getAdditiveStack(matchResult.additiveSlot()).getItem();
+                yield List.of(makeHaveButNeedTooltip(
+                        Component.translatable(itemIn.getDescriptionId()).withStyle(ChatFormatting.GOLD),
+                        recipe.getAdditives().get(matchResult.additiveSlot()),
+                        listAdditives,
+                        additiveResolver
+                ));
+            }
+            case INSUFFICIENT_ADDITIVE_0, INSUFFICIENT_ADDITIVE_1, INSUFFICIENT_ADDITIVE_2 -> {
+                if (input.isEmpty()) {
+                    yield List.of();
+                }
+
+                FramingSawRecipeCalculation calc = recipe.makeCraftingCalculation(
+                        screen.getRecipeInput(), true
+                );
+                int cntIn = screen.getAdditiveStack(matchResult.additiveSlot()).getCount();
+                int cntReq = calc.getAdditiveCount(matchResult.additiveSlot());
+                yield List.of(Component.translatable(
+                        TOOLTIP_HAVE_X_BUT_NEED_Y_ITEM_COUNT,
+                        Component.literal(Integer.toString(cntIn)).withStyle(ChatFormatting.GOLD),
+                        Component.literal(Integer.toString(cntReq)).withStyle(ChatFormatting.GOLD)
+                ));
+            }
+            case SUCCESS -> throw new IllegalStateException("Unreachable");
+        };
+        for (MutableComponent component : detail) {
+            components.add(component.withStyle(ChatFormatting.RED));
+        }
+
+        if (listAdditives > -1) {
+            appendAdditiveItemOptions(components, recipe, listAdditives, additiveResolver);
         }
         return components;
     }
 
-    private static void appendAdditiveItemOptions(List<Component> components, FramingSawRecipe recipe, int additiveSlot, CachingIngredientResolver.Multi additiveResolver)
-    {
+    private static void appendAdditiveItemOptions(List<Component> components, FramingSawRecipe recipe, int additiveSlot, CachingIngredientResolver.Multi additiveResolver) {
         FramingSawRecipeAdditive additive = recipe.getAdditives().get(additiveSlot);
         List<ItemStack> items = additiveResolver.getStacks(additiveSlot, additive.ingredient());
-        if (!additive.isTagBased() && items.size() <= 1)
-        {
+        if (!additive.isTagBased() && items.size() <= 1) {
             return;
         }
 
-        if (Minecraft.getInstance().hasShiftDown())
-        {
-            for (ItemStack option : items)
-            {
+        if (Minecraft.getInstance().hasShiftDown()) {
+            for (ItemStack option : items) {
                 Component name = option.getItemName();
                 components.add(Component.literal("- ").append(name).withStyle(ChatFormatting.GOLD));
             }
-        }
-        else
-        {
+        } else {
             Component keyName = InputConstants.getKey(new KeyEvent(InputConstants.KEY_LSHIFT, -1, 0)).getDisplayName();
             components.add(Component.translatable(
                     TOOLTIP_PRESS_TO_SHOW,
@@ -459,10 +416,8 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu> im
             FramingSawRecipeAdditive additive,
             int index,
             CachingIngredientResolver.Multi additiveResolver
-    )
-    {
-        if (additive.isTagBased())
-        {
+    ) {
+        if (additive.isTagBased()) {
             return Component.translatable(
                     TOOLTIP_HAVE_X_BUT_NEED_Y_TAG,
                     present,
@@ -478,47 +433,38 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu> im
         );
     }
 
-    private void renderButtons(GuiGraphicsExtractor graphics, int mouseX, int mouseY, int x, int y, int lastIdx)
-    {
+    private void renderButtons(GuiGraphicsExtractor graphics, int mouseX, int mouseY, int x, int y, int lastIdx) {
         int selIdx = menu.getSelectedRecipeIndex();
         // Only need to convert the index into filtered space when a query is present which shrinks the displayed count
-        if (selIdx != -1 && hasEffectiveSearchQuery)
-        {
+        if (selIdx != -1 && hasEffectiveSearchQuery) {
             FramingSawMenu.FramedRecipeHolder recipe = menu.getRecipes().get(selIdx);
             selIdx = filteredRecipes.indexOf(recipe);
         }
 
-        for (int idx = firstIndex; idx < lastIdx && idx < filteredRecipes.size(); ++idx)
-        {
+        for (int idx = firstIndex; idx < lastIdx && idx < filteredRecipes.size(); ++idx) {
             int relIdx = idx - firstIndex;
             int recX = x + relIdx % RECIPE_COLS * RECIPE_WIDTH;
             int recY = y + relIdx / RECIPE_COLS * RECIPE_HEIGHT;
 
             int u = 0;
             boolean hovered = false;
-            if (idx == selIdx)
-            {
+            if (idx == selIdx) {
                 u += RECIPE_WIDTH;
-            }
-            else if (mouseX >= recX && mouseY >= recY && mouseX < recX + RECIPE_WIDTH && mouseY < recY + RECIPE_HEIGHT)
-            {
+            } else if (mouseX >= recX && mouseY >= recY && mouseX < recX + RECIPE_WIDTH && mouseY < recY + RECIPE_HEIGHT) {
                 u += (RECIPE_WIDTH * 2);
                 hovered = true;
             }
 
             int color = 0xFFFFFFFF;
-            if (!hovered && displayRecipeErrors() && !filteredRecipes.get(idx).getMatchResult().success())
-            {
+            if (!hovered && displayRecipeErrors() && !filteredRecipes.get(idx).getMatchResult().success()) {
                 color = 0xFFE54C4C;
             }
             graphics.blit(RenderPipelines.GUI_TEXTURED, BACKGROUND, recX, recY, u, imageHeight, RECIPE_WIDTH, RECIPE_HEIGHT, 256, 256, color);
         }
     }
 
-    private void renderRecipes(GuiGraphicsExtractor graphics, int pLeft, int pTop, int lastIndex)
-    {
-        for (int idx = firstIndex; idx < lastIndex && idx < filteredRecipes.size(); idx++)
-        {
+    private void renderRecipes(GuiGraphicsExtractor graphics, int pLeft, int pTop, int lastIndex) {
+        for (int idx = firstIndex; idx < lastIndex && idx < filteredRecipes.size(); idx++) {
             int relIdx = idx - firstIndex;
             int x = pLeft + relIdx % RECIPE_COLS * RECIPE_WIDTH + 1;
             int y = pTop + relIdx / RECIPE_COLS * RECIPE_HEIGHT + 1;
@@ -530,19 +476,16 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu> im
     }
 
     @Override
-    protected void containerTick()
-    {
+    protected void containerTick() {
         searchBox.tick();
     }
 
     @Override
-    public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick)
-    {
+    public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
         scrolling = false;
 
         GuiEventListener focused = getFocused();
-        if (focused != null && !focused.isMouseOver(event.x(), event.y()))
-        {
+        if (focused != null && !focused.isMouseOver(event.x(), event.y())) {
             setFocused(null);
         }
 
@@ -550,40 +493,38 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu> im
         int y = topPos + RECIPES_Y;
         int lastIdx = firstIndex + RECIPE_COUNT;
 
-        for (int idx = firstIndex; idx < lastIdx; ++idx)
-        {
+        for (int idx = firstIndex; idx < lastIdx; ++idx) {
             int relIdx = idx - firstIndex;
             double recRelX = event.x() - (double)(x + relIdx % RECIPE_COLS * RECIPE_WIDTH);
             double recRelY = event.y() - (double)(y + relIdx / RECIPE_COLS * RECIPE_HEIGHT);
-            if (recRelX < 0 || recRelY < 0 || recRelX > RECIPE_WIDTH || recRelY > RECIPE_HEIGHT)
-            {
+            if (recRelX < 0 || recRelY < 0 || recRelX > RECIPE_WIDTH || recRelY > RECIPE_HEIGHT) {
                 continue;
             }
 
-            if (hasEffectiveSearchQuery)
-            {
-                if (idx < 0 || idx >= filteredRecipes.size()) break;
+            if (hasEffectiveSearchQuery) {
+                if (idx < 0 || idx >= filteredRecipes.size()) {
+                    break;
+                }
 
                 RecipeHolder<FramingSawRecipe> recipe = filteredRecipes.get(idx).toVanilla();
                 idx = cache.getRecipes().indexOf(recipe);
-                if (idx == -1) break;
+                if (idx == -1) {
+                    break;
+                }
             }
 
             //noinspection ConstantConditions
-            if (menu.clickMenuButton(minecraft.player, idx))
-            {
+            if (menu.clickMenuButton(minecraft.player, idx)) {
                 minecraft.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_STONECUTTER_SELECT_RECIPE, 1.0F));
                 ClientPacketDistributor.sendToServer(new ServerboundSelectFramingSawRecipePayload(menu.containerId, idx));
                 return true;
             }
         }
 
-        if (isScrollBarActive())
-        {
+        if (isScrollBarActive()) {
             x = leftPos + SCROLL_BAR_X;
             y = topPos + SCROLL_BAR_Y;
-            if (event.x() >= (double) x && event.x() < (double) (x + SCROLL_BTN_WIDTH) && event.y() >= (double) y && event.y() < (double) (y + SCROLL_BAR_HEIGHT))
-            {
+            if (event.x() >= (double) x && event.x() < (double) (x + SCROLL_BTN_WIDTH) && event.y() >= (double) y && event.y() < (double) (y + SCROLL_BAR_HEIGHT)) {
                 scrolling = true;
             }
         }
@@ -592,10 +533,8 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu> im
     }
 
     @Override
-    public boolean mouseDragged(MouseButtonEvent event, double dragX, double dragY)
-    {
-        if (scrolling && isScrollBarActive())
-        {
+    public boolean mouseDragged(MouseButtonEvent event, double dragX, double dragY) {
+        if (scrolling && isScrollBarActive()) {
             float topY = topPos + RECIPES_Y;
             float botY = topY + SCROLL_BAR_HEIGHT;
             float freeScrollHeight = botY - topY - SCROLL_BTN_HEIGHT;
@@ -611,10 +550,8 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu> im
     }
 
     @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double deltaX, double deltaY)
-    {
-        if (isScrollBarActive())
-        {
+    public boolean mouseScrolled(double mouseX, double mouseY, double deltaX, double deltaY) {
+        if (isScrollBarActive()) {
             int hiddenRows = getHiddenRows();
             float offset = (float) deltaY / (float) hiddenRows;
             scrollOffset = Mth.clamp(scrollOffset - offset, 0F, 1F);
@@ -625,30 +562,24 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu> im
     }
 
     @Override
-    public boolean keyPressed(KeyEvent event)
-    {
+    public boolean keyPressed(KeyEvent event) {
         // Prevent typing E in the search box from closing the screen
-        if (searchBox.isFocused() && Objects.requireNonNull(minecraft).options.keyInventory.matches(event))
-        {
+        if (searchBox.isFocused() && Objects.requireNonNull(minecraft).options.keyInventory.matches(event)) {
             return true;
         }
         return super.keyPressed(event);
     }
 
-    @Nullable
-    public PointedRecipe getRecipeAt(double mouseX, double mouseY)
-    {
+    public @Nullable PointedRecipe getRecipeAt(double mouseX, double mouseY) {
         double x = leftPos + RECIPES_X;
         double y = topPos + RECIPES_Y;
 
-        if (mouseX >= x && mouseX <= x + (RECIPE_WIDTH * RECIPE_COLS) && mouseY >= y && mouseY <= y + (RECIPE_HEIGHT * RECIPE_ROWS))
-        {
+        if (mouseX >= x && mouseX <= x + (RECIPE_WIDTH * RECIPE_COLS) && mouseY >= y && mouseY <= y + (RECIPE_HEIGHT * RECIPE_ROWS)) {
             int col = (int) ((mouseX - x) / RECIPE_WIDTH);
             int row = (int) ((mouseY - y) / RECIPE_HEIGHT);
             int idx = (row * RECIPE_COLS) + col + firstIndex;
 
-            if (idx > 0 && idx < filteredRecipes.size())
-            {
+            if (idx > 0 && idx < filteredRecipes.size()) {
                 int rx = (int) x + col * RECIPE_WIDTH;
                 int ry = (int) y + row * RECIPE_HEIGHT;
                 return new PointedRecipe(filteredRecipes.get(idx).toVanilla(), rx, ry);
@@ -657,68 +588,55 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu> im
         return null;
     }
 
-    private void onSearchChanged(String query)
-    {
-        if (query.isBlank())
-        {
+    private void onSearchChanged(String query) {
+        if (query.isBlank()) {
             acceptSearchResult(menu.getRecipes());
             return;
         }
 
         List<FramingSawMenu.FramedRecipeHolder> recipes = new ArrayList<>(menu.getRecipes().size());
         query = query.toLowerCase(Locale.ROOT);
-        for (FramingSawMenu.FramedRecipeHolder recipe : menu.getRecipes())
-        {
+        for (FramingSawMenu.FramedRecipeHolder recipe : menu.getRecipes()) {
             Component name = recipe.getRecipe().getResultStack().getItemName();
-            if (name.getString().toLowerCase(Locale.ROOT).contains(query))
-            {
+            if (name.getString().toLowerCase(Locale.ROOT).contains(query)) {
                 recipes.add(recipe);
             }
         }
         acceptSearchResult(recipes);
     }
 
-    private void acceptSearchResult(List<FramingSawMenu.FramedRecipeHolder> recipes)
-    {
+    private void acceptSearchResult(List<FramingSawMenu.FramedRecipeHolder> recipes) {
         filteredRecipes.clear();
         filteredRecipes.addAll(recipes);
         hasEffectiveSearchQuery = filteredRecipes.size() != menu.getRecipes().size();
         // If the query is not "effective" then the selected recipe must be in the list
-        if (!hasEffectiveSearchQuery || filteredRecipes.contains(menu.getRecipes().get(menu.getSelectedRecipeIndex())))
-        {
+        if (!hasEffectiveSearchQuery || filteredRecipes.contains(menu.getRecipes().get(menu.getSelectedRecipeIndex()))) {
             tryScrollToRecipe(menu.getSelectedRecipeIndex());
         }
     }
 
-    private boolean isScrollBarActive()
-    {
+    private boolean isScrollBarActive() {
         return filteredRecipes.size() > RECIPE_COUNT;
     }
 
-    private int getHiddenRows()
-    {
+    private int getHiddenRows() {
         return (filteredRecipes.size() + RECIPE_COLS - 1) / RECIPE_COLS - RECIPE_ROWS;
     }
 
-    private int calculateFirstIndex(int hiddenRows)
-    {
+    private int calculateFirstIndex(int hiddenRows) {
         int idx = (int) ((double) (scrollOffset * (float) hiddenRows) + .5D) * RECIPE_COLS;
         return Mth.clamp(idx, 0, filteredRecipes.size() - 1);
     }
 
-    public static FramingSawScreen create(FramingSawMenu menu, Inventory inv, Component title)
-    {
-        if (AppliedEnergisticsCompat.isLoaded())
-        {
+    public static FramingSawScreen create(FramingSawMenu menu, Inventory inv, Component title) {
+        if (AppliedEnergisticsCompat.isLoaded()) {
             return new FramingSawWithEncoderScreen(menu, inv, title);
         }
         return new FramingSawScreen(menu, inv, title);
     }
 
-    public record PointedRecipe(ResourceKey<Recipe<?>> id, FramingSawRecipe recipe, Rect2i area)
-    {
-        private PointedRecipe(RecipeHolder<FramingSawRecipe> recipe, int x, int y)
-        {
+    public record PointedRecipe(ResourceKey<Recipe<?>> id, FramingSawRecipe recipe, Rect2i area) {
+        private PointedRecipe(RecipeHolder<FramingSawRecipe> recipe, int x, int y) {
             this(recipe.id(), recipe.value(), new Rect2i(x, y, RECIPE_WIDTH, RECIPE_HEIGHT));
         }
     }

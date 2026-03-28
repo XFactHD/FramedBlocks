@@ -11,10 +11,8 @@ import io.github.xfacthd.framedblocks.client.render.special.ModelBasedOutlineRen
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.model.ModelManager;
 
-public final class CacheCleaner
-{
-    public static void clearModelCaches(Reason reason)
-    {
+public final class CacheCleaner {
+    public static void clearModelCaches(Reason reason) {
         ModelManager modelManager = Minecraft.getInstance().getModelManager();
 
         modelManager.getBlockStateModelSet()
@@ -37,8 +35,7 @@ public final class CacheCleaner
         clearExternalGeometryCaches(reason);
     }
 
-    public static void clearExternalGeometryCaches(Reason reason)
-    {
+    public static void clearExternalGeometryCaches(Reason reason) {
         FluidCubeModel.clearCaches();
         RuntimeMaterialBaker.clear(reason);
         ModelBasedOutlineRenderer.clearCaches();
@@ -46,8 +43,7 @@ public final class CacheCleaner
         BlockOverlayGenerator.clearCaches(reason);
     }
 
-    public enum Reason
-    {
+    public enum Reason {
         RELOAD,
         DISCONNECT,
         SETTINGS_CHANGED,

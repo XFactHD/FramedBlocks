@@ -8,15 +8,13 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.model.data.ModelData;
 
 @SuppressWarnings("ExtendsUtilityClass")
-public final class FramedBlockDisplayContext extends BlockDisplayContext implements DelegatingBlockRenderFakeLevel
-{
+public final class FramedBlockDisplayContext extends BlockDisplayContext implements DelegatingBlockRenderFakeLevel {
     private final BlockAndTintGetter realLevel;
     private final BlockPos pos;
     private final BlockState state;
     private final ModelData modelData;
 
-    public FramedBlockDisplayContext(BlockAndTintGetter realLevel, BlockPos pos, BlockState state, ModelData modelData)
-    {
+    public FramedBlockDisplayContext(BlockAndTintGetter realLevel, BlockPos pos, BlockState state, ModelData modelData) {
         this.realLevel = realLevel;
         this.pos = pos;
         this.state = state;
@@ -24,26 +22,22 @@ public final class FramedBlockDisplayContext extends BlockDisplayContext impleme
     }
 
     @Override
-    public BlockAndTintGetter realLevel()
-    {
+    public BlockAndTintGetter realLevel() {
         return realLevel;
     }
 
     @Override
-    public BlockPos pos()
-    {
+    public BlockPos pos() {
         return pos;
     }
 
     @Override
-    public BlockState state()
-    {
+    public BlockState state() {
         return state;
     }
 
     @Override
-    public ModelData modelData()
-    {
+    public ModelData modelData() {
         return modelData;
     }
 }

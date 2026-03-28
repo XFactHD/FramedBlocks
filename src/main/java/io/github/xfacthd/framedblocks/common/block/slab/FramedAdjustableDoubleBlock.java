@@ -18,8 +18,7 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.function.Function;
 
-public abstract class FramedAdjustableDoubleBlock extends FramedDoubleBlock
-{
+public abstract class FramedAdjustableDoubleBlock extends FramedDoubleBlock {
     private final Function<BlockState, Direction> facingGetter;
     private final Function<BlockState, DoubleBlockParts> partsBuilder;
     private final BlockEntityType.BlockEntitySupplier<FramedAdjustableDoubleBlockEntity> beSupplier;
@@ -30,8 +29,7 @@ public abstract class FramedAdjustableDoubleBlock extends FramedDoubleBlock
             Function<BlockState, Direction> facingGetter,
             Function<BlockState, DoubleBlockParts> partsBuilder,
             BlockEntityType.BlockEntitySupplier<FramedAdjustableDoubleBlockEntity> beSupplier
-    )
-    {
+    ) {
         super(type, props);
         this.facingGetter = facingGetter;
         this.partsBuilder = partsBuilder;
@@ -39,12 +37,9 @@ public abstract class FramedAdjustableDoubleBlock extends FramedDoubleBlock
     }
 
     @Override
-    public boolean handleBlockLeftClick(BlockState state, Level level, BlockPos pos, Player player)
-    {
-        if (player.getMainHandItem().getItem() == FBContent.ITEM_FRAMED_HAMMER.value())
-        {
-            if (level.getBlockEntity(pos) instanceof FramedAdjustableDoubleBlockEntity be)
-            {
+    public boolean handleBlockLeftClick(BlockState state, Level level, BlockPos pos, Player player) {
+        if (player.getMainHandItem().getItem() == FBContent.ITEM_FRAMED_HAMMER.value()) {
+            if (level.getBlockEntity(pos) instanceof FramedAdjustableDoubleBlockEntity be) {
                 return be.handleDeform(player);
             }
         }
@@ -52,36 +47,30 @@ public abstract class FramedAdjustableDoubleBlock extends FramedDoubleBlock
     }
 
     @Override
-    public FramedDoubleBlockEntity newBlockEntity(BlockPos pos, BlockState state)
-    {
+    public FramedDoubleBlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return beSupplier.create(pos, state);
     }
 
     @Override
-    public BlockState getJadeRenderState(BlockState state)
-    {
+    public BlockState getJadeRenderState(BlockState state) {
         return defaultBlockState();
     }
 
     @Override
-    public DoubleBlockParts calculateParts(BlockState state)
-    {
+    public DoubleBlockParts calculateParts(BlockState state) {
         return partsBuilder.apply(state);
     }
 
-    public Direction getFacing(BlockState state)
-    {
+    public Direction getFacing(BlockState state) {
         return facingGetter.apply(state);
     }
 
     @Override
-    public BlockState getItemModelSource()
-    {
+    public BlockState getItemModelSource() {
         return defaultBlockState();
     }
 
-    protected static DoubleBlockParts makeStandardParts(BlockState state)
-    {
+    protected static DoubleBlockParts makeStandardParts(BlockState state) {
         Direction facing = ((FramedAdjustableDoubleBlock) state.getBlock()).getFacing(state);
         BlockState defState = FBContent.BLOCK_FRAMED_COLLAPSIBLE_BLOCK.value().defaultBlockState();
         return new DoubleBlockParts(
@@ -90,8 +79,7 @@ public abstract class FramedAdjustableDoubleBlock extends FramedDoubleBlock
         );
     }
 
-    protected static DoubleBlockParts makeCopycatParts(BlockState state)
-    {
+    protected static DoubleBlockParts makeCopycatParts(BlockState state) {
         Direction facing = ((FramedAdjustableDoubleBlock) state.getBlock()).getFacing(state);
         BlockState defState = FBContent.BLOCK_FRAMED_COLLAPSIBLE_COPYCAT_BLOCK.value().defaultBlockState();
         int solidFirst = ~(1 << facing.ordinal()) & FramedCollapsibleCopycatBlock.ALL_SOLID;

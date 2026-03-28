@@ -6,18 +6,15 @@ import io.github.xfacthd.framedblocks.common.block.slopeslab.FramedDoubleSlopeSl
 import io.github.xfacthd.framedblocks.common.block.slopeslab.FramedFlatDoubleSlopeSlabCornerBlock;
 import io.github.xfacthd.framedblocks.common.util.BlockTypeMap;
 
-public final class NullCullPredicates extends BlockTypeMap<NullCullPredicate>
-{
+public final class NullCullPredicates extends BlockTypeMap<NullCullPredicate> {
     public static final NullCullPredicates PREDICATES = new NullCullPredicates();
 
-    private NullCullPredicates()
-    {
+    private NullCullPredicates() {
         super(NullCullPredicate.NEVER, type -> !type.isDoubleBlock());
     }
 
     @Override
-    protected void fill()
-    {
+    protected void fill() {
         put(BlockType.FRAMED_DOUBLE_SLOPE, NullCullPredicate.ALWAYS);
         put(BlockType.FRAMED_DIVIDED_SLOPE, NullCullPredicate.NEVER);
         put(BlockType.FRAMED_DOUBLE_HALF_SLOPE, NullCullPredicate.NEVER);

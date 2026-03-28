@@ -18,16 +18,16 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.function.Consumer;
 
-public final class TankItemRenderer implements SpecialModelRenderer<SimpleFluidContent>
-{
+public final class TankItemRenderer implements SpecialModelRenderer<SimpleFluidContent> {
     private static final TankItemRenderer INSTANCE = new TankItemRenderer();
 
     private TankItemRenderer() { }
 
     @Override
-    public void submit(@Nullable SimpleFluidContent content, PoseStack poseStack, SubmitNodeCollector collector, int light, int overlay, boolean hasGlint, int outlineColor)
-    {
-        if (content == null || content.isEmpty()) return;
+    public void submit(@Nullable SimpleFluidContent content, PoseStack poseStack, SubmitNodeCollector collector, int light, int overlay, boolean hasGlint, int outlineColor) {
+        if (content == null || content.isEmpty()) {
+            return;
+        }
 
         FluidModel fluidModel = ModelUtils.getFluidModel(content.getFluid().defaultFluidState());
         FluidTintSource tintSource = fluidModel.fluidTintSource();
@@ -36,19 +36,16 @@ public final class TankItemRenderer implements SpecialModelRenderer<SimpleFluidC
     }
 
     @Override
-    public SimpleFluidContent extractArgument(ItemStack stack)
-    {
+    public SimpleFluidContent extractArgument(ItemStack stack) {
         return stack.getOrDefault(FBContent.DC_TYPE_TANK_CONTENTS, SimpleFluidContent.EMPTY);
     }
 
     @Override
-    public void getExtents(Consumer<Vector3fc> extents)
-    {
+    public void getExtents(Consumer<Vector3fc> extents) {
         // NO-OP: this is always combined with another model which already provides correct extents
     }
 
-    public static final class Unbaked implements SpecialModelRenderer.Unbaked<SimpleFluidContent>
-    {
+    public static final class Unbaked implements SpecialModelRenderer.Unbaked<SimpleFluidContent> {
         public static final Identifier ID = Utils.id("tank");
         public static final TankItemRenderer.Unbaked INSTANCE = new TankItemRenderer.Unbaked();
         public static final MapCodec<TankItemRenderer.Unbaked> CODEC = MapCodec.unit(INSTANCE);
@@ -56,14 +53,12 @@ public final class TankItemRenderer implements SpecialModelRenderer<SimpleFluidC
         private Unbaked() { }
 
         @Override
-        public TankItemRenderer bake(BakingContext ctx)
-        {
+        public TankItemRenderer bake(BakingContext ctx) {
             return TankItemRenderer.INSTANCE;
         }
 
         @Override
-        public MapCodec<TankItemRenderer.Unbaked> type()
-        {
+        public MapCodec<TankItemRenderer.Unbaked> type() {
             return CODEC;
         }
     }

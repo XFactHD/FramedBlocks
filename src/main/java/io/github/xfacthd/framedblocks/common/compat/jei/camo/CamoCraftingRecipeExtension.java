@@ -12,50 +12,41 @@ import net.minecraft.world.item.crafting.display.SlotDisplay;
 
 import java.util.List;
 
-@SuppressWarnings("removal")
-public final class CamoCraftingRecipeExtension implements ICraftingCategoryExtension<JeiCamoApplicationRecipe>
-{
+public final class CamoCraftingRecipeExtension implements ICraftingCategoryExtension<JeiCamoApplicationRecipe> {
     private final CamoCraftingHelper camoCraftingHelper;
 
-    public CamoCraftingRecipeExtension(CamoCraftingHelper camoCraftingHelper)
-    {
+    public CamoCraftingRecipeExtension(CamoCraftingHelper camoCraftingHelper) {
         this.camoCraftingHelper = camoCraftingHelper;
     }
 
     @Override
-    public void setRecipe(RecipeHolder<JeiCamoApplicationRecipe> recipeHolder, IRecipeLayoutBuilder builder, ICraftingGridHelper craftingGridHelper, IFocusGroup focuses)
-    {
+    public void setRecipe(RecipeHolder<JeiCamoApplicationRecipe> recipeHolder, IRecipeLayoutBuilder builder, ICraftingGridHelper craftingGridHelper, IFocusGroup focuses) {
         JeiCamoApplicationRecipe recipe = recipeHolder.value();
         camoCraftingHelper.setRecipe(recipe, builder, craftingGridHelper);
     }
 
     @Override
-    public List<SlotDisplay> getIngredients(RecipeHolder<JeiCamoApplicationRecipe> recipeHolder)
-    {
+    public List<SlotDisplay> getIngredients(RecipeHolder<JeiCamoApplicationRecipe> recipeHolder) {
         JeiCamoApplicationRecipe recipe = recipeHolder.value();
         return camoCraftingHelper.getIngredients(recipe);
     }
 
     @Override
-    public int getWidth(RecipeHolder<JeiCamoApplicationRecipe> recipeHolder)
-    {
+    public int getWidth(RecipeHolder<JeiCamoApplicationRecipe> recipeHolder) {
         return 2;
     }
 
     @Override
-    public int getHeight(RecipeHolder<JeiCamoApplicationRecipe> recipeHolder)
-    {
+    public int getHeight(RecipeHolder<JeiCamoApplicationRecipe> recipeHolder) {
         return 2;
     }
 
     @Override
-    public void onDisplayedIngredientsUpdate(RecipeHolder<JeiCamoApplicationRecipe> recipeHolder, List<IRecipeSlotDrawable> recipeSlots, IFocusGroup focuses)
-    {
+    public void onDisplayedIngredientsUpdate(RecipeHolder<JeiCamoApplicationRecipe> recipeHolder, List<IRecipeSlotDrawable> recipeSlots, IFocusGroup focuses) {
         // The combinations of outputs for these recipes is way too much to calculate ahead of time.
         // If the focus is on an output it will already be set, but otherwise we need to calculate it here.
 
-        if (recipeHolder.value().result().isEmpty())
-        {
+        if (recipeHolder.value().result().isEmpty()) {
             IRecipeSlotDrawable frameSlot = recipeSlots.getFirst();
             IRecipeSlotDrawable inputOneSlot = recipeSlots.get(3);
             IRecipeSlotDrawable inputTwoSlot = recipeSlots.get(4);
@@ -71,7 +62,7 @@ public final class CamoCraftingRecipeExtension implements ICraftingCategoryExten
                     .findAny()
                     .orElseThrow()
                     .createDisplayOverrides()
-                    .addItemStack(output);
+                    .add(output);
         }
     }
 }

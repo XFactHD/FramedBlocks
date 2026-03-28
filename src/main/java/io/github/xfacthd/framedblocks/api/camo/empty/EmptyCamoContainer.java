@@ -10,58 +10,49 @@ import net.minecraft.world.level.block.Rotation;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import org.jspecify.annotations.Nullable;
 
-public final class EmptyCamoContainer extends CamoContainer<EmptyCamoContent, EmptyCamoContainer>
-{
+public final class EmptyCamoContainer extends CamoContainer<EmptyCamoContent, EmptyCamoContainer> {
     public static final EmptyCamoContainer EMPTY = new EmptyCamoContainer();
     public static final MutableComponent CAMO_NAME = Utils.translate("desc", "camo.empty").withStyle(ChatFormatting.ITALIC);
     private static final DeferredHolder<CamoContainerFactory<?>, CamoContainerFactory<EmptyCamoContainer>> FACTORY =
             DeferredHolder.create(FramedConstants.CAMO_CONTAINER_FACTORY_REGISTRY_KEY, Utils.id("empty"));
 
-    private EmptyCamoContainer()
-    {
+    private EmptyCamoContainer() {
         super(EmptyCamoContent.EMPTY);
     }
 
     @Override
-    public boolean canRotateCamo()
-    {
+    public boolean canRotateCamo() {
         return false;
     }
 
     @Override
-    @Nullable
-    public EmptyCamoContainer rotateCamo()
+    public @Nullable EmptyCamoContainer rotateCamo()
     {
         return null;
     }
 
     @Override
-    public EmptyCamoContainer adjustForCarrierRotation(Rotation rotation)
-    {
+    public EmptyCamoContainer adjustForCarrierRotation(Rotation rotation) {
         return this;
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         return System.identityHashCode(this);
     }
 
     @Override
-    public boolean equals(Object obj)
-    {
+    public boolean equals(Object obj) {
         return obj == this;
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "EmptyCamoContainer{}";
     }
 
     @Override
-    public CamoContainerFactory<EmptyCamoContainer> getFactory()
-    {
+    public CamoContainerFactory<EmptyCamoContainer> getFactory() {
         return FACTORY.value();
     }
 }

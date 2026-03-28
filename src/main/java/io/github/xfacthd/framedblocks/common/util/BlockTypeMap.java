@@ -9,8 +9,7 @@ import java.util.Objects;
 import java.util.function.BiConsumer;
 import java.util.function.Predicate;
 
-public abstract class BlockTypeMap<T>
-{
+public abstract class BlockTypeMap<T> {
     private static final BlockType[] TYPES = BlockType.values();
     private static final int TYPE_COUNT = TYPES.length;
 
@@ -19,61 +18,48 @@ public abstract class BlockTypeMap<T>
     private final Predicate<BlockType> setDefault;
     private final @Nullable Object[] values = new Object[TYPE_COUNT];
 
-    protected BlockTypeMap(T defaultValue)
-    {
+    protected BlockTypeMap(T defaultValue) {
         this(defaultValue, null);
     }
 
-    protected BlockTypeMap(T defaultValue, @Nullable Predicate<BlockType> setDefault)
-    {
+    protected BlockTypeMap(T defaultValue, @Nullable Predicate<BlockType> setDefault) {
         this.defaultValue = defaultValue;
         this.setDefault = setDefault;
     }
 
-    public final void initialize()
-    {
-        if (setDefault != null)
-        {
-            for (BlockType type : TYPES)
-            {
-                if (setDefault.test(type))
-                {
+    public final void initialize() {
+        if (setDefault != null) {
+            for (BlockType type : TYPES) {
+                if (setDefault.test(type)) {
                     put(type, defaultValue);
                 }
             }
         }
         fill();
-        if (!Utils.PRODUCTION)
-        {
+        if (!Utils.PRODUCTION) {
             check();
         }
     }
 
     protected abstract void fill();
 
-    private void check()
-    {
+    private void check() {
         int missing = 0;
-        for (int i = 0; i < TYPE_COUNT; i++)
-        {
-            if (values[i] == null)
-            {
+        for (int i = 0; i < TYPE_COUNT; i++) {
+            if (values[i] == null) {
                 missing++;
                 FramedBlocks.LOGGER.error(
                         "Type '{}' missing mapping in '{}'", TYPES[i], getClass().getSimpleName()
                 );
             }
         }
-        if (missing > 0)
-        {
+        if (missing > 0) {
             FramedBlocks.LOGGER.error("Found {} missing mappings in '{}'", missing, getClass().getSimpleName());
         }
     }
 
-    protected final void put(BlockType type, T value)
-    {
-        if (!Utils.PRODUCTION && values[type.ordinal()] != null)
-        {
+    protected final void put(BlockType type, T value) {
+        if (!Utils.PRODUCTION && values[type.ordinal()] != null) {
             throw new IllegalStateException(String.format(
                     "Tried to overwrite mapping assigned to '%s' in '%s' (old: %s, new: %s)",
                     type,
@@ -86,20 +72,16 @@ public abstract class BlockTypeMap<T>
     }
 
     @SuppressWarnings("unchecked")
-    public final T get(BlockType type)
-    {
+    public final T get(BlockType type) {
         Object value = values[Objects.requireNonNull(type).ordinal()];
-        if (value != null)
-        {
+        if (value != null) {
             return (T) value;
         }
         return defaultValue;
     }
 
-    public final void forEach(BiConsumer<BlockType, T> consumer)
-    {
-        for (BlockType type : TYPES)
-        {
+    public final void forEach(BiConsumer<BlockType, T> consumer) {
+        for (BlockType type : TYPES) {
             consumer.accept(type, get(type));
         }
     }

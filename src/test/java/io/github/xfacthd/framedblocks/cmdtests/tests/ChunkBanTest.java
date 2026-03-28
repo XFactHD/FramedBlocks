@@ -62,20 +62,17 @@ import java.util.function.Supplier;
 // | Max blocks per chunk:  |     39998 |    57376 |    78523 |    99921 |
 // +------------------------+-----------+----------+----------+----------+
 
-public final class ChunkBanTest
-{
+public final class ChunkBanTest {
     private static final String CONFIRMATION_KEY = "confirm";
     private static final Component MSG_NO_CONFIRM = Component.literal("Incorrect confirmation key, expected '" + CONFIRMATION_KEY + "'");
     private static final Component MSG_NOT_A_PLAYER = Component.literal("This command can only be executed by a real player");
     private static final Component MSG_ALREADY_RUNNING = Component.literal("Chunkban test preparation is already running");
-    private static final Supplier<SimpleBlockCamoContainer> CAMO_ONE_FACTORY = () ->
-    {
+    private static final Supplier<SimpleBlockCamoContainer> CAMO_ONE_FACTORY = () -> {
         SimpleBlockCamoContainer container = new SimpleBlockCamoContainer(Blocks.POLISHED_GRANITE.defaultBlockState(), FBContent.FACTORY_BLOCK.value());
         Preconditions.checkState(!container.isEmpty(), "Container is empty?!");
         return container;
     };
-    private static final Supplier<SimpleBlockCamoContainer> CAMO_TWO_FACTORY = () ->
-    {
+    private static final Supplier<SimpleBlockCamoContainer> CAMO_TWO_FACTORY = () -> {
         SimpleBlockCamoContainer container = new SimpleBlockCamoContainer(Blocks.POLISHED_DIORITE.defaultBlockState(), FBContent.FACTORY_BLOCK.value());
         Preconditions.checkState(!container.isEmpty(), "Container is empty?!");
         return container;
@@ -93,33 +90,26 @@ public final class ChunkBanTest
     private static BlockPos placePos = null;
     private static int blocksPlaced = 0;
 
-    public static int startChunkBanTest(CommandContext<CommandSourceStack> ctx, boolean withState)
-    {
+    public static int startChunkBanTest(CommandContext<CommandSourceStack> ctx, boolean withState) {
         String confirmation = ctx.getArgument("confirm", String.class);
-        if (!confirmation.equals(CONFIRMATION_KEY))
-        {
+        if (!confirmation.equals(CONFIRMATION_KEY)) {
             ctx.getSource().sendFailure(MSG_NO_CONFIRM);
             return 0;
         }
 
-        if (!(ctx.getSource().getPlayer() instanceof ServerPlayer player) || player instanceof FakePlayer)
-        {
+        if (!(ctx.getSource().getPlayer() instanceof ServerPlayer player) || player instanceof FakePlayer) {
             ctx.getSource().sendFailure(MSG_NOT_A_PLAYER);
             return 0;
         }
 
-        if (dimension != null)
-        {
+        if (dimension != null) {
             ctx.getSource().sendFailure(MSG_ALREADY_RUNNING);
             return 0;
         }
 
-        if (withState)
-        {
+        if (withState) {
             state = BlockStateArgument.getBlock(ctx, "state").getState();
-        }
-        else
-        {
+        } else {
             state = FBContent.BLOCK_FRAMED_DOUBLE_SLAB.value().defaultBlockState();
         }
 
@@ -135,27 +125,22 @@ public final class ChunkBanTest
         return 1;
     }
 
-    public static void onLevelTick(LevelTickEvent.Pre event)
-    {
+    public static void onLevelTick(LevelTickEvent.Pre event) {
         Level level = event.getLevel();
-        if (dimension != null && level.dimension() == dimension)
-        {
+        if (dimension != null && level.dimension() == dimension) {
             Objects.requireNonNull(state);
             Objects.requireNonNull(startPos);
             Objects.requireNonNull(placePos);
 
-            for (int i = 0; i < 16; i++)
-            {
+            for (int i = 0; i < 16; i++) {
                 BlockPos pos = placePos.east(i);
 
                 level.setBlockAndUpdate(pos, state);
                 BlockEntity be = level.getBlockEntity(pos);
-                if (be instanceof IFramedBlockEntity fbe)
-                {
+                if (be instanceof IFramedBlockEntity fbe) {
                     fbe.setCamo(CAMO_ONE_FACTORY.get(), false);
                 }
-                if (be instanceof FramedDoubleBlockEntity fdbe)
-                {
+                if (be instanceof FramedDoubleBlockEntity fdbe) {
                     fdbe.setCamo(CAMO_TWO_FACTORY.get(), true);
                 }
 
@@ -163,11 +148,9 @@ public final class ChunkBanTest
             }
 
             placePos = placePos.south();
-            if (placePos.getZ() > startPos.getZ() + 15)
-            {
+            if (placePos.getZ() > startPos.getZ() + 15) {
                 placePos = placePos.north(16).above();
-                if (placePos.getY() >= level.getMaxY())
-                {
+                if (placePos.getY() >= level.getMaxY()) {
                     Objects.requireNonNull(resultMsgConsumer).accept(Component.literal(
                             "Chunkban test preparation completed, placed " + blocksPlaced + " blocks"
                     ));

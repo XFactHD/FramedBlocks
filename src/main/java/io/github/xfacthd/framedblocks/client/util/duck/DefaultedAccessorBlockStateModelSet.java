@@ -7,11 +7,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import java.util.Map;
 
 @SuppressWarnings("unused") // Used via interface injection
-public interface DefaultedAccessorBlockStateModelSet extends AccessorBlockStateModelSet
-{
+public interface DefaultedAccessorBlockStateModelSet extends AccessorBlockStateModelSet {
     @Override
-    default Map<BlockState, BlockStateModel> framedblocks$getModelByState()
-    {
+    default Map<BlockState, BlockStateModel> framedblocks$getModelByState() {
         throw new AssertionError();
     }
 }

@@ -15,8 +15,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
 import java.util.List;
 
-public final class ToggleWaterloggableOverlay extends BlockInteractOverlay
-{
+public final class ToggleWaterloggableOverlay extends BlockInteractOverlay {
     public static final Component MSG_IS_WATERLOGGABLE = Utils.translate("tooltip", "is_waterloggable.true");
     public static final Component MSG_IS_NOT_WATERLOGGABLE = Utils.translate("tooltip", "is_waterloggable.false");
     public static final Component MSG_MAKE_WATERLOGGABLE = Utils.translate("tooltip", "make_waterloggable.true");
@@ -28,27 +27,23 @@ public final class ToggleWaterloggableOverlay extends BlockInteractOverlay
     private static final Texture TEXTURE_FALSE = new Texture(SYMBOL_TEXTURE, 0, 0, 20, 20, 40, 20);
     private static final Texture TEXTURE_TRUE = new Texture(SYMBOL_TEXTURE, 20, 0, 20, 20, 40, 20);
 
-    public ToggleWaterloggableOverlay()
-    {
+    public ToggleWaterloggableOverlay() {
         super(LINES_FALSE, LINES_TRUE, TEXTURE_FALSE, TEXTURE_TRUE, ClientConfig.VIEW::getToggleWaterlogMode);
     }
 
     @Override
-    public boolean isValidTool(Player player, ItemStack stack)
-    {
+    public boolean isValidTool(Player player, ItemStack stack) {
         return stack.is(FBContent.ITEM_FRAMED_HAMMER.value());
     }
 
     @Override
-    public boolean isValidTarget(Target target)
-    {
+    public boolean isValidTarget(Target target) {
         Block block = target.state().getBlock();
         return block instanceof FramedPressurePlateBlock || block instanceof FramedWeightedPressurePlateBlock;
     }
 
     @Override
-    public boolean getState(Target target)
-    {
+    public boolean getState(Target target) {
         return target.state().hasProperty(BlockStateProperties.WATERLOGGED);
     }
 }

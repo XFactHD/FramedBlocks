@@ -22,31 +22,25 @@ public record FramedBlockStateModelPart(
         TriState ambientOcclusion,
         Material.Baked particleMaterial,
         @Nullable BlockState shaderState
-) implements ExtendedBlockStateModelPart
-{
+) implements ExtendedBlockStateModelPart {
     @Override
-    public List<BakedQuad> getQuads(@Nullable Direction side)
-    {
+    public List<BakedQuad> getQuads(@Nullable Direction side) {
         return quads.get(side);
     }
 
     @Override
-    public boolean useAmbientOcclusion()
-    {
+    public boolean useAmbientOcclusion() {
         return !ambientOcclusion.isFalse();
     }
 
     @Override
     @BakedQuad.MaterialFlags
-    public int materialFlags()
-    {
+    public int materialFlags() {
         return quads.materialFlags();
     }
 
-    @Nullable
     @Override
-    public BlockState getBlockAppearance()
-    {
+    public @Nullable BlockState getBlockAppearance() {
         return shaderState;
     }
 }

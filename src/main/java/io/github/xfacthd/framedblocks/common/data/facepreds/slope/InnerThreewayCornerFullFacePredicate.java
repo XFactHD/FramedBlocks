@@ -5,22 +5,18 @@ import io.github.xfacthd.framedblocks.api.predicate.fullface.FullFacePredicate;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 
-public final class InnerThreewayCornerFullFacePredicate implements FullFacePredicate
-{
+public final class InnerThreewayCornerFullFacePredicate implements FullFacePredicate {
     public static final InnerThreewayCornerFullFacePredicate INSTANCE = new InnerThreewayCornerFullFacePredicate();
 
     private InnerThreewayCornerFullFacePredicate() { }
 
     @Override
-    public boolean test(BlockState state, Direction side)
-    {
+    public boolean test(BlockState state, Direction side) {
         boolean top = state.getValue(FramedProperties.TOP);
-        if (top && side == Direction.UP)
-        {
+        if (top && side == Direction.UP) {
             return true;
         }
-        else if (!top && side == Direction.DOWN)
-        {
+        if (!top && side == Direction.DOWN) {
             return true;
         }
 

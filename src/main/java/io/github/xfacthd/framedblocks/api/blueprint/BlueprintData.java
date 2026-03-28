@@ -41,8 +41,7 @@ public record BlueprintData(
         boolean emissive,
         BlockItemStateProperties blockState,
         Optional<TypedDataComponent<?>> customData
-) implements TooltipProvider
-{
+) implements TooltipProvider {
     private static final Codec<TypedDataComponent<?>> CUSTOM_DATA_CODEC = DataComponentType.PERSISTENT_CODEC
             .dispatch(TypedDataComponent::type, BlueprintData::makeCustomDataValueCodec);
     public static final Codec<BlueprintData> CODEC = RecordCodecBuilder.create(inst -> inst.group(
@@ -91,46 +90,37 @@ public record BlueprintData(
     public static final MutableComponent TRUE = Utils.translate("desc", "blueprint_true").withStyle(ChatFormatting.GREEN);
     public static final MutableComponent CANT_COPY = Utils.translate("desc", "blueprint_cant_copy").withStyle(ChatFormatting.RED);
 
-    public <T> T getCustomDataOrDefault(Supplier<DataComponentType<T>> type, T _default)
-    {
+    public <T> T getCustomDataOrDefault(Supplier<DataComponentType<T>> type, T _default) {
         return getCustomDataOrDefault(type.get(), _default);
     }
 
     @SuppressWarnings("unchecked")
-    public <T> T getCustomDataOrDefault(DataComponentType<T> type, T _default)
-    {
-        if (customData.isPresent() && customData.get().type() == type)
-        {
+    public <T> T getCustomDataOrDefault(DataComponentType<T> type, T _default) {
+        if (customData.isPresent() && customData.get().type() == type) {
             return (T) customData.get().value();
         }
         return _default;
     }
 
-    public boolean isEmpty()
-    {
+    public boolean isEmpty() {
         return block.defaultBlockState().isAir();
     }
 
-    public BlueprintData withBlockState(BlockItemStateProperties newBlockState)
-    {
+    public BlueprintData withBlockState(BlockItemStateProperties newBlockState) {
         return new BlueprintData(block, camos, overlay, glowing, intangible, reinforced, emissive, newBlockState, customData);
     }
 
-    public <T> BlueprintData withCustomData(Supplier<DataComponentType<T>> type, T data)
-    {
+    public <T> BlueprintData withCustomData(Supplier<DataComponentType<T>> type, T data) {
         return withCustomData(type.get(), data);
     }
 
-    public <T> BlueprintData withCustomData(DataComponentType<T> type, T data)
-    {
+    public <T> BlueprintData withCustomData(DataComponentType<T> type, T data) {
         return new BlueprintData(block, camos, overlay, glowing, intangible, reinforced, emissive, blockState, Optional.of(new TypedDataComponent<>(type, data)));
     }
 
     @Override
-    public void addToTooltip(Item.TooltipContext context, Consumer<Component> appender, TooltipFlag tooltipFlag, DataComponentGetter componentGetter)
-    {
-        if (isEmpty())
-        {
+    public void addToTooltip(Item.TooltipContext context, Consumer<Component> appender, TooltipFlag tooltipFlag, DataComponentGetter componentGetter) {
+        if (isEmpty()) {
             appender.accept(Component.translatable(CONTAINED_BLOCK, CamoPrinter.BLOCK_NONE).withStyle(ChatFormatting.GOLD));
             return;
         }
@@ -148,14 +138,12 @@ public record BlueprintData(
         appender.accept(Component.translatable(IS_EMISSIVE, emissive ? TRUE : FALSE).withStyle(ChatFormatting.GOLD));
 
         // Prevent printing a wrapped BlueprintData (i.e. from the door)
-        if (customData.isPresent() && customData.get().value() instanceof TooltipProvider tooltipProvider && !(tooltipProvider instanceof BlueprintData))
-        {
+        if (customData.isPresent() && customData.get().value() instanceof TooltipProvider tooltipProvider && !(tooltipProvider instanceof BlueprintData)) {
             tooltipProvider.addToTooltip(context, appender, tooltipFlag, componentGetter);
         }
     }
 
-    private static <T> MapCodec<TypedDataComponent<T>> makeCustomDataValueCodec(DataComponentType<T> type)
-    {
+    private static <T> MapCodec<TypedDataComponent<T>> makeCustomDataValueCodec(DataComponentType<T> type) {
         return type.codecOrThrow().fieldOf("value").xmap(
                 val -> TypedDataComponent.createUnchecked(type, val),
                 TypedDataComponent::value

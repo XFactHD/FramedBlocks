@@ -22,191 +22,158 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.MapColor;
 import org.jspecify.annotations.Nullable;
 
-public final class EmptyCamoContent extends CamoContent<EmptyCamoContent>
-{
+public final class EmptyCamoContent extends CamoContent<EmptyCamoContent> {
     public static final EmptyCamoContent EMPTY = new EmptyCamoContent();
 
     @Override
-    public boolean propagatesSkylightDown()
-    {
+    public boolean propagatesSkylightDown() {
         return false;
     }
 
     @Override
     @SuppressWarnings("deprecation")
-    public float getExplosionResistance(BlockGetter level, BlockPos pos, Explosion explosion)
-    {
+    public float getExplosionResistance(BlockGetter level, BlockPos pos, Explosion explosion) {
         return FramedBlocksAPI.INSTANCE.getDefaultModelState().getBlock().getExplosionResistance();
     }
 
     @Override
-    public boolean isFlammable(BlockGetter level, BlockPos pos, Direction face)
-    {
+    public boolean isFlammable(BlockGetter level, BlockPos pos, Direction face) {
         return false;
     }
 
     @Override
-    public int getFlammability(BlockGetter level, BlockPos pos, Direction face)
-    {
+    public int getFlammability(BlockGetter level, BlockPos pos, Direction face) {
         return 0;
     }
 
     @Override
-    public int getFireSpreadSpeed(BlockGetter level, BlockPos pos, Direction face)
-    {
+    public int getFireSpreadSpeed(BlockGetter level, BlockPos pos, Direction face) {
         return 0;
     }
 
     @Override
-    public boolean isIgnitedByLava(BlockGetter level, BlockPos pos, Direction face)
-    {
+    public boolean isIgnitedByLava(BlockGetter level, BlockPos pos, Direction face) {
         return true;
     }
 
     @Override
-    public float getShadeBrightness(BlockGetter level, BlockPos pos, float frameShade)
-    {
+    public float getShadeBrightness(BlockGetter level, BlockPos pos, float frameShade) {
         return frameShade;
     }
 
     @Override
-    public int getLightEmission()
-    {
+    public int getLightEmission() {
         return 0;
     }
 
     @Override
-    public boolean isEmissive()
-    {
+    public boolean isEmissive() {
         return false;
     }
 
     @Override
     @SuppressWarnings("deprecation")
-    public SoundType getSoundType()
-    {
+    public SoundType getSoundType() {
         return FramedBlocksAPI.INSTANCE.getDefaultModelState().getSoundType();
     }
 
     @Override
-    public boolean shouldDisplayFluidOverlay(BlockAndLightGetter level, BlockPos pos, FluidState fluid)
-    {
+    public boolean shouldDisplayFluidOverlay(BlockAndLightGetter level, BlockPos pos, FluidState fluid) {
         return true;
     }
 
     @Override
-    public float getFriction(LevelReader level, BlockPos pos, @Nullable Entity entity, float frameFriction)
-    {
+    public float getFriction(LevelReader level, BlockPos pos, @Nullable Entity entity, float frameFriction) {
         return frameFriction;
     }
 
     @Override
-    public TriState canSustainPlant(BlockGetter level, BlockPos pos, Direction side, BlockState plant)
-    {
+    public TriState canSustainPlant(BlockGetter level, BlockPos pos, Direction side, BlockState plant) {
         return TriState.DEFAULT;
     }
 
     @Override
-    public boolean canEntityDestroy(BlockGetter level, BlockPos pos, Entity entity)
-    {
+    public boolean canEntityDestroy(BlockGetter level, BlockPos pos, Entity entity) {
         return true;
     }
 
     @Override
-    @Nullable
-    public MapColor getMapColor(BlockGetter level, BlockPos pos)
-    {
+    public @Nullable MapColor getMapColor(BlockGetter level, BlockPos pos) {
         return null;
     }
 
     @Override
-    @Nullable
-    public Integer getBeaconColorMultiplier(LevelReader level, BlockPos pos, BlockPos beaconPos)
-    {
+    public @Nullable Integer getBeaconColorMultiplier(LevelReader level, BlockPos pos, BlockPos beaconPos) {
         return null;
     }
 
     @Override
-    public boolean isSolid()
-    {
+    public boolean isSolid() {
         return false;
     }
 
     @Override
-    public boolean canOcclude()
-    {
+    public boolean canOcclude() {
         return false;
     }
 
     @Override
-    public BlockState getAsBlockState()
-    {
+    public BlockState getAsBlockState() {
         return Blocks.AIR.defaultBlockState();
     }
 
     @Override
-    public BlockState getAppearanceState()
-    {
+    public BlockState getAppearanceState() {
         return Blocks.AIR.defaultBlockState();
     }
 
     @Override
-    public boolean isOccludedBy(BlockState adjState, BlockGetter level, BlockPos pos, BlockPos adjPos, Direction side)
-    {
+    public boolean isOccludedBy(BlockState adjState, BlockGetter level, BlockPos pos, BlockPos adjPos, Direction side) {
         return false;
     }
 
     @Override
-    public boolean isOccludedBy(CamoContent<?> adjCamo, BlockGetter level, BlockPos pos, BlockPos adjPos, Direction side)
-    {
+    public boolean isOccludedBy(CamoContent<?> adjCamo, BlockGetter level, BlockPos pos, BlockPos adjPos, Direction side) {
         return false;
     }
 
     @Override
-    public boolean occludes(BlockState adjState, BlockGetter level, BlockPos pos, BlockPos adjPos, Direction side)
-    {
+    public boolean occludes(BlockState adjState, BlockGetter level, BlockPos pos, BlockPos adjPos, Direction side) {
         return false;
     }
 
     @Override
-    public ParticleOptions makeRunningLandingParticles(BlockPos pos)
-    {
+    public ParticleOptions makeRunningLandingParticles(BlockPos pos) {
         return new BlockParticleOption(ParticleTypes.BLOCK, FramedBlocksAPI.INSTANCE.getDefaultModelState());
     }
 
     @Override
-    public String getCamoId()
-    {
+    public String getCamoId() {
         return "empty";
     }
 
     @Override
-    public MutableComponent getCamoName()
-    {
+    public MutableComponent getCamoName() {
         return EmptyCamoContainer.CAMO_NAME;
     }
 
     @Override
-    public CamoContentClientHandler<EmptyCamoContent> getClientHandler()
-    {
+    public CamoContentClientHandler<EmptyCamoContent> getClientHandler() {
         return EmptyCamoContentClientHandler.INSTANCE;
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         return System.identityHashCode(this);
     }
 
     @Override
-    public boolean equals(@Nullable Object obj)
-    {
+    public boolean equals(@Nullable Object obj) {
         return obj == this;
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "EmptyCamoContent{}";
     }
 }

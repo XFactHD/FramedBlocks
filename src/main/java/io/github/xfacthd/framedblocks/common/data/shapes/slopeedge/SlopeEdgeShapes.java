@@ -17,8 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
-public final class SlopeEdgeShapes implements ShapeGenerator
-{
+public final class SlopeEdgeShapes implements ShapeGenerator {
     public static final ShapeCache<ShapeKey> SHAPES = makeCache(() -> ShapeUtils.orUnoptimized(
             Block.box(0, 0, 0, 16, 4, 8),
             Block.box(0, 4, 0, 16, 8, 4)
@@ -31,23 +30,19 @@ public final class SlopeEdgeShapes implements ShapeGenerator
     ));
 
     @Override
-    public ShapeContainer generatePrimary(List<BlockState> states)
-    {
+    public ShapeContainer generatePrimary(List<BlockState> states) {
         return generate(states, SHAPES);
     }
 
     @Override
-    public ShapeContainer generateOcclusion(List<BlockState> states)
-    {
+    public ShapeContainer generateOcclusion(List<BlockState> states) {
         return generate(states, OCCLUSION_SHAPES);
     }
 
-    private static ShapeContainer generate(List<BlockState> states, ShapeCache<ShapeKey> cache)
-    {
+    private static ShapeContainer generate(List<BlockState> states, ShapeCache<ShapeKey> cache) {
         VoxelShape[] shapes = new VoxelShape[3 * 4 * 2];
 
-        for (SlopeType type : SlopeType.values())
-        {
+        for (SlopeType type : SlopeType.values()) {
             ShapeUtils.makeHorizontalRotations(
                     cache.get(new ShapeKey(type, false)),
                     Direction.NORTH,
@@ -66,8 +61,7 @@ public final class SlopeEdgeShapes implements ShapeGenerator
 
         Map<BlockState, VoxelShape> map = new IdentityHashMap<>(states.size());
 
-        for (BlockState state : states)
-        {
+        for (BlockState state : states) {
             SlopeType type = state.getValue(PropertyHolder.SLOPE_TYPE);
             Direction dir = state.getValue(FramedProperties.FACING_HOR);
             boolean altType = state.getValue(PropertyHolder.ALT_TYPE);
@@ -77,15 +71,12 @@ public final class SlopeEdgeShapes implements ShapeGenerator
         return ShapeContainer.of(map);
     }
 
-    private static int makeShapeIndex(Direction dir, SlopeType type, boolean altType)
-    {
+    private static int makeShapeIndex(Direction dir, SlopeType type, boolean altType) {
         return (type.ordinal() << 3) | (dir.get2DDataValue() << 1) | (altType ? 1 : 0);
     }
 
-    private static ShapeCache<ShapeKey> makeCache(Supplier<VoxelShape> bottomShape)
-    {
-        return ShapeCache.create(map ->
-        {
+    private static ShapeCache<ShapeKey> makeCache(Supplier<VoxelShape> bottomShape) {
+        return ShapeCache.create(map -> {
             VoxelShape shapeBottom = bottomShape.get();
             map.put(new ShapeKey(SlopeType.BOTTOM, false), shapeBottom);
             map.put(new ShapeKey(SlopeType.BOTTOM, true), shapeBottom.move(0, .5, .5));

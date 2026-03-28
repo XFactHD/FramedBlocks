@@ -34,13 +34,11 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
-public abstract class AbstractFramedBlock extends Block implements IFramedBlock, SimpleWaterloggedBlock
-{
+public abstract class AbstractFramedBlock extends Block implements IFramedBlock, SimpleWaterloggedBlock {
     private final IBlockType blockType;
     protected final ShapeLookup shapes;
 
-    public AbstractFramedBlock(IBlockType blockType, Properties props)
-    {
+    public AbstractFramedBlock(IBlockType blockType, Properties props) {
         this.blockType = blockType;
         super(props);
         this.shapes = ShapeLookup.of(this);
@@ -49,22 +47,17 @@ public abstract class AbstractFramedBlock extends Block implements IFramedBlock,
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
-    {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         BlockUtils.addStandardProperties(this, builder);
     }
 
     @Override
-    protected InteractionResult useItemOn(
-            ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit
-    )
-    {
+    protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         return handleUse(state, level, pos, player, hand, hit);
     }
 
     @Override
-    public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)
-    {
+    public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
         tryApplyCamoImmediately(level, pos, placer, stack);
     }
 
@@ -78,11 +71,9 @@ public abstract class AbstractFramedBlock extends Block implements IFramedBlock,
             BlockPos adjPos,
             BlockState adjState,
             RandomSource random
-    )
-    {
+    ) {
         updateCulling(level, pos);
-        if (isWaterLoggable() && state.getValue(BlockStateProperties.WATERLOGGED))
-        {
+        if (isWaterLoggable() && state.getValue(BlockStateProperties.WATERLOGGED)) {
             tickAccess.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
         }
 
@@ -90,86 +81,71 @@ public abstract class AbstractFramedBlock extends Block implements IFramedBlock,
     }
 
     @Override
-    protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, @Nullable Orientation orientation, boolean isMoving)
-    {
+    protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, @Nullable Orientation orientation, boolean isMoving) {
         updateCulling(level, pos);
     }
 
     @Override
-    protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext ctx)
-    {
-        if (isIntangible(state, level, pos, ctx))
-        {
+    protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext ctx) {
+        if (isIntangible(state, level, pos, ctx)) {
             return Shapes.empty();
         }
         return shapes.getShape(state);
     }
 
     @Override
-    protected boolean useShapeForLightOcclusion(BlockState state)
-    {
+    protected boolean useShapeForLightOcclusion(BlockState state) {
         return useCamoOcclusionShapeForLightOcclusion(state);
     }
 
     @Override
-    protected VoxelShape getOcclusionShape(BlockState state)
-    {
+    protected VoxelShape getOcclusionShape(BlockState state) {
         return getCamoOcclusionShape(state, shapes);
     }
 
     @Override
-    protected VoxelShape getVisualShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext ctx)
-    {
+    protected VoxelShape getVisualShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext ctx) {
         return getCamoVisualShape(state, level, pos, ctx);
     }
 
     @Override
-    protected float getShadeBrightness(BlockState state, BlockGetter level, BlockPos pos)
-    {
+    protected float getShadeBrightness(BlockState state, BlockGetter level, BlockPos pos) {
         return getCamoShadeBrightness(state, level, pos, super.getShadeBrightness(state, level, pos));
     }
 
     @Override
-    protected boolean propagatesSkylightDown(BlockState state)
-    {
+    protected boolean propagatesSkylightDown(BlockState state) {
         return state.getValue(FramedProperties.PROPAGATES_SKYLIGHT);
     }
 
     @Override
-    protected FluidState getFluidState(BlockState state)
-    {
-        if (isWaterLoggable() && state.getValue(BlockStateProperties.WATERLOGGED))
-        {
+    protected FluidState getFluidState(BlockState state) {
+        if (isWaterLoggable() && state.getValue(BlockStateProperties.WATERLOGGED)) {
             return Fluids.WATER.getSource(false);
         }
         return Fluids.EMPTY.defaultFluidState();
     }
 
     @Override
-    public boolean canPlaceLiquid(@Nullable LivingEntity entity, BlockGetter level, BlockPos pos, BlockState state, Fluid fluid)
-    {
+    public boolean canPlaceLiquid(@Nullable LivingEntity entity, BlockGetter level, BlockPos pos, BlockState state, Fluid fluid) {
         return isWaterLoggable() && SimpleWaterloggedBlock.super.canPlaceLiquid(entity, level, pos, state, fluid);
     }
 
     @Override
-    public boolean placeLiquid(LevelAccessor pLevel, BlockPos pPos, BlockState pState, FluidState pFluidState)
-    {
+    public boolean placeLiquid(LevelAccessor pLevel, BlockPos pPos, BlockState pState, FluidState pFluidState) {
         return isWaterLoggable() && SimpleWaterloggedBlock.super.placeLiquid(pLevel, pPos, pState, pFluidState);
     }
 
     @Override
-    public ItemStack pickupBlock(@Nullable LivingEntity entity, LevelAccessor level, BlockPos pos, BlockState state)
-    {
-        if (!isWaterLoggable())
-        {
+    public ItemStack pickupBlock(@Nullable LivingEntity entity, LevelAccessor level, BlockPos pos, BlockState state) {
+        if (!isWaterLoggable()) {
             return ItemStack.EMPTY;
         }
         return SimpleWaterloggedBlock.super.pickupBlock(entity, level, pos, state);
     }
 
     @Override
-    protected List<ItemStack> getDrops(BlockState state, LootParams.Builder builder)
-    {
+    protected List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {
         return super.getDrops(state, getCamoDrops(builder));
     }
 
@@ -178,25 +154,21 @@ public abstract class AbstractFramedBlock extends Block implements IFramedBlock,
      * can therefore tint the beam
      */
     @Override
-    public boolean doesBlockOccludeBeaconBeam(BlockState state, LevelReader level, BlockPos pos)
-    {
+    public boolean doesBlockOccludeBeaconBeam(BlockState state, LevelReader level, BlockPos pos) {
         return shapes.occludesBeaconBeam(state);
     }
 
     @Override
-    protected boolean isPathfindable(BlockState state, PathComputationType type)
-    {
+    protected boolean isPathfindable(BlockState state, PathComputationType type) {
         return state.is(Utils.GROUP_FULL_CUBE) && super.isPathfindable(state, type);
     }
 
     @Override
-    public IBlockType getBlockType()
-    {
+    public IBlockType getBlockType() {
         return blockType;
     }
 
-    protected final boolean isWaterLoggable()
-    {
+    protected final boolean isWaterLoggable() {
         return blockType.supportsWaterLogging();
     }
 }

@@ -11,8 +11,7 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.level.material.Fluid;
 
-public record FluidParticleOptions(Fluid fluid) implements ParticleOptions
-{
+public record FluidParticleOptions(Fluid fluid) implements ParticleOptions {
     public static final MapCodec<FluidParticleOptions> CODEC = BuiltInRegistries.FLUID.byNameCodec()
             .xmap(FluidParticleOptions::new, FluidParticleOptions::fluid)
             .fieldOf("fluid");
@@ -20,8 +19,7 @@ public record FluidParticleOptions(Fluid fluid) implements ParticleOptions
             ByteBufCodecs.registry(Registries.FLUID).map(FluidParticleOptions::new, FluidParticleOptions::fluid);
 
     @Override
-    public ParticleType<?> getType()
-    {
+    public ParticleType<?> getType() {
         return FBContent.FLUID_PARTICLE.get();
     }
 }

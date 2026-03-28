@@ -18,8 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
-public final class SlopePanelShapes implements ShapeGenerator
-{
+public final class SlopePanelShapes implements ShapeGenerator {
     public static final ShapeCache<SlopePanelShape> SHAPES = makeCache(() -> ShapeUtils.orUnoptimized(
             Block.box(0, 0, 0, 16, 16, 4),
             Block.box(0, 0, 0, 16,  8, 8)
@@ -32,33 +31,28 @@ public final class SlopePanelShapes implements ShapeGenerator
     ));
 
     @Override
-    public ShapeContainer generatePrimary(List<BlockState> states)
-    {
+    public ShapeContainer generatePrimary(List<BlockState> states) {
         return generate(states, SHAPES);
     }
 
     @Override
-    public ShapeContainer generateOcclusion(List<BlockState> states)
-    {
+    public ShapeContainer generateOcclusion(List<BlockState> states) {
         return generate(states, OCCLUSION_SHAPES);
     }
 
-    private static ShapeContainer generate(List<BlockState> states, ShapeCache<SlopePanelShape> cache)
-    {
+    private static ShapeContainer generate(List<BlockState> states, ShapeCache<SlopePanelShape> cache) {
         Map<BlockState, VoxelShape> map = new IdentityHashMap<>(states.size());
 
         int maskFront = 0b10000;
         VoxelShape[] shapes = new VoxelShape[4 * 4 * 2];
-        for (HorizontalRotation rot : HorizontalRotation.values())
-        {
+        for (HorizontalRotation rot : HorizontalRotation.values()) {
             VoxelShape shape = cache.get(SlopePanelShape.get(rot, false));
             VoxelShape shapeFront = cache.get(SlopePanelShape.get(rot, true));
             ShapeUtils.makeHorizontalRotations(shape, Direction.NORTH, shapes, rot.ordinal() << 2);
             ShapeUtils.makeHorizontalRotations(shapeFront, Direction.NORTH, shapes, maskFront | (rot.ordinal() << 2));
         }
 
-        for (BlockState state : states)
-        {
+        for (BlockState state : states) {
             Direction dir = state.getValue(FramedProperties.FACING_HOR);
             HorizontalRotation rot = state.getValue(PropertyHolder.ROTATION);
             int front = state.getValue(PropertyHolder.FRONT) ? maskFront : 0;
@@ -69,10 +63,8 @@ public final class SlopePanelShapes implements ShapeGenerator
         return ShapeContainer.of(map);
     }
 
-    private static ShapeCache<SlopePanelShape> makeCache(Supplier<VoxelShape> upShapeFactory)
-    {
-        return ShapeCache.createEnum(SlopePanelShape.class, map ->
-        {
+    private static ShapeCache<SlopePanelShape> makeCache(Supplier<VoxelShape> upShapeFactory) {
+        return ShapeCache.createEnum(SlopePanelShape.class, map -> {
             VoxelShape shapeUp = upShapeFactory.get();
             map.put(SlopePanelShape.UP_BACK, shapeUp);
             map.put(SlopePanelShape.UP_FRONT, shapeUp.move(0, 0, .5));

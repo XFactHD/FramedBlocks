@@ -6,24 +6,19 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jspecify.annotations.Nullable;
 
-public final class StackedCornerSlopePanelConnectionPredicate extends NonDetailedConnectionPredicate
-{
+public final class StackedCornerSlopePanelConnectionPredicate extends NonDetailedConnectionPredicate {
     @Override
-    public boolean canConnectFullEdge(BlockState state, Direction side, @Nullable Direction edge)
-    {
+    public boolean canConnectFullEdge(BlockState state, Direction side, @Nullable Direction edge) {
         Direction dir = state.getValue(FramedProperties.FACING_HOR);
         Direction dirTwo = state.getValue(FramedProperties.TOP) ? Direction.UP : Direction.DOWN;
 
-        if (side == dirTwo)
-        {
+        if (side == dirTwo) {
             return edge == dir.getOpposite() || edge == dir.getClockWise();
         }
-        else if (side == dir)
-        {
+        if (side == dir) {
             return edge == dir.getCounterClockWise();
         }
-        else if (side == dir.getCounterClockWise())
-        {
+        if (side == dir.getCounterClockWise()) {
             return edge == dir;
         }
         return false;

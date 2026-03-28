@@ -9,42 +9,35 @@ import net.minecraft.world.level.lighting.LevelLightEngine;
 import net.neoforged.neoforge.model.data.ModelData;
 
 /// Delegating [BlockAndTintGetter] providing access to a single [BlockState] and associated [ModelData].
-public non-sealed interface DelegatingBlockRenderFakeLevel extends BlockRenderFakeLevel
-{
+public non-sealed interface DelegatingBlockRenderFakeLevel extends BlockRenderFakeLevel {
     /// Returns the real client level, if available, to delegate lookups of thread-safe data to
     BlockAndTintGetter realLevel();
 
     @Override
-    default LevelLightEngine getLightEngine()
-    {
+    default LevelLightEngine getLightEngine() {
         return realLevel().getLightEngine();
     }
 
     @Override
-    default CardinalLighting cardinalLighting()
-    {
+    default CardinalLighting cardinalLighting() {
         return realLevel().cardinalLighting();
     }
 
     @Override
-    default int getBlockTint(BlockPos pos, ColorResolver resolver)
-    {
-        if (pos.equals(pos()))
-        {
+    default int getBlockTint(BlockPos pos, ColorResolver resolver) {
+        if (pos.equals(pos())) {
             return realLevel().getBlockTint(pos, resolver);
         }
         return -1;
     }
 
     @Override
-    default int getHeight()
-    {
+    default int getHeight() {
         return realLevel().getHeight();
     }
 
     @Override
-    default int getMinY()
-    {
+    default int getMinY() {
         return realLevel().getMinY();
     }
 }

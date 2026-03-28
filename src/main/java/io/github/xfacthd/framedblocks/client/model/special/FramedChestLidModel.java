@@ -18,8 +18,7 @@ import org.joml.Matrix4fc;
 
 import java.util.Map;
 
-public final class FramedChestLidModel implements CachingModel
-{
+public final class FramedChestLidModel implements CachingModel {
     private static final Direction[] DIRECTIONS = Direction.Plane.HORIZONTAL.stream().toArray(Direction[]::new);
     private static final ChestType[] TYPES = ChestType.values();
     private static final LatchType[] LATCHES = LatchType.values();
@@ -30,14 +29,10 @@ public final class FramedChestLidModel implements CachingModel
 
     private final FramedBlockModel[] models = new FramedBlockModel[MODEL_COUNT];
 
-    public FramedChestLidModel(Map<BlockState, BlockStateModel> models)
-    {
-        for (Direction dir : Direction.Plane.HORIZONTAL)
-        {
-            for (ChestType type : TYPES)
-            {
-                for (LatchType latch : LATCHES)
-                {
+    public FramedChestLidModel(Map<BlockState, BlockStateModel> models) {
+        for (Direction dir : Direction.Plane.HORIZONTAL) {
+            for (ChestType type : TYPES) {
+                for (LatchType latch : LATCHES) {
                     BlockState state = FBContent.BLOCK_FRAMED_CHEST.value().defaultBlockState()
                             .setValue(FramedProperties.FACING_HOR, dir)
                             .setValue(BlockStateProperties.CHEST_TYPE, type)
@@ -50,25 +45,20 @@ public final class FramedChestLidModel implements CachingModel
         }
     }
 
-    public BlockModel getModel(Direction dir, ChestType type, LatchType latch)
-    {
+    public BlockModel getModel(Direction dir, ChestType type, LatchType latch) {
         return models[makeModelIndex(dir, type, latch)];
     }
 
     @Override
-    public void clearCache()
-    {
-        for (FramedBlockModel model : models)
-        {
-            if (model.getModel() instanceof AbstractFramedBlockStateModel fbModel)
-            {
+    public void clearCache() {
+        for (FramedBlockModel model : models) {
+            if (model.getModel() instanceof AbstractFramedBlockStateModel fbModel) {
                 fbModel.clearCache();
             }
         }
     }
 
-    private static int makeModelIndex(Direction dir, ChestType type, LatchType latch)
-    {
+    private static int makeModelIndex(Direction dir, ChestType type, LatchType latch) {
         return dir.get2DDataValue() + (type.ordinal() * DIRECTION_COUNT) + (latch.ordinal() * DIRECTION_COUNT * TYPE_COUNT);
     }
 }

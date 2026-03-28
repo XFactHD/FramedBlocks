@@ -10,8 +10,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 @ApiStatus.NonExtendable
-public interface OverlayPartGenerator
-{
+public interface OverlayPartGenerator {
     /**
      * Generate overlay quads with the given texture based on all quads of the given cull faces
      *
@@ -19,8 +18,7 @@ public interface OverlayPartGenerator
      * @param material     The texture to be applied to the generated overlay quads
      * @param shaderState  The {@link BlockState} that's visually closest to the generated overlay or {@code null} if no dedicated state should be used, for use by shader mods
      */
-    default void generate(@Nullable Direction[] cullFaces, Material.Baked material, @Nullable BlockState shaderState)
-    {
+    default void generate(@Nullable Direction[] cullFaces, Material.Baked material, @Nullable BlockState shaderState) {
         generate(cullFaces, _ -> material, material, _ -> true, shaderState);
     }
 
@@ -32,8 +30,7 @@ public interface OverlayPartGenerator
      * @param normalFilter A predicate to filter the quads by their nearest normal direction
      * @param shaderState  The {@link BlockState} that's visually closest to the generated overlay or {@code null} if no dedicated state should be used, for use by shader mods
      */
-    default void generate(@Nullable Direction[] cullFaces, Material.Baked material, NormalFilter normalFilter, @Nullable BlockState shaderState)
-    {
+    default void generate(@Nullable Direction[] cullFaces, Material.Baked material, NormalFilter normalFilter, @Nullable BlockState shaderState) {
         generate(cullFaces, _ -> material, material, normalFilter, shaderState);
     }
 
@@ -45,8 +42,7 @@ public interface OverlayPartGenerator
      * @param primaryMaterial The primary sprite, to be used as the part's particle sprite
      * @param shaderState     The {@link BlockState} that's visually closest to the generated overlay or {@code null} if no dedicated state should be used, for use by shader mods
      */
-    default void generate(@Nullable Direction[] cullFaces, MaterialGetter materialGetter, Material.Baked primaryMaterial, @Nullable BlockState shaderState)
-    {
+    default void generate(@Nullable Direction[] cullFaces, MaterialGetter materialGetter, Material.Baked primaryMaterial, @Nullable BlockState shaderState) {
         generate(cullFaces, materialGetter, primaryMaterial, _ -> true, shaderState);
     }
 
@@ -61,14 +57,12 @@ public interface OverlayPartGenerator
      */
     void generate(@Nullable Direction[] cullFaces, MaterialGetter materialGetter, Material.Baked primaryMaterial, NormalFilter normalFilter, @Nullable BlockState shaderState);
 
-    interface NormalFilter extends Predicate<Direction>
-    {
+    interface NormalFilter extends Predicate<Direction> {
         @Override
         boolean test(Direction normal);
     }
 
-    interface MaterialGetter extends Function<Direction, Material.Baked>
-    {
+    interface MaterialGetter extends Function<Direction, Material.Baked> {
         @Override
         Material.Baked apply(Direction side);
     }

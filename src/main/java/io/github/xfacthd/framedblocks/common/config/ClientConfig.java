@@ -12,8 +12,7 @@ import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.neoforge.common.ModConfigSpec;
 
-public final class ClientConfig
-{
+public final class ClientConfig {
     public static final ExtConfigView.Client VIEW = (ExtConfigView.Client) ConfigView.Client.INSTANCE;
     private static final ModConfigSpec SPEC;
 
@@ -112,15 +111,13 @@ public final class ClientConfig
     private static OverlayDisplayMode trapdoorTextureRotationMode = OverlayDisplayMode.DETAILED_ALWAYS;
     private static OverlayDisplayMode copycatStyleMode = OverlayDisplayMode.DETAILED_ALWAYS;
 
-    public static void init(IEventBus modBus, ModContainer modContainer)
-    {
+    public static void init(IEventBus modBus, ModContainer modContainer) {
         modBus.addListener((ModConfigEvent.Loading event) -> onConfigReloaded(event));
         modBus.addListener((ModConfigEvent.Reloading event) -> onConfigReloaded(event));
         modContainer.registerConfig(ModConfig.Type.CLIENT, SPEC);
     }
 
-    static
-    {
+    static {
         ModConfigSpec.Builder builder = new ModConfigSpec.Builder();
 
         builder.translation(TRANSLATION_CATEGORY_GENERAL).push("general");
@@ -278,13 +275,11 @@ public final class ClientConfig
         SPEC = builder.build();
     }
 
-    private static String translate(String key)
-    {
+    private static String translate(String key) {
         return Utils.translateConfig("client", key);
     }
 
-    private static String[] formatOverlayComments(String overlay)
-    {
+    private static String[] formatOverlayComments(String overlay) {
         return new String[] {
                 COMMENT_OVERLAY_MAIN.formatted(overlay),
                 COMMENT_OVERLAY_HIDDEN.formatted(overlay),
@@ -294,10 +289,8 @@ public final class ClientConfig
         };
     }
 
-    private static void onConfigReloaded(ModConfigEvent event)
-    {
-        if (event.getConfig().getType() == ModConfig.Type.CLIENT && event.getConfig().getSpec() == SPEC)
-        {
+    private static void onConfigReloaded(ModConfigEvent event) {
+        if (event.getConfig().getType() == ModConfig.Type.CLIENT && event.getConfig().getSpec() == SPEC) {
             showGhostBlocks = SHOW_GHOST_BLOCKS_VALUE.get();
             altGhostRenderer = ALT_GHOST_RENDERER_VALUE.get();
             ghostRenderOpacity = GHOST_RENDER_OPACITY_VALUE.get();
@@ -331,167 +324,139 @@ public final class ClientConfig
 
     private ClientConfig() { }
 
-    public static final class ViewImpl implements ExtConfigView.Client
-    {
+    public static final class ViewImpl implements ExtConfigView.Client {
         @Override
-        public boolean showGhostBlocks()
-        {
+        public boolean showGhostBlocks() {
             return showGhostBlocks;
         }
 
         @Override
-        public boolean useAltGhostRenderer()
-        {
+        public boolean useAltGhostRenderer() {
             return altGhostRenderer;
         }
 
         @Override
-        public int getGhostRenderOpacity()
-        {
+        public int getGhostRenderOpacity() {
             return ghostRenderOpacity;
         }
 
         @Override
-        public boolean useFancySelectionBoxes()
-        {
+        public boolean useFancySelectionBoxes() {
             return fancyHitboxes;
         }
 
         @Override
-        public boolean detailedCullingEnabled()
-        {
+        public boolean detailedCullingEnabled() {
             return detailedCulling;
         }
 
         @Override
-        public ConTexMode getConTexMode()
-        {
+        public ConTexMode getConTexMode() {
             return conTexMode;
         }
 
         @Override
-        public CamoMessageVerbosity getCamoMessageVerbosity()
-        {
+        public CamoMessageVerbosity getCamoMessageVerbosity() {
             return camoMessageVerbosity;
         }
 
         @Override
-        public boolean shouldForceAmbientOcclusionOnGlowingBlocks()
-        {
+        public boolean shouldForceAmbientOcclusionOnGlowingBlocks() {
             return forceAoOnGlowingBlocks;
         }
 
         @Override
-        public boolean shouldRenderItemModelsWithCamo()
-        {
+        public boolean shouldRenderItemModelsWithCamo() {
             return renderItemModelsWithCamo;
         }
 
         @Override
-        public boolean showAllRecipePermutationsInEmi()
-        {
+        public boolean showAllRecipePermutationsInEmi() {
             return showAllRecipePermutationsInEmi;
         }
 
         @Override
-        public SolidFrameMode getSolidFrameMode()
-        {
+        public SolidFrameMode getSolidFrameMode() {
             return solidFrameMode;
         }
 
         @Override
-        public boolean showButtonPlateOverlay()
-        {
+        public boolean showButtonPlateOverlay() {
             return showButtonPlateOverlay;
         }
 
         @Override
-        public boolean showSpecialCubeOverlay()
-        {
+        public boolean showSpecialCubeOverlay() {
             return showSpecialCubeOverlay;
         }
 
         @Override
-        public boolean shouldRenderCamoInJade()
-        {
+        public boolean shouldRenderCamoInJade() {
             return renderCamoInJade;
         }
 
         @Override
-        public boolean showCamoCraftingInJei()
-        {
+        public boolean showCamoCraftingInJei() {
             return showCamoCraftingInJei;
         }
 
         @Override
-        public OverlayDisplayMode getMaxOverlayMode()
-        {
+        public OverlayDisplayMode getMaxOverlayMode() {
             return maxOverlayMode;
         }
 
         @Override
-        public OverlayDisplayMode getStateLockMode()
-        {
+        public OverlayDisplayMode getStateLockMode() {
             return stateLockMode;
         }
 
         @Override
-        public OverlayDisplayMode getToggleWaterlogMode()
-        {
+        public OverlayDisplayMode getToggleWaterlogMode() {
             return toggleWaterlogMode;
         }
 
         @Override
-        public OverlayDisplayMode getToggleAltSlopeMode()
-        {
+        public OverlayDisplayMode getToggleAltSlopeMode() {
             return toggleAltSlopeMode;
         }
 
         @Override
-        public OverlayDisplayMode getReinforcementMode()
-        {
+        public OverlayDisplayMode getReinforcementMode() {
             return reinforcementMode;
         }
 
         @Override
-        public OverlayDisplayMode getPrismOffsetMode()
-        {
+        public OverlayDisplayMode getPrismOffsetMode() {
             return prismOffsetMode;
         }
 
         @Override
-        public OverlayDisplayMode getSplitLineMode()
-        {
+        public OverlayDisplayMode getSplitLineMode() {
             return splitLineMode;
         }
 
         @Override
-        public OverlayDisplayMode getOneWayWindowMode()
-        {
+        public OverlayDisplayMode getOneWayWindowMode() {
             return oneWayWindowMode;
         }
 
         @Override
-        public OverlayDisplayMode getFrameBackgroundMode()
-        {
+        public OverlayDisplayMode getFrameBackgroundMode() {
             return frameBackgroundMode;
         }
 
         @Override
-        public OverlayDisplayMode getCamoRotationMode()
-        {
+        public OverlayDisplayMode getCamoRotationMode() {
             return camoRotationMode;
         }
 
         @Override
-        public OverlayDisplayMode getTrapdoorTextureRotationMode()
-        {
+        public OverlayDisplayMode getTrapdoorTextureRotationMode() {
             return trapdoorTextureRotationMode;
         }
 
         @Override
-        public OverlayDisplayMode getCopycatStyleMode()
-        {
+        public OverlayDisplayMode getCopycatStyleMode() {
             return copycatStyleMode;
         }
     }

@@ -17,34 +17,29 @@ import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 
-public final class ExtendedCornerSlopePanelShapes implements ShapeGenerator
-{
+public final class ExtendedCornerSlopePanelShapes implements ShapeGenerator {
     public static final ExtendedCornerSlopePanelShapes OUTER = new ExtendedCornerSlopePanelShapes(BooleanOp.AND, Direction.NORTH);
     public static final ExtendedCornerSlopePanelShapes INNER = new ExtendedCornerSlopePanelShapes(BooleanOp.OR, Direction.SOUTH);
 
     private final BooleanOp joinOp;
     private final Direction srcDir;
 
-    private ExtendedCornerSlopePanelShapes(BooleanOp joinOp, Direction srcDir)
-    {
+    private ExtendedCornerSlopePanelShapes(BooleanOp joinOp, Direction srcDir) {
         this.joinOp = joinOp;
         this.srcDir = srcDir;
     }
 
     @Override
-    public ShapeContainer generatePrimary(List<BlockState> states)
-    {
+    public ShapeContainer generatePrimary(List<BlockState> states) {
         return generate(states, ExtendedSlopePanelShapes.SHAPES);
     }
 
     @Override
-    public ShapeContainer generateOcclusion(List<BlockState> states)
-    {
+    public ShapeContainer generateOcclusion(List<BlockState> states) {
         return generate(states, ExtendedSlopePanelShapes.OCCLUSION_SHAPES);
     }
 
-    private ShapeContainer generate(List<BlockState> states, ShapeCache<HorizontalRotation> cache)
-    {
+    private ShapeContainer generate(List<BlockState> states, ShapeCache<HorizontalRotation> cache) {
         Map<BlockState, VoxelShape> map = new IdentityHashMap<>(states.size());
 
         VoxelShape bottomSlopeShape = cache.get(HorizontalRotation.UP);
@@ -63,8 +58,7 @@ public final class ExtendedCornerSlopePanelShapes implements ShapeGenerator
 
         VoxelShape[] shapes = ShapeUtils.makeHorizontalRotationsWithFlag(bottomShape, topShape, srcDir);
 
-        for (BlockState state : states)
-        {
+        for (BlockState state : states) {
             Direction dir = state.getValue(FramedProperties.FACING_HOR);
             boolean top = state.getValue(FramedProperties.TOP);
             map.put(state, shapes[dir.get2DDataValue() + (top ? 4 : 0)]);

@@ -12,42 +12,30 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-public final class SearchablesCompat
-{
+public final class SearchablesCompat {
     private static boolean loaded = false;
 
-    public static void init()
-    {
-        if (ModList.get().isLoaded("searchables"))
-        {
-            try
-            {
-                if (Utils.CLIENT_DIST)
-                {
+    public static void init() {
+        if (ModList.get().isLoaded("searchables")) {
+            try {
+                if (Utils.CLIENT_DIST) {
                     GuardedAccess.init();
                     loaded = true;
                 }
-            }
-            catch (Throwable t)
-            {
+            } catch (Throwable t) {
                 FramedBlocks.LOGGER.warn("An error occured while initializing Searchables integration!", t);
             }
         }
     }
 
-    public static boolean isLoaded()
-    {
+    public static boolean isLoaded() {
         return loaded;
     }
 
-    public static Consumer<String> createSearchHandler(ValueSupplier valueSupplier, ResultConsumer resultConsumer, Consumer<String> defaultHandler)
-    {
-        if (loaded)
-        {
+    public static Consumer<String> createSearchHandler(ValueSupplier valueSupplier, ResultConsumer resultConsumer, Consumer<String> defaultHandler) {
+        if (loaded) {
             return GuardedAccess.createSearchHandler(valueSupplier, resultConsumer);
-        }
-        else
-        {
+        } else {
             return defaultHandler;
         }
     }
@@ -58,8 +46,7 @@ public final class SearchablesCompat
     @FunctionalInterface
     public interface ResultConsumer extends Consumer<List<FramingSawMenu.FramedRecipeHolder>> { }
 
-    private static final class GuardedAccess
-    {
+    private static final class GuardedAccess {
         private static final SearchableType<FramingSawMenu.FramedRecipeHolder> SEARCH_TYPE = new SearchableType.Builder<FramingSawMenu.FramedRecipeHolder>()
                 .defaultComponent(SearchableComponent.create(
                         "result",
@@ -69,8 +56,7 @@ public final class SearchablesCompat
 
         public static void init() { }
 
-        public static Consumer<String> createSearchHandler(ValueSupplier valueSupplier, ResultConsumer resultConsumer)
-        {
+        public static Consumer<String> createSearchHandler(ValueSupplier valueSupplier, ResultConsumer resultConsumer) {
             return value -> resultConsumer.accept(SEARCH_TYPE.filterEntries(valueSupplier.get(), value));
         }
     }

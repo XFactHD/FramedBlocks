@@ -5,8 +5,7 @@ import net.minecraft.client.renderer.block.BlockModelRenderState;
 import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
 import org.joml.Quaternionfc;
 
-public final class FramedChestRenderState extends BlockEntityRenderState
-{
+public final class FramedChestRenderState extends BlockEntityRenderState {
     public final BlockModelRenderState modelRenderState = new BlockModelRenderState();
     public float rotOriginX;
     public float rotOriginZ;

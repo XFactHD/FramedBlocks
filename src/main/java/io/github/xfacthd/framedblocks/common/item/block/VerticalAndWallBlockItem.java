@@ -10,33 +10,25 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
 
-public class VerticalAndWallBlockItem extends FramedBlockItem
-{
+public class VerticalAndWallBlockItem extends FramedBlockItem {
     private final Block wallBlock;
 
-    public VerticalAndWallBlockItem(Block verticalBlock, Block wallBlock, Item.Properties props)
-    {
+    public VerticalAndWallBlockItem(Block verticalBlock, Block wallBlock, Item.Properties props) {
         super(verticalBlock, props);
         this.wallBlock = wallBlock;
     }
 
     @Override
-    @Nullable
-    protected BlockState getPlacementState(BlockPlaceContext context)
-    {
-        if (DirUtils.isY(context.getClickedFace()))
-        {
+    protected @Nullable BlockState getPlacementState(BlockPlaceContext context) {
+        if (DirUtils.isY(context.getClickedFace())) {
             return getBlock().getStateForPlacement(context);
-        }
-        else
-        {
+        } else {
             return wallBlock.getStateForPlacement(context);
         }
     }
 
     @Override
-    public void registerBlocks(Map<Block, Item> blockToItemMap, Item item)
-    {
+    public void registerBlocks(Map<Block, Item> blockToItemMap, Item item) {
         super.registerBlocks(blockToItemMap, item);
         blockToItemMap.put(wallBlock, item);
     }

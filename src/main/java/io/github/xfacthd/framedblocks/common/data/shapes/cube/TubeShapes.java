@@ -13,10 +13,8 @@ import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 
-public final class TubeShapes
-{
-    public static ShapeContainer generate(List<BlockState> states)
-    {
+public final class TubeShapes {
+    public static ShapeContainer generate(List<BlockState> states) {
         VoxelShape shapeThinY = ShapeUtils.or(
                 Block.box( 0, 0,  0, 16, 16,  2),
                 Block.box( 0, 0, 14, 16, 16, 16),
@@ -37,11 +35,9 @@ public final class TubeShapes
 
         Map<BlockState, VoxelShape> map = new IdentityHashMap<>(states.size());
 
-        for (BlockState state : states)
-        {
+        for (BlockState state : states) {
             boolean thick = state.getValue(PropertyHolder.THICK);
-            VoxelShape shape = switch (state.getValue(BlockStateProperties.AXIS))
-            {
+            VoxelShape shape = switch (state.getValue(BlockStateProperties.AXIS)) {
                 case X -> thick ? shapeThickX : shapeThinX;
                 case Y -> thick ? shapeThickY : shapeThinY;
                 case Z -> thick ? shapeThickZ : shapeThinZ;

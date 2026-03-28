@@ -16,63 +16,53 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 
-public final class ShapeRotationRecipeBuilder extends ExtShapelessRecipeBuilder
-{
+public final class ShapeRotationRecipeBuilder extends ExtShapelessRecipeBuilder {
     @Nullable
     private Ingredient tool = null;
     @Nullable
     private Ingredient block = null;
 
-    public ShapeRotationRecipeBuilder(RecipeProvider provider, HolderGetter<Item> itemRegistry, ItemLike result)
-    {
+    public ShapeRotationRecipeBuilder(RecipeProvider provider, HolderGetter<Item> itemRegistry, ItemLike result) {
         super(provider, itemRegistry, RecipeCategory.BUILDING_BLOCKS, result, 1);
     }
 
-    public ShapeRotationRecipeBuilder tool(Ingredient tool)
-    {
+    public ShapeRotationRecipeBuilder tool(Ingredient tool) {
         this.tool = tool;
         return this;
     }
 
-    public ShapeRotationRecipeBuilder block(ItemLike block)
-    {
+    public ShapeRotationRecipeBuilder block(ItemLike block) {
         this.block = Ingredient.of(block);
         return this;
     }
 
     @Override
-    public ShapeRotationRecipeBuilder requires(TagKey<Item> pTag)
-    {
+    public ShapeRotationRecipeBuilder requires(TagKey<Item> pTag) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public ShapeRotationRecipeBuilder requires(ItemLike pItem)
-    {
+    public ShapeRotationRecipeBuilder requires(ItemLike pItem) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public ShapeRotationRecipeBuilder requires(ItemLike pItem, int pQuantity)
-    {
+    public ShapeRotationRecipeBuilder requires(ItemLike pItem, int pQuantity) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public ShapeRotationRecipeBuilder requires(Ingredient pIngredient)
-    {
+    public ShapeRotationRecipeBuilder requires(Ingredient pIngredient) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public ShapeRotationRecipeBuilder requires(Ingredient pIngredient, int pQuantity)
-    {
+    public ShapeRotationRecipeBuilder requires(Ingredient pIngredient, int pQuantity) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void save(RecipeOutput output, ResourceKey<Recipe<?>> key)
-    {
+    public void save(RecipeOutput output, ResourceKey<Recipe<?>> key) {
         ShapeRotationRecipe recipe = new ShapeRotationRecipe(
                 RecipeBuilder.createCraftingCommonInfo(true),
                 RecipeBuilder.createCraftingBookInfo(category, group),

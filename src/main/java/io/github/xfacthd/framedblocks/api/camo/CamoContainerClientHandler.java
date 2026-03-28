@@ -5,8 +5,7 @@ import net.minecraft.client.renderer.block.BlockAndTintGetter;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemStack;
 
-public abstract class CamoContainerClientHandler<C extends CamoContent<C>, T extends CamoContainer<C, T>>
-{
+public abstract class CamoContainerClientHandler<C extends CamoContent<C>, T extends CamoContainer<C, T>> {
     /// Return the amount of tint layers the provided camo has
     public abstract int getTintCount(T camo);
 
@@ -29,27 +28,23 @@ public abstract class CamoContainerClientHandler<C extends CamoContent<C>, T ext
     /// @param tintList The list to append the tint values to
     public abstract void collectTintValues(T camo, ItemStack stack, IntList tintList);
 
-    static final class Default<C extends CamoContent<C>, T extends CamoContainer<C, T>> extends CamoContainerClientHandler<C, T>
-    {
+    static final class Default<C extends CamoContent<C>, T extends CamoContainer<C, T>> extends CamoContainerClientHandler<C, T> {
         static final CamoContainerClientHandler<?, ?> INSTANCE = new Default<>();
 
         @Override
-        public int getTintCount(T camo)
-        {
+        public int getTintCount(T camo) {
             C content = camo.getContent();
             return content.getClientHandler().getTintCount(content);
         }
 
         @Override
-        public void collectTintValues(T camo, BlockAndTintGetter level, BlockPos pos, IntList tintList)
-        {
+        public void collectTintValues(T camo, BlockAndTintGetter level, BlockPos pos, IntList tintList) {
             C content = camo.getContent();
             content.getClientHandler().collectTintValues(content, level, pos, tintList);
         }
 
         @Override
-        public void collectTintValues(T camo, ItemStack stack, IntList tintList)
-        {
+        public void collectTintValues(T camo, ItemStack stack, IntList tintList) {
             C content = camo.getContent();
             content.getClientHandler().collectTintValues(content, stack, tintList);
         }

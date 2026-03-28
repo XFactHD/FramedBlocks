@@ -10,21 +10,18 @@ import org.spongepowered.asm.mixin.Shadow;
 import java.util.Map;
 
 @Mixin(StateDefinition.Builder.class)
-public class MixinStateDefinitionBuilder implements StateDefinitionBuilderAccessor
-{
+public class MixinStateDefinitionBuilder implements StateDefinitionBuilderAccessor {
     @Shadow
     @Final
     private Map<String, Property<?>> properties;
 
     @Override
-    public boolean framedblocks$hasProperty(Property<?> property)
-    {
+    public boolean framedblocks$hasProperty(Property<?> property) {
         return properties.containsKey(property.getName());
     }
 
     @Override
-    public void framedblocks$removeProperty(Property<?> property)
-    {
+    public void framedblocks$removeProperty(Property<?> property) {
         properties.remove(property.getName());
     }
 }

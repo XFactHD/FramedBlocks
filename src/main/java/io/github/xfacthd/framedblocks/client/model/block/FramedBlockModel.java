@@ -17,52 +17,42 @@ import org.joml.Matrix4fc;
 import java.util.List;
 import java.util.Optional;
 
-public final class FramedBlockModel implements BlockModel
-{
+public final class FramedBlockModel implements BlockModel {
     private final BlockStateModel model;
     private final Matrix4fc transformation;
 
-    public FramedBlockModel(BlockStateModel model, Matrix4fc transformation)
-    {
+    public FramedBlockModel(BlockStateModel model, Matrix4fc transformation) {
         this.model = model;
         this.transformation = transformation;
     }
 
     @Override
-    public void update(BlockModelRenderState output, BlockState state, BlockDisplayContext context, long seed)
-    {
+    public void update(BlockModelRenderState output, BlockState state, BlockDisplayContext context, long seed) {
         BlockAndTintGetter level;
         BlockPos pos;
-        if (context instanceof FramedBlockDisplayContext ctx)
-        {
+        if (context instanceof FramedBlockDisplayContext ctx) {
             level = ctx;
             pos = ctx.pos();
-        }
-        else
-        {
+        } else {
             level = BlockAndTintGetter.EMPTY;
             pos = BlockPos.ZERO;
         }
         int materialFlags = model.materialFlags(level, pos, state);
         List<BlockStateModelPart> partList = output.setupModel(transformation, (materialFlags & BakedQuad.FLAG_TRANSLUCENT) != 0);
         model.collectParts(level, pos, state, output.scratchRandomSource(seed), partList);
-        if (output instanceof AdvancedBlockModelRenderState advOut)
-        {
+        if (output instanceof AdvancedBlockModelRenderState advOut) {
             advOut.setAnimated((materialFlags & BakedQuad.FLAG_ANIMATED) != 0);
         }
         IClientBlockExtensions.of(state).collectDynamicTintValues(state, level, pos, output.tintLayers());
     }
 
-    public BlockStateModel getModel()
-    {
+    public BlockStateModel getModel() {
         return model;
     }
 
-    public record Unbaked(BlockState state, Optional<Transformation> transformation) implements BlockModel.Unbaked
-    {
+    public record Unbaked(BlockState state, Optional<Transformation> transformation) implements BlockModel.Unbaked {
         @Override
-        public BlockModel bake(BakingContext context, Matrix4fc transformation)
-        {
+        public BlockModel bake(BakingContext context, Matrix4fc transformation) {
             Matrix4fc modelTransform = Transformation.compose(transformation, this.transformation);
             return new FramedBlockModel(context.modelGetter().apply(state), modelTransform);
         }

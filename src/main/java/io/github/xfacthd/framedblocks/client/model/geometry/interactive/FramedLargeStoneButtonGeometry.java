@@ -11,8 +11,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.Blocks;
 import org.jspecify.annotations.Nullable;
 
-public class FramedLargeStoneButtonGeometry extends FramedLargeButtonGeometry
-{
+public class FramedLargeStoneButtonGeometry extends FramedLargeButtonGeometry {
     private static final Material FRAME_LOCATION_FRONT = new Material(Utils.id("block/large_stone_button_frame_front"));
     private static final Material FRAME_LOCATION_SIDE = new Material(Utils.id("block/large_stone_button_frame_side"));
 
@@ -21,8 +20,7 @@ public class FramedLargeStoneButtonGeometry extends FramedLargeButtonGeometry
     private final @Nullable Direction[] overlayCullFaces;
     private final OverlayPartGenerator.MaterialGetter overlayMaterialGetter;
 
-    private FramedLargeStoneButtonGeometry(GeometryFactory.Context ctx)
-    {
+    private FramedLargeStoneButtonGeometry(GeometryFactory.Context ctx) {
         super(ctx);
         this.frameSpriteFront = ctx.materialLookup().getMaterial(FRAME_LOCATION_FRONT);
         this.frameSpriteSide = ctx.materialLookup().getMaterial(FRAME_LOCATION_SIDE);
@@ -31,21 +29,17 @@ public class FramedLargeStoneButtonGeometry extends FramedLargeButtonGeometry
     }
 
     @Override
-    public boolean hasGeneratedOverlay(FramedBlockData blockData, @Nullable Object cacheKeyUserData)
-    {
+    public boolean hasGeneratedOverlay(FramedBlockData blockData, @Nullable Object cacheKeyUserData) {
         return !blockData.getCamoContent().isEmpty();
     }
 
     @Override
-    public void generateOverlayParts(OverlayPartGenerator generator, RandomSource rand, @Nullable Object cacheKeyUserData)
-    {
+    public void generateOverlayParts(OverlayPartGenerator generator, RandomSource rand, @Nullable Object cacheKeyUserData) {
         generator.generate(overlayCullFaces, overlayMaterialGetter, frameSpriteFront, Blocks.STONE.defaultBlockState());
     }
 
-    public static FramedLargeButtonGeometry create(GeometryFactory.Context ctx)
-    {
-        if (ClientConfig.VIEW.showButtonPlateOverlay())
-        {
+    public static FramedLargeButtonGeometry create(GeometryFactory.Context ctx) {
+        if (ClientConfig.VIEW.showButtonPlateOverlay()) {
             return new FramedLargeStoneButtonGeometry(ctx);
         }
         return new FramedLargeButtonGeometry(ctx);

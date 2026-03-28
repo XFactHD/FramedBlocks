@@ -11,15 +11,13 @@ import net.minecraft.client.resources.model.geometry.BakedQuad;
 import net.minecraft.core.Direction;
 import org.jspecify.annotations.Nullable;
 
-public class FramedInnerPrismCornerGeometry extends Geometry
-{
+public class FramedInnerPrismCornerGeometry extends Geometry {
     private final Direction dir;
     private final boolean top;
     private final boolean offset;
     private final boolean altSlope;
 
-    public FramedInnerPrismCornerGeometry(GeometryFactory.Context ctx)
-    {
+    public FramedInnerPrismCornerGeometry(GeometryFactory.Context ctx) {
         this.dir = ctx.state().getValue(FramedProperties.FACING_HOR);
         this.top = ctx.state().getValue(FramedProperties.TOP);
         this.offset = ctx.state().getValue(FramedProperties.OFFSET);
@@ -27,27 +25,21 @@ public class FramedInnerPrismCornerGeometry extends Geometry
     }
 
     @Override
-    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
-    {
+    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData) {
         Direction quadDir = quad.direction();
-        if ((quadDir == Direction.DOWN && top) || (quadDir == Direction.UP && !top))
-        {
+        if ((quadDir == Direction.DOWN && top) || (quadDir == Direction.UP && !top)) {
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(dir.getOpposite(), 1, 0))
                     .export(quadMap, quadDir);
-        }
-        else if (quadDir == dir.getOpposite() || quadDir == dir.getClockWise())
-        {
+        } else if (quadDir == dir.getOpposite() || quadDir == dir.getClockWise()) {
             Direction cutDir = quadDir == dir.getOpposite() ? dir.getClockWise() : dir.getOpposite();
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(cutDir, top ? 1 : 0, top ? 0 : 1))
                     .export(quadMap, quadDir);
         }
 
-        if (!altSlope && quadDir == dir.getOpposite())
-        {
-            if (offset)
-            {
+        if (!altSlope && quadDir == dir.getOpposite())  {
+            if (offset) {
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(dir.getClockWise(), .5F))
                         .apply(Modifiers.offset(dir.getClockWise(), .5F))
@@ -59,18 +51,13 @@ public class FramedInnerPrismCornerGeometry extends Geometry
                         .apply(Modifiers.offset(dir.getCounterClockWise(), .5F))
                         .apply(Modifiers.cutPrismTriangle(top, false))
                         .export(quadMap, null);
-            }
-            else
-            {
+            } else {
                 QuadModifier.of(quad)
                         .apply(Modifiers.cutPrismTriangle(top, false))
                         .export(quadMap, null);
             }
-        }
-        else if (altSlope && ((!top && quadDir == Direction.UP) || (top && quadDir == Direction.DOWN)))
-        {
-            if (offset)
-            {
+        } else if (altSlope && ((!top && quadDir == Direction.UP) || (top && quadDir == Direction.DOWN))) {
+            if (offset) {
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(dir.getClockWise(), .5F))
                         .apply(Modifiers.offset(dir.getClockWise(), .5F))
@@ -82,9 +69,7 @@ public class FramedInnerPrismCornerGeometry extends Geometry
                         .apply(Modifiers.offset(dir.getCounterClockWise(), .5F))
                         .apply(Modifiers.cutPrismTriangle(dir.getOpposite(), false))
                         .export(quadMap, null);
-            }
-            else
-            {
+            } else {
                 QuadModifier.of(quad)
                         .apply(Modifiers.cutPrismTriangle(dir.getOpposite(), false))
                         .export(quadMap, null);

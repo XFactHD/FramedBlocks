@@ -10,33 +10,23 @@ import net.neoforged.fml.ModList;
 
 import java.util.function.Consumer;
 
-public final class AdditionalPlacementsCompat
-{
-    public static void init()
-    {
-        if (ModList.get().isLoaded("additionalplacements"))
-        {
-            try
-            {
+public final class AdditionalPlacementsCompat {
+    public static void init() {
+        if (ModList.get().isLoaded("additionalplacements")) {
+            try {
                 GuardedAccess.init();
-            }
-            catch (Throwable e)
-            {
+            } catch (Throwable e) {
                 FramedBlocks.LOGGER.warn("An error occured while initializing AdditionalPlacements integration!", e);
             }
         }
     }
 
-    private static final class GuardedAccess
-    {
-        public static void init()
-        {
-            Registration.addRegistration(new RegistrationInitializer()
-            {
+    private static final class GuardedAccess {
+        public static void init() {
+            Registration.addRegistration(new RegistrationInitializer() {
                 // FIXME: RL->ID
                 //@Override
-                //public void addGlobalBlacklisters(Consumer<IBlockBlacklister<Block>> register)
-                //{
+                //public void addGlobalBlacklisters(Consumer<IBlockBlacklister<Block>> register) {
                 //    register.accept((block, _) -> block instanceof IFramedBlock);
                 //}
             });

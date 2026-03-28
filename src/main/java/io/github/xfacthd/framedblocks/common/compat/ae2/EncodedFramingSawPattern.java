@@ -10,8 +10,7 @@ import net.minecraft.world.item.ItemStack;
 
 import java.util.List;
 
-record EncodedFramingSawPattern(ItemStack input, List<ItemStack> additives, ItemStack output)
-{
+record EncodedFramingSawPattern(ItemStack input, List<ItemStack> additives, ItemStack output) {
     public static final Codec<EncodedFramingSawPattern> CODEC = RecordCodecBuilder.create(inst -> inst.group(
             ItemStack.CODEC.fieldOf("input").forGetter(EncodedFramingSawPattern::input),
             ItemStack.CODEC.listOf().fieldOf("additives").forGetter(EncodedFramingSawPattern::additives),
@@ -29,20 +28,21 @@ record EncodedFramingSawPattern(ItemStack input, List<ItemStack> additives, Item
 
     @Override
     @SuppressWarnings("deprecation")
-    public boolean equals(Object o)
-    {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        EncodedFramingSawPattern that = (EncodedFramingSawPattern) o;
-        return ItemStack.matches(input, that.input) &&
-                ItemStack.listMatches(additives, that.additives) &&
-                ItemStack.matches(output, that.output);
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o instanceof EncodedFramingSawPattern(ItemStack otherInput, List<ItemStack> otherAdditives, ItemStack otherOutput)) {
+            return ItemStack.matches(input, otherInput) &&
+                    ItemStack.listMatches(additives, otherAdditives) &&
+                    ItemStack.matches(output, otherOutput);
+        }
+        return false;
     }
 
     @Override
     @SuppressWarnings("deprecation")
-    public int hashCode()
-    {
+    public int hashCode() {
         int result = 1;
         result = 31 * result + ItemStack.hashItemAndComponents(input);
         result = 31 * result + ItemStack.hashStackList(additives);

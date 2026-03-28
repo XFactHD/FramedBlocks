@@ -5,8 +5,7 @@ import net.minecraft.core.Direction;
 /**
  * Indicates the normal and two outer edges of a quarter-block sized face
  */
-public enum CornerDir
-{
+public enum CornerDir {
     NULL(Direction.UP, Direction.UP, Direction.UP),
 
     UP_NORTH_EAST(Direction.UP, Direction.NORTH, Direction.EAST),
@@ -45,17 +44,14 @@ public enum CornerDir
     private final Direction edgeOne;
     private final Direction edgeTwo;
 
-    CornerDir(Direction normal, Direction edgeOne, Direction edgeTwo)
-    {
+    CornerDir(Direction normal, Direction edgeOne, Direction edgeTwo) {
         this.normal = normal;
         this.edgeOne = edgeOne;
         this.edgeTwo = edgeTwo;
     }
 
-    public CornerDir getOppositeNormal()
-    {
-        if (this == NULL)
-        {
+    public CornerDir getOppositeNormal() {
+        if (this == NULL) {
             return this;
         }
         return fromDirections(normal.getOpposite(), edgeOne, edgeTwo);
@@ -65,16 +61,13 @@ public enum CornerDir
      * {@return true if both {@code CornerDir}s are not {@link CornerDir#NULL} and the other {@code CornerDir}
      * has the same edge directions and the opposite normal direction}
      */
-    public boolean isEqualTo(CornerDir other)
-    {
+    public boolean isEqualTo(CornerDir other) {
         return this != NULL && getOppositeNormal() == other;
     }
 
-    public static CornerDir fromDirections(Direction normal, Direction edgeOne, Direction edgeTwo)
-    {
+    public static CornerDir fromDirections(Direction normal, Direction edgeOne, Direction edgeTwo) {
         CornerDir dir = FROM_DIRS[normal.ordinal()][edgeOne.ordinal()][edgeTwo.ordinal()];
-        if (dir == null)
-        {
+        if (dir == null) {
             throw new IllegalArgumentException(
                     "Invalid direction triple: normal:" + normal + ", edge one: " + edgeOne + ", edge two: " + edgeTwo
             );
@@ -82,12 +75,12 @@ public enum CornerDir
         return dir;
     }
 
-    private static CornerDir[][][] makeDirTable()
-    {
+    private static CornerDir[][][] makeDirTable() {
         CornerDir[][][] table = new CornerDir[6][6][6];
-        for (CornerDir dir : values())
-        {
-            if (dir == NULL) { continue; }
+        for (CornerDir dir : values()) {
+            if (dir == NULL) {
+                continue;
+            }
 
             table[dir.normal.ordinal()][dir.edgeOne.ordinal()][dir.edgeTwo.ordinal()] = dir;
             table[dir.normal.ordinal()][dir.edgeTwo.ordinal()][dir.edgeOne.ordinal()] = dir;

@@ -23,32 +23,25 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import org.jspecify.annotations.Nullable;
 
-public class FramedLayeredCubeBlock extends FramedBlock
-{
-    public FramedLayeredCubeBlock(Properties props)
-    {
+public class FramedLayeredCubeBlock extends FramedBlock {
+    public FramedLayeredCubeBlock(Properties props) {
         super(BlockType.FRAMED_LAYERED_CUBE, props);
         registerDefaultState(defaultBlockState().setValue(BlockStateProperties.FACING, Direction.UP));
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
-    {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
         builder.add(BlockStateProperties.FACING, BlockStateProperties.LAYERS);
     }
 
     @Override
-    @Nullable
-    public BlockState getStateForPlacement(BlockPlaceContext context)
-    {
+    public @Nullable BlockState getStateForPlacement(BlockPlaceContext context) {
         return PlacementStateBuilder.of(this, context)
                 .withTargetFacing(true)
-                .withCustom((state, modCtx) ->
-                {
+                .withCustom((state, modCtx) -> {
                     BlockState prevState = modCtx.getLevel().getBlockState(modCtx.getClickedPos());
-                    if (prevState.is(this))
-                    {
+                    if (prevState.is(this)) {
                         int layers = prevState.getValue(BlockStateProperties.LAYERS);
                         return prevState.setValue(BlockStateProperties.LAYERS, Math.min(8, layers + 1));
                     }
@@ -59,19 +52,15 @@ public class FramedLayeredCubeBlock extends FramedBlock
     }
 
     @Override
-    protected boolean canBeReplaced(BlockState state, BlockPlaceContext useContext)
-    {
+    protected boolean canBeReplaced(BlockState state, BlockPlaceContext useContext) {
         int layers = state.getValue(BlockStateProperties.LAYERS);
-        if (layers >= 8 || !useContext.getItemInHand().is(this.asItem()))
-        {
+        if (layers >= 8 || !useContext.getItemInHand().is(this.asItem())) {
             return false;
         }
-        if (!useContext.getItemInHand().getOrDefault(FBContent.DC_TYPE_CAMO_LIST, CamoList.EMPTY).isEmpty())
-        {
+        if (!useContext.getItemInHand().getOrDefault(FBContent.DC_TYPE_CAMO_LIST, CamoList.EMPTY).isEmpty()) {
             return false;
         }
-        if (useContext.replacingClickedOnBlock())
-        {
+        if (useContext.replacingClickedOnBlock()) {
             Direction facing = state.getValue(BlockStateProperties.FACING);
             return useContext.getClickedFace() == facing;
         }
@@ -79,14 +68,10 @@ public class FramedLayeredCubeBlock extends FramedBlock
     }
 
     @Override
-    public BlockItem createBlockItem(Item.Properties props)
-    {
-        return new FramedSpecialBlockItem.Single(this, props)
-        {
-            @Nullable
+    public BlockItem createBlockItem(Item.Properties props) {
+        return new FramedSpecialBlockItem.Single(this, props) {
             @Override
-            protected BlockState getReplacementState(BlockPlaceContext ctx, BlockState originalState)
-            {
+            protected @Nullable BlockState getReplacementState(BlockPlaceContext ctx, BlockState originalState) {
                 return FramedLayeredCubeBlock.this.getStateForPlacement(ctx);
             }
         };
@@ -98,39 +83,33 @@ public class FramedLayeredCubeBlock extends FramedBlock
     }
 
     @Override
-    public BlockState rotate(BlockState state, RotationDirection direction, WrenchRotationMode mode)
-    {
+    public BlockState rotate(BlockState state, RotationDirection direction, WrenchRotationMode mode) {
         return direction.cycle(state, BlockStateProperties.FACING);
     }
 
     @Override
-    protected BlockState rotate(BlockState state, Rotation rotation)
-    {
+    protected BlockState rotate(BlockState state, Rotation rotation) {
         return BlockUtils.rotate(state, BlockStateProperties.FACING, rotation);
     }
 
     @Override
-    protected BlockState mirror(BlockState state, Mirror mirror)
-    {
+    protected BlockState mirror(BlockState state, Mirror mirror) {
         return BlockUtils.mirrorFaceBlock(state, BlockStateProperties.FACING, mirror);
     }
 
     @Override
-    public BlockState getItemModelSource()
-    {
+    public BlockState getItemModelSource() {
         return defaultBlockState();
     }
 
     @Override
-    public Direction getHorizontalOrientation(BlockState state)
-    {
+    public Direction getHorizontalOrientation(BlockState state) {
         Direction facing = state.getValue(BlockStateProperties.FACING);
         return DirUtils.isY(facing) ? Direction.NORTH : facing;
     }
 
     @Override
-    public BlockState getJadeRenderState(BlockState state)
-    {
+    public BlockState getJadeRenderState(BlockState state) {
         return defaultBlockState();
     }
 }

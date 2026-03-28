@@ -47,8 +47,7 @@ import org.jspecify.annotations.Nullable;
 import java.util.List;
 import java.util.Set;
 
-public final class FramedStandingSignBlock extends StandingSignBlock implements IFramedBlockInternal
-{
+public final class FramedStandingSignBlock extends StandingSignBlock implements IFramedBlockInternal {
     public FramedStandingSignBlock(Properties properties)
     {
         super(WoodType.OAK, IFramedBlock.applyDefaultProperties(properties, BlockType.FRAMED_SIGN)
@@ -60,24 +59,23 @@ public final class FramedStandingSignBlock extends StandingSignBlock implements 
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
-    {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
         BlockUtils.addStandardProperties(this, builder);
     }
 
     @Override
-    protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult)
-    {
+    protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
         InteractionResult result = handleUse(state, level, pos, player, hand, hitResult);
-        if (result.consumesAction()) return result;
+        if (result.consumesAction()) {
+            return result;
+        }
 
         return super.useItemOn(stack, state, level, pos, player, hand, hitResult);
     }
 
     @Override
-    public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)
-    {
+    public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
         tryApplyCamoImmediately(level, pos, placer, stack);
     }
 
@@ -91,107 +89,88 @@ public final class FramedStandingSignBlock extends StandingSignBlock implements 
             BlockPos adjPos,
             BlockState adjState,
             RandomSource random
-    )
-    {
+    ) {
         BlockState newState = super.updateShape(state, level, tickAccess, pos, side, adjPos, adjState, random);
-        if (!newState.isAir())
-        {
+        if (!newState.isAir()) {
             updateCulling(level, pos);
         }
         return newState;
     }
 
     @Override
-    protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, @Nullable Orientation orientation, boolean isMoving)
-    {
+    protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, @Nullable Orientation orientation, boolean isMoving) {
         updateCulling(level, pos);
     }
 
     @Override
-    protected boolean propagatesSkylightDown(BlockState state)
-    {
+    protected boolean propagatesSkylightDown(BlockState state) {
         return state.getValue(FramedProperties.PROPAGATES_SKYLIGHT);
     }
 
     @Override
-    protected List<ItemStack> getDrops(BlockState state, LootParams.Builder builder)
-    {
+    protected List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {
         return super.getDrops(state, getCamoDrops(builder));
     }
 
     @Override
-    public void openTextEdit(Player player, SignBlockEntity signEntity, boolean isFrontText)
-    {
+    public void openTextEdit(Player player, SignBlockEntity signEntity, boolean isFrontText) {
         signEntity.setAllowedPlayerEditor(player.getUUID());
         PacketDistributor.sendToPlayer((ServerPlayer) player, new ClientboundOpenSignScreenPayload(signEntity.getBlockPos(), isFrontText));
     }
 
     @Override
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
-    {
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return new FramedSignBlockEntity(pos, state);
     }
 
     @Override
-    @Nullable
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type)
-    {
+    public <T extends BlockEntity> @Nullable BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
         return createTickerHelper(type, FBContent.BE_TYPE_FRAMED_SIGN.value(), FramedSignBlockEntity::tick);
     }
 
     @Override
-    public BlockItem createBlockItem(Item.Properties props)
-    {
+    public BlockItem createBlockItem(Item.Properties props) {
         return new FramedSignItem(props);
     }
 
     @Override
-    public BlockType getBlockType()
-    {
+    public BlockType getBlockType() {
         return BlockType.FRAMED_SIGN;
     }
 
-    @Nullable
     @Override
-    public BlockState getItemModelSource()
-    {
+    public @Nullable BlockState getItemModelSource() {
         return null;
     }
 
     @Override
-    public Direction getHorizontalOrientation(BlockState state)
-    {
+    public Direction getHorizontalOrientation(BlockState state) {
         int rotation = state.getValue(BlockStateProperties.ROTATION_16);
         return Direction.from2DDataValue(rotation / 4);
     }
 
     @Override
-    public BlockState getJadeRenderState(BlockState state)
-    {
+    public BlockState getJadeRenderState(BlockState state) {
         return defaultBlockState();
     }
 
-    public static final class RotatingSignStateMerger implements StateMerger
-    {
+    public static final class RotatingSignStateMerger implements StateMerger {
         public static final RotatingSignStateMerger INSTANCE = new RotatingSignStateMerger();
 
         private RotatingSignStateMerger() { }
 
         @Override
-        public BlockState apply(BlockState state)
-        {
+        public BlockState apply(BlockState state) {
             state = WrapHelper.DEFAULT_MERGER.apply(state);
             int rot = state.getValue(BlockStateProperties.ROTATION_16);
-            if (rot > 7)
-            {
+            if (rot > 7) {
                 state = state.setValue(BlockStateProperties.ROTATION_16, rot - 8);
             }
             return state;
         }
 
         @Override
-        public Set<Property<?>> getHandledProperties(Holder<Block> block)
-        {
+        public Set<Property<?>> getHandledProperties(Holder<Block> block) {
             return Utils.concat(
                     WrapHelper.DEFAULT_MERGER.getHandledProperties(block),
                     Set.of(BlockStateProperties.ROTATION_16)

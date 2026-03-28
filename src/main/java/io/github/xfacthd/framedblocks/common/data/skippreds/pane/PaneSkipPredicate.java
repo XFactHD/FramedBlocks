@@ -11,14 +11,11 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
 @CullTest(BlockType.FRAMED_PANE)
-public final class PaneSkipPredicate implements SideSkipPredicate
-{
+public final class PaneSkipPredicate implements SideSkipPredicate {
     @Override
     @CullTest.TestTarget(BlockType.FRAMED_PANE)
-    public boolean test(BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side)
-    {
-        if (adjState.getBlock() != state.getBlock())
-        {
+    public boolean test(BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side) {
+        if (adjState.getBlock() != state.getBlock()) {
             return false;
         }
 
@@ -32,13 +29,11 @@ public final class PaneSkipPredicate implements SideSkipPredicate
         boolean adjSouth = adjState.getValue(BlockStateProperties.SOUTH);
         boolean adjWest = adjState.getValue(BlockStateProperties.WEST);
 
-        if (DirUtils.isY(side) && north == adjNorth && east == adjEast && south == adjSouth && west == adjWest)
-        {
+        if (DirUtils.isY(side) && north == adjNorth && east == adjEast && south == adjSouth && west == adjWest) {
             return true;
         }
 
-        return switch (side)
-        {
+        return switch (side) {
             case NORTH -> north && adjSouth;
             case EAST -> east && adjWest;
             case SOUTH -> south && adjNorth;

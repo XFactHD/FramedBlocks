@@ -16,19 +16,15 @@ import net.minecraft.util.Util;
 import net.minecraft.world.level.block.SignBlock;
 import org.joml.Vector3f;
 
-public final class FramedSignScreen extends AbstractSignEditScreen
-{
+public final class FramedSignScreen extends AbstractSignEditScreen {
     private static final Component TITLE_NORMAL = Component.translatable("sign.edit");
     private static final Component TITLE_HANGING = Component.translatable("hanging_sign.edit");
-    private static final BlockPictureInPictureRenderer.RenderConfig[] TRANSFORMS = Util.make(() ->
-    {
+    private static final BlockPictureInPictureRenderer.RenderConfig[] TRANSFORMS = Util.make(() -> {
         BlockPictureInPictureRenderer.RenderConfig[] transforms = new BlockPictureInPictureRenderer.RenderConfig[16];
-        for (int i = 0; i < 16; i++)
-        {
+        for (int i = 0; i < 16; i++) {
             float yRot = 22.5F * i;
             transforms[i] = new BlockPictureInPictureRenderer.RenderConfig(
-                    poseStack ->
-                    {
+                    poseStack -> {
                         poseStack.mulPose(Axis.YN.rotationDegrees(yRot));
                         poseStack.mulPose(Quaternions.ZP_180);
                         poseStack.translate(-.5, -.55, -.5);
@@ -56,8 +52,7 @@ public final class FramedSignScreen extends AbstractSignEditScreen
             float signScale,
             float signYOffset,
             Vector3f signTextScale
-    )
-    {
+    ) {
         super(sign, isFrontText, Minecraft.getInstance().isTextFilteringEnabled(), title);
         this.signBlock = (SignBlock) sign.getBlockState().getBlock();
         this.signTopY = signTopY;
@@ -68,8 +63,7 @@ public final class FramedSignScreen extends AbstractSignEditScreen
     }
 
     @Override
-    protected void extractSignBackground(GuiGraphicsExtractor graphics)
-    {
+    protected void extractSignBackground(GuiGraphicsExtractor graphics) {
         int centerX = width / 2;
         int x0 = centerX - 48;
         int x1 = centerX + 48;
@@ -81,34 +75,28 @@ public final class FramedSignScreen extends AbstractSignEditScreen
     }
 
     @Override
-    public float getSignYOffset()
-    {
+    public float getSignYOffset() {
         return signYOffset;
     }
 
     @Override
-    public Vector3f getSignTextScale()
-    {
+    public Vector3f getSignTextScale() {
         return signTextScale;
     }
 
-    private static FramedSignScreen normal(FramedSignBlockEntity sign, boolean isFrontText, int signTopY, int signBottomY)
-    {
+    private static FramedSignScreen normal(FramedSignBlockEntity sign, boolean isFrontText, int signTopY, int signBottomY) {
         return new FramedSignScreen(sign, isFrontText, TITLE_NORMAL, signTopY, signBottomY, SignEditScreen.MAGIC_SCALE_NUMBER * 1.5F, 90, SignEditScreen.TEXT_SCALE);
     }
 
-    public static FramedSignScreen standing(FramedSignBlockEntity sign, boolean isFrontText)
-    {
+    public static FramedSignScreen standing(FramedSignBlockEntity sign, boolean isFrontText) {
         return normal(sign, isFrontText, 66, 170);
     }
 
-    public static FramedSignScreen wall(FramedSignBlockEntity sign, boolean isFrontText)
-    {
+    public static FramedSignScreen wall(FramedSignBlockEntity sign, boolean isFrontText) {
         return normal(sign, isFrontText, 65, 139);
     }
 
-    public static FramedSignScreen hanging(FramedSignBlockEntity sign, boolean isFrontText)
-    {
+    public static FramedSignScreen hanging(FramedSignBlockEntity sign, boolean isFrontText) {
         return new FramedSignScreen(sign, isFrontText, TITLE_HANGING, 70, 147, SignEditScreen.MAGIC_SCALE_NUMBER * 1.15F, 125, HangingSignEditScreen.TEXT_SCALE);
     }
 }

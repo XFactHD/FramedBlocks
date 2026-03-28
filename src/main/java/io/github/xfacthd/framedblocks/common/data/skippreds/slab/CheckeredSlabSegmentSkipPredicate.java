@@ -22,18 +22,14 @@ import net.minecraft.world.level.block.state.BlockState;
  This class is machine-generated, any manual changes to this class will be overwritten.
  */
 @CullTest(BlockType.FRAMED_CHECKERED_SLAB_SEGMENT)
-public final class CheckeredSlabSegmentSkipPredicate implements SideSkipPredicate
-{
+public final class CheckeredSlabSegmentSkipPredicate implements SideSkipPredicate {
     @Override
-    public boolean test(BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side)
-    {
-        if (adjState.getBlock() instanceof IFramedBlock block && block.getBlockType() instanceof BlockType blockType)
-        {
+    public boolean test(BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side) {
+        if (adjState.getBlock() instanceof IFramedBlock block && block.getBlockType() instanceof BlockType blockType) {
             boolean top = state.getValue(FramedProperties.TOP);
             boolean second = state.getValue(PropertyHolder.SECOND);
 
-            return switch (blockType)
-            {
+            return switch (blockType) {
                 case FRAMED_CHECKERED_SLAB_SEGMENT -> testAgainstCheckeredSlabSegment(
                         top, second, adjState, side
                 );
@@ -88,8 +84,7 @@ public final class CheckeredSlabSegmentSkipPredicate implements SideSkipPredicat
     @CullTest.TestTarget(BlockType.FRAMED_CHECKERED_SLAB_SEGMENT)
     private static boolean testAgainstCheckeredSlabSegment(
             boolean top, boolean second, BlockState adjState, Direction side
-    )
-    {
+    ) {
         boolean adjTop = adjState.getValue(FramedProperties.TOP);
         boolean adjSecond = adjState.getValue(PropertyHolder.SECOND);
 
@@ -100,8 +95,7 @@ public final class CheckeredSlabSegmentSkipPredicate implements SideSkipPredicat
     @CullTest.TestTarget(BlockType.FRAMED_CORNER_SLOPE_EDGE)
     private static boolean testAgainstCornerSlopeEdge(
             boolean top, boolean second, BlockState adjState, Direction side
-    )
-    {
+    ) {
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         CornerType adjType = adjState.getValue(PropertyHolder.CORNER_TYPE);
         boolean adjAlt = adjState.getValue(PropertyHolder.ALT_TYPE);
@@ -112,8 +106,7 @@ public final class CheckeredSlabSegmentSkipPredicate implements SideSkipPredicat
     @CullTest.TestTarget(BlockType.FRAMED_ELEVATED_CORNER_SLOPE_EDGE)
     private static boolean testAgainstElevatedCornerSlopeEdge(
             boolean top, boolean second, BlockState adjState, Direction side
-    )
-    {
+    ) {
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         CornerType adjType = adjState.getValue(PropertyHolder.CORNER_TYPE);
 
@@ -123,8 +116,7 @@ public final class CheckeredSlabSegmentSkipPredicate implements SideSkipPredicat
     @CullTest.TestTarget(BlockType.FRAMED_SLAB_EDGE)
     private static boolean testAgainstSlabEdge(
             boolean top, boolean second, BlockState adjState, Direction side
-    )
-    {
+    ) {
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         boolean adjTop = adjState.getValue(FramedProperties.TOP);
 
@@ -134,8 +126,7 @@ public final class CheckeredSlabSegmentSkipPredicate implements SideSkipPredicat
     @CullTest.TestTarget(BlockType.FRAMED_SLAB_CORNER)
     private static boolean testAgainstSlabCorner(
             boolean top, boolean second, BlockState adjState, Direction side
-    )
-    {
+    ) {
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         boolean adjTop = adjState.getValue(FramedProperties.TOP);
 
@@ -145,8 +136,7 @@ public final class CheckeredSlabSegmentSkipPredicate implements SideSkipPredicat
     @CullTest.TestTarget(BlockType.FRAMED_HALF_STAIRS)
     private static boolean testAgainstHalfStairs(
             boolean top, boolean second, BlockState adjState, Direction side
-    )
-    {
+    ) {
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         boolean adjTop = adjState.getValue(FramedProperties.TOP);
         boolean adjRight = adjState.getValue(PropertyHolder.RIGHT);
@@ -157,8 +147,7 @@ public final class CheckeredSlabSegmentSkipPredicate implements SideSkipPredicat
     @CullTest.TestTarget(BlockType.FRAMED_VERTICAL_STAIRS)
     private static boolean testAgainstVerticalStairs(
             boolean top, boolean second, BlockState adjState, Direction side
-    )
-    {
+    ) {
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         StairsType adjType = adjState.getValue(PropertyHolder.STAIRS_TYPE);
 
@@ -168,8 +157,7 @@ public final class CheckeredSlabSegmentSkipPredicate implements SideSkipPredicat
     @CullTest.TestTarget(BlockType.FRAMED_VERTICAL_HALF_STAIRS)
     private static boolean testAgainstVerticalHalfStairs(
             boolean top, boolean second, BlockState adjState, Direction side
-    )
-    {
+    ) {
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         boolean adjTop = adjState.getValue(FramedProperties.TOP);
 
@@ -179,8 +167,7 @@ public final class CheckeredSlabSegmentSkipPredicate implements SideSkipPredicat
     @CullTest.TestTarget(BlockType.FRAMED_THREEWAY_CORNER_PILLAR)
     private static boolean testAgainstThreewayCornerPillar(
             boolean top, boolean second, BlockState adjState, Direction side
-    )
-    {
+    ) {
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         boolean adjTop = adjState.getValue(FramedProperties.TOP);
 
@@ -190,8 +177,7 @@ public final class CheckeredSlabSegmentSkipPredicate implements SideSkipPredicat
     @CullTest.TestTarget(BlockType.FRAMED_SMALL_CORNER_SLOPE_PANEL_W)
     private static boolean testAgainstSmallCornerSlopePanelWall(
             boolean top, boolean second, BlockState adjState, Direction side
-    )
-    {
+    ) {
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         HorizontalRotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
 
@@ -201,8 +187,7 @@ public final class CheckeredSlabSegmentSkipPredicate implements SideSkipPredicat
     @CullTest.TestTarget(BlockType.FRAMED_SMALL_INNER_CORNER_SLOPE_PANEL_W)
     private static boolean testAgainstSmallInnerCornerSlopePanelWall(
             boolean top, boolean second, BlockState adjState, Direction side
-    )
-    {
+    ) {
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         HorizontalRotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
 
@@ -212,8 +197,7 @@ public final class CheckeredSlabSegmentSkipPredicate implements SideSkipPredicat
     @CullTest.TestTarget(BlockType.FRAMED_EXT_CORNER_SLOPE_PANEL_W)
     private static boolean testAgainstExtendedCornerSlopePanelWall(
             boolean top, boolean second, BlockState adjState, Direction side
-    )
-    {
+    ) {
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         HorizontalRotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
 
@@ -223,8 +207,7 @@ public final class CheckeredSlabSegmentSkipPredicate implements SideSkipPredicat
     @CullTest.TestTarget(BlockType.FRAMED_MASONRY_CORNER_SEGMENT)
     private static boolean testAgainstMasonryCornerSegment(
             boolean top, boolean second, BlockState adjState, Direction side
-    )
-    {
+    ) {
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         boolean adjTop = adjState.getValue(FramedProperties.TOP);
 
@@ -234,8 +217,7 @@ public final class CheckeredSlabSegmentSkipPredicate implements SideSkipPredicat
     @CullTest.TestTarget(BlockType.FRAMED_CHECKERED_CUBE_SEGMENT)
     private static boolean testAgainstCheckeredCubeSegment(
             boolean top, boolean second, BlockState adjState, Direction side
-    )
-    {
+    ) {
         boolean adjSecond = adjState.getValue(PropertyHolder.SECOND);
         return SlabDirs.CheckeredSlabSegment.getDiagCornerDir(top, second, side).isEqualTo(SlabDirs.CheckeredCubeSegment.getDiagCornerDir(adjSecond, side.getOpposite()));
     }
@@ -243,8 +225,7 @@ public final class CheckeredSlabSegmentSkipPredicate implements SideSkipPredicat
     @CullTest.TestTarget(BlockType.FRAMED_CHECKERED_PANEL_SEGMENT)
     private static boolean testAgainstCheckeredPanelSegment(
             boolean top, boolean second, BlockState adjState, Direction side
-    )
-    {
+    ) {
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         boolean adjSecond = adjState.getValue(PropertyHolder.SECOND);
 

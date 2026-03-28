@@ -28,10 +28,8 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
-public class FramedLeverBlock extends LeverBlock implements IFramedBlockInternal
-{
-    public FramedLeverBlock(Properties props)
-    {
+public class FramedLeverBlock extends LeverBlock implements IFramedBlockInternal {
+    public FramedLeverBlock(Properties props) {
         super(props.pushReaction(PushReaction.DESTROY)
                 .noCollision()
                 .strength(.5F)
@@ -42,20 +40,15 @@ public class FramedLeverBlock extends LeverBlock implements IFramedBlockInternal
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
-    {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
         BlockUtils.addStandardProperties(this, builder);
     }
 
     @Override
-    protected InteractionResult useItemOn(
-            ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit
-    )
-    {
+    protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         InteractionResult result = handleUse(state, level, pos, player, hand, hit);
-        if (result == InteractionResult.FAIL)
-        {
+        if (result == InteractionResult.FAIL) {
             // Allow interacting with the block while holding a framed block
             return InteractionResult.TRY_WITH_EMPTY_HAND;
         }
@@ -63,67 +56,55 @@ public class FramedLeverBlock extends LeverBlock implements IFramedBlockInternal
     }
 
     @Override
-    public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)
-    {
+    public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
         tryApplyCamoImmediately(level, pos, placer, stack);
     }
 
     @Override
-    protected float getShadeBrightness(BlockState state, BlockGetter level, BlockPos pos)
-    {
+    protected float getShadeBrightness(BlockState state, BlockGetter level, BlockPos pos) {
         return getCamoShadeBrightness(state, level, pos, super.getShadeBrightness(state, level, pos));
     }
 
     @Override
-    protected boolean propagatesSkylightDown(BlockState state)
-    {
+    protected boolean propagatesSkylightDown(BlockState state) {
         return state.getValue(FramedProperties.PROPAGATES_SKYLIGHT);
     }
 
     @Override
-    protected List<ItemStack> getDrops(BlockState state, LootParams.Builder builder)
-    {
+    protected List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {
         return super.getDrops(state, getCamoDrops(builder));
     }
 
     @Override
-    public BlockState rotate(BlockState state, RotationDirection direction, WrenchRotationMode mode)
-    {
-        if (state.getValue(FACE) != AttachFace.WALL)
-        {
+    public BlockState rotate(BlockState state, RotationDirection direction, WrenchRotationMode mode) {
+        if (state.getValue(FACE) != AttachFace.WALL) {
             return IFramedBlockInternal.super.rotate(state, direction, mode);
         }
         return state;
     }
 
     @Override
-    public BlockType getBlockType()
-    {
+    public BlockType getBlockType() {
         return BlockType.FRAMED_LEVER;
     }
 
     @Override
-    @Nullable
-    public BlockState getItemModelSource()
-    {
+    public @Nullable BlockState getItemModelSource() {
         return null;
     }
 
     @Override
-    public Direction getHorizontalOrientation(BlockState state)
-    {
+    public Direction getHorizontalOrientation(BlockState state) {
         return state.getValue(FACING);
     }
 
     @Override
-    public BlockState getJadeRenderState(BlockState state)
-    {
+    public BlockState getJadeRenderState(BlockState state) {
         return defaultBlockState().setValue(FACE, AttachFace.FLOOR);
     }
 
     @Override
-    public float getJadeRenderScale(BlockState state)
-    {
+    public float getJadeRenderScale(BlockState state) {
         return 1.6F;
     }
 }

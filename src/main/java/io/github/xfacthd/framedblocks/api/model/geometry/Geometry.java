@@ -21,8 +21,7 @@ import net.neoforged.neoforge.model.data.ModelData;
 import org.jspecify.annotations.Nullable;
 
 @SuppressWarnings("MethodMayBeStatic")
-public abstract class Geometry
-{
+public abstract class Geometry {
     /**
      * Called for each {@link BakedQuad} of the camo block's model for whose side this block's
      * {@link FullFacePredicate#test(BlockState, Direction)} returns {@code false} or all quads
@@ -39,8 +38,7 @@ public abstract class Geometry
      * Return true if the base model loaded from JSON should be used when no camo is applied without going
      * through the quad manipulation process
      */
-    public boolean forceUngeneratedBaseModel()
-    {
+    public boolean forceUngeneratedBaseModel() {
         return false;
     }
 
@@ -50,8 +48,7 @@ public abstract class Geometry
      * {@link Geometry#forceUngeneratedBaseModel()} returns false
      * @apiNote Must return true if {@link Geometry#forceUngeneratedBaseModel()} returns true
      */
-    public boolean useBaseModel()
-    {
+    public boolean useBaseModel() {
         return forceUngeneratedBaseModel();
     }
 
@@ -59,8 +56,7 @@ public abstract class Geometry
      * {@return the {@link BlockStateModel} to use as the base model when no camo is applied}
      * @apiNote Only called if {@link #useBaseModel()} returns {@code true}
      */
-    public BlockStateModel getBaseModel(BlockStateModel baseModel, boolean useAltModel)
-    {
+    public BlockStateModel getBaseModel(BlockStateModel baseModel, boolean useAltModel) {
         return baseModel;
     }
 
@@ -68,16 +64,14 @@ public abstract class Geometry
      * Return true if all quads should be submitted for transformation, even if their cull-face would be filtered
      * by the {@link FullFacePredicate}
      */
-    public boolean transformAllQuads()
-    {
+    public boolean transformAllQuads() {
         return false;
     }
 
     /**
      * Return true if this geometry may add additional parts in {@link #collectAdditionalPartsUncached(PartConsumer, BlockAndTintGetter, BlockPos, RandomSource, FramedBlockData, ModelData)}.
      */
-    public boolean hasAdditionalUncachedParts()
-    {
+    public boolean hasAdditionalUncachedParts() {
         return false;
     }
 
@@ -114,8 +108,7 @@ public abstract class Geometry
      * @param blockData        The {@link FramedBlockData} holding the block's camo and related metadata
      * @param cacheKeyUserData The additional user data, if available, from the cache key used to cache the generated geometry
      */
-    public boolean hasGeneratedOverlay(FramedBlockData blockData, @Nullable Object cacheKeyUserData)
-    {
+    public boolean hasGeneratedOverlay(FramedBlockData blockData, @Nullable Object cacheKeyUserData) {
         return false;
     }
 
@@ -138,9 +131,7 @@ public abstract class Geometry
      * @param random     The {@link RandomSource} to use for randomization
      * @param data       The {@link ModelData} from the {@link IFramedBlockEntity}
      */
-    @Nullable
-    public Object computeCacheKeyUserData(BlockAndTintGetter level, BlockPos pos, RandomSource random, ModelData data)
-    {
+    public @Nullable Object computeCacheKeyUserData(BlockAndTintGetter level, BlockPos pos, RandomSource random, ModelData data) {
         return null;
     }
 
@@ -148,8 +139,7 @@ public abstract class Geometry
      * {@return whether the model should use a solid model when no camo is applied}
      * @apiNote Only has an effect if {@link #useBaseModel()} returns {@code false}
      */
-    public boolean useSolidNoCamoModel()
-    {
+    public boolean useSolidNoCamoModel() {
         return false;
     }
 
@@ -159,8 +149,7 @@ public abstract class Geometry
     /// @param pos       The position this geometry is being rendered at
     /// @param modelData The model data this geometry is being rendered with
     /// @param blockData The {@link FramedBlockData} holding the block's camo and related metadata
-    public int getMaterialFlags(BlockAndTintGetter level, BlockPos pos, ModelData modelData, FramedBlockData blockData)
-    {
+    public int getMaterialFlags(BlockAndTintGetter level, BlockPos pos, ModelData modelData, FramedBlockData blockData) {
         return 0;
     }
 
@@ -168,19 +157,15 @@ public abstract class Geometry
      * Compute the default AO behavior which is used unless the source {@link BlockStateModelPart} specifies something else
      * @see BlockStateModelPartExtension#ambientOcclusion()
      */
-    public DefaultAO computeDefaultAmbientOcclusion(FramedBlockData blockData, ModelData data)
-    {
-        if (blockData.isEmissive())
-        {
+    public DefaultAO computeDefaultAmbientOcclusion(FramedBlockData blockData, ModelData data) {
+        if (blockData.isEmissive()) {
             return DefaultAO.FORCE_DISABLE;
         }
         CamoContent<?> camoContent = blockData.getCamoContent();
-        if (!camoContent.isEmpty() && (camoContent.getLightEmission() != 0 || camoContent.isEmissive()))
-        {
+        if (!camoContent.isEmpty() && (camoContent.getLightEmission() != 0 || camoContent.isEmissive())) {
             return DefaultAO.DISABLE;
         }
-        if (ConfigView.Client.INSTANCE.shouldForceAmbientOcclusionOnGlowingBlocks())
-        {
+        if (ConfigView.Client.INSTANCE.shouldForceAmbientOcclusionOnGlowingBlocks()) {
             return DefaultAO.ENABLE;
         }
         return DefaultAO.DEFAULT;
@@ -189,8 +174,7 @@ public abstract class Geometry
     /**
      * {@return the {@link ItemModelInfo} to use for controlling item model geometry caching}
      */
-    public ItemModelInfo getItemModelInfo()
-    {
+    public ItemModelInfo getItemModelInfo() {
         return ItemModelInfo.DEFAULT;
     }
 }

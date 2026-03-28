@@ -15,17 +15,14 @@ import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 
-public final class CornerTubeShapes
-{
-    public static ShapeContainer generate(List<BlockState> states)
-    {
+public final class CornerTubeShapes {
+    public static ShapeContainer generate(List<BlockState> states) {
         VoxelShape[] thinShapes = makeShapes(2);
         VoxelShape[] thickShapes = makeShapes(3);
 
         Map<BlockState, VoxelShape> map = new IdentityHashMap<>(states.size());
 
-        for (BlockState state : states)
-        {
+        for (BlockState state : states) {
             CornerTubeOrientation orientation = state.getValue(PropertyHolder.CORNER_TYPE_ORIENTATION);
             boolean thick = state.getValue(PropertyHolder.THICK);
             VoxelShape shape = (thick ? thickShapes : thinShapes)[orientation.ordinal()];
@@ -35,8 +32,7 @@ public final class CornerTubeShapes
         return ShapeContainer.of(map);
     }
 
-    private static VoxelShape[] makeShapes(int thickness)
-    {
+    private static VoxelShape[] makeShapes(int thickness) {
         int max = 16 - thickness;
 
         VoxelShape shapeUpNorth = ShapeUtils.andUnoptimized(

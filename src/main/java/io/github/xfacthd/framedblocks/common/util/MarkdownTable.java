@@ -8,33 +8,28 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("UnusedReturnValue")
-public final class MarkdownTable
-{
+public final class MarkdownTable {
     private final List<String> header = new ArrayList<>();
     private final BooleanList alignment = new BooleanArrayList();
     private final List<List<String>> rows = new ArrayList<>();
     private List<String> currRow = new ArrayList<>();
 
-    public MarkdownTable header(String cell)
-    {
+    public MarkdownTable header(String cell) {
         return header(cell, false);
     }
 
-    public MarkdownTable header(String cell, boolean alignRight)
-    {
+    public MarkdownTable header(String cell, boolean alignRight) {
         header.add(cell.trim());
         alignment.add(alignRight);
         return this;
     }
 
-    public MarkdownTable cell(String cell)
-    {
+    public MarkdownTable cell(String cell) {
         currRow.add(cell.trim());
         return this;
     }
 
-    public MarkdownTable newRow()
-    {
+    public MarkdownTable newRow() {
         Preconditions.checkState(
                 currRow.size() == header.size(),
                 "Row length inconsistent. Expected: %s, got: %s",
@@ -46,19 +41,15 @@ public final class MarkdownTable
         return this;
     }
 
-    public String print()
-    {
-        if (!currRow.isEmpty())
-        {
+    public String print() {
+        if (!currRow.isEmpty()) {
             newRow();
         }
 
         int[] lengths = new int[header.size()];
-        for (int i = 0; i < header.size(); i++)
-        {
+        for (int i = 0; i < header.size(); i++) {
             lengths[i] = header.get(i).length();
-            for (List<String> row : rows)
-            {
+            for (List<String> row : rows) {
                 lengths[i] = Math.max(lengths[i], row.get(i).length());
             }
         }
@@ -67,8 +58,7 @@ public final class MarkdownTable
 
         // Header texts
         out.append("|");
-        for (int i = 0; i < header.size(); i++)
-        {
+        for (int i = 0; i < header.size(); i++) {
             String cell = header.get(i);
             int targetLen = lengths[i];
             printCell(out, cell, targetLen, alignment.getBoolean(i));
@@ -77,17 +67,14 @@ public final class MarkdownTable
 
         // Header separator
         out.append("|");
-        for (int i = 0; i < header.size(); i++)
-        {
+        for (int i = 0; i < header.size(); i++) {
             boolean alignRight = alignment.getBoolean(i);
             int targetLen = lengths[i];
-            if (!alignRight)
-            {
+            if (!alignRight) {
                 out.append(":");
             }
             out.append("-".repeat(targetLen + 1));
-            if (alignRight)
-            {
+            if (alignRight) {
                 out.append(":");
             }
             out.append("|");
@@ -95,11 +82,9 @@ public final class MarkdownTable
         out.append("\n");
 
         // Cell texts
-        for (List<String> row : rows)
-        {
+        for (List<String> row : rows) {
             out.append("|");
-            for (int i = 0; i < row.size(); i++)
-            {
+            for (int i = 0; i < row.size(); i++) {
                 String cell = row.get(i);
                 int targetLen = lengths[i];
                 printCell(out, cell, targetLen, alignment.getBoolean(i));
@@ -110,24 +95,18 @@ public final class MarkdownTable
         return out.toString();
     }
 
-    private static void printCell(StringBuilder out, String cell, int targetLen, boolean alignRight)
-    {
+    private static void printCell(StringBuilder out, String cell, int targetLen, boolean alignRight) {
         out.append(" ");
 
         int diff = targetLen - cell.length();
-        if (diff == 0)
-        {
+        if (diff == 0) {
             out.append(cell);
-        }
-        else
-        {
-            if (alignRight)
-            {
+        } else {
+            if (alignRight) {
                 out.append(" ".repeat(diff));
             }
             out.append(cell);
-            if (!alignRight)
-            {
+            if (!alignRight) {
                 out.append(" ".repeat(diff));
             }
         }

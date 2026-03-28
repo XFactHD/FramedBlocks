@@ -13,21 +13,16 @@ import net.minecraft.client.Minecraft;
 import net.neoforged.neoforge.client.network.event.RegisterClientPayloadHandlersEvent;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
-public final class ClientNetworkHandler
-{
-    public static void onRegisterPayloadHandlers(RegisterClientPayloadHandlersEvent event)
-    {
+public final class ClientNetworkHandler {
+    public static void onRegisterPayloadHandlers(RegisterClientPayloadHandlersEvent event) {
         event.register(ClientboundOpenSignScreenPayload.TYPE, ClientNetworkHandler::handleOpenSignScreen);
         event.register(ClientboundCullingUpdatePayload.TYPE, ClientNetworkHandler::handleCullingUpdate);
     }
 
-    private static void handleOpenSignScreen(ClientboundOpenSignScreenPayload payload, IPayloadContext ctx)
-    {
+    private static void handleOpenSignScreen(ClientboundOpenSignScreenPayload payload, IPayloadContext ctx) {
         //noinspection ConstantConditions
-        if (Minecraft.getInstance().level.getBlockEntity(payload.pos()) instanceof FramedSignBlockEntity be)
-        {
-            Minecraft.getInstance().setScreen(switch (be.getBlockState().getBlock())
-            {
+        if (Minecraft.getInstance().level.getBlockEntity(payload.pos()) instanceof FramedSignBlockEntity be) {
+            Minecraft.getInstance().setScreen(switch (be.getBlockState().getBlock()) {
                 case FramedStandingSignBlock _ -> FramedSignScreen.standing(be, payload.frontText());
                 case FramedWallSignBlock _ -> FramedSignScreen.wall(be, payload.frontText());
                 case FramedCeilingHangingSignBlock _, FramedWallHangingSignBlock _ -> FramedSignScreen.hanging(be, payload.frontText());
@@ -36,8 +31,7 @@ public final class ClientNetworkHandler
         }
     }
 
-    private static void handleCullingUpdate(ClientboundCullingUpdatePayload payload, IPayloadContext ctx)
-    {
+    private static void handleCullingUpdate(ClientboundCullingUpdatePayload payload, IPayloadContext ctx) {
         ClientCullingUpdateTracker.handleCullingUpdates(payload.chunk(), payload.positions());
     }
 

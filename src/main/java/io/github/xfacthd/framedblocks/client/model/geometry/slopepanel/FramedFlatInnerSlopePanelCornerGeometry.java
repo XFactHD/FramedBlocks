@@ -15,8 +15,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.Rotation;
 import org.jspecify.annotations.Nullable;
 
-public class FramedFlatInnerSlopePanelCornerGeometry extends Geometry
-{
+public class FramedFlatInnerSlopePanelCornerGeometry extends Geometry {
     private final Direction facing;
     private final HorizontalRotation rotation;
     private final HorizontalRotation rotRotation;
@@ -25,8 +24,7 @@ public class FramedFlatInnerSlopePanelCornerGeometry extends Geometry
     private final boolean front;
     private final boolean altSlope;
 
-    public FramedFlatInnerSlopePanelCornerGeometry(GeometryFactory.Context ctx)
-    {
+    public FramedFlatInnerSlopePanelCornerGeometry(GeometryFactory.Context ctx) {
         this.facing = ctx.state().getValue(FramedProperties.FACING_HOR);
         this.rotation = ctx.state().getValue(PropertyHolder.ROTATION);
         this.rotRotation = rotation.rotate(Rotation.COUNTERCLOCKWISE_90);
@@ -37,46 +35,35 @@ public class FramedFlatInnerSlopePanelCornerGeometry extends Geometry
     }
 
     @Override
-    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
-    {
+    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData) {
         Direction face = quad.direction();
-        if (face == orientation)
-        {
+        if (face == orientation) {
             FramedFlatSlopePanelCornerGeometry.createSideTriangle(quadMap, quad, facing, rotRotation, front, false);
 
-            if (altSlope && DirUtils.isY(orientation))
-            {
+            if (altSlope && DirUtils.isY(orientation)) {
                 QuadModifier.of(quad)
                         .apply(FramedFlatSlopePanelCornerGeometry.createVerticalSlopeTriangle(facing.getOpposite(), orientation, false))
                         .apply(FramedSlopePanelGeometry.createVerticalSlope(facing, rotOrientation))
                         .applyIf(Modifiers.offset(facing.getOpposite(), .5F), front)
                         .export(quadMap, null);
             }
-        }
-        else if (face == rotOrientation)
-        {
+        } else if (face == rotOrientation) {
             FramedFlatSlopePanelCornerGeometry.createSideTriangle(quadMap, quad, facing, rotation, front, false);
 
-            if (altSlope && DirUtils.isY(rotOrientation))
-            {
+            if (altSlope && DirUtils.isY(rotOrientation)) {
                 QuadModifier.of(quad)
                         .apply(FramedFlatSlopePanelCornerGeometry.createVerticalSlopeTriangle(facing.getOpposite(), rotOrientation, true))
                         .apply(FramedSlopePanelGeometry.createVerticalSlope(facing, orientation))
                         .applyIf(Modifiers.offset(facing.getOpposite(), .5F), front)
                         .export(quadMap, null);
             }
-        }
-        else if (face == orientation.getOpposite() || face == rotOrientation.getOpposite())
-        {
+        } else if (face == orientation.getOpposite() || face == rotOrientation.getOpposite()) {
             Direction cutDir = front ? facing : facing.getOpposite();
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(cutDir, .5F))
                     .export(quadMap, face);
-        }
-        else if (face == facing.getOpposite())
-        {
-            if (!altSlope || !DirUtils.isY(orientation))
-            {
+        } else if (face == facing.getOpposite()) {
+            if (!altSlope || !DirUtils.isY(orientation)) {
                 QuadModifier.of(quad)
                         .apply(FramedFlatSlopePanelCornerGeometry.createSlopeTriangle(facing, rotOrientation, true, face))
                         .apply(FramedSlopePanelGeometry.createSlope(facing, orientation))
@@ -84,17 +71,14 @@ public class FramedFlatInnerSlopePanelCornerGeometry extends Geometry
                         .export(quadMap, null);
             }
 
-            if (!altSlope || !DirUtils.isY(rotOrientation))
-            {
+            if (!altSlope || !DirUtils.isY(rotOrientation)) {
                 QuadModifier.of(quad)
                         .apply(FramedFlatSlopePanelCornerGeometry.createSlopeTriangle(facing, orientation, false, face))
                         .apply(FramedSlopePanelGeometry.createSlope(facing, rotOrientation))
                         .applyIf(Modifiers.offset(facing, .5F), !front)
                         .export(quadMap, null);
             }
-        }
-        else if (face == facing && front)
-        {
+        } else if (face == facing && front) {
             QuadModifier.of(quad)
                     .apply(Modifiers.setPosition(.5F))
                     .export(quadMap, null);

@@ -33,8 +33,7 @@ import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-public final class ModelWrappingManager
-{
+public final class ModelWrappingManager {
     private static final Logger LOGGER = LogUtils.getLogger();
     private static final Map<Block, ModelWrappingHandler> HANDLERS = new IdentityHashMap<>();
     private static final Map<StandaloneWrapperKey<?>, StandaloneModelWrappingHandler<?>> STANDALONE_HANDLERS = new IdentityHashMap<>();
@@ -42,14 +41,12 @@ public final class ModelWrappingManager
     @Nullable
     private static MarkdownTable stateMergerDebugOutput;
 
-    public static void fireRegistration()
-    {
+    public static void fireRegistration() {
         Stopwatch stopwatch = Stopwatch.createStarted();
 
         locked = false;
         boolean debugLogging = DevToolsConfig.VIEW.isStateMergerDebugLoggingEnabled();
-        if (debugLogging)
-        {
+        if (debugLogging) {
             LOGGER.info("=============== Model Wrapper Registration Start ===============");
             stateMergerDebugOutput = new MarkdownTable();
             stateMergerDebugOutput.header("Block");
@@ -57,8 +54,7 @@ public final class ModelWrappingManager
             stateMergerDebugOutput.header("Handled or ignored properties");
         }
         ModLoader.postEvent(new RegisterModelWrappersEvent());
-        if (debugLogging)
-        {
+        if (debugLogging) {
             LOGGER.info("StateMerger Debug Info\n{}", stateMergerDebugOutput.print().stripTrailing());
             LOGGER.info("=============== Model Wrapper Registration End =================");
             stateMergerDebugOutput = null;
@@ -69,44 +65,36 @@ public final class ModelWrappingManager
         LOGGER.debug("Registered model wrappers for {} blocks in {}", HANDLERS.size(), stopwatch);
     }
 
-    public static void onRegisterStandaloneModels(ModelEvent.RegisterStandalone event)
-    {
+    public static void onRegisterStandaloneModels(ModelEvent.RegisterStandalone event) {
         STANDALONE_HANDLERS.forEach((wrapperKey, handler) ->
                 event.register(wrapperKey.modelKey(), new UnbakedStandaloneFramedBlockModel<>(wrapperKey, handler.getModelFactory()))
         );
     }
 
-    public static void onRegisterBlockModels(RegisterBlockModelsEvent event)
-    {
+    public static void onRegisterBlockModels(RegisterBlockModelsEvent event) {
         HANDLERS.values().forEach(handler -> handler.registerBlockModelFactory(event));
     }
 
-    public static void register(Holder<Block> block, ModelWrappingHandler handler)
-    {
-        if (locked)
-        {
+    public static void register(Holder<Block> block, ModelWrappingHandler handler) {
+        if (locked) {
             throw new IllegalStateException("ModelWrappingHandler registration is locked");
         }
 
         ModelWrappingHandler oldHandler = HANDLERS.put(block.value(), handler);
-        if (oldHandler != null)
-        {
+        if (oldHandler != null) {
             throw new IllegalStateException("ModelWrappingHandler for '" + block + "' already registered");
         }
 
         debugStateMerger(block, handler.getStateMerger());
     }
 
-    public static void register(StandaloneWrapperKey<?> wrapperKey, StandaloneModelWrappingHandler<?> handler)
-    {
-        if (locked)
-        {
+    public static void register(StandaloneWrapperKey<?> wrapperKey, StandaloneModelWrappingHandler<?> handler) {
+        if (locked) {
             throw new IllegalStateException("ModelWrappingHandler registration is locked");
         }
 
         StandaloneModelWrappingHandler<?> oldHandler = STANDALONE_HANDLERS.put(wrapperKey, handler);
-        if (oldHandler != null)
-        {
+        if (oldHandler != null) {
             throw new IllegalStateException("ModelWrappingHandler for wrapper key '" + wrapperKey + "' already registered");
         }
 
@@ -114,21 +102,17 @@ public final class ModelWrappingManager
         debugStateMerger(wrapperKey.block(), wrapperKey.definitionFile().toString(), handler.getStateMerger());
     }
 
-    public static ModelWrappingHandler getHandler(Block block)
-    {
+    public static ModelWrappingHandler getHandler(Block block) {
         ModelWrappingHandler handler = HANDLERS.get(block);
-        if (handler == null)
-        {
+        if (handler == null) {
             throw new NullPointerException("No ModelWrappingHandler registered for block '" + block + "'");
         }
         return handler;
     }
 
-    public static StateMerger tryGetStateMerger(Block block)
-    {
+    public static StateMerger tryGetStateMerger(Block block) {
         ModelWrappingHandler handler = HANDLERS.get(block);
-        if (handler != null)
-        {
+        if (handler != null) {
             return handler.getStateMerger();
         }
 
@@ -137,25 +121,20 @@ public final class ModelWrappingManager
     }
 
     @SuppressWarnings("unchecked")
-    public static <T extends CachingModel> StandaloneModelWrappingHandler<T> getHandler(StandaloneWrapperKey<T> wrapperKey)
-    {
+    public static <T extends CachingModel> StandaloneModelWrappingHandler<T> getHandler(StandaloneWrapperKey<T> wrapperKey) {
         StandaloneModelWrappingHandler<?> handler = STANDALONE_HANDLERS.get(wrapperKey);
-        if (handler == null)
-        {
+        if (handler == null) {
             throw new NullPointerException("No ModelWrappingHandler registered for wrapper key '" + wrapperKey + "'");
         }
         return (StandaloneModelWrappingHandler<T>) handler;
     }
 
-    public static void printWrappingInfo(Map<BlockState, BlockStateModel> models)
-    {
+    public static void printWrappingInfo(Map<BlockState, BlockStateModel> models) {
         int stateCount = 0;
         Set<BlockStateModel> distinctModels = new ReferenceOpenHashSet<>();
-        for (Block block : HANDLERS.keySet())
-        {
+        for (Block block : HANDLERS.keySet()) {
             List<BlockState> states = block.getStateDefinition().getPossibleStates();
-            for (BlockState state : states)
-            {
+            for (BlockState state : states) {
                 distinctModels.add(models.get(state));
             }
             stateCount += states.size();
@@ -168,24 +147,19 @@ public final class ModelWrappingManager
                 HANDLERS.size()
         );
 
-        if (!Utils.PRODUCTION)
-        {
+        if (!Utils.PRODUCTION) {
             Map<BlockStateModel, Block> nonWrappedModels = new Reference2ObjectOpenHashMap<>();
-            for (Block block : HANDLERS.keySet())
-            {
+            for (Block block : HANDLERS.keySet()) {
                 List<BlockState> states = block.getStateDefinition().getPossibleStates();
-                for (BlockState state : states)
-                {
+                for (BlockState state : states) {
                     BlockStateModel model = models.get(state);
-                    if (!(model instanceof AbstractFramedBlockStateModel))
-                    {
+                    if (!(model instanceof AbstractFramedBlockStateModel)) {
                         nonWrappedModels.put(model, state.getBlock());
                     }
                 }
                 stateCount += states.size();
             }
-            if (!nonWrappedModels.isEmpty())
-            {
+            if (!nonWrappedModels.isEmpty()) {
                 Set<String> blocks = nonWrappedModels.values()
                         .stream()
                         .distinct()
@@ -201,20 +175,21 @@ public final class ModelWrappingManager
         }
     }
 
-    private static void debugStateMerger(Holder<Block> block, StateMerger stateMerger)
-    {
+    private static void debugStateMerger(Holder<Block> block, StateMerger stateMerger) {
         String blockId = Utils.getKeyOrThrow(block).identifier().toString();
         debugStateMerger(block, blockId, stateMerger);
     }
 
-    private static void debugStateMerger(Holder<Block> block, String blockId, StateMerger stateMerger)
-    {
-        if (stateMergerDebugOutput == null) return;
+    private static void debugStateMerger(Holder<Block> block, String blockId, StateMerger stateMerger) {
+        if (stateMergerDebugOutput == null) {
+            return;
+        }
 
         Pattern debugFilterPattern = DevToolsConfig.VIEW.getStateMergerDebugFilter();
-        if (debugFilterPattern != null)
-        {
-            if (!debugFilterPattern.matcher(blockId).matches()) return;
+        if (debugFilterPattern != null) {
+            if (!debugFilterPattern.matcher(blockId).matches()) {
+                return;
+            }
         }
 
         Set<Property<?>> props = new HashSet<>(block.value().getStateDefinition().getProperties());
@@ -229,8 +204,7 @@ public final class ModelWrappingManager
                 .newRow();
     }
 
-    private static String propsToString(Collection<Property<?>> properties)
-    {
+    private static String propsToString(Collection<Property<?>> properties) {
         return properties.stream()
                 .map(Property::getName)
                 .sorted()

@@ -25,25 +25,20 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import org.jspecify.annotations.Nullable;
 
-public class FramedDoubleThreewayCornerBlock extends FramedDoubleBlock implements SlopeToggleBlock
-{
-    public FramedDoubleThreewayCornerBlock(BlockType blockType, Properties props)
-    {
+public class FramedDoubleThreewayCornerBlock extends FramedDoubleBlock implements SlopeToggleBlock {
+    public FramedDoubleThreewayCornerBlock(BlockType blockType, Properties props) {
         super(blockType, props);
         registerDefaultState(defaultBlockState().setValue(FramedProperties.TOP, false));
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
-    {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
         builder.add(FramedProperties.FACING_HOR, FramedProperties.TOP);
     }
 
     @Override
-    @Nullable
-    public BlockState getStateForPlacement(BlockPlaceContext ctx)
-    {
+    public @Nullable BlockState getStateForPlacement(BlockPlaceContext ctx) {
         return PlacementStateBuilder.of(this, ctx)
                 .withHalfFacing()
                 .withTop()
@@ -51,30 +46,25 @@ public class FramedDoubleThreewayCornerBlock extends FramedDoubleBlock implement
     }
 
     @Override
-    public BlockState rotate(BlockState state, RotationDirection direction, WrenchRotationMode mode)
-    {
-        return switch (mode)
-        {
+    public BlockState rotate(BlockState state, RotationDirection direction, WrenchRotationMode mode) {
+        return switch (mode) {
             case PRIMARY -> super.rotate(state, direction, mode);
             case SECONDARY -> state.cycle(FramedProperties.TOP);
         };
     }
 
     @Override
-    protected BlockState rotate(BlockState state, Rotation rotation)
-    {
+    protected BlockState rotate(BlockState state, Rotation rotation) {
         return BlockUtils.rotate(state, rotation);
     }
 
     @Override
-    protected BlockState mirror(BlockState state, Mirror mirror)
-    {
+    protected BlockState mirror(BlockState state, Mirror mirror) {
         return BlockUtils.mirrorCornerBlock(state, mirror);
     }
 
     @Override
-    public DoubleBlockParts calculateParts(BlockState state)
-    {
+    public DoubleBlockParts calculateParts(BlockState state) {
         Direction facing = state.getValue(FramedProperties.FACING_HOR);
         boolean top = state.getValue(FramedProperties.TOP);
         boolean altSlope = state.getValue(FramedProperties.ALT_SLOPE);
@@ -92,56 +82,37 @@ public class FramedDoubleThreewayCornerBlock extends FramedDoubleBlock implement
     }
 
     @Override
-    public DoubleBlockTopInteractionMode calculateTopInteractionMode(BlockState state)
-    {
-        if (state.getValue(FramedProperties.TOP))
-        {
+    public DoubleBlockTopInteractionMode calculateTopInteractionMode(BlockState state) {
+        if (state.getValue(FramedProperties.TOP)) {
             return DoubleBlockTopInteractionMode.FIRST;
         }
         return DoubleBlockTopInteractionMode.EITHER;
     }
 
     @Override
-    public CamoGetter calculateCamoGetter(BlockState state, Direction side, @Nullable Direction edge)
-    {
+    public CamoGetter calculateCamoGetter(BlockState state, Direction side, @Nullable Direction edge) {
         Direction facing = state.getValue(FramedProperties.FACING_HOR);
         boolean top = state.getValue(FramedProperties.TOP);
         Direction dirTwo = top ? Direction.UP : Direction.DOWN;
 
-        if (side == facing || side == facing.getCounterClockWise() || side == dirTwo)
-        {
+        if (side == facing || side == facing.getCounterClockWise() || side == dirTwo) {
             return CamoGetter.FIRST;
-        }
-        else if (side == dirTwo.getOpposite())
-        {
-            if (edge == facing || edge == facing.getCounterClockWise())
-            {
+        } else if (side == dirTwo.getOpposite()) {
+            if (edge == facing || edge == facing.getCounterClockWise()) {
                 return CamoGetter.FIRST;
-            }
-            else if (edge == facing.getOpposite() || edge == facing.getClockWise())
-            {
+            } else if (edge == facing.getOpposite() || edge == facing.getClockWise()) {
                 return CamoGetter.SECOND;
             }
-        }
-        else if (side == facing.getOpposite())
-        {
-            if (edge == facing.getCounterClockWise() || edge == dirTwo)
-            {
+        } else if (side == facing.getOpposite()) {
+            if (edge == facing.getCounterClockWise() || edge == dirTwo) {
                 return CamoGetter.FIRST;
-            }
-            else if (edge == facing.getClockWise() || edge == dirTwo.getOpposite())
-            {
+            } else if (edge == facing.getClockWise() || edge == dirTwo.getOpposite()) {
                 return CamoGetter.SECOND;
             }
-        }
-        else if (side == facing.getClockWise())
-        {
-            if (edge == facing || edge == dirTwo)
-            {
+        } else if (side == facing.getClockWise()) {
+            if (edge == facing || edge == dirTwo) {
                 return CamoGetter.FIRST;
-            }
-            else if (edge == facing.getOpposite() || edge == dirTwo.getOpposite())
-            {
+            } else if (edge == facing.getOpposite() || edge == dirTwo.getOpposite()) {
                 return CamoGetter.SECOND;
             }
         }
@@ -150,39 +121,33 @@ public class FramedDoubleThreewayCornerBlock extends FramedDoubleBlock implement
     }
 
     @Override
-    public SolidityCheck calculateSolidityCheck(BlockState state, Direction side)
-    {
+    public SolidityCheck calculateSolidityCheck(BlockState state, Direction side) {
         Direction dir = state.getValue(FramedProperties.FACING_HOR);
         boolean top = state.getValue(FramedProperties.TOP);
 
-        if (side == dir || side == dir.getCounterClockWise() || (side == Direction.DOWN && !top) || (side == Direction.UP && top))
-        {
+        if (side == dir || side == dir.getCounterClockWise() || (side == Direction.DOWN && !top) || (side == Direction.UP && top)) {
             return SolidityCheck.FIRST;
         }
         return SolidityCheck.BOTH;
     }
 
     @Override
-    public final FramedDoubleBlockEntity newBlockEntity(BlockPos pos, BlockState state)
-    {
+    public final FramedDoubleBlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return new FramedDoubleThreewayCornerBlockEntity(pos, state);
     }
 
     @Override
-    public BlockState getItemModelSource()
-    {
+    public BlockState getItemModelSource() {
         return defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.WEST);
     }
 
     @Override
-    public Direction getHorizontalOrientation(BlockState state)
-    {
+    public Direction getHorizontalOrientation(BlockState state) {
         return state.getValue(FramedProperties.FACING_HOR);
     }
 
     @Override
-    public BlockState getJadeRenderState(BlockState state)
-    {
+    public BlockState getJadeRenderState(BlockState state) {
         return getItemModelSource();
     }
 }

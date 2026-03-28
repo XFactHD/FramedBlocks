@@ -17,8 +17,7 @@ import net.minecraft.world.item.crafting.ShapelessRecipe;
 
 import java.util.List;
 
-public final class ShapeRotationRecipe extends ShapelessRecipe
-{
+public final class ShapeRotationRecipe extends ShapelessRecipe {
     public static final MapCodec<ShapeRotationRecipe> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
             Recipe.CommonInfo.MAP_CODEC.forGetter(o -> o.commonInfo),
             CraftingRecipe.CraftingBookInfo.MAP_CODEC.forGetter(o -> o.bookInfo),
@@ -43,22 +42,18 @@ public final class ShapeRotationRecipe extends ShapelessRecipe
     private final Ingredient tool;
     private final Ingredient block;
 
-    public ShapeRotationRecipe(Recipe.CommonInfo commonInfo, CraftingRecipe.CraftingBookInfo bookInfo, ItemStackTemplate result, Ingredient tool, Ingredient block)
-    {
+    public ShapeRotationRecipe(Recipe.CommonInfo commonInfo, CraftingRecipe.CraftingBookInfo bookInfo, ItemStackTemplate result, Ingredient tool, Ingredient block) {
         super(commonInfo, bookInfo, result, List.of(tool, block));
         this.tool = tool;
         this.block = block;
     }
 
     @Override
-    public NonNullList<ItemStack> getRemainingItems(CraftingInput input)
-    {
+    public NonNullList<ItemStack> getRemainingItems(CraftingInput input) {
         NonNullList<ItemStack> remainders = NonNullList.withSize(input.size(), ItemStack.EMPTY);
-        for (int i = 0; i < input.size(); i++)
-        {
+        for (int i = 0; i < input.size(); i++) {
             ItemStack stack = input.getItem(i);
-            if (tool.test(stack))
-            {
+            if (tool.test(stack)) {
                 remainders.set(i, stack.copyWithCount(1));
             }
         }
@@ -67,8 +62,7 @@ public final class ShapeRotationRecipe extends ShapelessRecipe
 
     @Override
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    public RecipeSerializer<ShapelessRecipe> getSerializer()
-    {
-        return (RecipeSerializer<ShapelessRecipe>)(RecipeSerializer) FBContent.RECIPE_SERIALIZER_SHAPE_ROTATION.value();
+    public RecipeSerializer<ShapelessRecipe> getSerializer() {
+        return (RecipeSerializer<ShapelessRecipe>) (RecipeSerializer) FBContent.RECIPE_SERIALIZER_SHAPE_ROTATION.value();
     }
 }

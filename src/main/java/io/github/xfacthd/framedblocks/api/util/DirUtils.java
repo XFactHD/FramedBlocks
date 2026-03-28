@@ -11,81 +11,59 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.function.Consumer;
 
-public final class DirUtils
-{
+public final class DirUtils {
     static final Direction[] DIRECTIONS = Direction.values();
     static final Direction[] HORIZONTAL_DIRECTIONS = Direction.Plane.HORIZONTAL.stream().toArray(Direction[]::new);
 
-    public static boolean isPositive(Direction dir)
-    {
+    public static boolean isPositive(Direction dir) {
         return dir.getAxisDirection() == Direction.AxisDirection.POSITIVE;
     }
 
-    public static boolean isX(Direction dir)
-    {
+    public static boolean isX(Direction dir) {
         return dir.getAxis() == Direction.Axis.X;
     }
 
-    public static boolean isY(Direction dir)
-    {
+    public static boolean isY(Direction dir) {
         return dir.getAxis() == Direction.Axis.Y;
     }
 
-    public static boolean isZ(Direction dir)
-    {
+    public static boolean isZ(Direction dir) {
         return dir.getAxis() == Direction.Axis.Z;
     }
 
-    @Nullable
-    public static Direction dirByNormal(int x, int y, int z)
-    {
+    public static @Nullable Direction dirByNormal(int x, int y, int z) {
         return Lookups.NORMALS[Lookups.makeNormalIndex(x, y, z)];
     }
 
-    @Nullable
-    public static Direction dirByNormal(BlockPos from, BlockPos to)
-    {
+    public static @Nullable Direction dirByNormal(BlockPos from, BlockPos to) {
         int nx = to.getX() - from.getX();
         int ny = to.getY() - from.getY();
         int nz = to.getZ() - from.getZ();
         return dirByNormal(nx, ny, nz);
     }
 
-    public static Direction getDirByCross(Direction face, Vec3 hitVec)
-    {
+    public static Direction getDirByCross(Direction face, Vec3 hitVec) {
         hitVec = MathUtils.fraction(hitVec);
 
-        if (DirUtils.isY(face))
-        {
+        if (DirUtils.isY(face)) {
             double x = hitVec.x() - .5;
             double z = hitVec.z() - .5;
-            if (Math.max(Math.abs(x), Math.abs(z)) == Math.abs(x))
-            {
+            if (Math.max(Math.abs(x), Math.abs(z)) == Math.abs(x)) {
                 return x > 0 ? Direction.EAST : Direction.WEST;
-            }
-            else
-            {
+            } else {
                 return z > 0 ? Direction.SOUTH : Direction.NORTH;
             }
-        }
-        else
-        {
+        } else {
             double xz = (DirUtils.isX(face) ? hitVec.z() : hitVec.x()) - .5;
             double y = hitVec.y() - .5;
 
-            if (Math.max(Math.abs(xz), Math.abs(y)) == Math.abs(xz))
-            {
-                if (DirUtils.isX(face))
-                {
+            if (Math.max(Math.abs(xz), Math.abs(y)) == Math.abs(xz)) {
+                if (DirUtils.isX(face)) {
                     return xz < 0 ? Direction.NORTH : Direction.SOUTH;
-                }
-                else
-                {
+                } else {
                     return (xz < 0) ? Direction.WEST : Direction.EAST;
                 }
-            }
-            else
-            {
+            } else {
                 return y < 0 ? Direction.DOWN : Direction.UP;
             }
         }
@@ -94,43 +72,35 @@ public final class DirUtils
     /**
      * Returns the axis perpendicular to both provided axis which must themselves be perpendicular to each other
      */
-    public static Direction.Axis getPerpendicularAxis(Direction.Axis axisOne, Direction.Axis axisTwo)
-    {
+    public static Direction.Axis getPerpendicularAxis(Direction.Axis axisOne, Direction.Axis axisTwo) {
         Preconditions.checkArgument(axisOne != axisTwo, "Provided axis must be perpendicular");
         int idx = Lookups.makePerpAxisIndex(axisOne, axisTwo);
         return Objects.requireNonNull(Lookups.PERP_AXIS[idx]);
     }
 
-    public static Set<Direction> getAxisTubeFaces(Direction.Axis axis)
-    {
+    public static Set<Direction> getAxisTubeFaces(Direction.Axis axis) {
         return Lookups.AXIS_TUBE_FACES[axis.ordinal()];
     }
 
-    public static Set<Direction> getAxisCapFaces(Direction.Axis axis)
-    {
+    public static Set<Direction> getAxisCapFaces(Direction.Axis axis) {
         return Lookups.AXIS_CAP_FACES[axis.ordinal()];
     }
 
-    public static int get2dValueAround(Direction.Axis axis, Direction dir)
-    {
+    public static int get2dValueAround(Direction.Axis axis, Direction dir) {
         Preconditions.checkArgument(axis != dir.getAxis(), "Direction must be perpendicular to axis");
         return Lookups.DIR_2D_VALUE_AROUND_AXIS[Lookups.make2dValueIndex(axis, dir)];
     }
 
-    public static Direction getHorizontalDirection(Direction.Axis axis)
-    {
+    public static Direction getHorizontalDirection(Direction.Axis axis) {
         return axis != Direction.Axis.Y ? axis.getNegative() : Direction.NORTH;
     }
 
-    public static boolean isNinetyDegree(Rotation rotation)
-    {
+    public static boolean isNinetyDegree(Rotation rotation) {
         return rotation == Rotation.CLOCKWISE_90 || rotation == Rotation.COUNTERCLOCKWISE_90;
     }
 
-    public static Rotation getOppositeRotation(Rotation rotation)
-    {
-        return switch (rotation)
-        {
+    public static Rotation getOppositeRotation(Rotation rotation) {
+        return switch (rotation) {
             case NONE -> Rotation.NONE;
             case CLOCKWISE_90 -> Rotation.COUNTERCLOCKWISE_90;
             case CLOCKWISE_180 -> Rotation.CLOCKWISE_180;
@@ -138,35 +108,28 @@ public final class DirUtils
         };
     }
 
-    public static Rotation getRotationBetween(Direction dirOne, Direction dirTwo)
-    {
+    public static Rotation getRotationBetween(Direction dirOne, Direction dirTwo) {
         return Lookups.ROTATIONS[Lookups.makeDirToDirRotationIndex(dirOne, dirTwo)];
     }
 
-    public static void forAllDirectionsAndNull(Consumer<@Nullable Direction> consumer)
-    {
+    public static void forAllDirectionsAndNull(Consumer<@Nullable Direction> consumer) {
         consumer.accept(null);
         forAllDirections(consumer);
     }
 
-    public static void forAllDirections(Consumer<Direction> consumer)
-    {
-        for (Direction dir : DIRECTIONS)
-        {
+    public static void forAllDirections(Consumer<Direction> consumer) {
+        for (Direction dir : DIRECTIONS) {
             consumer.accept(dir);
         }
     }
 
-    public static void forHorizontalDirections(Consumer<Direction> consumer)
-    {
-        for (Direction dir : HORIZONTAL_DIRECTIONS)
-        {
+    public static void forHorizontalDirections(Consumer<Direction> consumer) {
+        for (Direction dir : HORIZONTAL_DIRECTIONS) {
             consumer.accept(dir);
         }
     }
 
-    public static int maskNullDirection(@Nullable Direction dir)
-    {
+    public static int maskNullDirection(@Nullable Direction dir) {
         return dir == null ? DIRECTIONS.length : dir.ordinal();
     }
 

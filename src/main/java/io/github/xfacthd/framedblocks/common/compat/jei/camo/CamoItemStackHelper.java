@@ -15,69 +15,53 @@ import org.jspecify.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class CamoItemStackHelper
-{
-    @Nullable
-    public static CamoContainerFactory<?> getCamoContainerFactory(ItemStack itemStack)
-    {
+public final class CamoItemStackHelper {
+    public static @Nullable CamoContainerFactory<?> getCamoContainerFactory(ItemStack itemStack) {
         CamoContainerFactory<?> factory = CamoContainerHelper.findCamoFactory(itemStack);
-        if (factory == null)
-        {
+        if (factory == null) {
             return null;
         }
         CamoCraftingHandler<?> craftingHandler = factory.getCraftingHandler();
-        if (craftingHandler == null || !craftingHandler.canApply(itemStack, ConfigView.Server.INSTANCE.shouldConsumeCamoItem()))
-        {
+        if (craftingHandler == null || !craftingHandler.canApply(itemStack, ConfigView.Server.INSTANCE.shouldConsumeCamoItem())) {
             return null;
         }
         return factory;
     }
 
-    @Nullable
-    public static IFramedBlock getFramedBlock(ItemStack itemStack)
-    {
-        if (itemStack.getItem() instanceof BlockItem item && item.getBlock() instanceof IFramedBlock framedBlock)
-        {
+    public static @Nullable IFramedBlock getFramedBlock(ItemStack itemStack) {
+        if (itemStack.getItem() instanceof BlockItem item && item.getBlock() instanceof IFramedBlock framedBlock) {
             return framedBlock;
         }
         return null;
     }
 
-    public static boolean isDoubleFramedBlock(ItemStack itemStack)
-    {
+    public static boolean isDoubleFramedBlock(ItemStack itemStack) {
         IFramedBlock framedBlock = getFramedBlock(itemStack);
         return framedBlock != null && isDoubleFramedBlock(framedBlock);
     }
 
-    public static boolean isDoubleFramedBlock(IFramedBlock framedBlock)
-    {
+    public static boolean isDoubleFramedBlock(IFramedBlock framedBlock) {
         return framedBlock.getBlockType().consumesTwoCamosInCamoApplicationRecipe();
     }
 
-    public static boolean isEmptyFramedBlock(ItemStack itemStack)
-    {
+    public static boolean isEmptyFramedBlock(ItemStack itemStack) {
         IFramedBlock framedBlock = getFramedBlock(itemStack);
-        if (framedBlock == null)
-        {
+        if (framedBlock == null) {
             return false;
         }
         CamoList camos = itemStack.getOrDefault(FBContent.DC_TYPE_CAMO_LIST, CamoList.EMPTY);
         return camos.isEmptyOrContentsEmpty();
     }
 
-    public static List<ItemStack> dropCamo(ItemStack itemStack)
-    {
+    public static List<ItemStack> dropCamo(ItemStack itemStack) {
         CamoList camos = itemStack.getOrDefault(FBContent.DC_TYPE_CAMO_LIST, CamoList.EMPTY);
-        if (camos.isEmptyOrContentsEmpty())
-        {
+        if (camos.isEmptyOrContentsEmpty()) {
             return List.of();
         }
 
         List<ItemStack> results = new ArrayList<>();
-        for (CamoContainer<?, ?> camoContainer : camos)
-        {
-            if (!camoContainer.canTriviallyConvertToItemStack())
-            {
+        for (CamoContainer<?, ?> camoContainer : camos) {
+            if (!camoContainer.canTriviallyConvertToItemStack()) {
                 return List.of();
             }
             ItemStack dropped = CamoContainerHelper.dropCamo(camoContainer);

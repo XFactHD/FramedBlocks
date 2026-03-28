@@ -7,17 +7,14 @@ import net.minecraft.world.level.block.state.properties.Property;
 
 import java.util.Set;
 
-final class PassthroughStateMerger implements StateMerger
-{
+final class PassthroughStateMerger implements StateMerger {
     @Override
-    public BlockState apply(BlockState state)
-    {
+    public BlockState apply(BlockState state) {
         return state;
     }
 
     @Override
-    public Set<Property<?>> getHandledProperties(Holder<Block> block)
-    {
+    public Set<Property<?>> getHandledProperties(Holder<Block> block) {
         return Set.of();
     }
 }

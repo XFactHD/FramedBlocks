@@ -43,8 +43,7 @@ public record BlockOverlay(
         @Nullable TintSource tintSource,
         Holder<Item> sourceItem,
         boolean translucent
-)
-{
+) {
     private static final Set<Direction> HORIZONTAL_DIRECTIONS = Set.of(Direction.Plane.HORIZONTAL.stream().toArray(Direction[]::new));
     public static final Codec<BlockOverlay> DIRECT_CODEC = RecordCodecBuilder.<BlockOverlay>create(inst -> inst.group(
             Identifier.CODEC.fieldOf("solid_texture").forGetter(BlockOverlay::solidTexture),
@@ -65,92 +64,73 @@ public record BlockOverlay(
             Optional<TintSource> tintSource,
             Holder<Item> sourceItem,
             boolean translucent
-    )
-    {
+    ) {
         this(solidTexture, edgeTexture.orElse(null), solidFace, tintSource.orElse(null), sourceItem, translucent);
     }
 
-    public boolean isSideSolid(BlockState state, Direction side)
-    {
-        if (solidFace.dynamic)
-        {
+    public boolean isSideSolid(BlockState state, Direction side) {
+        if (solidFace.dynamic) {
             return solidFace.getDynamicDirections(state).contains(side);
         }
         return solidFace.directions.contains(side);
     }
 
-    private Optional<Identifier> edgeTextureForSerialization()
-    {
+    private Optional<Identifier> edgeTextureForSerialization() {
         return Optional.ofNullable(edgeTexture);
     }
 
-    private Optional<TintSource> tintSourceForSerialization()
-    {
+    private Optional<TintSource> tintSourceForSerialization() {
         return Optional.ofNullable(tintSource);
     }
 
     @Override
-    public boolean equals(Object obj)
-    {
+    public boolean equals(Object obj) {
         return obj == this;
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         return System.identityHashCode(this);
     }
 
-    public static Component getName(Holder<BlockOverlay> overlay)
-    {
+    public static Component getName(Holder<BlockOverlay> overlay) {
         return Component.translatable(getDescriptionId(overlay));
     }
 
-    public static String getDescriptionId(Holder<BlockOverlay> overlay)
-    {
+    public static String getDescriptionId(Holder<BlockOverlay> overlay) {
         return Util.makeDescriptionId("block_overlay", Utils.getKeyOrThrow(overlay).identifier());
     }
 
-    public static BlockOverlayBuilder builder(String namespace)
-    {
+    public static BlockOverlayBuilder builder(String namespace) {
         return new BlockOverlayBuilder(namespace);
     }
 
-    private static DataResult<BlockOverlay> validate(BlockOverlay overlay)
-    {
-        if (overlay.edgeTexture() != null && overlay.solidFace() == BlockOverlay.SolidFace.ALL)
-        {
+    private static DataResult<BlockOverlay> validate(BlockOverlay overlay) {
+        if (overlay.edgeTexture() != null && overlay.solidFace() == BlockOverlay.SolidFace.ALL) {
             return DataResult.error(() -> "Overlay requests edge generation but has no non-solid faces");
         }
         return DataResult.success(overlay);
     }
 
-    public enum SolidFace implements StringRepresentable
-    {
+    public enum SolidFace implements StringRepresentable {
         ALL(Set.of(Direction.values())),
         TOP(Set.of(Direction.UP)),
         BOTTOM(Set.of(Direction.DOWN)),
         HORIZONTAL(HORIZONTAL_DIRECTIONS),
         VERTICAL(Set.of(Direction.UP, Direction.DOWN)),
-        AXIS_TUBE(HORIZONTAL)
-        {
+        AXIS_TUBE(HORIZONTAL) {
             @Override
-            public Set<Direction> getDynamicDirections(BlockState state)
-            {
-                if (state.getBlock() instanceof AxisOverlayCarrier axisOverlayCarrier)
-                {
+            public Set<Direction> getDynamicDirections(BlockState state) {
+                if (state.getBlock() instanceof AxisOverlayCarrier axisOverlayCarrier) {
                     return DirUtils.getAxisTubeFaces(axisOverlayCarrier.getAxis(state));
                 }
                 return Set.of();
             }
         },
-        AXIS_CAPS(VERTICAL)
-        {
+        AXIS_CAPS(VERTICAL) {
             @Override
-            public Set<Direction> getDynamicDirections(BlockState state)
-            {
-                if (state.getBlock() instanceof AxisOverlayCarrier axisOverlayCarrier)
-                {
+            public Set<Direction> getDynamicDirections(BlockState state) {
+                if (state.getBlock() instanceof AxisOverlayCarrier axisOverlayCarrier) {
                     return DirUtils.getAxisCapFaces(axisOverlayCarrier.getAxis(state));
                 }
                 return Set.of();
@@ -164,36 +144,30 @@ public record BlockOverlay(
         private final Set<Direction> directions;
         private final boolean dynamic;
 
-        SolidFace(Set<Direction> directions)
-        {
+        SolidFace(Set<Direction> directions) {
             this.directions = directions;
             this.dynamic = false;
         }
 
-        SolidFace(SolidFace fallback)
-        {
+        SolidFace(SolidFace fallback) {
             this.directions = fallback.directions;
             this.dynamic = true;
         }
 
-        public Set<Direction> getDynamicDirections(BlockState state)
-        {
+        public Set<Direction> getDynamicDirections(BlockState state) {
             throw new UnsupportedOperationException();
         }
 
-        public Set<Direction> getDirections()
-        {
+        public Set<Direction> getDirections() {
             return directions;
         }
 
-        public boolean isDynamic()
-        {
+        public boolean isDynamic() {
             return dynamic;
         }
 
         @Override
-        public String getSerializedName()
-        {
+        public String getSerializedName() {
             return name;
         }
     }

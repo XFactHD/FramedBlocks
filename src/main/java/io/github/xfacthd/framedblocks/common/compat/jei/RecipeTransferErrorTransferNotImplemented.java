@@ -9,20 +9,16 @@ import net.minecraft.client.gui.screens.Screen;
 import java.util.List;
 import java.util.Optional;
 
-public final class RecipeTransferErrorTransferNotImplemented implements IRecipeTransferError
-{
+public final class RecipeTransferErrorTransferNotImplemented implements IRecipeTransferError {
     @Override
-    public Type getType()
-    {
+    public Type getType() {
         return Type.COSMETIC;
     }
 
     @Override
-    public void showError(GuiGraphicsExtractor graphics, int mouseX, int mouseY, IRecipeSlotsView recipeSlotsView, int recipeX, int recipeY)
-    {
+    public void showError(GuiGraphicsExtractor graphics, int mouseX, int mouseY, IRecipeSlotsView recipeSlotsView, int recipeX, int recipeY) {
         Screen screen = Minecraft.getInstance().screen;
-        if (screen != null)
-        {
+        if (screen != null) {
             graphics.setTooltipForNextFrame(
                     Minecraft.getInstance().font,
                     List.of(JeiCompat.MSG_TRANSFER_NOT_IMPLEMENTED),

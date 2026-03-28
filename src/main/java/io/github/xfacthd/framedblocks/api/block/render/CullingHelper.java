@@ -16,8 +16,7 @@ import net.minecraft.world.level.block.state.BlockState;
  * These helpers must not be used outside the server and client thread, otherwise the {@link IFramedBlockEntity}
  * lookups will fail due to safeguards in vanilla code.
  */
-public final class CullingHelper
-{
+public final class CullingHelper {
     /**
      * Test whether the given {@link IFramedBlock} is occluded on the given side by the neighboring block
      * and their camos either match or the camo of the occluding block is solid
@@ -28,44 +27,34 @@ public final class CullingHelper
      * @param side The side being tested for occlusion
      * @return true if the given block is occluded on the given side
      */
-    public static boolean isSideHidden(BlockGetter level, BlockPos pos, BlockState state, Direction side)
-    {
+    public static boolean isSideHidden(BlockGetter level, BlockPos pos, BlockState state, Direction side) {
         BlockPos adjPos = pos.relative(side);
         BlockState adjState = level.getBlockState(adjPos);
 
         boolean adjFramed = false;
         IFramedBlock adjBlock = null;
-        if (adjState.getBlock() instanceof IFramedBlock block)
-        {
-            if (!block.canOccludeNeighbor(level, adjPos, adjState, pos, state))
-            {
+        if (adjState.getBlock() instanceof IFramedBlock block) {
+            if (!block.canOccludeNeighbor(level, adjPos, adjState, pos, state)) {
                 return false;
             }
             adjFramed = true;
             adjBlock = block;
-        }
-        else if (adjState.isSolidRender())
-        {
+        } else if (adjState.isSolidRender()) {
             // Let the game handle culling against fully solid cubes automatically,
             // prevents xray issues with block tool modifications like farmland tilling
             return false;
         }
 
         boolean fullFace = state.framedblocks$getCache().isFullFace(side);
-        if (!adjFramed || fullFace || !ConfigView.Client.INSTANCE.detailedCullingEnabled())
-        {
-            if (fullFace && (!adjFramed || adjState.framedblocks$getCache().isFullFace(side.getOpposite())))
-            {
-                if (!(level.getBlockEntity(pos) instanceof IFramedBlockEntity be))
-                {
+        if (!adjFramed || fullFace || !ConfigView.Client.INSTANCE.detailedCullingEnabled()) {
+            if (fullFace && (!adjFramed || adjState.framedblocks$getCache().isFullFace(side.getOpposite()))) {
+                if (!(level.getBlockEntity(pos) instanceof IFramedBlockEntity be)) {
                     return false;
                 }
 
                 CamoContent<?> camoContent = be.getCamo(side, null).getContent();
-                if (adjFramed)
-                {
-                    if (!(level.getBlockEntity(adjPos) instanceof IFramedBlockEntity adjBe))
-                    {
+                if (adjFramed) {
+                    if (!(level.getBlockEntity(adjPos) instanceof IFramedBlockEntity adjBe)) {
                         return false;
                     }
                     CamoContent<?> adjCamoContent = adjBe.getCamo(side.getOpposite(), null).getContent();
@@ -78,16 +67,13 @@ public final class CullingHelper
 
         SideSkipPredicate pred = ((IFramedBlock) state.getBlock()).getBlockType().getSideSkipPredicate();
         BlockState adjTestState = adjBlock.runOcclusionTestAndGetLookupState(pred, level, pos, state, adjState, side);
-        if (adjTestState != null)
-        {
-            if (!(level.getBlockEntity(adjPos) instanceof IFramedBlockEntity adjBe))
-            {
+        if (adjTestState != null) {
+            if (!(level.getBlockEntity(adjPos) instanceof IFramedBlockEntity adjBe)) {
                 return false;
             }
 
             CamoContent<?> adjCamoContent = adjBe.getCamo(adjTestState).getContent();
-            if (!adjCamoContent.isEmpty() && level.getBlockEntity(pos) instanceof IFramedBlockEntity be)
-            {
+            if (!adjCamoContent.isEmpty() && level.getBlockEntity(pos) instanceof IFramedBlockEntity be) {
                 CamoContent<?> camoContent = be.getCamo(state).getContent();
                 return camoContent.isOccludedBy(adjCamoContent, level, pos, adjPos, side);
             }
@@ -108,19 +94,15 @@ public final class CullingHelper
      */
     public static boolean hidesNeighborFace(
             IFramedBlock block, BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side
-    )
-    {
-        if (adjState.getBlock() instanceof IFramedBlock)
-        {
+    ) {
+        if (adjState.getBlock() instanceof IFramedBlock) {
             return false;
         }
         BlockPos adjPos = pos.relative(side);
-        if (!block.canOccludeNeighbor(level, pos, state, adjPos, adjState))
-        {
+        if (!block.canOccludeNeighbor(level, pos, state, adjPos, adjState)) {
             return false;
         }
-        if (state.framedblocks$getCache().isFullFace(side))
-        {
+        if (state.framedblocks$getCache().isFullFace(side)) {
             CamoContent<?> camoContent = block.getCamo(level, pos, state, side).getContent();
             return camoContent.occludes(adjState, level, pos, adjPos, side);
         }

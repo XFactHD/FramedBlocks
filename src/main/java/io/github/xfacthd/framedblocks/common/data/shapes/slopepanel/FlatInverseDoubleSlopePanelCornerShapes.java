@@ -16,17 +16,14 @@ import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 
-public final class FlatInverseDoubleSlopePanelCornerShapes implements ShapeGenerator
-{
+public final class FlatInverseDoubleSlopePanelCornerShapes implements ShapeGenerator {
     @Override
-    public ShapeContainer generatePrimary(List<BlockState> states)
-    {
+    public ShapeContainer generatePrimary(List<BlockState> states) {
         return generate(states, FlatSlopePanelCornerShapes.SHAPES, FlatSlopePanelCornerShapes.INNER_SHAPES);
     }
 
     @Override
-    public ShapeContainer generateOcclusion(List<BlockState> states)
-    {
+    public ShapeContainer generateOcclusion(List<BlockState> states) {
         return generate(states, FlatSlopePanelCornerShapes.OCCLUSION_SHAPES, FlatSlopePanelCornerShapes.INNER_OCCLUSION_SHAPES);
     }
 
@@ -34,13 +31,11 @@ public final class FlatInverseDoubleSlopePanelCornerShapes implements ShapeGener
             List<BlockState> states,
             ShapeCache<FlatSlopePanelCornerShapes.ShapeKey> cache,
             ShapeCache<FlatSlopePanelCornerShapes.ShapeKey> innerCache
-    )
-    {
+    ) {
         Map<BlockState, VoxelShape> map = new IdentityHashMap<>(states.size());
 
         VoxelShape[] shapes = new VoxelShape[4 * 4];
-        for (HorizontalRotation rot : HorizontalRotation.values())
-        {
+        for (HorizontalRotation rot : HorizontalRotation.values()) {
             VoxelShape frontShape = cache.get(new FlatSlopePanelCornerShapes.ShapeKey(rot.getOpposite(), true));
             HorizontalRotation backRot = rot.rotate(rot.isVertical() ? Rotation.CLOCKWISE_90 : Rotation.COUNTERCLOCKWISE_90);
             VoxelShape backShape = innerCache.get(new FlatSlopePanelCornerShapes.ShapeKey(backRot, true));
@@ -50,8 +45,7 @@ public final class FlatInverseDoubleSlopePanelCornerShapes implements ShapeGener
             ShapeUtils.makeHorizontalRotations(preShape, Direction.NORTH, shapes, rot.ordinal() << 2);
         }
 
-        for (BlockState state : states)
-        {
+        for (BlockState state : states) {
             Direction dir = state.getValue(FramedProperties.FACING_HOR);
             HorizontalRotation rot = state.getValue(PropertyHolder.ROTATION);
             int idx = dir.get2DDataValue() | (rot.ordinal() << 2);

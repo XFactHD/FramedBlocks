@@ -6,8 +6,7 @@ import net.minecraft.core.Direction;
  * Indicates in which direction the corner above the baseline points and whether the long edge
  * is on the outer edge of the block
  */
-public enum HalfTriangleDir
-{
+public enum HalfTriangleDir {
     NULL(Direction.UP, Direction.UP, false),
 
     NORTH_UP_FALSE  (Direction.NORTH, Direction.UP, false),
@@ -76,17 +75,14 @@ public enum HalfTriangleDir
     private final Direction shortEdge;
     private final boolean outerEdge;
 
-    HalfTriangleDir(Direction longEdge, Direction shortEdge, boolean outerEdge)
-    {
+    HalfTriangleDir(Direction longEdge, Direction shortEdge, boolean outerEdge) {
         this.longEdge = longEdge;
         this.shortEdge = shortEdge;
         this.outerEdge = outerEdge;
     }
 
-    public HalfTriangleDir getOpposite()
-    {
-        if (this == NULL)
-        {
+    public HalfTriangleDir getOpposite() {
+        if (this == NULL) {
             return this;
         }
         return fromDirections(longEdge.getOpposite(), shortEdge.getOpposite(), !outerEdge);
@@ -96,16 +92,13 @@ public enum HalfTriangleDir
      * {@return true if both {@code HalfTriangleDir}s are not {@link HalfTriangleDir#NULL} and the other
      * {@code HalfTriangleDir} has the same edge directions and the same connection to the outer edge}
      */
-    public boolean isEqualTo(HalfTriangleDir other)
-    {
+    public boolean isEqualTo(HalfTriangleDir other) {
         return this != NULL && this == other;
     }
 
-    public static HalfTriangleDir fromDirections(Direction longEdge, Direction shortEdge, boolean outerEdge)
-    {
+    public static HalfTriangleDir fromDirections(Direction longEdge, Direction shortEdge, boolean outerEdge) {
         HalfTriangleDir dir = FROM_DIRS[longEdge.ordinal()][shortEdge.ordinal()][outerEdge ? 1 : 0];
-        if (dir == null)
-        {
+        if (dir == null) {
             throw new IllegalArgumentException(
                     "Invalid dir/dir/bool triple: long edge:" + longEdge + ", short edge: " +
                             shortEdge + ", outer edge: " + outerEdge
@@ -114,12 +107,12 @@ public enum HalfTriangleDir
         return dir;
     }
 
-    private static HalfTriangleDir[][][] makeDirTable()
-    {
+    private static HalfTriangleDir[][][] makeDirTable() {
         HalfTriangleDir[][][] table = new HalfTriangleDir[6][6][2];
-        for (HalfTriangleDir dir : values())
-        {
-            if (dir == NULL) { continue; }
+        for (HalfTriangleDir dir : values()) {
+            if (dir == NULL) {
+                continue;
+            }
 
             table[dir.longEdge.ordinal()][dir.shortEdge.ordinal()][dir.outerEdge ? 1 : 0] = dir;
         }

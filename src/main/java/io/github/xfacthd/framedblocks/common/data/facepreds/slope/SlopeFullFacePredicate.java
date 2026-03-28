@@ -2,7 +2,7 @@ package io.github.xfacthd.framedblocks.common.data.facepreds.slope;
 
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.predicate.fullface.FullFacePredicate;
-import io.github.xfacthd.framedblocks.common.block.ISlopeBlock;
+import io.github.xfacthd.framedblocks.common.block.SlopeBlock;
 import io.github.xfacthd.framedblocks.common.data.property.SlopeType;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
@@ -16,7 +16,7 @@ public final class SlopeFullFacePredicate implements FullFacePredicate
     @Override
     public boolean test(BlockState state, Direction side)
     {
-        ISlopeBlock block = (ISlopeBlock) state.getBlock();
+        SlopeBlock block = (SlopeBlock) state.getBlock();
         SlopeType type = block.getSlopeType(state);
         if (side == Direction.UP && type == SlopeType.TOP)
         {

@@ -23,31 +23,27 @@ import net.neoforged.neoforge.client.fluid.FluidTintSource;
 import net.neoforged.neoforge.fluids.FluidStack;
 import org.jspecify.annotations.Nullable;
 
-public class FramedTankRenderer implements BlockEntityRenderer<FramedTankBlockEntity, FramedTankRenderState>
-{
+public class FramedTankRenderer implements BlockEntityRenderer<FramedTankBlockEntity, FramedTankRenderState> {
     private static final float OFFSET = .01F;
     private static final float MIN_XZ = OFFSET;
     private static final float MAX_XZ = 1F - OFFSET;
 
     private final FluidStateModelSet fluidModels;
 
-    public FramedTankRenderer(@SuppressWarnings("unused") BlockEntityRendererProvider.Context ctx)
-    {
+    public FramedTankRenderer(@SuppressWarnings("unused") BlockEntityRendererProvider.Context ctx) {
         this.fluidModels = Minecraft.getInstance().getModelManager().getFluidStateModelSet();
     }
 
     @Override
-    public void submit(FramedTankRenderState renderState, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, CameraRenderState camera)
-    {
+    public void submit(FramedTankRenderState renderState, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, CameraRenderState camera) {
         int fluidAmount = renderState.fluidAmount;
-        if (fluidAmount == 0) return;
-
-        submitContents(poseStack, submitNodeCollector, renderState.fluidModel, fluidAmount, renderState.tint, renderState.lightCoords);
+        if (fluidAmount != 0) {
+            submitContents(poseStack, submitNodeCollector, renderState.fluidModel, fluidAmount, renderState.tint, renderState.lightCoords);
+        }
     }
 
     @Override
-    public FramedTankRenderState createRenderState()
-    {
+    public FramedTankRenderState createRenderState() {
         return new FramedTankRenderState();
     }
 
@@ -58,12 +54,13 @@ public class FramedTankRenderer implements BlockEntityRenderer<FramedTankBlockEn
             float partialTick,
             Vec3 cameraPos,
             ModelFeatureRenderer.@Nullable CrumblingOverlay crumblingOverlay
-    )
-    {
+    ) {
         BlockEntityRenderer.super.extractRenderState(blockEntity, renderState, partialTick, cameraPos, crumblingOverlay);
 
         FluidStack fluid = blockEntity.getContents();
-        if (fluid.isEmpty()) return;
+        if (fluid.isEmpty()) {
+            return;
+        }
 
         FluidModel fluidModel = fluidModels.get(fluid.getFluid().defaultFluidState());
         renderState.fluidModel = fluidModel;
@@ -72,16 +69,14 @@ public class FramedTankRenderer implements BlockEntityRenderer<FramedTankBlockEn
         renderState.tint = tintSource != null ? tintSource.colorAsStack(fluid) : -1;
     }
 
-    public static void submitContents(PoseStack poseStack, SubmitNodeCollector collector, FluidModel fluidModel, int fluidAmount, int tint, int light)
-    {
+    public static void submitContents(PoseStack poseStack, SubmitNodeCollector collector, FluidModel fluidModel, int fluidAmount, int tint, int light) {
         TextureAtlasSprite stillTex = fluidModel.stillMaterial().sprite();
         TextureAtlasSprite flowTex = fluidModel.flowingMaterial().sprite();
         float height = Mth.clamp(fluidAmount / (float) TankFluidResourceHandler.CAPACITY, OFFSET, 1F - OFFSET);
         boolean sameTex = stillTex == flowTex;
 
         RenderType bufferType = ClientUtils.getEntityRenderType(fluidModel.layer());
-        collector.submitCustomGeometry(poseStack, bufferType, (pose, consumer) ->
-        {
+        collector.submitCustomGeometry(poseStack, bufferType, (pose, consumer) -> {
             float minU = flowTex.getU(MIN_XZ);
             float maxU = sameTex ? flowTex.getU(MAX_XZ) : flowTex.getU(8F / 16F - OFFSET);
             float minV = sameTex ? flowTex.getV(1F - height) : flowTex.getV(8F / 16F * (1F - height));
@@ -131,8 +126,7 @@ public class FramedTankRenderer implements BlockEntityRenderer<FramedTankBlockEn
     }
 
     @Override
-    public boolean shouldRender(FramedTankBlockEntity be, Vec3 camera)
-    {
+    public boolean shouldRender(FramedTankBlockEntity be, Vec3 camera) {
         return !be.getBlockState().getValue(FramedProperties.SOLID) && BlockEntityRenderer.super.shouldRender(be, camera);
     }
 }

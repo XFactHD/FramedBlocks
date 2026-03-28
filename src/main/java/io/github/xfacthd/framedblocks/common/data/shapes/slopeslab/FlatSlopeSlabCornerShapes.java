@@ -17,8 +17,7 @@ import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 
-public final class FlatSlopeSlabCornerShapes implements ShapeGenerator
-{
+public final class FlatSlopeSlabCornerShapes implements ShapeGenerator {
     public static final ShapeCache<SlopeSlabShape> SHAPES = makeCache(SlopeSlabShapes.SHAPES, BooleanOp.AND);
     public static final ShapeCache<SlopeSlabShape> OCCLUSION_SHAPES = makeCache(SlopeSlabShapes.OCCLUSION_SHAPES, BooleanOp.AND);
     public static final ShapeCache<SlopeSlabShape> INNER_SHAPES = makeCache(SlopeSlabShapes.SHAPES, BooleanOp.OR);
@@ -29,26 +28,22 @@ public final class FlatSlopeSlabCornerShapes implements ShapeGenerator
     private final ShapeCache<SlopeSlabShape> shapes;
     private final ShapeCache<SlopeSlabShape> occlusionShapes;
 
-    private FlatSlopeSlabCornerShapes(ShapeCache<SlopeSlabShape> shapes, ShapeCache<SlopeSlabShape> occlusionShapes)
-    {
+    private FlatSlopeSlabCornerShapes(ShapeCache<SlopeSlabShape> shapes, ShapeCache<SlopeSlabShape> occlusionShapes) {
         this.shapes = shapes;
         this.occlusionShapes = occlusionShapes;
     }
 
     @Override
-    public ShapeContainer generatePrimary(List<BlockState> states)
-    {
+    public ShapeContainer generatePrimary(List<BlockState> states) {
         return generate(states, shapes);
     }
 
     @Override
-    public ShapeContainer generateOcclusion(List<BlockState> states)
-    {
+    public ShapeContainer generateOcclusion(List<BlockState> states) {
         return generate(states, occlusionShapes);
     }
 
-    private static ShapeContainer generate(List<BlockState> states, ShapeCache<SlopeSlabShape> cache)
-    {
+    private static ShapeContainer generate(List<BlockState> states, ShapeCache<SlopeSlabShape> cache) {
         Map<BlockState, VoxelShape> map = new IdentityHashMap<>(states.size());
 
         int maskTop = 0b0100;
@@ -59,8 +54,7 @@ public final class FlatSlopeSlabCornerShapes implements ShapeGenerator
         ShapeUtils.makeHorizontalRotations(cache.get(SlopeSlabShape.TOP_BOTTOM_HALF), Direction.NORTH, shapes, maskTop);
         ShapeUtils.makeHorizontalRotations(cache.get(SlopeSlabShape.TOP_TOP_HALF), Direction.NORTH, shapes, maskTop | maskTopHalf);
 
-        for (BlockState state : states)
-        {
+        for (BlockState state : states) {
             Direction dir = state.getValue(FramedProperties.FACING_HOR);
             int top = state.getValue(FramedProperties.TOP) ? maskTop : 0;
             int topHalf = state.getValue(PropertyHolder.TOP_HALF) ? maskTopHalf : 0;
@@ -71,10 +65,8 @@ public final class FlatSlopeSlabCornerShapes implements ShapeGenerator
         return ShapeContainer.of(map);
     }
 
-    private static ShapeCache<SlopeSlabShape> makeCache(ShapeCache<SlopeSlabShape> cache, BooleanOp joinOp)
-    {
-        return ShapeCache.createEnum(SlopeSlabShape.class, map ->
-        {
+    private static ShapeCache<SlopeSlabShape> makeCache(ShapeCache<SlopeSlabShape> cache, BooleanOp joinOp) {
+        return ShapeCache.createEnum(SlopeSlabShape.class, map -> {
             VoxelShape shapeSlopeBottom = cache.get(SlopeSlabShape.BOTTOM_BOTTOM_HALF);
             VoxelShape shapeSlopeTop = cache.get(SlopeSlabShape.TOP_BOTTOM_HALF);
 

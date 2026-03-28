@@ -11,11 +11,9 @@ import net.neoforged.neoforge.model.data.ModelData;
 
 import java.util.Objects;
 
-public final class TargetClientBlockExtensions extends FramedClientBlockExtensions
-{
+public final class TargetClientBlockExtensions extends FramedClientBlockExtensions {
     @Override
-    protected void collectAdditionalTintValues(BlockState state, BlockAndTintGetter level, BlockPos pos, ModelData modelData, IntList tintValues)
-    {
+    protected void collectAdditionalTintValues(BlockState state, BlockAndTintGetter level, BlockPos pos, ModelData modelData, IntList tintValues) {
         DyeColor dyeColor = modelData.get(FramedTargetBlockEntity.COLOR_PROPERTY);
         tintValues.add(Objects.requireNonNullElse(dyeColor, FramedTargetBlockEntity.DEFAULT_COLOR).getTextColor());
     }

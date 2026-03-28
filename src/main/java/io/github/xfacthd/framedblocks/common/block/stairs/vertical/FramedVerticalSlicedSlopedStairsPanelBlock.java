@@ -18,22 +18,18 @@ import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jspecify.annotations.Nullable;
 
-public class FramedVerticalSlicedSlopedStairsPanelBlock extends FramedVerticalSlopedStairsBlock implements IFramedDoubleBlockInternal
-{
-    public FramedVerticalSlicedSlopedStairsPanelBlock(Properties props)
-    {
+public class FramedVerticalSlicedSlopedStairsPanelBlock extends FramedVerticalSlopedStairsBlock implements IFramedDoubleBlockInternal {
+    public FramedVerticalSlicedSlopedStairsPanelBlock(Properties props) {
         super(BlockType.FRAMED_VERTICAL_SLICED_SLOPED_STAIRS_PANEL, props);
     }
 
     @Override
-    public FramedDoubleBlockEntity newBlockEntity(BlockPos pos, BlockState state)
-    {
+    public FramedDoubleBlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return new FramedVerticalSlicedSlopedStairsPanelBlockEntity(pos, state);
     }
 
     @Override
-    public DoubleBlockParts calculateParts(BlockState state)
-    {
+    public DoubleBlockParts calculateParts(BlockState state) {
         Direction facing = state.getValue(FramedProperties.FACING_HOR);
         HorizontalRotation rot = state.getValue(PropertyHolder.ROTATION);
         boolean altSlope = state.getValue(FramedProperties.ALT_SLOPE);
@@ -56,64 +52,52 @@ public class FramedVerticalSlicedSlopedStairsPanelBlock extends FramedVerticalSl
     }
 
     @Override
-    public DoubleBlockTopInteractionMode calculateTopInteractionMode(BlockState state)
-    {
+    public DoubleBlockTopInteractionMode calculateTopInteractionMode(BlockState state) {
         return DoubleBlockTopInteractionMode.EITHER;
     }
 
     @Override
-    public SolidityCheck calculateSolidityCheck(BlockState state, Direction side)
-    {
+    public SolidityCheck calculateSolidityCheck(BlockState state, Direction side) {
         Direction facing = state.getValue(FramedProperties.FACING_HOR);
         HorizontalRotation rot = state.getValue(PropertyHolder.ROTATION);
         Direction dirTwo = rot.getOpposite().withFacing(facing);
         Direction dirThree = rot.rotate(Rotation.CLOCKWISE_90).withFacing(facing);
 
-        if (side == facing)
-        {
+        if (side == facing) {
             return SolidityCheck.FIRST;
         }
-        if (side == dirTwo || side == dirThree)
-        {
+        if (side == dirTwo || side == dirThree) {
             return SolidityCheck.BOTH;
         }
         return SolidityCheck.NONE;
     }
 
     @Override
-    public CamoGetter calculateCamoGetter(BlockState state, Direction side, @Nullable Direction edge)
-    {
+    public CamoGetter calculateCamoGetter(BlockState state, Direction side, @Nullable Direction edge) {
         Direction facing = state.getValue(FramedProperties.FACING_HOR);
         HorizontalRotation rot = state.getValue(PropertyHolder.ROTATION);
         Direction dirTwo = rot.getOpposite().withFacing(facing);
         Direction dirThree = rot.rotate(Rotation.CLOCKWISE_90).withFacing(facing);
 
-        if (side == facing)
-        {
+        if (side == facing) {
             return CamoGetter.FIRST;
         }
-        if (side == facing.getOpposite())
-        {
-            if (edge == dirTwo || edge == dirThree)
-            {
+        if (side == facing.getOpposite()) {
+            if (edge == dirTwo || edge == dirThree) {
                 return CamoGetter.SECOND;
             }
             return CamoGetter.NONE;
         }
-        if (side == dirTwo || side == dirThree)
-        {
-            if (edge == facing)
-            {
+        if (side == dirTwo || side == dirThree) {
+            if (edge == facing) {
                 return CamoGetter.FIRST;
             }
-            if (edge == facing.getOpposite())
-            {
+            if (edge == facing.getOpposite()) {
                 return CamoGetter.SECOND;
             }
             return CamoGetter.NONE;
         }
-        if (side == dirTwo.getOpposite() || side == dirThree.getOpposite())
-        {
+        if (side == dirTwo.getOpposite() || side == dirThree.getOpposite()) {
             return edge == facing ? CamoGetter.FIRST : CamoGetter.NONE;
         }
         return CamoGetter.NONE;

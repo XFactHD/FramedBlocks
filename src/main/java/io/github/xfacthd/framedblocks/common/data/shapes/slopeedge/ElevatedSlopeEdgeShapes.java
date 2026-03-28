@@ -18,24 +18,20 @@ import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 
-public final class ElevatedSlopeEdgeShapes implements ShapeGenerator
-{
+public final class ElevatedSlopeEdgeShapes implements ShapeGenerator {
     public static final ElevatedSlopeEdgeShapes INSTANCE = new ElevatedSlopeEdgeShapes();
 
     @Override
-    public ShapeContainer generatePrimary(List<BlockState> states)
-    {
+    public ShapeContainer generatePrimary(List<BlockState> states) {
         return generate(states, SlopeEdgeShapes.SHAPES);
     }
 
     @Override
-    public ShapeContainer generateOcclusion(List<BlockState> states)
-    {
+    public ShapeContainer generateOcclusion(List<BlockState> states) {
         return generate(states, SlopeEdgeShapes.OCCLUSION_SHAPES);
     }
 
-    private static ShapeContainer generate(List<BlockState> states, ShapeCache<SlopeEdgeShapes.ShapeKey> cache)
-    {
+    private static ShapeContainer generate(List<BlockState> states, ShapeCache<SlopeEdgeShapes.ShapeKey> cache) {
         VoxelShape shapeBottom = ShapeUtils.orUnoptimized(
                 ShapeUtils.orUnoptimized(Block.box(0, 0, 0, 16, 8, 16), Block.box(0, 8, 0, 16, 16, 8)),
                 cache.get(new SlopeEdgeShapes.ShapeKey(SlopeType.BOTTOM, true))
@@ -57,8 +53,7 @@ public final class ElevatedSlopeEdgeShapes implements ShapeGenerator
 
         Map<BlockState, VoxelShape> map = new IdentityHashMap<>(states.size());
 
-        for (BlockState state : states)
-        {
+        for (BlockState state : states) {
             SlopeType type = state.getValue(PropertyHolder.SLOPE_TYPE);
             Direction dir = state.getValue(FramedProperties.FACING_HOR);
             int idx = (type.ordinal() << 2) + dir.get2DDataValue();

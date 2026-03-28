@@ -13,18 +13,14 @@ import net.neoforged.neoforge.model.data.ModelData;
 
 import java.util.List;
 
-public final class FlowerPotClientBlockExtensions extends FramedClientBlockExtensions
-{
+public final class FlowerPotClientBlockExtensions extends FramedClientBlockExtensions {
     @Override
-    protected void collectAdditionalTintValues(BlockState state, BlockAndTintGetter level, BlockPos pos, ModelData modelData, IntList tintValues)
-    {
+    protected void collectAdditionalTintValues(BlockState state, BlockAndTintGetter level, BlockPos pos, ModelData modelData, IntList tintValues) {
         Block flowerBlock = modelData.get(FramedFlowerPotBlockEntity.FLOWER_BLOCK);
-        if (flowerBlock != null)
-        {
+        if (flowerBlock != null) {
             BlockState flowerState = flowerBlock.defaultBlockState();
             List<BlockTintSource> tintSources = Minecraft.getInstance().getBlockColors().getTintSources(flowerState);
-            for (BlockTintSource tintSource : tintSources)
-            {
+            for (BlockTintSource tintSource : tintSources) {
                 tintValues.add(tintSource.colorInWorld(flowerState, level, pos));
             }
         }

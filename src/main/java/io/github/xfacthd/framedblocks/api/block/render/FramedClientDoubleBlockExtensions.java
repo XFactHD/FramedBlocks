@@ -22,19 +22,16 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 
-public final class FramedClientDoubleBlockExtensions extends FramedClientBlockExtensions
-{
+public final class FramedClientDoubleBlockExtensions extends FramedClientBlockExtensions {
     public static final FramedClientDoubleBlockExtensions INSTANCE = new FramedClientDoubleBlockExtensions();
 
     private FramedClientDoubleBlockExtensions() { }
 
     @Override
-    public boolean addHitEffects(BlockState state, Level level, @Nullable HitResult target, ParticleEngine engine)
-    {
+    public boolean addHitEffects(BlockState state, Level level, @Nullable HitResult target, ParticleEngine engine) {
         BlockHitResult hit = (BlockHitResult) Objects.requireNonNull(target);
         boolean suppressed = suppressParticles(state, level, hit.getBlockPos());
-        if (!suppressed && level.getBlockEntity(hit.getBlockPos()) instanceof FramedDoubleBlockEntity be)
-        {
+        if (!suppressed && level.getBlockEntity(hit.getBlockPos()) instanceof FramedDoubleBlockEntity be) {
             Holder<BlockOverlay> overlay = be.getOverlay();
             ParticleHelper.Client.addHitEffects(state, level, hit, be.getCamo().getContent(), overlay, engine);
             ParticleHelper.Client.addHitEffects(state, level, hit, be.getCamoTwo().getContent(), overlay, engine);
@@ -44,11 +41,9 @@ public final class FramedClientDoubleBlockExtensions extends FramedClientBlockEx
     }
 
     @Override
-    public boolean addDestroyEffects(BlockState state, Level level, BlockPos pos, ParticleEngine engine)
-    {
+    public boolean addDestroyEffects(BlockState state, Level level, BlockPos pos, ParticleEngine engine) {
         boolean suppressed = suppressParticles(state, level, pos);
-        if (!suppressed && level.getBlockEntity(pos) instanceof FramedDoubleBlockEntity be)
-        {
+        if (!suppressed && level.getBlockEntity(pos) instanceof FramedDoubleBlockEntity be) {
             Holder<BlockOverlay> overlay = be.getOverlay();
             ParticleHelper.Client.addDestroyEffects(state, level, pos, be.getCamo().getContent(), overlay, engine);
             ParticleHelper.Client.addDestroyEffects(state, level, pos, be.getCamoTwo().getContent(), overlay, engine);
@@ -58,16 +53,13 @@ public final class FramedClientDoubleBlockExtensions extends FramedClientBlockEx
     }
 
     @Override
-    public boolean playHitSound(BlockState state, Level level, BlockPos pos, Direction hitFace, SoundManager soundManager)
-    {
-        if (level.getBlockEntity(pos) instanceof FramedDoubleBlockEntity be)
-        {
+    public boolean playHitSound(BlockState state, Level level, BlockPos pos, Direction hitFace, SoundManager soundManager) {
+        if (level.getBlockEntity(pos) instanceof FramedDoubleBlockEntity be) {
             SoundType soundOne = be.getCamo().getContent().getSoundType();
             SoundUtils.Client.playHitSound(soundManager, pos, soundOne);
 
             SoundType soundTwo = be.getCamoTwo().getContent().getSoundType();
-            if (!SoundUtils.isSameSound(soundOne, soundTwo, SoundEventType.HIT))
-            {
+            if (!SoundUtils.isSameSound(soundOne, soundTwo, SoundEventType.HIT)) {
                 SoundUtils.Client.playHitSound(soundManager, pos, soundTwo);
             }
             return true;
@@ -76,16 +68,13 @@ public final class FramedClientDoubleBlockExtensions extends FramedClientBlockEx
     }
 
     @Override
-    public boolean playBreakSound(BlockState state, Level level, BlockPos pos)
-    {
-        if (level.getBlockEntity(pos) instanceof FramedDoubleBlockEntity be)
-        {
+    public boolean playBreakSound(BlockState state, Level level, BlockPos pos) {
+        if (level.getBlockEntity(pos) instanceof FramedDoubleBlockEntity be) {
             SoundType soundOne = be.getCamo().getContent().getSoundType();
             SoundUtils.Client.playBreakSound(level, pos, soundOne);
 
             SoundType soundTwo = be.getCamoTwo().getContent().getSoundType();
-            if (!SoundUtils.isSameSound(soundOne, soundTwo, SoundEventType.BREAK))
-            {
+            if (!SoundUtils.isSameSound(soundOne, soundTwo, SoundEventType.BREAK)) {
                 SoundUtils.Client.playBreakSound(level, pos, soundTwo);
             }
 
@@ -95,8 +84,7 @@ public final class FramedClientDoubleBlockExtensions extends FramedClientBlockEx
     }
 
     @Override
-    void collectCamoTintValues(AbstractFramedBlockData data, BlockAndTintGetter level, BlockPos pos, IntList tintValues)
-    {
+    void collectCamoTintValues(AbstractFramedBlockData data, BlockAndTintGetter level, BlockPos pos, IntList tintValues) {
         super.collectCamoTintValues(data, level, pos, tintValues);
         CamoContainerHelper.Client.collectTintValues(data.unwrap(true).getCamoContainer(), level, pos, tintValues);
     }

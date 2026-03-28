@@ -16,8 +16,7 @@ import net.minecraft.util.LightCoordsUtil;
 import org.joml.Quaternionf;
 import org.jspecify.annotations.Nullable;
 
-public final class SpinningItemPictureInPictureRenderer extends PictureInPictureRenderer<SpinningItemPictureInPictureRenderer.RenderState>
-{
+public final class SpinningItemPictureInPictureRenderer extends PictureInPictureRenderer<SpinningItemPictureInPictureRenderer.RenderState> {
     private static final Quaternionf ROT_22_5_XP = Axis.XP.rotationDegrees(22.5F);
 
     private final SubmitNodeCollector submitNodeCollector;
@@ -26,16 +25,14 @@ public final class SpinningItemPictureInPictureRenderer extends PictureInPicture
     private Object lastModelIdentity = null;
     private int lastRotY = 0;
 
-    public SpinningItemPictureInPictureRenderer(MultiBufferSource.BufferSource bufferSource)
-    {
+    public SpinningItemPictureInPictureRenderer(MultiBufferSource.BufferSource bufferSource) {
         super(bufferSource);
         this.submitNodeCollector = Minecraft.getInstance().gameRenderer.getSubmitNodeStorage();
         this.featureRenderDispatcher = Minecraft.getInstance().gameRenderer.getFeatureRenderDispatcher();
     }
 
     @Override
-    protected void renderToTexture(RenderState state, PoseStack poseStack)
-    {
+    protected void renderToTexture(RenderState state, PoseStack poseStack) {
         TrackingItemStackRenderState renderState = state.renderState;
 
         poseStack.scale(1, -1, -1);
@@ -51,29 +48,27 @@ public final class SpinningItemPictureInPictureRenderer extends PictureInPicture
     }
 
     @Override
-    protected float getTranslateY(int height, int guiScale)
-    {
+    protected float getTranslateY(int height, int guiScale) {
         return height / 2F;
     }
 
     @Override
-    protected boolean textureIsReadyToBlit(RenderState state)
-    {
-        if (state.rotY != lastRotY) { return false; }
+    protected boolean textureIsReadyToBlit(RenderState state) {
+        if (state.rotY != lastRotY) {
+            return false;
+        }
 
         TrackingItemStackRenderState renderState = state.renderState;
         return !renderState.isAnimated() && renderState.getModelIdentity().equals(lastModelIdentity);
     }
 
     @Override
-    protected String getTextureLabel()
-    {
+    protected String getTextureLabel() {
         return "framedblocks spinning item";
     }
 
     @Override
-    public Class<RenderState> getRenderStateClass()
-    {
+    public Class<RenderState> getRenderStateClass() {
         return RenderState.class;
     }
 
@@ -87,8 +82,7 @@ public final class SpinningItemPictureInPictureRenderer extends PictureInPicture
             float scale,
             @Nullable ScreenRectangle bounds,
             @Nullable ScreenRectangle scissorArea
-    ) implements PictureInPictureRenderState
-    {
+    ) implements PictureInPictureRenderState {
         public RenderState(
                 TrackingItemStackRenderState renderState,
                 int rotY,
@@ -98,8 +92,7 @@ public final class SpinningItemPictureInPictureRenderer extends PictureInPicture
                 int y1,
                 float scale,
                 @Nullable ScreenRectangle scissorArea
-        )
-        {
+        ) {
             this(renderState, rotY, x0, y0, x1, y1, scale, PictureInPictureRenderState.getBounds(x0, y0, x1, y1, scissorArea), scissorArea);
         }
     }

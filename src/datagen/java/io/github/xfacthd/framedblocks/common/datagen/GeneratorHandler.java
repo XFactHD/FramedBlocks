@@ -16,15 +16,12 @@ import org.jspecify.annotations.Nullable;
 
 @Mod(value = FramedConstants.MOD_ID, dist = Dist.CLIENT)
 @SuppressWarnings("UtilityClassWithPublicConstructor")
-public final class GeneratorHandler
-{
+public final class GeneratorHandler {
     @Nullable
     public static DeferredItem<Item> framingSawPattern;
 
-    public GeneratorHandler(IEventBus modBus)
-    {
-        if (DatagenModLoader.isRunningDataGen())
-        {
+    public GeneratorHandler(IEventBus modBus) {
+        if (DatagenModLoader.isRunningDataGen()) {
             modBus.addListener(GeneratorHandler::onGatherData);
 
             DeferredRegister.Items items = DeferredRegister.createItems(FramedConstants.MOD_ID);
@@ -33,8 +30,7 @@ public final class GeneratorHandler
         }
     }
 
-    private static void onGatherData(GatherDataEvent.Client event)
-    {
+    private static void onGatherData(GatherDataEvent.Client event) {
         event.createDatapackRegistryObjects(
                 new RegistrySetBuilder()
                         .add(FramedConstants.BLOCK_OVERLAY_REGISTRY_KEY, FramedBlockOverlayProvider::buildBlockOverlayEntries)

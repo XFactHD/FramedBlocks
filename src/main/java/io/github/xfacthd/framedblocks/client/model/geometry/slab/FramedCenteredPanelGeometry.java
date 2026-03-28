@@ -12,33 +12,25 @@ import net.minecraft.client.resources.model.geometry.BakedQuad;
 import net.minecraft.core.Direction;
 import org.jspecify.annotations.Nullable;
 
-public class FramedCenteredPanelGeometry extends Geometry
-{
+public class FramedCenteredPanelGeometry extends Geometry {
     private final Direction dir;
 
-    public FramedCenteredPanelGeometry(GeometryFactory.Context ctx)
-    {
+    public FramedCenteredPanelGeometry(GeometryFactory.Context ctx) {
         this.dir = ctx.state().getValue(FramedProperties.FACING_NE);
     }
 
     @Override
-    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
-    {
+    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData) {
         Direction quadDir = quad.direction();
-        if (quadDir.getAxis() == dir.getAxis())
-        {
+        if (quadDir.getAxis() == dir.getAxis()) {
             QuadModifier.of(quad)
                     .apply(Modifiers.setPosition(12F/16F))
                     .export(quadMap, null);
-        }
-        else if (DirUtils.isY(quadDir))
-        {
+        } else if (DirUtils.isY(quadDir)) {
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(dir.getAxis(), 12F/16F))
                     .export(quadMap, quadDir);
-        }
-        else
-        {
+        } else {
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(quadDir.getClockWise().getAxis(), 12F/16F))
                     .export(quadMap, quadDir);

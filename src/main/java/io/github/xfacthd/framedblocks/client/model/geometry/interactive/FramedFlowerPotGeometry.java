@@ -29,8 +29,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.model.data.ModelData;
 import org.jspecify.annotations.Nullable;
 
-public class FramedFlowerPotGeometry extends Geometry
-{
+public class FramedFlowerPotGeometry extends Geometry {
     public static final Identifier HANGING_MODEL_LOCATION = Utils.id("block/hanging_pot_rope");
     public static final String HANGING_MODEL_KEY = "flower_pot_rope";
     private static final BlockState DIRT_STATE = Blocks.DIRT.defaultBlockState();
@@ -63,24 +62,19 @@ public class FramedFlowerPotGeometry extends Geometry
     @Nullable
     private final BlockStateModel hangingPotModel;
 
-    public FramedFlowerPotGeometry(GeometryFactory.Context ctx)
-    {
+    public FramedFlowerPotGeometry(GeometryFactory.Context ctx) {
         this.state = ctx.state();
         this.hanging = AmendmentsCompat.isLoaded() && ctx.state().getValue(PropertyHolder.HANGING);
         this.hangingPotModel = hanging ? ctx.auxModels().getModel(HANGING_MODEL_KEY) : null;
     }
 
     @Override
-    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
-    {
-        if (quad.direction() == Direction.DOWN)
-        {
+    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData) {
+        if (quad.direction() == Direction.DOWN) {
             QuadModifier.of(quad)
                     .apply(Modifiers.cutTopBottom(5F/16F, 5F/16F, 11F/16F, 11F/16F))
                     .export(quadMap, Direction.DOWN);
-        }
-        else if (quad.direction() == Direction.UP)
-        {
+        } else if (quad.direction() == Direction.UP) {
             QuadModifier.of(quad)
                     .apply(Modifiers.cutTopBottom(5F/16F, 5F/16F, 11F/16F, 6F/16F))
                     .apply(Modifiers.setPosition(6F/16F))
@@ -100,9 +94,7 @@ public class FramedFlowerPotGeometry extends Geometry
                     .apply(Modifiers.cutTopBottom(10F/16F, 6F/16F, 11F/16F, 10F/16F))
                     .apply(Modifiers.setPosition(6F/16F))
                     .export(quadMap, null);
-        }
-        else if (!DirUtils.isY(quad.direction()))
-        {
+        } else if (!DirUtils.isY(quad.direction())) {
             QuadModifier.of(quad)
                     .apply(Modifiers.cutSide(5F/16F, 0, 11F/16F, 6F/16F))
                     .apply(Modifiers.setPosition(11F/16F))
@@ -116,27 +108,22 @@ public class FramedFlowerPotGeometry extends Geometry
     }
 
     @Override
-    public void collectAdditionalPartsCached(PartConsumer consumer, BlockAndTintGetter level, BlockPos pos, RandomSource random, FramedBlockData blockData, @Nullable Object cacheKeyUserData)
-    {
+    public void collectAdditionalPartsCached(PartConsumer consumer, BlockAndTintGetter level, BlockPos pos, RandomSource random, FramedBlockData blockData, @Nullable Object cacheKeyUserData) {
         BlockState potState;
-        if (cacheKeyUserData instanceof Block block && !(potState = FramedFlowerPotBlock.getFlowerPotState(block)).isAir())
-        {
+        if (cacheKeyUserData instanceof Block block && !(potState = FramedFlowerPotBlock.getFlowerPotState(block)).isAir()) {
             BlockStateModel potModel = ModelUtils.getModel(potState);
             consumer.acceptAll(potModel, level, pos, random, potState, true, false, false, potState, PLANT_MODIFIER);
         }
 
         boolean camoOccludes = blockData.getCamoContent().canOcclude();
         BlockStateModel dirtModel = ModelUtils.getModel(DIRT_STATE);
-        consumer.acceptAll(dirtModel, level, pos, random, DIRT_STATE, false, true, false, DIRT_STATE, (quadMap, quads, side) ->
-        {
-            if ((camoOccludes && side != Direction.UP) || side == null)
-            {
+        consumer.acceptAll(dirtModel, level, pos, random, DIRT_STATE, false, true, false, DIRT_STATE, (quadMap, quads, side) -> {
+            if ((camoOccludes && side != Direction.UP) || side == null) {
                 quads.clear();
                 return;
             }
 
-            QuadListModifier mod = switch (side)
-            {
+            QuadListModifier mod = switch (side) {
                 case UP -> DIRT_UP_MODIFIER;
                 case DOWN -> DIRT_DOWN_MODIFIER;
                 default -> DIRT_HOR_MODIFIER;
@@ -144,28 +131,23 @@ public class FramedFlowerPotGeometry extends Geometry
             mod.modify(quadMap, quads, side);
         });
 
-        if (hanging && hangingPotModel != null)
-        {
+        if (hanging && hangingPotModel != null) {
             consumer.acceptAll(hangingPotModel, level, pos, random, state, true, false, false, null, null);
         }
     }
 
     @Override
-    @Nullable
-    public Object computeCacheKeyUserData(BlockAndTintGetter level, BlockPos pos, RandomSource random, ModelData data)
-    {
+    public @Nullable Object computeCacheKeyUserData(BlockAndTintGetter level, BlockPos pos, RandomSource random, ModelData data) {
         Block flower = getFlowerBlock(data);
         return flower != Blocks.AIR ? flower : null;
     }
 
     @Override
-    public boolean useSolidNoCamoModel()
-    {
+    public boolean useSolidNoCamoModel() {
         return true;
     }
 
-    private static Block getFlowerBlock(ModelData data)
-    {
+    private static Block getFlowerBlock(ModelData data) {
         Block flower = data.get(FramedFlowerPotBlockEntity.FLOWER_BLOCK);
         return flower != null ? flower : Blocks.AIR;
     }

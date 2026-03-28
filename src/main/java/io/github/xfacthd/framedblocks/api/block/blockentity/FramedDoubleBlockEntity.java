@@ -42,8 +42,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.function.Consumer;
 
-public class FramedDoubleBlockEntity extends FramedBlockEntity
-{
+public class FramedDoubleBlockEntity extends FramedBlockEntity {
     public static final String CAMO_TWO_NBT_KEY = "camo_two";
     public static final String CAMO_DIR_TWO_NBT_KEY = "camo_dir_two";
     private static final ValueMerger<MapColor> MAP_COLOR_MERGER = new ValueMerger<>(ColorUtils::average);
@@ -55,29 +54,22 @@ public class FramedDoubleBlockEntity extends FramedBlockEntity
     @Nullable
     private Direction camoOrientation = null;
 
-    public FramedDoubleBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
-    {
+    public FramedDoubleBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
     }
 
     @Override
-    void setCamoNoUpdate(CamoContainer<?, ?> camo, boolean secondary)
-    {
-        if (secondary)
-        {
+    void setCamoNoUpdate(CamoContainer<?, ?> camo, boolean secondary) {
+        if (secondary) {
             camoContainer = camo;
-        }
-        else
-        {
+        } else {
             super.setCamoNoUpdate(camo, false);
         }
     }
 
     @Override
-    void setCamoInternal(CamoContainer<?, ?> camo, boolean secondary, @Nullable Direction orientation, boolean forceOrientation)
-    {
-        if (!secondary)
-        {
+    void setCamoInternal(CamoContainer<?, ?> camo, boolean secondary, @Nullable Direction orientation, boolean forceOrientation) {
+        if (!secondary) {
             super.setCamoInternal(camo, false, orientation, forceOrientation);
             return;
         }
@@ -90,84 +82,68 @@ public class FramedDoubleBlockEntity extends FramedBlockEntity
     public CamoContainer<?, ?> getCamo(BlockState state)
     {
         DoubleBlockParts parts = getStateCache().getParts();
-        if (state == parts.stateOne())
-        {
+        if (state == parts.stateOne()) {
             return getCamo();
         }
-        if (state == parts.stateTwo())
-        {
+        if (state == parts.stateTwo()) {
             return getCamoTwo();
         }
         return EmptyCamoContainer.EMPTY;
     }
 
     @Override
-    CamoContainer<?, ?> getCamo(boolean secondary)
-    {
+    CamoContainer<?, ?> getCamo(boolean secondary) {
         return secondary ? camoContainer : getCamo();
     }
 
     @Override
-    @Nullable
-    public Direction getCamoOrientation(boolean secondary)
-    {
+    public @Nullable Direction getCamoOrientation(boolean secondary) {
         return secondary ? camoOrientation : super.getCamoOrientation(false);
     }
 
-    public final CamoContainer<?, ?> getCamoTwo()
-    {
+    public final CamoContainer<?, ?> getCamoTwo() {
         return camoContainer;
     }
 
     @Override
-    protected int getLightValue()
-    {
+    protected int getLightValue() {
         return Math.max(camoContainer.getContent().getLightEmission(), super.getLightValue());
     }
 
     @Override
-    protected final boolean isValidRemovalToolForAnyCamo(ItemStack stack)
-    {
+    protected final boolean isValidRemovalToolForAnyCamo(ItemStack stack) {
         return super.isValidRemovalToolForAnyCamo(stack) || CamoContainerHelper.isValidRemovalTool(camoContainer, stack);
     }
 
     @Override
-    public final IFramedDoubleBlock getBlock()
-    {
+    public final IFramedDoubleBlock getBlock() {
         return (IFramedDoubleBlock) super.getBlock();
     }
 
     @Override
-    public final DoubleBlockStateCache getStateCache()
-    {
+    public final DoubleBlockStateCache getStateCache() {
         return (DoubleBlockStateCache) super.getStateCache();
     }
 
     @Override
-    protected final boolean canAutoApplyCamoOnPlacement()
-    {
+    protected final boolean canAutoApplyCamoOnPlacement() {
         return false;
     }
 
     @Override
-    public final boolean canTriviallyDropAllCamos()
-    {
+    public final boolean canTriviallyDropAllCamos() {
         return super.canTriviallyDropAllCamos() && camoContainer.canTriviallyConvertToItemStack();
     }
 
     @Override
-    void addCamoDrops(Consumer<ItemStack> drops)
-    {
+    void addCamoDrops(Consumer<ItemStack> drops) {
         super.addCamoDrops(drops);
         dropCamo(drops, camoContainer);
     }
 
     @Override
-    @Nullable
-    public MapColor getMapColor()
-    {
-        return switch (getStateCache().getTopInteractionMode())
-        {
+    public @Nullable MapColor getMapColor() {
+        return switch (getStateCache().getTopInteractionMode()) {
             case FIRST -> super.getMapColor();
             case SECOND -> camoContainer.getMapColor(level(), worldPosition);
             case EITHER -> MAP_COLOR_MERGER.apply(super.getMapColor(), camoContainer.getMapColor(level(), worldPosition));
@@ -175,29 +151,23 @@ public class FramedDoubleBlockEntity extends FramedBlockEntity
     }
 
     @Override
-    @Nullable
-    public Integer getCamoBeaconColorMultiplier(LevelReader level, BlockPos pos, BlockPos beaconPos)
-    {
+    public @Nullable Integer getCamoBeaconColorMultiplier(LevelReader level, BlockPos pos, BlockPos beaconPos) {
         Integer superMult = super.getCamoBeaconColorMultiplier(level, pos, beaconPos);
         Integer localMult = camoContainer.getBeaconColorMultiplier(level, pos, beaconPos);
         return BEACON_MULT_MERGER.apply(superMult, localMult);
     }
 
     @Override
-    public boolean shouldCamoDisplayFluidOverlay(BlockAndLightGetter level, BlockPos pos, FluidState fluid)
-    {
-        if (camoContainer.getContent().shouldDisplayFluidOverlay(level, pos, fluid))
-        {
+    public boolean shouldCamoDisplayFluidOverlay(BlockAndLightGetter level, BlockPos pos, FluidState fluid) {
+        if (camoContainer.getContent().shouldDisplayFluidOverlay(level, pos, fluid)) {
             return true;
         }
         return super.shouldCamoDisplayFluidOverlay(level, pos, fluid);
     }
 
     @Override
-    public float getCamoFriction(BlockState state, @Nullable Entity entity, float frameFriction)
-    {
-        return switch (getStateCache().getTopInteractionMode())
-        {
+    public float getCamoFriction(BlockState state, @Nullable Entity entity, float frameFriction) {
+        return switch (getStateCache().getTopInteractionMode()) {
             case FIRST -> getCamo().getContent().getFriction(level(), worldPosition, entity, frameFriction);
             case SECOND -> getCamoTwo().getContent().getFriction(level(), worldPosition, entity, frameFriction);
             case EITHER -> Math.max(
@@ -208,32 +178,27 @@ public class FramedDoubleBlockEntity extends FramedBlockEntity
     }
 
     @Override
-    public TriState canCamoSustainPlant(BlockGetter level, Direction side, BlockState plant)
-    {
+    public TriState canCamoSustainPlant(BlockGetter level, Direction side, BlockState plant) {
         return getStateCache().getSolidityCheck(side).canSustainPlant(this, level, side, plant);
     }
 
     @Override
-    public boolean canEntityDestroyCamo(Entity entity)
-    {
+    public boolean canEntityDestroyCamo(Entity entity) {
         return super.canEntityDestroyCamo(entity) && camoContainer.getContent().canEntityDestroy(level(), worldPosition, entity);
     }
 
     @Override
-    protected boolean isCamoSolid()
-    {
+    protected boolean isCamoSolid() {
         return super.isCamoSolid() && camoContainer.getContent().isSolid();
     }
 
     @Override
-    protected boolean doesCamoPropagateSkylightDown()
-    {
+    protected boolean doesCamoPropagateSkylightDown() {
         return camoContainer.getContent().propagatesSkylightDown() && super.doesCamoPropagateSkylightDown();
     }
 
     @Override
-    public float getCamoExplosionResistance(Explosion explosion)
-    {
+    public float getCamoExplosionResistance(Explosion explosion) {
         return Math.max(
                 super.getCamoExplosionResistance(explosion),
                 camoContainer.getContent().getExplosionResistance(level(), worldPosition, explosion)
@@ -241,27 +206,25 @@ public class FramedDoubleBlockEntity extends FramedBlockEntity
     }
 
     @Override
-    public boolean isCamoFlammable(Direction face)
-    {
-        if (isReinforced()) return false;
+    public boolean isCamoFlammable(Direction face) {
+        if (isReinforced()) {
+            return false;
+        }
 
         CamoContainer<?, ?> camo = getCamo(face, null);
-        if (camo.isEmpty() && (!getCamo().isEmpty() || !camoContainer.isEmpty()))
-        {
-            return (getCamo().isEmpty() || getCamo().getContent().isFlammable(level(), worldPosition, face)) &&
-                   (camoContainer.isEmpty() || camoContainer.getContent().isFlammable(level(), worldPosition, face));
-        }
-        else if (!camo.isEmpty())
-        {
+        if (camo.isEmpty() && (!getCamo().isEmpty() || !camoContainer.isEmpty())) {
+            return super.isCamoFlammable(face) && (camoContainer.isEmpty() || camoContainer.getContent().isFlammable(level(), worldPosition, face));
+        } else if (!camo.isEmpty()) {
             return camo.getContent().isFlammable(level(), worldPosition, face);
         }
         return true;
     }
 
     @Override
-    public int getCamoFlammability(Direction face)
-    {
-        if (isReinforced()) return 0;
+    public int getCamoFlammability(Direction face) {
+        if (isReinforced()) {
+            return 0;
+        }
 
         int flammabilityOne = super.getCamoFlammability(face);
         int flammabilityTwo = camoContainer.getContent().getFlammability(level(), worldPosition, face);
@@ -269,9 +232,10 @@ public class FramedDoubleBlockEntity extends FramedBlockEntity
     }
 
     @Override
-    public int getCamoFireSpreadSpeed(Direction face)
-    {
-        if (isReinforced()) return 0;
+    public int getCamoFireSpreadSpeed(Direction face) {
+        if (isReinforced()) {
+            return 0;
+        }
 
         int spreadSpeedOne = super.getCamoFireSpreadSpeed(face);
         int spreadSpeedTwo = camoContainer.getContent().getFireSpreadSpeed(level(), worldPosition, face);
@@ -281,24 +245,21 @@ public class FramedDoubleBlockEntity extends FramedBlockEntity
     @Override
     public boolean isCamoIgnitedByLava(Direction face)
     {
-        if (isReinforced()) return false;
+        if (isReinforced()) {
+            return false;
+        }
 
         CamoContainer<?, ?> camo = getCamo(face, null);
-        if (camo.isEmpty() && (!getCamo().isEmpty() || !camoContainer.isEmpty()))
-        {
-            return (getCamo().isEmpty() || getCamo().getContent().isIgnitedByLava(level(), worldPosition, face)) &&
-                   (camoContainer.isEmpty() || camoContainer.getContent().isIgnitedByLava(level(), worldPosition, face));
-        }
-        else if (!camo.isEmpty())
-        {
+        if (camo.isEmpty() && (!getCamo().isEmpty() || !camoContainer.isEmpty())) {
+            return super.isCamoIgnitedByLava(face) && (camoContainer.isEmpty() || camoContainer.getContent().isIgnitedByLava(level(), worldPosition, face));
+        } else if (!camo.isEmpty()) {
             return camo.getContent().isIgnitedByLava(level(), worldPosition, face);
         }
         return true;
     }
 
     @Override
-    protected boolean hitSecondary(BlockHitResult hit, Vec3 lookVec, Vec3 eyePos)
-    {
+    protected boolean hitSecondary(BlockHitResult hit, Vec3 lookVec, Vec3 eyePos) {
         lookVec = lookVec.normalize().multiply(1D/16D, 1D/16D, 1D/16D);
         Vec3 vecStart = hit.getLocation().subtract(lookVec);
         Vec3 vecEnd = hit.getLocation().add(lookVec);
@@ -306,15 +267,13 @@ public class FramedDoubleBlockEntity extends FramedBlockEntity
 
         VoxelShape shapeSec = parts.stateTwo().getShape(EmptyBlockGetter.INSTANCE, BlockPos.ZERO);
         BlockHitResult clipSec = shapeSec.clip(vecStart, vecEnd, worldPosition);
-        if (clipSec == null)
-        {
+        if (clipSec == null) {
             return false;
         }
 
         VoxelShape shapePri = parts.stateOne().getShape(EmptyBlockGetter.INSTANCE, BlockPos.ZERO);
         BlockHitResult clipPri = shapePri.clip(vecStart, vecEnd, worldPosition);
-        if (clipPri == null)
-        {
+        if (clipPri == null) {
             return true;
         }
 
@@ -322,14 +281,12 @@ public class FramedDoubleBlockEntity extends FramedBlockEntity
     }
 
     @Override
-    public final CamoContainer<?, ?> getCamo(Direction side, @Nullable Direction edge)
-    {
+    public final CamoContainer<?, ?> getCamo(Direction side, @Nullable Direction edge) {
         return getStateCache().getCamoGetter(side, edge).getCamo(this);
     }
 
     @Override
-    boolean updateCulling(Direction side, BlockState state, boolean rerender)
-    {
+    boolean updateCulling(Direction side, BlockState state, boolean rerender) {
         DoubleBlockParts parts = getStateCache().getParts();
         boolean changed = super.updateCulling(side, parts.stateOne(), rerender);
         changed |= updateCulling(cullState, parts.stateTwo(), side, rerender);
@@ -337,9 +294,10 @@ public class FramedDoubleBlockEntity extends FramedBlockEntity
     }
 
     @Override
-    protected boolean needsModelDataUpdateAfterStateChange(BlockState oldState)
-    {
-        if (super.needsModelDataUpdateAfterStateChange(oldState)) return true;
+    protected boolean needsModelDataUpdateAfterStateChange(BlockState oldState) {
+        if (super.needsModelDataUpdateAfterStateChange(oldState)) {
+            return true;
+        }
 
         DoubleBlockStateCache oldCache = (DoubleBlockStateCache) oldState.framedblocks$getCache();
         return !getStateCache().getParts().equals(oldCache.getParts());
@@ -349,13 +307,11 @@ public class FramedDoubleBlockEntity extends FramedBlockEntity
      * Debug rendering
      */
 
-    public final DoubleBlockParts getParts()
-    {
+    public final DoubleBlockParts getParts() {
         return getStateCache().getParts();
     }
 
-    public final boolean debugHitSecondary(BlockHitResult hit, Player player)
-    {
+    public final boolean debugHitSecondary(BlockHitResult hit, Player player) {
         return hitSecondary(hit, player);
     }
 
@@ -364,23 +320,20 @@ public class FramedDoubleBlockEntity extends FramedBlockEntity
      */
 
     @Override
-    protected void writeToDataPacket(ValueOutput valueOutput)
-    {
+    protected void writeToDataPacket(ValueOutput valueOutput) {
         super.writeToDataPacket(valueOutput);
         CamoContainerHelper.writeToNetwork(valueOutput.child(CAMO_TWO_NBT_KEY), camoContainer);
         valueOutput.storeNullable(CAMO_DIR_TWO_NBT_KEY, FramedCodecs.DIRECTION_BY_INT, camoOrientation);
     }
 
     @Override
-    protected void readFromDataPacket(NetworkValueInput input)
-    {
+    protected void readFromDataPacket(NetworkValueInput input) {
         super.readFromDataPacket(input);
 
         camoContainer = input.readCamo(CAMO_TWO_NBT_KEY, true);
 
         Direction newOrientation = input.read(CAMO_DIR_TWO_NBT_KEY, FramedCodecs.DIRECTION_BY_INT).orElse(null);
-        if (newOrientation != camoOrientation)
-        {
+        if (newOrientation != camoOrientation) {
             camoOrientation = newOrientation;
             input.requestRenderUpdate();
         }
@@ -391,8 +344,7 @@ public class FramedDoubleBlockEntity extends FramedBlockEntity
      */
 
     @Override
-    final AbstractFramedBlockData computeBlockData(BlockState state, boolean includeCullInfo, boolean cullNullFace)
-    {
+    final AbstractFramedBlockData computeBlockData(BlockState state, boolean includeCullInfo, boolean cullNullFace) {
         DoubleBlockStateCache stateCache = getBlock().getCache(state);
         FramedBlockData modelDataOne = (FramedBlockData) super.computeBlockData(state, includeCullInfo, canCullNullFace(stateCache, false));
         byte cullMask = cullState.computeMask(includeCullInfo, canCullNullFace(stateCache, true));
@@ -400,8 +352,7 @@ public class FramedDoubleBlockEntity extends FramedBlockEntity
         return new FramedDoubleBlockData(stateCache.getParts(), modelDataOne, modelDataTwo);
     }
 
-    private boolean canCullNullFace(DoubleBlockStateCache stateCache, boolean secondPart)
-    {
+    private boolean canCullNullFace(DoubleBlockStateCache stateCache, boolean secondPart) {
         // Cull-ability of one part checks against the solidity of the other part's camo
         return stateCache.mayCullNullFace(secondPart) && getCamo(!secondPart).getContent().isSolid();
     }
@@ -411,14 +362,12 @@ public class FramedDoubleBlockEntity extends FramedBlockEntity
      */
 
     @Override
-    CamoList collectCamosForBlueprint()
-    {
+    CamoList collectCamosForBlueprint() {
         return CamoList.of(getCamo(), camoContainer);
     }
 
     @Override
-    void applyCamosFromBlueprint(BlueprintData blueprintData)
-    {
+    void applyCamosFromBlueprint(BlueprintData blueprintData) {
         super.applyCamosFromBlueprint(blueprintData);
         setCamo(blueprintData.camos().getCamo(1), true);
     }
@@ -428,22 +377,19 @@ public class FramedDoubleBlockEntity extends FramedBlockEntity
      */
 
     @Override
-    public void removeComponentsFromTag(ValueOutput valueOutput)
-    {
+    public void removeComponentsFromTag(ValueOutput valueOutput) {
         super.removeComponentsFromTag(valueOutput);
         valueOutput.discard(CAMO_TWO_NBT_KEY);
         valueOutput.discard(CAMO_DIR_TWO_NBT_KEY);
     }
 
     @Override
-    protected void collectCamoComponents(DataComponentMap.Builder builder)
-    {
+    protected void collectCamoComponents(DataComponentMap.Builder builder) {
         builder.set(Utils.DC_TYPE_CAMO_LIST, CamoList.of(getCamo(), camoContainer));
     }
 
     @Override
-    protected void applyCamoComponents(DataComponentGetter input)
-    {
+    protected void applyCamoComponents(DataComponentGetter input) {
         super.applyCamoComponents(input);
         setCamo(input.getOrDefault(Utils.DC_TYPE_CAMO_LIST, CamoList.EMPTY).getCamo(1), true);
     }
@@ -453,17 +399,14 @@ public class FramedDoubleBlockEntity extends FramedBlockEntity
      */
 
     @Override
-    public void saveAdditional(ValueOutput valueOutput)
-    {
+    public void saveAdditional(ValueOutput valueOutput) {
+        super.saveAdditional(valueOutput);
         valueOutput.store(CAMO_TWO_NBT_KEY, CamoContainerHelper.CODEC, camoContainer);
         valueOutput.storeNullable(CAMO_DIR_TWO_NBT_KEY, Direction.CODEC, camoOrientation);
-
-        super.saveAdditional(valueOutput);
     }
 
     @Override
-    public void loadAdditional(ValueInput valueInput)
-    {
+    public void loadAdditional(ValueInput valueInput) {
         super.loadAdditional(valueInput);
         camoContainer = loadAndValidateCamo(valueInput, CAMO_TWO_NBT_KEY);
         camoOrientation = valueInput.read(CAMO_DIR_TWO_NBT_KEY, Direction.CODEC).orElse(null);

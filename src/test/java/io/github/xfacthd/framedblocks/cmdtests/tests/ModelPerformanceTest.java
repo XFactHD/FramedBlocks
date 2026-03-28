@@ -48,8 +48,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.function.ToLongFunction;
 
-public final class ModelPerformanceTest
-{
+public final class ModelPerformanceTest {
     public static final String NAME = "ModelPerformance";
     private static final String PREFIX = "[" + NAME + "] ";
     private static final int RUNS = 10;
@@ -68,13 +67,11 @@ public final class ModelPerformanceTest
     ));
     private static final String STONE_NAME = BuiltInRegistries.BLOCK.getKey(Blocks.STONE).toString();
 
-    public static void testModelPerformance(CommandContext<CommandSourceStack> ignored, Consumer<Component> msgQueueAppender)
-    {
+    public static void testModelPerformance(CommandContext<CommandSourceStack> ignored, Consumer<Component> msgQueueAppender) {
         Map<String, BlockState> testStates = new LinkedHashMap<>();
 
         testStates.put(STONE_NAME, Blocks.STONE.defaultBlockState());
-        for (BlockType type : BlockType.values())
-        {
+        for (BlockType type : BlockType.values()) {
             BlockState state = FBContent.byType(type).defaultBlockState();
             String blockName = BuiltInRegistries.BLOCK.getKey(state.getBlock()).toString();
             testStates.put(blockName, state);
@@ -82,8 +79,7 @@ public final class ModelPerformanceTest
 
         // Warmup runs
         msgQueueAppender.accept(Component.literal(PREFIX + "Warmup..."));
-        for (BlockState state : testStates.values())
-        {
+        for (BlockState state : testStates.values()) {
             testModel(state, makeModelData(state, EmptyCamoContainer.EMPTY, false, null));
             testModel(state, makeModelData(state, TEST_CAMO_CONTAINER, false, null));
             testModel(state, makeModelData(state, TEST_CAMO_CONTAINER, true, null));
@@ -92,12 +88,10 @@ public final class ModelPerformanceTest
 
         msgQueueAppender.accept(Component.literal(PREFIX + "Measure..."));
         Map<String, List<Result>> results = new LinkedHashMap<>();
-        for (int i = 0; i < RUNS; i++)
-        {
+        for (int i = 0; i < RUNS; i++) {
             msgQueueAppender.accept(Component.literal(PREFIX + "  Run " + (i + 1)));
 
-            for (Map.Entry<String, BlockState> entry : testStates.entrySet())
-            {
+            for (Map.Entry<String, BlockState> entry : testStates.entrySet()) {
                 BlockState state = entry.getValue();
                 boolean stone = state.getBlock() == Blocks.STONE;
                 long timeEmpty = testModel(state, makeModelData(state, EmptyCamoContainer.EMPTY, false, null));
@@ -112,8 +106,7 @@ public final class ModelPerformanceTest
 
         MarkdownTable table = new MarkdownTable();
         table.header("Block");
-        for (int i = 0; i < RUNS; i++)
-        {
+        for (int i = 0; i < RUNS; i++) {
             table.header("Run %d".formatted(i + 1), true);
         }
         table.header("Average", true).header("Relative", true);
@@ -128,8 +121,7 @@ public final class ModelPerformanceTest
         float[] allCamoEmissiveRel = new float[results.size() - 1];
         long[] allCamoOverlayAvg = new long[results.size() - 1];
         float[] allCamoOverlayRel = new float[results.size() - 1];
-        results.forEach((name, values) ->
-        {
+        results.forEach((name, values) -> {
             int index = count[0] - 1;
             computeAndPrintEntry(table, index, name, TestType.EMPTY, values, allEmptyAvg, allEmptyRel, stoneAvg);
             computeAndPrintEntry(table, index, name, TestType.CAMO, values, allCamoAvg, allCamoRel, stoneAvg);
@@ -149,8 +141,7 @@ public final class ModelPerformanceTest
         int maxCamoEmissive = 0;
         int minCamoOverlay = 0;
         int maxCamoOverlay = 0;
-        for (int i = 0; i < results.size() - 1; i++)
-        {
+        for (int i = 0; i < results.size() - 1; i++) {
             minBlank = compare(allEmptyAvg, i, minBlank, true);
             maxBlank = compare(allEmptyAvg, i, maxBlank, false);
             minCamo = compare(allCamoAvg, i, minCamo, true);
@@ -176,19 +167,16 @@ public final class ModelPerformanceTest
         msgQueueAppender.accept(Component.literal(PREFIX).append(msg));
     }
 
-    private static void computeAndPrintEntry(MarkdownTable table, int index, String name, TestType type, List<Result> values, long[] allAverage, float[] allRelative, long[] stoneAvg)
-    {
+    private static void computeAndPrintEntry(MarkdownTable table, int index, String name, TestType type, List<Result> values, long[] allAverage, float[] allRelative, long[] stoneAvg) {
         boolean stone = name.equals(STONE_NAME);
-        if (stone && type != TestType.EMPTY) return;
+        if (stone && type != TestType.EMPTY) { return; }
 
-        if (!stone)
-        {
+        if (!stone) {
             name += " (" + type.suffix + ")";
         }
         table.cell(name);
         long total = 0;
-        for (Result entry : values)
-        {
+        for (Result entry : values) {
             long time = type.resultGetter.applyAsLong(entry);
             table.cell("%6d us".formatted(time));
             total += time;
@@ -197,31 +185,24 @@ public final class ModelPerformanceTest
         float relative = stone ? 1 : ((float) average / (float) stoneAvg[0]);
         table.cell("%6d us".formatted(average)).cell("%6.02f".formatted(relative)).newRow();
 
-        if (stone)
-        {
+        if (stone) {
             stoneAvg[0] = average;
-        }
-        else
-        {
+        } else {
             allAverage[index] = average;
             allRelative[index] = relative;
         }
     }
 
-    private static int compare(long[] data, int idx, int prevIdx, boolean min)
-    {
-        if (min ? data[idx] < data[prevIdx] : data[idx] > data[prevIdx])
-        {
+    private static int compare(long[] data, int idx, int prevIdx, boolean min) {
+        if (min ? data[idx] < data[prevIdx] : data[idx] > data[prevIdx]) {
             return idx;
         }
         return prevIdx;
     }
 
-    private static long testModel(BlockState state, ModelData data)
-    {
+    private static long testModel(BlockState state, ModelData data) {
         BlockStateModel model = ModelUtils.getModel(state);
-        if (model instanceof FramedBlockStateModel framedModel)
-        {
+        if (model instanceof FramedBlockStateModel framedModel) {
             framedModel.clearCache();
         }
 
@@ -229,13 +210,10 @@ public final class ModelPerformanceTest
 
         Stopwatch watch = Stopwatch.createStarted();
 
-        for (int i = 0; i < SAMPLE_COUNT; i++)
-        {
+        for (int i = 0; i < SAMPLE_COUNT; i++) {
             model.collectParts(level, BlockPos.ZERO, state, RANDOM, PART_SCRATCH_LIST);
-            for (BlockStateModelPart part : PART_SCRATCH_LIST)
-            {
-                for (Direction side : DIRECTIONS)
-                {
+            for (BlockStateModelPart part : PART_SCRATCH_LIST) {
+                for (Direction side : DIRECTIONS) {
                     part.getQuads(side);
                 }
             }
@@ -246,17 +224,13 @@ public final class ModelPerformanceTest
         return watch.elapsed(TimeUnit.MICROSECONDS);
     }
 
-    private static ModelData makeModelData(BlockState state, CamoContainer<?, ?> camo, boolean emissive, @Nullable Holder<BlockOverlay> overlay)
-    {
+    private static ModelData makeModelData(BlockState state, CamoContainer<?, ?> camo, boolean emissive, @Nullable Holder<BlockOverlay> overlay) {
         AbstractFramedBlockData fbData;
-        if (state.getBlock() instanceof IFramedDoubleBlock doubleBlock)
-        {
+        if (state.getBlock() instanceof IFramedDoubleBlock doubleBlock) {
             FramedBlockData dataOne = new FramedBlockData(state, camo, (byte) 0, false, false, emissive, TriState.DEFAULT, overlay);
             FramedBlockData dataTwo = new FramedBlockData(state, camo, (byte) 0, true, false, emissive, TriState.DEFAULT, null);
             fbData = new FramedDoubleBlockData(doubleBlock.getCache(state).getParts(), dataOne, dataTwo);
-        }
-        else
-        {
+        } else {
             fbData = new FramedBlockData(state, camo, (byte) 0, false, false, emissive, TriState.DEFAULT, overlay);
         }
         return ModelData.of(AbstractFramedBlockData.PROPERTY, fbData);
@@ -264,8 +238,7 @@ public final class ModelPerformanceTest
 
     private record Result(long timeEmpty, long timeCamo, long timeCamoEmissive, long timeCamoOverlay) { }
 
-    private enum TestType
-    {
+    private enum TestType {
         EMPTY("empty", Result::timeEmpty),
         CAMO("camo", Result::timeCamo),
         CAMO_EMISSIVE("camo emissive", Result::timeCamoEmissive),
@@ -275,8 +248,7 @@ public final class ModelPerformanceTest
         private final String suffix;
         private final ToLongFunction<Result> resultGetter;
 
-        TestType(String suffix, ToLongFunction<Result> resultGetter)
-        {
+        TestType(String suffix, ToLongFunction<Result> resultGetter) {
             this.suffix = suffix;
             this.resultGetter = resultGetter;
         }

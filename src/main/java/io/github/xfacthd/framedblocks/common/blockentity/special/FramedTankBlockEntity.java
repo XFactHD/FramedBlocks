@@ -22,102 +22,86 @@ import net.neoforged.neoforge.transfer.ResourceHandlerUtil;
 import net.neoforged.neoforge.transfer.fluid.FluidResource;
 import net.neoforged.neoforge.transfer.fluid.FluidUtil;
 
-public class FramedTankBlockEntity extends FramedBlockEntity
-{
+public class FramedTankBlockEntity extends FramedBlockEntity {
     private final TankFluidResourceHandler fluidHandler = new TankFluidResourceHandler(this);
 
-    public FramedTankBlockEntity(BlockPos pos, BlockState state)
-    {
+    public FramedTankBlockEntity(BlockPos pos, BlockState state) {
         super(FBContent.BE_TYPE_FRAMED_TANK.value(), pos, state);
     }
 
-    public InteractionResult handleTankInteraction(Player player, InteractionHand hand)
-    {
-        if (FluidUtil.interactWithFluidHandler(player, hand, worldPosition, fluidHandler))
-        {
+    public InteractionResult handleTankInteraction(Player player, InteractionHand hand) {
+        if (FluidUtil.interactWithFluidHandler(player, hand, worldPosition, fluidHandler)) {
             return InteractionResult.SUCCESS;
         }
         return InteractionResult.TRY_WITH_EMPTY_HAND;
     }
 
-    public FluidStack getContents()
-    {
+    public FluidStack getContents() {
         return fluidHandler.getResource(0).toStack(fluidHandler.getAmountAsInt(0));
     }
 
-    public ResourceHandler<FluidResource> getFluidHandler()
-    {
+    public ResourceHandler<FluidResource> getFluidHandler() {
         return fluidHandler;
     }
 
-    public void onTankContentsChanged()
-    {
-        if (level == null || level.isClientSide()) return;
+    public void onTankContentsChanged() {
+        if (level == null || level.isClientSide()) {
+            return;
+        }
 
         setChanged();
-        if (!getBlockState().getValue(FramedProperties.SOLID))
-        {
+        if (!getBlockState().getValue(FramedProperties.SOLID)) {
             level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
         }
     }
 
-    public int getAnalogSignal()
-    {
+    public int getAnalogSignal() {
         return ResourceHandlerUtil.getRedstoneSignalFromResourceHandler(fluidHandler);
     }
 
     @Override
-    protected void writeToDataPacket(ValueOutput valueOutput)
-    {
+    protected void writeToDataPacket(ValueOutput valueOutput) {
         super.writeToDataPacket(valueOutput);
         fluidHandler.serialize(valueOutput);
     }
 
     @Override
-    protected void readFromDataPacket(NetworkValueInput input)
-    {
+    protected void readFromDataPacket(NetworkValueInput input) {
         super.readFromDataPacket(input);
         fluidHandler.deserialize(input);
     }
 
     @Override
-    public void removeComponentsFromTag(ValueOutput valueOutput)
-    {
+    public void removeComponentsFromTag(ValueOutput valueOutput) {
         super.removeComponentsFromTag(valueOutput);
         valueOutput.discard(TankFluidResourceHandler.FLUID_NBT_KEY);
     }
 
     @Override
-    protected void applyMiscComponents(DataComponentGetter input)
-    {
+    protected void applyMiscComponents(DataComponentGetter input) {
         SimpleFluidContent content = input.getOrDefault(FBContent.DC_TYPE_TANK_CONTENTS, SimpleFluidContent.EMPTY);
-        if (!content.isEmpty())
-        {
+        if (!content.isEmpty()) {
             fluidHandler.setContent(content);
         }
     }
 
     @Override
-    protected void collectMiscComponents(DataComponentMap.Builder builder)
-    {
+    protected void collectMiscComponents(DataComponentMap.Builder builder) {
         FluidResource contents = fluidHandler.getResource(0);
-        if (!contents.isEmpty())
-        {
+        if (!contents.isEmpty()) {
             int amount = fluidHandler.getAmountAsInt(0);
             builder.set(FBContent.DC_TYPE_TANK_CONTENTS, SimpleFluidContent.copyOf(contents.toStack(amount)));
         }
     }
 
     @Override
-    public void loadAdditional(ValueInput valueInput)
-    {
+    public void loadAdditional(ValueInput valueInput) {
         super.loadAdditional(valueInput);
         fluidHandler.deserialize(valueInput);
     }
 
     @Override
-    public void saveAdditional(ValueOutput valueOutput)
-    {
+    public void saveAdditional(ValueOutput valueOutput) {
         super.saveAdditional(valueOutput);
         fluidHandler.serialize(valueOutput);
     }

@@ -8,37 +8,27 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jspecify.annotations.Nullable;
 
-public final class InnerCornerSlopeEdgeConnectionPredicate implements ConnectionPredicate
-{
+public final class InnerCornerSlopeEdgeConnectionPredicate implements ConnectionPredicate {
     @Override
-    public boolean canConnectFullEdge(BlockState state, Direction side, @Nullable Direction edge)
-    {
-        if (!state.getValue(PropertyHolder.ALT_TYPE))
-        {
+    public boolean canConnectFullEdge(BlockState state, Direction side, @Nullable Direction edge) {
+        if (!state.getValue(PropertyHolder.ALT_TYPE)) {
             Direction dir = state.getValue(FramedProperties.FACING_HOR);
             CornerType type = state.getValue(PropertyHolder.CORNER_TYPE);
-            if (type.isHorizontal())
-            {
+            if (type.isHorizontal()) {
                 Direction backOne = type.isTop() ? Direction.UP : Direction.DOWN;
                 Direction backTwo = type.isRight() ? dir.getClockWise() : dir.getCounterClockWise();
-                if (side == dir)
-                {
+                if (side == dir) {
                     return edge == backOne || edge == backTwo;
                 }
-                if (side == backOne || side == backTwo)
-                {
+                if (side == backOne || side == backTwo) {
                     return edge == dir;
                 }
-            }
-            else
-            {
+            } else {
                 Direction bottomFace = type.isTop() ? Direction.UP : Direction.DOWN;
-                if (side == bottomFace)
-                {
+                if (side == bottomFace) {
                     return edge == dir || edge == dir.getCounterClockWise();
                 }
-                if (side == dir || side == dir.getCounterClockWise())
-                {
+                if (side == dir || side == dir.getCounterClockWise()) {
                     return edge == bottomFace;
                 }
             }
@@ -47,8 +37,7 @@ public final class InnerCornerSlopeEdgeConnectionPredicate implements Connection
     }
 
     @Override
-    public boolean canConnectDetailed(BlockState state, Direction side, Direction edge)
-    {
+    public boolean canConnectDetailed(BlockState state, Direction side, Direction edge) {
         Direction dir = state.getValue(FramedProperties.FACING_HOR);
         CornerType type = state.getValue(PropertyHolder.CORNER_TYPE);
         boolean alt = state.getValue(PropertyHolder.ALT_TYPE);
@@ -56,39 +45,31 @@ public final class InnerCornerSlopeEdgeConnectionPredicate implements Connection
         Direction bottom;
         Direction backOne;
         Direction backTwo;
-        if (type.isHorizontal())
-        {
+        if (type.isHorizontal()) {
             bottom = dir;
             backOne = type.isTop() ? Direction.UP : Direction.DOWN;
             backTwo = type.isRight() ? dir.getClockWise() : dir.getCounterClockWise();
-        }
-        else
-        {
+        } else {
             bottom = type.isTop() ? Direction.UP : Direction.DOWN;
             backOne = dir;
             backTwo = dir.getCounterClockWise();
         }
 
-        if (side == bottom)
-        {
+        if (side == bottom) {
             return edge == backOne.getOpposite() || edge == backTwo.getOpposite();
         }
-        else if (side == backOne)
-        {
+        if (side == backOne) {
             return edge == backTwo.getOpposite() || (!alt && edge == backTwo);
         }
-        else if (side == backTwo)
-        {
+        if (side == backTwo) {
             return edge == backOne.getOpposite() || (!alt && edge == backOne);
         }
-        else if (side == backOne.getOpposite())
-        {
+        if (side == backOne.getOpposite()) {
             return edge == backTwo.getOpposite() || (!alt && (edge == backTwo || edge == bottom));
         }
-        else if (side == backTwo.getOpposite())
-        {
+        if (side == backTwo.getOpposite()) {
             return edge == backOne.getOpposite() || (!alt && (edge == backOne || edge == bottom));
         }
-        else return side == bottom.getOpposite();
+        return side == bottom.getOpposite();
     }
 }

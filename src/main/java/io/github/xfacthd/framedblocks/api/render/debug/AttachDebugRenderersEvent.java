@@ -17,18 +17,15 @@ import java.util.function.BiConsumer;
  * {@linkplain BlockDebugRenderer#isEnabled() enabled} {@link BlockDebugRenderer} attached to it will have a
  * {@link BlockEntityRenderer} assigned to it which will override any BER previously attached to this type
  */
-public final class AttachDebugRenderersEvent extends Event implements IModBusEvent
-{
+public final class AttachDebugRenderersEvent extends Event implements IModBusEvent {
     private final BiConsumer<BlockEntityType<? extends BlockEntity>, BlockDebugRenderer<?>> registrar;
 
     @ApiStatus.Internal
-    public AttachDebugRenderersEvent(BiConsumer<BlockEntityType<? extends BlockEntity>, BlockDebugRenderer<?>> registrar)
-    {
+    public AttachDebugRenderersEvent(BiConsumer<BlockEntityType<? extends BlockEntity>, BlockDebugRenderer<?>> registrar) {
         this.registrar = registrar;
     }
 
-    public <BT extends BlockEntity & IFramedBlockEntity> void attach(BlockEntityType<BT> type, BlockDebugRenderer<? super BT> renderer)
-    {
+    public <BT extends BlockEntity & IFramedBlockEntity> void attach(BlockEntityType<BT> type, BlockDebugRenderer<? super BT> renderer) {
         registrar.accept(type, renderer);
     }
 }

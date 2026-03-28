@@ -12,31 +12,28 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.jspecify.annotations.Nullable;
 
-public class FramedPillarSocketGeometry extends Geometry
-{
+public class FramedPillarSocketGeometry extends Geometry {
     private final Direction facing;
 
-    public FramedPillarSocketGeometry(GeometryFactory.Context ctx)
-    {
+    public FramedPillarSocketGeometry(GeometryFactory.Context ctx) {
         this.facing = ctx.state().getValue(BlockStateProperties.FACING);
     }
 
     @Override
-    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object cacheKeyUserData)
-    {
+    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object cacheKeyUserData) {
         Direction quadDir = quad.direction();
         Direction.Axis quadAxis = quadDir.getAxis();
 
-        if (quadDir == facing.getOpposite())
-        {
+        if (quadDir == facing.getOpposite()) {
             boolean y = DirUtils.isY(quadDir);
             QuadModifier.of(quad)
                     .apply(y ? Modifiers.cutTopBottom(.25F, .25F, .75F, .75F) : Modifiers.cutSide(.25F, .25F, .75F, .75F))
                     .export(quadMap, quadDir);
 
-            DirUtils.forAllDirections(dir ->
-            {
-                if (dir.getAxis() == facing.getAxis()) return;
+            DirUtils.forAllDirections(dir -> {
+                if (dir.getAxis() == facing.getAxis()) {
+                    return;
+                }
 
                 boolean perp = y ? DirUtils.isZ(dir) : DirUtils.isY(dir);
                 QuadModifier.of(quad)
@@ -45,9 +42,7 @@ public class FramedPillarSocketGeometry extends Geometry
                         .apply(Modifiers.setPosition(.5F))
                         .export(quadMap, null);
             });
-        }
-        else if (quadDir != facing)
-        {
+        } else if (quadDir != facing) {
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(facing.getOpposite(), .5F))
                     .export(quadMap, quadDir);

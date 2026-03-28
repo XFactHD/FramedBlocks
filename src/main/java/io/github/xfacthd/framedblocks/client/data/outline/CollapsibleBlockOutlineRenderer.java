@@ -14,26 +14,20 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.joml.Quaternionf;
 import org.jspecify.annotations.Nullable;
 
-public final class CollapsibleBlockOutlineRenderer implements OutlineRenderer<CollapsibleBlockOutlineRenderer.OutlineData>
-{
+public final class CollapsibleBlockOutlineRenderer implements OutlineRenderer<CollapsibleBlockOutlineRenderer.OutlineData> {
     private static final Quaternionf ROTATION = Axis.YN.rotationDegrees(180);
 
     @Override
-    public void rotateMatrix(PoseStack poseStack, BlockState state)
-    {
+    public void rotateMatrix(PoseStack poseStack, BlockState state) {
         poseStack.mulPose(ROTATION);
 
         NullableDirection face = state.getValue(PropertyHolder.NULLABLE_FACE);
-        if (face != NullableDirection.NONE)
-        {
+        if (face != NullableDirection.NONE) {
             Direction faceDir = face.toDirection().getOpposite();
 
-            if (faceDir == Direction.UP)
-            {
+            if (faceDir == Direction.UP) {
                 poseStack.mulPose(Quaternions.XP_180);
-            }
-            else if (faceDir != Direction.DOWN)
-            {
+            } else if (faceDir != Direction.DOWN) {
                 poseStack.mulPose(OutlineRenderer.YN_DIR[faceDir.getOpposite().get2DDataValue()]);
                 poseStack.mulPose(Quaternions.XN_90);
             }
@@ -41,16 +35,13 @@ public final class CollapsibleBlockOutlineRenderer implements OutlineRenderer<Co
     }
 
     @Override
-    @Nullable
-    public OutlineData extractOutlineData(BlockState state, Level level, BlockPos pos)
+    public @Nullable OutlineData extractOutlineData(BlockState state, Level level, BlockPos pos)
     {
         NullableDirection face = state.getValue(PropertyHolder.NULLABLE_FACE);
-        if (face == NullableDirection.NONE)
-        {
+        if (face == NullableDirection.NONE) {
             return null;
         }
-        if (!(level.getBlockEntity(pos) instanceof FramedCollapsibleBlockEntity be))
-        {
+        if (!(level.getBlockEntity(pos) instanceof FramedCollapsibleBlockEntity be)) {
             return null;
         }
 
@@ -63,8 +54,7 @@ public final class CollapsibleBlockOutlineRenderer implements OutlineRenderer<Co
     }
 
     @Override
-    public void draw(BlockState state, OutlineData data, LineDrawer drawer)
-    {
+    public void draw(BlockState state, OutlineData data, LineDrawer drawer) {
         float v0 = data.v0;
         float v1 = data.v1;
         float v2 = data.v2;

@@ -9,8 +9,7 @@ import net.minecraft.world.level.block.Rotation;
 import java.util.Locale;
 import java.util.Objects;
 
-public enum CornerTubeOrientation implements StringRepresentable
-{
+public enum CornerTubeOrientation implements StringRepresentable {
     UP_NORTH(Direction.UP, Direction.NORTH),
     UP_EAST(Direction.UP, Direction.EAST),
     UP_SOUTH(Direction.UP, Direction.SOUTH),
@@ -33,56 +32,50 @@ public enum CornerTubeOrientation implements StringRepresentable
     private final Direction primDir;
     private final Direction secDir;
 
-    CornerTubeOrientation(Direction primDir, Direction secDir)
-    {
+    CornerTubeOrientation(Direction primDir, Direction secDir) {
         this.primDir = primDir;
         this.secDir = secDir;
     }
 
-    public Direction getPrimaryDir()
-    {
+    public Direction getPrimaryDir() {
         return primDir;
     }
 
-    public Direction getSecondaryDir()
-    {
+    public Direction getSecondaryDir() {
         return secDir;
     }
 
-    public boolean isVertical()
-    {
+    public boolean isVertical() {
         return DirUtils.isY(primDir);
     }
 
-    public boolean isSideOpen(Direction side)
-    {
+    public boolean isSideOpen(Direction side) {
         return side == primDir || side == secDir;
     }
 
-    public CornerTubeOrientation rotate(Rotation rot)
-    {
-        if (rot == Rotation.NONE) return this;
+    public CornerTubeOrientation rotate(Rotation rot) {
+        if (rot == Rotation.NONE) {
+            return this;
+        }
         return of(rot.rotate(primDir), rot.rotate(secDir));
     }
 
-    public CornerTubeOrientation mirror(Mirror mirror)
-    {
-        if (mirror == Mirror.NONE) return this;
+    public CornerTubeOrientation mirror(Mirror mirror) {
+        if (mirror == Mirror.NONE) {
+            return this;
+        }
         return of(mirror.mirror(primDir), mirror.mirror(secDir));
     }
 
     @Override
-    public String getSerializedName()
-    {
+    public String getSerializedName() {
         return name;
     }
 
-    public static CornerTubeOrientation of(Direction dirOne, Direction dirTwo)
-    {
+    public static CornerTubeOrientation of(Direction dirOne, Direction dirTwo) {
         CornerTubeOrientation orientationOne = FROM_DIRS[dirOne.ordinal()][dirTwo.ordinal()];
         CornerTubeOrientation orientationTwo = FROM_DIRS[dirTwo.ordinal()][dirOne.ordinal()];
-        if (orientationOne == null && orientationTwo == null)
-        {
+        if (orientationOne == null && orientationTwo == null) {
             throw new IllegalArgumentException(
                     "Invalid direction pair! Primary dir: " + dirOne + ", Secondary dir: " + dirTwo
             );
@@ -90,11 +83,9 @@ public enum CornerTubeOrientation implements StringRepresentable
         return Objects.requireNonNullElse(orientationOne, orientationTwo);
     }
 
-    private static CornerTubeOrientation[][] makeDirTable()
-    {
+    private static CornerTubeOrientation[][] makeDirTable() {
         CornerTubeOrientation[][] table = new CornerTubeOrientation[6][6];
-        for (CornerTubeOrientation orientation : CornerTubeOrientation.values())
-        {
+        for (CornerTubeOrientation orientation : CornerTubeOrientation.values()) {
             Direction primDir = orientation.primDir;
             Direction secDir = orientation.secDir;
             table[primDir.ordinal()][secDir.ordinal()] = orientation;

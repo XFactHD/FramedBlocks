@@ -24,71 +24,62 @@ import org.jetbrains.annotations.ApiStatus;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-public interface IFramedBlockItem
-{
+public interface IFramedBlockItem {
     @ApiStatus.NonExtendable
-    default InteractionResult handlePlace(BlockPlaceContext context, Function<BlockPlaceContext, InteractionResult> superHandler)
-    {
+    default InteractionResult handlePlace(BlockPlaceContext context, Function<BlockPlaceContext, InteractionResult> superHandler) {
         InteractionResult result = superHandler.apply(context);
-        if (result == InteractionResult.SUCCESS)
-        {
+        if (result == InteractionResult.SUCCESS) {
             playPlaceSound(context);
         }
         return result;
     }
 
     @ApiStatus.OverrideOnly
-    default void playPlaceSound(BlockPlaceContext context)
-    {
+    default void playPlaceSound(BlockPlaceContext context) {
         Level level = context.getLevel();
         BlockPos pos = context.getClickedPos();
-        if (!(level.getBlockEntity(pos) instanceof IFramedBlockEntity be)) return;
+        if (!(level.getBlockEntity(pos) instanceof IFramedBlockEntity be)) {
+            return;
+        }
 
         SoundType soundOne = resolveSound(be.getCamo().getContent());
         SoundUtils.playPlaceSound(context, soundOne, false);
 
-        if (!(be instanceof FramedDoubleBlockEntity dbe)) return;
-
-        SoundType soundTwo = resolveSound(dbe.getCamoTwo().getContent());
-        if (!SoundUtils.isSameSound(soundOne, soundTwo, SoundEventType.PLACE))
-        {
-            SoundUtils.playPlaceSound(context, soundTwo, false);
+        if (be instanceof FramedDoubleBlockEntity dbe) {
+            SoundType soundTwo = resolveSound(dbe.getCamoTwo().getContent());
+            if (!SoundUtils.isSameSound(soundOne, soundTwo, SoundEventType.PLACE)) {
+                SoundUtils.playPlaceSound(context, soundTwo, false);
+            }
         }
+
     }
 
-    default boolean useCustomEmptyPlaceSound()
-    {
+    default boolean useCustomEmptyPlaceSound() {
         return false;
     }
 
     @SuppressWarnings("deprecation")
-    private SoundType resolveSound(CamoContent<?> camo)
-    {
-        if (useCustomEmptyPlaceSound() && camo.isEmpty())
-        {
+    private SoundType resolveSound(CamoContent<?> camo) {
+        if (useCustomEmptyPlaceSound() && camo.isEmpty()) {
             return ((BlockItem) this).getBlock().defaultBlockState().getSoundType();
         }
         return camo.getSoundType();
     }
 
     @ApiStatus.NonExtendable
-    default SoundEvent getCamoPlaceSound(BlockState state, Level level, BlockPos pos, Player player, PlaceSoundGetter superGetter)
-    {
-        if (level.getBlockEntity(pos) instanceof IFramedBlockEntity)
-        {
+    default SoundEvent getCamoPlaceSound(BlockState state, Level level, BlockPos pos, Player player, PlaceSoundGetter superGetter) {
+        if (level.getBlockEntity(pos) instanceof IFramedBlockEntity) {
             // Dummy out the automatically played place sound
             return SoundEvents.EMPTY;
         }
         return superGetter.get(state, level, pos, player);
     }
 
-    static void appendCamoHoverText(ItemStack stack, Consumer<Component> appender)
-    {
+    static void appendCamoHoverText(ItemStack stack, Consumer<Component> appender) {
         CamoPrinter.printCamoList(appender, stack.get(Utils.DC_TYPE_CAMO_LIST), false);
     }
 
-    interface PlaceSoundGetter
-    {
+    interface PlaceSoundGetter {
         SoundEvent get(BlockState state, Level level, BlockPos pos, Player player);
     }
 }

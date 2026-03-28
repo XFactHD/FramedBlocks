@@ -6,8 +6,7 @@ import net.minecraft.world.item.ItemStack;
 
 import java.util.function.Predicate;
 
-public interface TriggerRegistrar
-{
+public interface TriggerRegistrar {
     /**
      * Default predicate for removal of block camos. Should be preferred over specifically using the hammer for mod compatibility
      */

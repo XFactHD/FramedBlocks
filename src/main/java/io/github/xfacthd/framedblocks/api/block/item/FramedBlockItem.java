@@ -18,44 +18,37 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.function.Consumer;
 
-public class FramedBlockItem extends BlockItem implements IFramedBlockItem
-{
+public class FramedBlockItem extends BlockItem implements IFramedBlockItem {
     private final boolean customEmptyPlaceSound;
 
-    public FramedBlockItem(Block block, Properties props)
-    {
+    public FramedBlockItem(Block block, Properties props) {
         this(block, props, false);
     }
 
-    public FramedBlockItem(Block block, Properties props, boolean customEmptyPlaceSound)
-    {
+    public FramedBlockItem(Block block, Properties props, boolean customEmptyPlaceSound) {
         super(block, props);
         this.customEmptyPlaceSound = customEmptyPlaceSound;
         Preconditions.checkArgument(block instanceof IFramedBlock);
     }
 
     @Override
-    public InteractionResult place(BlockPlaceContext context)
-    {
+    public InteractionResult place(BlockPlaceContext context) {
         return handlePlace(context, super::place);
     }
 
     @Override
-    public boolean useCustomEmptyPlaceSound()
-    {
+    public boolean useCustomEmptyPlaceSound() {
         return customEmptyPlaceSound;
     }
 
     @Override
-    protected SoundEvent getPlaceSound(BlockState state, Level level, BlockPos pos, Player entity)
-    {
+    protected SoundEvent getPlaceSound(BlockState state, Level level, BlockPos pos, Player entity) {
         return getCamoPlaceSound(state, level, pos, entity, super::getPlaceSound);
     }
 
     @Override
     @SuppressWarnings("deprecation")
-    public void appendHoverText(ItemStack stack, TooltipContext ctx, TooltipDisplay display, Consumer<Component> appender, TooltipFlag flag)
-    {
+    public void appendHoverText(ItemStack stack, TooltipContext ctx, TooltipDisplay display, Consumer<Component> appender, TooltipFlag flag) {
         IFramedBlockItem.appendCamoHoverText(stack, appender);
     }
 }

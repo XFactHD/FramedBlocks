@@ -20,65 +20,51 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import org.jspecify.annotations.Nullable;
 
-public final class AppliedEnergisticsCompat
-{
+public final class AppliedEnergisticsCompat {
     public static final String MOD_ID = "ae2";
     public static final String SAW_PATTERN_ID = "framing_saw_pattern";
     private static boolean loaded = false;
 
-    public static void init(IEventBus modBus)
-    {
-        if (ModList.get().isLoaded(MOD_ID))
-        {
+    public static void init(IEventBus modBus) {
+        if (ModList.get().isLoaded(MOD_ID)) {
             GuardedAccess.init(modBus);
             loaded = true;
         }
     }
 
-    public static boolean isLoaded()
-    {
+    public static boolean isLoaded() {
         return loaded;
     }
 
-    public static ItemStack makeBlankPatternStack()
-    {
-        if (loaded)
-        {
+    public static ItemStack makeBlankPatternStack() {
+        if (loaded) {
             return GuardedAccess.makeBlankPatternStack();
         }
         return ItemStack.EMPTY;
     }
 
-    public static ItemStack makeSawPatternStack()
-    {
-        if (loaded)
-        {
+    public static ItemStack makeSawPatternStack() {
+        if (loaded) {
             return GuardedAccess.makeSawPatternStack();
         }
         return ItemStack.EMPTY;
     }
 
-    public static boolean isPattern(ItemStack stack, boolean encoded)
-    {
-        if (loaded)
-        {
+    public static boolean isPattern(ItemStack stack, boolean encoded) {
+        if (loaded) {
             return GuardedAccess.isPattern(stack, encoded);
         }
         return false;
     }
 
-    @Nullable
-    public static ItemStack tryEncodePattern(ItemStack input, ItemStack[] additives, ItemStack output)
-    {
-        if (loaded)
-        {
+    public static @Nullable ItemStack tryEncodePattern(ItemStack input, ItemStack[] additives, ItemStack output) {
+        if (loaded) {
             return GuardedAccess.tryEncodePattern(input, additives, output);
         }
         return null;
     }
 
-    static final class GuardedAccess
-    {
+    static final class GuardedAccess {
         private static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(FramedConstants.MOD_ID);
         private static final DeferredRegister<AttachmentType<?>> ATTACHMENTS = DeferredRegister.create(NeoForgeRegistries.ATTACHMENT_TYPES, FramedConstants.MOD_ID);
         private static final DeferredDataComponentTypeRegister DATA_COMPONENTS = DeferredDataComponentTypeRegister.create(FramedConstants.MOD_ID);
@@ -97,16 +83,14 @@ public final class AppliedEnergisticsCompat
 
         static final Holder<Item> ITEM_BLANK_PATTERN = DeferredItem.createItem(Utils.id(MOD_ID, "blank_pattern"));
 
-        public static void init(IEventBus modBus)
-        {
+        public static void init(IEventBus modBus) {
             ITEMS.register(modBus);
             ATTACHMENTS.register(modBus);
             DATA_COMPONENTS.register(modBus);
             modBus.addListener(GuardedAccess::onRegisterCapabilities);
         }
 
-        private static void onRegisterCapabilities(RegisterCapabilitiesEvent event)
-        {
+        private static void onRegisterCapabilities(RegisterCapabilitiesEvent event) {
             event.registerBlockEntity(
                     AECapabilities.CRAFTING_MACHINE,
                     FBContent.BE_TYPE_POWERED_FRAMING_SAW.value(),
@@ -114,23 +98,19 @@ public final class AppliedEnergisticsCompat
             );
         }
 
-        public static ItemStack makeBlankPatternStack()
-        {
+        public static ItemStack makeBlankPatternStack() {
             return new ItemStack(ITEM_BLANK_PATTERN);
         }
 
-        public static ItemStack makeSawPatternStack()
-        {
+        public static ItemStack makeSawPatternStack() {
             return new ItemStack(ITEM_FRAMING_SAW_PATTERN);
         }
 
-        public static boolean isPattern(ItemStack stack, boolean encoded)
-        {
+        public static boolean isPattern(ItemStack stack, boolean encoded) {
             return stack.is(encoded ? ITEM_FRAMING_SAW_PATTERN : ITEM_BLANK_PATTERN);
         }
 
-        public static ItemStack tryEncodePattern(ItemStack input, ItemStack[] additives, ItemStack output)
-        {
+        public static ItemStack tryEncodePattern(ItemStack input, ItemStack[] additives, ItemStack output) {
             ItemStack stack = new ItemStack(ITEM_FRAMING_SAW_PATTERN);
             FramingSawPatternDetails.encode(stack, input, additives, output);
             return stack;

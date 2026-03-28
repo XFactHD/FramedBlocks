@@ -14,8 +14,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.model.data.ModelData;
 
-public class FramedMarkedCubeGeometry extends FramedCubeGeometry
-{
+public class FramedMarkedCubeGeometry extends FramedCubeGeometry {
     public static final Identifier SLIME_FRAME_LOCATION = Utils.id("block/slime_frame");
     public static final Identifier REDSTONE_FRAME_LOCATION = Utils.id("block/redstone_frame");
     public static final String FRAME_KEY = "frame";
@@ -24,8 +23,7 @@ public class FramedMarkedCubeGeometry extends FramedCubeGeometry
     private final BlockStateModel frameModel;
     private final BlockState frameShaderState;
 
-    private FramedMarkedCubeGeometry(GeometryFactory.Context ctx, BlockState frameShaderState)
-    {
+    private FramedMarkedCubeGeometry(GeometryFactory.Context ctx, BlockState frameShaderState) {
         super(ctx);
         this.state = ctx.state();
         this.frameModel = ctx.auxModels().getModel(FRAME_KEY);
@@ -33,33 +31,26 @@ public class FramedMarkedCubeGeometry extends FramedCubeGeometry
     }
 
     @Override
-    public boolean hasAdditionalUncachedParts()
-    {
+    public boolean hasAdditionalUncachedParts() {
         return true;
     }
 
     @Override
-    public void collectAdditionalPartsUncached(PartConsumer consumer, BlockAndTintGetter level, BlockPos pos, RandomSource random, FramedBlockData blockData, ModelData data)
-    {
-        if (!blockData.getCamoContent().isEmpty())
-        {
+    public void collectAdditionalPartsUncached(PartConsumer consumer, BlockAndTintGetter level, BlockPos pos, RandomSource random, FramedBlockData blockData, ModelData data) {
+        if (!blockData.getCamoContent().isEmpty()) {
             consumer.acceptAll(frameModel, level, pos, random, state, false, false, true, frameShaderState, null);
         }
     }
 
-    public static FramedCubeGeometry slime(GeometryFactory.Context ctx)
-    {
-        if (ClientConfig.VIEW.showSpecialCubeOverlay())
-        {
+    public static FramedCubeGeometry slime(GeometryFactory.Context ctx) {
+        if (ClientConfig.VIEW.showSpecialCubeOverlay()) {
             return new FramedMarkedCubeGeometry(ctx, Blocks.SLIME_BLOCK.defaultBlockState());
         }
         return new FramedCubeGeometry(ctx);
     }
 
-    public static FramedCubeGeometry redstone(GeometryFactory.Context ctx)
-    {
-        if (ClientConfig.VIEW.showSpecialCubeOverlay())
-        {
+    public static FramedCubeGeometry redstone(GeometryFactory.Context ctx) {
+        if (ClientConfig.VIEW.showSpecialCubeOverlay()) {
             return new FramedMarkedCubeGeometry(ctx, Blocks.REDSTONE_BLOCK.defaultBlockState());
         }
         return new FramedCubeGeometry(ctx);

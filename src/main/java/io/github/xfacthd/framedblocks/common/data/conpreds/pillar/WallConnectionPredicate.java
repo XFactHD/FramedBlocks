@@ -11,8 +11,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
 
-public final class WallConnectionPredicate implements ConnectionPredicate
-{
+public final class WallConnectionPredicate implements ConnectionPredicate {
     private static final Map<Direction, Property<WallSide>> WALL_PROPERTIES = Map.of(
             Direction.NORTH, WallBlock.NORTH,
             Direction.EAST, WallBlock.EAST,
@@ -21,23 +20,18 @@ public final class WallConnectionPredicate implements ConnectionPredicate
     );
 
     @Override
-    public boolean canConnectFullEdge(BlockState state, Direction side, @Nullable Direction edge)
-    {
+    public boolean canConnectFullEdge(BlockState state, Direction side, @Nullable Direction edge) {
         return false;
     }
 
     @Override
-    public boolean canConnectDetailed(BlockState state, Direction side, Direction edge)
-    {
-        if (DirUtils.isY(side) || !DirUtils.isY(edge))
-        {
+    public boolean canConnectDetailed(BlockState state, Direction side, Direction edge) {
+        if (DirUtils.isY(side) || !DirUtils.isY(edge)) {
             Property<WallSide> prop = WALL_PROPERTIES.get(edge);
             return state.getValue(prop) != WallSide.NONE;
         }
-        else if (edge == Direction.UP)
-        {
-            if (state.getValue(WallBlock.UP))
-            {
+        if (edge == Direction.UP) {
+            if (state.getValue(WallBlock.UP)) {
                 return true;
             }
 
@@ -45,8 +39,7 @@ public final class WallConnectionPredicate implements ConnectionPredicate
             Property<WallSide> propB = WALL_PROPERTIES.get(side.getCounterClockWise());
             return state.getValue(propA) == WallSide.TALL || state.getValue(propB) == WallSide.TALL;
         }
-        else if (edge == Direction.DOWN)
-        {
+        if (edge == Direction.DOWN) {
             return true;
         }
         return false;

@@ -18,15 +18,11 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
  This class is machine-generated, any manual changes to this class will be overwritten.
  */
 @CullTest(BlockType.FRAMED_FENCE)
-public final class FenceSkipPredicate implements SideSkipPredicate
-{
+public final class FenceSkipPredicate implements SideSkipPredicate {
     @Override
-    public boolean test(BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side)
-    {
-        if (adjState.getBlock() instanceof IFramedBlock block && block.getBlockType() instanceof BlockType blockType)
-        {
-            return switch (blockType)
-            {
+    public boolean test(BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side) {
+        if (adjState.getBlock() instanceof IFramedBlock block && block.getBlockType() instanceof BlockType blockType) {
+            return switch (blockType) {
                 case FRAMED_FENCE -> testAgainstFence(
                         state, adjState, side
                 );
@@ -57,8 +53,7 @@ public final class FenceSkipPredicate implements SideSkipPredicate
     @CullTest.TestTarget(BlockType.FRAMED_FENCE)
     private static boolean testAgainstFence(
             BlockState state, BlockState adjState, Direction side
-    )
-    {
+    ) {
         return PillarDirs.Fence.testFenceArmDir(state, adjState, side) ||
                (PillarDirs.Fence.isPostDir(side) && PillarDirs.Fence.isPostDir(side.getOpposite()));
     }
@@ -66,16 +61,14 @@ public final class FenceSkipPredicate implements SideSkipPredicate
     @CullTest.TestTarget(value = BlockType.FRAMED_FENCE_GATE, oneWay = true)
     private static boolean testAgainstFenceGate(
             BlockState state, BlockState adjState, Direction side
-    )
-    {
+    ) {
         return PillarDirs.Fence.testFenceArmToGateDir(state, adjState, side);
     }
 
     @CullTest.TestTarget(BlockType.FRAMED_LATTICE_BLOCK)
     private static boolean testAgainstLattice(
             BlockState adjState, Direction side
-    )
-    {
+    ) {
         boolean adjXAxis = adjState.getValue(FramedProperties.X_AXIS);
         boolean adjYAxis = adjState.getValue(FramedProperties.Y_AXIS);
         boolean adjZAxis = adjState.getValue(FramedProperties.Z_AXIS);
@@ -86,8 +79,7 @@ public final class FenceSkipPredicate implements SideSkipPredicate
     @CullTest.TestTarget(BlockType.FRAMED_POST)
     private static boolean testAgainstPost(
             BlockState adjState, Direction side
-    )
-    {
+    ) {
         Direction.Axis adjAxis = adjState.getValue(BlockStateProperties.AXIS);
         return (PillarDirs.Fence.isPostDir(side) && PillarDirs.Post.isPostDir(adjAxis, side.getOpposite()));
     }
@@ -95,8 +87,7 @@ public final class FenceSkipPredicate implements SideSkipPredicate
     @CullTest.TestTarget(BlockType.FRAMED_PYRAMID)
     private static boolean testAgainstPyramid(
             BlockState adjState, Direction side
-    )
-    {
+    ) {
         Direction adjDir = adjState.getValue(BlockStateProperties.FACING);
         PillarConnection adjConnection = adjState.getValue(PropertyHolder.PILLAR_CONNECTION);
 
@@ -106,8 +97,7 @@ public final class FenceSkipPredicate implements SideSkipPredicate
     @CullTest.TestTarget(BlockType.FRAMED_ELEVATED_PYRAMID_SLAB)
     private static boolean testAgainstElevatedPyramidSlab(
             BlockState adjState, Direction side
-    )
-    {
+    ) {
         Direction adjDir = adjState.getValue(BlockStateProperties.FACING);
         PillarConnection adjConnection = adjState.getValue(PropertyHolder.PILLAR_CONNECTION);
 
@@ -117,8 +107,7 @@ public final class FenceSkipPredicate implements SideSkipPredicate
     @CullTest.TestTarget(BlockType.FRAMED_UPPER_PYRAMID_SLAB)
     private static boolean testAgainstUpperPyramidSlab(
             BlockState adjState, Direction side
-    )
-    {
+    ) {
         Direction adjDir = adjState.getValue(BlockStateProperties.FACING);
         PillarConnection adjConnection = adjState.getValue(PropertyHolder.PILLAR_CONNECTION);
 

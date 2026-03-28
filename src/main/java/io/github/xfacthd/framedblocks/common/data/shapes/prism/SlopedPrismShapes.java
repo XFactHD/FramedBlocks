@@ -17,26 +17,22 @@ import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 
-public final class SlopedPrismShapes implements ShapeGenerator
-{
+public final class SlopedPrismShapes implements ShapeGenerator {
     public static final SlopedPrismShapes OUTER = new SlopedPrismShapes();
 
     private SlopedPrismShapes() { }
 
     @Override
-    public ShapeContainer generatePrimary(List<BlockState> states)
-    {
+    public ShapeContainer generatePrimary(List<BlockState> states) {
         return generate(states, SlopeShapes.SHAPES);
     }
 
     @Override
-    public ShapeContainer generateOcclusion(List<BlockState> states)
-    {
+    public ShapeContainer generateOcclusion(List<BlockState> states) {
         return generate(states, SlopeShapes.OCCLUSION_SHAPES);
     }
 
-    private static ShapeContainer generate(List<BlockState> states, ShapeCache<SlopeType> slopeShapes)
-    {
+    private static ShapeContainer generate(List<BlockState> states, ShapeCache<SlopeType> slopeShapes) {
         Map<BlockState, VoxelShape> map = new IdentityHashMap<>(states.size());
 
         VoxelShape slopeShapeBottom = slopeShapes.get(SlopeType.BOTTOM);
@@ -53,40 +49,27 @@ public final class SlopedPrismShapes implements ShapeGenerator
         VoxelShape shapeLeft = ShapeUtils.rotateShapeUnoptimizedAroundZ(Direction.UP, Direction.EAST, shapeUp);
 
         VoxelShape[] shapes = new VoxelShape[CompoundDirection.COUNT];
-        for (CompoundDirection cmpDir : CompoundDirection.values())
-        {
+        for (CompoundDirection cmpDir : CompoundDirection.values()) {
             Direction facing = cmpDir.direction();
             Direction orientation = cmpDir.orientation();
 
-            if (DirUtils.isY(facing))
-            {
+            if (DirUtils.isY(facing)) {
                 shapes[cmpDir.ordinal()] = ShapeUtils.rotateShapeAroundY(
                         Direction.NORTH,
                         orientation,
                         facing == Direction.UP ? shapeBottom : shapeTop
                 );
-            }
-            else
-            {
+            } else {
                 VoxelShape shape;
-                if (orientation == Direction.UP)
-                {
+                if (orientation == Direction.UP) {
                     shape = shapeUp;
-                }
-                else if (orientation == Direction.DOWN)
-                {
+                } else if (orientation == Direction.DOWN) {
                     shape = shapeDown;
-                }
-                else if (orientation == facing.getClockWise())
-                {
+                } else if (orientation == facing.getClockWise()) {
                     shape = shapeLeft;
-                }
-                else if (orientation == facing.getCounterClockWise())
-                {
+                } else if (orientation == facing.getCounterClockWise()) {
                     shape = shapeRight;
-                }
-                else
-                {
+                } else {
                     throw new IllegalArgumentException("Invalid orientation for direction!");
                 }
 
@@ -94,8 +77,7 @@ public final class SlopedPrismShapes implements ShapeGenerator
             }
         }
 
-        for (BlockState state : states)
-        {
+        for (BlockState state : states) {
             CompoundDirection cmpDir = state.getValue(PropertyHolder.FACING_DIR);
             map.put(state, shapes[cmpDir.ordinal()]);
         }

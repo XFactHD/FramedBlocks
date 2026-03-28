@@ -46,8 +46,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
-public final class FramedBlockStateModel extends AbstractFramedBlockStateModel
-{
+public final class FramedBlockStateModel extends AbstractFramedBlockStateModel {
     private static final FramedBlockData DEFAULT_DATA = FramedBlockData.EMPTY;
     private static final int FLAG_NO_CAMO_ALT_MODEL = 0b001;
     private static final int FLAG_NO_CAMO_REINFORCED = 0b010;
@@ -67,8 +66,7 @@ public final class FramedBlockStateModel extends AbstractFramedBlockStateModel
     private final StateCache stateCache;
     private final ReinforcementModel reinforcement;
 
-    public FramedBlockStateModel(GeometryFactory.Context ctx, Geometry geometry, ReinforcementModel reinforcement)
-    {
+    public FramedBlockStateModel(GeometryFactory.Context ctx, Geometry geometry, ReinforcementModel reinforcement) {
         super(ctx.baseModel(), ctx.state(), geometry.getItemModelInfo());
         this.state = ctx.state();
         this.geometry = geometry;
@@ -94,8 +92,7 @@ public final class FramedBlockStateModel extends AbstractFramedBlockStateModel
 
     @Override
     @SuppressWarnings("ForLoopReplaceableByForEach")
-    public int collectParts(BlockAndTintGetter level, BlockPos pos, BlockState unusedState, RandomSource random, List<BlockStateModelPart> partsOut, int miscTintOffset)
-    {
+    public int collectParts(BlockAndTintGetter level, BlockPos pos, BlockState unusedState, RandomSource random, List<BlockStateModelPart> partsOut, int miscTintOffset) {
         BlockState state = this.state;
         ModelData extraData = level.getModelData(pos);
         AbstractFramedBlockData blockData = Objects.requireNonNullElse(extraData.get(AbstractFramedBlockData.PROPERTY), DEFAULT_DATA);
@@ -116,17 +113,14 @@ public final class FramedBlockStateModel extends AbstractFramedBlockStateModel
         Holder<BlockOverlay> blockOverlay = partData.getBlockOverlay();
         long seed = state.getSeed(pos);
 
-        if (empty)
-        {
+        if (empty) {
             int noCamoIdx = getNoCamoModelSourceIndex(partData);
             camoContent = NO_CAMO_CONTENTS[noCamoIdx];
             camoModel = useBaseModel ? geometry.getBaseModel(delegate, partData.isSecondPart()) : NO_CAMO_MODELS[noCamoIdx];
             camoTintOffset = 0;
             overlayTintOffset = 0;
             camoEmissive = false;
-        }
-        else
-        {
+        } else {
             camoModel = CamoContainerHelper.Client.getOrCreateModel(camoContent);
             camoTintOffset = blockData.getCamoTintIndexOffset(partData.isSecondPart());
             overlayTintOffset = blockData.getPostCamoTintIndexOffset();
@@ -136,29 +130,25 @@ public final class FramedBlockStateModel extends AbstractFramedBlockStateModel
 
         PartConsumerImpl partConsumer = null;
         int uncachedFaceMask = partData.computeFaceMask(stateCache, false);
-        int prevOutSize = partsOut.size();
-        if (uncachedFaceMask != 0)
-        {
+        if (uncachedFaceMask != 0 || uncachedAdditionalParts) {
             partConsumer = new PartConsumerImpl(partsOut, uncachedFaceMask, defaultAO, camoEmissive, forceEmissive);
-
+        }
+        int prevOutSize = partsOut.size();
+        if (uncachedFaceMask != 0) {
             random.setSeed(seed);
             partConsumer.setTintIndexOffset(camoTintOffset);
             collectCamoParts(partConsumer, camoModel, level, pos, random, camoContent, true, null, mayUseCt);
         }
-        if (blockOverlay != null)
-        {
-            if (partsOut.size() > prevOutSize)
-            {
+        if (blockOverlay != null) {
+            if (partsOut.size() > prevOutSize) {
                 BlockOverlayGenerator.generateUncached(state, blockOverlay, partsOut.subList(prevOutSize, partsOut.size()), partsOut, forceEmissive, overlayTintOffset);
             }
-            if (blockOverlay.value().tintSource() != null)
-            {
+            if (blockOverlay.value().tintSource() != null) {
                 localMiscTintOffset++;
             }
         }
         localMiscTintOffset = Math.max(localMiscTintOffset, miscTintOffset);
-        if (!empty || !forceUngeneratedBaseModel)
-        {
+        if (!empty || !forceUngeneratedBaseModel) {
             random.setSeed(seed);
             boolean needCtCtxCached = mayUseCt && cfgCtMode.atleast(ConTexMode.FULL_EDGE) && cfgCtMode.atleast(minCtMode);
             Object ctCtx = needCtCtxCached ? camoModel.createGeometryKey(level, pos, state, random) : null;
@@ -167,8 +157,7 @@ public final class FramedBlockStateModel extends AbstractFramedBlockStateModel
             // Remove CT context from key if the context is the source model itself and therefore a "dumb" model
             Object key = createCacheKey(partData, camoContent, ctCtx == camoModel ? null : ctCtx, userKeyData, camoTintOffset, overlayTintOffset, localMiscTintOffset);
             PartCacheEntry cacheEntry = partCache.get(key);
-            if (cacheEntry == null)
-            {
+            if (cacheEntry == null) {
                 cacheEntry = buildPartCache(
                         camoModel,
                         level,
@@ -189,22 +178,15 @@ public final class FramedBlockStateModel extends AbstractFramedBlockStateModel
                 partCache.put(key, cacheEntry);
             }
             List<ExtendedBlockStateModelPart> cachedParts = cacheEntry.parts;
-            if (!cachedParts.isEmpty())
-            {
+            if (!cachedParts.isEmpty()) {
                 int cachedFaceMask = partData.computeFaceMask(stateCache, true);
-                for (int i = 0; i < cachedParts.size(); i++)
-                {
+                for (int i = 0; i < cachedParts.size(); i++) {
                     partsOut.add(new CullableBlockStateModelPart(cachedParts.get(i), cachedFaceMask));
                 }
             }
             localMiscTintOffset = cacheEntry.tintOffset;
         }
-        if (uncachedAdditionalParts)
-        {
-            if (partConsumer == null)
-            {
-                partConsumer = new PartConsumerImpl(partsOut, uncachedFaceMask, defaultAO, camoEmissive, forceEmissive);
-            }
+        if (uncachedAdditionalParts) {
             random.setSeed(seed);
             partConsumer.setTintIndexOffset(localMiscTintOffset);
             partConsumer.setCountTintIndices(true);
@@ -212,16 +194,14 @@ public final class FramedBlockStateModel extends AbstractFramedBlockStateModel
             localMiscTintOffset = partConsumer.getMaxTintIndex() + 1;
             partConsumer.setCountTintIndices(false);
         }
-        if (reinforce && uncachedFaceMask != 0)
-        {
+        if (reinforce && uncachedFaceMask != 0) {
             BlockStateModelPart reinforcementPart = reinforcement.getFiltered(uncachedFaceMask, defaultAO.apply(TriState.DEFAULT));
             partConsumer.accept(reinforcementPart, ReinforcementModel.SHADER_STATE, false, false, true, ReinforcementModel.SHADER_STATE, null);
         }
         return localMiscTintOffset;
     }
 
-    static boolean isSideHidden(int cullMask, @Nullable Direction side)
-    {
+    static boolean isSideHidden(int cullMask, @Nullable Direction side) {
         return side != null && (cullMask & (1 << side.ordinal())) == 0;
     }
 
@@ -233,13 +213,11 @@ public final class FramedBlockStateModel extends AbstractFramedBlockStateModel
             int camoTintOffset,
             int overlayTintOffset,
             int miscTintOffset
-    )
-    {
+    ) {
         Holder<BlockOverlay> overlay = fbData.getBlockOverlay();
         boolean secondPart = fbData.isSecondPart();
         boolean emissive = fbData.isEmissive();
-        if (overlay != null || ctCtx != null || userKeyData != null || (secondPart && (camoTintOffset > 0 || miscTintOffset > 0)) || emissive)
-        {
+        if (overlay != null || ctCtx != null || userKeyData != null || (secondPart && (camoTintOffset > 0 || miscTintOffset > 0)) || emissive) {
             BlockState outerState = overlay != null ? fbData.getOuterState() : null;
             // Assume that neither camos nor arbitrary geometry are stupid enough to need so many tint "layers" that any of the offsets are > 255
             int packedTintOffsets = (camoTintOffset & 0xFF) | ((overlayTintOffset & 0xFF) << 8) | ((miscTintOffset & 0xFF) << 16);
@@ -265,8 +243,7 @@ public final class FramedBlockStateModel extends AbstractFramedBlockStateModel
             int camoTintOffset,
             int overlayTintOffset,
             int miscTintOffset
-    )
-    {
+    ) {
         ObjectList<ExtendedBlockStateModelPart> parts = new ObjectArrayList<>();
         boolean forceEmissive = fbData.isEmissive();
         boolean secondPart = fbData.isSecondPart();
@@ -274,10 +251,8 @@ public final class FramedBlockStateModel extends AbstractFramedBlockStateModel
         PartConsumerImpl partConsumer = new PartConsumerImpl(parts, cullMask, defaultAO, camoEmissive, forceEmissive);
         boolean xformAll = geometry.transformAllQuads();
 
-        QuadListModifier modifier = (quadMap, quads, _) ->
-        {
-            for (BakedQuad quad : quads)
-            {
+        QuadListModifier modifier = (quadMap, quads, _) -> {
+            for (BakedQuad quad : quads) {
                 geometry.transformQuad(quadMap, quad, fbData, cacheKeyUserData);
             }
             quads.clear();
@@ -286,14 +261,12 @@ public final class FramedBlockStateModel extends AbstractFramedBlockStateModel
         random.setSeed(seed);
         partConsumer.setTintIndexOffset(camoTintOffset);
         collectCamoParts(partConsumer, camoModel, level, pos, random, camo, !xformAll, modifier, supportDynamicCamoGeometry);
-        if (reinforce)
-        {
+        if (reinforce) {
             BlockStateModelPart srcPart = reinforcement.getFiltered(xformAll ? 0b00111111 : cullMask, defaultAO.apply(TriState.DEFAULT));
             partConsumer.accept(srcPart, ReinforcementModel.SHADER_STATE, false, true, !xformAll, ReinforcementModel.SHADER_STATE, modifier);
         }
         Holder<BlockOverlay> overlay = fbData.getBlockOverlay();
-        if (!parts.isEmpty() && overlay != null)
-        {
+        if (!parts.isEmpty() && overlay != null) {
             BlockOverlayGenerator.generateCached(fbData.getOuterState(), state, secondPart, overlay, parts, forceEmissive, overlayTintOffset);
         }
         random.setSeed(seed);
@@ -303,8 +276,7 @@ public final class FramedBlockStateModel extends AbstractFramedBlockStateModel
         int tintIndexOffset = partConsumer.getMaxTintIndex() + 1;
         partConsumer.setCountTintIndices(false);
 
-        if (!parts.isEmpty() && geometry.hasGeneratedOverlay(fbData, cacheKeyUserData))
-        {
+        if (!parts.isEmpty() && geometry.hasGeneratedOverlay(fbData, cacheKeyUserData)) {
             OverlayModelPartGenerator overlayGenerator = new OverlayModelPartGenerator(parts, forceEmissive, defaultAO.apply(TriState.DEFAULT));
             random.setSeed(seed);
             geometry.generateOverlayParts(overlayGenerator, random, cacheKeyUserData);
@@ -324,76 +296,74 @@ public final class FramedBlockStateModel extends AbstractFramedBlockStateModel
             boolean cullNonNull,
             @Nullable QuadListModifier modifier,
             boolean supportDynamicGeometry
-    )
-    {
-        if (!supportDynamicGeometry)
-        {
+    ) {
+        if (!supportDynamicGeometry) {
             level = BlockAndTintGetter.EMPTY;
             pos = BlockPos.ZERO;
         }
         partConsumer.acceptCamo(camoModel, level, pos, random, this.state, camo.getAsBlockState(), cullNonNull, modifier);
     }
 
-    private int getNoCamoModelSourceIndex(FramedBlockData fbData)
-    {
+    private int getNoCamoModelSourceIndex(FramedBlockData fbData) {
         int idx = 0;
-        if (fbData.isSecondPart()) idx |= FLAG_NO_CAMO_ALT_MODEL;
-        if (fbData.isReinforced()) idx |= FLAG_NO_CAMO_REINFORCED;
-        if (ClientConfig.VIEW.getSolidFrameMode().useSolidFrame(useSolidBase)) idx |= FLAG_NO_CAMO_SOLID_BG;
+        if (fbData.isSecondPart()) {
+            idx |= FLAG_NO_CAMO_ALT_MODEL;
+        }
+        if (fbData.isReinforced()) {
+            idx |= FLAG_NO_CAMO_REINFORCED;
+        }
+        if (ClientConfig.VIEW.getSolidFrameMode().useSolidFrame(useSolidBase)) {
+            idx |= FLAG_NO_CAMO_SOLID_BG;
+        }
         return idx;
     }
 
-    private static BlockCamoContent[] makeNoCamoContents()
-    {
+    private static BlockCamoContent[] makeNoCamoContents() {
         BlockCamoContent[] contents = new BlockCamoContent[1 << 3];
-        for (int i = 0; i < contents.length; i++)
-        {
+        for (int i = 0; i < contents.length; i++) {
             BlockState stateOut = FBContent.BLOCK_FRAMED_CUBE.value().defaultBlockState();
-            if ((i & FLAG_NO_CAMO_ALT_MODEL) != 0) stateOut = stateOut.setValue(PropertyHolder.ALT, true);
-            if ((i & FLAG_NO_CAMO_REINFORCED) != 0) stateOut = stateOut.setValue(PropertyHolder.REINFORCED, true);
-            if ((i & FLAG_NO_CAMO_SOLID_BG) != 0) stateOut = stateOut.setValue(PropertyHolder.SOLID_BG, true);
+            if ((i & FLAG_NO_CAMO_ALT_MODEL) != 0) {
+                stateOut = stateOut.setValue(PropertyHolder.ALT, true);
+            }
+            if ((i & FLAG_NO_CAMO_REINFORCED) != 0) {
+                stateOut = stateOut.setValue(PropertyHolder.REINFORCED, true);
+            }
+            if ((i & FLAG_NO_CAMO_SOLID_BG) != 0) {
+                stateOut = stateOut.setValue(PropertyHolder.SOLID_BG, true);
+            }
             contents[i] = new BlockCamoContent(stateOut);
         }
         return contents;
     }
 
     @Override
-    public int materialFlags(BlockAndTintGetter level, BlockPos pos, BlockState unusedState)
-    {
+    public int materialFlags(BlockAndTintGetter level, BlockPos pos, BlockState unusedState) {
         int flags = 0;
         ModelData modelData = level.getModelData(pos);
         FramedBlockData blockData = AbstractFramedBlockData.getOrDefault(modelData, state, DEFAULT_DATA);
         CamoContent<?> camoContent = blockData.getCamoContent();
-        if (!camoContent.isEmpty())
-        {
+        if (!camoContent.isEmpty()) {
             flags |= CamoContainerHelper.Client.getOrCreateModel(camoContent).materialFlags(level, pos, camoContent.getAsBlockState());
-        }
-        else if (useBaseModel)
-        {
+        } else if (useBaseModel) {
             flags |= geometry.getBaseModel(delegate, blockData.isSecondPart()).materialFlags(level, pos, state);
         }
         Holder<BlockOverlay> overlay = blockData.getBlockOverlay();
-        if (overlay != null && overlay.value().translucent())
-        {
+        if (overlay != null && overlay.value().translucent()) {
             flags |= BakedQuad.FLAG_TRANSLUCENT;
         }
         return flags | geometry.getMaterialFlags(level, pos, modelData, blockData);
     }
 
     @Override
-    public void clearCache()
-    {
+    public void clearCache() {
         super.clearCache();
         partCache.clear();
     }
 
-    public static void collectCubeBaseModels(Map<BlockState, BlockStateModel> models)
-    {
-        for (int i = 0; i < NO_CAMO_CONTENTS.length; i++)
-        {
+    public static void collectCubeBaseModels(Map<BlockState, BlockStateModel> models) {
+        for (int i = 0; i < NO_CAMO_CONTENTS.length; i++) {
             BlockStateModel model = models.get(NO_CAMO_CONTENTS[i].getState());
-            if (model instanceof AbstractFramedBlockStateModel framedModel)
-            {
+            if (model instanceof AbstractFramedBlockStateModel framedModel) {
                 model = framedModel.getBaseModel();
             }
             NO_CAMO_MODELS[i] = model;
@@ -411,11 +381,9 @@ public final class FramedBlockStateModel extends AbstractFramedBlockStateModel
             @Nullable Object userData
     ) { }
 
-    private record CullableBlockStateModelPart(ExtendedBlockStateModelPart wrapped, int cullMask) implements DelegateBlockStateModelPart
-    {
+    private record CullableBlockStateModelPart(ExtendedBlockStateModelPart wrapped, int cullMask) implements DelegateBlockStateModelPart {
         @Override
-        public List<BakedQuad> getQuads(@Nullable Direction side)
-        {
+        public List<BakedQuad> getQuads(@Nullable Direction side) {
             boolean hidden = (cullMask & (1 << DirUtils.maskNullDirection(side))) == 0;
             return hidden ? Collections.emptyList() : wrapped.getQuads(side);
         }

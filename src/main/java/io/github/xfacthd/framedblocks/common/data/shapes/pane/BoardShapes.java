@@ -13,12 +13,10 @@ import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 
-public final class BoardShapes
-{
+public final class BoardShapes {
     private static final Direction[] DIRECTIONS = Direction.values();
 
-    public static ShapeContainer generate(List<BlockState> states)
-    {
+    public static ShapeContainer generate(List<BlockState> states) {
         Map<BlockState, VoxelShape> map = new IdentityHashMap<>(states.size());
 
         VoxelShape shape = Block.box(0, 0, 0, 16, 16, 1);
@@ -27,15 +25,14 @@ public final class BoardShapes
         VoxelShape shapeTop = Block.box(0, 15, 0, 16, 16, 16);
 
         VoxelShape[] allShapes = new VoxelShape[(1 << 6) - 1];
-        for (int i = 0; i < allShapes.length; i++)
-        {
+        for (int i = 0; i < allShapes.length; i++) {
             VoxelShape merged = Shapes.empty();
-            for (Direction dir : DIRECTIONS)
-            {
-                if (((i + 1) & (1 << dir.ordinal())) == 0) continue;
+            for (Direction dir : DIRECTIONS) {
+                if (((i + 1) & (1 << dir.ordinal())) == 0) {
+                    continue;
+                }
 
-                VoxelShape faceShape = switch (dir)
-                {
+                VoxelShape faceShape = switch (dir) {
                     case DOWN -> shapeBottom;
                     case UP -> shapeTop;
                     default -> shapesHor[dir.get2DDataValue()];
@@ -45,8 +42,7 @@ public final class BoardShapes
             allShapes[i] = ShapeUtils.optimize(merged);
         }
 
-        for (BlockState state : states)
-        {
+        for (BlockState state : states) {
             int mask = state.getValue(PropertyHolder.FACES);
             map.put(state, allShapes[mask - 1]);
         }

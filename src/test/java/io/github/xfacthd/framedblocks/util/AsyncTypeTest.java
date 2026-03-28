@@ -16,8 +16,7 @@ import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.LongConsumer;
 
-public final class AsyncTypeTest
-{
+public final class AsyncTypeTest {
     private static final BlockType[] TYPES = BlockType.values();
 
     public static <T> Stats execute(
@@ -25,15 +24,12 @@ public final class AsyncTypeTest
             ResultConsumer<T> resultConsumer,
             String progressMsgTemplate,
             Consumer<Component> msgQueueAppender
-    )
-    {
+    ) {
         AtomicLong combinations = new AtomicLong(0);
         AtomicLong lastPrinted = new AtomicLong(0);
-        LongConsumer combinationCollector = i ->
-        {
+        LongConsumer combinationCollector = i -> {
             long val = combinations.addAndGet(i);
-            if (val - lastPrinted.get() > 10000000L)
-            {
+            if (val - lastPrinted.get() > 10000000L) {
                 lastPrinted.set(val);
                 msgQueueAppender.accept(Component.literal(progressMsgTemplate.formatted(val)));
             }
@@ -42,15 +38,12 @@ public final class AsyncTypeTest
         Stopwatch watch = Stopwatch.createStarted();
         ExecutorService exec = Executors.newFixedThreadPool(Math.max((int) (Runtime.getRuntime().availableProcessors() * .75), 1));
         List<CompletableFuture<T>> futures = new ArrayList<>(TYPES.length);
-        for (BlockType type : TYPES)
-        {
+        for (BlockType type : TYPES) {
             futures.add(
                     CompletableFuture.supplyAsync(
                             () -> testFunc.apply(type, combinationCollector), exec
-                    ).whenComplete((result, error) ->
-                    {
-                        synchronized (resultConsumer)
-                        {
+                    ).whenComplete((result, error) -> {
+                        synchronized (resultConsumer) {
                             resultConsumer.accept(result, error);
                         }
                     })
@@ -65,15 +58,13 @@ public final class AsyncTypeTest
     }
 
     @FunctionalInterface
-    public interface TypeTestFunction<T> extends BiFunction<BlockType, LongConsumer, T>
-    {
+    public interface TypeTestFunction<T> extends BiFunction<BlockType, LongConsumer, T> {
         @Override
         T apply(BlockType type, LongConsumer combinationCollector);
     }
 
     @FunctionalInterface
-    public interface ResultConsumer<T> extends BiConsumer<T, Throwable>
-    {
+    public interface ResultConsumer<T> extends BiConsumer<T, Throwable> {
         @Override
         void accept(T result, Throwable error);
     }

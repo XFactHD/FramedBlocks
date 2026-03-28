@@ -16,10 +16,8 @@ import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 
-public final class HalfSlopeShapes implements ShapeGenerator
-{
-    public static final ShapeCache<ShapeKey> SHAPES = ShapeCache.create(map ->
-    {
+public final class HalfSlopeShapes implements ShapeGenerator {
+    public static final ShapeCache<ShapeKey> SHAPES = ShapeCache.create(map -> {
         map.put(new ShapeKey(false, false), ShapeUtils.andUnoptimized(
                 SlopeShapes.SHAPES.get(SlopeType.BOTTOM),
                 CommonShapes.PANEL.get(Direction.WEST)
@@ -37,8 +35,7 @@ public final class HalfSlopeShapes implements ShapeGenerator
                 CommonShapes.PANEL.get(Direction.EAST)
         ));
     });
-    public static final ShapeCache<ShapeKey> OCCLUSION_SHAPES = ShapeCache.create(map ->
-    {
+    public static final ShapeCache<ShapeKey> OCCLUSION_SHAPES = ShapeCache.create(map -> {
         map.put(new ShapeKey(false, false), ShapeUtils.andUnoptimized(
                 SlopeShapes.OCCLUSION_SHAPES.get(SlopeType.BOTTOM),
                 CommonShapes.PANEL.get(Direction.WEST)
@@ -58,26 +55,22 @@ public final class HalfSlopeShapes implements ShapeGenerator
     });
 
     @Override
-    public ShapeContainer generatePrimary(List<BlockState> states)
-    {
+    public ShapeContainer generatePrimary(List<BlockState> states) {
         return generateShapes(states, SHAPES);
     }
 
     @Override
-    public ShapeContainer generateOcclusion(List<BlockState> states)
-    {
+    public ShapeContainer generateOcclusion(List<BlockState> states) {
         return generateShapes(states, OCCLUSION_SHAPES);
     }
 
-    private static ShapeContainer generateShapes(List<BlockState> states, ShapeCache<ShapeKey> shapeCache)
-    {
+    private static ShapeContainer generateShapes(List<BlockState> states, ShapeCache<ShapeKey> shapeCache) {
         Map<BlockState, VoxelShape> map = new IdentityHashMap<>(states.size());
 
         int maskTop = 0b0100;
         int maskRight = 0b1000;
         VoxelShape[] shapes = new VoxelShape[4 * 4];
-        for (int i = 0; i < 4; i++)
-        {
+        for (int i = 0; i < 4; i++) {
             ShapeUtils.makeHorizontalRotations(
                     shapeCache.get(new ShapeKey((i & 0b01) != 0, (i & 0b10) != 0)),
                     Direction.NORTH,
@@ -86,8 +79,7 @@ public final class HalfSlopeShapes implements ShapeGenerator
             );
         }
 
-        for (BlockState state : states)
-        {
+        for (BlockState state : states) {
             Direction dir = state.getValue(FramedProperties.FACING_HOR);
             int top = state.getValue(FramedProperties.TOP) ? maskTop : 0;
             int right = state.getValue(PropertyHolder.RIGHT) ? maskRight : 0;

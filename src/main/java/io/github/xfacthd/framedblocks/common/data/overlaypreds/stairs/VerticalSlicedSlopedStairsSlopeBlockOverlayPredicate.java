@@ -8,13 +8,10 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 
-public final class VerticalSlicedSlopedStairsSlopeBlockOverlayPredicate implements BlockOverlayPredicate
-{
+public final class VerticalSlicedSlopedStairsSlopeBlockOverlayPredicate implements BlockOverlayPredicate {
     @Override
-    public boolean supportsSolid(BlockState state, Direction side, boolean secondPart)
-    {
-        if (secondPart)
-        {
+    public boolean supportsSolid(BlockState state, Direction side, boolean secondPart) {
+        if (secondPart) {
             Direction facing = state.getValue(FramedProperties.FACING_HOR);
             HorizontalRotation rot = state.getValue(PropertyHolder.ROTATION);
             Direction dirTwo = rot.withFacing(facing);
@@ -25,24 +22,20 @@ public final class VerticalSlicedSlopedStairsSlopeBlockOverlayPredicate implemen
     }
 
     @Override
-    public boolean supportsEdge(BlockState state, Direction side, Direction edge, boolean secondPart, boolean nullCullFace, boolean unaligned)
-    {
+    public boolean supportsEdge(BlockState state, Direction side, Direction edge, boolean secondPart, boolean nullCullFace, boolean unaligned) {
         Direction facing = state.getValue(FramedProperties.FACING_HOR);
         HorizontalRotation rot = state.getValue(PropertyHolder.ROTATION);
         Direction dirTwo = rot.withFacing(facing);
         Direction dirThree = rot.rotate(Rotation.COUNTERCLOCKWISE_90).withFacing(facing);
 
-        if (secondPart)
-        {
+        if (secondPart) {
             return side != dirTwo.getOpposite() && side != dirThree.getOpposite() && edge != dirTwo.getOpposite() && edge != dirThree.getOpposite();
         }
 
-        if (side == facing)
-        {
+        if (side == facing) {
             return edge != dirTwo && edge != dirThree;
         }
-        if (side == dirTwo || side == dirThree)
-        {
+        if (side == dirTwo || side == dirThree) {
             return edge != facing;
         }
         return false;

@@ -13,8 +13,7 @@ import net.minecraft.world.item.ItemStack;
 
 import java.util.List;
 
-public final class ReinforcementOverlay extends BlockInteractOverlay
-{
+public final class ReinforcementOverlay extends BlockInteractOverlay {
     public static final String REINFORCE_MESSAGE = Utils.translationKey("tooltip", "reinforce_state");
     public static final Component STATE_NOT_REINFORCED = Utils.translate("tooltip", "reinforce_state.false")
             .withStyle(ChatFormatting.RED);
@@ -31,28 +30,23 @@ public final class ReinforcementOverlay extends BlockInteractOverlay
     private static final Texture TEXTURE_FALSE = new Texture(SYMBOL_TEXTURE, 0, 0, 22, 22, 44, 22);
     private static final Texture TEXTURE_TRUE = new Texture(SYMBOL_TEXTURE, 22, 0, 22, 22, 44, 22);
 
-    public ReinforcementOverlay()
-    {
+    public ReinforcementOverlay() {
         super(LIST_FALSE, LIST_TRUE, TEXTURE_FALSE, TEXTURE_TRUE, ClientConfig.VIEW::getReinforcementMode);
     }
 
     @Override
-    public boolean isValidTool(Player player, ItemStack stack)
-    {
+    public boolean isValidTool(Player player, ItemStack stack) {
         return stack.is(Utils.FRAMED_REINFORCEMENT.value());
     }
 
     @Override
-    public boolean isValidTarget(Target target)
-    {
+    public boolean isValidTarget(Target target) {
         return target.state().getBlock() instanceof IFramedBlock;
     }
 
     @Override
-    public boolean getState(Target target)
-    {
-        if (target.level().getBlockEntity(target.pos()) instanceof IFramedBlockEntity be)
-        {
+    public boolean getState(Target target) {
+        if (target.level().getBlockEntity(target.pos()) instanceof IFramedBlockEntity be) {
             return be.isReinforced();
         }
         return false;

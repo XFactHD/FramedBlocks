@@ -19,32 +19,27 @@ import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 
-public final class CornerSlopeShapes implements ShapeGenerator
-{
+public final class CornerSlopeShapes implements ShapeGenerator {
     public static final CornerSlopeShapes OUTER = new CornerSlopeShapes(BooleanOp.AND);
     public static final CornerSlopeShapes INNER = new CornerSlopeShapes(BooleanOp.OR);
 
     private final BooleanOp joinOp;
 
-    private CornerSlopeShapes(BooleanOp joinOp)
-    {
+    private CornerSlopeShapes(BooleanOp joinOp) {
         this.joinOp = joinOp;
     }
 
     @Override
-    public ShapeContainer generatePrimary(List<BlockState> states)
-    {
+    public ShapeContainer generatePrimary(List<BlockState> states) {
         return generate(states, SlopeShapes.SHAPES);
     }
 
     @Override
-    public ShapeContainer generateOcclusion(List<BlockState> states)
-    {
+    public ShapeContainer generateOcclusion(List<BlockState> states) {
         return generate(states, SlopeShapes.OCCLUSION_SHAPES);
     }
 
-    private ShapeContainer generate(List<BlockState> states, ShapeCache<SlopeType> shapeCache)
-    {
+    private ShapeContainer generate(List<BlockState> states, ShapeCache<SlopeType> shapeCache) {
         Map<BlockState, VoxelShape> map = new IdentityHashMap<>(states.size());
 
         VoxelShape shapeSlopeBottom = shapeCache.get(SlopeType.BOTTOM);
@@ -71,10 +66,8 @@ public final class CornerSlopeShapes implements ShapeGenerator
         VoxelShape shapeTopRight = Shapes.joinUnoptimized(shapeSlopeTop, shapeSlopeHorizontalEast, joinOp);
 
         Map<ShapeKey, VoxelShape> shapes = new HashMap<>();
-        for (CornerType type : CornerType.values())
-        {
-            VoxelShape shape = switch (type)
-            {
+        for (CornerType type : CornerType.values()) {
+            VoxelShape shape = switch (type) {
                 case BOTTOM -> shapeBottom;
                 case TOP -> shapeTop;
                 case HORIZONTAL_BOTTOM_LEFT -> shapeBottomLeft;
@@ -85,8 +78,7 @@ public final class CornerSlopeShapes implements ShapeGenerator
             ShapeUtils.makeHorizontalRotations(shape, Direction.NORTH, shapes, type, ShapeKey::new);
         }
 
-        for (BlockState state : states)
-        {
+        for (BlockState state : states) {
             CornerType type = state.getValue(PropertyHolder.CORNER_TYPE);
             Direction dir = state.getValue(FramedProperties.FACING_HOR);
             map.put(state, shapes.get(new ShapeKey(dir, type)));

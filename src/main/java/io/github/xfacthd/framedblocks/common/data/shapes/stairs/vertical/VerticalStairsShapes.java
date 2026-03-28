@@ -16,10 +16,8 @@ import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 
-public final class VerticalStairsShapes
-{
-    public static final ShapeCache<ShapeKey> SHAPES = ShapeCache.create(map ->
-    {
+public final class VerticalStairsShapes {
+    public static final ShapeCache<ShapeKey> SHAPES = ShapeCache.create(map -> {
         VoxelShape topFwdShape = ShapeUtils.orUnoptimized(
                 Block.box(0, 0, 0, 8, 16, 16),
                 Block.box(8, 0, 0, 16, 8, 8)
@@ -64,12 +62,10 @@ public final class VerticalStairsShapes
         ShapeUtils.makeHorizontalRotations(bottomBothShape, Direction.SOUTH, map, StairsType.BOTTOM_BOTH, ShapeKey::new);
     });
 
-    public static ShapeContainer generate(List<BlockState> states)
-    {
+    public static ShapeContainer generate(List<BlockState> states) {
         Map<BlockState, VoxelShape> map = new IdentityHashMap<>(states.size());
 
-        for (BlockState state : states)
-        {
+        for (BlockState state : states) {
             Direction dir = state.getValue(FramedProperties.FACING_HOR);
             StairsType type = state.getValue(PropertyHolder.STAIRS_TYPE);
             map.put(state, SHAPES.get(new ShapeKey(dir, type)));

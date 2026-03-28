@@ -26,14 +26,12 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
-public final class FluidCubeModel
-{
+public final class FluidCubeModel {
     public static final Identifier BARE_MODEL = Utils.id("fluid/bare");
     public static final Identifier BARE_MODEL_SINGLE = Utils.id("fluid/bare_single");
     private static final Map<FluidCamoContent, BlockStateModel> FLUID_MODEL_CACHE = new ConcurrentHashMap<>();
     private static final Lazy<ModelBaker.Interner> INTERNER = Lazy.of(ModelBakery.InternerImpl::new);
-    private static final BlockModelRotation[] ROTATIONS = Util.make(new BlockModelRotation[6], arr ->
-    {
+    private static final BlockModelRotation[] ROTATIONS = Util.make(new BlockModelRotation[6], arr -> {
         arr[Direction.DOWN.ordinal()] = BlockModelRotation.IDENTITY;
         arr[Direction.UP.ordinal()] = BlockModelRotation.get(Quadrant.fromXYAngles(Quadrant.R180, Quadrant.R0));
         arr[Direction.NORTH.ordinal()] = BlockModelRotation.get(Quadrant.fromXYAngles(Quadrant.R270, Quadrant.R0));
@@ -42,13 +40,11 @@ public final class FluidCubeModel
         arr[Direction.EAST.ordinal()] = BlockModelRotation.get(Quadrant.fromXYAngles(Quadrant.R90, Quadrant.R270));
     });
 
-    public static BlockStateModel getOrCreate(FluidCamoContent fluidCamo)
-    {
+    public static BlockStateModel getOrCreate(FluidCamoContent fluidCamo) {
         return FLUID_MODEL_CACHE.computeIfAbsent(fluidCamo, FluidCubeModel::create);
     }
 
-    public static BlockStateModel create(FluidCamoContent fluidCamo)
-    {
+    public static BlockStateModel create(FluidCamoContent fluidCamo) {
         ModelManager modelManager = Minecraft.getInstance().getModelManager();
         ModelBakery modelBakery = modelManager.getModelBakery();
 
@@ -79,13 +75,11 @@ public final class FluidCubeModel
         return new SingleVariant(new SimpleModelWrapper(fluidQuads, false, fluidModel.stillMaterial()));
     }
 
-    private static Material unbakeMaterial(Material.Baked material)
-    {
+    private static Material unbakeMaterial(Material.Baked material) {
         return new Material(material.sprite().contents().name(), material.forceTranslucent());
     }
 
-    public static void clearCaches()
-    {
+    public static void clearCaches() {
         FLUID_MODEL_CACHE.clear();
         INTERNER.invalidate();
     }

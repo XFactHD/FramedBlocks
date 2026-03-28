@@ -21,27 +21,23 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.function.Predicate;
 
-public class FramedBookshelfGeometry extends Geometry
-{
+public class FramedBookshelfGeometry extends Geometry {
     private static final BlockState AUX_SHADER_STATE = Blocks.BOOKSHELF.defaultBlockState();
 
     private final BlockState state;
     private final BlockStateModel baseModel;
     private final Predicate<Direction> frontFacePred;
 
-    private FramedBookshelfGeometry(GeometryFactory.Context ctx, Predicate<Direction> frontFacePred)
-    {
+    private FramedBookshelfGeometry(GeometryFactory.Context ctx, Predicate<Direction> frontFacePred) {
         this.state = ctx.state();
         this.baseModel = ctx.baseModel();
         this.frontFacePred = frontFacePred;
     }
 
     @Override
-    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
-    {
+    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData) {
         Direction quadDir = quad.direction();
-        if (DirUtils.isY(quadDir) || !frontFacePred.test(quadDir))
-        {
+        if (DirUtils.isY(quadDir) || !frontFacePred.test(quadDir)) {
             return;
         }
 
@@ -70,18 +66,15 @@ public class FramedBookshelfGeometry extends Geometry
     }
 
     @Override
-    public void collectAdditionalPartsCached(PartConsumer consumer, BlockAndTintGetter level, BlockPos pos, RandomSource random, FramedBlockData blockData, @Nullable Object cacheKeyUserData)
-    {
+    public void collectAdditionalPartsCached(PartConsumer consumer, BlockAndTintGetter level, BlockPos pos, RandomSource random, FramedBlockData blockData, @Nullable Object cacheKeyUserData) {
         consumer.acceptAll(baseModel, level, pos, random, state, false, false, false, AUX_SHADER_STATE, null);
     }
 
-    public static FramedBookshelfGeometry normal(GeometryFactory.Context ctx)
-    {
+    public static FramedBookshelfGeometry normal(GeometryFactory.Context ctx) {
         return new FramedBookshelfGeometry(ctx, _ -> true);
     }
 
-    public static FramedBookshelfGeometry chiseled(GeometryFactory.Context ctx)
-    {
+    public static FramedBookshelfGeometry chiseled(GeometryFactory.Context ctx) {
         Direction facing = ctx.state().getValue(FramedProperties.FACING_HOR);
         return new FramedBookshelfGeometry(ctx, facing::equals);
     }

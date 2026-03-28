@@ -14,28 +14,23 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 
-public class FramedFlatExtendedDoubleSlopePanelCornerBlockEntity extends FramedDoubleBlockEntity
-{
+public class FramedFlatExtendedDoubleSlopePanelCornerBlockEntity extends FramedDoubleBlockEntity {
     private final boolean isInner;
 
-    public FramedFlatExtendedDoubleSlopePanelCornerBlockEntity(BlockPos pos, BlockState state)
-    {
+    public FramedFlatExtendedDoubleSlopePanelCornerBlockEntity(BlockPos pos, BlockState state) {
         super(FBContent.BE_TYPE_FRAMED_FLAT_EXTENDED_DOUBLE_SLOPE_PANEL_CORNER.value(), pos, state);
         this.isInner = getBlockType() == BlockType.FRAMED_FLAT_EXT_INNER_DOUBLE_SLOPE_PANEL_CORNER;
     }
 
     @Override
-    protected boolean hitSecondary(BlockHitResult hit, Vec3 lookVec, Vec3 eyePos)
-    {
+    protected boolean hitSecondary(BlockHitResult hit, Vec3 lookVec, Vec3 eyePos) {
         Direction side = hit.getDirection();
 
         Direction facing = getBlockState().getValue(FramedProperties.FACING_HOR);
-        if (side == facing)
-        {
+        if (side == facing) {
             return false;
         }
-        if (side == facing.getOpposite())
-        {
+        if (side == facing.getOpposite()) {
             return true;
         }
 
@@ -43,25 +38,20 @@ public class FramedFlatExtendedDoubleSlopePanelCornerBlockEntity extends FramedD
         Direction rotDir = rotation.withFacing(facing);
         Direction perpRotDir = rotation.rotate(Rotation.COUNTERCLOCKWISE_90).withFacing(facing);
 
-        if (isInner && (side == rotDir.getOpposite() || side == perpRotDir.getOpposite()))
-        {
+        if (isInner && (side == rotDir.getOpposite() || side == perpRotDir.getOpposite())) {
             return false;
         }
 
         Vec3 hitVec = hit.getLocation();
         double hor = MathUtils.fractionInDir(hitVec, facing.getOpposite());
-        if (!isInner && (side == rotDir || side == perpRotDir))
-        {
+        if (!isInner && (side == rotDir || side == perpRotDir)) {
             return hor > .5;
         }
 
         Direction perpDir;
-        if (isInner)
-        {
+        if (isInner) {
             perpDir = side == rotDir ? perpRotDir.getOpposite() : rotDir.getOpposite();
-        }
-        else
-        {
+        } else {
             perpDir = side == rotDir.getOpposite() ? perpRotDir.getOpposite() : rotDir.getOpposite();
         }
 

@@ -12,24 +12,20 @@ import net.minecraft.client.resources.model.geometry.BakedQuad;
 import net.minecraft.core.Direction;
 import org.jspecify.annotations.Nullable;
 
-public class FramedVerticalHalfStairsGeometry extends Geometry
-{
+public class FramedVerticalHalfStairsGeometry extends Geometry {
     private final Direction dir;
     private final boolean top;
 
-    public FramedVerticalHalfStairsGeometry(GeometryFactory.Context ctx)
-    {
+    public FramedVerticalHalfStairsGeometry(GeometryFactory.Context ctx) {
         this.dir = ctx.state().getValue(FramedProperties.FACING_HOR);
         this.top = ctx.state().getValue(FramedProperties.TOP);
     }
 
     @Override
-    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
-    {
+    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData) {
         Direction quadDir = quad.direction();
         Direction vertEdge = top ? Direction.DOWN : Direction.UP;
-        if (quadDir == dir.getOpposite() || quadDir == dir.getClockWise())
-        {
+        if (quadDir == dir.getOpposite() || quadDir == dir.getClockWise()) {
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(quadDir == dir.getOpposite() ? dir.getClockWise() : dir.getOpposite(), .5F))
                     .apply(Modifiers.cut(vertEdge, .5F))
@@ -40,15 +36,11 @@ public class FramedVerticalHalfStairsGeometry extends Geometry
                     .apply(Modifiers.cut(vertEdge, .5F))
                     .apply(Modifiers.setPosition(.5F))
                     .export(quadMap, null);
-        }
-        else if (quadDir == dir || quadDir == dir.getCounterClockWise())
-        {
+        } else if (quadDir == dir || quadDir == dir.getCounterClockWise()) {
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(vertEdge, .5F))
                     .export(quadMap, quadDir);
-        }
-        else if (DirUtils.isY(quadDir))
-        {
+        } else if (DirUtils.isY(quadDir)) {
             boolean inset = (quadDir == Direction.UP) != top;
 
             QuadModifier.of(quad)

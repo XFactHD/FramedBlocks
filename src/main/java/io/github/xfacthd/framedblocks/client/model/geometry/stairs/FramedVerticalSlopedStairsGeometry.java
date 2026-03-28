@@ -15,15 +15,13 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.Rotation;
 import org.jspecify.annotations.Nullable;
 
-public class FramedVerticalSlopedStairsGeometry extends Geometry
-{
+public class FramedVerticalSlopedStairsGeometry extends Geometry {
     private final Direction facing;
     private final Direction rotDir;
     private final Direction rotDirTwo;
     private final boolean altSlope;
 
-    public FramedVerticalSlopedStairsGeometry(GeometryFactory.Context ctx)
-    {
+    public FramedVerticalSlopedStairsGeometry(GeometryFactory.Context ctx) {
         this.facing = ctx.state().getValue(FramedProperties.FACING_HOR);
         HorizontalRotation rot = ctx.state().getValue(PropertyHolder.ROTATION);
         this.rotDir = rot.withFacing(facing);
@@ -32,17 +30,13 @@ public class FramedVerticalSlopedStairsGeometry extends Geometry
     }
 
     @Override
-    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
-    {
+    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData) {
         Direction quadDir = quad.direction();
-        if (quadDir == rotDir || quadDir == rotDirTwo)
-        {
+        if (quadDir == rotDir || quadDir == rotDirTwo) {
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(facing.getOpposite(), .5F))
                     .export(quadMap, quadDir);
-        }
-        else if (quadDir == facing.getOpposite())
-        {
+        } else if (quadDir == facing.getOpposite()) {
             QuadModifier.of(quad)
                     .apply(Modifiers.cutSide(rotDir, 1F, 0F))
                     .export(quadMap, quadDir);
@@ -57,17 +51,13 @@ public class FramedVerticalSlopedStairsGeometry extends Geometry
         Direction slopeQuadDir = useRotDirQuad ? rotDir : rotDirTwo;
         Direction slopeRotDir = useRotDirQuad ? rotDirTwo : rotDir;
 
-        if (quadDir == slopeQuadDir)
-        {
-            if (DirUtils.isY(slopeQuadDir))
-            {
+        if (quadDir == slopeQuadDir) {
+            if (DirUtils.isY(slopeQuadDir)) {
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(facing, .5F))
                         .apply(Modifiers.makeVerticalSlope(slopeRotDir, 45F))
                         .export(quadMap, null);
-            }
-            else
-            {
+            } else {
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(facing, .5F))
                         .apply(Modifiers.makeVerticalSlope(slopeRotDir == Direction.UP, 45F))

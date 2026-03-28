@@ -18,8 +18,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.Arrays;
 
-public class FramingSawWithEncoderMenu extends FramingSawMenu
-{
+public class FramingSawWithEncoderMenu extends FramingSawMenu {
     public static final int SLOT_PATTERN_INPUT = SLOT_INV_FIRST + INV_SLOT_COUNT;
     public static final int SLOT_PATTERN_OUTPUT = SLOT_PATTERN_INPUT + 1;
     public static final int MENU_BUTTON_MODE_CRAFTING = -1;
@@ -32,8 +31,7 @@ public class FramingSawWithEncoderMenu extends FramingSawMenu
     @Nullable
     private BooleanConsumer encoderModeListener;
 
-    FramingSawWithEncoderMenu(int containerId, Inventory inv, ContainerLevelAccess levelAccess)
-    {
+    FramingSawWithEncoderMenu(int containerId, Inventory inv, ContainerLevelAccess levelAccess) {
         super(containerId, inv, levelAccess);
         Preconditions.checkState(AppliedEnergisticsCompat.isLoaded(), "FramingSawWithEncoderMenu requires AE2, how did we get here???");
 
@@ -42,10 +40,8 @@ public class FramingSawWithEncoderMenu extends FramingSawMenu
 
         addDataSlot(patternEncoderMode);
 
-        if (!level.isClientSide())
-        {
-            levelAccess.execute((level, pos) ->
-            {
+        if (!level.isClientSide()) {
+            levelAccess.execute((level, pos) -> {
                 boolean encoder = level.getBlockState(pos).getValue(PropertyHolder.SAW_ENCODER);
                 patternEncoderMode.set(encoder ? 1 : 0);
             });
@@ -53,53 +49,37 @@ public class FramingSawWithEncoderMenu extends FramingSawMenu
     }
 
     @Override
-    public ItemStack quickMoveStack(Player player, int index)
-    {
-        if (isInEncoderMode())
-        {
+    public ItemStack quickMoveStack(Player player, int index) {
+        if (isInEncoderMode()) {
             ItemStack remainder = ItemStack.EMPTY;
             Slot slot = slots.get(index);
-            if (slot.hasItem())
-            {
+            if (slot.hasItem()) {
                 ItemStack stack = slot.getItem();
                 remainder = stack.copy();
 
-                if (index == SLOT_PATTERN_INPUT || index == SLOT_PATTERN_OUTPUT)
-                {
-                    if (!moveItemStackTo(stack, SLOT_INV_FIRST, SLOT_INV_FIRST + INV_SLOT_COUNT, true))
-                    {
+                if (index == SLOT_PATTERN_INPUT || index == SLOT_PATTERN_OUTPUT) {
+                    if (!moveItemStackTo(stack, SLOT_INV_FIRST, SLOT_INV_FIRST + INV_SLOT_COUNT, true)) {
                         return ItemStack.EMPTY;
                     }
-                }
-                else if (index >= SLOT_INV_FIRST)
-                {
-                    if (AppliedEnergisticsCompat.isPattern(stack, false))
-                    {
-                        if (!moveItemStackTo(stack, SLOT_PATTERN_INPUT, SLOT_PATTERN_INPUT + 1, false))
-                        {
+                } else if (index >= SLOT_INV_FIRST) {
+                    if (AppliedEnergisticsCompat.isPattern(stack, false)) {
+                        if (!moveItemStackTo(stack, SLOT_PATTERN_INPUT, SLOT_PATTERN_INPUT + 1, false)) {
                             return ItemStack.EMPTY;
                         }
-                    }
-                    else if (AppliedEnergisticsCompat.isPattern(stack, true))
-                    {
-                        if (!moveItemStackTo(stack, SLOT_PATTERN_OUTPUT, SLOT_PATTERN_OUTPUT + 1, false))
-                        {
+                    } else if (AppliedEnergisticsCompat.isPattern(stack, true)) {
+                        if (!moveItemStackTo(stack, SLOT_PATTERN_OUTPUT, SLOT_PATTERN_OUTPUT + 1, false)) {
                             return ItemStack.EMPTY;
                         }
                     }
                 }
 
-                if (stack.isEmpty())
-                {
+                if (stack.isEmpty()) {
                     slot.set(ItemStack.EMPTY);
-                }
-                else
-                {
+                } else {
                     slot.setChanged();
                 }
 
-                if (stack.getCount() == remainder.getCount())
-                {
+                if (stack.getCount() == remainder.getCount()) {
                     return ItemStack.EMPTY;
                 }
 
@@ -112,30 +92,22 @@ public class FramingSawWithEncoderMenu extends FramingSawMenu
     }
 
     @Override
-    public boolean clickMenuButton(Player player, int id)
-    {
-        if (!level.isClientSide())
-        {
-            if (id == MENU_BUTTON_MODE_CRAFTING)
-            {
+    public boolean clickMenuButton(Player player, int id) {
+        if (!level.isClientSide()) {
+            if (id == MENU_BUTTON_MODE_CRAFTING) {
                 setEncoderMode(player, false);
-            }
-            else if (id == MENU_BUTTON_MODE_ENCODING)
-            {
+            } else if (id == MENU_BUTTON_MODE_ENCODING) {
                 setEncoderMode(player, true);
             }
         }
         return super.clickMenuButton(player, id);
     }
 
-    private void setEncoderMode(Player player, boolean encoder)
-    {
-        if (isInEncoderMode() != encoder)
-        {
+    private void setEncoderMode(Player player, boolean encoder) {
+        if (isInEncoderMode() != encoder) {
             patternEncoderMode.set(encoder ? 1 : 0);
 
-            levelAccess.execute((level, pos) ->
-            {
+            levelAccess.execute((level, pos) -> {
                 clearContainer(player, encoder ? inputContainer : encoderContainer);
                 slotsChanged(encoder ? inputContainer : encoderContainer);
 
@@ -146,39 +118,34 @@ public class FramingSawWithEncoderMenu extends FramingSawMenu
     }
 
     @Override
-    public void removed(Player player)
-    {
+    public void removed(Player player) {
         super.removed(player);
         levelAccess.execute((_, _) -> clearContainer(player, encoderContainer));
     }
 
     @Override
-    protected boolean isCraftingEnabled()
-    {
+    protected boolean isCraftingEnabled() {
         return !isInEncoderMode();
     }
 
-    public void setEncoderModeListener(BooleanConsumer listener)
-    {
+    public void setEncoderModeListener(BooleanConsumer listener) {
         this.encoderModeListener = listener;
     }
 
-    public boolean isInEncoderMode()
-    {
+    public boolean isInEncoderMode() {
         return patternEncoderMode.isEncoder();
     }
 
-    public void tryEncodePattern(FramingSawRecipe recipe, ItemStack[] inputs)
-    {
-        if (!patternInputSlot.hasItem() && !patternOutputSlot.hasItem()) return;
+    public void tryEncodePattern(FramingSawRecipe recipe, ItemStack[] inputs) {
+        if (!patternInputSlot.hasItem() && !patternOutputSlot.hasItem()) {
+            return;
+        }
 
         ItemStack[] additives = Arrays.copyOfRange(inputs, 1, inputs.length);
         ItemStack pattern = AppliedEnergisticsCompat.tryEncodePattern(inputs[0], additives, recipe.getResultStack());
 
-        if (pattern != null)
-        {
-            if (!patternOutputSlot.hasItem())
-            {
+        if (pattern != null) {
+            if (!patternOutputSlot.hasItem()) {
                 patternInputSlot.getItem().shrink(1);
             }
             patternOutputSlot.set(pattern);
@@ -186,79 +153,64 @@ public class FramingSawWithEncoderMenu extends FramingSawMenu
         }
     }
 
-    private static class EncoderSlot extends Slot
-    {
+    private static class EncoderSlot extends Slot {
         private final FramingSawWithEncoderMenu menu;
 
-        public EncoderSlot(FramingSawWithEncoderMenu menu, Container pContainer, int pSlot, int pX, int pY)
-        {
+        public EncoderSlot(FramingSawWithEncoderMenu menu, Container pContainer, int pSlot, int pX, int pY) {
             super(pContainer, pSlot, pX, pY);
             this.menu = menu;
         }
 
         @Override
-        public boolean isActive()
-        {
+        public boolean isActive() {
             return menu.isInEncoderMode();
         }
     }
 
-    private static class EncoderInputSlot extends EncoderSlot
-    {
-        public EncoderInputSlot(FramingSawWithEncoderMenu menu, Container pContainer, int pSlot, int pX, int pY)
-        {
+    private static class EncoderInputSlot extends EncoderSlot {
+        public EncoderInputSlot(FramingSawWithEncoderMenu menu, Container pContainer, int pSlot, int pX, int pY) {
             super(menu, pContainer, pSlot, pX, pY);
         }
 
         @Override
-        public boolean mayPlace(ItemStack stack)
-        {
+        public boolean mayPlace(ItemStack stack) {
             return AppliedEnergisticsCompat.isPattern(stack, false);
         }
     }
 
-    private static class EncoderOutputSlot extends EncoderSlot
-    {
-        public EncoderOutputSlot(FramingSawWithEncoderMenu menu, Container pContainer, int pSlot, int pX, int pY)
-        {
+    private static class EncoderOutputSlot extends EncoderSlot {
+        public EncoderOutputSlot(FramingSawWithEncoderMenu menu, Container pContainer, int pSlot, int pX, int pY) {
             super(menu, pContainer, pSlot, pX, pY);
         }
 
         @Override
-        public boolean mayPlace(ItemStack stack)
-        {
+        public boolean mayPlace(ItemStack stack) {
             return AppliedEnergisticsCompat.isPattern(stack, true);
         }
     }
 
-    private static class EncoderModeDataSlot extends DataSlot
-    {
+    private static class EncoderModeDataSlot extends DataSlot {
         private final FramingSawWithEncoderMenu menu;
         private boolean encoder;
 
-        public EncoderModeDataSlot(FramingSawWithEncoderMenu menu)
-        {
+        public EncoderModeDataSlot(FramingSawWithEncoderMenu menu) {
             this.menu = menu;
         }
 
         @Override
-        public int get()
-        {
+        public int get() {
             return encoder ? 1 : 0;
         }
 
         @Override
-        public void set(int value)
-        {
+        public void set(int value) {
             encoder = value != 0;
-            if (menu.encoderModeListener != null)
-            {
+            if (menu.encoderModeListener != null) {
                 menu.encoderModeListener.accept(encoder);
             }
         }
 
-        public boolean isEncoder()
-        {
+        public boolean isEncoder() {
             return encoder;
         }
     }

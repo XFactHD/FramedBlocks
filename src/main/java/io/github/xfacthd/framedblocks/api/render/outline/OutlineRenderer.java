@@ -22,8 +22,7 @@ import org.jspecify.annotations.Nullable;
  * <p>
  * Must be registered in {@link RegisterOutlineRenderersEvent}
  */
-public interface OutlineRenderer<T>
-{
+public interface OutlineRenderer<T> {
     OutlineRenderer<Unit> NO_OP = new NoopOutlineRenderer();
 
     /**
@@ -37,8 +36,7 @@ public interface OutlineRenderer<T>
      *
      * @return additional data or null to fall back to vanilla rendering
      */
-    @Nullable
-    T extractOutlineData(BlockState state, Level level, BlockPos pos);
+    @Nullable T extractOutlineData(BlockState state, Level level, BlockPos pos);
 
     /**
      * Draw the outlines of the block. Provides access to the {@link BlockState}, {@link Level} and {@link BlockPos}
@@ -50,8 +48,7 @@ public interface OutlineRenderer<T>
     /**
      * Get the horizontal {@link Direction} the block is facing in
      */
-    default Direction getRotationDir(BlockState state)
-    {
+    default Direction getRotationDir(BlockState state) {
         return state.getValue(FramedProperties.FACING_HOR);
     }
 
@@ -59,8 +56,7 @@ public interface OutlineRenderer<T>
      * Manipulate the {@link PoseStack} to apply rotations and other transformations
      * @implNote The {@code PoseStack} is already centered in the target block space when this is called
      */
-    default void rotateMatrix(PoseStack poseStack, BlockState state)
-    {
+    default void rotateMatrix(PoseStack poseStack, BlockState state) {
         Direction dir = getRotationDir(state);
         Preconditions.checkState(dir.getAxis().isHorizontal(), "Rotation direction must be horizontal");
         poseStack.mulPose(YN_DIR[dir.get2DDataValue()]);
@@ -72,28 +68,23 @@ public interface OutlineRenderer<T>
      * @param rotY90 Whether the {@code PoseStack} needs to be rotated -90 degrees around the y-axis,
      *               needed for un-symmetric shapes like corners
      */
-    static void mirrorHorizontally(PoseStack pstack, boolean rotY90)
-    {
+    static void mirrorHorizontally(PoseStack pstack, boolean rotY90) {
         pstack.mulPose(Quaternions.ZP_180);
-        if (rotY90)
-        {
+        if (rotY90) {
             pstack.mulPose(Quaternions.YN_90);
         }
     }
 
-    private static Quaternionf[] makeQuaternionArray()
-    {
+    private static Quaternionf[] makeQuaternionArray() {
         Quaternionf[] array = new Quaternionf[4];
-        for (Direction dir : Direction.Plane.HORIZONTAL)
-        {
+        for (Direction dir : Direction.Plane.HORIZONTAL) {
             array[dir.get2DDataValue()] = Axis.YN.rotationDegrees(dir.toYRot());
         }
         return array;
     }
 
     @ApiStatus.NonExtendable
-    interface LineDrawer
-    {
+    interface LineDrawer {
         void drawLine(float x1, float y1, float z1, float x2, float y2, float z2);
 
         void drawLines(float[] vertices);

@@ -8,12 +8,10 @@ import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.HandlerThread;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
-public final class NetworkHandler
-{
+public final class NetworkHandler {
     private static final String PROTOCOL_VERSION = "3";
 
-    public static void onRegisterPayloads(RegisterPayloadHandlersEvent event)
-    {
+    public static void onRegisterPayloads(RegisterPayloadHandlersEvent event) {
         PayloadRegistrar registrar = event.registrar(PROTOCOL_VERSION);
         registrar.executesOn(HandlerThread.MAIN)
                 .playToClient(

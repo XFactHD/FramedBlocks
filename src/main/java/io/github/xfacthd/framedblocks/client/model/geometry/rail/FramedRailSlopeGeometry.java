@@ -21,33 +21,27 @@ import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.block.state.properties.RailShape;
 import net.neoforged.neoforge.model.data.ModelData;
 
-public class FramedRailSlopeGeometry extends FramedSlopeGeometry
-{
+public class FramedRailSlopeGeometry extends FramedSlopeGeometry {
     private final BlockState railState;
 
     private FramedRailSlopeGeometry(GeometryFactory.Context ctx, BlockState railBlock, EnumProperty<RailShape> shapeProperty)
     {
         super(ctx.withState(getSlopeState(ctx.state())));
-
-        RailShape shape = ctx.state().getValue(PropertyHolder.ASCENDING_RAIL_SHAPE);
-        railState = railBlock.setValue(shapeProperty, shape);
+        this.railState = railBlock.setValue(shapeProperty, ctx.state().getValue(PropertyHolder.ASCENDING_RAIL_SHAPE));
     }
 
     @Override
-    public boolean hasAdditionalUncachedParts()
-    {
+    public boolean hasAdditionalUncachedParts() {
         return true;
     }
 
     @Override
-    public void collectAdditionalPartsUncached(PartConsumer consumer, BlockAndTintGetter level, BlockPos pos, RandomSource random, FramedBlockData blockData, ModelData data)
-    {
+    public void collectAdditionalPartsUncached(PartConsumer consumer, BlockAndTintGetter level, BlockPos pos, RandomSource random, FramedBlockData blockData, ModelData data) {
         BlockStateModel model = ModelUtils.getModel(railState);
         consumer.acceptAll(model, level, pos, random, railState, true, false, false, railState, null);
     }
 
-    private static BlockState getSlopeState(BlockState state)
-    {
+    private static BlockState getSlopeState(BlockState state) {
         RailShape shape = state.getValue(PropertyHolder.ASCENDING_RAIL_SHAPE);
         Direction dir = FramedUtils.getDirectionFromAscendingRailShape(shape);
         boolean altSlope = state.getValue(FramedProperties.ALT_SLOPE);
@@ -58,13 +52,11 @@ public class FramedRailSlopeGeometry extends FramedSlopeGeometry
                 .setValue(FramedProperties.ALT_SLOPE, altSlope);
     }
 
-    public static FramedRailSlopeGeometry normal(GeometryFactory.Context ctx)
-    {
+    public static FramedRailSlopeGeometry normal(GeometryFactory.Context ctx) {
         return new FramedRailSlopeGeometry(ctx, Blocks.RAIL.defaultBlockState(), BlockStateProperties.RAIL_SHAPE);
     }
 
-    public static FramedRailSlopeGeometry powered(GeometryFactory.Context ctx)
-    {
+    public static FramedRailSlopeGeometry powered(GeometryFactory.Context ctx) {
         boolean powered = ctx.state().getValue(BlockStateProperties.POWERED);
         return new FramedRailSlopeGeometry(
                 ctx,
@@ -73,8 +65,7 @@ public class FramedRailSlopeGeometry extends FramedSlopeGeometry
         );
     }
 
-    public static FramedRailSlopeGeometry detector(GeometryFactory.Context ctx)
-    {
+    public static FramedRailSlopeGeometry detector(GeometryFactory.Context ctx) {
         boolean powered = ctx.state().getValue(BlockStateProperties.POWERED);
         return new FramedRailSlopeGeometry(
                 ctx,
@@ -83,8 +74,7 @@ public class FramedRailSlopeGeometry extends FramedSlopeGeometry
         );
     }
 
-    public static FramedRailSlopeGeometry activator(GeometryFactory.Context ctx)
-    {
+    public static FramedRailSlopeGeometry activator(GeometryFactory.Context ctx) {
         boolean powered = ctx.state().getValue(BlockStateProperties.POWERED);
         return new FramedRailSlopeGeometry(
                 ctx,

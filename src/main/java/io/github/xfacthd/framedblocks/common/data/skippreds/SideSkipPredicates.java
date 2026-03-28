@@ -16,18 +16,15 @@ import io.github.xfacthd.framedblocks.common.data.skippreds.slopeslab.*;
 import io.github.xfacthd.framedblocks.common.data.skippreds.stairs.*;
 import io.github.xfacthd.framedblocks.common.util.BlockTypeMap;
 
-public final class SideSkipPredicates extends BlockTypeMap<SideSkipPredicate>
-{
+public final class SideSkipPredicates extends BlockTypeMap<SideSkipPredicate> {
     public static final SideSkipPredicates PREDICATES = new SideSkipPredicates();
 
-    private SideSkipPredicates()
-    {
+    private SideSkipPredicates() {
         super(SideSkipPredicate.FALSE, BlockType::isDoubleBlock);
     }
 
     @Override
-    protected void fill()
-    {
+    protected void fill() {
         put(BlockType.FRAMED_CUBE, SideSkipPredicate.FALSE);
         put(BlockType.FRAMED_SLOPE, new SlopeSkipPredicate());
         put(BlockType.FRAMED_HALF_SLOPE, new HalfSlopeSkipPredicate());
@@ -152,14 +149,14 @@ public final class SideSkipPredicates extends BlockTypeMap<SideSkipPredicate>
         put(BlockType.FRAMED_EXT_CORNER_SLOPE_PANEL_W, new ExtendedCornerSlopePanelWallSkipPredicate());
         put(BlockType.FRAMED_EXT_INNER_CORNER_SLOPE_PANEL, new ExtendedInnerCornerSlopePanelSkipPredicate());
         put(BlockType.FRAMED_EXT_INNER_CORNER_SLOPE_PANEL_W, new ExtendedInnerCornerSlopePanelWallSkipPredicate());
-        put(BlockType.FRAMED_SMALL_PRISM_CORNER_SLOPE_PANEL, new SmallPrismSlopePanelCornerSkipPredicate());
-        put(BlockType.FRAMED_SMALL_PRISM_CORNER_SLOPE_PANEL_W, new SmallPrismSlopePanelCornerWallSkipPredicate());
-        put(BlockType.FRAMED_LARGE_PRISM_CORNER_SLOPE_PANEL, new LargePrismSlopePanelCornerSkipPredicate());
-        put(BlockType.FRAMED_LARGE_PRISM_CORNER_SLOPE_PANEL_W, new LargePrismSlopePanelCornerWallSkipPredicate());
-        put(BlockType.FRAMED_SMALL_INNER_PRISM_CORNER_SLOPE_PANEL, new SmallInnerPrismSlopePanelCornerSkipPredicate());
-        put(BlockType.FRAMED_SMALL_INNER_PRISM_CORNER_SLOPE_PANEL_W, new SmallInnerPrismSlopePanelCornerWallSkipPredicate());
-        put(BlockType.FRAMED_LARGE_INNER_PRISM_CORNER_SLOPE_PANEL, new LargeInnerPrismSlopePanelCornerSkipPredicate());
-        put(BlockType.FRAMED_LARGE_INNER_PRISM_CORNER_SLOPE_PANEL_W, new LargeInnerPrismSlopePanelCornerWallSkipPredicate());
+        put(BlockType.FRAMED_SMALL_PRISM_CORNER_SLOPE_PANEL, new SmallPrismCornerSlopePanelSkipPredicate());
+        put(BlockType.FRAMED_SMALL_PRISM_CORNER_SLOPE_PANEL_W, new SmallPrismCornerSlopePanelWallSkipPredicate());
+        put(BlockType.FRAMED_LARGE_PRISM_CORNER_SLOPE_PANEL, new LargePrismCornerSlopePanelSkipPredicate());
+        put(BlockType.FRAMED_LARGE_PRISM_CORNER_SLOPE_PANEL_W, new LargePrismCornerSlopePanelWallSkipPredicate());
+        put(BlockType.FRAMED_SMALL_INNER_PRISM_CORNER_SLOPE_PANEL, new SmallInnerPrismCornerSlopePanelSkipPredicate());
+        put(BlockType.FRAMED_SMALL_INNER_PRISM_CORNER_SLOPE_PANEL_W, new SmallInnerPrismCornerSlopePanelWallSkipPredicate());
+        put(BlockType.FRAMED_LARGE_INNER_PRISM_CORNER_SLOPE_PANEL, new LargeInnerPrismCornerSlopePanelSkipPredicate());
+        put(BlockType.FRAMED_LARGE_INNER_PRISM_CORNER_SLOPE_PANEL_W, new LargeInnerPrismCornerSlopePanelWallSkipPredicate());
         put(BlockType.FRAMED_PYRAMID, new PyramidSkipPredicate());
         put(BlockType.FRAMED_PYRAMID_SLAB, SideSkipPredicate.FALSE);
         put(BlockType.FRAMED_ELEVATED_PYRAMID_SLAB, new ElevatedPyramidSlabSkipPredicate());

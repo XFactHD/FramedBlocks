@@ -5,8 +5,7 @@ import net.minecraft.core.Direction;
 /**
  * Indicates the normal and outer edge of a half-block sized face
  */
-public enum HalfDir
-{
+public enum HalfDir {
     NULL(Direction.UP, Direction.UP),
 
     UP_NORTH(Direction.UP, Direction.NORTH),
@@ -44,25 +43,20 @@ public enum HalfDir
     private final Direction normal;
     private final Direction edge;
 
-    HalfDir(Direction normal, Direction edge)
-    {
+    HalfDir(Direction normal, Direction edge) {
         this.normal = normal;
         this.edge = edge;
     }
 
-    public HalfDir getOppositeEdge()
-    {
-        if (this == NULL)
-        {
+    public HalfDir getOppositeEdge() {
+        if (this == NULL) {
             return this;
         }
         return fromDirections(normal, edge.getOpposite());
     }
 
-    public HalfDir getOppositeNormal()
-    {
-        if (this == NULL)
-        {
+    public HalfDir getOppositeNormal() {
+        if (this == NULL) {
             return this;
         }
         return fromDirections(normal.getOpposite(), edge);
@@ -72,8 +66,7 @@ public enum HalfDir
      * {@return true if both {@code HalfDir}s are not {@link HalfDir#NULL} and the other {@code HalfDir}
      * has the same edge direction and the opposite normal direction}
      */
-    public boolean isEqualTo(HalfDir other)
-    {
+    public boolean isEqualTo(HalfDir other) {
         return this != NULL && getOppositeNormal() == other;
     }
 
@@ -81,27 +74,24 @@ public enum HalfDir
      * {@return true if both {@code HalfDir}s are not {@link HalfDir#NULL} and the other {@code HalfDir}
      * has the same normal direction and the opposite edge direction}
      */
-    public boolean isEqualToOppositeEdge(HalfDir other)
-    {
+    public boolean isEqualToOppositeEdge(HalfDir other) {
         return this != NULL && getOppositeEdge() == other;
     }
 
-    public static HalfDir fromDirections(Direction normal, Direction edge)
-    {
+    public static HalfDir fromDirections(Direction normal, Direction edge) {
         HalfDir dir = FROM_DIRS[normal.ordinal()][edge.ordinal()];
-        if (dir == null)
-        {
+        if (dir == null) {
             throw new IllegalArgumentException("Invalid direction pair: normal:" + normal + ", edge: " + edge);
         }
         return dir;
     }
 
-    private static HalfDir[][] makeDirTable()
-    {
+    private static HalfDir[][] makeDirTable() {
         HalfDir[][] table = new HalfDir[6][6];
-        for (HalfDir dir : values())
-        {
-            if (dir == NULL) { continue; }
+        for (HalfDir dir : values()) {
+            if (dir == NULL) {
+                continue;
+            }
 
             table[dir.normal.ordinal()][dir.edge.ordinal()] = dir;
         }

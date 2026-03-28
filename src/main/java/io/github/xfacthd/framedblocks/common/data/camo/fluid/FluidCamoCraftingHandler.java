@@ -8,17 +8,14 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.Locale;
 
-final class FluidCamoCraftingHandler implements CamoCraftingHandler<FluidCamoContainer>
-{
+final class FluidCamoCraftingHandler implements CamoCraftingHandler<FluidCamoContainer> {
     static final FluidCamoCraftingHandler INSTANCE = new FluidCamoCraftingHandler();
 
     private FluidCamoCraftingHandler() { }
 
     @Override
-    public boolean canApply(ItemStack stack, boolean consume)
-    {
-        if (!stack.is(Utils.CRAFTING_BLOCKED_FLUID_CONTAINERS))
-        {
+    public boolean canApply(ItemStack stack, boolean consume) {
+        if (!stack.is(Utils.CRAFTING_BLOCKED_FLUID_CONTAINERS)) {
             ItemAccess itemAccess = new FluidCamoCraftingItemAccess(stack);
             return FluidCamoContainerFactory.applyCamo(itemAccess, null, consume, false) != null;
         }
@@ -26,18 +23,15 @@ final class FluidCamoCraftingHandler implements CamoCraftingHandler<FluidCamoCon
     }
 
     @Override
-    public FluidCamoContainer apply(ItemStack stack, boolean consume)
-    {
+    public FluidCamoContainer apply(ItemStack stack, boolean consume) {
         ItemAccess itemAccess = new FluidCamoCraftingItemAccess(stack);
         FluidCamoContainer camo = FluidCamoContainerFactory.applyCamo(itemAccess, null, consume, false);
         return assertResult(camo, stack, "apply");
     }
 
     @Override
-    public ItemStack getRemainder(ItemStack stack, boolean consume)
-    {
-        if (consume)
-        {
+    public ItemStack getRemainder(ItemStack stack, boolean consume) {
+        if (consume) {
             FluidCamoCraftingItemAccess itemAccess = new FluidCamoCraftingItemAccess(stack.copy());
             // Perform a "dummy" application to force the creation of the remainder
             FluidCamoContainer camo = FluidCamoContainerFactory.applyCamo(itemAccess, null, true, true);
@@ -47,10 +41,8 @@ final class FluidCamoCraftingHandler implements CamoCraftingHandler<FluidCamoCon
         return stack.copyWithCount(1);
     }
 
-    private static FluidCamoContainer assertResult(@Nullable FluidCamoContainer camo, ItemStack stack, String method)
-    {
-        if (camo == null)
-        {
+    private static FluidCamoContainer assertResult(@Nullable FluidCamoContainer camo, ItemStack stack, String method) {
+        if (camo == null) {
             throw new IllegalStateException(String.format(
                     Locale.ROOT,
                     "CamoCraftingHandler#%s() called with invalid input, CamoCraftingHandler#canApply() was likely not called: %s",

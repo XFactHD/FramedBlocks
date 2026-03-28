@@ -38,24 +38,21 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 
-public final class FramedChestRenderer implements BlockEntityRenderer<FramedChestBlockEntity, FramedChestRenderState>
-{
+public final class FramedChestRenderer implements BlockEntityRenderer<FramedChestBlockEntity, FramedChestRenderState> {
     private static final Identifier BLOCKSTATE_LOC = Utils.id("framed_chest_lid");
     public static final StandaloneWrapperKey<FramedChestLidModel> WRAPPER_KEY = new StandaloneWrapperKey<>(FBContent.BLOCK_FRAMED_CHEST, BLOCKSTATE_LOC);
 
     @Nullable
     private final FramedChestLidModel lidModel;
 
-    public FramedChestRenderer(@SuppressWarnings("unused") BlockEntityRendererProvider.Context ctx)
-    {
+    public FramedChestRenderer(@SuppressWarnings("unused") BlockEntityRendererProvider.Context ctx) {
         this.lidModel = Minecraft.getInstance()
                 .getModelManager()
                 .getStandaloneModel(WRAPPER_KEY.modelKey());
     }
 
     @Override
-    public void submit(FramedChestRenderState renderState, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, CameraRenderState camera)
-    {
+    public void submit(FramedChestRenderState renderState, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, CameraRenderState camera) {
         poseStack.pushPose();
 
         float xOff = renderState.rotOriginX;
@@ -70,8 +67,7 @@ public final class FramedChestRenderer implements BlockEntityRenderer<FramedChes
     }
 
     @Override
-    public FramedChestRenderState createRenderState()
-    {
+    public FramedChestRenderState createRenderState() {
         return new FramedChestRenderState();
     }
 
@@ -82,8 +78,7 @@ public final class FramedChestRenderer implements BlockEntityRenderer<FramedChes
             float partialTick,
             Vec3 cameraPos,
             ModelFeatureRenderer.@Nullable CrumblingOverlay crumblingOverlay
-    )
-    {
+    ) {
         BlockEntityRenderer.super.extractRenderState(blockEntity, renderState, partialTick, cameraPos, crumblingOverlay);
 
         Level level = Objects.requireNonNull(blockEntity.getLevel());
@@ -106,34 +101,37 @@ public final class FramedChestRenderer implements BlockEntityRenderer<FramedChes
         renderState.rotOriginZ = DirUtils.isZ(dir) ? (DirUtils.isPositive(dir) ? 1F/16F : 15F/16F) : 0;
     }
 
-    private static float calculateAngle(Level level, ChestState chestState, Direction dir, long lastChange, float partialTicks)
-    {
+    private static float calculateAngle(Level level, ChestState chestState, Direction dir, long lastChange, float partialTicks) {
         float diff = (float) (level.getGameTime() - lastChange) + partialTicks;
 
         float factor = Mth.lerp(diff / 10F, 0, 1);
-        if (chestState == ChestState.CLOSING) factor = 1F - factor;
+        if (chestState == ChestState.CLOSING) {
+            factor = 1F - factor;
+        }
 
         factor = 1.0F - factor;
         factor = 1.0F - factor * factor * factor;
 
         float angle = Mth.clamp(factor * 90F, 0F, 90F);
-        if (!DirUtils.isPositive(dir)) angle *= -1F;
+        if (!DirUtils.isPositive(dir)) {
+            angle *= -1F;
+        }
 
         return angle;
     }
 
     @Override
-    public boolean shouldRender(FramedChestBlockEntity be, Vec3 camera)
-    {
-        if (lidModel == null || be.isRemoved()) return false;
+    public boolean shouldRender(FramedChestBlockEntity be, Vec3 camera) {
+        if (lidModel == null || be.isRemoved()) {
+            return false;
+        }
 
         ChestState state = FramedChestBlock.combine(be, true).apply(FramedChestBlock.STATE_COMBINER);
         return state != ChestState.CLOSED && BlockEntityRenderer.super.shouldRender(be, camera);
     }
 
     @Override
-    public AABB getRenderBoundingBox(FramedChestBlockEntity blockEntity)
-    {
+    public AABB getRenderBoundingBox(FramedChestBlockEntity blockEntity) {
         BlockPos pos = blockEntity.getBlockPos();
         return new AABB(pos.getX() - .25, pos.getY() + .5625, pos.getZ() - .25, pos.getX() + 1.25, pos.getY() + 1.5, pos.getZ() + 1.25);
     }

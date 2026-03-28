@@ -16,18 +16,15 @@ import io.github.xfacthd.framedblocks.common.data.conpreds.slopeslab.*;
 import io.github.xfacthd.framedblocks.common.data.conpreds.stairs.*;
 import io.github.xfacthd.framedblocks.common.util.BlockTypeMap;
 
-public final class ConnectionPredicates extends BlockTypeMap<ConnectionPredicate>
-{
+public final class ConnectionPredicates extends BlockTypeMap<ConnectionPredicate> {
     public static final ConnectionPredicates PREDICATES = new ConnectionPredicates();
 
-    private ConnectionPredicates()
-    {
+    private ConnectionPredicates() {
         super(ConnectionPredicate.FALSE);
     }
 
     @Override
-    protected void fill()
-    {
+    protected void fill() {
         put(BlockType.FRAMED_CUBE, ConnectionPredicate.FULL_EDGE);
         put(BlockType.FRAMED_SLOPE, SlopeConnectionPredicate.INSTANCE);
         put(BlockType.FRAMED_DOUBLE_SLOPE, new DoubleSlopeConnectionPredicate());

@@ -8,55 +8,45 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jspecify.annotations.Nullable;
 
-public final class HalfStairsConnectionPredicate implements ConnectionPredicate
-{
+public final class HalfStairsConnectionPredicate implements ConnectionPredicate {
     @Override
-    public boolean canConnectFullEdge(BlockState state, Direction side, @Nullable Direction edge)
-    {
+    public boolean canConnectFullEdge(BlockState state, Direction side, @Nullable Direction edge) {
         Direction facing = state.getValue(FramedProperties.FACING_HOR);
         boolean top = state.getValue(FramedProperties.TOP);
         boolean right = state.getValue(PropertyHolder.RIGHT);
         Direction dirTwo = top ? Direction.UP : Direction.DOWN;
         Direction dirThree = right ? facing.getClockWise() : facing.getCounterClockWise();
 
-        if (side == facing || side == dirTwo)
-        {
+        if (side == facing || side == dirTwo) {
             return edge == dirThree;
         }
-        else if (side == dirThree)
-        {
+        if (side == dirThree) {
             return edge == facing || edge == dirTwo;
         }
         return false;
     }
 
     @Override
-    public boolean canConnectDetailed(BlockState state, Direction side, Direction edge)
-    {
+    public boolean canConnectDetailed(BlockState state, Direction side, Direction edge) {
         Direction facing = state.getValue(FramedProperties.FACING_HOR);
         boolean top = state.getValue(FramedProperties.TOP);
         boolean right = state.getValue(PropertyHolder.RIGHT);
         Direction dirTwo = top ? Direction.UP : Direction.DOWN;
         Direction dirThree = right ? facing.getClockWise() : facing.getCounterClockWise();
 
-        if (side == facing)
-        {
+        if (side == facing) {
             return DirUtils.isY(edge);
         }
-        else if (side == facing.getOpposite() || side == dirTwo.getOpposite())
-        {
+        if (side == facing.getOpposite() || side == dirTwo.getOpposite()) {
             return edge != dirThree.getOpposite();
         }
-        else if (side == dirTwo)
-        {
+        if (side == dirTwo) {
             return edge.getAxis() == facing.getAxis();
         }
-        else if (side == dirThree)
-        {
+        if (side == dirThree) {
             return edge == facing.getOpposite() || edge == dirTwo.getOpposite();
         }
-        else if (side == dirThree.getOpposite())
-        {
+        if (side == dirThree.getOpposite()) {
             return true;
         }
         return false;

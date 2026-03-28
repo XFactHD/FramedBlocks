@@ -7,30 +7,24 @@ import net.minecraft.world.level.block.state.properties.Property;
 
 import java.util.List;
 
-public enum RotationDirection
-{
+public enum RotationDirection {
     CLOCKWISE(Rotation.CLOCKWISE_90),
     COUNTERCLOCKWISE(Rotation.COUNTERCLOCKWISE_90);
 
     private final Rotation vanillaRotation;
 
-    RotationDirection(Rotation vanillaRotation)
-    {
+    RotationDirection(Rotation vanillaRotation) {
         this.vanillaRotation = vanillaRotation;
     }
 
-    public Rotation toVanillaRotation()
-    {
+    public Rotation toVanillaRotation() {
         return vanillaRotation;
     }
 
-    public <T extends Comparable<T>> BlockState cycle(BlockState state, Property<T> property)
-    {
-        return switch (this)
-        {
+    public <T extends Comparable<T>> BlockState cycle(BlockState state, Property<T> property) {
+        return switch (this) {
             case CLOCKWISE -> state.cycle(property);
-            case COUNTERCLOCKWISE ->
-            {
+            case COUNTERCLOCKWISE -> {
                 List<T> possibleValues = property.getPossibleValues();
                 int currIndex = possibleValues.indexOf(state.getValue(property));
                 int prevIndex = Mth.positiveModulo(currIndex - 1, possibleValues.size());
@@ -39,8 +33,7 @@ public enum RotationDirection
         };
     }
 
-    public static RotationDirection of(boolean sneaking)
-    {
+    public static RotationDirection of(boolean sneaking) {
         return sneaking ? COUNTERCLOCKWISE : CLOCKWISE;
     }
 }

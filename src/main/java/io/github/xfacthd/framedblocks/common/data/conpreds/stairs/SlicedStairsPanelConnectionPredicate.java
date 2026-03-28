@@ -9,100 +9,76 @@ import net.minecraft.world.level.block.state.properties.Half;
 import net.minecraft.world.level.block.state.properties.StairsShape;
 import org.jspecify.annotations.Nullable;
 
-public final class SlicedStairsPanelConnectionPredicate extends NonDetailedConnectionPredicate
-{
+public final class SlicedStairsPanelConnectionPredicate extends NonDetailedConnectionPredicate {
     @Override
-    public boolean canConnectFullEdge(BlockState state, Direction side, @Nullable Direction edge)
-    {
+    public boolean canConnectFullEdge(BlockState state, Direction side, @Nullable Direction edge) {
         Direction dir = state.getValue(StairBlock.FACING);
         StairsShape shape = state.getValue(StairBlock.SHAPE);
         boolean top = state.getValue(StairBlock.HALF) == Half.TOP;
         Direction dirTwo = top ? Direction.UP : Direction.DOWN;
 
-        if (side == dir)
-        {
-            if (shape == StairsShape.STRAIGHT || shape == StairsShape.INNER_LEFT || shape == StairsShape.INNER_RIGHT)
-            {
+        if (side == dir) {
+            if (shape == StairsShape.STRAIGHT || shape == StairsShape.INNER_LEFT || shape == StairsShape.INNER_RIGHT) {
                 return true;
             }
-            if (edge == dir.getCounterClockWise() && shape != StairsShape.OUTER_RIGHT)
-            {
+            if (edge == dir.getCounterClockWise() && shape != StairsShape.OUTER_RIGHT) {
                 return true;
             }
-            if (edge == dir.getClockWise() && shape != StairsShape.OUTER_LEFT)
-            {
+            if (edge == dir.getClockWise() && shape != StairsShape.OUTER_LEFT) {
                 return true;
             }
-            if (edge != null && DirUtils.isY(edge))
-            {
+            if (edge != null && DirUtils.isY(edge)) {
                 return shape != StairsShape.OUTER_LEFT && shape != StairsShape.OUTER_RIGHT;
             }
             return false;
         }
-        if (side == dir.getOpposite())
-        {
-            if (edge == dir.getCounterClockWise())
-            {
+        if (side == dir.getOpposite()) {
+            if (edge == dir.getCounterClockWise()) {
                 return shape == StairsShape.INNER_LEFT;
             }
-            if (edge == dir.getClockWise())
-            {
+            if (edge == dir.getClockWise()) {
                 return shape == StairsShape.INNER_RIGHT;
             }
-            if (edge == dirTwo)
-            {
+            if (edge == dirTwo) {
                 return shape != StairsShape.INNER_LEFT && shape != StairsShape.INNER_RIGHT;
             }
             return false;
         }
-        if (side == dir.getCounterClockWise())
-        {
-            if (shape == StairsShape.INNER_LEFT)
-            {
+        if (side == dir.getCounterClockWise()) {
+            if (shape == StairsShape.INNER_LEFT) {
                 return true;
             }
             return (edge == dir && shape != StairsShape.OUTER_RIGHT) || (edge == dirTwo && shape == StairsShape.OUTER_RIGHT);
         }
-        if (side == dir.getClockWise())
-        {
-            if (shape == StairsShape.INNER_RIGHT)
-            {
+        if (side == dir.getClockWise()) {
+            if (shape == StairsShape.INNER_RIGHT) {
                 return true;
             }
             return (edge == dir && shape != StairsShape.OUTER_LEFT) || (edge == dirTwo && shape == StairsShape.OUTER_LEFT);
         }
-        if (side == dirTwo)
-        {
-            if (edge == dir)
-            {
+        if (side == dirTwo) {
+            if (edge == dir) {
                 return shape != StairsShape.OUTER_LEFT && shape != StairsShape.OUTER_RIGHT;
             }
-            if (edge == dir.getOpposite())
-            {
+            if (edge == dir.getOpposite()) {
                 return shape != StairsShape.INNER_LEFT && shape != StairsShape.INNER_RIGHT;
             }
-            if (edge == dir.getCounterClockWise())
-            {
+            if (edge == dir.getCounterClockWise()) {
                 return shape == StairsShape.OUTER_RIGHT || shape == StairsShape.INNER_LEFT;
             }
-            if (edge == dir.getClockWise())
-            {
+            if (edge == dir.getClockWise()) {
                 return shape == StairsShape.OUTER_LEFT || shape == StairsShape.INNER_RIGHT;
             }
             return false;
         }
-        if (side == dirTwo.getOpposite())
-        {
-            if (edge == dir)
-            {
+        if (side == dirTwo.getOpposite()) {
+            if (edge == dir) {
                 return shape != StairsShape.OUTER_LEFT && shape != StairsShape.OUTER_RIGHT;
             }
-            if (edge == dir.getCounterClockWise())
-            {
+            if (edge == dir.getCounterClockWise()) {
                 return shape == StairsShape.INNER_LEFT;
             }
-            if (edge == dir.getClockWise())
-            {
+            if (edge == dir.getClockWise()) {
                 return shape == StairsShape.INNER_RIGHT;
             }
         }

@@ -28,59 +28,46 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import org.jspecify.annotations.Nullable;
 
-public class FramedDoubleSlopeBlock extends FramedDoubleBlock implements SlopeToggleBlock
-{
-    public FramedDoubleSlopeBlock(Properties props)
-    {
+public class FramedDoubleSlopeBlock extends FramedDoubleBlock implements SlopeToggleBlock {
+    public FramedDoubleSlopeBlock(Properties props) {
         super(BlockType.FRAMED_DOUBLE_SLOPE, props);
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
-    {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
         builder.add(FramedProperties.FACING_HOR, PropertyHolder.SLOPE_TYPE);
     }
 
     @Override
-    @Nullable
-    public BlockState getStateForPlacement(BlockPlaceContext ctx)
-    {
+    public @Nullable BlockState getStateForPlacement(BlockPlaceContext ctx) {
         return ExtPlacementStateBuilder.of(this, ctx).withHorizontalFacingAndSlopeType().build();
     }
 
     @Override
-    public BlockState rotate(BlockState state, RotationDirection direction, WrenchRotationMode mode)
-    {
-        return switch (mode)
-        {
+    public BlockState rotate(BlockState state, RotationDirection direction, WrenchRotationMode mode) {
+        return switch (mode) {
             case PRIMARY -> super.rotate(state, direction, mode);
             case SECONDARY -> direction.cycle(state, PropertyHolder.SLOPE_TYPE);
         };
     }
 
     @Override
-    protected BlockState rotate(BlockState state, Rotation rotation)
-    {
+    protected BlockState rotate(BlockState state, Rotation rotation) {
         return BlockUtils.rotate(state, rotation);
     }
 
     @Override
-    protected BlockState mirror(BlockState state, Mirror mirror)
-    {
-        if (state.getValue(PropertyHolder.SLOPE_TYPE) == SlopeType.HORIZONTAL)
-        {
+    protected BlockState mirror(BlockState state, Mirror mirror) {
+        if (state.getValue(PropertyHolder.SLOPE_TYPE) == SlopeType.HORIZONTAL) {
             return BlockUtils.mirrorCornerBlock(state, mirror);
-        }
-        else
-        {
+        } else {
             return BlockUtils.mirrorFaceBlock(state, mirror);
         }
     }
 
     @Override
-    public DoubleBlockParts calculateParts(BlockState state)
-    {
+    public DoubleBlockParts calculateParts(BlockState state) {
         Direction facing = state.getValue(FramedProperties.FACING_HOR);
         SlopeType type = state.getValue(PropertyHolder.SLOPE_TYPE);
         boolean altSlope = state.getValue(FramedProperties.ALT_SLOPE);
@@ -97,10 +84,8 @@ public class FramedDoubleSlopeBlock extends FramedDoubleBlock implements SlopeTo
     }
 
     @Override
-    public DoubleBlockTopInteractionMode calculateTopInteractionMode(BlockState state)
-    {
-        return switch (state.getValue(PropertyHolder.SLOPE_TYPE))
-        {
+    public DoubleBlockTopInteractionMode calculateTopInteractionMode(BlockState state) {
+        return switch (state.getValue(PropertyHolder.SLOPE_TYPE)) {
             case BOTTOM -> DoubleBlockTopInteractionMode.SECOND;
             case TOP -> DoubleBlockTopInteractionMode.FIRST;
             case HORIZONTAL -> DoubleBlockTopInteractionMode.EITHER;
@@ -108,69 +93,52 @@ public class FramedDoubleSlopeBlock extends FramedDoubleBlock implements SlopeTo
     }
 
     @Override
-    public CamoGetter calculateCamoGetter(BlockState state, Direction side, @Nullable Direction edge)
-    {
+    public CamoGetter calculateCamoGetter(BlockState state, Direction side, @Nullable Direction edge) {
         Direction facing = state.getValue(FramedProperties.FACING_HOR);
         SlopeType type = state.getValue(PropertyHolder.SLOPE_TYPE);
-        return switch (type)
-        {
-            case HORIZONTAL ->
-            {
-                if (matchesHor(side, facing) || (DirUtils.isY(side) && matchesHor(edge, facing)))
-                {
+        return switch (type) {
+            case HORIZONTAL -> {
+                if (matchesHor(side, facing) || (DirUtils.isY(side) && matchesHor(edge, facing))) {
                     yield CamoGetter.FIRST;
                 }
                 Direction oppFacing = facing.getOpposite();
-                if (matchesHor(side, oppFacing) || (DirUtils.isY(side) && matchesHor(edge, oppFacing)))
-                {
+                if (matchesHor(side, oppFacing) || (DirUtils.isY(side) && matchesHor(edge, oppFacing))) {
                     yield CamoGetter.SECOND;
                 }
                 yield CamoGetter.NONE;
             }
-            case TOP ->
-            {
-                if (side.getAxis() == facing.getClockWise().getAxis())
-                {
-                    if (edge == facing || edge == Direction.UP)
-                    {
+            case TOP -> {
+                if (side.getAxis() == facing.getClockWise().getAxis()) {
+                    if (edge == facing || edge == Direction.UP) {
                         yield CamoGetter.FIRST;
                     }
-                    if (edge == facing.getOpposite() || edge == Direction.DOWN)
-                    {
+                    if (edge == facing.getOpposite() || edge == Direction.DOWN) {
                         yield CamoGetter.SECOND;
                     }
                     yield CamoGetter.NONE;
                 }
-                if (side == facing || side == Direction.UP)
-                {
+                if (side == facing || side == Direction.UP) {
                     yield CamoGetter.FIRST;
                 }
-                if (side == facing.getOpposite() || side == Direction.DOWN)
-                {
+                if (side == facing.getOpposite() || side == Direction.DOWN) {
                     yield CamoGetter.SECOND;
                 }
                 yield CamoGetter.NONE;
             }
-            case BOTTOM ->
-            {
-                if (side.getAxis() == facing.getClockWise().getAxis())
-                {
-                    if (edge == facing || edge == Direction.DOWN)
-                    {
+            case BOTTOM -> {
+                if (side.getAxis() == facing.getClockWise().getAxis()) {
+                    if (edge == facing || edge == Direction.DOWN) {
                         yield CamoGetter.FIRST;
                     }
-                    if (edge == facing.getOpposite() || edge == Direction.UP)
-                    {
+                    if (edge == facing.getOpposite() || edge == Direction.UP) {
                         yield CamoGetter.SECOND;
                     }
                     yield CamoGetter.NONE;
                 }
-                if (side == facing || side == Direction.DOWN)
-                {
+                if (side == facing || side == Direction.DOWN) {
                     yield CamoGetter.FIRST;
                 }
-                if (side == facing.getOpposite() || side == Direction.UP)
-                {
+                if (side == facing.getOpposite() || side == Direction.UP) {
                     yield CamoGetter.SECOND;
                 }
                 yield CamoGetter.NONE;
@@ -178,50 +146,35 @@ public class FramedDoubleSlopeBlock extends FramedDoubleBlock implements SlopeTo
         };
     }
 
-    private static boolean matchesHor(@Nullable Direction side, Direction facing)
-    {
+    private static boolean matchesHor(@Nullable Direction side, Direction facing) {
         return side == facing || side == facing.getCounterClockWise();
     }
 
     @Override
-    public SolidityCheck calculateSolidityCheck(BlockState state, Direction side)
-    {
+    public SolidityCheck calculateSolidityCheck(BlockState state, Direction side) {
         Direction facing = state.getValue(FramedProperties.FACING_HOR);
         SlopeType type = state.getValue(PropertyHolder.SLOPE_TYPE);
-        return switch (type)
-        {
-            case HORIZONTAL ->
-            {
-                if (side == facing || side == facing.getCounterClockWise())
-                {
+        return switch (type) {
+            case HORIZONTAL -> {
+                if (side == facing || side == facing.getCounterClockWise()) {
                     yield SolidityCheck.FIRST;
-                }
-                else if (side == facing.getOpposite() || side == facing.getClockWise())
-                {
+                } else if (side == facing.getOpposite() || side == facing.getClockWise()) {
                     yield SolidityCheck.SECOND;
                 }
                 yield SolidityCheck.BOTH;
             }
-            case TOP ->
-            {
-                if (side == facing || side == Direction.UP)
-                {
+            case TOP -> {
+                if (side == facing || side == Direction.UP) {
                     yield SolidityCheck.FIRST;
-                }
-                else if (side == facing.getOpposite() || side == Direction.DOWN)
-                {
+                } else if (side == facing.getOpposite() || side == Direction.DOWN) {
                     yield SolidityCheck.SECOND;
                 }
                 yield SolidityCheck.BOTH;
             }
-            case BOTTOM ->
-            {
-                if (side == facing || side == Direction.UP)
-                {
+            case BOTTOM -> {
+                if (side == facing || side == Direction.UP) {
                     yield SolidityCheck.SECOND;
-                }
-                else if (side == facing.getOpposite() || side == Direction.DOWN)
-                {
+                } else if (side == facing.getOpposite() || side == Direction.DOWN) {
                     yield SolidityCheck.FIRST;
                 }
                 yield SolidityCheck.BOTH;
@@ -230,34 +183,29 @@ public class FramedDoubleSlopeBlock extends FramedDoubleBlock implements SlopeTo
     }
 
     @Override
-    public final FramedDoubleBlockEntity newBlockEntity(BlockPos pos, BlockState state)
-    {
+    public FramedDoubleBlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return new FramedDoubleSlopeBlockEntity(pos, state);
     }
 
     @Override
-    public BlockState getItemModelSource()
-    {
+    public BlockState getItemModelSource() {
         return defaultBlockState()
                 .setValue(FramedProperties.FACING_HOR, Direction.WEST)
                 .setValue(PropertyHolder.SLOPE_TYPE, SlopeType.HORIZONTAL);
     }
 
     @Override
-    public Direction getHorizontalOrientation(BlockState state)
-    {
+    public Direction getHorizontalOrientation(BlockState state) {
         return state.getValue(FramedProperties.FACING_HOR);
     }
 
     @Override
-    public BlockState getJadeRenderState(BlockState state)
-    {
+    public BlockState getJadeRenderState(BlockState state) {
         return defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
     }
 
     @Override
-    public SlopeOrientation getSlopeOrientation(BlockState state)
-    {
+    public SlopeOrientation getSlopeOrientation(BlockState state) {
         return state.getValue(PropertyHolder.SLOPE_TYPE).getOrientation();
     }
 }

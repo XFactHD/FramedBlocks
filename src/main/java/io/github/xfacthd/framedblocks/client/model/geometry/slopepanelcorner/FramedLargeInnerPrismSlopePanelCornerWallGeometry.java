@@ -19,17 +19,13 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.function.BiConsumer;
 
-public class FramedLargeInnerPrismSlopePanelCornerWallGeometry extends Geometry
-{
+public class FramedLargeInnerPrismSlopePanelCornerWallGeometry extends Geometry {
     private static final float PRISM_ANGLE_HOR = FramedSmallPrismSlopePanelCornerWallGeometry.PRISM_ANGLE_HOR;
     private static final float PRISM_ANGLE_VERT = FramedSmallPrismSlopePanelCornerWallGeometry.PRISM_ANGLE_VERT;
-    private static final Vector3f[] ROT_ORIGINS = Util.make(() ->
-    {
+    private static final Vector3f[] ROT_ORIGINS = Util.make(() -> {
         Vector3f[] origins = new Vector3f[32];
-        DirUtils.forHorizontalDirections(dir ->
-        {
-            for (HorizontalRotation rot : HorizontalRotation.values())
-            {
+        DirUtils.forHorizontalDirections(dir -> {
+            for (HorizontalRotation rot : HorizontalRotation.values()) {
                 int idx = dir.get2DDataValue() << 3 | rot.ordinal() << 1;
 
                 Direction rotDirOne = rot.withFacing(dir).getOpposite();
@@ -57,8 +53,7 @@ public class FramedLargeInnerPrismSlopePanelCornerWallGeometry extends Geometry
     private final boolean invAngle;
     private final Vector3f dirAxisRotOrigin;
 
-    public FramedLargeInnerPrismSlopePanelCornerWallGeometry(GeometryFactory.Context ctx)
-    {
+    public FramedLargeInnerPrismSlopePanelCornerWallGeometry(GeometryFactory.Context ctx) {
         this.dir = ctx.state().getValue(FramedProperties.FACING_HOR);
         HorizontalRotation rot = ctx.state().getValue(PropertyHolder.ROTATION);
         this.rotDirOne = rot.withFacing(dir);
@@ -75,11 +70,9 @@ public class FramedLargeInnerPrismSlopePanelCornerWallGeometry extends Geometry
     }
 
     @Override
-    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object cacheKeyUserData)
-    {
+    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object cacheKeyUserData) {
         Direction quadDir = quad.direction();
-        if (quadDir == dir)
-        {
+        if (quadDir == dir) {
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(rotDirTwo.getOpposite(), .5F))
                     .export(quadMap, quadDir);
@@ -87,41 +80,31 @@ public class FramedLargeInnerPrismSlopePanelCornerWallGeometry extends Geometry
                     .apply(Modifiers.cut(rotDirTwo, .5F))
                     .apply(Modifiers.cut(rotDirOne.getOpposite(), flipSideTris ? 1.5F : .5F, flipSideTris ? .5F : 1.5F))
                     .export(quadMap, quadDir);
-        }
-        else if (quadDir == dir.getOpposite())
-        {
+        } else if (quadDir == dir.getOpposite()) {
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(rotDirTwo.getOpposite(), flipSideTris ? 0 : 1, flipSideTris ? 1 : 0))
                     .export(quadMap, quadDir);
 
-            if (!altSlope)
-            {
+            if (!altSlope) {
                 makePrismSlope(quadMap, quad, this::makePrismSlopeHorizontal);
             }
-        }
-        else if (quadDir == rotDirOne.getOpposite())
-        {
+        } else if (quadDir == rotDirOne.getOpposite()) {
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(rotDirTwo.getOpposite(), flipSideTris ? .5F : 0, flipSideTris ? 0 : .5F))
                     .export(quadMap, quadDir);
 
-            if (altSlope)
-            {
+            if (altSlope) {
                 makePrismSlope(quadMap, quad, this::makePrismSlopeVertical);
             }
-        }
-        else if (quadDir == rotDirTwo.getOpposite())
-        {
+        } else if (quadDir == rotDirTwo.getOpposite()) {
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(rotDirOne.getOpposite(), flipSideTris ? .5F : 0, flipSideTris ? 0 : .5F))
                     .export(quadMap, quadDir);
         }
     }
 
-    private void makePrismSlope(QuadMapBuilder quadMap, BakedQuad quad, BiConsumer<QuadMapBuilder, QuadModifier> slopeMaker)
-    {
-        if (offset)
-        {
+    private void makePrismSlope(QuadMapBuilder quadMap, BakedQuad quad, BiConsumer<QuadMapBuilder, QuadModifier> slopeMaker) {
+        if (offset) {
             QuadModifier modOne = QuadModifier.of(quad)
                     .apply(Modifiers.cut(rotDirTwo, .5F))
                     .apply(Modifiers.offset(rotDirTwo, .5F));
@@ -130,15 +113,12 @@ public class FramedLargeInnerPrismSlopePanelCornerWallGeometry extends Geometry
                     .apply(Modifiers.offset(rotDirTwo.getOpposite(), .5F));
             slopeMaker.accept(quadMap, modTwo);
             slopeMaker.accept(quadMap, modOne);
-        }
-        else
-        {
+        } else {
             slopeMaker.accept(quadMap, QuadModifier.of(quad));
         }
     }
 
-    private void makePrismSlopeHorizontal(QuadMapBuilder quadMap, QuadModifier modifier)
-    {
+    private void makePrismSlopeHorizontal(QuadMapBuilder quadMap, QuadModifier modifier) {
         float tiltAngle = invAngle ? -PRISM_ANGLE_HOR : PRISM_ANGLE_HOR;
         float rotAngle = DirUtils.isPositive(dir) ? -45F : 45F;
         modifier.apply(Modifiers.cut(rotDirTwo, flipPrismTri ? .75F : 1, flipPrismTri ? 1 : .75F))
@@ -150,8 +130,7 @@ public class FramedLargeInnerPrismSlopePanelCornerWallGeometry extends Geometry
                 .export(quadMap, null);
     }
 
-    private void makePrismSlopeVertical(QuadMapBuilder quadMap, QuadModifier modifier)
-    {
+    private void makePrismSlopeVertical(QuadMapBuilder quadMap, QuadModifier modifier) {
         float tiltAngle = invAngle ? -PRISM_ANGLE_VERT : PRISM_ANGLE_VERT;
         float rotAngle = DirUtils.isPositive(dir) ? -45F : 45F;
         modifier.apply(Modifiers.cut(rotDirTwo, flipPrismTri ? .75F : 1, flipPrismTri ? 1 : .75F))
@@ -161,8 +140,7 @@ public class FramedLargeInnerPrismSlopePanelCornerWallGeometry extends Geometry
                 .export(quadMap, null);
     }
 
-    private static Vector3f getRotOrigin(Direction dir, HorizontalRotation rot, boolean altSlope)
-    {
+    private static Vector3f getRotOrigin(Direction dir, HorizontalRotation rot, boolean altSlope) {
         return ROT_ORIGINS[dir.get2DDataValue() << 3 | rot.ordinal() << 1 | (altSlope ? 1 : 0)];
     }
 }

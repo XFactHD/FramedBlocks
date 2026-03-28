@@ -10,8 +10,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.function.Consumer;
 
-public final class SearchEditBox extends EditBox
-{
+public final class SearchEditBox extends EditBox {
     private static final long UPDATE_DELAY = 250L;
     private static final boolean NO_DELAY = SearchablesCompat.isLoaded();
 
@@ -20,8 +19,7 @@ public final class SearchEditBox extends EditBox
     private String lastQuery = "";
     private long lastChange = 0L;
 
-    public SearchEditBox(Font font, int x, int y, int w, int h, Component hint, Consumer<String> searchHandler, @Nullable SearchEditBox prev)
-    {
+    public SearchEditBox(Font font, int x, int y, int w, int h, Component hint, Consumer<String> searchHandler, @Nullable SearchEditBox prev) {
         super(font, x, y, w, h, prev, hint);
         this.searchHandler = searchHandler;
         setHint(hint);
@@ -29,13 +27,10 @@ public final class SearchEditBox extends EditBox
     }
 
     @Override
-    public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick)
-    {
-        if (event.button() == InputConstants.MOUSE_BUTTON_RIGHT && isMouseOver(event.x(), event.y()))
-        {
+    public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
+        if (event.button() == InputConstants.MOUSE_BUTTON_RIGHT && isMouseOver(event.x(), event.y())) {
             setValue("");
-            if (!NO_DELAY)
-            {
+            if (!NO_DELAY) {
                 lastChange = System.currentTimeMillis() - UPDATE_DELAY;
             }
             return true;
@@ -43,16 +38,14 @@ public final class SearchEditBox extends EditBox
         return super.mouseClicked(event, doubleClick);
     }
 
-    private void onSearchChanged(String text)
-    {
-        if (lastQuery.equals(text)) return;
-
-        if (NO_DELAY)
-        {
-            searchHandler.accept(text);
+    private void onSearchChanged(String text) {
+        if (lastQuery.equals(text)) {
+            return;
         }
-        else
-        {
+
+        if (NO_DELAY) {
+            searchHandler.accept(text);
+        } else {
             changed = true;
             lastChange = System.currentTimeMillis();
         }
@@ -60,24 +53,20 @@ public final class SearchEditBox extends EditBox
         lastQuery = text;
     }
 
-    public void tick()
-    {
-        if (!NO_DELAY && changed && System.currentTimeMillis() - lastChange > UPDATE_DELAY)
-        {
+    public void tick() {
+        if (!NO_DELAY && changed && System.currentTimeMillis() - lastChange > UPDATE_DELAY) {
             changed = false;
             searchHandler.accept(lastQuery);
         }
     }
 
     @Override
-    public boolean isBordered()
-    {
+    public boolean isBordered() {
         return false;
     }
 
     @Override
-    public int getInnerWidth()
-    {
+    public int getInnerWidth() {
         return width - 8;
     }
 }

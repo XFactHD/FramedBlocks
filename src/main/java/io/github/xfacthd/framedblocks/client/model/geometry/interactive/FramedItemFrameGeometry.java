@@ -22,8 +22,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 
-public class FramedItemFrameGeometry extends Geometry
-{
+public class FramedItemFrameGeometry extends Geometry {
     private static final int GLOWING_BRIGHTNESS = 5;
     private static final QuadListModifier GLOWING_LEATHER_MODIFIER = (_, quads, _) ->
             quads.replaceAll(quad -> Objects.requireNonNull(QuadModifier.of(quad).apply(Modifiers.setLightEmission(GLOWING_BRIGHTNESS, false)).exportDirect()));
@@ -43,8 +42,7 @@ public class FramedItemFrameGeometry extends Geometry
     @Nullable
     private final QuadListModifier leatherModifier;
 
-    private FramedItemFrameGeometry(GeometryFactory.Context ctx, boolean glowing)
-    {
+    private FramedItemFrameGeometry(GeometryFactory.Context ctx, boolean glowing) {
         this.state = ctx.state();
         this.baseModel = ctx.baseModel();
         this.facing = ctx.state().getValue(BlockStateProperties.FACING);
@@ -62,32 +60,23 @@ public class FramedItemFrameGeometry extends Geometry
     }
 
     @Override
-    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
-    {
+    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData) {
         Direction quadFace = quad.direction();
-        if (DirUtils.isY(facing))
-        {
+        if (DirUtils.isY(facing)) {
             makeVerticalFrame(quadMap, quad, quadFace);
-        }
-        else
-        {
+        } else {
             makeHorizontalFrame(quadMap, quad, quadFace);
         }
     }
 
-    private void makeVerticalFrame(QuadMapBuilder quadMap, BakedQuad quad, Direction quadFace)
-    {
-        if (quadFace == facing)
-        {
+    private void makeVerticalFrame(QuadMapBuilder quadMap, BakedQuad quad, Direction quadFace) {
+        if (quadFace == facing) {
             QuadModifier.of(quad)
                     .applyIf(Modifiers.cutTopBottom(outerMin, outerMin, outerMax, outerMax), !mapFrame)
                     .apply(Modifiers.setLightEmission(lightEmission, true))
                     .export(quadMap, quadFace);
-        }
-        else if (quadFace == facing.getOpposite())
-        {
-            if (!leather && !mapFrame)
-            {
+        } else if (quadFace == facing.getOpposite()) {
+            if (!leather && !mapFrame) {
                 QuadModifier.of(quad)
                         .apply(Modifiers.cutTopBottom(innerMin, innerMin, innerMax, innerMax))
                         .apply(Modifiers.setLightEmission(lightEmission, true))
@@ -95,8 +84,7 @@ public class FramedItemFrameGeometry extends Geometry
                         .export(quadMap, null);
             }
 
-            if (!mapFrame || leather)
-            {
+            if (!mapFrame || leather) {
                 QuadModifier.of(quad)
                         .apply(Modifiers.cutTopBottom(outerMin, outerMin, innerMin, outerMax))
                         .apply(Modifiers.setLightEmission(lightEmission, true))
@@ -122,16 +110,13 @@ public class FramedItemFrameGeometry extends Geometry
                         .export(quadMap, null);
             }
 
-            if (mapFrame && !leather)
-            {
+            if (mapFrame && !leather) {
                 QuadModifier.of(quad)
                         .apply(Modifiers.setLightEmission(lightEmission, true))
                         .apply(Modifiers.setPosition(1F/16F))
                         .export(quadMap, quadFace);
             }
-        }
-        else
-        {
+        } else {
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(facing.getOpposite(), 1F/16F))
                     .applyIf(Modifiers.cut(quadFace.getClockWise().getAxis(), outerMax), !mapFrame)
@@ -139,8 +124,7 @@ public class FramedItemFrameGeometry extends Geometry
                     .applyIf(Modifiers.setPosition(outerMax), !mapFrame)
                     .export(quadMap, null);
 
-            if (!mapFrame)
-            {
+            if (!mapFrame) {
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(facing, 15.5F / 16F))
                         .apply(Modifiers.cut(facing.getOpposite(), 1F / 16F))
@@ -152,19 +136,14 @@ public class FramedItemFrameGeometry extends Geometry
         }
     }
 
-    private void makeHorizontalFrame(QuadMapBuilder quadMap, BakedQuad quad, Direction quadFace)
-    {
-        if (quadFace == facing)
-        {
+    private void makeHorizontalFrame(QuadMapBuilder quadMap, BakedQuad quad, Direction quadFace) {
+        if (quadFace == facing) {
             QuadModifier.of(quad)
                     .applyIf(Modifiers.cutSide(outerMin, outerMin, outerMax, outerMax), !mapFrame)
                     .apply(Modifiers.setLightEmission(lightEmission, true))
                     .export(quadMap, quadFace);
-        }
-        else if (quadFace == facing.getOpposite())
-        {
-            if (!leather && !mapFrame)
-            {
+        } else if (quadFace == facing.getOpposite()) {
+            if (!leather && !mapFrame) {
                 QuadModifier.of(quad)
                         .apply(Modifiers.cutSide(innerMin, innerMin, innerMax, innerMax))
                         .apply(Modifiers.setLightEmission(lightEmission, true))
@@ -172,8 +151,7 @@ public class FramedItemFrameGeometry extends Geometry
                         .export(quadMap, null);
             }
 
-            if (!mapFrame || leather)
-            {
+            if (!mapFrame || leather) {
                 QuadModifier.of(quad)
                         .apply(Modifiers.cutSide(outerMin, outerMin, innerMin, outerMax))
                         .apply(Modifiers.setLightEmission(lightEmission, true))
@@ -199,16 +177,13 @@ public class FramedItemFrameGeometry extends Geometry
                         .export(quadMap, null);
             }
 
-            if (mapFrame && !leather)
-            {
+            if (mapFrame && !leather) {
                 QuadModifier.of(quad)
                         .apply(Modifiers.setLightEmission(lightEmission, true))
                         .apply(Modifiers.setPosition(1F/16F))
                         .export(quadMap, quadFace);
             }
-        }
-        else if (DirUtils.isY(quadFace))
-        {
+        } else if (DirUtils.isY(quadFace)) {
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(facing.getOpposite(), 1F/16F))
                     .applyIf(Modifiers.cut(facing.getClockWise().getAxis(), outerMax), !mapFrame)
@@ -216,8 +191,7 @@ public class FramedItemFrameGeometry extends Geometry
                     .applyIf(Modifiers.setPosition(outerMax), !mapFrame)
                     .export(quadMap, null);
 
-            if (!mapFrame)
-            {
+            if (!mapFrame) {
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(facing, 15.5F/16F))
                         .apply(Modifiers.cut(facing.getOpposite(), 1F/16F))
@@ -226,9 +200,7 @@ public class FramedItemFrameGeometry extends Geometry
                         .apply(Modifiers.setPosition(innerPos))
                         .export(quadMap, null);
             }
-        }
-        else
-        {
+        } else {
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(facing.getOpposite(), 1F/16F))
                     .applyIf(Modifiers.cut(Direction.Axis.Y, outerMax), !mapFrame)
@@ -236,8 +208,7 @@ public class FramedItemFrameGeometry extends Geometry
                     .applyIf(Modifiers.setPosition(outerMax), !mapFrame)
                     .export(quadMap, null);
 
-            if (!mapFrame)
-            {
+            if (!mapFrame) {
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(facing, 15.5F/16F))
                         .apply(Modifiers.cut(facing.getOpposite(), 1F/16F))
@@ -250,21 +221,17 @@ public class FramedItemFrameGeometry extends Geometry
     }
 
     @Override
-    public void collectAdditionalPartsCached(PartConsumer consumer, BlockAndTintGetter level, BlockPos pos, RandomSource random, FramedBlockData blockData, @Nullable Object cacheKeyUserData)
-    {
-        if (leather)
-        {
+    public void collectAdditionalPartsCached(PartConsumer consumer, BlockAndTintGetter level, BlockPos pos, RandomSource random, FramedBlockData blockData, @Nullable Object cacheKeyUserData) {
+        if (leather) {
             consumer.acceptAll(baseModel, level, pos, random, state, true, false, false, null, leatherModifier);
         }
     }
 
-    public static FramedItemFrameGeometry normal(GeometryFactory.Context ctx)
-    {
+    public static FramedItemFrameGeometry normal(GeometryFactory.Context ctx) {
         return new FramedItemFrameGeometry(ctx, false);
     }
 
-    public static FramedItemFrameGeometry glowing(GeometryFactory.Context ctx)
-    {
+    public static FramedItemFrameGeometry glowing(GeometryFactory.Context ctx) {
         return new FramedItemFrameGeometry(ctx, true);
     }
 }

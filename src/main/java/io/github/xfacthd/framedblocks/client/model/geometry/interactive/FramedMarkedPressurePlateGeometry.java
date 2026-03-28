@@ -15,8 +15,7 @@ import net.minecraft.world.level.block.WeightedPressurePlateBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jspecify.annotations.Nullable;
 
-public class FramedMarkedPressurePlateGeometry extends FramedPressurePlateGeometry
-{
+public class FramedMarkedPressurePlateGeometry extends FramedPressurePlateGeometry {
     private static final Material STONE_FRAME_LOCATION = new Material(Utils.id("block/stone_plate_frame"));
     private static final Material OBSIDIAN_FRAME_LOCATION = new Material(Utils.id("block/obsidian_plate_frame"));
     private static final Material GOLD_FRAME_LOCATION = new Material(Utils.id("block/gold_plate_frame"));
@@ -26,30 +25,25 @@ public class FramedMarkedPressurePlateGeometry extends FramedPressurePlateGeomet
     private final Material.Baked frameMaterial;
     private final BlockState frameShaderState;
 
-    private FramedMarkedPressurePlateGeometry(Material.Baked frameMaterial, BlockState frameShaderState, boolean powered)
-    {
+    private FramedMarkedPressurePlateGeometry(Material.Baked frameMaterial, BlockState frameShaderState, boolean powered) {
         super(powered, true);
         this.frameMaterial = frameMaterial;
         this.frameShaderState = frameShaderState;
     }
 
     @Override
-    public boolean hasGeneratedOverlay(FramedBlockData blockData, @Nullable Object cacheKeyUserData)
-    {
+    public boolean hasGeneratedOverlay(FramedBlockData blockData, @Nullable Object cacheKeyUserData) {
         return !blockData.getCamoContent().isEmpty();
     }
 
     @Override
-    public void generateOverlayParts(OverlayPartGenerator generator, RandomSource rand, @Nullable Object cacheKeyUserData)
-    {
+    public void generateOverlayParts(OverlayPartGenerator generator, RandomSource rand, @Nullable Object cacheKeyUserData) {
         generator.generate(OVERLAY_CULL_FACES, frameMaterial, DirUtils::isY, frameShaderState);
     }
 
-    public static FramedPressurePlateGeometry stone(GeometryFactory.Context ctx)
-    {
+    public static FramedPressurePlateGeometry stone(GeometryFactory.Context ctx) {
         boolean powered = ctx.state().getValue(PressurePlateBlock.POWERED);
-        if (!ClientConfig.VIEW.showButtonPlateOverlay())
-        {
+        if (!ClientConfig.VIEW.showButtonPlateOverlay()) {
             return new FramedPressurePlateGeometry(powered, true);
         }
 
@@ -57,11 +51,9 @@ public class FramedMarkedPressurePlateGeometry extends FramedPressurePlateGeomet
         return new FramedMarkedPressurePlateGeometry(frame, Blocks.STONE.defaultBlockState(), powered);
     }
 
-    public static FramedPressurePlateGeometry obsidian(GeometryFactory.Context ctx)
-    {
+    public static FramedPressurePlateGeometry obsidian(GeometryFactory.Context ctx) {
         boolean powered = ctx.state().getValue(PressurePlateBlock.POWERED);
-        if (!ClientConfig.VIEW.showButtonPlateOverlay())
-        {
+        if (!ClientConfig.VIEW.showButtonPlateOverlay()) {
             return new FramedPressurePlateGeometry(powered, true);
         }
 
@@ -69,11 +61,9 @@ public class FramedMarkedPressurePlateGeometry extends FramedPressurePlateGeomet
         return new FramedMarkedPressurePlateGeometry(frame, Blocks.OBSIDIAN.defaultBlockState(), powered);
     }
 
-    public static FramedPressurePlateGeometry gold(GeometryFactory.Context ctx)
-    {
+    public static FramedPressurePlateGeometry gold(GeometryFactory.Context ctx) {
         boolean powered = ctx.state().getValue(WeightedPressurePlateBlock.POWER) > 0;
-        if (!ClientConfig.VIEW.showButtonPlateOverlay())
-        {
+        if (!ClientConfig.VIEW.showButtonPlateOverlay()) {
             return new FramedPressurePlateGeometry(powered, true);
         }
 
@@ -81,11 +71,9 @@ public class FramedMarkedPressurePlateGeometry extends FramedPressurePlateGeomet
         return new FramedMarkedPressurePlateGeometry(frame, Blocks.GOLD_BLOCK.defaultBlockState(), powered);
     }
 
-    public static FramedPressurePlateGeometry iron(GeometryFactory.Context ctx)
-    {
+    public static FramedPressurePlateGeometry iron(GeometryFactory.Context ctx) {
         boolean powered = ctx.state().getValue(WeightedPressurePlateBlock.POWER) > 0;
-        if (!ClientConfig.VIEW.showButtonPlateOverlay())
-        {
+        if (!ClientConfig.VIEW.showButtonPlateOverlay()) {
             return new FramedPressurePlateGeometry(powered, true);
         }
 

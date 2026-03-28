@@ -14,22 +14,18 @@ import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 
-public final class FlatInverseDoubleSlopeSlabCornerShapes implements ShapeGenerator
-{
+public final class FlatInverseDoubleSlopeSlabCornerShapes implements ShapeGenerator {
     @Override
-    public ShapeContainer generatePrimary(List<BlockState> states)
-    {
+    public ShapeContainer generatePrimary(List<BlockState> states) {
         return generate(states, FlatSlopeSlabCornerShapes.SHAPES, FlatSlopeSlabCornerShapes.INNER_SHAPES);
     }
 
     @Override
-    public ShapeContainer generateOcclusion(List<BlockState> states)
-    {
+    public ShapeContainer generateOcclusion(List<BlockState> states) {
         return generate(states, FlatSlopeSlabCornerShapes.OCCLUSION_SHAPES, FlatSlopeSlabCornerShapes.INNER_OCCLUSION_SHAPES);
     }
 
-    private static ShapeContainer generate(List<BlockState> states, ShapeCache<SlopeSlabShape> cache, ShapeCache<SlopeSlabShape> innerCache)
-    {
+    private static ShapeContainer generate(List<BlockState> states, ShapeCache<SlopeSlabShape> cache, ShapeCache<SlopeSlabShape> innerCache) {
         Map<BlockState, VoxelShape> map = new IdentityHashMap<>(states.size());
 
         VoxelShape shapeBot = ShapeUtils.orUnoptimized(
@@ -47,8 +43,7 @@ public final class FlatInverseDoubleSlopeSlabCornerShapes implements ShapeGenera
 
         VoxelShape[] shapes = ShapeUtils.makeHorizontalRotationsWithFlag(shapeBot, shapeTop, Direction.NORTH);
 
-        for (BlockState state : states)
-        {
+        for (BlockState state : states) {
             Direction dir = state.getValue(FramedProperties.FACING_HOR);
             boolean top = state.getValue(FramedProperties.TOP);
             map.put(state, shapes[dir.get2DDataValue() + (top ? 4 : 0)]);

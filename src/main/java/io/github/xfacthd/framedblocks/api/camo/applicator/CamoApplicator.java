@@ -9,23 +9,20 @@ import net.neoforged.neoforge.capabilities.ItemCapability;
 import net.neoforged.neoforge.transfer.access.ItemAccess;
 import org.jetbrains.annotations.ApiStatus;
 
-public interface CamoApplicator
-{
+public interface CamoApplicator {
     ItemCapability<CamoApplicator, Void> CAPABILITY = ItemCapability.createVoid(Utils.id("camo_applicator"), CamoApplicator.class);
 
     boolean apply(IFramedBlockEntity be, Player player, InteractionHand hand, CamoHandler camoHandler, ModifierHandler modHandler);
 
     @FunctionalInterface
     @ApiStatus.NonExtendable
-    interface CamoHandler
-    {
+    interface CamoHandler {
         boolean accept(CamoContainerFactory<?> factory, ItemAccess itemAccess);
     }
 
     @FunctionalInterface
     @ApiStatus.NonExtendable
-    interface ModifierHandler
-    {
+    interface ModifierHandler {
         boolean accept(ItemAccess itemAccess);
     }
 }

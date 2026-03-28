@@ -8,8 +8,7 @@ import net.minecraft.world.level.block.Rotation;
 
 import java.util.Locale;
 
-public enum CompoundDirection implements StringRepresentable
-{
+public enum CompoundDirection implements StringRepresentable {
     DOWN_NORTH  (Direction.DOWN, Direction.NORTH),
     DOWN_SOUTH  (Direction.DOWN, Direction.SOUTH),
     DOWN_WEST   (Direction.DOWN, Direction.WEST),
@@ -48,48 +47,37 @@ public enum CompoundDirection implements StringRepresentable
     private final Direction direction;
     private final Direction orientation;
 
-    CompoundDirection(Direction direction, Direction orientation)
-    {
+    CompoundDirection(Direction direction, Direction orientation) {
         this.direction = direction;
         this.orientation = orientation;
     }
 
-    public Direction direction()
-    {
+    public Direction direction() {
         return direction;
     }
 
-    public Direction orientation()
-    {
+    public Direction orientation() {
         return orientation;
     }
 
-    public CompoundDirection rotate(Rotation rot)
-    {
-        if (rot == Rotation.NONE)
-        {
+    public CompoundDirection rotate(Rotation rot) {
+        if (rot == Rotation.NONE) {
             return this;
         }
 
-        if (DirUtils.isY(direction))
-        {
+        if (DirUtils.isY(direction)) {
             return of(direction, rot.rotate(orientation));
         }
-        else
-        {
-            Direction newOrientation = orientation;
-            if (orientation.getAxis() != Direction.Axis.Y)
-            {
-                newOrientation = rot.rotate(orientation);
-            }
-            return of(rot.rotate(direction), newOrientation);
+
+        Direction newOrientation = orientation;
+        if (orientation.getAxis() != Direction.Axis.Y) {
+            newOrientation = rot.rotate(orientation);
         }
+        return of(rot.rotate(direction), newOrientation);
     }
 
-    public CompoundDirection mirror(Mirror mirror)
-    {
-        return switch (mirror)
-        {
+    public CompoundDirection mirror(Mirror mirror) {
+        return switch (mirror) {
             case NONE -> this;
             case FRONT_BACK -> DirUtils.isX(direction) ? of(direction.getOpposite(), orientation) : this;
             case LEFT_RIGHT -> DirUtils.isZ(direction) ? of(direction.getOpposite(), orientation) : this;
@@ -97,16 +85,13 @@ public enum CompoundDirection implements StringRepresentable
     }
 
     @Override
-    public String getSerializedName()
-    {
+    public String getSerializedName() {
         return name;
     }
 
-    public static CompoundDirection of(Direction direction, Direction orientation)
-    {
+    public static CompoundDirection of(Direction direction, Direction orientation) {
         CompoundDirection dirAxis = FROM_DIRS[direction.ordinal()][orientation.ordinal()];
-        if (dirAxis == null)
-        {
+        if (dirAxis == null) {
             throw new IllegalArgumentException(
                     "Invalid direction pair! Direction: " + direction + ", Orientation: " + orientation
             );
@@ -114,11 +99,9 @@ public enum CompoundDirection implements StringRepresentable
         return dirAxis;
     }
 
-    private static CompoundDirection[][] makeDirTable()
-    {
+    private static CompoundDirection[][] makeDirTable() {
         CompoundDirection[][] table = new CompoundDirection[6][6];
-        for (CompoundDirection cmpDir : values())
-        {
+        for (CompoundDirection cmpDir : values()) {
             Direction direction = cmpDir.direction;
             Direction orientation = cmpDir.orientation;
             table[direction.ordinal()][orientation.ordinal()] = cmpDir;

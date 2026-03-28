@@ -15,8 +15,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.function.BiConsumer;
 
-public class FramedSmallInnerPrismSlopePanelCornerGeometry extends Geometry
-{
+public class FramedSmallInnerPrismSlopePanelCornerGeometry extends Geometry {
     private static final float PRISM_ANGLE_HOR = FramedSmallPrismSlopePanelCornerGeometry.PRISM_ANGLE_HOR;
     private static final float PRISM_ANGLE_VERT = FramedSmallPrismSlopePanelCornerGeometry.PRISM_ANGLE_VERT;
 
@@ -28,8 +27,7 @@ public class FramedSmallInnerPrismSlopePanelCornerGeometry extends Geometry
     private final Vector3f tiltOrigin;
     private final boolean invAngle;
 
-    public FramedSmallInnerPrismSlopePanelCornerGeometry(GeometryFactory.Context ctx)
-    {
+    public FramedSmallInnerPrismSlopePanelCornerGeometry(GeometryFactory.Context ctx) {
         this.dir = ctx.state().getValue(FramedProperties.FACING_HOR);
         this.top = ctx.state().getValue(FramedProperties.TOP);
         this.upDir = top ? Direction.DOWN : Direction.UP;
@@ -40,28 +38,21 @@ public class FramedSmallInnerPrismSlopePanelCornerGeometry extends Geometry
     }
 
     @Override
-    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object cacheKeyUserData)
-    {
+    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object cacheKeyUserData) {
         Direction quadDir = quad.direction();
-        if (quadDir == dir.getClockWise())
-        {
+        if (quadDir == dir.getClockWise()) {
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(dir.getOpposite(), top ? 1F : .5F, top ? .5F : 1F))
                     .export(quadMap, quadDir);
-        }
-        else if (quadDir == dir.getOpposite())
-        {
+        } else if (quadDir == dir.getOpposite()) {
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(dir.getClockWise(), top ? 1F : .5F, top ? .5F : 1F))
                     .export(quadMap, quadDir);
 
-            if (!altSlope)
-            {
+            if (!altSlope) {
                 makePrismSlope(quadMap, quad, this::makePrismSlopeHorizontal);
             }
-        }
-        else if (quadDir == upDir)
-        {
+        } else if (quadDir == upDir) {
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(dir.getOpposite(), .5F))
                     .export(quadMap, quadDir);
@@ -71,17 +62,14 @@ public class FramedSmallInnerPrismSlopePanelCornerGeometry extends Geometry
                     .apply(Modifiers.cut(dir.getClockWise(), .5F, 1.5F))
                     .export(quadMap, quadDir);
 
-            if (altSlope)
-            {
+            if (altSlope) {
                 makePrismSlope(quadMap, quad, this::makePrismSlopeVertical);
             }
         }
     }
 
-    private void makePrismSlope(QuadMapBuilder quadMap, BakedQuad quad, BiConsumer<QuadMapBuilder, QuadModifier> slopeMaker)
-    {
-        if (offset)
-        {
+    private void makePrismSlope(QuadMapBuilder quadMap, BakedQuad quad, BiConsumer<QuadMapBuilder, QuadModifier> slopeMaker) {
+        if (offset) {
             QuadModifier modOne = QuadModifier.of(quad)
                     .apply(Modifiers.cut(dir.getClockWise(), .5F))
                     .apply(Modifiers.offset(dir.getClockWise(), .5F));
@@ -90,15 +78,12 @@ public class FramedSmallInnerPrismSlopePanelCornerGeometry extends Geometry
                     .apply(Modifiers.offset(dir.getCounterClockWise(), .5F));
             slopeMaker.accept(quadMap, modTwo);
             slopeMaker.accept(quadMap, modOne);
-        }
-        else
-        {
+        } else {
             slopeMaker.accept(quadMap, QuadModifier.of(quad));
         }
     }
 
-    private void makePrismSlopeHorizontal(QuadMapBuilder quadMap, QuadModifier modifier)
-    {
+    private void makePrismSlopeHorizontal(QuadMapBuilder quadMap, QuadModifier modifier) {
         float tiltAngle = invAngle ? -PRISM_ANGLE_HOR : PRISM_ANGLE_HOR;
         modifier.apply(Modifiers.cut(dir.getClockWise(), top ? .5F : .75F, top ? .75F : .5F))
                 .apply(Modifiers.cut(dir.getCounterClockWise(), top ? .5F : .75F, top ? .75F : .5F))
@@ -108,8 +93,7 @@ public class FramedSmallInnerPrismSlopePanelCornerGeometry extends Geometry
                 .export(quadMap, null);
     }
 
-    private void makePrismSlopeVertical(QuadMapBuilder quadMap, QuadModifier modifier)
-    {
+    private void makePrismSlopeVertical(QuadMapBuilder quadMap, QuadModifier modifier) {
         float tiltAngle = invAngle ? -PRISM_ANGLE_VERT : PRISM_ANGLE_VERT;
         modifier.apply(Modifiers.cut(dir.getClockWise(), .5F, .75F))
                 .apply(Modifiers.cut(dir.getCounterClockWise(), .75F, .5F))

@@ -32,8 +32,7 @@ import net.neoforged.neoforge.model.data.ModelData;
 import java.util.Objects;
 import java.util.function.Supplier;
 
-public class DoubleBlockPartDebugRenderer implements BlockDebugRenderer<FramedDoubleBlockEntity>
-{
+public class DoubleBlockPartDebugRenderer implements BlockDebugRenderer<FramedDoubleBlockEntity> {
     public static final DoubleBlockPartDebugRenderer INSTANCE = new DoubleBlockPartDebugRenderer();
     private static final Supplier<FramedBlockData> MODEL_DATA = Lazy.of(() -> new FramedBlockData(null, new SimpleBlockCamoContainer(
             Blocks.STONE.defaultBlockState(), FBContent.FACTORY_BLOCK.get()
@@ -45,10 +44,11 @@ public class DoubleBlockPartDebugRenderer implements BlockDebugRenderer<FramedDo
     private DoubleBlockPartDebugRenderer() { }
 
     @Override
-    public void extract(FramedDoubleBlockEntity be, BlockHitResult blockHit, float partialTick, LevelRenderState renderState)
-    {
+    public void extract(FramedDoubleBlockEntity be, BlockHitResult blockHit, float partialTick, LevelRenderState renderState) {
         BlockState state = be.getBlockState();
-        if (!(state.getBlock() instanceof IFramedBlock)) return;
+        if (!(state.getBlock() instanceof IFramedBlock)) {
+            return;
+        }
 
         DoubleBlockParts parts = be.getParts();
         Player player = Objects.requireNonNull(Minecraft.getInstance().player);
@@ -67,27 +67,22 @@ public class DoubleBlockPartDebugRenderer implements BlockDebugRenderer<FramedDo
     }
 
     @Override
-    public void submit(LevelRenderState renderState, PoseStack poseStack, SubmitNodeCollector collector)
-    {
+    public void submit(LevelRenderState renderState, PoseStack poseStack, SubmitNodeCollector collector) {
         BlockPartRenderState data = renderState.getRenderData(DATA_KEY);
-        if (data != null)
-        {
+        if (data != null) {
             data.submitOnlyOutline(poseStack, collector, LightCoordsUtil.FULL_BRIGHT, OverlayTexture.NO_OVERLAY, data.color);
         }
     }
 
     @Override
-    public boolean isEnabled()
-    {
+    public boolean isEnabled() {
         return DevToolsConfig.VIEW.isDoubleBlockPartHitDebugRendererEnabled();
     }
 
-    private static final class BlockPartRenderState extends BlockModelRenderState
-    {
+    private static final class BlockPartRenderState extends BlockModelRenderState {
         private final int color;
 
-        private BlockPartRenderState(int color)
-        {
+        private BlockPartRenderState(int color) {
             this.color = color;
         }
     }

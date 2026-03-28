@@ -21,8 +21,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.model.data.ModelData;
 import org.jspecify.annotations.Nullable;
 
-public class FramedTargetGeometry extends Geometry
-{
+public class FramedTargetGeometry extends Geometry {
     public static final Identifier OVERLAY_LOCATION = Utils.id("block/target_overlay");
     public static final String OVERLAY_KEY = "overlay";
     public static final int OVERLAY_TINT_IDX = 0;
@@ -31,8 +30,7 @@ public class FramedTargetGeometry extends Geometry
     private final BlockState state;
     private final BlockStateModel overlayModel;
 
-    public FramedTargetGeometry(GeometryFactory.Context ctx)
-    {
+    public FramedTargetGeometry(GeometryFactory.Context ctx) {
         this.state = ctx.state();
         this.overlayModel = ctx.auxModels().getModel(OVERLAY_KEY);
     }
@@ -41,41 +39,33 @@ public class FramedTargetGeometry extends Geometry
     public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData) { }
 
     @Override
-    public boolean hasAdditionalUncachedParts()
-    {
+    public boolean hasAdditionalUncachedParts() {
         return true;
     }
 
     @Override
-    public void collectAdditionalPartsUncached(PartConsumer consumer, BlockAndTintGetter level, BlockPos pos, RandomSource random, FramedBlockData blockData, ModelData data)
-    {
+    public void collectAdditionalPartsUncached(PartConsumer consumer, BlockAndTintGetter level, BlockPos pos, RandomSource random, FramedBlockData blockData, ModelData data) {
         consumer.acceptAll(overlayModel, level, pos, random, state, false, false, true, null, null);
     }
 
     @Override
-    public ItemModelInfo getItemModelInfo()
-    {
+    public ItemModelInfo getItemModelInfo() {
         return ITEM_MODEL_INFO;
     }
 
-    private static final class TargetItemModelInfo implements ItemModelInfo
-    {
+    private static final class TargetItemModelInfo implements ItemModelInfo {
         @Override
-        public boolean isDataRequired()
-        {
+        public boolean isDataRequired() {
             return true;
         }
 
         @Override
-        @Nullable
-        public Object computeCacheKey(ItemStack stack)
-        {
+        public @Nullable Object computeCacheKey(ItemStack stack) {
             return stack.get(FBContent.DC_TYPE_TARGET_COLOR);
         }
 
         @Override
-        public void appendTintValues(ItemStack stack, IntList tints)
-        {
+        public void appendTintValues(ItemStack stack, IntList tints) {
             tints.add(stack.getOrDefault(FBContent.DC_TYPE_TARGET_COLOR, FramedTargetBlockEntity.DEFAULT_COLOR).getTextColor());
         }
     }

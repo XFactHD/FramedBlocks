@@ -1,13 +1,11 @@
 package io.github.xfacthd.framedblocks.api.util;
 
-public enum CamoMessageVerbosity
-{
+public enum CamoMessageVerbosity {
     NONE,
     DEFAULT,
     DETAILED;
 
-    public boolean isAtLeast(CamoMessageVerbosity verbosity)
-    {
+    public boolean isAtLeast(CamoMessageVerbosity verbosity) {
         return ordinal() >= verbosity.ordinal();
     }
 }

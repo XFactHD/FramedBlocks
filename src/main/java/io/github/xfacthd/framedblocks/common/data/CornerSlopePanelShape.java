@@ -1,7 +1,6 @@
 package io.github.xfacthd.framedblocks.common.data;
 
-public enum CornerSlopePanelShape
-{
+public enum CornerSlopePanelShape {
     SMALL_BOTTOM,
     SMALL_TOP,
     LARGE_BOTTOM,

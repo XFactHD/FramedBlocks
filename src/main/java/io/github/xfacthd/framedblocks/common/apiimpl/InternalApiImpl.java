@@ -32,24 +32,19 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
-public final class InternalApiImpl implements InternalAPI
-{
+public final class InternalApiImpl implements InternalAPI {
     @Override
-    @Nullable
-    public CamoContainerFactory<?> findCamoFactory(ItemStack stack)
-    {
+    public @Nullable CamoContainerFactory<?> findCamoFactory(ItemStack stack) {
         return CamoContainerFactories.findCamoFactory(stack);
     }
 
     @Override
-    public boolean isValidRemovalTool(CamoContainer<?, ?> container, ItemStack stack)
-    {
+    public boolean isValidRemovalTool(CamoContainer<?, ?> container, ItemStack stack) {
         return CamoContainerFactories.isValidRemovalTool(container, stack);
     }
 
     @Override
-    public void enqueueCullingUpdate(Level level, BlockPos pos)
-    {
+    public void enqueueCullingUpdate(Level level, BlockPos pos) {
         CullingUpdateTracker.enqueueCullingUpdate(level, pos);
     }
 
@@ -62,41 +57,35 @@ public final class InternalApiImpl implements InternalAPI
             Direction side,
             @Nullable BlockState queryState,
             @Nullable BlockPos queryPos
-    )
-    {
+    ) {
         return AppearanceHelper.getAppearance(block, state, level, pos, side, queryState, queryPos);
     }
 
     @Override
-    public void registerShapeCache(ShapeCache<?> cache)
-    {
+    public void registerShapeCache(ShapeCache<?> cache) {
         Preconditions.checkState(!Utils.PRODUCTION, "Reloading shapes is not supported in production");
         ShapeReloader.addCache(cache);
     }
 
     @Override
-    public void registerReloadableShapeLookup(ReloadableShapeLookup lookup)
-    {
+    public void registerReloadableShapeLookup(ReloadableShapeLookup lookup) {
         Preconditions.checkState(!Utils.PRODUCTION, "Reloading shapes is not supported in production");
         ShapeReloader.addLookup(lookup);
     }
 
     @Override
-    public BlockCamoRotator getCamoRotator(Block block)
-    {
+    public BlockCamoRotator getCamoRotator(Block block) {
         return BlockCamoRotators.get(block);
     }
 
     @Override
-    public Recipe<?> makeFramingSawRecipe(int materialAmount, List<FramingSawRecipeBuilder.Additive> additives, ItemStackTemplate result, boolean disabled)
-    {
+    public Recipe<?> makeFramingSawRecipe(int materialAmount, List<FramingSawRecipeBuilder.Additive> additives, ItemStackTemplate result, boolean disabled) {
         List<FramingSawRecipeAdditive> builtAdditives = additives.stream().map(FramingSawRecipeAdditive::of).toList();
         return new FramingSawRecipe(materialAmount, builtAdditives, result, disabled);
     }
 
     @Override
-    public BlueprintCopyBehaviour getBlueprintCopyBehavior(Block block)
-    {
+    public BlueprintCopyBehaviour getBlueprintCopyBehavior(Block block) {
         return FramedBlueprintItem.getBehaviour(block);
     }
 }

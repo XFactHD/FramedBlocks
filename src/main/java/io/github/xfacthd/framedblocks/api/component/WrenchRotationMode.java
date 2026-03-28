@@ -12,8 +12,7 @@ import net.minecraft.util.StringRepresentable;
 import java.util.Locale;
 import java.util.function.IntFunction;
 
-public enum WrenchRotationMode implements StringRepresentable
-{
+public enum WrenchRotationMode implements StringRepresentable {
     PRIMARY,
     SECONDARY,
     ;
@@ -25,23 +24,19 @@ public enum WrenchRotationMode implements StringRepresentable
     private final String name = toString().toLowerCase(Locale.ROOT);
     private final Component translatedName = Utils.translate("desc", "framed_wrench.mode." + name);
 
-    public Component getTranslatedName()
-    {
+    public Component getTranslatedName() {
         return translatedName;
     }
 
-    public WrenchRotationMode getNext()
-    {
-        return switch (this)
-        {
+    public WrenchRotationMode getNext() {
+        return switch (this) {
             case PRIMARY -> SECONDARY;
             case SECONDARY -> PRIMARY;
         };
     }
 
     @Override
-    public String getSerializedName()
-    {
+    public String getSerializedName() {
         return name;
     }
 }

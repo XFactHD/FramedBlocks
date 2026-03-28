@@ -6,33 +6,28 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.world.level.block.SignBlock;
 import org.joml.Vector3f;
 
-public final class FramedHangingSignRenderer extends FramedSignRenderer
-{
+public final class FramedHangingSignRenderer extends FramedSignRenderer {
     private static final float TEXT_RENDER_SCALE = 0.9F;
     private static final Vector3f TEXT_OFFSET = new Vector3f(0.1F/16F, -5.12F/16F, 1.024F/16F);
 
-    public FramedHangingSignRenderer(BlockEntityRendererProvider.Context ctx)
-    {
+    public FramedHangingSignRenderer(BlockEntityRendererProvider.Context ctx) {
         super(ctx);
     }
 
     @Override
-    protected void applyTransforms(PoseStack poseStack, float yRot, boolean standing)
-    {
+    protected void applyTransforms(PoseStack poseStack, float yRot, boolean standing) {
         poseStack.translate(0.5D, 0.9375D, 0.5D);
         poseStack.mulPose(Axis.YP.rotationDegrees(yRot));
         poseStack.translate(0.0F, -0.3125F, 0.0F);
     }
 
     @Override
-    protected float getSignTextRenderScale()
-    {
+    protected float getSignTextRenderScale() {
         return TEXT_RENDER_SCALE;
     }
 
     @Override
-    protected Vector3f getTextOffset(SignBlock signBlock)
-    {
+    protected Vector3f getTextOffset(SignBlock signBlock) {
         return TEXT_OFFSET;
     }
 }

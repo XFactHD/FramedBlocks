@@ -10,8 +10,7 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.level.saveddata.maps.MapFrame;
 
-public record FramedMap(BlockPos pos, int yRot)
-{
+public record FramedMap(BlockPos pos, int yRot) {
     public static final Codec<FramedMap> CODEC = RecordCodecBuilder.create(inst -> inst.group(
             BlockPos.CODEC.fieldOf("pos").forGetter(FramedMap::pos),
             Codec.INT.fieldOf("rot").forGetter(FramedMap::yRot)
@@ -24,18 +23,15 @@ public record FramedMap(BlockPos pos, int yRot)
             FramedMap::new
     );
 
-    public FramedMap(BlockPos pos, Direction dir)
-    {
+    public FramedMap(BlockPos pos, Direction dir) {
         this(pos, dir.get2DDataValue() * 90);
     }
 
-    public static String makeFrameId(BlockPos pos)
-    {
+    public static String makeFrameId(BlockPos pos) {
         return FramedConstants.MOD_ID + ":" + MapFrame.frameId(pos);
     }
 
-    public interface MarkerRemover
-    {
+    public interface MarkerRemover {
         void framedblocks$removeMapMarker(BlockPos pos);
     }
 }

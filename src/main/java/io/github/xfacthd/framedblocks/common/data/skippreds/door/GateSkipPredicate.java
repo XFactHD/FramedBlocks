@@ -19,23 +19,19 @@ import net.minecraft.world.level.block.state.properties.Half;
         BlockType.FRAMED_GATE,
         BlockType.FRAMED_IRON_GATE
 })
-public final class GateSkipPredicate implements SideSkipPredicate
-{
+public final class GateSkipPredicate implements SideSkipPredicate {
     public static final GateSkipPredicate INSTANCE = new GateSkipPredicate();
 
     private GateSkipPredicate() { }
 
     @Override
-    public boolean test(BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side)
-    {
-        if (adjState.getBlock() instanceof IFramedBlock block && block.getBlockType() instanceof BlockType blockType)
-        {
+    public boolean test(BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side) {
+        if (adjState.getBlock() instanceof IFramedBlock block && block.getBlockType() instanceof BlockType blockType) {
             Direction dir = state.getValue(BlockStateProperties.HORIZONTAL_FACING);
             DoorHingeSide hinge = state.getValue(BlockStateProperties.DOOR_HINGE);
             boolean open = state.getValue(BlockStateProperties.OPEN);
 
-            return switch (blockType)
-            {
+            return switch (blockType) {
                 case FRAMED_GATE,
                      FRAMED_IRON_GATE -> testAgainstGate(
                         dir, hinge, open, adjState, side
@@ -60,8 +56,7 @@ public final class GateSkipPredicate implements SideSkipPredicate
     })
     private static boolean testAgainstGate(
             Direction dir, DoorHingeSide hinge, boolean open, BlockState adjState, Direction side
-    )
-    {
+    ) {
         Direction adjDir = adjState.getValue(BlockStateProperties.HORIZONTAL_FACING);
         DoorHingeSide adjHinge = adjState.getValue(BlockStateProperties.DOOR_HINGE);
         boolean adjOpen = adjState.getValue(BlockStateProperties.OPEN);
@@ -75,8 +70,7 @@ public final class GateSkipPredicate implements SideSkipPredicate
     })
     private static boolean testAgainstDoor(
             Direction dir, DoorHingeSide hinge, boolean open, BlockState adjState, Direction side
-    )
-    {
+    ) {
         Direction adjDir = adjState.getValue(BlockStateProperties.HORIZONTAL_FACING);
         DoorHingeSide adjHinge = adjState.getValue(BlockStateProperties.DOOR_HINGE);
         boolean adjOpen = adjState.getValue(BlockStateProperties.OPEN);
@@ -90,8 +84,7 @@ public final class GateSkipPredicate implements SideSkipPredicate
     })
     private static boolean testAgainstTrapdoor(
             Direction dir, DoorHingeSide hinge, boolean open, BlockState adjState, Direction side
-    )
-    {
+    ) {
         Direction adjDir = adjState.getValue(BlockStateProperties.HORIZONTAL_FACING);
         Half adjHalf = adjState.getValue(BlockStateProperties.HALF);
         boolean adjOpen = adjState.getValue(BlockStateProperties.OPEN);

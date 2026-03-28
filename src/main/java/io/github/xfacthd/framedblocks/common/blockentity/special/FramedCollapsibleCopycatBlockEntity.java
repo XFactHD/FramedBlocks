@@ -22,8 +22,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.neoforged.neoforge.model.data.ModelData;
 
-public class FramedCollapsibleCopycatBlockEntity extends FramedBlockEntity implements ICollapsibleCopycatBlockEntity
-{
+public class FramedCollapsibleCopycatBlockEntity extends FramedBlockEntity implements CollapsibleCopycatBlockEntity {
     private static final Direction[] DIRECTIONS = Direction.values();
     private static final Direction[] HORIZONTAL_DIRECTIONS = Direction.Plane.HORIZONTAL.stream().toArray(Direction[]::new);
     private static final int MAX_OFFSET_BEACON_OCCLUSION = 5;
@@ -33,16 +32,13 @@ public class FramedCollapsibleCopycatBlockEntity extends FramedBlockEntity imple
     private int packedOffsets = 0;
     private boolean occludesBeacon = true;
 
-    public FramedCollapsibleCopycatBlockEntity(BlockPos pos, BlockState state)
-    {
+    public FramedCollapsibleCopycatBlockEntity(BlockPos pos, BlockState state) {
         super(FBContent.BE_TYPE_FRAMED_COLLAPSIBLE_COPYCAT_BLOCK.value(), pos, state);
     }
 
-    public void handleDeform(Player player)
-    {
+    public void handleDeform(Player player) {
         HitResult hit = player.pick(10D, 1F, false);
-        if (!(hit instanceof BlockHitResult blockHit))
-        {
+        if (!(hit instanceof BlockHitResult blockHit)) {
             return;
         }
 
@@ -51,76 +47,61 @@ public class FramedCollapsibleCopycatBlockEntity extends FramedBlockEntity imple
         boolean changed = false;
         Rotation rotation = getBlockState().getValue(PropertyHolder.COPYCAT_ROTATION);
         int offset = getFaceOffset(faceHit, rotation);
-        if (sneak && offset > 0)
-        {
+        if (sneak && offset > 0) {
             setFaceOffset(faceHit, rotation, offset - 1);
             changed = true;
-        }
-        else if (!sneak && offset < 15 - getFaceOffset(faceHit.getOpposite(), rotation))
-        {
+        } else if (!sneak && offset < 15 - getFaceOffset(faceHit.getOpposite(), rotation)) {
             setFaceOffset(faceHit, rotation, offset + 1);
             changed = true;
         }
-        if (changed)
-        {
+        if (changed) {
             updateBeaconOcclusion();
-            if (!updateFaceSolidity())
-            {
+            if (!updateFaceSolidity()) {
                 level().sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
             }
             setChangedWithoutSignalUpdate();
         }
     }
 
-    private void setFaceOffset(Direction side, Rotation rotation, int offset)
-    {
+    private void setFaceOffset(Direction side, Rotation rotation, int offset) {
         int idx = rotation.rotate(side).ordinal() * 4;
         int mask = 0x0F << idx;
         packedOffsets = (packedOffsets & ~mask) | (offset << idx);
     }
 
-    public int getFaceOffset(Direction side, Rotation rotation)
-    {
+    public int getFaceOffset(Direction side, Rotation rotation) {
         int srcIdx = rotation.rotate(side).ordinal();
         return (byte) (packedOffsets >> (srcIdx * 4) & 0xF);
     }
 
     @Override
-    public int getFaceOffset(BlockState state, Direction side)
-    {
+    public int getFaceOffset(BlockState state, Direction side) {
         return getFaceOffset(side, state.getValue(PropertyHolder.COPYCAT_ROTATION));
     }
 
     @Override
-    public int getPackedOffsets(BlockState state)
-    {
+    public int getPackedOffsets(BlockState state) {
         return packedOffsets;
     }
 
-    public boolean doesOccludeBeaconBeam()
-    {
+    public boolean doesOccludeBeaconBeam() {
         return occludesBeacon;
     }
 
-    public boolean updateFaceSolidity()
-    {
+    public boolean updateFaceSolidity() {
         BlockState state = getBlockState();
         int solid = computeSolidFaces(packedOffsets, state.getValue(PropertyHolder.COPYCAT_ROTATION));
-        if (state.getValue(PropertyHolder.SOLID_FACES) != solid)
-        {
+        if (state.getValue(PropertyHolder.SOLID_FACES) != solid) {
             level().setBlockAndUpdate(worldPosition, state.setValue(PropertyHolder.SOLID_FACES, solid));
             return true;
         }
         return false;
     }
 
-    private void updateBeaconOcclusion()
-    {
+    private void updateBeaconOcclusion() {
         occludesBeacon = true;
-        for (Direction face : HORIZONTAL_DIRECTIONS)
-        {
-            if (getFaceOffset(face, Rotation.NONE) > MAX_OFFSET_BEACON_OCCLUSION)
-            {
+        for (Direction face : HORIZONTAL_DIRECTIONS) {
+            if (getFaceOffset(face, Rotation.NONE) > MAX_OFFSET_BEACON_OCCLUSION) {
                 occludesBeacon = false;
                 break;
             }
@@ -128,49 +109,41 @@ public class FramedCollapsibleCopycatBlockEntity extends FramedBlockEntity imple
     }
 
     @Override
-    public void setBlockState(BlockState state)
-    {
+    public void setBlockState(BlockState state) {
         Rotation oldRot = getBlockState().getValue(PropertyHolder.COPYCAT_ROTATION);
         super.setBlockState(state);
-        if (level != null && !level.isClientSide() && oldRot != state.getValue(PropertyHolder.COPYCAT_ROTATION))
-        {
+        if (level != null && !level.isClientSide() && oldRot != state.getValue(PropertyHolder.COPYCAT_ROTATION)) {
             updateFaceSolidity();
         }
     }
 
     @Override
-    public void onLoad()
-    {
-        if (!level().isClientSide())
-        {
+    public void onLoad() {
+        if (!level().isClientSide()) {
             updateFaceSolidity();
         }
         super.onLoad();
     }
 
     @Override
-    protected void attachAdditionalModelData(ModelData.Builder builder)
-    {
+    protected void attachAdditionalModelData(ModelData.Builder builder) {
         int offsets = getPackedOffsets(getBlockState());
         builder.with(PackedCollapsibleBlockOffsets.PROPERTY, new PackedCollapsibleBlockOffsets.Single(offsets));
     }
 
     @Override
-    protected void writeToDataPacket(ValueOutput valueOutput)
-    {
+    protected void writeToDataPacket(ValueOutput valueOutput) {
         super.writeToDataPacket(valueOutput);
         valueOutput.putInt("offsets", packedOffsets);
         valueOutput.putBoolean("occludesBeacon", occludesBeacon);
     }
 
     @Override
-    protected void readFromDataPacket(NetworkValueInput input)
-    {
+    protected void readFromDataPacket(NetworkValueInput input) {
         super.readFromDataPacket(input);
 
         int packed = input.getIntOr("offsets", 0);
-        if (packed != packedOffsets)
-        {
+        if (packed != packedOffsets) {
             packedOffsets = packed;
 
             input.requestRenderUpdate();
@@ -181,39 +154,32 @@ public class FramedCollapsibleCopycatBlockEntity extends FramedBlockEntity imple
     }
 
     @Override
-    protected BlueprintData appendCustomBlueprintData(BlueprintData blueprintData)
-    {
+    protected BlueprintData appendCustomBlueprintData(BlueprintData blueprintData) {
         return blueprintData.withCustomData(FBContent.DC_TYPE_COLLAPSIBLE_COPYCAT_BLOCK_DATA, new CollapsibleCopycatBlockData(packedOffsets));
     }
 
     @Override
-    protected void applyCustomDataFromBlueprint(TypedDataComponent<?> auxData)
-    {
-        if (auxData.value() instanceof CollapsibleCopycatBlockData(int offsets))
-        {
+    protected void applyCustomDataFromBlueprint(TypedDataComponent<?> auxData) {
+        if (auxData.value() instanceof CollapsibleCopycatBlockData(int offsets)) {
             packedOffsets = offsets;
         }
     }
 
     @Override
-    public void removeComponentsFromTag(ValueOutput valueOutput)
-    {
+    public void removeComponentsFromTag(ValueOutput valueOutput) {
         super.removeComponentsFromTag(valueOutput);
         valueOutput.discard("offsets");
     }
 
     @Override
-    protected void collectMiscComponents(DataComponentMap.Builder builder)
-    {
+    protected void collectMiscComponents(DataComponentMap.Builder builder) {
         builder.set(FBContent.DC_TYPE_COLLAPSIBLE_COPYCAT_BLOCK_DATA, new CollapsibleCopycatBlockData(packedOffsets));
     }
 
     @Override
-    protected void applyMiscComponents(DataComponentGetter input)
-    {
+    protected void applyMiscComponents(DataComponentGetter input) {
         CollapsibleCopycatBlockData blockData = input.get(FBContent.DC_TYPE_COLLAPSIBLE_COPYCAT_BLOCK_DATA);
-        if (blockData != null)
-        {
+        if (blockData != null) {
             packedOffsets = blockData.offsets();
             updateFaceSolidity();
             updateBeaconOcclusion();
@@ -221,39 +187,32 @@ public class FramedCollapsibleCopycatBlockEntity extends FramedBlockEntity imple
     }
 
     @Override
-    public void saveAdditional(ValueOutput valueOutput)
-    {
+    public void saveAdditional(ValueOutput valueOutput) {
         super.saveAdditional(valueOutput);
         valueOutput.putInt("offsets", packedOffsets);
     }
 
     @Override
-    public void loadAdditional(ValueInput valueInput)
-    {
+    public void loadAdditional(ValueInput valueInput) {
         super.loadAdditional(valueInput);
         packedOffsets = valueInput.getIntOr("offsets", 0);
         updateBeaconOcclusion();
     }
 
-    public static byte[] unpackOffsets(int packed, Rotation rotation)
-    {
+    public static byte[] unpackOffsets(int packed, Rotation rotation) {
         byte[] offsets = new byte[DIRECTIONS.length];
-        for (Direction face : DIRECTIONS)
-        {
+        for (Direction face : DIRECTIONS) {
             int srcIdx = rotation.rotate(face).ordinal();
             offsets[face.ordinal()] = (byte) (packed >> (srcIdx * 4) & 0xF);
         }
         return offsets;
     }
 
-    public static int computeSolidFaces(int packedOffsets, Rotation rotation)
-    {
+    public static int computeSolidFaces(int packedOffsets, Rotation rotation) {
         int solid = 0;
-        for (Direction face : DIRECTIONS)
-        {
+        for (Direction face : DIRECTIONS) {
             int srcIdx = rotation.rotate(face).ordinal();
-            if (((packedOffsets >> (srcIdx * 4)) & 0xF) == 0)
-            {
+            if (((packedOffsets >> (srcIdx * 4)) & 0xF) == 0) {
                 solid |= (1 << face.ordinal());
             }
         }

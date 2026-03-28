@@ -24,14 +24,12 @@ import net.minecraft.world.level.block.state.properties.Property;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public final class BlockStateInfo
-{
+public final class BlockStateInfo {
     public static final String NAME = "BlockStateInfo";
     private static final String RESULT_MSG = "[" + NAME + "] Collected blockstate info for %s blocks in %s. ";
     private static final BlockType[] TYPES = BlockType.values();
 
-    public static int dumpBlockStateInfo(CommandContext<CommandSourceStack> ctx)
-    {
+    public static int dumpBlockStateInfo(CommandContext<CommandSourceStack> ctx) {
         Stopwatch watch = Stopwatch.createStarted();
 
         MarkdownTable table = new MarkdownTable();
@@ -54,8 +52,7 @@ public final class BlockStateInfo
         long totalModelStates = 0;
         long totalStatesWithOverlays = 0;
         long totalModelStatesWithOverlays = 0;
-        for (BlockType type : TYPES)
-        {
+        for (BlockType type : TYPES) {
             Block block = FBContent.byType(type);
             String name = BuiltInRegistries.BLOCK.getKey(block).getPath();
             ModelWrappingHandler wrapper = ModelWrappingManager.getHandler(block);
@@ -63,8 +60,7 @@ public final class BlockStateInfo
             int modelStateCount = wrapper.getVisitedStateCount();
             TriState supportsCamoRotation = checkCamoRotationSupport(block);
 
-            if (supportsCamoRotation == TriState.TRUE)
-            {
+            if (supportsCamoRotation == TriState.TRUE) {
                 totalBlocksWithCamoRotation++;
             }
 
@@ -92,12 +88,10 @@ public final class BlockStateInfo
 
             totalStates += stateCount;
             totalModelStates += modelStateCount;
-            if (type.isDoubleBlock())
-            {
+            if (type.isDoubleBlock()) {
                 totalDoubleBlocks++;
             }
-            if (type.supportsBlockOverlays())
-            {
+            if (type.supportsBlockOverlays()) {
                 totalBlocksWithOverlays++;
                 totalStatesWithOverlays += stateCount;
                 totalModelStatesWithOverlays += modelStateCount;
@@ -124,11 +118,9 @@ public final class BlockStateInfo
         return Command.SINGLE_SUCCESS;
     }
 
-    private static TriState checkCamoRotationSupport(Block block)
-    {
+    private static TriState checkCamoRotationSupport(Block block) {
         IFramedBlock framedBlock = (IFramedBlock) block;
-        if (framedBlock.getHorizontalOrientation(block.defaultBlockState()) == null)
-        {
+        if (framedBlock.getHorizontalOrientation(block.defaultBlockState()) == null) {
             return TriState.DEFAULT;
         }
 
@@ -141,8 +133,7 @@ public final class BlockStateInfo
     }
 
     @SuppressWarnings("deprecation")
-    private static String printIgnoredProperties(ModelWrappingHandler wrapper, Block block)
-    {
+    private static String printIgnoredProperties(ModelWrappingHandler wrapper, Block block) {
         return wrapper.getStateMerger()
                 .getHandledProperties(block.builtInRegistryHolder())
                 .stream()
@@ -152,23 +143,18 @@ public final class BlockStateInfo
                 .collect(Collectors.joining(", "));
     }
 
-    private static String checkBooleanProperty(Block block, BooleanProperty property)
-    {
-        if (!block.defaultBlockState().hasProperty(property))
-        {
+    private static String checkBooleanProperty(Block block, BooleanProperty property) {
+        if (!block.defaultBlockState().hasProperty(property)) {
             return "missing";
         }
-        else if (block.defaultBlockState().getValue(property))
-        {
+        if (block.defaultBlockState().getValue(property)) {
             return "wrong default";
         }
         return "present";
     }
 
-    private static String triStateToString(TriState value)
-    {
-        return switch (value)
-        {
+    private static String triStateToString(TriState value) {
+        return switch (value) {
             case TRUE -> "supported";
             case FALSE -> "broken";
             case DEFAULT -> "-";

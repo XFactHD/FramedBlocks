@@ -12,28 +12,23 @@ import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jspecify.annotations.Nullable;
 
-public final class DoorGhostRenderBehaviour implements GhostRenderBehaviour
-{
+public final class DoorGhostRenderBehaviour implements GhostRenderBehaviour {
     @Override
-    public int getPassCount(ItemStack stack, @Nullable ItemStack proxiedStack)
-    {
+    public int getPassCount(ItemStack stack, @Nullable ItemStack proxiedStack) {
         return 2;
     }
 
     @Override
-    @Nullable
-    public BlockState getRenderState(
+    public @Nullable BlockState getRenderState(
             ItemStack stack,
             @Nullable ItemStack proxiedStack,
             BlockHitResult hit,
             BlockPlaceContext ctx,
             BlockState hitState,
             int renderPass
-    )
-    {
+    ) {
         BlockState state = GhostRenderBehaviour.super.getRenderState(stack, proxiedStack, hit, ctx, hitState, renderPass);
-        if (state != null && renderPass == 1)
-        {
+        if (state != null && renderPass == 1) {
             state = state.setValue(DoorBlock.HALF, DoubleBlockHalf.UPPER);
         }
         return state;
@@ -48,8 +43,7 @@ public final class DoorGhostRenderBehaviour implements GhostRenderBehaviour
             BlockState hitState,
             BlockPos defaultPos,
             int renderPass
-    )
-    {
+    ) {
         return defaultPos.relative(Direction.UP, renderPass);
     }
 
@@ -62,8 +56,7 @@ public final class DoorGhostRenderBehaviour implements GhostRenderBehaviour
             BlockState hitState,
             BlockState renderState,
             BlockPos renderPos
-    )
-    {
+    ) {
         return GhostRenderBehaviour.super.canRenderAt(stack, proxiedStack, hit, ctx, hitState, renderState, renderPos) &&
                GhostRenderBehaviour.super.canRenderAt(stack, proxiedStack, hit, ctx, hitState, renderState, renderPos.above());
     }
@@ -76,8 +69,7 @@ public final class DoorGhostRenderBehaviour implements GhostRenderBehaviour
             BlockState renderState,
             int renderPass,
             CamoList camo
-    )
-    {
+    ) {
         return camo.subList(renderPass, renderPass + 1);
     }
 }

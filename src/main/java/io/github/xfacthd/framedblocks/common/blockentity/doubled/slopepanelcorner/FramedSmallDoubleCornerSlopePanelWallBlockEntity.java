@@ -14,24 +14,19 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 
-public class FramedSmallDoubleCornerSlopePanelWallBlockEntity extends FramedDoubleBlockEntity
-{
-    public FramedSmallDoubleCornerSlopePanelWallBlockEntity(BlockPos pos, BlockState state)
-    {
+public class FramedSmallDoubleCornerSlopePanelWallBlockEntity extends FramedDoubleBlockEntity {
+    public FramedSmallDoubleCornerSlopePanelWallBlockEntity(BlockPos pos, BlockState state) {
         super(FBContent.BE_TYPE_FRAMED_SMALL_DOUBLE_CORNER_SLOPE_PANEL_WALL.value(), pos, state);
     }
 
     @Override
-    protected boolean hitSecondary(BlockHitResult hit, Vec3 lookVec, Vec3 eyePos)
-    {
+    protected boolean hitSecondary(BlockHitResult hit, Vec3 lookVec, Vec3 eyePos) {
         Direction side = hit.getDirection();
         Direction dir = getBlockState().getValue(FramedProperties.FACING_HOR);
-        if (side == dir)
-        {
+        if (side == dir) {
             return false;
         }
-        if (side == dir.getOpposite())
-        {
+        if (side == dir.getOpposite()) {
             return true;
         }
 
@@ -39,20 +34,16 @@ public class FramedSmallDoubleCornerSlopePanelWallBlockEntity extends FramedDoub
         Direction rotDir = rot.withFacing(dir);
         Direction perpRotDir = rot.rotate(Rotation.COUNTERCLOCKWISE_90).withFacing(dir);
 
-        if (side == rotDir.getOpposite() || side == perpRotDir.getOpposite())
-        {
+        if (side == rotDir.getOpposite() || side == perpRotDir.getOpposite()) {
             return false;
         }
 
         Vec3 hitVec = hit.getLocation();
         double xzDir = MathUtils.fractionInDir(hitVec, dir);
         double xzPerp;
-        if (DirUtils.isY(side))
-        {
+        if (DirUtils.isY(side)) {
             xzPerp = MathUtils.fractionInDir(hitVec, DirUtils.isY(rotDir) ? perpRotDir : rotDir);
-        }
-        else
-        {
+        } else {
             xzPerp = MathUtils.fractionInDir(hitVec, DirUtils.isY(rotDir) ? rotDir : perpRotDir);
         }
 

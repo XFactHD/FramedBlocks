@@ -14,8 +14,7 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jspecify.annotations.Nullable;
 
-public final class FramedBlockData extends AbstractFramedBlockData
-{
+public final class FramedBlockData extends AbstractFramedBlockData {
     public static final FramedBlockData EMPTY = new FramedBlockData();
     private static final int FULL_FACE_INVERSION_MASK = 0b1111111;
     private static final int FLAG_SECOND_PART = 1;
@@ -33,8 +32,7 @@ public final class FramedBlockData extends AbstractFramedBlockData
     private final Holder<BlockOverlay> overlay;
     private final int postCamoTintIndexOffset;
 
-    public FramedBlockData(@Nullable BlockState outerState, CamoContainer<?, ?> camoContent, boolean secondPart, @Nullable Holder<BlockOverlay> overlay)
-    {
+    public FramedBlockData(@Nullable BlockState outerState, CamoContainer<?, ?> camoContent, boolean secondPart, @Nullable Holder<BlockOverlay> overlay) {
         this(outerState, camoContent, (byte) 0, secondPart, false, false, TriState.DEFAULT, overlay);
     }
 
@@ -47,8 +45,7 @@ public final class FramedBlockData extends AbstractFramedBlockData
             boolean emissive,
             TriState viewBlocking,
             @Nullable Holder<BlockOverlay> overlay
-    )
-    {
+    ) {
         this.outerState = outerState;
         this.camoContainer = camoContainer;
         this.camoContent = camoContainer.getContent();
@@ -63,8 +60,7 @@ public final class FramedBlockData extends AbstractFramedBlockData
         this.postCamoTintIndexOffset = CamoContainerHelper.Client.getTintCount(camoContainer);
     }
 
-    private FramedBlockData()
-    {
+    private FramedBlockData() {
         this.outerState = null;
         this.camoContainer = EmptyCamoContainer.EMPTY;
         this.camoContent = camoContainer.getContent();
@@ -75,39 +71,31 @@ public final class FramedBlockData extends AbstractFramedBlockData
         this.postCamoTintIndexOffset = 0;
     }
 
-    @Nullable
-    public BlockState getOuterState()
-    {
+    public @Nullable BlockState getOuterState() {
         return outerState;
     }
 
-    public CamoContainer<?, ?> getCamoContainer()
-    {
+    public CamoContainer<?, ?> getCamoContainer() {
         return camoContainer;
     }
 
-    public CamoContent<?> getCamoContent()
-    {
+    public CamoContent<?> getCamoContent() {
         return camoContent;
     }
 
-    public boolean isSideHidden(Direction side)
-    {
+    public boolean isSideHidden(Direction side) {
         return (cullMask & (1 << side.ordinal())) != 0;
     }
 
-    public boolean isSecondPart()
-    {
+    public boolean isSecondPart() {
         return (flags & FLAG_SECOND_PART) != 0;
     }
 
-    public boolean isReinforced()
-    {
+    public boolean isReinforced() {
         return (flags & FLAG_REINFORCED) != 0;
     }
 
-    public boolean isEmissive()
-    {
+    public boolean isEmissive() {
         return (flags & FLAG_EMISSIVE) != 0;
     }
 
@@ -119,71 +107,60 @@ public final class FramedBlockData extends AbstractFramedBlockData
      * @param forCached Whether the mask should be computed for the cached path ({@link StateCache#isFullFace(Direction)}
      *                  returns false) or the uncached path ({@link StateCache#isFullFace(Direction)} returns true)
      */
-    public int computeFaceMask(StateCache stateCache, boolean forCached)
-    {
+    public int computeFaceMask(StateCache stateCache, boolean forCached) {
         int mask = stateCache.getFullFaceMask();
-        if (forCached)
-        {
+        if (forCached) {
             mask ^= FULL_FACE_INVERSION_MASK;
         }
         return mask & ~cullMask;
     }
 
     @Override
-    public FramedBlockData unwrap(BlockState partState)
-    {
+    public FramedBlockData unwrap(BlockState partState) {
         return this;
     }
 
     @Override
-    public FramedBlockData unwrap(boolean secondary)
-    {
+    public FramedBlockData unwrap(boolean secondary) {
         return this;
     }
 
     @Override
-    public boolean isCamoEmissive()
-    {
+    public boolean isCamoEmissive() {
         return camoContent.isEmissive();
     }
 
     @Override
-    public float getCamoShadeBrightness(BlockGetter level, BlockPos pos, float frameShade)
-    {
+    public float getCamoShadeBrightness(BlockGetter level, BlockPos pos, float frameShade) {
         return camoContent.getShadeBrightness(level, pos, frameShade);
     }
 
     @Override
-    public TriState isViewBlocking()
-    {
+    public TriState isViewBlocking() {
         return viewBlocking;
     }
 
     @Override
-    @Nullable
-    public Holder<BlockOverlay> getBlockOverlay()
-    {
+    public @Nullable Holder<BlockOverlay> getBlockOverlay() {
         return overlay;
     }
 
     @Override
-    public int getCamoTintIndexOffset(boolean secondPart)
-    {
+    public int getCamoTintIndexOffset(boolean secondPart) {
         return 0;
     }
 
     @Override
-    public int getPostCamoTintIndexOffset()
-    {
+    public int getPostCamoTintIndexOffset() {
         return postCamoTintIndexOffset;
     }
 
     @Override
-    public boolean equals(Object obj)
-    {
-        if (obj == this) return true;
-        if (obj instanceof FramedBlockData other)
-        {
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (obj instanceof FramedBlockData other) {
             return camoContainer.equals(other.camoContainer) &&
                    cullMask == other.cullMask &&
                    flags == other.flags &&

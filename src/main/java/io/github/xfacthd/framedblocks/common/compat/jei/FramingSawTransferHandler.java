@@ -25,14 +25,12 @@ import java.util.Optional;
 
 public abstract sealed class FramingSawTransferHandler<C extends AbstractContainerMenu & IFramingSawMenu>
         implements IRecipeTransferHandler<C, FramingSawRecipe>
-        permits FramingSawTransferHandler.FramingSaw, FramingSawTransferHandler.PoweredFramingSaw
-{
+        permits FramingSawTransferHandler.FramingSaw, FramingSawTransferHandler.PoweredFramingSaw {
     private final IRecipeTransferHandlerHelper transferHelper;
     private final IRecipeTransferInfo<C, FramingSawRecipe> transferInfo;
     private final IRecipeTransferHandler<C, FramingSawRecipe> wrappedHandler;
 
-    private FramingSawTransferHandler(IRecipeTransferHandlerHelper transferHelper, Class<? extends C> menuClass, MenuType<C> menuType)
-    {
+    private FramingSawTransferHandler(IRecipeTransferHandlerHelper transferHelper, Class<? extends C> menuClass, MenuType<C> menuType) {
         this.transferHelper = transferHelper;
         this.transferInfo = transferHelper.createBasicRecipeTransferInfo(
                 menuClass,
@@ -47,39 +45,31 @@ public abstract sealed class FramingSawTransferHandler<C extends AbstractContain
     }
 
     @Override
-    public Class<? extends C> getContainerClass()
-    {
+    public Class<? extends C> getContainerClass() {
         return transferInfo.getContainerClass();
     }
 
     @Override
-    public Optional<MenuType<C>> getMenuType()
-    {
+    public Optional<MenuType<C>> getMenuType() {
         return transferInfo.getMenuType();
     }
 
     @Override
-    public IRecipeType<FramingSawRecipe> getRecipeType()
-    {
+    public IRecipeType<FramingSawRecipe> getRecipeType() {
         return transferInfo.getRecipeType();
     }
 
     @Override
-    @Nullable
-    public IRecipeTransferError transferRecipe(C menu, FramingSawRecipe recipe, IRecipeSlotsView recipeSlots, Player player, boolean maxTransfer, boolean doTransfer)
-    {
+    public @Nullable IRecipeTransferError transferRecipe(C menu, FramingSawRecipe recipe, IRecipeSlotsView recipeSlots, Player player, boolean maxTransfer, boolean doTransfer) {
         int idx = -1;
         List<RecipeHolder<FramingSawRecipe>> recipes = FramingSawRecipeCache.get(true).getRecipes();
-        for (int i = 0; i < recipes.size(); i++)
-        {
-            if (recipes.get(i).value() == recipe)
-            {
+        for (int i = 0; i < recipes.size(); i++) {
+            if (recipes.get(i).value() == recipe) {
                 idx = i;
                 break;
             }
         }
-        if (idx != -1 && menu.isValidRecipeIndex(idx))
-        {
+        if (idx != -1 && menu.isValidRecipeIndex(idx)) {
             //TODO: https://github.com/mezz/JustEnoughItems/issues/3146
             //IRecipeTransferError error = wrappedHandler.transferRecipe(menu, recipe, recipeSlots, player, maxTransfer, doTransfer);
             //if (error != null)
@@ -87,8 +77,7 @@ public abstract sealed class FramingSawTransferHandler<C extends AbstractContain
             //    return error;
             //}
 
-            if (doTransfer && menu.clickMenuButton(player, idx))
-            {
+            if (doTransfer && menu.clickMenuButton(player, idx)) {
                 ClientPacketDistributor.sendToServer(new ServerboundSelectFramingSawRecipePayload(menu.containerId, idx));
             }
             // TODO: return null instead of "transfer not implemented" when the suggestion is implemented
@@ -97,18 +86,14 @@ public abstract sealed class FramingSawTransferHandler<C extends AbstractContain
         return transferHelper.createUserErrorWithTooltip(JeiCompat.MSG_INVALID_RECIPE);
     }
 
-    public static final class FramingSaw extends FramingSawTransferHandler<FramingSawMenu>
-    {
-        public FramingSaw(IRecipeTransferHandlerHelper transferHelper)
-        {
+    public static final class FramingSaw extends FramingSawTransferHandler<FramingSawMenu> {
+        public FramingSaw(IRecipeTransferHandlerHelper transferHelper) {
             super(transferHelper, FramingSawMenu.class, FBContent.MENU_TYPE_FRAMING_SAW.get());
         }
     }
 
-    public static final class PoweredFramingSaw extends FramingSawTransferHandler<PoweredFramingSawMenu>
-    {
-        public PoweredFramingSaw(IRecipeTransferHandlerHelper transferHelper)
-        {
+    public static final class PoweredFramingSaw extends FramingSawTransferHandler<PoweredFramingSawMenu> {
+        public PoweredFramingSaw(IRecipeTransferHandlerHelper transferHelper) {
             super(transferHelper, PoweredFramingSawMenu.class, FBContent.MENU_TYPE_POWERED_FRAMING_SAW.get());
         }
     }

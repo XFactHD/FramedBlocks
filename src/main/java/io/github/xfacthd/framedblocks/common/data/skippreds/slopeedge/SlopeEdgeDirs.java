@@ -10,23 +10,15 @@ import io.github.xfacthd.framedblocks.common.data.skippreds.QuarterTriangleDir;
 import io.github.xfacthd.framedblocks.common.data.skippreds.TriangleDir;
 import net.minecraft.core.Direction;
 
-public final class SlopeEdgeDirs
-{
-    public static final class SlopeEdge
-    {
-        public static QuarterTriangleDir getTriDir(Direction dir, SlopeType type, boolean alt, Direction side)
-        {
-            if (type == SlopeType.HORIZONTAL)
-            {
-                if (DirUtils.isY(side))
-                {
+public final class SlopeEdgeDirs {
+    public static final class SlopeEdge {
+        public static QuarterTriangleDir getTriDir(Direction dir, SlopeType type, boolean alt, Direction side) {
+            if (type == SlopeType.HORIZONTAL) {
+                if (DirUtils.isY(side)) {
                     return QuarterTriangleDir.fromDirections(dir, dir.getCounterClockWise(), alt);
                 }
-            }
-            else
-            {
-                if (side.getAxis() == dir.getClockWise().getAxis())
-                {
+            } else {
+                if (side.getAxis() == dir.getClockWise().getAxis()) {
                     Direction dirTwo = type == SlopeType.TOP ? Direction.UP : Direction.DOWN;
                     return QuarterTriangleDir.fromDirections(dir, dirTwo, alt);
                 }
@@ -34,32 +26,21 @@ public final class SlopeEdgeDirs
             return QuarterTriangleDir.NULL;
         }
 
-        public static HalfDir getHalfDir(Direction dir, SlopeType type, boolean alt, Direction side)
-        {
-            if (alt)
-            {
+        public static HalfDir getHalfDir(Direction dir, SlopeType type, boolean alt, Direction side) {
+            if (alt) {
                 return HalfDir.NULL;
             }
-            if (type == SlopeType.HORIZONTAL)
-            {
-                if (side == dir)
-                {
+            if (type == SlopeType.HORIZONTAL) {
+                if (side == dir) {
                     return HalfDir.fromDirections(side, dir.getCounterClockWise());
-                }
-                else if (side == dir.getCounterClockWise())
-                {
+                } else if (side == dir.getCounterClockWise()) {
                     return HalfDir.fromDirections(side, dir);
                 }
-            }
-            else
-            {
+            } else {
                 Direction dirTwo = type == SlopeType.TOP ? Direction.UP : Direction.DOWN;
-                if (side == dir)
-                {
+                if (side == dir) {
                     return HalfDir.fromDirections(side, dirTwo);
-                }
-                else if (side == dirTwo)
-                {
+                } else if (side == dirTwo) {
                     return HalfDir.fromDirections(side, dir);
                 }
             }
@@ -69,21 +50,14 @@ public final class SlopeEdgeDirs
         private SlopeEdge() { }
     }
 
-    public static final class ElevatedSlopeEdge
-    {
-        public static TriangleDir getTriDir(Direction dir, SlopeType type, Direction side)
-        {
-            if (type == SlopeType.HORIZONTAL)
-            {
-                if (DirUtils.isY(side))
-                {
+    public static final class ElevatedSlopeEdge {
+        public static TriangleDir getTriDir(Direction dir, SlopeType type, Direction side) {
+            if (type == SlopeType.HORIZONTAL) {
+                if (DirUtils.isY(side)) {
                     return TriangleDir.fromDirections(dir, dir.getCounterClockWise());
                 }
-            }
-            else
-            {
-                if (side.getAxis() == dir.getClockWise().getAxis())
-                {
+            } else {
+                if (side.getAxis() == dir.getClockWise().getAxis()) {
                     Direction dirTwo = type == SlopeType.TOP ? Direction.UP : Direction.DOWN;
                     return TriangleDir.fromDirections(dir, dirTwo);
                 }
@@ -91,28 +65,18 @@ public final class SlopeEdgeDirs
             return TriangleDir.NULL;
         }
 
-        public static HalfDir getHalfDir(Direction dir, SlopeType type, Direction side)
-        {
-            if (type == SlopeType.HORIZONTAL)
-            {
-                if (side == dir.getOpposite())
-                {
+        public static HalfDir getHalfDir(Direction dir, SlopeType type, Direction side) {
+            if (type == SlopeType.HORIZONTAL) {
+                if (side == dir.getOpposite()) {
                     return HalfDir.fromDirections(side, dir.getCounterClockWise());
-                }
-                else if (side == dir.getClockWise())
-                {
+                } else if (side == dir.getClockWise()) {
                     return HalfDir.fromDirections(side, dir);
                 }
-            }
-            else
-            {
+            } else {
                 Direction dirTwo = type == SlopeType.TOP ? Direction.UP : Direction.DOWN;
-                if (side == dir.getOpposite())
-                {
+                if (side == dir.getOpposite()) {
                     return HalfDir.fromDirections(side, dirTwo);
-                }
-                else if (side == dirTwo.getOpposite())
-                {
+                } else if (side == dirTwo.getOpposite()) {
                     return HalfDir.fromDirections(side, dir);
                 }
             }
@@ -122,58 +86,41 @@ public final class SlopeEdgeDirs
         private ElevatedSlopeEdge() { }
     }
 
-    public static final class CornerSlopeEdge
-    {
-        public static QuarterTriangleDir getTriDir(Direction dir, CornerType type, boolean alt, Direction side)
-        {
-            if (type.isHorizontal())
-            {
+    public static final class CornerSlopeEdge {
+        public static QuarterTriangleDir getTriDir(Direction dir, CornerType type, boolean alt, Direction side) {
+            if (type.isHorizontal()) {
                 Direction backOne = type.isTop() ? Direction.UP : Direction.DOWN;
                 Direction backTwo = type.isRight() ? dir.getClockWise() : dir.getCounterClockWise();
-                if (side == backOne)
-                {
+                if (side == backOne) {
                     return QuarterTriangleDir.fromDirections(dir, backTwo, alt);
                 }
-                if (side == backTwo)
-                {
+                if (side == backTwo) {
                     return QuarterTriangleDir.fromDirections(dir, backOne, alt);
                 }
-            }
-            else
-            {
+            } else {
                 Direction bottom = type.isTop() ? Direction.UP : Direction.DOWN;
-                if (side == dir)
-                {
+                if (side == dir) {
                     return QuarterTriangleDir.fromDirections(dir.getCounterClockWise(), bottom, alt);
-                }
-                else if (side == dir.getCounterClockWise())
-                {
+                } else if (side == dir.getCounterClockWise()) {
                     return QuarterTriangleDir.fromDirections(dir, bottom, alt);
                 }
             }
             return QuarterTriangleDir.NULL;
         }
 
-        public static CornerDir getCornerDir(Direction dir, CornerType type, boolean alt, Direction side)
-        {
-            if (!alt)
-            {
-                if (type.isHorizontal())
-                {
-                    if (side == dir)
-                    {
+        public static CornerDir getCornerDir(Direction dir, CornerType type, boolean alt, Direction side) {
+            if (!alt) {
+                if (type.isHorizontal()) {
+                    if (side == dir) {
                         return CornerDir.fromDirections(
                                 dir,
                                 type.isTop() ? Direction.UP : Direction.DOWN,
                                 type.isRight() ? dir.getClockWise() : dir.getCounterClockWise()
                         );
                     }
-                }
-                else
-                {
+                } else {
                     Direction bottom = type.isTop() ? Direction.UP : Direction.DOWN;
-                    if (side == bottom)
-                    {
+                    if (side == bottom) {
                         return CornerDir.fromDirections(bottom, dir, dir.getCounterClockWise());
                     }
                 }
@@ -184,56 +131,40 @@ public final class SlopeEdgeDirs
         private CornerSlopeEdge() { }
     }
 
-    public static final class InnerCornerSlopeEdge
-    {
-        public static QuarterTriangleDir getTriDir(Direction dir, CornerType type, boolean alt, Direction side)
-        {
-            if (type.isHorizontal())
-            {
-                Direction frontOne =  type.isTop() ? Direction.DOWN : Direction.UP;
-                Direction frontTwo =  type.isRight() ? dir.getCounterClockWise() : dir.getClockWise();
-                if (side == frontOne)
-                {
+    public static final class InnerCornerSlopeEdge {
+        public static QuarterTriangleDir getTriDir(Direction dir, CornerType type, boolean alt, Direction side) {
+            if (type.isHorizontal()) {
+                Direction frontOne = type.isTop() ? Direction.DOWN : Direction.UP;
+                Direction frontTwo = type.isRight() ? dir.getCounterClockWise() : dir.getClockWise();
+                if (side == frontOne) {
                     return QuarterTriangleDir.fromDirections(dir, frontTwo.getOpposite(), alt);
                 }
-                if (side == frontTwo)
-                {
+                if (side == frontTwo) {
                     return QuarterTriangleDir.fromDirections(dir, frontOne.getOpposite(), alt);
                 }
-            }
-            else
-            {
+            } else {
                 Direction bottom = type.isTop() ? Direction.UP : Direction.DOWN;
-                if (side == dir.getOpposite())
-                {
+                if (side == dir.getOpposite()) {
                     return QuarterTriangleDir.fromDirections(bottom, dir.getCounterClockWise(), alt);
                 }
-                if (side == dir.getClockWise())
-                {
+                if (side == dir.getClockWise()) {
                     return QuarterTriangleDir.fromDirections(bottom, dir, alt);
                 }
             }
             return QuarterTriangleDir.NULL;
         }
 
-        public static HalfDir getHalfDir(Direction dir, CornerType type, boolean alt, Direction side)
-        {
-            if (!alt)
-            {
-                if (type.isHorizontal())
-                {
-                    Direction backOne =  type.isTop() ? Direction.UP : Direction.DOWN;
-                    Direction backTwo =  type.isRight() ? dir.getClockWise() : dir.getCounterClockWise();
-                    if (side == backOne || side == backTwo)
-                    {
+        public static HalfDir getHalfDir(Direction dir, CornerType type, boolean alt, Direction side) {
+            if (!alt) {
+                if (type.isHorizontal()) {
+                    Direction backOne = type.isTop() ? Direction.UP : Direction.DOWN;
+                    Direction backTwo = type.isRight() ? dir.getClockWise() : dir.getCounterClockWise();
+                    if (side == backOne || side == backTwo) {
                         return HalfDir.fromDirections(side, dir);
                     }
-                }
-                else
-                {
+                } else {
                     Direction bottom = type.isTop() ? Direction.UP : Direction.DOWN;
-                    if (side == dir || side == dir.getCounterClockWise())
-                    {
+                    if (side == dir || side == dir.getCounterClockWise()) {
                         return HalfDir.fromDirections(side, bottom);
                     }
                 }
@@ -241,24 +172,17 @@ public final class SlopeEdgeDirs
             return HalfDir.NULL;
         }
 
-        public static TriangleDir getStairDir(Direction dir, CornerType type, boolean alt, Direction side)
-        {
-            if (!alt)
-            {
-                if (type.isHorizontal())
-                {
-                    if (side == dir)
-                    {
-                        Direction backOne =  type.isTop() ? Direction.UP : Direction.DOWN;
-                        Direction backTwo =  type.isRight() ? dir.getClockWise() : dir.getCounterClockWise();
+        public static TriangleDir getStairDir(Direction dir, CornerType type, boolean alt, Direction side) {
+            if (!alt) {
+                if (type.isHorizontal()) {
+                    if (side == dir) {
+                        Direction backOne = type.isTop() ? Direction.UP : Direction.DOWN;
+                        Direction backTwo = type.isRight() ? dir.getClockWise() : dir.getCounterClockWise();
                         return TriangleDir.fromDirections(backOne, backTwo);
                     }
-                }
-                else
-                {
+                } else {
                     Direction bottom = type.isTop() ? Direction.UP : Direction.DOWN;
-                    if (side == bottom)
-                    {
+                    if (side == bottom) {
                         return TriangleDir.fromDirections(dir, dir.getCounterClockWise());
                     }
                 }
@@ -269,32 +193,23 @@ public final class SlopeEdgeDirs
         private InnerCornerSlopeEdge() { }
     }
 
-    public static final class ElevatedCornerSlopeEdge
-    {
-        public static TriangleDir getTriDir(Direction dir, CornerType type, Direction side)
-        {
-            if (type.isHorizontal())
-            {
+    public static final class ElevatedCornerSlopeEdge {
+        public static TriangleDir getTriDir(Direction dir, CornerType type, Direction side) {
+            if (type.isHorizontal()) {
                 Direction yBack = type.isTop() ? Direction.UP : Direction.DOWN;
                 Direction xBack = type.isRight() ? dir.getClockWise() : dir.getCounterClockWise();
-                if (side == xBack)
-                {
+                if (side == xBack) {
                     return TriangleDir.fromDirections(dir, yBack);
                 }
-                if (side == yBack)
-                {
+                if (side == yBack) {
                     return TriangleDir.fromDirections(dir, xBack);
                 }
-            }
-            else
-            {
-                if (side == dir)
-                {
+            } else {
+                if (side == dir) {
                     Direction bottom = type == CornerType.TOP ? Direction.UP : Direction.DOWN;
                     return TriangleDir.fromDirections(dir.getCounterClockWise(), bottom);
                 }
-                if (side == dir.getCounterClockWise())
-                {
+                if (side == dir.getCounterClockWise()) {
                     Direction bottom = type == CornerType.TOP ? Direction.UP : Direction.DOWN;
                     return TriangleDir.fromDirections(dir, bottom);
                 }
@@ -302,21 +217,15 @@ public final class SlopeEdgeDirs
             return TriangleDir.NULL;
         }
 
-        public static HalfDir getHalfDir(Direction dir, CornerType type, Direction side)
-        {
-            if (type.isHorizontal())
-            {
+        public static HalfDir getHalfDir(Direction dir, CornerType type, Direction side) {
+            if (type.isHorizontal()) {
                 Direction yFront = type.isTop() ? Direction.DOWN : Direction.UP;
                 Direction xFront = type.isRight() ? dir.getCounterClockWise() : dir.getClockWise();
-                if (side == xFront || side == yFront)
-                {
+                if (side == xFront || side == yFront) {
                     return HalfDir.fromDirections(side, dir);
                 }
-            }
-            else
-            {
-                if (side == dir.getOpposite() || side == dir.getClockWise())
-                {
+            } else {
+                if (side == dir.getOpposite() || side == dir.getClockWise()) {
                     Direction bottom = type == CornerType.TOP ? Direction.UP : Direction.DOWN;
                     return HalfDir.fromDirections(side, bottom);
                 }
@@ -324,24 +233,18 @@ public final class SlopeEdgeDirs
             return HalfDir.NULL;
         }
 
-        public static CornerDir getCornerDir(Direction dir, CornerType type, Direction side)
-        {
-            if (type.isHorizontal())
-            {
-                if (side == dir.getOpposite())
-                {
+        public static CornerDir getCornerDir(Direction dir, CornerType type, Direction side) {
+            if (type.isHorizontal()) {
+                if (side == dir.getOpposite()) {
                     return CornerDir.fromDirections(
                             side,
                             type.isTop() ? Direction.UP : Direction.DOWN,
                             type.isRight() ? dir.getClockWise() : dir.getCounterClockWise()
                     );
                 }
-            }
-            else
-            {
+            } else {
                 Direction top = type == CornerType.TOP ? Direction.DOWN : Direction.UP;
-                if (side == top)
-                {
+                if (side == top) {
                     return CornerDir.fromDirections(side, dir, dir.getCounterClockWise());
                 }
             }
@@ -351,32 +254,23 @@ public final class SlopeEdgeDirs
         private ElevatedCornerSlopeEdge() { }
     }
 
-    public static final class ElevatedInnerCornerSlopeEdge
-    {
-        public static TriangleDir getTriDir(Direction dir, CornerType type, Direction side)
-        {
-            if (type.isHorizontal())
-            {
+    public static final class ElevatedInnerCornerSlopeEdge {
+        public static TriangleDir getTriDir(Direction dir, CornerType type, Direction side) {
+            if (type.isHorizontal()) {
                 Direction yBack = type.isTop() ? Direction.UP : Direction.DOWN;
                 Direction xBack = type.isRight() ? dir.getClockWise() : dir.getCounterClockWise();
-                if (side == xBack.getOpposite())
-                {
+                if (side == xBack.getOpposite()) {
                     return TriangleDir.fromDirections(dir, yBack);
                 }
-                if (side == yBack.getOpposite())
-                {
+                if (side == yBack.getOpposite()) {
                     return TriangleDir.fromDirections(dir, xBack);
                 }
-            }
-            else
-            {
-                if (side == dir.getOpposite())
-                {
+            } else {
+                if (side == dir.getOpposite()) {
                     Direction bottom = type == CornerType.TOP ? Direction.UP : Direction.DOWN;
                     return TriangleDir.fromDirections(bottom, dir.getCounterClockWise());
                 }
-                if (side == dir.getClockWise())
-                {
+                if (side == dir.getClockWise()) {
                     Direction bottom = type == CornerType.TOP ? Direction.UP : Direction.DOWN;
                     return TriangleDir.fromDirections(bottom, dir);
                 }
@@ -384,23 +278,17 @@ public final class SlopeEdgeDirs
             return TriangleDir.NULL;
         }
 
-        public static TriangleDir getStairDir(Direction dir, CornerType type, Direction side)
-        {
-            if (type.isHorizontal())
-            {
-                if (side == dir.getOpposite())
-                {
+        public static TriangleDir getStairDir(Direction dir, CornerType type, Direction side) {
+            if (type.isHorizontal()) {
+                if (side == dir.getOpposite()) {
                     return TriangleDir.fromDirections(
                             type.isTop() ? Direction.UP : Direction.DOWN,
                             type.isRight() ? dir.getClockWise() : dir.getCounterClockWise()
                     );
                 }
-            }
-            else
-            {
+            } else {
                 Direction top = type == CornerType.TOP ? Direction.DOWN : Direction.UP;
-                if (side == top)
-                {
+                if (side == top) {
                     return TriangleDir.fromDirections(dir, dir.getCounterClockWise());
                 }
             }
@@ -410,22 +298,17 @@ public final class SlopeEdgeDirs
         private ElevatedInnerCornerSlopeEdge() { }
     }
 
-    public static final class ThreewayCornerSlopeEdge
-    {
-        public static QuarterTriangleDir getTriDir(Direction dir, boolean top, boolean right, boolean alt, Direction side)
-        {
+    public static final class ThreewayCornerSlopeEdge {
+        public static QuarterTriangleDir getTriDir(Direction dir, boolean top, boolean right, boolean alt, Direction side) {
             Direction bottom = top ? Direction.UP : Direction.DOWN;
             Direction dirTwo = right ? dir.getClockWise() : dir.getCounterClockWise();
-            if (side == dir)
-            {
+            if (side == dir) {
                 return QuarterTriangleDir.fromDirections(bottom, dirTwo, alt);
             }
-            if (side == dirTwo)
-            {
+            if (side == dirTwo) {
                 return QuarterTriangleDir.fromDirections(bottom, dir, alt);
             }
-            if (side == bottom)
-            {
+            if (side == bottom) {
                 return QuarterTriangleDir.fromDirections(dir, dirTwo, alt);
             }
             return QuarterTriangleDir.NULL;
@@ -434,43 +317,33 @@ public final class SlopeEdgeDirs
         private ThreewayCornerSlopeEdge() { }
     }
 
-    public static final class InnerThreewayCornerSlopeEdge
-    {
-        public static QuarterTriangleDir getTriDir(Direction dir, boolean top, boolean right, boolean alt, Direction side)
-        {
+    public static final class InnerThreewayCornerSlopeEdge {
+        public static QuarterTriangleDir getTriDir(Direction dir, boolean top, boolean right, boolean alt, Direction side) {
             Direction bottom = top ? Direction.UP : Direction.DOWN;
             Direction dirTwo = right ? dir.getClockWise() : dir.getCounterClockWise();
-            if (side == dir.getOpposite())
-            {
+            if (side == dir.getOpposite()) {
                 return QuarterTriangleDir.fromDirections(bottom, dirTwo, alt);
             }
-            if (side == dirTwo.getOpposite())
-            {
+            if (side == dirTwo.getOpposite()) {
                 return QuarterTriangleDir.fromDirections(bottom, dir, alt);
             }
-            if (side == bottom.getOpposite())
-            {
+            if (side == bottom.getOpposite()) {
                 return QuarterTriangleDir.fromDirections(dir, dirTwo, alt);
             }
             return QuarterTriangleDir.NULL;
         }
 
-        public static TriangleDir getStairDir(Direction dir, boolean top, boolean right, boolean alt, Direction side)
-        {
-            if (!alt)
-            {
+        public static TriangleDir getStairDir(Direction dir, boolean top, boolean right, boolean alt, Direction side) {
+            if (!alt) {
                 Direction bottom = top ? Direction.UP : Direction.DOWN;
                 Direction dirTwo = right ? dir.getClockWise() : dir.getCounterClockWise();
-                if (side == dir)
-                {
+                if (side == dir) {
                     return TriangleDir.fromDirections(bottom, dirTwo);
                 }
-                if (side == dirTwo)
-                {
+                if (side == dirTwo) {
                     return TriangleDir.fromDirections(bottom, dir);
                 }
-                if (side == bottom)
-                {
+                if (side == bottom) {
                     return TriangleDir.fromDirections(dir, dirTwo);
                 }
             }
@@ -480,27 +353,21 @@ public final class SlopeEdgeDirs
         private InnerThreewayCornerSlopeEdge() { }
     }
 
-    public static final class SlopeEdgeSlab
-    {
-        public static QuarterTriangleDir getTriDir(Direction dir, boolean topHalf, boolean top, Direction side)
-        {
-            if (side.getAxis() == dir.getClockWise().getAxis())
-            {
+    public static final class SlopeEdgeSlab {
+        public static QuarterTriangleDir getTriDir(Direction dir, boolean topHalf, boolean top, Direction side) {
+            if (side.getAxis() == dir.getClockWise().getAxis()) {
                 Direction backFace = top ? Direction.UP : Direction.DOWN;
                 return QuarterTriangleDir.fromDirections(dir, backFace, top != topHalf);
             }
             return QuarterTriangleDir.NULL;
         }
 
-        public static HalfDir getHalfDir(Direction dir, boolean topHalf, boolean top, Direction side)
-        {
-            if (side == dir)
-            {
+        public static HalfDir getHalfDir(Direction dir, boolean topHalf, boolean top, Direction side) {
+            if (side == dir) {
                 return HalfDir.fromDirections(side, topHalf ? Direction.UP : Direction.DOWN);
             }
             Direction frontFace = top ? Direction.DOWN : Direction.UP;
-            if (side == frontFace && topHalf != top)
-            {
+            if (side == frontFace && topHalf != top) {
                 return HalfDir.fromDirections(side, dir);
             }
             return HalfDir.NULL;
@@ -509,27 +376,21 @@ public final class SlopeEdgeDirs
         private SlopeEdgeSlab() { }
     }
 
-    public static final class SlopeEdgePanel
-    {
-        public static QuarterTriangleDir getTriDir(Direction dir, HorizontalRotation rot, boolean front, Direction side)
-        {
+    public static final class SlopeEdgePanel {
+        public static QuarterTriangleDir getTriDir(Direction dir, HorizontalRotation rot, boolean front, Direction side) {
             Direction backEdge = rot.withFacing(dir).getOpposite();
-            if (side.getAxis() != dir.getAxis() && side.getAxis() != backEdge.getAxis())
-            {
+            if (side.getAxis() != dir.getAxis() && side.getAxis() != backEdge.getAxis()) {
                 return QuarterTriangleDir.fromDirections(dir, backEdge, front);
             }
             return QuarterTriangleDir.NULL;
         }
 
-        public static HalfDir getHalfDir(Direction dir, HorizontalRotation rot, boolean front, Direction side)
-        {
+        public static HalfDir getHalfDir(Direction dir, HorizontalRotation rot, boolean front, Direction side) {
             Direction backEdge = rot.withFacing(dir).getOpposite();
-            if (side == dir.getOpposite() && front)
-            {
+            if (side == dir.getOpposite() && front) {
                 return HalfDir.fromDirections(side, backEdge);
             }
-            if (side == backEdge)
-            {
+            if (side == backEdge) {
                 return HalfDir.fromDirections(side, front ? dir.getOpposite() : dir);
             }
             return HalfDir.NULL;

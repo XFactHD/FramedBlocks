@@ -16,8 +16,7 @@ import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 
-public final class ElevatedCornerSlopeEdgeShapes implements ShapeGenerator
-{
+public final class ElevatedCornerSlopeEdgeShapes implements ShapeGenerator {
     private static final ShapeCache<CornerType> BASE_SHAPES = makeCache();
     private static final ShapeCache<CornerType> INNER_BASE_SHAPES = makeInnerCache();
     public static final ElevatedCornerSlopeEdgeShapes OUTER = new ElevatedCornerSlopeEdgeShapes(false);
@@ -27,38 +26,32 @@ public final class ElevatedCornerSlopeEdgeShapes implements ShapeGenerator
     private final ShapeCache<CornerSlopeEdgeShapes.ShapeKey> edgeShapes;
     private final ShapeCache<CornerSlopeEdgeShapes.ShapeKey> edgeOcclusionShapes;
 
-    private ElevatedCornerSlopeEdgeShapes(boolean inner)
-    {
+    private ElevatedCornerSlopeEdgeShapes(boolean inner) {
         this.baseShapes = inner ? INNER_BASE_SHAPES : BASE_SHAPES;
         this.edgeShapes = inner ? CornerSlopeEdgeShapes.INNER_SHAPES : CornerSlopeEdgeShapes.OUTER_SHAPES;
         this.edgeOcclusionShapes = inner ? CornerSlopeEdgeShapes.INNER_OCCLUSION_SHAPES : CornerSlopeEdgeShapes.OUTER_OCCLUSION_SHAPES;
     }
 
     @Override
-    public ShapeContainer generatePrimary(List<BlockState> states)
-    {
+    public ShapeContainer generatePrimary(List<BlockState> states) {
         return generate(states, edgeShapes, baseShapes);
     }
 
     @Override
-    public ShapeContainer generateOcclusion(List<BlockState> states)
-    {
+    public ShapeContainer generateOcclusion(List<BlockState> states) {
         return generate(states, edgeOcclusionShapes, baseShapes);
     }
 
-    private static ShapeContainer generate(List<BlockState> states, ShapeCache<CornerSlopeEdgeShapes.ShapeKey> edgeShapes, ShapeCache<CornerType> baseShapes)
-    {
+    private static ShapeContainer generate(List<BlockState> states, ShapeCache<CornerSlopeEdgeShapes.ShapeKey> edgeShapes, ShapeCache<CornerType> baseShapes) {
         VoxelShape[] shapes = new VoxelShape[4 * 6];
-        for (CornerType type : CornerType.values())
-        {
+        for (CornerType type : CornerType.values()) {
             VoxelShape edgeShape = edgeShapes.get(new CornerSlopeEdgeShapes.ShapeKey(type, true));
             VoxelShape shape = ShapeUtils.orUnoptimized(baseShapes.get(type), edgeShape);
             ShapeUtils.makeHorizontalRotations(shape, Direction.NORTH, shapes, type, ElevatedCornerSlopeEdgeShapes::makeIndex);
         }
 
         Map<BlockState, VoxelShape> map = new IdentityHashMap<>(states.size());
-        for (BlockState state : states)
-        {
+        for (BlockState state : states) {
             Direction dir = state.getValue(FramedProperties.FACING_HOR);
             CornerType type = state.getValue(PropertyHolder.CORNER_TYPE);
             map.put(state, shapes[makeIndex(dir, type)]);
@@ -66,15 +59,12 @@ public final class ElevatedCornerSlopeEdgeShapes implements ShapeGenerator
         return ShapeContainer.of(map);
     }
 
-    private static int makeIndex(Direction dir, CornerType type)
-    {
+    private static int makeIndex(Direction dir, CornerType type) {
         return (type.ordinal() << 2) | dir.get2DDataValue();
     }
 
-    private static ShapeCache<CornerType> makeCache()
-    {
-        return ShapeCache.createEnum(CornerType.class, map ->
-        {
+    private static ShapeCache<CornerType> makeCache() {
+        return ShapeCache.createEnum(CornerType.class, map -> {
             map.put(CornerType.BOTTOM, ShapeUtils.orUnoptimized(
                     CommonShapes.SLAB.get(false),
                     CommonShapes.CORNER_PILLAR.get(Direction.NORTH)
@@ -101,10 +91,8 @@ public final class ElevatedCornerSlopeEdgeShapes implements ShapeGenerator
         });
     }
 
-    private static ShapeCache<CornerType> makeInnerCache()
-    {
-        return ShapeCache.createEnum(CornerType.class, map ->
-        {
+    private static ShapeCache<CornerType> makeInnerCache() {
+        return ShapeCache.createEnum(CornerType.class, map -> {
             VoxelShape bottomShape = ShapeUtils.orUnoptimized(
                     CommonShapes.SLAB.get(false),
                     CommonShapes.STRAIGHT_VERTICAL_STAIRS.get(Direction.NORTH)

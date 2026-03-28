@@ -21,24 +21,20 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
-public final class PoweredFramingSawGuiContainerHandler implements IGuiContainerHandler<PoweredFramingSawScreen>
-{
+public final class PoweredFramingSawGuiContainerHandler implements IGuiContainerHandler<PoweredFramingSawScreen> {
     private final IIngredientManager ingredientManager;
 
-    public PoweredFramingSawGuiContainerHandler(IIngredientManager ingredientManager)
-    {
+    public PoweredFramingSawGuiContainerHandler(IIngredientManager ingredientManager) {
         this.ingredientManager = ingredientManager;
     }
 
     @Override
-    public Collection<IGuiClickableArea> getGuiClickableAreas(PoweredFramingSawScreen screen, double mouseX, double mouseY)
-    {
+    public Collection<IGuiClickableArea> getGuiClickableAreas(PoweredFramingSawScreen screen, double mouseX, double mouseY) {
         int minX = PoweredFramingSawScreen.PROGRESS_X;
         int minY = PoweredFramingSawScreen.PROGRESS_Y;
         int maxX = minX + PoweredFramingSawScreen.PROGRESS_WIDTH;
         int maxY = minY + PoweredFramingSawScreen.PROGRESS_HEIGHT;
-        if (mouseX >= minX && mouseX < maxX && mouseY >= minY && mouseY < maxY)
-        {
+        if (mouseX >= minX && mouseX < maxX && mouseY >= minY && mouseY < maxY) {
             return List.of(new ClickableArea(new Rect2i(
                     minX, minY, PoweredFramingSawScreen.PROGRESS_WIDTH, PoweredFramingSawScreen.PROGRESS_HEIGHT
             ), ingredientManager));
@@ -49,27 +45,22 @@ public final class PoweredFramingSawGuiContainerHandler implements IGuiContainer
     @Override
     public Optional<IClickableIngredient<ItemStack>> getClickableIngredientUnderMouse(
             IClickableIngredientFactory factory, PoweredFramingSawScreen screen, double mouseX, double mouseY
-    )
-    {
+    ) {
         RecipeHolder<FramingSawRecipe> recipe = screen.getMenu().getSelectedRecipe();
-        if (screen.isMouseOverRecipeSlot(mouseX, mouseY) && recipe != null)
-        {
+        if (screen.isMouseOverRecipeSlot(mouseX, mouseY) && recipe != null) {
             return factory.createBuilder(recipe.value().getResultStack()).buildWithArea(screen.getTargetStackArea());
         }
         return Optional.empty();
     }
 
-    private record ClickableArea(Rect2i area, IIngredientManager ingredients) implements IGuiClickableArea
-    {
+    private record ClickableArea(Rect2i area, IIngredientManager ingredients) implements IGuiClickableArea {
         @Override
-        public Rect2i getArea()
-        {
+        public Rect2i getArea() {
             return area;
         }
 
         @Override
-        public void onClick(IFocusFactory focusFactory, IRecipesGui recipesGui)
-        {
+        public void onClick(IFocusFactory focusFactory, IRecipesGui recipesGui) {
             Optional<ITypedIngredient<ItemStack>> optIng = ingredients.createTypedIngredient(
                     VanillaTypes.ITEM_STACK,
                     new ItemStack(FBContent.BLOCK_POWERED_FRAMING_SAW.value()),

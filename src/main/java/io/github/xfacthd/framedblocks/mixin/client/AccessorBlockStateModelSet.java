@@ -9,8 +9,7 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 import java.util.Map;
 
 @Mixin(BlockStateModelSet.class)
-public interface AccessorBlockStateModelSet
-{
+public interface AccessorBlockStateModelSet {
     @Accessor("modelByState")
     Map<BlockState, BlockStateModel> framedblocks$getModelByState();
 }

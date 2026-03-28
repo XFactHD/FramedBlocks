@@ -29,8 +29,7 @@ import org.jspecify.annotations.Nullable;
 import java.util.List;
 import java.util.Objects;
 
-public class PoweredFramingSawMenu extends AbstractContainerMenu implements IFramingSawMenu
-{
+public class PoweredFramingSawMenu extends AbstractContainerMenu implements IFramingSawMenu {
     private final PoweredFramingSawBlockEntity blockEntity;
     private final RecipeInputItemResourceHandler itemHandler;
     private final DataSlot progressSlot;
@@ -43,13 +42,11 @@ public class PoweredFramingSawMenu extends AbstractContainerMenu implements IFra
     @Nullable
     private RecipeHolder<FramingSawRecipe> lastRecipe = null;
 
-    public PoweredFramingSawMenu(int windowId, Inventory inv, FriendlyByteBuf buf)
-    {
+    public PoweredFramingSawMenu(int windowId, Inventory inv, FriendlyByteBuf buf) {
         this(windowId, inv, inv.player.level(), buf.readBlockPos());
     }
 
-    public PoweredFramingSawMenu(int windowId, Inventory inv, Level level, BlockPos pos)
-    {
+    public PoweredFramingSawMenu(int windowId, Inventory inv, Level level, BlockPos pos) {
         super(FBContent.MENU_TYPE_POWERED_FRAMING_SAW.value(), windowId);
 
         BlockEntity be = level.getBlockEntity(pos);
@@ -65,50 +62,40 @@ public class PoweredFramingSawMenu extends AbstractContainerMenu implements IFra
         this.durationSlot = addDataSlot(DataSlot.standalone());
 
         this.itemHandler = makeItemHandler(blockEntity.getItemHandler(), level);
-        for (int i = 0; i <= FramingSawMenu.SLOT_RESULT; i++)
-        {
-            int x = switch (i)
-            {
+        for (int i = 0; i <= FramingSawMenu.SLOT_RESULT; i++) {
+            int x = switch (i) {
                 case FramingSawMenu.SLOT_INPUT -> 34;
                 case FramingSawMenu.SLOT_RESULT -> 148;
                 default -> 38 + i * 18;
             };
             IndexModifier<ItemResource> indexModifier = this.itemHandler::set;
-            if (i >= FramingSawMenu.SLOT_ADDITIVE_FIRST && i < FramingSawMenu.SLOT_RESULT)
-            {
+            if (i >= FramingSawMenu.SLOT_ADDITIVE_FIRST && i < FramingSawMenu.SLOT_RESULT) {
                 addSlot(new AdditiveSlot(itemHandler, indexModifier, i, x, 46));
-            }
-            else
-            {
+            } else {
                 addSlot(new ResourceHandlerSlot(itemHandler, indexModifier, i, x, 46));
             }
         }
         FramedUtils.addPlayerInvSlots(this::addSlot, inv, 8, 100);
 
         recipeIdxSlot.set(-1);
-        if (!level.isClientSide())
-        {
+        if (!level.isClientSide()) {
             capacitySlot.set(blockEntity.getEnergyCapacity());
             durationSlot.set(blockEntity.getCraftingDuration());
         }
     }
 
-    private static RecipeInputItemResourceHandler makeItemHandler(RecipeInputItemResourceHandler handler, Level level)
-    {
-        if (level.isClientSide())
-        {
+    private static RecipeInputItemResourceHandler makeItemHandler(RecipeInputItemResourceHandler handler, Level level) {
+        if (level.isClientSide()) {
             handler = new RecipeInputItemResourceHandler(handler.size());
         }
         return handler;
     }
 
     @Override
-    public void broadcastChanges()
-    {
+    public void broadcastChanges() {
         progressSlot.set(blockEntity.getProgress());
         RecipeHolder<FramingSawRecipe> recipe = blockEntity.getSelectedRecipe();
-        if (!Objects.equals(lastRecipe, recipe))
-        {
+        if (!Objects.equals(lastRecipe, recipe)) {
             recipeIdxSlot.set(recipe == null ? -1 : cache.getRecipes().indexOf(recipe));
             handleRecipeChange(recipe);
         }
@@ -119,141 +106,108 @@ public class PoweredFramingSawMenu extends AbstractContainerMenu implements IFra
         super.broadcastChanges();
     }
 
-    private void handleRecipeChange(@Nullable RecipeHolder<FramingSawRecipe> recipe)
-    {
+    private void handleRecipeChange(@Nullable RecipeHolder<FramingSawRecipe> recipe) {
         lastRecipe = recipe;
         int additiveCount = recipe != null ? recipe.value().getAdditives().size() : FramingSawRecipe.MAX_ADDITIVE_COUNT;
-        for (int i = 0; i < FramingSawRecipe.MAX_ADDITIVE_COUNT; i++)
-        {
+        for (int i = 0; i < FramingSawRecipe.MAX_ADDITIVE_COUNT; i++) {
             AdditiveSlot slot = (AdditiveSlot) getSlot(FramingSawMenu.SLOT_ADDITIVE_FIRST + i);
             slot.active = i < additiveCount;
         }
     }
 
     @Override
-    public boolean clickMenuButton(Player player, int id)
-    {
-        if (id == -1)
-        {
+    public boolean clickMenuButton(Player player, int id) {
+        if (id == -1) {
             blockEntity.selectRecipe(null);
             return true;
         }
 
         List<RecipeHolder<FramingSawRecipe>> recipes = cache.getRecipes();
-        if (id >= 0 && id < recipes.size())
-        {
+        if (id >= 0 && id < recipes.size()) {
             blockEntity.selectRecipe(recipes.get(id));
             return true;
         }
         return super.clickMenuButton(player, id);
     }
 
-    @Nullable
-    public RecipeHolder<FramingSawRecipe> getSelectedRecipe()
-    {
+    public @Nullable RecipeHolder<FramingSawRecipe> getSelectedRecipe() {
         return lastRecipe;
     }
 
-    public int getProgress()
-    {
+    public int getProgress() {
         return progressSlot.get();
     }
 
-    @Nullable
-    public FramingSawRecipeMatchResult getMatchResult()
-    {
+    public @Nullable FramingSawRecipeMatchResult getMatchResult() {
         int result = recipeStatusSlot.get();
         return result == -1 ? null : FramingSawRecipeMatchResult.valueOf(result);
     }
 
-    public int getEnergy()
-    {
+    public int getEnergy() {
         return energySlot.get();
     }
 
-    public int getEnergyCapacity()
-    {
+    public int getEnergyCapacity() {
         return capacitySlot.get();
     }
 
-    public int getCraftingDuration()
-    {
+    public int getCraftingDuration() {
         return durationSlot.get();
     }
 
     @Override
-    public ItemStack getInputStack()
-    {
+    public ItemStack getInputStack() {
         return getSlot(FramingSawMenu.SLOT_INPUT).getItem();
     }
 
     @Override
-    public RecipeInput getRecipeInput()
-    {
+    public RecipeInput getRecipeInput() {
         return itemHandler;
     }
 
     @Override
-    public ItemStack getAdditiveStack(int slot)
-    {
+    public ItemStack getAdditiveStack(int slot) {
         return getSlot(FramingSawMenu.SLOT_ADDITIVE_FIRST + slot).getItem();
     }
 
     @Override
-    public boolean isValidRecipeIndex(int idx)
-    {
+    public boolean isValidRecipeIndex(int idx) {
         return idx >= 0 && idx < cache.getRecipes().size();
     }
 
     @Override
-    public ItemStack quickMoveStack(Player player, int index)
-    {
+    public ItemStack quickMoveStack(Player player, int index) {
         ItemStack remainder = ItemStack.EMPTY;
         Slot slot = slots.get(index);
-        if (slot.hasItem())
-        {
+        if (slot.hasItem()) {
             ItemStack stack = slot.getItem();
             remainder = stack.copy();
 
-            if (index == FramingSawMenu.SLOT_RESULT)
-            {
+            if (index == FramingSawMenu.SLOT_RESULT) {
                 stack.getItem().onCraftedBy(stack, player);
-                if (!moveItemStackTo(stack, FramingSawMenu.SLOT_INV_FIRST, slots.size(), true))
-                {
+                if (!moveItemStackTo(stack, FramingSawMenu.SLOT_INV_FIRST, slots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
                 slot.onQuickCraft(stack, remainder);
-            }
-            else if (index < FramingSawMenu.SLOT_INV_FIRST)
-            {
-                if (!moveItemStackTo(stack, FramingSawMenu.SLOT_INV_FIRST, slots.size(), true))
-                {
+            } else if (index < FramingSawMenu.SLOT_INV_FIRST) {
+                if (!moveItemStackTo(stack, FramingSawMenu.SLOT_INV_FIRST, slots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
-            }
-            else if (cache.getMaterialValue(stack.getItem()) > 0)
-            {
-                if (!moveItemStackTo(stack, FramingSawMenu.SLOT_INPUT, FramingSawMenu.SLOT_INPUT + 1, false))
-                {
+            } else if (cache.getMaterialValue(stack.getItem()) > 0) {
+                if (!moveItemStackTo(stack, FramingSawMenu.SLOT_INPUT, FramingSawMenu.SLOT_INPUT + 1, false)) {
                     return ItemStack.EMPTY;
                 }
-            }
-            else if (!moveItemStackTo(stack, FramingSawMenu.SLOT_ADDITIVE_FIRST, FramingSawMenu.SLOT_ADDITIVE_FIRST + FramingSawRecipe.MAX_ADDITIVE_COUNT, false))
-            {
+            } else if (!moveItemStackTo(stack, FramingSawMenu.SLOT_ADDITIVE_FIRST, FramingSawMenu.SLOT_ADDITIVE_FIRST + FramingSawRecipe.MAX_ADDITIVE_COUNT, false)) {
                 return ItemStack.EMPTY;
             }
 
-            if (stack.isEmpty())
-            {
+            if (stack.isEmpty()) {
                 slot.set(ItemStack.EMPTY);
-            }
-            else
-            {
+            } else {
                 slot.setChanged();
             }
 
-            if (stack.getCount() == remainder.getCount())
-            {
+            if (stack.getCount() == remainder.getCount()) {
                 return ItemStack.EMPTY;
             }
 
@@ -263,52 +217,43 @@ public class PoweredFramingSawMenu extends AbstractContainerMenu implements IFra
     }
 
     @Override
-    public boolean stillValid(Player player)
-    {
+    public boolean stillValid(Player player) {
         return blockEntity.isUsableByPlayer(player);
     }
 
-    private static final class AdditiveSlot extends ResourceHandlerSlot
-    {
+    private static final class AdditiveSlot extends ResourceHandlerSlot {
         private boolean active = true;
 
-        public AdditiveSlot(ResourceHandler<ItemResource> handler, IndexModifier<ItemResource> indexModifier, int idx, int x, int y)
-        {
+        public AdditiveSlot(ResourceHandler<ItemResource> handler, IndexModifier<ItemResource> indexModifier, int idx, int x, int y) {
             super(handler, indexModifier, idx, x, y);
         }
 
         @Override
-        public boolean isActive()
-        {
+        public boolean isActive() {
             return active || hasItem();
         }
 
         @Override
-        public boolean isHighlightable()
-        {
+        public boolean isHighlightable() {
             return active || hasItem();
         }
 
         @Override
-        public boolean mayPlace(ItemStack stack)
-        {
+        public boolean mayPlace(ItemStack stack) {
             return active && super.mayPlace(stack);
         }
     }
 
-    private final class RecipeIndexDataSlot extends DataSlot
-    {
+    private final class RecipeIndexDataSlot extends DataSlot {
         private int index = -1;
 
         @Override
-        public int get()
-        {
+        public int get() {
             return index;
         }
 
         @Override
-        public void set(int value)
-        {
+        public void set(int value) {
             index = value;
             handleRecipeChange(value == -1 ? null : cache.getRecipes().get(value));
         }

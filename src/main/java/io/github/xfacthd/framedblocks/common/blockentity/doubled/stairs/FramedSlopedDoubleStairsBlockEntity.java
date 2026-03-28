@@ -10,30 +10,24 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 
-public class FramedSlopedDoubleStairsBlockEntity extends FramedDoubleBlockEntity
-{
-    public FramedSlopedDoubleStairsBlockEntity(BlockPos pos, BlockState state)
-    {
+public class FramedSlopedDoubleStairsBlockEntity extends FramedDoubleBlockEntity {
+    public FramedSlopedDoubleStairsBlockEntity(BlockPos pos, BlockState state) {
         super(FBContent.BE_TYPE_FRAMED_SLOPED_DOUBLE_STAIRS.value(), pos, state);
     }
 
     @Override
-    protected boolean hitSecondary(BlockHitResult hit, Vec3 lookVec, Vec3 eyePos)
-    {
+    protected boolean hitSecondary(BlockHitResult hit, Vec3 lookVec, Vec3 eyePos) {
         Direction facing = getBlockState().getValue(FramedProperties.FACING_HOR);
         Direction dirTwo = getBlockState().getValue(FramedProperties.TOP) ? Direction.DOWN : Direction.UP;
 
         Direction side = hit.getDirection();
         Vec3 hitVec = hit.getLocation();
 
-        if (side == dirTwo)
-        {
+        if (side == dirTwo) {
             double par = MathUtils.fractionInDir(hitVec, facing);
             double perp = MathUtils.fractionInDir(hitVec, facing.getClockWise());
             return perp > par;
-        }
-        else if (side == facing.getOpposite() || side == facing.getClockWise())
-        {
+        } else if (side == facing.getOpposite() || side == facing.getClockWise()) {
             return MathUtils.fractionInDir(hitVec, dirTwo) > .5;
         }
         return false;

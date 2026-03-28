@@ -14,10 +14,8 @@ import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 
-public final class CheckeredPanelSegmentShapes
-{
-    public static ShapeContainer generate(List<BlockState> states)
-    {
+public final class CheckeredPanelSegmentShapes {
+    public static ShapeContainer generate(List<BlockState> states) {
         VoxelShape shapeFirst = ShapeUtils.orUnoptimized(
                 Block.box(0, 0, 0,  8,  8,  8),
                 Block.box(8, 8, 0, 16, 16,  8)
@@ -28,8 +26,7 @@ public final class CheckeredPanelSegmentShapes
         );
 
         VoxelShape[] shapes = new VoxelShape[8];
-        for (Direction dir : Direction.Plane.HORIZONTAL)
-        {
+        for (Direction dir : Direction.Plane.HORIZONTAL) {
             int idx = dir.get2DDataValue();
             boolean x = DirUtils.isX(dir);
             shapes[idx] = ShapeUtils.rotateShapeAroundY(Direction.NORTH, dir, x ? shapeSecond : shapeFirst);
@@ -37,8 +34,7 @@ public final class CheckeredPanelSegmentShapes
         }
 
         Map<BlockState, VoxelShape> map = new IdentityHashMap<>(states.size());
-        for (BlockState state : states)
-        {
+        for (BlockState state : states) {
             Direction dir = state.getValue(FramedProperties.FACING_HOR);
             boolean second = state.getValue(PropertyHolder.SECOND);
             int idx = dir.get2DDataValue() + (second ? 4 : 0);

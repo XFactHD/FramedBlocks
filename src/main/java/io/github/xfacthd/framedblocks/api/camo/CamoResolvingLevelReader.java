@@ -30,30 +30,24 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
-final class CamoResolvingLevelReader implements LevelReader
-{
+final class CamoResolvingLevelReader implements LevelReader {
     private final LevelReader wrapped;
     private final BlockPos origin;
 
-    CamoResolvingLevelReader(LevelReader wrapped, BlockPos origin)
-    {
+    CamoResolvingLevelReader(LevelReader wrapped, BlockPos origin) {
         this.wrapped = wrapped;
         this.origin = origin;
     }
 
     @Override
-    public BlockState getBlockState(BlockPos pos)
-    {
+    public BlockState getBlockState(BlockPos pos) {
         BlockState state = wrapped.getBlockState(pos);
-        if (state.getBlock() instanceof IFramedBlock)
-        {
+        if (state.getBlock() instanceof IFramedBlock) {
             Direction side = DirUtils.dirByNormal(pos, origin);
-            if (side == null || !state.isFaceSturdy(wrapped, pos, side, SupportType.FULL))
-            {
+            if (side == null || !state.isFaceSturdy(wrapped, pos, side, SupportType.FULL)) {
                 return Blocks.AIR.defaultBlockState();
             }
-            if (wrapped.getBlockEntity(pos) instanceof IFramedBlockEntity be)
-            {
+            if (wrapped.getBlockEntity(pos) instanceof IFramedBlockEntity be) {
                 return be.getCamo(side, null).getContent().getAsBlockState();
             }
             return Blocks.AIR.defaultBlockState();
@@ -62,108 +56,89 @@ final class CamoResolvingLevelReader implements LevelReader
     }
 
     @Override
-    public FluidState getFluidState(BlockPos pos)
-    {
+    public FluidState getFluidState(BlockPos pos) {
         return wrapped.getFluidState(pos);
     }
 
-    @Nullable
     @Override
-    public BlockEntity getBlockEntity(BlockPos pos)
-    {
+    public @Nullable BlockEntity getBlockEntity(BlockPos pos) {
         return wrapped.getBlockEntity(pos);
     }
 
-    @Nullable
     @Override
-    public ChunkAccess getChunk(int x, int z, ChunkStatus status, boolean required)
-    {
+    public @Nullable ChunkAccess getChunk(int x, int z, ChunkStatus status, boolean required) {
         return wrapped.getChunk(x, z, status, required);
     }
 
     @Override
     @Deprecated
-    public boolean hasChunk(int chunkX, int chunkZ)
-    {
+    public boolean hasChunk(int chunkX, int chunkZ) {
         return wrapped.hasChunk(chunkX, chunkZ);
     }
 
     @Override
-    public int getHeight(Heightmap.Types pHeightmapType, int pX, int pZ)
-    {
+    public int getHeight(Heightmap.Types pHeightmapType, int pX, int pZ) {
         return wrapped.getHeight();
     }
 
     @Override
-    public int getSkyDarken()
-    {
+    public int getSkyDarken() {
         return wrapped.getSkyDarken();
     }
 
     @Override
-    public BiomeManager getBiomeManager()
-    {
+    public BiomeManager getBiomeManager() {
         return wrapped.getBiomeManager();
     }
 
     @Override
-    public Holder<Biome> getUncachedNoiseBiome(int x, int y, int z)
-    {
+    public Holder<Biome> getUncachedNoiseBiome(int x, int y, int z) {
         return wrapped.getUncachedNoiseBiome(x, y, z);
     }
 
     @Override
-    public boolean isClientSide()
-    {
+    public boolean isClientSide() {
         return wrapped.isClientSide();
     }
 
     @Override
     @Deprecated
-    public int getSeaLevel()
-    {
+    public int getSeaLevel() {
         return wrapped.getSeaLevel();
     }
 
     @Override
-    public DimensionType dimensionType()
-    {
+    public DimensionType dimensionType() {
         return wrapped.dimensionType();
     }
 
     @Override
-    public RegistryAccess registryAccess()
-    {
+    public RegistryAccess registryAccess() {
         return wrapped.registryAccess();
     }
 
     @Override
-    public FeatureFlagSet enabledFeatures()
-    {
+    public FeatureFlagSet enabledFeatures() {
         return wrapped.enabledFeatures();
     }
 
     @Override
-    public LevelLightEngine getLightEngine()
-    {
+    public LevelLightEngine getLightEngine() {
         return wrapped.getLightEngine();
     }
 
     @Override
-    public WorldBorder getWorldBorder()
-    {
+    public WorldBorder getWorldBorder() {
         return wrapped.getWorldBorder();
     }
 
     @Override
-    public List<VoxelShape> getEntityCollisions(@Nullable Entity entity, AABB box)
-    {
+    public List<VoxelShape> getEntityCollisions(@Nullable Entity entity, AABB box) {
         return wrapped.getEntityCollisions(entity, box);
     }
 
     @Override
-    public EnvironmentAttributeReader environmentAttributes()
-    {
+    public EnvironmentAttributeReader environmentAttributes() {
         return wrapped.environmentAttributes();
     }
 }

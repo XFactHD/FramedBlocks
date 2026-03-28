@@ -19,8 +19,7 @@ import net.neoforged.neoforge.transfer.transaction.Transaction;
 
 import java.util.List;
 
-final class FramingSawCraftingMachine implements ICraftingMachine
-{
+final class FramingSawCraftingMachine implements ICraftingMachine {
     private static final Lazy<PatternContainerGroup> GROUP = Lazy.of(() -> new PatternContainerGroup(
             AEItemKey.of(FBContent.BLOCK_POWERED_FRAMING_SAW.value()),
             FBContent.BLOCK_POWERED_FRAMING_SAW.value().asItem().getDefaultInstance().getItemName(),
@@ -29,62 +28,48 @@ final class FramingSawCraftingMachine implements ICraftingMachine
 
     private final PoweredFramingSawBlockEntity blockEntity;
 
-    FramingSawCraftingMachine(IAttachmentHolder blockEntity)
-    {
+    FramingSawCraftingMachine(IAttachmentHolder blockEntity) {
         this.blockEntity = (PoweredFramingSawBlockEntity) blockEntity;
     }
 
     @Override
-    public PatternContainerGroup getCraftingMachineInfo()
-    {
+    public PatternContainerGroup getCraftingMachineInfo() {
         return GROUP.get();
     }
 
     @Override
-    public boolean pushPattern(IPatternDetails pattern, KeyCounter[] inputs, Direction ejectDir)
-    {
-        if (pattern instanceof FramingSawPatternDetails sawPattern)
-        {
-            if (!blockEntity.isInputEmpty() && !sawPattern.getRecipe().equals(blockEntity.getSelectedRecipe()))
-            {
+    public boolean pushPattern(IPatternDetails pattern, KeyCounter[] inputs, Direction ejectDir) {
+        if (pattern instanceof FramingSawPatternDetails sawPattern) {
+            if (!blockEntity.isInputEmpty() && !sawPattern.getRecipe().equals(blockEntity.getSelectedRecipe())) {
                 return false;
             }
 
             ResourceHandler<ItemResource> inv = blockEntity.getItemHandler();
-            for (int i = 0; i < FramingSawMenu.SLOT_RESULT; i++)
-            {
+            for (int i = 0; i < FramingSawMenu.SLOT_RESULT; i++) {
                 ItemResource resource = inv.getResource(i);
-                if (i >= inputs.length)
-                {
-                    if (!resource.isEmpty())
-                    {
+                if (i >= inputs.length) {
+                    if (!resource.isEmpty()) {
                         return false;
                     }
                     continue;
                 }
 
                 var entry = inputs[i].getFirstEntry();
-                if (entry == null)
-                {
+                if (entry == null) {
                     continue;
                 }
-                if (!(entry.getKey() instanceof AEItemKey itemKey))
-                {
+                if (!(entry.getKey() instanceof AEItemKey itemKey)) {
                     return false;
                 }
-                if (!resource.isEmpty() && (!itemKey.matches(resource.toStack()) || inv.getAmountAsInt(i) + entry.getLongValue() > resource.getMaxStackSize()))
-                {
+                if (!resource.isEmpty() && (!itemKey.matches(resource.toStack()) || inv.getAmountAsInt(i) + entry.getLongValue() > resource.getMaxStackSize())) {
                     return false;
                 }
             }
             blockEntity.selectRecipe(sawPattern.getRecipe());
-            try (Transaction tx = Transaction.open(null))
-            {
-                for (int i = 0; i < inputs.length; i++)
-                {
+            try (Transaction tx = Transaction.open(null)) {
+                for (int i = 0; i < inputs.length; i++) {
                     var entry = inputs[i].getFirstEntry();
-                    if (entry == null)
-                    {
+                    if (entry == null) {
                         continue;
                     }
 
@@ -102,8 +87,7 @@ final class FramingSawCraftingMachine implements ICraftingMachine
     }
 
     @Override
-    public boolean acceptsPlans()
-    {
+    public boolean acceptsPlans() {
         return true;
     }
 }

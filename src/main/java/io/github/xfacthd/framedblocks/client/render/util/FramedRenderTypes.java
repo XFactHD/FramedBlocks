@@ -5,8 +5,7 @@ import net.minecraft.client.renderer.rendertype.OutputTarget;
 import net.minecraft.client.renderer.rendertype.RenderSetup;
 import net.minecraft.client.renderer.rendertype.RenderType;
 
-public final class FramedRenderTypes
-{
+public final class FramedRenderTypes {
     public static final RenderType LINES_NO_DEPTH = RenderType.create(
             "lines",
             RenderSetup.builder(FramedRenderPipelines.LINES_NO_DEPTH)

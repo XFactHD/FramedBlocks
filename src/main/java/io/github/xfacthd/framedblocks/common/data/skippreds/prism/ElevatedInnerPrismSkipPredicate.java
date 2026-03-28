@@ -16,21 +16,16 @@ import net.minecraft.world.level.block.state.BlockState;
  This class is machine-generated, any manual changes to this class will be overwritten.
  */
 @CullTest(BlockType.FRAMED_ELEVATED_INNER_PRISM)
-public final class ElevatedInnerPrismSkipPredicate implements SideSkipPredicate
-{
+public final class ElevatedInnerPrismSkipPredicate implements SideSkipPredicate {
     @Override
-    public boolean test(BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side)
-    {
+    public boolean test(BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side) {
         DirectionAxis dirAxis = state.getValue(PropertyHolder.FACING_AXIS);
-        if (PrismDirs.ElevatedInnerPrism.testEarlyExit(dirAxis, side))
-        {
+        if (PrismDirs.ElevatedInnerPrism.testEarlyExit(dirAxis, side)) {
             return false;
         }
 
-        if (adjState.getBlock() instanceof IFramedBlock block && block.getBlockType() instanceof BlockType blockType)
-        {
-            return switch (blockType)
-            {
+        if (adjState.getBlock() instanceof IFramedBlock block && block.getBlockType() instanceof BlockType blockType) {
+            return switch (blockType) {
                 case FRAMED_ELEVATED_INNER_PRISM -> testAgainstElevatedInnerPrism(
                         dirAxis, adjState, side
                 );
@@ -46,8 +41,7 @@ public final class ElevatedInnerPrismSkipPredicate implements SideSkipPredicate
     @CullTest.TestTarget(BlockType.FRAMED_ELEVATED_INNER_PRISM)
     private static boolean testAgainstElevatedInnerPrism(
             DirectionAxis dirAxis, BlockState adjState, Direction side
-    )
-    {
+    ) {
         DirectionAxis adjDirAxis = adjState.getValue(PropertyHolder.FACING_AXIS);
         return PrismDirs.ElevatedInnerPrism.getTriDir(dirAxis, side).isEqualTo(PrismDirs.ElevatedInnerPrism.getTriDir(adjDirAxis, side.getOpposite()));
     }
@@ -55,8 +49,7 @@ public final class ElevatedInnerPrismSkipPredicate implements SideSkipPredicate
     @CullTest.TestTarget(BlockType.FRAMED_ELEVATED_INNER_SLOPED_PRISM)
     private static boolean testAgainstElevatedInnerSlopedPrism(
             DirectionAxis dirAxis, BlockState adjState, Direction side
-    )
-    {
+    ) {
         CompoundDirection adjCmpDir = adjState.getValue(PropertyHolder.FACING_DIR);
         return PrismDirs.ElevatedInnerPrism.getTriDir(dirAxis, side).isEqualTo(PrismDirs.ElevatedInnerSlopedPrism.getTriDir(adjCmpDir, side.getOpposite()));
     }

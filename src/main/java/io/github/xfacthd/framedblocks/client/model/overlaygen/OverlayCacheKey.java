@@ -16,18 +16,14 @@ record OverlayCacheKey(
         Material.Baked material,
         boolean forceTranslucent,
         boolean forceEmissive
-) implements OverlayQuadGenerator.VertexCoordProvider
-{
-    public OverlayCacheKey(BakedQuad quad, Material.Baked material, boolean forceTranslucent, boolean forceEmissive)
-    {
+) implements OverlayQuadGenerator.VertexCoordProvider {
+    public OverlayCacheKey(BakedQuad quad, Material.Baked material, boolean forceTranslucent, boolean forceEmissive) {
         this(quad.direction(), quad.position0(), quad.position1(), quad.position2(), quad.position3(), quad.bakedNormals(), material, forceTranslucent, forceEmissive);
     }
 
     @Override
-    public Vector3fc pos(int vert)
-    {
-        return switch (vert)
-        {
+    public Vector3fc pos(int vert) {
+        return switch (vert) {
             case 0 -> pos0;
             case 1 -> pos1;
             case 2 -> pos2;

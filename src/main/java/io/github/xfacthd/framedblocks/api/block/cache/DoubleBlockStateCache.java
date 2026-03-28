@@ -16,8 +16,7 @@ import org.jspecify.annotations.Nullable;
 import java.util.Arrays;
 import java.util.Objects;
 
-public class DoubleBlockStateCache extends StateCache
-{
+public class DoubleBlockStateCache extends StateCache {
     private final DoubleBlockTopInteractionMode topInteractionMode;
     private final DoubleBlockParts parts;
     private final SolidityCheck[] solidityChecks = new SolidityCheck[DIR_COUNT];
@@ -27,8 +26,7 @@ public class DoubleBlockStateCache extends StateCache
     private final boolean mayCullNullFacePartOne;
     private final boolean mayCullNullFacePartTwo;
 
-    public DoubleBlockStateCache(BlockState state, IBlockType type)
-    {
+    public DoubleBlockStateCache(BlockState state, IBlockType type) {
         super(state, type);
         IFramedDoubleBlock block = (IFramedDoubleBlock) state.getBlock();
         this.topInteractionMode = block.calculateTopInteractionMode(state);
@@ -36,24 +34,18 @@ public class DoubleBlockStateCache extends StateCache
         BlockOverlayPredicate overlayPredicate = type.getBlockOverlayPredicate();
         boolean supportsOverlay = type.supportsBlockOverlays();
         byte solidOverlay = 0;
-        for (Direction side : DIRECTIONS)
-        {
+        for (Direction side : DIRECTIONS) {
             solidityChecks[side.ordinal()] = block.calculateSolidityCheck(state, side);
-            if (supportsOverlay && overlayPredicate.supportsSolid(state, side, true))
-            {
+            if (supportsOverlay && overlayPredicate.supportsSolid(state, side, true)) {
                 solidOverlay |= (byte) (1 << side.ordinal());
             }
-            for (Direction edge : DIRECTIONS_WITH_NULL)
-            {
+            for (Direction edge : DIRECTIONS_WITH_NULL) {
                 CamoGetter getter;
-                if (edge != null && edge.getAxis() == side.getAxis())
-                {
+                if (edge != null && edge.getAxis() == side.getAxis()) {
                     // null is the first value in DIRECTIONS_WITH_NULL, so this is safe
                     int cgNullIdx = side.ordinal() * DIR_COUNT_N + DirUtils.maskNullDirection(null);
                     getter = camoGetters[cgNullIdx];
-                }
-                else
-                {
+                } else {
                     getter = block.calculateCamoGetter(state, side, edge);
                 }
                 int cgIdx = side.ordinal() * DIR_COUNT_N + DirUtils.maskNullDirection(edge);
@@ -67,52 +59,42 @@ public class DoubleBlockStateCache extends StateCache
         this.mayCullNullFacePartTwo = nullCullPredicate.testPartTwo(state);
     }
 
-    public final DoubleBlockTopInteractionMode getTopInteractionMode()
-    {
+    public final DoubleBlockTopInteractionMode getTopInteractionMode() {
         return topInteractionMode;
     }
 
-    public final DoubleBlockParts getParts()
-    {
+    public final DoubleBlockParts getParts() {
         return parts;
     }
 
-    public final SolidityCheck getSolidityCheck(Direction side)
-    {
+    public final SolidityCheck getSolidityCheck(Direction side) {
         return solidityChecks[side.ordinal()];
     }
 
-    public final CamoGetter getCamoGetter(Direction side, @Nullable Direction edge)
-    {
+    public final CamoGetter getCamoGetter(Direction side, @Nullable Direction edge) {
         return camoGetters[side.ordinal() * DIR_COUNT_N + DirUtils.maskNullDirection(edge)];
     }
 
     @Override
-    public final boolean supportsSolidOverlay(Direction side, boolean secondPart)
-    {
+    public final boolean supportsSolidOverlay(Direction side, boolean secondPart) {
         return secondPart ? (solidOverlay & (1 << side.ordinal())) != 0 : super.supportsSolidOverlay(side, false);
     }
 
     @Override
-    public final boolean supportsEdgeOverlay(Direction side, Direction edge, boolean secondPart, boolean nullCullFace, boolean unaligned)
-    {
-        if (secondPart)
-        {
+    public final boolean supportsEdgeOverlay(Direction side, Direction edge, boolean secondPart, boolean nullCullFace, boolean unaligned) {
+        if (secondPart) {
             return edgeOverlay.isSet(side, edge, nullCullFace, unaligned);
         }
         return super.supportsEdgeOverlay(side, edge, false, nullCullFace, unaligned);
     }
 
-    public final boolean mayCullNullFace(boolean secondPart)
-    {
+    public final boolean mayCullNullFace(boolean secondPart) {
         return secondPart ? mayCullNullFacePartTwo : mayCullNullFacePartOne;
     }
 
     @Override
-    public boolean equals(Object other)
-    {
-        if (!super.equals(other))
-        {
+    public boolean equals(Object other) {
+        if (!super.equals(other)) {
             return false;
         }
         DoubleBlockStateCache that = (DoubleBlockStateCache) other;
@@ -128,8 +110,7 @@ public class DoubleBlockStateCache extends StateCache
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         int result = super.hashCode();
         result = 31 * result + Objects.hashCode(topInteractionMode);
         result = 31 * result + Objects.hashCode(parts.stateOne());

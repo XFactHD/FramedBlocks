@@ -6,14 +6,10 @@ import io.github.xfacthd.framedblocks.client.data.outline.*;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 
-public final class BlockOutlineRenderers
-{
-    public static void onRegisterOutlineRenderers(RegisterOutlineRenderersEvent event)
-    {
-        for (BlockType type : BlockType.values())
-        {
-            if (type.useModelBasedOutline())
-            {
+public final class BlockOutlineRenderers {
+    public static void onRegisterOutlineRenderers(RegisterOutlineRenderersEvent event) {
+        for (BlockType type : BlockType.values()) {
+            if (type.useModelBasedOutline()) {
                 event.registerModelBased(FBContent.byType(type));
             }
         }

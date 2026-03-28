@@ -2,8 +2,7 @@ package io.github.xfacthd.framedblocks.common.block.slopepanel;
 
 import io.github.xfacthd.framedblocks.common.data.property.HorizontalRotation;
 
-public enum SlopePanelShape
-{
+public enum SlopePanelShape {
     UP_BACK,
     DOWN_BACK,
     RIGHT_BACK,
@@ -15,8 +14,7 @@ public enum SlopePanelShape
 
     private static final SlopePanelShape[] VALUES = values();
 
-    public static SlopePanelShape get(HorizontalRotation rot, boolean front)
-    {
+    public static SlopePanelShape get(HorizontalRotation rot, boolean front) {
         return VALUES[(front ? 0b100 : 0b000) | rot.ordinal()];
     }
 }

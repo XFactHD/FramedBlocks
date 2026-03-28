@@ -13,46 +13,36 @@ import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemStack;
 
-final class BlockCamoContentClientHandler extends CamoContentClientHandler<BlockCamoContent>
-{
+final class BlockCamoContentClientHandler extends CamoContentClientHandler<BlockCamoContent> {
     static final CamoContentClientHandler<BlockCamoContent> INSTANCE = new BlockCamoContentClientHandler();
 
     private BlockCamoContentClientHandler() { }
 
     @Override
-    public BlockStateModel getOrCreateModel(BlockCamoContent camo)
-    {
+    public BlockStateModel getOrCreateModel(BlockCamoContent camo) {
         return ModelUtils.getModel(camo.getState());
     }
 
     @Override
-    public Particle makeHitDestroyParticle(
-            ClientLevel level, double x, double y, double z, double sx, double sy, double sz, BlockCamoContent camo, BlockPos pos
-    )
-    {
+    public Particle makeHitDestroyParticle(ClientLevel level, double x, double y, double z, double sx, double sy, double sz, BlockCamoContent camo, BlockPos pos) {
         return new TerrainParticle(level, x, y, z, 0.0D, 0.0D, 0.0D, camo.getState(), pos);
     }
 
     @Override
-    public int getTintCount(BlockCamoContent camo)
-    {
+    public int getTintCount(BlockCamoContent camo) {
         return TintUtils.getTintSources(camo).size();
     }
 
     @Override
-    public void collectTintValues(BlockCamoContent camo, BlockAndTintGetter level, BlockPos pos, IntList tintList)
-    {
-        for (BlockTintSource tintSource : TintUtils.getTintSources(camo))
-        {
+    public void collectTintValues(BlockCamoContent camo, BlockAndTintGetter level, BlockPos pos, IntList tintList) {
+        for (BlockTintSource tintSource : TintUtils.getTintSources(camo)) {
             tintList.add(tintSource.colorInWorld(camo.getState(), level, pos));
         }
     }
 
     @Override
-    public void collectTintValues(BlockCamoContent camo, ItemStack stack, IntList tintList)
-    {
-        for (BlockTintSource tintSource : TintUtils.getTintSources(camo))
-        {
+    public void collectTintValues(BlockCamoContent camo, ItemStack stack, IntList tintList) {
+        for (BlockTintSource tintSource : TintUtils.getTintSources(camo)) {
             tintList.add(tintSource.color(camo.getState()));
         }
     }

@@ -10,8 +10,7 @@ import net.minecraft.util.StringRepresentable;
 import java.util.Locale;
 import java.util.function.IntFunction;
 
-public enum DummyIngredientType implements StringRepresentable
-{
+public enum DummyIngredientType implements StringRepresentable {
     EMPTY,
     CAMO_EXAMPLES,
     EMPTY_FRAMES,
@@ -26,8 +25,7 @@ public enum DummyIngredientType implements StringRepresentable
     private final String name = toString().toLowerCase(Locale.ROOT);
 
     @Override
-    public String getSerializedName()
-    {
+    public String getSerializedName() {
         return name;
     }
 }

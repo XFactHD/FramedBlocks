@@ -9,61 +9,43 @@ import net.minecraft.world.level.block.state.properties.Half;
 import net.minecraft.world.level.block.state.properties.StairsShape;
 import org.jspecify.annotations.Nullable;
 
-public final class DividedStairsConnectionPredicate extends NonDetailedConnectionPredicate
-{
+public final class DividedStairsConnectionPredicate extends NonDetailedConnectionPredicate {
     @Override
-    public boolean canConnectFullEdge(BlockState state, Direction side, @Nullable Direction edge)
-    {
+    public boolean canConnectFullEdge(BlockState state, Direction side, @Nullable Direction edge) {
         Direction facing = state.getValue(StairBlock.FACING);
         StairsShape shape = state.getValue(StairBlock.SHAPE);
         boolean top = state.getValue(BlockStateProperties.HALF) == Half.TOP;
         Direction dirTwo = top ? Direction.UP : Direction.DOWN;
 
-        if (side == facing)
-        {
-            if (edge == facing.getCounterClockWise() && shape != StairsShape.OUTER_RIGHT)
-            {
-                return true;
-            }
-            if (edge == facing.getClockWise() && shape != StairsShape.OUTER_LEFT)
-            {
-                return true;
-            }
-        }
-        else if (side == dirTwo)
-        {
+        if (side == dirTwo) {
             return edge != null && edge.getAxis() == facing.getClockWise().getAxis();
         }
-        else if (side == dirTwo.getOpposite() || side == facing.getOpposite())
-        {
-            if (shape == StairsShape.INNER_LEFT && edge == facing.getCounterClockWise())
-            {
+        if (side == facing) {
+            if (edge == facing.getCounterClockWise() && shape != StairsShape.OUTER_RIGHT) {
                 return true;
             }
-            if (shape == StairsShape.INNER_RIGHT && edge == facing.getClockWise())
-            {
+            if (edge == facing.getClockWise() && shape != StairsShape.OUTER_LEFT) {
                 return true;
             }
-        }
-        else if (side == facing.getCounterClockWise())
-        {
-            if (shape == StairsShape.INNER_LEFT)
-            {
+        } else if (side == dirTwo.getOpposite() || side == facing.getOpposite()) {
+            if (shape == StairsShape.INNER_LEFT && edge == facing.getCounterClockWise()) {
                 return true;
             }
-            if (shape != StairsShape.OUTER_RIGHT)
-            {
+            if (shape == StairsShape.INNER_RIGHT && edge == facing.getClockWise()) {
+                return true;
+            }
+        } else if (side == facing.getCounterClockWise()) {
+            if (shape == StairsShape.INNER_LEFT) {
+                return true;
+            }
+            if (shape != StairsShape.OUTER_RIGHT) {
                 return edge == facing || edge == dirTwo;
             }
-        }
-        else if (side == facing.getClockWise())
-        {
-            if (shape == StairsShape.INNER_RIGHT)
-            {
+        } else if (side == facing.getClockWise()) {
+            if (shape == StairsShape.INNER_RIGHT) {
                 return true;
             }
-            if (shape != StairsShape.OUTER_LEFT)
-            {
+            if (shape != StairsShape.OUTER_LEFT) {
                 return edge == facing || edge == dirTwo;
             }
         }

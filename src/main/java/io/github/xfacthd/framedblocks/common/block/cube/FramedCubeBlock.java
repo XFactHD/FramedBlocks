@@ -9,10 +9,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import org.jspecify.annotations.Nullable;
 
-public class FramedCubeBlock extends FramedBlock
-{
-    public FramedCubeBlock(Properties props)
-    {
+public class FramedCubeBlock extends FramedBlock {
+    public FramedCubeBlock(Properties props) {
         super(BlockType.FRAMED_CUBE, props);
         registerDefaultState(defaultBlockState()
                 .setValue(PropertyHolder.ALT, false)
@@ -22,28 +20,23 @@ public class FramedCubeBlock extends FramedBlock
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
-    {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
         builder.add(PropertyHolder.ALT, PropertyHolder.REINFORCED, PropertyHolder.SOLID_BG);
     }
 
     @Override
-    public BlockState getItemModelSource()
-    {
+    public BlockState getItemModelSource() {
         return defaultBlockState();
     }
 
     @Override
-    @Nullable
-    public Direction getHorizontalOrientation(BlockState state)
-    {
+    public @Nullable Direction getHorizontalOrientation(BlockState state) {
         return null;
     }
 
     @Override
-    public BlockState getJadeRenderState(BlockState state)
-    {
+    public BlockState getJadeRenderState(BlockState state) {
         return state;
     }
 }

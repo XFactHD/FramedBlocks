@@ -5,8 +5,7 @@ import net.minecraft.world.level.block.entity.SignText;
 import org.jetbrains.annotations.UnknownNullability;
 import org.joml.Vector3f;
 
-public final class FramedSignRenderState extends BlockEntityRenderState
-{
+public final class FramedSignRenderState extends BlockEntityRenderState {
     public boolean standing;
     public float yRot;
     @UnknownNullability

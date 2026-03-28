@@ -10,10 +10,8 @@ import net.neoforged.neoforge.transfer.item.VanillaContainerWrapper;
 
 import java.util.Objects;
 
-public final class CapabilitySetup
-{
-    public static void onRegisterCapabilities(RegisterCapabilitiesEvent event)
-    {
+public final class CapabilitySetup {
+    public static void onRegisterCapabilities(RegisterCapabilitiesEvent event) {
         event.registerBlockEntity(
                 Capabilities.Item.BLOCK,
                 FBContent.BE_TYPE_FRAMED_SECRET_STORAGE.value(),

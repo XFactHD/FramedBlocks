@@ -12,27 +12,18 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 
-public final class OneWayWindowClientBlockExtensions extends FramedClientBlockExtensions
-{
+public final class OneWayWindowClientBlockExtensions extends FramedClientBlockExtensions {
     @Override
-    protected boolean addHitEffectsUnsuppressed(
-            BlockState state, Level level, BlockHitResult hit, IFramedBlockEntity be, ParticleEngine engine
-    )
-    {
-        if (state.getValue(PropertyHolder.NULLABLE_FACE) != NullableDirection.NONE)
-        {
+    protected boolean addHitEffectsUnsuppressed(BlockState state, Level level, BlockHitResult hit, IFramedBlockEntity be, ParticleEngine engine) {
+        if (state.getValue(PropertyHolder.NULLABLE_FACE) != NullableDirection.NONE) {
             ParticleHelper.Client.addHitEffects(state, level, hit, FramedOneWayWindowBlock.GLASS_DUMMY_CAMO, null, engine);
         }
         return super.addHitEffectsUnsuppressed(state, level, hit, be, engine);
     }
 
     @Override
-    protected boolean addDestroyEffectsUnsuppressed(
-            BlockState state, Level level, BlockPos pos, IFramedBlockEntity be, ParticleEngine engine
-    )
-    {
-        if (state.getValue(PropertyHolder.NULLABLE_FACE) != NullableDirection.NONE)
-        {
+    protected boolean addDestroyEffectsUnsuppressed(BlockState state, Level level, BlockPos pos, IFramedBlockEntity be, ParticleEngine engine) {
+        if (state.getValue(PropertyHolder.NULLABLE_FACE) != NullableDirection.NONE) {
             ParticleHelper.Client.addDestroyEffects(state, level, pos, FramedOneWayWindowBlock.GLASS_DUMMY_CAMO, null, engine);
         }
         return super.addDestroyEffectsUnsuppressed(state, level, pos, be, engine);

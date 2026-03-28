@@ -13,28 +13,23 @@ import net.minecraft.client.resources.model.geometry.BakedQuad;
 import net.minecraft.core.Direction;
 import org.jspecify.annotations.Nullable;
 
-public class FramedCheckeredSlabSegmentGeometry extends Geometry
-{
+public class FramedCheckeredSlabSegmentGeometry extends Geometry {
     private final boolean top;
     private final boolean second;
 
-    public FramedCheckeredSlabSegmentGeometry(GeometryFactory.Context ctx)
-    {
+    public FramedCheckeredSlabSegmentGeometry(GeometryFactory.Context ctx) {
         this.top = ctx.state().getValue(FramedProperties.TOP);
         this.second = ctx.state().getValue(PropertyHolder.SECOND);
     }
 
     @Override
-    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
-    {
+    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData) {
         Direction quadDir = quad.direction();
-        if (DirUtils.isY(quadDir))
-        {
+        if (DirUtils.isY(quadDir)) {
             boolean up = quadDir == Direction.UP;
             Direction xDir = (second ^ up) ? Direction.WEST : Direction.EAST;
 
-            if (up == top)
-            {
+            if (up == top) {
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(Direction.SOUTH, .5F))
                         .apply(Modifiers.cut(xDir, .5F))
@@ -44,9 +39,7 @@ public class FramedCheckeredSlabSegmentGeometry extends Geometry
                         .apply(Modifiers.cut(Direction.NORTH, .5F))
                         .apply(Modifiers.cut(xDir.getOpposite(), .5F))
                         .export(quadMap, quadDir);
-            }
-            else
-            {
+            } else {
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(Direction.SOUTH, .5F))
                         .apply(Modifiers.cut(xDir.getOpposite(), .5F))
@@ -59,13 +52,10 @@ public class FramedCheckeredSlabSegmentGeometry extends Geometry
                         .apply(Modifiers.setPosition(.5F))
                         .export(quadMap, null);
             }
-        }
-        else
-        {
+        } else {
             Direction horDir = DirUtils.isX(quadDir) ^ second ? quadDir.getCounterClockWise() : quadDir.getClockWise();
 
-            if (!top)
-            {
+            if (!top) {
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(Direction.UP, .5F))
                         .apply(Modifiers.cut(horDir, .5F))
@@ -76,9 +66,7 @@ public class FramedCheckeredSlabSegmentGeometry extends Geometry
                         .apply(Modifiers.cut(horDir.getOpposite(), .5F))
                         .apply(Modifiers.setPosition(.5F))
                         .export(quadMap, null);
-            }
-            else
-            {
+            } else {
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(Direction.DOWN, .5F))
                         .apply(Modifiers.cut(horDir.getOpposite(), .5F))

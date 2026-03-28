@@ -7,8 +7,7 @@ import org.jetbrains.annotations.ApiStatus;
 
 @ApiStatus.NonExtendable
 @SuppressWarnings("unused")
-public interface DebugRenderers
-{
+public interface DebugRenderers {
     DebugRenderers INSTANCE = Utils.loadService(DebugRenderers.class);
 
     BlockDebugRenderer<IFramedBlockEntity> connectionPredicate();

@@ -10,18 +10,14 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import org.jspecify.annotations.Nullable;
 
-public final class CollapsibleCopycatBlockCopyBehaviour extends DummyDataHandlingCopyBehaviour<CollapsibleCopycatBlockData>
-{
-    public CollapsibleCopycatBlockCopyBehaviour()
-    {
+public final class CollapsibleCopycatBlockCopyBehaviour extends DummyDataHandlingCopyBehaviour<CollapsibleCopycatBlockData> {
+    public CollapsibleCopycatBlockCopyBehaviour() {
         super(FBContent.DC_TYPE_COLLAPSIBLE_COPYCAT_BLOCK_DATA.value(), CollapsibleCopycatBlockData.EMPTY);
     }
 
     @Override
-    public void postProcessPaste(Level level, BlockPos pos, @Nullable Player player, BlueprintData data, ItemStack dummyStack)
-    {
-        if (level.getBlockEntity(pos) instanceof FramedCollapsibleCopycatBlockEntity be)
-        {
+    public void postProcessPaste(Level level, BlockPos pos, @Nullable Player player, BlueprintData data, ItemStack dummyStack) {
+        if (level.getBlockEntity(pos) instanceof FramedCollapsibleCopycatBlockEntity be) {
             be.updateFaceSolidity();
         }
     }

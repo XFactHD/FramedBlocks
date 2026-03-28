@@ -3,39 +3,37 @@ package io.github.xfacthd.framedblocks.api.camo.block;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jspecify.annotations.Nullable;
 
-public final class SimpleBlockCamoContainer extends AbstractBlockCamoContainer<SimpleBlockCamoContainer>
-{
+public final class SimpleBlockCamoContainer extends AbstractBlockCamoContainer<SimpleBlockCamoContainer> {
     private final SimpleBlockCamoContainerFactory factory;
 
-    public SimpleBlockCamoContainer(BlockState state, SimpleBlockCamoContainerFactory factory)
-    {
+    public SimpleBlockCamoContainer(BlockState state, SimpleBlockCamoContainerFactory factory) {
         super(state);
         this.factory = factory;
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         return content.hashCode() * 13 + System.identityHashCode(factory);
     }
 
     @Override
-    public boolean equals(@Nullable Object obj)
-    {
-        if (obj == this) return true;
-        if (!(obj instanceof SimpleBlockCamoContainer other)) return false;
+    public boolean equals(@Nullable Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (!(obj instanceof SimpleBlockCamoContainer other)) {
+            return false;
+        }
         return content.equals(other.content) && factory == other.factory;
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "SimpleBlockCamoContainer{content=" + content + "}";
     }
 
     @Override
-    public SimpleBlockCamoContainerFactory getFactory()
-    {
+    public SimpleBlockCamoContainerFactory getFactory() {
         return factory;
     }
 }

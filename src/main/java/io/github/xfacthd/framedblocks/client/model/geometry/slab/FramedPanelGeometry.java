@@ -12,33 +12,25 @@ import net.minecraft.client.resources.model.geometry.BakedQuad;
 import net.minecraft.core.Direction;
 import org.jspecify.annotations.Nullable;
 
-public class FramedPanelGeometry extends Geometry
-{
+public class FramedPanelGeometry extends Geometry {
     private final Direction dir;
 
-    public FramedPanelGeometry(GeometryFactory.Context ctx)
-    {
+    public FramedPanelGeometry(GeometryFactory.Context ctx) {
         this.dir = ctx.state().getValue(FramedProperties.FACING_HOR);
     }
 
     @Override
-    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
-    {
+    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData) {
         Direction quadDir = quad.direction();
-        if (quadDir == dir.getOpposite())
-        {
+        if (quadDir == dir.getOpposite()) {
             QuadModifier.of(quad)
                     .apply(Modifiers.setPosition(.5F))
                     .export(quadMap, null);
-        }
-        else if (DirUtils.isY(quad.direction()))
-        {
+        } else if (DirUtils.isY(quad.direction())) {
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(dir.getOpposite(), .5F))
                     .export(quadMap, quadDir);
-        }
-        else
-        {
+        } else {
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(dir.getOpposite(), .5F))
                     .export(quadMap, quadDir);

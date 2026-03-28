@@ -14,23 +14,19 @@ import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 
-public final class PillarSocketShapes
-{
+public final class PillarSocketShapes {
     private static final ShapeCache<Direction> SHAPES = ShapeCache.createEnum(Direction.class, PillarSocketShapes::createShapes);
 
-    public static ShapeContainer generate(List<BlockState> states)
-    {
+    public static ShapeContainer generate(List<BlockState> states) {
         Map<BlockState, VoxelShape> map = new IdentityHashMap<>(states.size());
-        for (BlockState state : states)
-        {
+        for (BlockState state : states) {
             Direction dir = state.getValue(BlockStateProperties.FACING);
             map.put(state, SHAPES.get(dir));
         }
         return ShapeContainer.of(map);
     }
 
-    private static void createShapes(Map<Direction, VoxelShape> map)
-    {
+    private static void createShapes(Map<Direction, VoxelShape> map) {
         VoxelShape shapeDown = ShapeUtils.orUnoptimized(
                 CommonShapes.SLAB.get(Boolean.FALSE),
                 Block.box(4, 8, 4, 12, 16, 12)
@@ -43,5 +39,5 @@ public final class PillarSocketShapes
         ShapeUtils.makeHorizontalRotations(shapeNorth, Direction.NORTH, map);
     }
 
-    private PillarSocketShapes() {}
+    private PillarSocketShapes() { }
 }

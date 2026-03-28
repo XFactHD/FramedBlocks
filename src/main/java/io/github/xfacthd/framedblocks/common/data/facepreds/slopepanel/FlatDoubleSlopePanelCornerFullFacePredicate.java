@@ -6,19 +6,13 @@ import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 
-public final class FlatDoubleSlopePanelCornerFullFacePredicate implements FullFacePredicate
-{
+public final class FlatDoubleSlopePanelCornerFullFacePredicate implements FullFacePredicate {
     @Override
-    public boolean test(BlockState state, Direction side)
-    {
+    public boolean test(BlockState state, Direction side) {
         Direction facing = state.getValue(FramedProperties.FACING_HOR);
-        if (state.getValue(PropertyHolder.FRONT))
-        {
+        if (state.getValue(PropertyHolder.FRONT)) {
             return side == facing.getOpposite();
         }
-        else
-        {
-            return side == facing;
-        }
+        return side == facing;
     }
 }

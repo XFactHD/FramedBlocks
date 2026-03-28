@@ -11,12 +11,10 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.state.BlockState;
 
 @CullTest(BlockType.FRAMED_LADDER)
-public final class LadderSkipPredicate implements SideSkipPredicate
-{
+public final class LadderSkipPredicate implements SideSkipPredicate {
     @Override
     @CullTest.TestTarget(BlockType.FRAMED_LADDER)
-    public boolean test(BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side)
-    {
+    public boolean test(BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side) {
         return DirUtils.isY(side) && adjState.getBlock() == FBContent.BLOCK_FRAMED_LADDER.value();
     }
 }

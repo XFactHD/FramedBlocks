@@ -14,24 +14,20 @@ import net.neoforged.neoforge.client.fluid.FluidTintSource;
 import java.util.List;
 import java.util.function.Function;
 
-public final class TintUtils
-{
+public final class TintUtils {
     private static final Function<BlockState, List<BlockTintSource>> BLOCK_TINT_SOURCE_RESOLVER = state -> Minecraft.getInstance().getBlockColors().getTintSources(state);
     private static final BlockTintSource UNTINTED = BlockTintSources.constant(-1);
 
-    public static List<BlockTintSource> getTintSources(BlockTintSourceCache sourceCache)
-    {
+    public static List<BlockTintSource> getTintSources(BlockTintSourceCache sourceCache) {
         return sourceCache.resolveTintSources(BLOCK_TINT_SOURCE_RESOLVER);
     }
 
-    public static int getFluidColor(BlockAndLightGetter level, BlockPos pos, FluidState fluid)
-    {
+    public static int getFluidColor(BlockAndLightGetter level, BlockPos pos, FluidState fluid) {
         FluidTintSource tintSource = ModelUtils.getFluidModel(fluid).fluidTintSource();
         return tintSource != null ? tintSource.colorInWorld(fluid, fluid.createLegacyBlock(), ClientUtils.asTintGetter(level), pos) : -1;
     }
 
-    public static BlockTintSource getOverlayTintSource(TintSource tintSource)
-    {
+    public static BlockTintSource getOverlayTintSource(TintSource tintSource) {
         return tintSource.resolveTintSource(BLOCK_TINT_SOURCE_RESOLVER).orElse(UNTINTED);
     }
 

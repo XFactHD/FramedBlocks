@@ -5,8 +5,7 @@ import net.minecraft.core.Direction;
 /**
  * Indicates in which direction the corner above the baseline points
  */
-public enum TriangleDir
-{
+public enum TriangleDir {
     NULL(Direction.UP, Direction.UP),
 
     NORTH_EAST(Direction.NORTH, Direction.EAST),
@@ -29,16 +28,13 @@ public enum TriangleDir
     private final Direction cardOne;
     private final Direction cardTwo;
 
-    TriangleDir(Direction cardOne, Direction cardTwo)
-    {
+    TriangleDir(Direction cardOne, Direction cardTwo) {
         this.cardOne = cardOne;
         this.cardTwo = cardTwo;
     }
 
-    public TriangleDir getOpposite()
-    {
-        if (this == NULL)
-        {
+    public TriangleDir getOpposite() {
+        if (this == NULL) {
             return this;
         }
         return fromDirections(cardOne.getOpposite(), cardTwo.getOpposite());
@@ -48,27 +44,24 @@ public enum TriangleDir
      * {@return true if both {@code TriangleDir}s are not {@link TriangleDir#NULL} and the other
      * {@code TriangleDir} has the same edge directions}
      */
-    public boolean isEqualTo(TriangleDir other)
-    {
+    public boolean isEqualTo(TriangleDir other) {
         return this != NULL && this == other;
     }
 
-    public static TriangleDir fromDirections(Direction dirOne, Direction dirTwo)
-    {
+    public static TriangleDir fromDirections(Direction dirOne, Direction dirTwo) {
         TriangleDir dir = FROM_DIRS[dirOne.ordinal()][dirTwo.ordinal()];
-        if (dir == null)
-        {
+        if (dir == null) {
             throw new IllegalArgumentException("Invalid direction pair: edge one:" + dirOne + ", edge two: " + dirTwo);
         }
         return dir;
     }
 
-    private static TriangleDir[][] makeDirTable()
-    {
+    private static TriangleDir[][] makeDirTable() {
         TriangleDir[][] table = new TriangleDir[6][6];
-        for (TriangleDir dir : values())
-        {
-            if (dir == NULL) { continue; }
+        for (TriangleDir dir : values()) {
+            if (dir == NULL) {
+                continue;
+            }
 
             table[dir.cardOne.ordinal()][dir.cardTwo.ordinal()] = dir;
             table[dir.cardTwo.ordinal()][dir.cardOne.ordinal()] = dir;

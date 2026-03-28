@@ -10,8 +10,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.function.Function;
 
-public enum CamoGetter
-{
+public enum CamoGetter {
     NONE(_ -> EmptyCamoContainer.EMPTY, _ -> FramedBlockData.EMPTY, _ -> null),
     FIRST(FramedDoubleBlockEntity::getCamo, data -> data.unwrap(false), DoubleBlockParts::stateOne),
     SECOND(FramedDoubleBlockEntity::getCamoTwo, data -> data.unwrap(true), DoubleBlockParts::stateTwo),
@@ -25,41 +24,32 @@ public enum CamoGetter
             Function<FramedDoubleBlockEntity, CamoContainer<?, ?>> entityCamoGetter,
             Function<AbstractFramedBlockData, FramedBlockData> modelDataUnwrapper,
             Function<DoubleBlockParts, @Nullable BlockState> partGetter
-    )
-    {
+    ) {
         this.entityCamoGetter = entityCamoGetter;
         this.modelDataUnwrapper = modelDataUnwrapper;
         this.partGetter = partGetter;
     }
 
-    public CamoContainer<?, ?> getCamo(FramedDoubleBlockEntity be)
-    {
+    public CamoContainer<?, ?> getCamo(FramedDoubleBlockEntity be) {
         return entityCamoGetter.apply(be);
     }
 
-    public CamoContainer<?, ?> getCamo(AbstractFramedBlockData data)
-    {
+    public CamoContainer<?, ?> getCamo(AbstractFramedBlockData data) {
         return modelDataUnwrapper.apply(data).getCamoContainer();
     }
 
-    @Nullable
-    public BlockState getComponent(DoubleBlockParts parts)
-    {
+    public @Nullable BlockState getComponent(DoubleBlockParts parts) {
         return partGetter.apply(parts);
     }
 
-    public static CamoGetter get(boolean first, boolean second)
-    {
-        if (first && second)
-        {
+    public static CamoGetter get(boolean first, boolean second) {
+        if (first && second) {
             throw new IllegalArgumentException("Only first or second may be true");
         }
-        if (first)
-        {
+        if (first) {
             return FIRST;
         }
-        if (second)
-        {
+        if (second) {
             return SECOND;
         }
         return NONE;

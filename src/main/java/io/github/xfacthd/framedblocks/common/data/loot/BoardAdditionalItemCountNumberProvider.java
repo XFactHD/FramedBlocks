@@ -8,18 +8,15 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 
-public final class BoardAdditionalItemCountNumberProvider implements NumberProvider
-{
+public final class BoardAdditionalItemCountNumberProvider implements NumberProvider {
     public static final BoardAdditionalItemCountNumberProvider INSTANCE = new BoardAdditionalItemCountNumberProvider();
 
     private BoardAdditionalItemCountNumberProvider() { }
 
     @Override
-    public float getFloat(LootContext ctx)
-    {
+    public float getFloat(LootContext ctx) {
         BlockState state = ctx.getParameter(LootContextParams.BLOCK_STATE);
-        if (state.hasProperty(PropertyHolder.FACES))
-        {
+        if (state.hasProperty(PropertyHolder.FACES)) {
             int faces = state.getValue(PropertyHolder.FACES);
             return Integer.bitCount(faces) - 1;
         }
@@ -27,8 +24,7 @@ public final class BoardAdditionalItemCountNumberProvider implements NumberProvi
     }
 
     @Override
-    public MapCodec<BoardAdditionalItemCountNumberProvider> codec()
-    {
+    public MapCodec<BoardAdditionalItemCountNumberProvider> codec() {
         return FBContent.BOARD_ADDITIONAL_ITEM_COUNT_NUMBER_PROVIDER.value();
     }
 }

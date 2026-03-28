@@ -45,34 +45,28 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
 
-public class FramedBlueprintItem extends FramedToolItem
-{
+public class FramedBlueprintItem extends FramedToolItem {
     public static final Component CANT_PLACE_FLUID_CAMO = Utils.translate("desc", "blueprint_cant_place_fluid_camo").withStyle(ChatFormatting.RED);
     private static final String MATERIAL_LIST_PREFIX = "\n  - ";
     private static final FrameModifier[] MODIFIERS = FrameModifier.values();
 
     private static final Map<Block, BlueprintCopyBehaviour> COPY_BEHAVIOURS = new IdentityHashMap<>();
-    private static final BlueprintCopyBehaviour NO_OP_BEHAVIOUR = new BlueprintCopyBehaviour(){};
+    private static final BlueprintCopyBehaviour NO_OP_BEHAVIOUR = new BlueprintCopyBehaviour() {};
 
-    public FramedBlueprintItem(FramedToolType type, Properties props)
-    {
+    public FramedBlueprintItem(FramedToolType type, Properties props) {
         super(type, props.component(FBContent.DC_TYPE_BLUEPRINT_DATA, BlueprintData.EMPTY));
     }
 
     @Override
-    public boolean doesSneakBypassUse(ItemStack stack, LevelReader level, BlockPos pos, Player player)
-    {
+    public boolean doesSneakBypassUse(ItemStack stack, LevelReader level, BlockPos pos, Player player) {
         return false;
     }
 
     @Override
-    public InteractionResult use(Level level, Player player, InteractionHand hand)
-    {
+    public InteractionResult use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
-        if (player.isShiftKeyDown())
-        {
-            if (!level.isClientSide())
-            {
+        if (player.isShiftKeyDown()) {
+            if (!level.isClientSide()) {
                 stack.set(FBContent.DC_TYPE_BLUEPRINT_DATA, BlueprintData.EMPTY);
             }
             return InteractionResult.SUCCESS;
@@ -81,38 +75,31 @@ public class FramedBlueprintItem extends FramedToolItem
     }
 
     @Override
-    public InteractionResult useOn(UseOnContext context)
-    {
+    public InteractionResult useOn(UseOnContext context) {
         Player player = context.getPlayer();
-        if (player == null)
-        {
+        if (player == null) {
             return InteractionResult.FAIL;
         }
 
         Level level = context.getLevel();
         BlockPos pos = context.getClickedPos();
 
-        if (player.isShiftKeyDown())
-        {
+        if (player.isShiftKeyDown()) {
             return writeBlueprint(level, pos, context.getItemInHand());
         }
         BlueprintData data = context.getItemInHand().getOrDefault(FBContent.DC_TYPE_BLUEPRINT_DATA, BlueprintData.EMPTY);
-        if (!data.isEmpty())
-        {
+        if (!data.isEmpty()) {
             return readBlueprint(context, player, data);
         }
         return super.useOn(context);
     }
 
-    private static InteractionResult writeBlueprint(Level level, BlockPos pos, ItemStack stack)
-    {
-        if (!(level.getBlockEntity(pos) instanceof IFramedBlockEntity be))
-        {
+    private static InteractionResult writeBlueprint(Level level, BlockPos pos, ItemStack stack) {
+        if (!(level.getBlockEntity(pos) instanceof IFramedBlockEntity be)) {
             return InteractionResult.FAIL;
         }
 
-        if (!level.isClientSide())
-        {
+        if (!level.isClientSide()) {
             BlockState state = be.getBlockState();
             BlueprintCopyBehaviour behaviour = getBehaviour(state.getBlock());
             BlueprintData data = behaviour.writeToBlueprint(level, pos, state, be);
@@ -122,60 +109,48 @@ public class FramedBlueprintItem extends FramedToolItem
         return InteractionResult.SUCCESS;
     }
 
-    private static BlueprintData storeBlockStateProperties(BlueprintCopyBehaviour behaviour, BlueprintData data, BlockState state)
-    {
+    private static BlueprintData storeBlockStateProperties(BlueprintCopyBehaviour behaviour, BlueprintData data, BlockState state) {
         Set<Property<?>> properties = behaviour.getPropertiesToCopy(state);
-        if (!properties.isEmpty())
-        {
+        if (!properties.isEmpty()) {
             BlockItemStateProperties stateProps = BlockItemStateProperties.EMPTY;
-            for (Property<?> property : properties)
-            {
+            for (Property<?> property : properties) {
                 stateProps = stateProps.with(property, state);
             }
-            if (!stateProps.isEmpty())
-            {
+            if (!stateProps.isEmpty()) {
                 return data.withBlockState(stateProps);
             }
         }
         return data;
     }
 
-    private static InteractionResult readBlueprint(UseOnContext context, Player player, BlueprintData data)
-    {
+    private static InteractionResult readBlueprint(UseOnContext context, Player player, BlueprintData data) {
         Block block = data.block();
-        if (block.defaultBlockState().isAir())
-        {
+        if (block.defaultBlockState().isAir()) {
             return InteractionResult.FAIL;
         }
 
         Item item = block.asItem();
-        if (!(item instanceof BlockItem blockItem))
-        {
+        if (!(item instanceof BlockItem blockItem)) {
             return InteractionResult.FAIL;
         }
 
-        if (checkMissingMaterials(player, data))
-        {
+        if (checkMissingMaterials(player, data)) {
             return InteractionResult.FAIL;
         }
 
         return tryPlace(context, player, blockItem, data);
     }
 
-    private static boolean checkMissingMaterials(Player player, BlueprintData data)
-    {
-        if (player.getAbilities().instabuild)
-        {
+    private static boolean checkMissingMaterials(Player player, BlueprintData data) {
+        if (player.getAbilities().instabuild) {
             //Creative mode can always build
             return false;
         }
 
         CamoList camos = getCamoContainers(data);
 
-        if (!canCopyAllCamos(camos))
-        {
-            if (player instanceof ServerPlayer serverPlayer)
-            {
+        if (!canCopyAllCamos(camos)) {
+            if (player instanceof ServerPlayer serverPlayer) {
                 serverPlayer.sendSystemMessage(CANT_PLACE_FLUID_CAMO);
             }
             return true;
@@ -184,23 +159,18 @@ public class FramedBlueprintItem extends FramedToolItem
         List<ItemStack> materials = collectMaterials(data, camos);
 
         List<ItemStack> missingMaterials = new ArrayList<>();
-        for (ItemStack stack : materials)
-        {
-            if (stack.isEmpty())
-            {
+        for (ItemStack stack : materials) {
+            if (stack.isEmpty()) {
                 continue;
             }
 
-            if (player.getInventory().countItem(stack.getItem()) < stack.getCount())
-            {
+            if (player.getInventory().countItem(stack.getItem()) < stack.getCount()) {
                 missingMaterials.add(stack);
             }
         }
 
-        if (!missingMaterials.isEmpty())
-        {
-            if (player instanceof ServerPlayer serverPlayer)
-            {
+        if (!missingMaterials.isEmpty()) {
+            if (player instanceof ServerPlayer serverPlayer) {
                 List<String> names = missingMaterials.stream()
                         .map(s -> s.getHoverName().getString())
                         .toList();
@@ -213,8 +183,7 @@ public class FramedBlueprintItem extends FramedToolItem
         return false;
     }
 
-    private static InteractionResult tryPlace(UseOnContext context, Player player, BlockItem item, BlueprintData data)
-    {
+    private static InteractionResult tryPlace(UseOnContext context, Player player, BlockItem item, BlueprintData data) {
         ItemStack dummyStack = new ItemStack(item, 1);
         dummyStack.set(DataComponents.BLOCK_STATE, data.blockState());
 
@@ -229,16 +198,13 @@ public class FramedBlueprintItem extends FramedToolItem
         BlockPos pos = new BlockPlaceContext(placeContext).getClickedPos();
         InteractionResult result = item.useOn(placeContext);
 
-        if (!context.getLevel().isClientSide() && result.consumesAction())
-        {
-            if (context.getLevel().getBlockEntity(pos) instanceof IFramedBlockEntity be)
-            {
+        if (!context.getLevel().isClientSide() && result.consumesAction()) {
+            if (context.getLevel().getBlockEntity(pos) instanceof IFramedBlockEntity be) {
                 be.applyBlueprintData(data);
             }
             getBehaviour(data.block()).postProcessPaste(context.getLevel(), pos, context.getPlayer(), data, dummyStack);
 
-            if (!player.getAbilities().instabuild)
-            {
+            if (!player.getAbilities().instabuild) {
                 consumeItems(player, data);
             }
         }
@@ -246,22 +212,20 @@ public class FramedBlueprintItem extends FramedToolItem
         return result;
     }
 
-    private static void consumeItems(Player player, BlueprintData data)
-    {
+    private static void consumeItems(Player player, BlueprintData data) {
         CamoList camos = getCamoContainers(data);
 
-        if (!canCopyAllCamos(camos)) return;
+        if (!canCopyAllCamos(camos)) {
+            return;
+        }
 
         List<ItemStack> materials = collectMaterials(data, camos);
 
         Inventory inv = player.getInventory();
-        for (int i = 0; i < inv.getContainerSize(); i++)
-        {
+        for (int i = 0; i < inv.getContainerSize(); i++) {
             ItemStack stack = inv.getItem(i);
-            for (ItemStack material : materials)
-            {
-                if (!material.isEmpty() && stack.is(material.getItem()))
-                {
+            for (ItemStack material : materials) {
+                if (!material.isEmpty() && stack.is(material.getItem())) {
                     int size = stack.getCount();
                     stack.shrink(Math.min(material.getCount(), size));
                     material.shrink(size - stack.getCount());
@@ -271,83 +235,70 @@ public class FramedBlueprintItem extends FramedToolItem
             }
             materials.removeIf(ItemStack::isEmpty);
 
-            if (materials.isEmpty())
-            {
+            if (materials.isEmpty()) {
                 break;
             }
         }
     }
 
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    private static boolean canCopyAllCamos(CamoList camos)
-    {
-        if (!ServerConfig.VIEW.shouldConsumeCamoItem()) return true;
+    private static boolean canCopyAllCamos(CamoList camos) {
+        if (!ServerConfig.VIEW.shouldConsumeCamoItem()) {
+            return true;
+        }
 
         //Copying fluid camos is currently not possible
         return camos.stream().allMatch(CamoContainer::canTriviallyConvertToItemStack);
     }
 
-    private static List<ItemStack> collectMaterials(BlueprintData data, CamoList camos)
-    {
+    private static List<ItemStack> collectMaterials(BlueprintData data, CamoList camos) {
         List<ItemStack> materials = new ArrayList<>();
         materials.add(getBlockItem(data));
-        if (ServerConfig.VIEW.shouldConsumeCamoItem())
-        {
+        if (ServerConfig.VIEW.shouldConsumeCamoItem()) {
             materials.addAll(getCamoStacksMerged(camos));
         }
 
         BlueprintCopyBehaviour behaviour = getBehaviour(data.block());
-        for (FrameModifier modifier : MODIFIERS)
-        {
+        for (FrameModifier modifier : MODIFIERS) {
             modifier.collectForBlueprint(behaviour, data, materials);
         }
         materials.addAll(behaviour.getAdditionalConsumedMaterials(data));
         return materials;
     }
 
-    public static BlueprintCopyBehaviour getBehaviour(Block block)
-    {
+    public static BlueprintCopyBehaviour getBehaviour(Block block) {
         return COPY_BEHAVIOURS.getOrDefault(block, NO_OP_BEHAVIOUR);
     }
 
-    public static CamoList getCamoContainers(BlueprintData data)
-    {
+    public static CamoList getCamoContainers(BlueprintData data) {
         return getBehaviour(data.block()).getCamos(data);
     }
 
-    private static ItemStack getBlockItem(BlueprintData data)
-    {
+    private static ItemStack getBlockItem(BlueprintData data) {
         return getBehaviour(data.block()).getBlockItem(data);
     }
 
-    private static List<ItemStack> getCamoStacksMerged(CamoList camos)
-    {
+    private static List<ItemStack> getCamoStacksMerged(CamoList camos) {
         List<ItemStack> camoStacks = new ArrayList<>();
-        for (CamoContainer<?, ?> camo : camos)
-        {
+        for (CamoContainer<?, ?> camo : camos) {
             ItemStack stack = CamoContainerHelper.dropCamo(camo);
-            if (stack.isEmpty())
-            {
+            if (stack.isEmpty()) {
                 continue;
             }
 
-            for (ItemStack existing : camoStacks)
-            {
-                if (ItemStack.isSameItem(existing, stack))
-                {
+            for (ItemStack existing : camoStacks) {
+                if (ItemStack.isSameItem(existing, stack)) {
                     int size = existing.getCount();
                     existing.grow(Math.min(existing.getMaxStackSize() - size, stack.getCount()));
                     stack.shrink(existing.getCount() - size);
 
-                    if (stack.isEmpty())
-                    {
+                    if (stack.isEmpty()) {
                         break;
                     }
                 }
             }
 
-            if (!stack.isEmpty())
-            {
+            if (!stack.isEmpty()) {
                 camoStacks.add(stack);
             }
         }
@@ -356,20 +307,16 @@ public class FramedBlueprintItem extends FramedToolItem
 
     @Override
     @SuppressWarnings("deprecation")
-    public void appendHoverText(ItemStack stack, TooltipContext ctx, TooltipDisplay display, Consumer<Component> appender, TooltipFlag flag)
-    {
+    public void appendHoverText(ItemStack stack, TooltipContext ctx, TooltipDisplay display, Consumer<Component> appender, TooltipFlag flag) {
         stack.getOrDefault(FBContent.DC_TYPE_BLUEPRINT_DATA, BlueprintData.EMPTY).addToTooltip(ctx, appender, flag, stack);
     }
 
-    public static void init()
-    {
-        ModLoader.postEvent(new RegisterBlueprintCopyBehavioursEvent((behaviour, blocks) ->
-        {
+    public static void init() {
+        ModLoader.postEvent(new RegisterBlueprintCopyBehavioursEvent((behaviour, blocks) -> {
             Preconditions.checkNotNull(behaviour, "BlueprintCopyBehaviour must be non-null");
             Preconditions.checkState(blocks.length > 0, "At least one block must be provided to register a BlueprintCopyBehaviour");
 
-            for (Block block : blocks)
-            {
+            for (Block block : blocks) {
                 Preconditions.checkNotNull(block);
                 COPY_BEHAVIOURS.put(block, behaviour);
             }

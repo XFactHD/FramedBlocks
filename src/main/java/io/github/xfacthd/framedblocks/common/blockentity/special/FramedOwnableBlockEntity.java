@@ -14,62 +14,51 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.UUID;
 
-public class FramedOwnableBlockEntity extends FramedBlockEntity
-{
+public class FramedOwnableBlockEntity extends FramedBlockEntity {
     @Nullable
     private UUID owner;
 
-    protected FramedOwnableBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
-    {
+    protected FramedOwnableBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
     }
 
-    public FramedOwnableBlockEntity(BlockPos pos, BlockState state)
-    {
+    public FramedOwnableBlockEntity(BlockPos pos, BlockState state) {
         this(FBContent.BE_TYPE_FRAMED_OWNABLE_BLOCK.value(), pos, state);
     }
 
-    public void setOwner(UUID owner, boolean forceSync)
-    {
+    public void setOwner(UUID owner, boolean forceSync) {
         this.owner = owner;
         setChangedWithoutSignalUpdate();
 
-        if (forceSync)
-        {
+        if (forceSync) {
             level().sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
         }
     }
 
-    @Nullable
-    public UUID getOwner()
-    {
+    public @Nullable UUID getOwner() {
         return owner;
     }
 
     @Override
-    protected void writeToDataPacket(ValueOutput valueOutput)
-    {
+    protected void writeToDataPacket(ValueOutput valueOutput) {
         super.writeToDataPacket(valueOutput);
         valueOutput.storeNullable("owner", UUIDUtil.CODEC, owner);
     }
 
     @Override
-    protected void readFromDataPacket(NetworkValueInput input)
-    {
+    protected void readFromDataPacket(NetworkValueInput input) {
         super.readFromDataPacket(input);
         owner = input.read("owner", UUIDUtil.CODEC).orElse(null);
     }
 
     @Override
-    public void saveAdditional(ValueOutput valueOutput)
-    {
+    public void saveAdditional(ValueOutput valueOutput) {
         super.saveAdditional(valueOutput);
         valueOutput.storeNullable("owner", UUIDUtil.CODEC, owner);
     }
 
     @Override
-    public void loadAdditional(ValueInput valueInput)
-    {
+    public void loadAdditional(ValueInput valueInput) {
         super.loadAdditional(valueInput);
         owner = valueInput.read("owner", UUIDUtil.CODEC).orElse(null);
     }

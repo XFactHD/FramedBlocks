@@ -17,8 +17,7 @@ import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 
-public final class VerticalSlopedStairsShapes implements ShapeGenerator
-{
+public final class VerticalSlopedStairsShapes implements ShapeGenerator {
     public static final VerticalSlopedStairsShapes INSTANCE = new VerticalSlopedStairsShapes();
     private static final ShapeCache<ShapeKey> SHAPES = makeCache(HalfSlopeShapes.SHAPES);
     private static final ShapeCache<ShapeKey> OCCLUSION_SHAPES = makeCache(HalfSlopeShapes.OCCLUSION_SHAPES);
@@ -26,23 +25,19 @@ public final class VerticalSlopedStairsShapes implements ShapeGenerator
     private VerticalSlopedStairsShapes() { }
 
     @Override
-    public ShapeContainer generatePrimary(List<BlockState> states)
-    {
+    public ShapeContainer generatePrimary(List<BlockState> states) {
         return generateShapes(states, SHAPES);
     }
 
     @Override
-    public ShapeContainer generateOcclusion(List<BlockState> states)
-    {
+    public ShapeContainer generateOcclusion(List<BlockState> states) {
         return generateShapes(states, OCCLUSION_SHAPES);
     }
 
-    private static ShapeContainer generateShapes(List<BlockState> states, ShapeCache<ShapeKey> shapeCache)
-    {
+    private static ShapeContainer generateShapes(List<BlockState> states, ShapeCache<ShapeKey> shapeCache) {
         Map<BlockState, VoxelShape> map = new IdentityHashMap<>(states.size());
 
-        for (BlockState state : states)
-        {
+        for (BlockState state : states) {
             Direction dir = state.getValue(FramedProperties.FACING_HOR);
             HorizontalRotation rot = state.getValue(PropertyHolder.ROTATION);
             map.put(state, shapeCache.get(new ShapeKey(dir, rot)));
@@ -51,10 +46,8 @@ public final class VerticalSlopedStairsShapes implements ShapeGenerator
         return ShapeContainer.of(map);
     }
 
-    private static ShapeCache<ShapeKey> makeCache(ShapeCache<HalfSlopeShapes.ShapeKey> shapeCache)
-    {
-        return ShapeCache.create(map ->
-        {
+    private static ShapeCache<ShapeKey> makeCache(ShapeCache<HalfSlopeShapes.ShapeKey> shapeCache) {
+        return ShapeCache.create(map -> {
             VoxelShape panelShape = CommonShapes.PANEL.get(Direction.NORTH);
 
             VoxelShape shapeUp = ShapeUtils.orUnoptimized(

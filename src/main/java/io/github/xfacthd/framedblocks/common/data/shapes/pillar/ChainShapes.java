@@ -11,10 +11,8 @@ import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 
-public final class ChainShapes
-{
-    public static ShapeContainer generate(List<BlockState> states)
-    {
+public final class ChainShapes {
+    public static ShapeContainer generate(List<BlockState> states) {
         Map<BlockState, VoxelShape> map = new IdentityHashMap<>(states.size());
 
         VoxelShape[] shapes = new VoxelShape[] {
@@ -23,8 +21,7 @@ public final class ChainShapes
                 Block.box(6.5, 6.5, 0.0, 9.5, 9.5, 16.0)
         };
 
-        for (BlockState state : states)
-        {
+        for (BlockState state : states) {
             Direction.Axis axis = state.getValue(FramedChainBlock.AXIS);
             map.put(state, shapes[axis.ordinal()]);
         }

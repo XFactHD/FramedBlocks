@@ -8,23 +8,19 @@ import io.github.xfacthd.framedblocks.client.render.debug.impl.ConnectionPredica
 import io.github.xfacthd.framedblocks.client.render.debug.impl.DoubleBlockPartDebugRenderer;
 import io.github.xfacthd.framedblocks.client.render.debug.impl.QuadWindingDebugRenderer;
 
-public final class DebugRenderersImpl implements DebugRenderers
-{
+public final class DebugRenderersImpl implements DebugRenderers {
     @Override
-    public BlockDebugRenderer<IFramedBlockEntity> connectionPredicate()
-    {
+    public BlockDebugRenderer<IFramedBlockEntity> connectionPredicate() {
         return ConnectionPredicateDebugRenderer.INSTANCE;
     }
 
     @Override
-    public BlockDebugRenderer<IFramedBlockEntity> quadWinding()
-    {
+    public BlockDebugRenderer<IFramedBlockEntity> quadWinding() {
         return QuadWindingDebugRenderer.INSTANCE;
     }
 
     @Override
-    public BlockDebugRenderer<FramedDoubleBlockEntity> doubleBlockPart()
-    {
+    public BlockDebugRenderer<FramedDoubleBlockEntity> doubleBlockPart() {
         return DoubleBlockPartDebugRenderer.INSTANCE;
     }
 }

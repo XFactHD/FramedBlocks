@@ -14,8 +14,7 @@ import net.minecraft.world.level.block.state.properties.WallSide;
 import org.joml.Vector4f;
 import org.jspecify.annotations.Nullable;
 
-public class FramedWallGeometry extends Geometry
-{
+public class FramedWallGeometry extends Geometry {
     private static final Vector4f[] rects = new Vector4f[] { //Wall half segment top/bottom rects
             new Vector4f( 5F/16F,      0F, 11F/16F,  5F/16F), //North
             new Vector4f( 5F/16F, 11F/16F, 11F/16F,      1F), //South
@@ -38,8 +37,7 @@ public class FramedWallGeometry extends Geometry
     private final WallSide south;
     private final WallSide west;
 
-    public FramedWallGeometry(GeometryFactory.Context ctx)
-    {
+    public FramedWallGeometry(GeometryFactory.Context ctx) {
         this.center = ctx.state().getValue(BlockStateProperties.UP);
         this.north = ctx.state().getValue(BlockStateProperties.NORTH_WALL);
         this.east =  ctx.state().getValue(BlockStateProperties.EAST_WALL);
@@ -48,23 +46,18 @@ public class FramedWallGeometry extends Geometry
     }
 
     @Override
-    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
-    {
-        if (north != WallSide.NONE)
-        {
+    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData) {
+        if (north != WallSide.NONE) {
             buildWallHalfSegment(quadMap, quad, Direction.NORTH, north);
         }
-        if (south != WallSide.NONE)
-        {
+        if (south != WallSide.NONE) {
             buildWallHalfSegment(quadMap, quad, Direction.SOUTH, south);
         }
 
-        if (east != WallSide.NONE)
-        {
+        if (east != WallSide.NONE) {
             buildWallHalfSegment(quadMap, quad, Direction.EAST, east);
         }
-        if (west != WallSide.NONE)
-        {
+        if (west != WallSide.NONE) {
             buildWallHalfSegment(quadMap, quad, Direction.WEST, west);
         }
 
@@ -76,22 +69,17 @@ public class FramedWallGeometry extends Geometry
         buildCenterPillar(quadMap, quad);
     }
 
-    private void buildWallHalfSegment(QuadMapBuilder quadMap, BakedQuad quad, Direction dir, WallSide height)
-    {
-        if (height != WallSide.NONE)
-        {
+    private void buildWallHalfSegment(QuadMapBuilder quadMap, BakedQuad quad, Direction dir, WallSide height) {
+        if (height != WallSide.NONE) {
             Direction quadDir = quad.direction();
-            if (DirUtils.isY(quadDir))
-            {
+            if (DirUtils.isY(quadDir)) {
                 Vector4f rect = rects[dir.ordinal() - 2 + (center ? 4 : 0)];
                 boolean inset = height != WallSide.TALL && quadDir != Direction.DOWN;
                 QuadModifier.of(quad)
                         .apply(Modifiers.cutTopBottom(rect.x(), rect.y(), rect.z(), rect.w()))
                         .applyIf(Modifiers.setPosition(LOW_HEIGHT), inset)
                         .export(quadMap, inset ? null : quadDir);
-            }
-            else if (quadDir.getAxis() != dir.getAxis())
-            {
+            } else if (quadDir.getAxis() != dir.getAxis()) {
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(dir.getOpposite(), center ? LARGE_MIN : SMALL_MIN))
                         .applyIf(Modifiers.cut(Direction.UP, LOW_HEIGHT), height != WallSide.TALL)
@@ -101,43 +89,32 @@ public class FramedWallGeometry extends Geometry
         }
     }
 
-    private static void buildWallEndCap(QuadMapBuilder quadMap, BakedQuad quad, Direction dir, WallSide height)
-    {
-        if (quad.direction() == dir && height != WallSide.NONE)
-        {
+    private static void buildWallEndCap(QuadMapBuilder quadMap, BakedQuad quad, Direction dir, WallSide height) {
+        if (quad.direction() == dir && height != WallSide.NONE) {
             QuadModifier.of(quad)
                     .apply(Modifiers.cutSide(SMALL_MIN, 0, SMALL_MAX, height == WallSide.TALL ? 1F : LOW_HEIGHT))
                     .export(quadMap, dir);
         }
     }
 
-    private void buildCenterPillar(QuadMapBuilder quadMap, BakedQuad quad)
-    {
+    private void buildCenterPillar(QuadMapBuilder quadMap, BakedQuad quad) {
         Direction quadDir = quad.direction();
-        if (center)
-        {
-            if (DirUtils.isY(quadDir))
-            {
+        if (center) {
+            if (DirUtils.isY(quadDir)) {
                 QuadModifier.of(quad)
                         .apply(Modifiers.cutTopBottom(LARGE_MIN, LARGE_MIN, LARGE_MAX, LARGE_MAX))
                         .export(quadMap, quadDir);
-            }
-            else
-            {
+            } else {
                 QuadModifier.of(quad)
                         .apply(Modifiers.cutSide(LARGE_MIN, 0, LARGE_MAX, 1))
                         .apply(Modifiers.setPosition(LARGE_MAX))
                         .export(quadMap, null);
             }
-        }
-        else
-        {
+        } else {
             boolean tall = north == WallSide.TALL || east == WallSide.TALL || south == WallSide.TALL || west == WallSide.TALL;
 
-            switch (quadDir)
-            {
-                case UP, DOWN ->
-                {
+            switch (quadDir) {
+                case UP, DOWN -> {
                     boolean inset = !tall && quadDir == Direction.UP;
                     QuadModifier.of(quad)
                             .apply(Modifiers.cutTopBottom(SMALL_MIN, SMALL_MIN, SMALL_MAX, SMALL_MAX))
@@ -152,17 +129,13 @@ public class FramedWallGeometry extends Geometry
         }
     }
 
-    private static void buildSmallCenterSide(QuadMapBuilder quadMap, BakedQuad quad, WallSide height, boolean tall)
-    {
-        if (height == WallSide.NONE)
-        {
+    private static void buildSmallCenterSide(QuadMapBuilder quadMap, BakedQuad quad, WallSide height, boolean tall) {
+        if (height == WallSide.NONE) {
             QuadModifier.of(quad)
                     .apply(Modifiers.cutSide(SMALL_MIN, 0, SMALL_MAX, tall ? 1 : LOW_HEIGHT))
                     .apply(Modifiers.setPosition(SMALL_MAX))
                     .export(quadMap, null);
-        }
-        else if (tall && height == WallSide.LOW)
-        {
+        } else if (tall && height == WallSide.LOW) {
             QuadModifier.of(quad)
                     .apply(Modifiers.cutSide(SMALL_MIN, LOW_HEIGHT, SMALL_MAX, 1))
                     .apply(Modifiers.setPosition(SMALL_MAX))

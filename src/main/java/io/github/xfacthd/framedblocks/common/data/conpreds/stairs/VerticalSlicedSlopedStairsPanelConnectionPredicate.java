@@ -9,30 +9,24 @@ import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jspecify.annotations.Nullable;
 
-public final class VerticalSlicedSlopedStairsPanelConnectionPredicate extends NonDetailedConnectionPredicate
-{
+public final class VerticalSlicedSlopedStairsPanelConnectionPredicate extends NonDetailedConnectionPredicate {
     @Override
-    public boolean canConnectFullEdge(BlockState state, Direction side, @Nullable Direction edge)
-    {
+    public boolean canConnectFullEdge(BlockState state, Direction side, @Nullable Direction edge) {
         Direction facing = state.getValue(FramedProperties.FACING_HOR);
         HorizontalRotation rot = state.getValue(PropertyHolder.ROTATION);
         Direction dirTwo = rot.getOpposite().withFacing(facing);
         Direction dirThree = rot.rotate(Rotation.CLOCKWISE_90).withFacing(facing);
 
-        if (side == facing)
-        {
+        if (side == facing) {
             return true;
         }
-        if (side == facing.getOpposite())
-        {
+        if (side == facing.getOpposite()) {
             return edge == dirTwo || edge == dirThree;
         }
-        if (side == dirTwo || side == dirThree)
-        {
+        if (side == dirTwo || side == dirThree) {
             return edge == facing || edge == facing.getOpposite();
         }
-        if (side == dirTwo.getOpposite() || side == dirThree.getOpposite())
-        {
+        if (side == dirTwo.getOpposite() || side == dirThree.getOpposite()) {
             return edge == facing;
         }
         return false;

@@ -18,8 +18,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-public final class OverlayQuadGenerator
-{
+public final class OverlayQuadGenerator {
     private static final Map<OverlayCacheKey, BakedQuad> OVERLAY_CACHE = new ConcurrentHashMap<>();
 
     public static void generate(
@@ -29,25 +28,23 @@ public final class OverlayQuadGenerator
             Predicate<Direction> filter,
             boolean forceTranslucent,
             boolean forceEmissive
-    )
-    {
+    ) {
         outQuads.ensureCapacity(outQuads.size() + srcQuads.size());
         Set<OverlayCacheKey> uniqueKeys = new HashSet<>(srcQuads.size());
-        for (BakedQuad quad : srcQuads)
-        {
-            if (!filter.test(quad.direction())) continue;
+        for (BakedQuad quad : srcQuads) {
+            if (!filter.test(quad.direction())) {
+                continue;
+            }
 
             Material.Baked spriteInfo = spriteGetter.apply(quad.direction());
             OverlayCacheKey key = new OverlayCacheKey(quad, spriteInfo, forceTranslucent, forceEmissive);
-            if (uniqueKeys.add(key))
-            {
+            if (uniqueKeys.add(key)) {
                 outQuads.add(OVERLAY_CACHE.computeIfAbsent(key, OverlayQuadGenerator::generateOverlayQuad));
             }
         }
     }
 
-    private static BakedQuad generateOverlayQuad(OverlayCacheKey key)
-    {
+    private static BakedQuad generateOverlayQuad(OverlayCacheKey key) {
         Material.Baked material = key.material();
         boolean forceTranslucent = material.forceTranslucent() || key.forceTranslucent();
         Transparency transparency = forceTranslucent ? Transparency.TRANSLUCENT : material.sprite().transparency();
@@ -62,8 +59,7 @@ public final class OverlayQuadGenerator
             Transparency transparency,
             boolean emissive,
             int tintIndex
-    )
-    {
+    ) {
         MutableQuad quad = new MutableQuad();
 
         quad.setSprite(material, transparency);
@@ -71,12 +67,10 @@ public final class OverlayQuadGenerator
         quad.setAmbientOcclusion(!emissive);
         quad.setShade(!emissive);
         quad.setTintIndex(tintIndex);
-        if (emissive)
-        {
+        if (emissive) {
             quad.setLightEmission(LightEngine.MAX_LEVEL);
         }
-        for (int i = 0; i < 4; i++)
-        {
+        for (int i = 0; i < 4; i++) {
             quad.setPosition(i, coords.pos(i));
         }
         quad.setNormal(normals);
@@ -85,13 +79,11 @@ public final class OverlayQuadGenerator
         return quad.toBakedQuad();
     }
 
-    public static void clearCaches()
-    {
+    public static void clearCaches() {
         OVERLAY_CACHE.clear();
     }
 
-    sealed interface VertexCoordProvider permits OverlayCacheKey, BlockOverlayCacheKey.QuadBounds
-    {
+    sealed interface VertexCoordProvider permits OverlayCacheKey, BlockOverlayCacheKey.QuadBounds {
         Vector3fc pos(int index);
     }
 

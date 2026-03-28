@@ -6,29 +6,23 @@ import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jspecify.annotations.Nullable;
 
-public abstract class AbstractBlockCamoContainer<T extends AbstractBlockCamoContainer<T>> extends CamoContainer<BlockCamoContent, T>
-{
-    protected AbstractBlockCamoContainer(BlockState state)
-    {
+public abstract class AbstractBlockCamoContainer<T extends AbstractBlockCamoContainer<T>> extends CamoContainer<BlockCamoContent, T> {
+    protected AbstractBlockCamoContainer(BlockState state) {
         super(new BlockCamoContent(state));
     }
 
-    public final BlockState getState()
-    {
+    public final BlockState getState() {
         return content.getState();
     }
 
     @Override
-    public boolean canRotateCamo()
-    {
+    public boolean canRotateCamo() {
         BlockState state = content.getState();
         return BlockCamoRotator.of(state.getBlock()).canRotate(state);
     }
 
     @Override
-    @Nullable
-    public T rotateCamo()
-    {
+    public @Nullable T rotateCamo() {
         BlockState state = content.getState();
         BlockState newState = BlockCamoRotator.of(state.getBlock()).rotate(state);
         return newState != null ? copyWithState(newState) : null;
@@ -36,8 +30,7 @@ public abstract class AbstractBlockCamoContainer<T extends AbstractBlockCamoCont
 
     @Override
     @SuppressWarnings({ "unchecked", "deprecation" })
-    public T adjustForCarrierRotation(Rotation rotation)
-    {
+    public T adjustForCarrierRotation(Rotation rotation) {
         BlockState state = content.getState();
         BlockState newState = state.rotate(rotation);
         return state != newState ? copyWithState(newState) : (T) this;
@@ -49,8 +42,7 @@ public abstract class AbstractBlockCamoContainer<T extends AbstractBlockCamoCont
      * such as custom item interactions.
      */
     @SuppressWarnings("unchecked")
-    public final T copyWithState(BlockState state)
-    {
+    public final T copyWithState(BlockState state) {
         return getFactory().copyContainerWithState((T) this, state);
     }
 

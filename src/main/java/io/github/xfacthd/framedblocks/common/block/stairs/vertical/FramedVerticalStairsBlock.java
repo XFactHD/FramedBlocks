@@ -28,24 +28,19 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.Set;
 
-public class FramedVerticalStairsBlock extends FramedBlock implements ShapeLockableBlock
-{
-    public FramedVerticalStairsBlock(BlockType type, Properties props)
-    {
+public class FramedVerticalStairsBlock extends FramedBlock implements ShapeLockableBlock {
+    public FramedVerticalStairsBlock(BlockType type, Properties props) {
         super(type, props);
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
-    {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
         builder.add(FramedProperties.FACING_HOR, PropertyHolder.STAIRS_TYPE);
     }
 
     @Override
-    @Nullable
-    public BlockState getStateForPlacement(BlockPlaceContext ctx)
-    {
+    public @Nullable BlockState getStateForPlacement(BlockPlaceContext ctx) {
         return PlacementStateBuilder.of(this, ctx)
                 .withHalfFacing()
                 .withCustom((state, modCtx) -> getStateFromContext(state, modCtx.getLevel(), modCtx.getClickedPos()))
@@ -63,20 +58,16 @@ public class FramedVerticalStairsBlock extends FramedBlock implements ShapeLocka
             BlockPos adjPos,
             BlockState adjState,
             RandomSource random
-    )
-    {
+    ) {
         Direction dir = state.getValue(FramedProperties.FACING_HOR);
-        if (side != dir.getOpposite() && side != dir.getClockWise())
-        {
+        if (side != dir.getOpposite() && side != dir.getClockWise()) {
             state = getStateFromContext(state, level, pos);
         }
         return super.updateShape(state, level, tickAccess, pos, side, adjPos, adjState, random);
     }
 
-    private static BlockState getStateFromContext(BlockState state, LevelReader level, BlockPos pos)
-    {
-        if (state.getValue(FramedProperties.STATE_LOCKED))
-        {
+    private static BlockState getStateFromContext(BlockState state, LevelReader level, BlockPos pos) {
+        if (state.getValue(FramedProperties.STATE_LOCKED)) {
             return state;
         }
 
@@ -85,26 +76,19 @@ public class FramedVerticalStairsBlock extends FramedBlock implements ShapeLocka
         BlockState front = level.getBlockState(pos.relative(dir));
         BlockState left = level.getBlockState(pos.relative(dir.getCounterClockWise()));
 
-        if (isNoStair(front) && isNoStair(left))
-        {
+        if (isNoStair(front) && isNoStair(left)) {
             return state.setValue(PropertyHolder.STAIRS_TYPE, StairsType.VERTICAL);
-        }
-        else
-        {
+        } else {
             boolean topCornerFront = false;
             boolean bottomCornerFront = false;
 
-            if (front.getBlock() instanceof StairBlock && front.getValue(BlockStateProperties.HORIZONTAL_FACING) == dir.getCounterClockWise())
-            {
+            if (front.getBlock() instanceof StairBlock && front.getValue(BlockStateProperties.HORIZONTAL_FACING) == dir.getCounterClockWise()) {
                 topCornerFront = front.getValue(BlockStateProperties.HALF) == Half.BOTTOM;
                 bottomCornerFront = front.getValue(BlockStateProperties.HALF) == Half.TOP;
-            }
-            else if (front.getBlock() instanceof FramedHalfStairsBlock && front.getValue(FramedProperties.FACING_HOR) == dir.getCounterClockWise())
-            {
+            } else if (front.getBlock() instanceof FramedHalfStairsBlock && front.getValue(FramedProperties.FACING_HOR) == dir.getCounterClockWise()) {
                 boolean top = front.getValue(FramedProperties.TOP);
 
-                if (!front.getValue(PropertyHolder.RIGHT))
-                {
+                if (!front.getValue(PropertyHolder.RIGHT)) {
                     topCornerFront = !top;
                     bottomCornerFront = top;
                 }
@@ -113,17 +97,13 @@ public class FramedVerticalStairsBlock extends FramedBlock implements ShapeLocka
             boolean topCornerLeft = false;
             boolean bottomCornerLeft = false;
 
-            if (left.getBlock() instanceof StairBlock && left.getValue(BlockStateProperties.HORIZONTAL_FACING) == dir)
-            {
+            if (left.getBlock() instanceof StairBlock && left.getValue(BlockStateProperties.HORIZONTAL_FACING) == dir) {
                 topCornerLeft = left.getValue(BlockStateProperties.HALF) == Half.BOTTOM;
                 bottomCornerLeft = left.getValue(BlockStateProperties.HALF) == Half.TOP;
-            }
-            else if (left.getBlock() instanceof FramedHalfStairsBlock && left.getValue(FramedProperties.FACING_HOR) == dir)
-            {
+            } else if (left.getBlock() instanceof FramedHalfStairsBlock && left.getValue(FramedProperties.FACING_HOR) == dir) {
                 boolean top = left.getValue(FramedProperties.TOP);
 
-                if (left.getValue(PropertyHolder.RIGHT))
-                {
+                if (left.getValue(PropertyHolder.RIGHT)) {
                     topCornerLeft = !top;
                     bottomCornerLeft = top;
                 }
@@ -133,33 +113,20 @@ public class FramedVerticalStairsBlock extends FramedBlock implements ShapeLocka
             BlockState below = level.getBlockState(pos.below());
 
             StairsType type = StairsType.VERTICAL;
-            if ((topCornerFront || topCornerLeft) && !(above.getBlock() instanceof FramedVerticalStairsBlock))
-            {
-                if (!topCornerLeft)
-                {
+            if ((topCornerFront || topCornerLeft) && !(above.getBlock() instanceof FramedVerticalStairsBlock)) {
+                if (!topCornerLeft) {
                     type = StairsType.TOP_FWD;
-                }
-                else if (!topCornerFront)
-                {
+                } else if (!topCornerFront) {
                     type = StairsType.TOP_CCW;
-                }
-                else
-                {
+                } else {
                     type = StairsType.TOP_BOTH;
                 }
-            }
-            else if ((bottomCornerFront || bottomCornerLeft) && !(below.getBlock() instanceof FramedVerticalStairsBlock))
-            {
-                if (!bottomCornerLeft)
-                {
+            } else if ((bottomCornerFront || bottomCornerLeft) && !(below.getBlock() instanceof FramedVerticalStairsBlock)) {
+                if (!bottomCornerLeft) {
                     type = StairsType.BOTTOM_FWD;
-                }
-                else if (!bottomCornerFront)
-                {
+                } else if (!bottomCornerFront) {
                     type = StairsType.BOTTOM_CCW;
-                }
-                else
-                {
+                } else {
                     type = StairsType.BOTTOM_BOTH;
                 }
             }
@@ -168,44 +135,37 @@ public class FramedVerticalStairsBlock extends FramedBlock implements ShapeLocka
         }
     }
 
-    private static boolean isNoStair(BlockState state)
-    {
+    private static boolean isNoStair(BlockState state) {
         return !(state.getBlock() instanceof StairBlock) && !(state.getBlock() instanceof FramedHalfStairsBlock);
     }
 
     @Override
-    protected BlockState rotate(BlockState state, Rotation rotation)
-    {
+    protected BlockState rotate(BlockState state, Rotation rotation) {
         return BlockUtils.rotate(state, rotation);
     }
 
     @Override
-    protected BlockState mirror(BlockState state, Mirror mirror)
-    {
+    protected BlockState mirror(BlockState state, Mirror mirror) {
         return BlockUtils.mirrorCornerBlock(state, mirror);
     }
 
     @Override
-    public Set<Property<?>> getPropertiesToCopy()
-    {
+    public Set<Property<?>> getPropertiesToCopy() {
         return Set.of(PropertyHolder.STAIRS_TYPE);
     }
 
     @Override
-    public BlockState getItemModelSource()
-    {
+    public BlockState getItemModelSource() {
         return defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
     }
 
     @Override
-    public Direction getHorizontalOrientation(BlockState state)
-    {
+    public Direction getHorizontalOrientation(BlockState state) {
         return state.getValue(FramedProperties.FACING_HOR);
     }
 
     @Override
-    public BlockState getJadeRenderState(BlockState state)
-    {
+    public BlockState getJadeRenderState(BlockState state) {
         return defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.WEST);
     }
 }

@@ -12,18 +12,15 @@ import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 
-public final class SlabCornerShapes
-{
-    public static ShapeContainer generate(List<BlockState> states)
-    {
+public final class SlabCornerShapes {
+    public static ShapeContainer generate(List<BlockState> states) {
         Map<BlockState, VoxelShape> map = new IdentityHashMap<>(states.size());
 
         VoxelShape shapeBot = Block.box(0, 0, 0, 8,  8, 8);
         VoxelShape shapeTop = Block.box(0, 8, 0, 8, 16, 8);
         VoxelShape[] shapes = ShapeUtils.makeHorizontalRotationsWithFlag(shapeBot, shapeTop, Direction.NORTH);
 
-        for (BlockState state : states)
-        {
+        for (BlockState state : states) {
             Direction dir = state.getValue(FramedProperties.FACING_HOR);
             boolean top = state.getValue(FramedProperties.TOP);
             map.put(state, shapes[dir.get2DDataValue() + (top ? 4 : 0)]);

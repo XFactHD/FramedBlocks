@@ -9,15 +9,12 @@ import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleProvider;
 import net.minecraft.util.RandomSource;
 
-public final class BlockOverlayParticle extends BlockAtlasSpriteParticle
-{
-    public BlockOverlayParticle(ClientLevel level, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed, BlockOverlay overlay)
-    {
+public final class BlockOverlayParticle extends BlockAtlasSpriteParticle {
+    public BlockOverlayParticle(ClientLevel level, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed, BlockOverlay overlay) {
         super(level, x, y, z, xSpeed, ySpeed, zSpeed, overlay.solidTexture());
 
         TintSource tintSource = overlay.tintSource();
-        if (tintSource != null)
-        {
+        if (tintSource != null) {
             int tint = TintUtils.getOverlayTintSource(tintSource).colorInWorld(tintSource.defaultBlockState(), level, pos);
             this.rCol = .6F * (float) (tint >> 16 & 0xFF) / 255F;
             this.gCol = .6F * (float) (tint >> 8 & 0xFF) / 255F;
@@ -25,8 +22,7 @@ public final class BlockOverlayParticle extends BlockAtlasSpriteParticle
         }
     }
 
-    public static final class Provider implements ParticleProvider<BlockOverlayParticleOptions>
-    {
+    public static final class Provider implements ParticleProvider<BlockOverlayParticleOptions> {
         @Override
         public Particle createParticle(
                 BlockOverlayParticleOptions options,
@@ -38,8 +34,7 @@ public final class BlockOverlayParticle extends BlockAtlasSpriteParticle
                 double sy,
                 double sz,
                 RandomSource random
-        )
-        {
+        ) {
             return new BlockOverlayParticle(level, x, y, z, sx, sy, sz, options.overlay().value());
         }
     }

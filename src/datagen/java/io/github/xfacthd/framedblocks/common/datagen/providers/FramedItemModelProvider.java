@@ -22,16 +22,13 @@ import net.neoforged.neoforge.common.conditions.ModLoadedCondition;
 import java.util.Objects;
 import java.util.stream.Stream;
 
-public final class FramedItemModelProvider extends AbstractFramedItemModelProvider
-{
-    public FramedItemModelProvider(PackOutput output)
-    {
+public final class FramedItemModelProvider extends AbstractFramedItemModelProvider {
+    public FramedItemModelProvider(PackOutput output) {
         super(output, FramedConstants.MOD_ID);
     }
 
     @Override
-    protected void registerModels(BlockModelGenerators blockModels, ItemModelGenerators itemModels)
-    {
+    protected void registerModels(BlockModelGenerators blockModels, ItemModelGenerators itemModels) {
         itemModels.generateFlatItem(FBContent.ITEM_FRAMED_HAMMER.value(), ModelTemplates.FLAT_HANDHELD_ITEM);
         itemModels.generateFlatItem(FBContent.ITEM_FRAMED_WRENCH.value(), ModelTemplates.FLAT_HANDHELD_ITEM);
         itemModels.generateFlatItem(FBContent.ITEM_FRAMED_KEY.value(), ModelTemplates.FLAT_HANDHELD_ITEM);
@@ -63,8 +60,7 @@ public final class FramedItemModelProvider extends AbstractFramedItemModelProvid
     }
 
     @Override
-    protected Stream<? extends Holder<Item>> getKnownItems()
-    {
+    protected Stream<? extends Holder<Item>> getKnownItems() {
         return Stream.of(
                 FBContent.ITEM_FRAMED_HAMMER,
                 FBContent.ITEM_FRAMED_WRENCH,

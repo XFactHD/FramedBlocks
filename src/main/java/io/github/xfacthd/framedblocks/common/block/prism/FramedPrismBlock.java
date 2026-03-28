@@ -18,48 +18,36 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.Nullable;
 
-public class FramedPrismBlock extends FramedBlock implements IFramedPrismBlock, SlopeToggleBlock
-{
-    public FramedPrismBlock(BlockType type, Properties props)
-    {
+public class FramedPrismBlock extends FramedBlock implements PrismBlock, SlopeToggleBlock {
+    public FramedPrismBlock(BlockType type, Properties props) {
         super(type, props);
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
-    {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
         builder.add(PropertyHolder.FACING_AXIS);
     }
 
     @Override
-    @Nullable
-    public BlockState getStateForPlacement(BlockPlaceContext context)
-    {
+    public @Nullable BlockState getStateForPlacement(BlockPlaceContext context) {
         return getStateForPlacement(context, this);
     }
 
-    @Nullable
-    public static BlockState getStateForPlacement(BlockPlaceContext ctx, Block block)
-    {
+    public static @Nullable BlockState getStateForPlacement(BlockPlaceContext ctx, Block block) {
         return PlacementStateBuilder.of(block, ctx)
-                .withCustom((state, modCtx) ->
-                {
+                .withCustom((state, modCtx) -> {
                     Direction face = modCtx.getClickedFace();
                     Direction.Axis axis = modCtx.getHorizontalDirection().getAxis();
-                    if (!DirUtils.isY(face))
-                    {
+                    if (!DirUtils.isY(face)) {
                         Vec3 subHit = MathUtils.fraction(modCtx.getClickLocation());
 
                         double xz = (DirUtils.isX(face) ? subHit.z() : subHit.x()) - .5;
                         double y = subHit.y() - .5;
 
-                        if (Math.max(Math.abs(xz), Math.abs(y)) == Math.abs(xz))
-                        {
+                        if (Math.max(Math.abs(xz), Math.abs(y)) == Math.abs(xz)) {
                             axis = face.getClockWise().getAxis();
-                        }
-                        else
-                        {
+                        } else {
                             axis = Direction.Axis.Y;
                         }
                     }
@@ -71,42 +59,38 @@ public class FramedPrismBlock extends FramedBlock implements IFramedPrismBlock, 
     }
 
     @Override
-    protected BlockState rotate(BlockState state, Rotation rotation)
-    {
+    protected BlockState rotate(BlockState state, Rotation rotation) {
         DirectionAxis dirAxis = state.getValue(PropertyHolder.FACING_AXIS);
         return state.setValue(PropertyHolder.FACING_AXIS, dirAxis.rotate(rotation));
     }
 
     @Override
-    protected BlockState mirror(BlockState state, Mirror mirror)
-    {
+    protected BlockState mirror(BlockState state, Mirror mirror) {
         DirectionAxis dirAxis = state.getValue(PropertyHolder.FACING_AXIS);
         return state.setValue(PropertyHolder.FACING_AXIS, dirAxis.mirror(mirror));
     }
 
     @Override
-    public BlockState getItemModelSource()
-    {
+    public BlockState getItemModelSource() {
         return defaultBlockState().setValue(PropertyHolder.FACING_AXIS, DirectionAxis.UP_X);
     }
 
     @Override
-    public Direction getHorizontalOrientation(BlockState state)
-    {
+    public Direction getHorizontalOrientation(BlockState state) {
         DirectionAxis dirAxis = state.getValue(PropertyHolder.FACING_AXIS);
-        if (!DirUtils.isY(dirAxis.direction())) return dirAxis.direction();
+        if (!DirUtils.isY(dirAxis.direction())) {
+            return dirAxis.direction();
+        }
         return DirUtils.getHorizontalDirection(dirAxis.axis());
     }
 
     @Override
-    public BlockState getJadeRenderState(BlockState state)
-    {
+    public BlockState getJadeRenderState(BlockState state) {
         return getItemModelSource();
     }
 
     @Override
-    public boolean isInnerPrism()
-    {
+    public boolean isInnerPrism() {
         return getBlockType() != BlockType.FRAMED_PRISM;
     }
 }

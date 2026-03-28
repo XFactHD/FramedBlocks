@@ -24,13 +24,11 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.function.Consumer;
 
-public final class SpecialTestCommand
-{
+public final class SpecialTestCommand {
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("uuuu_MM_dd-kk_mm_ss");
     private static final Path EXPORT_DIR = Path.of("./logs/test");
 
-    public static void registerCommands(RegisterCommandsEvent event)
-    {
+    public static void registerCommands(RegisterCommandsEvent event) {
         event.getDispatcher().register(Commands.literal("fbtest")
                 .then(Commands.literal("skippredicates")
                         .then(Commands.literal("errors")
@@ -54,7 +52,7 @@ public final class SpecialTestCommand
                                 .then(Commands.argument("state", BlockStateArgument.block(event.getBuildContext()))
                                         .executes(ctx -> ChunkBanTest.startChunkBanTest(ctx, true))
                                 )
-                                .executes(ctx-> ChunkBanTest.startChunkBanTest(ctx, false))
+                                .executes(ctx -> ChunkBanTest.startChunkBanTest(ctx, false))
                         )
                 )
                 .then(Commands.literal("stateinfo")
@@ -76,10 +74,8 @@ public final class SpecialTestCommand
         );
     }
 
-    private static int reloadShapes(CommandContext<CommandSourceStack> ctx)
-    {
-        if (ShapeReloader.reload())
-        {
+    private static int reloadShapes(CommandContext<CommandSourceStack> ctx) {
+        if (ShapeReloader.reload()) {
             ctx.getSource().sendSuccess(() -> Component.literal("Shapes reloaded"), false);
             return Command.SINGLE_SUCCESS;
         }
@@ -88,10 +84,8 @@ public final class SpecialTestCommand
         return 0;
     }
 
-    private static Command<CommandSourceStack> async(String testName, AsyncCommand cmd)
-    {
-        return ctx ->
-        {
+    private static Command<CommandSourceStack> async(String testName, AsyncCommand cmd) {
+        return ctx -> {
             ctx.getSource().sendSuccess(() -> Component.literal("Starting " + testName + " test"), false);
 
             Consumer<Component> appender = msg -> ctx.getSource().getServer().submit(() ->
@@ -103,16 +97,11 @@ public final class SpecialTestCommand
         };
     }
 
-    public static void runGuardedOffThread(String testName, Consumer<Component> msgQueueAppender, Runnable test)
-    {
-        Util.backgroundExecutor().execute(() ->
-        {
-            try
-            {
+    public static void runGuardedOffThread(String testName, Consumer<Component> msgQueueAppender, Runnable test) {
+        Util.backgroundExecutor().execute(() -> {
+            try {
                 test.run();
-            }
-            catch (Throwable t)
-            {
+            } catch (Throwable t) {
                 msgQueueAppender.accept(Component.literal(
                         "Encountered an uncaught error while testing " + testName + ". See log for details"
                 ));
@@ -121,27 +110,21 @@ public final class SpecialTestCommand
         });
     }
 
-    public static Component writeResultToFile(String filePrefix, String data)
-    {
+    public static Component writeResultToFile(String filePrefix, String data) {
         return writeResultToFile(filePrefix, "txt", data);
     }
 
-    public static Component writeResultToFile(String filePrefix, String fileType, String data)
-    {
-        try
-        {
+    public static Component writeResultToFile(String filePrefix, String fileType, String data) {
+        try {
             Files.createDirectories(EXPORT_DIR);
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
         String dateTime = FORMATTER.format(LocalDateTime.now());
         Path path = EXPORT_DIR.resolve("%s_%s.%s".formatted(filePrefix, dateTime, fileType));
 
-        try
-        {
+        try {
             Files.writeString(path, data, StandardOpenOption.WRITE, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
 
             String pathText = path.toAbsolutePath().toString();
@@ -150,9 +133,7 @@ public final class SpecialTestCommand
                             .applyFormat(ChatFormatting.UNDERLINE)
             );
             return Component.literal("Tests results exported to ").append(pathComponent);
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             FramedBlocks.LOGGER.error("Encountered an error while exporting test results", e);
             return Component.literal("Export of test results failed with error: %s: %s".formatted(
                     e.getClass().getSimpleName(), e.getMessage()
@@ -160,8 +141,7 @@ public final class SpecialTestCommand
         }
     }
 
-    public interface AsyncCommand
-    {
+    public interface AsyncCommand {
         void run(CommandContext<CommandSourceStack> ctx, Consumer<Component> msgQueueAppender);
     }
 

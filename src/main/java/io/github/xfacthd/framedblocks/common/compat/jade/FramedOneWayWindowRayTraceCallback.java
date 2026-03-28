@@ -12,39 +12,30 @@ import snownee.jade.api.BlockAccessor;
 import snownee.jade.api.IWailaClientRegistration;
 import snownee.jade.api.callback.JadeRayTraceCallback;
 
-final class FramedOneWayWindowRayTraceCallback implements JadeRayTraceCallback
-{
+final class FramedOneWayWindowRayTraceCallback implements JadeRayTraceCallback {
     private final IWailaClientRegistration registration;
 
-    public FramedOneWayWindowRayTraceCallback(IWailaClientRegistration registration)
-    {
+    public FramedOneWayWindowRayTraceCallback(IWailaClientRegistration registration) {
         this.registration = registration;
     }
 
     @Override
-    @Nullable
-    public Accessor<?> onRayTrace(HitResult hitResult, @Nullable Accessor<?> accessor, @Nullable Accessor<?> originalAccessor)
-    {
-        if (accessor instanceof BlockAccessor blockAccessor && blockAccessor.getBlockState().is(FBContent.BLOCK_FRAMED_ONE_WAY_WINDOW))
-        {
+    public @Nullable Accessor<?> onRayTrace(HitResult hitResult, @Nullable Accessor<?> accessor, @Nullable Accessor<?> originalAccessor) {
+        if (accessor instanceof BlockAccessor blockAccessor && blockAccessor.getBlockState().is(FBContent.BLOCK_FRAMED_ONE_WAY_WINDOW)) {
             Direction face = blockAccessor.getBlockState().getValue(PropertyHolder.NULLABLE_FACE).toNullableDirection();
-            if (face == null || face == blockAccessor.getSide())
-            {
+            if (face == null || face == blockAccessor.getSide()) {
                 return accessor;
             }
 
-            if (!(blockAccessor.getBlockEntity() instanceof FramedOwnableBlockEntity be))
-            {
+            if (!(blockAccessor.getBlockEntity() instanceof FramedOwnableBlockEntity be)) {
                 return accessor;
             }
-            if (be.getCamo().isEmpty() || (be.getOwner() != null && be.getOwner().equals(accessor.getPlayer().getUUID())))
-            {
+            if (be.getCamo().isEmpty() || (be.getOwner() != null && be.getOwner().equals(accessor.getPlayer().getUUID()))) {
                 return accessor;
             }
 
             BlockState camoState = be.getCamo().getContent().getAsBlockState();
-            if (!camoState.isAir())
-            {
+            if (!camoState.isAir()) {
                 return registration.blockAccessor()
                         .from(blockAccessor)
                         .blockEntity(() -> null)

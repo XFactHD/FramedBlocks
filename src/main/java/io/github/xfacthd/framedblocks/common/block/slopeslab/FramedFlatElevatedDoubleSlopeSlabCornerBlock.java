@@ -27,12 +27,10 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import org.jspecify.annotations.Nullable;
 
-public class FramedFlatElevatedDoubleSlopeSlabCornerBlock extends FramedDoubleBlock implements SlopeToggleBlock
-{
+public class FramedFlatElevatedDoubleSlopeSlabCornerBlock extends FramedDoubleBlock implements SlopeToggleBlock {
     private final boolean isInner;
 
-    public FramedFlatElevatedDoubleSlopeSlabCornerBlock(BlockType blockType, Properties props)
-    {
+    public FramedFlatElevatedDoubleSlopeSlabCornerBlock(BlockType blockType, Properties props) {
         super(blockType, props);
         this.isInner = blockType == BlockType.FRAMED_FLAT_ELEV_INNER_DOUBLE_SLOPE_SLAB_CORNER;
         registerDefaultState(defaultBlockState()
@@ -42,16 +40,13 @@ public class FramedFlatElevatedDoubleSlopeSlabCornerBlock extends FramedDoubleBl
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
-    {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
         builder.add(FramedProperties.FACING_HOR, FramedProperties.TOP);
     }
 
     @Override
-    @Nullable
-    public BlockState getStateForPlacement(BlockPlaceContext ctx)
-    {
+    public @Nullable BlockState getStateForPlacement(BlockPlaceContext ctx) {
         return PlacementStateBuilder.of(this, ctx)
                 .withHalfFacing()
                 .withTop()
@@ -59,39 +54,31 @@ public class FramedFlatElevatedDoubleSlopeSlabCornerBlock extends FramedDoubleBl
     }
 
     @Override
-    public BlockState rotate(BlockState state, RotationDirection direction, WrenchRotationMode mode)
-    {
-        return switch (mode)
-        {
+    public BlockState rotate(BlockState state, RotationDirection direction, WrenchRotationMode mode) {
+        return switch (mode) {
             case PRIMARY -> super.rotate(state, direction, mode);
             case SECONDARY -> state.cycle(FramedProperties.TOP);
         };
     }
 
     @Override
-    protected BlockState rotate(BlockState state, Rotation rotation)
-    {
+    protected BlockState rotate(BlockState state, Rotation rotation) {
         return BlockUtils.rotate(state, rotation);
     }
 
     @Override
-    protected BlockState mirror(BlockState state, Mirror mirror)
-    {
+    protected BlockState mirror(BlockState state, Mirror mirror) {
         return BlockUtils.mirrorCornerBlock(state, mirror);
     }
 
     @Override
-    public DoubleBlockParts calculateParts(BlockState state)
-    {
+    public DoubleBlockParts calculateParts(BlockState state) {
         BlockState defStateOne;
         BlockState defStateTwo;
-        if (getBlockType() == BlockType.FRAMED_FLAT_ELEV_INNER_DOUBLE_SLOPE_SLAB_CORNER)
-        {
+        if (getBlockType() == BlockType.FRAMED_FLAT_ELEV_INNER_DOUBLE_SLOPE_SLAB_CORNER) {
             defStateOne = FBContent.BLOCK_FRAMED_FLAT_ELEVATED_INNER_SLOPE_SLAB_CORNER.value().defaultBlockState();
             defStateTwo = FBContent.BLOCK_FRAMED_FLAT_SLOPE_SLAB_CORNER.value().defaultBlockState();
-        }
-        else
-        {
+        } else {
             defStateOne = FBContent.BLOCK_FRAMED_FLAT_ELEVATED_SLOPE_SLAB_CORNER.value().defaultBlockState();
             defStateTwo = FBContent.BLOCK_FRAMED_FLAT_INNER_SLOPE_SLAB_CORNER.value().defaultBlockState();
         }
@@ -112,46 +99,33 @@ public class FramedFlatElevatedDoubleSlopeSlabCornerBlock extends FramedDoubleBl
     }
 
     @Override
-    public DoubleBlockTopInteractionMode calculateTopInteractionMode(BlockState state)
-    {
-        if (state.getValue(FramedProperties.TOP))
-        {
+    public DoubleBlockTopInteractionMode calculateTopInteractionMode(BlockState state) {
+        if (state.getValue(FramedProperties.TOP)) {
             return DoubleBlockTopInteractionMode.FIRST;
         }
         return DoubleBlockTopInteractionMode.SECOND;
     }
 
     @Override
-    public CamoGetter calculateCamoGetter(BlockState state, Direction side, @Nullable Direction edge)
-    {
+    public CamoGetter calculateCamoGetter(BlockState state, Direction side, @Nullable Direction edge) {
         boolean top = state.getValue(FramedProperties.TOP);
         Direction dirTwo = top ? Direction.UP : Direction.DOWN;
 
-        if (DirUtils.isY(side))
-        {
-            if (side == dirTwo)
-            {
+        if (DirUtils.isY(side)) {
+            if (side == dirTwo) {
                 return CamoGetter.FIRST;
-            }
-            else if (side == dirTwo.getOpposite())
-            {
+            } else if (side == dirTwo.getOpposite()) {
                 return CamoGetter.SECOND;
             }
         }
 
         Direction facing = state.getValue(FramedProperties.FACING_HOR);
-        if (isInner && (side == facing || side == facing.getCounterClockWise()))
-        {
+        if (isInner && (side == facing || side == facing.getCounterClockWise())) {
             return CamoGetter.FIRST;
-        }
-        else if (!DirUtils.isY(side))
-        {
-            if (edge == dirTwo)
-            {
+        } else if (!DirUtils.isY(side)) {
+            if (edge == dirTwo) {
                 return CamoGetter.FIRST;
-            }
-            else if (edge == dirTwo.getOpposite())
-            {
+            } else if (edge == dirTwo.getOpposite()) {
                 return CamoGetter.SECOND;
             }
         }
@@ -160,22 +134,15 @@ public class FramedFlatElevatedDoubleSlopeSlabCornerBlock extends FramedDoubleBl
     }
 
     @Override
-    public SolidityCheck calculateSolidityCheck(BlockState state, Direction side)
-    {
+    public SolidityCheck calculateSolidityCheck(BlockState state, Direction side) {
         boolean top = state.getValue(FramedProperties.TOP);
-        if (side == Direction.UP)
-        {
+        if (side == Direction.UP) {
             return top ? SolidityCheck.FIRST : SolidityCheck.SECOND;
-        }
-        else if (side == Direction.DOWN)
-        {
+        } else if (side == Direction.DOWN) {
             return top ? SolidityCheck.SECOND : SolidityCheck.FIRST;
-        }
-        else if (isInner)
-        {
+        } else if (isInner) {
             Direction facing = state.getValue(FramedProperties.FACING_HOR);
-            if (side == facing || side == facing.getCounterClockWise())
-            {
+            if (side == facing || side == facing.getCounterClockWise()) {
                 return SolidityCheck.FIRST;
             }
         }
@@ -183,26 +150,22 @@ public class FramedFlatElevatedDoubleSlopeSlabCornerBlock extends FramedDoubleBl
     }
 
     @Override
-    public FramedDoubleBlockEntity newBlockEntity(BlockPos pos, BlockState state)
-    {
+    public FramedDoubleBlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return new FramedFlatElevatedDoubleSlopeSlabCornerBlockEntity(pos, state);
     }
 
     @Override
-    public BlockState getItemModelSource()
-    {
+    public BlockState getItemModelSource() {
         return defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
     }
 
     @Override
-    public Direction getHorizontalOrientation(BlockState state)
-    {
+    public Direction getHorizontalOrientation(BlockState state) {
         return state.getValue(FramedProperties.FACING_HOR);
     }
 
     @Override
-    public BlockState getJadeRenderState(BlockState state)
-    {
+    public BlockState getJadeRenderState(BlockState state) {
         return defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.WEST);
     }
 }

@@ -9,49 +9,40 @@ import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jspecify.annotations.Nullable;
 
-public final class FlatExtendedInnerSlopePanelCornerConnectionPredicate implements ConnectionPredicate
-{
+public final class FlatExtendedInnerSlopePanelCornerConnectionPredicate implements ConnectionPredicate {
     @Override
-    public boolean canConnectFullEdge(BlockState state, Direction side, @Nullable Direction edge)
-    {
+    public boolean canConnectFullEdge(BlockState state, Direction side, @Nullable Direction edge) {
         Direction facing = state.getValue(FramedProperties.FACING_HOR);
         HorizontalRotation rot = state.getValue(PropertyHolder.ROTATION);
         Direction rotDir = rot.withFacing(facing);
         Direction perpRotDir = rot.rotate(Rotation.COUNTERCLOCKWISE_90).withFacing(facing);
 
-        if (side == facing || side == rotDir.getOpposite() || side == perpRotDir.getOpposite())
-        {
+        if (side == facing || side == rotDir.getOpposite() || side == perpRotDir.getOpposite()) {
             return true;
         }
-        else if (side == rotDir)
-        {
+        if (side == rotDir) {
             return edge == facing || edge == perpRotDir.getOpposite();
         }
-        else if (side == perpRotDir)
-        {
+        if (side == perpRotDir) {
             return edge == facing || edge == rotDir.getOpposite();
         }
         return false;
     }
 
     @Override
-    public boolean canConnectDetailed(BlockState state, Direction side, Direction edge)
-    {
+    public boolean canConnectDetailed(BlockState state, Direction side, Direction edge) {
         Direction facing = state.getValue(FramedProperties.FACING_HOR);
         HorizontalRotation rot = state.getValue(PropertyHolder.ROTATION);
         Direction rotDir = rot.withFacing(facing);
         Direction perpRotDir = rot.rotate(Rotation.COUNTERCLOCKWISE_90).withFacing(facing);
 
-        if (side == rotDir)
-        {
+        if (side == rotDir) {
             return edge == perpRotDir;
         }
-        else if (side == perpRotDir)
-        {
+        if (side == perpRotDir) {
             return edge == rotDir;
         }
-        else if (side == facing.getOpposite())
-        {
+        if (side == facing.getOpposite()) {
             return edge == rotDir || edge == perpRotDir;
         }
         return false;

@@ -13,18 +13,15 @@ import io.github.xfacthd.framedblocks.common.data.facepreds.slopeslab.*;
 import io.github.xfacthd.framedblocks.common.data.facepreds.stairs.*;
 import io.github.xfacthd.framedblocks.common.util.BlockTypeMap;
 
-public final class FullFacePredicates extends BlockTypeMap<FullFacePredicate>
-{
+public final class FullFacePredicates extends BlockTypeMap<FullFacePredicate> {
     public static final FullFacePredicates PREDICATES = new FullFacePredicates();
 
-    private FullFacePredicates()
-    {
+    private FullFacePredicates() {
         super(FullFacePredicate.FALSE);
     }
 
     @Override
-    protected void fill()
-    {
+    protected void fill() {
         put(BlockType.FRAMED_CUBE, FullFacePredicate.TRUE);
         put(BlockType.FRAMED_SLOPE, SlopeFullFacePredicate.INSTANCE);
         put(BlockType.FRAMED_DOUBLE_SLOPE, new DoubleSlopeFullFacePredicate());

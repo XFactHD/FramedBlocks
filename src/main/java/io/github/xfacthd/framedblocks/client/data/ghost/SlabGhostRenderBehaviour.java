@@ -10,22 +10,18 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jspecify.annotations.Nullable;
 
-public final class SlabGhostRenderBehaviour implements GhostRenderBehaviour
-{
+public final class SlabGhostRenderBehaviour implements GhostRenderBehaviour {
     @Override
-    @Nullable
-    public BlockState getRenderState(
+    public @Nullable BlockState getRenderState(
             ItemStack stack,
             @Nullable ItemStack proxiedStack,
             BlockHitResult hit,
             BlockPlaceContext ctx,
             BlockState hitState,
             int renderPass
-    )
-    {
+    ) {
         BlockState state = ctx.getLevel().getBlockState(ctx.getClickedPos());
-        if (state.getBlock() == FBContent.BLOCK_FRAMED_SLAB.value())
-        {
+        if (state.getBlock() == FBContent.BLOCK_FRAMED_SLAB.value()) {
             boolean top = state.getValue(FramedProperties.TOP);
             return state.setValue(FramedProperties.TOP, !top);
         }
@@ -41,11 +37,9 @@ public final class SlabGhostRenderBehaviour implements GhostRenderBehaviour
             BlockState hitState,
             BlockPos defaultPos,
             int renderPass
-    )
-    {
+    ) {
         BlockState state = ctx.getLevel().getBlockState(ctx.getClickedPos());
-        if (state.getBlock() == FBContent.BLOCK_FRAMED_SLAB.value())
-        {
+        if (state.getBlock() == FBContent.BLOCK_FRAMED_SLAB.value()) {
             return ctx.getClickedPos();
         }
         return defaultPos;
@@ -60,10 +54,8 @@ public final class SlabGhostRenderBehaviour implements GhostRenderBehaviour
             BlockState hitState,
             BlockState renderState,
             BlockPos renderPos
-    )
-    {
-        if (renderPos.equals(hit.getBlockPos()))
-        {
+    ) {
+        if (renderPos.equals(hit.getBlockPos())) {
             return true;
         }
         return GhostRenderBehaviour.super.canRenderAt(stack, proxiedStack, hit, ctx, hitState, renderState, renderPos);

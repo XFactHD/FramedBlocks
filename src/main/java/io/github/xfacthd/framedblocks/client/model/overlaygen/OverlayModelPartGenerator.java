@@ -17,51 +17,43 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 
-public final class OverlayModelPartGenerator implements OverlayPartGenerator
-{
+public final class OverlayModelPartGenerator implements OverlayPartGenerator {
     private final ObjectList<ExtendedBlockStateModelPart> staticParts;
     private final boolean forceEmissive;
     private final TriState ambientOcclusion;
     private final ObjectList<ExtendedBlockStateModelPart> generatedParts = new ObjectArrayList<>();
     private boolean flushed = false;
 
-    public OverlayModelPartGenerator(ObjectList<ExtendedBlockStateModelPart> staticParts, boolean forceEmissive, TriState ambientOcclusion)
-    {
+    public OverlayModelPartGenerator(ObjectList<ExtendedBlockStateModelPart> staticParts, boolean forceEmissive, TriState ambientOcclusion) {
         this.staticParts = staticParts;
         this.forceEmissive = forceEmissive;
         this.ambientOcclusion = ambientOcclusion;
     }
 
     @Override
-    public void generate(@Nullable Direction[] cullFaces, MaterialGetter materialGetter, Material.Baked primaryMaterial, NormalFilter normalFilter, @Nullable BlockState shaderState)
-    {
+    public void generate(@Nullable Direction[] cullFaces, MaterialGetter materialGetter, Material.Baked primaryMaterial, NormalFilter normalFilter, @Nullable BlockState shaderState) {
         Preconditions.checkState(!flushed, "OverlayPartGenerator was already flushed");
 
         QuadMapBuilderInternal quadMap = QuadMapBuilderInternal.create();
         int flags = 0;
-        for (ExtendedBlockStateModelPart part : staticParts)
-        {
+        for (ExtendedBlockStateModelPart part : staticParts) {
             flags |= part.materialFlags();
         }
         boolean forceTranslucent = (flags & BakedQuad.FLAG_TRANSLUCENT) != 0;
         boolean hasQuads = false;
-        for (BlockStateModelPart part : staticParts)
-        {
-            for (Direction side : cullFaces)
-            {
+        for (BlockStateModelPart part : staticParts) {
+            for (Direction side : cullFaces) {
                 ArrayList<BakedQuad> outQuads = quadMap.getOrCreate(side);
                 OverlayQuadGenerator.generate(part.getQuads(side), outQuads, materialGetter, normalFilter, forceTranslucent, forceEmissive);
                 hasQuads |= !outQuads.isEmpty();
             }
         }
-        if (hasQuads)
-        {
+        if (hasQuads) {
             generatedParts.add(new FramedBlockStateModelPart(quadMap.build(), ambientOcclusion, primaryMaterial, shaderState));
         }
     }
 
-    public void flush()
-    {
+    public void flush() {
         flushed = true;
         staticParts.addAll(generatedParts);
     }

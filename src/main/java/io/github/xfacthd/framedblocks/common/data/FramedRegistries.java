@@ -9,22 +9,19 @@ import net.neoforged.neoforge.registries.RegistryBuilder;
 
 import java.util.function.Consumer;
 
-public final class FramedRegistries
-{
+public final class FramedRegistries {
     public static final Registry<CamoContainerFactory<?>> CAMO_CONTAINER_FACTORIES = create(
             FramedConstants.CAMO_CONTAINER_FACTORY_REGISTRY_KEY,
             builder -> builder.sync(true)
     );
 
-    private static <T> Registry<T> create(ResourceKey<Registry<T>> key, Consumer<RegistryBuilder<T>> consumer)
-    {
+    private static <T> Registry<T> create(ResourceKey<Registry<T>> key, Consumer<RegistryBuilder<T>> consumer) {
         RegistryBuilder<T> builder = new RegistryBuilder<>(key);
         consumer.accept(builder);
         return builder.create();
     }
 
-    public static void onRegisterNewRegistries(NewRegistryEvent event)
-    {
+    public static void onRegisterNewRegistries(NewRegistryEvent event) {
         event.register(CAMO_CONTAINER_FACTORIES);
     }
 

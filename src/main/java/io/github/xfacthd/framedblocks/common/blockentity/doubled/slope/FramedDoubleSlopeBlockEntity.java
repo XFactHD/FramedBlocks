@@ -13,30 +13,24 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 
-public class FramedDoubleSlopeBlockEntity extends FramedDoubleBlockEntity
-{
-    public FramedDoubleSlopeBlockEntity(BlockPos pos, BlockState state)
-    {
+public class FramedDoubleSlopeBlockEntity extends FramedDoubleBlockEntity {
+    public FramedDoubleSlopeBlockEntity(BlockPos pos, BlockState state) {
         super(FBContent.BE_TYPE_DOUBLE_FRAMED_SLOPE.value(), pos, state);
     }
 
     @Override
-    protected boolean hitSecondary(BlockHitResult hit, Vec3 lookVec, Vec3 eyePos)
-    {
+    protected boolean hitSecondary(BlockHitResult hit, Vec3 lookVec, Vec3 eyePos) {
         SlopeType type = getBlockState().getValue(PropertyHolder.SLOPE_TYPE);
         Direction facing = getBlockState().getValue(FramedProperties.FACING_HOR);
         Direction side = hit.getDirection();
 
         Vec3 vec = MathUtils.fraction(hit.getLocation());
 
-        if (type == SlopeType.HORIZONTAL)
-        {
-            if (side == facing || side == facing.getCounterClockWise())
-            {
+        if (type == SlopeType.HORIZONTAL) {
+            if (side == facing || side == facing.getCounterClockWise()) {
                 return false;
             }
-            if (side == facing.getOpposite() || side == facing.getClockWise())
-            {
+            if (side == facing.getOpposite() || side == facing.getClockWise()) {
                 return true;
             }
 
@@ -44,35 +38,25 @@ public class FramedDoubleSlopeBlockEntity extends FramedDoubleBlockEntity
 
             if (DirUtils.isPositive(facing)) { secondary = !secondary; }
             return secondary;
-        }
-        else
-        {
+        } else {
             double hor = DirUtils.isX(facing) ? vec.x() : vec.z();
-            if (!DirUtils.isPositive(facing))
-            {
+            if (!DirUtils.isPositive(facing)) {
                 hor = 1D - hor;
             }
 
-            if (type == SlopeType.TOP)
-            {
-                if (side == facing || side == Direction.UP)
-                {
+            if (type == SlopeType.TOP) {
+                if (side == facing || side == Direction.UP) {
                     return false;
                 }
-                if (side == facing.getOpposite() || side == Direction.DOWN)
-                {
+                if (side == facing.getOpposite() || side == Direction.DOWN) {
                     return true;
                 }
                 return vec.y() <= (1D - hor);
-            }
-            else if (type == SlopeType.BOTTOM)
-            {
-                if (side == facing || side == Direction.DOWN)
-                {
+            } else if (type == SlopeType.BOTTOM) {
+                if (side == facing || side == Direction.DOWN) {
                     return false;
                 }
-                if (side == facing.getOpposite() || side == Direction.UP)
-                {
+                if (side == facing.getOpposite() || side == Direction.UP) {
                     return true;
                 }
                 return vec.y() >= hor;

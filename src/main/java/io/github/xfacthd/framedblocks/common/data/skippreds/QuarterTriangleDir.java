@@ -5,8 +5,7 @@ import net.minecraft.core.Direction;
 /**
  * Indicates in which direction the corner above the baseline points and whether the said corner is offset to the block center
  */
-public enum QuarterTriangleDir
-{
+public enum QuarterTriangleDir {
     NULL(Direction.UP, Direction.UP, false),
 
     NORTH_EAST_FALSE(Direction.NORTH, Direction.EAST, false),
@@ -45,17 +44,14 @@ public enum QuarterTriangleDir
     private final Direction cardTwo;
     private final boolean offset;
 
-    QuarterTriangleDir(Direction cardOne, Direction cardTwo, boolean offset)
-    {
+    QuarterTriangleDir(Direction cardOne, Direction cardTwo, boolean offset) {
         this.cardOne = cardOne;
         this.cardTwo = cardTwo;
         this.offset = offset;
     }
 
-    public QuarterTriangleDir getOpposite()
-    {
-        if (this == NULL)
-        {
+    public QuarterTriangleDir getOpposite() {
+        if (this == NULL) {
             return this;
         }
         return fromDirections(cardOne.getOpposite(), cardTwo.getOpposite(), offset);
@@ -65,27 +61,24 @@ public enum QuarterTriangleDir
      * {@return true if both {@code TriangleDir}s are not {@link QuarterTriangleDir#NULL} and the other
      * {@code TriangleDir} has the same edge directions}
      */
-    public boolean isEqualTo(QuarterTriangleDir other)
-    {
+    public boolean isEqualTo(QuarterTriangleDir other) {
         return this != NULL && this == other;
     }
 
-    public static QuarterTriangleDir fromDirections(Direction dirOne, Direction dirTwo, boolean offset)
-    {
+    public static QuarterTriangleDir fromDirections(Direction dirOne, Direction dirTwo, boolean offset) {
         QuarterTriangleDir dir = FROM_DIRS[dirOne.ordinal()][dirTwo.ordinal()][offset ? 1 : 0];
-        if (dir == null)
-        {
+        if (dir == null) {
             throw new IllegalArgumentException("Invalid direction pair: edge one:" + dirOne + ", edge two: " + dirTwo);
         }
         return dir;
     }
 
-    private static QuarterTriangleDir[][][] makeDirTable()
-    {
+    private static QuarterTriangleDir[][][] makeDirTable() {
         QuarterTriangleDir[][][] table = new QuarterTriangleDir[6][6][2];
-        for (QuarterTriangleDir dir : values())
-        {
-            if (dir == NULL) { continue; }
+        for (QuarterTriangleDir dir : values()) {
+            if (dir == NULL) {
+                continue;
+            }
 
             table[dir.cardOne.ordinal()][dir.cardTwo.ordinal()][dir.offset ? 1 : 0] = dir;
             table[dir.cardTwo.ordinal()][dir.cardOne.ordinal()][dir.offset ? 1 : 0] = dir;

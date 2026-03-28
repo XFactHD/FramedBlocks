@@ -13,10 +13,8 @@ import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 
-public final class HalfStairsShapes
-{
-    public static ShapeContainer generate(List<BlockState> states)
-    {
+public final class HalfStairsShapes {
+    public static ShapeContainer generate(List<BlockState> states) {
         Map<BlockState, VoxelShape> map = new IdentityHashMap<>(states.size());
 
         VoxelShape bottomLeft = ShapeUtils.orUnoptimized(
@@ -47,8 +45,7 @@ public final class HalfStairsShapes
         ShapeUtils.makeHorizontalRotations(topLeft, Direction.SOUTH, shapes, maskTop);
         ShapeUtils.makeHorizontalRotations(topRight, Direction.SOUTH, shapes, maskTop | maskRight);
 
-        for (BlockState state : states)
-        {
+        for (BlockState state : states) {
             Direction dir = state.getValue(FramedProperties.FACING_HOR);
             int top = state.getValue(FramedProperties.TOP) ? maskTop : 0;
             int right = state.getValue(PropertyHolder.RIGHT) ? maskRight : 0;

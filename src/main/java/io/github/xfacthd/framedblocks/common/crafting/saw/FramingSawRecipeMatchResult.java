@@ -6,8 +6,7 @@ import net.minecraft.network.chat.Component;
 
 import java.util.Locale;
 
-public enum FramingSawRecipeMatchResult
-{
+public enum FramingSawRecipeMatchResult {
     SUCCESS(true),
     CAMO_PRESENT(false),
     MATERIAL_VALUE(false),
@@ -44,13 +43,11 @@ public enum FramingSawRecipeMatchResult
     private final int additiveSlot;
     private final Component translation;
 
-    FramingSawRecipeMatchResult(boolean success)
-    {
+    FramingSawRecipeMatchResult(boolean success) {
         this(success, -1);
     }
 
-    FramingSawRecipeMatchResult(boolean success, int additiveSlot)
-    {
+    FramingSawRecipeMatchResult(boolean success, int additiveSlot) {
         this.success = success;
         this.additiveSlot = additiveSlot;
         this.translation = Utils.translate(
@@ -58,23 +55,19 @@ public enum FramingSawRecipeMatchResult
         ).withStyle(success ? ChatFormatting.GREEN : ChatFormatting.RED);
     }
 
-    public boolean success()
-    {
+    public boolean success() {
         return success;
     }
 
-    public int additiveSlot()
-    {
+    public int additiveSlot() {
         return additiveSlot;
     }
 
-    public Component translation()
-    {
+    public Component translation() {
         return translation;
     }
 
-    public static FramingSawRecipeMatchResult valueOf(int idx)
-    {
+    public static FramingSawRecipeMatchResult valueOf(int idx) {
         return VALUES[idx];
     }
 }

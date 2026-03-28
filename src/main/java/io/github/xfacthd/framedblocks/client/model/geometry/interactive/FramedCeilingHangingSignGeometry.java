@@ -19,8 +19,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.jspecify.annotations.Nullable;
 
-public class FramedCeilingHangingSignGeometry extends Geometry
-{
+public class FramedCeilingHangingSignGeometry extends Geometry {
     private static final BlockState AUX_SHADER_STATE = Blocks.OAK_HANGING_SIGN.defaultBlockState();
 
     private final BlockState state;
@@ -31,8 +30,7 @@ public class FramedCeilingHangingSignGeometry extends Geometry
     @Nullable
     private final QuadListModifier chainModifier;
 
-    public FramedCeilingHangingSignGeometry(GeometryFactory.Context ctx)
-    {
+    public FramedCeilingHangingSignGeometry(GeometryFactory.Context ctx) {
         this.state = ctx.state();
         this.baseModel = ctx.baseModel();
         int rotation = ctx.state().getValue(BlockStateProperties.ROTATION_16);
@@ -47,29 +45,23 @@ public class FramedCeilingHangingSignGeometry extends Geometry
     }
 
     @Override
-    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
-    {
+    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData) {
         Direction quadDir = quad.direction();
-        if (quadDir.getAxis() == dir.getAxis())
-        {
+        if (quadDir.getAxis() == dir.getAxis()) {
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(Direction.UP, 10F/16F))
                     .apply(Modifiers.cut(quadDir.getClockWise().getAxis(), 15F/16F))
                     .apply(Modifiers.setPosition(9F/16F))
                     .applyIf(Modifiers.rotateCentered(Direction.Axis.Y, rotDegrees, false), attached)
                     .export(quadMap, null);
-        }
-        else if (quadDir.getAxis() == dir.getClockWise().getAxis())
-        {
+        } else if (quadDir.getAxis() == dir.getClockWise().getAxis()) {
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(Direction.UP, 10F/16F))
                     .apply(Modifiers.cut(quadDir.getClockWise().getAxis(), 9F/16F))
                     .apply(Modifiers.setPosition(15F/16F))
                     .applyIf(Modifiers.rotateCentered(Direction.Axis.Y, rotDegrees, false), attached)
                     .export(quadMap, null);
-        }
-        else
-        {
+        } else {
             boolean up = quadDir == Direction.UP;
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(dir.getAxis(), 9F/16F))
@@ -81,8 +73,7 @@ public class FramedCeilingHangingSignGeometry extends Geometry
     }
 
     @Override
-    public void collectAdditionalPartsCached(PartConsumer consumer, BlockAndTintGetter level, BlockPos pos, RandomSource random, FramedBlockData blockData, @Nullable Object cacheKeyUserData)
-    {
+    public void collectAdditionalPartsCached(PartConsumer consumer, BlockAndTintGetter level, BlockPos pos, RandomSource random, FramedBlockData blockData, @Nullable Object cacheKeyUserData) {
         consumer.acceptAll(baseModel, level, pos, random, state, true, false, false, AUX_SHADER_STATE, chainModifier);
     }
 }

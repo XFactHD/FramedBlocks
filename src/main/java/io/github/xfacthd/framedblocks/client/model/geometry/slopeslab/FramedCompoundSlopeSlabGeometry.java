@@ -12,58 +12,46 @@ import net.minecraft.client.resources.model.geometry.BakedQuad;
 import net.minecraft.core.Direction;
 import org.jspecify.annotations.Nullable;
 
-public class FramedCompoundSlopeSlabGeometry extends Geometry
-{
+public class FramedCompoundSlopeSlabGeometry extends Geometry {
     private final Direction dir;
     private final boolean altSlope;
 
-    public FramedCompoundSlopeSlabGeometry(GeometryFactory.Context ctx)
-    {
+    public FramedCompoundSlopeSlabGeometry(GeometryFactory.Context ctx) {
         this.dir = ctx.state().getValue(FramedProperties.FACING_HOR);
         this.altSlope = ctx.state().getValue(FramedProperties.ALT_SLOPE);
     }
 
     @Override
-    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
-    {
+    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData) {
         Direction quadDir = quad.direction();
-        if (quadDir == dir)
-        {
+        if (quadDir == dir) {
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(Direction.DOWN, .5F))
                     .export(quadMap, quadDir);
 
-            if (!altSlope)
-            {
+            if (!altSlope) {
                 QuadModifier.of(quad)
                         .apply(Modifiers.makeVerticalSlope(false, FramedSlopeSlabGeometry.SLOPE_ANGLE))
                         .apply(Modifiers.offset(Direction.DOWN, .5F))
                         .export(quadMap, null);
             }
-        }
-        else if (quadDir == dir.getOpposite())
-        {
+        } else if (quadDir == dir.getOpposite()) {
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(Direction.UP, .5F))
                     .export(quadMap, quadDir);
 
-            if (!altSlope)
-            {
+            if (!altSlope) {
                 QuadModifier.of(quad)
                         .apply(Modifiers.makeVerticalSlope(true, FramedSlopeSlabGeometry.SLOPE_ANGLE))
                         .apply(Modifiers.offset(Direction.UP, .5F))
                         .export(quadMap, null);
             }
-        }
-        else if (altSlope && DirUtils.isY(quadDir))
-        {
+        } else if (altSlope && DirUtils.isY(quadDir)) {
             Direction edge = quadDir == Direction.UP ? dir.getOpposite() : dir;
             QuadModifier.of(quad)
                     .apply(Modifiers.makeVerticalSlope(edge, FramedSlopeSlabGeometry.SLOPE_ANGLE_VERT))
                     .export(quadMap, null);
-        }
-        else if (quadDir.getAxis() == dir.getClockWise().getAxis())
-        {
+        } else if (quadDir.getAxis() == dir.getClockWise().getAxis()) {
             boolean cw = quadDir == dir.getClockWise();
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(Direction.UP, cw ? .5F : 1F, cw ? 1F : .5F))

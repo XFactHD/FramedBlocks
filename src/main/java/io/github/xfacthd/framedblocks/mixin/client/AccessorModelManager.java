@@ -10,8 +10,7 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 import java.util.Map;
 
 @Mixin(ModelManager.class)
-public interface AccessorModelManager
-{
+public interface AccessorModelManager {
     @Accessor("bakedItemStackModels")
     Map<Identifier, ItemModel> framedblocks$getBakedItemStackModels();
 

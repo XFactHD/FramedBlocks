@@ -9,30 +9,24 @@ import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jspecify.annotations.Nullable;
 
-public final class LargeDoubleCornerSlopePanelWallConnectionPredicate extends NonDetailedConnectionPredicate
-{
+public final class LargeDoubleCornerSlopePanelWallConnectionPredicate extends NonDetailedConnectionPredicate {
     @Override
-    public boolean canConnectFullEdge(BlockState state, Direction side, @Nullable Direction edge)
-    {
+    public boolean canConnectFullEdge(BlockState state, Direction side, @Nullable Direction edge) {
         Direction dir = state.getValue(FramedProperties.FACING_HOR);
         HorizontalRotation rot = state.getValue(PropertyHolder.ROTATION);
         Direction rotDir = rot.withFacing(dir);
         Direction perpRotDir = rot.rotate(Rotation.COUNTERCLOCKWISE_90).withFacing(dir);
 
-        if (side == rotDir.getOpposite() || side == perpRotDir.getOpposite())
-        {
+        if (side == rotDir.getOpposite() || side == perpRotDir.getOpposite()) {
             return true;
         }
-        else if (side.getAxis() == dir.getAxis())
-        {
+        if (side.getAxis() == dir.getAxis()) {
             return edge == rotDir.getOpposite() || edge == perpRotDir.getOpposite();
         }
-        else if (side == rotDir)
-        {
+        if (side == rotDir) {
             return edge == perpRotDir.getOpposite();
         }
-        else if (side == perpRotDir)
-        {
+        if (side == perpRotDir) {
             return edge == rotDir.getOpposite();
         }
         return false;

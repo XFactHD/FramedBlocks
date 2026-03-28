@@ -24,44 +24,36 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import org.jspecify.annotations.Nullable;
 
-public class FramedElevatedDoublePrismBlock extends FramedDoubleBlock implements IFramedPrismBlock, SlopeToggleBlock
-{
-    public FramedElevatedDoublePrismBlock(BlockType type, Properties props)
-    {
+public class FramedElevatedDoublePrismBlock extends FramedDoubleBlock implements PrismBlock, SlopeToggleBlock {
+    public FramedElevatedDoublePrismBlock(BlockType type, Properties props) {
         super(type, props);
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
-    {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
         builder.add(PropertyHolder.FACING_AXIS);
     }
 
     @Override
-    @Nullable
-    public BlockState getStateForPlacement(BlockPlaceContext context)
-    {
+    public @Nullable BlockState getStateForPlacement(BlockPlaceContext context) {
         return FramedPrismBlock.getStateForPlacement(context, this);
     }
 
     @Override
-    protected BlockState rotate(BlockState state, Rotation rotation)
-    {
+    protected BlockState rotate(BlockState state, Rotation rotation) {
         DirectionAxis dirAxis = state.getValue(PropertyHolder.FACING_AXIS);
         return state.setValue(PropertyHolder.FACING_AXIS, dirAxis.rotate(rotation));
     }
 
     @Override
-    protected BlockState mirror(BlockState state, Mirror mirror)
-    {
+    protected BlockState mirror(BlockState state, Mirror mirror) {
         DirectionAxis dirAxis = state.getValue(PropertyHolder.FACING_AXIS);
         return state.setValue(PropertyHolder.FACING_AXIS, dirAxis.mirror(mirror));
     }
 
     @Override
-    public DoubleBlockParts calculateParts(BlockState state)
-    {
+    public DoubleBlockParts calculateParts(BlockState state) {
         DirectionAxis dirAxis = state.getValue(PropertyHolder.FACING_AXIS);
         boolean altSlope = state.getValue(FramedProperties.ALT_SLOPE);
 
@@ -81,37 +73,27 @@ public class FramedElevatedDoublePrismBlock extends FramedDoubleBlock implements
     }
 
     @Override
-    public DoubleBlockTopInteractionMode calculateTopInteractionMode(BlockState state)
-    {
+    public DoubleBlockTopInteractionMode calculateTopInteractionMode(BlockState state) {
         DirectionAxis dirAxis = state.getValue(PropertyHolder.FACING_AXIS);
-        if (dirAxis.direction() == Direction.UP)
-        {
+        if (dirAxis.direction() == Direction.UP) {
             return DoubleBlockTopInteractionMode.SECOND;
-        }
-        else if (dirAxis.direction() == Direction.DOWN || dirAxis.axis() != Direction.Axis.Y)
-        {
+        } else if (dirAxis.direction() == Direction.DOWN || dirAxis.axis() != Direction.Axis.Y) {
             return DoubleBlockTopInteractionMode.FIRST;
         }
         return DoubleBlockTopInteractionMode.EITHER;
     }
 
     @Override
-    public CamoGetter calculateCamoGetter(BlockState state, Direction side, @Nullable Direction edge)
-    {
+    public CamoGetter calculateCamoGetter(BlockState state, Direction side, @Nullable Direction edge) {
         DirectionAxis dirAxis = state.getValue(PropertyHolder.FACING_AXIS);
         Direction facing = dirAxis.direction();
-        if (side == facing)
-        {
+        if (side == facing) {
             return CamoGetter.SECOND;
         }
-        if (side.getAxis() == dirAxis.axis())
-        {
-            if (edge == facing)
-            {
+        if (side.getAxis() == dirAxis.axis()) {
+            if (edge == facing) {
                 return CamoGetter.SECOND;
-            }
-            else if (edge != null)
-            {
+            } else if (edge != null) {
                 return CamoGetter.FIRST;
             }
             return CamoGetter.NONE;
@@ -120,50 +102,44 @@ public class FramedElevatedDoublePrismBlock extends FramedDoubleBlock implements
     }
 
     @Override
-    public SolidityCheck calculateSolidityCheck(BlockState state, Direction side)
-    {
+    public SolidityCheck calculateSolidityCheck(BlockState state, Direction side) {
         DirectionAxis dirAxis = state.getValue(PropertyHolder.FACING_AXIS);
         Direction facing = dirAxis.direction();
-        if (side == facing)
-        {
+        if (side == facing) {
             return SolidityCheck.SECOND;
         }
-        if (side.getAxis() == dirAxis.axis())
-        {
+        if (side.getAxis() == dirAxis.axis()) {
             return SolidityCheck.BOTH;
         }
         return SolidityCheck.FIRST;
     }
 
     @Override
-    public FramedDoubleBlockEntity newBlockEntity(BlockPos pos, BlockState state)
-    {
+    public FramedDoubleBlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return new FramedElevatedDoublePrismBlockEntity(pos, state);
     }
 
     @Override
-    public BlockState getItemModelSource()
-    {
+    public BlockState getItemModelSource() {
         return defaultBlockState().setValue(PropertyHolder.FACING_AXIS, DirectionAxis.UP_X);
     }
 
     @Override
-    public Direction getHorizontalOrientation(BlockState state)
-    {
+    public Direction getHorizontalOrientation(BlockState state) {
         DirectionAxis dirAxis = state.getValue(PropertyHolder.FACING_AXIS);
-        if (!DirUtils.isY(dirAxis.direction())) return dirAxis.direction();
+        if (!DirUtils.isY(dirAxis.direction())) {
+            return dirAxis.direction();
+        }
         return DirUtils.getHorizontalDirection(dirAxis.axis());
     }
 
     @Override
-    public BlockState getJadeRenderState(BlockState state)
-    {
+    public BlockState getJadeRenderState(BlockState state) {
         return getItemModelSource();
     }
 
     @Override
-    public boolean isInnerPrism()
-    {
+    public boolean isInnerPrism() {
         return getBlockType() == BlockType.FRAMED_ELEVATED_INNER_DOUBLE_PRISM;
     }
 }

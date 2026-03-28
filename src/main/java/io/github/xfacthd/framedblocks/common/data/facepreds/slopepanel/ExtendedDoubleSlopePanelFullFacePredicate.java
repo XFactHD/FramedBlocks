@@ -7,14 +7,11 @@ import io.github.xfacthd.framedblocks.common.data.property.HorizontalRotation;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 
-public final class ExtendedDoubleSlopePanelFullFacePredicate implements FullFacePredicate
-{
+public final class ExtendedDoubleSlopePanelFullFacePredicate implements FullFacePredicate {
     @Override
-    public boolean test(BlockState state, Direction side)
-    {
+    public boolean test(BlockState state, Direction side) {
         Direction dir = state.getValue(FramedProperties.FACING_HOR);
-        if (side.getAxis() == dir.getAxis())
-        {
+        if (side.getAxis() == dir.getAxis()) {
             return true;
         }
 

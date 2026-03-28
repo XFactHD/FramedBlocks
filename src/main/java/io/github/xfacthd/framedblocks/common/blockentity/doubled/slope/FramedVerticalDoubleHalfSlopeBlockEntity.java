@@ -11,34 +11,28 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 
-public class FramedVerticalDoubleHalfSlopeBlockEntity extends FramedDoubleBlockEntity
-{
-    public FramedVerticalDoubleHalfSlopeBlockEntity(BlockPos pos, BlockState state)
-    {
+public class FramedVerticalDoubleHalfSlopeBlockEntity extends FramedDoubleBlockEntity {
+    public FramedVerticalDoubleHalfSlopeBlockEntity(BlockPos pos, BlockState state) {
         super(FBContent.BE_TYPE_FRAMED_VERTICAL_DOUBLE_HALF_SLOPE.value(), pos, state);
     }
 
     @Override
-    protected boolean hitSecondary(BlockHitResult hit, Vec3 lookVec, Vec3 eyePos)
-    {
+    protected boolean hitSecondary(BlockHitResult hit, Vec3 lookVec, Vec3 eyePos) {
         Direction facing = getBlockState().getValue(FramedProperties.FACING_HOR);
 
         Direction side = hit.getDirection();
 
-        if (side == facing || side == facing.getCounterClockWise())
-        {
+        if (side == facing || side == facing.getCounterClockWise()) {
             return false;
         }
-        if (side == facing.getOpposite() || side == facing.getClockWise())
-        {
+        if (side == facing.getOpposite() || side == facing.getClockWise()) {
             return true;
         }
 
         Vec3 vec = MathUtils.fraction(hit.getLocation());
         boolean secondary = DirUtils.isX(facing) ? vec.x() >= vec.z() : vec.z() >= (1D - vec.x());
 
-        if (DirUtils.isPositive(facing))
-        {
+        if (DirUtils.isPositive(facing)) {
             secondary = !secondary;
         }
         return secondary;

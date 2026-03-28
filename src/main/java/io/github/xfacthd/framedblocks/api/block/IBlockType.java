@@ -15,8 +15,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import org.jetbrains.annotations.ApiStatus;
 
-public interface IBlockType
-{
+public interface IBlockType {
     boolean canOccludeWithSolidCamo();
 
     boolean hasSpecialOutline();
@@ -68,16 +67,14 @@ public interface IBlockType
      * and its {@link BlockEntity} must extend {@link FramedDoubleBlockEntity}. The {@link BlockStateModel} is not required
      * to extend or implement any specific class
      */
-    default boolean isDoubleBlock()
-    {
+    default boolean isDoubleBlock() {
         return false;
     }
 
     /**
      * {@return whether this block can consume two camo items in the camo application recipe}
      */
-    default boolean consumesTwoCamosInCamoApplicationRecipe()
-    {
+    default boolean consumesTwoCamosInCamoApplicationRecipe() {
         return isDoubleBlock();
     }
 

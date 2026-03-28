@@ -7,28 +7,23 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 
-public final class NetworkValueInput extends DelegateValueInput
-{
+public final class NetworkValueInput extends DelegateValueInput {
     private final FramedBlockEntity blockEntity;
     boolean needRenderUpdate = false;
     boolean needCullingUpdate = false;
     boolean needLightUpdate = false;
 
-    private NetworkValueInput(FramedBlockEntity blockEntity, ValueInput input)
-    {
+    private NetworkValueInput(FramedBlockEntity blockEntity, ValueInput input) {
         super(input);
         this.blockEntity = blockEntity;
     }
 
-    public CamoContainer<?, ?> readCamo(String key, boolean secondary)
-    {
+    public CamoContainer<?, ?> readCamo(String key, boolean secondary) {
         CamoContainer<?, ?> newCamo = CamoContainerHelper.readFromNetwork(delegate.child(key));
-        if (!newCamo.equals(blockEntity.getCamo(secondary)))
-        {
+        if (!newCamo.equals(blockEntity.getCamo(secondary))) {
             int oldLight = blockEntity.getLightValue();
             blockEntity.setCamoNoUpdate(newCamo, secondary);
-            if (oldLight != blockEntity.getLightValue())
-            {
+            if (oldLight != blockEntity.getLightValue()) {
                 requestLightUpdate();
             }
 
@@ -38,42 +33,33 @@ public final class NetworkValueInput extends DelegateValueInput
         return newCamo;
     }
 
-    public void requestRenderUpdate()
-    {
+    public void requestRenderUpdate() {
         needRenderUpdate = true;
     }
 
-    public void requestCullingUpdate()
-    {
+    public void requestCullingUpdate() {
         needCullingUpdate = true;
     }
 
-    public void requestLightUpdate()
-    {
+    public void requestLightUpdate() {
         needLightUpdate = true;
     }
 
-    private void finishUpdateTag()
-    {
-        if (needCullingUpdate)
-        {
+    private void finishUpdateTag() {
+        if (needCullingUpdate) {
             blockEntity.markCullStateDirty();
         }
         blockEntity.requestModelDataUpdate();
     }
 
-    private void finishUpdatePacket()
-    {
-        if (needLightUpdate)
-        {
+    private void finishUpdatePacket() {
+        if (needLightUpdate) {
             blockEntity.doLightUpdate();
         }
-        if (needCullingUpdate)
-        {
+        if (needCullingUpdate) {
             blockEntity.updateCulling(true, false);
         }
-        if (needRenderUpdate)
-        {
+        if (needRenderUpdate) {
             blockEntity.requestModelDataUpdate();
 
             BlockState state = blockEntity.getBlockState();
@@ -81,15 +67,13 @@ public final class NetworkValueInput extends DelegateValueInput
         }
     }
 
-    static void handleUpdateTag(FramedBlockEntity blockEntity, ValueInput input)
-    {
+    static void handleUpdateTag(FramedBlockEntity blockEntity, ValueInput input) {
         NetworkValueInput netInput = new NetworkValueInput(blockEntity, input);
         blockEntity.readFromDataPacket(netInput);
         netInput.finishUpdateTag();
     }
 
-    static void handleUpdatePacket(FramedBlockEntity blockEntity, ValueInput input)
-    {
+    static void handleUpdatePacket(FramedBlockEntity blockEntity, ValueInput input) {
         NetworkValueInput netInput = new NetworkValueInput(blockEntity, input);
         blockEntity.readFromDataPacket(netInput);
         netInput.finishUpdatePacket();

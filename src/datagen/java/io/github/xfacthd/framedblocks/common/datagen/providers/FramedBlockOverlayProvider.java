@@ -11,10 +11,8 @@ import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 
-public final class FramedBlockOverlayProvider
-{
-    public static void buildBlockOverlayEntries(BootstrapContext<BlockOverlay> context)
-    {
+public final class FramedBlockOverlayProvider {
+    public static void buildBlockOverlayEntries(BootstrapContext<BlockOverlay> context) {
         overlay(context, "moss", (builder, _) -> builder
                 .solidTexture("moss")
                 .solidFace(BlockOverlay.SolidFace.ALL)
@@ -63,8 +61,7 @@ public final class FramedBlockOverlayProvider
                 .solidFace(BlockOverlay.SolidFace.TOP)
                 .sourceItem(Items.SNOWBALL)
         );
-        for (DyeColor color : DyeColor.values())
-        {
+        for (DyeColor color : DyeColor.values()) {
             String colName = color.getName();
             overlay(context, colName + "_carpet", (builder, _) -> builder
                     .solidTexture(Utils.id("minecraft", "block/" + colName + "_wool"))
@@ -75,19 +72,16 @@ public final class FramedBlockOverlayProvider
         }
     }
 
-    private static void overlay(BootstrapContext<BlockOverlay> context, String name, BuilderOperator operator)
-    {
+    private static void overlay(BootstrapContext<BlockOverlay> context, String name, BuilderOperator operator) {
         BlockOverlayBuilder builder = BlockOverlay.builder(FramedConstants.MOD_ID);
         context.register(key(name), operator.apply(builder, name).build());
     }
 
-    private static ResourceKey<BlockOverlay> key(String name)
-    {
+    private static ResourceKey<BlockOverlay> key(String name) {
         return ResourceKey.create(FramedConstants.BLOCK_OVERLAY_REGISTRY_KEY, Utils.id(name));
     }
 
-    private interface BuilderOperator
-    {
+    private interface BuilderOperator {
         BlockOverlayBuilder apply(BlockOverlayBuilder builder, String name);
     }
 

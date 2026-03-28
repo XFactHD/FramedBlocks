@@ -15,8 +15,7 @@ import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 
-public final class PrismCornerSlopePanelWallShapes implements ShapeGenerator
-{
+public final class PrismCornerSlopePanelWallShapes implements ShapeGenerator {
     public static final PrismCornerSlopePanelWallShapes SMALL_OUTER = new PrismCornerSlopePanelWallShapes(
             PrismCornerSlopePanelShapes.PrismCornerShape.SMALL_OUTER
     );
@@ -33,44 +32,39 @@ public final class PrismCornerSlopePanelWallShapes implements ShapeGenerator
 
     private final PrismCornerSlopePanelShapes.PrismCornerShape cornerShape;
 
-    private PrismCornerSlopePanelWallShapes(PrismCornerSlopePanelShapes.PrismCornerShape cornerShape)
-    {
+    private PrismCornerSlopePanelWallShapes(PrismCornerSlopePanelShapes.PrismCornerShape cornerShape) {
         this.cornerShape = cornerShape;
     }
 
     @Override
-    public ShapeContainer generatePrimary(List<BlockState> states)
-    {
+    public ShapeContainer generatePrimary(List<BlockState> states) {
         return generate(states, PrismCornerSlopePanelShapes.SHAPES);
     }
 
     @Override
-    public ShapeContainer generateOcclusion(List<BlockState> states)
-    {
+    public ShapeContainer generateOcclusion(List<BlockState> states) {
         return generate(states, PrismCornerSlopePanelShapes.OCCLUSION_SHAPES);
     }
 
-    private ShapeContainer generate(List<BlockState> states, ShapeCache<PrismCornerSlopePanelShapes.PrismCornerShape> cache)
-    {
+    private ShapeContainer generate(List<BlockState> states, ShapeCache<PrismCornerSlopePanelShapes.PrismCornerShape> cache) {
         VoxelShape baseShape = cache.get(cornerShape);
-        if (baseShape.isEmpty()) return ShapeContainer.EMPTY;
+        if (baseShape.isEmpty()) {
+            return ShapeContainer.EMPTY;
+        }
 
         Map<BlockState, VoxelShape> map = new IdentityHashMap<>(states.size());
 
         VoxelShape[] shapes = new VoxelShape[16];
         shapes[0] = ShapeUtils.rotateShapeUnoptimizedAroundX(Direction.UP, Direction.SOUTH, baseShape);
-        for (HorizontalRotation rot : ROTATIONS)
-        {
+        for (HorizontalRotation rot : ROTATIONS) {
             shapes[rot.ordinal() * 4] = ShapeUtils.rotateShapeAroundZ(Direction.UP, rot.withFacing(Direction.NORTH), shapes[0]);
         }
-        for (int i = 0; i < 4; i++)
-        {
+        for (int i = 0; i < 4; i++) {
             int baseIdx = i * 4;
             ShapeUtils.makeHorizontalRotations(shapes[baseIdx], Direction.NORTH, shapes, baseIdx);
         }
 
-        for (BlockState state : states)
-        {
+        for (BlockState state : states) {
             Direction dir = state.getValue(FramedProperties.FACING_HOR);
             HorizontalRotation rot = state.getValue(PropertyHolder.ROTATION);
             map.put(state, shapes[rot.ordinal() << 2 | dir.get2DDataValue()]);

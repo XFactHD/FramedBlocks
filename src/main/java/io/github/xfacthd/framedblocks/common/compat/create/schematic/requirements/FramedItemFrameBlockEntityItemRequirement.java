@@ -9,13 +9,10 @@ import net.minecraft.world.item.ItemStack;
 
 import java.util.List;
 
-public final class FramedItemFrameBlockEntityItemRequirement extends FramedBlockEntityItemRequirement
-{
+public final class FramedItemFrameBlockEntityItemRequirement extends FramedBlockEntityItemRequirement {
     @Override
-    protected void collectAdditionalRequirements(IFramedBlockEntity blockEntity, List<ItemRequirement.StackRequirement> requirements)
-    {
-        if (blockEntity instanceof FramedItemFrameBlockEntity itemFrame && itemFrame.hasItem())
-        {
+    protected void collectAdditionalRequirements(IFramedBlockEntity blockEntity, List<ItemRequirement.StackRequirement> requirements) {
+        if (blockEntity instanceof FramedItemFrameBlockEntity itemFrame && itemFrame.hasItem()) {
             ItemStack stack = ComponentProcessors.withUnsafeComponentsDiscarded(itemFrame.getItem().copy());
             requirements.add(consumeStrict(stack));
         }

@@ -12,13 +12,11 @@ import org.slf4j.Logger;
 
 import java.util.List;
 
-public final class SelfTest
-{
+public final class SelfTest {
     public static final Logger LOGGER = LogUtils.getLogger();
     private static boolean firstJoin = true;
 
-    public static void runStartupSelfTest(@SuppressWarnings("unused") FMLLoadCompleteEvent event)
-    {
+    public static void runStartupSelfTest(@SuppressWarnings("unused") FMLLoadCompleteEvent event) {
         SelfTestReporter reporter = new SelfTestReporter();
 
         List<Block> blocks = FBContent.getRegisteredBlocks()
@@ -45,9 +43,10 @@ public final class SelfTest
         reporter.finish();
     }
 
-    public static void runInWorldSelfTest(PlayerEvent.PlayerLoggedInEvent event)
-    {
-        if (!firstJoin) return;
+    public static void runInWorldSelfTest(PlayerEvent.PlayerLoggedInEvent event) {
+        if (!firstJoin) {
+            return;
+        }
         firstJoin = false;
 
         SelfTestReporter reporter = new SelfTestReporter();

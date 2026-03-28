@@ -14,15 +14,13 @@ import net.minecraft.client.resources.model.geometry.BakedQuad;
 import net.minecraft.core.Direction;
 import org.jspecify.annotations.Nullable;
 
-public class FramedSlopeEdgePanelGeometry extends Geometry
-{
+public class FramedSlopeEdgePanelGeometry extends Geometry {
     private final Direction dir;
     private final Direction backEdge;
     private final boolean front;
     private final boolean altSlope;
 
-    public FramedSlopeEdgePanelGeometry(GeometryFactory.Context ctx)
-    {
+    public FramedSlopeEdgePanelGeometry(GeometryFactory.Context ctx) {
         this.dir = ctx.state().getValue(FramedProperties.FACING_HOR);
         HorizontalRotation rot = ctx.state().getValue(PropertyHolder.ROTATION);
         this.backEdge = rot.withFacing(dir).getOpposite();
@@ -31,27 +29,21 @@ public class FramedSlopeEdgePanelGeometry extends Geometry
     }
 
     @Override
-    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object cacheKeyUserData)
-    {
+    public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object cacheKeyUserData) {
         Direction quadDir = quad.direction();
-        if (quadDir == dir)
-        {
-            if (front)
-            {
+        if (quadDir == dir) {
+            if (front) {
                 QuadModifier.of(quad)
                         .apply(Modifiers.setPosition(.5F))
                         .export(quadMap, null);
             }
-        }
-        else if (quadDir == dir.getOpposite())
-        {
+        } else if (quadDir == dir.getOpposite()) {
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(backEdge.getOpposite(), .5F))
                     .applyIf(Modifiers.setPosition(.5F), !front)
                     .export(quadMap, front ? quadDir : null);
 
-            if (altSlope)
-            {
+            if (altSlope) {
                 boolean vert = DirUtils.isY(backEdge);
                 boolean topEdge = backEdge == Direction.DOWN;
                 boolean rightEdge = backEdge == dir.getClockWise();
@@ -61,17 +53,12 @@ public class FramedSlopeEdgePanelGeometry extends Geometry
                         .applyIf(Modifiers.offset(dir.getOpposite(), .5F), front)
                         .export(quadMap, null);
             }
-        }
-        else if (quadDir == backEdge)
-        {
+        } else if (quadDir == backEdge) {
             QuadModifier.of(quad)
                     .apply(Modifiers.cut(front ? dir : dir.getOpposite(), .5F))
                     .export(quadMap, quadDir);
-        }
-        else if (quadDir == backEdge.getOpposite())
-        {
-            if (!altSlope)
-            {
+        } else if (quadDir == backEdge.getOpposite()) {
+            if (!altSlope) {
                 boolean vert = DirUtils.isY(backEdge);
                 boolean rightEdge = backEdge == dir.getClockWise();
                 QuadModifier.of(quad)
@@ -81,9 +68,7 @@ public class FramedSlopeEdgePanelGeometry extends Geometry
                         .applyIf(Modifiers.offset(dir.getOpposite(), .5F), front)
                         .export(quadMap, null);
             }
-        }
-        else
-        {
+        } else {
             boolean flip = DirUtils.isY(backEdge) ? quadDir == dir.getClockWise() : backEdge == dir.getCounterClockWise();
             float lenOne = (flip ? 0F : 1F) + (front ? .5F : 0F);
             float lenTwo = (flip ? 1F : 0F) + (front ? .5F : 0F);

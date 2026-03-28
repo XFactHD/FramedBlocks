@@ -12,10 +12,8 @@ import net.neoforged.neoforge.network.IContainerFactory;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
-public final class DeferredMenuTypeRegister extends DeferredRegister<MenuType<?>>
-{
-    private DeferredMenuTypeRegister(String namespace)
-    {
+public final class DeferredMenuTypeRegister extends DeferredRegister<MenuType<?>> {
+    private DeferredMenuTypeRegister(String namespace) {
         super(Registries.MENU, namespace);
     }
 
@@ -23,27 +21,23 @@ public final class DeferredMenuTypeRegister extends DeferredRegister<MenuType<?>
     @SuppressWarnings("unchecked")
     protected <I extends MenuType<?>> DeferredHolder<MenuType<?>, I> createHolder(
             ResourceKey<? extends Registry<MenuType<?>>> registryKey, Identifier key
-    )
-    {
+    ) {
         return (DeferredHolder<MenuType<?>, I>) DeferredMenuType.createMenuType(ResourceKey.create(registryKey, key));
     }
 
     public <T extends AbstractContainerMenu> DeferredMenuType<T> registerSimpleMenuType(
             String name, MenuType.MenuSupplier<T> constructor
-    )
-    {
+    ) {
         return (DeferredMenuType<T>) register(name, () -> new MenuType<>(constructor, FeatureFlags.DEFAULT_FLAGS));
     }
 
     public <T extends AbstractContainerMenu> DeferredMenuType<T> registerAdvancedMenuType(
             String name, IContainerFactory<T> constructor
-    )
-    {
+    ) {
         return (DeferredMenuType<T>) register(name, () -> new MenuType<>(constructor, FeatureFlags.DEFAULT_FLAGS));
     }
 
-    public static DeferredMenuTypeRegister create(String namespace)
-    {
+    public static DeferredMenuTypeRegister create(String namespace) {
         return new DeferredMenuTypeRegister(namespace);
     }
 }

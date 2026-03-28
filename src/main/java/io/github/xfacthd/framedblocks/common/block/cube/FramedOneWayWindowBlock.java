@@ -33,48 +33,36 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jspecify.annotations.Nullable;
 
-public class FramedOneWayWindowBlock extends FramedBlock
-{
+public class FramedOneWayWindowBlock extends FramedBlock {
     public static final BlockCamoContent GLASS_DUMMY_CAMO = new BlockCamoContent(Blocks.TINTED_GLASS.defaultBlockState());
 
-    public FramedOneWayWindowBlock(Properties props)
-    {
+    public FramedOneWayWindowBlock(Properties props) {
         super(BlockType.FRAMED_ONE_WAY_WINDOW, props);
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
-    {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
         builder.add(PropertyHolder.NULLABLE_FACE);
     }
 
     @Override
-    public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)
-    {
+    public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
         super.setPlacedBy(level, pos, state, placer, stack);
-        if (placer instanceof Player player && level.getBlockEntity(pos) instanceof FramedOwnableBlockEntity be)
-        {
+        if (placer instanceof Player player && level.getBlockEntity(pos) instanceof FramedOwnableBlockEntity be) {
             be.setOwner(player.getUUID(), true);
         }
     }
 
     @Override
-    public boolean handleBlockLeftClick(BlockState state, Level level, BlockPos pos, Player player)
-    {
-        if (player.getMainHandItem().is(FBContent.ITEM_FRAMED_WRENCH.value()) && isOwnedBy(level, pos, player))
-        {
-            if (!level.isClientSide())
-            {
-                if (player.isShiftKeyDown())
-                {
+    public boolean handleBlockLeftClick(BlockState state, Level level, BlockPos pos, Player player) {
+        if (player.getMainHandItem().is(FBContent.ITEM_FRAMED_WRENCH.value()) && isOwnedBy(level, pos, player)) {
+            if (!level.isClientSide()) {
+                if (player.isShiftKeyDown()) {
                     level.setBlockAndUpdate(pos, state.setValue(PropertyHolder.NULLABLE_FACE, NullableDirection.NONE));
-                }
-                else
-                {
+                } else {
                     HitResult hit = player.pick(10D, 0, false);
-                    if (!(hit instanceof BlockHitResult blockHit))
-                    {
+                    if (!(hit instanceof BlockHitResult blockHit)) {
                         return false;
                     }
 
@@ -88,30 +76,24 @@ public class FramedOneWayWindowBlock extends FramedBlock
     }
 
     @Override
-    protected VoxelShape getOcclusionShape(BlockState state)
-    {
-        if (state.getValue(PropertyHolder.NULLABLE_FACE) != NullableDirection.NONE)
-        {
+    protected VoxelShape getOcclusionShape(BlockState state) {
+        if (state.getValue(PropertyHolder.NULLABLE_FACE) != NullableDirection.NONE) {
             return Shapes.empty();
         }
         return super.getOcclusionShape(state);
     }
 
     @Override
-    public boolean canOccludeNeighbor(BlockGetter level, BlockPos pos, BlockState state, BlockPos adjPos, BlockState adjState)
-    {
-        if (adjState.getBlock() != FBContent.BLOCK_FRAMED_ONE_WAY_WINDOW.value())
-        {
+    public boolean canOccludeNeighbor(BlockGetter level, BlockPos pos, BlockState state, BlockPos adjPos, BlockState adjState) {
+        if (adjState.getBlock() != FBContent.BLOCK_FRAMED_ONE_WAY_WINDOW.value()) {
             return false;
         }
         return state.getValue(PropertyHolder.NULLABLE_FACE) == adjState.getValue(PropertyHolder.NULLABLE_FACE);
     }
 
     @Override
-    public boolean addRunningEffects(BlockState state, Level level, BlockPos pos, Entity entity)
-    {
-        if (state.getValue(PropertyHolder.NULLABLE_FACE) == NullableDirection.UP)
-        {
+    public boolean addRunningEffects(BlockState state, Level level, BlockPos pos, Entity entity) {
+        if (state.getValue(PropertyHolder.NULLABLE_FACE) == NullableDirection.UP) {
             ParticleHelper.spawnRunningParticles(GLASS_DUMMY_CAMO, level, pos, entity);
             return true;
         }
@@ -119,12 +101,8 @@ public class FramedOneWayWindowBlock extends FramedBlock
     }
 
     @Override
-    public boolean addLandingEffects(
-            BlockState state, ServerLevel level, BlockPos pos, BlockState sameState, LivingEntity entity, int count
-    )
-    {
-        if (state.getValue(PropertyHolder.NULLABLE_FACE) == NullableDirection.UP)
-        {
+    public boolean addLandingEffects(BlockState state, ServerLevel level, BlockPos pos, BlockState sameState, LivingEntity entity, int count) {
+        if (state.getValue(PropertyHolder.NULLABLE_FACE) == NullableDirection.UP) {
             ParticleHelper.spawnLandingParticles(GLASS_DUMMY_CAMO, level, pos, entity, count);
             return true;
         }
@@ -132,35 +110,28 @@ public class FramedOneWayWindowBlock extends FramedBlock
     }
 
     @Override
-    protected BlockState rotate(BlockState state, Rotation rotation)
-    {
+    protected BlockState rotate(BlockState state, Rotation rotation) {
         NullableDirection face = state.getValue(PropertyHolder.NULLABLE_FACE);
         return state.setValue(PropertyHolder.NULLABLE_FACE, face.rotate(rotation));
     }
 
     @Override
-    protected BlockState mirror(BlockState state, Mirror mirror)
-    {
+    protected BlockState mirror(BlockState state, Mirror mirror) {
         NullableDirection face = state.getValue(PropertyHolder.NULLABLE_FACE);
         return state.setValue(PropertyHolder.NULLABLE_FACE, face.mirror(mirror));
     }
 
     @Override
-    public BlockState getAppearance(BlockState state, BlockAndLightGetter level, BlockPos pos, Direction side, @Nullable BlockState queryState, @Nullable BlockPos queryPos)
-    {
+    public BlockState getAppearance(BlockState state, BlockAndLightGetter level, BlockPos pos, Direction side, @Nullable BlockState queryState, @Nullable BlockPos queryPos) {
         Direction dir = state.getValue(PropertyHolder.NULLABLE_FACE).toNullableDirection();
-        if (dir == side && queryPos != null)
-        {
-            if (DirUtils.dirByNormal(pos, queryPos) == dir)
-            {
+        if (dir == side && queryPos != null) {
+            if (DirUtils.dirByNormal(pos, queryPos) == dir) {
                 return Blocks.TINTED_GLASS.defaultBlockState();
             }
-            if (queryState == null)
-            {
+            if (queryState == null) {
                 queryState = level.getBlockState(queryPos);
             }
-            if (queryState.is(this) && queryState.getValue(PropertyHolder.NULLABLE_FACE).toNullableDirection() == dir)
-            {
+            if (queryState.is(this) && queryState.getValue(PropertyHolder.NULLABLE_FACE).toNullableDirection() == dir) {
                 return Blocks.TINTED_GLASS.defaultBlockState();
             }
             return Blocks.AIR.defaultBlockState();
@@ -169,38 +140,31 @@ public class FramedOneWayWindowBlock extends FramedBlock
     }
 
     @Override
-    public FramedBlockEntity newBlockEntity(BlockPos pos, BlockState state)
-    {
+    public FramedBlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return new FramedOwnableBlockEntity(pos, state);
     }
 
     @Override
-    public BlockState getItemModelSource()
-    {
+    public BlockState getItemModelSource() {
         return defaultBlockState();
     }
 
     @Override
-    @Nullable
-    public Direction getHorizontalOrientation(BlockState state)
+    public @Nullable Direction getHorizontalOrientation(BlockState state)
     {
         return null;
     }
 
     @Override
-    public BlockState getJadeRenderState(BlockState state)
-    {
+    public BlockState getJadeRenderState(BlockState state) {
         return state.setValue(PropertyHolder.NULLABLE_FACE, NullableDirection.EAST);
     }
 
-    public static boolean isOwnedBy(BlockGetter level, BlockPos pos, Player player)
-    {
-        if (!ServerConfig.VIEW.isOneWayWindowOwnable())
-        {
+    public static boolean isOwnedBy(BlockGetter level, BlockPos pos, Player player) {
+        if (!ServerConfig.VIEW.isOneWayWindowOwnable()) {
             return true;
         }
-        if (level.getBlockEntity(pos) instanceof FramedOwnableBlockEntity be)
-        {
+        if (level.getBlockEntity(pos) instanceof FramedOwnableBlockEntity be) {
             return player.getUUID().equals(be.getOwner());
         }
         return false;

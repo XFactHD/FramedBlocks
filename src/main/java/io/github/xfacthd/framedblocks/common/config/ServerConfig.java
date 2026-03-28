@@ -8,8 +8,7 @@ import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.neoforge.common.ModConfigSpec;
 
-public final class ServerConfig
-{
+public final class ServerConfig {
     public static final ExtConfigView.Server VIEW = (ExtConfigView.Server) ConfigView.Server.INSTANCE;
     private static final ModConfigSpec SPEC;
 
@@ -51,15 +50,13 @@ public final class ServerConfig
     private static int poweredSawConsumption = 0;
     private static int poweredSawRecipeDuration = 0;
 
-    public static void init(IEventBus modBus, ModContainer modContainer)
-    {
+    public static void init(IEventBus modBus, ModContainer modContainer) {
         modBus.addListener((ModConfigEvent.Loading event) -> onConfigReloaded(event));
         modBus.addListener((ModConfigEvent.Reloading event) -> onConfigReloaded(event));
         modContainer.registerConfig(ModConfig.Type.SERVER, SPEC);
     }
 
-    static
-    {
+    static {
         ModConfigSpec.Builder builder = new ModConfigSpec.Builder();
 
         builder.translation(TRANSLATION_CATEGORY_GENERAL).push("general");
@@ -115,15 +112,12 @@ public final class ServerConfig
         SPEC = builder.build();
     }
 
-    private static String translate(String key)
-    {
+    private static String translate(String key) {
         return Utils.translateConfig("server", key);
     }
 
-    private static void onConfigReloaded(ModConfigEvent event)
-    {
-        if (event.getConfig().getType() == ModConfig.Type.SERVER && event.getConfig().getSpec() == SPEC)
-        {
+    private static void onConfigReloaded(ModConfigEvent event) {
+        if (event.getConfig().getType() == ModConfig.Type.SERVER && event.getConfig().getSpec() == SPEC) {
             allowBlockEntities = ALLOW_BLOCK_ENTITIES_VALUE.get();
             enableIntangibility = ENABLE_INTANGIBILITY_VALUE.get();
             oneWayWindowOwnable = ONE_WAY_WINDOW_OWNABLE_VALUE.get();
@@ -140,65 +134,54 @@ public final class ServerConfig
 
     private ServerConfig() { }
 
-    public static final class ViewImpl implements ExtConfigView.Server
-    {
+    public static final class ViewImpl implements ExtConfigView.Server {
         @Override
-        public boolean allowBlockEntities()
-        {
+        public boolean allowBlockEntities() {
             return allowBlockEntities;
         }
 
         @Override
-        public boolean enableIntangibility()
-        {
+        public boolean enableIntangibility() {
             return enableIntangibility;
         }
 
         @Override
-        public boolean isOneWayWindowOwnable()
-        {
+        public boolean isOneWayWindowOwnable() {
             return oneWayWindowOwnable;
         }
 
         @Override
-        public boolean shouldConsumeCamoItem()
-        {
+        public boolean shouldConsumeCamoItem() {
             return consumeCamoItem;
         }
 
         @Override
-        public int getGlowstoneLightLevel()
-        {
+        public int getGlowstoneLightLevel() {
             return glowstoneLightLevel;
         }
 
         @Override
-        public boolean areBlocksFireproof()
-        {
+        public boolean areBlocksFireproof() {
             return fireproofBlocks;
         }
 
         @Override
-        public int getPoweredSawEnergyCapacity()
-        {
+        public int getPoweredSawEnergyCapacity() {
             return poweredSawEnergyCapacity;
         }
 
         @Override
-        public int getPoweredSawMaxInput()
-        {
+        public int getPoweredSawMaxInput() {
             return poweredSawMaxReceive;
         }
 
         @Override
-        public int getPoweredSawConsumption()
-        {
+        public int getPoweredSawConsumption() {
             return poweredSawConsumption;
         }
 
         @Override
-        public int getPoweredSawCraftingDuration()
-        {
+        public int getPoweredSawCraftingDuration() {
             return poweredSawRecipeDuration;
         }
     }

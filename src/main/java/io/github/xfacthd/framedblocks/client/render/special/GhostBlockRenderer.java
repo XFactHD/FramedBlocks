@@ -69,8 +69,7 @@ import java.util.OptionalDouble;
 import java.util.OptionalInt;
 
 @SuppressWarnings("ConstantConditions")
-public final class GhostBlockRenderer
-{
+public final class GhostBlockRenderer {
     private static final RandomSource RANDOM = RandomSource.create();
     private static final Map<Item, GhostRenderBehaviour> RENDER_BEHAVIOURS = new IdentityHashMap<>();
     private static final GhostRenderBehaviour DEFAULT_BEHAVIOUR = new GhostRenderBehaviour() {};
@@ -80,21 +79,16 @@ public final class GhostBlockRenderer
     private static final ByteBufferBuilder BUFFER_BUILDER = new ByteBufferBuilder(RenderType.TRANSIENT_BUFFER_SIZE);
     private static final ContextKey<List<GhostRenderState>> DATA_KEY = new ContextKey<>(Utils.id("placement_preview"));
 
-    private static void onExtractRenderState(ExtractLevelRenderStateEvent event)
-    {
-        if (!ClientConfig.VIEW.showGhostBlocks())
-        {
+    private static void onExtractRenderState(ExtractLevelRenderStateEvent event) {
+        if (!ClientConfig.VIEW.showGhostBlocks()) {
             return;
         }
 
         ProfilerFiller profiler = Profiler.get();
         profiler.push(DEBUG_NAME);
-        try
-        {
+        try {
             tryExtractGhostBlock(event.getRenderState(), profiler);
-        }
-        catch (Throwable t)
-        {
+        } catch (Throwable t) {
             CrashReport report = CrashReport.forThrowable(t, "FramedBlocks: Extracting placement preview render state");
 
             CrashReportCategory category = report.addCategory("Placement preview context");
@@ -108,27 +102,21 @@ public final class GhostBlockRenderer
             category.trimStacktrace(category.getStacktrace().length);
 
             throw new ReportedException(report);
-        }
-        finally
-        {
+        } finally {
             profiler.pop(); // DEBUG_NAME
         }
     }
 
-    private static void tryExtractGhostBlock(LevelRenderState renderState, ProfilerFiller profiler)
-    {
-        if (mc().player.isSpectator())
-        {
+    private static void tryExtractGhostBlock(LevelRenderState renderState, ProfilerFiller profiler) {
+        if (mc().player.isSpectator()) {
             return;
         }
-        if (!(mc().hitResult instanceof BlockHitResult hit) || hit.getType() != HitResult.Type.BLOCK)
-        {
+        if (!(mc().hitResult instanceof BlockHitResult hit) || hit.getType() != HitResult.Type.BLOCK) {
             return;
         }
 
         ItemStack stack = mc().player.getMainHandItem();
-        if (stack.isEmpty())
-        {
+        if (stack.isEmpty()) {
             return;
         }
 
@@ -139,8 +127,7 @@ public final class GhostBlockRenderer
         profiler.pop(); //get_stack
 
         profiler.push("may_render");
-        if (!behaviour.mayRender(stack, proxiedStack))
-        {
+        if (!behaviour.mayRender(stack, proxiedStack)) {
             profiler.pop(); //may_render
             return;
         }
@@ -153,15 +140,12 @@ public final class GhostBlockRenderer
 
         int passCount = behaviour.getPassCount(stack, proxiedStack);
         List<GhostRenderState> renderStates = new ArrayList<>(passCount);
-        for (int pass = 0; pass < passCount; pass++)
-        {
-            if (!extractGhostBlock(renderStates, profiler, behaviour, stack, proxiedStack, hit, context, hitState, pass))
-            {
+        for (int pass = 0; pass < passCount; pass++) {
+            if (!extractGhostBlock(renderStates, profiler, behaviour, stack, proxiedStack, hit, context, hitState, pass)) {
                 break;
             }
         }
-        if (!renderStates.isEmpty())
-        {
+        if (!renderStates.isEmpty()) {
             renderState.setRenderData(DATA_KEY, renderStates);
         }
     }
@@ -176,21 +160,18 @@ public final class GhostBlockRenderer
             BlockPlaceContext context,
             BlockState hitState,
             int renderPass
-    )
-    {
+    ) {
         profiler.push("get_state");
         BlockState renderState = behaviour.getRenderState(stack, proxiedStack, hit, context, hitState, renderPass);
         profiler.pop(); //get_state
-        if (renderState == null)
-        {
+        if (renderState == null) {
             return true;
         }
 
         profiler.push("get_pos");
         BlockPos renderPos = behaviour.getRenderPos(stack, proxiedStack, hit, context, hitState, context.getClickedPos(), renderPass);
         profiler.popPush("can_render"); //get_pos
-        if (renderPass == 0 && !behaviour.canRenderAt(stack, proxiedStack, hit, context, hitState, renderState, renderPos))
-        {
+        if (renderPass == 0 && !behaviour.canRenderAt(stack, proxiedStack, hit, context, hitState, renderState, renderPos)) {
             profiler.pop(); //can_render
             return false;
         }
@@ -224,8 +205,7 @@ public final class GhostBlockRenderer
         profiler.push(DEBUG_NAME);
 
         List<GhostRenderState> renderStates = event.getLevelRenderState().getRenderData(DATA_KEY);
-        if (renderStates == null)
-        {
+        if (renderStates == null) {
             profiler.pop(); // DEBUG_NAME
             return;
         }
@@ -244,18 +224,15 @@ public final class GhostBlockRenderer
 
         profiler.push("render_all");
         PoseStack poseStack = event.getPoseStack();
-        for (GhostRenderState renderState : renderStates)
-        {
+        for (GhostRenderState renderState : renderStates) {
             doRenderGhostBlock(blockRenderer, ghostBuffer, poseStack, profiler, renderState);
         }
         profiler.pop(); // render_all
 
         profiler.push("upload");
         MeshData meshData = buffer.build();
-        if (meshData != null)
-        {
-            try (meshData)
-            {
+        if (meshData != null) {
+            try (meshData) {
                 uploadAndDraw(config, meshData);
             }
         }
@@ -264,8 +241,7 @@ public final class GhostBlockRenderer
         profiler.pop();
     }
 
-    private static void doRenderGhostBlock(ModelBlockRenderer blockRenderer, VertexConsumer builder, PoseStack poseStack, ProfilerFiller profiler, GhostRenderState renderState)
-    {
+    private static void doRenderGhostBlock(ModelBlockRenderer blockRenderer, VertexConsumer builder, PoseStack poseStack, ProfilerFiller profiler, GhostRenderState renderState) {
         profiler.push("prepare");
         BlockPos pos = renderState.pos;
         BlockState state = renderState.state;
@@ -289,8 +265,7 @@ public final class GhostBlockRenderer
         profiler.pop(); //render
     }
 
-    private static void uploadAndDraw(GhostBlockRenderConfig config, MeshData meshData)
-    {
+    private static void uploadAndDraw(GhostBlockRenderConfig config, MeshData meshData) {
         meshData.sortQuads(BUFFER_BUILDER, RenderSystem.getProjectionType().vertexSorting());
 
         RenderPipeline pipeline = config.getPipeline();
@@ -298,13 +273,10 @@ public final class GhostBlockRenderer
         GpuBuffer vertexBuffer = vertexFormat.uploadImmediateVertexBuffer(meshData.vertexBuffer());
         GpuBuffer indexBuffer;
         VertexFormat.IndexType indexType;
-        if (meshData.indexBuffer() != null)
-        {
+        if (meshData.indexBuffer() != null) {
             indexBuffer = vertexFormat.uploadImmediateIndexBuffer(meshData.indexBuffer());
             indexType = meshData.drawState().indexType();
-        }
-        else
-        {
+        } else {
             RenderSystem.AutoStorageIndexBuffer autoIndexBuffer = RenderSystem.getSequentialBuffer(meshData.drawState().mode());
             indexBuffer = autoIndexBuffer.getBuffer(meshData.drawState().indexCount());
             indexType = autoIndexBuffer.type();
@@ -325,8 +297,7 @@ public final class GhostBlockRenderer
                 OptionalInt.empty(),
                 target.getDepthTextureView(),
                 OptionalDouble.empty()
-        ))
-        {
+        )) {
             renderPass.setPipeline(pipeline);
             RenderSystem.bindDefaultUniforms(renderPass);
             renderPass.setUniform("DynamicTransforms", dynamicUniforms);
@@ -339,11 +310,9 @@ public final class GhostBlockRenderer
         }
     }
 
-    public static void init()
-    {
+    public static void init() {
         ModLoader.postEvent(new RegisterGhostRenderBehavioursEvent(
-                (behaviour, blocks) ->
-                {
+                (behaviour, blocks) -> {
                     Preconditions.checkNotNull(behaviour, "GhostRenderBehaviour must be non-null");
                     Preconditions.checkArgument(blocks.length > 0, "At least one block must be provided to register a GhostRenderBehaviour");
 
@@ -354,8 +323,7 @@ public final class GhostBlockRenderer
                         RENDER_BEHAVIOURS.put(item, behaviour);
                     }
                 },
-                (behaviour, items) ->
-                {
+                (behaviour, items) -> {
                     Preconditions.checkNotNull(behaviour, "GhostRenderBehaviour must be non-null");
                     Preconditions.checkArgument(items.length > 0, "At least one item must be provided to register a GhostRenderBehaviour");
 
@@ -371,13 +339,11 @@ public final class GhostBlockRenderer
         NeoForge.EVENT_BUS.addListener(GhostBlockRenderer::onRenderLevelStage);
     }
 
-    public static GhostRenderBehaviour getBehaviour(Item item)
-    {
+    public static GhostRenderBehaviour getBehaviour(Item item) {
         return RENDER_BEHAVIOURS.getOrDefault(item, DEFAULT_BEHAVIOUR);
     }
 
-    private static Minecraft mc()
-    {
+    private static Minecraft mc() {
         return Minecraft.getInstance();
     }
 

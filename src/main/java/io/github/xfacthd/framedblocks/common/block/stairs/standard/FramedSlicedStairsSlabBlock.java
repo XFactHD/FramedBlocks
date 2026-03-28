@@ -17,31 +17,25 @@ import net.minecraft.world.level.block.state.properties.Half;
 import net.minecraft.world.level.block.state.properties.StairsShape;
 import org.jspecify.annotations.Nullable;
 
-public class FramedSlicedStairsSlabBlock extends FramedStairsBlock implements IFramedDoubleBlockInternal
-{
-    public FramedSlicedStairsSlabBlock(Properties props)
-    {
+public class FramedSlicedStairsSlabBlock extends FramedStairsBlock implements IFramedDoubleBlockInternal {
+    public FramedSlicedStairsSlabBlock(Properties props) {
         super(BlockType.FRAMED_SLICED_STAIRS_SLAB, props);
     }
 
     @Override
-    public DoubleBlockTopInteractionMode calculateTopInteractionMode(BlockState state)
-    {
-        if (state.getValue(HALF) != Half.TOP)
-        {
+    public DoubleBlockTopInteractionMode calculateTopInteractionMode(BlockState state) {
+        if (state.getValue(HALF) != Half.TOP) {
             return DoubleBlockTopInteractionMode.EITHER;
         }
         return DoubleBlockTopInteractionMode.FIRST;
     }
 
     @Override
-    public DoubleBlockParts calculateParts(BlockState state)
-    {
+    public DoubleBlockParts calculateParts(BlockState state) {
         Direction dir = state.getValue(FACING);
         boolean top = state.getValue(HALF) == Half.TOP;
 
-        BlockState partTwo = switch (state.getValue(SHAPE))
-        {
+        BlockState partTwo = switch (state.getValue(SHAPE)) {
             case STRAIGHT -> FBContent.BLOCK_FRAMED_SLAB_EDGE.value()
                     .defaultBlockState()
                     .setValue(FramedProperties.FACING_HOR, dir)
@@ -72,78 +66,57 @@ public class FramedSlicedStairsSlabBlock extends FramedStairsBlock implements IF
     }
 
     @Override
-    public SolidityCheck calculateSolidityCheck(BlockState state, Direction side)
-    {
+    public SolidityCheck calculateSolidityCheck(BlockState state, Direction side) {
         Direction dir = state.getValue(FACING);
         StairsShape shape = state.getValue(SHAPE);
         boolean top = state.getValue(HALF) == Half.TOP;
         Direction dirTwo = top ? Direction.UP : Direction.DOWN;
 
-        if (side == dirTwo)
-        {
+        if (side == dirTwo) {
             return SolidityCheck.FIRST;
-        }
-        else if (side == dir && shape != StairsShape.OUTER_LEFT && shape != StairsShape.OUTER_RIGHT)
-        {
+        } else if (side == dir && shape != StairsShape.OUTER_LEFT && shape != StairsShape.OUTER_RIGHT) {
             return SolidityCheck.BOTH;
-        }
-        else if (side == dir.getCounterClockWise() && shape == StairsShape.INNER_LEFT)
-        {
+        } else if (side == dir.getCounterClockWise() && shape == StairsShape.INNER_LEFT) {
             return SolidityCheck.BOTH;
-        }
-        else if (side == dir.getClockWise() && shape == StairsShape.INNER_RIGHT)
-        {
+        } else if (side == dir.getClockWise() && shape == StairsShape.INNER_RIGHT) {
             return SolidityCheck.BOTH;
         }
         return SolidityCheck.NONE;
     }
 
     @Override
-    public CamoGetter calculateCamoGetter(BlockState state, Direction side, @Nullable Direction edge)
-    {
+    public CamoGetter calculateCamoGetter(BlockState state, Direction side, @Nullable Direction edge) {
         Direction dir = state.getValue(FACING);
         boolean top = state.getValue(HALF) == Half.TOP;
         Direction dirTwo = top ? Direction.UP : Direction.DOWN;
 
-        if (side == dirTwo || (!DirUtils.isY(side) && edge == dirTwo))
-        {
+        if (side == dirTwo || (!DirUtils.isY(side) && edge == dirTwo)) {
             return CamoGetter.FIRST;
         }
 
-        return switch (state.getValue(SHAPE))
-        {
-            case STRAIGHT ->
-            {
-                if (side == dir && edge == dirTwo.getOpposite())
-                {
+        return switch (state.getValue(SHAPE)) {
+            case STRAIGHT -> {
+                if (side == dir && edge == dirTwo.getOpposite()) {
                     yield CamoGetter.SECOND;
-                }
-                else if (side == dirTwo.getOpposite() && edge == dir)
-                {
+                } else if (side == dirTwo.getOpposite() && edge == dir) {
                     yield CamoGetter.SECOND;
                 }
                 yield CamoGetter.NONE;
             }
-            case INNER_LEFT ->
-            {
-                if (side == dirTwo.getOpposite() && (edge == dir || edge == dir.getCounterClockWise()))
-                {
+            case INNER_LEFT -> {
+                if (side == dirTwo.getOpposite() && (edge == dir || edge == dir.getCounterClockWise())) {
                     yield CamoGetter.SECOND;
                 }
-                if ((side == dir || side == dir.getCounterClockWise()) && edge == dirTwo.getOpposite())
-                {
+                if ((side == dir || side == dir.getCounterClockWise()) && edge == dirTwo.getOpposite()) {
                     yield CamoGetter.SECOND;
                 }
                 yield CamoGetter.NONE;
             }
-            case INNER_RIGHT ->
-            {
-                if (side == dirTwo.getOpposite() && (edge == dir || edge == dir.getClockWise()))
-                {
+            case INNER_RIGHT -> {
+                if (side == dirTwo.getOpposite() && (edge == dir || edge == dir.getClockWise())) {
                     yield CamoGetter.SECOND;
                 }
-                if ((side == dir || side == dir.getClockWise()) && edge == dirTwo.getOpposite())
-                {
+                if ((side == dir || side == dir.getClockWise()) && edge == dirTwo.getOpposite()) {
                     yield CamoGetter.SECOND;
                 }
                 yield CamoGetter.NONE;
@@ -153,26 +126,22 @@ public class FramedSlicedStairsSlabBlock extends FramedStairsBlock implements IF
     }
 
     @Override
-    public FramedDoubleBlockEntity newBlockEntity(BlockPos pos, BlockState state)
-    {
+    public FramedDoubleBlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return IFramedDoubleBlockInternal.super.newBlockEntity(pos, state);
     }
 
     @Override
-    public BlockState getItemModelSource()
-    {
+    public BlockState getItemModelSource() {
         return defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
     }
 
     @Override
-    public Direction getHorizontalOrientation(BlockState state)
-    {
+    public Direction getHorizontalOrientation(BlockState state) {
         return state.getValue(FramedProperties.FACING_HOR);
     }
 
     @Override
-    public BlockState getJadeRenderState(BlockState state)
-    {
+    public BlockState getJadeRenderState(BlockState state) {
         return getItemModelSource();
     }
 }

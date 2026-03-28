@@ -35,32 +35,26 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
-public final class BlockOutlineRenderer
-{
+public final class BlockOutlineRenderer {
     private static final int DEFAULT_LINE_COLOR = ARGB.color(0x66, 0xFF000000);
     private static final Map<IBlockType, OutlineRenderer<?>> OUTLINE_RENDERERS = new IdentityHashMap<>();
     private static final Set<IBlockType> ERRORED_TYPES = new HashSet<>();
 
-    public static void onRenderBlockHighlight(ExtractBlockOutlineRenderStateEvent event)
-    {
-        if (!ClientConfig.VIEW.useFancySelectionBoxes() && !DevToolsConfig.VIEW.isOcclusionShapeDebugRenderingEnabled())
-        {
+    public static void onRenderBlockHighlight(ExtractBlockOutlineRenderStateEvent event) {
+        if (!ClientConfig.VIEW.useFancySelectionBoxes() && !DevToolsConfig.VIEW.isOcclusionShapeDebugRenderingEnabled()) {
             return;
         }
 
         BlockHitResult result = event.getHitResult();
         ClientLevel level = Objects.requireNonNull(Minecraft.getInstance().level);
         BlockState state = level.getBlockState(result.getBlockPos());
-        if (!(state.getBlock() instanceof IFramedBlock block))
-        {
+        if (!(state.getBlock() instanceof IFramedBlock block)) {
             return;
         }
 
-        if (DevToolsConfig.VIEW.isOcclusionShapeDebugRenderingEnabled())
-        {
+        if (DevToolsConfig.VIEW.isOcclusionShapeDebugRenderingEnabled()) {
             BlockState newState = state;
-            if (newState.hasProperty(FramedProperties.SOLID))
-            {
+            if (newState.hasProperty(FramedProperties.SOLID)) {
                 newState = newState.setValue(FramedProperties.SOLID, true);
             }
             event.getLevelRenderState().blockOutlineRenderState = new BlockOutlineRenderState(
@@ -75,27 +69,24 @@ public final class BlockOutlineRenderer
         }
 
         IBlockType type = block.getBlockType();
-        if (type.hasSpecialOutline())
-        {
+        if (type.hasSpecialOutline()) {
             OutlineRenderer<Object> renderer = getRenderer(type);
-            if (renderer == null)
-            {
-                if (ERRORED_TYPES.add(type))
-                {
+            if (renderer == null) {
+                if (ERRORED_TYPES.add(type)) {
                     FramedBlocks.LOGGER.error("IBlockType '{}' requests custom outline rendering but no OutlineRender was registered!", type.getName());
                 }
                 return;
             }
 
             Object data = renderer.extractOutlineData(state, level, result.getBlockPos());
-            if (data == null) return;
+            if (data == null) {
+                return;
+            }
 
             Vec3 offset = Vec3.atLowerCornerOf(result.getBlockPos()).subtract(event.getCamera().position());
             boolean highContrast = event.isHighContrast();
-            event.addCustomRenderer((renderState, buffer, poseStack, translucentPass, _) ->
-            {
-                if (translucentPass == renderState.isTranslucent())
-                {
+            event.addCustomRenderer((renderState, buffer, poseStack, translucentPass, _) -> {
+                if (translucentPass == renderState.isTranslucent()) {
                     poseStack.pushPose();
                     poseStack.translate(offset.x, offset.y, offset.z);
                     poseStack.translate(.5, .5, .5);
@@ -113,26 +104,20 @@ public final class BlockOutlineRenderer
         }
     }
 
-    @Nullable
     @SuppressWarnings("unchecked")
-    private static OutlineRenderer<Object> getRenderer(IBlockType type)
-    {
+    private static @Nullable OutlineRenderer<Object> getRenderer(IBlockType type) {
         return (OutlineRenderer<Object>) OUTLINE_RENDERERS.get(type);
     }
 
-    private static AbstractLineDrawer createDrawer(PoseStack.Pose pose, MultiBufferSource buffer, boolean highContrast)
-    {
-        if (highContrast)
-        {
+    private static AbstractLineDrawer createDrawer(PoseStack.Pose pose, MultiBufferSource buffer, boolean highContrast) {
+        if (highContrast) {
             return new HighContrastLineDrawer(pose, buffer);
         }
         return new DefaultLineDrawer(pose, buffer.getBuffer(RenderTypes.lines()), DEFAULT_LINE_COLOR);
     }
 
-    public static void init()
-    {
-        ModLoader.postEvent(new RegisterOutlineRenderersEvent((type, renderer) ->
-        {
+    public static void init() {
+        ModLoader.postEvent(new RegisterOutlineRenderersEvent((type, renderer) -> {
             Preconditions.checkArgument(
                     type.hasSpecialOutline(),
                     "IBlockType %s doesn't return true from IBlockType#hasSpecialOutline()",
@@ -142,26 +127,22 @@ public final class BlockOutlineRenderer
         }));
     }
 
-    public static boolean hasOutlineRenderer(IBlockType type)
-    {
+    public static boolean hasOutlineRenderer(IBlockType type) {
         return OUTLINE_RENDERERS.containsKey(type);
     }
 
-    private static abstract class AbstractLineDrawer implements SimpleOutlineRenderer.LineDrawer
-    {
+    private static abstract class AbstractLineDrawer implements SimpleOutlineRenderer.LineDrawer {
         final PoseStack.Pose pose;
         final float lineWidth;
 
-        AbstractLineDrawer(PoseStack.Pose pose)
-        {
+        AbstractLineDrawer(PoseStack.Pose pose) {
             this.pose = pose;
             this.lineWidth = Minecraft.getInstance().getWindow().getAppropriateLineWidth();
         }
 
         abstract void finish();
 
-        final void drawLine(VertexConsumer builder, float x1, float y1, float z1, float x2, float y2, float z2, int color, float lineWidth)
-        {
+        final void drawLine(VertexConsumer builder, float x1, float y1, float z1, float x2, float y2, float z2, int color, float lineWidth) {
             float nX = x2 - x1;
             float nY = y2 - y1;
             float nZ = z2 - z1;
@@ -176,27 +157,23 @@ public final class BlockOutlineRenderer
         }
     }
 
-    static final class DefaultLineDrawer extends AbstractLineDrawer
-    {
+    static final class DefaultLineDrawer extends AbstractLineDrawer {
         private final VertexConsumer builder;
         private final int lineColor;
 
-        DefaultLineDrawer(PoseStack.Pose pose, VertexConsumer builder, int lineColor)
-        {
+        DefaultLineDrawer(PoseStack.Pose pose, VertexConsumer builder, int lineColor) {
             super(pose);
             this.builder = builder;
             this.lineColor = lineColor;
         }
 
         @Override
-        public void drawLine(float x1, float y1, float z1, float x2, float y2, float z2)
-        {
+        public void drawLine(float x1, float y1, float z1, float x2, float y2, float z2) {
             drawLine(builder, x1, y1, z1, x2, y2, z2, lineColor, lineWidth);
         }
 
         @Override
-        public void drawLines(float[] vertices)
-        {
+        public void drawLines(float[] vertices) {
             for (int i = 0; i < vertices.length; i += 6)
             {
                 drawLine(vertices[i], vertices[i + 1], vertices[i + 2], vertices[i + 3], vertices[i + 4], vertices[i + 5]);
@@ -207,8 +184,7 @@ public final class BlockOutlineRenderer
         void finish() { }
     }
 
-    private static final class HighContrastLineDrawer extends AbstractLineDrawer
-    {
+    private static final class HighContrastLineDrawer extends AbstractLineDrawer {
         private static final int LINE_STRIDE = 6;
         private static final int INITIAL_LINE_COUNT = 32;
         private static final String STRIDE_ERROR = "Packed vertex array size must be multiple of " + LINE_STRIDE;
@@ -217,16 +193,14 @@ public final class BlockOutlineRenderer
         private float[] lines;
         private int pointer;
 
-        HighContrastLineDrawer(PoseStack.Pose pose, MultiBufferSource buffer)
-        {
+        HighContrastLineDrawer(PoseStack.Pose pose, MultiBufferSource buffer) {
             super(pose);
             this.buffer = buffer;
             this.lines = new float[INITIAL_LINE_COUNT * LINE_STRIDE];
         }
 
         @Override
-        public void drawLine(float x1, float y1, float z1, float x2, float y2, float z2)
-        {
+        public void drawLine(float x1, float y1, float z1, float x2, float y2, float z2) {
             ensureCapacity(pointer + LINE_STRIDE);
 
             lines[pointer] = x1;
@@ -240,8 +214,7 @@ public final class BlockOutlineRenderer
         }
 
         @Override
-        public void drawLines(float[] vertices)
-        {
+        public void drawLines(float[] vertices) {
             Preconditions.checkArgument(vertices.length % LINE_STRIDE == 0, STRIDE_ERROR);
 
             ensureCapacity(pointer + vertices.length);
@@ -249,10 +222,8 @@ public final class BlockOutlineRenderer
             pointer += vertices.length;
         }
 
-        private void ensureCapacity(int size)
-        {
-            if (size > lines.length)
-            {
+        private void ensureCapacity(int size) {
+            if (size > lines.length) {
                 int newSize = Math.max(lines.length + (INITIAL_LINE_COUNT * LINE_STRIDE), size);
                 float[] newLines = new float[newSize];
                 System.arraycopy(lines, 0, newLines, 0, lines.length);
@@ -261,17 +232,14 @@ public final class BlockOutlineRenderer
         }
 
         @Override
-        void finish()
-        {
+        void finish() {
             drawBufferedLines(RenderTypes.secondaryBlockOutline(), CommonColors.BLACK, 7F);
             drawBufferedLines(RenderTypes.lines(), CommonColors.HIGH_CONTRAST_DIAMOND, lineWidth);
         }
 
-        private void drawBufferedLines(RenderType renderType, int color, float lineWidth)
-        {
+        private void drawBufferedLines(RenderType renderType, int color, float lineWidth) {
             VertexConsumer builder = buffer.getBuffer(renderType);
-            for (int i = 0; i < pointer; i += LINE_STRIDE)
-            {
+            for (int i = 0; i < pointer; i += LINE_STRIDE) {
                 drawLine(builder, lines[i], lines[i + 1], lines[i + 2], lines[i + 3], lines[i + 4], lines[i + 5], color, lineWidth);
             }
         }

@@ -24,16 +24,13 @@ import net.neoforged.neoforge.common.Tags;
 
 import java.util.concurrent.CompletableFuture;
 
-public final class FramedRecipeProvider extends AbstractFramedRecipeProvider
-{
-    private FramedRecipeProvider(HolderLookup.Provider registries, RecipeOutput output)
-    {
+public final class FramedRecipeProvider extends AbstractFramedRecipeProvider {
+    private FramedRecipeProvider(HolderLookup.Provider registries, RecipeOutput output) {
         super(registries, output);
     }
 
     @Override
-    protected void buildRecipes()
-    {
+    protected void buildRecipes() {
         // region Framed Blocks
 
         shapedBuildingBlock(FBContent.BLOCK_FRAMED_CUBE.value(), 4)
@@ -1643,8 +1640,7 @@ public final class FramedRecipeProvider extends AbstractFramedRecipeProvider
         // endregion
     }
 
-    private void makeRotationRecipe(Holder<Block> first, Holder<Block> second, RecipeOutput consumer)
-    {
+    private void makeRotationRecipe(Holder<Block> first, Holder<Block> second, RecipeOutput consumer) {
         String firstName = Utils.getKeyOrThrow(first).identifier().getPath();
         String secondName = Utils.getKeyOrThrow(second).identifier().getPath();
 
@@ -1663,27 +1659,22 @@ public final class FramedRecipeProvider extends AbstractFramedRecipeProvider
                 .save(consumer, key(name));
     }
 
-    private static ResourceKey<Recipe<?>> key(String name)
-    {
+    private static ResourceKey<Recipe<?>> key(String name) {
         return ResourceKey.create(Registries.RECIPE, Utils.id(name));
     }
 
-    public static final class Runner extends RecipeProvider.Runner
-    {
-        public Runner(PackOutput output, CompletableFuture<HolderLookup.Provider> registries)
-        {
+    public static final class Runner extends RecipeProvider.Runner {
+        public Runner(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
             super(output, registries);
         }
 
         @Override
-        protected RecipeProvider createRecipeProvider(HolderLookup.Provider registries, RecipeOutput output)
-        {
+        protected RecipeProvider createRecipeProvider(HolderLookup.Provider registries, RecipeOutput output) {
             return new FramedRecipeProvider(registries, output);
         }
 
         @Override
-        public String getName()
-        {
+        public String getName() {
             return "FramedBlocks Recipes";
         }
     }

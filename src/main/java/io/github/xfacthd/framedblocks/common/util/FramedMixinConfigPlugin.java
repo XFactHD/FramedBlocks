@@ -10,8 +10,7 @@ import java.util.List;
 import java.util.Set;
 
 @SuppressWarnings("unused") // Referenced by mixin config
-public final class FramedMixinConfigPlugin implements IMixinConfigPlugin
-{
+public final class FramedMixinConfigPlugin implements IMixinConfigPlugin {
     private static final Set<String> DEV_ONLY_MIXINS = Set.of(
     );
 
@@ -19,17 +18,13 @@ public final class FramedMixinConfigPlugin implements IMixinConfigPlugin
     public void onLoad(String mixinPackage) { }
 
     @Override
-    @Nullable
-    public String getRefMapperConfig()
-    {
+    public @Nullable String getRefMapperConfig() {
         return null;
     }
 
     @Override
-    public boolean shouldApplyMixin(String targetClassName, String mixinClassName)
-    {
-        if (DEV_ONLY_MIXINS.contains(mixinClassName))
-        {
+    public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
+        if (DEV_ONLY_MIXINS.contains(mixinClassName)) {
             return !FMLEnvironment.isProduction();
         }
         return true;
@@ -39,9 +34,7 @@ public final class FramedMixinConfigPlugin implements IMixinConfigPlugin
     public void acceptTargets(Set<String> myTargets, Set<String> otherTargets) { }
 
     @Override
-    @Nullable
-    public List<String> getMixins()
-    {
+    public @Nullable List<String> getMixins() {
         return null;
     }
 
@@ -52,15 +45,11 @@ public final class FramedMixinConfigPlugin implements IMixinConfigPlugin
     public void postApply(String targetClassName, ClassNode targetClass, String mixinClassName, IMixinInfo mixinInfo) { }
 
     @SuppressWarnings({ "SameParameterValue", "unused" })
-    private static boolean checkClassExists(String className)
-    {
-        try
-        {
+    private static boolean checkClassExists(String className) {
+        try {
             Class.forName(className, false, FramedMixinConfigPlugin.class.getClassLoader());
             return true;
-        }
-        catch (ClassNotFoundException e)
-        {
+        } catch (ClassNotFoundException e) {
             return false;
         }
     }

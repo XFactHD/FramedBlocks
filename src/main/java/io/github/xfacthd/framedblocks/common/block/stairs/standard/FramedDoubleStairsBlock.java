@@ -32,27 +32,22 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jspecify.annotations.Nullable;
 
-public class FramedDoubleStairsBlock extends FramedStairsBlock implements IFramedDoubleBlockInternal
-{
-    public FramedDoubleStairsBlock(Properties props)
-    {
+public class FramedDoubleStairsBlock extends FramedStairsBlock implements IFramedDoubleBlockInternal {
+    public FramedDoubleStairsBlock(Properties props) {
         super(BlockType.FRAMED_DOUBLE_STAIRS, props);
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
-    {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
         BlockUtils.removeProperty(builder, WATERLOGGED);
     }
 
     @Override
-    public BlockState getStateForPlacement(BlockPlaceContext ctx)
-    {
+    public BlockState getStateForPlacement(BlockPlaceContext ctx) {
         BlockPos pos = ctx.getClickedPos();
         Direction side = ctx.getClickedFace();
-        Half half = switch (side)
-        {
+        Half half = switch (side) {
             case UP -> Half.BOTTOM;
             case DOWN -> Half.TOP;
             default -> MathUtils.fractionInDir(ctx.getClickLocation(), Direction.UP) > .5D ? Half.TOP : Half.BOTTOM;
@@ -64,38 +59,32 @@ public class FramedDoubleStairsBlock extends FramedStairsBlock implements IFrame
     }
 
     @Override
-    protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext ctx)
-    {
+    protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext ctx) {
         return isIntangible(state, level, pos, ctx) ? Shapes.empty() : Shapes.block();
     }
 
     @Override
-    public boolean canPlaceLiquid(@Nullable LivingEntity entity, BlockGetter level, BlockPos pos, BlockState state, Fluid fluid)
-    {
+    public boolean canPlaceLiquid(@Nullable LivingEntity entity, BlockGetter level, BlockPos pos, BlockState state, Fluid fluid) {
         return false;
     }
 
     @Override
-    public boolean placeLiquid(LevelAccessor pLevel, BlockPos pPos, BlockState pState, FluidState pFluidState)
-    {
+    public boolean placeLiquid(LevelAccessor pLevel, BlockPos pPos, BlockState pState, FluidState pFluidState) {
         return false;
     }
 
     @Override
-    public ItemStack pickupBlock(@Nullable LivingEntity entity, LevelAccessor level, BlockPos pos, BlockState state)
-    {
+    public ItemStack pickupBlock(@Nullable LivingEntity entity, LevelAccessor level, BlockPos pos, BlockState state) {
         return ItemStack.EMPTY;
     }
 
     @Override
-    protected FluidState getFluidState(BlockState state)
-    {
+    protected FluidState getFluidState(BlockState state) {
         return Fluids.EMPTY.defaultFluidState();
     }
 
     @Override
-    public DoubleBlockParts calculateParts(BlockState state)
-    {
+    public DoubleBlockParts calculateParts(BlockState state) {
         Direction facing = state.getValue(FACING);
         StairsShape shape = state.getValue(SHAPE);
         boolean top = state.getValue(BlockStateProperties.HALF) == Half.TOP;
@@ -105,8 +94,7 @@ public class FramedDoubleStairsBlock extends FramedStairsBlock implements IFrame
                 .setValue(BlockStateProperties.HORIZONTAL_FACING, facing)
                 .setValue(BlockStateProperties.STAIRS_SHAPE, shape)
                 .setValue(BlockStateProperties.HALF, top ? Half.TOP : Half.BOTTOM);
-        BlockState partTwo = switch (shape)
-        {
+        BlockState partTwo = switch (shape) {
             case STRAIGHT -> FBContent.BLOCK_FRAMED_SLAB_EDGE.value()
                     .defaultBlockState()
                     .setValue(FramedProperties.FACING_HOR, facing.getOpposite())
@@ -133,163 +121,102 @@ public class FramedDoubleStairsBlock extends FramedStairsBlock implements IFrame
     }
 
     @Override
-    public DoubleBlockTopInteractionMode calculateTopInteractionMode(BlockState state)
-    {
-        if (state.getValue(BlockStateProperties.HALF) == Half.TOP)
-        {
+    public DoubleBlockTopInteractionMode calculateTopInteractionMode(BlockState state) {
+        if (state.getValue(BlockStateProperties.HALF) == Half.TOP) {
             return DoubleBlockTopInteractionMode.FIRST;
         }
         return DoubleBlockTopInteractionMode.EITHER;
     }
 
     @Override
-    public CamoGetter calculateCamoGetter(BlockState state, Direction side, @Nullable Direction edge)
-    {
+    public CamoGetter calculateCamoGetter(BlockState state, Direction side, @Nullable Direction edge) {
         Direction facing = state.getValue(FACING);
         boolean top = state.getValue(BlockStateProperties.HALF) == Half.TOP;
         Direction dirTwo = top ? Direction.UP : Direction.DOWN;
 
-        return switch (state.getValue(SHAPE))
-        {
-            case STRAIGHT ->
-            {
-                if (side == facing || side == dirTwo)
-                {
+        return switch (state.getValue(SHAPE)) {
+            case STRAIGHT -> {
+                if (side == facing || side == dirTwo) {
                     yield CamoGetter.FIRST;
-                }
-                else if (side == facing.getOpposite())
-                {
-                    if (edge == dirTwo)
-                    {
+                } else if (side == facing.getOpposite()) {
+                    if (edge == dirTwo) {
                         yield CamoGetter.FIRST;
-                    }
-                    else if (edge == dirTwo.getOpposite())
-                    {
+                    } else if (edge == dirTwo.getOpposite()) {
                         yield CamoGetter.SECOND;
                     }
-                }
-                else if (side == dirTwo.getOpposite())
-                {
-                    if (edge == facing)
-                    {
+                } else if (side == dirTwo.getOpposite()) {
+                    if (edge == facing) {
                         yield CamoGetter.FIRST;
-                    }
-                    else if (edge == facing.getOpposite())
-                    {
+                    } else if (edge == facing.getOpposite()) {
                         yield CamoGetter.SECOND;
                     }
-                }
-                else if (side.getAxis() == facing.getClockWise().getAxis())
-                {
-                    if (edge == facing || edge == dirTwo)
-                    {
+                } else if (side.getAxis() == facing.getClockWise().getAxis()) {
+                    if (edge == facing || edge == dirTwo) {
                         yield CamoGetter.FIRST;
                     }
                 }
                 yield CamoGetter.NONE;
             }
-            case INNER_LEFT ->
-            {
-                if (side == facing || side == facing.getCounterClockWise() || side == dirTwo)
-                {
+            case INNER_LEFT -> {
+                if (side == facing || side == facing.getCounterClockWise() || side == dirTwo) {
                     yield CamoGetter.FIRST;
-                }
-                else if (side == dirTwo.getOpposite())
-                {
-                    if (edge == facing || edge == facing.getCounterClockWise())
-                    {
+                } else if (side == dirTwo.getOpposite()) {
+                    if (edge == facing || edge == facing.getCounterClockWise()) {
                         yield CamoGetter.FIRST;
                     }
-                }
-                else if (side == facing.getOpposite())
-                {
-                    if (edge == facing.getCounterClockWise() || edge == dirTwo)
-                    {
+                } else if (side == facing.getOpposite()) {
+                    if (edge == facing.getCounterClockWise() || edge == dirTwo) {
                         yield CamoGetter.FIRST;
                     }
-                }
-                else if (side == facing.getClockWise())
-                {
-                    if (edge == facing || edge == dirTwo)
-                    {
+                } else if (side == facing.getClockWise()) {
+                    if (edge == facing || edge == dirTwo) {
                         yield CamoGetter.FIRST;
                     }
                 }
                 yield CamoGetter.NONE;
             }
-            case INNER_RIGHT ->
-            {
-                if (side == facing || side == facing.getClockWise() || side == dirTwo)
-                {
+            case INNER_RIGHT -> {
+                if (side == facing || side == facing.getClockWise() || side == dirTwo) {
                     yield CamoGetter.FIRST;
-                }
-                else if (side == dirTwo.getOpposite())
-                {
-                    if (edge == facing || edge == facing.getClockWise())
-                    {
+                } else if (side == dirTwo.getOpposite()) {
+                    if (edge == facing || edge == facing.getClockWise()) {
                         yield CamoGetter.FIRST;
                     }
-                }
-                else if (side == facing.getOpposite())
-                {
-                    if (edge == facing.getClockWise() || edge == dirTwo)
-                    {
+                } else if (side == facing.getOpposite()) {
+                    if (edge == facing.getClockWise() || edge == dirTwo) {
                         yield CamoGetter.FIRST;
                     }
-                }
-                else if (side == facing.getCounterClockWise())
-                {
-                    if (edge == facing || edge == dirTwo)
-                    {
+                } else if (side == facing.getCounterClockWise()) {
+                    if (edge == facing || edge == dirTwo) {
                         yield CamoGetter.FIRST;
                     }
                 }
                 yield CamoGetter.NONE;
             }
-            case OUTER_LEFT ->
-            {
-                if (side == dirTwo || (side != dirTwo.getOpposite() && edge == dirTwo))
-                {
+            case OUTER_LEFT -> {
+                if (side == dirTwo || (side != dirTwo.getOpposite() && edge == dirTwo)) {
                     yield CamoGetter.FIRST;
-                }
-                else if (side == facing && edge == facing.getCounterClockWise())
-                {
+                } else if (side == facing && edge == facing.getCounterClockWise()) {
                     yield CamoGetter.FIRST;
-                }
-                else if (side == dirTwo.getOpposite() && (edge == facing.getOpposite() || edge == facing.getClockWise()))
-                {
+                } else if (side == dirTwo.getOpposite() && (edge == facing.getOpposite() || edge == facing.getClockWise())) {
                     yield CamoGetter.SECOND;
-                }
-                else if ((side == facing.getOpposite() || side == facing.getClockWise()) && edge == dirTwo.getOpposite())
-                {
+                } else if ((side == facing.getOpposite() || side == facing.getClockWise()) && edge == dirTwo.getOpposite()) {
                     yield CamoGetter.SECOND;
-                }
-                else if (side == facing.getCounterClockWise() && edge == facing)
-                {
+                } else if (side == facing.getCounterClockWise() && edge == facing) {
                     yield CamoGetter.FIRST;
                 }
                 yield CamoGetter.NONE;
             }
-            case OUTER_RIGHT ->
-            {
-                if (side == dirTwo || (side != dirTwo.getOpposite() && edge == dirTwo))
-                {
+            case OUTER_RIGHT -> {
+                if (side == dirTwo || (side != dirTwo.getOpposite() && edge == dirTwo)) {
                     yield CamoGetter.FIRST;
-                }
-                else if (side == facing && edge == facing.getClockWise())
-                {
+                } else if (side == facing && edge == facing.getClockWise()) {
                     yield CamoGetter.FIRST;
-                }
-                else if (side == dirTwo.getOpposite() && (edge == facing.getOpposite() || edge == facing.getCounterClockWise()))
-                {
+                } else if (side == dirTwo.getOpposite() && (edge == facing.getOpposite() || edge == facing.getCounterClockWise())) {
                     yield CamoGetter.SECOND;
-                }
-                else if ((side == facing.getOpposite() || side == facing.getCounterClockWise()) && edge == dirTwo.getOpposite())
-                {
+                } else if ((side == facing.getOpposite() || side == facing.getCounterClockWise()) && edge == dirTwo.getOpposite()) {
                     yield CamoGetter.SECOND;
-                }
-                else if (side == facing.getClockWise() && edge == facing)
-                {
+                } else if (side == facing.getClockWise() && edge == facing) {
                     yield CamoGetter.FIRST;
                 }
                 yield CamoGetter.NONE;
@@ -298,53 +225,41 @@ public class FramedDoubleStairsBlock extends FramedStairsBlock implements IFrame
     }
 
     @Override
-    public SolidityCheck calculateSolidityCheck(BlockState state, Direction side)
-    {
+    public SolidityCheck calculateSolidityCheck(BlockState state, Direction side) {
         Direction facing = state.getValue(FACING);
         StairsShape shape = state.getValue(SHAPE);
         boolean top = state.getValue(BlockStateProperties.HALF) == Half.TOP;
         Direction dirTwo = top ? Direction.UP : Direction.DOWN;
 
-        if (side == facing && shape != StairsShape.OUTER_LEFT && shape != StairsShape.OUTER_RIGHT)
-        {
+        if (side == facing && shape != StairsShape.OUTER_LEFT && shape != StairsShape.OUTER_RIGHT) {
             return SolidityCheck.FIRST;
-        }
-        else if (side == dirTwo)
-        {
+        } else if (side == dirTwo) {
             return SolidityCheck.FIRST;
-        }
-        else if (shape == StairsShape.INNER_LEFT && side == facing.getCounterClockWise())
-        {
+        } else if (shape == StairsShape.INNER_LEFT && side == facing.getCounterClockWise()) {
             return SolidityCheck.FIRST;
-        }
-        else if (shape == StairsShape.INNER_RIGHT && side == facing.getClockWise())
-        {
+        } else if (shape == StairsShape.INNER_RIGHT && side == facing.getClockWise()) {
             return SolidityCheck.FIRST;
         }
         return SolidityCheck.BOTH;
     }
 
     @Override
-    public FramedDoubleBlockEntity newBlockEntity(BlockPos pos, BlockState state)
-    {
+    public FramedDoubleBlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return IFramedDoubleBlockInternal.super.newBlockEntity(pos, state);
     }
 
     @Override
-    public BlockState getItemModelSource()
-    {
+    public BlockState getItemModelSource() {
         return defaultBlockState().setValue(FACING, Direction.SOUTH);
     }
 
     @Override
-    public Direction getHorizontalOrientation(BlockState state)
-    {
+    public Direction getHorizontalOrientation(BlockState state) {
         return state.getValue(FACING);
     }
 
     @Override
-    public BlockState getJadeRenderState(BlockState state)
-    {
+    public BlockState getJadeRenderState(BlockState state) {
         return getItemModelSource();
     }
 }

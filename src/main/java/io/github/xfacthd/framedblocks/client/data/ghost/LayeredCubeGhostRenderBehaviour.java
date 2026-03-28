@@ -13,17 +13,13 @@ import org.joml.Vector3f;
 import org.joml.Vector3fc;
 import org.jspecify.annotations.Nullable;
 
-public final class LayeredCubeGhostRenderBehaviour implements GhostRenderBehaviour
-{
+public final class LayeredCubeGhostRenderBehaviour implements GhostRenderBehaviour {
     private static final float LAYER_HEIGHT = 1F/8F;
 
     @Override
-    @Nullable
-    public BlockState getRenderState(ItemStack stack, @Nullable ItemStack proxiedStack, BlockHitResult hit, BlockPlaceContext ctx, BlockState hitState, int renderPass)
-    {
+    public @Nullable BlockState getRenderState(ItemStack stack, @Nullable ItemStack proxiedStack, BlockHitResult hit, BlockPlaceContext ctx, BlockState hitState, int renderPass) {
         BlockState state = GhostRenderBehaviour.super.getRenderState(stack, proxiedStack, hit, ctx, hitState, renderPass);
-        if (state != null)
-        {
+        if (state != null) {
             state = state.setValue(BlockStateProperties.LAYERS, 1);
         }
         return state;
@@ -37,11 +33,9 @@ public final class LayeredCubeGhostRenderBehaviour implements GhostRenderBehavio
             BlockState renderState,
             int renderPass,
             ModelData data
-    )
-    {
+    ) {
         BlockState prevState = ctx.getLevel().getBlockState(ctx.getClickedPos());
-        if (prevState.is(FBContent.BLOCK_FRAMED_LAYERED_CUBE))
-        {
+        if (prevState.is(FBContent.BLOCK_FRAMED_LAYERED_CUBE)) {
             Direction facing = prevState.getValue(BlockStateProperties.FACING);
             int layers = prevState.getValue(BlockStateProperties.LAYERS);
             return new Vector3f(

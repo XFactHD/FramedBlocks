@@ -9,14 +9,12 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
 
-public class FramedStorageScreen extends AbstractContainerScreen<FramedStorageMenu>
-{
+public class FramedStorageScreen extends AbstractContainerScreen<FramedStorageMenu> {
     private static final Identifier CHEST_GUI_TEXTURE = Utils.id("minecraft", "textures/gui/container/generic_54.png");
 
     private final int invHeight;
 
-    public FramedStorageScreen(FramedStorageMenu menu, Inventory inv, Component title)
-    {
+    public FramedStorageScreen(FramedStorageMenu menu, Inventory inv, Component title) {
         int rows = menu.getRowCount();
         super(menu, inv, title, DEFAULT_IMAGE_WIDTH, 114 + rows * 18);
         this.inventoryLabelY = imageHeight - 94;
@@ -24,8 +22,7 @@ public class FramedStorageScreen extends AbstractContainerScreen<FramedStorageMe
     }
 
     @Override
-    public void extractBackground(GuiGraphicsExtractor graphics, int x, int y, float partialTicks)
-    {
+    public void extractBackground(GuiGraphicsExtractor graphics, int x, int y, float partialTicks) {
         super.extractBackground(graphics, x, y, partialTicks);
 
         int left = (this.width - this.imageWidth) / 2;

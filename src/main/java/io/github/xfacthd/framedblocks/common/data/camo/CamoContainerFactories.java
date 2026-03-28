@@ -22,15 +22,13 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.function.Predicate;
 
-public final class CamoContainerFactories
-{
+public final class CamoContainerFactories {
     private static final Map<Item, CamoContainerFactory<?>> APPLICATION_ITEMS = new Reference2ObjectOpenHashMap<>();
     private static final List<FactoryPredicatePair> APPLICATION_PREDICATES = new ArrayList<>();
     private static final Map<Item, Set<CamoContainerFactory<?>>> REMOVAL_ITEMS = new Reference2ObjectOpenHashMap<>();
     private static final Map<CamoContainerFactory<?>, List<Predicate<ItemStack>>> REMOVAL_PREDICATES = new Reference2ObjectOpenHashMap<>();
 
-    public static void registerCamoFactories()
-    {
+    public static void registerCamoFactories() {
         FramedRegistries.CAMO_CONTAINER_FACTORIES.forEach(factory ->
                 factory.registerTriggerItems(new TriggerRegistrarImpl(factory))
         );
@@ -50,42 +48,36 @@ public final class CamoContainerFactories
         Set<CamoContainerFactory<?>> removable = new ReferenceOpenHashSet<>(REMOVAL_PREDICATES.keySet());
         REMOVAL_ITEMS.values().forEach(removable::addAll);
         int registrySize = FramedRegistries.CAMO_CONTAINER_FACTORIES.size() - 1; // Subtract one to ignore empty container
-        if (applicable.size() != registrySize || removable.size() != registrySize)
-        {
+        if (applicable.size() != registrySize || removable.size() != registrySize) {
             StringBuilder builder = new StringBuilder("CamoContainerFactory trigger registration incomplete!\n");
-            if (applicable.size() != registrySize) printMissing(builder, "application", applicable);
-            if (removable.size() != registrySize) printMissing(builder, "removal", removable);
+            if (applicable.size() != registrySize) {
+                printMissing(builder, "application", applicable);
+            }
+            if (removable.size() != registrySize) {
+                printMissing(builder, "removal", removable);
+            }
             throw new IllegalStateException(builder.toString());
         }
     }
 
-    private static void printMissing(StringBuilder builder, String type, Set<CamoContainerFactory<?>> factories)
-    {
+    private static void printMissing(StringBuilder builder, String type, Set<CamoContainerFactory<?>> factories) {
         builder.append("\tFactories missing ").append(type).append(" items/predicates:\n");
-        FramedRegistries.CAMO_CONTAINER_FACTORIES.entrySet().forEach(entry ->
-        {
-            if (entry.getValue() != FBContent.FACTORY_EMPTY.value() && !factories.contains(entry.getValue()))
-            {
+        FramedRegistries.CAMO_CONTAINER_FACTORIES.entrySet().forEach(entry -> {
+            if (entry.getValue() != FBContent.FACTORY_EMPTY.value() && !factories.contains(entry.getValue())) {
                 builder.append("\t- ").append(entry.getKey().identifier()).append("\n");
             }
         });
     }
 
-    @Nullable
-    public static CamoContainerFactory<?> findCamoFactory(ItemStack stack)
-    {
-        if (stack.getItem() instanceof BlockItem item && item.getBlock() instanceof IFramedBlock)
-        {
+    public static @Nullable CamoContainerFactory<?> findCamoFactory(ItemStack stack) {
+        if (stack.getItem() instanceof BlockItem item && item.getBlock() instanceof IFramedBlock) {
             return null;
         }
 
         CamoContainerFactory<?> factory = APPLICATION_ITEMS.get(stack.getItem());
-        if (factory == null)
-        {
-            for (FactoryPredicatePair pair : APPLICATION_PREDICATES)
-            {
-                if (pair.predicate.test(stack))
-                {
+        if (factory == null) {
+            for (FactoryPredicatePair pair : APPLICATION_PREDICATES) {
+                if (pair.predicate.test(stack)) {
                     factory = pair.factory;
                     break;
                 }
@@ -94,21 +86,16 @@ public final class CamoContainerFactories
         return factory;
     }
 
-    public static boolean isValidRemovalTool(CamoContainer<?, ?> container, ItemStack stack)
-    {
+    public static boolean isValidRemovalTool(CamoContainer<?, ?> container, ItemStack stack) {
         Set<CamoContainerFactory<?>> factories = REMOVAL_ITEMS.get(stack.getItem());
-        if (factories != null && factories.contains(container.getFactory()))
-        {
+        if (factories != null && factories.contains(container.getFactory())) {
             return true;
         }
 
         List<Predicate<ItemStack>> predicates = REMOVAL_PREDICATES.getOrDefault(container.getFactory(), List.of());
-        if (!predicates.isEmpty())
-        {
-            for (Predicate<ItemStack> predicate : predicates)
-            {
-                if (predicate.test(stack))
-                {
+        if (!predicates.isEmpty()) {
+            for (Predicate<ItemStack> predicate : predicates) {
+                if (predicate.test(stack)) {
                     return true;
                 }
             }
@@ -116,30 +103,24 @@ public final class CamoContainerFactories
         return false;
     }
 
-    private record TriggerRegistrarImpl(CamoContainerFactory<?> factory) implements TriggerRegistrar
-    {
+    private record TriggerRegistrarImpl(CamoContainerFactory<?> factory) implements TriggerRegistrar {
         @Override
-        public void registerApplicationItem(Item item)
-        {
-            if (APPLICATION_ITEMS.containsKey(item))
-            {
+        public void registerApplicationItem(Item item) {
+            if (APPLICATION_ITEMS.containsKey(item)) {
                 throw new IllegalArgumentException(String.format("Item %s is already registered!", item));
             }
             APPLICATION_ITEMS.put(item, factory);
         }
 
         @Override
-        public void registerApplicationPredicate(Predicate<ItemStack> predicate)
-        {
+        public void registerApplicationPredicate(Predicate<ItemStack> predicate) {
             APPLICATION_PREDICATES.add(new FactoryPredicatePair(predicate, factory));
         }
 
         @Override
-        public void registerRemovalItem(Item item)
-        {
+        public void registerRemovalItem(Item item) {
             Set<CamoContainerFactory<?>> factories = REMOVAL_ITEMS.computeIfAbsent(item, _ -> new ReferenceOpenHashSet<>());
-            if (factories.contains(factory))
-            {
+            if (factories.contains(factory)) {
                 String factoryName = Objects.requireNonNull(FramedRegistries.CAMO_CONTAINER_FACTORIES.getKey(factory)).toString();
                 throw new IllegalArgumentException(String.format("Factory %s is already registered to item %s!", factoryName, item));
             }
@@ -147,8 +128,7 @@ public final class CamoContainerFactories
         }
 
         @Override
-        public void registerRemovalPredicate(Predicate<ItemStack> predicate)
-        {
+        public void registerRemovalPredicate(Predicate<ItemStack> predicate) {
             REMOVAL_PREDICATES.computeIfAbsent(factory, _ -> new ArrayList<>()).add(predicate);
         }
     }

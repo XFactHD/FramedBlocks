@@ -12,16 +12,13 @@ import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 
-public final class LayeredCubeShapes
-{
+public final class LayeredCubeShapes {
     private static final int LAYER_COUNT = 8;
     private static final int DIR_COUNT = Direction.values().length;
 
-    public static ShapeContainer generate(List<BlockState> states)
-    {
+    public static ShapeContainer generate(List<BlockState> states) {
         VoxelShape[] shapes = new VoxelShape[LAYER_COUNT * DIR_COUNT];
-        for (int i = 1; i <= LAYER_COUNT; i++)
-        {
+        for (int i = 1; i <= LAYER_COUNT; i++) {
             VoxelShape layerShapeUp = Block.box(0, 0, 0, 16, i * 2, 16);
             VoxelShape layerShapeDown = ShapeUtils.rotateShapeAroundX(Direction.UP, Direction.DOWN, layerShapeUp);
             VoxelShape layerShapeNorth = ShapeUtils.rotateShapeAroundX(Direction.UP, Direction.NORTH, layerShapeUp);
@@ -33,8 +30,7 @@ public final class LayeredCubeShapes
 
         Map<BlockState, VoxelShape> map = new IdentityHashMap<>(states.size());
 
-        for (BlockState state : states)
-        {
+        for (BlockState state : states) {
             Direction dir = state.getValue(BlockStateProperties.FACING);
             int layers = state.getValue(BlockStateProperties.LAYERS);
             map.put(state, shapes[index(dir, layers)]);
@@ -43,8 +39,7 @@ public final class LayeredCubeShapes
         return ShapeContainer.of(map);
     }
 
-    private static int index(Direction dir, int layers)
-    {
+    private static int index(Direction dir, int layers) {
         return ((layers - 1) * DIR_COUNT) + dir.ordinal();
     }
 

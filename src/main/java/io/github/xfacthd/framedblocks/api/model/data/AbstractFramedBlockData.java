@@ -11,8 +11,7 @@ import net.neoforged.neoforge.model.data.ModelProperty;
 import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.Nullable;
 
-public abstract sealed class AbstractFramedBlockData permits FramedBlockData, FramedDoubleBlockData
-{
+public abstract sealed class AbstractFramedBlockData permits FramedBlockData, FramedDoubleBlockData {
     public static final ModelProperty<AbstractFramedBlockData> PROPERTY = new ModelProperty<>();
 
     public abstract FramedBlockData unwrap(BlockState partState);
@@ -25,8 +24,7 @@ public abstract sealed class AbstractFramedBlockData permits FramedBlockData, Fr
 
     public abstract TriState isViewBlocking();
 
-    @Nullable
-    public abstract Holder<BlockOverlay> getBlockOverlay();
+    public abstract @Nullable Holder<BlockOverlay> getBlockOverlay();
 
     /// Returns the offset to apply to tint indices in camo quads of the specified part
     ///
@@ -36,10 +34,8 @@ public abstract sealed class AbstractFramedBlockData permits FramedBlockData, Fr
     /// Returns the offset to apply to tint indices in non-camo quads
     public abstract int getPostCamoTintIndexOffset();
 
-    @Nullable
     @Contract("_,_,!null -> !null")
-    public static FramedBlockData getOrDefault(ModelData modelData, BlockState partState, @Nullable FramedBlockData defaultData)
-    {
+    public static @Nullable FramedBlockData getOrDefault(ModelData modelData, BlockState partState, @Nullable FramedBlockData defaultData) {
         AbstractFramedBlockData data = modelData.get(PROPERTY);
         return data != null ? data.unwrap(partState) : defaultData;
     }

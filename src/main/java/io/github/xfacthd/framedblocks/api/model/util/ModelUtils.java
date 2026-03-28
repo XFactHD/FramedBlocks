@@ -34,8 +34,7 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-public final class ModelUtils
-{
+public final class ModelUtils {
     public static final ModelBaker.SharedOperationKey<BlockStateModel> MISSING_MODEL_KEY = makeSharedOpsKey(
             baker -> new SingleVariant(baker.missingBlockModelPart())
     );
@@ -63,8 +62,7 @@ public final class ModelUtils
             int uv2,
             int uvTo,
             boolean vAxis
-    )
-    {
+    ) {
         float coordMin = Math.min(coord1, coord2);
         float coordMax = Math.max(coord1, coord2);
 
@@ -76,55 +74,43 @@ public final class ModelUtils
         float uvAbsMax = Math.max(uvAbs1, uvAbs2);
         boolean invert = ((coord2 > coord1) ^ (uvAbs2 > uvAbs1)) != vAxis;
 
-        if (coordTo == coordMin)
-        {
+        if (coordTo == coordMin) {
             quad.setUvComponent(uvTo, uvIdx, (invert) ? uvAbsMax : uvAbsMin);
-        }
-        else if (coordTo == coordMax)
-        {
+        } else if (coordTo == coordMax) {
             quad.setUvComponent(uvTo, uvIdx, (invert) ? uvAbsMin : uvAbsMax);
-        }
-        else
-        {
+        } else {
             float mult = (coordTo - coordMin) / (coordMax - coordMin);
             if (invert) mult = 1F - mult;
             quad.setUvComponent(uvTo, uvIdx, Mth.lerp(mult, uvAbsMin, uvAbsMax));
         }
     }
 
-    public static boolean isQuadRotated(ExtMutableQuad data)
-    {
+    public static boolean isQuadRotated(ExtMutableQuad data) {
         return (Mth.equal(data.uvComponent(0, 1), data.uvComponent(1, 1)) || Mth.equal(data.uvComponent(3, 1), data.uvComponent(2, 1))) &&
                (Mth.equal(data.uvComponent(1, 0), data.uvComponent(2, 0)) || Mth.equal(data.uvComponent(0, 0), data.uvComponent(3, 0)));
     }
 
-    public static BlockStateModel getModel(BlockState state)
-    {
+    public static BlockStateModel getModel(BlockState state) {
         return Minecraft.getInstance().getModelManager().getBlockStateModelSet().get(state);
     }
 
-    public static AbstractFramedBlockStateModel getFramedBlockModel(BlockState state)
-    {
+    public static AbstractFramedBlockStateModel getFramedBlockModel(BlockState state) {
         BlockStateModel model = getModel(state);
-        if (model instanceof AbstractFramedBlockStateModel framedModel)
-        {
+        if (model instanceof AbstractFramedBlockStateModel framedModel) {
             return framedModel;
         }
         return new DelegateFramedBlockStateModel(model, state);
     }
 
-    public static FluidModel getFluidModel(FluidState state)
-    {
+    public static FluidModel getFluidModel(FluidState state) {
         return Minecraft.getInstance().getModelManager().getFluidStateModelSet().get(state);
     }
 
-    public static Supplier<BlockStateModel> getModelDeferred(BlockState state)
-    {
+    public static Supplier<BlockStateModel> getModelDeferred(BlockState state) {
         return Lazy.of(() -> getModel(state));
     }
 
-    public static ExtendedBlockStateModelPart makeModelPart(QuadMapBuilder quadMap, TriState partAO, Material.Baked particleMaterial, @Nullable BlockState shaderState)
-    {
+    public static ExtendedBlockStateModelPart makeModelPart(QuadMapBuilder quadMap, TriState partAO, Material.Baked particleMaterial, @Nullable BlockState shaderState) {
         return InternalClientAPI.INSTANCE.makeBlockModelPart(quadMap, partAO, particleMaterial, shaderState);
     }
 
@@ -138,18 +124,20 @@ public final class ModelUtils
      * licensed under LGPL v3
      */
     @SuppressWarnings("ForLoopReplaceableByForEach")
-    public static List<BakedQuad> getFilteredNullQuads(BlockStateModelPart modelPart, Direction side)
-    {
+    public static List<BakedQuad> getFilteredNullQuads(BlockStateModelPart modelPart, Direction side) {
         List<BakedQuad> nullQuads = modelPart.getQuads(null);
-        if (nullQuads.isEmpty()) return Collections.emptyList();
+        if (nullQuads.isEmpty()) {
+            return Collections.emptyList();
+        }
 
         List<BakedQuad> quadsOut = null;
-        for (int i = 0; i < nullQuads.size(); i++)
-        {
+        for (int i = 0; i < nullQuads.size(); i++) {
             BakedQuad quad = nullQuads.get(i);
 
             // Filter out quads pointing completely the wrong way early
-            if (quad.direction() != side) continue;
+            if (quad.direction() != side) {
+                continue;
+            }
 
             float minX = 32F;
             float minY = 32F;
@@ -158,8 +146,7 @@ public final class ModelUtils
             float maxY = -32F;
             float maxZ = -32F;
 
-            for (int vert = 0; vert < 4; ++vert)
-            {
+            for (int vert = 0; vert < 4; ++vert) {
                 Vector3fc pos = quad.position(vert);
 
                 minX = Math.min(minX, pos.x());
@@ -171,17 +158,14 @@ public final class ModelUtils
             }
 
             boolean positive = DirUtils.isPositive(side);
-            boolean aligned = switch(side.getAxis())
-            {
+            boolean aligned = switch(side.getAxis()) {
                 case X -> minX == maxX && (positive ? maxX > 0.9999F : minX < 0.0001F);
                 case Y -> minY == maxY && (positive ? maxY > 0.9999F : minY < 0.0001F);
                 case Z -> minZ == maxZ && (positive ? maxZ > 0.9999F : minZ < 0.0001F);
             };
 
-            if (aligned)
-            {
-                if (quadsOut == null)
-                {
+            if (aligned) {
+                if (quadsOut == null) {
                     quadsOut = new ArrayList<>();
                 }
                 quadsOut.add(quad);
@@ -191,13 +175,10 @@ public final class ModelUtils
     }
 
     @SuppressWarnings({ "Convert2Lambda", "Anonymous2MethodRef" })
-    public static <T> ModelBaker.SharedOperationKey<T> makeSharedOpsKey(Function<ModelBaker, T> operation)
-    {
-        return new ModelBaker.SharedOperationKey<>()
-        {
+    public static <T> ModelBaker.SharedOperationKey<T> makeSharedOpsKey(Function<ModelBaker, T> operation) {
+        return new ModelBaker.SharedOperationKey<>() {
             @Override
-            public T compute(ModelBaker baker)
-            {
+            public T compute(ModelBaker baker) {
                 return operation.apply(baker);
             }
         };
@@ -210,19 +191,15 @@ public final class ModelUtils
      * @param event The registration event
      * @param model The model to register
      */
-    public static void registerStandaloneForLoading(ModelEvent.RegisterStandalone event, Identifier model)
-    {
-        event.register(new StandaloneModelKey<>(model::toString), new UnbakedStandaloneModel<Unit>()
-        {
+    public static void registerStandaloneForLoading(ModelEvent.RegisterStandalone event, Identifier model) {
+        event.register(new StandaloneModelKey<>(model::toString), new UnbakedStandaloneModel<Unit>() {
             @Override
-            public Unit bake(ModelBaker baker)
-            {
+            public Unit bake(ModelBaker baker) {
                 return Unit.INSTANCE;
             }
 
             @Override
-            public void resolveDependencies(Resolver resolver)
-            {
+            public void resolveDependencies(Resolver resolver) {
                 resolver.markDependency(model);
             }
         });
