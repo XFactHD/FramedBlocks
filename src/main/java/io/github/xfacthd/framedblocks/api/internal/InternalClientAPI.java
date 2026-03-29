@@ -19,6 +19,7 @@ import net.minecraft.client.renderer.block.dispatch.BlockStateModelDispatcher;
 import net.minecraft.client.renderer.block.dispatch.SingleVariant;
 import net.minecraft.client.renderer.item.ItemModel;
 import net.minecraft.client.resources.model.ModelBaker;
+import net.minecraft.client.resources.model.cuboid.ItemTransforms;
 import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.Identifier;
@@ -53,7 +54,7 @@ public interface InternalClientAPI {
 
     void enqueueClientTask(int delay, Runnable task);
 
-    ItemModel.Unbaked createFramedBlockItemModel(Block block, BlockItemModelProvider modelProvider, Identifier baseModel);
+    ItemModel.Unbaked createFramedBlockItemModel(Block block, BlockItemModelProvider modelProvider, Either<Identifier, ItemTransforms> modelOrXform);
 
     ExtendedBlockStateModelPart makeBlockModelPart(QuadMapBuilder quadMap, TriState partAO, Material.Baked particleMaterial, @Nullable BlockState shaderState);
 

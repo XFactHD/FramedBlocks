@@ -40,6 +40,7 @@ import net.minecraft.client.renderer.block.dispatch.BlockStateModelDispatcher;
 import net.minecraft.client.renderer.block.dispatch.SingleVariant;
 import net.minecraft.client.renderer.item.ItemModel;
 import net.minecraft.client.resources.model.ModelBaker;
+import net.minecraft.client.resources.model.cuboid.ItemTransforms;
 import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.Identifier;
@@ -97,8 +98,8 @@ public final class InternalClientApiImpl implements InternalClientAPI {
     }
 
     @Override
-    public ItemModel.Unbaked createFramedBlockItemModel(Block block, BlockItemModelProvider modelProvider, Identifier baseModel) {
-        return new FramedBlockItemModel.Unbaked(block, modelProvider, baseModel);
+    public ItemModel.Unbaked createFramedBlockItemModel(Block block, BlockItemModelProvider modelProvider, Either<Identifier, ItemTransforms> modelOrXform) {
+        return new FramedBlockItemModel.Unbaked(block, modelProvider, modelOrXform);
     }
 
     @Override

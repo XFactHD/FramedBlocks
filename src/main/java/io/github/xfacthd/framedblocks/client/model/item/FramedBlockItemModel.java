@@ -2,6 +2,8 @@ package io.github.xfacthd.framedblocks.client.model.item;
 
 import com.google.common.base.Preconditions;
 import com.google.common.base.Suppliers;
+import com.mojang.datafixers.util.Either;
+import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -64,6 +66,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 public final class FramedBlockItemModel extends AbstractFramedBlockItemModel {
@@ -191,7 +194,7 @@ public final class FramedBlockItemModel extends AbstractFramedBlockItemModel {
             }
             itemModelInfo.appendTintValues(stack, tints);
 
-            ModelRenderProperties renderProps = new ModelRenderProperties(true, model.particleMaterial(BlockAndTintGetter.EMPTY, BlockPos.ZERO, state), itemTransforms);
+            ModelRenderProperties renderProps = new ModelRenderProperties(true, model.particleMaterial(level, BlockPos.ZERO, state), itemTransforms);
             modelEntry = new ModelEntry(allQuads, renderProps, camos, tints.isEmpty() ? IntLists.emptyList() : tints, overlay, userData, animated);
             itemModelCache.put(cacheKey, modelEntry);
         }
@@ -224,12 +227,15 @@ public final class FramedBlockItemModel extends AbstractFramedBlockItemModel {
             boolean animated
     ) { }
 
-    public record Unbaked(Block block, BlockItemModelProvider modelProvider, Identifier baseModel) implements ItemModel.Unbaked {
+    public record Unbaked(Block block, BlockItemModelProvider modelProvider, Either<Identifier, ItemTransforms> modelOrXform) implements ItemModel.Unbaked {
         public static final Identifier ID = Utils.id("block");
         public static final MapCodec<FramedBlockItemModel.Unbaked> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
                 BuiltInRegistries.BLOCK.byNameCodec().fieldOf("block").validate(FramedBlockItemModel.Unbaked::validateBlock).forGetter(FramedBlockItemModel.Unbaked::block),
                 BlockItemModelProviders.CODEC.optionalFieldOf("model_provider", BlockItemModelProvider.DEFAULT).forGetter(FramedBlockItemModel.Unbaked::modelProvider),
-                Identifier.CODEC.fieldOf("base_model").forGetter(FramedBlockItemModel.Unbaked::baseModel)
+                Codec.mapEither(
+                        Identifier.CODEC.fieldOf("base_model"),
+                        ItemTransformsCodec.XFORMS_CODEC.fieldOf("transforms")
+                ).forGetter(Unbaked::modelOrXform)
         ).apply(inst, FramedBlockItemModel.Unbaked::new));
         private static final ModelBaker.SharedOperationKey<ItemModel> ERROR_MODEL_KEY = ModelUtils.makeSharedOpsKey(baker -> {
             ResolvedModel model = baker.getModel(ERROR_MODEL_LOCATION);
@@ -248,19 +254,22 @@ public final class FramedBlockItemModel extends AbstractFramedBlockItemModel {
             BlockState state = Objects.requireNonNull(((IFramedBlock) block).getItemModelSource());
             Supplier<BlockStateModel> modelSupplier = modelProvider.create(state, context.blockModelBaker());
             boolean nonStandardModelProvider = modelProvider != BlockItemModelProvider.DEFAULT;
-            ItemTransforms transforms = context.blockModelBaker().getModel(baseModel).getTopTransforms();
+            ItemTransforms transforms = modelOrXform.map(
+                    model -> context.blockModelBaker().getModel(model).getTopTransforms(),
+                    Function.identity()
+            );
             ItemModel errorModel = context.blockModelBaker().compute(ERROR_MODEL_KEY);
             return new FramedBlockItemModel(state, modelSupplier, nonStandardModelProvider, transforms, errorModel);
         }
 
         @Override
         public void resolveDependencies(Resolver resolver) {
-            resolver.markDependency(baseModel);
+            modelOrXform.ifLeft(resolver::markDependency);
             resolver.markDependency(ERROR_MODEL_LOCATION);
         }
 
         @Override
-        public MapCodec<? extends ItemModel.Unbaked> type() {
+        public MapCodec<Unbaked> type() {
             return CODEC;
         }
 
