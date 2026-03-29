@@ -1,6 +1,7 @@
 package io.github.xfacthd.framedblocks.common.datagen.providers;
 
 import io.github.xfacthd.framedblocks.api.datagen.models.AbstractFramedBlockModelProvider;
+import io.github.xfacthd.framedblocks.api.datagen.models.ItemTransformsBuilder;
 import io.github.xfacthd.framedblocks.api.util.ClientUtils;
 import io.github.xfacthd.framedblocks.api.util.FramedConstants;
 import io.github.xfacthd.framedblocks.api.util.Utils;
@@ -1035,6 +1036,46 @@ public final class FramedBlockModelProvider extends AbstractFramedBlockModelProv
         blockModels.registerSimpleFlatItemModel(FBContent.BLOCK_FRAMED_CHAIN.value().asItem());
     }
 
+    private static ItemTransformsBuilder buildLanternItemTransforms(ItemTransformsBuilder builder) {
+        return builder
+                .thirdPersonLeftHand(xform -> xform
+                        .rotation(65, 0, 0)
+                        .translation(0, -1.5F, -1.3F)
+                        .scale(.575F)
+                )
+                .thirdPersonRightHand(xform -> xform
+                        .rotation(65, 0, 0)
+                        .translation(0, -1.5F, -1.3F)
+                        .scale(.575F)
+                )
+                .firstPersonLeftHand(xform -> xform
+                        .rotation(0, 225, 0)
+                        .translation(-1, 6, 4)
+                        .scale(.4F)
+                )
+                .firstPersonRightHand(xform -> xform
+                        .rotation(0, 45, 0)
+                        .translation(-1, 6, 4)
+                        .scale(.4F)
+                )
+                .gui(xform -> xform
+                        .rotation(30, 225, 0)
+                        .translation(0, 2, 2)
+                        .scale(.8F)
+                )
+                .ground(xform -> xform
+                        .translation(0, 3, 0)
+                        .scale(.45F)
+                )
+                .fixed(xform -> xform
+                        .translation(0, 2.5F, 0)
+                )
+                .fixedFromBottom(xform -> xform
+                        .rotation(0, 180, 0)
+                        .scale(1.5F)
+                );
+    }
+
     private void registerFramedLantern(BlockModelGenerators blockModels) {
         Identifier standing = ModelLocationUtils.getModelLocation(FBContent.BLOCK_FRAMED_LANTERN.value());
         Identifier hanging = ModelLocationUtils.getModelLocation(FBContent.BLOCK_FRAMED_LANTERN.value(), "_hanging");
@@ -1051,7 +1092,7 @@ public final class FramedBlockModelProvider extends AbstractFramedBlockModelProv
                 .with(and(chainCondition, hangingCondition), BlockModelGenerators.plainVariant(chainHanging))
         );
 
-        blockModels.registerSimpleFlatItemModel(FBContent.BLOCK_FRAMED_LANTERN.value().asItem());
+        framedBlockItemModel(blockModels, FBContent.BLOCK_FRAMED_LANTERN, builder -> builder.transforms(FramedBlockModelProvider::buildLanternItemTransforms));
     }
 
     private void registerFramedSoulLantern(BlockModelGenerators blockModels) {
@@ -1070,7 +1111,7 @@ public final class FramedBlockModelProvider extends AbstractFramedBlockModelProv
                 .with(and(chainCondition, hangingCondition), BlockModelGenerators.plainVariant(chainHanging))
         );
 
-        blockModels.registerSimpleFlatItemModel(FBContent.BLOCK_FRAMED_SOUL_LANTERN.value().asItem());
+        framedBlockItemModel(blockModels, FBContent.BLOCK_FRAMED_SOUL_LANTERN, builder -> builder.transforms(FramedBlockModelProvider::buildLanternItemTransforms));
     }
 
     private void registerFramedCopperLantern(BlockModelGenerators blockModels) {
@@ -1089,7 +1130,7 @@ public final class FramedBlockModelProvider extends AbstractFramedBlockModelProv
                 .with(and(chainCondition, hangingCondition), BlockModelGenerators.plainVariant(chainHanging))
         );
 
-        blockModels.registerSimpleFlatItemModel(FBContent.BLOCK_FRAMED_COPPER_LANTERN.value().asItem());
+        framedBlockItemModel(blockModels, FBContent.BLOCK_FRAMED_COPPER_LANTERN, builder -> builder.transforms(FramedBlockModelProvider::buildLanternItemTransforms));
     }
 
     private void registerFramingSaw(BlockModelGenerators blockModels) {

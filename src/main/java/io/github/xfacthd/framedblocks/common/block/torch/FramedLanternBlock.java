@@ -104,7 +104,7 @@ public class FramedLanternBlock extends LanternBlock implements IFramedBlockInte
 
     @Override
     public @Nullable BlockState getItemModelSource() {
-        return null;
+        return defaultBlockState();
     }
 
     @Override

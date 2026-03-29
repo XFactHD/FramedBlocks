@@ -1,6 +1,124 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "framedblocks:item/framed_lantern"
+    "type": "framedblocks:block",
+    "block": "framedblocks:framed_lantern",
+    "transforms": {
+      "firstperson_lefthand": {
+        "rotation": [
+          0.0,
+          225.0,
+          0.0
+        ],
+        "scale": [
+          0.4,
+          0.4,
+          0.4
+        ],
+        "translation": [
+          -1.0,
+          6.0,
+          4.0
+        ]
+      },
+      "firstperson_righthand": {
+        "rotation": [
+          0.0,
+          45.0,
+          0.0
+        ],
+        "scale": [
+          0.4,
+          0.4,
+          0.4
+        ],
+        "translation": [
+          -1.0,
+          6.0,
+          4.0
+        ]
+      },
+      "fixed": {
+        "translation": [
+          0.0,
+          2.5,
+          0.0
+        ]
+      },
+      "ground": {
+        "scale": [
+          0.45,
+          0.45,
+          0.45
+        ],
+        "translation": [
+          0.0,
+          3.0,
+          0.0
+        ]
+      },
+      "gui": {
+        "rotation": [
+          30.0,
+          225.0,
+          0.0
+        ],
+        "scale": [
+          0.8,
+          0.8,
+          0.8
+        ],
+        "translation": [
+          0.0,
+          2.0,
+          2.0
+        ]
+      },
+      "on_shelf": {
+        "rotation": [
+          0.0,
+          180.0,
+          0.0
+        ],
+        "scale": [
+          1.5,
+          1.5,
+          1.5
+        ]
+      },
+      "thirdperson_lefthand": {
+        "rotation": [
+          65.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          0.575,
+          0.575,
+          0.575
+        ],
+        "translation": [
+          0.0,
+          -1.5,
+          -1.3
+        ]
+      },
+      "thirdperson_righthand": {
+        "rotation": [
+          65.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          0.575,
+          0.575,
+          0.575
+        ],
+        "translation": [
+          0.0,
+          -1.5,
+          -1.3
+        ]
+      }
+    }
   }
 }
