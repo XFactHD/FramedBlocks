@@ -43,10 +43,10 @@ public final class CamoCraftingHelper {
 
     public CamoCraftingHelper() {
         this.helperRecipe = DUMMY_RECIPE;
-        this.fakeEmptyIngredient = makeDummyIngredient(DummyIngredientType.EMPTY);
-        this.camoExamplesIngredient = makeDummyIngredient(DummyIngredientType.CAMO_EXAMPLES);
-        this.emptyFramesIngredient = makeDummyIngredient(DummyIngredientType.EMPTY_FRAMES);
-        this.emptyDoubleFramesIngredient = makeDummyIngredient(DummyIngredientType.EMPTY_DOUBLE_FRAMES);
+        this.fakeEmptyIngredient = DummyIngredientType.EMPTY.toIngredient();
+        this.camoExamplesIngredient = DummyIngredientType.CAMO_EXAMPLES.toIngredient();
+        this.emptyFramesIngredient = DummyIngredientType.EMPTY_FRAMES.toIngredient();
+        this.emptyDoubleFramesIngredient = DummyIngredientType.EMPTY_DOUBLE_FRAMES.toIngredient();
     }
 
     public void captureRecipe(Optional<CamoApplicationRecipe> recipe) {
@@ -200,10 +200,6 @@ public final class CamoCraftingHelper {
                 .map(SlotDisplay.class::cast)
                 .toList();
         return new SlotDisplay.Composite(displays);
-    }
-
-    public static Ingredient makeDummyIngredient(DummyIngredientType dummyType) {
-        return new JeiCamoApplicationDummyIngredient(dummyType).toVanilla();
     }
 
     public static ContextMap makeSlotDisplayContext() {

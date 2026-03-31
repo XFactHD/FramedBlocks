@@ -131,29 +131,21 @@ public final class CamoRecipeManagerPlugin implements ISimpleRecipeManagerPlugin
     }
 
     private RecipeHolder<CraftingRecipe> createRecipe(StackOrDummy frame, StackOrDummy camoOne, StackOrDummy camoTwo, Optional<ItemStack> result) {
-        Ingredient frameIngredient = frame.map(stack -> Ingredient.of(stack.getItem()), CamoCraftingHelper::makeDummyIngredient);
+        Ingredient frameIngredient = frame.mapToIngredient();
         Ingredient copyTool = camoCraftingHelper.getCopyToolIngredient();
-        Ingredient camoOneIngredient = camoOne.map(stack -> Ingredient.of(stack.getItem()), CamoCraftingHelper::makeDummyIngredient);
-        Ingredient secondInputStacks = camoTwo.map(stack -> Ingredient.of(stack.getItem()), CamoCraftingHelper::makeDummyIngredient);
+        Ingredient camoOneIngredient = camoOne.mapToIngredient();
+        Ingredient secondInputStacks = camoTwo.mapToIngredient();
         JeiCamoApplicationRecipe recipe = new JeiCamoApplicationRecipe(frameIngredient, copyTool, camoOneIngredient, secondInputStacks, result.map(ItemStackTemplate::fromNonEmptyStack));
 
-        Identifier Identifier = generateId(frame, camoOne, camoTwo);
-        return new RecipeHolder<>(ResourceKey.create(Registries.RECIPE, Identifier), recipe);
+        Identifier recipeId = generateId(frame, camoOne, camoTwo);
+        return new RecipeHolder<>(ResourceKey.create(Registries.RECIPE, recipeId), recipe);
     }
 
     private static Identifier generateId(StackOrDummy frame, StackOrDummy camoOne, StackOrDummy camoTwo) {
-        String frameId = mapStackOrDummyType(frame);
-        String camoOneId = mapStackOrDummyType(camoOne);
-        String camoTwoId = mapStackOrDummyType(camoTwo);
+        String frameId = frame.mapToString();
+        String camoOneId = camoOne.mapToString();
+        String camoTwoId = camoTwo.mapToString();
         return Utils.id("camo_application/jei_generated/" + frameId + "/" + camoOneId + "/" + camoTwoId);
-    }
-
-    private static String mapStackOrDummyType(StackOrDummy value) {
-        return value.map(CamoRecipeManagerPlugin::stackToString, DummyIngredientType::getSerializedName);
-    }
-
-    private static String stackToString(ItemStack stack) {
-        return stack.isEmpty() ? "empty" : BuiltInRegistries.ITEM.getKey(stack.getItem()).toLanguageKey();
     }
 
     private record StackOrDummy(Either<ItemStack, DummyIngredientType> value) {
@@ -166,12 +158,25 @@ public final class CamoRecipeManagerPlugin implements ISimpleRecipeManagerPlugin
             return value.map(stackMapper, dummyMapper);
         }
 
+        public String mapToString() {
+            return map(StackOrDummy::stackToString, DummyIngredientType::getSerializedName);
+        }
+
+        public Ingredient mapToIngredient() {
+            // TODO: check how discarding stack data influences recipe display with things like fluid tanks
+            return map(stack -> Ingredient.of(stack.getItem()), DummyIngredientType::toIngredient);
+        }
+
         public static StackOrDummy stack(ItemStack stack) {
             return new StackOrDummy(Either.left(stack));
         }
 
         public static StackOrDummy dummy(DummyIngredientType dummyType) {
             return new StackOrDummy(Either.right(dummyType));
+        }
+
+        private static String stackToString(ItemStack stack) {
+            return stack.isEmpty() ? "empty" : BuiltInRegistries.ITEM.getKey(stack.getItem()).toLanguageKey();
         }
     }
 }

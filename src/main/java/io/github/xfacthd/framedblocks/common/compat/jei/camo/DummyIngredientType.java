@@ -6,6 +6,7 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.util.ByIdMap;
 import net.minecraft.util.StringRepresentable;
+import net.minecraft.world.item.crafting.Ingredient;
 
 import java.util.Locale;
 import java.util.function.IntFunction;
@@ -23,6 +24,10 @@ public enum DummyIngredientType implements StringRepresentable {
     public static final StreamCodec<ByteBuf, DummyIngredientType> STREAM_CODEC = ByteBufCodecs.idMapper(BY_ID, DummyIngredientType::ordinal);
 
     private final String name = toString().toLowerCase(Locale.ROOT);
+
+    public Ingredient toIngredient() {
+        return new JeiCamoApplicationDummyIngredient(this).toVanilla();
+    }
 
     @Override
     public String getSerializedName() {
