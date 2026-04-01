@@ -12,6 +12,7 @@ import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
 import net.minecraft.client.renderer.block.dispatch.BlockStateModelPart;
 import net.minecraft.client.renderer.block.dispatch.SingleVariant;
 import net.minecraft.client.resources.model.ModelBaker;
+import net.minecraft.client.resources.model.ModelDebugName;
 import net.minecraft.client.resources.model.geometry.BakedQuad;
 import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.core.Direction;
@@ -194,7 +195,7 @@ public final class ModelUtils {
     public static void registerStandaloneForLoading(ModelEvent.RegisterStandalone event, Identifier model) {
         event.register(new StandaloneModelKey<>(model::toString), new UnbakedStandaloneModel<Unit>() {
             @Override
-            public Unit bake(ModelBaker baker) {
+            public Unit bake(ModelBaker baker, ModelDebugName debugName) {
                 return Unit.INSTANCE;
             }
 

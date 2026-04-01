@@ -12,6 +12,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
 import net.minecraft.client.renderer.block.dispatch.BlockStateModelDispatcher;
 import net.minecraft.client.resources.model.ModelBaker;
+import net.minecraft.client.resources.model.ModelDebugName;
 import net.minecraft.resources.FileToIdConverter;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.Resource;
@@ -48,7 +49,7 @@ public final class UnbakedStandaloneFramedBlockModel<T extends CachingModel> imp
     }
 
     @Override
-    public T bake(ModelBaker baker) {
+    public T bake(ModelBaker baker, ModelDebugName debugName) {
         Function<BlockState, BlockStateModel> modelProvider;
         if (unbakedModels.isEmpty()) {
             BlockStateModel missing = baker.compute(ModelUtils.MISSING_MODEL_KEY);
