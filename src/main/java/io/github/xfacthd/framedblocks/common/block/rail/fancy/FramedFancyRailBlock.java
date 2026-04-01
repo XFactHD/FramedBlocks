@@ -2,7 +2,6 @@ package io.github.xfacthd.framedblocks.common.block.rail.fancy;
 
 import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
-import io.github.xfacthd.framedblocks.api.block.IBlockType;
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.common.block.IFramedBlockInternal;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
@@ -109,7 +108,7 @@ public class FramedFancyRailBlock extends RailBlock implements IFramedBlockInter
     }
 
     @Override
-    public IBlockType getBlockType() {
+    public BlockType getBlockType() {
         return BlockType.FRAMED_FANCY_RAIL;
     }
 

@@ -2,7 +2,6 @@ package io.github.xfacthd.framedblocks.common.block.interactive;
 
 import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
-import io.github.xfacthd.framedblocks.api.block.IBlockType;
 import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.block.IFramedBlockInternal;
@@ -116,7 +115,7 @@ public class FramedHopperBlock extends HopperBlock implements IFramedBlockIntern
     }
 
     @Override
-    public IBlockType getBlockType() {
+    public BlockType getBlockType() {
         return BlockType.FRAMED_HOPPER;
     }
 

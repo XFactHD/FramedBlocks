@@ -2,7 +2,6 @@ package io.github.xfacthd.framedblocks.common.block.cube;
 
 import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
-import io.github.xfacthd.framedblocks.api.block.IBlockType;
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import io.github.xfacthd.framedblocks.common.block.IFramedBlockInternal;
@@ -144,7 +143,7 @@ public class FramedTargetBlock extends TargetBlock implements IFramedBlockIntern
     }
 
     @Override
-    public IBlockType getBlockType() {
+    public BlockType getBlockType() {
         return BlockType.FRAMED_TARGET;
     }
 

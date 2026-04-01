@@ -2,7 +2,6 @@ package io.github.xfacthd.framedblocks.common.block.interactive;
 
 import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
-import io.github.xfacthd.framedblocks.api.block.IBlockType;
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.common.block.IFramedBlockInternal;
 import io.github.xfacthd.framedblocks.common.blockentity.special.FramedChiseledBookshelfBlockEntity;
@@ -127,7 +126,7 @@ public final class FramedChiseledBookshelfBlock extends ChiseledBookShelfBlock i
     }
 
     @Override
-    public IBlockType getBlockType() {
+    public BlockType getBlockType() {
         return BlockType.FRAMED_CHISELED_BOOKSHELF;
     }
 

@@ -2,7 +2,6 @@ package io.github.xfacthd.framedblocks.common.block.torch;
 
 import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
-import io.github.xfacthd.framedblocks.api.block.IBlockType;
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.common.block.IFramedBlockInternal;
@@ -98,7 +97,7 @@ public class FramedLanternBlock extends LanternBlock implements IFramedBlockInte
     }
 
     @Override
-    public IBlockType getBlockType() {
+    public BlockType getBlockType() {
         return type;
     }
 

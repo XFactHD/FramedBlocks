@@ -2,7 +2,6 @@ package io.github.xfacthd.framedblocks.common.block.pillar;
 
 import com.mojang.serialization.MapCodec;
 import io.github.xfacthd.framedblocks.api.block.BlockUtils;
-import io.github.xfacthd.framedblocks.api.block.IBlockType;
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.common.block.IFramedBlockInternal;
@@ -104,7 +103,7 @@ public class FramedChainBlock extends ChainBlock implements IFramedBlockInternal
     }
 
     @Override
-    public IBlockType getBlockType() {
+    public BlockType getBlockType() {
         return BlockType.FRAMED_CHAIN;
     }
 
