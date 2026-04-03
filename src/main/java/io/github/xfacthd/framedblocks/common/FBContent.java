@@ -375,6 +375,7 @@ public final class FBContent {
     public static final Holder<Block> BLOCK_FRAMED_LAYERED_CUBE = registerBlock(FramedLayeredCubeBlock::new, BlockType.FRAMED_LAYERED_CUBE);
     public static final Holder<Block> BLOCK_FRAMED_LIGHTNING_ROD = registerBlock(FramedLightningRodBlock::new, BlockType.FRAMED_LIGHTNING_ROD);
     public static final Holder<Block> BLOCK_FRAMED_PATH = registerBlock(FramedPathBlock::new, BlockType.FRAMED_PATH);
+    public static final Holder<Block> BLOCK_FRAMED_SHELF = registerBlock(FramedShelfBlock::new, BlockType.FRAMED_SHELF);
     // endregion
 
     // region Special Blocks
@@ -646,6 +647,10 @@ public final class FBContent {
     public static final DeferredBlockEntity<FramedHopperBlockEntity> BE_TYPE_FRAMED_HOPPER = registerBlockEntity(
             FramedHopperBlockEntity::new,
             BlockType.FRAMED_HOPPER
+    );
+    public static final DeferredBlockEntity<FramedShelfBlockEntity> BE_TYPE_FRAMED_SHELF = registerBlockEntity(
+            FramedShelfBlockEntity::new,
+            BlockType.FRAMED_SHELF
     );
     // endregion
 

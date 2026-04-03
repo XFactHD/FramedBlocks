@@ -57,6 +57,7 @@ public final class FramedBlockTagProvider extends BlockTagsProvider {
         tag(BlockTags.ENCHANTMENT_POWER_PROVIDER).add(FBContent.BLOCK_FRAMED_BOOKSHELF.value());
         tag(Tags.Blocks.BOOKSHELVES).add(FBContent.BLOCK_FRAMED_BOOKSHELF.value());
         tag(BlockTags.LIGHTNING_RODS).add(FBContent.BLOCK_FRAMED_LIGHTNING_ROD.value());
+        tag(BlockTags.WOODEN_SHELVES).add(FBContent.BLOCK_FRAMED_SHELF.value());
 
         tag(Utils.FRAMEABLE).addTags(
                 Tags.Blocks.GLASS_BLOCKS,

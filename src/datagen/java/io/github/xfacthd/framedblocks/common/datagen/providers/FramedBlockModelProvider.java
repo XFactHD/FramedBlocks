@@ -63,6 +63,7 @@ public final class FramedBlockModelProvider extends AbstractFramedBlockModelProv
     private static final Material TEXTURE_UNDERLAY = new Material(Identifier.withDefaultNamespace("block/stripped_dark_oak_log"));
     private static final Identifier TRAPDOOR_TEMPLATE_LOC = Identifier.withDefaultNamespace("block/template_orientable_trapdoor_bottom");
     private static final Identifier THIN_BLOCK_LOC = Identifier.withDefaultNamespace("block/thin_block");
+    private static final Identifier SHELF_TEMPLATE_LOC = Identifier.withDefaultNamespace("block/template_shelf_inventory");
 
     public FramedBlockModelProvider(PackOutput output) {
         super(output, FramedConstants.MOD_ID);
@@ -271,6 +272,7 @@ public final class FramedBlockModelProvider extends AbstractFramedBlockModelProv
         simpleFramedBlockWithItem(blockModels, FBContent.BLOCK_FRAMED_LAYERED_CUBE, snowCube, builder -> builder.itemBaseModel(THIN_BLOCK_LOC));
         simpleFramedBlockWithItem(blockModels, FBContent.BLOCK_FRAMED_LIGHTNING_ROD, cube);
         simpleFramedBlockWithItem(blockModels, FBContent.BLOCK_FRAMED_PATH, cube);
+        simpleFramedBlockWithItem(blockModels, FBContent.BLOCK_FRAMED_SHELF, cube, builder -> builder.itemBaseModel(SHELF_TEMPLATE_LOC));
 
         registerFramedCube(blockModels, cube);
         registerFramedFence(blockModels, cube);

@@ -1,0 +1,7 @@
+{
+  "model": {
+    "type": "framedblocks:block",
+    "base_model": "minecraft:block/template_shelf_inventory",
+    "block": "framedblocks:framed_shelf"
+  }
+}

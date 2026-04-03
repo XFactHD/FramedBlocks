@@ -238,6 +238,7 @@
     "framedblocks:framed_copper_lantern",
     "framedblocks:framed_hopper",
     "framedblocks:framed_layered_cube",
-    "framedblocks:framed_path"
+    "framedblocks:framed_path",
+    "framedblocks:framed_shelf"
   ]
 }

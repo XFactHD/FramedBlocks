@@ -327,6 +327,7 @@ public final class FramedLanguageProvider extends LanguageProvider {
         add(FBContent.BLOCK_FRAMED_LAYERED_CUBE.value(), "Framed Layered Cube");
         add(FBContent.BLOCK_FRAMED_LIGHTNING_ROD.value(), "Framed Lightning Rod");
         add(FBContent.BLOCK_FRAMED_PATH.value(), "Framed Path");
+        add(FBContent.BLOCK_FRAMED_SHELF.value(), "Framed Shelf");
     }
 
     private void addSpecialBlockTranslations() {

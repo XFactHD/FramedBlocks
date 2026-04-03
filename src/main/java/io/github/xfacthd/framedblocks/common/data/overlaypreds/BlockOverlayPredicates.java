@@ -2,6 +2,7 @@ package io.github.xfacthd.framedblocks.common.data.overlaypreds;
 
 import io.github.xfacthd.framedblocks.api.predicate.overlay.BlockOverlayPredicate;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
+import io.github.xfacthd.framedblocks.common.data.overlaypreds.misc.*;
 import io.github.xfacthd.framedblocks.common.data.overlaypreds.pillar.*;
 import io.github.xfacthd.framedblocks.common.data.overlaypreds.slab.*;
 import io.github.xfacthd.framedblocks.common.data.overlaypreds.slope.*;
@@ -175,5 +176,6 @@ public final class BlockOverlayPredicates extends BlockTypeMap<BlockOverlayPredi
         put(BlockType.FRAMED_LAYERED_CUBE, BlockOverlayPredicate.ALWAYS);
         put(BlockType.FRAMED_LIGHTNING_ROD, BlockOverlayPredicate.ALWAYS);
         put(BlockType.FRAMED_PATH, BlockOverlayPredicate.ALWAYS);
+        put(BlockType.FRAMED_SHELF, new ShelfBlockOverlayPredicate());
     }
 }

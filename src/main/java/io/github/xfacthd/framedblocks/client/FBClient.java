@@ -93,6 +93,7 @@ import io.github.xfacthd.framedblocks.common.block.interactive.button.FramedLarg
 import io.github.xfacthd.framedblocks.common.block.interactive.pressureplate.FramedWeightedPressurePlateBlock;
 import io.github.xfacthd.framedblocks.common.block.sign.FramedStandingSignBlock;
 import io.github.xfacthd.framedblocks.common.block.stairs.standard.FramedStairsBlock;
+import net.minecraft.client.renderer.blockentity.ShelfRenderer;
 import net.minecraft.core.Holder;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.api.distmarker.Dist;
@@ -188,6 +189,7 @@ public final class FBClient {
         event.registerBlockEntityRenderer(FBContent.BE_TYPE_FRAMED_CHEST.value(), FramedChestRenderer::new);
         event.registerBlockEntityRenderer(FBContent.BE_TYPE_FRAMED_ITEM_FRAME.value(), FramedItemFrameRenderer::new);
         event.registerBlockEntityRenderer(FBContent.BE_TYPE_FRAMED_TANK.value(), FramedTankRenderer::new);
+        event.registerBlockEntityRenderer(FBContent.BE_TYPE_FRAMED_SHELF.value(), ShelfRenderer::new);
     }
 
     private static void onRegisterBlockItemModelProviders(RegisterBlockItemModelProvidersEvent event) {
@@ -465,6 +467,7 @@ public final class FBClient {
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_LAYERED_CUBE, FramedLayeredCubeGeometry::new, WrapHelper.DEFAULT_MERGER);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_LIGHTNING_ROD, FramedLightningRodGeometry::new, WrapHelper.DEFAULT_MERGER);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_PATH, FramedPathGeometry::new, WrapHelper.DEFAULT_MERGER);
+        WrapHelper.wrap(FBContent.BLOCK_FRAMED_SHELF, FramedShelfGeometry::new, WrapHelper.DEFAULT_MERGER);
 
         WrapHelper.wrapStandalone(FramedChestRenderer.WRAPPER_KEY, FramedChestLidGeometry::new, FramedChestLidModel::new, WrapHelper.DEFAULT_MERGER);
     }
