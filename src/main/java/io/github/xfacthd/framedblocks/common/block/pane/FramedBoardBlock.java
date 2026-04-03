@@ -11,7 +11,6 @@ import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import io.github.xfacthd.framedblocks.common.item.block.FramedSpecialBlockItem;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.util.Util;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -25,12 +24,6 @@ import org.jspecify.annotations.Nullable;
 
 public class FramedBoardBlock extends FramedBlock {
     private static final Direction[] HOR_DIRECTIONS = Direction.Plane.HORIZONTAL.stream().toArray(Direction[]::new);
-    private static final int[] EDGE_MASKS = Util.make(new int[3], arr -> {
-        for (Direction.Axis axis : Direction.Axis.values()) {
-            int mask = (1 << axis.getPositive().ordinal()) | (1 << axis.getNegative().ordinal());
-            arr[axis.ordinal()] = ~mask & 0b00111111;
-        }
-    });
     private static final int DEFAULT_FACE = 1 << Direction.DOWN.ordinal();
 
     public FramedBoardBlock(Properties props) {
@@ -150,9 +143,5 @@ public class FramedBoardBlock extends FramedBlock {
             faces &= ~mask;
         }
         return faces == 0 ? state : state.setValue(PropertyHolder.FACES, faces);
-    }
-
-    public static int computeEdgeMask(BlockState state, Direction side) {
-        return state.getValue(PropertyHolder.FACES) & EDGE_MASKS[side.getAxis().ordinal()];
     }
 }

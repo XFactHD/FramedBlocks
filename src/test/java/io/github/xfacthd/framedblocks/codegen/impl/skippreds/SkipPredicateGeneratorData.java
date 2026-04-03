@@ -333,8 +333,25 @@ final class SkipPredicateGeneratorData {
             entry("FRAMED_COPPER_WALL_TORCH", IGNORED_PKG),
             entry("FRAMED_REDSTONE_TORCH", IGNORED_PKG),
             entry("FRAMED_REDSTONE_WALL_TORCH", IGNORED_PKG),
-            entry("FRAMED_BOARD", "pane"),
-            entry("FRAMED_CORNER_STRIP", "pane"),
+            entry("FRAMED_BOARD", "pane")
+                    .props(
+                            Property.internal("int", "faces", "FACES", PropType.PRIMITIVE)
+                                    .withEarlyExit()
+                    )
+                    .dirs(
+                            new TestDir("int", "EdgeMask", null, TestDirIds.BOARD_EDGE_MASK),
+                            new TestDir("HalfDir", "SingleEdge", null, TestDirIds.BOARD_SINGLE_EDGE)
+                                    .withExcludedTypes("FRAMED_BOARD")
+                    ),
+            entry("FRAMED_CORNER_STRIP", "pane")
+                    .props(
+                            Property.api("Direction", "dir", "FACING_HOR", PropType.PRIMITIVE),
+                            Property.internal("SlopeType", "type", "SLOPE_TYPE", PropType.CUSTOM)
+                    )
+                    .dirs(
+                            new TestDir("HalfDir", "Edge", null, TestDirIds.BOARD_SINGLE_EDGE),
+                            new TestDir("CornerDir", "Corner", null, TestDirIds.CORNER_STRIP_CORNER)
+                    ),
             entry("FRAMED_LATTICE_BLOCK", "pillar")
                     .shortName("Lattice")
                     .props(

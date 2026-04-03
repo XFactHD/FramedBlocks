@@ -101,6 +101,12 @@ final class TestDirIds {
     static final String HOPPER_SIDE = "hopper_side";
     /** Horizontal faces of a vertical Layered Cube */
     static final String LAYERS_DIR = "layers_dir";
+    /** Edges of a particular face of a Board block */
+    static final String BOARD_EDGE_MASK = "board_edge_mask";
+    /** Singular edge, if applicable, of a particular face of a Board block */
+    static final String BOARD_SINGLE_EDGE = "board_single_edge";
+    /** Corner of a Corner Strip */
+    static final String CORNER_STRIP_CORNER = "corner_strip_corner";
 
     private TestDirIds() { }
 }
