@@ -5,10 +5,12 @@ import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.api.predicate.cull.SideSkipPredicate;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
+import io.github.xfacthd.framedblocks.common.data.property.CompoundDirection;
 import io.github.xfacthd.framedblocks.common.data.property.CornerType;
 import io.github.xfacthd.framedblocks.common.data.property.HorizontalRotation;
 import io.github.xfacthd.framedblocks.common.data.property.StairsType;
 import io.github.xfacthd.framedblocks.common.data.skippreds.CullTest;
+import io.github.xfacthd.framedblocks.common.data.skippreds.pane.PaneDirs;
 import io.github.xfacthd.framedblocks.common.data.skippreds.pillar.PillarDirs;
 import io.github.xfacthd.framedblocks.common.data.skippreds.slopeedge.SlopeEdgeDirs;
 import io.github.xfacthd.framedblocks.common.data.skippreds.slopepanelcorner.SlopePanelCornerDirs;
@@ -55,6 +57,9 @@ public final class CheckeredSlabSegmentSkipPredicate implements SideSkipPredicat
                         top, second, adjState, side
                 );
                 case FRAMED_THREEWAY_CORNER_PILLAR -> testAgainstThreewayCornerPillar(
+                        top, second, adjState, side
+                );
+                case FRAMED_CORNER_BOARD -> testAgainstCornerBoard(
                         top, second, adjState, side
                 );
                 case FRAMED_SMALL_CORNER_SLOPE_PANEL_W -> testAgainstSmallCornerSlopePanelWall(
@@ -172,6 +177,14 @@ public final class CheckeredSlabSegmentSkipPredicate implements SideSkipPredicat
         boolean adjTop = adjState.getValue(FramedProperties.TOP);
 
         return SlabDirs.CheckeredSlabSegment.getCornerDir(top, second, side).isEqualTo(PillarDirs.ThreewayCornerPillar.getCornerDir(adjDir, adjTop, side.getOpposite()));
+    }
+
+    @CullTest.TestTarget(BlockType.FRAMED_CORNER_BOARD)
+    private static boolean testAgainstCornerBoard(
+            boolean top, boolean second, BlockState adjState, Direction side
+    ) {
+        CompoundDirection adjCmpDir = adjState.getValue(PropertyHolder.FACING_DIR);
+        return SlabDirs.CheckeredSlabSegment.getCornerDir(top, second, side).isEqualTo(PaneDirs.CornerBoard.getCornerDir(adjCmpDir, side.getOpposite()));
     }
 
     @CullTest.TestTarget(BlockType.FRAMED_SMALL_CORNER_SLOPE_PANEL_W)

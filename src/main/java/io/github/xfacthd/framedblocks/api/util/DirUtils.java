@@ -69,6 +69,36 @@ public final class DirUtils {
         }
     }
 
+    public static Direction getDirByCorner(Direction face, Vec3 hitVec) {
+        hitVec = MathUtils.fraction(hitVec);
+
+        if (DirUtils.isY(face)) {
+            double x = hitVec.x() - .5;
+            double z = hitVec.z() - .5;
+            if (z < 0) {
+                return x > 0 ? Direction.EAST : Direction.NORTH;
+            } else {
+                return x > 0 ? Direction.SOUTH : Direction.WEST;
+            }
+        } else {
+            double xz = MathUtils.fractionInDir(hitVec, face.getClockWise()) - .5;
+            double y = hitVec.y() - .5;
+            if (y > 0) {
+                if (xz > 0) {
+                    return face.getClockWise();
+                } else {
+                    return Direction.UP;
+                }
+            } else {
+                if (xz > 0) {
+                    return Direction.DOWN;
+                } else {
+                    return face.getCounterClockWise();
+                }
+            }
+        }
+    }
+
     /**
      * Returns the axis perpendicular to both provided axis which must themselves be perpendicular to each other
      */

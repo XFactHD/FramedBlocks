@@ -5,6 +5,7 @@ import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.api.predicate.cull.SideSkipPredicate;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
+import io.github.xfacthd.framedblocks.common.data.property.CompoundDirection;
 import io.github.xfacthd.framedblocks.common.data.property.CornerType;
 import io.github.xfacthd.framedblocks.common.data.property.HorizontalRotation;
 import io.github.xfacthd.framedblocks.common.data.property.PillarConnection;
@@ -12,6 +13,7 @@ import io.github.xfacthd.framedblocks.common.data.property.SlopeType;
 import io.github.xfacthd.framedblocks.common.data.property.StairsType;
 import io.github.xfacthd.framedblocks.common.data.skippreds.CullTest;
 import io.github.xfacthd.framedblocks.common.data.skippreds.misc.MiscDirs;
+import io.github.xfacthd.framedblocks.common.data.skippreds.pane.PaneDirs;
 import io.github.xfacthd.framedblocks.common.data.skippreds.slab.SlabDirs;
 import io.github.xfacthd.framedblocks.common.data.skippreds.slope.SlopeDirs;
 import io.github.xfacthd.framedblocks.common.data.skippreds.slopeedge.SlopeEdgeDirs;
@@ -95,6 +97,9 @@ public final class PillarSocketSkipPredicate implements SideSkipPredicate {
                         dir, adjState, side
                 );
                 case FRAMED_WALL -> testAgainstWall(
+                        dir, adjState, side
+                );
+                case FRAMED_HALF_BOARD -> testAgainstHalfBoard(
                         dir, adjState, side
                 );
                 case FRAMED_THICK_LATTICE -> testAgainstThickLattice(
@@ -353,6 +358,14 @@ public final class PillarSocketSkipPredicate implements SideSkipPredicate {
     ) {
         boolean adjUp = adjState.getValue(BlockStateProperties.UP);
         return (PillarDirs.PillarSocket.isPillarDir(dir, side) && PillarDirs.Wall.isPillarDir(adjUp, side.getOpposite()));
+    }
+
+    @CullTest.TestTarget(BlockType.FRAMED_HALF_BOARD)
+    private static boolean testAgainstHalfBoard(
+            Direction dir, BlockState adjState, Direction side
+    ) {
+        CompoundDirection adjCmpDir = adjState.getValue(PropertyHolder.FACING_DIR);
+        return PillarDirs.PillarSocket.getHalfDir(dir, side).isEqualTo(PaneDirs.HalfBoard.getHalfDir(adjCmpDir, side.getOpposite()));
     }
 
     @CullTest.TestTarget(BlockType.FRAMED_THICK_LATTICE)

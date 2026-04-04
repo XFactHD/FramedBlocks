@@ -236,6 +236,11 @@ public final class FBContent {
     public static final Holder<Block> BLOCK_FRAMED_REDSTONE_TORCH = registerBlock(FramedRedstoneTorchBlock::new, BlockType.FRAMED_REDSTONE_TORCH);
     public static final Holder<Block> BLOCK_FRAMED_REDSTONE_WALL_TORCH = registerBlock(FramedRedstoneWallTorchBlock::new, BlockType.FRAMED_REDSTONE_WALL_TORCH);
     public static final Holder<Block> BLOCK_FRAMED_BOARD = registerBlock(FramedBoardBlock::new, BlockType.FRAMED_BOARD);
+    public static final Holder<Block> BLOCK_FRAMED_HALF_BOARD = registerBlock(FramedPartialBoardBlock::new, BlockType.FRAMED_HALF_BOARD);
+    public static final Holder<Block> BLOCK_FRAMED_DIVIDED_BOARD = registerBlock(FramedDividedBoardBlock::new, BlockType.FRAMED_DIVIDED_BOARD);
+    public static final Holder<Block> BLOCK_FRAMED_CORNER_BOARD = registerBlock(FramedPartialBoardBlock::new, BlockType.FRAMED_CORNER_BOARD);
+    public static final Holder<Block> BLOCK_FRAMED_INNER_CORNER_BOARD = registerBlock(FramedPartialBoardBlock::new, BlockType.FRAMED_INNER_CORNER_BOARD);
+    public static final Holder<Block> BLOCK_FRAMED_DOUBLE_CORNER_BOARD = registerBlock(FramedDoubleCornerBoardBlock::new, BlockType.FRAMED_DOUBLE_CORNER_BOARD);
     public static final Holder<Block> BLOCK_FRAMED_CORNER_STRIP = registerBlock(FramedCornerStripBlock::new, BlockType.FRAMED_CORNER_STRIP);
     public static final Holder<Block> BLOCK_FRAMED_LATTICE = registerBlock(FramedLatticeBlock::new, BlockType.FRAMED_LATTICE_BLOCK);
     public static final Holder<Block> BLOCK_FRAMED_THICK_LATTICE = registerBlock(FramedLatticeBlock::new, BlockType.FRAMED_THICK_LATTICE);

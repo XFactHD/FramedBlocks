@@ -5,6 +5,7 @@ import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.api.predicate.cull.SideSkipPredicate;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
+import io.github.xfacthd.framedblocks.common.data.property.CompoundDirection;
 import io.github.xfacthd.framedblocks.common.data.property.SlopeType;
 import io.github.xfacthd.framedblocks.common.data.skippreds.CullTest;
 import net.minecraft.core.BlockPos;
@@ -29,6 +30,12 @@ public final class BoardSkipPredicate implements SideSkipPredicate {
                 case FRAMED_BOARD -> testAgainstBoard(
                         faces, adjState, side
                 );
+                case FRAMED_HALF_BOARD -> testAgainstHalfBoard(
+                        faces, adjState, side
+                );
+                case FRAMED_INNER_CORNER_BOARD -> testAgainstInnerCornerBoard(
+                        faces, adjState, side
+                );
                 case FRAMED_CORNER_STRIP -> testAgainstCornerStrip(
                         faces, adjState, side
                 );
@@ -44,6 +51,22 @@ public final class BoardSkipPredicate implements SideSkipPredicate {
     ) {
         int adjFaces = adjState.getValue(PropertyHolder.FACES);
         return PaneDirs.Board.getEdgeMaskDir(faces, side) == PaneDirs.Board.getEdgeMaskDir(adjFaces, side.getOpposite());
+    }
+
+    @CullTest.TestTarget(BlockType.FRAMED_HALF_BOARD)
+    private static boolean testAgainstHalfBoard(
+            int faces, BlockState adjState, Direction side
+    ) {
+        CompoundDirection adjCmpDir = adjState.getValue(PropertyHolder.FACING_DIR);
+        return PaneDirs.Board.getSingleEdgeDir(faces, side).isEqualTo(PaneDirs.HalfBoard.getEdgeDir(adjCmpDir, side.getOpposite()));
+    }
+
+    @CullTest.TestTarget(BlockType.FRAMED_INNER_CORNER_BOARD)
+    private static boolean testAgainstInnerCornerBoard(
+            int faces, BlockState adjState, Direction side
+    ) {
+        CompoundDirection adjCmpDir = adjState.getValue(PropertyHolder.FACING_DIR);
+        return PaneDirs.Board.getSingleEdgeDir(faces, side).isEqualTo(PaneDirs.InnerCornerBoard.getEdgeDir(adjCmpDir, side.getOpposite()));
     }
 
     @CullTest.TestTarget(BlockType.FRAMED_CORNER_STRIP)

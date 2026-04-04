@@ -1,0 +1,42 @@
+package io.github.xfacthd.framedblocks.common.data.conpreds.pane;
+
+import io.github.xfacthd.framedblocks.api.predicate.contex.ConnectionPredicate;
+import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
+import io.github.xfacthd.framedblocks.common.data.property.CompoundDirection;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.block.state.BlockState;
+import org.jspecify.annotations.Nullable;
+
+public final class HalfBoardConnectionPredicate implements ConnectionPredicate {
+    @Override
+    public boolean canConnectFullEdge(BlockState state, Direction side, @Nullable Direction edge) {
+        CompoundDirection cmpDir = state.getValue(PropertyHolder.FACING_DIR);
+        if (side == cmpDir.direction()) {
+            return edge == cmpDir.orientation();
+        }
+        if (side == cmpDir.orientation()) {
+            return edge == cmpDir.direction();
+        }
+        return false;
+    }
+
+    @Override
+    public boolean canConnectDetailed(BlockState state, Direction side, Direction edge) {
+        CompoundDirection cmpDir = state.getValue(PropertyHolder.FACING_DIR);
+        Direction face = cmpDir.direction();
+        Direction dir = cmpDir.orientation();
+        if (side == face) {
+            return edge.getAxis() != dir.getAxis();
+        }
+        if (side == face.getOpposite()) {
+            return edge != dir.getOpposite();
+        }
+        if (side == dir) {
+            return edge != face.getOpposite();
+        }
+        if (side != dir.getOpposite()) {
+            return edge == face || edge == dir;
+        }
+        return false;
+    }
+}

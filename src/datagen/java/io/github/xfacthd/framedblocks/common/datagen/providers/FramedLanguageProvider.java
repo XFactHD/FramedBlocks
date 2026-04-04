@@ -188,6 +188,11 @@ public final class FramedLanguageProvider extends LanguageProvider {
         add(FBContent.BLOCK_FRAMED_COPPER_TORCH.value(), "Framed Copper Torch"); //See above
         add(FBContent.BLOCK_FRAMED_REDSTONE_TORCH.value(), "Framed Redstone Torch"); //See above
         add(FBContent.BLOCK_FRAMED_BOARD.value(), "Framed Board");
+        add(FBContent.BLOCK_FRAMED_HALF_BOARD.value(), "Framed Half Board");
+        add(FBContent.BLOCK_FRAMED_DIVIDED_BOARD.value(), "Framed Divided Board");
+        add(FBContent.BLOCK_FRAMED_CORNER_BOARD.value(), "Framed Corner Board");
+        add(FBContent.BLOCK_FRAMED_INNER_CORNER_BOARD.value(), "Framed Inner Corner Board");
+        add(FBContent.BLOCK_FRAMED_DOUBLE_CORNER_BOARD.value(), "Framed Double Corner Board");
         add(FBContent.BLOCK_FRAMED_CORNER_STRIP.value(), "Framed Corner Strip");
         add(FBContent.BLOCK_FRAMED_LATTICE.value(), "Framed Lattice");
         add(FBContent.BLOCK_FRAMED_THICK_LATTICE.value(), "Framed Thick Lattice");

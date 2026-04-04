@@ -1,8 +1,11 @@
 package io.github.xfacthd.framedblocks.common.data.skippreds.pane;
 
+import io.github.xfacthd.framedblocks.common.block.pane.FramedPartialBoardBlock;
+import io.github.xfacthd.framedblocks.common.data.property.CompoundDirection;
 import io.github.xfacthd.framedblocks.common.data.property.SlopeType;
 import io.github.xfacthd.framedblocks.common.data.skippreds.CornerDir;
 import io.github.xfacthd.framedblocks.common.data.skippreds.HalfDir;
+import io.github.xfacthd.framedblocks.common.data.skippreds.TriangleDir;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Util;
 
@@ -41,6 +44,88 @@ public final class PaneDirs {
         }
 
         private Board() { }
+    }
+
+    public static final class HalfBoard {
+        public static HalfDir getEdgeDir(CompoundDirection cmpDir, Direction side) {
+            if (side == cmpDir.orientation()) {
+                return HalfDir.fromDirections(side, cmpDir.direction());
+            }
+            return HalfDir.NULL;
+        }
+
+        public static CornerDir getHalfEdgeDir(CompoundDirection cmpDir, Direction side) {
+            if (side.getAxis() != cmpDir.direction().getAxis() && side.getAxis() != cmpDir.orientation().getAxis()) {
+                return CornerDir.fromDirections(side, cmpDir.direction(), cmpDir.orientation());
+            }
+            return CornerDir.NULL;
+        }
+
+        public static HalfDir getHalfDir(CompoundDirection cmpDir, Direction side) {
+            if (side == cmpDir.direction()) {
+                return HalfDir.fromDirections(side, cmpDir.orientation());
+            }
+            return HalfDir.NULL;
+        }
+
+        private HalfBoard() { }
+    }
+
+    public static final class CornerBoard {
+        public static CornerDir getHalfEdgeDir(CompoundDirection cmpDir, Direction side) {
+            Direction dirOne = cmpDir.orientation();
+            Direction dirTwo = FramedPartialBoardBlock.getCornerDirTwo(cmpDir);
+            if (side == dirOne) {
+                return CornerDir.fromDirections(side, cmpDir.direction(), dirTwo);
+            }
+            if (side == dirTwo) {
+                return CornerDir.fromDirections(side, cmpDir.direction(), dirOne);
+            }
+            return CornerDir.NULL;
+        }
+
+        public static CornerDir getCornerDir(CompoundDirection cmpDir, Direction side) {
+            if (side == cmpDir.direction()) {
+                Direction dirOne = cmpDir.orientation();
+                Direction dirTwo = FramedPartialBoardBlock.getCornerDirTwo(cmpDir);
+                return CornerDir.fromDirections(side, dirOne, dirTwo);
+            }
+            return CornerDir.NULL;
+        }
+
+        private CornerBoard() { }
+    }
+
+    public static final class InnerCornerBoard {
+        public static HalfDir getEdgeDir(CompoundDirection cmpDir, Direction side) {
+            if (side == cmpDir.orientation() || side == FramedPartialBoardBlock.getCornerDirTwo(cmpDir)) {
+                return HalfDir.fromDirections(side, cmpDir.direction());
+            }
+            return HalfDir.NULL;
+        }
+
+        public static CornerDir getHalfEdgeDir(CompoundDirection cmpDir, Direction side) {
+            Direction dirOne = cmpDir.orientation();
+            Direction dirTwo = FramedPartialBoardBlock.getCornerDirTwo(cmpDir);
+            if (side == dirOne.getOpposite()) {
+                return CornerDir.fromDirections(side, cmpDir.direction(), dirTwo);
+            }
+            if (side == dirTwo.getOpposite()) {
+                return CornerDir.fromDirections(side, cmpDir.direction(), dirOne);
+            }
+            return CornerDir.NULL;
+        }
+
+        public static TriangleDir getStairDir(CompoundDirection cmpDir, Direction side) {
+            if (side == cmpDir.direction()) {
+                Direction dirOne = cmpDir.orientation();
+                Direction dirTwo = FramedPartialBoardBlock.getCornerDirTwo(cmpDir);
+                return TriangleDir.fromDirections(dirOne, dirTwo);
+            }
+            return TriangleDir.NULL;
+        }
+
+        private InnerCornerBoard() { }
     }
 
     public static final class CornerStrip {

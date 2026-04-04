@@ -343,6 +343,26 @@ final class SkipPredicateGeneratorData {
                             new TestDir("HalfDir", "SingleEdge", null, TestDirIds.BOARD_SINGLE_EDGE)
                                     .withExcludedTypes("FRAMED_BOARD")
                     ),
+            entry("FRAMED_HALF_BOARD", "pane")
+                    .props(Property.internal("CompoundDirection", "cmpDir", "FACING_DIR", PropType.CUSTOM))
+                    .dirs(
+                            new TestDir("HalfDir", "Edge", null, TestDirIds.BOARD_SINGLE_EDGE),
+                            new TestDir("CornerDir", "HalfEdge", null, TestDirIds.HALF_BOARD_HALF_EDGE),
+                            new TestDir("HalfDir", "Half", null, TestDirIds.HALF_XZ_HOR, TestDirIds.HALF_XZ_VERT, TestDirIds.HALF_Y)
+                    ),
+            entry("FRAMED_CORNER_BOARD", "pane")
+                    .props(Property.internal("CompoundDirection", "cmpDir", "FACING_DIR", PropType.CUSTOM))
+                    .dirs(
+                            new TestDir("CornerDir", "HalfEdge", null, TestDirIds.HALF_BOARD_HALF_EDGE),
+                            new TestDir("CornerDir", "Corner", null, TestDirIds.CORNER_XZ, TestDirIds.CORNER_Y)
+                    ),
+            entry("FRAMED_INNER_CORNER_BOARD", "pane")
+                    .props(Property.internal("CompoundDirection", "cmpDir", "FACING_DIR", PropType.CUSTOM))
+                    .dirs(
+                            new TestDir("HalfDir", "Edge", null, TestDirIds.BOARD_SINGLE_EDGE),
+                            new TestDir("CornerDir", "HalfEdge", null, TestDirIds.HALF_BOARD_HALF_EDGE),
+                            new TestDir("TriangleDir", "Stair", null, TestDirIds.STAIR_XZ, TestDirIds.STAIR_Y)
+                    ),
             entry("FRAMED_CORNER_STRIP", "pane")
                     .props(
                             Property.api("Direction", "dir", "FACING_HOR", PropType.PRIMITIVE),

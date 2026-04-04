@@ -53,6 +53,8 @@ public final class NullCullPredicates extends BlockTypeMap<NullCullPredicate> {
         put(BlockType.FRAMED_VERTICAL_SLICED_SLOPED_STAIRS_PANEL, NullCullPredicate.NEVER);
         put(BlockType.FRAMED_VERTICAL_SLICED_SLOPED_STAIRS_SLOPE, NullCullPredicate.NEVER);
         put(BlockType.FRAMED_DOUBLE_THREEWAY_CORNER_PILLAR, NullCullPredicate.ALWAYS);
+        put(BlockType.FRAMED_DIVIDED_BOARD, NullCullPredicate.NEVER);
+        put(BlockType.FRAMED_DOUBLE_CORNER_BOARD, NullCullPredicate.NEVER);
         put(BlockType.FRAMED_FANCY_RAIL_SLOPE, NullCullPredicate.NEVER);
         put(BlockType.FRAMED_FANCY_POWERED_RAIL_SLOPE, NullCullPredicate.NEVER);
         put(BlockType.FRAMED_FANCY_DETECTOR_RAIL_SLOPE, NullCullPredicate.NEVER);

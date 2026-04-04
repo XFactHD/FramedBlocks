@@ -1,0 +1,7 @@
+{
+  "model": {
+    "type": "framedblocks:block",
+    "base_model": "minecraft:block/thin_block",
+    "block": "framedblocks:framed_double_corner_board"
+  }
+}

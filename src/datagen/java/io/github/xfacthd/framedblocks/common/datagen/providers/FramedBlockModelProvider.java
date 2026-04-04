@@ -158,6 +158,11 @@ public final class FramedBlockModelProvider extends AbstractFramedBlockModelProv
         simpleFramedBlockWithItem(blockModels, FBContent.BLOCK_FRAMED_LARGE_STONE_BUTTON, stoneCube, builder -> builder.itemBaseModel(THIN_BLOCK_LOC));
         simpleFramedBlock(blockModels, FBContent.BLOCK_FRAMED_WALL_SIGN, cube);
         simpleFramedBlockWithItem(blockModels, FBContent.BLOCK_FRAMED_BOARD, cube, builder -> builder.itemBaseModel(THIN_BLOCK_LOC));
+        simpleFramedBlockWithItem(blockModels, FBContent.BLOCK_FRAMED_HALF_BOARD, cube, builder -> builder.itemBaseModel(THIN_BLOCK_LOC));
+        simpleFramedBlockWithItem(blockModels, FBContent.BLOCK_FRAMED_DIVIDED_BOARD, cube, builder -> builder.itemBaseModel(THIN_BLOCK_LOC));
+        simpleFramedBlockWithItem(blockModels, FBContent.BLOCK_FRAMED_CORNER_BOARD, cube, builder -> builder.itemBaseModel(THIN_BLOCK_LOC));
+        simpleFramedBlockWithItem(blockModels, FBContent.BLOCK_FRAMED_INNER_CORNER_BOARD, cube, builder -> builder.itemBaseModel(THIN_BLOCK_LOC));
+        simpleFramedBlockWithItem(blockModels, FBContent.BLOCK_FRAMED_DOUBLE_CORNER_BOARD, cube, builder -> builder.itemBaseModel(THIN_BLOCK_LOC));
         simpleFramedBlockWithItem(blockModels, FBContent.BLOCK_FRAMED_LATTICE, cube);
         simpleFramedBlockWithItem(blockModels, FBContent.BLOCK_FRAMED_THICK_LATTICE, cube);
         simpleFramedBlockWithItem(blockModels, FBContent.BLOCK_FRAMED_HORIZONTAL_PANE, cube);
