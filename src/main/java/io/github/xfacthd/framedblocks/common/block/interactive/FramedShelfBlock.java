@@ -137,6 +137,6 @@ public final class FramedShelfBlock extends ShelfBlock implements IFramedBlockIn
 
     @Override
     public BlockState getJadeRenderState(BlockState state) {
-        return state;
+        return defaultBlockState();
     }
 }
