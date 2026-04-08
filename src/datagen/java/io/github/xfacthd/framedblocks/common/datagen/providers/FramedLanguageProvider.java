@@ -1,6 +1,5 @@
 package io.github.xfacthd.framedblocks.common.datagen.providers;
 
-import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.api.block.ShapeLockableBlock;
 import io.github.xfacthd.framedblocks.api.block.overlay.BlockOverlay;
 import io.github.xfacthd.framedblocks.api.blueprint.BlueprintData;
@@ -11,6 +10,7 @@ import io.github.xfacthd.framedblocks.api.camo.empty.EmptyCamoContainer;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.util.FramedConstants;
 import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.text.MoreCommonComponents;
 import io.github.xfacthd.framedblocks.client.screen.FramingSawScreen;
 import io.github.xfacthd.framedblocks.client.screen.FramingSawWithEncoderScreen;
 import io.github.xfacthd.framedblocks.client.screen.PoweredFramingSawScreen;
@@ -459,6 +459,20 @@ public final class FramedLanguageProvider extends LanguageProvider {
     }
 
     private void addTooltipTranslations() {
+        add(MoreCommonComponents.FALSE, "false");
+        add(MoreCommonComponents.TRUE, "true");
+        add(MoreCommonComponents.direction(Direction.DOWN), "Down");
+        add(MoreCommonComponents.direction(Direction.UP), "Up");
+        add(MoreCommonComponents.direction(Direction.NORTH), "North");
+        add(MoreCommonComponents.direction(Direction.SOUTH), "South");
+        add(MoreCommonComponents.direction(Direction.WEST), "West");
+        add(MoreCommonComponents.direction(Direction.EAST), "East");
+        add(MoreCommonComponents.axis(Direction.Axis.X), "X");
+        add(MoreCommonComponents.axis(Direction.Axis.Y), "Y");
+        add(MoreCommonComponents.axis(Direction.Axis.Z), "Z");
+        add(MoreCommonComponents.Internal.INDENT_KEY, "  %s");
+        add(MoreCommonComponents.Internal.BULLET_KEY, "  - %s");
+
         add(BlueprintData.CONTAINED_BLOCK, "Contained Block: %s");
         add(BlueprintData.STORED_OVERLAY, "Overlay: %s");
         add(BlueprintData.IS_ILLUMINATED, "Illuminated: %s");
@@ -467,16 +481,13 @@ public final class FramedLanguageProvider extends LanguageProvider {
         add(BlueprintData.IS_EMISSIVE, "Emissive: %s");
         add(BlueprintData.MISSING_MATERIALS, "[Framed Blueprint] Missing required materials:");
         add(CamoPrinter.BLOCK_NONE, "None");
+        add(CamoPrinter.CAMO_LABEL, "Camo: %s");
+        add(CamoPrinter.CAMO_LABEL_MULTI, "Camos: %s");
         add(CamoPrinter.DOUBLE_CAMO_SEPARATOR_KEY, "%s | %s");
-        add(CamoPrinter.MULTI_CAMO_ENTRY_PREFIX_KEY, "  - %s");
         add(BlueprintData.BLOCK_INVALID, "Invalid");
         add(BlueprintData.OVERLAY_NONE, "None");
-        add(BlueprintData.FALSE, "false");
-        add(BlueprintData.TRUE, "true");
         add(BlueprintData.CANT_COPY, "[Framed Blueprint] This block can currently not be copied!");
         add(FramedBlueprintItem.CANT_PLACE_FLUID_CAMO, "[Framed Blueprint] Copying blocks with fluid camos is currently not possible!");
-        add(IFramedBlock.CAMO_LABEL, "Camo: %s");
-        add(IFramedBlock.CAMO_LABEL_MULTI, "Camos: %s");
         add(PhantomPasteItem.FEATURE_DISABLED, "The intangibility feature is disabled, this item therefor has no function!");
         add(FramedTankBlockItem.TANK_CONTENTS, "Stored Fluid: %s");
         add(FramedTankBlockItem.EMPTY_FLUID, "Empty");

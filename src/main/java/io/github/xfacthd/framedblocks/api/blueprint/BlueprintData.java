@@ -8,6 +8,7 @@ import io.github.xfacthd.framedblocks.api.camo.CamoList;
 import io.github.xfacthd.framedblocks.api.camo.CamoPrinter;
 import io.github.xfacthd.framedblocks.api.internal.InternalAPI;
 import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.text.MoreCommonComponents;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentGetter;
@@ -17,7 +18,6 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.Item;
@@ -84,11 +84,11 @@ public record BlueprintData(
     public static final String IS_REINFORCED = "desc.framedblocks.blueprint_reinforced";
     public static final String IS_EMISSIVE = "desc.framedblocks.blueprint_emissive";
     public static final String MISSING_MATERIALS = Utils.translationKey("desc", "blueprint_missing_materials");
-    public static final MutableComponent BLOCK_INVALID = Utils.translate("desc", "blueprint_invalid").withStyle(ChatFormatting.RED);
-    public static final MutableComponent OVERLAY_NONE = Utils.translate("desc", "blueprint.overlay.none").withStyle(ChatFormatting.RED);
-    public static final MutableComponent FALSE = Utils.translate("desc", "blueprint_false").withStyle(ChatFormatting.RED);
-    public static final MutableComponent TRUE = Utils.translate("desc", "blueprint_true").withStyle(ChatFormatting.GREEN);
-    public static final MutableComponent CANT_COPY = Utils.translate("desc", "blueprint_cant_copy").withStyle(ChatFormatting.RED);
+    public static final Component BLOCK_INVALID = Utils.translate("desc", "blueprint_invalid").withStyle(ChatFormatting.RED);
+    public static final Component OVERLAY_NONE = Utils.translate("desc", "blueprint.overlay.none").withStyle(ChatFormatting.RED);
+    public static final Component FALSE = MoreCommonComponents.FALSE;
+    public static final Component TRUE = MoreCommonComponents.TRUE;
+    public static final Component CANT_COPY = Utils.translate("desc", "blueprint_cant_copy").withStyle(ChatFormatting.RED);
 
     public <T> T getCustomDataOrDefault(Supplier<DataComponentType<T>> type, T _default) {
         return getCustomDataOrDefault(type.get(), _default);

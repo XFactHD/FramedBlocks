@@ -60,8 +60,6 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.Nullable;
 
 public interface IFramedBlock extends EntityBlock, IBlockExtension {
-    String CAMO_LABEL = Utils.translationKey("desc", "block.stored_camo");
-    String CAMO_LABEL_MULTI = Utils.translationKey("desc", "block.stored_camo_multi");
     Identifier DYNAMIC_DROPS = Utils.id("dynamic_drops");
 
     /**

@@ -1,7 +1,7 @@
 package io.github.xfacthd.framedblocks.api.camo;
 
-import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.text.MoreCommonComponents;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -12,10 +12,11 @@ import java.util.function.Consumer;
 
 public final class CamoPrinter {
     public static final MutableComponent BLOCK_NONE = Utils.translate("desc", "camo_tooltip.block.none").withStyle(ChatFormatting.RED);
+    public static final String CAMO_LABEL = Utils.translationKey("desc", "block.stored_camo");
+    public static final String CAMO_LABEL_MULTI = Utils.translationKey("desc", "block.stored_camo_multi");
     public static final String DOUBLE_CAMO_SEPARATOR_KEY = Utils.translationKey("desc", "camo_tooltip.double_camo_separator");
-    public static final String MULTI_CAMO_ENTRY_PREFIX_KEY = Utils.translationKey("desc", "camo_tooltip.multi_camo_prefix");
     private static final Prefixer DEFAULT_CAMO_PREFIXER = (text, multiple) -> {
-        String key = multiple ? IFramedBlock.CAMO_LABEL_MULTI : IFramedBlock.CAMO_LABEL;
+        String key = multiple ? CAMO_LABEL_MULTI : CAMO_LABEL;
         return Component.translatable(key, text).withStyle(ChatFormatting.GOLD);
     };
 
@@ -43,7 +44,7 @@ public final class CamoPrinter {
                 appender.accept(prefixer.apply("", true));
                 for (CamoContainer<?, ?> camo : camos) {
                     MutableComponent printed = printCamo(camo);
-                    appender.accept(Component.translatable(MULTI_CAMO_ENTRY_PREFIX_KEY, printed));
+                    appender.accept(MoreCommonComponents.bullet(printed));
                 }
             }
         }
