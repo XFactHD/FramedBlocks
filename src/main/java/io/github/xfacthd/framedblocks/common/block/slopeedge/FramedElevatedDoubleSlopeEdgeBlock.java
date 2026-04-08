@@ -87,7 +87,7 @@ public class FramedElevatedDoubleSlopeEdgeBlock extends FramedDoubleBlock implem
         if (type == SlopeType.TOP) {
             return DoubleBlockTopInteractionMode.FIRST;
         }
-        return DoubleBlockTopInteractionMode.EITHER;
+        return DoubleBlockTopInteractionMode.BOTH;
     }
 
     @Override

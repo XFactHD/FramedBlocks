@@ -125,7 +125,7 @@ public class FramedDoubleStairsBlock extends FramedStairsBlock implements IFrame
         if (state.getValue(BlockStateProperties.HALF) == Half.TOP) {
             return DoubleBlockTopInteractionMode.FIRST;
         }
-        return DoubleBlockTopInteractionMode.EITHER;
+        return DoubleBlockTopInteractionMode.BOTH;
     }
 
     @Override

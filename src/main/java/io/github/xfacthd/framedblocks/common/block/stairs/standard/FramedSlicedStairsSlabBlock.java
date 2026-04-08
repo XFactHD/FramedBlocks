@@ -25,7 +25,7 @@ public class FramedSlicedStairsSlabBlock extends FramedStairsBlock implements IF
     @Override
     public DoubleBlockTopInteractionMode calculateTopInteractionMode(BlockState state) {
         if (state.getValue(HALF) != Half.TOP) {
-            return DoubleBlockTopInteractionMode.EITHER;
+            return DoubleBlockTopInteractionMode.BOTH;
         }
         return DoubleBlockTopInteractionMode.FIRST;
     }

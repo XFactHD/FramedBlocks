@@ -99,7 +99,7 @@ public class FramedFlatExtendedDoubleSlopePanelCornerBlock extends FramedDoubleB
                 return DoubleBlockTopInteractionMode.FIRST;
             }
         }
-        return DoubleBlockTopInteractionMode.EITHER;
+        return DoubleBlockTopInteractionMode.BOTH;
     }
 
     @Override

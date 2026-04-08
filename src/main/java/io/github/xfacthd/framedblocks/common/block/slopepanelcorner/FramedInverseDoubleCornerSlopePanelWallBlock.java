@@ -84,7 +84,7 @@ public class FramedInverseDoubleCornerSlopePanelWallBlock extends FramedDoubleBl
     public DoubleBlockTopInteractionMode calculateTopInteractionMode(BlockState state) {
         HorizontalRotation rot = state.getValue(PropertyHolder.ROTATION);
         if (rot == HorizontalRotation.UP || rot == HorizontalRotation.RIGHT) {
-            return DoubleBlockTopInteractionMode.EITHER;
+            return DoubleBlockTopInteractionMode.BOTH;
         }
         return DoubleBlockTopInteractionMode.FIRST;
     }

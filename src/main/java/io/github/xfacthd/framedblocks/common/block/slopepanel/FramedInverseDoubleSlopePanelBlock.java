@@ -83,7 +83,7 @@ public class FramedInverseDoubleSlopePanelBlock extends FramedDoubleBlock implem
 
     @Override
     public DoubleBlockTopInteractionMode calculateTopInteractionMode(BlockState state) {
-        return DoubleBlockTopInteractionMode.EITHER;
+        return DoubleBlockTopInteractionMode.BOTH;
     }
 
     @Override

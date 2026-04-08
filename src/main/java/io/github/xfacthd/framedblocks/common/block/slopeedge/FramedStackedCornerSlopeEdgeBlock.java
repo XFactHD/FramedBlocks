@@ -93,7 +93,7 @@ public class FramedStackedCornerSlopeEdgeBlock extends FramedDoubleBlock impleme
         if (state.getValue(PropertyHolder.CORNER_TYPE) == CornerType.BOTTOM) {
             return DoubleBlockTopInteractionMode.FIRST;
         }
-        return DoubleBlockTopInteractionMode.EITHER;
+        return DoubleBlockTopInteractionMode.BOTH;
     }
 
     @Override

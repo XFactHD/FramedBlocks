@@ -90,7 +90,7 @@ public class FramedExtendedDoubleSlopePanelBlock extends FramedDoubleBlock imple
         if (state.getValue(PropertyHolder.ROTATION) == HorizontalRotation.DOWN) {
             return DoubleBlockTopInteractionMode.FIRST;
         }
-        return DoubleBlockTopInteractionMode.EITHER;
+        return DoubleBlockTopInteractionMode.BOTH;
     }
 
     @Override

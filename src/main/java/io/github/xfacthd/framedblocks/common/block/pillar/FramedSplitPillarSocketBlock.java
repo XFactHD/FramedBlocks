@@ -49,7 +49,7 @@ public class FramedSplitPillarSocketBlock extends FramedPillarSocketBlock implem
 
     @Override
     public DoubleBlockTopInteractionMode calculateTopInteractionMode(BlockState state) {
-        return DoubleBlockTopInteractionMode.EITHER;
+        return DoubleBlockTopInteractionMode.BOTH;
     }
 
     @Override

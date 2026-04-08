@@ -124,14 +124,14 @@ public class FramedDoubleCornerSlopePanelWallBlock extends FramedDoubleBlock imp
             case FRAMED_SMALL_DOUBLE_CORNER_SLOPE_PANEL_W -> {
                 HorizontalRotation rot = state.getValue(PropertyHolder.ROTATION);
                 if (rot == HorizontalRotation.UP || rot == HorizontalRotation.RIGHT) {
-                    yield DoubleBlockTopInteractionMode.EITHER;
+                    yield DoubleBlockTopInteractionMode.BOTH;
                 }
                 yield DoubleBlockTopInteractionMode.FIRST;
             }
             case FRAMED_LARGE_DOUBLE_CORNER_SLOPE_PANEL_W -> {
                 HorizontalRotation rot = state.getValue(PropertyHolder.ROTATION);
                 if (rot == HorizontalRotation.DOWN || rot == HorizontalRotation.LEFT) {
-                    yield DoubleBlockTopInteractionMode.EITHER;
+                    yield DoubleBlockTopInteractionMode.BOTH;
                 }
                 yield DoubleBlockTopInteractionMode.FIRST;
             }

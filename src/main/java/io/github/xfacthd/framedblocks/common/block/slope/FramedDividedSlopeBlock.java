@@ -111,7 +111,7 @@ public class FramedDividedSlopeBlock extends FramedDoubleBlock implements SlopeB
     @Override
     public DoubleBlockTopInteractionMode calculateTopInteractionMode(BlockState state) {
         boolean horizontal = state.getValue(PropertyHolder.SLOPE_TYPE) == SlopeType.HORIZONTAL;
-        return horizontal ? DoubleBlockTopInteractionMode.SECOND : DoubleBlockTopInteractionMode.EITHER;
+        return horizontal ? DoubleBlockTopInteractionMode.SECOND : DoubleBlockTopInteractionMode.BOTH;
     }
 
     @Override

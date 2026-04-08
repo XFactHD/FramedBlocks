@@ -80,7 +80,7 @@ public class FramedElevatedDoublePrismBlock extends FramedDoubleBlock implements
         } else if (dirAxis.direction() == Direction.DOWN || dirAxis.axis() != Direction.Axis.Y) {
             return DoubleBlockTopInteractionMode.FIRST;
         }
-        return DoubleBlockTopInteractionMode.EITHER;
+        return DoubleBlockTopInteractionMode.BOTH;
     }
 
     @Override

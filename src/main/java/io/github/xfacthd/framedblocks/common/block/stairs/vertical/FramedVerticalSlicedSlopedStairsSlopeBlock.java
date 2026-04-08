@@ -58,7 +58,7 @@ public class FramedVerticalSlicedSlopedStairsSlopeBlock extends FramedVerticalSl
     public DoubleBlockTopInteractionMode calculateTopInteractionMode(BlockState state) {
         HorizontalRotation rot = state.getValue(PropertyHolder.ROTATION);
         boolean top = rot == HorizontalRotation.LEFT || rot == HorizontalRotation.DOWN;
-        return top ? DoubleBlockTopInteractionMode.FIRST : DoubleBlockTopInteractionMode.EITHER;
+        return top ? DoubleBlockTopInteractionMode.FIRST : DoubleBlockTopInteractionMode.BOTH;
     }
 
     @Override

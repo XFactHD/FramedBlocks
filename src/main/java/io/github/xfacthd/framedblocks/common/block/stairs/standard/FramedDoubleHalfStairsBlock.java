@@ -82,7 +82,7 @@ public class FramedDoubleHalfStairsBlock extends FramedDoubleBlock {
         if (state.getValue(FramedProperties.TOP)) {
             return DoubleBlockTopInteractionMode.FIRST;
         }
-        return DoubleBlockTopInteractionMode.EITHER;
+        return DoubleBlockTopInteractionMode.BOTH;
     }
 
     @Override

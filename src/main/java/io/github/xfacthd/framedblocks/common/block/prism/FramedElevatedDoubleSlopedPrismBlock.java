@@ -80,7 +80,7 @@ public class FramedElevatedDoubleSlopedPrismBlock extends FramedDoubleBlock impl
         } else if (cmpDir.direction() == Direction.DOWN || cmpDir.orientation() != Direction.UP) {
             return DoubleBlockTopInteractionMode.FIRST;
         }
-        return DoubleBlockTopInteractionMode.EITHER;
+        return DoubleBlockTopInteractionMode.BOTH;
     }
 
     @Override

@@ -81,7 +81,7 @@ public class FramedStackedSlopeEdgeBlock extends FramedDoubleBlock implements Sl
         if (type == SlopeType.TOP) {
             return DoubleBlockTopInteractionMode.FIRST;
         }
-        return DoubleBlockTopInteractionMode.EITHER;
+        return DoubleBlockTopInteractionMode.BOTH;
     }
 
     @Override

@@ -50,12 +50,12 @@ public final class FramedDividedBoardBlock extends FramedDoubleBlock {
     public DoubleBlockTopInteractionMode calculateTopInteractionMode(BlockState state) {
         CompoundDirection cmpDir = state.getValue(PropertyHolder.FACING_DIR);
         if (DirUtils.isY(cmpDir.direction())) {
-            return DoubleBlockTopInteractionMode.EITHER;
+            return DoubleBlockTopInteractionMode.BOTH;
         }
         return switch (cmpDir.orientation()) {
             case DOWN -> DoubleBlockTopInteractionMode.SECOND;
             case UP -> DoubleBlockTopInteractionMode.FIRST;
-            default -> DoubleBlockTopInteractionMode.EITHER;
+            default -> DoubleBlockTopInteractionMode.BOTH;
         };
     }
 

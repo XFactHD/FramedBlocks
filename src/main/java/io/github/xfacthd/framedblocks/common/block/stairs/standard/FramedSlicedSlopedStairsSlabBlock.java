@@ -44,7 +44,7 @@ public class FramedSlicedSlopedStairsSlabBlock extends FramedSlopedStairsBlock i
     @Override
     public DoubleBlockTopInteractionMode calculateTopInteractionMode(BlockState state) {
         boolean top = state.getValue(FramedProperties.TOP);
-        return top ? DoubleBlockTopInteractionMode.FIRST : DoubleBlockTopInteractionMode.EITHER;
+        return top ? DoubleBlockTopInteractionMode.FIRST : DoubleBlockTopInteractionMode.BOTH;
     }
 
     @Override

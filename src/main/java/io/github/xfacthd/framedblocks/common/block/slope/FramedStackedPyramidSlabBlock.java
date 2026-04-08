@@ -55,7 +55,7 @@ public class FramedStackedPyramidSlabBlock extends FramedConnectingPyramidBlock 
         return switch (state.getValue(BlockStateProperties.FACING)) {
             case UP -> DoubleBlockTopInteractionMode.SECOND;
             case DOWN -> DoubleBlockTopInteractionMode.FIRST;
-            default -> DoubleBlockTopInteractionMode.EITHER;
+            default -> DoubleBlockTopInteractionMode.BOTH;
         };
     }
 

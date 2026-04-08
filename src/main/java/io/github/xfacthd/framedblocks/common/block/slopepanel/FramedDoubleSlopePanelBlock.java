@@ -90,7 +90,7 @@ public class FramedDoubleSlopePanelBlock extends FramedDoubleBlock implements Sl
     @Override
     public DoubleBlockTopInteractionMode calculateTopInteractionMode(BlockState state) {
         return switch (state.getValue(PropertyHolder.ROTATION)) {
-            case LEFT, RIGHT -> DoubleBlockTopInteractionMode.EITHER;
+            case LEFT, RIGHT -> DoubleBlockTopInteractionMode.BOTH;
             case UP -> DoubleBlockTopInteractionMode.SECOND;
             case DOWN -> DoubleBlockTopInteractionMode.FIRST;
         };

@@ -91,7 +91,7 @@ public class FramedFlatDoubleSlopePanelCornerBlock extends FramedDoubleBlock imp
         if (rotation == HorizontalRotation.DOWN || rotation == HorizontalRotation.LEFT) {
             return DoubleBlockTopInteractionMode.FIRST;
         }
-        return DoubleBlockTopInteractionMode.EITHER;
+        return DoubleBlockTopInteractionMode.BOTH;
     }
 
     @Override

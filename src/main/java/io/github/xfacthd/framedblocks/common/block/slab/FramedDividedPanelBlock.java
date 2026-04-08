@@ -71,7 +71,7 @@ public class FramedDividedPanelBlock extends FramedDoubleBlock {
         if (getBlockType() == BlockType.FRAMED_DIVIDED_PANEL_HORIZONTAL) {
             return DoubleBlockTopInteractionMode.SECOND;
         } else {
-            return DoubleBlockTopInteractionMode.EITHER;
+            return DoubleBlockTopInteractionMode.BOTH;
         }
     }
 

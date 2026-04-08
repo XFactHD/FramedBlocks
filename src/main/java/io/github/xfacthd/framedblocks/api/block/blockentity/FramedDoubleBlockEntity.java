@@ -146,7 +146,7 @@ public class FramedDoubleBlockEntity extends FramedBlockEntity {
         return switch (getStateCache().getTopInteractionMode()) {
             case FIRST -> super.getMapColor();
             case SECOND -> camoContainer.getMapColor(level(), worldPosition);
-            case EITHER -> MAP_COLOR_MERGER.apply(super.getMapColor(), camoContainer.getMapColor(level(), worldPosition));
+            case BOTH -> MAP_COLOR_MERGER.apply(super.getMapColor(), camoContainer.getMapColor(level(), worldPosition));
         };
     }
 
@@ -170,7 +170,7 @@ public class FramedDoubleBlockEntity extends FramedBlockEntity {
         return switch (getStateCache().getTopInteractionMode()) {
             case FIRST -> getCamo().getContent().getFriction(level(), worldPosition, entity, frameFriction);
             case SECOND -> getCamoTwo().getContent().getFriction(level(), worldPosition, entity, frameFriction);
-            case EITHER -> Math.max(
+            case BOTH -> Math.max(
                     getCamo().getContent().getFriction(level(), worldPosition, entity, frameFriction),
                     getCamoTwo().getContent().getFriction(level(), worldPosition, entity, frameFriction)
             );

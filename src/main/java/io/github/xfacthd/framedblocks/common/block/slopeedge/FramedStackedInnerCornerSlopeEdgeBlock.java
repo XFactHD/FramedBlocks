@@ -93,7 +93,7 @@ public class FramedStackedInnerCornerSlopeEdgeBlock extends FramedDoubleBlock im
         if (type == CornerType.BOTTOM || (type.isHorizontal() && type.isTop())) {
             return DoubleBlockTopInteractionMode.FIRST;
         }
-        return DoubleBlockTopInteractionMode.EITHER;
+        return DoubleBlockTopInteractionMode.BOTH;
     }
 
     @Override

@@ -95,7 +95,7 @@ public class FramedElevatedDoubleCornerSlopeEdgeBlock extends FramedDoubleBlock 
         if (state.getValue(PropertyHolder.CORNER_TYPE) == CornerType.BOTTOM) {
             return DoubleBlockTopInteractionMode.FIRST;
         }
-        return DoubleBlockTopInteractionMode.EITHER;
+        return DoubleBlockTopInteractionMode.BOTH;
     }
 
     @Override

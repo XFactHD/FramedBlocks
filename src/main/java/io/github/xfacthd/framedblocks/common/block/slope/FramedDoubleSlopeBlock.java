@@ -88,7 +88,7 @@ public class FramedDoubleSlopeBlock extends FramedDoubleBlock implements SlopeTo
         return switch (state.getValue(PropertyHolder.SLOPE_TYPE)) {
             case BOTTOM -> DoubleBlockTopInteractionMode.SECOND;
             case TOP -> DoubleBlockTopInteractionMode.FIRST;
-            case HORIZONTAL -> DoubleBlockTopInteractionMode.EITHER;
+            case HORIZONTAL -> DoubleBlockTopInteractionMode.BOTH;
         };
     }
 

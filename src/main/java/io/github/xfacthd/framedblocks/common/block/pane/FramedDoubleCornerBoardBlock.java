@@ -53,12 +53,12 @@ public final class FramedDoubleCornerBoardBlock extends FramedDoubleBlock {
     public DoubleBlockTopInteractionMode calculateTopInteractionMode(BlockState state) {
         CompoundDirection cmpDir = state.getValue(PropertyHolder.FACING_DIR);
         if (DirUtils.isY(cmpDir.direction())) {
-            return DoubleBlockTopInteractionMode.EITHER;
+            return DoubleBlockTopInteractionMode.BOTH;
         }
         if (cmpDir.orientation() == Direction.UP || FramedPartialBoardBlock.getCornerDirTwo(cmpDir) == Direction.UP) {
             return DoubleBlockTopInteractionMode.FIRST;
         }
-        return DoubleBlockTopInteractionMode.EITHER;
+        return DoubleBlockTopInteractionMode.BOTH;
     }
 
     @Override

@@ -66,7 +66,7 @@ public final class FramedDoubleBlockStateModel extends AbstractFramedBlockStateM
         return switch (particleMode) {
             case FIRST -> getMaterialOrDefault(level, pos, state, fbData, false);
             case SECOND -> getMaterialOrDefault(level, pos, state, fbData, true);
-            case EITHER -> {
+            case BOTH -> {
                 Material.Baked sprite = getMaterial(level, pos, state, fbData, false);
                 if (sprite != null) {
                     yield sprite;

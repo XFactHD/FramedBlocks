@@ -93,7 +93,7 @@ public class FramedDoubleCornerBlock extends FramedDoubleBlock implements SlopeT
         } else if (type.isTop()) {
             return DoubleBlockTopInteractionMode.FIRST;
         }
-        return DoubleBlockTopInteractionMode.EITHER;
+        return DoubleBlockTopInteractionMode.BOTH;
     }
 
     @Override

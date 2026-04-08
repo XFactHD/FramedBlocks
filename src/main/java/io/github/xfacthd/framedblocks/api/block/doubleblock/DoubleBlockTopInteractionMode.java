@@ -7,7 +7,7 @@ package io.github.xfacthd.framedblocks.api.block.doubleblock;
 public enum DoubleBlockTopInteractionMode {
     FIRST(true, false),
     SECOND(false, true),
-    EITHER(true, true);
+    BOTH(true, true);
 
     private final boolean applyFirst;
     private final boolean applySecond;
