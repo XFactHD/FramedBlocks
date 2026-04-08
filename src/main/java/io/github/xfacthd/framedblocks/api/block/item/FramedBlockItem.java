@@ -15,6 +15,7 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jspecify.annotations.Nullable;
 
 import java.util.function.Consumer;
 
@@ -37,6 +38,11 @@ public class FramedBlockItem extends BlockItem implements IFramedBlockItem {
     }
 
     @Override
+    protected @Nullable BlockState getPlacementState(BlockPlaceContext context) {
+        return getPlacementState(context, super::getPlacementState);
+    }
+
+    @Override
     public boolean useCustomEmptyPlaceSound() {
         return customEmptyPlaceSound;
     }
@@ -49,6 +55,6 @@ public class FramedBlockItem extends BlockItem implements IFramedBlockItem {
     @Override
     @SuppressWarnings("deprecation")
     public void appendHoverText(ItemStack stack, TooltipContext ctx, TooltipDisplay display, Consumer<Component> appender, TooltipFlag flag) {
-        IFramedBlockItem.appendCamoHoverText(stack, appender);
+        appendDefaultHoverText(stack, ctx, appender);
     }
 }

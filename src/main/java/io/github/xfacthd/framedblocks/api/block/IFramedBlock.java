@@ -3,6 +3,7 @@ package io.github.xfacthd.framedblocks.api.block;
 import io.github.xfacthd.framedblocks.api.block.blockentity.IFramedBlockEntity;
 import io.github.xfacthd.framedblocks.api.block.cache.StateCache;
 import io.github.xfacthd.framedblocks.api.block.item.FramedBlockItem;
+import io.github.xfacthd.framedblocks.api.block.item.IFramedBlockItem;
 import io.github.xfacthd.framedblocks.api.block.render.CullingHelper;
 import io.github.xfacthd.framedblocks.api.block.render.ParticleHelper;
 import io.github.xfacthd.framedblocks.api.camo.CamoContainer;
@@ -85,8 +86,10 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension {
         return props;
     }
 
-    // TODO: replace with custom BlockItem with support for manual placement state cycling instead of automatic state detection
-    default BlockItem createBlockItem(Item.Properties props) {
+    /// Create a [BlockItem] for this block. Must extend [BlockItem] and [IFramedBlockItem].
+    ///
+    /// @param props The [Item.Properties] to construct the item with
+    default IFramedBlockItem createBlockItem(Item.Properties props) {
         return new FramedBlockItem((Block) this, props);
     }
 

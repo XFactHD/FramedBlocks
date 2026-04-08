@@ -3,6 +3,7 @@ package io.github.xfacthd.framedblocks.common.block.sign;
 import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
+import io.github.xfacthd.framedblocks.api.block.item.IFramedBlockItem;
 import io.github.xfacthd.framedblocks.api.model.wrapping.WrapHelper;
 import io.github.xfacthd.framedblocks.api.model.wrapping.statemerger.StateMerger;
 import io.github.xfacthd.framedblocks.api.util.Utils;
@@ -21,7 +22,6 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -129,7 +129,7 @@ public final class FramedStandingSignBlock extends StandingSignBlock implements 
     }
 
     @Override
-    public BlockItem createBlockItem(Item.Properties props) {
+    public IFramedBlockItem createBlockItem(Item.Properties props) {
         return new FramedSignItem(props);
     }
 

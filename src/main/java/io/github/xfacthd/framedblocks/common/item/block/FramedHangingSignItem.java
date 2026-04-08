@@ -35,6 +35,6 @@ public final class FramedHangingSignItem extends HangingSignItem implements IFra
     @Override
     @SuppressWarnings("deprecation")
     public void appendHoverText(ItemStack stack, TooltipContext ctx, TooltipDisplay display, Consumer<Component> appender, TooltipFlag flag) {
-        IFramedBlockItem.appendCamoHoverText(stack, appender);
+        appendDefaultHoverText(stack, ctx, appender);
     }
 }

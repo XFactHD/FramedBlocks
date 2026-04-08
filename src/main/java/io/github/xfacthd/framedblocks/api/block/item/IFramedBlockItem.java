@@ -14,17 +14,24 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.ApiStatus;
+import org.jspecify.annotations.Nullable;
 
 import java.util.function.Consumer;
 import java.util.function.Function;
 
 public interface IFramedBlockItem {
+    @ApiStatus.NonExtendable
+    default @Nullable BlockState getPlacementState(BlockPlaceContext context, Function<BlockPlaceContext, @Nullable BlockState> superHandler) {
+        return superHandler.apply(context);
+    }
+
     @ApiStatus.NonExtendable
     default InteractionResult handlePlace(BlockPlaceContext context, Function<BlockPlaceContext, InteractionResult> superHandler) {
         InteractionResult result = superHandler.apply(context);
@@ -75,7 +82,8 @@ public interface IFramedBlockItem {
         return superGetter.get(state, level, pos, player);
     }
 
-    static void appendCamoHoverText(ItemStack stack, Consumer<Component> appender) {
+    @ApiStatus.NonExtendable
+    default void appendDefaultHoverText(ItemStack stack, Item.TooltipContext ctx, Consumer<Component> appender) {
         CamoPrinter.printCamoList(appender, stack.get(Utils.DC_TYPE_CAMO_LIST), false);
     }
 

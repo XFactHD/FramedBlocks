@@ -36,6 +36,6 @@ public class FramedStandingAndWallBlockItem extends StandingAndWallBlockItem imp
     @Override
     @SuppressWarnings("deprecation")
     public void appendHoverText(ItemStack stack, TooltipContext ctx, TooltipDisplay display, Consumer<Component> appender, TooltipFlag flag) {
-        IFramedBlockItem.appendCamoHoverText(stack, appender);
+        appendDefaultHoverText(stack, ctx, appender);
     }
 }

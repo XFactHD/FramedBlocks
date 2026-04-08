@@ -77,6 +77,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
@@ -854,9 +855,10 @@ public final class FBContent {
         BLOCKS_BY_TYPE.put(type, result);
 
         if (type.hasBlockItem()) {
-            ITEMS.registerItem(type.getName(), props ->
-                    ((IFramedBlock) result.value()).createBlockItem(props.useBlockDescriptionPrefix())
-            );
+            ITEMS.registerItem(type.getName(), props -> {
+                IFramedBlock block = (IFramedBlock) result.value();
+                return (BlockItem) block.createBlockItem(props.useBlockDescriptionPrefix());
+            });
         }
 
         return result;

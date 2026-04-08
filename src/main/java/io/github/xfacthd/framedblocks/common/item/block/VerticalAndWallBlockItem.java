@@ -20,11 +20,13 @@ public class VerticalAndWallBlockItem extends FramedBlockItem {
 
     @Override
     protected @Nullable BlockState getPlacementState(BlockPlaceContext context) {
-        if (DirUtils.isY(context.getClickedFace())) {
-            return getBlock().getStateForPlacement(context);
-        } else {
-            return wallBlock.getStateForPlacement(context);
-        }
+        return getPlacementState(context, ctx -> {
+            if (DirUtils.isY(ctx.getClickedFace())) {
+                return getBlock().getStateForPlacement(ctx);
+            } else {
+                return wallBlock.getStateForPlacement(ctx);
+            }
+        });
     }
 
     @Override

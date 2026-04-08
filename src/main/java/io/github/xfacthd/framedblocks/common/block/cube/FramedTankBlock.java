@@ -1,6 +1,7 @@
 package io.github.xfacthd.framedblocks.common.block.cube;
 
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
+import io.github.xfacthd.framedblocks.api.block.item.IFramedBlockItem;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
 import io.github.xfacthd.framedblocks.common.blockentity.special.FramedTankBlockEntity;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
@@ -10,7 +11,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -54,7 +54,7 @@ public class FramedTankBlock extends FramedBlock {
     }
 
     @Override
-    public BlockItem createBlockItem(Item.Properties props) {
+    public IFramedBlockItem createBlockItem(Item.Properties props) {
         return new FramedTankBlockItem(this, props);
     }
 

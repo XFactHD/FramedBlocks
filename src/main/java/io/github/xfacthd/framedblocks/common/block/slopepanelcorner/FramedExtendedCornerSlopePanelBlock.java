@@ -3,6 +3,7 @@ package io.github.xfacthd.framedblocks.common.block.slopepanelcorner;
 import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.SlopeToggleBlock;
+import io.github.xfacthd.framedblocks.api.block.item.IFramedBlockItem;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.util.RotationDirection;
 import io.github.xfacthd.framedblocks.common.FBContent;
@@ -10,7 +11,6 @@ import io.github.xfacthd.framedblocks.common.block.FramedBlock;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import io.github.xfacthd.framedblocks.common.item.block.VerticalAndWallBlockItem;
 import net.minecraft.core.Direction;
-import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.Block;
@@ -58,7 +58,7 @@ public class FramedExtendedCornerSlopePanelBlock extends FramedBlock implements 
     }
 
     @Override
-    public BlockItem createBlockItem(Item.Properties props) {
+    public IFramedBlockItem createBlockItem(Item.Properties props) {
         Block other = switch (getBlockType()) {
             case FRAMED_EXT_CORNER_SLOPE_PANEL -> FBContent.BLOCK_FRAMED_EXTENDED_CORNER_SLOPE_PANEL_WALL.value();
             case FRAMED_EXT_INNER_CORNER_SLOPE_PANEL -> FBContent.BLOCK_FRAMED_EXTENDED_INNER_CORNER_SLOPE_PANEL_WALL.value();

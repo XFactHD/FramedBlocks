@@ -8,6 +8,7 @@ import io.github.xfacthd.framedblocks.api.block.doubleblock.CamoGetter;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockParts;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockTopInteractionMode;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.SolidityCheck;
+import io.github.xfacthd.framedblocks.api.block.item.IFramedBlockItem;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.api.util.RotationDirection;
@@ -20,7 +21,6 @@ import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import io.github.xfacthd.framedblocks.common.item.block.VerticalAndWallBlockItem;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.Block;
@@ -78,7 +78,7 @@ public class FramedDoubleHalfSlopeBlock extends FramedDoubleBlock implements Slo
     }
 
     @Override
-    public BlockItem createBlockItem(Item.Properties props) {
+    public IFramedBlockItem createBlockItem(Item.Properties props) {
         return new VerticalAndWallBlockItem(
                 this,
                 FBContent.BLOCK_FRAMED_VERTICAL_DOUBLE_HALF_SLOPE.value(),

@@ -1,6 +1,7 @@
 package io.github.xfacthd.framedblocks.common.block.pane;
 
 import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
+import io.github.xfacthd.framedblocks.api.block.item.IFramedBlockItem;
 import io.github.xfacthd.framedblocks.api.camo.CamoList;
 import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.api.util.MathUtils;
@@ -11,7 +12,6 @@ import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import io.github.xfacthd.framedblocks.common.item.block.FramedSpecialBlockItem;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
@@ -75,7 +75,7 @@ public class FramedBoardBlock extends FramedBlock {
     }
 
     @Override
-    public BlockItem createBlockItem(Item.Properties props) {
+    public IFramedBlockItem createBlockItem(Item.Properties props) {
         return new FramedSpecialBlockItem.Single(this, props) {
             @Override
             protected @Nullable BlockState getReplacementState(BlockPlaceContext ctx, BlockState originalState) {
