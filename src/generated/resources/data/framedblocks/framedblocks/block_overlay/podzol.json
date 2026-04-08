@@ -2,5 +2,5 @@
   "edge_texture": "framedblocks:block/overlay/podzol_edge",
   "solid_face": "top",
   "solid_texture": "minecraft:block/podzol_top",
-  "source_item": "minecraft:podzol"
+  "source_item": "minecraft:leaf_litter"
 }

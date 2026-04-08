@@ -29,7 +29,7 @@ public final class FramedBlockOverlayProvider {
                 .solidTexture(Utils.id("minecraft", "block/podzol_top"))
                 .edgeTexture(name)
                 .solidFace(BlockOverlay.SolidFace.TOP)
-                .sourceItem(Items.PODZOL)
+                .sourceItem(Items.LEAF_LITTER)
         );
         overlay(context, "mycelium", (builder, name) -> builder
                 .solidTexture(Utils.id("minecraft", "block/mycelium_top"))
