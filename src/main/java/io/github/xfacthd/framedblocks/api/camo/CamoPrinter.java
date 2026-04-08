@@ -41,8 +41,7 @@ public final class CamoPrinter {
             }
             default -> {
                 appender.accept(prefixer.apply("", true));
-                for (CamoContainer<?, ?> camo : camos)
-                {
+                for (CamoContainer<?, ?> camo : camos) {
                     MutableComponent printed = printCamo(camo);
                     appender.accept(Component.translatable(MULTI_CAMO_ENTRY_PREFIX_KEY, printed));
                 }

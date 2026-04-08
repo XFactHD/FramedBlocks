@@ -130,8 +130,7 @@ public class FramedItemFrameRenderer implements BlockEntityRenderer<FramedItemFr
         renderState.mapId = mapId;
     }
 
-    private static void extractNameTag(FramedItemFrameBlockEntity blockEntity, FramedItemFrameRenderState renderState, ItemStack stack)
-    {
+    private static void extractNameTag(FramedItemFrameBlockEntity blockEntity, FramedItemFrameRenderState renderState, ItemStack stack) {
         if (!Minecraft.renderNames() || !stack.has(DataComponents.CUSTOM_NAME)) {
             return;
         }
