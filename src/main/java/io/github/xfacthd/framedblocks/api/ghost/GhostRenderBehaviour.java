@@ -7,6 +7,7 @@ import io.github.xfacthd.framedblocks.api.camo.CamoList;
 import io.github.xfacthd.framedblocks.api.model.data.AbstractFramedBlockData;
 import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
 import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.mixin.InvokerBlockItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
 import net.minecraft.core.BlockPos;
@@ -17,7 +18,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -81,7 +81,7 @@ public interface GhostRenderBehaviour {
      * @param proxiedStack The proxied {@code ItemStack} as returned from {@link GhostRenderBehaviour#getProxiedStack(ItemStack)}
      * @param hit The {@link BlockHitResult} from {@link Minecraft#hitResult}
      * @param ctx The {@link BlockPlaceContext} to use for determining the resulting {@code BlockState} via
-     *            {@link Block#getStateForPlacement(BlockPlaceContext)}
+     *            {@link BlockItem#getPlacementState(BlockPlaceContext)}
      * @param hitState The {@code BlockState} hit by the given {@code BlockHitResult}
      * @param renderPass The current render pass index
      * @return The {@code BlockState} to render or null when none could be determined
@@ -94,8 +94,7 @@ public interface GhostRenderBehaviour {
             BlockState hitState,
             int renderPass
     ) {
-        Block block = ((BlockItem) stack.getItem()).getBlock();
-        return block.getStateForPlacement(ctx);
+        return ((InvokerBlockItem) stack.getItem()).framedblocks$callGetPlacementState(ctx);
     }
 
     /**

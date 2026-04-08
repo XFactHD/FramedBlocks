@@ -27,35 +27,6 @@ public final class GhostRenderBehaviours {
         ));
         event.registerBlocks(new SlabGhostRenderBehaviour(), FBContent.BLOCK_FRAMED_SLAB.value());
         event.registerBlocks(new PanelGhostRenderBehaviour(), FBContent.BLOCK_FRAMED_PANEL.value());
-        event.registerBlocks(new StandingAndWallBlockGhostRenderBehaviour(), List.of(
-                FBContent.BLOCK_FRAMED_SIGN,
-                FBContent.BLOCK_FRAMED_HANGING_SIGN,
-                FBContent.BLOCK_FRAMED_TORCH,
-                FBContent.BLOCK_FRAMED_SOUL_TORCH,
-                FBContent.BLOCK_FRAMED_COPPER_TORCH,
-                FBContent.BLOCK_FRAMED_REDSTONE_TORCH,
-                FBContent.BLOCK_FRAMED_HALF_SLOPE,
-                FBContent.BLOCK_FRAMED_SMALL_CORNER_SLOPE_PANEL,
-                FBContent.BLOCK_FRAMED_LARGE_CORNER_SLOPE_PANEL,
-                FBContent.BLOCK_FRAMED_SMALL_INNER_CORNER_SLOPE_PANEL,
-                FBContent.BLOCK_FRAMED_LARGE_INNER_CORNER_SLOPE_PANEL,
-                FBContent.BLOCK_FRAMED_EXTENDED_CORNER_SLOPE_PANEL,
-                FBContent.BLOCK_FRAMED_EXTENDED_INNER_CORNER_SLOPE_PANEL,
-                FBContent.BLOCK_FRAMED_SMALL_PRISM_SLOPE_PANEL_CORNER,
-                FBContent.BLOCK_FRAMED_LARGE_PRISM_SLOPE_PANEL_CORNER,
-                FBContent.BLOCK_FRAMED_SMALL_INNER_PRISM_SLOPE_PANEL_CORNER,
-                FBContent.BLOCK_FRAMED_LARGE_INNER_PRISM_SLOPE_PANEL_CORNER
-        ));
-        event.registerBlocks(new StandingAndWallDoubleBlockGhostRenderBehaviour(), List.of(
-                FBContent.BLOCK_FRAMED_DOUBLE_HALF_SLOPE,
-                FBContent.BLOCK_FRAMED_SMALL_DOUBLE_CORNER_SLOPE_PANEL,
-                FBContent.BLOCK_FRAMED_LARGE_DOUBLE_CORNER_SLOPE_PANEL,
-                FBContent.BLOCK_FRAMED_INVERSE_DOUBLE_CORNER_SLOPE_PANEL,
-                FBContent.BLOCK_FRAMED_EXTENDED_DOUBLE_CORNER_SLOPE_PANEL,
-                FBContent.BLOCK_FRAMED_EXTENDED_INNER_DOUBLE_CORNER_SLOPE_PANEL,
-                FBContent.BLOCK_FRAMED_STACKED_CORNER_SLOPE_PANEL,
-                FBContent.BLOCK_FRAMED_STACKED_INNER_CORNER_SLOPE_PANEL
-        ));
         event.registerBlock(new CollapsibleBlockGhostRenderBehaviour(), FBContent.BLOCK_FRAMED_COLLAPSIBLE_BLOCK);
         event.registerBlock(new CollapsibleCopycatBlockGhostRenderBehaviour(), FBContent.BLOCK_FRAMED_COLLAPSIBLE_COPYCAT_BLOCK);
         event.registerItems(
