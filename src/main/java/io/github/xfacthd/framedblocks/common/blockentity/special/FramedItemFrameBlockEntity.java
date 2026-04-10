@@ -110,7 +110,7 @@ public class FramedItemFrameBlockEntity extends FramedBlockEntity implements Ite
             }
         }
 
-        Utils.giveToPlayer(player, heldItem, true);
+        Utils.giveToPlayer(player, heldItem);
 
         // Don't clear rotation
         setItem(ItemStack.EMPTY);

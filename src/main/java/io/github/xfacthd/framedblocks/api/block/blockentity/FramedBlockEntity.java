@@ -284,7 +284,7 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
         if (!level().isClientSide()) {
             setGlowing(false);
 
-            Utils.giveToPlayer(player, FrameModifier.GLOWING.getDefaultStack(), true);
+            Utils.giveToPlayer(player, FrameModifier.GLOWING.getDefaultStack());
         }
         return InteractionResult.SUCCESS;
     }
@@ -303,7 +303,7 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
         if (!level().isClientSide()) {
             setIntangible(false);
 
-            Utils.giveToPlayer(player, FrameModifier.INTANGIBLE.getDefaultStack(), true);
+            Utils.giveToPlayer(player, FrameModifier.INTANGIBLE.getDefaultStack());
         }
         return InteractionResult.SUCCESS;
     }
@@ -326,7 +326,7 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
                 stack.hurtAndBreak(1, player, hand.asEquipmentSlot());
             }
 
-            Utils.giveToPlayer(player, FrameModifier.REINFORCED.getDefaultStack(), true);
+            Utils.giveToPlayer(player, FrameModifier.REINFORCED.getDefaultStack());
         }
         return InteractionResult.SUCCESS;
     }
@@ -345,7 +345,7 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
         if (!level().isClientSide()) {
             setEmissive(false);
 
-            Utils.giveToPlayer(player, FrameModifier.EMISSIVE.getDefaultStack(), true);
+            Utils.giveToPlayer(player, FrameModifier.EMISSIVE.getDefaultStack());
         }
         return InteractionResult.SUCCESS;
     }

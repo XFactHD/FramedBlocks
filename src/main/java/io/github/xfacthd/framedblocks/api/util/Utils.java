@@ -245,19 +245,18 @@ public final class Utils {
      *
      * @param player The player to give the stack to
      * @param stack The stack to give to the player
-     * @param giveInSurvival Whether the stack should be given to a player in survival mode
      */
-    public static void giveToPlayer(Player player, ItemStack stack, boolean giveInSurvival) {
+    public static void giveToPlayer(Player player, ItemStack stack) {
         if (stack.isEmpty()) {
             return;
         }
 
-        boolean creative = player.isCreative();
-        if (!creative && giveInSurvival) {
+        boolean creative = player.hasInfiniteMaterials();
+        if (!creative) {
             if (!player.getInventory().add(stack)) {
                 player.drop(stack, false);
             }
-        } else if (creative && !player.getInventory().contains(stack)) {
+        } else if (!player.getInventory().contains(stack)) {
             player.getInventory().add(stack);
         }
     }

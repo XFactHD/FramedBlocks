@@ -102,7 +102,7 @@ public class FramedFlowerPotBlock extends FramedBlock {
                         }
                     } else {
                         ItemStack flowerStack = new ItemStack(be.getFlowerBlock());
-                        Utils.giveToPlayer(player, flowerStack, true);
+                        Utils.giveToPlayer(player, flowerStack);
 
                         be.setFlowerBlock(Blocks.AIR);
                     }
