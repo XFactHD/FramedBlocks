@@ -7,10 +7,10 @@ import io.github.xfacthd.framedblocks.common.blockentity.special.FramedFlowerPot
 import io.github.xfacthd.framedblocks.common.compat.amendments.AmendmentsCompat;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
+import it.unimi.dsi.fastutil.objects.Reference2ReferenceOpenHashMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.Identifier;
 import net.minecraft.stats.Stats;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
@@ -33,9 +33,10 @@ import net.minecraft.world.phys.BlockHitResult;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
-import java.util.function.Supplier;
 
 public class FramedFlowerPotBlock extends FramedBlock {
+    private static final Map<Block, BlockState> POT_STATE_BY_FLOWER_BLOCK = new Reference2ReferenceOpenHashMap<>();
+
     public FramedFlowerPotBlock(Properties props) {
         super(BlockType.FRAMED_FLOWER_POT, props);
         registerDefaultState(defaultBlockState().setValue(PropertyHolder.HANGING, false));
@@ -150,10 +151,16 @@ public class FramedFlowerPotBlock extends FramedBlock {
     }
 
     public static BlockState getFlowerPotState(Block flower) {
-        Map<Identifier, Supplier<? extends Block>> fullPots = ((FlowerPotBlock) Blocks.FLOWER_POT).getFullPotsView();
-        return fullPots.getOrDefault(
-                BuiltInRegistries.BLOCK.getKey(flower),
-                () -> Blocks.AIR
-        ).get().defaultBlockState();
+        return POT_STATE_BY_FLOWER_BLOCK.getOrDefault(flower, Blocks.AIR.defaultBlockState());
+    }
+
+    public static void initPotMapping() {
+        POT_STATE_BY_FLOWER_BLOCK.clear();
+        ((FlowerPotBlock) Blocks.FLOWER_POT).getFullPotsView().forEach((flowerId, potSupplier) -> {
+            Block flower = BuiltInRegistries.BLOCK.getValue(flowerId);
+            if (!flower.defaultBlockState().isAir()) {
+                POT_STATE_BY_FLOWER_BLOCK.put(flower, potSupplier.get().defaultBlockState());
+            }
+        });
     }
 }

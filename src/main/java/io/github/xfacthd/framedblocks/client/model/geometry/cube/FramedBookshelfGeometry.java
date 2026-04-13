@@ -7,6 +7,7 @@ import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.geometry.PartConsumer;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
+import io.github.xfacthd.framedblocks.api.model.util.ModelUtils;
 import io.github.xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
 import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import net.minecraft.client.renderer.block.BlockAndTintGetter;
@@ -17,6 +18,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.model.data.ModelData;
 import org.jspecify.annotations.Nullable;
 
 import java.util.function.Predicate;
@@ -68,6 +70,11 @@ public class FramedBookshelfGeometry extends Geometry {
     @Override
     public void collectAdditionalPartsCached(PartConsumer consumer, BlockAndTintGetter level, BlockPos pos, RandomSource random, FramedBlockData blockData, @Nullable Object cacheKeyUserData) {
         consumer.acceptAll(baseModel, level, pos, random, state, false, false, false, auxShaderState, null);
+    }
+
+    @Override
+    public @Nullable Object computeCacheKeyUserData(BlockAndTintGetter level, BlockPos pos, RandomSource random, ModelData data) {
+        return ModelUtils.getGeometryKeyFiltered(baseModel, level, pos, state, random);
     }
 
     public static FramedBookshelfGeometry normal(GeometryFactory.Context ctx) {

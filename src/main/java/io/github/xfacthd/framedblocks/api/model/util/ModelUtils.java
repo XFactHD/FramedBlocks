@@ -7,6 +7,7 @@ import io.github.xfacthd.framedblocks.api.model.data.QuadMapBuilder;
 import io.github.xfacthd.framedblocks.api.model.quad.ExtMutableQuad;
 import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.block.BlockAndTintGetter;
 import net.minecraft.client.renderer.block.FluidModel;
 import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
 import net.minecraft.client.renderer.block.dispatch.BlockStateModelPart;
@@ -15,9 +16,11 @@ import net.minecraft.client.resources.model.ModelBaker;
 import net.minecraft.client.resources.model.ModelDebugName;
 import net.minecraft.client.resources.model.geometry.BakedQuad;
 import net.minecraft.client.resources.model.sprite.Material;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.util.TriState;
 import net.minecraft.util.Unit;
 import net.minecraft.world.level.block.state.BlockState;
@@ -204,6 +207,21 @@ public final class ModelUtils {
                 resolver.markDependency(model);
             }
         });
+    }
+
+    /// Returns the provided model's geometry key, filtering out keys that are the queried model and therefore don't need to be included in the cache key
+    ///
+    /// @param model  The model to query
+    /// @param level  The level to query the model with
+    /// @param pos    The position to query the model with
+    /// @param state  The block state to query the model with
+    /// @param random The random source to query the model with
+    public static @Nullable Object getGeometryKeyFiltered(BlockStateModel model, BlockAndTintGetter level, BlockPos pos, BlockState state, RandomSource random) {
+        Object geometryKey = model.createGeometryKey(level, pos, state, random);
+        if (geometryKey == model) {
+            geometryKey = null;
+        }
+        return geometryKey;
     }
 
     private ModelUtils() { }

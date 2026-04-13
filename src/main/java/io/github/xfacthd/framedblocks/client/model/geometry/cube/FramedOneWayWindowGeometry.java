@@ -51,12 +51,7 @@ public class FramedOneWayWindowGeometry extends Geometry {
     @Override
     public @Nullable Object computeCacheKeyUserData(BlockAndTintGetter level, BlockPos pos, RandomSource random, ModelData data) {
         if (face != NullableDirection.NONE) {
-            BlockStateModel model = tintedGlassModel.get();
-            Object geometryKey = model.createGeometryKey(level, pos, GLASS_STATE, random);
-            // Only include the geometry key if it's not the SingleVariant's default value (i.e. the model itself)
-            if (geometryKey != model) {
-                return geometryKey;
-            }
+            return ModelUtils.getGeometryKeyFiltered(tintedGlassModel.get(), level, pos, GLASS_STATE, random);
         }
         return null;
     }

@@ -93,6 +93,10 @@ public abstract class Geometry {
      * Add additional {@link BlockStateModelPart}s which should be cached.
      * The result of this method will be cached, processing time is therefore not critical
      *
+     * Implementors of this method which pull geometry from another model (including the geometry's base model) should also override
+     * {@link #computeCacheKeyUserData(BlockAndTintGetter, BlockPos, RandomSource, ModelData)} and return the geometry key from the
+     * model being queried in this method to ensure things like randomized models are cached correctly.
+     *
      * @param consumer         The {@link PartConsumer} to pass the additional parts to
      * @param level            The {@linkplain BlockAndTintGetter level} the block is being rendered in
      * @param pos              The {@link BlockPos} the block is being rendered at

@@ -109,8 +109,12 @@ public class FramedFlowerPotGeometry extends Geometry {
 
     @Override
     public void collectAdditionalPartsCached(PartConsumer consumer, BlockAndTintGetter level, BlockPos pos, RandomSource random, FramedBlockData blockData, @Nullable Object cacheKeyUserData) {
-        BlockState potState;
-        if (cacheKeyUserData instanceof Block block && !(potState = FramedFlowerPotBlock.getFlowerPotState(block)).isAir()) {
+        BlockState potState = switch (cacheKeyUserData) {
+            case BlockState keyState -> keyState;
+            case CompoundKey(BlockState keyState, _) -> keyState;
+            case null, default -> null;
+        };
+        if (potState != null) {
             BlockStateModel potModel = ModelUtils.getModel(potState);
             consumer.acceptAll(potModel, level, pos, random, potState, true, false, false, potState, PLANT_MODIFIER);
         }
@@ -138,8 +142,14 @@ public class FramedFlowerPotGeometry extends Geometry {
 
     @Override
     public @Nullable Object computeCacheKeyUserData(BlockAndTintGetter level, BlockPos pos, RandomSource random, ModelData data) {
-        Block flower = getFlowerBlock(data);
-        return flower != Blocks.AIR ? flower : null;
+        Block flower = data.get(FramedFlowerPotBlockEntity.FLOWER_BLOCK);
+        if (flower == null || flower == Blocks.AIR) {
+            return null;
+        }
+
+        BlockState potState = FramedFlowerPotBlock.getFlowerPotState(flower);
+        Object geoKey = ModelUtils.getGeometryKeyFiltered(ModelUtils.getModel(potState), level, pos, potState, random);
+        return geoKey != null ? new CompoundKey(potState, geoKey) : potState;
     }
 
     @Override
@@ -147,8 +157,5 @@ public class FramedFlowerPotGeometry extends Geometry {
         return true;
     }
 
-    private static Block getFlowerBlock(ModelData data) {
-        Block flower = data.get(FramedFlowerPotBlockEntity.FLOWER_BLOCK);
-        return flower != null ? flower : Blocks.AIR;
-    }
+    private record CompoundKey(BlockState flowerPot, Object geoKey) { }
 }

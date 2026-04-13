@@ -6,6 +6,7 @@ import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.geometry.PartConsumer;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
+import io.github.xfacthd.framedblocks.api.model.util.ModelUtils;
 import io.github.xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
 import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import net.minecraft.client.renderer.block.BlockAndTintGetter;
@@ -20,6 +21,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.block.state.properties.RailShape;
+import net.neoforged.neoforge.model.data.ModelData;
 import org.joml.Vector3f;
 import org.jspecify.annotations.Nullable;
 
@@ -182,6 +184,11 @@ public class FramedFancyRailGeometry extends Geometry {
     @Override
     public void collectAdditionalPartsCached(PartConsumer consumer, BlockAndTintGetter level, BlockPos pos, RandomSource random, FramedBlockData blockData, @Nullable Object cacheKeyUserData) {
         consumer.acceptAll(baseModel, level, pos, random, state, true, false, false, auxShaderState, null);
+    }
+
+    @Override
+    public @Nullable Object computeCacheKeyUserData(BlockAndTintGetter level, BlockPos pos, RandomSource random, ModelData data) {
+        return ModelUtils.getGeometryKeyFiltered(baseModel, level, pos, state, random);
     }
 
     @Override
