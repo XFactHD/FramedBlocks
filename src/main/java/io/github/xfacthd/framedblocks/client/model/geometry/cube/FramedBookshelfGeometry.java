@@ -22,16 +22,16 @@ import org.jspecify.annotations.Nullable;
 import java.util.function.Predicate;
 
 public class FramedBookshelfGeometry extends Geometry {
-    private static final BlockState AUX_SHADER_STATE = Blocks.BOOKSHELF.defaultBlockState();
-
     private final BlockState state;
     private final BlockStateModel baseModel;
     private final Predicate<Direction> frontFacePred;
+    private final BlockState auxShaderState;
 
-    private FramedBookshelfGeometry(GeometryFactory.Context ctx, Predicate<Direction> frontFacePred) {
+    private FramedBookshelfGeometry(GeometryFactory.Context ctx, Predicate<Direction> frontFacePred, BlockState auxShaderState) {
         this.state = ctx.state();
         this.baseModel = ctx.baseModel();
         this.frontFacePred = frontFacePred;
+        this.auxShaderState = auxShaderState;
     }
 
     @Override
@@ -67,15 +67,15 @@ public class FramedBookshelfGeometry extends Geometry {
 
     @Override
     public void collectAdditionalPartsCached(PartConsumer consumer, BlockAndTintGetter level, BlockPos pos, RandomSource random, FramedBlockData blockData, @Nullable Object cacheKeyUserData) {
-        consumer.acceptAll(baseModel, level, pos, random, state, false, false, false, AUX_SHADER_STATE, null);
+        consumer.acceptAll(baseModel, level, pos, random, state, false, false, false, auxShaderState, null);
     }
 
     public static FramedBookshelfGeometry normal(GeometryFactory.Context ctx) {
-        return new FramedBookshelfGeometry(ctx, _ -> true);
+        return new FramedBookshelfGeometry(ctx, _ -> true, Blocks.BOOKSHELF.defaultBlockState());
     }
 
     public static FramedBookshelfGeometry chiseled(GeometryFactory.Context ctx) {
         Direction facing = ctx.state().getValue(FramedProperties.FACING_HOR);
-        return new FramedBookshelfGeometry(ctx, facing::equals);
+        return new FramedBookshelfGeometry(ctx, facing::equals, Blocks.CHISELED_BOOKSHELF.defaultBlockState());
     }
 }
