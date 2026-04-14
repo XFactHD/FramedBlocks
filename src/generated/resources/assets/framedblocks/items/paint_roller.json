@@ -1,0 +1,6 @@
+{
+  "model": {
+    "type": "framedblocks:paint_roller",
+    "base_model": "framedblocks:item/paint_roller"
+  }
+}

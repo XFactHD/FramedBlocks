@@ -63,11 +63,13 @@ import io.github.xfacthd.framedblocks.common.data.component.*;
 import io.github.xfacthd.framedblocks.common.data.loot.BoardAdditionalItemCountNumberProvider;
 import io.github.xfacthd.framedblocks.common.data.loot.LayeredCubeAdditionalItemCountNumberProvider;
 import io.github.xfacthd.framedblocks.common.item.FramedBlueprintItem;
+import io.github.xfacthd.framedblocks.common.item.PaintRollerItem;
 import io.github.xfacthd.framedblocks.common.item.FramedToolItem;
 import io.github.xfacthd.framedblocks.common.item.FramedWrenchItem;
 import io.github.xfacthd.framedblocks.common.item.PhantomPasteItem;
 import io.github.xfacthd.framedblocks.common.menu.FramedStorageMenu;
 import io.github.xfacthd.framedblocks.common.menu.FramingSawMenu;
+import io.github.xfacthd.framedblocks.common.menu.PaintRollerMenu;
 import io.github.xfacthd.framedblocks.common.menu.PoweredFramingSawMenu;
 import io.github.xfacthd.framedblocks.common.particle.BlockOverlayParticleOptions;
 import io.github.xfacthd.framedblocks.common.particle.FluidParticleOptions;
@@ -423,9 +425,12 @@ public final class FBContent {
     public static final DeferredDataComponentType<WrenchRotationMode> DC_TYPE_WRENCH_MODE = DATA_COMPONENTS.registerSimpleComponentType(
             "wrench_mode", WrenchRotationMode.CODEC, WrenchRotationMode.STREAM_CODEC
     );
-    public static final DeferredDataComponentType<Holder<BlockOverlay>> DC_TYPE_BLOCK_OVERLAY = DATA_COMPONENTS.registerComponentType(
-            "block_overlay",
-            builder -> builder.persistent(BlockOverlay.CODEC).networkSynchronized(BlockOverlay.STREAM_CODEC)
+    public static final DeferredDataComponentType<Holder<BlockOverlay>> DC_TYPE_BLOCK_OVERLAY = DATA_COMPONENTS.registerSimpleComponentType(
+            "block_overlay", BlockOverlay.CODEC, BlockOverlay.STREAM_CODEC
+    );
+    public static final DeferredDataComponentType<PaintRollerContents> DC_TYPE_PAINT_ROLLER_CONTENTS = DATA_COMPONENTS.registerComponentType(
+            "paint_roller_contents",
+            builder -> builder.persistent(PaintRollerContents.CODEC).networkSynchronized(PaintRollerContents.STREAM_CODEC).ignoreSwapAnimation()
     );
     // endregion
 
@@ -435,6 +440,7 @@ public final class FBContent {
     public static final Holder<Item> ITEM_FRAMED_BLUEPRINT = registerToolItem(FramedBlueprintItem::new, FramedToolType.BLUEPRINT);
     public static final Holder<Item> ITEM_FRAMED_KEY = registerToolItem(FramedToolItem::new, FramedToolType.KEY);
     public static final Holder<Item> ITEM_FRAMED_SCREWDRIVER = registerToolItem(FramedToolItem::new, FramedToolType.SCREWDRIVER);
+    public static final Holder<Item> ITEM_PAINT_ROLLER = registerToolItem(PaintRollerItem::new, FramedToolType.PAINT_ROLLER);
     public static final Holder<Item> ITEM_FRAMED_REINFORCEMENT = ITEMS.registerSimpleItem("framed_reinforcement");
     public static final Holder<Item> ITEM_PHANTOM_PASTE = ITEMS.registerItem("phantom_paste", PhantomPasteItem::new);
     public static final Holder<Item> ITEM_GLOW_PASTE = ITEMS.registerSimpleItem("glow_paste");
@@ -681,6 +687,9 @@ public final class FBContent {
     );
     public static final DeferredMenuType<PoweredFramingSawMenu> MENU_TYPE_POWERED_FRAMING_SAW = MENU_TYPES.registerAdvancedMenuType(
             "powered_framing_saw", PoweredFramingSawMenu::new
+    );
+    public static final DeferredMenuType<PaintRollerMenu> MENU_TYPE_PAINT_ROLLER = MENU_TYPES.registerSimpleMenuType(
+            "paint_roller", PaintRollerMenu::createClient
     );
     // endregion
 

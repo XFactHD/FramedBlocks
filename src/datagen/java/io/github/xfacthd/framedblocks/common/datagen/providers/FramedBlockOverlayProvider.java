@@ -77,7 +77,7 @@ public final class FramedBlockOverlayProvider {
         context.register(key(name), operator.apply(builder, name).build());
     }
 
-    private static ResourceKey<BlockOverlay> key(String name) {
+    static ResourceKey<BlockOverlay> key(String name) {
         return ResourceKey.create(FramedConstants.BLOCK_OVERLAY_REGISTRY_KEY, Utils.id(name));
     }
 

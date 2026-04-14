@@ -40,6 +40,7 @@ import io.github.xfacthd.framedblocks.client.model.geometry.stairs.*;
 import io.github.xfacthd.framedblocks.client.model.geometry.torch.*;
 import io.github.xfacthd.framedblocks.client.model.item.BlockItemModelProviders;
 import io.github.xfacthd.framedblocks.client.model.item.FramedBlockItemModel;
+import io.github.xfacthd.framedblocks.client.model.item.PaintRollerItemModel;
 import io.github.xfacthd.framedblocks.client.model.item.TankItemModel;
 import io.github.xfacthd.framedblocks.client.model.item.modelprovider.FenceBlockItemModelProvider;
 import io.github.xfacthd.framedblocks.client.model.item.property.BlueprintProperty;
@@ -70,12 +71,14 @@ import io.github.xfacthd.framedblocks.client.render.util.FramedPipelineModifiers
 import io.github.xfacthd.framedblocks.client.render.util.FramedRenderPipelines;
 import io.github.xfacthd.framedblocks.client.screen.FramedStorageScreen;
 import io.github.xfacthd.framedblocks.client.screen.FramingSawScreen;
+import io.github.xfacthd.framedblocks.client.screen.PaintRollerScreen;
 import io.github.xfacthd.framedblocks.client.screen.PoweredFramingSawScreen;
 import io.github.xfacthd.framedblocks.client.screen.overlay.BlockInteractOverlayLayer;
 import io.github.xfacthd.framedblocks.client.screen.overlay.impl.*;
 import io.github.xfacthd.framedblocks.client.screen.pip.BlockPictureInPictureRenderer;
 import io.github.xfacthd.framedblocks.client.screen.pip.SpinningItemPictureInPictureRenderer;
 import io.github.xfacthd.framedblocks.client.screen.widget.BlockPreviewTooltipComponent;
+import io.github.xfacthd.framedblocks.client.screen.widget.PaintRollerClientTooltipComponent;
 import io.github.xfacthd.framedblocks.client.util.CacheCleaner;
 import io.github.xfacthd.framedblocks.client.util.ClientEventHandler;
 import io.github.xfacthd.framedblocks.client.util.ClientTaskQueue;
@@ -93,6 +96,7 @@ import io.github.xfacthd.framedblocks.common.block.interactive.button.FramedLarg
 import io.github.xfacthd.framedblocks.common.block.interactive.pressureplate.FramedWeightedPressurePlateBlock;
 import io.github.xfacthd.framedblocks.common.block.sign.FramedStandingSignBlock;
 import io.github.xfacthd.framedblocks.common.block.stairs.standard.FramedStairsBlock;
+import io.github.xfacthd.framedblocks.common.data.component.PaintRollerContents;
 import net.minecraft.client.renderer.blockentity.ShelfRenderer;
 import net.minecraft.core.Holder;
 import net.minecraft.world.level.block.Block;
@@ -145,6 +149,7 @@ public final class FBClient {
         NeoForge.EVENT_BUS.addListener(ClientTaskQueue::onClientTick);
         NeoForge.EVENT_BUS.addListener(BlockOutlineRenderer::onRenderBlockHighlight);
         NeoForge.EVENT_BUS.addListener(KeyMappings::onClientTick);
+        NeoForge.EVENT_BUS.addListener(ClientEventHandler::onClientConnect);
         NeoForge.EVENT_BUS.addListener(ClientEventHandler::onClientDisconnect);
         NeoForge.EVENT_BUS.addListener(EventPriority.LOW, true, CollapsibleBlockIndicatorRenderer::onRenderBlockHighlight);
 
@@ -162,6 +167,7 @@ public final class FBClient {
     private static void onRegisterItemModels(RegisterItemModelsEvent event) {
         event.register(FramedBlockItemModel.Unbaked.ID, FramedBlockItemModel.Unbaked.CODEC);
         event.register(TankItemModel.Unbaked.ID, TankItemModel.Unbaked.CODEC);
+        event.register(PaintRollerItemModel.Unbaked.ID, PaintRollerItemModel.Unbaked.CODEC);
     }
 
     private static void onRegisterSpecialModelRenderers(RegisterSpecialModelRendererEvent event) {
@@ -173,6 +179,7 @@ public final class FBClient {
         event.register(FBContent.MENU_TYPE_FRAMED_DOUBLE_CHEST.value(), FramedStorageScreen::new);
         event.register(FBContent.MENU_TYPE_FRAMING_SAW.value(), FramingSawScreen::create);
         event.register(FBContent.MENU_TYPE_POWERED_FRAMING_SAW.value(), PoweredFramingSawScreen::new);
+        event.register(FBContent.MENU_TYPE_PAINT_ROLLER.value(), PaintRollerScreen::new);
     }
 
     private static void onAttachDebugRenderers(AttachDebugRenderersEvent event) {
@@ -534,6 +541,7 @@ public final class FBClient {
 
     private static void onRegisterClientTooltipComponentFactories(RegisterClientTooltipComponentFactoriesEvent event) {
         event.register(BlockPreviewTooltipComponent.class, Function.identity());
+        event.register(PaintRollerContents.class, PaintRollerClientTooltipComponent::new);
     }
 
     private static void onRegisterPictureInPictureRenderers(RegisterPictureInPictureRenderersEvent event) {

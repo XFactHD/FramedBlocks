@@ -414,6 +414,7 @@
   "item.framedblocks.framed_wrench": "Framed Wrench",
   "item.framedblocks.framing_saw_pattern": "Framing Saw Pattern",
   "item.framedblocks.glow_paste": "Glow Paste",
+  "item.framedblocks.paint_roller": "Paint Roller",
   "item.framedblocks.phantom_paste": "Phantom Paste",
   "itemGroup.framed_blocks": "FramedBlocks",
   "key.category.framedblocks.main": "FramedBlocks",
@@ -423,6 +424,9 @@
   "label.framedblocks.jade.camo.double.one": "Camo one: %s",
   "label.framedblocks.jade.camo.double.two": "Camo two: %s",
   "label.framedblocks.jade.camo.single": "Camo: %s",
+  "label.framedblocks.paint_roller.source_item": "Apply with: %s",
+  "label.framedblocks.paint_roller.stored.count": "Count: %s",
+  "label.framedblocks.paint_roller.stored.type": "Type: %s",
   "label.framedblocks.source_tooltip.anim_splitter.frames": "Frames",
   "label.framedblocks.source_tooltip.anim_splitter.texture": "Texture",
   "label.framedblocks.source_tooltip.area_mask.area": "Area",
@@ -471,6 +475,7 @@
   "title.framedblocks.framed_hopper": "Framed Item Hopper",
   "title.framedblocks.framed_secret_storage": "Framed Secret Storage",
   "title.framedblocks.framing_saw": "Framing Saw",
+  "title.framedblocks.paint_roller": "Paint Roller",
   "title.framedblocks.powered_framing_saw": "Powered Framing Saw",
   "title.framedblocks.powered_saw.target_block": "Target:",
   "tooltip.framedblocks.alt_slope": "Block uses %s faces for vertical sloped faces.",
@@ -555,6 +560,7 @@
   "value.framedblocks.dir.south": "South",
   "value.framedblocks.dir.up": "Up",
   "value.framedblocks.dir.west": "West",
+  "value.framedblocks.paint_roller.stored.type.none": "[None]",
   "value.framedblocks.source_tooltip.area_mask.area": "X: %s Y: %s Width: %s Height: %s",
   "value.framedblocks.source_tooltip.area_mask.offset": "X: %s Y: %s"
 }

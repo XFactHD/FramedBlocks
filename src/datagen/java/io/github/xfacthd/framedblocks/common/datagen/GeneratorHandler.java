@@ -47,5 +47,6 @@ public final class GeneratorHandler {
         event.createProvider(FramedBlockTagProvider::new);
         event.createProvider(FramedItemTagProvider::new);
         event.createProvider(FramedDataMapProvider::new);
+        event.createProvider(FramedOverlayTagProvider::new);
     }
 }

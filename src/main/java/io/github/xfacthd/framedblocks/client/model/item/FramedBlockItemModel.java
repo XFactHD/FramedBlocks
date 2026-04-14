@@ -9,7 +9,6 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.api.block.overlay.BlockOverlay;
-import io.github.xfacthd.framedblocks.api.block.overlay.TintSource;
 import io.github.xfacthd.framedblocks.api.camo.CamoContainer;
 import io.github.xfacthd.framedblocks.api.camo.CamoContainerHelper;
 import io.github.xfacthd.framedblocks.api.camo.CamoList;
@@ -188,9 +187,8 @@ public final class FramedBlockItemModel extends AbstractFramedBlockItemModel {
                     CamoContainerHelper.Client.collectTintValues(camo, stack, tints);
                 }
             }
-            TintSource overlayTintSource;
-            if (overlay != null && (overlayTintSource = overlay.value().tintSource()) != null) {
-                tints.add(TintUtils.getOverlayTintSource(overlayTintSource).color(overlayTintSource.defaultBlockState()));
+            if (overlay != null && overlay.value().tintSource() != null) {
+                tints.add(TintUtils.getOverlayDefaultTint(overlay.value()));
             }
             itemModelInfo.appendTintValues(stack, tints);
 

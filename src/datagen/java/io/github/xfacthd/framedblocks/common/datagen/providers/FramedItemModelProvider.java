@@ -3,6 +3,7 @@ package io.github.xfacthd.framedblocks.common.datagen.providers;
 import io.github.xfacthd.framedblocks.api.datagen.models.AbstractFramedItemModelProvider;
 import io.github.xfacthd.framedblocks.api.util.FramedConstants;
 import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.client.model.item.PaintRollerItemModel;
 import io.github.xfacthd.framedblocks.client.model.item.property.BlueprintProperty;
 import io.github.xfacthd.framedblocks.client.model.loader.fallback.FallbackLoaderBuilder;
 import io.github.xfacthd.framedblocks.common.FBContent;
@@ -11,6 +12,7 @@ import io.github.xfacthd.framedblocks.common.datagen.GeneratorHandler;
 import net.minecraft.client.data.models.BlockModelGenerators;
 import net.minecraft.client.data.models.ItemModelGenerators;
 import net.minecraft.client.data.models.model.ItemModelUtils;
+import net.minecraft.client.data.models.model.ModelLocationUtils;
 import net.minecraft.client.data.models.model.ModelTemplates;
 import net.minecraft.client.data.models.model.TextureMapping;
 import net.minecraft.client.resources.model.sprite.Material;
@@ -56,6 +58,10 @@ public final class FramedItemModelProvider extends AbstractFramedItemModelProvid
                 BlueprintProperty.INSTANCE,
                 ItemModelUtils.plainModel(itemModels.createFlatItemModel(FBContent.ITEM_FRAMED_BLUEPRINT.value(), "_written", ModelTemplates.FLAT_ITEM)),
                 ItemModelUtils.plainModel(itemModels.createFlatItemModel(FBContent.ITEM_FRAMED_BLUEPRINT.value(), ModelTemplates.FLAT_ITEM))
+        ));
+
+        itemModels.itemModelOutput.accept(FBContent.ITEM_PAINT_ROLLER.value(), new PaintRollerItemModel.Unbaked(
+                ModelLocationUtils.getModelLocation(FBContent.ITEM_PAINT_ROLLER.value())
         ));
     }
 

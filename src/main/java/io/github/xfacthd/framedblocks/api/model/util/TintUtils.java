@@ -1,5 +1,6 @@
 package io.github.xfacthd.framedblocks.api.model.util;
 
+import io.github.xfacthd.framedblocks.api.block.overlay.BlockOverlay;
 import io.github.xfacthd.framedblocks.api.block.overlay.TintSource;
 import io.github.xfacthd.framedblocks.api.util.ClientUtils;
 import net.minecraft.client.Minecraft;
@@ -29,6 +30,14 @@ public final class TintUtils {
 
     public static BlockTintSource getOverlayTintSource(TintSource tintSource) {
         return tintSource.resolveTintSource(BLOCK_TINT_SOURCE_RESOLVER).orElse(UNTINTED);
+    }
+
+    public static int getOverlayDefaultTint(BlockOverlay overlay) {
+        TintSource tintSource = overlay.tintSource();
+        if (tintSource != null) {
+            return getOverlayTintSource(tintSource).color(tintSource.defaultBlockState());
+        }
+        return -1;
     }
 
     private TintUtils() { }

@@ -13,8 +13,10 @@ import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.api.util.text.MoreCommonComponents;
 import io.github.xfacthd.framedblocks.client.screen.FramingSawScreen;
 import io.github.xfacthd.framedblocks.client.screen.FramingSawWithEncoderScreen;
+import io.github.xfacthd.framedblocks.client.screen.PaintRollerScreen;
 import io.github.xfacthd.framedblocks.client.screen.PoweredFramingSawScreen;
 import io.github.xfacthd.framedblocks.client.screen.overlay.impl.*;
+import io.github.xfacthd.framedblocks.client.screen.widget.PaintRollerClientTooltipComponent;
 import io.github.xfacthd.framedblocks.client.util.KeyMappings;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.block.special.FramingSawBlock;
@@ -36,6 +38,7 @@ import io.github.xfacthd.framedblocks.common.item.FramedWrenchItem;
 import io.github.xfacthd.framedblocks.common.item.PhantomPasteItem;
 import io.github.xfacthd.framedblocks.common.item.block.FramedMirroringBlockItem;
 import io.github.xfacthd.framedblocks.common.item.block.FramedTankBlockItem;
+import io.github.xfacthd.framedblocks.common.menu.PaintRollerMenu;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
@@ -346,6 +349,7 @@ public final class FramedLanguageProvider extends LanguageProvider {
         add(FBContent.ITEM_FRAMED_BLUEPRINT.value(), "Framed Blueprint");
         add(FBContent.ITEM_FRAMED_KEY.value(), "Framed Key");
         add(FBContent.ITEM_FRAMED_SCREWDRIVER.value(), "Framed Screwdriver");
+        add(FBContent.ITEM_PAINT_ROLLER.value(), "Paint Roller");
         add(FBContent.ITEM_FRAMED_REINFORCEMENT.value(), "Framed Reinforcement");
         add(FBContent.ITEM_PHANTOM_PASTE.value(), "Phantom Paste");
         add(FBContent.ITEM_GLOW_PASTE.value(), "Glow Paste");
@@ -456,6 +460,9 @@ public final class FramedLanguageProvider extends LanguageProvider {
         add(FramingSawRecipeMatchResult.INSUFFICIENT_ADDITIVE_0.translation(), "Insufficient amount of additive ingredient present in the first slot");
         add(FramingSawRecipeMatchResult.INSUFFICIENT_ADDITIVE_1.translation(), "Insufficient amount of additive ingredient present in the second slot");
         add(FramingSawRecipeMatchResult.INSUFFICIENT_ADDITIVE_2.translation(), "Insufficient amount of additive ingredient present in the third slot");
+
+        add(PaintRollerMenu.TITLE, "Paint Roller");
+        add(PaintRollerScreen.LABEL_SOURCE_ITEM, "Apply with: %s");
     }
 
     private void addTooltipTranslations() {
@@ -496,6 +503,9 @@ public final class FramedLanguageProvider extends LanguageProvider {
         add(FramedWrenchItem.LABEL_TOGGLE, "Right-click while crouching to toggle mode");
         add(WrenchRotationMode.PRIMARY.getTranslatedName(), "Primary Axis");
         add(WrenchRotationMode.SECONDARY.getTranslatedName(), "Secondary Axis");
+        add(PaintRollerClientTooltipComponent.LABEL_OVERLAY_TYPE, "Type: %s");
+        add(PaintRollerClientTooltipComponent.LABEL_OVERLAY_COUNT, "Count: %s");
+        add(PaintRollerClientTooltipComponent.VALUE_OVERLAY_TYPE_NONE, "[None]");
     }
 
     private void addOverlayTranslations() {

@@ -1,0 +1,28 @@
+{
+  "values": [
+    "framedblocks:grass",
+    "framedblocks:podzol",
+    "framedblocks:mycelium",
+    "framedblocks:path",
+    "framedblocks:crimson_nylium",
+    "framedblocks:warped_nylium",
+    "framedblocks:snow",
+    "framedblocks:moss",
+    "framedblocks:white_carpet",
+    "framedblocks:orange_carpet",
+    "framedblocks:magenta_carpet",
+    "framedblocks:light_blue_carpet",
+    "framedblocks:yellow_carpet",
+    "framedblocks:lime_carpet",
+    "framedblocks:pink_carpet",
+    "framedblocks:gray_carpet",
+    "framedblocks:light_gray_carpet",
+    "framedblocks:cyan_carpet",
+    "framedblocks:purple_carpet",
+    "framedblocks:blue_carpet",
+    "framedblocks:brown_carpet",
+    "framedblocks:green_carpet",
+    "framedblocks:red_carpet",
+    "framedblocks:black_carpet"
+  ]
+}

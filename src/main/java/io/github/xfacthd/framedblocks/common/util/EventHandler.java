@@ -6,13 +6,16 @@ import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.client.util.ClientAccess;
 import io.github.xfacthd.framedblocks.common.config.ServerConfig;
 import io.github.xfacthd.framedblocks.common.crafting.saw.FramingSawRecipeCache;
+import io.github.xfacthd.framedblocks.common.data.dynreg.BlockOverlayCache;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.TriState;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.event.TagsUpdatedEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
+import net.neoforged.neoforge.event.server.ServerStartedEvent;
 import net.neoforged.neoforge.event.server.ServerStoppedEvent;
 
 public final class EventHandler {
@@ -51,8 +54,18 @@ public final class EventHandler {
         }
     }
 
+    public static void onServerStarted(ServerStartedEvent event) {
+        BlockOverlayCache.get(false).update(event.getServer().registryAccess());
+    }
+
     public static void onServerShutdown(@SuppressWarnings("unused") ServerStoppedEvent event) {
         FramingSawRecipeCache.get(false).clear();
+        BlockOverlayCache.get(false).clear();
+    }
+
+    public static void onTagsUpdated(TagsUpdatedEvent event) {
+        boolean client = event.getUpdateCause() == TagsUpdatedEvent.UpdateCause.CLIENT_PACKET_RECEIVED;
+        BlockOverlayCache.get(client).updateSorting(event.getLookupProvider());
     }
 
     private EventHandler() { }
