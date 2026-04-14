@@ -33,7 +33,7 @@ public final class GeneratorHandler {
     private static void onGatherData(GatherDataEvent.Client event) {
         event.createDatapackRegistryObjects(
                 new RegistrySetBuilder()
-                        .add(FramedConstants.BLOCK_OVERLAY_REGISTRY_KEY, FramedBlockOverlayProvider::buildBlockOverlayEntries)
+                        .add(FramedConstants.Registries.BLOCK_OVERLAY_REGISTRY_KEY, FramedBlockOverlayProvider::buildBlockOverlayEntries)
         );
 
         event.createProvider(FramedSpriteSourceProvider::new);

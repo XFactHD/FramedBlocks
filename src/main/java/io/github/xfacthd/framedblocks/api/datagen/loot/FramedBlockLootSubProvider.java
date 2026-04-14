@@ -3,7 +3,7 @@ package io.github.xfacthd.framedblocks.api.datagen.loot;
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.api.datagen.loot.objects.RetainCamoLootCondition;
 import io.github.xfacthd.framedblocks.api.datagen.loot.objects.SplitCamoLootFunction;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.FramedConstants;
 import net.minecraft.advancements.criterion.StatePropertiesPredicate;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.loot.BlockLootSubProvider;
@@ -84,7 +84,7 @@ public abstract class FramedBlockLootSubProvider extends BlockLootSubProvider {
     protected final LootPool.Builder createDropWithCamoPool(Block block, Block drop, Consumer<LootPoolSingletonContainer.Builder<?>> itemModifier) {
         LootPoolSingletonContainer.Builder<?> tableItem = LootItem.lootTableItem(drop)
                 .apply(CopyComponentsFunction.copyComponentsFromBlockEntity(LootContextParams.BLOCK_ENTITY)
-                        .include(Utils.DC_TYPE_CAMO_LIST.value())
+                        .include(FramedConstants.Objects.DC_TYPE_CAMO_LIST.value())
                         .when(RetainCamoLootCondition.BUILDER)
                 );
         itemModifier.accept(tableItem);

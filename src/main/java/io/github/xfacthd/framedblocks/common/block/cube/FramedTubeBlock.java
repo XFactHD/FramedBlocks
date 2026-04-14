@@ -2,7 +2,7 @@ package io.github.xfacthd.framedblocks.common.block.cube;
 
 import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
 import io.github.xfacthd.framedblocks.api.util.DirUtils;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.FramedConstants;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
@@ -42,7 +42,7 @@ public class FramedTubeBlock extends FramedBlock {
 
     @Override
     public boolean handleBlockLeftClick(BlockState state, Level level, BlockPos pos, Player player) {
-        if (player.getMainHandItem().is(Utils.FRAMED_HAMMER.value())) {
+        if (player.getMainHandItem().is(FramedConstants.Objects.FRAMED_HAMMER.value())) {
             if (!level.isClientSide()) {
                 state = state.setValue(PropertyHolder.THICK, !state.getValue(PropertyHolder.THICK));
                 level.setBlock(pos, state, Block.UPDATE_ALL);

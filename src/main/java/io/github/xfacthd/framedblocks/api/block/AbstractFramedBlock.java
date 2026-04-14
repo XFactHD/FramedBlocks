@@ -1,7 +1,7 @@
 package io.github.xfacthd.framedblocks.api.block;
 
 import io.github.xfacthd.framedblocks.api.shapes.ShapeLookup;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.FramedConstants;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
@@ -160,7 +160,7 @@ public abstract class AbstractFramedBlock extends Block implements IFramedBlock,
 
     @Override
     protected boolean isPathfindable(BlockState state, PathComputationType type) {
-        return state.is(Utils.GROUP_FULL_CUBE) && super.isPathfindable(state, type);
+        return state.is(FramedConstants.Tags.GROUP_FULL_CUBE) && super.isPathfindable(state, type);
     }
 
     @Override

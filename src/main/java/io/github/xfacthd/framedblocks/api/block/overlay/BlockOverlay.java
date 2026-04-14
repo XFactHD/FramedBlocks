@@ -53,8 +53,8 @@ public record BlockOverlay(
             BuiltInRegistries.ITEM.holderByNameCodec().fieldOf("source_item").forGetter(BlockOverlay::sourceItem),
             Codec.BOOL.optionalFieldOf("translucent", false).forGetter(BlockOverlay::translucent)
     ).apply(inst, BlockOverlay::new)).validate(BlockOverlay::validate);
-    public static final Codec<Holder<BlockOverlay>> CODEC = RegistryFixedCodec.create(FramedConstants.BLOCK_OVERLAY_REGISTRY_KEY);
-    public static final StreamCodec<RegistryFriendlyByteBuf, Holder<BlockOverlay>> STREAM_CODEC = ByteBufCodecs.holderRegistry(FramedConstants.BLOCK_OVERLAY_REGISTRY_KEY);
+    public static final Codec<Holder<BlockOverlay>> CODEC = RegistryFixedCodec.create(FramedConstants.Registries.BLOCK_OVERLAY_REGISTRY_KEY);
+    public static final StreamCodec<RegistryFriendlyByteBuf, Holder<BlockOverlay>> STREAM_CODEC = ByteBufCodecs.holderRegistry(FramedConstants.Registries.BLOCK_OVERLAY_REGISTRY_KEY);
     public static final String TEXTURE_PREFIX = "block/overlay/";
 
     private BlockOverlay(

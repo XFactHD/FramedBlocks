@@ -4,7 +4,7 @@ import io.github.xfacthd.framedblocks.api.block.blockentity.FramedDoubleBlockEnt
 import io.github.xfacthd.framedblocks.api.block.blockentity.IFramedBlockEntity;
 import io.github.xfacthd.framedblocks.api.camo.CamoContent;
 import io.github.xfacthd.framedblocks.api.camo.CamoPrinter;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.FramedConstants;
 import io.github.xfacthd.framedblocks.api.util.sound.SoundEventType;
 import io.github.xfacthd.framedblocks.api.util.sound.SoundUtils;
 import net.minecraft.core.BlockPos;
@@ -84,7 +84,7 @@ public interface IFramedBlockItem {
 
     @ApiStatus.NonExtendable
     default void appendDefaultHoverText(ItemStack stack, Item.TooltipContext ctx, Consumer<Component> appender) {
-        CamoPrinter.printCamoList(appender, stack.get(Utils.DC_TYPE_CAMO_LIST), false);
+        CamoPrinter.printCamoList(appender, stack.get(FramedConstants.Objects.DC_TYPE_CAMO_LIST), false);
     }
 
     interface PlaceSoundGetter {

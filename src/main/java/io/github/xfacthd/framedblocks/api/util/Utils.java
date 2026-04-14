@@ -1,16 +1,10 @@
 package io.github.xfacthd.framedblocks.api.util;
 
 import com.google.common.base.Preconditions;
-import io.github.xfacthd.framedblocks.api.block.overlay.BlockOverlay;
-import io.github.xfacthd.framedblocks.api.camo.CamoList;
-import io.github.xfacthd.framedblocks.api.component.FrameConfig;
-import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
-import io.github.xfacthd.framedblocks.api.util.registration.DeferredDataComponentType;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentPatch;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
@@ -27,15 +21,11 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.neoforged.fml.loading.FMLEnvironment;
-import net.neoforged.neoforge.common.ItemAbility;
 import net.neoforged.neoforge.common.Tags;
-import net.neoforged.neoforge.registries.DeferredBlock;
-import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.transfer.access.ItemAccess;
 import net.neoforged.neoforge.transfer.item.ItemResource;
 import net.neoforged.neoforge.transfer.item.ItemStacksResourceHandler;
@@ -56,57 +46,6 @@ public final class Utils {
     private static final Identifier RL_TEMPLATE = Utils.id(FramedConstants.MOD_ID, "");
     public static final boolean PRODUCTION = FMLEnvironment.isProduction();
     public static final boolean CLIENT_DIST = FMLEnvironment.getDist().isClient();
-    public static final TagKey<Block> FRAMEABLE = blockTag("frameable");
-    public static final TagKey<Block> BLOCK_BLACKLIST = blockTag("blacklisted");
-    public static final TagKey<Fluid> FLUID_BLACKLIST = TagKey.create(Registries.FLUID, id("blacklisted"));
-    /** Allow other mods to whitelist their BEs, circumventing the config setting */
-    public static final TagKey<Block> BE_WHITELIST = blockTag("blockentity_whitelisted");
-    /** Blocks tagged with this will not be occluded by framed blocks using them as camo, both as camo and directly placed */
-    public static final TagKey<Block> NON_OCCLUDEABLE = blockTag("non_occludeable");
-    public static final TagKey<Item> TOOL_WRENCH = itemTag("c", "tools/wrench");
-    public static final TagKey<Item> COMPLEX_WRENCH = itemTag("complex_wrench");
-    /** Allow other mods to add items that temporarily disable intangibility to allow interaction with the targeted block */
-    public static final TagKey<Item> DISABLE_INTANGIBLE = itemTag("disable_intangible");
-    /** Group tag containing all full-cube blocks excluding ones that can deviate from that via player interaction */
-    public static final TagKey<Block> GROUP_FULL_CUBE = blockTag("group/full");
-    /** Items tagged with this cannot be used as fluid containers in fluid camo application via crafting */
-    public static final TagKey<Item> CRAFTING_BLOCKED_FLUID_CONTAINERS = Utils.itemTag("crafting_blocked_fluid_containers");
-
-    /**
-     * Provided by tools for rotating blocks
-     */
-    public static final ItemAbility ACTION_WRENCH_ROTATE = ItemAbility.get("wrench_rotate");
-    /**
-     * Provided by tools for emptying items out of blocks (respected for removal of standard block camos)
-     */
-    public static final ItemAbility ACTION_WRENCH_EMPTY = ItemAbility.get("wrench_empty");
-    /**
-     * Providing by tools for configuring blocks (respected for camo rotation)
-     */
-    public static final ItemAbility ACTION_WRENCH_CONFIGURE = ItemAbility.get("wrench_configure");
-
-    public static final Holder<Block> FRAMED_CUBE = DeferredBlock.createBlock(Utils.id("framed_cube"));
-
-    public static final Holder<Item> FRAMED_HAMMER = DeferredItem.createItem(Utils.id("framed_hammer"));
-    public static final Holder<Item> FRAMED_WRENCH = DeferredItem.createItem(Utils.id("framed_wrench"));
-    public static final Holder<Item> FRAMED_KEY = DeferredItem.createItem(Utils.id("framed_key"));
-    public static final Holder<Item> FRAMED_SCREWDRIVER = DeferredItem.createItem(Utils.id("framed_screwdriver"));
-    public static final Holder<Item> FRAMED_REINFORCEMENT = DeferredItem.createItem(Utils.id("framed_reinforcement"));
-    public static final Holder<Item> PHANTOM_PASTE = DeferredItem.createItem(Utils.id("phantom_paste"));
-    public static final Holder<Item> GLOW_PASTE = DeferredItem.createItem(Utils.id("glow_paste"));
-
-    public static final DeferredDataComponentType<CamoList> DC_TYPE_CAMO_LIST = DeferredDataComponentType.createDataComponent(
-            Utils.id("camo_list")
-    );
-    public static final DeferredDataComponentType<FrameConfig> DC_TYPE_FRAME_CONFIG = DeferredDataComponentType.createDataComponent(
-            Utils.id("frame_config")
-    );
-    public static final DeferredDataComponentType<Holder<BlockOverlay>> DC_TYPE_BLOCK_OVERLAY = DeferredDataComponentType.createDataComponent(
-            Utils.id("block_overlay")
-    );
-    public static final DeferredDataComponentType<WrenchRotationMode> DC_TYPE_WRENCH_MODE = DeferredDataComponentType.createDataComponent(
-            Utils.id("wrench_mode")
-    );
 
     public static MutableComponent translate(@Nullable String prefix, @Nullable String postfix, Object... arguments) {
         return Component.translatable(translationKey(prefix, postfix), arguments);
@@ -290,11 +229,11 @@ public final class Utils {
     }
 
     public static boolean isWrenchRotationTool(ItemStack stack) {
-        return stack.canPerformAction(ACTION_WRENCH_ROTATE) || (stack.is(TOOL_WRENCH) && !stack.is(COMPLEX_WRENCH));
+        return stack.canPerformAction(FramedConstants.ItemAbilities.ACTION_WRENCH_ROTATE) || (stack.is(FramedConstants.Tags.TOOL_WRENCH) && !stack.is(FramedConstants.Tags.COMPLEX_WRENCH));
     }
 
     public static boolean isConfigurationTool(ItemStack stack) {
-        return stack.is(FRAMED_SCREWDRIVER) || stack.canPerformAction(ACTION_WRENCH_CONFIGURE);
+        return stack.is(FramedConstants.Objects.FRAMED_SCREWDRIVER) || stack.canPerformAction(FramedConstants.ItemAbilities.ACTION_WRENCH_CONFIGURE);
     }
 
     public static String formatItemStack(ItemStack stack) {

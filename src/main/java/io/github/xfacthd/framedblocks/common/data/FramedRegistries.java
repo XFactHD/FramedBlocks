@@ -16,7 +16,7 @@ import java.util.function.Consumer;
 
 public final class FramedRegistries {
     public static final Registry<CamoContainerFactory<?>> CAMO_CONTAINER_FACTORIES = create(
-            FramedConstants.CAMO_CONTAINER_FACTORY_REGISTRY_KEY,
+            FramedConstants.Registries.CAMO_CONTAINER_FACTORY_REGISTRY_KEY,
             builder -> builder.sync(true)
     );
 

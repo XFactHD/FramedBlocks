@@ -12,7 +12,7 @@ import io.github.xfacthd.framedblocks.api.model.data.AbstractFramedBlockData;
 import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
 import io.github.xfacthd.framedblocks.api.model.data.FramedDoubleBlockData;
 import io.github.xfacthd.framedblocks.api.util.ColorUtils;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.FramedConstants;
 import io.github.xfacthd.framedblocks.api.util.ValueMerger;
 import io.github.xfacthd.framedblocks.api.util.serdes.FramedCodecs;
 import net.minecraft.core.BlockPos;
@@ -385,13 +385,13 @@ public class FramedDoubleBlockEntity extends FramedBlockEntity {
 
     @Override
     protected void collectCamoComponents(DataComponentMap.Builder builder) {
-        builder.set(Utils.DC_TYPE_CAMO_LIST, CamoList.of(getCamo(), camoContainer));
+        builder.set(FramedConstants.Objects.DC_TYPE_CAMO_LIST, CamoList.of(getCamo(), camoContainer));
     }
 
     @Override
     protected void applyCamoComponents(DataComponentGetter input) {
         super.applyCamoComponents(input);
-        setCamo(input.getOrDefault(Utils.DC_TYPE_CAMO_LIST, CamoList.EMPTY).getCamo(1), true);
+        setCamo(input.getOrDefault(FramedConstants.Objects.DC_TYPE_CAMO_LIST, CamoList.EMPTY).getCamo(1), true);
     }
 
     /*

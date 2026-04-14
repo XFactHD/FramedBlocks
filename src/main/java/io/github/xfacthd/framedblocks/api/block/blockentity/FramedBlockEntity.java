@@ -20,6 +20,7 @@ import io.github.xfacthd.framedblocks.api.model.data.AbstractFramedBlockData;
 import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
 import io.github.xfacthd.framedblocks.api.util.ConfigView;
 import io.github.xfacthd.framedblocks.api.util.DirUtils;
+import io.github.xfacthd.framedblocks.api.util.FramedConstants;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.api.util.serdes.FramedCodecs;
 import net.minecraft.core.BlockPos;
@@ -691,7 +692,7 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
             if (mainItem.isEmpty()) {
                 return true;
             }
-            if (mainItem.is(Utils.DISABLE_INTANGIBLE) || Utils.isWrenchRotationTool(mainItem) || Utils.isConfigurationTool(mainItem)) {
+            if (mainItem.is(FramedConstants.Tags.DISABLE_INTANGIBLE) || Utils.isWrenchRotationTool(mainItem) || Utils.isConfigurationTool(mainItem)) {
                 return false;
             }
             if (mainItem.getCapability(CamoApplicator.CAPABILITY) != null) {
@@ -1109,12 +1110,12 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
         FrameConfig.collect(builder, this);
 
         if (overlay != null) {
-            builder.set(Utils.DC_TYPE_BLOCK_OVERLAY, overlay);
+            builder.set(FramedConstants.Objects.DC_TYPE_BLOCK_OVERLAY, overlay);
         }
     }
 
     protected void collectCamoComponents(DataComponentMap.Builder builder) {
-        builder.set(Utils.DC_TYPE_CAMO_LIST, CamoList.of(camoContainer));
+        builder.set(FramedConstants.Objects.DC_TYPE_CAMO_LIST, CamoList.of(camoContainer));
     }
 
     protected void collectMiscComponents(DataComponentMap.Builder builder) { }
@@ -1124,12 +1125,12 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
         applyCamoComponents(input);
         applyMiscComponents(input);
 
-        input.getOrDefault(Utils.DC_TYPE_FRAME_CONFIG, FrameConfig.DEFAULT).apply(this);
-        overlay = input.get(Utils.DC_TYPE_BLOCK_OVERLAY);
+        input.getOrDefault(FramedConstants.Objects.DC_TYPE_FRAME_CONFIG, FrameConfig.DEFAULT).apply(this);
+        overlay = input.get(FramedConstants.Objects.DC_TYPE_BLOCK_OVERLAY);
     }
 
     protected void applyCamoComponents(DataComponentGetter input) {
-        setCamo(input.getOrDefault(Utils.DC_TYPE_CAMO_LIST, CamoList.EMPTY).getCamo(0), false);
+        setCamo(input.getOrDefault(FramedConstants.Objects.DC_TYPE_CAMO_LIST, CamoList.EMPTY).getCamo(0), false);
     }
 
     protected void applyMiscComponents(DataComponentGetter input) { }

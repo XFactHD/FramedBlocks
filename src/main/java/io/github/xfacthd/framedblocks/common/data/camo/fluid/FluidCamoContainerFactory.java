@@ -6,7 +6,7 @@ import io.github.xfacthd.framedblocks.api.camo.CamoContainerFactory;
 import io.github.xfacthd.framedblocks.api.camo.CamoCraftingHandler;
 import io.github.xfacthd.framedblocks.api.camo.TriggerRegistrar;
 import io.github.xfacthd.framedblocks.api.util.CamoMessageVerbosity;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.FramedConstants;
 import io.github.xfacthd.framedblocks.common.config.ServerConfig;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -151,7 +151,7 @@ public final class FluidCamoContainerFactory extends CamoContainerFactory<FluidC
         if (fluid == Fluids.EMPTY) {
             return false;
         }
-        if (BuiltInRegistries.FLUID.wrapAsHolder(fluid).is(Utils.FLUID_BLACKLIST)) {
+        if (BuiltInRegistries.FLUID.wrapAsHolder(fluid).is(FramedConstants.Tags.FLUID_BLACKLIST)) {
             displayValidationMessage(player, MSG_BLACKLISTED, CamoMessageVerbosity.DEFAULT);
             return false;
         }

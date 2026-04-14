@@ -6,7 +6,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.xfacthd.framedblocks.api.camo.CamoContainer;
 import io.github.xfacthd.framedblocks.api.camo.CamoList;
 import io.github.xfacthd.framedblocks.api.camo.empty.EmptyCamoContainer;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.FramedConstants;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
@@ -29,11 +29,11 @@ public final class SplitCamoLootFunction extends LootItemConditionalFunction {
 
     @Override
     protected ItemStack run(ItemStack stack, LootContext ctx) {
-        CamoList camoList = stack.remove(Utils.DC_TYPE_CAMO_LIST);
+        CamoList camoList = stack.remove(FramedConstants.Objects.DC_TYPE_CAMO_LIST);
         if (camoList != null && !camoList.isEmpty()) {
             CamoContainer<?, ?> camo = camoList.getCamo(camoIndex);
             if (camo != EmptyCamoContainer.EMPTY) {
-                stack.set(Utils.DC_TYPE_CAMO_LIST, CamoList.of(camo));
+                stack.set(FramedConstants.Objects.DC_TYPE_CAMO_LIST, CamoList.of(camo));
             }
         }
         return stack;

@@ -4,7 +4,7 @@ import io.github.xfacthd.framedblocks.api.camo.CamoContentClientHandler;
 import io.github.xfacthd.framedblocks.api.camo.CamoContainerHelper;
 import io.github.xfacthd.framedblocks.api.camo.CamoContent;
 import io.github.xfacthd.framedblocks.api.model.util.BlockTintSourceCache;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.FramedConstants;
 import net.minecraft.client.color.block.BlockTintSource;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -151,7 +151,7 @@ public final class BlockCamoContent extends CamoContent<BlockCamoContent> implem
             return true;
         }
         if (adjState.getBlock() == state.getBlock()) {
-            return !adjState.is(Utils.NON_OCCLUDEABLE);
+            return !adjState.is(FramedConstants.Tags.NON_OCCLUDEABLE);
         }
         return state.skipRendering(adjState, side);
     }
@@ -171,7 +171,7 @@ public final class BlockCamoContent extends CamoContent<BlockCamoContent> implem
             return true;
         }
         if (adjState.getBlock() == state.getBlock()) {
-            return !adjState.is(Utils.NON_OCCLUDEABLE);
+            return !adjState.is(FramedConstants.Tags.NON_OCCLUDEABLE);
         }
         return adjState.skipRendering(state, side.getOpposite());
     }

@@ -59,7 +59,7 @@ public final class FramedBlockTagProvider extends BlockTagsProvider {
         tag(BlockTags.LIGHTNING_RODS).add(FBContent.BLOCK_FRAMED_LIGHTNING_ROD.value());
         tag(BlockTags.WOODEN_SHELVES).add(FBContent.BLOCK_FRAMED_SHELF.value());
 
-        tag(Utils.FRAMEABLE).addTags(
+        tag(FramedConstants.Tags.FRAMEABLE).addTags(
                 Tags.Blocks.GLASS_BLOCKS,
                 BlockTags.ICE,
                 BlockTags.LEAVES
@@ -74,7 +74,7 @@ public final class FramedBlockTagProvider extends BlockTagsProvider {
                 Blocks.WAXED_OXIDIZED_COPPER_GRATE
         );
 
-        getOrCreateRawBuilder(Utils.FRAMEABLE)
+        getOrCreateRawBuilder(FramedConstants.Tags.FRAMEABLE)
                 .addOptionalElement(Utils.id("create", "oak_window"))
                 .addOptionalElement(Utils.id("create", "spruce_window"))
                 .addOptionalElement(Utils.id("create", "birch_window"))
@@ -103,18 +103,18 @@ public final class FramedBlockTagProvider extends BlockTagsProvider {
                 .addOptionalTag(Utils.id("chipped", "black_stained_glass"))
                 .addOptionalTag(Utils.id("c", "hardened_glass"));
 
-        tag(Utils.BLOCK_BLACKLIST).add(
+        tag(FramedConstants.Tags.BLOCK_BLACKLIST).add(
                 Blocks.PISTON,
                 Blocks.STICKY_PISTON,
                 Blocks.COMPOSTER
         );
 
-        tag(Utils.BE_WHITELIST);
+        tag(FramedConstants.Tags.BE_WHITELIST);
 
-        tag(Utils.NON_OCCLUDEABLE)
+        tag(FramedConstants.Tags.NON_OCCLUDEABLE)
                 .addTag(BlockTags.LEAVES);
 
-        TagAppender<Block, Block> fullGroupTag = tag(Utils.GROUP_FULL_CUBE);
+        TagAppender<Block, Block> fullGroupTag = tag(FramedConstants.Tags.GROUP_FULL_CUBE);
         FBContent.getRegisteredBlocks()
                 .stream()
                 .map(Holder::value)

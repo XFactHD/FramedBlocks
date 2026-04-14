@@ -6,7 +6,7 @@ import net.neoforged.neoforge.registries.DataPackRegistryEvent;
 
 public final class DynamicRegistrySetup {
     public static void onCreateDatapackRegistries(DataPackRegistryEvent.NewRegistry event) {
-        event.dataPackRegistry(FramedConstants.BLOCK_OVERLAY_REGISTRY_KEY, BlockOverlay.DIRECT_CODEC, BlockOverlay.DIRECT_CODEC);
+        event.dataPackRegistry(FramedConstants.Registries.BLOCK_OVERLAY_REGISTRY_KEY, BlockOverlay.DIRECT_CODEC, BlockOverlay.DIRECT_CODEC);
     }
 
     private DynamicRegistrySetup() { }

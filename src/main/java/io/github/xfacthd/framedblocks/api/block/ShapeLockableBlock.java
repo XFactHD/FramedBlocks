@@ -1,5 +1,6 @@
 package io.github.xfacthd.framedblocks.api.block;
 
+import io.github.xfacthd.framedblocks.api.util.FramedConstants;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -41,7 +42,7 @@ public interface ShapeLockableBlock extends IFramedBlock {
 
     @ApiStatus.NonExtendable
     default boolean lockState(Level level, BlockPos pos, Player player, ItemStack stack) {
-        if (stack.getItem() != Utils.FRAMED_KEY.value()) {
+        if (stack.getItem() != FramedConstants.Objects.FRAMED_KEY.value()) {
             return false;
         }
 

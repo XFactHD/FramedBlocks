@@ -5,7 +5,7 @@ import io.github.xfacthd.framedblocks.api.camo.TriggerRegistrar;
 import io.github.xfacthd.framedblocks.api.camo.block.SimpleBlockCamoContainerFactory;
 import io.github.xfacthd.framedblocks.api.util.CamoMessageVerbosity;
 import io.github.xfacthd.framedblocks.api.util.ConfigView;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.FramedConstants;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BlockGetter;
@@ -21,15 +21,15 @@ public final class BlockCamoContainerFactory extends SimpleBlockCamoContainerFac
             return false;
         }
 
-        if (camoState.is(Utils.BLOCK_BLACKLIST)) {
+        if (camoState.is(FramedConstants.Tags.BLOCK_BLACKLIST)) {
             displayValidationMessage(player, MSG_BLACKLISTED, CamoMessageVerbosity.DEFAULT);
             return false;
         }
-        if (camoState.hasBlockEntity() && !ConfigView.Server.INSTANCE.allowBlockEntities() && !camoState.is(Utils.BE_WHITELIST)) {
+        if (camoState.hasBlockEntity() && !ConfigView.Server.INSTANCE.allowBlockEntities() && !camoState.is(FramedConstants.Tags.BE_WHITELIST)) {
             displayValidationMessage(player, MSG_BLOCK_ENTITY, CamoMessageVerbosity.DEFAULT);
             return false;
         }
-        if (!camoState.isSolidRender() && !camoState.is(Utils.FRAMEABLE)) {
+        if (!camoState.isSolidRender() && !camoState.is(FramedConstants.Tags.FRAMEABLE)) {
             displayValidationMessage(player, MSG_NON_SOLID, CamoMessageVerbosity.DETAILED);
             return false;
         }

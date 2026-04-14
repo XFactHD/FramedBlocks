@@ -3,7 +3,7 @@ package io.github.xfacthd.framedblocks.common.block.torch;
 import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.FramedConstants;
 import io.github.xfacthd.framedblocks.common.block.IFramedBlockInternal;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
@@ -60,7 +60,7 @@ public class FramedLanternBlock extends LanternBlock implements IFramedBlockInte
     @Override
     public boolean handleBlockLeftClick(BlockState state, Level level, BlockPos pos, Player player) {
         ItemStack stack = player.getMainHandItem();
-        if (stack.is(Utils.FRAMED_HAMMER.value())) {
+        if (stack.is(FramedConstants.Objects.FRAMED_HAMMER.value())) {
             if (!level.isClientSide()) {
                 state = state.setValue(PropertyHolder.CHAIN_TYPE, state.getValue(PropertyHolder.CHAIN_TYPE).next());
                 level.setBlock(pos, state, Block.UPDATE_ALL);

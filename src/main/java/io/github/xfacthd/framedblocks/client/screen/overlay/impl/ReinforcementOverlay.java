@@ -3,6 +3,7 @@ package io.github.xfacthd.framedblocks.client.screen.overlay.impl;
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.api.block.blockentity.IFramedBlockEntity;
 import io.github.xfacthd.framedblocks.api.screen.overlay.BlockInteractOverlay;
+import io.github.xfacthd.framedblocks.api.util.FramedConstants;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.common.config.ClientConfig;
 import net.minecraft.ChatFormatting;
@@ -36,7 +37,7 @@ public final class ReinforcementOverlay extends BlockInteractOverlay {
 
     @Override
     public boolean isValidTool(Player player, ItemStack stack) {
-        return stack.is(Utils.FRAMED_REINFORCEMENT.value());
+        return stack.is(FramedConstants.Objects.FRAMED_REINFORCEMENT.value());
     }
 
     @Override

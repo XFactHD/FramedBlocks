@@ -14,7 +14,7 @@ import java.util.concurrent.CompletableFuture;
 
 public final class FramedOverlayTagProvider extends KeyTagProvider<BlockOverlay> {
     public FramedOverlayTagProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
-        super(output, FramedConstants.BLOCK_OVERLAY_REGISTRY_KEY, registries, FramedConstants.MOD_ID);
+        super(output, FramedConstants.Registries.BLOCK_OVERLAY_REGISTRY_KEY, registries, FramedConstants.MOD_ID);
     }
 
     @Override

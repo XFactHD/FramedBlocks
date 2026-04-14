@@ -2,8 +2,8 @@ package io.github.xfacthd.framedblocks.api.block.blockentity;
 
 import io.github.xfacthd.framedblocks.api.blueprint.BlueprintCopyBehaviour;
 import io.github.xfacthd.framedblocks.api.blueprint.BlueprintData;
+import io.github.xfacthd.framedblocks.api.util.FramedConstants;
 import io.github.xfacthd.framedblocks.api.util.ItemPredicate;
-import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -31,22 +31,22 @@ public enum FrameModifier implements StringRepresentable {
     INTANGIBLE(
             IFramedBlockEntity::isMarkedIntangible,
             IFramedBlockEntity::setIntangible,
-            ItemPredicate.ofItem(Utils.PHANTOM_PASTE),
-            () -> ItemResource.of(Utils.PHANTOM_PASTE),
+            ItemPredicate.ofItem(FramedConstants.Objects.PHANTOM_PASTE),
+            () -> ItemResource.of(FramedConstants.Objects.PHANTOM_PASTE),
             BlueprintCopyBehaviour::getIntangibleCount
     ),
     REINFORCED(
             IFramedBlockEntity::isReinforced,
             IFramedBlockEntity::setReinforced,
-            ItemPredicate.ofItem(Utils.FRAMED_REINFORCEMENT),
-            () -> ItemResource.of(Utils.FRAMED_REINFORCEMENT),
+            ItemPredicate.ofItem(FramedConstants.Objects.FRAMED_REINFORCEMENT),
+            () -> ItemResource.of(FramedConstants.Objects.FRAMED_REINFORCEMENT),
             BlueprintCopyBehaviour::getReinforcementCount
     ),
     EMISSIVE(
             IFramedBlockEntity::isEmissive,
             IFramedBlockEntity::setEmissive,
-            ItemPredicate.ofItem(Utils.GLOW_PASTE),
-            () -> ItemResource.of(Utils.GLOW_PASTE),
+            ItemPredicate.ofItem(FramedConstants.Objects.GLOW_PASTE),
+            () -> ItemResource.of(FramedConstants.Objects.GLOW_PASTE),
             BlueprintCopyBehaviour::getEmissiveCount
     ),
     ;

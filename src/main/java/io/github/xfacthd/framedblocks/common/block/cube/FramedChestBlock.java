@@ -5,8 +5,8 @@ import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
+import io.github.xfacthd.framedblocks.api.util.FramedConstants;
 import io.github.xfacthd.framedblocks.api.util.RotationDirection;
-import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.blockentity.special.FramedChestBlockEntity;
 import io.github.xfacthd.framedblocks.common.blockentity.special.FramedStorageBlockEntity;
@@ -183,7 +183,7 @@ public class FramedChestBlock extends FramedStorageBlock {
     @Override
     public boolean handleBlockLeftClick(BlockState state, Level level, BlockPos pos, Player player) {
         ItemStack stack = player.getMainHandItem();
-        if (stack.is(Utils.FRAMED_HAMMER.value())) {
+        if (stack.is(FramedConstants.Objects.FRAMED_HAMMER.value())) {
             if (!level.isClientSide()) {
                 state = state.setValue(PropertyHolder.LATCH_TYPE, state.getValue(PropertyHolder.LATCH_TYPE).next());
                 level.setBlock(pos, state, Block.UPDATE_ALL);

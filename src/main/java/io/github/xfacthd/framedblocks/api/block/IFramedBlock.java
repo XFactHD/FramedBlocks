@@ -16,6 +16,7 @@ import io.github.xfacthd.framedblocks.api.predicate.cull.SideSkipPredicate;
 import io.github.xfacthd.framedblocks.api.shapes.ShapeLookup;
 import io.github.xfacthd.framedblocks.api.util.ConfigView;
 import io.github.xfacthd.framedblocks.api.util.DirUtils;
+import io.github.xfacthd.framedblocks.api.util.FramedConstants;
 import io.github.xfacthd.framedblocks.api.util.RotationDirection;
 import io.github.xfacthd.framedblocks.api.util.sound.SoundUtils;
 import io.github.xfacthd.framedblocks.api.util.Utils;
@@ -115,7 +116,7 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension {
         }
 
         if (Utils.isWrenchRotationTool(heldItem)) {
-            WrenchRotationMode mode = heldItem.getOrDefault(Utils.DC_TYPE_WRENCH_MODE, WrenchRotationMode.PRIMARY);
+            WrenchRotationMode mode = heldItem.getOrDefault(FramedConstants.Objects.DC_TYPE_WRENCH_MODE, WrenchRotationMode.PRIMARY);
             BlockState newState = rotate(state, RotationDirection.of(player.isShiftKeyDown()), mode);
             if (newState != state) {
                 if (!level.isClientSide()) {

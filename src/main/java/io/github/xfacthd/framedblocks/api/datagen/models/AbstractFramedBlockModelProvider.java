@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Maps;
 import com.mojang.math.Quadrant;
 import io.github.xfacthd.framedblocks.api.model.standalone.StandaloneWrapperKey;
+import io.github.xfacthd.framedblocks.api.util.FramedConstants;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import net.minecraft.client.data.models.BlockModelGenerators;
 import net.minecraft.client.data.models.ModelProvider;
@@ -50,7 +51,7 @@ import java.util.stream.Stream;
 
 @SuppressWarnings({ "SameParameterValue", "unused", "UnusedReturnValue" })
 public abstract class AbstractFramedBlockModelProvider extends ModelProvider {
-    protected static final Identifier FRAMED_CUBE_MODEL = ModelLocationUtils.getModelLocation(Utils.FRAMED_CUBE.value());
+    protected static final Identifier FRAMED_CUBE_MODEL = ModelLocationUtils.getModelLocation(FramedConstants.Objects.FRAMED_CUBE.value());
     protected static final TextureSlot SLOT_FRAME = TextureSlot.create("frame");
     protected static final TextureSlot SLOT_UNDERLAY = TextureSlot.create("underlay");
     protected static final PropertyDispatch<VariantMutator> ROTATION_FACING_ALT = PropertyDispatch.modify(BlockStateProperties.FACING)

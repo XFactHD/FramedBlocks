@@ -1,6 +1,7 @@
 package io.github.xfacthd.framedblocks.common.datagen.providers;
 
 import io.github.xfacthd.framedblocks.api.datagen.recipes.AbstractFramedRecipeProvider;
+import io.github.xfacthd.framedblocks.api.util.FramedConstants;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.crafting.camo.CamoApplicationRecipe;
@@ -1646,14 +1647,14 @@ public final class FramedRecipeProvider extends AbstractFramedRecipeProvider {
 
         String name = firstName + "_rotate_to_" + secondName;
         new ShapeRotationRecipeBuilder(this, itemRegistry, second.value())
-                .tool(tag(Utils.TOOL_WRENCH))
+                .tool(tag(FramedConstants.Tags.TOOL_WRENCH))
                 .block(first.value())
                 .unlockedBy(first)
                 .save(consumer, key(name));
 
         name = secondName + "_rotate_to_" + firstName;
         new ShapeRotationRecipeBuilder(this, itemRegistry, first.value())
-                .tool(tag(Utils.TOOL_WRENCH))
+                .tool(tag(FramedConstants.Tags.TOOL_WRENCH))
                 .block(second.value())
                 .unlockedBy(second)
                 .save(consumer, key(name));

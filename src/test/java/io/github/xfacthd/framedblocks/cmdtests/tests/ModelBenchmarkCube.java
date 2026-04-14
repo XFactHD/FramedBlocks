@@ -34,7 +34,7 @@ public final class ModelBenchmarkCube {
     private static final Component MSG_NOT_A_PLAYER = Component.literal("This command can only be executed by a real player");
     private static final Component MSG_CAMO_FAILED = Component.literal("Failed to create camo for test blocks");
     private static final Component MSG_OVERLAY_FAILED = Component.literal("Failed to resolve BlockOverlay for test blocks");
-    private static final ResourceKey<BlockOverlay> OVERLAY_KEY = ResourceKey.create(FramedConstants.BLOCK_OVERLAY_REGISTRY_KEY, Utils.id("grass"));
+    private static final ResourceKey<BlockOverlay> OVERLAY_KEY = ResourceKey.create(FramedConstants.Registries.BLOCK_OVERLAY_REGISTRY_KEY, Utils.id("grass"));
 
     public static int buildBenchmarkCube(CommandContext<CommandSourceStack> ctx) {
         String confirmation = ctx.getArgument("confirm", String.class);

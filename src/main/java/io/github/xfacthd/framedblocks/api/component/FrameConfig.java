@@ -3,7 +3,7 @@ package io.github.xfacthd.framedblocks.api.component;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.xfacthd.framedblocks.api.block.blockentity.IFramedBlockEntity;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.FramedConstants;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -32,7 +32,7 @@ public record FrameConfig(boolean glowing, boolean intangible, boolean reinforce
     public static void collect(DataComponentMap.Builder builder, IFramedBlockEntity be) {
         FrameConfig cfg = new FrameConfig(be.isGlowing(), be.isMarkedIntangible(), be.isReinforced(), be.isEmissive());
         if (!cfg.equals(FrameConfig.DEFAULT)) {
-            builder.set(Utils.DC_TYPE_FRAME_CONFIG, cfg);
+            builder.set(FramedConstants.Objects.DC_TYPE_FRAME_CONFIG, cfg);
         }
     }
 

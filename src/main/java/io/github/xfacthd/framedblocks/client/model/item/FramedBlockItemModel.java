@@ -20,6 +20,7 @@ import io.github.xfacthd.framedblocks.api.model.util.ModelUtils;
 import io.github.xfacthd.framedblocks.api.model.util.TintUtils;
 import io.github.xfacthd.framedblocks.api.render.fakelevel.FreestandingBlockRenderFakeLevel;
 import io.github.xfacthd.framedblocks.api.util.ConfigView;
+import io.github.xfacthd.framedblocks.api.util.FramedConstants;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
@@ -123,8 +124,8 @@ public final class FramedBlockItemModel extends AbstractFramedBlockItemModel {
         }
 
         boolean showCamo = ConfigView.Client.INSTANCE.shouldRenderItemModelsWithCamo();
-        CamoList camos = showCamo ? stack.getOrDefault(Utils.DC_TYPE_CAMO_LIST, CamoList.EMPTY) : CamoList.EMPTY;
-        Holder<BlockOverlay> overlay = showCamo ? stack.get(Utils.DC_TYPE_BLOCK_OVERLAY) : null;
+        CamoList camos = showCamo ? stack.getOrDefault(FramedConstants.Objects.DC_TYPE_CAMO_LIST, CamoList.EMPTY) : CamoList.EMPTY;
+        Holder<BlockOverlay> overlay = showCamo ? stack.get(FramedConstants.Objects.DC_TYPE_BLOCK_OVERLAY) : null;
 
         ModelEntry modelEntry;
         try {

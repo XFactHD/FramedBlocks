@@ -6,7 +6,7 @@ import io.github.xfacthd.framedblocks.api.block.overlay.BlockOverlay;
 import io.github.xfacthd.framedblocks.api.camo.CamoList;
 import io.github.xfacthd.framedblocks.api.model.data.AbstractFramedBlockData;
 import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.FramedConstants;
 import io.github.xfacthd.framedblocks.mixin.InvokerBlockItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
@@ -160,7 +160,7 @@ public interface GhostRenderBehaviour {
      * @return The camo(s) stored to apply to the rendered block
      */
     default CamoList readCamo(ItemStack stack, @Nullable ItemStack proxiedStack, int renderPass) {
-        return stack.getOrDefault(Utils.DC_TYPE_CAMO_LIST, CamoList.EMPTY);
+        return stack.getOrDefault(FramedConstants.Objects.DC_TYPE_CAMO_LIST, CamoList.EMPTY);
     }
 
     /**
@@ -196,7 +196,7 @@ public interface GhostRenderBehaviour {
      * @return The stored overlay to apply to the rendered block
      */
     default @Nullable Holder<BlockOverlay> readBlockOverlay(ItemStack stack, @Nullable ItemStack proxiedStack, int renderPass) {
-        return stack.get(Utils.DC_TYPE_BLOCK_OVERLAY);
+        return stack.get(FramedConstants.Objects.DC_TYPE_BLOCK_OVERLAY);
     }
 
     /**

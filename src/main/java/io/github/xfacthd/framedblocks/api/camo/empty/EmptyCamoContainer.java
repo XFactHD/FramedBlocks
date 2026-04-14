@@ -14,7 +14,7 @@ public final class EmptyCamoContainer extends CamoContainer<EmptyCamoContent, Em
     public static final EmptyCamoContainer EMPTY = new EmptyCamoContainer();
     public static final MutableComponent CAMO_NAME = Utils.translate("desc", "camo.empty").withStyle(ChatFormatting.ITALIC);
     private static final DeferredHolder<CamoContainerFactory<?>, CamoContainerFactory<EmptyCamoContainer>> FACTORY =
-            DeferredHolder.create(FramedConstants.CAMO_CONTAINER_FACTORY_REGISTRY_KEY, Utils.id("empty"));
+            DeferredHolder.create(FramedConstants.Registries.CAMO_CONTAINER_FACTORY_REGISTRY_KEY, Utils.id("empty"));
 
     private EmptyCamoContainer() {
         super(EmptyCamoContent.EMPTY);

@@ -385,10 +385,10 @@ public final class FramedLanguageProvider extends LanguageProvider {
         add(JadeCompat.LABEL_CAMO_TWO, "Camo two: %s");
         add(JadeCompat.DETAIL_PREFIX, "    %s");
 
-        add(Utils.TOOL_WRENCH, "Wrenches");
-        add(Utils.DISABLE_INTANGIBLE, "Disable Intangibility");
-        add(Utils.GROUP_FULL_CUBE, "Full Framed Blocks");
-        add(Utils.CRAFTING_BLOCKED_FLUID_CONTAINERS, "Camo-crafting-blocked Fluid Containers");
+        add(FramedConstants.Tags.TOOL_WRENCH, "Wrenches");
+        add(FramedConstants.Tags.DISABLE_INTANGIBLE, "Disable Intangibility");
+        add(FramedConstants.Tags.GROUP_FULL_CUBE, "Full Framed Blocks");
+        add(FramedConstants.Tags.CRAFTING_BLOCKED_FLUID_CONTAINERS, "Camo-crafting-blocked Fluid Containers");
 
         addBlockOverlay("grass", "Grass");
         addBlockOverlay("podzol", "Podzol");
@@ -666,7 +666,7 @@ public final class FramedLanguageProvider extends LanguageProvider {
 
     private void addBlockOverlay(String id, String name) {
         Holder<BlockOverlay> overlay = Objects.requireNonNull(lookup).getOrThrow(
-                ResourceKey.create(FramedConstants.BLOCK_OVERLAY_REGISTRY_KEY, Utils.id(id))
+                ResourceKey.create(FramedConstants.Registries.BLOCK_OVERLAY_REGISTRY_KEY, Utils.id(id))
         );
         add(BlockOverlay.getDescriptionId(overlay), name);
     }

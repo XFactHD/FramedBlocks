@@ -1,6 +1,7 @@
 package io.github.xfacthd.framedblocks.common.data.camo.fluid;
 
 import io.github.xfacthd.framedblocks.api.camo.CamoCraftingHandler;
+import io.github.xfacthd.framedblocks.api.util.FramedConstants;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.transfer.access.ItemAccess;
@@ -15,7 +16,7 @@ final class FluidCamoCraftingHandler implements CamoCraftingHandler<FluidCamoCon
 
     @Override
     public boolean canApply(ItemStack stack, boolean consume) {
-        if (!stack.is(Utils.CRAFTING_BLOCKED_FLUID_CONTAINERS)) {
+        if (!stack.is(FramedConstants.Tags.CRAFTING_BLOCKED_FLUID_CONTAINERS)) {
             ItemAccess itemAccess = new FluidCamoCraftingItemAccess(stack);
             return FluidCamoContainerFactory.applyCamo(itemAccess, null, consume, false) != null;
         }

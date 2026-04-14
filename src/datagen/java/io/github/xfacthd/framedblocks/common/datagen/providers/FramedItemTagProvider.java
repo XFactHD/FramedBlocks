@@ -33,18 +33,18 @@ public final class FramedItemTagProvider extends ItemTagsProvider {
         tag(ItemTags.HANGING_SIGNS).add(FBContent.BLOCK_FRAMED_HANGING_SIGN.value().asItem());
         tag(Tags.Items.CHESTS).add(FBContent.BLOCK_FRAMED_CHEST.value().asItem());
         tag(Tags.Items.BOOKSHELVES).add(FBContent.BLOCK_FRAMED_BOOKSHELF.value().asItem());
-        tag(Utils.TOOL_WRENCH).add(FBContent.ITEM_FRAMED_WRENCH.value());
-        tag(Tags.Items.TOOLS).addTag(Utils.TOOL_WRENCH);
-        tag(Utils.DISABLE_INTANGIBLE).add(
+        tag(FramedConstants.Tags.TOOL_WRENCH).add(FBContent.ITEM_FRAMED_WRENCH.value());
+        tag(Tags.Items.TOOLS).addTag(FramedConstants.Tags.TOOL_WRENCH);
+        tag(FramedConstants.Tags.DISABLE_INTANGIBLE).add(
                 FBContent.ITEM_FRAMED_HAMMER.value(),
                 FBContent.ITEM_FRAMED_BLUEPRINT.value(),
                 FBContent.ITEM_FRAMED_SCREWDRIVER.value(),
                 FBContent.ITEM_FRAMED_KEY.value()
         );
 
-        getOrCreateRawBuilder(Utils.COMPLEX_WRENCH)
+        getOrCreateRawBuilder(FramedConstants.Tags.COMPLEX_WRENCH)
                 .addOptionalElement(Utils.id("mekanism", "configurator"));
 
-        tag(Utils.CRAFTING_BLOCKED_FLUID_CONTAINERS);
+        tag(FramedConstants.Tags.CRAFTING_BLOCKED_FLUID_CONTAINERS);
     }
 }

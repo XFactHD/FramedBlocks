@@ -3,7 +3,7 @@ package io.github.xfacthd.framedblocks.common.block.pillar;
 import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.util.DirUtils;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.FramedConstants;
 import io.github.xfacthd.framedblocks.common.block.IFramedBlockInternal;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import net.minecraft.core.BlockPos;
@@ -53,7 +53,7 @@ public class FramedLightningRodBlock extends LightningRodBlock implements IFrame
     @Override
     public boolean handleBlockLeftClick(BlockState state, Level level, BlockPos pos, Player player) {
         ItemStack stack = player.getMainHandItem();
-        if (stack.is(Utils.FRAMED_HAMMER.value())) {
+        if (stack.is(FramedConstants.Objects.FRAMED_HAMMER.value())) {
             if (!level.isClientSide()) {
                 state = state.setValue(FramedProperties.COPYCAT_STYLE, !state.getValue(FramedProperties.COPYCAT_STYLE));
                 level.setBlock(pos, state, Block.UPDATE_ALL);

@@ -126,7 +126,7 @@ public final class FBContent {
     private static final DeferredMapCodecRegister<LootItemCondition> LOOT_CONDITIONS = mapCodecRegister(Registries.LOOT_CONDITION_TYPE);
     private static final DeferredMapCodecRegister<LootItemFunction> LOOT_FUNCTIONS = mapCodecRegister(Registries.LOOT_FUNCTION_TYPE);
     private static final DeferredMapCodecRegister<NumberProvider> LOOT_NUMBER_PROVIDERS = mapCodecRegister(Registries.LOOT_NUMBER_PROVIDER_TYPE);
-    private static final DeferredRegister<CamoContainerFactory<?>> CAMO_CONTAINER_FACTORIES = register(FramedConstants.CAMO_CONTAINER_FACTORY_REGISTRY_KEY);
+    private static final DeferredRegister<CamoContainerFactory<?>> CAMO_CONTAINER_FACTORIES = register(FramedConstants.Registries.CAMO_CONTAINER_FACTORY_REGISTRY_KEY);
 
     private static final Map<BlockType, Holder<Block>> BLOCKS_BY_TYPE = new EnumMap<>(BlockType.class);
     private static final Map<FramedToolType, Holder<Item>> TOOLS_BY_TYPE = new EnumMap<>(FramedToolType.class);
