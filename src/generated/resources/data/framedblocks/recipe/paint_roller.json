@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "F": "framedblocks:framed_cube",
+    "I": "#c:ingots/iron",
+    "N": "#c:nuggets/iron",
+    "W": "minecraft:white_wool"
+  },
+  "pattern": [
+    "WFW",
+    " NN",
+    " I "
+  ],
+  "result": {
+    "id": "framedblocks:paint_roller"
+  }
+}
