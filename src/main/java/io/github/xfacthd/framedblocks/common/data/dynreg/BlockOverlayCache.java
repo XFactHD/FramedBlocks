@@ -7,7 +7,6 @@ import it.unimi.dsi.fastutil.objects.Reference2ReferenceOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -26,6 +25,7 @@ public final class BlockOverlayCache {
     private final List<Holder<BlockOverlay>> overlaysView = Collections.unmodifiableList(overlays);
     private final Set<Item> validItems = new ReferenceOpenHashSet<>();
     private final Map<Item, Holder<BlockOverlay>> typeByItem = new Reference2ReferenceOpenHashMap<>();
+    private boolean initialized = false;
 
     public static BlockOverlayCache get(boolean client) {
         return client ? CLIENT_INSTANCE : SERVER_INSTANCE;
@@ -43,22 +43,21 @@ public final class BlockOverlayCache {
         return typeByItem.get(item);
     }
 
-    public void update(RegistryAccess registries) {
+    public void update(HolderLookup.Provider registries) {
         clear();
 
-        registries.lookupOrThrow(FramedConstants.BLOCK_OVERLAY_REGISTRY_KEY)
-                .listElements()
-                .forEach(overlay -> {
-                    Item item = overlay.value().sourceItem().value();
-                    overlays.add(overlay);
-                    validItems.add(item);
-                    typeByItem.put(item, overlay);
-                });
+        if (!initialized) {
+            initialized = true;
+            registries.lookupOrThrow(FramedConstants.Registries.BLOCK_OVERLAY_REGISTRY_KEY)
+                    .listElements()
+                    .forEach(overlay -> {
+                        Item item = overlay.value().sourceItem().value();
+                        overlays.add(overlay);
+                        validItems.add(item);
+                        typeByItem.put(item, overlay);
+                    });
+        }
 
-        updateSorting(registries);
-    }
-
-    public void updateSorting(HolderLookup.Provider registries) {
         List<Holder<BlockOverlay>> overlayOrder = registries.getOrThrow(FramedConstants.Tags.OVERLAY_ORDER).stream().toList();
         overlays.sort((o1, o2) -> {
             int idx1 = overlayOrder.indexOf(o1);
@@ -79,6 +78,7 @@ public final class BlockOverlayCache {
         overlays.clear();
         validItems.clear();
         typeByItem.clear();
+        initialized = false;
     }
 
     private BlockOverlayCache() { }

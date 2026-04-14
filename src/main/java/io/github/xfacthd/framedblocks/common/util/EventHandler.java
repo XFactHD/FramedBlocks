@@ -15,7 +15,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.event.TagsUpdatedEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
-import net.neoforged.neoforge.event.server.ServerStartedEvent;
 import net.neoforged.neoforge.event.server.ServerStoppedEvent;
 
 public final class EventHandler {
@@ -54,10 +53,6 @@ public final class EventHandler {
         }
     }
 
-    public static void onServerStarted(ServerStartedEvent event) {
-        BlockOverlayCache.get(false).update(event.getServer().registryAccess());
-    }
-
     public static void onServerShutdown(@SuppressWarnings("unused") ServerStoppedEvent event) {
         FramingSawRecipeCache.get(false).clear();
         BlockOverlayCache.get(false).clear();
@@ -65,7 +60,7 @@ public final class EventHandler {
 
     public static void onTagsUpdated(TagsUpdatedEvent event) {
         boolean client = event.getUpdateCause() == TagsUpdatedEvent.UpdateCause.CLIENT_PACKET_RECEIVED;
-        BlockOverlayCache.get(client).updateSorting(event.getLookupProvider());
+        BlockOverlayCache.get(client).update(event.getLookupProvider());
     }
 
     private EventHandler() { }

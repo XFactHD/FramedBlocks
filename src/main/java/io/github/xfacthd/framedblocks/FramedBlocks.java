@@ -59,7 +59,6 @@ public final class FramedBlocks {
 
         NeoForge.EVENT_BUS.addListener(EventHandler::onBlockLeftClick);
         NeoForge.EVENT_BUS.addListener(EventHandler::onBlockRightClick);
-        NeoForge.EVENT_BUS.addListener(EventHandler::onServerStarted);
         NeoForge.EVENT_BUS.addListener(EventHandler::onServerShutdown);
         NeoForge.EVENT_BUS.addListener(EventHandler::onTagsUpdated);
         NeoForge.EVENT_BUS.addListener(CullingUpdateTracker::onServerLevelTick);

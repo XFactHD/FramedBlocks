@@ -149,7 +149,6 @@ public final class FBClient {
         NeoForge.EVENT_BUS.addListener(ClientTaskQueue::onClientTick);
         NeoForge.EVENT_BUS.addListener(BlockOutlineRenderer::onRenderBlockHighlight);
         NeoForge.EVENT_BUS.addListener(KeyMappings::onClientTick);
-        NeoForge.EVENT_BUS.addListener(ClientEventHandler::onClientConnect);
         NeoForge.EVENT_BUS.addListener(ClientEventHandler::onClientDisconnect);
         NeoForge.EVENT_BUS.addListener(EventPriority.LOW, true, CollapsibleBlockIndicatorRenderer::onRenderBlockHighlight);
 
