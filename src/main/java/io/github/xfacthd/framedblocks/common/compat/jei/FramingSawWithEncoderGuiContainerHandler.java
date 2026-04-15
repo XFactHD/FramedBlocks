@@ -10,8 +10,8 @@ public final class FramingSawWithEncoderGuiContainerHandler extends FramingSawGu
     public List<Rect2i> getGuiExtraAreas(FramingSawWithEncoderScreen screen) {
         if (screen.getMenu().isInEncoderMode()) {
             return List.of(new Rect2i(
-                    screen.getGuiLeft() + FramingSawWithEncoderScreen.TAB_X,
-                    screen.getGuiTop() + FramingSawWithEncoderScreen.TAB_TOP_Y,
+                    screen.getLeftPos() + FramingSawWithEncoderScreen.TAB_X,
+                    screen.getTopPos() + FramingSawWithEncoderScreen.TAB_TOP_Y,
                     FramingSawWithEncoderScreen.TAB_WIDTH,
                     FramingSawWithEncoderScreen.TAB_HEIGHT * 2
             ));

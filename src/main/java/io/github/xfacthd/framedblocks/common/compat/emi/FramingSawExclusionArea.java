@@ -11,8 +11,8 @@ public final class FramingSawExclusionArea implements EmiExclusionArea<FramingSa
     public void addExclusionArea(FramingSawWithEncoderScreen screen, Consumer<Bounds> consumer) {
         if (screen.getMenu().isInEncoderMode()) {
             consumer.accept(new Bounds(
-                    screen.getGuiLeft() + FramingSawWithEncoderScreen.TAB_X,
-                    screen.getGuiTop() + FramingSawWithEncoderScreen.TAB_TOP_Y,
+                    screen.getLeftPos() + FramingSawWithEncoderScreen.TAB_X,
+                    screen.getTopPos() + FramingSawWithEncoderScreen.TAB_TOP_Y,
                     FramingSawWithEncoderScreen.TAB_WIDTH,
                     FramingSawWithEncoderScreen.TAB_HEIGHT * 2
             ));
