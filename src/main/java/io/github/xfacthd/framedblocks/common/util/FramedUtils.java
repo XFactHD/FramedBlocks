@@ -1,6 +1,7 @@
 package io.github.xfacthd.framedblocks.common.util;
 
 import io.github.xfacthd.framedblocks.common.FBContent;
+import io.github.xfacthd.framedblocks.common.menu.slot.SlotFactory;
 import net.minecraft.core.Direction;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.TickTask;
@@ -105,15 +106,19 @@ public final class FramedUtils {
     }
 
     public static void addPlayerInvSlots(Consumer<Slot> slotConsumer, Inventory playerInv, int x, int y) {
+        addPlayerInvSlots(slotConsumer, playerInv, x, y, Slot::new);
+    }
+
+    public static void addPlayerInvSlots(Consumer<Slot> slotConsumer, Inventory playerInv, int x, int y, SlotFactory factory) {
         for (int row = 0; row < 3; ++row) {
             for (int col = 0; col < 9; ++col) {
-                slotConsumer.accept(new Slot(playerInv, col + row * 9 + 9, x + col * 18, y));
+                slotConsumer.accept(factory.create(playerInv, col + row * 9 + 9, x + col * 18, y));
             }
             y += 18;
         }
 
         for (int col = 0; col < 9; ++col) {
-            slotConsumer.accept(new Slot(playerInv, col, x + col * 18, y + 4));
+            slotConsumer.accept(factory.create(playerInv, col, x + col * 18, y + 4));
         }
     }
 

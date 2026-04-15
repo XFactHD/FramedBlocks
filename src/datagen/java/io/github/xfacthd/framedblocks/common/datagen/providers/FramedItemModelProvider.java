@@ -6,6 +6,7 @@ import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.client.model.item.PaintRollerItemModel;
 import io.github.xfacthd.framedblocks.client.model.item.property.BlueprintProperty;
 import io.github.xfacthd.framedblocks.client.model.loader.fallback.FallbackLoaderBuilder;
+import io.github.xfacthd.framedblocks.client.render.item.CamoApplicatorRenderer;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.compat.ae2.AppliedEnergisticsCompat;
 import io.github.xfacthd.framedblocks.common.datagen.GeneratorHandler;
@@ -18,6 +19,7 @@ import net.minecraft.client.data.models.model.TextureMapping;
 import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.core.Holder;
 import net.minecraft.data.PackOutput;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.common.conditions.ModLoadedCondition;
 
@@ -36,6 +38,18 @@ public final class FramedItemModelProvider extends AbstractFramedItemModelProvid
         itemModels.generateFlatItem(FBContent.ITEM_FRAMED_KEY.value(), ModelTemplates.FLAT_HANDHELD_ITEM);
         itemModels.generateFlatItem(FBContent.ITEM_FRAMED_SCREWDRIVER.value(), ModelTemplates.FLAT_HANDHELD_ITEM);
         itemModels.generateFlatItem(FBContent.ITEM_FRAMED_AXE.value(), ModelTemplates.FLAT_HANDHELD_ITEM);
+
+        Identifier applicatorModel = ModelLocationUtils.getModelLocation(FBContent.ITEM_CAMO_APPLICATOR.value());
+        itemModels.itemModelOutput.accept(
+                FBContent.ITEM_CAMO_APPLICATOR.value(),
+                ItemModelUtils.composite(
+                        ItemModelUtils.plainModel(applicatorModel),
+                        ItemModelUtils.specialModel(
+                                applicatorModel,
+                                new CamoApplicatorRenderer.Unbaked()
+                        )
+                )
+        );
 
         itemModels.generateFlatItem(FBContent.ITEM_FRAMED_REINFORCEMENT.value(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(FBContent.ITEM_PHANTOM_PASTE.value(), ModelTemplates.FLAT_ITEM);
@@ -73,6 +87,7 @@ public final class FramedItemModelProvider extends AbstractFramedItemModelProvid
                 FBContent.ITEM_FRAMED_WRENCH,
                 FBContent.ITEM_FRAMED_KEY,
                 FBContent.ITEM_FRAMED_SCREWDRIVER,
+                FBContent.ITEM_CAMO_APPLICATOR,
                 FBContent.ITEM_FRAMED_REINFORCEMENT,
                 FBContent.ITEM_PHANTOM_PASTE,
                 FBContent.ITEM_GLOW_PASTE,

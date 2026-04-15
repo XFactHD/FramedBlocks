@@ -62,12 +62,16 @@ import io.github.xfacthd.framedblocks.common.data.camo.fluid.FluidCamoContainerF
 import io.github.xfacthd.framedblocks.common.data.component.*;
 import io.github.xfacthd.framedblocks.common.data.loot.BoardAdditionalItemCountNumberProvider;
 import io.github.xfacthd.framedblocks.common.data.loot.LayeredCubeAdditionalItemCountNumberProvider;
+import io.github.xfacthd.framedblocks.common.item.applicator.CamoApplicatorConfig;
+import io.github.xfacthd.framedblocks.common.item.applicator.CamoApplicatorContent;
+import io.github.xfacthd.framedblocks.common.item.applicator.CamoApplicatorItem;
 import io.github.xfacthd.framedblocks.common.item.FramedAxeItem;
 import io.github.xfacthd.framedblocks.common.item.FramedBlueprintItem;
 import io.github.xfacthd.framedblocks.common.item.PaintRollerItem;
 import io.github.xfacthd.framedblocks.common.item.FramedToolItem;
 import io.github.xfacthd.framedblocks.common.item.FramedWrenchItem;
 import io.github.xfacthd.framedblocks.common.item.PhantomPasteItem;
+import io.github.xfacthd.framedblocks.common.menu.CamoApplicatorMenu;
 import io.github.xfacthd.framedblocks.common.menu.FramedStorageMenu;
 import io.github.xfacthd.framedblocks.common.menu.FramingSawMenu;
 import io.github.xfacthd.framedblocks.common.menu.PaintRollerMenu;
@@ -433,9 +437,14 @@ public final class FBContent {
     public static final DeferredDataComponentType<Holder<BlockOverlay>> DC_TYPE_BLOCK_OVERLAY = DATA_COMPONENTS.registerSimpleComponentType(
             "block_overlay", BlockOverlay.CODEC, BlockOverlay.STREAM_CODEC
     );
-    public static final DeferredDataComponentType<PaintRollerContents> DC_TYPE_PAINT_ROLLER_CONTENTS = DATA_COMPONENTS.registerComponentType(
-            "paint_roller_contents",
-            builder -> builder.persistent(PaintRollerContents.CODEC).networkSynchronized(PaintRollerContents.STREAM_CODEC).ignoreSwapAnimation()
+    public static final DeferredDataComponentType<PaintRollerContents> DC_TYPE_PAINT_ROLLER_CONTENTS = DATA_COMPONENTS.registerSimpleComponentType(
+            "paint_roller_contents", PaintRollerContents.CODEC, PaintRollerContents.STREAM_CODEC, true
+    );
+    public static final DeferredDataComponentType<CamoApplicatorContent> DC_TYPE_APPLICATOR_CONTENT = DATA_COMPONENTS.registerCachedComponentType(
+            "applicator_content", CamoApplicatorContent.CODEC, CamoApplicatorContent.STREAM_CODEC, true
+    );
+    public static final DeferredDataComponentType<CamoApplicatorConfig> DC_TYPE_APPLICATOR_CONFIG = DATA_COMPONENTS.registerSimpleComponentType(
+            "applicator_config", CamoApplicatorConfig.CODEC, CamoApplicatorConfig.STREAM_CODEC, true
     );
     // endregion
 
@@ -446,6 +455,7 @@ public final class FBContent {
     public static final Holder<Item> ITEM_FRAMED_KEY = registerToolItem(FramedToolItem::new, FramedToolType.KEY);
     public static final Holder<Item> ITEM_FRAMED_SCREWDRIVER = registerToolItem(FramedToolItem::new, FramedToolType.SCREWDRIVER);
     public static final Holder<Item> ITEM_FRAMED_AXE = registerToolItem(FramedAxeItem::new, FramedToolType.AXE);
+    public static final Holder<Item> ITEM_CAMO_APPLICATOR = registerToolItem(CamoApplicatorItem::new, FramedToolType.CAMO_APPLICATOR);
     public static final Holder<Item> ITEM_PAINT_ROLLER = registerToolItem(PaintRollerItem::new, FramedToolType.PAINT_ROLLER);
     public static final Holder<Item> ITEM_FRAMED_REINFORCEMENT = ITEMS.registerSimpleItem("framed_reinforcement");
     public static final Holder<Item> ITEM_PHANTOM_PASTE = ITEMS.registerItem("phantom_paste", PhantomPasteItem::new);
@@ -693,6 +703,9 @@ public final class FBContent {
     );
     public static final DeferredMenuType<PoweredFramingSawMenu> MENU_TYPE_POWERED_FRAMING_SAW = MENU_TYPES.registerAdvancedMenuType(
             "powered_framing_saw", PoweredFramingSawMenu::new
+    );
+    public static final DeferredMenuType<CamoApplicatorMenu> MENU_TYPE_CAMO_APPLICATOR = MENU_TYPES.registerAdvancedMenuType(
+            "camo_applicator", CamoApplicatorMenu::createClient
     );
     public static final DeferredMenuType<PaintRollerMenu> MENU_TYPE_PAINT_ROLLER = MENU_TYPES.registerSimpleMenuType(
             "paint_roller", PaintRollerMenu::createClient

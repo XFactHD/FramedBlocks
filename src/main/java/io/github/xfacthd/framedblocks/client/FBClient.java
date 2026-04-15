@@ -59,6 +59,7 @@ import io.github.xfacthd.framedblocks.client.render.debug.impl.CollapsibleBlockD
 import io.github.xfacthd.framedblocks.client.render.debug.impl.ConnectionPredicateDebugRenderer;
 import io.github.xfacthd.framedblocks.client.render.debug.impl.DoubleBlockPartDebugRenderer;
 import io.github.xfacthd.framedblocks.client.render.debug.impl.QuadWindingDebugRenderer;
+import io.github.xfacthd.framedblocks.client.render.item.CamoApplicatorRenderer;
 import io.github.xfacthd.framedblocks.client.render.item.TankItemRenderer;
 import io.github.xfacthd.framedblocks.client.render.particle.BlockOverlayParticle;
 import io.github.xfacthd.framedblocks.client.render.particle.FluidSpriteParticle;
@@ -69,6 +70,7 @@ import io.github.xfacthd.framedblocks.client.render.util.AnimationSplitterSource
 import io.github.xfacthd.framedblocks.client.render.util.AreaMaskSource;
 import io.github.xfacthd.framedblocks.client.render.util.FramedPipelineModifiers;
 import io.github.xfacthd.framedblocks.client.render.util.FramedRenderPipelines;
+import io.github.xfacthd.framedblocks.client.screen.CamoApplicatorScreen;
 import io.github.xfacthd.framedblocks.client.screen.FramedStorageScreen;
 import io.github.xfacthd.framedblocks.client.screen.FramingSawScreen;
 import io.github.xfacthd.framedblocks.client.screen.PaintRollerScreen;
@@ -171,6 +173,7 @@ public final class FBClient {
 
     private static void onRegisterSpecialModelRenderers(RegisterSpecialModelRendererEvent event) {
         event.register(TankItemRenderer.Unbaked.ID, TankItemRenderer.Unbaked.CODEC);
+        event.register(CamoApplicatorRenderer.Unbaked.ID, CamoApplicatorRenderer.Unbaked.CODEC);
     }
 
     private static void onRegisterMenuScreens(RegisterMenuScreensEvent event) {
@@ -178,6 +181,7 @@ public final class FBClient {
         event.register(FBContent.MENU_TYPE_FRAMED_DOUBLE_CHEST.value(), FramedStorageScreen::new);
         event.register(FBContent.MENU_TYPE_FRAMING_SAW.value(), FramingSawScreen::create);
         event.register(FBContent.MENU_TYPE_POWERED_FRAMING_SAW.value(), PoweredFramingSawScreen::new);
+        event.register(FBContent.MENU_TYPE_CAMO_APPLICATOR.value(), CamoApplicatorScreen::new);
         event.register(FBContent.MENU_TYPE_PAINT_ROLLER.value(), PaintRollerScreen::new);
     }
 

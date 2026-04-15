@@ -33,11 +33,38 @@ public final class DeferredDataComponentTypeRegister extends DeferredRegister.Da
     }
 
     public <D> DeferredDataComponentType<D> registerSimpleComponentType(String name, Codec<D> codec, StreamCodec<? super RegistryFriendlyByteBuf, D> streamCodec) {
-        return registerComponentType(name, builder -> builder.persistent(codec).networkSynchronized(streamCodec));
+        return registerSimpleComponentType(name, codec, streamCodec, false);
+    }
+
+    public <D> DeferredDataComponentType<D> registerSimpleComponentType(String name, Codec<D> codec, StreamCodec<? super RegistryFriendlyByteBuf, D> streamCodec, boolean ignoreSwapAnimation) {
+        return registerComponentType(name, codec, streamCodec, false, ignoreSwapAnimation);
     }
 
     public <D> DeferredDataComponentType<D> registerCachedComponentType(String name, Codec<D> codec, StreamCodec<? super RegistryFriendlyByteBuf, D> streamCodec) {
-        return registerComponentType(name, builder -> builder.persistent(codec).networkSynchronized(streamCodec).cacheEncoding());
+        return registerCachedComponentType(name, codec, streamCodec, false);
+    }
+
+    public <D> DeferredDataComponentType<D> registerCachedComponentType(String name, Codec<D> codec, StreamCodec<? super RegistryFriendlyByteBuf, D> streamCodec, boolean ignoreSwapAnimation) {
+        return registerComponentType(name, codec, streamCodec, true, ignoreSwapAnimation);
+    }
+
+    private <D> DeferredDataComponentType<D> registerComponentType(
+            String name,
+            Codec<D> codec,
+            StreamCodec<? super RegistryFriendlyByteBuf, D> streamCodec,
+            boolean cacheEncoding,
+            boolean ignoreSwapAnimation
+    ) {
+        return registerComponentType(name, builder -> {
+            builder.persistent(codec).networkSynchronized(streamCodec);
+            if (cacheEncoding) {
+                builder.cacheEncoding();
+            }
+            if (ignoreSwapAnimation) {
+                builder.ignoreSwapAnimation();
+            }
+            return builder;
+        });
     }
 
     public static DeferredDataComponentTypeRegister create(String namespace) {

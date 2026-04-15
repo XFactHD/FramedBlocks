@@ -39,4 +39,9 @@ final class EmptyCamoContentClientHandler extends CamoContentClientHandler<Empty
 
     @Override
     public void collectTintValues(EmptyCamoContent camo, ItemStack stack, IntList tintList) { }
+
+    @Override
+    public int getParticleTintValue(EmptyCamoContent camo) {
+        return -1;
+    }
 }

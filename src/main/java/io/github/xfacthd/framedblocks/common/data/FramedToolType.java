@@ -13,6 +13,7 @@ public enum FramedToolType {
     KEY("framed_key", null),
     SCREWDRIVER("framed_screwdriver", FramedConstants.ItemAbilities.ACTION_WRENCH_CONFIGURE),
     AXE("framed_axe", null),
+    CAMO_APPLICATOR("camo_applicator", null),
     PAINT_ROLLER("paint_roller", null),
     ;
 

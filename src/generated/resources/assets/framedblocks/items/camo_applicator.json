@@ -1,0 +1,18 @@
+{
+  "model": {
+    "type": "minecraft:composite",
+    "models": [
+      {
+        "type": "minecraft:model",
+        "model": "framedblocks:item/camo_applicator"
+      },
+      {
+        "type": "minecraft:special",
+        "base": "framedblocks:item/camo_applicator",
+        "model": {
+          "type": "framedblocks:camo_applicator"
+        }
+      }
+    ]
+  }
+}

@@ -2,6 +2,7 @@ package io.github.xfacthd.framedblocks.common.datagen.providers;
 
 import io.github.xfacthd.framedblocks.api.block.ShapeLockableBlock;
 import io.github.xfacthd.framedblocks.api.block.overlay.BlockOverlay;
+import io.github.xfacthd.framedblocks.api.block.blockentity.FrameModifier;
 import io.github.xfacthd.framedblocks.api.blueprint.BlueprintData;
 import io.github.xfacthd.framedblocks.api.camo.CamoContainerFactory;
 import io.github.xfacthd.framedblocks.api.camo.CamoPrinter;
@@ -11,6 +12,7 @@ import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.util.FramedConstants;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.api.util.text.MoreCommonComponents;
+import io.github.xfacthd.framedblocks.client.screen.CamoApplicatorScreen;
 import io.github.xfacthd.framedblocks.client.screen.FramingSawScreen;
 import io.github.xfacthd.framedblocks.client.screen.FramingSawWithEncoderScreen;
 import io.github.xfacthd.framedblocks.client.screen.PaintRollerScreen;
@@ -37,8 +39,10 @@ import io.github.xfacthd.framedblocks.common.item.FramedAxeItem;
 import io.github.xfacthd.framedblocks.common.item.FramedBlueprintItem;
 import io.github.xfacthd.framedblocks.common.item.FramedWrenchItem;
 import io.github.xfacthd.framedblocks.common.item.PhantomPasteItem;
+import io.github.xfacthd.framedblocks.common.item.applicator.CamoApplicatorConfig;
 import io.github.xfacthd.framedblocks.common.item.block.FramedMirroringBlockItem;
 import io.github.xfacthd.framedblocks.common.item.block.FramedTankBlockItem;
+import io.github.xfacthd.framedblocks.common.menu.CamoApplicatorMenu;
 import io.github.xfacthd.framedblocks.common.menu.PaintRollerMenu;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
@@ -351,6 +355,7 @@ public final class FramedLanguageProvider extends LanguageProvider {
         add(FBContent.ITEM_FRAMED_KEY.value(), "Framed Key");
         add(FBContent.ITEM_FRAMED_SCREWDRIVER.value(), "Framed Screwdriver");
         add(FBContent.ITEM_FRAMED_AXE.value(), "Framed Axe");
+        add(FBContent.ITEM_CAMO_APPLICATOR.value(), "Camo Applicator");
         add(FBContent.ITEM_PAINT_ROLLER.value(), "Paint Roller");
         add(FBContent.ITEM_FRAMED_REINFORCEMENT.value(), "Framed Reinforcement");
         add(FBContent.ITEM_PHANTOM_PASTE.value(), "Phantom Paste");
@@ -463,6 +468,19 @@ public final class FramedLanguageProvider extends LanguageProvider {
         add(FramingSawRecipeMatchResult.INSUFFICIENT_ADDITIVE_1.translation(), "Insufficient amount of additive ingredient present in the second slot");
         add(FramingSawRecipeMatchResult.INSUFFICIENT_ADDITIVE_2.translation(), "Insufficient amount of additive ingredient present in the third slot");
 
+        add(CamoApplicatorMenu.TITLE, "Camo Applicator");
+        add(CamoApplicatorScreen.MODE_BTN_TITLE, "Mode");
+        add(CamoApplicatorScreen.TOOLTIP_SELECT_SLOT, "Press [%s] to select this slot");
+        add(CamoApplicatorScreen.TOOLTIP_MODIFIER_AMOUNT, "%s / %s");
+        add(CamoApplicatorScreen.TOOLTIP_MODIFIER_ACTIVE, "Active: %s");
+        add(CamoApplicatorScreen.LABEL_CFG_HEADER, "Settings");
+        add(CamoApplicatorScreen.LABEL_CFG_MODE, "Mode");
+        add(CamoApplicatorScreen.LABEL_CFG_MODIFIERS, "Modifiers");
+        add(CamoApplicatorScreen.MODIFIER_SPECS[FrameModifier.GLOWING.ordinal()].tooltip(), "Glowstone");
+        add(CamoApplicatorScreen.MODIFIER_SPECS[FrameModifier.INTANGIBLE.ordinal()].tooltip(), "Phantom Paste");
+        add(CamoApplicatorScreen.MODIFIER_SPECS[FrameModifier.REINFORCED.ordinal()].tooltip(), "Reinforcement");
+        add(CamoApplicatorScreen.MODIFIER_SPECS[FrameModifier.EMISSIVE.ordinal()].tooltip(), "Glow Paste");
+
         add(PaintRollerMenu.TITLE, "Paint Roller");
         add(PaintRollerScreen.LABEL_SOURCE_ITEM, "Apply with: %s");
     }
@@ -509,6 +527,24 @@ public final class FramedLanguageProvider extends LanguageProvider {
         add(PaintRollerClientTooltipComponent.LABEL_OVERLAY_COUNT, "Count: %s");
         add(PaintRollerClientTooltipComponent.VALUE_OVERLAY_TYPE_NONE, "[None]");
         add(FramedAxeItem.TOOLTIP_RETAIN_CAMO, "Framed blocks broken with this Axe keep their camo instead of dropping it separately");
+        add(CamoApplicatorConfig.APPLICATOR_MODE, "Mode: %s");
+        add(CamoApplicatorConfig.Mode.FIXED.getTranslation(), "Fixed");
+        add(CamoApplicatorConfig.Mode.FIXED.getTooltip(), "Only the selected slot is used and needs to be manually changed");
+        add(CamoApplicatorConfig.Mode.AUTO_INCREMENT.getTranslation(), "Auto-Increment");
+        add(CamoApplicatorConfig.Mode.AUTO_INCREMENT.getTooltip(), "Starts at the selected slot and increments to the next non-empty slot once the selected slot is depleted");
+        add(CamoApplicatorConfig.Mode.CYCLING.getTranslation(), "Cycling");
+        add(CamoApplicatorConfig.Mode.CYCLING.getTooltip(), "Starts at the selected slot and increments to the next non-empty slot after every successful camo application");
+        add(CamoApplicatorConfig.Mode.RANDOM.getTranslation(), "Random");
+        add(CamoApplicatorConfig.Mode.RANDOM.getTooltip(), "Starts at the selected slot and selects a random non-empty slot after every successful camo application");
+        add(CamoApplicatorConfig.SELECTED_ITEM, "Selected Item: %s");
+        add(CamoApplicatorConfig.SELECTED_ITEM_VALUE, "%s x %s");
+        add(CamoApplicatorConfig.SELECTED_ITEM_EMPTY, "None");
+        add(CamoApplicatorConfig.APPLY_GLOWSTONE, "Apply Glowstone: %s");
+        add(CamoApplicatorConfig.APPLY_PHANTOM_PASTE, "Apply Phantom Paste: %s");
+        add(CamoApplicatorConfig.APPLY_REINFORCEMENT, "Apply Reinforcement: %s");
+        add(CamoApplicatorConfig.APPLY_GLOW_PASTE, "Apply Glow Paste: %s");
+        add(CamoApplicatorConfig.FALSE, "False");
+        add(CamoApplicatorConfig.TRUE, "True");
     }
 
     private void addOverlayTranslations() {

@@ -1,7 +1,9 @@
 package io.github.xfacthd.framedblocks.api.util.network;
 
+import com.google.common.base.Preconditions;
 import io.netty.buffer.ByteBuf;
 import it.unimi.dsi.fastutil.longs.LongCollection;
+import net.minecraft.network.VarInt;
 import net.minecraft.network.VarLong;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -51,6 +53,27 @@ public final class FramedByteBufCodecs {
             public void encode(B buf, C collection) {
                 ByteBufCodecs.writeCount(buf, collection.size(), maxSize);
                 collection.forEach((long value) -> VarLong.write(buf, value));
+            }
+        };
+    }
+
+    public static StreamCodec<ByteBuf, int[]> fixedIntArray(int size) {
+        return new StreamCodec<>() {
+            @Override
+            public void encode(ByteBuf buf, int[] arr) {
+                Preconditions.checkArgument(arr.length == size, "Array size does not match provided fixed size");
+                for (int val : arr) {
+                    VarInt.write(buf, val);
+                }
+            }
+
+            @Override
+            public int[] decode(ByteBuf buf) {
+                int[] arr = new int[size];
+                for (int i = 0; i < size; i++) {
+                    arr[i] = VarInt.read(buf);
+                }
+                return arr;
             }
         };
     }

@@ -52,4 +52,11 @@ public final class FluidCamoContentClientHandler extends CamoContentClientHandle
             tintList.add(tintSource.color(fluidState));
         }
     }
+
+    @Override
+    public int getParticleTintValue(FluidCamoContent camo) {
+        FluidState fluidState = camo.getFluid().defaultFluidState();
+        FluidTintSource tintSource = ModelUtils.getFluidModel(fluidState).fluidTintSource();
+        return tintSource != null ? tintSource.color(fluidState) : -1;
+    }
 }

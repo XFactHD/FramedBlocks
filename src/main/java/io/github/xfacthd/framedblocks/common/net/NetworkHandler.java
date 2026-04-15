@@ -2,6 +2,9 @@ package io.github.xfacthd.framedblocks.common.net;
 
 import io.github.xfacthd.framedblocks.common.net.payload.clientbound.ClientboundCullingUpdatePayload;
 import io.github.xfacthd.framedblocks.common.net.payload.clientbound.ClientboundOpenSignScreenPayload;
+import io.github.xfacthd.framedblocks.common.net.payload.serverbound.ServerboundCamoApplicatorConfigureModifierPayload;
+import io.github.xfacthd.framedblocks.common.net.payload.serverbound.ServerboundCamoApplicatorSetModePayload;
+import io.github.xfacthd.framedblocks.common.net.payload.serverbound.ServerboundCamoApplicatorSetSlotPayload;
 import io.github.xfacthd.framedblocks.common.net.payload.serverbound.ServerboundEncodeFramingSawPatternPayload;
 import io.github.xfacthd.framedblocks.common.net.payload.serverbound.ServerboundSelectFramingSawRecipePayload;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
@@ -31,6 +34,21 @@ public final class NetworkHandler {
                         ServerboundEncodeFramingSawPatternPayload.TYPE,
                         ServerboundEncodeFramingSawPatternPayload.STREAM_CODEC,
                         ServerboundEncodeFramingSawPatternPayload::handle
+                )
+                .playToServer(
+                        ServerboundCamoApplicatorSetModePayload.TYPE,
+                        ServerboundCamoApplicatorSetModePayload.STREAM_CODEC,
+                        ServerboundCamoApplicatorSetModePayload::handle
+                )
+                .playToServer(
+                        ServerboundCamoApplicatorSetSlotPayload.TYPE,
+                        ServerboundCamoApplicatorSetSlotPayload.STREAM_CODEC,
+                        ServerboundCamoApplicatorSetSlotPayload::handle
+                )
+                .playToServer(
+                        ServerboundCamoApplicatorConfigureModifierPayload.TYPE,
+                        ServerboundCamoApplicatorConfigureModifierPayload.STREAM_CODEC,
+                        ServerboundCamoApplicatorConfigureModifierPayload::handle
                 );
     }
 

@@ -3,6 +3,7 @@ package io.github.xfacthd.framedblocks.api.camo.block;
 import io.github.xfacthd.framedblocks.api.camo.CamoContentClientHandler;
 import io.github.xfacthd.framedblocks.api.model.util.ModelUtils;
 import io.github.xfacthd.framedblocks.api.model.util.TintUtils;
+import io.github.xfacthd.framedblocks.api.render.fakelevel.ColorResolvingLevel;
 import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.client.color.block.BlockTintSource;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -12,6 +13,8 @@ import net.minecraft.client.renderer.block.BlockAndTintGetter;
 import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemStack;
+
+import java.util.List;
 
 final class BlockCamoContentClientHandler extends CamoContentClientHandler<BlockCamoContent> {
     static final CamoContentClientHandler<BlockCamoContent> INSTANCE = new BlockCamoContentClientHandler();
@@ -45,5 +48,14 @@ final class BlockCamoContentClientHandler extends CamoContentClientHandler<Block
         for (BlockTintSource tintSource : TintUtils.getTintSources(camo)) {
             tintList.add(tintSource.color(camo.getState()));
         }
+    }
+
+    @Override
+    public int getParticleTintValue(BlockCamoContent camo) {
+        List<BlockTintSource> tintSources = TintUtils.getTintSources(camo);
+        if (!tintSources.isEmpty()) {
+            return tintSources.getFirst().colorAsTerrainParticle(camo.getState(), ColorResolvingLevel.INSTANCE, BlockPos.ZERO);
+        }
+        return -1;
     }
 }

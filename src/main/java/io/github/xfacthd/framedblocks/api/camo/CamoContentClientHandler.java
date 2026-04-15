@@ -43,4 +43,9 @@ public abstract class CamoContentClientHandler<T extends CamoContent<T>> {
     /// @param stack    The stack holding the camo
     /// @param tintList The list to append the tint values to
     public abstract void collectTintValues(T camo, ItemStack stack, IntList tintList);
+
+    /// Return the tint value to use for the particle texture
+    ///
+    /// @param camo The camo whose particle tint value is being queried
+    public abstract int getParticleTintValue(T camo);
 }

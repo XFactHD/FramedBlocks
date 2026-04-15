@@ -11,6 +11,7 @@ import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
 import io.github.xfacthd.framedblocks.FramedBlocks;
 import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.client.screen.CamoApplicatorScreen;
 import io.github.xfacthd.framedblocks.client.screen.FramingSawScreen;
 import io.github.xfacthd.framedblocks.client.screen.FramingSawWithEncoderScreen;
 import io.github.xfacthd.framedblocks.client.screen.PoweredFramingSawScreen;
@@ -47,6 +48,7 @@ public final class FramedEmiPlugin implements EmiPlugin {
         registry.addDragDropHandler(FramingSawWithEncoderScreen.class, new FramingSawDragDropHandler());
         registry.addDragDropHandler(PoweredFramingSawScreen.class, new PoweredFramingSawDragDropHandler());
         registry.addExclusionArea(FramingSawWithEncoderScreen.class, new FramingSawExclusionArea());
+        registry.addExclusionArea(CamoApplicatorScreen.class, new CamoApplicatorExclusionArea());
         registerRecipes(registry);
     }
 

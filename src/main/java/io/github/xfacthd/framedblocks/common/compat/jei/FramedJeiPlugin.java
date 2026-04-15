@@ -1,6 +1,7 @@
 package io.github.xfacthd.framedblocks.common.compat.jei;
 
 import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.client.screen.CamoApplicatorScreen;
 import io.github.xfacthd.framedblocks.client.screen.FramingSawScreen;
 import io.github.xfacthd.framedblocks.client.screen.FramingSawWithEncoderScreen;
 import io.github.xfacthd.framedblocks.client.screen.PoweredFramingSawScreen;
@@ -131,6 +132,10 @@ public final class FramedJeiPlugin implements IModPlugin {
         registration.addGuiContainerHandler(
                 PoweredFramingSawScreen.class,
                 new PoweredFramingSawGuiContainerHandler(ingredientManager)
+        );
+        registration.addGuiContainerHandler(
+                CamoApplicatorScreen.class,
+                new CamoApplicatorGuiContainerHandler()
         );
     }
 

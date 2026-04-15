@@ -1,7 +1,9 @@
 package io.github.xfacthd.framedblocks.common.capability;
 
+import io.github.xfacthd.framedblocks.api.camo.applicator.CamoApplicator;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.capability.fluid.TankFluidResourceHandler;
+import io.github.xfacthd.framedblocks.common.item.applicator.CamoApplicatorImpl;
 import net.minecraft.core.Direction;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
@@ -61,6 +63,12 @@ public final class CapabilitySetup {
                         TankFluidResourceHandler.CAPACITY
                 ),
                 FBContent.BLOCK_FRAMED_TANK.value()
+        );
+
+        event.registerItem(
+                CamoApplicator.CAPABILITY,
+                (stack, _) -> new CamoApplicatorImpl(stack),
+                FBContent.ITEM_CAMO_APPLICATOR.value()
         );
     }
 
