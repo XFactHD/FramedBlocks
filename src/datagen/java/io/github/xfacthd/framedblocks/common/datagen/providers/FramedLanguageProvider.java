@@ -33,6 +33,7 @@ import io.github.xfacthd.framedblocks.common.config.ServerConfig;
 import io.github.xfacthd.framedblocks.common.crafting.saw.FramingSawRecipeMatchResult;
 import io.github.xfacthd.framedblocks.common.data.property.NullableDirection;
 import io.github.xfacthd.framedblocks.common.datagen.GeneratorHandler;
+import io.github.xfacthd.framedblocks.common.item.FramedAxeItem;
 import io.github.xfacthd.framedblocks.common.item.FramedBlueprintItem;
 import io.github.xfacthd.framedblocks.common.item.FramedWrenchItem;
 import io.github.xfacthd.framedblocks.common.item.PhantomPasteItem;
@@ -349,6 +350,7 @@ public final class FramedLanguageProvider extends LanguageProvider {
         add(FBContent.ITEM_FRAMED_BLUEPRINT.value(), "Framed Blueprint");
         add(FBContent.ITEM_FRAMED_KEY.value(), "Framed Key");
         add(FBContent.ITEM_FRAMED_SCREWDRIVER.value(), "Framed Screwdriver");
+        add(FBContent.ITEM_FRAMED_AXE.value(), "Framed Axe");
         add(FBContent.ITEM_PAINT_ROLLER.value(), "Paint Roller");
         add(FBContent.ITEM_FRAMED_REINFORCEMENT.value(), "Framed Reinforcement");
         add(FBContent.ITEM_PHANTOM_PASTE.value(), "Phantom Paste");
@@ -506,6 +508,7 @@ public final class FramedLanguageProvider extends LanguageProvider {
         add(PaintRollerClientTooltipComponent.LABEL_OVERLAY_TYPE, "Type: %s");
         add(PaintRollerClientTooltipComponent.LABEL_OVERLAY_COUNT, "Count: %s");
         add(PaintRollerClientTooltipComponent.VALUE_OVERLAY_TYPE_NONE, "[None]");
+        add(FramedAxeItem.TOOLTIP_RETAIN_CAMO, "Framed blocks broken with this Axe keep their camo instead of dropping it separately");
     }
 
     private void addOverlayTranslations() {

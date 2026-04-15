@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "C": "framedblocks:framed_cube",
+    "I": "#minecraft:iron_tool_materials"
+  },
+  "pattern": [
+    "II",
+    "IC",
+    " C"
+  ],
+  "result": {
+    "id": "framedblocks:framed_axe"
+  }
+}

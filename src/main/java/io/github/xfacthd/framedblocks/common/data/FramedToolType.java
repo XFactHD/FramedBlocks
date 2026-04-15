@@ -12,6 +12,7 @@ public enum FramedToolType {
     BLUEPRINT("framed_blueprint", null),
     KEY("framed_key", null),
     SCREWDRIVER("framed_screwdriver", FramedConstants.ItemAbilities.ACTION_WRENCH_CONFIGURE),
+    AXE("framed_axe", null),
     PAINT_ROLLER("paint_roller", null),
     ;
 

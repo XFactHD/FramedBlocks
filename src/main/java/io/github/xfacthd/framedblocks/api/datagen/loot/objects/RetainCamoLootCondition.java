@@ -2,6 +2,7 @@ package io.github.xfacthd.framedblocks.api.datagen.loot.objects;
 
 import com.mojang.serialization.MapCodec;
 import io.github.xfacthd.framedblocks.api.block.blockentity.IFramedBlockEntity;
+import io.github.xfacthd.framedblocks.api.util.FramedConstants;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
@@ -15,6 +16,9 @@ public final class RetainCamoLootCondition implements LootItemCondition {
 
     @Override
     public boolean test(LootContext ctx) {
+        if (ctx.getParameter(LootContextParams.TOOL).has(FramedConstants.Objects.DC_TYPE_RETAIN_CAMO)) {
+            return true;
+        }
         if (ctx.getOptionalParameter(LootContextParams.BLOCK_ENTITY) instanceof IFramedBlockEntity be) {
             return !be.canTriviallyDropAllCamos();
         }

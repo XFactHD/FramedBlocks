@@ -62,6 +62,7 @@ import io.github.xfacthd.framedblocks.common.data.camo.fluid.FluidCamoContainerF
 import io.github.xfacthd.framedblocks.common.data.component.*;
 import io.github.xfacthd.framedblocks.common.data.loot.BoardAdditionalItemCountNumberProvider;
 import io.github.xfacthd.framedblocks.common.data.loot.LayeredCubeAdditionalItemCountNumberProvider;
+import io.github.xfacthd.framedblocks.common.item.FramedAxeItem;
 import io.github.xfacthd.framedblocks.common.item.FramedBlueprintItem;
 import io.github.xfacthd.framedblocks.common.item.PaintRollerItem;
 import io.github.xfacthd.framedblocks.common.item.FramedToolItem;
@@ -79,6 +80,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.util.Unit;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.DyeColor;
@@ -425,6 +427,9 @@ public final class FBContent {
     public static final DeferredDataComponentType<WrenchRotationMode> DC_TYPE_WRENCH_MODE = DATA_COMPONENTS.registerSimpleComponentType(
             "wrench_mode", WrenchRotationMode.CODEC, WrenchRotationMode.STREAM_CODEC
     );
+    public static final DeferredDataComponentType<Unit> DC_TYPE_RETAIN_CAMO = DATA_COMPONENTS.registerSimpleComponentType(
+            "retain_camo", Unit.CODEC, Unit.STREAM_CODEC
+    );
     public static final DeferredDataComponentType<Holder<BlockOverlay>> DC_TYPE_BLOCK_OVERLAY = DATA_COMPONENTS.registerSimpleComponentType(
             "block_overlay", BlockOverlay.CODEC, BlockOverlay.STREAM_CODEC
     );
@@ -440,6 +445,7 @@ public final class FBContent {
     public static final Holder<Item> ITEM_FRAMED_BLUEPRINT = registerToolItem(FramedBlueprintItem::new, FramedToolType.BLUEPRINT);
     public static final Holder<Item> ITEM_FRAMED_KEY = registerToolItem(FramedToolItem::new, FramedToolType.KEY);
     public static final Holder<Item> ITEM_FRAMED_SCREWDRIVER = registerToolItem(FramedToolItem::new, FramedToolType.SCREWDRIVER);
+    public static final Holder<Item> ITEM_FRAMED_AXE = registerToolItem(FramedAxeItem::new, FramedToolType.AXE);
     public static final Holder<Item> ITEM_PAINT_ROLLER = registerToolItem(PaintRollerItem::new, FramedToolType.PAINT_ROLLER);
     public static final Holder<Item> ITEM_FRAMED_REINFORCEMENT = ITEMS.registerSimpleItem("framed_reinforcement");
     public static final Holder<Item> ITEM_PHANTOM_PASTE = ITEMS.registerItem("phantom_paste", PhantomPasteItem::new);

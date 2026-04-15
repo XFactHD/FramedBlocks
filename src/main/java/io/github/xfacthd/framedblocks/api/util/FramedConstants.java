@@ -11,6 +11,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.TagKey;
+import net.minecraft.util.Unit;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.Fluid;
@@ -47,6 +48,8 @@ public final class FramedConstants {
         public static final DeferredDataComponentType<FrameConfig> DC_TYPE_FRAME_CONFIG = DeferredDataComponentType.createDataComponent(Utils.id("frame_config"));
         public static final DeferredDataComponentType<Holder<BlockOverlay>> DC_TYPE_BLOCK_OVERLAY = DeferredDataComponentType.createDataComponent(Utils.id("block_overlay"));
         public static final DeferredDataComponentType<WrenchRotationMode> DC_TYPE_WRENCH_MODE = DeferredDataComponentType.createDataComponent(Utils.id("wrench_mode"));
+        /// If present on an item, breaking a framed block with it will unconditionally retain the camo on the dropped item instead of dropping it separately
+        public static final DeferredDataComponentType<Unit> DC_TYPE_RETAIN_CAMO = DeferredDataComponentType.createDataComponent(Utils.id("retain_camo"));
 
         private Objects() { }
     }

@@ -150,8 +150,10 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension {
 
     default LootParams.Builder getCamoDrops(LootParams.Builder builder) {
         if (builder.getOptionalParameter(LootContextParams.BLOCK_ENTITY) instanceof IFramedBlockEntity be) {
+            boolean dropCamo = ConfigView.Server.INSTANCE.shouldConsumeCamoItem() &&
+                    !builder.getParameter(LootContextParams.TOOL).has(FramedConstants.Objects.DC_TYPE_RETAIN_CAMO);
             builder.withDynamicDrop(DYNAMIC_DROPS, consumer ->
-                    be.addAdditionalDrops(consumer, ConfigView.Server.INSTANCE.shouldConsumeCamoItem())
+                    be.addAdditionalDrops(consumer, dropCamo)
             );
         }
         return builder;

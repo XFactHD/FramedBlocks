@@ -35,6 +35,7 @@ public final class FramedItemModelProvider extends AbstractFramedItemModelProvid
         itemModels.generateFlatItem(FBContent.ITEM_FRAMED_WRENCH.value(), ModelTemplates.FLAT_HANDHELD_ITEM);
         itemModels.generateFlatItem(FBContent.ITEM_FRAMED_KEY.value(), ModelTemplates.FLAT_HANDHELD_ITEM);
         itemModels.generateFlatItem(FBContent.ITEM_FRAMED_SCREWDRIVER.value(), ModelTemplates.FLAT_HANDHELD_ITEM);
+        itemModels.generateFlatItem(FBContent.ITEM_FRAMED_AXE.value(), ModelTemplates.FLAT_HANDHELD_ITEM);
 
         itemModels.generateFlatItem(FBContent.ITEM_FRAMED_REINFORCEMENT.value(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(FBContent.ITEM_PHANTOM_PASTE.value(), ModelTemplates.FLAT_ITEM);

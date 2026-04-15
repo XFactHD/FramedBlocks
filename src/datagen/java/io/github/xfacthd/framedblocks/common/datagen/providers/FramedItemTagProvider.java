@@ -41,6 +41,8 @@ public final class FramedItemTagProvider extends ItemTagsProvider {
                 FBContent.ITEM_FRAMED_SCREWDRIVER.value(),
                 FBContent.ITEM_FRAMED_KEY.value()
         );
+        tag(ItemTags.DURABILITY_ENCHANTABLE).add(FBContent.ITEM_FRAMED_AXE.value());
+        tag(ItemTags.MINING_ENCHANTABLE).add(FBContent.ITEM_FRAMED_AXE.value());
 
         getOrCreateRawBuilder(FramedConstants.Tags.COMPLEX_WRENCH)
                 .addOptionalElement(Utils.id("mekanism", "configurator"));

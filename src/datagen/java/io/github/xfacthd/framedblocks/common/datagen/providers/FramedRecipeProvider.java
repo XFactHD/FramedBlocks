@@ -1568,6 +1568,15 @@ public final class FramedRecipeProvider extends AbstractFramedRecipeProvider {
                 .unlockedBy(FBContent.BLOCK_FRAMED_CUBE)
                 .save(output);
 
+        shapedRecipe(RecipeCategory.TOOLS, FBContent.ITEM_FRAMED_AXE.value())
+                .pattern("II")
+                .pattern("IC")
+                .pattern(" C")
+                .define('I', ItemTags.IRON_TOOL_MATERIALS)
+                .define('C', FBContent.BLOCK_FRAMED_CUBE.value())
+                .unlockedBy(FBContent.BLOCK_FRAMED_CUBE)
+                .save(output);
+
         shapedRecipe(RecipeCategory.TOOLS, FBContent.ITEM_PAINT_ROLLER.value())
                 .pattern("WFW")
                 .pattern(" NN")
