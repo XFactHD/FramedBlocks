@@ -17,7 +17,7 @@ public final class ElevatedInnerSlopedPrismConnectionPredicate implements Connec
         if (side != facing && side != orientation) {
             return true;
         } else if (side == orientation) {
-            return edge != facing;
+            return edge != null && edge != facing;
         }
         return false;
     }
