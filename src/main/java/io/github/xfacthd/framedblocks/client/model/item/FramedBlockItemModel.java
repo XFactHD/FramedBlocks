@@ -195,6 +195,9 @@ public final class FramedBlockItemModel extends AbstractFramedBlockItemModel {
 
             ModelRenderProperties renderProps = new ModelRenderProperties(true, model.particleMaterial(level, BlockPos.ZERO, state), itemTransforms);
             modelEntry = new ModelEntry(allQuads, renderProps, camos, tints.isEmpty() ? IntLists.emptyList() : tints, overlay, userData, animated);
+            if (itemModelCache.isEmpty()) {
+                markCacheDirty();
+            }
             itemModelCache.put(cacheKey, modelEntry);
         }
         return modelEntry;

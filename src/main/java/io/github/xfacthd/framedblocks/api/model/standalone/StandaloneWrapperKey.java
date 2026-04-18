@@ -5,7 +5,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.client.model.standalone.StandaloneModelKey;
 
-public final class StandaloneWrapperKey<T extends CachingModel> {
+public final class StandaloneWrapperKey<T> {
     public static final String STANDALONE_DEFINITION_FOLDER = "specialstates";
 
     private final Holder<Block> block;

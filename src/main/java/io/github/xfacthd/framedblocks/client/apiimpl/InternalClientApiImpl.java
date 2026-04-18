@@ -10,7 +10,6 @@ import io.github.xfacthd.framedblocks.api.model.ExtendedBlockStateModelPart;
 import io.github.xfacthd.framedblocks.api.model.data.QuadMapBuilder;
 import io.github.xfacthd.framedblocks.api.model.item.ItemModelInfo;
 import io.github.xfacthd.framedblocks.api.model.item.block.BlockItemModelProvider;
-import io.github.xfacthd.framedblocks.api.model.standalone.CachingModel;
 import io.github.xfacthd.framedblocks.api.model.standalone.StandaloneModelFactory;
 import io.github.xfacthd.framedblocks.api.model.standalone.StandaloneWrapperKey;
 import io.github.xfacthd.framedblocks.api.model.util.ModelUtils;
@@ -80,7 +79,7 @@ public final class InternalClientApiImpl implements InternalClientAPI {
     }
 
     @Override
-    public <T extends CachingModel> void registerStandaloneModelWrapper(
+    public <T> void registerStandaloneModelWrapper(
             StandaloneWrapperKey<T> wrapperKey,
             GeometryFactory geometryFactory,
             StandaloneModelFactory<T> modelFactory,

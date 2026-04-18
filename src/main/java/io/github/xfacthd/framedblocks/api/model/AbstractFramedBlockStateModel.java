@@ -15,7 +15,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
-public abstract class AbstractFramedBlockStateModel extends DelegateBlockStateModel {
+public abstract class AbstractFramedBlockStateModel extends DelegateBlockStateModel implements CachingFramedModel {
     private final BlockState state;
     @Nullable
     private final ItemModelInfo itemModelInfo;
@@ -60,8 +60,6 @@ public abstract class AbstractFramedBlockStateModel extends DelegateBlockStateMo
     public final int materialFlags() {
         return materialFlags(BlockAndTintGetter.EMPTY, BlockPos.ZERO, state);
     }
-
-    public void clearCache() { }
 
     public BlockStateModel getBaseModel() {
         return delegate;

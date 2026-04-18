@@ -175,6 +175,9 @@ public final class FramedBlockStateModel extends AbstractFramedBlockStateModel {
                         overlayTintOffset,
                         localMiscTintOffset
                 );
+                if (partCache.isEmpty()) {
+                    markCacheDirty();
+                }
                 partCache.put(key, cacheEntry);
             }
             List<ExtendedBlockStateModelPart> cachedParts = cacheEntry.parts;
