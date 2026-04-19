@@ -2,10 +2,11 @@ package io.github.xfacthd.framedblocks.common.compat.searchables;
 
 import com.blamejared.searchables.api.SearchableComponent;
 import com.blamejared.searchables.api.SearchableType;
-import io.github.xfacthd.framedblocks.FramedBlocks;
+import com.mojang.logging.LogUtils;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.common.menu.FramingSawMenu;
 import net.neoforged.fml.ModList;
+import org.slf4j.Logger;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,6 +14,7 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public final class SearchablesCompat {
+    private static final Logger LOGGER = LogUtils.getLogger();
     private static boolean loaded = false;
 
     public static void init() {
@@ -23,7 +25,7 @@ public final class SearchablesCompat {
                     loaded = true;
                 }
             } catch (Throwable t) {
-                FramedBlocks.LOGGER.warn("An error occured while initializing Searchables integration!", t);
+                LOGGER.warn("An error occured while initializing Searchables integration!", t);
             }
         }
     }

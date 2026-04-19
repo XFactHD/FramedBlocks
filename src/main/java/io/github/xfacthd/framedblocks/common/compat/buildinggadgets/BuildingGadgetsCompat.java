@@ -3,7 +3,7 @@ package io.github.xfacthd.framedblocks.common.compat.buildinggadgets;
 //import com.direwolf20.buildinggadgets.common.tainted.building.tilesupport.*;
 //import com.direwolf20.buildinggadgets.common.tainted.registry.TopologicalRegistryBuilder;
 //import com.direwolf20.buildinggadgets.common.util.ref.Reference;
-import io.github.xfacthd.framedblocks.FramedBlocks;
+import com.mojang.logging.LogUtils;
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import io.github.xfacthd.framedblocks.api.util.FramedConstants;
 import io.github.xfacthd.framedblocks.api.util.Utils;
@@ -12,10 +12,13 @@ import net.neoforged.fml.InterModComms;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.event.lifecycle.InterModEnqueueEvent;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import org.slf4j.Logger;
 
 import java.util.function.Supplier;
 
 public final class BuildingGadgetsCompat {
+    private static final Logger LOGGER = LogUtils.getLogger();
+
     public static void init(IEventBus modBus) {
         if (ModList.get().isLoaded("buildinggadgets")) {
             /* Safeguard against potential API changes in Building Gadgets
@@ -26,7 +29,7 @@ public final class BuildingGadgetsCompat {
             try {
                 //GuardedAccess.init(modBus);
             } catch (Throwable e) {
-                FramedBlocks.LOGGER.warn("An error occured while initializing Building Gadgets integration!", e);
+                LOGGER.warn("An error occured while initializing Building Gadgets integration!", e);
             }
         }
     }

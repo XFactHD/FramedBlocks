@@ -4,7 +4,7 @@ import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
-import io.github.xfacthd.framedblocks.FramedBlocks;
+import com.mojang.logging.LogUtils;
 import io.github.xfacthd.framedblocks.cmdtests.tests.*;
 import io.github.xfacthd.framedblocks.common.data.shapes.ShapeReloader;
 import net.minecraft.ChatFormatting;
@@ -15,6 +15,7 @@ import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Util;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
+import org.slf4j.Logger;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -25,6 +26,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.function.Consumer;
 
 public final class SpecialTestCommand {
+    private static final Logger LOGGER = LogUtils.getLogger();
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("uuuu_MM_dd-kk_mm_ss");
     private static final Path EXPORT_DIR = Path.of("./logs/test");
 
@@ -105,7 +107,7 @@ public final class SpecialTestCommand {
                 msgQueueAppender.accept(Component.literal(
                         "Encountered an uncaught error while testing " + testName + ". See log for details"
                 ));
-                FramedBlocks.LOGGER.error("Encountered an error while testing {}", testName, t);
+                LOGGER.error("Encountered an error while testing {}", testName, t);
             }
         });
     }
@@ -134,7 +136,7 @@ public final class SpecialTestCommand {
             );
             return Component.literal("Tests results exported to ").append(pathComponent);
         } catch (IOException e) {
-            FramedBlocks.LOGGER.error("Encountered an error while exporting test results", e);
+            LOGGER.error("Encountered an error while exporting test results", e);
             return Component.literal("Export of test results failed with error: %s: %s".formatted(
                     e.getClass().getSimpleName(), e.getMessage()
             ));

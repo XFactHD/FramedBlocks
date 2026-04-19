@@ -1,8 +1,8 @@
 package io.github.xfacthd.framedblocks.common.compat.diagonalblocks;
 
+import com.mojang.logging.LogUtils;
 import fuzs.diagonalblocks.api.v2.block.type.DiagonalBlockType;
 import fuzs.diagonalblocks.api.v2.block.type.DiagonalBlockTypes;
-import io.github.xfacthd.framedblocks.FramedBlocks;
 import io.github.xfacthd.framedblocks.api.block.render.FramedClientBlockExtensions;
 import io.github.xfacthd.framedblocks.api.model.wrapping.RegisterModelWrappersEvent;
 import io.github.xfacthd.framedblocks.api.model.wrapping.WrapHelper;
@@ -21,10 +21,12 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModList;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import net.neoforged.neoforge.event.BlockEntityTypeAddBlocksEvent;
+import org.slf4j.Logger;
 
 import java.util.Optional;
 
 public final class DiagonalBlocksCompat {
+    private static final Logger LOGGER = LogUtils.getLogger();
     private static boolean loaded = false;
 
     public static void init(IEventBus modBus) {
@@ -36,7 +38,7 @@ public final class DiagonalBlocksCompat {
                 }
                 loaded = true;
             } catch (Throwable t) {
-                FramedBlocks.LOGGER.error("Failed to initialized Diagonal Blocks integration");
+                LOGGER.error("Failed to initialized Diagonal Blocks integration");
             }
         }
     }

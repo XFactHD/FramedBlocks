@@ -1,15 +1,17 @@
 package io.github.xfacthd.framedblocks.common.util;
 
-import io.github.xfacthd.framedblocks.FramedBlocks;
+import com.mojang.logging.LogUtils;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import org.jspecify.annotations.Nullable;
+import org.slf4j.Logger;
 
 import java.util.Objects;
 import java.util.function.BiConsumer;
 import java.util.function.Predicate;
 
 public abstract class BlockTypeMap<T> {
+    private static final Logger LOGGER = LogUtils.getLogger();
     private static final BlockType[] TYPES = BlockType.values();
     private static final int TYPE_COUNT = TYPES.length;
 
@@ -48,13 +50,13 @@ public abstract class BlockTypeMap<T> {
         for (int i = 0; i < TYPE_COUNT; i++) {
             if (values[i] == null) {
                 missing++;
-                FramedBlocks.LOGGER.error(
+                LOGGER.error(
                         "Type '{}' missing mapping in '{}'", TYPES[i], getClass().getSimpleName()
                 );
             }
         }
         if (missing > 0) {
-            FramedBlocks.LOGGER.error("Found {} missing mappings in '{}'", missing, getClass().getSimpleName());
+            LOGGER.error("Found {} missing mappings in '{}'", missing, getClass().getSimpleName());
         }
     }
 

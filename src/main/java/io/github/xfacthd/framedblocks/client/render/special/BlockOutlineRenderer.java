@@ -3,7 +3,7 @@ package io.github.xfacthd.framedblocks.client.render.special;
 import com.google.common.base.Preconditions;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import io.github.xfacthd.framedblocks.FramedBlocks;
+import com.mojang.logging.LogUtils;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.IBlockType;
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
@@ -27,6 +27,7 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.fml.ModLoader;
 import net.neoforged.neoforge.client.event.ExtractBlockOutlineRenderStateEvent;
 import org.jspecify.annotations.Nullable;
+import org.slf4j.Logger;
 
 import java.util.HashSet;
 import java.util.IdentityHashMap;
@@ -36,6 +37,7 @@ import java.util.Objects;
 import java.util.Set;
 
 public final class BlockOutlineRenderer {
+    private static final Logger LOGGER = LogUtils.getLogger();
     private static final int DEFAULT_LINE_COLOR = ARGB.color(0x66, 0xFF000000);
     private static final Map<IBlockType, OutlineRenderer<?>> OUTLINE_RENDERERS = new IdentityHashMap<>();
     private static final Set<IBlockType> ERRORED_TYPES = new HashSet<>();
@@ -73,7 +75,7 @@ public final class BlockOutlineRenderer {
             OutlineRenderer<Object> renderer = getRenderer(type);
             if (renderer == null) {
                 if (ERRORED_TYPES.add(type)) {
-                    FramedBlocks.LOGGER.error("IBlockType '{}' requests custom outline rendering but no OutlineRender was registered!", type.getName());
+                    LOGGER.error("IBlockType '{}' requests custom outline rendering but no OutlineRender was registered!", type.getName());
                 }
                 return;
             }

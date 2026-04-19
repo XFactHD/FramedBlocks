@@ -1,6 +1,6 @@
 package io.github.xfacthd.framedblocks.common.compat.atlasviewer;
 
-import io.github.xfacthd.framedblocks.FramedBlocks;
+import com.mojang.logging.LogUtils;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.client.render.util.AnimationSplitterSource;
 import io.github.xfacthd.framedblocks.client.render.util.AreaMaskSource;
@@ -8,9 +8,11 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModList;
+import org.slf4j.Logger;
 import xfacthd.atlasviewer.client.api.RegisterSpriteSourceDetailsEvent;
 
 public final class AtlasViewerCompat {
+    private static final Logger LOGGER = LogUtils.getLogger();
     public static final Component LABEL_TEXTURE = Utils.translate("label", "source_tooltip.anim_splitter.texture");
     public static final Component LABEL_FRAMES = Utils.translate("label", "source_tooltip.anim_splitter.frames");
     public static final Component LABEL_MASK_TEXTURE = Utils.translate("label", "source_tooltip.area_mask.texture");
@@ -27,7 +29,7 @@ public final class AtlasViewerCompat {
                     GuardedClientAccess.init(modBus);
                 }
             } catch (Throwable e) {
-                FramedBlocks.LOGGER.warn("An error occured while initializing AtlasViewer integration!", e);
+                LOGGER.warn("An error occured while initializing AtlasViewer integration!", e);
             }
         }
     }

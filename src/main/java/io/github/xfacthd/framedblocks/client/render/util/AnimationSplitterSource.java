@@ -1,10 +1,10 @@
 package io.github.xfacthd.framedblocks.client.render.util;
 
 import com.mojang.blaze3d.platform.NativeImage;
+import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import io.github.xfacthd.framedblocks.FramedBlocks;
 import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
 import net.minecraft.client.renderer.texture.SpriteContents;
 import net.minecraft.client.renderer.texture.atlas.SpriteResourceLoader;
@@ -20,12 +20,14 @@ import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceMetadata;
 import net.minecraft.util.ExtraCodecs;
+import org.slf4j.Logger;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
 public record AnimationSplitterSource(Identifier resource, List<Frame> frames) implements SpriteSource {
+    private static final Logger LOGGER = LogUtils.getLogger();
     public static final MapCodec<AnimationSplitterSource> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
             Identifier.CODEC.fieldOf("resource").forGetter(s -> s.resource),
             ExtraCodecs.nonEmptyList(Frame.CODEC.listOf()).fieldOf("frames").forGetter(s -> s.frames)
@@ -45,7 +47,7 @@ public record AnimationSplitterSource(Identifier resource, List<Frame> frames) i
             LazyLoadedImage image = new LazyLoadedImage(texPath, res, frames.size());
             frames.forEach(frame -> out.add(frame.outLoc, new FrameInstance(res, texPath, image, frame, additionalMetadata)));
         } else {
-            FramedBlocks.LOGGER.warn("Missing sprite: {}", texPath);
+            LOGGER.warn("Missing sprite: {}", texPath);
         }
     }
 
@@ -97,7 +99,7 @@ public record AnimationSplitterSource(Identifier resource, List<Frame> frames) i
                 Optional<TextureMetadataSection> textureMetadata = srcMeta.getSection(TextureMetadataSection.TYPE);
                 return new SpriteContents(frame.outLoc, new FrameSize(frameW, frameH), imageOut, Optional.empty(), metaSections, textureMetadata);
             } catch (Exception e) {
-                FramedBlocks.LOGGER.error("Failed to split out frame {}", frame, e);
+                LOGGER.error("Failed to split out frame {}", frame, e);
             } finally {
                 lazyImage.release();
             }

@@ -1,6 +1,5 @@
 package io.github.xfacthd.framedblocks;
 
-import com.mojang.logging.LogUtils;
 import io.github.xfacthd.framedblocks.api.util.FramedConstants;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.common.FBContent;
@@ -36,13 +35,9 @@ import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.common.world.poi.ExtendPoiTypesEvent;
 import net.neoforged.neoforge.event.AddServerReloadListenersEvent;
-import org.slf4j.Logger;
 
 @Mod(FramedConstants.MOD_ID)
-@SuppressWarnings("UtilityClassWithPublicConstructor")
 public final class FramedBlocks {
-    public static final Logger LOGGER = LogUtils.getLogger();
-
     public FramedBlocks(IEventBus modBus, ModContainer modContainer) {
         FBContent.init(modBus);
 

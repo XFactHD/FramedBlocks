@@ -1,6 +1,6 @@
 package io.github.xfacthd.framedblocks.client.util;
 
-import io.github.xfacthd.framedblocks.FramedBlocks;
+import com.mojang.logging.LogUtils;
 import io.github.xfacthd.framedblocks.api.block.blockentity.IFramedBlockEntity;
 import io.github.xfacthd.framedblocks.api.util.FramedConstants;
 import io.github.xfacthd.framedblocks.api.util.Utils;
@@ -15,8 +15,10 @@ import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.common.util.Lazy;
 import org.lwjgl.glfw.GLFW;
+import org.slf4j.Logger;
 
 public final class KeyMappings {
+    private static final Logger LOGGER = LogUtils.getLogger();
     public static final KeyMapping.Category KEY_CATEGORY = new KeyMapping.Category(Utils.id("main"));
     public static final Lazy<KeyMapping> UPDATE_CULLING = makeKeyMapping("update_cull", GLFW.GLFW_KEY_F9);
     public static final Lazy<KeyMapping> WIPE_CACHE = makeKeyMapping("wipe_cache", -1);
@@ -44,7 +46,7 @@ public final class KeyMappings {
                 try {
                     be.updateCulling(true, true);
                 } catch (Throwable throwable) {
-                    FramedBlocks.LOGGER.error(
+                    LOGGER.error(
                             "Encountered unexpected exception while updating culling of '{}'",
                             be.getBlockState().getBlock(),
                             throwable

@@ -1,14 +1,16 @@
 package io.github.xfacthd.framedblocks.common.compat.amendments;
 
-import io.github.xfacthd.framedblocks.FramedBlocks;
+import com.mojang.logging.LogUtils;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import net.mehvahdjukaar.amendments.Amendments;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.LevelReader;
 import net.neoforged.fml.ModList;
+import org.slf4j.Logger;
 
 public final class AmendmentsCompat {
+    private static final Logger LOGGER = LogUtils.getLogger();
     public static final String MOD_ID = "amendments";
     public static final Identifier HANGING_MODEL_LOCATION = Utils.id(MOD_ID, "block/hanging_flower_pot_rope");
     private static boolean loaded = false;
@@ -41,7 +43,7 @@ public final class AmendmentsCompat {
             } catch (Throwable e) {
                 if (!failedPreviously) {
                     failedPreviously = true;
-                    FramedBlocks.LOGGER.error("[AmendmentsCompat] Encountered an error while checking hanging pot surviving", e);
+                    LOGGER.error("[AmendmentsCompat] Encountered an error while checking hanging pot surviving", e);
                 }
                 return true;
             }

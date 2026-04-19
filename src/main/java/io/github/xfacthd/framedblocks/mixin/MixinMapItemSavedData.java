@@ -4,10 +4,10 @@ import com.llamalad7.mixinextras.expression.Definition;
 import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
+import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import io.github.xfacthd.framedblocks.FramedBlocks;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.data.component.FramedMap;
@@ -91,7 +91,7 @@ public abstract class MixinMapItemSavedData implements FramedMap.MarkerRemover {
                     FramedMap.CODEC.listOf().optionalFieldOf("framedblocks:frames", List.of()).forGetter(MixinMapItemSavedData::framedblocks$getFramedMaps)
             ).apply(inst, MixinMapItemSavedData::framedblocks$applyFramedMaps));
         } else {
-            FramedBlocks.LOGGER.error("Failed to wrap MapItemSavedData.CODEC, map markers for Framed Item Frames will NOT persist!");
+            LogUtils.getLogger().error("[FramedBlocks] Failed to wrap MapItemSavedData.CODEC, map markers for Framed Item Frames will NOT persist!");
             if (!Utils.PRODUCTION) {
                 throw new RuntimeException("Failed to wrap MapItemSavedData.CODEC");
             }

@@ -1,5 +1,6 @@
 package io.github.xfacthd.framedblocks.common.compat.create;
 
+import com.mojang.logging.LogUtils;
 import com.simibubi.create.api.behaviour.interaction.MovingInteractionBehaviour;
 import com.simibubi.create.api.contraption.BlockMovementChecks;
 import com.simibubi.create.api.schematic.nbt.SafeNbtWriterRegistry;
@@ -9,7 +10,6 @@ import com.simibubi.create.content.contraptions.behaviour.DoorMovingInteraction;
 import com.simibubi.create.content.contraptions.behaviour.FenceGateMovingInteraction;
 import com.simibubi.create.content.contraptions.behaviour.LeverMovingInteraction;
 import com.simibubi.create.content.contraptions.behaviour.TrapdoorMovingInteraction;
-import io.github.xfacthd.framedblocks.FramedBlocks;
 import io.github.xfacthd.framedblocks.api.compat.create.FramedBlockEntityItemRequirement;
 import io.github.xfacthd.framedblocks.api.compat.create.FramedBlockSafeNbtWriter;
 import io.github.xfacthd.framedblocks.common.FBContent;
@@ -28,16 +28,19 @@ import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.fml.ModList;
+import org.slf4j.Logger;
 
 import java.util.Map;
 
 public final class CreateCompat {
+    private static final Logger LOGGER = LogUtils.getLogger();
+
     public static void commonSetup() {
         if (ModList.get().isLoaded("create")) {
             try {
                 GuardedAccess.init();
             } catch (Throwable e) {
-                FramedBlocks.LOGGER.warn("An error occured while initializing Create integration!", e);
+                LOGGER.warn("An error occured while initializing Create integration!", e);
             }
         }
     }
@@ -64,7 +67,7 @@ public final class CreateCompat {
                 registerInteractionBehaviour(FBContent.BLOCK_FRAMED_TRAP_DOOR, new TrapdoorMovingInteraction());
                 registerInteractionBehaviour(FBContent.BLOCK_FRAMED_FENCE_GATE, new FenceGateMovingInteraction());
             } catch (Throwable t) {
-                FramedBlocks.LOGGER.warn("An error occured while registering MovingInteractions for Create contraptions!", t);
+                LOGGER.warn("An error occured while registering MovingInteractions for Create contraptions!", t);
             }
 
             FramedBlockMovementChecks movementChecks = new FramedBlockMovementChecks();
