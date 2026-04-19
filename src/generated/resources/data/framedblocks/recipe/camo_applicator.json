@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "C": "#c:chests/wooden",
+    "H": "framedblocks:framed_hammer",
+    "I": "#c:ingots/iron",
+    "R": "#c:storage_blocks/redstone"
+  },
+  "pattern": [
+    "IHI",
+    "IRI",
+    "ICI"
+  ],
+  "result": {
+    "id": "framedblocks:camo_applicator"
+  }
+}
