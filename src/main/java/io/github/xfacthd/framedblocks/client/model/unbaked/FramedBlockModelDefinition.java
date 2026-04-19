@@ -9,7 +9,6 @@ import io.github.xfacthd.framedblocks.api.model.standalone.StandaloneWrapperKey;
 import io.github.xfacthd.framedblocks.client.model.wrapping.ModelWrappingHandler;
 import io.github.xfacthd.framedblocks.client.model.wrapping.ModelWrappingManager;
 import io.github.xfacthd.framedblocks.client.model.wrapping.StandaloneWrapperKeys;
-import io.github.xfacthd.framedblocks.common.data.StateCacheBuilder;
 import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
 import net.minecraft.client.renderer.block.dispatch.BlockStateModelDispatcher;
 import net.minecraft.client.renderer.block.dispatch.SingleVariant;
@@ -49,7 +48,6 @@ public record FramedBlockModelDefinition(
                 }
         );
 
-        StateCacheBuilder.ensureStateCachesInitialized();
         ModelWrappingHandler handler = getWrappingHandler(states.any().getBlock());
         handler.wrapAllBlockStateModels(models, auxModels);
 

@@ -4,6 +4,7 @@ import com.mojang.logging.LogUtils;
 import io.github.xfacthd.framedblocks.api.util.FramedConstants;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.common.FBContent;
+import io.github.xfacthd.framedblocks.common.block.interactive.FramedFlowerPotBlock;
 import io.github.xfacthd.framedblocks.common.capability.CapabilitySetup;
 import io.github.xfacthd.framedblocks.common.compat.CompatHandler;
 import io.github.xfacthd.framedblocks.common.config.ClientConfig;
@@ -89,10 +90,11 @@ public final class FramedBlocks {
     }
 
     private static void onCommonSetup(FMLCommonSetupEvent event) {
-        StateCacheBuilder.ensureStateCachesInitialized();
+        StateCacheBuilder.initializeStateCaches();
         FramedBlueprintItem.init();
         CompatHandler.commonSetup();
         CamoContainerFactories.registerCamoFactories();
+        FramedFlowerPotBlock.initPotMapping();
     }
 
     private static void onAddDebugReloadListener(AddServerReloadListenersEvent event) {

@@ -1,7 +1,7 @@
 package io.github.xfacthd.framedblocks.common.data;
 
 import com.google.common.base.Stopwatch;
-import io.github.xfacthd.framedblocks.FramedBlocks;
+import com.mojang.logging.LogUtils;
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.api.block.cache.StateCache;
 import io.github.xfacthd.framedblocks.api.util.Utils;
@@ -13,25 +13,15 @@ import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import org.slf4j.Logger;
 
 import java.util.Map;
 
 public final class StateCacheBuilder {
-    private static volatile boolean cachesBuilt = false;
+    private static final Logger LOGGER = LogUtils.getLogger();
 
-    public static void ensureStateCachesInitialized() {
-        if (!cachesBuilt) {
-            synchronized (StateCacheBuilder.class) {
-                if (!cachesBuilt) {
-                    initializeStateCaches();
-                    cachesBuilt = true;
-                }
-            }
-        }
-    }
-
-    private static void initializeStateCaches() {
-        FramedBlocks.LOGGER.debug("Initializing custom state metadata caches");
+    public static void initializeStateCaches() {
+        LOGGER.debug("Initializing custom state metadata caches");
         Stopwatch watch = Stopwatch.createStarted();
         long[] stateCount = new long[] { 0 };
         ObjectOpenHashSet<StateCache> cacheDedup = new ObjectOpenHashSet<>();
@@ -51,7 +41,7 @@ public final class StateCacheBuilder {
                     stateCount[0] += states.size();
                 });
         watch.stop();
-        FramedBlocks.LOGGER.debug("Initialized {} unique caches for {} states in {}", cacheDedup.size(), stateCount[0], watch);
+        LOGGER.debug("Initialized {} unique caches for {} states in {}", cacheDedup.size(), stateCount[0], watch);
     }
 
     public static final class CacheReloader implements ResourceManagerReloadListener {

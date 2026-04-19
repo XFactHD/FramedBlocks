@@ -799,7 +799,6 @@ public final class FBContent {
 
     public static void init(IEventBus modBus) {
         modBus.addListener(FramedRegistries::onRegisterNewRegistries);
-        modBus.addListener(FramedRegistries::onModifyRegistries);
 
         BLOCKS.register(modBus);
         DATA_COMPONENTS.register(modBus);
