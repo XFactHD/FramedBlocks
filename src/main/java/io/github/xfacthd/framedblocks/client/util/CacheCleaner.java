@@ -1,6 +1,6 @@
 package io.github.xfacthd.framedblocks.client.util;
 
-import io.github.xfacthd.framedblocks.api.model.CachingFramedModel;
+import io.github.xfacthd.framedblocks.api.model.CachingModel;
 import io.github.xfacthd.framedblocks.client.model.FluidCubeModel;
 import io.github.xfacthd.framedblocks.client.model.RuntimeMaterialBaker;
 import io.github.xfacthd.framedblocks.client.model.overlaygen.BlockOverlayGenerator;
@@ -9,7 +9,7 @@ import io.github.xfacthd.framedblocks.client.render.special.ModelBasedOutlineRen
 
 public final class CacheCleaner {
     public static void clearModelCaches(Reason reason) {
-        CachingFramedModel.clearAllCaches();
+        CachingModel.clearAllCaches();
 
         clearExternalGeometryCaches(reason);
     }

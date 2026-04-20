@@ -4,11 +4,11 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.WeakHashMap;
 
-public interface CachingFramedModel {
-    Set<CachingFramedModel> USED_CACHING_MODELS = Collections.newSetFromMap(new WeakHashMap<>());
+public interface CachingModel {
+    Set<CachingModel> USED_CACHING_MODELS = Collections.newSetFromMap(new WeakHashMap<>());
 
     /**
-     * Override this method t
+     * Override this method to implement clearing of the cache on a given model.
      */
     default void clearCache() {}
 
@@ -24,7 +24,7 @@ public interface CachingFramedModel {
 
     static void clearAllCaches() {
         synchronized (USED_CACHING_MODELS) {
-            USED_CACHING_MODELS.forEach(CachingFramedModel::clearCache);
+            USED_CACHING_MODELS.forEach(CachingModel::clearCache);
             USED_CACHING_MODELS.clear();
         }
     }
