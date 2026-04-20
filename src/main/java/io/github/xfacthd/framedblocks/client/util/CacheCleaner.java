@@ -7,9 +7,27 @@ import io.github.xfacthd.framedblocks.client.model.overlaygen.BlockOverlayGenera
 import io.github.xfacthd.framedblocks.client.model.overlaygen.OverlayQuadGenerator;
 import io.github.xfacthd.framedblocks.client.render.special.ModelBasedOutlineRenderer;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+import java.util.WeakHashMap;
+
 public final class CacheCleaner {
+    private static final Set<CachingModel> USED_CACHING_MODELS = Collections.newSetFromMap(new WeakHashMap<>());
+
+    public static void registerLoadedCachingModel(CachingModel model) {
+        synchronized (USED_CACHING_MODELS) {
+            USED_CACHING_MODELS.add(model);
+        }
+    }
+
     public static void clearModelCaches(Reason reason) {
-        CachingModel.clearAllCaches();
+        synchronized (USED_CACHING_MODELS) {
+            // Some clearCache() implementations may construct a model instance (e.g. FramedBlockItemModel).
+            // This adds it to USED_CACHING_MODELS, so we must snapshot the list of models we're clearing
+            // to avoid ConcurrentModificationException.
+            List.copyOf(USED_CACHING_MODELS).forEach(CachingModel::clearCache);
+        }
 
         clearExternalGeometryCaches(reason);
     }

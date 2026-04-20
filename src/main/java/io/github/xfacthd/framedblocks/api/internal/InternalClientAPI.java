@@ -1,6 +1,7 @@
 package io.github.xfacthd.framedblocks.api.internal;
 
 import com.mojang.datafixers.util.Either;
+import io.github.xfacthd.framedblocks.api.model.CachingModel;
 import io.github.xfacthd.framedblocks.api.model.ExtendedBlockStateModelPart;
 import io.github.xfacthd.framedblocks.api.model.data.QuadMapBuilder;
 import io.github.xfacthd.framedblocks.api.model.item.ItemModelInfo;
@@ -68,4 +69,6 @@ public interface InternalClientAPI {
     OutlineRenderer<?> createModelBasedOutlineRenderer(Block block);
 
     MaterialLookup getRuntimeMaterialLookup();
+
+    void registerLoadedCachingModel(CachingModel model);
 }
