@@ -609,8 +609,7 @@ public final class Modifiers {
 
     public static QuadModifier.Modifier scaleFace(float factor, Vector3f origin) {
         return quad -> {
-            Vector3f scaleVec = switch (quad.direction().getAxis())
-            {
+            Vector3f scaleVec = switch (quad.direction().getAxis()) {
                 case X -> new Vector3f(0.0F, 1.0F, 1.0F);
                 case Y -> new Vector3f(1.0F, 0.0F, 1.0F);
                 case Z -> new Vector3f(1.0F, 1.0F, 0.0F);

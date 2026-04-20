@@ -16,19 +16,19 @@ final class FramedBlockInternals {
     static boolean isViewBlocking(BlockState state, BlockGetter level, BlockPos pos) {
         AbstractFramedBlockData fbData = level.getModelData(pos).get(AbstractFramedBlockData.PROPERTY);
         TriState viewBlocking;
-        if (fbData != null && (viewBlocking = fbData.isViewBlocking()) != TriState.DEFAULT)
-        {
+        if (fbData != null && (viewBlocking = fbData.isViewBlocking()) != TriState.DEFAULT) {
             return viewBlocking.isTrue();
         }
         return isSuffocatingDefault(state, level, pos);
     }
 
     static boolean isSuffocating(BlockState state, BlockGetter level, BlockPos pos) {
-        if (!isSuffocatingDefault(state, level, pos)) return false;
+        if (!isSuffocatingDefault(state, level, pos)) {
+            return false;
+        }
 
         IFramedBlock block = (IFramedBlock) state.getBlock();
-        if (ConfigView.Server.INSTANCE.enableIntangibility() && block.getBlockType().allowMakingIntangible())
-        {
+        if (ConfigView.Server.INSTANCE.enableIntangibility() && block.getBlockType().allowMakingIntangible()) {
             return !block.isIntangible(state, level, pos, null);
         }
         return true;

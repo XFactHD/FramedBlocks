@@ -26,8 +26,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.RailShape;
 import org.jspecify.annotations.Nullable;
 
-public class FramedFancyRailSlopeBlock extends FramedRailSlopeBlock<FramedDoubleBlockEntity> implements IFramedDoubleBlockInternal, SlopeBlock.RailSlopeBlock
-{
+public class FramedFancyRailSlopeBlock extends FramedRailSlopeBlock<FramedDoubleBlockEntity> implements IFramedDoubleBlockInternal, SlopeBlock.RailSlopeBlock {
     public FramedFancyRailSlopeBlock(Properties props, BlockEntityType.BlockEntitySupplier<FramedDoubleBlockEntity> beFactory) {
         super(BlockType.FRAMED_FANCY_RAIL_SLOPE, props, beFactory);
     }

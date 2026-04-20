@@ -35,8 +35,7 @@ public final class CollapsibleBlockOutlineRenderer implements OutlineRenderer<Co
     }
 
     @Override
-    public @Nullable OutlineData extractOutlineData(BlockState state, Level level, BlockPos pos)
-    {
+    public @Nullable OutlineData extractOutlineData(BlockState state, Level level, BlockPos pos) {
         NullableDirection face = state.getValue(PropertyHolder.NULLABLE_FACE);
         if (face == NullableDirection.NONE) {
             return null;

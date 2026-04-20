@@ -51,8 +51,7 @@ public final class ParticleHelper {
         double y = entity.getY();
         double z = entity.getZ();
         BlockPos entityPos = entity.blockPosition();
-        if (pos.getX() != entityPos.getX() || pos.getZ() != entityPos.getZ())
-        {
+        if (pos.getX() != entityPos.getX() || pos.getZ() != entityPos.getZ()) {
             double offX = x - (double)pos.getX() - 0.5D;
             double offZ = z - (double)pos.getZ() - 0.5D;
             double maxOff = Math.max(Math.abs(offX), Math.abs(offZ));

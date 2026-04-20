@@ -176,8 +176,7 @@ public final class BlockOutlineRenderer {
 
         @Override
         public void drawLines(float[] vertices) {
-            for (int i = 0; i < vertices.length; i += 6)
-            {
+            for (int i = 0; i < vertices.length; i += 6) {
                 drawLine(vertices[i], vertices[i + 1], vertices[i + 2], vertices[i + 3], vertices[i + 4], vertices[i + 5]);
             }
         }

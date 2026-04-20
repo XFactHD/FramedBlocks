@@ -58,8 +58,7 @@ public class FramedLanternGeometry extends Geometry {
                     .applyIf(Modifiers.setPosition(hanging ? 8F/16F : 7F/16F), up)
                     .export(quadMap, hanging || up ? null : Direction.DOWN);
 
-            if (up)
-            {
+            if (up) {
                 QuadModifier.of(quad)
                         .apply(Modifiers.cutTopBottom(6F/16F, 6F/16F, 10F/16F, 10F/16F))
                         .apply(Modifiers.setPosition(hanging ? 10F/16F : 9F/16F))

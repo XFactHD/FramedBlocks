@@ -124,8 +124,7 @@ public class FramedVerticalDoubleHalfSlopeBlock extends FramedDoubleBlock implem
     }
 
     @Override
-    public @Nullable BlockState getItemModelSource()
-    {
+    public @Nullable BlockState getItemModelSource() {
         return null;
     }
 

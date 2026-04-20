@@ -11,47 +11,37 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.state.BlockState;
 
 @CullTest(BlockType.FRAMED_COLLAPSIBLE_COPYCAT_BLOCK)
-public final class CollapsibleCopycatBlockSkipPredicate implements SideSkipPredicate
-{
+public final class CollapsibleCopycatBlockSkipPredicate implements SideSkipPredicate {
     private static final Direction[] DIRECTIONS = Direction.values();
 
     @Override
     @CullTest.TestTarget(BlockType.FRAMED_COLLAPSIBLE_COPYCAT_BLOCK)
-    public boolean test(BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side)
-    {
-        if (adjState.getBlock() == state.getBlock())
-        {
+    public boolean test(BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side) {
+        if (adjState.getBlock() == state.getBlock()) {
             int solid = state.getValue(PropertyHolder.SOLID_FACES);
-            if ((solid & (1 << side.ordinal())) == 0)
-            {
+            if ((solid & (1 << side.ordinal())) == 0) {
                 return false;
             }
 
             int adjSolid = adjState.getValue(PropertyHolder.SOLID_FACES);
-            if ((adjSolid & (1 << side.getOpposite().ordinal())) == 0)
-            {
+            if ((adjSolid & (1 << side.getOpposite().ordinal())) == 0) {
                 return false;
             }
 
-            if (!(level.getBlockEntity(pos) instanceof CollapsibleCopycatBlockEntity be))
-            {
+            if (!(level.getBlockEntity(pos) instanceof CollapsibleCopycatBlockEntity be)) {
                 return false;
             }
-            if (!(level.getBlockEntity(pos.relative(side)) instanceof CollapsibleCopycatBlockEntity adjBe))
-            {
+            if (!(level.getBlockEntity(pos.relative(side)) instanceof CollapsibleCopycatBlockEntity adjBe)) {
                 return false;
             }
 
-            for (Direction face : DIRECTIONS)
-            {
-                if (face.getAxis() == side.getAxis())
-                {
+            for (Direction face : DIRECTIONS) {
+                if (face.getAxis() == side.getAxis()) {
                     continue;
                 }
                 int offset = be.getFaceOffset(state, face);
                 int adjOffset = adjBe.getFaceOffset(adjState, face);
-                if (offset != adjOffset)
-                {
+                if (offset != adjOffset) {
                     return false;
                 }
             }

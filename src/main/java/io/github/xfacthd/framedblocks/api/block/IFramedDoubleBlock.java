@@ -155,8 +155,8 @@ public interface IFramedDoubleBlock extends IFramedBlock {
 
         DoubleBlockTopInteractionMode mode = getCache(state).getTopInteractionMode();
 
-        SoundType soundOne = null;if (mode.applyFirst())
-        {
+        SoundType soundOne = null;
+        if (mode.applyFirst()) {
             soundOne = be.getCamo().getContent().getSoundType();
             SoundUtils.playFallSound(entity, soundOne);
         }

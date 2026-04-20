@@ -158,8 +158,8 @@ public class FramedDoubleHalfSlopeBlock extends FramedDoubleBlock implements Slo
         return state.getValue(FramedProperties.FACING_HOR);
     }
 
-    @Override public BlockState getJadeRenderState(BlockState state)
-    {
+    @Override
+    public BlockState getJadeRenderState(BlockState state) {
         return getItemModelSource();
     }
 }

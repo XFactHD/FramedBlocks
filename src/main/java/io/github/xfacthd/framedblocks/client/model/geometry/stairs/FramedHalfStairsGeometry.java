@@ -61,8 +61,7 @@ public class FramedHalfStairsGeometry extends Geometry {
             QuadModifier mod = QuadModifier.of(quad)
                     .apply(Modifiers.cut(horCut, .5F));
 
-            if (!base)
-            {
+            if (!base) {
                 mod.derive().apply(Modifiers.cut(dir, .5F))
                         .apply(Modifiers.setPosition(.5F))
                         .export(quadMap, null);

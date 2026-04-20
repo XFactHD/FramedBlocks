@@ -24,8 +24,7 @@ import net.neoforged.neoforge.model.data.ModelData;
 public class FramedRailSlopeGeometry extends FramedSlopeGeometry {
     private final BlockState railState;
 
-    private FramedRailSlopeGeometry(GeometryFactory.Context ctx, BlockState railBlock, EnumProperty<RailShape> shapeProperty)
-    {
+    private FramedRailSlopeGeometry(GeometryFactory.Context ctx, BlockState railBlock, EnumProperty<RailShape> shapeProperty) {
         super(ctx.withState(getSlopeState(ctx.state())));
         this.railState = railBlock.setValue(shapeProperty, ctx.state().getValue(PropertyHolder.ASCENDING_RAIL_SHAPE));
     }

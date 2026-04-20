@@ -54,8 +54,7 @@ public class FramedLeverGeometry extends Geometry {
         Direction quadDir = quad.direction();
         Direction facing = getFacing();
         boolean quadInDir = quadDir == facing;
-        if (DirUtils.isY(facing))
-        {
+        if (DirUtils.isY(facing)) {
             if (quadDir.getAxis() == facing.getAxis()) {
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(dir.getAxis(), MAX_LARGE))

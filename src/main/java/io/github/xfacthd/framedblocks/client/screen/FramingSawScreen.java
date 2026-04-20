@@ -299,8 +299,7 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu> im
 
         ItemStack input = screen.getInputStack();
         int listAdditives = -1;
-        List<MutableComponent> detail = switch (matchResult)
-        {
+        List<MutableComponent> detail = switch (matchResult) {
             case CAMO_PRESENT -> List.of();
             case MATERIAL_VALUE -> {
                 int matIn = input.isEmpty() ? 0 : cache.getMaterialValue(input.getItem()) * input.getCount();

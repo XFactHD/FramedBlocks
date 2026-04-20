@@ -21,10 +21,13 @@ public final class ValueMerger<T> {
     }
 
     @Contract("!null, _ -> !null; _, !null -> !null")
-    public @Nullable T apply(@Nullable T valOne, @Nullable T valTwo)
-    {
-        if (defaultCheck.test(valOne)) return valTwo;
-        if (defaultCheck.test(valTwo)) return valOne;
+    public @Nullable T apply(@Nullable T valOne, @Nullable T valTwo) {
+        if (defaultCheck.test(valOne)) {
+            return valTwo;
+        }
+        if (defaultCheck.test(valTwo)) {
+            return valOne;
+        }
         return merger.apply(valOne, valTwo);
     }
 }

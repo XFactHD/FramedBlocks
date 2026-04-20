@@ -84,8 +84,7 @@ public final class CommonShapes {
 
             for (BlockState state : states) {
                 Direction dir = state.getValue(dirProp);
-                if (state.getValue(invProp))
-                {
+                if (state.getValue(invProp)) {
                     dir = dir.getOpposite();
                 }
                 map.put(state, PANEL.get(dir));

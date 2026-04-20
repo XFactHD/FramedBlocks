@@ -157,8 +157,7 @@ public final class BlockCamoContent extends CamoContent<BlockCamoContent> implem
     }
 
     @Override
-    public boolean isOccludedBy(CamoContent<?> adjCamo, BlockGetter level, BlockPos pos, BlockPos adjPos, Direction side)
-    {
+    public boolean isOccludedBy(CamoContent<?> adjCamo, BlockGetter level, BlockPos pos, BlockPos adjPos, Direction side) {
         if (adjCamo instanceof BlockCamoContent blockCamo) {
             return isOccludedBy(blockCamo.state, level, pos, adjPos, side);
         }

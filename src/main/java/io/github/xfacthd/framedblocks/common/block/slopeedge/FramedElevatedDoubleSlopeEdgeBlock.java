@@ -45,8 +45,7 @@ public class FramedElevatedDoubleSlopeEdgeBlock extends FramedDoubleBlock implem
                 .withCustom((state, modCtx) -> {
                     Direction dir = state.getValue(FramedProperties.FACING_HOR);
                     SlopeType type = state.getValue(PropertyHolder.SLOPE_TYPE);
-                    if (dir != modCtx.getHorizontalDirection() && type == SlopeType.HORIZONTAL)
-                    {
+                    if (dir != modCtx.getHorizontalDirection() && type == SlopeType.HORIZONTAL) {
                         state = state.setValue(FramedProperties.ALT_SLOPE, true);
                     }
                     return state;

@@ -26,8 +26,7 @@ public final class FancyRailGhostRenderBehaviour implements GhostRenderBehaviour
             int renderPass
     ) {
         BlockState state = RailSlopeGhostRenderBehaviour.INSTANCE.getRenderState(stack, proxiedStack, hit, ctx, hitState, renderPass);
-        if (state != null)
-        {
+        if (state != null) {
             return state;
         }
         return GhostRenderBehaviour.super.getRenderState(stack, proxiedStack, hit, ctx, hitState, renderPass);

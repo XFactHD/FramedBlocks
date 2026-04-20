@@ -48,8 +48,7 @@ import java.util.List;
 import java.util.Set;
 
 public final class FramedStandingSignBlock extends StandingSignBlock implements IFramedBlockInternal {
-    public FramedStandingSignBlock(Properties properties)
-    {
+    public FramedStandingSignBlock(Properties properties) {
         super(WoodType.OAK, IFramedBlock.applyDefaultProperties(properties, BlockType.FRAMED_SIGN)
                 .forceSolidOn()
                 .noCollision()

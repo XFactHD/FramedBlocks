@@ -1089,8 +1089,7 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
      */
 
     @Override
-    public void removeComponentsFromTag(ValueOutput valueOutput)
-    {
+    public void removeComponentsFromTag(ValueOutput valueOutput) {
         valueOutput.discard(CAMO_NBT_KEY);
         valueOutput.discard(CAMO_DIR_NBT_KEY);
         valueOutput.discard(OVERLAY_NBT_KEY);
@@ -1171,8 +1170,7 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
         emissive = valueInput.getBooleanOr("emissive", false);
         recheckStates |= valueInput.getByteOr("updated", (byte) 0) < DATA_VERSION;
 
-        if (glowing)
-        {
+        if (glowing) {
             recheckStates = forceLightUpdate = true;
         }
     }

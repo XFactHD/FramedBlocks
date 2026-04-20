@@ -150,8 +150,7 @@ public class FramedOneWayWindowBlock extends FramedBlock {
     }
 
     @Override
-    public @Nullable Direction getHorizontalOrientation(BlockState state)
-    {
+    public @Nullable Direction getHorizontalOrientation(BlockState state) {
         return null;
     }
 

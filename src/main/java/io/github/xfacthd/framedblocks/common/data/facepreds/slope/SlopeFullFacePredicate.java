@@ -7,27 +7,22 @@ import io.github.xfacthd.framedblocks.common.data.property.SlopeType;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 
-public final class SlopeFullFacePredicate implements FullFacePredicate
-{
+public final class SlopeFullFacePredicate implements FullFacePredicate {
     public static final SlopeFullFacePredicate INSTANCE = new SlopeFullFacePredicate();
 
     private SlopeFullFacePredicate() { }
 
     @Override
-    public boolean test(BlockState state, Direction side)
-    {
+    public boolean test(BlockState state, Direction side) {
         SlopeBlock block = (SlopeBlock) state.getBlock();
         SlopeType type = block.getSlopeType(state);
-        if (side == Direction.UP && type == SlopeType.TOP)
-        {
+        if (side == Direction.UP && type == SlopeType.TOP) {
             return true;
         }
-        else if (side == Direction.DOWN && type == SlopeType.BOTTOM)
-        {
+        if (side == Direction.DOWN && type == SlopeType.BOTTOM) {
             return true;
         }
-        else if (type == SlopeType.HORIZONTAL)
-        {
+        if (type == SlopeType.HORIZONTAL) {
             Direction facing = state.getValue(FramedProperties.FACING_HOR);
             return side == facing || side == facing.getCounterClockWise();
         }

@@ -18,11 +18,9 @@ final class DoublePanelBlockOverlayPredicate implements BlockOverlayPredicate {
     }
 
     @Override
-    public boolean supportsEdge(BlockState state, Direction side, Direction edge, boolean secondPart, boolean nullCullFace, boolean unaligned)
-    {
+    public boolean supportsEdge(BlockState state, Direction side, Direction edge, boolean secondPart, boolean nullCullFace, boolean unaligned) {
         Direction facing = state.getValue(FramedProperties.FACING_HOR);
-        if (side.getAxis() != facing.getAxis())
-        {
+        if (side.getAxis() != facing.getAxis()) {
             if (edge == facing) {
                 return !secondPart;
             }

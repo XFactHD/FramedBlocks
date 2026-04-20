@@ -9,8 +9,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jspecify.annotations.Nullable;
 
-public final class BoardGhostRenderBehaviour implements GhostRenderBehaviour
-{
+public final class BoardGhostRenderBehaviour implements GhostRenderBehaviour {
     @Override
     public @Nullable BlockState getRenderState(
             ItemStack stack,

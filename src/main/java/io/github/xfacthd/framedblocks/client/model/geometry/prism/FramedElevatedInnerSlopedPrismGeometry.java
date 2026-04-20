@@ -161,8 +161,7 @@ public class FramedElevatedInnerSlopedPrismGeometry extends Geometry {
                         .export(quadMap, quadFace);
             }
         } else if (quadFace.getAxis() != orientation.getAxis() && quadFace.getAxis() != facing.getAxis()) {
-            if (altSlope && !yFacing && !yOrient)
-            {
+            if (altSlope && !yFacing && !yOrient) {
                 // Side slope for horizontal facing and horizontal orientation with Y_SLOPE
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(facing.getOpposite(), .5F))

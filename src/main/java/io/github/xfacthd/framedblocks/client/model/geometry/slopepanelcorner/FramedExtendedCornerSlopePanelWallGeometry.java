@@ -56,8 +56,7 @@ public class FramedExtendedCornerSlopePanelWallGeometry extends Geometry {
                     .apply(Modifiers.cut(vertRotDir.getOpposite(), .5F))
                     .export(quadMap, quadDir);
 
-            if (!altSlope)
-            {
+            if (!altSlope) {
                 QuadModifier.of(quad)
                         .apply(Modifiers.cut(horRotDir.getOpposite(), up ? .5F : 1F, up ? 1F : .5F))
                         .apply(Modifiers.makeVerticalSlope(!up, FramedSlopePanelGeometry.SLOPE_ANGLE_VERT))

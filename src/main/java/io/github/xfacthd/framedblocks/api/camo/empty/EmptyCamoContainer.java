@@ -26,8 +26,7 @@ public final class EmptyCamoContainer extends CamoContainer<EmptyCamoContent, Em
     }
 
     @Override
-    public @Nullable EmptyCamoContainer rotateCamo()
-    {
+    public @Nullable EmptyCamoContainer rotateCamo() {
         return null;
     }
 

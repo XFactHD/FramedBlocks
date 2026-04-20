@@ -79,7 +79,7 @@ public final class CollapsibleBlockDebugRenderer implements BlockDebugRenderer<F
             float x = .5F - (font.width(text) / (TARGET_TEXT_SCALE * 2F));
             submitText(collector, poseStack, x, 25F/16F, 1F, 0F, TARGET_TEXT_SCALE, text, TARGET_COLOR);
 
-            text = data.rotated() ? "true" : "false";
+            text = Boolean.toString(data.rotated());
             x = .5F - (font.width(text) / (TARGET_TEXT_SCALE * 2F));
             submitText(collector, poseStack, x, 22/16F, 1F, 0F, TARGET_TEXT_SCALE, text, TARGET_COLOR);
         }

@@ -26,8 +26,7 @@ public class FramedPrismGeometry extends Geometry {
         this.altSlope = ctx.state().getValue(FramedProperties.ALT_SLOPE);
     }
 
-    @Override public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData)
-    {
+    @Override public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object modelData) {
         boolean yFacing = DirUtils.isY(facing);
         boolean yAxis = axis == Direction.Axis.Y;
         Direction quadFace = quad.direction();

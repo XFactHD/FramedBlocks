@@ -68,8 +68,7 @@ public final class WrappedFramedBlockEntity extends FramedBlockEntity {
     @Override
     public void loadAdditionalInternal(ValueInput valueInput) {
         // Ensure loadAdditional() called from handleUpdateTag() in the wrapping BE does not attempt a "from-disk load" from a network tag
-        if (!suppressLoad)
-        {
+        if (!suppressLoad) {
             super.loadAdditionalInternal(valueInput);
         }
     }
@@ -77,8 +76,7 @@ public final class WrappedFramedBlockEntity extends FramedBlockEntity {
     @Override
     public void saveAdditionalInternal(ValueOutput valueOutput) {
         // Ensure saveAdditional() called from getUpdateTag() in the wrapping BE does not attempt a "to-disk save" into a network tag
-        if (!suppressSave)
-        {
+        if (!suppressSave) {
             super.saveAdditionalInternal(valueOutput);
         }
     }

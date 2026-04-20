@@ -199,8 +199,7 @@ public final class GhostBlockRenderer {
         return true;
     }
 
-    private static void onRenderLevelStage(RenderLevelStageEvent.AfterTranslucentParticles event)
-    {
+    private static void onRenderLevelStage(RenderLevelStageEvent.AfterTranslucentParticles event) {
         ProfilerFiller profiler = Profiler.get();
         profiler.push(DEBUG_NAME);
 
@@ -316,8 +315,7 @@ public final class GhostBlockRenderer {
                     Preconditions.checkNotNull(behaviour, "GhostRenderBehaviour must be non-null");
                     Preconditions.checkArgument(blocks.length > 0, "At least one block must be provided to register a GhostRenderBehaviour");
 
-                    for (Block block : blocks)
-                    {
+                    for (Block block : blocks) {
                         Item item = block.asItem();
                         Preconditions.checkState(item instanceof BlockItem, "Block %s must have an associated BlockItem", block);
                         RENDER_BEHAVIOURS.put(item, behaviour);
@@ -327,8 +325,7 @@ public final class GhostBlockRenderer {
                     Preconditions.checkNotNull(behaviour, "GhostRenderBehaviour must be non-null");
                     Preconditions.checkArgument(items.length > 0, "At least one item must be provided to register a GhostRenderBehaviour");
 
-                    for (Item item : items)
-                    {
+                    for (Item item : items) {
                         Preconditions.checkNotNull(item);
                         RENDER_BEHAVIOURS.put(item, behaviour);
                     }

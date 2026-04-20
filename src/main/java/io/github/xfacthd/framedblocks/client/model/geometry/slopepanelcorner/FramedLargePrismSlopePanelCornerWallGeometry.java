@@ -62,8 +62,7 @@ public class FramedLargePrismSlopePanelCornerWallGeometry extends Geometry {
         this.invAngle = FramedSmallPrismSlopePanelCornerWallGeometry.invertTiltAngle(dir, rot) == altSlope;
     }
 
-    @Override public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object cacheKeyUserData)
-    {
+    @Override public void transformQuad(QuadMapBuilder quadMap, BakedQuad quad, FramedBlockData blockData, @Nullable Object cacheKeyUserData) {
         Direction quadDir = quad.direction();
         if (quadDir == dir) {
             QuadModifier.of(quad)

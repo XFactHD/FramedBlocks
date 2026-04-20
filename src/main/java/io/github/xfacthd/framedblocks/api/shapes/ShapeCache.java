@@ -27,8 +27,7 @@ public final class ShapeCache<K> {
         this.generator = generator;
         this.cache = mapFactory.get();
         generator.accept(cache);
-        if (!Utils.PRODUCTION)
-        {
+        if (!Utils.PRODUCTION) {
             InternalAPI.INSTANCE.registerShapeCache(this);
         }
     }

@@ -122,8 +122,7 @@ public class FramedChainGeometry extends Geometry {
             BakedQuad quad,
             CutterFactory vertCutterFactory,
             BidirectionalCutterFactory horCutterFactory
-    )
-    {
+    ) {
         Direction dirUp = Direction.fromAxisAndDirection(axis, Direction.AxisDirection.POSITIVE);
         Direction dirDown = Direction.fromAxisAndDirection(axis, Direction.AxisDirection.NEGATIVE);
 

@@ -50,8 +50,7 @@ final class QuadModifierPool {
         }
     }
 
-    private static final class LeakDetector implements Runnable
-    {
+    private static final class LeakDetector implements Runnable {
         private static final Logger LOGGER = LogUtils.getLogger();
         private static final StackWalker STACK_WALKER = StackWalker.getInstance(StackWalker.Option.RETAIN_CLASS_REFERENCE);
         private static final String UNKNOWN_OWNER = "<Unknown>";

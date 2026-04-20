@@ -111,8 +111,7 @@ final class BlockOverlayMetaCache {
     }
 
     @Contract("_,false->!null")
-    private static @Nullable SpriteInfo makeSpriteSpec(Material.Baked material, boolean forceTranslucent)
-    {
+    private static @Nullable SpriteInfo makeSpriteSpec(Material.Baked material, boolean forceTranslucent) {
         if (material.forceTranslucent() && forceTranslucent) {
             return null;
         }

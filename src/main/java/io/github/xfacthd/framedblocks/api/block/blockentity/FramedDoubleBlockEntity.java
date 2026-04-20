@@ -79,8 +79,7 @@ public class FramedDoubleBlockEntity extends FramedBlockEntity {
     }
 
     @Override
-    public CamoContainer<?, ?> getCamo(BlockState state)
-    {
+    public CamoContainer<?, ?> getCamo(BlockState state) {
         DoubleBlockParts parts = getStateCache().getParts();
         if (state == parts.stateOne()) {
             return getCamo();
@@ -243,8 +242,7 @@ public class FramedDoubleBlockEntity extends FramedBlockEntity {
     }
 
     @Override
-    public boolean isCamoIgnitedByLava(Direction face)
-    {
+    public boolean isCamoIgnitedByLava(Direction face) {
         if (isReinforced()) {
             return false;
         }

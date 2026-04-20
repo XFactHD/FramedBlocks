@@ -97,8 +97,7 @@ public class FramedFlowerPotBlock extends FramedBlock {
                         be.setFlowerBlock(((BlockItem) stack.getItem()).getBlock());
 
                         player.awardStat(Stats.POT_FLOWER);
-                        if (!player.getAbilities().instabuild)
-                        {
+                        if (!player.getAbilities().instabuild) {
                             stack.shrink(1);
                         }
                     } else {
