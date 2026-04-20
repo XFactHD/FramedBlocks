@@ -212,19 +212,18 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
         return InteractionResult.PASS;
     }
 
-    private InteractionResult tryRemoveModifier(Player player, ItemStack stack, InteractionHand hand)
-    {
-        if (stack.is(Items.BRUSH)) {
-            return glowing ? removeGlowstone(player) : InteractionResult.FAIL;
+    private InteractionResult tryRemoveModifier(Player player, ItemStack stack, InteractionHand hand) {
+        if (glowing && stack.is(Items.BRUSH)) {
+            return removeGlowstone(player);
         }
-        if (player.isShiftKeyDown() && Utils.isConfigurationTool(stack)) {
-            return intangible ? removeIntangibility(player) : InteractionResult.FAIL;
+        if (intangible && player.isShiftKeyDown() && Utils.isConfigurationTool(stack)) {
+            return removeIntangibility(player);
         }
-        if (stack.isCorrectToolForDrops(Blocks.OBSIDIAN.defaultBlockState())) {
-            return reinforced ? removeReinforcement(player, stack, hand) : InteractionResult.FAIL;
+        if (reinforced && stack.isCorrectToolForDrops(Blocks.OBSIDIAN.defaultBlockState())) {
+            return removeReinforcement(player, stack, hand);
         }
-        if (stack.canPerformAction(ItemAbilities.AXE_SCRAPE)) {
-            return emissive ? removeEmissivity(player) : InteractionResult.FAIL;
+        if (emissive && stack.canPerformAction(ItemAbilities.AXE_SCRAPE)) {
+            return removeEmissivity(player);
         }
         return InteractionResult.PASS;
     }
