@@ -20,7 +20,7 @@ public final class ConnectionPredicates extends BlockTypeMap<ConnectionPredicate
     public static final ConnectionPredicates PREDICATES = new ConnectionPredicates();
 
     private ConnectionPredicates() {
-        super(ConnectionPredicate.FALSE);
+        super(ConnectionPredicate.FALSE, type -> !type.supportsConnectedTextures());
     }
 
     @Override
@@ -102,34 +102,7 @@ public final class ConnectionPredicates extends BlockTypeMap<ConnectionPredicate
         put(BlockType.FRAMED_IRON_DOOR, DoorConnectionPredicate.INSTANCE);
         put(BlockType.FRAMED_TRAPDOOR, TrapdoorConnectionPredicate.INSTANCE);
         put(BlockType.FRAMED_IRON_TRAPDOOR, TrapdoorConnectionPredicate.INSTANCE);
-        put(BlockType.FRAMED_PRESSURE_PLATE, ConnectionPredicate.FALSE);
-        put(BlockType.FRAMED_WATERLOGGABLE_PRESSURE_PLATE, ConnectionPredicate.FALSE);
-        put(BlockType.FRAMED_STONE_PRESSURE_PLATE, ConnectionPredicate.FALSE);
-        put(BlockType.FRAMED_WATERLOGGABLE_STONE_PRESSURE_PLATE, ConnectionPredicate.FALSE);
-        put(BlockType.FRAMED_OBSIDIAN_PRESSURE_PLATE, ConnectionPredicate.FALSE);
-        put(BlockType.FRAMED_WATERLOGGABLE_OBSIDIAN_PRESSURE_PLATE, ConnectionPredicate.FALSE);
-        put(BlockType.FRAMED_GOLD_PRESSURE_PLATE, ConnectionPredicate.FALSE);
-        put(BlockType.FRAMED_WATERLOGGABLE_GOLD_PRESSURE_PLATE, ConnectionPredicate.FALSE);
-        put(BlockType.FRAMED_IRON_PRESSURE_PLATE, ConnectionPredicate.FALSE);
-        put(BlockType.FRAMED_WATERLOGGABLE_IRON_PRESSURE_PLATE, ConnectionPredicate.FALSE);
         put(BlockType.FRAMED_LADDER, new LadderConnectionPredicate());
-        put(BlockType.FRAMED_BUTTON, ConnectionPredicate.FALSE);
-        put(BlockType.FRAMED_STONE_BUTTON, ConnectionPredicate.FALSE);
-        put(BlockType.FRAMED_LARGE_BUTTON, ConnectionPredicate.FALSE);
-        put(BlockType.FRAMED_LARGE_STONE_BUTTON, ConnectionPredicate.FALSE);
-        put(BlockType.FRAMED_LEVER, ConnectionPredicate.FALSE);
-        put(BlockType.FRAMED_SIGN, ConnectionPredicate.FALSE);
-        put(BlockType.FRAMED_WALL_SIGN, ConnectionPredicate.FALSE);
-        put(BlockType.FRAMED_HANGING_SIGN, ConnectionPredicate.FALSE);
-        put(BlockType.FRAMED_WALL_HANGING_SIGN, ConnectionPredicate.FALSE);
-        put(BlockType.FRAMED_TORCH, ConnectionPredicate.FALSE);
-        put(BlockType.FRAMED_WALL_TORCH, ConnectionPredicate.FALSE);
-        put(BlockType.FRAMED_SOUL_TORCH, ConnectionPredicate.FALSE);
-        put(BlockType.FRAMED_SOUL_WALL_TORCH, ConnectionPredicate.FALSE);
-        put(BlockType.FRAMED_COPPER_TORCH, ConnectionPredicate.FALSE);
-        put(BlockType.FRAMED_COPPER_WALL_TORCH, ConnectionPredicate.FALSE);
-        put(BlockType.FRAMED_REDSTONE_TORCH, ConnectionPredicate.FALSE);
-        put(BlockType.FRAMED_REDSTONE_WALL_TORCH, ConnectionPredicate.FALSE);
         put(BlockType.FRAMED_BOARD, new BoardConnectionPredicate());
         put(BlockType.FRAMED_HALF_BOARD, new HalfBoardConnectionPredicate());
         put(BlockType.FRAMED_DIVIDED_BOARD, new DividedBoardConnectionPredicate());
@@ -142,22 +115,16 @@ public final class ConnectionPredicates extends BlockTypeMap<ConnectionPredicate
         put(BlockType.FRAMED_CHEST, new ChestConnectionPredicate());
         put(BlockType.FRAMED_SECRET_STORAGE, ConnectionPredicate.FULL_EDGE);
         put(BlockType.FRAMED_TANK, ConnectionPredicate.FULL_FACE);
-        put(BlockType.FRAMED_BARS, ConnectionPredicate.FALSE);
         put(BlockType.FRAMED_PANE, PaneConnectionPredicate.INSTANCE);
         put(BlockType.FRAMED_HORIZONTAL_PANE, new HorizontalPaneConnectionPredicate());
         put(BlockType.FRAMED_RAIL_SLOPE, SlopeConnectionPredicate.INSTANCE);
         put(BlockType.FRAMED_POWERED_RAIL_SLOPE, SlopeConnectionPredicate.INSTANCE);
         put(BlockType.FRAMED_DETECTOR_RAIL_SLOPE, SlopeConnectionPredicate.INSTANCE);
         put(BlockType.FRAMED_ACTIVATOR_RAIL_SLOPE, SlopeConnectionPredicate.INSTANCE);
-        put(BlockType.FRAMED_FANCY_RAIL, ConnectionPredicate.FALSE);
-        put(BlockType.FRAMED_FANCY_POWERED_RAIL, ConnectionPredicate.FALSE);
-        put(BlockType.FRAMED_FANCY_DETECTOR_RAIL, ConnectionPredicate.FALSE);
-        put(BlockType.FRAMED_FANCY_ACTIVATOR_RAIL, ConnectionPredicate.FALSE);
         put(BlockType.FRAMED_FANCY_RAIL_SLOPE, SlopeConnectionPredicate.INSTANCE);
         put(BlockType.FRAMED_FANCY_POWERED_RAIL_SLOPE, SlopeConnectionPredicate.INSTANCE);
         put(BlockType.FRAMED_FANCY_DETECTOR_RAIL_SLOPE, SlopeConnectionPredicate.INSTANCE);
         put(BlockType.FRAMED_FANCY_ACTIVATOR_RAIL_SLOPE, SlopeConnectionPredicate.INSTANCE);
-        put(BlockType.FRAMED_FLOWER_POT, ConnectionPredicate.FALSE);
         put(BlockType.FRAMED_PILLAR, PillarConnectionPredicate.INSTANCE);
         put(BlockType.FRAMED_HALF_PILLAR, new HalfPillarConnectionPredicate());
         put(BlockType.FRAMED_PILLAR_SOCKET, new PillarSocketConnectionPredicate());
@@ -249,9 +216,6 @@ public final class ConnectionPredicates extends BlockTypeMap<ConnectionPredicate
         put(BlockType.FRAMED_TARGET, ConnectionPredicate.FULL_EDGE);
         put(BlockType.FRAMED_GATE, DoorConnectionPredicate.INSTANCE);
         put(BlockType.FRAMED_IRON_GATE, DoorConnectionPredicate.INSTANCE);
-        put(BlockType.FRAMED_ITEM_FRAME, ConnectionPredicate.FALSE);
-        put(BlockType.FRAMED_GLOWING_ITEM_FRAME, ConnectionPredicate.FALSE);
-        put(BlockType.FRAMED_MINI_CUBE, ConnectionPredicate.FALSE);
         put(BlockType.FRAMED_ONE_WAY_WINDOW, ConnectionPredicate.FULL_FACE);
         put(BlockType.FRAMED_BOOKSHELF, new BookshelfConnectionPredicate());
         put(BlockType.FRAMED_CHISELED_BOOKSHELF, new ChiseledBookshelfConnectionPredicate());
@@ -268,15 +232,9 @@ public final class ConnectionPredicates extends BlockTypeMap<ConnectionPredicate
         put(BlockType.FRAMED_TUBE, new TubeConnectionPredicate());
         put(BlockType.FRAMED_CORNER_TUBE, new CornerTubeConnectionPredicate());
         put(BlockType.FRAMED_CHAIN, new ChainConnectionPredicate());
-        put(BlockType.FRAMED_LANTERN, ConnectionPredicate.FALSE);
-        put(BlockType.FRAMED_SOUL_LANTERN, ConnectionPredicate.FALSE);
-        put(BlockType.FRAMED_COPPER_LANTERN, ConnectionPredicate.FALSE);
         put(BlockType.FRAMED_HOPPER, new HopperConnectionPredicate());
         put(BlockType.FRAMED_LAYERED_CUBE, new LayeredCubeConnectionPredicate());
-        put(BlockType.FRAMED_LIGHTNING_ROD, ConnectionPredicate.FALSE);
         put(BlockType.FRAMED_PATH, new PathConnectionPredicate());
         put(BlockType.FRAMED_SHELF, new ShelfConnectionPredicate());
-        put(BlockType.FRAMED_BANNER, ConnectionPredicate.FALSE);
-        put(BlockType.FRAMED_WALL_BANNER, ConnectionPredicate.FALSE);
     }
 }
