@@ -3,6 +3,7 @@ package io.github.xfacthd.framedblocks.api.model.quad;
 import io.github.xfacthd.framedblocks.api.model.data.QuadMapBuilder;
 import net.minecraft.client.resources.model.geometry.BakedQuad;
 import net.minecraft.core.Direction;
+import org.jetbrains.annotations.CheckReturnValue;
 import org.jspecify.annotations.Nullable;
 
 public sealed class QuadModifier permits QuadModifierPool.LeakDetectingQuadModifier {
@@ -29,6 +30,7 @@ public sealed class QuadModifier permits QuadModifierPool.LeakDetectingQuadModif
      * Apply the given {@link Modifier} to the current vertex data if {@code apply} is true. If a previous modifier
      * failed, then the modification will not be applied
      */
+    @CheckReturnValue
     public QuadModifier applyIf(Modifier modifier, boolean apply) {
         return apply ? apply(modifier) : this;
     }
@@ -37,6 +39,7 @@ public sealed class QuadModifier permits QuadModifierPool.LeakDetectingQuadModif
      * Apply the given {@link Modifier} to the current vertex data. If a previous modifier failed,
      * then the modification will not be applied
      */
+    @CheckReturnValue
     public QuadModifier apply(Modifier modifier) {
         ensureValid();
         if (!failed && !modifier.accept(mutableQuad)) {

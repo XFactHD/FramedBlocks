@@ -5,8 +5,8 @@ import net.minecraft.core.Direction;
 import org.jetbrains.annotations.Nullable;
 
 public final class MultiQuadModifier {
-    private final QuadModifier modOne;
-    private final QuadModifier modTwo;
+    private QuadModifier modOne;
+    private QuadModifier modTwo;
 
     public MultiQuadModifier(QuadModifier modOne, QuadModifier modTwo) {
         this.modOne = modOne;
@@ -18,8 +18,8 @@ public final class MultiQuadModifier {
      * @see QuadModifier#applyIf(QuadModifier.Modifier,boolean)
      */
     public MultiQuadModifier applyIf(QuadModifier.Modifier modifier, boolean apply) {
-        modOne.applyIf(modifier, apply);
-        modTwo.applyIf(modifier, apply);
+        modOne = modOne.applyIf(modifier, apply);
+        modTwo = modTwo.applyIf(modifier, apply);
         return this;
     }
 
@@ -28,8 +28,8 @@ public final class MultiQuadModifier {
      * @see QuadModifier#apply(QuadModifier.Modifier)
      */
     public MultiQuadModifier apply(QuadModifier.Modifier modifier) {
-        modOne.apply(modifier);
-        modTwo.apply(modifier);
+        modOne = modOne.apply(modifier);
+        modTwo = modTwo.apply(modifier);
         return this;
     }
 
