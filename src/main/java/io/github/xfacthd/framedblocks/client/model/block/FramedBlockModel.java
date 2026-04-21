@@ -46,10 +46,6 @@ public final class FramedBlockModel implements BlockModel {
         IClientBlockExtensions.of(state).collectDynamicTintValues(state, level, pos, output.tintLayers());
     }
 
-    public BlockStateModel getModel() {
-        return model;
-    }
-
     public record Unbaked(BlockState state, Optional<Transformation> transformation) implements BlockModel.Unbaked {
         @Override
         public BlockModel bake(BakingContext context, Matrix4fc transformation) {

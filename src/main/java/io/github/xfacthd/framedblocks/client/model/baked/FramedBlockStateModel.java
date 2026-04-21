@@ -9,6 +9,7 @@ import io.github.xfacthd.framedblocks.api.camo.CamoContainerHelper;
 import io.github.xfacthd.framedblocks.api.camo.CamoContent;
 import io.github.xfacthd.framedblocks.api.camo.block.BlockCamoContent;
 import io.github.xfacthd.framedblocks.api.model.AbstractFramedBlockStateModel;
+import io.github.xfacthd.framedblocks.api.model.CachingModel;
 import io.github.xfacthd.framedblocks.api.model.ExtendedBlockStateModelPart;
 import io.github.xfacthd.framedblocks.api.model.data.AbstractFramedBlockData;
 import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
@@ -46,7 +47,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
-public final class FramedBlockStateModel extends AbstractFramedBlockStateModel {
+public final class FramedBlockStateModel extends AbstractFramedBlockStateModel implements CachingModel {
     private static final FramedBlockData DEFAULT_DATA = FramedBlockData.EMPTY;
     private static final int FLAG_NO_CAMO_ALT_MODEL = 0b001;
     private static final int FLAG_NO_CAMO_REINFORCED = 0b010;
@@ -88,6 +89,8 @@ public final class FramedBlockStateModel extends AbstractFramedBlockStateModel {
                 !this.useSolidBase || !this.useBaseModel,
                 "Geometry#useSolidNoCamoModel() and Geometry#useBaseModel() cannot both return true"
         );
+
+        CachingModel.register(this);
     }
 
     @Override
@@ -356,7 +359,6 @@ public final class FramedBlockStateModel extends AbstractFramedBlockStateModel {
 
     @Override
     public void clearCache() {
-        super.clearCache();
         partCache.clear();
     }
 

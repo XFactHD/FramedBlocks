@@ -77,22 +77,14 @@ public final class FramedBlockItemModel extends AbstractFramedBlockItemModel {
     private final Map<Object, ModelEntry> itemModelCache = new Object2ObjectOpenHashMap<>();
     private final BlockState state;
     private final Supplier<BlockStateModel> modelSupplier;
-    private final boolean nonStandardModelProvider;
     private final ItemTransforms itemTransforms;
     private final ItemModel errorModel;
     private final Supplier<Vector3fc[]> extents;
     private final List<BlockStateModelPart> partScratchList = new ObjectArrayList<>();
 
-    private FramedBlockItemModel(
-            BlockState state,
-            Supplier<BlockStateModel> modelSupplier,
-            boolean nonStandardModelProvider,
-            ItemTransforms itemTransforms,
-            ItemModel errorModel
-    ) {
+    private FramedBlockItemModel(BlockState state, Supplier<BlockStateModel> modelSupplier, ItemTransforms itemTransforms, ItemModel errorModel) {
         this.state = state;
         this.modelSupplier = Lazy.of(modelSupplier);
-        this.nonStandardModelProvider = nonStandardModelProvider;
         this.itemTransforms = itemTransforms;
         this.errorModel = errorModel;
         this.extents = Suppliers.memoize(() -> {
@@ -207,11 +199,6 @@ public final class FramedBlockItemModel extends AbstractFramedBlockItemModel {
     @Override
     public void clearCache() {
         itemModelCache.clear();
-        // Assume that models provided by non-standard providers are "freestanding" and therefore don't get caught by
-        // the clearCache() call on all AbstractFramedBlockModels in the block model "registry"
-        if (nonStandardModelProvider && modelSupplier.get() instanceof AbstractFramedBlockStateModel framedModel) {
-            framedModel.clearCache();
-        }
     }
 
     private record CompoundCacheKey(CamoList camos, @Nullable Holder<BlockOverlay> overlay, @Nullable Object userData) { }
@@ -252,13 +239,12 @@ public final class FramedBlockItemModel extends AbstractFramedBlockItemModel {
         public FramedBlockItemModel bake(BakingContext context, Matrix4fc transformation) {
             BlockState state = Objects.requireNonNull(((IFramedBlock) block).getItemModelSource());
             Supplier<BlockStateModel> modelSupplier = modelProvider.create(state, context.blockModelBaker());
-            boolean nonStandardModelProvider = modelProvider != BlockItemModelProvider.DEFAULT;
             ItemTransforms transforms = modelOrXform.map(
                     model -> context.blockModelBaker().getModel(model).getTopTransforms(),
                     Function.identity()
             );
             ItemModel errorModel = context.blockModelBaker().compute(ERROR_MODEL_KEY);
-            return new FramedBlockItemModel(state, modelSupplier, nonStandardModelProvider, transforms, errorModel);
+            return new FramedBlockItemModel(state, modelSupplier, transforms, errorModel);
         }
 
         @Override
