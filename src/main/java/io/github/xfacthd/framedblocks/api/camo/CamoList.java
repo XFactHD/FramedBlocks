@@ -2,12 +2,14 @@ package io.github.xfacthd.framedblocks.api.camo;
 
 import com.mojang.serialization.Codec;
 import io.github.xfacthd.framedblocks.api.camo.empty.EmptyCamoContainer;
+import io.github.xfacthd.framedblocks.api.util.FramedConstants;
 import io.github.xfacthd.framedblocks.api.util.network.FramedByteBufCodecs;
 import it.unimi.dsi.fastutil.objects.ObjectArrays;
 import it.unimi.dsi.fastutil.objects.ObjectIterators;
 import it.unimi.dsi.fastutil.objects.ObjectSpliterators;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.Arrays;
 import java.util.Iterator;
@@ -170,5 +172,9 @@ public final class CamoList implements Iterable<CamoContainer<?, ?>> {
 
     public static CamoList of(List<CamoContainer<?, ?>> camos) {
         return camos.isEmpty() ? EMPTY : new CamoList(camos.toArray(CamoContainer[]::new));
+    }
+
+    public static CamoList get(ItemStack stack) {
+        return stack.getOrDefault(FramedConstants.Objects.DC_TYPE_CAMO_LIST, EMPTY);
     }
 }

@@ -273,5 +273,7 @@ public final class FullFacePredicates extends BlockTypeMap<FullFacePredicate> {
         put(BlockType.FRAMED_LIGHTNING_ROD, FullFacePredicate.FALSE);
         put(BlockType.FRAMED_PATH, FullFacePredicate.DOWN);
         put(BlockType.FRAMED_SHELF, FullFacePredicate.HOR_DIR_OPPOSITE);
+        put(BlockType.FRAMED_BANNER, FullFacePredicate.FALSE);
+        put(BlockType.FRAMED_WALL_BANNER, FullFacePredicate.FALSE);
     }
 }

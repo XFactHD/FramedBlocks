@@ -77,12 +77,12 @@ final class PartConsumerImpl implements PartConsumer {
             BlockAndTintGetter level,
             BlockPos pos,
             RandomSource random,
-            BlockState framedState,
+            BlockState queryState,
             BlockState camoState,
             boolean cullNonNull,
             @Nullable QuadListModifier modifier
     ) {
-        model.collectParts(level, pos, framedState, random, srcParts);
+        model.collectParts(level, pos, queryState, random, srcParts);
         for (BlockStateModelPart part : srcParts) {
             accept(part, camoState, false, true, cullNonNull, true, camoState, modifier);
         }

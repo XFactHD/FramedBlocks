@@ -1499,6 +1499,15 @@ public final class FramedRecipeProvider extends AbstractFramedRecipeProvider {
                 .unlockedBy(Items.COPPER_TORCH)
                 .save(output);
 
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_BANNER.value())
+                .pattern("W")
+                .pattern("W")
+                .pattern("F")
+                .define('W', ItemTags.WOOL)
+                .define('F', FBContent.BLOCK_FRAMED_CUBE.value())
+                .unlockedBy(FBContent.BLOCK_FRAMED_CUBE)
+                .save(output);
+
         // endregion
 
         // region Special Blocks

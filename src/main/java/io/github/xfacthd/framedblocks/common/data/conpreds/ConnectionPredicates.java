@@ -276,5 +276,7 @@ public final class ConnectionPredicates extends BlockTypeMap<ConnectionPredicate
         put(BlockType.FRAMED_LIGHTNING_ROD, ConnectionPredicate.FALSE);
         put(BlockType.FRAMED_PATH, new PathConnectionPredicate());
         put(BlockType.FRAMED_SHELF, new ShelfConnectionPredicate());
+        put(BlockType.FRAMED_BANNER, ConnectionPredicate.FALSE);
+        put(BlockType.FRAMED_WALL_BANNER, ConnectionPredicate.FALSE);
     }
 }

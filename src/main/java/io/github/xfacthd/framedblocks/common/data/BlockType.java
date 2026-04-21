@@ -292,6 +292,8 @@ public enum BlockType implements IBlockType {
     FRAMED_LIGHTNING_ROD                            (false, false,  true,  true, false, false,  true, null,                 Outline.SIMPLE),
     FRAMED_PATH                                     ( true, false, false,  true,  true, false,  true, ConTexMode.FULL_FACE, Outline.SIMPLE, Block.box(0, 0, 0, 16, 15, 16)),
     FRAMED_SHELF                                    ( true,  true,  true,  true,  true, false,  true, ConTexMode.FULL_FACE, Outline.SIMPLE),
+    FRAMED_BANNER                                   (false,  true, false,  true, false, false, false, null,                 Outline.SIMPLE, Block.column(8, 0, 16)),
+    FRAMED_WALL_BANNER                              (false,  true, false, false, false, false, false, null,                 Outline.SIMPLE, WallBannerShapes::generate),
     ;
 
     private final String name = toString().toLowerCase(Locale.ROOT);

@@ -190,5 +190,7 @@ public final class SideSkipPredicates extends BlockTypeMap<SideSkipPredicate> {
         put(BlockType.FRAMED_LIGHTNING_ROD, SideSkipPredicate.FALSE);
         put(BlockType.FRAMED_PATH, new PathSkipPredicate());
         put(BlockType.FRAMED_SHELF, new ShelfSkipPredicate());
+        put(BlockType.FRAMED_BANNER, SideSkipPredicate.FALSE);
+        put(BlockType.FRAMED_WALL_BANNER, SideSkipPredicate.FALSE);
     }
 }

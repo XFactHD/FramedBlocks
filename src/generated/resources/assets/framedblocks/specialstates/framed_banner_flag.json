@@ -1,0 +1,9 @@
+{
+  "neoforge:definition_type": "framedblocks:wrapper",
+  "variants": {
+    "": {
+      "model": "framedblocks:block/framed_cube"
+    }
+  },
+  "wrapper_key": "framedblocks:framed_banner_flag"
+}

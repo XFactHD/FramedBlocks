@@ -10,16 +10,18 @@ import net.minecraft.client.resources.model.ModelBaker;
 
 public final class UnbakedFramedBlockStateModel extends AbstractUnbakedFramedBlockStateModel {
     private final GeometryFactory geometryFactory;
+    private final boolean standaloneWithCt;
 
-    public UnbakedFramedBlockStateModel(ModelFactory.Context ctx, GeometryFactory geometryFactory) {
+    public UnbakedFramedBlockStateModel(ModelFactory.Context ctx, GeometryFactory geometryFactory, boolean standaloneWithCt) {
         super(ctx);
         this.geometryFactory = geometryFactory;
+        this.standaloneWithCt = standaloneWithCt;
     }
 
     @Override
     protected BlockStateModel bakeCached(GeometryFactory.Context context, ModelBaker baker) {
         ReinforcementModel reinforcement = ReinforcementModel.getOrCreate(baker);
-        return new FramedBlockStateModel(context, geometryFactory.create(context), reinforcement);
+        return new FramedBlockStateModel(context, geometryFactory.create(context), reinforcement, standaloneWithCt);
     }
 
     @Override

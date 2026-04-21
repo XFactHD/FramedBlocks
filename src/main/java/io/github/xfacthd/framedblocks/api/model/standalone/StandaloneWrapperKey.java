@@ -11,11 +11,17 @@ public final class StandaloneWrapperKey<T> {
     private final Holder<Block> block;
     private final Identifier definitionFile;
     private final StandaloneModelKey<T> modelKey;
+    private final boolean forceCt;
 
     public StandaloneWrapperKey(Holder<Block> block, Identifier definitionFile) {
+        this(block, definitionFile, false);
+    }
+
+    public StandaloneWrapperKey(Holder<Block> block, Identifier definitionFile, boolean forceCt) {
         this.block = block;
         this.definitionFile = definitionFile;
         this.modelKey = new StandaloneModelKey<>(definitionFile::toString);
+        this.forceCt = forceCt;
     }
 
     public Holder<Block> block() {
@@ -28,6 +34,10 @@ public final class StandaloneWrapperKey<T> {
 
     public StandaloneModelKey<T> modelKey() {
         return modelKey;
+    }
+
+    public boolean isForceCt() {
+        return forceCt;
     }
 
     @Override

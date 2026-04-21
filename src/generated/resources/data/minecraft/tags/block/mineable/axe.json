@@ -244,6 +244,8 @@
     "framedblocks:framed_hopper",
     "framedblocks:framed_layered_cube",
     "framedblocks:framed_path",
-    "framedblocks:framed_shelf"
+    "framedblocks:framed_shelf",
+    "framedblocks:framed_banner",
+    "framedblocks:framed_wall_banner"
   ]
 }

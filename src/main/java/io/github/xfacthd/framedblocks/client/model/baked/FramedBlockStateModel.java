@@ -64,20 +64,22 @@ public final class FramedBlockStateModel extends AbstractFramedBlockStateModel i
     private final boolean useBaseModel;
     private final boolean useSolidBase;
     private final boolean uncachedAdditionalParts;
+    private final boolean useCamoStateForCamoModelQueries;
     private final StateCache stateCache;
     private final ReinforcementModel reinforcement;
 
-    public FramedBlockStateModel(GeometryFactory.Context ctx, Geometry geometry, ReinforcementModel reinforcement) {
+    public FramedBlockStateModel(GeometryFactory.Context ctx, Geometry geometry, ReinforcementModel reinforcement, boolean standaloneWithCt) {
         super(ctx.baseModel(), ctx.state(), geometry.getItemModelInfo());
         this.state = ctx.state();
         this.geometry = geometry;
         IBlockType type = ((IFramedBlock) state.getBlock()).getBlockType();
-        this.supportsCt = type.supportsConnectedTextures();
-        this.minCtMode = type.getMinimumConTexMode();
+        this.supportsCt = type.supportsConnectedTextures() || standaloneWithCt;
+        this.minCtMode = standaloneWithCt ? ConTexMode.FULL_FACE : type.getMinimumConTexMode();
         this.forceUngeneratedBaseModel = geometry.forceUngeneratedBaseModel();
         this.useBaseModel = geometry.useBaseModel();
         this.useSolidBase = geometry.useSolidNoCamoModel();
         this.uncachedAdditionalParts = geometry.hasAdditionalUncachedParts();
+        this.useCamoStateForCamoModelQueries = standaloneWithCt;
         this.stateCache = state.framedblocks$getCache();
         this.reinforcement = reinforcement;
 
@@ -153,8 +155,13 @@ public final class FramedBlockStateModel extends AbstractFramedBlockStateModel i
         localMiscTintOffset = Math.max(localMiscTintOffset, miscTintOffset);
         if (!empty || !forceUngeneratedBaseModel) {
             random.setSeed(seed);
-            boolean needCtCtxCached = mayUseCt && cfgCtMode.atleast(ConTexMode.FULL_EDGE) && cfgCtMode.atleast(minCtMode);
-            Object ctCtx = needCtCtxCached ? camoModel.createGeometryKey(level, pos, state, random) : null;
+            Object ctCtx;
+            if (mayUseCt && cfgCtMode.atleast(ConTexMode.FULL_EDGE) && cfgCtMode.atleast(minCtMode)) {
+                BlockState geoKeyState = useCamoStateForCamoModelQueries ? camoContent.getAppearanceState() : state;
+                ctCtx = camoModel.createGeometryKey(level, pos, geoKeyState, random);
+            } else {
+                ctCtx = null;
+            }
             random.setSeed(seed);
             Object userKeyData = geometry.computeCacheKeyUserData(level, pos, random, extraData);
             // Remove CT context from key if the context is the source model itself and therefore a "dumb" model
@@ -304,7 +311,8 @@ public final class FramedBlockStateModel extends AbstractFramedBlockStateModel i
             level = BlockAndTintGetter.EMPTY;
             pos = BlockPos.ZERO;
         }
-        partConsumer.acceptCamo(camoModel, level, pos, random, this.state, camo.getAsBlockState(), cullNonNull, modifier);
+        BlockState queryState = useCamoStateForCamoModelQueries ? camo.getAppearanceState() : state;
+        partConsumer.acceptCamo(camoModel, level, pos, random, queryState, camo.getAsBlockState(), cullNonNull, modifier);
     }
 
     private int getNoCamoModelSourceIndex(FramedBlockData fbData) {

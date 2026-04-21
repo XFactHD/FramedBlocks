@@ -28,6 +28,7 @@ import io.github.xfacthd.framedblocks.client.model.baked.FramedBlockStateModel;
 import io.github.xfacthd.framedblocks.client.model.item.FramedBlockItemModel;
 import io.github.xfacthd.framedblocks.client.model.unbaked.FramedBlockModelDefinition;
 import io.github.xfacthd.framedblocks.client.model.unbaked.UnbakedCopyingFramedBlockStateModel;
+import io.github.xfacthd.framedblocks.client.model.unbaked.UnbakedEmptyFramedBlockStateModel;
 import io.github.xfacthd.framedblocks.client.model.unbaked.UnbakedFramedBlockStateModel;
 import io.github.xfacthd.framedblocks.client.model.unbaked.UnbakedFramedDoubleBlockStateModel;
 import io.github.xfacthd.framedblocks.client.model.wrapping.ModelWrappingHandler;
@@ -39,6 +40,7 @@ import io.github.xfacthd.framedblocks.client.util.ClientTaskQueue;
 import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
 import net.minecraft.client.renderer.block.dispatch.BlockStateModelDispatcher;
 import net.minecraft.client.renderer.block.dispatch.SingleVariant;
+import net.minecraft.client.renderer.block.model.BlockModel;
 import net.minecraft.client.renderer.item.ItemModel;
 import net.minecraft.client.resources.model.ModelBaker;
 import net.minecraft.client.resources.model.cuboid.ItemTransforms;
@@ -53,6 +55,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 public final class InternalClientApiImpl implements InternalClientAPI {
@@ -61,7 +64,7 @@ public final class InternalClientApiImpl implements InternalClientAPI {
     @Override
     public void registerModelWrapper(Holder<Block> block, GeometryFactory geometryFactory, StateMerger stateMerger) {
         Preconditions.checkArgument(block.value() instanceof IFramedBlock, "Cannot register model wrapper for non-IFramedBlock");
-        registerSpecialModelWrapper(block, ctx -> new UnbakedFramedBlockStateModel(ctx, geometryFactory), stateMerger);
+        registerSpecialModelWrapper(block, ctx -> new UnbakedFramedBlockStateModel(ctx, geometryFactory, false), stateMerger);
     }
 
     @Override
@@ -81,6 +84,11 @@ public final class InternalClientApiImpl implements InternalClientAPI {
     }
 
     @Override
+    public void registerEmptyModelWrapper(Holder<Block> block) {
+        registerSpecialModelWrapper(block, UnbakedEmptyFramedBlockStateModel::new, StateMerger.IGNORE_ALL);
+    }
+
+    @Override
     public <T> void registerStandaloneModelWrapper(
             StandaloneWrapperKey<T> wrapperKey,
             GeometryFactory geometryFactory,
@@ -89,8 +97,13 @@ public final class InternalClientApiImpl implements InternalClientAPI {
     ) {
         Holder<Block> block = wrapperKey.block();
         Preconditions.checkArgument(block.value() instanceof IFramedBlock, "Cannot register model wrapper for non-IFramedBlock");
-        ModelFactory blockModelFactory = ctx -> new UnbakedFramedBlockStateModel(ctx, geometryFactory);
+        ModelFactory blockModelFactory = ctx -> new UnbakedFramedBlockStateModel(ctx, geometryFactory, wrapperKey.isForceCt());
         ModelWrappingManager.register(wrapperKey, new StandaloneModelWrappingHandler<>(block, blockModelFactory, stateMerger, modelFactory));
+    }
+
+    @Override
+    public void overrideBlockModelFactory(Holder<Block> block, Function<BlockState, BlockModel.Unbaked> blockModelFactory) {
+        ModelWrappingManager.getHandler(block.value()).overrideBlockModelFactory(blockModelFactory);
     }
 
     @Override
@@ -129,7 +142,7 @@ public final class InternalClientApiImpl implements InternalClientAPI {
             }
             GeometryFactory.Context ctx = new GeometryFactory.Context(state, baseModel, AuxModelProvider.invalid(), MaterialLookup.runtime());
             ReinforcementModel reinforcement = ReinforcementModel.getOrCreate(baker);
-            return new FramedBlockStateModel(ctx, geometry.create(ctx), reinforcement);
+            return new FramedBlockStateModel(ctx, geometry.create(ctx), reinforcement, false);
         };
     }
 

@@ -12,12 +12,15 @@ import io.github.xfacthd.framedblocks.api.model.standalone.StandaloneModelFactor
 import io.github.xfacthd.framedblocks.api.model.standalone.StandaloneWrapperKey;
 import io.github.xfacthd.framedblocks.api.model.wrapping.statemerger.StateMerger;
 import io.github.xfacthd.framedblocks.api.util.Utils;
+import net.minecraft.client.renderer.block.model.BlockModel;
 import net.minecraft.core.Holder;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.Property;
 
 import java.util.Set;
+import java.util.function.Function;
 
 @SuppressWarnings("unused")
 public final class WrapHelper {
@@ -152,6 +155,13 @@ public final class WrapHelper {
         InternalClientAPI.INSTANCE.registerCopyingModelWrapper(block, srcBlock, stateMerger);
     }
 
+    /// Wrap the model of the given block's default state in a model providing no parts and apply this model to all states.
+    ///
+    /// @param block The block whose models to replace
+    public static void wrapEmpty(Holder<Block> block) {
+        InternalClientAPI.INSTANCE.registerEmptyModelWrapper(block);
+    }
+
     public static <T> void wrapStandalone(
             StandaloneWrapperKey<T> wrapperKey,
             GeometryFactory blockGeometryFactory,
@@ -168,6 +178,10 @@ public final class WrapHelper {
             StateMerger stateMerger
     ) {
         InternalClientAPI.INSTANCE.registerStandaloneModelWrapper(wrapperKey, blockGeometryFactory, modelFactory, stateMerger);
+    }
+
+    public static void overrideBlockModelFactory(Holder<Block> block, Function<BlockState, BlockModel.Unbaked> blockModelFactory) {
+        InternalClientAPI.INSTANCE.overrideBlockModelFactory(block, blockModelFactory);
     }
 
     private WrapHelper() { }

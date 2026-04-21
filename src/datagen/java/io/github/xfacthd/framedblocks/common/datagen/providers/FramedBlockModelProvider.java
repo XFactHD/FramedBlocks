@@ -16,7 +16,9 @@ import io.github.xfacthd.framedblocks.client.model.item.TankItemModel;
 import io.github.xfacthd.framedblocks.client.model.item.modelprovider.FenceBlockItemModelProvider;
 import io.github.xfacthd.framedblocks.client.model.loader.fallback.FallbackLoader;
 import io.github.xfacthd.framedblocks.client.model.loader.fallback.FallbackLoaderBuilder;
+import io.github.xfacthd.framedblocks.client.render.block.FramedBannerRenderer;
 import io.github.xfacthd.framedblocks.client.render.block.FramedChestRenderer;
+import io.github.xfacthd.framedblocks.client.render.item.BannerItemRenderer;
 import io.github.xfacthd.framedblocks.client.render.item.TankItemRenderer;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.compat.amendments.AmendmentsCompat;
@@ -28,6 +30,7 @@ import net.minecraft.client.data.models.MultiVariant;
 import net.minecraft.client.data.models.blockstates.ConditionBuilder;
 import net.minecraft.client.data.models.blockstates.MultiVariantGenerator;
 import net.minecraft.client.data.models.blockstates.PropertyDispatch;
+import net.minecraft.client.data.models.model.ItemModelUtils;
 import net.minecraft.client.data.models.model.ModelLocationUtils;
 import net.minecraft.client.data.models.model.ModelTemplate;
 import net.minecraft.client.data.models.model.ModelTemplates;
@@ -54,7 +57,9 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Function;
+import java.util.function.UnaryOperator;
 
 @SuppressWarnings({ "MethodMayBeStatic", "SameParameterValue" })
 public final class FramedBlockModelProvider extends AbstractFramedBlockModelProvider {
@@ -324,6 +329,7 @@ public final class FramedBlockModelProvider extends AbstractFramedBlockModelProv
         registerFramedLantern(blockModels);
         registerFramedSoulLantern(blockModels);
         registerFramedCopperLantern(blockModels);
+        registerFramedBanner(blockModels, cube);
 
         registerFramingSaw(blockModels);
         registerPoweredFramingSaw(blockModels);
@@ -1138,6 +1144,16 @@ public final class FramedBlockModelProvider extends AbstractFramedBlockModelProv
         );
 
         framedBlockItemModel(blockModels, FBContent.BLOCK_FRAMED_COPPER_LANTERN, builder -> builder.transforms(FramedBlockModelProvider::buildLanternItemTransforms));
+    }
+
+    private void registerFramedBanner(BlockModelGenerators blockModels, Identifier cube) {
+        simpleFramedBlock(blockModels, FBContent.BLOCK_FRAMED_BANNER, cube);
+        simpleFramedBlock(blockModels, FBContent.BLOCK_FRAMED_WALL_BANNER, cube);
+
+        Identifier itemModel = ModelLocationUtils.decorateItemModelLocation("template_banner");
+        blockModels.itemModelOutput.accept(FBContent.BLOCK_FRAMED_BANNER.value().asItem(), ItemModelUtils.specialModel(itemModel, Optional.empty(), new BannerItemRenderer.Unbaked()));
+
+        framedStandaloneVariant(FramedBannerRenderer.WRAPPER_KEY, BlockModelGenerators.plainVariant(cube), UnaryOperator.identity());
     }
 
     private void registerFramingSaw(BlockModelGenerators blockModels) {

@@ -17,6 +17,7 @@ import io.github.xfacthd.framedblocks.api.util.Utils;
 import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
 import net.minecraft.client.renderer.block.dispatch.BlockStateModelDispatcher;
 import net.minecraft.client.renderer.block.dispatch.SingleVariant;
+import net.minecraft.client.renderer.block.model.BlockModel;
 import net.minecraft.client.renderer.item.ItemModel;
 import net.minecraft.client.resources.model.ModelBaker;
 import net.minecraft.client.resources.model.cuboid.ItemTransforms;
@@ -31,6 +32,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 @ApiStatus.Internal
@@ -45,12 +47,16 @@ public interface InternalClientAPI {
 
     void registerCopyingModelWrapper(Holder<Block> block, Holder<Block> srcBlock, StateMerger stateMerger);
 
+    void registerEmptyModelWrapper(Holder<Block> block);
+
     <T> void registerStandaloneModelWrapper(
             StandaloneWrapperKey<T> wrapperKey,
             GeometryFactory blockGeometryFactory,
             StandaloneModelFactory<T> modelFactory,
             StateMerger stateMerger
     );
+
+    void overrideBlockModelFactory(Holder<Block> block, Function<BlockState, BlockModel.Unbaked> blockModelFactory);
 
     void enqueueClientTask(int delay, Runnable task);
 

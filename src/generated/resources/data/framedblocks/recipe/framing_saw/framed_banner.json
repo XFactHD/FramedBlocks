@@ -1,0 +1,13 @@
+{
+  "type": "framedblocks:frame",
+  "additives": [
+    {
+      "count": 2,
+      "ingredient": "#minecraft:wool"
+    }
+  ],
+  "material": 6144,
+  "result": {
+    "id": "framedblocks:framed_banner"
+  }
+}

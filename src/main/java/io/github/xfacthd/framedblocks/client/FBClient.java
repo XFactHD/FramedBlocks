@@ -45,10 +45,12 @@ import io.github.xfacthd.framedblocks.client.model.item.TankItemModel;
 import io.github.xfacthd.framedblocks.client.model.item.modelprovider.FenceBlockItemModelProvider;
 import io.github.xfacthd.framedblocks.client.model.item.property.BlueprintProperty;
 import io.github.xfacthd.framedblocks.client.model.loader.fallback.FallbackLoader;
+import io.github.xfacthd.framedblocks.client.model.special.FramedBannerFlagModel;
 import io.github.xfacthd.framedblocks.client.model.special.FramedChestLidModel;
 import io.github.xfacthd.framedblocks.client.model.unbaked.FramedBlockModelDefinition;
 import io.github.xfacthd.framedblocks.client.model.wrapping.ModelWrappingManager;
 import io.github.xfacthd.framedblocks.client.net.ClientNetworkHandler;
+import io.github.xfacthd.framedblocks.client.render.block.FramedBannerRenderer;
 import io.github.xfacthd.framedblocks.client.render.block.FramedChestRenderer;
 import io.github.xfacthd.framedblocks.client.render.block.FramedHangingSignRenderer;
 import io.github.xfacthd.framedblocks.client.render.block.FramedItemFrameRenderer;
@@ -59,6 +61,7 @@ import io.github.xfacthd.framedblocks.client.render.debug.impl.CollapsibleBlockD
 import io.github.xfacthd.framedblocks.client.render.debug.impl.ConnectionPredicateDebugRenderer;
 import io.github.xfacthd.framedblocks.client.render.debug.impl.DoubleBlockPartDebugRenderer;
 import io.github.xfacthd.framedblocks.client.render.debug.impl.QuadWindingDebugRenderer;
+import io.github.xfacthd.framedblocks.client.render.item.BannerItemRenderer;
 import io.github.xfacthd.framedblocks.client.render.item.CamoApplicatorRenderer;
 import io.github.xfacthd.framedblocks.client.render.item.TankItemRenderer;
 import io.github.xfacthd.framedblocks.client.render.particle.BlockOverlayParticle;
@@ -173,6 +176,7 @@ public final class FBClient {
 
     private static void onRegisterSpecialModelRenderers(RegisterSpecialModelRendererEvent event) {
         event.register(TankItemRenderer.Unbaked.ID, TankItemRenderer.Unbaked.CODEC);
+        event.register(BannerItemRenderer.Unbaked.ID, BannerItemRenderer.Unbaked.CODEC);
         event.register(CamoApplicatorRenderer.Unbaked.ID, CamoApplicatorRenderer.Unbaked.CODEC);
     }
 
@@ -200,6 +204,7 @@ public final class FBClient {
         event.registerBlockEntityRenderer(FBContent.BE_TYPE_FRAMED_ITEM_FRAME.value(), FramedItemFrameRenderer::new);
         event.registerBlockEntityRenderer(FBContent.BE_TYPE_FRAMED_TANK.value(), FramedTankRenderer::new);
         event.registerBlockEntityRenderer(FBContent.BE_TYPE_FRAMED_SHELF.value(), ShelfRenderer::new);
+        event.registerBlockEntityRenderer(FBContent.BE_TYPE_FRAMED_BANNER.value(), FramedBannerRenderer::new);
     }
 
     private static void onRegisterBlockItemModelProviders(RegisterBlockItemModelProvidersEvent event) {
@@ -484,7 +489,14 @@ public final class FBClient {
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_PATH, FramedPathGeometry::new, WrapHelper.DEFAULT_MERGER);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_SHELF, FramedShelfGeometry::new, WrapHelper.DEFAULT_MERGER);
 
+        WrapHelper.wrapEmpty(FBContent.BLOCK_FRAMED_BANNER);
+        WrapHelper.wrapEmpty(FBContent.BLOCK_FRAMED_WALL_BANNER);
+
         WrapHelper.wrapStandalone(FramedChestRenderer.WRAPPER_KEY, FramedChestLidGeometry::new, FramedChestLidModel::new, WrapHelper.DEFAULT_MERGER);
+        WrapHelper.wrapStandalone(FramedBannerRenderer.WRAPPER_KEY, FramedBannerFlagGeometry::new, FramedBannerFlagModel::new, FramedBannerFlagGeometry.STATE_MERGER);
+
+        WrapHelper.overrideBlockModelFactory(FBContent.BLOCK_FRAMED_BANNER, BannerItemRenderer::createBlockModel);
+        WrapHelper.overrideBlockModelFactory(FBContent.BLOCK_FRAMED_WALL_BANNER, BannerItemRenderer::createBlockModel);
     }
 
     private static void onBlockStateModelRegister(RegisterBlockStateModels event) {
