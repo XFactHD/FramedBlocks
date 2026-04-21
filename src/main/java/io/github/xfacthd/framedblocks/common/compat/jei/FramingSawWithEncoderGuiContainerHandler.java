@@ -1,6 +1,6 @@
 package io.github.xfacthd.framedblocks.common.compat.jei;
 
-import io.github.xfacthd.framedblocks.client.screen.FramingSawWithEncoderScreen;
+import io.github.xfacthd.framedblocks.client.screen.saw.FramingSawWithEncoderScreen;
 import net.minecraft.client.renderer.Rect2i;
 
 import java.util.List;

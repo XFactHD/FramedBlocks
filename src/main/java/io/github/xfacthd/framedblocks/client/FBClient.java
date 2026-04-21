@@ -75,9 +75,9 @@ import io.github.xfacthd.framedblocks.client.render.util.FramedPipelineModifiers
 import io.github.xfacthd.framedblocks.client.render.util.FramedRenderPipelines;
 import io.github.xfacthd.framedblocks.client.screen.CamoApplicatorScreen;
 import io.github.xfacthd.framedblocks.client.screen.FramedStorageScreen;
-import io.github.xfacthd.framedblocks.client.screen.FramingSawScreen;
+import io.github.xfacthd.framedblocks.client.screen.saw.FramingSawScreen;
 import io.github.xfacthd.framedblocks.client.screen.PaintRollerScreen;
-import io.github.xfacthd.framedblocks.client.screen.PoweredFramingSawScreen;
+import io.github.xfacthd.framedblocks.client.screen.saw.PoweredFramingSawScreen;
 import io.github.xfacthd.framedblocks.client.screen.overlay.BlockInteractOverlayLayer;
 import io.github.xfacthd.framedblocks.client.screen.overlay.impl.*;
 import io.github.xfacthd.framedblocks.client.screen.pip.BlockPictureInPictureRenderer;

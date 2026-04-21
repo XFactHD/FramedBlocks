@@ -2,7 +2,7 @@ package io.github.xfacthd.framedblocks.common.compat.emi;
 
 import dev.emi.emi.api.EmiExclusionArea;
 import dev.emi.emi.api.widget.Bounds;
-import io.github.xfacthd.framedblocks.client.screen.FramingSawWithEncoderScreen;
+import io.github.xfacthd.framedblocks.client.screen.saw.FramingSawWithEncoderScreen;
 
 import java.util.function.Consumer;
 

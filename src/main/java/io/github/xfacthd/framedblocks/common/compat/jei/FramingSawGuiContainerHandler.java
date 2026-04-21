@@ -1,6 +1,6 @@
 package io.github.xfacthd.framedblocks.common.compat.jei;
 
-import io.github.xfacthd.framedblocks.client.screen.FramingSawScreen;
+import io.github.xfacthd.framedblocks.client.screen.saw.FramingSawScreen;
 import mezz.jei.api.gui.builder.IClickableIngredientFactory;
 import mezz.jei.api.gui.handlers.IGuiContainerHandler;
 import mezz.jei.api.runtime.IClickableIngredient;

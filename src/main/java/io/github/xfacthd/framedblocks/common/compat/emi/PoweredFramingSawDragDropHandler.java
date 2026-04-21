@@ -4,7 +4,7 @@
 import dev.emi.emi.api.EmiDragDropHandler;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
-import io.github.xfacthd.framedblocks.client.screen.PoweredFramingSawScreen;
+import io.github.xfacthd.framedblocks.client.screen.saw.PoweredFramingSawScreen;
 import io.github.xfacthd.framedblocks.common.crafting.saw.FramingSawRecipeCache;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.world.item.Item;

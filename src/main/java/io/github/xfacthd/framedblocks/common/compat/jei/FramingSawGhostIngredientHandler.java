@@ -1,6 +1,6 @@
 package io.github.xfacthd.framedblocks.common.compat.jei;
 
-import io.github.xfacthd.framedblocks.client.screen.FramingSawWithEncoderScreen;
+import io.github.xfacthd.framedblocks.client.screen.saw.FramingSawWithEncoderScreen;
 import io.github.xfacthd.framedblocks.common.crafting.saw.FramingSawRecipe;
 import io.github.xfacthd.framedblocks.common.crafting.saw.FramingSawRecipeAdditive;
 import io.github.xfacthd.framedblocks.common.crafting.saw.FramingSawRecipeCache;

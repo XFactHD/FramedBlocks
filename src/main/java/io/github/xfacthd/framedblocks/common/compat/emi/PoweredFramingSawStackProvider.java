@@ -5,7 +5,7 @@ import dev.emi.emi.api.EmiApi;
 import dev.emi.emi.api.EmiStackProvider;
 import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.stack.EmiStackInteraction;
-import io.github.xfacthd.framedblocks.client.screen.PoweredFramingSawScreen;
+import io.github.xfacthd.framedblocks.client.screen.saw.PoweredFramingSawScreen;
 import io.github.xfacthd.framedblocks.common.crafting.saw.FramingSawRecipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 

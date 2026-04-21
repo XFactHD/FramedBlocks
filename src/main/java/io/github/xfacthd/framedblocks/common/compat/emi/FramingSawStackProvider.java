@@ -5,7 +5,7 @@ import dev.emi.emi.api.EmiApi;
 import dev.emi.emi.api.EmiStackProvider;
 import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.stack.EmiStackInteraction;
-import io.github.xfacthd.framedblocks.client.screen.FramingSawScreen;
+import io.github.xfacthd.framedblocks.client.screen.saw.FramingSawScreen;
 
 public final class FramingSawStackProvider implements EmiStackProvider<FramingSawScreen> {
     @Override

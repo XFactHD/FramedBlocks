@@ -2,7 +2,7 @@ package io.github.xfacthd.framedblocks.common.compat.jei;
 
 import com.google.common.collect.Lists;
 import io.github.xfacthd.framedblocks.api.util.Utils;
-import io.github.xfacthd.framedblocks.client.screen.FramingSawScreen;
+import io.github.xfacthd.framedblocks.client.screen.saw.FramingSawScreen;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.block.special.FramingSawBlock;
 import io.github.xfacthd.framedblocks.common.crafting.saw.FramingSawRecipe;

@@ -1,4 +1,4 @@
-package io.github.xfacthd.framedblocks.client.screen;
+package io.github.xfacthd.framedblocks.client.screen.saw;
 
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeInput;

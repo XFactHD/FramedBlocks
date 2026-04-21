@@ -1,6 +1,6 @@
 package io.github.xfacthd.framedblocks.common.compat.jei;
 
-import io.github.xfacthd.framedblocks.client.screen.PoweredFramingSawScreen;
+import io.github.xfacthd.framedblocks.client.screen.saw.PoweredFramingSawScreen;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.crafting.saw.FramingSawRecipe;
 import mezz.jei.api.constants.VanillaTypes;

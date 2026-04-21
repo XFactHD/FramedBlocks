@@ -1,4 +1,4 @@
-package io.github.xfacthd.framedblocks.client.screen;
+package io.github.xfacthd.framedblocks.client.screen.saw;
 
 import io.github.xfacthd.framedblocks.api.util.ClientUtils;
 import io.github.xfacthd.framedblocks.api.util.Utils;
@@ -159,7 +159,7 @@ public class PoweredFramingSawScreen extends AbstractContainerScreen<PoweredFram
             width = font.width(MSG_STATUS_NO_RECIPE);
         } else if (match != null && !match.success()) {
             status.append(MSG_STATUS_NO_MATCH);
-            statusTooltip = FramingSawScreen.appendRecipeFailure(new ArrayList<>(), cache, additiveResolver, recipe, match, this);
+            statusTooltip = SawRecipeFailurePrinter.appendRecipeFailure(new ArrayList<>(), cache, additiveResolver, recipe, match, this);
             width = font.width(MSG_STATUS_NO_MATCH);
         } else {
             status.append(MSG_STATUS_READY);

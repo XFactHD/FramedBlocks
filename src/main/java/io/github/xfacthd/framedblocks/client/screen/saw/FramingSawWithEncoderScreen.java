@@ -1,4 +1,4 @@
-package io.github.xfacthd.framedblocks.client.screen;
+package io.github.xfacthd.framedblocks.client.screen.saw;
 
 import com.google.common.base.Preconditions;
 import com.mojang.blaze3d.platform.InputConstants;
@@ -203,7 +203,7 @@ public class FramingSawWithEncoderScreen extends FramingSawScreen {
         } else if (encodeButton.isMouseOver(mouseX, mouseY) && encoderMatchResult != null && !encoderMatchResult.success()) {
             List<Component> lines = new ArrayList<>();
             FramingSawMenu.FramedRecipeHolder recipe = menu.getRecipes().get(menu.getSelectedRecipeIndex());
-            appendRecipeFailure(lines, cache, additiveResolver, recipe.getRecipe(), encoderMatchResult, this);
+            SawRecipeFailurePrinter.appendRecipeFailure(lines, cache, additiveResolver, recipe.getRecipe(), encoderMatchResult, this);
             graphics.setTooltipForNextFrame(font, lines, Optional.empty(), mouseX, mouseY);
         } else if (encoding) {
             for (int i = 0; i <= FramingSawMenu.SLOT_RESULT; i++) {

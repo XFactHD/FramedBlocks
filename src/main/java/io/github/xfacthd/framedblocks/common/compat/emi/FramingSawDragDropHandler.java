@@ -4,7 +4,7 @@
 import dev.emi.emi.api.EmiDragDropHandler;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
-import io.github.xfacthd.framedblocks.client.screen.FramingSawWithEncoderScreen;
+import io.github.xfacthd.framedblocks.client.screen.saw.FramingSawWithEncoderScreen;
 import io.github.xfacthd.framedblocks.common.crafting.saw.FramingSawRecipe;
 import io.github.xfacthd.framedblocks.common.crafting.saw.FramingSawRecipeAdditive;
 import io.github.xfacthd.framedblocks.common.crafting.saw.FramingSawRecipeCache;
