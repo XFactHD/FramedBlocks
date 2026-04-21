@@ -5,6 +5,6 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.Map;
 
-public interface StandaloneModelFactory<T extends CachingModel> {
+public interface StandaloneModelFactory<T> {
     T create(Map<BlockState, BlockStateModel> modes);
 }

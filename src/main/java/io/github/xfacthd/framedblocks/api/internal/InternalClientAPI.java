@@ -1,11 +1,11 @@
 package io.github.xfacthd.framedblocks.api.internal;
 
 import com.mojang.datafixers.util.Either;
+import io.github.xfacthd.framedblocks.api.model.CachingModel;
 import io.github.xfacthd.framedblocks.api.model.ExtendedBlockStateModelPart;
 import io.github.xfacthd.framedblocks.api.model.data.QuadMapBuilder;
 import io.github.xfacthd.framedblocks.api.model.item.ItemModelInfo;
 import io.github.xfacthd.framedblocks.api.model.item.block.BlockItemModelProvider;
-import io.github.xfacthd.framedblocks.api.model.standalone.CachingModel;
 import io.github.xfacthd.framedblocks.api.model.standalone.StandaloneModelFactory;
 import io.github.xfacthd.framedblocks.api.model.standalone.StandaloneWrapperKey;
 import io.github.xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
@@ -45,7 +45,7 @@ public interface InternalClientAPI {
 
     void registerCopyingModelWrapper(Holder<Block> block, Holder<Block> srcBlock, StateMerger stateMerger);
 
-    <T extends CachingModel> void registerStandaloneModelWrapper(
+    <T> void registerStandaloneModelWrapper(
             StandaloneWrapperKey<T> wrapperKey,
             GeometryFactory blockGeometryFactory,
             StandaloneModelFactory<T> modelFactory,
@@ -69,4 +69,6 @@ public interface InternalClientAPI {
     OutlineRenderer<?> createModelBasedOutlineRenderer(Block block);
 
     MaterialLookup getRuntimeMaterialLookup();
+
+    void registerLoadedCachingModel(CachingModel model);
 }

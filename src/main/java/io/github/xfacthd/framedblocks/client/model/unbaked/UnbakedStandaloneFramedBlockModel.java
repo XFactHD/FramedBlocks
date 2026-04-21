@@ -4,7 +4,6 @@ import com.google.common.collect.Maps;
 import com.google.gson.JsonParseException;
 import com.mojang.logging.LogUtils;
 import com.mojang.serialization.JsonOps;
-import io.github.xfacthd.framedblocks.api.model.standalone.CachingModel;
 import io.github.xfacthd.framedblocks.api.model.standalone.StandaloneModelFactory;
 import io.github.xfacthd.framedblocks.api.model.standalone.StandaloneWrapperKey;
 import io.github.xfacthd.framedblocks.api.model.util.ModelUtils;
@@ -29,12 +28,10 @@ import java.util.ArrayList;
 import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
-public final class UnbakedStandaloneFramedBlockModel<T extends CachingModel> implements UnbakedStandaloneModel<T> {
+public final class UnbakedStandaloneFramedBlockModel<T> implements UnbakedStandaloneModel<T> {
     private static final Logger LOGGER = LogUtils.getLogger();
-    private static final Map<StandaloneWrapperKey<?>, CachingModel> BAKED_MODELS = new ConcurrentHashMap<>();
     private static final FileToIdConverter BLOCKSTATE_LISTER = FileToIdConverter.json(StandaloneWrapperKey.STANDALONE_DEFINITION_FOLDER);
 
     private final StandaloneWrapperKey<T> wrapperKey;
@@ -60,9 +57,7 @@ public final class UnbakedStandaloneFramedBlockModel<T extends CachingModel> imp
         List<BlockState> states = wrapperKey.block().value().getStateDefinition().getPossibleStates();
         Map<BlockState, BlockStateModel> bakedModels = Maps.toMap(states, modelProvider::apply);
 
-        T model = modelFactory.create(bakedModels);
-        BAKED_MODELS.put(wrapperKey, model);
-        return model;
+        return modelFactory.create(bakedModels);
     }
 
     @Override
@@ -97,10 +92,6 @@ public final class UnbakedStandaloneFramedBlockModel<T extends CachingModel> imp
             models.putAll(definition.contents.instantiate(stateDefinition, () -> file + "/" + definition.source));
         }
         return models;
-    }
-
-    public static void clearCaches() {
-        BAKED_MODELS.values().forEach(CachingModel::clearCache);
     }
 
     private record LoadedDefinition(String source, BlockStateModelDispatcher contents) {}

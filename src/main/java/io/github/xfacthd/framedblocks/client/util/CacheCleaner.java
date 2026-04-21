@@ -1,46 +1,33 @@
 package io.github.xfacthd.framedblocks.client.util;
 
-import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
-import io.github.xfacthd.framedblocks.api.model.AbstractFramedBlockStateModel;
-import io.github.xfacthd.framedblocks.api.model.item.AbstractFramedBlockItemModel;
+import io.github.xfacthd.framedblocks.api.model.CachingModel;
 import io.github.xfacthd.framedblocks.client.model.FluidCubeModel;
 import io.github.xfacthd.framedblocks.client.model.RuntimeMaterialBaker;
 import io.github.xfacthd.framedblocks.client.model.overlaygen.BlockOverlayGenerator;
 import io.github.xfacthd.framedblocks.client.model.overlaygen.OverlayQuadGenerator;
-import io.github.xfacthd.framedblocks.client.model.unbaked.UnbakedStandaloneFramedBlockModel;
 import io.github.xfacthd.framedblocks.client.render.special.ModelBasedOutlineRenderer;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.block.BlockStateModelSet;
-import net.minecraft.client.resources.model.ModelManager;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.StateDefinition;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
+import java.util.WeakHashMap;
 
 public final class CacheCleaner {
+    private static final Set<CachingModel> USED_CACHING_MODELS = Collections.newSetFromMap(new WeakHashMap<>());
+
+    public static void registerLoadedCachingModel(CachingModel model) {
+        synchronized (USED_CACHING_MODELS) {
+            USED_CACHING_MODELS.add(model);
+        }
+    }
+
     public static void clearModelCaches(Reason reason) {
-        ModelManager modelManager = Minecraft.getInstance().getModelManager();
-
-        BlockStateModelSet blockModels = modelManager.getBlockStateModelSet();
-        BuiltInRegistries.BLOCK.stream()
-                .filter(IFramedBlock.class::isInstance)
-                .map(Block::getStateDefinition)
-                .map(StateDefinition::getPossibleStates)
-                .flatMap(List::stream)
-                .map(blockModels::get)
-                .filter(AbstractFramedBlockStateModel.class::isInstance)
-                .map(AbstractFramedBlockStateModel.class::cast)
-                .forEach(AbstractFramedBlockStateModel::clearCache);
-
-        modelManager.framedblocks$getBakedItemStackModels()
-                .values()
-                .stream()
-                .filter(AbstractFramedBlockItemModel.class::isInstance)
-                .map(AbstractFramedBlockItemModel.class::cast)
-                .forEach(AbstractFramedBlockItemModel::clearCache);
-
-        UnbakedStandaloneFramedBlockModel.clearCaches();
+        synchronized (USED_CACHING_MODELS) {
+            // Some clearCache() implementations may construct a model instance (e.g. FramedBlockItemModel).
+            // This adds it to USED_CACHING_MODELS, so we must snapshot the list of models we're clearing
+            // to avoid ConcurrentModificationException.
+            List.copyOf(USED_CACHING_MODELS).forEach(CachingModel::clearCache);
+        }
 
         clearExternalGeometryCaches(reason);
     }

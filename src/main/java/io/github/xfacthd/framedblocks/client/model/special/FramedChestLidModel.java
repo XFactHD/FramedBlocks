@@ -1,8 +1,6 @@
 package io.github.xfacthd.framedblocks.client.model.special;
 
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
-import io.github.xfacthd.framedblocks.api.model.AbstractFramedBlockStateModel;
-import io.github.xfacthd.framedblocks.api.model.standalone.CachingModel;
 import io.github.xfacthd.framedblocks.client.model.block.FramedBlockModel;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
@@ -18,7 +16,7 @@ import org.joml.Matrix4fc;
 
 import java.util.Map;
 
-public final class FramedChestLidModel implements CachingModel {
+public final class FramedChestLidModel {
     private static final Direction[] DIRECTIONS = Direction.Plane.HORIZONTAL.stream().toArray(Direction[]::new);
     private static final ChestType[] TYPES = ChestType.values();
     private static final LatchType[] LATCHES = LatchType.values();
@@ -47,15 +45,6 @@ public final class FramedChestLidModel implements CachingModel {
 
     public BlockModel getModel(Direction dir, ChestType type, LatchType latch) {
         return models[makeModelIndex(dir, type, latch)];
-    }
-
-    @Override
-    public void clearCache() {
-        for (FramedBlockModel model : models) {
-            if (model.getModel() instanceof AbstractFramedBlockStateModel fbModel) {
-                fbModel.clearCache();
-            }
-        }
     }
 
     private static int makeModelIndex(Direction dir, ChestType type, LatchType latch) {

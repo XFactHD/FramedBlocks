@@ -2,6 +2,7 @@ package io.github.xfacthd.framedblocks.api.model;
 
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.api.block.overlay.BlockOverlay;
+import io.github.xfacthd.framedblocks.api.internal.InternalClientAPI;
 import io.github.xfacthd.framedblocks.api.model.item.ItemModelInfo;
 import net.minecraft.client.renderer.block.BlockAndTintGetter;
 import net.minecraft.client.renderer.block.dispatch.BlockStateModelPart;
@@ -15,7 +16,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
-public abstract class AbstractFramedBlockStateModel extends DelegateBlockStateModel {
+public abstract class AbstractFramedBlockStateModel extends DelegateBlockStateModel implements CachingModel {
     private final BlockState state;
     @Nullable
     private final ItemModelInfo itemModelInfo;
@@ -25,6 +26,7 @@ public abstract class AbstractFramedBlockStateModel extends DelegateBlockStateMo
         this.state = state;
         boolean isItemModel = state.getBlock() instanceof IFramedBlock block && block.getItemModelSource() == state;
         this.itemModelInfo = isItemModel ? itemModelInfo : null;
+        InternalClientAPI.INSTANCE.registerLoadedCachingModel(this);
     }
 
     /// Collect the [BlockStateModelPart]s making up this model in the given level context.
@@ -60,8 +62,6 @@ public abstract class AbstractFramedBlockStateModel extends DelegateBlockStateMo
     public final int materialFlags() {
         return materialFlags(BlockAndTintGetter.EMPTY, BlockPos.ZERO, state);
     }
-
-    public void clearCache() { }
 
     public BlockStateModel getBaseModel() {
         return delegate;

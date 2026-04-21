@@ -3,7 +3,6 @@ package io.github.xfacthd.framedblocks.client.model.wrapping;
 import com.google.common.base.Stopwatch;
 import com.mojang.logging.LogUtils;
 import io.github.xfacthd.framedblocks.api.model.AbstractFramedBlockStateModel;
-import io.github.xfacthd.framedblocks.api.model.standalone.CachingModel;
 import io.github.xfacthd.framedblocks.api.model.standalone.StandaloneWrapperKey;
 import io.github.xfacthd.framedblocks.api.model.wrapping.RegisterModelWrappersEvent;
 import io.github.xfacthd.framedblocks.api.model.wrapping.statemerger.StateMerger;
@@ -121,7 +120,7 @@ public final class ModelWrappingManager {
     }
 
     @SuppressWarnings("unchecked")
-    public static <T extends CachingModel> StandaloneModelWrappingHandler<T> getHandler(StandaloneWrapperKey<T> wrapperKey) {
+    public static <T> StandaloneModelWrappingHandler<T> getHandler(StandaloneWrapperKey<T> wrapperKey) {
         StandaloneModelWrappingHandler<?> handler = STANDALONE_HANDLERS.get(wrapperKey);
         if (handler == null) {
             throw new NullPointerException("No ModelWrappingHandler registered for wrapper key '" + wrapperKey + "'");

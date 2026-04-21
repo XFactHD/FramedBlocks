@@ -8,7 +8,6 @@ import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockParts;
 import io.github.xfacthd.framedblocks.api.internal.InternalClientAPI;
 import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.item.ItemModelInfo;
-import io.github.xfacthd.framedblocks.api.model.standalone.CachingModel;
 import io.github.xfacthd.framedblocks.api.model.standalone.StandaloneModelFactory;
 import io.github.xfacthd.framedblocks.api.model.standalone.StandaloneWrapperKey;
 import io.github.xfacthd.framedblocks.api.model.wrapping.statemerger.StateMerger;
@@ -153,7 +152,7 @@ public final class WrapHelper {
         InternalClientAPI.INSTANCE.registerCopyingModelWrapper(block, srcBlock, stateMerger);
     }
 
-    public static <T extends CachingModel> void wrapStandalone(
+    public static <T> void wrapStandalone(
             StandaloneWrapperKey<T> wrapperKey,
             GeometryFactory blockGeometryFactory,
             StandaloneModelFactory<T> modelFactory,
@@ -162,7 +161,7 @@ public final class WrapHelper {
         wrapStandalone(wrapperKey, blockGeometryFactory, modelFactory, StateMerger.ignoring(ignoredProps));
     }
 
-    public static <T extends CachingModel> void wrapStandalone(
+    public static <T> void wrapStandalone(
             StandaloneWrapperKey<T> wrapperKey,
             GeometryFactory blockGeometryFactory,
             StandaloneModelFactory<T> modelFactory,

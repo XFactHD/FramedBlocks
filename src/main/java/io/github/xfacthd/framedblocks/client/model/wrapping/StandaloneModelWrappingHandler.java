@@ -1,13 +1,12 @@
 package io.github.xfacthd.framedblocks.client.model.wrapping;
 
-import io.github.xfacthd.framedblocks.api.model.standalone.CachingModel;
 import io.github.xfacthd.framedblocks.api.model.standalone.StandaloneModelFactory;
 import io.github.xfacthd.framedblocks.api.model.wrapping.ModelFactory;
 import io.github.xfacthd.framedblocks.api.model.wrapping.statemerger.StateMerger;
 import net.minecraft.core.Holder;
 import net.minecraft.world.level.block.Block;
 
-public final class StandaloneModelWrappingHandler<T extends CachingModel> extends ModelWrappingHandler {
+public final class StandaloneModelWrappingHandler<T> extends ModelWrappingHandler {
     private final StandaloneModelFactory<T> modelFactory;
 
     public StandaloneModelWrappingHandler(

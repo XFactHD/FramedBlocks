@@ -6,11 +6,11 @@ import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.api.block.IFramedDoubleBlock;
 import io.github.xfacthd.framedblocks.api.internal.InternalClientAPI;
 import io.github.xfacthd.framedblocks.api.model.AbstractFramedBlockStateModel;
+import io.github.xfacthd.framedblocks.api.model.CachingModel;
 import io.github.xfacthd.framedblocks.api.model.ExtendedBlockStateModelPart;
 import io.github.xfacthd.framedblocks.api.model.data.QuadMapBuilder;
 import io.github.xfacthd.framedblocks.api.model.item.ItemModelInfo;
 import io.github.xfacthd.framedblocks.api.model.item.block.BlockItemModelProvider;
-import io.github.xfacthd.framedblocks.api.model.standalone.CachingModel;
 import io.github.xfacthd.framedblocks.api.model.standalone.StandaloneModelFactory;
 import io.github.xfacthd.framedblocks.api.model.standalone.StandaloneWrapperKey;
 import io.github.xfacthd.framedblocks.api.model.util.ModelUtils;
@@ -34,6 +34,7 @@ import io.github.xfacthd.framedblocks.client.model.wrapping.ModelWrappingHandler
 import io.github.xfacthd.framedblocks.client.model.wrapping.ModelWrappingManager;
 import io.github.xfacthd.framedblocks.client.model.wrapping.StandaloneModelWrappingHandler;
 import io.github.xfacthd.framedblocks.client.render.special.ModelBasedOutlineRenderer;
+import io.github.xfacthd.framedblocks.client.util.CacheCleaner;
 import io.github.xfacthd.framedblocks.client.util.ClientTaskQueue;
 import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
 import net.minecraft.client.renderer.block.dispatch.BlockStateModelDispatcher;
@@ -80,7 +81,7 @@ public final class InternalClientApiImpl implements InternalClientAPI {
     }
 
     @Override
-    public <T extends CachingModel> void registerStandaloneModelWrapper(
+    public <T> void registerStandaloneModelWrapper(
             StandaloneWrapperKey<T> wrapperKey,
             GeometryFactory geometryFactory,
             StandaloneModelFactory<T> modelFactory,
@@ -140,5 +141,10 @@ public final class InternalClientApiImpl implements InternalClientAPI {
     @Override
     public MaterialLookup getRuntimeMaterialLookup() {
         return RuntimeMaterialBaker.INSTANCE;
+    }
+
+    @Override
+    public void registerLoadedCachingModel(CachingModel model) {
+        CacheCleaner.registerLoadedCachingModel(model);
     }
 }
