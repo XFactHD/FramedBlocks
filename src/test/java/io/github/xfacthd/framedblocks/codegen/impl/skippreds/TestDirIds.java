@@ -35,6 +35,8 @@ final class TestDirIds {
     static final String STAIR_Y = "stair_y";
     /** Horizontal faces of a Wall */
     static final String WALL_ARM = "wall_arm";
+    /** Vertical face profile of a Wall */
+    static final String WALL_PROFILE = "wall_profile";
     /** Horizontal faces of a Fence */
     static final String FENCE_ARM = "fence_arm";
     /** Top/bottom face of a Wall or vertical Pillar */

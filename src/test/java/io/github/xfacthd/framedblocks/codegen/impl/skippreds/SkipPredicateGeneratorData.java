@@ -280,6 +280,7 @@ final class SkipPredicateGeneratorData {
                     .props(Property.vanilla("boolean", "up", "UP", PropType.PRIMITIVE))
                     .dirs(
                             new TestDir(null, "WallArm", List.of(), TestDirIds.WALL_ARM),
+                            new TestDir(null, "WallProfile", List.of("up"), TestDirIds.WALL_PROFILE),
                             new TestDir("boolean", "Pillar", null, TestDirIds.PILLAR_VERT)
                     ),
             entry("FRAMED_FENCE", "pillar")

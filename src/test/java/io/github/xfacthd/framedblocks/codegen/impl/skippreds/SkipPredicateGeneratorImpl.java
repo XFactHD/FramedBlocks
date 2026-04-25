@@ -550,23 +550,22 @@ public final class SkipPredicateGeneratorImpl {
                 case EQUALS -> first ? EQUALS_DIR_TEST_TEMPLATE_FIRST : EQUALS_DIR_TEST_TEMPLATE_OTHER;
                 case SPECIAL -> first ? SPECIAL_DIR_TEST_TEMPLATE_FIRST : SPECIAL_DIR_TEST_TEMPLATE_OTHER;
             };
-            String firstExecParams = buildTestExecParams(sourceType, pair.first, false, noPropsTypes, special);
             String dirTestExec;
             if (special) {
                 dirTestExec = template.formatted(
                         firstTarget,
                         pair.first.name(),
-                        firstExecParams
+                        buildSpecialTestExecParams(sourceType, type, pair.first, pair.second, noPropsTypes)
                 );
             } else {
                 Objects.requireNonNull(pair.second);
                 dirTestExec = template.formatted(
                         firstTarget,
                         pair.first.name(),
-                        firstExecParams,
+                        buildSimpleTestExecParams(sourceType, pair.first, false, noPropsTypes),
                         secondTarget,
                         pair.second.name(),
-                        buildTestExecParams(type, pair.second, true, noPropsTypes, false)
+                        buildSimpleTestExecParams(type, pair.second, true, noPropsTypes)
                 );
             }
             builder.append(indent).append(dirTestExec);
@@ -577,7 +576,20 @@ public final class SkipPredicateGeneratorImpl {
         return builder.append(";").toString();
     }
 
-    private static String buildTestExecParams(Type type, TestDir dir, boolean opposite, Set<Type> noPropsTypes, boolean special) {
+    private static String buildSimpleTestExecParams(Type type, TestDir dir, boolean opposite, Set<Type> noPropsTypes) {
+        return buildPropertyValueParamList(type, dir, opposite, noPropsTypes) + (opposite ? "side.getOpposite()" : "side");
+    }
+
+    private static String buildSpecialTestExecParams(Type typeOne, Type typeTwo, TestDir dirOne, @Nullable TestDir dirTwo, Set<Type> noPropsTypes) {
+        String firstParams = buildPropertyValueParamList(typeOne, dirOne, false, noPropsTypes);
+        String params = "state, " + firstParams + "adjState, ";
+        if (dirTwo != null) {
+            params += buildPropertyValueParamList(typeTwo, dirTwo, true, noPropsTypes);
+        }
+        return params + "side";
+    }
+
+    private static String buildPropertyValueParamList(Type type, TestDir dir, boolean opposite, Set<Type> noPropsTypes) {
         String params = dir.getProps()
                 .stream()
                 .map(prop -> type.propertyMap().get(prop))
@@ -589,10 +601,6 @@ public final class SkipPredicateGeneratorImpl {
         } else {
             noPropsTypes.add(type);
         }
-        if (special) {
-            params = "state, " + params + "adjState, ";
-        }
-        params += opposite ? "side.getOpposite()" : "side";
         return params;
     }
 

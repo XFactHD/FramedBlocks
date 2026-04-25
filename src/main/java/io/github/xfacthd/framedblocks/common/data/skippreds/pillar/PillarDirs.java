@@ -11,6 +11,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.WallSide;
 
+import java.util.function.Predicate;
+
 @SuppressWarnings("JavaExistingMethodCanBeUsed")
 public final class PillarDirs {
     public static final class CornerPillar {
@@ -65,11 +67,36 @@ public final class PillarDirs {
     }
 
     public static final class Wall {
+        private static final Direction[] HOR_DIRECTIONS = Direction.Plane.HORIZONTAL.stream().toArray(Direction[]::new);
+        private static final Predicate<WallSide> WALL_SIDE_PRED_UP = side -> side == WallSide.TALL;
+        private static final Predicate<WallSide> WALL_SIDE_PRED_DOWN = side -> side != WallSide.NONE;
+
         public static boolean testWallArmDir(BlockState state, BlockState adjState, Direction side) {
             if (!DirUtils.isY(side)) {
                 WallSide wallSide = getWallSide(state, side);
                 WallSide adjWallSide = getWallSide(adjState, side.getOpposite());
                 return wallSide != WallSide.NONE && wallSide == adjWallSide;
+            }
+            return false;
+        }
+
+        public static boolean testWallProfileDir(BlockState state, boolean up, BlockState adjState, boolean adjUp, Direction side) {
+            if (DirUtils.isY(side)) {
+                if (up != adjUp) {
+                    return false;
+                }
+
+                boolean top = side == Direction.UP;
+                Predicate<WallSide> sidePred = top ? WALL_SIDE_PRED_UP : WALL_SIDE_PRED_DOWN;
+                Predicate<WallSide> adjSidePred = top ? WALL_SIDE_PRED_DOWN : WALL_SIDE_PRED_UP;
+                for (Direction dir : HOR_DIRECTIONS) {
+                    boolean sideExists = sidePred.test(getWallSide(state, dir));
+                    boolean adjSideExists = adjSidePred.test(getWallSide(adjState, dir));
+                    if (sideExists != adjSideExists) {
+                        return false;
+                    }
+                }
+                return true;
             }
             return false;
         }
