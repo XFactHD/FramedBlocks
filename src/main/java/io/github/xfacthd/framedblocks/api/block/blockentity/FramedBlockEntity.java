@@ -1035,7 +1035,7 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
         }
 
         Rotation rotation = DirUtils.getRotationBetween(camoOrientation, blockOrientation);
-        return camo.adjustForCarrierRotation(rotation);
+        return camo.adjustForCarrierRotation(Mirror.NONE, rotation);
     }
 
     protected void attachAdditionalModelData(ModelData.Builder builder) { }

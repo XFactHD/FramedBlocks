@@ -8,6 +8,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.MapColor;
@@ -64,14 +65,16 @@ public abstract class CamoContainer<C extends CamoContent<C>, T extends CamoCont
      */
     public abstract @Nullable T rotateCamo();
 
-    /**
-     * Rotate the camo to follow the containing framed block's horizontal rotation,
-     * i.e. via {@link BlockState#rotate(Rotation)} on block camos.
-     *
-     * @param rotation The rotation to apply to the camo
-     */
+    /// Mirror and rotate the camo to follow the framed block's horizontal rotation,
+    /// i.e. via [BlockState#rotate(Rotation)] and [BlockState#mirror(Mirror)] on block camos.
+    ///
+    /// The mirror should be applied before the rotation to ensure the result matches the order
+    /// of operations in structure placement.
+    ///
+    /// @param mirror   The mirroring to apply to the camo
+    /// @param rotation The rotation to apply to the camo
     @SuppressWarnings("deprecation")
-    public abstract T adjustForCarrierRotation(Rotation rotation);
+    public abstract T adjustForCarrierRotation(Mirror mirror, Rotation rotation);
 
     /**
      * {@return whether this camo can be converted to an {@link ItemStack} without consuming another item}

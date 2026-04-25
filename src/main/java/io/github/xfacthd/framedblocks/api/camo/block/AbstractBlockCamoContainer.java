@@ -2,6 +2,7 @@ package io.github.xfacthd.framedblocks.api.camo.block;
 
 import io.github.xfacthd.framedblocks.api.camo.CamoContainer;
 import io.github.xfacthd.framedblocks.api.camo.block.rotator.BlockCamoRotator;
+import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jspecify.annotations.Nullable;
@@ -30,9 +31,9 @@ public abstract class AbstractBlockCamoContainer<T extends AbstractBlockCamoCont
 
     @Override
     @SuppressWarnings({ "unchecked", "deprecation" })
-    public T adjustForCarrierRotation(Rotation rotation) {
+    public T adjustForCarrierRotation(Mirror mirror, Rotation rotation) {
         BlockState state = content.getState();
-        BlockState newState = state.rotate(rotation);
+        BlockState newState = state.mirror(mirror).rotate(rotation);
         return state != newState ? copyWithState(newState) : (T) this;
     }
 

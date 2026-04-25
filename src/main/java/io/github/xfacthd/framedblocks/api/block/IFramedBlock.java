@@ -115,9 +115,14 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension {
             return InteractionResult.SUCCESS;
         }
 
+        if (!(level.getBlockEntity(pos) instanceof IFramedBlockEntity be)) {
+            return InteractionResult.FAIL;
+        }
+
         if (Utils.isWrenchRotationTool(heldItem)) {
             WrenchRotationMode mode = heldItem.getOrDefault(FramedConstants.Objects.DC_TYPE_WRENCH_MODE, WrenchRotationMode.PRIMARY);
-            BlockState newState = rotate(state, RotationDirection.of(player.isShiftKeyDown()), mode);
+            RotationDirection direction = RotationDirection.of(player.isShiftKeyDown());
+            BlockState newState = rotate(state, direction, mode);
             if (newState != state) {
                 if (!level.isClientSide()) {
                     level.setBlockAndUpdate(pos, newState);
@@ -128,10 +133,7 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension {
             return InteractionResult.FAIL;
         }
 
-        if (level.getBlockEntity(pos) instanceof IFramedBlockEntity be) {
-            return be.handleInteraction(player, hand, hit);
-        }
-        return InteractionResult.FAIL;
+        return be.handleInteraction(player, hand, hit);
     }
 
     @Override

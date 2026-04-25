@@ -6,6 +6,7 @@ import io.github.xfacthd.framedblocks.api.util.FramedConstants;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import org.jspecify.annotations.Nullable;
@@ -31,7 +32,7 @@ public final class EmptyCamoContainer extends CamoContainer<EmptyCamoContent, Em
     }
 
     @Override
-    public EmptyCamoContainer adjustForCarrierRotation(Rotation rotation) {
+    public EmptyCamoContainer adjustForCarrierRotation(Mirror mirror, Rotation rotation) {
         return this;
     }
 
