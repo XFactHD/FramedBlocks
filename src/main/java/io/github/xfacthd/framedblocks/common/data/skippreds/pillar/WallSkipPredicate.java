@@ -61,8 +61,7 @@ public final class WallSkipPredicate implements SideSkipPredicate {
     ) {
         boolean adjUp = adjState.getValue(BlockStateProperties.UP);
         return PillarDirs.Wall.testWallArmDir(state, adjState, side) ||
-               PillarDirs.Wall.testWallProfileDir(state, up, adjState, adjUp, side) ||
-               (PillarDirs.Wall.isPillarDir(up, side) && PillarDirs.Wall.isPillarDir(adjUp, side.getOpposite()));
+               PillarDirs.Wall.testWallProfileDir(state, up, adjState, adjUp, side);
     }
 
     @CullTest.TestTarget(BlockType.FRAMED_THICK_LATTICE)

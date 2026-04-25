@@ -281,7 +281,7 @@ final class SkipPredicateGeneratorData {
                     .dirs(
                             new TestDir(null, "WallArm", List.of(), TestDirIds.WALL_ARM),
                             new TestDir(null, "WallProfile", List.of("up"), TestDirIds.WALL_PROFILE),
-                            new TestDir("boolean", "Pillar", null, TestDirIds.PILLAR_VERT)
+                            new TestDir("boolean", "Pillar", null, TestDirIds.PILLAR_VERT).withExcludedTypes("FRAMED_WALL")
                     ),
             entry("FRAMED_FENCE", "pillar")
                     .dirs(
