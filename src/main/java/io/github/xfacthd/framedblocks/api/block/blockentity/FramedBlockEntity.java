@@ -88,7 +88,6 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
      */
     public static final InteractionResult CONSUME_CAMO_FAILED = new InteractionResult.Success(InteractionResult.SwingSource.NONE, new InteractionResult.ItemContext(true, null));
     private static final Direction[] DIRECTIONS = Direction.values();
-    private static final int DATA_VERSION = 3;
     protected static final int FLAG_GLOWING = 1;
     protected static final int FLAG_INTANGIBLE = 1 << 1;
     protected static final int FLAG_REINFORCED = 1 << 2;
@@ -106,7 +105,6 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
     private boolean intangible = false;
     private boolean reinforced = false;
     private boolean emissive = false;
-    private boolean recheckStates = false;
     private boolean forceLightUpdate = false;
     private boolean cullStateDirty = false;
 
@@ -856,9 +854,8 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
 
     void onLoadInternal() {
         if (!level().isClientSide()) {
-            if (recheckStates) {
-                updateDynamicStates(true, true, true);
-            }
+            // Unconditionally recompute these flags to work around issues with tools exactly copying blockstates without copying BE data
+            updateDynamicStates(true, true, true);
             if (forceLightUpdate) {
                 // Ensure blocks placed by exactly copying BlockState and BlockEntity correctly store their light emission
                 doLightUpdate();
@@ -1151,7 +1148,6 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
         valueOutput.putBoolean("intangible", intangible);
         valueOutput.putBoolean("reinforced", reinforced);
         valueOutput.putBoolean("emissive", emissive);
-        valueOutput.putByte("updated", (byte) DATA_VERSION);
     }
 
     @Override
@@ -1168,17 +1164,15 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
         intangible = valueInput.getBooleanOr("intangible", false);
         reinforced = valueInput.getBooleanOr("reinforced", false);
         emissive = valueInput.getBooleanOr("emissive", false);
-        recheckStates |= valueInput.getByteOr("updated", (byte) 0) < DATA_VERSION;
 
         if (glowing) {
-            recheckStates = forceLightUpdate = true;
+            forceLightUpdate = true;
         }
     }
 
     final CamoContainer<?, ?> loadAndValidateCamo(ValueInput valueInput, String key) {
         CamoContainer<?, ?> camo = valueInput.read(key, CamoContainerHelper.CODEC).orElse(EmptyCamoContainer.EMPTY);
         if (!CamoContainerHelper.validateCamo(camo)) {
-            recheckStates = true;
             LOGGER.warn(
                     "Framed Block of type \"{}\" at position {} contains an invalid camo of type \"{}\" containing \"{}\", removing camo! This might be caused by a config or tag change!",
                     BuiltInRegistries.BLOCK.getKey(getBlockState().getBlock()),
