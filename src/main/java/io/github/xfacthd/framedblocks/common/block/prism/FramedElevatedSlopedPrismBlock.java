@@ -1,12 +1,13 @@
 package io.github.xfacthd.framedblocks.common.block.prism;
 
 import io.github.xfacthd.framedblocks.api.block.SlopeToggleBlock;
-import io.github.xfacthd.framedblocks.api.util.DirUtils;
+import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
+import io.github.xfacthd.framedblocks.api.util.RotationDirection;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import io.github.xfacthd.framedblocks.common.data.property.CompoundDirection;
-import net.minecraft.core.Direction;
+import net.minecraft.util.TriState;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Mirror;
@@ -33,6 +34,11 @@ public class FramedElevatedSlopedPrismBlock extends FramedBlock implements Prism
     }
 
     @Override
+    public BlockState rotate(BlockState state, RotationDirection direction, WrenchRotationMode mode) {
+        return FramedSlopedPrismBlock.rotateWithWrench(state, direction, mode);
+    }
+
+    @Override
     protected BlockState rotate(BlockState state, Rotation rotation) {
         CompoundDirection cmpDir = state.getValue(PropertyHolder.FACING_DIR);
         return state.setValue(PropertyHolder.FACING_DIR, cmpDir.rotate(rotation));
@@ -45,22 +51,15 @@ public class FramedElevatedSlopedPrismBlock extends FramedBlock implements Prism
     }
 
     @Override
+    public TriState shouldNotifyBlockEntityOfWrenchRotation(WrenchRotationMode mode, BlockState oldState, BlockState newState) {
+        return FramedSlopedPrismBlock.shouldNotifyBlockEntityOfWrenchRotation(mode, oldState);
+    }
+
+    @Override
     public BlockState getItemModelSource() {
         boolean inner = getBlockType() == BlockType.FRAMED_ELEVATED_INNER_SLOPED_PRISM;
         CompoundDirection cmpDir = inner ? CompoundDirection.UP_EAST : CompoundDirection.UP_WEST;
         return defaultBlockState().setValue(PropertyHolder.FACING_DIR, cmpDir);
-    }
-
-    @Override
-    public Direction getHorizontalOrientation(BlockState state) {
-        CompoundDirection cmpDir = state.getValue(PropertyHolder.FACING_DIR);
-        if (!DirUtils.isY(cmpDir.direction())) {
-            return cmpDir.direction();
-        }
-        if (!DirUtils.isY(cmpDir.orientation())) {
-            return cmpDir.orientation();
-        }
-        return Direction.NORTH;
     }
 
     @Override

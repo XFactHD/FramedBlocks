@@ -17,6 +17,7 @@ import io.github.xfacthd.framedblocks.common.blockentity.doubled.slope.FramedDou
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.util.TriState;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Mirror;
@@ -61,6 +62,11 @@ public class FramedDoubleThreewayCornerBlock extends FramedDoubleBlock implement
     @Override
     protected BlockState mirror(BlockState state, Mirror mirror) {
         return BlockUtils.mirrorCornerBlock(state, mirror);
+    }
+
+    @Override
+    public TriState shouldNotifyBlockEntityOfWrenchRotation(WrenchRotationMode mode, BlockState oldState, BlockState newState) {
+        return mode.getDefaultNotifyBlockEntity();
     }
 
     @Override
@@ -139,11 +145,6 @@ public class FramedDoubleThreewayCornerBlock extends FramedDoubleBlock implement
     @Override
     public BlockState getItemModelSource() {
         return defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.WEST);
-    }
-
-    @Override
-    public Direction getHorizontalOrientation(BlockState state) {
-        return state.getValue(FramedProperties.FACING_HOR);
     }
 
     @Override

@@ -15,7 +15,6 @@ import io.github.xfacthd.framedblocks.api.model.data.AbstractFramedBlockData;
 import io.github.xfacthd.framedblocks.api.predicate.cull.SideSkipPredicate;
 import io.github.xfacthd.framedblocks.api.shapes.ShapeLookup;
 import io.github.xfacthd.framedblocks.api.util.ConfigView;
-import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.api.util.FramedConstants;
 import io.github.xfacthd.framedblocks.api.util.RotationDirection;
 import io.github.xfacthd.framedblocks.api.util.sound.SoundUtils;
@@ -123,9 +122,15 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension {
             WrenchRotationMode mode = heldItem.getOrDefault(FramedConstants.Objects.DC_TYPE_WRENCH_MODE, WrenchRotationMode.PRIMARY);
             RotationDirection direction = RotationDirection.of(player.isShiftKeyDown());
             BlockState newState = rotate(state, direction, mode);
-            if (newState != state) {
+            TriState notifyBlockEntity = shouldNotifyBlockEntityOfWrenchRotation(mode, state, newState);
+            if (newState != state || notifyBlockEntity == TriState.TRUE) {
                 if (!level.isClientSide()) {
-                    level.setBlockAndUpdate(pos, newState);
+                    if (newState != state) {
+                        level.setBlockAndUpdate(pos, newState);
+                    }
+                    if (notifyBlockEntity != TriState.FALSE) {
+                        be.applyWrenchRotation(direction.toVanillaRotation(), newState != state);
+                    }
                 }
                 return InteractionResult.SUCCESS;
             }
@@ -424,6 +429,21 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension {
         return state.rotate(direction.toVanillaRotation());
     }
 
+    /// Returns whether the rotation applied with the given mode is a rotation around the Y axis, requiring the [BlockEntity]
+    /// to be notified of the rotation to adjust the applied camo(s).
+    /// - [TriState#FALSE]: [BlockEntity] is not informed of the rotation, regardless of success
+    /// - [TriState#DEFAULT]: [BlockEntity] is informed of successful rotations
+    /// - [TriState#TRUE]: [BlockEntity] is informed of every rotation attempt, regardless of success
+    ///
+    /// @param mode     The mode of the wrench this block was rotated with
+    /// @param oldState The [BlockState] before rotation
+    /// @param newState The [BlockState] after rotation
+    /// @return whether the BlockEntity should react to rotating the block with a wrench in the given mode.
+    @ApiStatus.OverrideOnly
+    default TriState shouldNotifyBlockEntityOfWrenchRotation(WrenchRotationMode mode, BlockState oldState, BlockState newState) {
+        return TriState.FALSE;
+    }
+
     @Override
     default MapColor getMapColor(BlockState state, BlockGetter level, BlockPos pos, MapColor defaultColor) {
         if (level.getBlockEntity(pos) instanceof IFramedBlockEntity be) {
@@ -485,18 +505,6 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension {
      * {@return the state whose block model to reuse for the item or null if the loaded item model should be used}
      */
     @Nullable BlockState getItemModelSource();
-
-    /**
-     * {@return the horizontal orientation of the given state to adjust the camo rotation to the block's rotation or {@code null} if not applicable}
-     * <p>
-     * This method should either always or never return {@code null}. Special cases:
-     * <ul>
-     *     <li>Blocks with a {@link Direction.Axis} property as primary orientation should return {@link DirUtils#getHorizontalDirection(Direction.Axis)}</li>
-     *     <li>Blocks with a {@link Direction} property including vertical directions should return {@link Direction#NORTH} for vertical directions</li>
-     *     <li>Blocks which have a conditional orientation (i.e. one-way window) should always return {@code null}</li>
-     * </ul>
-     */
-    @Nullable Direction getHorizontalOrientation(BlockState state);
 
     /**
      * {@return the class under which this block should be registered to the Jade BlockComponentProvider to prevent

@@ -4,12 +4,14 @@ import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
 import io.github.xfacthd.framedblocks.api.block.item.IFramedBlockItem;
+import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.util.MathUtils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import io.github.xfacthd.framedblocks.common.item.block.FramedSpecialBlockItem;
 import net.minecraft.core.Direction;
+import net.minecraft.util.TriState;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.Block;
@@ -80,13 +82,13 @@ public class FramedPanelBlock extends FramedBlock {
     }
 
     @Override
-    public BlockState getItemModelSource() {
-        return defaultBlockState();
+    public TriState shouldNotifyBlockEntityOfWrenchRotation(WrenchRotationMode mode, BlockState oldState, BlockState newState) {
+        return TriState.DEFAULT;
     }
 
     @Override
-    public Direction getHorizontalOrientation(BlockState state) {
-        return state.getValue(FramedProperties.FACING_HOR);
+    public BlockState getItemModelSource() {
+        return defaultBlockState();
     }
 
     @Override

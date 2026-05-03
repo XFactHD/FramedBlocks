@@ -8,7 +8,7 @@ import io.github.xfacthd.framedblocks.api.util.RotationDirection;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
-import net.minecraft.core.Direction;
+import net.minecraft.util.TriState;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Mirror;
@@ -46,7 +46,7 @@ public class FramedCheckeredSlabSegmentBlock extends FramedBlock {
     @Override
     public BlockState rotate(BlockState state, RotationDirection direction, WrenchRotationMode mode) {
         return switch (mode) {
-            case PRIMARY -> rotate(state, direction.toVanillaRotation());
+            case PRIMARY -> super.rotate(state, direction, mode);
             case SECONDARY -> state.cycle(FramedProperties.TOP);
         };
     }
@@ -58,19 +58,16 @@ public class FramedCheckeredSlabSegmentBlock extends FramedBlock {
 
     @Override
     protected BlockState mirror(BlockState state, Mirror mirror) {
-        if (mirror != Mirror.NONE) {
-            return state.cycle(PropertyHolder.SECOND);
-        }
-        return super.mirror(state, mirror);
+        return mirror != Mirror.NONE ? state.cycle(PropertyHolder.SECOND) : state;
+    }
+
+    @Override
+    public TriState shouldNotifyBlockEntityOfWrenchRotation(WrenchRotationMode mode, BlockState oldState, BlockState newState) {
+        return mode.getDefaultNotifyBlockEntity();
     }
 
     @Override
     public @Nullable BlockState getItemModelSource() {
-        return null;
-    }
-
-    @Override
-    public @Nullable Direction getHorizontalOrientation(BlockState state) {
         return null;
     }
 

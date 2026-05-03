@@ -1,6 +1,7 @@
 package io.github.xfacthd.framedblocks.common.data.property;
 
 import io.github.xfacthd.framedblocks.api.util.DirUtils;
+import io.github.xfacthd.framedblocks.api.util.RotationDirection;
 import net.minecraft.core.Direction;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.level.block.Mirror;
@@ -77,11 +78,25 @@ public enum CompoundDirection implements StringRepresentable {
     }
 
     public CompoundDirection mirror(Mirror mirror) {
-        return switch (mirror) {
-            case NONE -> this;
-            case FRONT_BACK -> DirUtils.isX(direction) ? of(direction.getOpposite(), orientation) : this;
-            case LEFT_RIGHT -> DirUtils.isZ(direction) ? of(direction.getOpposite(), orientation) : this;
-        };
+        if (mirror == Mirror.NONE) {
+            return this;
+        }
+
+        Direction.Axis mirrorAxis = DirUtils.getMirrorAxis(mirror);
+        return of(
+                direction.getAxis() == mirrorAxis ? direction.getOpposite() : direction,
+                orientation.getAxis() == mirrorAxis ? orientation.getOpposite() : orientation
+        );
+    }
+
+    public CompoundDirection rotateOrientation(RotationDirection dir) {
+        if (!DirUtils.isY(direction) && !DirUtils.isPositive(direction)) {
+            dir = dir.getOpposite();
+        }
+        return of(direction, switch (dir) {
+            case CLOCKWISE -> orientation.getClockWise(direction.getAxis());
+            case COUNTERCLOCKWISE -> orientation.getCounterClockWise(direction.getAxis());
+        });
     }
 
     @Override

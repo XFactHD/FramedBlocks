@@ -75,6 +75,10 @@ public enum DirectionAxis implements StringRepresentable {
         };
     }
 
+    public DirectionAxis rotateAxis() {
+        return of(dir, DirUtils.getPerpendicularAxis(axis, dir.getAxis()));
+    }
+
     @Override
     public String getSerializedName() {
         return name;

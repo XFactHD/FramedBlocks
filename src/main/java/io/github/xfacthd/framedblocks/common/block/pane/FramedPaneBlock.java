@@ -4,6 +4,8 @@ import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.api.block.ShapeLockableBlock;
+import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
+import io.github.xfacthd.framedblocks.api.util.RotationDirection;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.block.IFramedBlockInternal;
 import io.github.xfacthd.framedblocks.common.compat.diagonalblocks.DiagonalBlocksCompat;
@@ -138,6 +140,11 @@ public class FramedPaneBlock extends IronBarsBlock implements IFramedBlockIntern
     }
 
     @Override
+    public BlockState rotate(BlockState state, RotationDirection direction, WrenchRotationMode mode) {
+        return state;
+    }
+
+    @Override
     public BlockType getBlockType() {
         return type;
     }
@@ -149,11 +156,6 @@ public class FramedPaneBlock extends IronBarsBlock implements IFramedBlockIntern
 
     @Override
     public @Nullable BlockState getItemModelSource() {
-        return null;
-    }
-
-    @Override
-    public @Nullable Direction getHorizontalOrientation(BlockState state) {
         return null;
     }
 

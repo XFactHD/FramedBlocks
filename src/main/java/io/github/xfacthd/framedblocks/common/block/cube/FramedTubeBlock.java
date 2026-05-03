@@ -1,8 +1,9 @@
 package io.github.xfacthd.framedblocks.common.block.cube;
 
 import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
-import io.github.xfacthd.framedblocks.api.util.DirUtils;
+import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.util.FramedConstants;
+import io.github.xfacthd.framedblocks.api.util.RotationDirection;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
@@ -58,6 +59,11 @@ public class FramedTubeBlock extends FramedBlock {
     }
 
     @Override
+    public BlockState rotate(BlockState state, RotationDirection direction, WrenchRotationMode mode) {
+        return direction.cycle(state, BlockStateProperties.AXIS);
+    }
+
+    @Override
     protected BlockState rotate(BlockState state, Rotation rotation) {
         Direction.Axis axis = state.getValue(BlockStateProperties.AXIS);
         if (axis != Direction.Axis.Y && (rotation == Rotation.CLOCKWISE_90 || rotation == Rotation.COUNTERCLOCKWISE_90)) {
@@ -69,11 +75,6 @@ public class FramedTubeBlock extends FramedBlock {
     @Override
     public BlockState getItemModelSource() {
         return defaultBlockState().setValue(BlockStateProperties.AXIS, Direction.Axis.Y);
-    }
-
-    @Override
-    public Direction getHorizontalOrientation(BlockState state) {
-        return DirUtils.getHorizontalDirection(state.getValue(BlockStateProperties.AXIS));
     }
 
     @Override

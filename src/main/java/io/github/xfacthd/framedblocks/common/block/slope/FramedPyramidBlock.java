@@ -4,7 +4,6 @@ import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
 import io.github.xfacthd.framedblocks.api.block.SlopeToggleBlock;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
-import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.api.util.RotationDirection;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
@@ -56,12 +55,6 @@ public class FramedPyramidBlock extends FramedBlock implements SlopeToggleBlock 
     @Override
     public BlockState getItemModelSource() {
         return defaultBlockState();
-    }
-
-    @Override
-    public Direction getHorizontalOrientation(BlockState state) {
-        Direction facing = state.getValue(BlockStateProperties.FACING);
-        return DirUtils.isY(facing) ? Direction.NORTH : facing;
     }
 
     @Override

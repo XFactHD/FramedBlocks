@@ -1,10 +1,14 @@
 package io.github.xfacthd.framedblocks.common.block.interactive.banner;
 
 import io.github.xfacthd.framedblocks.api.block.item.IFramedBlockItem;
+import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
+import io.github.xfacthd.framedblocks.api.util.RotationDirection;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import io.github.xfacthd.framedblocks.common.item.block.FramedStandingAndWallBlockItem;
 import net.minecraft.core.Direction;
+import net.minecraft.util.TriState;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.Block;
@@ -38,6 +42,11 @@ public final class FramedBannerBlock extends AbstractFramedBannerBlock {
     }
 
     @Override
+    public BlockState rotate(BlockState state, RotationDirection direction, WrenchRotationMode mode) {
+        return direction.rotateRot16(state);
+    }
+
+    @Override
     protected BlockState rotate(BlockState state, Rotation rotation) {
         return state.setValue(BlockStateProperties.ROTATION_16, rotation.rotate(state.getValue(BlockStateProperties.ROTATION_16), 16));
     }
@@ -48,14 +57,14 @@ public final class FramedBannerBlock extends AbstractFramedBannerBlock {
     }
 
     @Override
-    public IFramedBlockItem createBlockItem(Item.Properties props) {
-        return new FramedStandingAndWallBlockItem(this, FBContent.BLOCK_FRAMED_WALL_BANNER.value(), Direction.DOWN, props);
+    public TriState shouldNotifyBlockEntityOfWrenchRotation(WrenchRotationMode mode, BlockState oldState, BlockState newState) {
+        boolean quadrantChanged = DirUtils.isDifferentRot16Quadrant(oldState, newState);
+        return quadrantChanged ? TriState.DEFAULT : TriState.FALSE;
     }
 
     @Override
-    public Direction getHorizontalOrientation(BlockState state) {
-        int rotation = state.getValue(BlockStateProperties.ROTATION_16);
-        return Direction.from2DDataValue(rotation / 4);
+    public IFramedBlockItem createBlockItem(Item.Properties props) {
+        return new FramedStandingAndWallBlockItem(this, FBContent.BLOCK_FRAMED_WALL_BANNER.value(), Direction.DOWN, props);
     }
 
     @Override

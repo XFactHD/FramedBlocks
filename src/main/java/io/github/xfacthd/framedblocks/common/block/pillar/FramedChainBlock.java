@@ -3,7 +3,8 @@ package io.github.xfacthd.framedblocks.common.block.pillar;
 import com.mojang.serialization.MapCodec;
 import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
-import io.github.xfacthd.framedblocks.api.util.DirUtils;
+import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
+import io.github.xfacthd.framedblocks.api.util.RotationDirection;
 import io.github.xfacthd.framedblocks.common.block.IFramedBlockInternal;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import net.minecraft.core.BlockPos;
@@ -22,6 +23,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.ChainBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.redstone.Orientation;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.BlockHitResult;
@@ -103,6 +105,11 @@ public class FramedChainBlock extends ChainBlock implements IFramedBlockInternal
     }
 
     @Override
+    public BlockState rotate(BlockState state, RotationDirection direction, WrenchRotationMode mode) {
+        return direction.cycle(state, BlockStateProperties.AXIS);
+    }
+
+    @Override
     public BlockType getBlockType() {
         return BlockType.FRAMED_CHAIN;
     }
@@ -110,11 +117,6 @@ public class FramedChainBlock extends ChainBlock implements IFramedBlockInternal
     @Override
     public @Nullable BlockState getItemModelSource() {
         return null;
-    }
-
-    @Override
-    public Direction getHorizontalOrientation(BlockState state) {
-        return DirUtils.getHorizontalDirection(state.getValue(AXIS));
     }
 
     @Override

@@ -6,7 +6,6 @@ import io.github.xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import io.github.xfacthd.framedblocks.api.block.item.FramedBlockItem;
 import io.github.xfacthd.framedblocks.api.block.item.IFramedBlockItem;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
-import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.api.util.RotationDirection;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
@@ -205,12 +204,6 @@ public class FramedItemFrameBlock extends FramedBlock {
     @Override
     public @Nullable BlockState getItemModelSource() {
         return null;
-    }
-
-    @Override
-    public Direction getHorizontalOrientation(BlockState state) {
-        Direction facing = state.getValue(BlockStateProperties.FACING);
-        return DirUtils.isY(facing) ? Direction.NORTH : facing;
     }
 
     @Override

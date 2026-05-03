@@ -14,7 +14,6 @@ import io.github.xfacthd.framedblocks.api.model.data.FramedDoubleBlockData;
 import io.github.xfacthd.framedblocks.api.util.ColorUtils;
 import io.github.xfacthd.framedblocks.api.util.FramedConstants;
 import io.github.xfacthd.framedblocks.api.util.ValueMerger;
-import io.github.xfacthd.framedblocks.api.util.serdes.FramedCodecs;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponentGetter;
@@ -29,6 +28,8 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.EmptyBlockGetter;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.Mirror;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
@@ -44,15 +45,12 @@ import java.util.function.Consumer;
 
 public class FramedDoubleBlockEntity extends FramedBlockEntity {
     public static final String CAMO_TWO_NBT_KEY = "camo_two";
-    public static final String CAMO_DIR_TWO_NBT_KEY = "camo_dir_two";
     private static final ValueMerger<MapColor> MAP_COLOR_MERGER = new ValueMerger<>(ColorUtils::average);
     private static final ValueMerger<Integer> BEACON_MULT_MERGER = new ValueMerger<>(ARGB::average);
     private static final ValueMerger<Integer> FLAMMABILITY_MERGER = new ValueMerger<>(i -> i == -1, Math::min);
 
     private final CullState cullState = new CullState();
     private CamoContainer<?, ?> camoContainer = EmptyCamoContainer.EMPTY;
-    @Nullable
-    private Direction camoOrientation = null;
 
     public FramedDoubleBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
@@ -68,14 +66,12 @@ public class FramedDoubleBlockEntity extends FramedBlockEntity {
     }
 
     @Override
-    void setCamoInternal(CamoContainer<?, ?> camo, boolean secondary, @Nullable Direction orientation, boolean forceOrientation) {
-        if (!secondary) {
-            super.setCamoInternal(camo, false, orientation, forceOrientation);
-            return;
+    void setCamoInternal(CamoContainer<?, ?> camo, boolean secondary) {
+        if (secondary) {
+            camoContainer = camo;
+        } else {
+            super.setCamoInternal(camo, false);
         }
-
-        camoOrientation = updateOrientation(camo, orientation, true, forceOrientation);
-        camoContainer = camo;
     }
 
     @Override
@@ -93,11 +89,6 @@ public class FramedDoubleBlockEntity extends FramedBlockEntity {
     @Override
     CamoContainer<?, ?> getCamo(boolean secondary) {
         return secondary ? camoContainer : getCamo();
-    }
-
-    @Override
-    public @Nullable Direction getCamoOrientation(boolean secondary) {
-        return secondary ? camoOrientation : super.getCamoOrientation(false);
     }
 
     public final CamoContainer<?, ?> getCamoTwo() {
@@ -301,6 +292,13 @@ public class FramedDoubleBlockEntity extends FramedBlockEntity {
         return !getStateCache().getParts().equals(oldCache.getParts());
     }
 
+    @Override
+    public boolean applyExternalRotation(Mirror mirror, Rotation rotation, RotationSource source) {
+        CamoContainer<?, ?> prevCamo = camoContainer;
+        camoContainer = camoContainer.adjustForCarrierRotation(mirror, rotation);
+        return super.applyExternalRotation(mirror, rotation, source) || prevCamo != camoContainer;
+    }
+
     /*
      * Debug rendering
      */
@@ -321,20 +319,12 @@ public class FramedDoubleBlockEntity extends FramedBlockEntity {
     protected void writeToDataPacket(ValueOutput valueOutput) {
         super.writeToDataPacket(valueOutput);
         CamoContainerHelper.writeToNetwork(valueOutput.child(CAMO_TWO_NBT_KEY), camoContainer);
-        valueOutput.storeNullable(CAMO_DIR_TWO_NBT_KEY, FramedCodecs.DIRECTION_BY_INT, camoOrientation);
     }
 
     @Override
     protected void readFromDataPacket(NetworkValueInput input) {
         super.readFromDataPacket(input);
-
         camoContainer = input.readCamo(CAMO_TWO_NBT_KEY, true);
-
-        Direction newOrientation = input.read(CAMO_DIR_TWO_NBT_KEY, FramedCodecs.DIRECTION_BY_INT).orElse(null);
-        if (newOrientation != camoOrientation) {
-            camoOrientation = newOrientation;
-            input.requestRenderUpdate();
-        }
     }
 
     /*
@@ -378,7 +368,6 @@ public class FramedDoubleBlockEntity extends FramedBlockEntity {
     public void removeComponentsFromTag(ValueOutput valueOutput) {
         super.removeComponentsFromTag(valueOutput);
         valueOutput.discard(CAMO_TWO_NBT_KEY);
-        valueOutput.discard(CAMO_DIR_TWO_NBT_KEY);
     }
 
     @Override
@@ -400,13 +389,11 @@ public class FramedDoubleBlockEntity extends FramedBlockEntity {
     public void saveAdditional(ValueOutput valueOutput) {
         super.saveAdditional(valueOutput);
         valueOutput.store(CAMO_TWO_NBT_KEY, CamoContainerHelper.CODEC, camoContainer);
-        valueOutput.storeNullable(CAMO_DIR_TWO_NBT_KEY, Direction.CODEC, camoOrientation);
     }
 
     @Override
     public void loadAdditional(ValueInput valueInput) {
         super.loadAdditional(valueInput);
         camoContainer = loadAndValidateCamo(valueInput, CAMO_TWO_NBT_KEY);
-        camoOrientation = valueInput.read(CAMO_DIR_TWO_NBT_KEY, Direction.CODEC).orElse(null);
     }
 }

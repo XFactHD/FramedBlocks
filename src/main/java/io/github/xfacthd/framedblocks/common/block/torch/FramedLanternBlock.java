@@ -8,7 +8,6 @@ import io.github.xfacthd.framedblocks.common.block.IFramedBlockInternal;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
@@ -104,11 +103,6 @@ public class FramedLanternBlock extends LanternBlock implements IFramedBlockInte
     @Override
     public @Nullable BlockState getItemModelSource() {
         return defaultBlockState();
-    }
-
-    @Override
-    public @Nullable Direction getHorizontalOrientation(BlockState state) {
-        return null;
     }
 
     @Override

@@ -8,6 +8,7 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.util.ByIdMap;
 import net.minecraft.util.StringRepresentable;
+import net.minecraft.util.TriState;
 
 import java.util.Locale;
 import java.util.function.IntFunction;
@@ -32,6 +33,13 @@ public enum WrenchRotationMode implements StringRepresentable {
         return switch (this) {
             case PRIMARY -> SECONDARY;
             case SECONDARY -> PRIMARY;
+        };
+    }
+
+    public TriState getDefaultNotifyBlockEntity() {
+        return switch (this) {
+            case PRIMARY -> TriState.DEFAULT;
+            case SECONDARY -> TriState.FALSE;
         };
     }
 

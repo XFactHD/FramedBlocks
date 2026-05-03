@@ -2,12 +2,15 @@ package io.github.xfacthd.framedblocks.common.block.pane;
 
 import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
+import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
+import io.github.xfacthd.framedblocks.api.util.RotationDirection;
 import io.github.xfacthd.framedblocks.common.block.ExtPlacementStateBuilder;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import io.github.xfacthd.framedblocks.common.data.property.SlopeType;
 import net.minecraft.core.Direction;
+import net.minecraft.util.TriState;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Mirror;
@@ -36,6 +39,14 @@ public class FramedCornerStripBlock extends FramedBlock {
     }
 
     @Override
+    public BlockState rotate(BlockState state, RotationDirection direction, WrenchRotationMode mode) {
+        if (mode == WrenchRotationMode.SECONDARY) {
+            return direction.cycle(state, PropertyHolder.SLOPE_TYPE);
+        }
+        return super.rotate(state, direction, mode);
+    }
+
+    @Override
     protected BlockState rotate(BlockState state, Rotation rotation) {
         return BlockUtils.rotate(state, rotation);
     }
@@ -50,13 +61,13 @@ public class FramedCornerStripBlock extends FramedBlock {
     }
 
     @Override
-    public BlockState getItemModelSource() {
-        return defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
+    public TriState shouldNotifyBlockEntityOfWrenchRotation(WrenchRotationMode mode, BlockState oldState, BlockState newState) {
+        return mode.getDefaultNotifyBlockEntity();
     }
 
     @Override
-    public Direction getHorizontalOrientation(BlockState state) {
-        return state.getValue(FramedProperties.FACING_HOR);
+    public BlockState getItemModelSource() {
+        return defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
     }
 
     @Override

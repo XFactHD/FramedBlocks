@@ -9,7 +9,6 @@ import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.block.IFramedBlockInternal;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.world.InteractionHand;
@@ -98,11 +97,6 @@ public class FramedWallTorchBlock extends WallTorchBlock implements IFramedBlock
     @Override
     public @Nullable BlockState getItemModelSource() {
         return null;
-    }
-
-    @Override
-    public Direction getHorizontalOrientation(BlockState state) {
-        return state.getValue(FACING);
     }
 
     @Override

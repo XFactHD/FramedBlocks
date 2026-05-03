@@ -12,6 +12,7 @@ import io.github.xfacthd.framedblocks.common.data.BlockType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
+import net.minecraft.util.TriState;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
@@ -21,7 +22,6 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.ButtonBlock;
-import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -100,8 +100,8 @@ public class FramedButtonBlock extends ButtonBlock implements IFramedBlockIntern
     }
 
     @Override
-    protected BlockState rotate(BlockState state, Rotation rotation) {
-        return super.rotate(state, rotation);
+    public TriState shouldNotifyBlockEntityOfWrenchRotation(WrenchRotationMode mode, BlockState oldState, BlockState newState) {
+        return TriState.DEFAULT;
     }
 
     @Override
@@ -112,11 +112,6 @@ public class FramedButtonBlock extends ButtonBlock implements IFramedBlockIntern
     @Override
     public BlockState getItemModelSource() {
         return defaultBlockState().setValue(FACE, AttachFace.FLOOR);
-    }
-
-    @Override
-    public @Nullable Direction getHorizontalOrientation(BlockState state) {
-        return state.getValue(FACING);
     }
 
     @Override

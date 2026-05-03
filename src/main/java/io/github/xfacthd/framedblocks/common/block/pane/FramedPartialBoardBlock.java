@@ -1,14 +1,19 @@
 package io.github.xfacthd.framedblocks.common.block.pane;
 
 import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
+import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.util.DirUtils;
+import io.github.xfacthd.framedblocks.api.util.RotationDirection;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import io.github.xfacthd.framedblocks.common.data.property.CompoundDirection;
 import net.minecraft.core.Direction;
+import net.minecraft.util.TriState;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Mirror;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import org.jspecify.annotations.Nullable;
@@ -49,23 +54,40 @@ public final class FramedPartialBoardBlock extends FramedBlock {
     }
 
     @Override
+    public BlockState rotate(BlockState state, RotationDirection direction, WrenchRotationMode mode) {
+        if (mode == WrenchRotationMode.SECONDARY) {
+            CompoundDirection cmpDir = state.getValue(PropertyHolder.FACING_DIR);
+            return state.setValue(PropertyHolder.FACING_DIR, cmpDir.rotateOrientation(direction));
+        }
+        return super.rotate(state, direction, mode);
+    }
+
+    @Override
+    protected BlockState rotate(BlockState state, Rotation rotation) {
+        CompoundDirection cmpDir = state.getValue(PropertyHolder.FACING_DIR);
+        return state.setValue(PropertyHolder.FACING_DIR, cmpDir.rotate(rotation));
+    }
+
+    @Override
+    protected BlockState mirror(BlockState state, Mirror mirror) {
+        CompoundDirection cmpDir = state.getValue(PropertyHolder.FACING_DIR);
+        return state.setValue(PropertyHolder.FACING_DIR, cmpDir.mirror(mirror));
+    }
+
+    @Override
+    public TriState shouldNotifyBlockEntityOfWrenchRotation(WrenchRotationMode mode, BlockState oldState, BlockState newState) {
+        if (mode == WrenchRotationMode.PRIMARY || DirUtils.isY(oldState.getValue(PropertyHolder.FACING_DIR).direction())) {
+            return TriState.DEFAULT;
+        }
+        return TriState.FALSE;
+    }
+
+    @Override
     public BlockState getItemModelSource() {
         if (getBlockType() == BlockType.FRAMED_INNER_CORNER_BOARD) {
             return defaultBlockState().setValue(PropertyHolder.FACING_DIR, CompoundDirection.of(Direction.DOWN, Direction.SOUTH));
         }
         return defaultBlockState();
-    }
-
-    @Override
-    public Direction getHorizontalOrientation(BlockState state) {
-        CompoundDirection cmpDir = state.getValue(PropertyHolder.FACING_DIR);
-        if (!DirUtils.isY(cmpDir.direction())) {
-            return cmpDir.direction();
-        }
-        if (!DirUtils.isY(cmpDir.orientation())) {
-            return cmpDir.orientation();
-        }
-        return Direction.NORTH;
     }
 
     @Override

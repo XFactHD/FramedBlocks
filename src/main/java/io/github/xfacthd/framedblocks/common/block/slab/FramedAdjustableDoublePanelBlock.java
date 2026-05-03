@@ -1,16 +1,21 @@
 package io.github.xfacthd.framedblocks.common.block.slab;
 
+import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.CamoGetter;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockParts;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockTopInteractionMode;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.SolidityCheck;
+import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.common.blockentity.doubled.slab.FramedAdjustableDoubleBlockEntity;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import net.minecraft.core.Direction;
+import net.minecraft.util.TriState;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Mirror;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -39,6 +44,21 @@ public class FramedAdjustableDoublePanelBlock extends FramedAdjustableDoubleBloc
         return PlacementStateBuilder.of(this, ctx)
                 .withTargetOrHorizontalFacing()
                 .build();
+    }
+
+    @Override
+    protected BlockState rotate(BlockState state, Rotation rotation) {
+        return BlockUtils.rotate(state, rotation);
+    }
+
+    @Override
+    protected BlockState mirror(BlockState state, Mirror mirror) {
+        return BlockUtils.mirrorFaceBlock(state, mirror);
+    }
+
+    @Override
+    public TriState shouldNotifyBlockEntityOfWrenchRotation(WrenchRotationMode mode, BlockState oldState, BlockState newState) {
+        return TriState.DEFAULT;
     }
 
     @Override
@@ -74,11 +94,6 @@ public class FramedAdjustableDoublePanelBlock extends FramedAdjustableDoubleBloc
             return CamoGetter.SECOND;
         }
         return CamoGetter.NONE;
-    }
-
-    @Override
-    public Direction getHorizontalOrientation(BlockState state) {
-        return state.getValue(FramedProperties.FACING_HOR);
     }
 
     public static FramedAdjustableDoublePanelBlock standard(Properties props) {

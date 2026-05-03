@@ -2,7 +2,10 @@ package io.github.xfacthd.framedblocks.common.blockentity.special;
 
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import io.github.xfacthd.framedblocks.api.block.blockentity.NetworkValueInput;
+import io.github.xfacthd.framedblocks.api.block.blockentity.RotationSource;
 import io.github.xfacthd.framedblocks.api.blueprint.BlueprintData;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
+import io.github.xfacthd.framedblocks.api.util.MathUtils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.blockentity.PackedCollapsibleBlockOffsets;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
@@ -14,6 +17,7 @@ import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.TypedDataComponent;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
@@ -26,8 +30,6 @@ public class FramedCollapsibleCopycatBlockEntity extends FramedBlockEntity imple
     private static final Direction[] DIRECTIONS = Direction.values();
     private static final Direction[] HORIZONTAL_DIRECTIONS = Direction.Plane.HORIZONTAL.stream().toArray(Direction[]::new);
     private static final int MAX_OFFSET_BEACON_OCCLUSION = 5;
-    private static final int FACE_OFFSET_BITS = 4;
-    public static final int OFFSET_BITS = FACE_OFFSET_BITS * DIRECTIONS.length;
 
     private int packedOffsets = 0;
     private boolean occludesBeacon = true;
@@ -45,13 +47,12 @@ public class FramedCollapsibleCopycatBlockEntity extends FramedBlockEntity imple
         Direction faceHit = blockHit.getDirection();
         boolean sneak = player.isShiftKeyDown();
         boolean changed = false;
-        Rotation rotation = getBlockState().getValue(PropertyHolder.COPYCAT_ROTATION);
-        int offset = getFaceOffset(faceHit, rotation);
+        int offset = getFaceOffset(faceHit);
         if (sneak && offset > 0) {
-            setFaceOffset(faceHit, rotation, offset - 1);
+            setFaceOffset(faceHit, offset - 1);
             changed = true;
-        } else if (!sneak && offset < 15 - getFaceOffset(faceHit.getOpposite(), rotation)) {
-            setFaceOffset(faceHit, rotation, offset + 1);
+        } else if (!sneak && offset < 15 - getFaceOffset(faceHit.getOpposite())) {
+            setFaceOffset(faceHit, offset + 1);
             changed = true;
         }
         if (changed) {
@@ -63,20 +64,19 @@ public class FramedCollapsibleCopycatBlockEntity extends FramedBlockEntity imple
         }
     }
 
-    private void setFaceOffset(Direction side, Rotation rotation, int offset) {
-        int idx = rotation.rotate(side).ordinal() * 4;
+    private void setFaceOffset(Direction side, int offset) {
+        int idx = side.ordinal() * 4;
         int mask = 0x0F << idx;
         packedOffsets = (packedOffsets & ~mask) | (offset << idx);
     }
 
-    public int getFaceOffset(Direction side, Rotation rotation) {
-        int srcIdx = rotation.rotate(side).ordinal();
-        return (byte) (packedOffsets >> (srcIdx * 4) & 0xF);
+    public int getFaceOffset(Direction side) {
+        return (byte) (packedOffsets >> (side.ordinal() * 4) & 0xF);
     }
 
     @Override
     public int getFaceOffset(BlockState state, Direction side) {
-        return getFaceOffset(side, state.getValue(PropertyHolder.COPYCAT_ROTATION));
+        return getFaceOffset(side);
     }
 
     @Override
@@ -90,7 +90,7 @@ public class FramedCollapsibleCopycatBlockEntity extends FramedBlockEntity imple
 
     public boolean updateFaceSolidity() {
         BlockState state = getBlockState();
-        int solid = computeSolidFaces(packedOffsets, state.getValue(PropertyHolder.COPYCAT_ROTATION));
+        int solid = computeSolidFaces(packedOffsets);
         if (state.getValue(PropertyHolder.SOLID_FACES) != solid) {
             level().setBlockAndUpdate(worldPosition, state.setValue(PropertyHolder.SOLID_FACES, solid));
             return true;
@@ -101,7 +101,7 @@ public class FramedCollapsibleCopycatBlockEntity extends FramedBlockEntity imple
     private void updateBeaconOcclusion() {
         occludesBeacon = true;
         for (Direction face : HORIZONTAL_DIRECTIONS) {
-            if (getFaceOffset(face, Rotation.NONE) > MAX_OFFSET_BEACON_OCCLUSION) {
+            if (getFaceOffset(face) > MAX_OFFSET_BEACON_OCCLUSION) {
                 occludesBeacon = false;
                 break;
             }
@@ -109,20 +109,28 @@ public class FramedCollapsibleCopycatBlockEntity extends FramedBlockEntity imple
     }
 
     @Override
-    public void setBlockState(BlockState state) {
-        Rotation oldRot = getBlockState().getValue(PropertyHolder.COPYCAT_ROTATION);
-        super.setBlockState(state);
-        if (level != null && !level.isClientSide() && oldRot != state.getValue(PropertyHolder.COPYCAT_ROTATION)) {
-            updateFaceSolidity();
+    protected boolean applyExternalRotation(Mirror mirror, Rotation rotation, RotationSource source) {
+        int prevOffsets = packedOffsets;
+        if (mirror != Mirror.NONE) {
+            Direction.Axis mirrorAxis = DirUtils.getMirrorAxis(mirror);
+            int offNeg = getFaceOffset(mirrorAxis.getNegative());
+            int offPos = getFaceOffset(mirrorAxis.getPositive());
+            setFaceOffset(mirrorAxis.getNegative(), offPos);
+            setFaceOffset(mirrorAxis.getPositive(), offNeg);
         }
-    }
-
-    @Override
-    public void onLoad() {
-        if (!level().isClientSide()) {
-            updateFaceSolidity();
+        if (rotation != Rotation.NONE) {
+            int[] horOffsets = new int[4];
+            for (Direction dir : HORIZONTAL_DIRECTIONS) {
+                horOffsets[dir.get2DDataValue()] = getFaceOffset(dir);
+            }
+            for (Direction dir : HORIZONTAL_DIRECTIONS) {
+                setFaceOffset(rotation.rotate(dir), horOffsets[dir.get2DDataValue()]);
+            }
         }
-        super.onLoad();
+        if (source == RotationSource.STRUCTURE || (packedOffsets != prevOffsets)) {
+            return super.applyExternalRotation(mirror, rotation, source);
+        }
+        return false;
     }
 
     @Override
@@ -199,23 +207,42 @@ public class FramedCollapsibleCopycatBlockEntity extends FramedBlockEntity imple
         updateBeaconOcclusion();
     }
 
-    public static byte[] unpackOffsets(int packed, Rotation rotation) {
+    public static byte[] unpackOffsets(int packed) {
         byte[] offsets = new byte[DIRECTIONS.length];
-        for (Direction face : DIRECTIONS) {
-            int srcIdx = rotation.rotate(face).ordinal();
-            offsets[face.ordinal()] = (byte) (packed >> (srcIdx * 4) & 0xF);
+        for (int i = 0; i < DIRECTIONS.length; i++) {
+            offsets[i] = (byte) (packed >> (i * 4) & 0xF);
         }
         return offsets;
     }
 
-    public static int computeSolidFaces(int packedOffsets, Rotation rotation) {
+    public static int computeSolidFaces(int packedOffsets) {
         int solid = 0;
         for (Direction face : DIRECTIONS) {
-            int srcIdx = rotation.rotate(face).ordinal();
-            if (((packedOffsets >> (srcIdx * 4)) & 0xF) == 0) {
+            if (((packedOffsets >> (face.ordinal() * 4)) & 0xF) == 0) {
                 solid |= (1 << face.ordinal());
             }
         }
         return solid;
+    }
+
+    public static int rotateSolidFaces(int solidFaces, Rotation rotation) {
+        boolean[] horSolidFaces = new boolean[4];
+        for (Direction dir : HORIZONTAL_DIRECTIONS) {
+            horSolidFaces[dir.get2DDataValue()] = MathUtils.readBit(solidFaces, dir.ordinal());
+        }
+        for (Direction dir : HORIZONTAL_DIRECTIONS) {
+            Direction outDir = rotation.rotate(dir);
+            solidFaces = MathUtils.writeBit(solidFaces, outDir.ordinal(), horSolidFaces[dir.get2DDataValue()]);
+        }
+        return solidFaces;
+    }
+
+    public static int mirrorSolidFaces(int solidFaces, Mirror mirror) {
+        Direction.Axis mirrorAxis = DirUtils.getMirrorAxis(mirror);
+        boolean solidNeg = MathUtils.readBit(solidFaces, mirrorAxis.getNegative().ordinal());
+        boolean solidPos = MathUtils.readBit(solidFaces, mirrorAxis.getPositive().ordinal());
+        solidFaces = MathUtils.writeBit(solidFaces, mirrorAxis.getNegative().ordinal(), solidPos);
+        solidFaces = MathUtils.writeBit(solidFaces, mirrorAxis.getPositive().ordinal(), solidNeg);
+        return solidFaces;
     }
 }

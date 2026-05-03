@@ -4,8 +4,11 @@ import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.api.block.item.IFramedBlockItem;
+import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.model.wrapping.WrapHelper;
 import io.github.xfacthd.framedblocks.api.model.wrapping.statemerger.StateMerger;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
+import io.github.xfacthd.framedblocks.api.util.RotationDirection;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.block.IFramedBlockInternal;
@@ -18,6 +21,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
+import net.minecraft.util.TriState;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
@@ -118,6 +122,17 @@ public final class FramedStandingSignBlock extends StandingSignBlock implements 
     }
 
     @Override
+    public BlockState rotate(BlockState state, RotationDirection direction, WrenchRotationMode mode) {
+        return direction.rotateRot16(state);
+    }
+
+    @Override
+    public TriState shouldNotifyBlockEntityOfWrenchRotation(WrenchRotationMode mode, BlockState oldState, BlockState newState) {
+        boolean quadrantChanged = DirUtils.isDifferentRot16Quadrant(oldState, newState);
+        return quadrantChanged ? TriState.DEFAULT : TriState.FALSE;
+    }
+
+    @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return new FramedSignBlockEntity(pos, state);
     }
@@ -140,12 +155,6 @@ public final class FramedStandingSignBlock extends StandingSignBlock implements 
     @Override
     public @Nullable BlockState getItemModelSource() {
         return null;
-    }
-
-    @Override
-    public Direction getHorizontalOrientation(BlockState state) {
-        int rotation = state.getValue(BlockStateProperties.ROTATION_16);
-        return Direction.from2DDataValue(rotation / 4);
     }
 
     @Override

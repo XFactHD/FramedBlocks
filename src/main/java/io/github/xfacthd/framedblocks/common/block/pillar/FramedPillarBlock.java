@@ -67,11 +67,6 @@ public class FramedPillarBlock extends FramedBlock implements PillarLikeBlock, A
     }
 
     @Override
-    public Direction getHorizontalOrientation(BlockState state) {
-        return DirUtils.getHorizontalDirection(state.getValue(BlockStateProperties.AXIS));
-    }
-
-    @Override
     public BlockState getJadeRenderState(BlockState state) {
         return defaultBlockState().setValue(BlockStateProperties.AXIS, Direction.Axis.Y);
     }

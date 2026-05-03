@@ -23,6 +23,7 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
@@ -98,11 +99,6 @@ public non-sealed interface DelegatingFramedBlockEntity extends IFramedBlockEnti
     }
 
     @Override
-    default void setCamo(CamoContainer<?, ?> camo, boolean secondary, CamoOrientation orientation) {
-        unwrap().setCamo(camo, secondary, orientation);
-    }
-
-    @Override
     @ApiStatus.NonExtendable
     default CamoContainer<?, ?> getCamo(BlockState state) {
         return unwrap().getCamo(state);
@@ -124,11 +120,6 @@ public non-sealed interface DelegatingFramedBlockEntity extends IFramedBlockEnti
     @ApiStatus.NonExtendable
     default CamoContainer<?, ?> getCamo(BlockHitResult hit, Vec3 lookVec, Vec3 eyePos) {
         return unwrap().getCamo(hit, lookVec, eyePos);
-    }
-
-    @Override
-    default @Nullable Direction getCamoOrientation(boolean secondary) {
-        return unwrap().getCamoOrientation(secondary);
     }
 
     @Override
@@ -279,6 +270,12 @@ public non-sealed interface DelegatingFramedBlockEntity extends IFramedBlockEnti
     @ApiStatus.NonExtendable
     default boolean canEntityDestroyCamo(Entity entity) {
         return unwrap().canEntityDestroyCamo(entity);
+    }
+
+    @Override
+    @ApiStatus.NonExtendable
+    default void applyWrenchRotation(Rotation rotation, boolean stateChanged) {
+        unwrap().applyWrenchRotation(rotation, stateChanged);
     }
 
     @Override

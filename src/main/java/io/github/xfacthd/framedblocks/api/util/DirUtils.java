@@ -3,7 +3,10 @@ package io.github.xfacthd.framedblocks.api.util;
 import com.google.common.base.Preconditions;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.Nullable;
 
@@ -121,10 +124,6 @@ public final class DirUtils {
         return Lookups.DIR_2D_VALUE_AROUND_AXIS[Lookups.make2dValueIndex(axis, dir)];
     }
 
-    public static Direction getHorizontalDirection(Direction.Axis axis) {
-        return axis != Direction.Axis.Y ? axis.getNegative() : Direction.NORTH;
-    }
-
     public static boolean isNinetyDegree(Rotation rotation) {
         return rotation == Rotation.CLOCKWISE_90 || rotation == Rotation.COUNTERCLOCKWISE_90;
     }
@@ -144,6 +143,7 @@ public final class DirUtils {
 
     public static void forAllDirectionsAndNull(Consumer<@Nullable Direction> consumer) {
         consumer.accept(null);
+        //noinspection NullableProblems
         forAllDirections(consumer);
     }
 
@@ -161,6 +161,20 @@ public final class DirUtils {
 
     public static int maskNullDirection(@Nullable Direction dir) {
         return dir == null ? DIRECTIONS.length : dir.ordinal();
+    }
+
+    public static Direction.Axis getMirrorAxis(Mirror mirror) {
+        return switch (mirror) {
+            case LEFT_RIGHT -> Direction.Axis.Z;
+            case FRONT_BACK -> Direction.Axis.X;
+            case NONE -> throw new IllegalArgumentException("Cannot get mirror axis of Mirror.NONE");
+        };
+    }
+
+    public static boolean isDifferentRot16Quadrant(BlockState oldState, BlockState newState) {
+        int oldRot = oldState.getValue(BlockStateProperties.ROTATION_16);
+        int newRot = newState.getValue(BlockStateProperties.ROTATION_16);
+        return  (oldRot / 4) != (newRot / 4);
     }
 
     private DirUtils() { }

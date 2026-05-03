@@ -153,11 +153,6 @@ public class FramedLatticeBlock extends FramedBlock implements PillarLikeBlock, 
     }
 
     @Override
-    public @Nullable Direction getHorizontalOrientation(BlockState state) {
-        return null;
-    }
-
-    @Override
     public Set<Property<?>> getPropertiesToCopy() {
         return Set.of(FramedProperties.X_AXIS, FramedProperties.Y_AXIS, FramedProperties.Z_AXIS);
     }

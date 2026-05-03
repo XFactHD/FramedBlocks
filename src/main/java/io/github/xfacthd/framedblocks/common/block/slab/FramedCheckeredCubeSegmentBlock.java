@@ -5,7 +5,6 @@ import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
-import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Mirror;
@@ -51,11 +50,6 @@ public class FramedCheckeredCubeSegmentBlock extends FramedBlock {
 
     @Override
     public @Nullable BlockState getItemModelSource() {
-        return null;
-    }
-
-    @Override
-    public @Nullable Direction getHorizontalOrientation(BlockState state) {
         return null;
     }
 

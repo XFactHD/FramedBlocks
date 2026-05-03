@@ -3,11 +3,9 @@ package io.github.xfacthd.framedblocks.common.block.cube;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
-import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import org.jspecify.annotations.Nullable;
 
 public class FramedCubeBlock extends FramedBlock {
     public FramedCubeBlock(Properties props) {
@@ -28,11 +26,6 @@ public class FramedCubeBlock extends FramedBlock {
     @Override
     public BlockState getItemModelSource() {
         return defaultBlockState();
-    }
-
-    @Override
-    public @Nullable Direction getHorizontalOrientation(BlockState state) {
-        return null;
     }
 
     @Override

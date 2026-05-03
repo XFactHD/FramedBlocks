@@ -13,6 +13,7 @@ import io.github.xfacthd.framedblocks.common.block.FramedBlock;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import io.github.xfacthd.framedblocks.common.item.block.VerticalAndWallBlockItem;
 import net.minecraft.core.Direction;
+import net.minecraft.util.TriState;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.Block;
@@ -88,6 +89,11 @@ public class FramedCornerSlopePanelBlock extends FramedBlock implements SlopeTog
     }
 
     @Override
+    public TriState shouldNotifyBlockEntityOfWrenchRotation(WrenchRotationMode mode, BlockState oldState, BlockState newState) {
+        return mode.getDefaultNotifyBlockEntity();
+    }
+
+    @Override
     public IFramedBlockItem createBlockItem(Item.Properties props) {
         Block other = switch (getBlockType()) {
             case FRAMED_SMALL_CORNER_SLOPE_PANEL -> FBContent.BLOCK_FRAMED_SMALL_CORNER_SLOPE_PANEL_WALL.value();
@@ -106,11 +112,6 @@ public class FramedCornerSlopePanelBlock extends FramedBlock implements SlopeTog
     @Override
     public BlockState getItemModelSource() {
         return defaultBlockState().setValue(FramedProperties.FACING_HOR, invertFacing ? Direction.EAST : Direction.WEST);
-    }
-
-    @Override
-    public Direction getHorizontalOrientation(BlockState state) {
-        return state.getValue(FramedProperties.FACING_HOR);
     }
 
     @Override

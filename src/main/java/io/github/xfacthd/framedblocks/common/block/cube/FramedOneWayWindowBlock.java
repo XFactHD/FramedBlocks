@@ -3,6 +3,7 @@ package io.github.xfacthd.framedblocks.common.block.cube;
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import io.github.xfacthd.framedblocks.api.block.render.ParticleHelper;
 import io.github.xfacthd.framedblocks.api.camo.block.BlockCamoContent;
+import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
@@ -14,6 +15,7 @@ import io.github.xfacthd.framedblocks.common.data.property.NullableDirection;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.TriState;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -122,6 +124,11 @@ public class FramedOneWayWindowBlock extends FramedBlock {
     }
 
     @Override
+    public TriState shouldNotifyBlockEntityOfWrenchRotation(WrenchRotationMode mode, BlockState oldState, BlockState newState) {
+        return TriState.DEFAULT;
+    }
+
+    @Override
     public BlockState getAppearance(BlockState state, BlockAndLightGetter level, BlockPos pos, Direction side, @Nullable BlockState queryState, @Nullable BlockPos queryPos) {
         Direction dir = state.getValue(PropertyHolder.NULLABLE_FACE).toNullableDirection();
         if (dir == side && queryPos != null) {
@@ -147,11 +154,6 @@ public class FramedOneWayWindowBlock extends FramedBlock {
     @Override
     public BlockState getItemModelSource() {
         return defaultBlockState();
-    }
-
-    @Override
-    public @Nullable Direction getHorizontalOrientation(BlockState state) {
-        return null;
     }
 
     @Override

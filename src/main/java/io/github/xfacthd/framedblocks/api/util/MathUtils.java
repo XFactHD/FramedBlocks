@@ -56,5 +56,36 @@ public final class MathUtils {
         return (long) a * (long) (b / IntMath.gcd(a, b));
     }
 
+    /// Returns whether the bit at `index` in the provided `bitset` is set to `1`.
+    ///
+    /// @param bitset The bitset to read from
+    /// @param index  The bit index to read
+    /// @return Whether the bit is set
+    public static boolean readBit(int bitset, int index) {
+        return (bitset & (1 << index)) != 0;
+    }
+
+    /// Sets or clears the bit at `index` in the provided `bitset` depending on `value`.
+    ///
+    /// @param bitset The bitset to modify
+    /// @param index  The bit index to modify
+    /// @param value  Whether the bit should be set (`true`) or cleared (`false`)
+    /// @return The modified bitset
+    public static int writeBit(int bitset, int index, boolean value) {
+        int mask = 1 << index;
+        if (value) {
+            bitset |= mask;
+        } else {
+            bitset &= ~mask;
+        }
+        return bitset;
+    }
+
+    public static void swap(int[] arr, int indexOne, int indexTwo) {
+        int temp = arr[indexOne];
+        arr[indexOne] = arr[indexTwo];
+        arr[indexTwo] = temp;
+    }
+
     private MathUtils() { }
 }

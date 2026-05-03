@@ -2,6 +2,7 @@ package io.github.xfacthd.framedblocks.common.block.cube;
 
 import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
+import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.shapes.ShapeUtils;
 import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.common.FBContent;
@@ -13,6 +14,7 @@ import io.github.xfacthd.framedblocks.common.data.property.NullableDirection;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
+import net.minecraft.util.TriState;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -20,6 +22,7 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -98,6 +101,17 @@ public class FramedCollapsibleBlock extends FramedBlock {
     }
 
     @Override
+    protected BlockState mirror(BlockState state, Mirror mirror) {
+        NullableDirection collapsedFace = state.getValue(PropertyHolder.NULLABLE_FACE);
+        return state.setValue(PropertyHolder.NULLABLE_FACE, collapsedFace.mirror(mirror));
+    }
+
+    @Override
+    public TriState shouldNotifyBlockEntityOfWrenchRotation(WrenchRotationMode mode, BlockState oldState, BlockState newState) {
+        return TriState.TRUE;
+    }
+
+    @Override
     public boolean doesBlockOccludeBeaconBeam(BlockState state, LevelReader level, BlockPos pos) {
         NullableDirection face = state.getValue(PropertyHolder.NULLABLE_FACE);
         return face == NullableDirection.NONE || DirUtils.isY(face.toDirection());
@@ -111,11 +125,6 @@ public class FramedCollapsibleBlock extends FramedBlock {
     @Override
     public BlockState getItemModelSource() {
         return defaultBlockState();
-    }
-
-    @Override
-    public @Nullable Direction getHorizontalOrientation(BlockState state) {
-        return null;
     }
 
     @Override

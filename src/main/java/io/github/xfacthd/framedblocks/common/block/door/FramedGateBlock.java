@@ -1,8 +1,8 @@
 package io.github.xfacthd.framedblocks.common.block.door;
 
 import io.github.xfacthd.framedblocks.api.block.BlockUtils;
-import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
+import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.api.util.MathUtils;
 import io.github.xfacthd.framedblocks.common.FBContent;
@@ -13,6 +13,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.TriState;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -150,6 +151,11 @@ public class FramedGateBlock extends FramedBlock {
     }
 
     @Override
+    public TriState shouldNotifyBlockEntityOfWrenchRotation(WrenchRotationMode mode, BlockState oldState, BlockState newState) {
+        return TriState.DEFAULT;
+    }
+
+    @Override
     protected boolean isPathfindable(BlockState state, PathComputationType type) {
         return switch (type) {
             case LAND, AIR -> state.getValue(BlockStateProperties.OPEN);
@@ -164,11 +170,6 @@ public class FramedGateBlock extends FramedBlock {
     @Override
     public BlockState getItemModelSource() {
         return defaultBlockState();
-    }
-
-    @Override
-    public Direction getHorizontalOrientation(BlockState state) {
-        return state.getValue(FramedProperties.FACING_HOR);
     }
 
     @Override

@@ -2,8 +2,10 @@ package io.github.xfacthd.framedblocks.common.blockentity.special;
 
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import io.github.xfacthd.framedblocks.api.block.blockentity.NetworkValueInput;
+import io.github.xfacthd.framedblocks.api.block.blockentity.RotationSource;
 import io.github.xfacthd.framedblocks.api.blueprint.BlueprintData;
 import io.github.xfacthd.framedblocks.api.util.DirUtils;
+import io.github.xfacthd.framedblocks.api.util.MathUtils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.blockentity.PackedCollapsibleBlockOffsets;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
@@ -23,6 +25,8 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.component.BlockItemStateProperties;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Mirror;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
@@ -32,8 +36,11 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.model.data.ModelData;
 import org.jspecify.annotations.Nullable;
 
+import java.util.Arrays;
+
 public class FramedCollapsibleBlockEntity extends FramedBlockEntity implements CollapsibleBlockEntity {
     public static final int DIRECTIONS = Direction.values().length;
+    private static final Direction[] HORIZONTAL_DIRECTIONS = Direction.Plane.HORIZONTAL.stream().toArray(Direction[]::new);
     public static final int VERTEX_COUNT = 4;
     private static final int BIT_PER_VERTEX = 5;
     private static final int VERTEX_MASK = ~(-1 << BIT_PER_VERTEX);
@@ -168,6 +175,37 @@ public class FramedCollapsibleBlockEntity extends FramedBlockEntity implements C
         }
     }
 
+    public static int vertexFromCorner(Direction faceHit, Direction dirOne, Direction dirTwo) {
+        if (DirUtils.isY(faceHit)) {
+            Direction dirX = select(Direction.Axis.X, dirOne, dirTwo);
+            Direction dirZ = select(Direction.Axis.Z, dirOne, dirTwo);
+            if ((dirZ == Direction.NORTH) == (faceHit == Direction.UP)) {
+                return dirX == Direction.WEST ? 0 : 3;
+            } else {
+                return dirX == Direction.WEST ? 1 : 2;
+            }
+        } else {
+            Direction dirY = select(Direction.Axis.Y, dirOne, dirTwo);
+            Direction dirXZ = select(DirUtils.isX(faceHit) ? Direction.Axis.Z : Direction.Axis.X, dirOne, dirTwo);
+            boolean positive = faceHit == Direction.SOUTH || faceHit == Direction.WEST;
+            if (dirY == Direction.DOWN) {
+                return DirUtils.isPositive(dirXZ) != positive ? 1 : 2;
+            } else {
+                return DirUtils.isPositive(dirXZ) != positive ? 0 : 3;
+            }
+        }
+    }
+
+    private static Direction select(Direction.Axis axis, Direction dirOne, Direction dirTwo) {
+        if (dirOne.getAxis() == axis) {
+            return dirOne;
+        } else if (dirTwo.getAxis() == axis) {
+            return dirTwo;
+        } else {
+            throw new IllegalArgumentException("Neither %s nor %s fit axis %s".formatted(dirOne, dirTwo, axis));
+        }
+    }
+
     public @Nullable Direction getCollapsedFace() {
         return getBlockState().getValue(PropertyHolder.NULLABLE_FACE).toNullableDirection();
     }
@@ -184,6 +222,62 @@ public class FramedCollapsibleBlockEntity extends FramedBlockEntity implements C
     @Override
     public int getPackedOffsets(BlockState state) {
         return packedOffsets;
+    }
+
+    @Override
+    protected boolean applyExternalRotation(Mirror mirror, Rotation rotation, RotationSource source) {
+        int prevOffsets = packedOffsets;
+        NullableDirection nullableDir = getBlockState().getValue(PropertyHolder.NULLABLE_FACE);
+        if (nullableDir != NullableDirection.NONE && (mirror != Mirror.NONE || rotation != Rotation.NONE)) {
+            Direction dir = nullableDir.toDirection();
+            int[] offsets = new int[4];
+            for (int i = 0; i < 4; i++) {
+                offsets[i] = getVertexOffset(i);
+            }
+
+            if (mirror != Mirror.NONE) {
+                Direction face;
+                Direction.Axis mirrorAxis;
+                Direction.Axis perpAxis;
+                if (DirUtils.isY(dir)) {
+                    face = dir;
+                    mirrorAxis = DirUtils.getMirrorAxis(mirror);
+                    perpAxis = DirUtils.getPerpendicularAxis(mirrorAxis, Direction.Axis.Y);
+                } else {
+                    NullableDirection unmirrored = nullableDir.rotate(DirUtils.getOppositeRotation(rotation)).mirror(mirror);
+                    face = unmirrored.toDirection();
+                    mirrorAxis = face.getClockWise().getAxis();
+                    perpAxis = Direction.Axis.Y;
+                }
+
+                Direction mirrorNeg = mirrorAxis.getNegative();
+                Direction mirrorPos = mirrorAxis.getPositive();
+                Direction perpNeg = perpAxis.getNegative();
+                Direction perpPos = perpAxis.getPositive();
+                MathUtils.swap(offsets, vertexFromCorner(face, mirrorNeg, perpNeg), vertexFromCorner(face, mirrorPos, perpNeg));
+                MathUtils.swap(offsets, vertexFromCorner(face, mirrorNeg, perpPos), vertexFromCorner(face, mirrorPos, perpPos));
+            }
+
+            if (DirUtils.isY(dir) && rotation != Rotation.NONE) {
+                if (dir == Direction.UP) {
+                    rotation = DirUtils.getOppositeRotation(rotation);
+                }
+                int[] offsetsCopy = Arrays.copyOf(offsets, offsets.length);
+                for (Direction horDir : HORIZONTAL_DIRECTIONS) {
+                    Direction outDir = rotation.rotate(horDir);
+                    offsets[outDir.get2DDataValue()] = offsetsCopy[horDir.get2DDataValue()];
+                }
+            }
+
+            for (int i = 0; i < 4; i++) {
+                setVertexOffset(i, offsets[i]);
+            }
+        }
+        if (source == RotationSource.STRUCTURE || packedOffsets != prevOffsets) {
+            super.applyExternalRotation(mirror, rotation, source);
+            return true;
+        }
+        return false;
     }
 
     @Override

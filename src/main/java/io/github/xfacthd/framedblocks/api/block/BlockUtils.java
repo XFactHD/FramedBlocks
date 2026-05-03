@@ -1,7 +1,6 @@
 package io.github.xfacthd.framedblocks.api.block;
 
 import com.google.common.base.Preconditions;
-import io.github.xfacthd.framedblocks.api.block.blockentity.CamoOrientation;
 import io.github.xfacthd.framedblocks.api.block.blockentity.FrameModifier;
 import io.github.xfacthd.framedblocks.api.block.blockentity.IFramedBlockEntity;
 import io.github.xfacthd.framedblocks.api.block.overlay.BlockOverlay;
@@ -238,13 +237,11 @@ public final class BlockUtils {
             Runnable action
     ) {
         CamoContainer<?, ?> camo = EmptyCamoContainer.EMPTY;
-        CamoOrientation camoOrientation = CamoOrientation.UNKNOWN;
         Holder<BlockOverlay> overlay = null;
         boolean[] modifiers = new boolean[MODIFIERS.length];
 
         if (level.getBlockEntity(pos) instanceof IFramedBlockEntity be) {
             camo = be.getCamo();
-            camoOrientation = CamoOrientation.of(be.getCamoOrientation(false));
             overlay = be.getOverlay();
             for (FrameModifier modifier : MODIFIERS) {
                 modifiers[modifier.ordinal()] = modifier.isActive(be);
@@ -259,7 +256,7 @@ public final class BlockUtils {
         }
 
         if (level.getBlockEntity(pos) instanceof IFramedBlockEntity be) {
-            be.setCamo(camo, writeToCamoTwo, camoOrientation);
+            be.setCamo(camo, writeToCamoTwo);
             be.setOverlay(overlay);
             for (FrameModifier modifier : MODIFIERS) {
                 modifier.setActive(be, modifiers[modifier.ordinal()]);

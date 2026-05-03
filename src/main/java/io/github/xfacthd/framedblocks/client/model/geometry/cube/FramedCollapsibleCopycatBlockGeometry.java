@@ -16,7 +16,6 @@ import net.minecraft.client.resources.model.geometry.BakedQuad;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.model.data.ModelData;
 import org.jspecify.annotations.Nullable;
@@ -35,13 +34,11 @@ public class FramedCollapsibleCopycatBlockGeometry extends Geometry {
 
     private final BlockState state;
     private final int solidFaces;
-    private final Rotation rotation;
     private final BlockStateModel altBaseModel;
 
     public FramedCollapsibleCopycatBlockGeometry(GeometryFactory.Context ctx) {
         this.state = ctx.state();
         this.solidFaces = ctx.state().getValue(PropertyHolder.SOLID_FACES);
-        this.rotation = ctx.state().getValue(PropertyHolder.COPYCAT_ROTATION);
         this.altBaseModel = ctx.auxModels().getModel(ALT_BASE_MODEL_KEY);
     }
 
@@ -54,7 +51,7 @@ public class FramedCollapsibleCopycatBlockGeometry extends Geometry {
             return;
         }
 
-        byte[] offsets = FramedCollapsibleCopycatBlockEntity.unpackOffsets(packedOffsets, rotation);
+        byte[] offsets = FramedCollapsibleCopycatBlockEntity.unpackOffsets(packedOffsets);
         boolean solid = (solidFaces & (1 << quadDir.ordinal())) != 0;
         List<QuadModifier> mods = new ArrayList<>(2);
         QuadModifier initialModifier = QuadModifier.of(quad).apply(Modifiers.setPosition((16F - offsets[quadDir.ordinal()]) / 16F));

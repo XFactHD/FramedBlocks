@@ -109,11 +109,6 @@ public class FramedTorchBlock extends TorchBlock implements IFramedBlockInternal
     }
 
     @Override
-    public @Nullable Direction getHorizontalOrientation(BlockState state) {
-        return null;
-    }
-
-    @Override
     public Class<? extends Block> getJadeTargetClass() {
         return FramedTorchBlock.class;
     }

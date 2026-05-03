@@ -4,15 +4,20 @@ import io.github.xfacthd.framedblocks.api.block.doubleblock.CamoGetter;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockParts;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockTopInteractionMode;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.SolidityCheck;
+import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.util.DirUtils;
+import io.github.xfacthd.framedblocks.api.util.RotationDirection;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.block.FramedDoubleBlock;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import io.github.xfacthd.framedblocks.common.data.property.CompoundDirection;
 import net.minecraft.core.Direction;
+import net.minecraft.util.TriState;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Mirror;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import org.jspecify.annotations.Nullable;
@@ -96,20 +101,37 @@ public final class FramedDividedBoardBlock extends FramedDoubleBlock {
     }
 
     @Override
-    public BlockState getItemModelSource() {
-        return defaultBlockState();
+    public BlockState rotate(BlockState state, RotationDirection direction, WrenchRotationMode mode) {
+        if (mode == WrenchRotationMode.SECONDARY) {
+            CompoundDirection cmpDir = state.getValue(PropertyHolder.FACING_DIR);
+            return state.setValue(PropertyHolder.FACING_DIR, cmpDir.rotateOrientation(direction));
+        }
+        return super.rotate(state, direction, mode);
     }
 
     @Override
-    public Direction getHorizontalOrientation(BlockState state) {
+    protected BlockState rotate(BlockState state, Rotation rotation) {
         CompoundDirection cmpDir = state.getValue(PropertyHolder.FACING_DIR);
-        if (!DirUtils.isY(cmpDir.direction())) {
-            return cmpDir.direction();
+        return state.setValue(PropertyHolder.FACING_DIR, cmpDir.rotate(rotation));
+    }
+
+    @Override
+    protected BlockState mirror(BlockState state, Mirror mirror) {
+        CompoundDirection cmpDir = state.getValue(PropertyHolder.FACING_DIR);
+        return state.setValue(PropertyHolder.FACING_DIR, cmpDir.mirror(mirror));
+    }
+
+    @Override
+    public TriState shouldNotifyBlockEntityOfWrenchRotation(WrenchRotationMode mode, BlockState oldState, BlockState newState) {
+        if (mode == WrenchRotationMode.PRIMARY || DirUtils.isY(oldState.getValue(PropertyHolder.FACING_DIR).direction())) {
+            return TriState.DEFAULT;
         }
-        if (!DirUtils.isY(cmpDir.orientation())) {
-            return cmpDir.orientation();
-        }
-        return Direction.NORTH;
+        return TriState.FALSE;
+    }
+
+    @Override
+    public BlockState getItemModelSource() {
+        return defaultBlockState();
     }
 
     @Override

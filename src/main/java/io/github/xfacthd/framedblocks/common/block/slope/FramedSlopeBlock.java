@@ -21,6 +21,7 @@ import io.github.xfacthd.framedblocks.common.util.FramedUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.TriState;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -121,6 +122,11 @@ public class FramedSlopeBlock extends FramedBlock implements SlopeBlock, SlopeTo
     }
 
     @Override
+    public TriState shouldNotifyBlockEntityOfWrenchRotation(WrenchRotationMode mode, BlockState oldState, BlockState newState) {
+        return mode.getDefaultNotifyBlockEntity();
+    }
+
+    @Override
     public Direction getFacing(BlockState state) {
         return state.getValue(FramedProperties.FACING_HOR);
     }
@@ -133,11 +139,6 @@ public class FramedSlopeBlock extends FramedBlock implements SlopeBlock, SlopeTo
     @Override
     public BlockState getItemModelSource() {
         return defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
-    }
-
-    @Override
-    public Direction getHorizontalOrientation(BlockState state) {
-        return state.getValue(FramedProperties.FACING_HOR);
     }
 
     @Override

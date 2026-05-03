@@ -54,11 +54,6 @@ public class FramedAdjustableDoubleSlabBlock extends FramedAdjustableDoubleBlock
         };
     }
 
-    @Override
-    public @Nullable Direction getHorizontalOrientation(BlockState state) {
-        return null;
-    }
-
     public static FramedAdjustableDoubleSlabBlock standard(Properties props) {
         return new FramedAdjustableDoubleSlabBlock(
                 BlockType.FRAMED_ADJ_DOUBLE_SLAB,

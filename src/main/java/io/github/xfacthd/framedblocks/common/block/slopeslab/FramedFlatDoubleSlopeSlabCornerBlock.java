@@ -19,6 +19,7 @@ import io.github.xfacthd.framedblocks.common.data.BlockType;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.util.TriState;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Mirror;
@@ -62,13 +63,7 @@ public class FramedFlatDoubleSlopeSlabCornerBlock extends FramedDoubleBlock impl
 
     @Override
     public BlockState rotate(BlockState state, RotationDirection direction, WrenchRotationMode mode) {
-        return switch (mode) {
-            case PRIMARY -> super.rotate(state, direction, mode);
-            case SECONDARY -> state.cycle(switch (direction) {
-                case CLOCKWISE -> PropertyHolder.TOP_HALF;
-                case COUNTERCLOCKWISE -> FramedProperties.TOP;
-            });
-        };
+        return FramedSlopeSlabBlock.rotateSlopeSlab(state, direction, mode);
     }
 
     @Override
@@ -79,6 +74,11 @@ public class FramedFlatDoubleSlopeSlabCornerBlock extends FramedDoubleBlock impl
     @Override
     protected BlockState mirror(BlockState state, Mirror mirror) {
         return BlockUtils.mirrorCornerBlock(state, mirror);
+    }
+
+    @Override
+    public TriState shouldNotifyBlockEntityOfWrenchRotation(WrenchRotationMode mode, BlockState oldState, BlockState newState) {
+        return mode.getDefaultNotifyBlockEntity();
     }
 
     @Override
@@ -157,11 +157,6 @@ public class FramedFlatDoubleSlopeSlabCornerBlock extends FramedDoubleBlock impl
     @Override
     public BlockState getItemModelSource() {
         return defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.WEST);
-    }
-
-    @Override
-    public Direction getHorizontalOrientation(BlockState state) {
-        return state.getValue(FramedProperties.FACING_HOR);
     }
 
     @Override

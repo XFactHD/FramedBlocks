@@ -11,6 +11,7 @@ import io.github.xfacthd.framedblocks.common.data.BlockType;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import io.github.xfacthd.framedblocks.common.data.property.CornerType;
 import net.minecraft.core.Direction;
+import net.minecraft.util.TriState;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Mirror;
@@ -43,20 +44,12 @@ public class FramedCornerSlopeBlock extends FramedBlock implements SlopeToggleBl
         return rotateCorner(state, direction, mode);
     }
 
+    @SuppressWarnings("deprecation")
     public static BlockState rotateCorner(BlockState state, RotationDirection direction, WrenchRotationMode mode) {
-        CornerType type = state.getValue(PropertyHolder.CORNER_TYPE);
-        Rotation rotation = direction.toVanillaRotation();
-        if (type.isHorizontal()) {
-            return switch (mode) {
-                case PRIMARY -> state.setValue(PropertyHolder.CORNER_TYPE, type.rotate(rotation));
-                case SECONDARY -> BlockUtils.rotate(state, FramedProperties.FACING_HOR, rotation);
-            };
-        } else {
-            return switch (mode) {
-                case PRIMARY -> BlockUtils.rotate(state, FramedProperties.FACING_HOR, rotation);
-                case SECONDARY -> state.setValue(PropertyHolder.CORNER_TYPE, type.verticalOpposite());
-            };
+        if (mode == WrenchRotationMode.SECONDARY) {
+            return state.cycle(PropertyHolder.CORNER_TYPE);
         }
+        return state.rotate(direction.toVanillaRotation());
     }
 
     @Override
@@ -79,13 +72,13 @@ public class FramedCornerSlopeBlock extends FramedBlock implements SlopeToggleBl
     }
 
     @Override
-    public BlockState getItemModelSource() {
-        return defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
+    public TriState shouldNotifyBlockEntityOfWrenchRotation(WrenchRotationMode mode, BlockState oldState, BlockState newState) {
+        return mode.getDefaultNotifyBlockEntity();
     }
 
     @Override
-    public Direction getHorizontalOrientation(BlockState state) {
-        return state.getValue(FramedProperties.FACING_HOR);
+    public BlockState getItemModelSource() {
+        return defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
     }
 
     @Override

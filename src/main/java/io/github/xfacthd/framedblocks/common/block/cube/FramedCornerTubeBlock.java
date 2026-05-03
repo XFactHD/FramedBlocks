@@ -1,6 +1,7 @@
 package io.github.xfacthd.framedblocks.common.block.cube;
 
 import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
+import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.api.util.FramedConstants;
 import io.github.xfacthd.framedblocks.api.util.MathUtils;
@@ -10,6 +11,7 @@ import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import io.github.xfacthd.framedblocks.common.data.property.CornerTubeOrientation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.util.TriState;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -95,13 +97,13 @@ public class FramedCornerTubeBlock extends FramedBlock {
     }
 
     @Override
-    public BlockState getItemModelSource() {
-        return defaultBlockState().setValue(PropertyHolder.CORNER_TYPE_ORIENTATION, CornerTubeOrientation.UP_NORTH);
+    public TriState shouldNotifyBlockEntityOfWrenchRotation(WrenchRotationMode mode, BlockState oldState, BlockState newState) {
+        return TriState.DEFAULT;
     }
 
     @Override
-    public Direction getHorizontalOrientation(BlockState state) {
-        return state.getValue(PropertyHolder.CORNER_TYPE_ORIENTATION).getSecondaryDir();
+    public BlockState getItemModelSource() {
+        return defaultBlockState().setValue(PropertyHolder.CORNER_TYPE_ORIENTATION, CornerTubeOrientation.UP_NORTH);
     }
 
     @Override

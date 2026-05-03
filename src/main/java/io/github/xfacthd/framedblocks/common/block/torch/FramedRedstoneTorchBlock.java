@@ -100,11 +100,6 @@ public class FramedRedstoneTorchBlock extends RedstoneTorchBlock implements IFra
     }
 
     @Override
-    public @Nullable Direction getHorizontalOrientation(BlockState state) {
-        return null;
-    }
-
-    @Override
     public BlockState getJadeRenderState(BlockState state) {
         return defaultBlockState();
     }

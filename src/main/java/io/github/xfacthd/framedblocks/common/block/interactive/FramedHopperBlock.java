@@ -2,7 +2,6 @@ package io.github.xfacthd.framedblocks.common.block.interactive;
 
 import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
-import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.block.IFramedBlockInternal;
 import io.github.xfacthd.framedblocks.common.blockentity.special.FramedHopperBlockEntity;
@@ -122,12 +121,6 @@ public class FramedHopperBlock extends HopperBlock implements IFramedBlockIntern
     @Override
     public BlockState getItemModelSource() {
         return defaultBlockState();
-    }
-
-    @Override
-    public Direction getHorizontalOrientation(BlockState state) {
-        Direction facing = state.getValue(FACING);
-        return DirUtils.isY(facing) ? Direction.NORTH : facing;
     }
 
     @Override

@@ -153,11 +153,6 @@ public class FramedTargetBlock extends TargetBlock implements IFramedBlockIntern
     }
 
     @Override
-    public @Nullable Direction getHorizontalOrientation(BlockState state) {
-        return null;
-    }
-
-    @Override
     public BlockState getJadeRenderState(BlockState state) {
         return state;
     }

@@ -12,8 +12,8 @@ import io.github.xfacthd.framedblocks.common.block.FramedBlock;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import io.github.xfacthd.framedblocks.common.data.property.HorizontalRotation;
-import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
+import net.minecraft.util.TriState;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Mirror;
@@ -66,8 +66,8 @@ public class FramedCornerSlopePanelWallBlock extends FramedBlock implements Slop
     @Override
     public BlockState rotate(BlockState state, RotationDirection direction, WrenchRotationMode mode) {
         return switch (mode) {
-            case PRIMARY -> HorizontalRotation.rotate(state, direction);
-            case SECONDARY -> super.rotate(state, direction, mode);
+            case PRIMARY -> super.rotate(state, direction, mode);
+            case SECONDARY -> HorizontalRotation.rotate(state, direction);
         };
     }
 
@@ -93,13 +93,13 @@ public class FramedCornerSlopePanelWallBlock extends FramedBlock implements Slop
     }
 
     @Override
-    public @Nullable BlockState getItemModelSource() {
-        return null;
+    public TriState shouldNotifyBlockEntityOfWrenchRotation(WrenchRotationMode mode, BlockState oldState, BlockState newState) {
+        return mode.getDefaultNotifyBlockEntity();
     }
 
     @Override
-    public Direction getHorizontalOrientation(BlockState state) {
-        return state.getValue(FramedProperties.FACING_HOR);
+    public @Nullable BlockState getItemModelSource() {
+        return null;
     }
 
     @Override

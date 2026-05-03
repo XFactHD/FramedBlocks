@@ -36,7 +36,7 @@ public final class RotateMirrorErrors {
                     for (WrenchRotationMode mode : MODES) {
                         for (RotationDirection direction : DIRECTIONS) {
                             String type = "wrench_rotate_" + mode.getSerializedName();
-                            guard(reporter, state, (modState, mod) -> block.rotate(state, mod, mode), direction, type, knownFaultyWrench);
+                            guard(reporter, state, (modState, mod) -> block.rotate(modState, mod, mode), direction, type, knownFaultyWrench);
                         }
                     }
 

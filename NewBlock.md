@@ -19,6 +19,10 @@
   - For double-camo blocks, extend `AbstractFramedDoubleBlock` or implement `IFramedDoubleBlock`
   - When `IFramedBlock` or `IFramedDoubleBlock` are implemented manually, certain vanilla methods need to be manually delegated to the interface methods as done in the two abstract block classes
   - If the block handles `VoxelShape`s itself, override `IFramedBlocks#doesBlockOccludeBeaconBeam()` to return an appropriate value
+  - If the block is orientable, rotation and mirror handling for structures and wrench interaction must be implemented
+    - Implement `BlockBehaviour#rotate(BlockState, Rotation)` and `BlockBehaviour#mirror(BlockState, Mirror)` to strictly handle rotation/mirroring around the Y axis
+    - If the block has non-horizontal primary orientations or has a secondary orientation property, override `IFramedBlock#rotate(BlockState, RotationDirection, WrenchRotationMode)`
+    - Implement `IFramedBlock#shouldNotifyBlockEntityOfWrenchRotation()` to specify under which circumstances the rotation is around the Y axis, requiring the `BlockEntity` to be notified to adjust the camo
 - Create a `BlockEntity` or use an existing one:
   - For single-camo blocks, use `FramedBlockEntity` or extend it to implement additional functionality
   - For double-camo blocks, use `FramedDoubleBlockEntity` or extend it to implement additional functionality or part hit detection that cannot be handled by the default shape-based implementation

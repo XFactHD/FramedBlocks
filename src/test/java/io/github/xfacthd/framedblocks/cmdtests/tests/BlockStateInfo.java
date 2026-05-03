@@ -4,7 +4,6 @@ import com.google.common.base.Stopwatch;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.context.CommandContext;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
-import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.api.block.ShapeLockableBlock;
 import io.github.xfacthd.framedblocks.client.model.wrapping.ModelWrappingHandler;
 import io.github.xfacthd.framedblocks.client.model.wrapping.ModelWrappingManager;
@@ -15,13 +14,11 @@ import io.github.xfacthd.framedblocks.common.util.MarkdownTable;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.util.TriState;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.Property;
 
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 public final class BlockStateInfo {
@@ -37,7 +34,6 @@ public final class BlockStateInfo {
                 .header("State count", true)
                 .header("Model state count", true)
                 .header("BlockOverlays")
-                .header("Camo Rotation")
                 .header("Solid")
                 .header("Glowing")
                 .header("Skylight")
@@ -47,7 +43,6 @@ public final class BlockStateInfo {
 
         long totalDoubleBlocks = 0;
         long totalBlocksWithOverlays = 0;
-        long totalBlocksWithCamoRotation = 0;
         long totalStates = 0;
         long totalModelStates = 0;
         long totalStatesWithOverlays = 0;
@@ -58,14 +53,8 @@ public final class BlockStateInfo {
             ModelWrappingHandler wrapper = ModelWrappingManager.getHandler(block);
             int stateCount = block.getStateDefinition().getPossibleStates().size();
             int modelStateCount = wrapper.getVisitedStateCount();
-            TriState supportsCamoRotation = checkCamoRotationSupport(block);
-
-            if (supportsCamoRotation == TriState.TRUE) {
-                totalBlocksWithCamoRotation++;
-            }
 
             String blockOverlays = type.supportsBlockOverlays() ? "supported" : "-";
-            String camoRotation = triStateToString(supportsCamoRotation);
             String solid = type.canOccludeWithSolidCamo() ? checkBooleanProperty(block, FramedProperties.SOLID) : "-";
             String glowing = checkBooleanProperty(block, FramedProperties.GLOWING);
             String skylight = checkBooleanProperty(block, FramedProperties.PROPAGATES_SKYLIGHT);
@@ -77,7 +66,6 @@ public final class BlockStateInfo {
                     .cell("%,d".formatted(stateCount))
                     .cell("%,d".formatted(modelStateCount))
                     .cell(blockOverlays)
-                    .cell(camoRotation)
                     .cell(solid)
                     .cell(glowing)
                     .cell(skylight)
@@ -102,7 +90,6 @@ public final class BlockStateInfo {
                 "\nBlock count: " + TYPES.length +
                 "\\\n↳ With two camos: " + totalDoubleBlocks +
                 "\\\n↳ With BlockOverlays: " + totalBlocksWithOverlays +
-                "\\\n↳ With camo rotation: " + totalBlocksWithCamoRotation +
                 "\\\nTotal states: " + totalStates +
                 "\\\n↳ With BlockOverlays: " + totalStatesWithOverlays +
                 "\\\nTotal model states: " + totalModelStates +
@@ -116,20 +103,6 @@ public final class BlockStateInfo {
         ctx.getSource().sendSuccess(() -> resultMsg, true);
 
         return Command.SINGLE_SUCCESS;
-    }
-
-    private static TriState checkCamoRotationSupport(Block block) {
-        IFramedBlock framedBlock = (IFramedBlock) block;
-        if (framedBlock.getHorizontalOrientation(block.defaultBlockState()) == null) {
-            return TriState.DEFAULT;
-        }
-
-        boolean anyNull = block.getStateDefinition()
-                .getPossibleStates()
-                .stream()
-                .map(framedBlock::getHorizontalOrientation)
-                .anyMatch(Objects::isNull);
-        return anyNull ? TriState.FALSE : TriState.TRUE;
     }
 
     @SuppressWarnings("deprecation")
@@ -151,14 +124,6 @@ public final class BlockStateInfo {
             return "wrong default";
         }
         return "present";
-    }
-
-    private static String triStateToString(TriState value) {
-        return switch (value) {
-            case TRUE -> "supported";
-            case FALSE -> "broken";
-            case DEFAULT -> "-";
-        };
     }
 
     private BlockStateInfo() { }

@@ -72,11 +72,6 @@ public class FramedStorageBlock extends FramedBlock {
     }
 
     @Override
-    public @Nullable Direction getHorizontalOrientation(BlockState state) {
-        return null;
-    }
-
-    @Override
     public BlockState getJadeRenderState(BlockState state) {
         return state;
     }

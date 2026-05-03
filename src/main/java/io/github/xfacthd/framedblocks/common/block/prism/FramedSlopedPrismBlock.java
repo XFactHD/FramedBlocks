@@ -2,13 +2,16 @@ package io.github.xfacthd.framedblocks.common.block.prism;
 
 import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
 import io.github.xfacthd.framedblocks.api.block.SlopeToggleBlock;
+import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.api.util.MathUtils;
+import io.github.xfacthd.framedblocks.api.util.RotationDirection;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import io.github.xfacthd.framedblocks.common.data.property.CompoundDirection;
 import net.minecraft.core.Direction;
+import net.minecraft.util.TriState;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Mirror;
@@ -69,6 +72,20 @@ public class FramedSlopedPrismBlock extends FramedBlock implements PrismBlock, S
     }
 
     @Override
+    public BlockState rotate(BlockState state, RotationDirection direction, WrenchRotationMode mode) {
+        return rotateWithWrench(state, direction, mode);
+    }
+
+    @SuppressWarnings("deprecation")
+    public static BlockState rotateWithWrench(BlockState state, RotationDirection direction, WrenchRotationMode mode) {
+        if (mode == WrenchRotationMode.SECONDARY) {
+            CompoundDirection cmpDir = state.getValue(PropertyHolder.FACING_DIR);
+            return state.setValue(PropertyHolder.FACING_DIR, cmpDir.rotateOrientation(direction));
+        }
+        return state.rotate(direction.toVanillaRotation());
+    }
+
+    @Override
     protected BlockState rotate(BlockState state, Rotation rotation) {
         CompoundDirection cmpDir = state.getValue(PropertyHolder.FACING_DIR);
         return state.setValue(PropertyHolder.FACING_DIR, cmpDir.rotate(rotation));
@@ -81,22 +98,22 @@ public class FramedSlopedPrismBlock extends FramedBlock implements PrismBlock, S
     }
 
     @Override
+    public TriState shouldNotifyBlockEntityOfWrenchRotation(WrenchRotationMode mode, BlockState oldState, BlockState newState) {
+        return shouldNotifyBlockEntityOfWrenchRotation(mode, oldState);
+    }
+
+    public static TriState shouldNotifyBlockEntityOfWrenchRotation(WrenchRotationMode mode, BlockState oldState) {
+        if (mode == WrenchRotationMode.PRIMARY || DirUtils.isY(oldState.getValue(PropertyHolder.FACING_DIR).direction())) {
+            return TriState.DEFAULT;
+        }
+        return TriState.FALSE;
+    }
+
+    @Override
     public BlockState getItemModelSource() {
         boolean outer = getBlockType() == BlockType.FRAMED_SLOPED_PRISM;
         CompoundDirection cmpDir = outer ? CompoundDirection.UP_WEST : CompoundDirection.UP_EAST;
         return defaultBlockState().setValue(PropertyHolder.FACING_DIR, cmpDir);
-    }
-
-    @Override
-    public Direction getHorizontalOrientation(BlockState state) {
-        CompoundDirection cmpDir = state.getValue(PropertyHolder.FACING_DIR);
-        if (!DirUtils.isY(cmpDir.direction())) {
-            return cmpDir.direction();
-        }
-        if (!DirUtils.isY(cmpDir.orientation())) {
-            return cmpDir.orientation();
-        }
-        return Direction.NORTH;
     }
 
     @Override

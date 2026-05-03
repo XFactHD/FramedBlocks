@@ -20,6 +20,7 @@ import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import io.github.xfacthd.framedblocks.common.data.property.SlopeType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.util.TriState;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Mirror;
@@ -64,6 +65,11 @@ public class FramedDoubleSlopeBlock extends FramedDoubleBlock implements SlopeTo
         } else {
             return BlockUtils.mirrorFaceBlock(state, mirror);
         }
+    }
+
+    @Override
+    public TriState shouldNotifyBlockEntityOfWrenchRotation(WrenchRotationMode mode, BlockState oldState, BlockState newState) {
+        return mode.getDefaultNotifyBlockEntity();
     }
 
     @Override
@@ -192,11 +198,6 @@ public class FramedDoubleSlopeBlock extends FramedDoubleBlock implements SlopeTo
         return defaultBlockState()
                 .setValue(FramedProperties.FACING_HOR, Direction.WEST)
                 .setValue(PropertyHolder.SLOPE_TYPE, SlopeType.HORIZONTAL);
-    }
-
-    @Override
-    public Direction getHorizontalOrientation(BlockState state) {
-        return state.getValue(FramedProperties.FACING_HOR);
     }
 
     @Override

@@ -5,12 +5,13 @@ import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.model.wrapping.WrapHelper;
 import io.github.xfacthd.framedblocks.api.model.wrapping.statemerger.StateMerger;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.api.util.RotationDirection;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
-import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
+import net.minecraft.util.TriState;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Mirror;
@@ -50,12 +51,7 @@ public class FramedMiniCubeBlock extends FramedBlock {
 
     @Override
     public BlockState rotate(BlockState state, RotationDirection direction, WrenchRotationMode mode) {
-        int rotation = state.getValue(BlockStateProperties.ROTATION_16);
-        rotation += switch (direction) {
-            case CLOCKWISE -> 1;
-            case COUNTERCLOCKWISE -> 15;
-        };
-        return state.setValue(BlockStateProperties.ROTATION_16, rotation % 16);
+        return direction.rotateRot16(state);
     }
 
     @Override
@@ -71,14 +67,14 @@ public class FramedMiniCubeBlock extends FramedBlock {
     }
 
     @Override
-    public BlockState getItemModelSource() {
-        return defaultBlockState();
+    public TriState shouldNotifyBlockEntityOfWrenchRotation(WrenchRotationMode mode, BlockState oldState, BlockState newState) {
+        boolean quadrantChanged = DirUtils.isDifferentRot16Quadrant(oldState, newState);
+        return quadrantChanged ? TriState.DEFAULT : TriState.FALSE;
     }
 
     @Override
-    public Direction getHorizontalOrientation(BlockState state) {
-        int rotation = state.getValue(BlockStateProperties.ROTATION_16);
-        return Direction.from2DDataValue(rotation / 4);
+    public BlockState getItemModelSource() {
+        return defaultBlockState();
     }
 
     @Override

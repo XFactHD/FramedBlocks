@@ -19,10 +19,8 @@ import io.github.xfacthd.framedblocks.api.component.FrameConfig;
 import io.github.xfacthd.framedblocks.api.model.data.AbstractFramedBlockData;
 import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
 import io.github.xfacthd.framedblocks.api.util.ConfigView;
-import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.api.util.FramedConstants;
 import io.github.xfacthd.framedblocks.api.util.Utils;
-import io.github.xfacthd.framedblocks.api.util.serdes.FramedCodecs;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
@@ -96,9 +94,6 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
     private final CullState cullState = new CullState();
     private StateCache stateCache;
     private CamoContainer<?, ?> camoContainer = EmptyCamoContainer.EMPTY;
-    /** Holds the horizontal orientation this block had when the camo was applied ("applications" for the purpose of updating an existing camo don't update this) */
-    @Nullable
-    private Direction camoOrientation = null;
     @Nullable
     private Holder<BlockOverlay> overlay = null;
     private boolean glowing = false;
@@ -378,16 +373,9 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
 
     @Override
     public final void setCamo(CamoContainer<?, ?> camo, boolean secondary) {
-        setCamo(camo, secondary, CamoOrientation.UNKNOWN);
-    }
-
-    @Override
-    public final void setCamo(CamoContainer<?, ?> camo, boolean secondary, CamoOrientation orientation) {
         int light = getLightValue();
 
-        boolean forceOrientation = orientation != CamoOrientation.UNKNOWN;
-        Direction camoOrientation = orientation.resolve(this);
-        setCamoInternal(camo, secondary, camoOrientation, forceOrientation);
+        setCamoInternal(camo, secondary);
 
         setChangedWithoutSignalUpdate();
         if (getLightValue() != light) {
@@ -403,23 +391,8 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
         camoContainer = camo;
     }
 
-    void setCamoInternal(CamoContainer<?, ?> camo, boolean secondary, @Nullable Direction orientation, boolean forceOrientation) {
-        camoOrientation = updateOrientation(camo, orientation, false, forceOrientation);
+    void setCamoInternal(CamoContainer<?, ?> camo, boolean secondary) {
         camoContainer = camo;
-    }
-
-    @Nullable Direction updateOrientation(CamoContainer<?, ?> newCamo, @Nullable Direction newDir, boolean second, boolean force) {
-        if (newCamo.isEmpty()) {
-            return null;
-        }
-
-        CamoContainer<?, ?> oldCamo = getCamo(second);
-        if (oldCamo.isEmpty() || force) {
-            return newDir;
-        }
-
-        // Keep previous orientation
-        return getCamoOrientation(second);
     }
 
     /**
@@ -462,16 +435,6 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
 
     CamoContainer<?, ?> getCamo(boolean secondary) {
         return camoContainer;
-    }
-
-    /**
-     * Returns the horizontal orientation this block had when the camo was applied.
-     *
-     * @param secondary Whether the orientation of the first or second camo should be returned
-     */
-    @Override
-    public @Nullable Direction getCamoOrientation(boolean secondary) {
-        return camoOrientation;
     }
 
     @Override
@@ -847,6 +810,22 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
     }
 
     @Override
+    public final void applyWrenchRotation(Rotation rotation, boolean stateChanged) {
+        if (applyExternalRotation(Mirror.NONE, rotation, RotationSource.WRENCH)) {
+            setChangedWithoutSignalUpdate();
+            if (!stateChanged) {
+                level().sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
+            }
+        }
+    }
+
+    protected boolean applyExternalRotation(Mirror mirror, Rotation rotation, RotationSource source) {
+        CamoContainer<?, ?> prevCamo = camoContainer;
+        camoContainer = camoContainer.adjustForCarrierRotation(mirror, rotation);
+        return camoContainer != prevCamo;
+    }
+
+    @Override
     public void onLoad() {
         onLoadInternal();
         super.onLoad();
@@ -874,10 +853,7 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
     }
 
     protected boolean needsModelDataUpdateAfterStateChange(BlockState oldState) {
-        IFramedBlock block = getBlock();
-        Direction oldOrientation = block.getHorizontalOrientation(oldState);
-        Direction newOrientation = block.getHorizontalOrientation(getBlockState());
-        return oldOrientation != newOrientation;
+        return false;
     }
 
     @Override
@@ -917,19 +893,12 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
 
     protected void writeToDataPacket(ValueOutput valueOutput) {
         CamoContainerHelper.writeToNetwork(valueOutput.child(CAMO_NBT_KEY), camoContainer);
-        valueOutput.storeNullable(CAMO_DIR_NBT_KEY, FramedCodecs.DIRECTION_BY_INT, camoOrientation);
         valueOutput.storeNullable(OVERLAY_NBT_KEY, BlockOverlay.CODEC, overlay);
         valueOutput.putByte("flags", writeFlags());
     }
 
     protected void readFromDataPacket(NetworkValueInput input) {
         camoContainer = input.readCamo(CAMO_NBT_KEY, false);
-
-        Direction newOrientation = input.read(CAMO_DIR_NBT_KEY, FramedCodecs.DIRECTION_BY_INT).orElse(null);
-        if (newOrientation != camoOrientation) {
-            camoOrientation = newOrientation;
-            input.requestRenderUpdate();
-        }
 
         Holder<BlockOverlay> newOverlay = input.read(OVERLAY_NBT_KEY, BlockOverlay.CODEC).orElse(null);
         if (newOverlay != overlay) {
@@ -1016,23 +985,7 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
     final FramedBlockData makeBlockData(BlockState state, CamoContainer<?, ?> camo, byte cullMask, boolean secondPart) {
         // The view-blocking value is never resolved from the second part, no point in computing it twice
         TriState viewBlocking = secondPart ? TriState.DEFAULT : Utils.toTriState(state.isSuffocating(level(), worldPosition));
-        CamoContainer<?, ?> adjustedCamo = adjustCamoOrientation(camo, state, secondPart);
-        return new FramedBlockData(state, adjustedCamo, cullMask, secondPart, reinforced, emissive, viewBlocking, overlay);
-    }
-
-    private CamoContainer<?, ?> adjustCamoOrientation(CamoContainer<?, ?> camo, BlockState state, boolean secondPart) {
-        Direction camoOrientation = getCamoOrientation(secondPart);
-        if (camoOrientation == null) {
-            return camo;
-        }
-
-        Direction blockOrientation = getBlock().getHorizontalOrientation(state);
-        if (blockOrientation == null) {
-            return camo;
-        }
-
-        Rotation rotation = DirUtils.getRotationBetween(camoOrientation, blockOrientation);
-        return camo.adjustForCarrierRotation(Mirror.NONE, rotation);
+        return new FramedBlockData(state, camo, cullMask, secondPart, reinforced, emissive, viewBlocking, overlay);
     }
 
     protected void attachAdditionalModelData(ModelData.Builder builder) { }
@@ -1142,7 +1095,6 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
 
     void saveAdditionalInternal(ValueOutput valueOutput) {
         valueOutput.store(CAMO_NBT_KEY, CamoContainerHelper.CODEC, camoContainer);
-        valueOutput.storeNullable(CAMO_DIR_NBT_KEY, Direction.CODEC, camoOrientation);
         valueOutput.storeNullable(OVERLAY_NBT_KEY, BlockOverlay.CODEC, overlay);
         valueOutput.putBoolean("glowing", glowing);
         valueOutput.putBoolean("intangible", intangible);
@@ -1158,7 +1110,6 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
 
     void loadAdditionalInternal(ValueInput valueInput) {
         camoContainer = loadAndValidateCamo(valueInput, CAMO_NBT_KEY);
-        camoOrientation = valueInput.read(CAMO_DIR_NBT_KEY, Direction.CODEC).orElse(null);
         overlay = valueInput.read(OVERLAY_NBT_KEY, BlockOverlay.CODEC).orElse(null);
         glowing = valueInput.getBooleanOr("glowing", false);
         intangible = valueInput.getBooleanOr("intangible", false);

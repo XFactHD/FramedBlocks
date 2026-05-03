@@ -7,7 +7,9 @@ import fuzs.diagonalblocks.api.v2.util.EightWayDirection;
 import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.ShapeLockableBlock;
+import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.util.DirUtils;
+import io.github.xfacthd.framedblocks.api.util.RotationDirection;
 import io.github.xfacthd.framedblocks.common.block.IFramedBlockInternal;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import net.minecraft.core.BlockPos;
@@ -135,6 +137,11 @@ public final class FramedDiagonalFenceBlock extends DiagonalFenceBlock implement
     }
 
     @Override
+    public BlockState rotate(BlockState state, RotationDirection direction, WrenchRotationMode mode) {
+        return state;
+    }
+
+    @Override
     public BlockType getBlockType() {
         return BlockType.FRAMED_FENCE;
     }
@@ -146,11 +153,6 @@ public final class FramedDiagonalFenceBlock extends DiagonalFenceBlock implement
 
     @Override
     public @Nullable BlockState getItemModelSource() {
-        return null;
-    }
-
-    @Override
-    public @Nullable Direction getHorizontalOrientation(BlockState state) {
         return null;
     }
 

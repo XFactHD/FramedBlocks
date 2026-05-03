@@ -19,6 +19,7 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
@@ -43,8 +44,6 @@ public sealed interface IFramedBlockEntity extends IBlockEntityExtension permits
 
     void setCamo(CamoContainer<?, ?> camo, boolean secondary);
 
-    void setCamo(CamoContainer<?, ?> camo, boolean secondary, CamoOrientation orientation);
-
     CamoContainer<?, ?> getCamo(BlockState state);
 
     CamoContainer<?, ?> getCamo(Direction side, @Nullable Direction edge);
@@ -52,8 +51,6 @@ public sealed interface IFramedBlockEntity extends IBlockEntityExtension permits
     CamoContainer<?, ?> getCamo(BlockHitResult hit, Player player);
 
     CamoContainer<?, ?> getCamo(BlockHitResult hit, Vec3 lookVec, Vec3 eyePos);
-
-    @Nullable Direction getCamoOrientation(boolean secondary);
 
     CamoContainer<?, ?> getCamo();
 
@@ -104,6 +101,8 @@ public sealed interface IFramedBlockEntity extends IBlockEntityExtension permits
     TriState canCamoSustainPlant(BlockGetter level, Direction side, BlockState plant);
 
     boolean canEntityDestroyCamo(Entity entity);
+
+    void applyWrenchRotation(Rotation rotation, boolean stateChanged);
 
     IFramedBlock getBlock();
 

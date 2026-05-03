@@ -1,12 +1,16 @@
 package io.github.xfacthd.framedblocks.common.block.pillar;
 
+import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
-import io.github.xfacthd.framedblocks.api.util.DirUtils;
+import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
+import io.github.xfacthd.framedblocks.api.util.RotationDirection;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Mirror;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -32,14 +36,23 @@ public class FramedPillarSocketBlock extends FramedBlock {
     }
 
     @Override
-    public BlockState getItemModelSource() {
-        return defaultBlockState().setValue(BlockStateProperties.FACING, Direction.DOWN);
+    public BlockState rotate(BlockState state, RotationDirection direction, WrenchRotationMode mode) {
+        return direction.cycle(state, BlockStateProperties.FACING);
     }
 
     @Override
-    public Direction getHorizontalOrientation(BlockState state) {
-        Direction facing = state.getValue(BlockStateProperties.FACING);
-        return DirUtils.isY(facing) ? Direction.NORTH : facing;
+    protected BlockState rotate(BlockState state, Rotation rotation) {
+        return BlockUtils.rotate(state, BlockStateProperties.FACING, rotation);
+    }
+
+    @Override
+    protected BlockState mirror(BlockState state, Mirror mirror) {
+        return BlockUtils.mirrorFaceBlock(state, BlockStateProperties.FACING, mirror);
+    }
+
+    @Override
+    public BlockState getItemModelSource() {
+        return defaultBlockState().setValue(BlockStateProperties.FACING, Direction.DOWN);
     }
 
     @Override

@@ -12,6 +12,7 @@ import io.github.xfacthd.framedblocks.common.data.BlockType;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import io.github.xfacthd.framedblocks.common.item.block.FramedMirroringBlockItem;
 import net.minecraft.core.Direction;
+import net.minecraft.util.TriState;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.Block;
@@ -51,8 +52,13 @@ public class FramedSlopeSlabBlock extends FramedBlock implements SlopeToggleBloc
 
     @Override
     public BlockState rotate(BlockState state, RotationDirection direction, WrenchRotationMode mode) {
+        return rotateSlopeSlab(state, direction, mode);
+    }
+
+    @SuppressWarnings("deprecation")
+    public static BlockState rotateSlopeSlab(BlockState state, RotationDirection direction, WrenchRotationMode mode) {
         return switch (mode) {
-            case PRIMARY -> super.rotate(state, direction, mode);
+            case PRIMARY -> state.rotate(direction.toVanillaRotation());
             case SECONDARY -> state.cycle(switch (direction) {
                 case CLOCKWISE -> PropertyHolder.TOP_HALF;
                 case COUNTERCLOCKWISE -> FramedProperties.TOP;
@@ -71,6 +77,11 @@ public class FramedSlopeSlabBlock extends FramedBlock implements SlopeToggleBloc
     }
 
     @Override
+    public TriState shouldNotifyBlockEntityOfWrenchRotation(WrenchRotationMode mode, BlockState oldState, BlockState newState) {
+        return mode.getDefaultNotifyBlockEntity();
+    }
+
+    @Override
     public IFramedBlockItem createBlockItem(Item.Properties props) {
         return new FramedMirroringBlockItem(this, props);
     }
@@ -78,11 +89,6 @@ public class FramedSlopeSlabBlock extends FramedBlock implements SlopeToggleBloc
     @Override
     public BlockState getItemModelSource() {
         return defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
-    }
-
-    @Override
-    public Direction getHorizontalOrientation(BlockState state) {
-        return state.getValue(FramedProperties.FACING_HOR);
     }
 
     @Override

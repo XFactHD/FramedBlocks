@@ -7,6 +7,8 @@ import fuzs.diagonalblocks.api.v2.util.EightWayDirection;
 import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.ShapeLockableBlock;
+import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
+import io.github.xfacthd.framedblocks.api.util.RotationDirection;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.block.IFramedBlockInternal;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
@@ -128,6 +130,11 @@ public final class FramedDiagonalGlassPaneBlock extends DiagonalGlassPaneBlock i
     }
 
     @Override
+    public BlockState rotate(BlockState state, RotationDirection direction, WrenchRotationMode mode) {
+        return state;
+    }
+
+    @Override
     protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext ctx) {
         if (isIntangible(state, level, pos, ctx)) {
             return Shapes.empty();
@@ -170,11 +177,6 @@ public final class FramedDiagonalGlassPaneBlock extends DiagonalGlassPaneBlock i
 
     @Override
     public @Nullable BlockState getItemModelSource() {
-        return null;
-    }
-
-    @Override
-    public @Nullable Direction getHorizontalOrientation(BlockState state) {
         return null;
     }
 

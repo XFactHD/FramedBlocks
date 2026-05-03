@@ -7,7 +7,8 @@ import io.github.xfacthd.framedblocks.api.block.doubleblock.CamoGetter;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockParts;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockTopInteractionMode;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.SolidityCheck;
-import io.github.xfacthd.framedblocks.api.util.DirUtils;
+import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
+import io.github.xfacthd.framedblocks.api.util.RotationDirection;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.block.FramedDoubleBlock;
 import io.github.xfacthd.framedblocks.common.blockentity.doubled.prism.FramedElevatedDoublePrismBlockEntity;
@@ -16,6 +17,7 @@ import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import io.github.xfacthd.framedblocks.common.data.property.DirectionAxis;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.util.TriState;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Mirror;
@@ -41,6 +43,11 @@ public class FramedElevatedDoublePrismBlock extends FramedDoubleBlock implements
     }
 
     @Override
+    public BlockState rotate(BlockState state, RotationDirection direction, WrenchRotationMode mode) {
+        return FramedPrismBlock.rotateWithWrench(state, direction, mode);
+    }
+
+    @Override
     protected BlockState rotate(BlockState state, Rotation rotation) {
         DirectionAxis dirAxis = state.getValue(PropertyHolder.FACING_AXIS);
         return state.setValue(PropertyHolder.FACING_AXIS, dirAxis.rotate(rotation));
@@ -50,6 +57,11 @@ public class FramedElevatedDoublePrismBlock extends FramedDoubleBlock implements
     protected BlockState mirror(BlockState state, Mirror mirror) {
         DirectionAxis dirAxis = state.getValue(PropertyHolder.FACING_AXIS);
         return state.setValue(PropertyHolder.FACING_AXIS, dirAxis.mirror(mirror));
+    }
+
+    @Override
+    public TriState shouldNotifyBlockEntityOfWrenchRotation(WrenchRotationMode mode, BlockState oldState, BlockState newState) {
+        return FramedPrismBlock.shouldNotifyBlockEntityOfWrenchRotation(mode, oldState);
     }
 
     @Override
@@ -122,15 +134,6 @@ public class FramedElevatedDoublePrismBlock extends FramedDoubleBlock implements
     @Override
     public BlockState getItemModelSource() {
         return defaultBlockState().setValue(PropertyHolder.FACING_AXIS, DirectionAxis.UP_X);
-    }
-
-    @Override
-    public Direction getHorizontalOrientation(BlockState state) {
-        DirectionAxis dirAxis = state.getValue(PropertyHolder.FACING_AXIS);
-        if (!DirUtils.isY(dirAxis.direction())) {
-            return dirAxis.direction();
-        }
-        return DirUtils.getHorizontalDirection(dirAxis.axis());
     }
 
     @Override
