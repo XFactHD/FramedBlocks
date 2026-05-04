@@ -3,10 +3,13 @@ package io.github.xfacthd.framedblocks.api.render.fakelevel;
 import net.minecraft.client.renderer.block.BlockAndTintGetter;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.CardinalLighting;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.ColorResolver;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.lighting.LevelLightEngine;
+import net.neoforged.neoforge.common.world.AuxiliaryLightManager;
 import net.neoforged.neoforge.model.data.ModelData;
+import org.jspecify.annotations.Nullable;
 
 /// Delegating [BlockAndTintGetter] providing access to a single [BlockState] and associated [ModelData].
 public non-sealed interface DelegatingBlockRenderFakeLevel extends BlockRenderFakeLevel {
@@ -39,5 +42,10 @@ public non-sealed interface DelegatingBlockRenderFakeLevel extends BlockRenderFa
     @Override
     default int getMinY() {
         return realLevel().getMinY();
+    }
+
+    @Override
+    default @Nullable AuxiliaryLightManager getAuxLightManager(ChunkPos pos) {
+        return realLevel().getAuxLightManager(pos);
     }
 }
