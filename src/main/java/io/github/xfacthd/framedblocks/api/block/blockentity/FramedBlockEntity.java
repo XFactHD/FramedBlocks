@@ -49,6 +49,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -807,6 +808,11 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
             return false;
         }
         return camoContainer.getContent().canEntityDestroy(level(), worldPosition, entity);
+    }
+
+    @Override
+    public final void applyStructureRotation(Mirror mirror, Rotation rotation) {
+        applyExternalRotation(mirror, rotation, RotationSource.STRUCTURE);
     }
 
     @Override

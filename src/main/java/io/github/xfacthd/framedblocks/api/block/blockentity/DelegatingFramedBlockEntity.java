@@ -23,6 +23,7 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -36,6 +37,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.neoforged.neoforge.common.extensions.IBlockEntityExtension;
 import net.neoforged.neoforge.model.data.ModelData;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.MustBeInvokedByOverriders;
 import org.jspecify.annotations.Nullable;
 
 import java.util.function.BiConsumer;
@@ -57,6 +59,7 @@ import java.util.function.Function;
  *     <li>{@link IBlockEntityExtension#onDataPacket(Connection, ValueInput)} via {@link WrappedFramedBlockEntity#onDataPacket(Connection, ValueInput, BiConsumer)}</li>
  *     <li>{@link IBlockEntityExtension#getModelData()}</li>
  *     <li>{@link IBlockEntityExtension#onLoad()} via {@link WrappedFramedBlockEntity#onLoadInternal()} before calling the super method</li>
+ *     <li>{@link IBlockEntityExtension#applyStructureRotation(Mirror, Rotation)} if the BE implementing this interface already overrides it</li>
  *     <li>{@link BlockEntity#collectImplicitComponents(DataComponentMap.Builder)} via {@link WrappedFramedBlockEntity#collectImplicitComponentsForDelegate(DataComponentMap.Builder)}</li>
  *     <li>{@link BlockEntity#applyImplicitComponents(DataComponentGetter)} via {@link WrappedFramedBlockEntity#applyImplicitComponentsForDelegate(DataComponentGetter)}</li>
  *     <li>{@link BlockEntity#removeComponentsFromTag(ValueOutput)}</li>
@@ -270,6 +273,12 @@ public non-sealed interface DelegatingFramedBlockEntity extends IFramedBlockEnti
     @ApiStatus.NonExtendable
     default boolean canEntityDestroyCamo(Entity entity) {
         return unwrap().canEntityDestroyCamo(entity);
+    }
+
+    @Override
+    @MustBeInvokedByOverriders
+    default void applyStructureRotation(Mirror mirror, Rotation rotation) {
+        unwrap().applyStructureRotation(mirror, rotation);
     }
 
     @Override
