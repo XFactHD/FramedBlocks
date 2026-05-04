@@ -29,6 +29,7 @@ public record FramedBlockStateModelPart(
     }
 
     @Override
+    @Deprecated
     public boolean useAmbientOcclusion() {
         return !ambientOcclusion.isFalse();
     }

@@ -27,6 +27,7 @@ public final class DeferredRecipeSerializerRegister extends DeferredRegister<Rec
         return (DeferredHolder<RecipeSerializer<?>, I>) DeferredRecipeSerializer.createRecipeSerializer(ResourceKey.create(registryKey, key));
     }
 
+    @SuppressWarnings({ "unchecked", "RedundantSuppression" })
     public <R extends Recipe<?>> DeferredRecipeSerializer<R> registerRecipeSerializer(
             String name, MapCodec<R> codec, StreamCodec<RegistryFriendlyByteBuf, R> streamCodec
     ) {

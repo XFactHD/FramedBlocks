@@ -24,6 +24,7 @@ public final class DeferredRecipeTypeRegister extends DeferredRegister<RecipeTyp
         return (DeferredHolder<RecipeType<?>, I>) DeferredRecipeType.createRecipeType(ResourceKey.create(registryKey, key));
     }
 
+    @SuppressWarnings({ "unchecked", "RedundantSuppression" })
     public <R extends Recipe<?>> DeferredRecipeType<R> registerRecipeType(String name) {
         Identifier location = Identifier.fromNamespaceAndPath(getNamespace(), name);
         Holder<RecipeType<?>> holder = register(name, () -> RecipeType.simple(location));

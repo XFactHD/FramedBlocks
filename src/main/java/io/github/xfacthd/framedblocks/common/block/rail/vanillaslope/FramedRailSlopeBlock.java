@@ -117,6 +117,7 @@ public class FramedRailSlopeBlock<BE extends FramedBlockEntity> extends BaseRail
     }
 
     @Override
+    @Deprecated
     public Property<RailShape> getShapeProperty() {
         return PropertyHolder.ASCENDING_RAIL_SHAPE;
     }
