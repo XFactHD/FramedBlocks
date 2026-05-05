@@ -3,8 +3,8 @@ package io.github.xfacthd.framedblocks.common.blockentity.special;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.capability.energy.EntityAwareEnergyHandler;
-import io.github.xfacthd.framedblocks.common.capability.item.ExternalItemResourceHandler;
 import io.github.xfacthd.framedblocks.common.capability.item.RecipeInputItemResourceHandler;
+import io.github.xfacthd.framedblocks.common.capability.item.MaskingRangedResourceHandler;
 import io.github.xfacthd.framedblocks.common.config.ServerConfig;
 import io.github.xfacthd.framedblocks.common.crafting.saw.FramingSawRecipe;
 import io.github.xfacthd.framedblocks.common.crafting.saw.FramingSawRecipeAdditive;
@@ -27,6 +27,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
+import net.neoforged.neoforge.transfer.CombinedResourceHandler;
 import net.neoforged.neoforge.transfer.ResourceHandler;
 import net.neoforged.neoforge.transfer.energy.EnergyHandler;
 import net.neoforged.neoforge.transfer.item.ItemResource;
@@ -53,12 +54,10 @@ public class PoweredFramingSawBlockEntity extends BlockEntity {
             return PoweredFramingSawBlockEntity.this.isValidItem(slot, resource);
         }
     };
-    private final ResourceHandler<ItemResource> externalItemHandler = new ExternalItemResourceHandler(itemHandler) {
-        @Override
-        protected boolean canExtract(int slot) {
-            return slot == FramingSawMenu.SLOT_RESULT;
-        }
-    };
+    private final ResourceHandler<ItemResource> externalItemHandler = new CombinedResourceHandler<>(
+            MaskingRangedResourceHandler.insertOnly(itemHandler, FramingSawMenu.SLOT_INPUT, FramingSawMenu.SLOT_RESULT),
+            MaskingRangedResourceHandler.extractOnly(itemHandler, FramingSawMenu.SLOT_RESULT, FramingSawMenu.SLOT_RESULT + 1)
+    );
     private final EntityAwareEnergyHandler energyStorage = new EntityAwareEnergyHandler(
             ServerConfig.VIEW.getPoweredSawEnergyCapacity(),
             ServerConfig.VIEW.getPoweredSawMaxInput(),
