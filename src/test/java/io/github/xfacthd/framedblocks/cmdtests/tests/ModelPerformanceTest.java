@@ -44,6 +44,7 @@ import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.function.ToLongFunction;
@@ -66,12 +67,18 @@ public final class ModelPerformanceTest {
             false
     ));
     private static final String STONE_NAME = BuiltInRegistries.BLOCK.getKey(Blocks.STONE).toString();
+    // Exclude banners, they use empty models, poisoning the data
+    private static final Set<BlockType> EXCLUDED = Set.of(BlockType.FRAMED_BANNER, BlockType.FRAMED_WALL_BANNER);
 
     public static void testModelPerformance(CommandContext<CommandSourceStack> ignored, Consumer<Component> msgQueueAppender) {
         Map<String, BlockState> testStates = new LinkedHashMap<>();
 
         testStates.put(STONE_NAME, Blocks.STONE.defaultBlockState());
         for (BlockType type : BlockType.values()) {
+            if (EXCLUDED.contains(type)) {
+                continue;
+            }
+
             BlockState state = FBContent.byType(type).defaultBlockState();
             String blockName = BuiltInRegistries.BLOCK.getKey(state.getBlock()).toString();
             testStates.put(blockName, state);
