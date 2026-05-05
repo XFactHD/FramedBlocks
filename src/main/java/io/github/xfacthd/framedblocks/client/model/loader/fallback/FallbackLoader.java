@@ -7,8 +7,8 @@ import com.google.gson.JsonParseException;
 import com.mojang.serialization.JsonOps;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.block.model.BlockModel;
 import net.minecraft.client.resources.model.UnbakedModel;
+import net.minecraft.client.resources.model.cuboid.CuboidModel;
 import net.minecraft.client.resources.model.cuboid.MissingCuboidModel;
 import net.minecraft.client.resources.model.geometry.UnbakedGeometry;
 import net.minecraft.client.resources.model.sprite.Material;
@@ -40,7 +40,7 @@ public final class FallbackLoader implements UnbakedModelLoader<UnbakedModel> {
 
         if (conditions.stream().allMatch(cond -> cond.test(ICondition.IContext.EMPTY))) {
             json.remove("loader");
-            return ctx.deserialize(json, BlockModel.class);
+            return ctx.deserialize(json, CuboidModel.class);
         }
 
         Identifier fallback = Identifier.parse(GsonHelper.getAsString(json, "fallback"));
