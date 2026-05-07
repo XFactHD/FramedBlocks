@@ -14,6 +14,8 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jspecify.annotations.Nullable;
 
+import java.util.Objects;
+
 public final class FramedBlockData extends AbstractFramedBlockData {
     public static final FramedBlockData EMPTY = new FramedBlockData();
     private static final int FULL_FACE_INVERSION_MASK = 0b1111111;
@@ -30,10 +32,12 @@ public final class FramedBlockData extends AbstractFramedBlockData {
     private final TriState viewBlocking;
     @Nullable
     private final Holder<BlockOverlay> overlay;
+    @Nullable
+    private final ModelDataEntry<?> queryData;
     private final int postCamoTintIndexOffset;
 
     public FramedBlockData(@Nullable BlockState outerState, CamoContainer<?, ?> camoContent, boolean secondPart, @Nullable Holder<BlockOverlay> overlay) {
-        this(outerState, camoContent, (byte) 0, secondPart, false, false, TriState.DEFAULT, overlay);
+        this(outerState, camoContent, (byte) 0, secondPart, false, false, TriState.DEFAULT, overlay, null);
     }
 
     public FramedBlockData(
@@ -44,7 +48,8 @@ public final class FramedBlockData extends AbstractFramedBlockData {
             boolean reinforced,
             boolean emissive,
             TriState viewBlocking,
-            @Nullable Holder<BlockOverlay> overlay
+            @Nullable Holder<BlockOverlay> overlay,
+            @Nullable ModelDataEntry<?> queryData
     ) {
         this.outerState = outerState;
         this.camoContainer = camoContainer;
@@ -57,6 +62,7 @@ public final class FramedBlockData extends AbstractFramedBlockData {
         this.flags = flags;
         this.viewBlocking = viewBlocking;
         this.overlay = overlay;
+        this.queryData = queryData;
         this.postCamoTintIndexOffset = CamoContainerHelper.Client.getTintCount(camoContainer);
     }
 
@@ -68,6 +74,7 @@ public final class FramedBlockData extends AbstractFramedBlockData {
         this.flags = 0;
         this.viewBlocking = TriState.DEFAULT;
         this.overlay = null;
+        this.queryData = null;
         this.postCamoTintIndexOffset = 0;
     }
 
@@ -145,6 +152,10 @@ public final class FramedBlockData extends AbstractFramedBlockData {
         return overlay;
     }
 
+    public @Nullable ModelDataEntry<?> getQueryData() {
+        return queryData;
+    }
+
     @Override
     public int getCamoTintIndexOffset(boolean secondPart) {
         return 0;
@@ -164,7 +175,8 @@ public final class FramedBlockData extends AbstractFramedBlockData {
             return camoContainer.equals(other.camoContainer) &&
                    cullMask == other.cullMask &&
                    flags == other.flags &&
-                   viewBlocking == other.viewBlocking;
+                   viewBlocking == other.viewBlocking &&
+                   Objects.equals(queryData, other.queryData);
         }
         return false;
     }

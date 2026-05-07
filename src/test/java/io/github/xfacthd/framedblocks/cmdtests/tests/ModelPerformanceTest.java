@@ -234,11 +234,11 @@ public final class ModelPerformanceTest {
     private static ModelData makeModelData(BlockState state, CamoContainer<?, ?> camo, boolean emissive, @Nullable Holder<BlockOverlay> overlay) {
         AbstractFramedBlockData fbData;
         if (state.getBlock() instanceof IFramedDoubleBlock doubleBlock) {
-            FramedBlockData dataOne = new FramedBlockData(state, camo, (byte) 0, false, false, emissive, TriState.DEFAULT, overlay);
-            FramedBlockData dataTwo = new FramedBlockData(state, camo, (byte) 0, true, false, emissive, TriState.DEFAULT, null);
+            FramedBlockData dataOne = new FramedBlockData(state, camo, (byte) 0, false, false, emissive, TriState.DEFAULT, overlay, null);
+            FramedBlockData dataTwo = new FramedBlockData(state, camo, (byte) 0, true, false, emissive, TriState.DEFAULT, null, null);
             fbData = new FramedDoubleBlockData(doubleBlock.getCache(state).getParts(), dataOne, dataTwo);
         } else {
-            fbData = new FramedBlockData(state, camo, (byte) 0, false, false, emissive, TriState.DEFAULT, overlay);
+            fbData = new FramedBlockData(state, camo, (byte) 0, false, false, emissive, TriState.DEFAULT, overlay, null);
         }
         return ModelData.of(AbstractFramedBlockData.PROPERTY, fbData);
     }

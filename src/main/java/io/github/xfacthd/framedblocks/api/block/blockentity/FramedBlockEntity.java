@@ -18,6 +18,7 @@ import io.github.xfacthd.framedblocks.api.camo.empty.EmptyCamoContainer;
 import io.github.xfacthd.framedblocks.api.component.FrameConfig;
 import io.github.xfacthd.framedblocks.api.model.data.AbstractFramedBlockData;
 import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
+import io.github.xfacthd.framedblocks.api.model.data.ModelDataEntry;
 import io.github.xfacthd.framedblocks.api.util.ConfigView;
 import io.github.xfacthd.framedblocks.api.util.FramedConstants;
 import io.github.xfacthd.framedblocks.api.util.Utils;
@@ -991,7 +992,8 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
     final FramedBlockData makeBlockData(BlockState state, CamoContainer<?, ?> camo, byte cullMask, boolean secondPart) {
         // The view-blocking value is never resolved from the second part, no point in computing it twice
         TriState viewBlocking = secondPart ? TriState.DEFAULT : Utils.toTriState(state.isSuffocating(level(), worldPosition));
-        return new FramedBlockData(state, camo, cullMask, secondPart, reinforced, emissive, viewBlocking, overlay);
+        ModelDataEntry<?> queryData = camo.computeQueryData(level(), worldPosition);
+        return new FramedBlockData(state, camo, cullMask, secondPart, reinforced, emissive, viewBlocking, overlay, queryData);
     }
 
     protected void attachAdditionalModelData(ModelData.Builder builder) { }

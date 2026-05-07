@@ -13,6 +13,7 @@ import io.github.xfacthd.framedblocks.api.model.CachingModel;
 import io.github.xfacthd.framedblocks.api.model.ExtendedBlockStateModelPart;
 import io.github.xfacthd.framedblocks.api.model.data.AbstractFramedBlockData;
 import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
+import io.github.xfacthd.framedblocks.api.model.data.ModelDataEntry;
 import io.github.xfacthd.framedblocks.api.model.geometry.DefaultAO;
 import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.geometry.QuadListModifier;
@@ -28,6 +29,7 @@ import io.github.xfacthd.framedblocks.common.config.ClientConfig;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectList;
+import net.minecraft.Optionull;
 import net.minecraft.client.renderer.block.BlockAndTintGetter;
 import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
 import net.minecraft.client.renderer.block.dispatch.BlockStateModelPart;
@@ -142,7 +144,7 @@ public final class FramedBlockStateModel extends AbstractFramedBlockStateModel i
         if (uncachedFaceMask != 0) {
             random.setSeed(seed);
             partConsumer.setTintIndexOffset(camoTintOffset);
-            collectCamoParts(partConsumer, camoModel, level, pos, random, camoContent, true, null, mayUseCt);
+            collectCamoParts(partConsumer, camoModel, level, pos, random, partData, camoContent, true, null, mayUseCt);
         }
         if (blockOverlay != null) {
             if (partsOut.size() > prevOutSize) {
@@ -225,13 +227,14 @@ public final class FramedBlockStateModel extends AbstractFramedBlockStateModel i
             int miscTintOffset
     ) {
         Holder<BlockOverlay> overlay = fbData.getBlockOverlay();
+        Object queryData = Optionull.map(fbData.getQueryData(), ModelDataEntry::data);
         boolean secondPart = fbData.isSecondPart();
         boolean emissive = fbData.isEmissive();
-        if (overlay != null || ctCtx != null || userKeyData != null || (secondPart && (camoTintOffset > 0 || miscTintOffset > 0)) || emissive) {
+        if (overlay != null || ctCtx != null || queryData != null || userKeyData != null || (secondPart && (camoTintOffset > 0 || miscTintOffset > 0)) || emissive) {
             BlockState outerState = overlay != null ? fbData.getOuterState() : null;
             // Assume that neither camos nor arbitrary geometry are stupid enough to need so many tint "layers" that any of the offsets are > 255
             int packedTintOffsets = (camoTintOffset & 0xFF) | ((overlayTintOffset & 0xFF) << 8) | ((miscTintOffset & 0xFF) << 16);
-            return new CompoundPartCacheKey(outerState, camo, overlay, ctCtx, secondPart, emissive, packedTintOffsets, userKeyData);
+            return new CompoundPartCacheKey(outerState, camo, overlay, ctCtx, queryData, secondPart, emissive, packedTintOffsets, userKeyData);
         }
         // Avoid allocating a wrapping key object if possible
         return camo;
@@ -270,7 +273,7 @@ public final class FramedBlockStateModel extends AbstractFramedBlockStateModel i
 
         random.setSeed(seed);
         partConsumer.setTintIndexOffset(camoTintOffset);
-        collectCamoParts(partConsumer, camoModel, level, pos, random, camo, !xformAll, modifier, supportDynamicCamoGeometry);
+        collectCamoParts(partConsumer, camoModel, level, pos, random, fbData, camo, !xformAll, modifier, supportDynamicCamoGeometry);
         if (reinforce) {
             BlockStateModelPart srcPart = reinforcement.getFiltered(xformAll ? 0b00111111 : cullMask, defaultAO.apply(TriState.DEFAULT));
             partConsumer.accept(srcPart, ReinforcementModel.SHADER_STATE, false, true, !xformAll, ReinforcementModel.SHADER_STATE, modifier);
@@ -302,6 +305,7 @@ public final class FramedBlockStateModel extends AbstractFramedBlockStateModel i
             BlockAndTintGetter level,
             BlockPos pos,
             RandomSource random,
+            FramedBlockData partData,
             CamoContent<?> camo,
             boolean cullNonNull,
             @Nullable QuadListModifier modifier,
@@ -310,6 +314,10 @@ public final class FramedBlockStateModel extends AbstractFramedBlockStateModel i
         if (!supportDynamicGeometry) {
             level = BlockAndTintGetter.EMPTY;
             pos = BlockPos.ZERO;
+        }
+        ModelDataEntry<?> queryData = partData.getQueryData();
+        if (queryData != null) {
+            level = new DataAppendingDelegateLevel(level, pos, queryData);
         }
         BlockState queryState = useCamoStateForCamoModelQueries ? camo.getAppearanceState() : state;
         partConsumer.acceptCamo(camoModel, level, pos, random, queryState, camo.getAsBlockState(), cullNonNull, modifier);
@@ -385,6 +393,7 @@ public final class FramedBlockStateModel extends AbstractFramedBlockStateModel i
             CamoContent<?> camo,
             @Nullable Holder<BlockOverlay> overlay,
             @Nullable Object ctContext,
+            @Nullable Object queryData,
             boolean secondPart,
             boolean emissive,
             int packedTintOffsets,

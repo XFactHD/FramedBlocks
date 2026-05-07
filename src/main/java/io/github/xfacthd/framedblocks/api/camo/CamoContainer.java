@@ -1,5 +1,6 @@
 package io.github.xfacthd.framedblocks.api.camo;
 
+import io.github.xfacthd.framedblocks.api.model.data.ModelDataEntry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.network.chat.Component;
@@ -12,6 +13,7 @@ import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.MapColor;
+import net.neoforged.neoforge.model.data.ModelData;
 import org.jspecify.annotations.Nullable;
 
 import java.util.function.Consumer;
@@ -21,6 +23,7 @@ import java.util.function.Consumer;
  * the respective implementation. Additional data stored in this container must be immutable to make it eligible
  * for use in {@linkplain DataComponentType data components}
  */
+@SuppressWarnings({ "unused", "MethodMayBeStatic" })
 public abstract class CamoContainer<C extends CamoContent<C>, T extends CamoContainer<C, T>> {
     protected final C content;
 
@@ -92,8 +95,16 @@ public abstract class CamoContainer<C extends CamoContent<C>, T extends CamoCont
      * @param pos      The position of the framed block whose camo is shown
      * @param player   The player looking at the framed block
      */
-    @SuppressWarnings("unused")
     public void appendJadeTooltip(Level level, BlockPos pos, Player player, Consumer<Component> appender) { }
+
+    /// Compute additional data to be included in the [ModelData] made available to the camo model during
+    /// part collection.
+    ///
+    /// @param level The level containing the framed block this camo is applied to
+    /// @param pos   The position of the framed block this camo is applied to
+    public @Nullable ModelDataEntry<?> computeQueryData(Level level, BlockPos pos) {
+        return null;
+    }
 
     /**
      * {@return whether this container represents a non-existent camo}
