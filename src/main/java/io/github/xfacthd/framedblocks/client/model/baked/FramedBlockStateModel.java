@@ -45,6 +45,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
@@ -170,23 +171,32 @@ public final class FramedBlockStateModel extends AbstractFramedBlockStateModel i
             Object key = createCacheKey(partData, camoContent, ctCtx == camoModel ? null : ctCtx, userKeyData, camoTintOffset, overlayTintOffset, localMiscTintOffset);
             PartCacheEntry cacheEntry = partCache.get(key);
             if (cacheEntry == null) {
-                cacheEntry = buildPartCache(
-                        camoModel,
-                        level,
-                        pos,
-                        random,
-                        seed,
-                        partData,
-                        camoContent,
-                        userKeyData,
-                        reinforce,
-                        camoEmissive,
-                        defaultAO,
-                        ctCtx != null,
-                        camoTintOffset,
-                        overlayTintOffset,
-                        localMiscTintOffset
-                );
+                try {
+                    cacheEntry = buildPartCache(
+                            camoModel,
+                            level,
+                            pos,
+                            random,
+                            seed,
+                            partData,
+                            camoContent,
+                            userKeyData,
+                            reinforce,
+                            camoEmissive,
+                            defaultAO,
+                            ctCtx != null,
+                            camoTintOffset,
+                            overlayTintOffset,
+                            localMiscTintOffset
+                    );
+                } catch (Throwable t) {
+                    throw new RuntimeException(String.format(
+                            Locale.ROOT,
+                            "Encountered an unexpected error while computing cached model parts for %s on %s",
+                            partData.getCamoContainer(),
+                            state
+                    ), t);
+                }
                 partCache.put(key, cacheEntry);
             }
             List<ExtendedBlockStateModelPart> cachedParts = cacheEntry.parts;
