@@ -1,27 +1,32 @@
 package io.github.xfacthd.framedblocks.common.data.camo.fluid;
 
 import io.github.xfacthd.framedblocks.api.camo.CamoContentClientHandler;
+import io.github.xfacthd.framedblocks.api.camo.resource.ResourceCamoContentClientHandler;
 import io.github.xfacthd.framedblocks.api.model.util.ModelUtils;
-import io.github.xfacthd.framedblocks.client.model.FluidCubeModel;
 import io.github.xfacthd.framedblocks.client.render.particle.FluidSpriteParticle;
 import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.block.BlockAndTintGetter;
-import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
+import net.minecraft.client.renderer.block.FluidModel;
+import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.material.FluidState;
 import net.neoforged.neoforge.client.fluid.FluidTintSource;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
 
-public final class FluidCamoContentClientHandler extends CamoContentClientHandler<FluidCamoContent> {
+public final class FluidCamoContentClientHandler extends ResourceCamoContentClientHandler<FluidResource, FluidCamoContent> {
     public static final CamoContentClientHandler<FluidCamoContent> INSTANCE = new FluidCamoContentClientHandler();
 
     private FluidCamoContentClientHandler() { }
 
     @Override
-    public BlockStateModel getOrCreateModel(FluidCamoContent camo) {
-        return FluidCubeModel.getOrCreate(camo);
+    public ResourceModelSpec getModelSpec(FluidCamoContent camo) {
+        FluidModel fluidModel = ModelUtils.getFluidModel(camo.getFluid().defaultFluidState());
+        Material.Baked stillMaterial = fluidModel.stillMaterial();
+        Material.Baked flowingMaterial = fluidModel.flowingMaterial();
+        return new ResourceModelSpec(stillMaterial, flowingMaterial, fluidModel.fluidTintSource() != null, camo.getFlowDirection());
     }
 
     @Override

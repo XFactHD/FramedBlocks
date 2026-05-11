@@ -1,7 +1,7 @@
 package io.github.xfacthd.framedblocks.client.util;
 
 import io.github.xfacthd.framedblocks.api.model.CachingModel;
-import io.github.xfacthd.framedblocks.client.model.FluidCubeModel;
+import io.github.xfacthd.framedblocks.client.model.ResourceCubeModel;
 import io.github.xfacthd.framedblocks.client.model.RuntimeMaterialBaker;
 import io.github.xfacthd.framedblocks.client.model.overlaygen.BlockOverlayGenerator;
 import io.github.xfacthd.framedblocks.client.model.overlaygen.OverlayQuadGenerator;
@@ -29,7 +29,7 @@ public final class CacheCleaner {
     }
 
     public static void clearExternalGeometryCaches(Reason reason) {
-        FluidCubeModel.clearCaches();
+        ResourceCubeModel.clearInterner();
         RuntimeMaterialBaker.clear(reason);
         ModelBasedOutlineRenderer.clearCaches();
         OverlayQuadGenerator.clearCaches();

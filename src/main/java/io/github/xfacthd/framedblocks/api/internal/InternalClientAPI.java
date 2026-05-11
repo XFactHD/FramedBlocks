@@ -1,6 +1,8 @@
 package io.github.xfacthd.framedblocks.api.internal;
 
 import com.mojang.datafixers.util.Either;
+import io.github.xfacthd.framedblocks.api.camo.resource.ResourceCamoContent;
+import io.github.xfacthd.framedblocks.api.camo.resource.ResourceCamoContentClientHandler;
 import io.github.xfacthd.framedblocks.api.model.CachingModel;
 import io.github.xfacthd.framedblocks.api.model.ExtendedBlockStateModelPart;
 import io.github.xfacthd.framedblocks.api.model.data.QuadMapBuilder;
@@ -27,6 +29,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.util.TriState;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.transfer.resource.Resource;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.Nullable;
 
@@ -77,4 +80,8 @@ public interface InternalClientAPI {
     MaterialLookup getRuntimeMaterialLookup();
 
     void registerLoadedCachingModel(CachingModel model);
+
+    <R extends Resource, C extends ResourceCamoContent<R, C>> ResourceCamoContentClientHandler.ResourceModelBaker<R, C> createResourceModelBaker(
+            ResourceCamoContentClientHandler<R, C> clientHandler
+    );
 }

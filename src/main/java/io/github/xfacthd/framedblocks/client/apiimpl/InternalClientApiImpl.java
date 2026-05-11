@@ -4,6 +4,8 @@ import com.google.common.base.Preconditions;
 import com.mojang.datafixers.util.Either;
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.api.block.IFramedDoubleBlock;
+import io.github.xfacthd.framedblocks.api.camo.resource.ResourceCamoContent;
+import io.github.xfacthd.framedblocks.api.camo.resource.ResourceCamoContentClientHandler;
 import io.github.xfacthd.framedblocks.api.internal.InternalClientAPI;
 import io.github.xfacthd.framedblocks.api.model.AbstractFramedBlockStateModel;
 import io.github.xfacthd.framedblocks.api.model.CachingModel;
@@ -21,6 +23,7 @@ import io.github.xfacthd.framedblocks.api.model.wrapping.MaterialLookup;
 import io.github.xfacthd.framedblocks.api.model.wrapping.statemerger.StateMerger;
 import io.github.xfacthd.framedblocks.api.render.outline.OutlineRenderer;
 import io.github.xfacthd.framedblocks.client.model.FramedBlockStateModelPart;
+import io.github.xfacthd.framedblocks.client.model.ResourceCubeModel;
 import io.github.xfacthd.framedblocks.client.model.quadmap.QuadMapBuilderInternal;
 import io.github.xfacthd.framedblocks.client.model.ReinforcementModel;
 import io.github.xfacthd.framedblocks.client.model.RuntimeMaterialBaker;
@@ -51,6 +54,7 @@ import net.minecraft.util.TriState;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.transfer.resource.Resource;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
@@ -159,5 +163,12 @@ public final class InternalClientApiImpl implements InternalClientAPI {
     @Override
     public void registerLoadedCachingModel(CachingModel model) {
         CacheCleaner.registerLoadedCachingModel(model);
+    }
+
+    @Override
+    public <R extends Resource, C extends ResourceCamoContent<R, C>> ResourceCamoContentClientHandler.ResourceModelBaker<R, C> createResourceModelBaker(
+            ResourceCamoContentClientHandler<R, C> clientHandler
+    ) {
+        return new ResourceCubeModel<>(clientHandler);
     }
 }

@@ -1,8 +1,6 @@
 {
-  "parent": "minecraft:block/block",
+  "parent": "minecraft:block/cube_column",
   "textures": {
-    "end": "minecraft:block/water_still",
-    "side": "minecraft:block/water_flow",
     "particle": "#end"
   },
   "elements": [

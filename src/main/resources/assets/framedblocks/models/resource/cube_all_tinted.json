@@ -1,9 +1,5 @@
 {
-  "parent": "minecraft:block/block",
-  "textures": {
-    "end": "minecraft:block/water_still",
-    "particle": "#end"
-  },
+  "parent": "minecraft:block/cube_all",
   "elements": [
     {
       "from": [ 0, 0, 0 ],

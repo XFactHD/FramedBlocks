@@ -1,0 +1,20 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "particle": "#end"
+  },
+  "elements": [
+    {
+      "from": [ 0, 0, 0 ],
+      "to": [ 16, 16, 16 ],
+      "faces": {
+        "down":  { "texture": "#end",  "cullface": "down" },
+        "up":    { "texture": "#end",  "cullface": "up" },
+        "north": { "texture": "#side", "uv": [ 0, 0, 8, 8 ], "cullface": "north" },
+        "south": { "texture": "#side", "uv": [ 0, 0, 8, 8 ], "cullface": "south" },
+        "west":  { "texture": "#side", "uv": [ 0, 0, 8, 8 ], "cullface": "west" },
+        "east":  { "texture": "#side", "uv": [ 0, 0, 8, 8 ], "cullface": "east" }
+      }
+    }
+  ]
+}

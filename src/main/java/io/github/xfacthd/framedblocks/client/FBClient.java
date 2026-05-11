@@ -20,7 +20,7 @@ import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.client.data.BlockOutlineRenderers;
 import io.github.xfacthd.framedblocks.client.data.GhostRenderBehaviours;
 import io.github.xfacthd.framedblocks.client.data.extensions.block.*;
-import io.github.xfacthd.framedblocks.client.model.FluidCubeModel;
+import io.github.xfacthd.framedblocks.client.model.ResourceCubeModel;
 import io.github.xfacthd.framedblocks.client.model.RuntimeMaterialBaker;
 import io.github.xfacthd.framedblocks.client.model.baked.FramedBlockStateModel;
 import io.github.xfacthd.framedblocks.client.model.geometry.cube.*;
@@ -504,8 +504,10 @@ public final class FBClient {
     }
 
     private static void onRegisterStandaloneModels(ModelEvent.RegisterStandalone event) {
-        ModelUtils.registerStandaloneForLoading(event, FluidCubeModel.BARE_MODEL);
-        ModelUtils.registerStandaloneForLoading(event, FluidCubeModel.BARE_MODEL_SINGLE);
+        ModelUtils.registerStandaloneForLoading(event, ResourceCubeModel.MODEL_BARE);
+        ModelUtils.registerStandaloneForLoading(event, ResourceCubeModel.MODEL_BARE_TINTED);
+        ModelUtils.registerStandaloneForLoading(event, ResourceCubeModel.MODEL_BARE_SINGLE);
+        ModelUtils.registerStandaloneForLoading(event, ResourceCubeModel.MODEL_BARE_SINGLE_TINTED);
     }
 
     private static void onModelsLoaded(ModelEvent.BakingCompleted event) {
