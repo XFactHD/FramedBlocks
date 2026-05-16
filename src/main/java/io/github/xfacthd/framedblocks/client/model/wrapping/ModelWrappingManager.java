@@ -11,7 +11,6 @@ import io.github.xfacthd.framedblocks.client.model.unbaked.UnbakedStandaloneFram
 import io.github.xfacthd.framedblocks.common.config.DevToolsConfig;
 import io.github.xfacthd.framedblocks.common.util.MarkdownTable;
 import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
-import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
 import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
 import net.minecraft.core.Holder;
 import net.minecraft.world.level.block.Block;
@@ -130,18 +129,19 @@ public final class ModelWrappingManager {
 
     public static void printWrappingInfo(Map<BlockState, BlockStateModel> models) {
         int stateCount = 0;
-        Set<BlockStateModel> distinctModels = new ReferenceOpenHashSet<>();
-        for (Block block : HANDLERS.keySet()) {
-            List<BlockState> states = block.getStateDefinition().getPossibleStates();
-            for (BlockState state : states) {
-                distinctModels.add(models.get(state));
-            }
-            stateCount += states.size();
+        int distinctCount = 0;
+        for (Map.Entry<Block, ModelWrappingHandler> entry : HANDLERS.entrySet()) {
+            stateCount += entry.getKey().getStateDefinition().getPossibleStates().size();
+            distinctCount += entry.getValue().getVisitedStateCount();
+        }
+        for (Map.Entry<StandaloneWrapperKey<?>, StandaloneModelWrappingHandler<?>> entry : STANDALONE_HANDLERS.entrySet()) {
+            stateCount += entry.getKey().block().value().getStateDefinition().getPossibleStates().size();
+            distinctCount += entry.getValue().getVisitedStateCount();
         }
 
         LOGGER.debug(
                 "Wrapped {} unique block models ({} total) for {} blocks",
-                distinctModels.size(),
+                distinctCount,
                 stateCount,
                 HANDLERS.size()
         );
