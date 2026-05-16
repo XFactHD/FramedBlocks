@@ -2,6 +2,7 @@ package io.github.xfacthd.framedblocks.common.block.cube;
 
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import io.github.xfacthd.framedblocks.api.block.item.IFramedBlockItem;
+import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
 import io.github.xfacthd.framedblocks.common.blockentity.special.FramedTankBlockEntity;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
@@ -60,6 +61,11 @@ public class FramedTankBlock extends FramedBlock {
     @Override
     public BlockState getItemModelSource() {
         return defaultBlockState();
+    }
+
+    @Override
+    public StateCycleSpec createStateCycleSpec() {
+        return StateCycleSpec.UNSUPPORTED;
     }
 
     @Override

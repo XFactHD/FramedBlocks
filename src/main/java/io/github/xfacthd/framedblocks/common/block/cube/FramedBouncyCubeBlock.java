@@ -3,6 +3,7 @@ package io.github.xfacthd.framedblocks.common.block.cube;
 import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
+import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
 import io.github.xfacthd.framedblocks.common.block.IFramedBlockInternal;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import net.minecraft.core.BlockPos;
@@ -120,6 +121,11 @@ public class FramedBouncyCubeBlock extends SlimeBlock implements IFramedBlockInt
     @Override
     public BlockState getItemModelSource() {
         return defaultBlockState();
+    }
+
+    @Override
+    public StateCycleSpec createStateCycleSpec() {
+        return StateCycleSpec.UNSUPPORTED;
     }
 
     @Override

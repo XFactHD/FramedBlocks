@@ -2,6 +2,7 @@ package io.github.xfacthd.framedblocks.common.block.interactive;
 
 import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
+import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.util.RotationDirection;
 import io.github.xfacthd.framedblocks.common.block.IFramedBlockInternal;
@@ -96,6 +97,11 @@ public class FramedLeverBlock extends LeverBlock implements IFramedBlockInternal
     @Override
     public @Nullable BlockState getItemModelSource() {
         return null;
+    }
+
+    @Override
+    public StateCycleSpec createStateCycleSpec() {
+        return StateCycleSpec.UNSUPPORTED;
     }
 
     @Override

@@ -9,6 +9,7 @@ import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockParts;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockTopInteractionMode;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.SolidityCheck;
 import io.github.xfacthd.framedblocks.api.block.item.IFramedBlockItem;
+import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.util.RotationDirection;
 import io.github.xfacthd.framedblocks.common.FBContent;
@@ -183,6 +184,15 @@ public class FramedDoubleCornerSlopePanelBlock extends FramedDoubleBlock impleme
     @Override
     public BlockState getItemModelSource() {
         return defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.EAST);
+    }
+
+    @Override
+    public StateCycleSpec createStateCycleSpec() {
+        return FramedCornerSlopePanelBlock.createStateCycleSpec(this, switch (getBlockType()) {
+            case FRAMED_SMALL_DOUBLE_CORNER_SLOPE_PANEL -> FBContent.BLOCK_FRAMED_SMALL_DOUBLE_CORNER_SLOPE_PANEL_WALL.value();
+            case FRAMED_LARGE_DOUBLE_CORNER_SLOPE_PANEL -> FBContent.BLOCK_FRAMED_LARGE_DOUBLE_CORNER_SLOPE_PANEL_WALL.value();
+            default -> throw new IllegalStateException("Unexpected type: " + getBlockType());
+        });
     }
 
     @Override

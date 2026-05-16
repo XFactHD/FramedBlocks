@@ -5,12 +5,17 @@ import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
 import io.github.xfacthd.framedblocks.api.block.SlopeToggleBlock;
 import io.github.xfacthd.framedblocks.api.block.item.IFramedBlockItem;
+import io.github.xfacthd.framedblocks.api.block.item.placement.PropertyLabels;
+import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.util.MathUtils;
 import io.github.xfacthd.framedblocks.api.util.RotationDirection;
+import io.github.xfacthd.framedblocks.api.util.text.ValuePrinters;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
+import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
+import io.github.xfacthd.framedblocks.common.data.property.HorizontalRotation;
 import io.github.xfacthd.framedblocks.common.item.block.VerticalAndWallBlockItem;
 import net.minecraft.core.Direction;
 import net.minecraft.util.TriState;
@@ -93,9 +98,8 @@ public class FramedCornerSlopePanelBlock extends FramedBlock implements SlopeTog
         return mode.getDefaultNotifyBlockEntity();
     }
 
-    @Override
-    public IFramedBlockItem createBlockItem(Item.Properties props) {
-        Block other = switch (getBlockType()) {
+    private Block getWallBlock() {
+        return switch (getBlockType()) {
             case FRAMED_SMALL_CORNER_SLOPE_PANEL -> FBContent.BLOCK_FRAMED_SMALL_CORNER_SLOPE_PANEL_WALL.value();
             case FRAMED_LARGE_CORNER_SLOPE_PANEL -> FBContent.BLOCK_FRAMED_LARGE_CORNER_SLOPE_PANEL_WALL.value();
             case FRAMED_SMALL_INNER_CORNER_SLOPE_PANEL -> FBContent.BLOCK_FRAMED_SMALL_INNER_CORNER_SLOPE_PANEL_WALL.value();
@@ -106,12 +110,39 @@ public class FramedCornerSlopePanelBlock extends FramedBlock implements SlopeTog
             case FRAMED_LARGE_INNER_PRISM_CORNER_SLOPE_PANEL -> FBContent.BLOCK_FRAMED_LARGE_INNER_PRISM_SLOPE_PANEL_CORNER_WALL.value();
             default -> throw new IllegalStateException("Unexpected type: " + getBlockType());
         };
-        return new VerticalAndWallBlockItem(this, other, props);
+    }
+
+    @Override
+    public IFramedBlockItem createBlockItem(Item.Properties props) {
+        return new VerticalAndWallBlockItem(this, getWallBlock(), props);
     }
 
     @Override
     public BlockState getItemModelSource() {
         return defaultBlockState().setValue(FramedProperties.FACING_HOR, invertFacing ? Direction.EAST : Direction.WEST);
+    }
+
+    @Override
+    public StateCycleSpec createStateCycleSpec() {
+        return createStateCycleSpec(this, getWallBlock());
+    }
+
+    static StateCycleSpec createStateCycleSpec(Block block, Block wallBlock) {
+        return StateCycleSpec.multiBuilder()
+                .add(block, builder -> builder
+                        .property(FramedProperties.FACING_HOR, PropertyLabels.FACING)
+                        .property(FramedProperties.TOP, propBuilder ->
+                                propBuilder.printer(PropertyLabels.HALF, ValuePrinters.HALF_BOOL)
+                        )
+                        .reverseCycleOrder()
+                )
+                .add(wallBlock, builder -> builder
+                        .property(FramedProperties.FACING_HOR, PropertyLabels.FACING)
+                        .property(PropertyHolder.ROTATION, propBuilder ->
+                                propBuilder.values(HorizontalRotation.CYCLE_ORDER).printer(PropertyLabels.ORIENTATION)
+                        )
+                )
+                .build();
     }
 
     @Override

@@ -6,6 +6,8 @@ import io.github.xfacthd.framedblocks.api.block.doubleblock.CamoGetter;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockParts;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockTopInteractionMode;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.SolidityCheck;
+import io.github.xfacthd.framedblocks.api.block.item.placement.PropertyLabels;
+import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
 import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.api.util.MathUtils;
 import io.github.xfacthd.framedblocks.common.FBContent;
@@ -308,6 +310,17 @@ public class FramedVerticalSlicedStairsBlock extends FramedVerticalStairsBlock i
         return defaultBlockState()
                 .setValue(FramedProperties.FACING_HOR, Direction.SOUTH)
                 .setValue(PropertyHolder.RIGHT, true);
+    }
+
+    @Override
+    public StateCycleSpec createStateCycleSpec() {
+        return StateCycleSpec.builder(this)
+                .property(FramedProperties.FACING_HOR, PropertyLabels.FACING)
+                .property(PropertyHolder.STAIRS_TYPE, PropertyLabels.SHAPE)
+                .property(PropertyHolder.RIGHT, builder ->
+                        builder.printer(PropertyHolder.Labels.RIGHT)
+                )
+                .build();
     }
 
     @Override

@@ -14,6 +14,7 @@ import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.util.FramedConstants;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.api.util.text.MoreCommonComponents;
+import io.github.xfacthd.framedblocks.api.util.text.Printable;
 import io.github.xfacthd.framedblocks.api.util.text.ValuePrinters;
 import io.github.xfacthd.framedblocks.client.screen.CamoApplicatorScreen;
 import io.github.xfacthd.framedblocks.client.screen.saw.FramingSawScreen;
@@ -25,6 +26,12 @@ import io.github.xfacthd.framedblocks.client.screen.saw.SawRecipeFailurePrinter;
 import io.github.xfacthd.framedblocks.client.screen.widget.PaintRollerClientTooltipComponent;
 import io.github.xfacthd.framedblocks.client.util.KeyMappings;
 import io.github.xfacthd.framedblocks.common.FBContent;
+import io.github.xfacthd.framedblocks.common.block.cube.FramedOneWayWindowBlock;
+import io.github.xfacthd.framedblocks.common.block.cube.FramedTubeBlock;
+import io.github.xfacthd.framedblocks.common.block.pane.FramedCornerStripBlock;
+import io.github.xfacthd.framedblocks.common.block.pillar.FramedFenceBlock;
+import io.github.xfacthd.framedblocks.common.block.pillar.FramedLatticeBlock;
+import io.github.xfacthd.framedblocks.common.block.slopeslab.FramedSlopeSlabBlock;
 import io.github.xfacthd.framedblocks.common.block.special.FramingSawBlock;
 import io.github.xfacthd.framedblocks.common.block.special.PoweredFramingSawBlock;
 import io.github.xfacthd.framedblocks.common.blockentity.special.FramedChestBlockEntity;
@@ -37,8 +44,14 @@ import io.github.xfacthd.framedblocks.common.config.ClientConfig;
 import io.github.xfacthd.framedblocks.common.config.DevToolsConfig;
 import io.github.xfacthd.framedblocks.common.config.ServerConfig;
 import io.github.xfacthd.framedblocks.common.crafting.saw.FramingSawRecipeMatchResult;
+import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import io.github.xfacthd.framedblocks.common.data.attachment.PlacementStateCycleStorage;
+import io.github.xfacthd.framedblocks.common.data.property.CornerTubeOrientation;
+import io.github.xfacthd.framedblocks.common.data.property.CornerType;
+import io.github.xfacthd.framedblocks.common.data.property.HorizontalRotation;
 import io.github.xfacthd.framedblocks.common.data.property.NullableDirection;
+import io.github.xfacthd.framedblocks.common.data.property.SlopeType;
+import io.github.xfacthd.framedblocks.common.data.property.StairsType;
 import io.github.xfacthd.framedblocks.common.datagen.GeneratorHandler;
 import io.github.xfacthd.framedblocks.common.item.FramedAxeItem;
 import io.github.xfacthd.framedblocks.common.item.FramedBlueprintItem;
@@ -49,6 +62,7 @@ import io.github.xfacthd.framedblocks.common.item.block.FramedMirroringBlockItem
 import io.github.xfacthd.framedblocks.common.item.block.FramedTankBlockItem;
 import io.github.xfacthd.framedblocks.common.menu.CamoApplicatorMenu;
 import io.github.xfacthd.framedblocks.common.menu.PaintRollerMenu;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
@@ -588,7 +602,58 @@ public final class FramedLanguageProvider extends LanguageProvider {
         add(PropertyLabels.ROTATION, "Rotation: %s");
         add(PropertyLabels.HALF, "Half: %s");
         add(PropertyLabels.SHAPE, "Shape: %s");
+        add(PropertyLabels.TYPE, "Type: %s");
         add(PropertyLabels.HINGE_SIDE, "Hinge Side: %s");
+        add(FramedOneWayWindowBlock.LABEL_WINDOW_FACE, "Window Face: %s");
+        add(FramedTubeBlock.LABEL_THICK, "Thick: %s");
+        add(FramedCornerStripBlock.TYPE_PRINTER.print(SlopeType.BOTTOM), "Bottom");
+        add(FramedCornerStripBlock.TYPE_PRINTER.print(SlopeType.TOP), "Top");
+        add(FramedCornerStripBlock.TYPE_PRINTER.print(SlopeType.HORIZONTAL), "Vertical");
+        add(FramedFenceBlock.LABEL_NORTH, "North: %s");
+        add(FramedFenceBlock.LABEL_EAST, "East: %s");
+        add(FramedFenceBlock.LABEL_SOUTH, "South: %s");
+        add(FramedFenceBlock.LABEL_WEST, "West: %s");
+        add(FramedLatticeBlock.LABEL_X_AXIS, "X Axis: %s");
+        add(FramedLatticeBlock.LABEL_Y_AXIS, "Y Axis: %s");
+        add(FramedLatticeBlock.LABEL_Z_AXIS, "Z Axis: %s");
+        add(FramedSlopeSlabBlock.VALUE_UPRIGHT, "Upright");
+        add(FramedSlopeSlabBlock.VALUE_UPSIDEDOWN, "Upside Down");
+        add(CornerTubeOrientation.UP_NORTH, "Up North");
+        add(CornerTubeOrientation.UP_EAST, "Up East");
+        add(CornerTubeOrientation.UP_SOUTH, "Up South");
+        add(CornerTubeOrientation.UP_WEST, "Up West");
+        add(CornerTubeOrientation.DOWN_NORTH, "Down North");
+        add(CornerTubeOrientation.DOWN_EAST, "Down East");
+        add(CornerTubeOrientation.DOWN_SOUTH, "Down South");
+        add(CornerTubeOrientation.DOWN_WEST, "Down West");
+        add(CornerTubeOrientation.NORTH_EAST, "North-East");
+        add(CornerTubeOrientation.EAST_SOUTH, "South-East");
+        add(CornerTubeOrientation.SOUTH_WEST, "South-West");
+        add(CornerTubeOrientation.WEST_NORTH, "North-West");
+        add(CornerType.BOTTOM, "Bottom");
+        add(CornerType.TOP, "Top");
+        add(CornerType.HORIZONTAL_BOTTOM_LEFT, "Horizontal Bottom-Left");
+        add(CornerType.HORIZONTAL_BOTTOM_RIGHT, "Horizontal Bottom-Right");
+        add(CornerType.HORIZONTAL_TOP_LEFT, "Horizontal Top-Left");
+        add(CornerType.HORIZONTAL_TOP_RIGHT, "Horizontal Top-Right");
+        add(HorizontalRotation.UP, "Up");
+        add(HorizontalRotation.DOWN, "Down");
+        add(HorizontalRotation.RIGHT, "Right");
+        add(HorizontalRotation.LEFT, "Left");
+        add(NullableDirection.VALUE_NONE, "None");
+        add(SlopeType.BOTTOM, "Bottom");
+        add(SlopeType.TOP, "Top");
+        add(SlopeType.HORIZONTAL, "Horizontal");
+        add(StairsType.VERTICAL, "Vertical");
+        add(StairsType.TOP_FWD, "Top Forward");
+        add(StairsType.TOP_CCW, "Top Counter-Clockwise");
+        add(StairsType.TOP_BOTH, "Top Both");
+        add(StairsType.BOTTOM_FWD, "Bottom Forward");
+        add(StairsType.BOTTOM_CCW, "Bottom Counter-Clockwise");
+        add(StairsType.BOTTOM_BOTH, "Bottom Both");
+        add(PropertyHolder.Labels.RIGHT, "Right: %s");
+        add(PropertyHolder.Printers.VALUE_REAR, "Rear");
+        add(PropertyHolder.Printers.VALUE_FRONT, "Front");
     }
 
     private void addOverlayTranslations() {
@@ -732,6 +797,10 @@ public final class FramedLanguageProvider extends LanguageProvider {
         } else {
             add(key.getString(), value);
         }
+    }
+
+    private void add(Printable printable, String value) {
+        add(printable.print(ChatFormatting.RESET), value);
     }
 
     private void addConfigCategory(String key, String catValue, String catButtonValue, String catTooltipValue) {

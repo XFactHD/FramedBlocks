@@ -1,6 +1,7 @@
 package io.github.xfacthd.framedblocks.common.block.prism;
 
 import io.github.xfacthd.framedblocks.api.block.SlopeToggleBlock;
+import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.util.RotationDirection;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
@@ -62,6 +63,11 @@ public class FramedElevatedPrismBlock extends FramedBlock implements PrismBlock,
     @Override
     public BlockState getJadeRenderState(BlockState state) {
         return getItemModelSource();
+    }
+
+    @Override
+    public StateCycleSpec createStateCycleSpec() {
+        return FramedPrismBlock.createStateCycleSpec(this);
     }
 
     @Override

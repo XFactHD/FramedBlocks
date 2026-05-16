@@ -10,6 +10,7 @@ public final class PropertyLabels {
     public static final String ROTATION = Utils.translationKey("label", "state_cycling.property.rotation");
     public static final String HALF = Utils.translationKey("label", "state_cycling.property.half");
     public static final String SHAPE = Utils.translationKey("label", "state_cycling.property.shape");
+    public static final String TYPE = Utils.translationKey("label", "state_cycling.property.type");
     public static final String HINGE_SIDE = Utils.translationKey("label", "state_cycling.property.hinge_side");
 
     private PropertyLabels() { }

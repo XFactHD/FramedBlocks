@@ -3,6 +3,7 @@ package io.github.xfacthd.framedblocks.common.block.slopeedge;
 import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.SlopeToggleBlock;
+import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.util.RotationDirection;
 import io.github.xfacthd.framedblocks.common.block.ExtPlacementStateBuilder;
@@ -72,6 +73,11 @@ public class FramedElevatedCornerSlopeEdgeBlock extends FramedBlock implements S
     @Override
     public BlockState getItemModelSource() {
         return defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
+    }
+
+    @Override
+    public StateCycleSpec createStateCycleSpec() {
+        return FramedCornerSlopeBlock.createStateCycleSpec(this);
     }
 
     @Override

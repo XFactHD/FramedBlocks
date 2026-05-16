@@ -3,10 +3,12 @@ package io.github.xfacthd.framedblocks.common.block.slopeedge;
 import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.SlopeToggleBlock;
+import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.util.RotationDirection;
 import io.github.xfacthd.framedblocks.common.block.ExtPlacementStateBuilder;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
+import io.github.xfacthd.framedblocks.common.block.slope.FramedThreewayCornerBlock;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import net.minecraft.core.Direction;
@@ -71,6 +73,11 @@ public class FramedThreewayCornerSlopeEdgeBlock extends FramedBlock implements S
     @Override
     public BlockState getItemModelSource() {
         return defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
+    }
+
+    @Override
+    public StateCycleSpec createStateCycleSpec() {
+        return FramedThreewayCornerBlock.createStateCycleSpec(this);
     }
 
     @Override

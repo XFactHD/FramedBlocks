@@ -1,9 +1,12 @@
 package io.github.xfacthd.framedblocks.common.block.cube;
 
 import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
+import io.github.xfacthd.framedblocks.api.block.item.placement.PropertyLabels;
+import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.util.FramedConstants;
 import io.github.xfacthd.framedblocks.api.util.RotationDirection;
+import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
@@ -22,6 +25,8 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.jspecify.annotations.Nullable;
 
 public class FramedTubeBlock extends FramedBlock {
+    public static final String LABEL_THICK = Utils.translationKey("label", "state_cycling.property.tube.thick");
+
     public FramedTubeBlock(Properties props) {
         super(BlockType.FRAMED_TUBE, props);
         registerDefaultState(defaultBlockState().setValue(PropertyHolder.THICK, false));
@@ -75,6 +80,14 @@ public class FramedTubeBlock extends FramedBlock {
     @Override
     public BlockState getItemModelSource() {
         return defaultBlockState().setValue(BlockStateProperties.AXIS, Direction.Axis.Y);
+    }
+
+    @Override
+    public StateCycleSpec createStateCycleSpec() {
+        return StateCycleSpec.builder(this)
+                .property(BlockStateProperties.AXIS, PropertyLabels.AXIS)
+                .property(PropertyHolder.THICK, LABEL_THICK)
+                .build();
     }
 
     @Override

@@ -7,6 +7,7 @@ import io.github.xfacthd.framedblocks.api.block.doubleblock.CamoGetter;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockParts;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockTopInteractionMode;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.SolidityCheck;
+import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.block.FramedDoubleBlock;
@@ -119,6 +120,11 @@ public class FramedDividedPanelBlock extends FramedDoubleBlock {
     @Override
     public BlockState getItemModelSource() {
         return defaultBlockState();
+    }
+
+    @Override
+    public StateCycleSpec createStateCycleSpec() {
+        return FramedPanelBlock.createStateCycleSpec(this);
     }
 
     @Override

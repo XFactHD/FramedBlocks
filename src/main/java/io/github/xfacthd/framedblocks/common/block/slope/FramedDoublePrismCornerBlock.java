@@ -3,6 +3,7 @@ package io.github.xfacthd.framedblocks.common.block.slope;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockParts;
 import io.github.xfacthd.framedblocks.common.FBContent;
+import io.github.xfacthd.framedblocks.common.block.PrismCornerBlock;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -14,7 +15,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import org.jspecify.annotations.Nullable;
 
-public class FramedDoublePrismCornerBlock extends FramedDoubleThreewayCornerBlock {
+public class FramedDoublePrismCornerBlock extends FramedDoubleThreewayCornerBlock implements PrismCornerBlock {
     public FramedDoublePrismCornerBlock(Properties props) {
         super(BlockType.FRAMED_DOUBLE_PRISM_CORNER, props);
         registerDefaultState(defaultBlockState().setValue(FramedProperties.OFFSET, false));
@@ -29,12 +30,7 @@ public class FramedDoublePrismCornerBlock extends FramedDoubleThreewayCornerBloc
     @Override
     public @Nullable BlockState getStateForPlacement(BlockPlaceContext context) {
         BlockState state = super.getStateForPlacement(context);
-        if (state == null) {
-            return null;
-        }
-
-        state = state.setValue(FramedProperties.OFFSET, context.getClickedPos().getY() % 2 == 0);
-        return state;
+        return state != null ? applyOffset(state, context) : null;
     }
 
     @Override
@@ -65,5 +61,10 @@ public class FramedDoublePrismCornerBlock extends FramedDoubleThreewayCornerBloc
                         .setValue(FramedProperties.OFFSET, !offset)
                         .setValue(FramedProperties.ALT_SLOPE, altSlope)
         );
+    }
+
+    @Override
+    public boolean isOffsetOnOddPos() {
+        return false;
     }
 }

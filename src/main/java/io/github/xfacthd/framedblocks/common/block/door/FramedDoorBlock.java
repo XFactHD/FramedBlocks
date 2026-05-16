@@ -4,6 +4,8 @@ import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
+import io.github.xfacthd.framedblocks.api.block.item.placement.PropertyLabels;
+import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.model.wrapping.WrapHelper;
 import io.github.xfacthd.framedblocks.api.model.wrapping.statemerger.StateMerger;
@@ -149,6 +151,24 @@ public class FramedDoorBlock extends DoorBlock implements IFramedBlockInternal {
     @Override
     public @Nullable BlockState getItemModelSource() {
         return null;
+    }
+
+    @Override
+    public StateCycleSpec createStateCycleSpec() {
+        return createStateCycleSpec(this, true);
+    }
+
+    static StateCycleSpec createStateCycleSpec(Block block, boolean full) {
+        return StateCycleSpec.builder(block)
+                .property(FACING, PropertyLabels.FACING)
+                .property(HINGE, PropertyLabels.HINGE_SIDE)
+                .postProcessor((state, ctx) -> {
+                    Level level = ctx.getLevel();
+                    BlockPos pos = ctx.getClickedPos();
+                    boolean powered = level.hasNeighborSignal(pos) || (full && level.hasNeighborSignal(pos.above()));
+                    return state.setValue(OPEN, powered).setValue(POWERED, powered);
+                })
+                .build();
     }
 
     @Override

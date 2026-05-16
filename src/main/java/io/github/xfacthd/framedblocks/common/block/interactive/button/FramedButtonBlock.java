@@ -2,6 +2,7 @@ package io.github.xfacthd.framedblocks.common.block.interactive.button;
 
 import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
+import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.model.wrapping.WrapHelper;
 import io.github.xfacthd.framedblocks.api.model.wrapping.statemerger.StateMerger;
@@ -112,6 +113,11 @@ public class FramedButtonBlock extends ButtonBlock implements IFramedBlockIntern
     @Override
     public BlockState getItemModelSource() {
         return defaultBlockState().setValue(FACE, AttachFace.FLOOR);
+    }
+
+    @Override
+    public StateCycleSpec createStateCycleSpec() {
+        return StateCycleSpec.UNSUPPORTED;
     }
 
     @Override

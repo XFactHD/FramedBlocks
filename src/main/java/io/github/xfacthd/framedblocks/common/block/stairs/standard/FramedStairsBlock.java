@@ -4,6 +4,9 @@ import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.api.block.ShapeLockableBlock;
+import io.github.xfacthd.framedblocks.api.block.item.placement.PropertyLabels;
+import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
+import io.github.xfacthd.framedblocks.api.block.item.placement.ValueOrders;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.model.wrapping.WrapHelper;
 import io.github.xfacthd.framedblocks.api.model.wrapping.statemerger.StateMerger;
@@ -157,6 +160,18 @@ public class FramedStairsBlock extends StairBlock implements IFramedBlockInterna
     @Override
     public Set<Property<?>> getPropertiesToCopy() {
         return Set.of(SHAPE);
+    }
+
+    @Override
+    public StateCycleSpec createStateCycleSpec() {
+        return StateCycleSpec.builder(this)
+                .property(HALF, prop -> prop.values(ValueOrders.HALF))
+                .property(FACING)
+                .property(SHAPE)
+                .propertyPrinter(FACING, PropertyLabels.FACING)
+                .propertyPrinter(SHAPE, PropertyLabels.SHAPE)
+                .propertyPrinter(HALF, PropertyLabels.HALF)
+                .build();
     }
 
     @Override

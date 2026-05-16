@@ -1,12 +1,20 @@
 package io.github.xfacthd.framedblocks.common.data.property;
 
+import io.github.xfacthd.framedblocks.api.block.item.placement.PropertyLabels;
+import io.github.xfacthd.framedblocks.api.block.item.placement.PropertyPrinter;
+import io.github.xfacthd.framedblocks.api.block.item.placement.ValueOrders;
 import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.api.util.RotationDirection;
+import io.github.xfacthd.framedblocks.api.util.text.ValuePrinters;
 import net.minecraft.core.Direction;
 import net.minecraft.util.StringRepresentable;
+import net.minecraft.util.Util;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Locale;
 
 public enum CompoundDirection implements StringRepresentable {
@@ -43,6 +51,35 @@ public enum CompoundDirection implements StringRepresentable {
 
     private static final CompoundDirection[][] FROM_DIRS = makeDirTable();
     public static final int COUNT = values().length;
+    private static final List<Direction> ORIENTATION_CYCLE_ORDER = List.of(
+            Direction.UP,
+            Direction.NORTH,
+            Direction.WEST,
+            Direction.DOWN,
+            Direction.SOUTH,
+            Direction.EAST
+    );
+    public static final List<CompoundDirection> CYCLE_ORDER = Util.make(() -> {
+        List<CompoundDirection> values = new ArrayList<>(List.of(values()));
+        values.sort(Comparator.comparingInt(cmpDir -> {
+            int directionIdx = ValueOrders.FACING.indexOf(cmpDir.direction);
+            int orientationIdx;
+            if (DirUtils.isY(cmpDir.direction)) {
+                orientationIdx = ValueOrders.FACING.indexOf(cmpDir.orientation);
+            } else if (DirUtils.isPositive(cmpDir.direction.getClockWise())) {
+                orientationIdx = ORIENTATION_CYCLE_ORDER.indexOf(cmpDir.orientation);
+            } else {
+                Direction orientation = DirUtils.isY(cmpDir.orientation) ? cmpDir.orientation : cmpDir.orientation.getOpposite();
+                orientationIdx = ORIENTATION_CYCLE_ORDER.indexOf(orientation);
+            }
+            return directionIdx * 6 + orientationIdx;
+        }));
+        return values;
+    });
+    public static final PropertyPrinter<CompoundDirection> PRINTER = (value, out, defaultValueColor) -> {
+        out.accept(PropertyLabels.FACING, ValuePrinters.DIRECTION.printStyled(value.direction(), defaultValueColor));
+        out.accept(PropertyLabels.ORIENTATION, ValuePrinters.DIRECTION.printStyled(value.orientation(), defaultValueColor));
+    };
 
     private final String name = toString().toLowerCase(Locale.ROOT);
     private final Direction direction;

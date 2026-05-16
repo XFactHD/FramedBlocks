@@ -13,11 +13,15 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.block.state.properties.RailShape;
 import net.neoforged.neoforge.common.util.Lazy;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.IdentityHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -49,6 +53,18 @@ public final class FramedUtils {
             FBContent.BLOCK_FRAMED_FANCY_DETECTOR_RAIL.value().asItem(), FBContent.BLOCK_FRAMED_FANCY_DETECTOR_RAIL_SLOPE.value(),
             FBContent.BLOCK_FRAMED_FANCY_ACTIVATOR_RAIL.value().asItem(), FBContent.BLOCK_FRAMED_FANCY_ACTIVATOR_RAIL_SLOPE.value()
     )));
+    private static final List<RailShape> RAIL_SHAPE_CYCLE_ORDER = List.of(
+            RailShape.NORTH_SOUTH,
+            RailShape.EAST_WEST,
+            RailShape.ASCENDING_NORTH,
+            RailShape.ASCENDING_EAST,
+            RailShape.ASCENDING_SOUTH,
+            RailShape.ASCENDING_WEST,
+            RailShape.NORTH_EAST,
+            RailShape.SOUTH_EAST,
+            RailShape.SOUTH_WEST,
+            RailShape.NORTH_WEST
+    );
 
     public static boolean isRailItem(Item item) {
         return RAIL_ITEMS.get().contains(item);
@@ -89,6 +105,17 @@ public final class FramedUtils {
             case ASCENDING_EAST -> Direction.EAST;
             case ASCENDING_SOUTH, SOUTH_EAST, SOUTH_WEST -> Direction.SOUTH;
         };
+    }
+
+    public static List<RailShape> getRailShapeCycleOrder(Property<RailShape> property) {
+        return getRailShapeCycleOrder(property, _ -> false);
+    }
+
+    public static List<RailShape> getRailShapeCycleOrder(Property<RailShape> property, Predicate<RailShape> filter) {
+        List<RailShape> values = new ArrayList<>(property.getPossibleValues());
+        values.removeIf(filter);
+        values.sort(Comparator.comparingInt(RAIL_SHAPE_CYCLE_ORDER::indexOf));
+        return values;
     }
 
     public static void enqueueImmediateTask(LevelAccessor level, Runnable task, boolean allowClient) {

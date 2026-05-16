@@ -1,6 +1,8 @@
 package io.github.xfacthd.framedblocks.common.block.pillar;
 
 import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
+import io.github.xfacthd.framedblocks.api.block.item.placement.PropertyLabels;
+import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
 import io.github.xfacthd.framedblocks.api.block.overlay.AxisOverlayCarrier;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.util.DirUtils;
@@ -64,6 +66,13 @@ public class FramedPillarBlock extends FramedBlock implements PillarLikeBlock, A
     @Override
     public BlockState getItemModelSource() {
         return defaultBlockState().setValue(BlockStateProperties.AXIS, Direction.Axis.Y);
+    }
+
+    @Override
+    public StateCycleSpec createStateCycleSpec() {
+        return StateCycleSpec.builder(this)
+                .property(BlockStateProperties.AXIS, PropertyLabels.AXIS)
+                .build();
     }
 
     @Override

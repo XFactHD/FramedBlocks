@@ -4,6 +4,8 @@ import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
 import io.github.xfacthd.framedblocks.api.block.SlopeToggleBlock;
+import io.github.xfacthd.framedblocks.api.block.item.placement.PropertyLabels;
+import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.util.RotationDirection;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
@@ -68,6 +70,21 @@ public class FramedElevatedSlopeSlabBlock extends FramedBlock implements SlopeTo
     @Override
     public BlockState getItemModelSource() {
         return defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
+    }
+
+    @Override
+    public StateCycleSpec createStateCycleSpec() {
+        return createStateCycleSpec(this);
+    }
+
+    public static StateCycleSpec createStateCycleSpec(Block block) {
+        return StateCycleSpec.builder(block)
+                .property(FramedProperties.FACING_HOR, PropertyLabels.FACING)
+                .property(FramedProperties.TOP, builder ->
+                        builder.printer(PropertyLabels.ORIENTATION, FramedSlopeSlabBlock.PRINTER_ORIENTATION)
+                )
+                .reverseCycleOrder()
+                .build();
     }
 
     @Override

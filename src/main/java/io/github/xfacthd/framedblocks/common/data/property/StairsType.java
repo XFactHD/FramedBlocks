@@ -1,10 +1,14 @@
 package io.github.xfacthd.framedblocks.common.data.property;
 
+import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.text.Printable;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
 import net.minecraft.util.StringRepresentable;
 
 import java.util.Locale;
 
-public enum StairsType implements StringRepresentable {
+public enum StairsType implements StringRepresentable, Printable {
     VERTICAL,
     TOP_FWD,
     TOP_CCW,
@@ -14,10 +18,16 @@ public enum StairsType implements StringRepresentable {
     BOTTOM_BOTH;
 
     private final String name = toString().toLowerCase(Locale.ENGLISH);
+    private final Component displayName = Utils.translate("value", "stairs_type." + name);
 
     @Override
     public String getSerializedName() {
         return name;
+    }
+
+    @Override
+    public Component print(ChatFormatting defaultColor) {
+        return displayName.copy().withStyle(defaultColor);
     }
 
     public boolean isTop() {

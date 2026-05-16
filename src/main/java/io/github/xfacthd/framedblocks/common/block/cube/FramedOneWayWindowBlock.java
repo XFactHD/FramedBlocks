@@ -1,10 +1,12 @@
 package io.github.xfacthd.framedblocks.common.block.cube;
 
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
+import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
 import io.github.xfacthd.framedblocks.api.block.render.ParticleHelper;
 import io.github.xfacthd.framedblocks.api.camo.block.BlockCamoContent;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.util.DirUtils;
+import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
 import io.github.xfacthd.framedblocks.common.blockentity.special.FramedOwnableBlockEntity;
@@ -37,6 +39,7 @@ import org.jspecify.annotations.Nullable;
 
 public class FramedOneWayWindowBlock extends FramedBlock {
     public static final BlockCamoContent GLASS_DUMMY_CAMO = new BlockCamoContent(Blocks.TINTED_GLASS.defaultBlockState());
+    public static final String LABEL_WINDOW_FACE = Utils.translationKey("label", "state_cycling.property.one_way_window.window_face");
 
     public FramedOneWayWindowBlock(Properties props) {
         super(BlockType.FRAMED_ONE_WAY_WINDOW, props);
@@ -154,6 +157,16 @@ public class FramedOneWayWindowBlock extends FramedBlock {
     @Override
     public BlockState getItemModelSource() {
         return defaultBlockState();
+    }
+
+    @Override
+    public StateCycleSpec createStateCycleSpec() {
+        return StateCycleSpec.builder(this)
+                .property(PropertyHolder.NULLABLE_FACE, builder -> builder
+                        .values(NullableDirection.CYCLE_ORDER)
+                        .printer(LABEL_WINDOW_FACE)
+                )
+                .build();
     }
 
     @Override

@@ -2,9 +2,12 @@ package io.github.xfacthd.framedblocks.common.block.stairs.standard;
 
 import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
+import io.github.xfacthd.framedblocks.api.block.item.placement.PropertyLabels;
+import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.api.util.RotationDirection;
+import io.github.xfacthd.framedblocks.api.util.text.ValuePrinters;
 import io.github.xfacthd.framedblocks.common.block.ExtPlacementStateBuilder;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
@@ -83,6 +86,22 @@ public class FramedHalfStairsBlock extends FramedBlock {
         return defaultBlockState()
                 .setValue(FramedProperties.FACING_HOR, Direction.SOUTH)
                 .setValue(PropertyHolder.RIGHT, true);
+    }
+
+    @Override
+    public StateCycleSpec createStateCycleSpec() {
+        return createStateCycleSpec(this);
+    }
+
+    static StateCycleSpec createStateCycleSpec(Block block) {
+        return StateCycleSpec.builder(block)
+                .property(FramedProperties.TOP)
+                .property(FramedProperties.FACING_HOR)
+                .property(PropertyHolder.RIGHT)
+                .propertyPrinter(FramedProperties.FACING_HOR, PropertyLabels.FACING)
+                .propertyPrinter(FramedProperties.TOP, PropertyLabels.HALF, ValuePrinters.HALF_BOOL)
+                .propertyPrinter(PropertyHolder.RIGHT, PropertyHolder.Labels.RIGHT)
+                .build();
     }
 
     @Override

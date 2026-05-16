@@ -3,9 +3,12 @@ package io.github.xfacthd.framedblocks.common.block.rail.fancy;
 import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
+import io.github.xfacthd.framedblocks.api.block.item.placement.PropertyLabels;
+import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.common.block.IFramedBlockInternal;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
+import io.github.xfacthd.framedblocks.common.util.FramedUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
@@ -23,6 +26,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RailBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.Property;
+import net.minecraft.world.level.block.state.properties.RailShape;
 import net.minecraft.world.level.redstone.Orientation;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.BlockHitResult;
@@ -121,6 +126,20 @@ public class FramedFancyRailBlock extends RailBlock implements IFramedBlockInter
     @Override
     public BlockState getItemModelSource() {
         return defaultBlockState();
+    }
+
+    @Override
+    public StateCycleSpec createStateCycleSpec() {
+        return createStateCycleSpec(this, SHAPE);
+    }
+
+    static StateCycleSpec createStateCycleSpec(Block block, Property<RailShape> shapeProperty) {
+        return StateCycleSpec.builder(block)
+                .property(shapeProperty, builder -> builder
+                        .values(FramedUtils.getRailShapeCycleOrder(shapeProperty, RailShape::isSlope))
+                        .printer(PropertyLabels.SHAPE)
+                )
+                .build();
     }
 
     @Override

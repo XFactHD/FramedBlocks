@@ -5,8 +5,12 @@ import io.github.xfacthd.framedblocks.api.render.Quaternions;
 import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.api.util.MathUtils;
 import io.github.xfacthd.framedblocks.api.util.RotationDirection;
+import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.text.Printable;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
@@ -15,16 +19,20 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.joml.Quaternionfc;
 
+import java.util.List;
 import java.util.Locale;
 import java.util.function.Function;
 
-public enum HorizontalRotation implements StringRepresentable {
+public enum HorizontalRotation implements StringRepresentable, Printable {
     UP   (_ -> Direction.UP,   Shapes.box( 0, .5, 0,  1,  1, 1), Shapes.box( 0, .5, 0, .5,  1, 1), Quaternions.ONE),
     DOWN (_ -> Direction.DOWN, Shapes.box( 0,  0, 0,  1, .5, 1), Shapes.box(.5,  0, 0,  1, .5, 1), Quaternions.ZP_180),
     RIGHT(Direction::getClockWise,        Shapes.box(.5,  0, 0,  1,  1, 1), Shapes.box(.5, .5, 0,  1,  1, 1), Quaternions.ZP_90),
     LEFT (Direction::getCounterClockWise, Shapes.box( 0,  0, 0, .5,  1, 1), Shapes.box( 0,  0, 0, .5, .5, 1), Quaternions.ZN_90);
 
+    public static final List<HorizontalRotation> CYCLE_ORDER = List.of(UP, RIGHT, DOWN, LEFT);
+
     private final String name = toString().toLowerCase(Locale.ROOT);
+    private final Component displayName = Utils.translate("value", "horizontal_rotation." + name);
     private final Function<Direction, Direction> facingMod;
     private final VoxelShape slabShape;
     private final VoxelShape cornerShape;
@@ -106,6 +114,11 @@ public enum HorizontalRotation implements StringRepresentable {
     @Override
     public String getSerializedName() {
         return name;
+    }
+
+    @Override
+    public Component print(ChatFormatting defaultColor) {
+        return displayName.copy().withStyle(defaultColor);
     }
 
     /**

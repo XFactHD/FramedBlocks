@@ -1,6 +1,7 @@
 package io.github.xfacthd.framedblocks.common.block.pane;
 
 import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
+import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.api.util.RotationDirection;
@@ -75,6 +76,7 @@ public final class FramedPartialBoardBlock extends FramedBlock {
     }
 
     @Override
+    @SuppressWarnings("JavaExistingMethodCanBeUsed")
     public TriState shouldNotifyBlockEntityOfWrenchRotation(WrenchRotationMode mode, BlockState oldState, BlockState newState) {
         if (mode == WrenchRotationMode.PRIMARY || DirUtils.isY(oldState.getValue(PropertyHolder.FACING_DIR).direction())) {
             return TriState.DEFAULT;
@@ -88,6 +90,20 @@ public final class FramedPartialBoardBlock extends FramedBlock {
             return defaultBlockState().setValue(PropertyHolder.FACING_DIR, CompoundDirection.of(Direction.DOWN, Direction.SOUTH));
         }
         return defaultBlockState();
+    }
+
+    @Override
+    public StateCycleSpec createStateCycleSpec() {
+        return createStateCycleSpec(this);
+    }
+
+    static StateCycleSpec createStateCycleSpec(Block block) {
+        return StateCycleSpec.builder(block)
+                .property(PropertyHolder.FACING_DIR, builder -> builder
+                        .values(CompoundDirection.CYCLE_ORDER)
+                        .printer(CompoundDirection.PRINTER)
+                )
+                .build();
     }
 
     @Override

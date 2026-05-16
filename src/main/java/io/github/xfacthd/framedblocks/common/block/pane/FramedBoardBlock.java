@@ -2,10 +2,15 @@ package io.github.xfacthd.framedblocks.common.block.pane;
 
 import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
 import io.github.xfacthd.framedblocks.api.block.item.IFramedBlockItem;
+import io.github.xfacthd.framedblocks.api.block.item.placement.PropertyLabels;
+import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
+import io.github.xfacthd.framedblocks.api.block.item.placement.ValueOrders;
 import io.github.xfacthd.framedblocks.api.camo.CamoList;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.api.util.MathUtils;
+import io.github.xfacthd.framedblocks.api.util.text.ValuePrinter;
+import io.github.xfacthd.framedblocks.api.util.text.ValuePrinters;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
@@ -24,9 +29,17 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import org.jspecify.annotations.Nullable;
 
+import java.util.List;
+
 public class FramedBoardBlock extends FramedBlock {
     private static final Direction[] HOR_DIRECTIONS = Direction.Plane.HORIZONTAL.stream().toArray(Direction[]::new);
     private static final int DEFAULT_FACE = 1 << Direction.DOWN.ordinal();
+    private static final List<Integer> SINGLE_FACE_VALUES = ValueOrders.FACING
+            .stream()
+            .map(dir -> 1 << dir.ordinal())
+            .toList();
+    private static final ValuePrinter<Integer> FACE_PRINTER = (face, defaultColor) ->
+            ValuePrinters.DIRECTION.printStyled(ValueOrders.FACING.get(Integer.numberOfTrailingZeros(face)), defaultColor);
 
     public FramedBoardBlock(Properties props) {
         super(BlockType.FRAMED_BOARD, props);
@@ -125,6 +138,16 @@ public class FramedBoardBlock extends FramedBlock {
     @Override
     public BlockState getItemModelSource() {
         return defaultBlockState();
+    }
+
+    @Override
+    public StateCycleSpec createStateCycleSpec() {
+        return StateCycleSpec.builder(this)
+                .property(PropertyHolder.FACES, builder -> builder
+                        .values(SINGLE_FACE_VALUES)
+                        .printer(PropertyLabels.FACING, FACE_PRINTER)
+                )
+                .build();
     }
 
     @Override

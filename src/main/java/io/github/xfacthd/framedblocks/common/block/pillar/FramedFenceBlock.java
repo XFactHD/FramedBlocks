@@ -4,9 +4,11 @@ import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.api.block.ShapeLockableBlock;
+import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.api.util.RotationDirection;
+import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.common.block.IFramedBlockInternal;
 import io.github.xfacthd.framedblocks.common.compat.diagonalblocks.DiagonalBlocksCompat;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
@@ -37,6 +39,11 @@ import java.util.List;
 import java.util.Set;
 
 public class FramedFenceBlock extends FenceBlock implements IFramedBlockInternal, ShapeLockableBlock {
+    public static final String LABEL_NORTH = Utils.translationKey("label", "state_cycling.property.fence.north");
+    public static final String LABEL_EAST = Utils.translationKey("label", "state_cycling.property.fence.east");
+    public static final String LABEL_SOUTH = Utils.translationKey("label", "state_cycling.property.fence.south");
+    public static final String LABEL_WEST = Utils.translationKey("label", "state_cycling.property.fence.west");
+
     public FramedFenceBlock(Properties props) {
         super(IFramedBlock.applyDefaultProperties(props, BlockType.FRAMED_FENCE));
         BlockUtils.configureStandardProperties(this);
@@ -130,6 +137,16 @@ public class FramedFenceBlock extends FenceBlock implements IFramedBlockInternal
     @Override
     public @Nullable BlockState getItemModelSource() {
         return defaultBlockState();
+    }
+
+    @Override
+    public StateCycleSpec createStateCycleSpec() {
+        return StateCycleSpec.builder(this)
+                .property(NORTH, LABEL_NORTH)
+                .property(EAST, LABEL_EAST)
+                .property(SOUTH, LABEL_SOUTH)
+                .property(WEST, LABEL_WEST)
+                .build();
     }
 
     @Override

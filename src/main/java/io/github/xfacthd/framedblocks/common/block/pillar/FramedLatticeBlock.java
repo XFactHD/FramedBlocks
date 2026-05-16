@@ -3,9 +3,11 @@ package io.github.xfacthd.framedblocks.common.block.pillar;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
 import io.github.xfacthd.framedblocks.api.block.ShapeLockableBlock;
+import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.api.util.RotationDirection;
+import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
 import io.github.xfacthd.framedblocks.common.block.PillarLikeBlock;
@@ -33,6 +35,10 @@ import java.util.Set;
 import java.util.function.BiPredicate;
 
 public class FramedLatticeBlock extends FramedBlock implements PillarLikeBlock, ShapeLockableBlock {
+    public static final String LABEL_X_AXIS = Utils.translationKey("label", "state_cycling.property.lattice.x_axis");
+    public static final String LABEL_Y_AXIS = Utils.translationKey("label", "state_cycling.property.lattice.y_axis");
+    public static final String LABEL_Z_AXIS = Utils.translationKey("label", "state_cycling.property.lattice.z_axis");
+
     private final BiPredicate<Direction, BlockState> connectionTest;
     private final PillarConnection pillarConnection;
 
@@ -150,6 +156,16 @@ public class FramedLatticeBlock extends FramedBlock implements PillarLikeBlock, 
                 .setValue(FramedProperties.X_AXIS, true)
                 .setValue(FramedProperties.Y_AXIS, true)
                 .setValue(FramedProperties.Z_AXIS, true);
+    }
+
+    @Override
+    public StateCycleSpec createStateCycleSpec() {
+        return StateCycleSpec.builder(this)
+                .property(FramedProperties.X_AXIS, LABEL_X_AXIS)
+                .property(FramedProperties.Y_AXIS, LABEL_Y_AXIS)
+                .property(FramedProperties.Z_AXIS, LABEL_Z_AXIS)
+                .reverseCycleOrder()
+                .build();
     }
 
     @Override

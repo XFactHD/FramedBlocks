@@ -1,6 +1,7 @@
 package io.github.xfacthd.framedblocks.common.block.prism;
 
 import io.github.xfacthd.framedblocks.api.block.SlopeToggleBlock;
+import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.util.RotationDirection;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
@@ -60,6 +61,11 @@ public class FramedElevatedSlopedPrismBlock extends FramedBlock implements Prism
         boolean inner = getBlockType() == BlockType.FRAMED_ELEVATED_INNER_SLOPED_PRISM;
         CompoundDirection cmpDir = inner ? CompoundDirection.UP_EAST : CompoundDirection.UP_WEST;
         return defaultBlockState().setValue(PropertyHolder.FACING_DIR, cmpDir);
+    }
+
+    @Override
+    public StateCycleSpec createStateCycleSpec() {
+        return FramedSlopedPrismBlock.createStateCycleSpec(this);
     }
 
     @Override

@@ -1,6 +1,8 @@
 package io.github.xfacthd.framedblocks.common.block.interactive.banner;
 
 import io.github.xfacthd.framedblocks.api.block.item.IFramedBlockItem;
+import io.github.xfacthd.framedblocks.api.block.item.placement.PropertyLabels;
+import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.api.util.RotationDirection;
@@ -65,6 +67,13 @@ public final class FramedBannerBlock extends AbstractFramedBannerBlock {
     @Override
     public IFramedBlockItem createBlockItem(Item.Properties props) {
         return new FramedStandingAndWallBlockItem(this, FBContent.BLOCK_FRAMED_WALL_BANNER.value(), Direction.DOWN, props);
+    }
+
+    @Override
+    public StateCycleSpec createStateCycleSpec() {
+        return StateCycleSpec.builder(this)
+                .property(BlockStateProperties.ROTATION_16, PropertyLabels.ROTATION)
+                .build();
     }
 
     @Override

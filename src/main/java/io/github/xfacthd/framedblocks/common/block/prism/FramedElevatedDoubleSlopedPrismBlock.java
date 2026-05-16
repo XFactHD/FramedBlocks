@@ -7,6 +7,7 @@ import io.github.xfacthd.framedblocks.api.block.doubleblock.CamoGetter;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockParts;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockTopInteractionMode;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.SolidityCheck;
+import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.util.RotationDirection;
 import io.github.xfacthd.framedblocks.common.FBContent;
@@ -136,6 +137,11 @@ public class FramedElevatedDoubleSlopedPrismBlock extends FramedDoubleBlock impl
         boolean inner = getBlockType() == BlockType.FRAMED_ELEVATED_INNER_DOUBLE_SLOPED_PRISM;
         CompoundDirection cmpDir = inner ? CompoundDirection.UP_EAST : CompoundDirection.UP_WEST;
         return defaultBlockState().setValue(PropertyHolder.FACING_DIR, cmpDir);
+    }
+
+    @Override
+    public StateCycleSpec createStateCycleSpec() {
+        return FramedSlopedPrismBlock.createStateCycleSpec(this);
     }
 
     @Override

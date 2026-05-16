@@ -8,6 +8,8 @@ import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
 import io.github.xfacthd.framedblocks.api.block.SlopeToggleBlock;
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedDoubleBlockEntity;
+import io.github.xfacthd.framedblocks.api.block.item.placement.PropertyLabels;
+import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.shapes.ShapeLookup;
 import io.github.xfacthd.framedblocks.api.util.DirUtils;
@@ -229,6 +231,20 @@ public class FramedRailSlopeBlock<BE extends FramedBlockEntity> extends BaseRail
     @Override
     public BlockState getItemModelSource() {
         return defaultBlockState().setValue(PropertyHolder.ASCENDING_RAIL_SHAPE, RailShape.ASCENDING_SOUTH);
+    }
+
+    @Override
+    public StateCycleSpec createStateCycleSpec() {
+        return createStateCycleSpec(this);
+    }
+
+    static StateCycleSpec createStateCycleSpec(Block block) {
+        return StateCycleSpec.builder(block)
+                .property(PropertyHolder.ASCENDING_RAIL_SHAPE, builder -> builder
+                        .values(FramedUtils.getRailShapeCycleOrder(PropertyHolder.ASCENDING_RAIL_SHAPE))
+                        .printer(PropertyLabels.SHAPE)
+                )
+                .build();
     }
 
     @Override

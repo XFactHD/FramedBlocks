@@ -1,6 +1,8 @@
 package io.github.xfacthd.framedblocks.common.block.cube;
 
 import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
+import io.github.xfacthd.framedblocks.api.block.item.placement.PropertyLabels;
+import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.api.util.FramedConstants;
@@ -104,6 +106,14 @@ public class FramedCornerTubeBlock extends FramedBlock {
     @Override
     public BlockState getItemModelSource() {
         return defaultBlockState().setValue(PropertyHolder.CORNER_TYPE_ORIENTATION, CornerTubeOrientation.UP_NORTH);
+    }
+
+    @Override
+    public StateCycleSpec createStateCycleSpec() {
+        return StateCycleSpec.builder(this)
+                .property(PropertyHolder.CORNER_TYPE_ORIENTATION, PropertyLabels.ORIENTATION)
+                .property(PropertyHolder.THICK, FramedTubeBlock.LABEL_THICK)
+                .build();
     }
 
     @Override

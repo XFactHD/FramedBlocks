@@ -4,9 +4,14 @@ import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
 import io.github.xfacthd.framedblocks.api.block.SlopeToggleBlock;
+import io.github.xfacthd.framedblocks.api.block.item.placement.PropertyLabels;
+import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
+import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpecBuilder;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.util.RotationDirection;
+import io.github.xfacthd.framedblocks.api.util.text.ValuePrinters;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
+import io.github.xfacthd.framedblocks.common.block.PrismCornerBlock;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import net.minecraft.core.Direction;
 import net.minecraft.util.TriState;
@@ -65,6 +70,24 @@ public class FramedThreewayCornerBlock extends FramedBlock implements SlopeToggl
     @Override
     public BlockState getItemModelSource() {
         return defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
+    }
+
+    @Override
+    public StateCycleSpec createStateCycleSpec() {
+        return createStateCycleSpec(this);
+    }
+
+    public static StateCycleSpec createStateCycleSpec(Block block) {
+        StateCycleSpecBuilder specBuilder = StateCycleSpec.builder(block)
+                .property(FramedProperties.FACING_HOR, PropertyLabels.FACING)
+                .property(FramedProperties.TOP, builder ->
+                        builder.printer(PropertyLabels.HALF, ValuePrinters.HALF_BOOL)
+                )
+                .reverseCycleOrder();
+        if (block instanceof PrismCornerBlock prismCorner) {
+            specBuilder.postProcessor(prismCorner::applyOffset);
+        }
+        return specBuilder.build();
     }
 
     @Override

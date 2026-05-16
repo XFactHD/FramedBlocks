@@ -1,12 +1,16 @@
 package io.github.xfacthd.framedblocks.common.data.property;
 
+import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.text.Printable;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.level.block.Rotation;
 
 import java.util.Locale;
 
-public enum CornerType implements StringRepresentable {
+public enum CornerType implements StringRepresentable, Printable {
     BOTTOM,
     TOP,
     HORIZONTAL_BOTTOM_LEFT,
@@ -15,10 +19,16 @@ public enum CornerType implements StringRepresentable {
     HORIZONTAL_TOP_RIGHT;
 
     private final String name = toString().toLowerCase(Locale.ENGLISH);
+    private final Component displayName = Utils.translate("value", "corner_type." + name);
 
     @Override
     public String getSerializedName() {
         return name;
+    }
+
+    @Override
+    public Component print(ChatFormatting defaultColor) {
+        return displayName.copy().withStyle(defaultColor);
     }
 
     public boolean isHorizontal() {

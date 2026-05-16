@@ -5,13 +5,19 @@ import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
 import io.github.xfacthd.framedblocks.api.block.SlopeToggleBlock;
 import io.github.xfacthd.framedblocks.api.block.item.IFramedBlockItem;
+import io.github.xfacthd.framedblocks.api.block.item.placement.PropertyLabels;
+import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.util.RotationDirection;
+import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.text.ValuePrinter;
+import io.github.xfacthd.framedblocks.api.util.text.ValuePrinters;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import io.github.xfacthd.framedblocks.common.item.block.FramedMirroringBlockItem;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
 import net.minecraft.util.TriState;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -23,6 +29,10 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import org.jspecify.annotations.Nullable;
 
 public class FramedSlopeSlabBlock extends FramedBlock implements SlopeToggleBlock {
+    public static final Component VALUE_UPRIGHT = Utils.translate("value", "state_cycling.property.slope_slab.orientation.upright");
+    public static final Component VALUE_UPSIDEDOWN = Utils.translate("value", "state_cycling.property.slope_slab.orientation.upside_down");
+    public static final ValuePrinter<Boolean> PRINTER_ORIENTATION = ValuePrinter.of(top -> top ? VALUE_UPSIDEDOWN : VALUE_UPRIGHT);
+
     public FramedSlopeSlabBlock(Properties props) {
         super(BlockType.FRAMED_SLOPE_SLAB, props);
         registerDefaultState(defaultBlockState()
@@ -89,6 +99,23 @@ public class FramedSlopeSlabBlock extends FramedBlock implements SlopeToggleBloc
     @Override
     public BlockState getItemModelSource() {
         return defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
+    }
+
+    @Override
+    public StateCycleSpec createStateCycleSpec() {
+        return createStateCycleSpec(this);
+    }
+
+    public static StateCycleSpec createStateCycleSpec(Block block) {
+        return StateCycleSpec.builder(block)
+                .property(FramedProperties.FACING_HOR, PropertyLabels.FACING)
+                .property(PropertyHolder.TOP_HALF, builder ->
+                        builder.printer(PropertyLabels.HALF, ValuePrinters.HALF_BOOL)
+                )
+                .property(FramedProperties.TOP, builder ->
+                        builder.printer(PropertyLabels.ORIENTATION, PRINTER_ORIENTATION)
+                )
+                .build();
     }
 
     @Override

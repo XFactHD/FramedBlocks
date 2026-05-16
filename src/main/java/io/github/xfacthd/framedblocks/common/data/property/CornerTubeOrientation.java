@@ -1,7 +1,11 @@
 package io.github.xfacthd.framedblocks.common.data.property;
 
 import io.github.xfacthd.framedblocks.api.util.DirUtils;
+import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.text.Printable;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
@@ -9,7 +13,7 @@ import net.minecraft.world.level.block.Rotation;
 import java.util.Locale;
 import java.util.Objects;
 
-public enum CornerTubeOrientation implements StringRepresentable {
+public enum CornerTubeOrientation implements StringRepresentable, Printable {
     UP_NORTH(Direction.UP, Direction.NORTH),
     UP_EAST(Direction.UP, Direction.EAST),
     UP_SOUTH(Direction.UP, Direction.SOUTH),
@@ -29,6 +33,7 @@ public enum CornerTubeOrientation implements StringRepresentable {
     public static final int COUNT = values().length;
 
     private final String name = toString().toLowerCase(Locale.ROOT);
+    private final Component displayName = Utils.translate("value", "corner_tube_orientation." + name);
     private final Direction primDir;
     private final Direction secDir;
 
@@ -70,6 +75,11 @@ public enum CornerTubeOrientation implements StringRepresentable {
     @Override
     public String getSerializedName() {
         return name;
+    }
+
+    @Override
+    public Component print(ChatFormatting defaultColor) {
+        return displayName.copy().withStyle(defaultColor);
     }
 
     public static CornerTubeOrientation of(Direction dirOne, Direction dirTwo) {

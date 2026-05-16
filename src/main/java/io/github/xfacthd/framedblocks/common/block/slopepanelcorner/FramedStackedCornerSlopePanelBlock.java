@@ -8,6 +8,7 @@ import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockParts;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockTopInteractionMode;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.SolidityCheck;
 import io.github.xfacthd.framedblocks.api.block.item.IFramedBlockItem;
+import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.api.util.RotationDirection;
@@ -181,6 +182,15 @@ public class FramedStackedCornerSlopePanelBlock extends FramedDoubleBlock implem
     public BlockState getItemModelSource() {
         boolean inner = getBlockType() == BlockType.FRAMED_STACKED_INNER_CORNER_SLOPE_PANEL;
         return defaultBlockState().setValue(FramedProperties.FACING_HOR, inner ? Direction.EAST : Direction.WEST);
+    }
+
+    @Override
+    public StateCycleSpec createStateCycleSpec() {
+        return FramedCornerSlopePanelBlock.createStateCycleSpec(this, switch (getBlockType()) {
+            case FRAMED_STACKED_CORNER_SLOPE_PANEL -> FBContent.BLOCK_FRAMED_STACKED_CORNER_SLOPE_PANEL_WALL.value();
+            case FRAMED_STACKED_INNER_CORNER_SLOPE_PANEL -> FBContent.BLOCK_FRAMED_STACKED_INNER_CORNER_SLOPE_PANEL_WALL.value();
+            default -> throw new IllegalStateException("Unexpected type: " + getBlockType());
+        });
     }
 
     @Override

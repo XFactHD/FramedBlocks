@@ -1,11 +1,19 @@
 package io.github.xfacthd.framedblocks.common.data.property;
 
+import io.github.xfacthd.framedblocks.api.block.item.placement.PropertyLabels;
+import io.github.xfacthd.framedblocks.api.block.item.placement.PropertyPrinter;
+import io.github.xfacthd.framedblocks.api.block.item.placement.ValueOrders;
 import io.github.xfacthd.framedblocks.api.util.DirUtils;
+import io.github.xfacthd.framedblocks.api.util.text.ValuePrinters;
 import net.minecraft.core.Direction;
 import net.minecraft.util.StringRepresentable;
+import net.minecraft.util.Util;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Locale;
 
 public enum DirectionAxis implements StringRepresentable {
@@ -29,6 +37,24 @@ public enum DirectionAxis implements StringRepresentable {
 
     private static final DirectionAxis[][] FROM_DIR_AXIS = makeDirTable();
     public static final int COUNT = values().length;
+    public static final List<DirectionAxis> CYCLE_ORDER = Util.make(() -> {
+        List<DirectionAxis> values = new ArrayList<>(List.of(values()));
+        values.sort(Comparator.comparingInt(dirAxis -> {
+            int dirIdx = ValueOrders.FACING.indexOf(dirAxis.dir);
+            int axisIdx;
+            if (!DirUtils.isY(dirAxis.dir)) {
+                axisIdx = dirAxis.axis == Direction.Axis.Y ? 1 : 0;
+            } else {
+                axisIdx = dirAxis.axis.ordinal();
+            }
+            return dirIdx * 3 + axisIdx;
+        }));
+        return values;
+    });
+    public static final PropertyPrinter<DirectionAxis> PRINTER = (dirAxis, out, defaultValueColor) -> {
+        out.accept(PropertyLabels.FACING, ValuePrinters.DIRECTION.printStyled(dirAxis.dir, defaultValueColor));
+        out.accept(PropertyLabels.AXIS, ValuePrinters.AXIS.printStyled(dirAxis.axis, defaultValueColor));
+    };
 
     private final String name = toString().toLowerCase(Locale.ROOT);
     private final Direction dir;

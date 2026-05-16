@@ -3,6 +3,8 @@ package io.github.xfacthd.framedblocks.common.block.door;
 import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
+import io.github.xfacthd.framedblocks.api.block.item.placement.PropertyLabels;
+import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.model.wrapping.WrapHelper;
 import io.github.xfacthd.framedblocks.api.model.wrapping.statemerger.StateMerger;
@@ -111,6 +113,25 @@ public class FramedFenceGateBlock extends FenceGateBlock implements IFramedBlock
     @Override
     public BlockState getItemModelSource() {
         return defaultBlockState();
+    }
+
+    @Override
+    public StateCycleSpec createStateCycleSpec() {
+        return StateCycleSpec.builder(this)
+                .property(FACING, PropertyLabels.FACING)
+                .postProcessor((state, ctx) -> {
+                    Level level = ctx.getLevel();
+                    BlockPos pos = ctx.getClickedPos();
+                    boolean powered = level.hasNeighborSignal(pos);
+                    Direction facing = state.getValue(FACING);
+                    boolean inWall = isWall(level, pos, facing.getClockWise()) || isWall(level, pos, facing.getCounterClockWise());
+                    return state.setValue(OPEN, powered).setValue(POWERED, powered).setValue(IN_WALL, inWall);
+                })
+                .build();
+    }
+
+    private boolean isWall(Level level, BlockPos pos, Direction offset) {
+        return isWall(level.getBlockState(pos.relative(offset)));
     }
 
     @Override

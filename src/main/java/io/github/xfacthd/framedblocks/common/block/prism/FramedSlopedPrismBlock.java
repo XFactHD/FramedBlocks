@@ -1,7 +1,9 @@
 package io.github.xfacthd.framedblocks.common.block.prism;
 
+import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
 import io.github.xfacthd.framedblocks.api.block.SlopeToggleBlock;
+import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.api.util.MathUtils;
@@ -114,6 +116,24 @@ public class FramedSlopedPrismBlock extends FramedBlock implements PrismBlock, S
         boolean outer = getBlockType() == BlockType.FRAMED_SLOPED_PRISM;
         CompoundDirection cmpDir = outer ? CompoundDirection.UP_WEST : CompoundDirection.UP_EAST;
         return defaultBlockState().setValue(PropertyHolder.FACING_DIR, cmpDir);
+    }
+
+    @Override
+    public StateCycleSpec createStateCycleSpec() {
+        return createStateCycleSpec(this);
+    }
+
+    static StateCycleSpec createStateCycleSpec(Block block) {
+        return StateCycleSpec.builder(block)
+                .property(PropertyHolder.FACING_DIR, builder -> builder
+                        .values(CompoundDirection.CYCLE_ORDER)
+                        .printer(CompoundDirection.PRINTER)
+                )
+                .postProcessor((state, _) -> {
+                    Direction face = state.getValue(PropertyHolder.FACING_DIR).direction();
+                    return state.setValue(FramedProperties.ALT_SLOPE, DirUtils.isY(face));
+                })
+                .build();
     }
 
     @Override
