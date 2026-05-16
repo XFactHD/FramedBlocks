@@ -2,17 +2,21 @@ package io.github.xfacthd.framedblocks.client.util;
 
 import com.mojang.logging.LogUtils;
 import io.github.xfacthd.framedblocks.api.block.blockentity.IFramedBlockEntity;
+import io.github.xfacthd.framedblocks.api.block.item.IFramedBlockItem;
 import io.github.xfacthd.framedblocks.api.util.FramedConstants;
 import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.common.net.payload.serverbound.ServerboundStateCycleActionPayload;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import net.neoforged.neoforge.common.util.Lazy;
 import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
@@ -22,6 +26,8 @@ public final class KeyMappings {
     public static final KeyMapping.Category KEY_CATEGORY = new KeyMapping.Category(Utils.id("main"));
     public static final Lazy<KeyMapping> UPDATE_CULLING = makeKeyMapping("update_cull", GLFW.GLFW_KEY_F9);
     public static final Lazy<KeyMapping> WIPE_CACHE = makeKeyMapping("wipe_cache", -1);
+    public static final Lazy<KeyMapping> TOGGLE_STATE_CYCLE = makeKeyMapping("toggle_state_cycle", GLFW.GLFW_KEY_Y);
+    public static final Lazy<KeyMapping> UNLOCK_STATE_CYCLE = makeKeyMapping("unlock_state_cycle", GLFW.GLFW_KEY_LEFT_CONTROL);
 
     private static Lazy<KeyMapping> makeKeyMapping(String name, int key) {
         return Lazy.of(() -> new KeyMapping(FramedConstants.MOD_ID + ".key." + name, key, KEY_CATEGORY));
@@ -32,6 +38,8 @@ public final class KeyMappings {
 
         event.register(UPDATE_CULLING.get());
         event.register(WIPE_CACHE.get());
+        event.register(TOGGLE_STATE_CYCLE.get());
+        event.register(UNLOCK_STATE_CYCLE.get());
     }
 
     public static void onClientTick(@SuppressWarnings("unused") ClientTickEvent.Pre event) {
@@ -73,6 +81,13 @@ public final class KeyMappings {
 
             //noinspection ConstantConditions
             Minecraft.getInstance().player.sendOverlayMessage(Component.literal("Model cache cleared"));
+        }
+
+        if (isKeyPressed(TOGGLE_STATE_CYCLE)) {
+            Player player = Minecraft.getInstance().player;
+            if (player != null && player.getMainHandItem().getItem() instanceof IFramedBlockItem item && item.getStateCycleSpec().canCycle()) {
+                ClientPacketDistributor.sendToServer(ServerboundStateCycleActionPayload.TOGGLE);
+            }
         }
     }
 

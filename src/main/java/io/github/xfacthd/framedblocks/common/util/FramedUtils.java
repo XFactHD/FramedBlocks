@@ -1,5 +1,6 @@
 package io.github.xfacthd.framedblocks.common.util;
 
+import com.mojang.serialization.DataResult;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.menu.slot.SlotFactory;
 import net.minecraft.core.Direction;
@@ -20,6 +21,8 @@ import java.util.IdentityHashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 public final class FramedUtils {
     private static final Lazy<Set<Item>> RAIL_ITEMS = Lazy.of(() -> {
@@ -120,6 +123,26 @@ public final class FramedUtils {
         for (int col = 0; col < 9; ++col) {
             slotConsumer.accept(factory.create(playerInv, col, x + col * 18, y + 4));
         }
+    }
+
+    public static <T, R extends T> Function<T, DataResult<R>> validateSubType(Class<R> subType) {
+        String messagePrefix = "Not a " + subType.getSimpleName() + ": ";
+        return value -> {
+            if (subType.isInstance(value)) {
+                return DataResult.success(subType.cast(value));
+            }
+            return DataResult.error(() -> messagePrefix + value);
+        };
+    }
+
+    public static <T, R extends T> Function<T, R> assertSubType(Class<R> subType) {
+        String messagePrefix = "Not a " + subType.getSimpleName() + ": ";
+        return value -> {
+            if (subType.isInstance(value)) {
+                return subType.cast(value);
+            }
+            throw new IllegalArgumentException(messagePrefix + value);
+        };
     }
 
     private FramedUtils() { }

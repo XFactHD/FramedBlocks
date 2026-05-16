@@ -23,6 +23,13 @@
     - Implement `BlockBehaviour#rotate(BlockState, Rotation)` and `BlockBehaviour#mirror(BlockState, Mirror)` to strictly handle rotation/mirroring around the Y axis
     - If the block has non-horizontal primary orientations or has a secondary orientation property, override `IFramedBlock#rotate(BlockState, RotationDirection, WrenchRotationMode)`
     - Implement `IFramedBlock#shouldNotifyBlockEntityOfWrenchRotation()` to specify under which circumstances the rotation is around the Y axis, requiring the `BlockEntity` to be notified to adjust the camo
+  - Define a `StateCycleSpec` specifying how to cycle through the block's possible placement states
+    - Return `StateCycleSpec.UNSUPPORTED` to prevent cycling through placement states. Use cases include
+      - The block doesn't have multiple placement states with player-relevant differences
+      - The block is not placeable (i.e. it is only used as a part of a double block)
+      - The block is a secondary one out of a group of blocks placed by one `BlockItem`
+    - Build a spec with `StateCycleSpec.builder()` if this block has a one-to-one mapping to a `BlockItem`
+    - Build a spec with `StateCycleSpec.multiBuilder()` if this block is the primary one out of a group of blocks placed by one `BlockItem`
 - Create a `BlockEntity` or use an existing one:
   - For single-camo blocks, use `FramedBlockEntity` or extend it to implement additional functionality
   - For double-camo blocks, use `FramedDoubleBlockEntity` or extend it to implement additional functionality or part hit detection that cannot be handled by the default shape-based implementation

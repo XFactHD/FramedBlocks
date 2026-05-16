@@ -1,6 +1,8 @@
 package io.github.xfacthd.framedblocks.api.internal;
 
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
+import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
+import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpecBuilder;
 import io.github.xfacthd.framedblocks.api.blueprint.BlueprintCopyBehaviour;
 import io.github.xfacthd.framedblocks.api.camo.CamoContainer;
 import io.github.xfacthd.framedblocks.api.camo.CamoContainerFactory;
@@ -11,6 +13,8 @@ import io.github.xfacthd.framedblocks.api.shapes.ShapeCache;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.Recipe;
@@ -22,6 +26,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
+import java.util.SequencedMap;
 
 @ApiStatus.Internal
 public interface InternalAPI {
@@ -52,4 +57,10 @@ public interface InternalAPI {
     Recipe<?> makeFramingSawRecipe(int materialAmount, List<FramingSawRecipeBuilder.Additive> additives, ItemStackTemplate result, boolean disabled);
 
     BlueprintCopyBehaviour getBlueprintCopyBehavior(Block block);
+
+    StateCycleSpec buildSingleBlockStateCycleSpec(StateCycleSpecBuilder builder, StateCycleSpecAssembler assembler);
+
+    StateCycleSpec buildMultiBlockStateCycleSpec(SequencedMap<Block, StateCycleSpecBuilder> entries, StateCycleSpecAssembler assembler);
+
+    boolean isStateCyclingActive(Player player, BlockItem item);
 }

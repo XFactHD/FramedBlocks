@@ -7,6 +7,7 @@ import io.github.xfacthd.framedblocks.common.net.payload.serverbound.Serverbound
 import io.github.xfacthd.framedblocks.common.net.payload.serverbound.ServerboundCamoApplicatorSetSlotPayload;
 import io.github.xfacthd.framedblocks.common.net.payload.serverbound.ServerboundEncodeFramingSawPatternPayload;
 import io.github.xfacthd.framedblocks.common.net.payload.serverbound.ServerboundSelectFramingSawRecipePayload;
+import io.github.xfacthd.framedblocks.common.net.payload.serverbound.ServerboundStateCycleActionPayload;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.HandlerThread;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
@@ -49,6 +50,11 @@ public final class NetworkHandler {
                         ServerboundCamoApplicatorConfigureModifierPayload.TYPE,
                         ServerboundCamoApplicatorConfigureModifierPayload.STREAM_CODEC,
                         ServerboundCamoApplicatorConfigureModifierPayload::handle
+                )
+                .playToServer(
+                        ServerboundStateCycleActionPayload.TYPE,
+                        ServerboundStateCycleActionPayload.STREAM_CODEC,
+                        ServerboundStateCycleActionPayload::handle
                 );
     }
 

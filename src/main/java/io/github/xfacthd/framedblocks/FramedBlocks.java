@@ -24,6 +24,7 @@ import io.github.xfacthd.framedblocks.common.data.overlaypreds.BlockOverlayPredi
 import io.github.xfacthd.framedblocks.common.data.shapes.ShapeReloader;
 import io.github.xfacthd.framedblocks.common.data.skippreds.SideSkipPredicates;
 import io.github.xfacthd.framedblocks.common.item.FramedBlueprintItem;
+import io.github.xfacthd.framedblocks.common.item.ItemValidator;
 import io.github.xfacthd.framedblocks.common.net.NetworkHandler;
 import io.github.xfacthd.framedblocks.common.util.EventHandler;
 import net.minecraft.world.entity.ai.village.poi.PoiTypes;
@@ -90,6 +91,7 @@ public final class FramedBlocks {
         CompatHandler.commonSetup();
         CamoContainerFactories.registerCamoFactories();
         FramedFlowerPotBlock.initPotMapping();
+        ItemValidator.validate();
     }
 
     private static void onAddDebugReloadListener(AddServerReloadListenersEvent event) {

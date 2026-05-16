@@ -58,6 +58,7 @@ import io.github.xfacthd.framedblocks.common.crafting.saw.FramingSawRecipeDispla
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import io.github.xfacthd.framedblocks.common.data.FramedRegistries;
 import io.github.xfacthd.framedblocks.common.data.FramedToolType;
+import io.github.xfacthd.framedblocks.common.data.attachment.*;
 import io.github.xfacthd.framedblocks.common.data.camo.block.BlockCamoContainerFactory;
 import io.github.xfacthd.framedblocks.common.data.camo.fluid.FluidCamoContainerFactory;
 import io.github.xfacthd.framedblocks.common.data.component.*;
@@ -133,6 +134,7 @@ public final class FBContent {
     private static final DeferredMapCodecRegister<LootItemCondition> LOOT_CONDITIONS = mapCodecRegister(Registries.LOOT_CONDITION_TYPE);
     private static final DeferredMapCodecRegister<LootItemFunction> LOOT_FUNCTIONS = mapCodecRegister(Registries.LOOT_FUNCTION_TYPE);
     private static final DeferredMapCodecRegister<NumberProvider> LOOT_NUMBER_PROVIDERS = mapCodecRegister(Registries.LOOT_NUMBER_PROVIDER_TYPE);
+    private static final DeferredAttachmentTypeRegister ATTACHMENT_TYPES = DeferredAttachmentTypeRegister.create(FramedConstants.MOD_ID);
     private static final DeferredRegister<CamoContainerFactory<?>> CAMO_CONTAINER_FACTORIES = register(FramedConstants.Registries.CAMO_CONTAINER_FACTORY_REGISTRY_KEY);
 
     private static final Map<BlockType, Holder<Block>> BLOCKS_BY_TYPE = new EnumMap<>(BlockType.class);
@@ -792,6 +794,17 @@ public final class FBContent {
     );
     // endregion
 
+    // region AttachmentTypes
+    public static final DeferredAttachmentType<PlacementStateCycleStorage> DA_TYPE_STATE_CYCLE_STORAGE = ATTACHMENT_TYPES.registerAttachmentType(
+            "state_cycle_storage",
+            PlacementStateCycleStorage::new,
+            builder -> builder
+                    .serialize(PlacementStateCycleStorage.CODEC)
+                    .sync(new PlacementStateCycleStorage.SyncHandler())
+                    .copyOnDeath()
+    );
+    // endregion
+
     // region CamoContainer.Factories
     public static final DeferredHolder<CamoContainerFactory<?>, EmptyCamoContainerFactory> FACTORY_EMPTY = CAMO_CONTAINER_FACTORIES.register(
             "empty", EmptyCamoContainerFactory::new
@@ -823,6 +836,7 @@ public final class FBContent {
         LOOT_FUNCTIONS.register(modBus);
         LOOT_NUMBER_PROVIDERS.register(modBus);
         CAMO_CONTAINER_FACTORIES.register(modBus);
+        ATTACHMENT_TYPES.register(modBus);
     }
 
     public static Collection<DeferredHolder<Block, ? extends Block>> getRegisteredBlocks() {

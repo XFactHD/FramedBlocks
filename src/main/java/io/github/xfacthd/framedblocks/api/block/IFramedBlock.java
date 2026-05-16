@@ -4,6 +4,7 @@ import io.github.xfacthd.framedblocks.api.block.blockentity.IFramedBlockEntity;
 import io.github.xfacthd.framedblocks.api.block.cache.StateCache;
 import io.github.xfacthd.framedblocks.api.block.item.FramedBlockItem;
 import io.github.xfacthd.framedblocks.api.block.item.IFramedBlockItem;
+import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
 import io.github.xfacthd.framedblocks.api.block.render.CullingHelper;
 import io.github.xfacthd.framedblocks.api.block.render.ParticleHelper;
 import io.github.xfacthd.framedblocks.api.camo.CamoContainer;
@@ -89,6 +90,14 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension {
     /// @param props The [Item.Properties] to construct the item with
     default IFramedBlockItem createBlockItem(Item.Properties props) {
         return new FramedBlockItem((Block) this, props);
+    }
+
+    /// Create the [StateCycleSpec] to use for cycling through this block's states.
+    ///
+    /// Blocks which do not have an item or are not the primary block of the [BlockItem] used to place
+    /// them should return [StateCycleSpec#UNSUPPORTED].
+    default StateCycleSpec createStateCycleSpec() {
+        return StateCycleSpec.NOT_IMPLEMENTED;
     }
 
     @ApiStatus.OverrideOnly

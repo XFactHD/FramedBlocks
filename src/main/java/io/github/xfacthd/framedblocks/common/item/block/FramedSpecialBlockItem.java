@@ -29,7 +29,7 @@ public abstract class FramedSpecialBlockItem extends FramedBlockItem {
         Level level = ctx.getLevel();
         BlockPos pos = ctx.getClickedPos();
         BlockState originalState = level.getBlockState(pos);
-        if (ctx.canPlace() && originalState.is(getBlock()) && ctx.getPlayer() != null) {
+        if (ctx.canPlace() && originalState.is(getBlock()) && ctx.getPlayer() != null && !isStateCyclingActive(ctx.getPlayer())) {
             BlockState newState = getReplacementState(ctx, originalState);
             if (newState != null) {
                 if (!level.isClientSide()) {

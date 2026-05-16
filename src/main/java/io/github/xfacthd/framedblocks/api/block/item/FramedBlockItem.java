@@ -2,6 +2,7 @@ package io.github.xfacthd.framedblocks.api.block.item;
 
 import com.google.common.base.Preconditions;
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
+import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvent;
@@ -20,6 +21,7 @@ import org.jspecify.annotations.Nullable;
 import java.util.function.Consumer;
 
 public class FramedBlockItem extends BlockItem implements IFramedBlockItem {
+    private final StateCycleSpec cycleSpec;
     private final boolean customEmptyPlaceSound;
 
     public FramedBlockItem(Block block, Properties props) {
@@ -27,9 +29,10 @@ public class FramedBlockItem extends BlockItem implements IFramedBlockItem {
     }
 
     public FramedBlockItem(Block block, Properties props, boolean customEmptyPlaceSound) {
+        Preconditions.checkArgument(block instanceof IFramedBlock);
         super(block, props);
         this.customEmptyPlaceSound = customEmptyPlaceSound;
-        Preconditions.checkArgument(block instanceof IFramedBlock);
+        this.cycleSpec = ((IFramedBlock) block).createStateCycleSpec();
     }
 
     @Override
@@ -45,6 +48,11 @@ public class FramedBlockItem extends BlockItem implements IFramedBlockItem {
     @Override
     public boolean useCustomEmptyPlaceSound() {
         return customEmptyPlaceSound;
+    }
+
+    @Override
+    public StateCycleSpec getStateCycleSpec() {
+        return cycleSpec;
     }
 
     @Override

@@ -75,13 +75,13 @@ import io.github.xfacthd.framedblocks.client.render.util.FramedPipelineModifiers
 import io.github.xfacthd.framedblocks.client.render.util.FramedRenderPipelines;
 import io.github.xfacthd.framedblocks.client.screen.CamoApplicatorScreen;
 import io.github.xfacthd.framedblocks.client.screen.FramedStorageScreen;
-import io.github.xfacthd.framedblocks.client.screen.saw.FramingSawScreen;
 import io.github.xfacthd.framedblocks.client.screen.PaintRollerScreen;
-import io.github.xfacthd.framedblocks.client.screen.saw.PoweredFramingSawScreen;
-import io.github.xfacthd.framedblocks.client.screen.overlay.BlockInteractOverlayLayer;
+import io.github.xfacthd.framedblocks.client.screen.overlay.*;
 import io.github.xfacthd.framedblocks.client.screen.overlay.impl.*;
 import io.github.xfacthd.framedblocks.client.screen.pip.BlockPictureInPictureRenderer;
 import io.github.xfacthd.framedblocks.client.screen.pip.SpinningItemPictureInPictureRenderer;
+import io.github.xfacthd.framedblocks.client.screen.saw.FramingSawScreen;
+import io.github.xfacthd.framedblocks.client.screen.saw.PoweredFramingSawScreen;
 import io.github.xfacthd.framedblocks.client.screen.widget.BlockPreviewTooltipComponent;
 import io.github.xfacthd.framedblocks.client.screen.widget.PaintRollerClientTooltipComponent;
 import io.github.xfacthd.framedblocks.client.util.CacheCleaner;
@@ -155,6 +155,7 @@ public final class FBClient {
         NeoForge.EVENT_BUS.addListener(BlockOutlineRenderer::onRenderBlockHighlight);
         NeoForge.EVENT_BUS.addListener(KeyMappings::onClientTick);
         NeoForge.EVENT_BUS.addListener(ClientEventHandler::onClientDisconnect);
+        NeoForge.EVENT_BUS.addListener(ClientEventHandler::onScrollInput);
         NeoForge.EVENT_BUS.addListener(EventPriority.LOW, true, CollapsibleBlockIndicatorRenderer::onRenderBlockHighlight);
 
         container.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
@@ -216,6 +217,7 @@ public final class FBClient {
         BlockInteractOverlayLayer.init();
 
         event.registerAboveAll(Utils.id("block_interact"), new BlockInteractOverlayLayer());
+        event.registerAboveAll(Utils.id("placement_state"), new PlacementStateCycleOverlay());
     }
 
     private static void onRegisterBlockInteractOverlays(RegisterBlockInteractOverlaysEvent event) {

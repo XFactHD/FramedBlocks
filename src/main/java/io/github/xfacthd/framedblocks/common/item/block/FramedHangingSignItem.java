@@ -1,6 +1,7 @@
 package io.github.xfacthd.framedblocks.common.item.block;
 
 import io.github.xfacthd.framedblocks.api.block.item.IFramedBlockItem;
+import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -25,6 +26,11 @@ public final class FramedHangingSignItem extends HangingSignItem implements IFra
     @Override
     public InteractionResult place(BlockPlaceContext context) {
         return handlePlace(context, super::place);
+    }
+
+    @Override
+    public StateCycleSpec getStateCycleSpec() {
+        return StateCycleSpec.UNSUPPORTED;
     }
 
     @Override

@@ -1,6 +1,8 @@
 package io.github.xfacthd.framedblocks.common.datagen.providers;
 
 import io.github.xfacthd.framedblocks.api.block.ShapeLockableBlock;
+import io.github.xfacthd.framedblocks.api.block.item.IFramedBlockItem;
+import io.github.xfacthd.framedblocks.api.block.item.placement.PropertyLabels;
 import io.github.xfacthd.framedblocks.api.block.overlay.BlockOverlay;
 import io.github.xfacthd.framedblocks.api.block.blockentity.FrameModifier;
 import io.github.xfacthd.framedblocks.api.blueprint.BlueprintData;
@@ -12,6 +14,7 @@ import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.util.FramedConstants;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.api.util.text.MoreCommonComponents;
+import io.github.xfacthd.framedblocks.api.util.text.ValuePrinters;
 import io.github.xfacthd.framedblocks.client.screen.CamoApplicatorScreen;
 import io.github.xfacthd.framedblocks.client.screen.saw.FramingSawScreen;
 import io.github.xfacthd.framedblocks.client.screen.saw.FramingSawWithEncoderScreen;
@@ -34,6 +37,7 @@ import io.github.xfacthd.framedblocks.common.config.ClientConfig;
 import io.github.xfacthd.framedblocks.common.config.DevToolsConfig;
 import io.github.xfacthd.framedblocks.common.config.ServerConfig;
 import io.github.xfacthd.framedblocks.common.crafting.saw.FramingSawRecipeMatchResult;
+import io.github.xfacthd.framedblocks.common.data.attachment.PlacementStateCycleStorage;
 import io.github.xfacthd.framedblocks.common.data.property.NullableDirection;
 import io.github.xfacthd.framedblocks.common.datagen.GeneratorHandler;
 import io.github.xfacthd.framedblocks.common.item.FramedAxeItem;
@@ -55,6 +59,10 @@ import net.minecraft.network.chat.ComponentContents;
 import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.level.block.state.properties.DoorHingeSide;
+import net.minecraft.world.level.block.state.properties.Half;
+import net.minecraft.world.level.block.state.properties.RailShape;
+import net.minecraft.world.level.block.state.properties.StairsShape;
 import net.neoforged.neoforge.common.ModConfigSpec;
 import net.neoforged.neoforge.common.data.LanguageProvider;
 import org.apache.commons.lang3.StringUtils;
@@ -370,6 +378,8 @@ public final class FramedLanguageProvider extends LanguageProvider {
         add(KeyMappings.KEY_CATEGORY.label(), "FramedBlocks");
         add(KeyMappings.UPDATE_CULLING.get().getName(), "Update culling cache");
         add(KeyMappings.WIPE_CACHE.get().getName(), "Clear model cache");
+        add(KeyMappings.TOGGLE_STATE_CYCLE.get().getName(), "Toggle placement state cycling");
+        add(KeyMappings.UNLOCK_STATE_CYCLE.get().getName(), "Unlock placement state cycling");
 
         add(FBContent.MAIN_TAB.value().getDisplayName(), "FramedBlocks");
 
@@ -423,6 +433,9 @@ public final class FramedLanguageProvider extends LanguageProvider {
         add(SimpleBlockCamoContainerFactory.MSG_NON_SOLID, "Untagged non-solid blocks cannot be inserted into framed blocks!");
 
         add(ShapeLockableBlock.LOCK_MESSAGE, "The state of this block is now %s");
+
+        add(PlacementStateCycleStorage.MSG_ENABLED, "Manual placement state cycling enabled");
+        add(PlacementStateCycleStorage.MSG_DISABLED, "Manual placement state cycling disabled");
     }
 
     private void addScreenTranslations() {
@@ -503,6 +516,26 @@ public final class FramedLanguageProvider extends LanguageProvider {
         add(MoreCommonComponents.Internal.INDENT_KEY, "  %s");
         add(MoreCommonComponents.Internal.BULLET_KEY, "  - %s");
 
+        add(ValuePrinters.HALF.print(Half.BOTTOM), "Bottom");
+        add(ValuePrinters.HALF.print(Half.TOP), "Top");
+        add(ValuePrinters.STAIRS_SHAPE.print(StairsShape.STRAIGHT), "Straight");
+        add(ValuePrinters.STAIRS_SHAPE.print(StairsShape.INNER_LEFT), "Inner Left");
+        add(ValuePrinters.STAIRS_SHAPE.print(StairsShape.INNER_RIGHT), "Inner Right");
+        add(ValuePrinters.STAIRS_SHAPE.print(StairsShape.OUTER_LEFT), "Outer Left");
+        add(ValuePrinters.STAIRS_SHAPE.print(StairsShape.OUTER_RIGHT), "Outer Right");
+        add(ValuePrinters.RAIL_SHAPE.print(RailShape.NORTH_SOUTH), "Straight Z");
+        add(ValuePrinters.RAIL_SHAPE.print(RailShape.EAST_WEST), "Straight X");
+        add(ValuePrinters.RAIL_SHAPE.print(RailShape.ASCENDING_EAST), "Ascending East");
+        add(ValuePrinters.RAIL_SHAPE.print(RailShape.ASCENDING_WEST), "Ascending West");
+        add(ValuePrinters.RAIL_SHAPE.print(RailShape.ASCENDING_NORTH), "Ascending North");
+        add(ValuePrinters.RAIL_SHAPE.print(RailShape.ASCENDING_SOUTH), "Ascending South");
+        add(ValuePrinters.RAIL_SHAPE.print(RailShape.SOUTH_EAST), "Corner South-East");
+        add(ValuePrinters.RAIL_SHAPE.print(RailShape.SOUTH_WEST), "Corner South-West");
+        add(ValuePrinters.RAIL_SHAPE.print(RailShape.NORTH_WEST), "Corner North-West");
+        add(ValuePrinters.RAIL_SHAPE.print(RailShape.NORTH_EAST), "Corner North-East");
+        add(ValuePrinters.HINGE_SIDE.print(DoorHingeSide.LEFT), "Left");
+        add(ValuePrinters.HINGE_SIDE.print(DoorHingeSide.RIGHT), "Right");
+
         add(BlueprintData.CONTAINED_BLOCK, "Contained Block: %s");
         add(BlueprintData.STORED_OVERLAY, "Overlay: %s");
         add(BlueprintData.IS_ILLUMINATED, "Illuminated: %s");
@@ -548,6 +581,14 @@ public final class FramedLanguageProvider extends LanguageProvider {
         add(CamoApplicatorConfig.APPLY_GLOW_PASTE, "Apply Glow Paste: %s");
         add(CamoApplicatorConfig.FALSE, "False");
         add(CamoApplicatorConfig.TRUE, "True");
+        add(IFramedBlockItem.HEADER_SELECTED_STATE, "Selected placement state:");
+        add(PropertyLabels.FACING, "Facing: %s");
+        add(PropertyLabels.ORIENTATION, "Orientation: %s");
+        add(PropertyLabels.AXIS, "Axis: %s");
+        add(PropertyLabels.ROTATION, "Rotation: %s");
+        add(PropertyLabels.HALF, "Half: %s");
+        add(PropertyLabels.SHAPE, "Shape: %s");
+        add(PropertyLabels.HINGE_SIDE, "Hinge Side: %s");
     }
 
     private void addOverlayTranslations() {
