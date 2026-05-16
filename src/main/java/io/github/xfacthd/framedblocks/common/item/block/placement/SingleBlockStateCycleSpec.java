@@ -140,7 +140,7 @@ public record SingleBlockStateCycleSpec(
         }
 
         void print(BlockState state, PropertyPrinter.LineOutput output) {
-            printer.print(state.getValue(property), output);
+            printer.print(state.getValue(property), output, ChatFormatting.WHITE);
         }
     }
 }

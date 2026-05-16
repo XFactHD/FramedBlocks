@@ -27,7 +27,8 @@ public final class StateCycleSpecBuilder {
     private final Block block;
     private final SequencedMap<Property<?>, PropertySpec<?>> properties = new LinkedHashMap<>();
     private final SequencedMap<Property<?>, PropertyPrinter<?>> propertyPrinters = new Reference2ObjectLinkedOpenHashMap<>();
-    private @Nullable PlacementStatePostProcessor postProcessor = null;
+    @Nullable
+    private PlacementStatePostProcessor postProcessor = null;
     private boolean mayLockState = true;
     private boolean reversed = false;
 

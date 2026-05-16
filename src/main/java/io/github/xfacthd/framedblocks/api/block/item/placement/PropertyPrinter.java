@@ -2,6 +2,7 @@ package io.github.xfacthd.framedblocks.api.block.item.placement;
 
 import io.github.xfacthd.framedblocks.api.util.text.ValuePrinter;
 import io.github.xfacthd.framedblocks.api.util.text.ValuePrinters;
+import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.state.properties.Property;
 
@@ -10,9 +11,10 @@ import java.util.function.BiConsumer;
 public interface PropertyPrinter<T extends Comparable<T>> {
     /// Print the provided value to the provided output
     ///
-    /// @param value  The value to be printed
-    /// @param output The output to pass printed lines to
-    void print(T value, LineOutput output);
+    /// @param value             The value to be printed
+    /// @param output            The output to pass printed lines to
+    /// @param defaultValueColor The default color to apply to value text
+    void print(T value, LineOutput output, ChatFormatting defaultValueColor);
 
     /// Create a [PropertyPrinter] for the provided property with the provided label.
     ///
@@ -37,7 +39,7 @@ public interface PropertyPrinter<T extends Comparable<T>> {
     /// @param label        The label to prefix the property value with
     /// @param valuePrinter The value printer to use for displaying the property's values
     static <T extends Comparable<T>> PropertyPrinter<T> of(String label, ValuePrinter<T> valuePrinter) {
-        return (value, output) -> output.accept(label, valuePrinter.print(value));
+        return (value, output, defaultValueColor) -> output.accept(label, valuePrinter.printStyled(value, defaultValueColor));
     }
 
     interface LineOutput extends BiConsumer<String, Component> {

@@ -34,14 +34,14 @@ public final class MoreCommonComponents {
         private static final Component[] DIRECTIONS = Util.make(() -> {
             Component[] arr = new Component[6];
             for (Direction dir : Direction.values()) {
-                arr[dir.ordinal()] = Utils.translate("value", "dir." + dir.getSerializedName()).withStyle(ChatFormatting.WHITE);
+                arr[dir.ordinal()] = Utils.translate("value", "dir." + dir.getSerializedName());
             }
             return arr;
         });
         private static final Component[] AXES = Util.make(() -> {
             Component[] arr = new Component[3];
             for (Direction.Axis axis : Direction.Axis.values()) {
-                arr[axis.ordinal()] = Utils.translate("value", "axis." + axis.getSerializedName()).withStyle(ChatFormatting.WHITE);
+                arr[axis.ordinal()] = Utils.translate("value", "axis." + axis.getSerializedName());
             }
             return arr;
         });

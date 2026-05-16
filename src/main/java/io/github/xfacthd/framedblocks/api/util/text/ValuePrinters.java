@@ -20,11 +20,11 @@ public final class ValuePrinters {
 
     public static final ValuePrinter<Boolean> BOOLEAN = register(Boolean.class, ValuePrinters::printBoolean);
     public static final ValuePrinter<Integer> INTEGER = register(Integer.class, ValuePrinters::printInteger);
-    public static final ValuePrinter<Direction> DIRECTION = register(Direction.class, MoreCommonComponents::direction);
-    public static final ValuePrinter<Direction.Axis> AXIS = register(Direction.Axis.class, MoreCommonComponents::axis);
-    public static final ValuePrinter<Direction> DIR_AXIS = dir -> AXIS.print(dir.getAxis());
+    public static final ValuePrinter<Direction> DIRECTION = register(Direction.class, ValuePrinter.of(MoreCommonComponents::direction));
+    public static final ValuePrinter<Direction.Axis> AXIS = register(Direction.Axis.class, ValuePrinter.of(MoreCommonComponents::axis));
+    public static final ValuePrinter<Direction> DIR_AXIS = (dir, defaultColor) -> AXIS.printStyled(dir.getAxis(), defaultColor);
     public static final ValuePrinter<Half> HALF = registerEnum(Half.class);
-    public static final ValuePrinter<Boolean> HALF_BOOL = top -> HALF.print(top ? Half.TOP : Half.BOTTOM);
+    public static final ValuePrinter<Boolean> HALF_BOOL = (top, defaultColor) -> HALF.printStyled(top ? Half.TOP : Half.BOTTOM, defaultColor);
     public static final ValuePrinter<StairsShape> STAIRS_SHAPE = registerEnum(StairsShape.class);
     public static final ValuePrinter<RailShape> RAIL_SHAPE = registerEnum(RailShape.class);
     public static final ValuePrinter<DoorHingeSide> HINGE_SIDE = registerEnum(DoorHingeSide.class);
@@ -42,20 +42,20 @@ public final class ValuePrinters {
     }
 
     public static <T extends Enum<T> & StringRepresentable> ValuePrinter<T> createForEnum(Class<T> valueClass) {
-        return createForEnum(valueClass, getDefaultEnumPrefix(valueClass));
+        ValuePrinter<T> printer = find(valueClass);
+        return printer != null ? printer : createForEnum(valueClass, getDefaultEnumPrefix(valueClass));
     }
 
     public static <T extends Enum<T> & StringRepresentable> ValuePrinter<T> createForEnum(Class<T> valueClass, String prefix) {
-        ValuePrinter<T> printer = find(valueClass);
-        return printer != null ? printer : createForEnumRaw(valueClass, prefix);
+        return createForEnumRaw(valueClass, prefix);
     }
 
-    private static Component printBoolean(Boolean value) {
+    private static Component printBoolean(Boolean value, ChatFormatting defaultColor) {
         return value ? MoreCommonComponents.TRUE : MoreCommonComponents.FALSE;
     }
 
-    private static Component printInteger(Integer value) {
-        return Component.literal(value.toString()).withStyle(ChatFormatting.WHITE);
+    private static Component printInteger(Integer value, ChatFormatting defaultColor) {
+        return Component.literal(value.toString()).withStyle(defaultColor);
     }
 
     private static <T extends Enum<T> & StringRepresentable> ValuePrinter<T> registerEnum(Class<T> valueClass) {
@@ -71,9 +71,9 @@ public final class ValuePrinters {
         Component[] components = new Component[constants.length];
         prefix += ".";
         for (T constant : constants) {
-            components[constant.ordinal()] = Utils.translate("value", prefix + constant.getSerializedName()).withStyle(ChatFormatting.WHITE);
+            components[constant.ordinal()] = Utils.translate("value", prefix + constant.getSerializedName());
         }
-        return value -> components[value.ordinal()];
+        return ValuePrinter.of(value -> components[value.ordinal()]);
     }
 
     private static <T extends Enum<T>> String getDefaultEnumPrefix(Class<T> valueClass) {

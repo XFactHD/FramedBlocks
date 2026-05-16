@@ -1,5 +1,6 @@
 package io.github.xfacthd.framedblocks.api.util.text;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 
 final class PrintableValuePrinter<T extends Printable> implements ValuePrinter<T> {
@@ -8,7 +9,7 @@ final class PrintableValuePrinter<T extends Printable> implements ValuePrinter<T
     private PrintableValuePrinter() { }
 
     @Override
-    public Component print(T value) {
-        return value.print();
+    public Component printStyled(T value, ChatFormatting defaultColor) {
+        return value.print(defaultColor);
     }
 }
