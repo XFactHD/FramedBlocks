@@ -28,7 +28,7 @@ public final class BlockEntityPresence {
             if (types.isEmpty()) {
                 reporter.warn(
                         "Block '{}' is not valid for any BE types (double: {}, special: {})",
-                        block, type.isDoubleBlock(), type.hasSpecialTile()
+                        block, type.isDoubleBlock(), type.hasSpecialBlockEntity()
                 );
             } else if (types.size() > 1) {
                 String typesString = types.stream()
@@ -38,7 +38,7 @@ public final class BlockEntityPresence {
                         .collect(Collectors.joining(", "));
                 reporter.warn(
                         "Block '{}' is valid for multiple BE types: [{}] (double: {}, special: {})",
-                        block, typesString, type.isDoubleBlock(), type.hasSpecialTile()
+                        block, typesString, type.isDoubleBlock(), type.hasSpecialBlockEntity()
                 );
             }
         });

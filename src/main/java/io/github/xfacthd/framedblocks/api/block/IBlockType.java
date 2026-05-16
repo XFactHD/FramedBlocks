@@ -40,7 +40,7 @@ public interface IBlockType {
 
     ShapeGenerator getShapeGenerator();
 
-    boolean hasSpecialTile();
+    boolean hasSpecialBlockEntity();
 
     boolean hasBlockItem();
 

@@ -300,7 +300,7 @@ public enum BlockType implements IBlockType {
     private final boolean canOcclude;
     private final boolean specialOutline;
     private final boolean modelBasedOutline;
-    private final boolean specialTile;
+    private final boolean specialBlockEntity;
     private final boolean waterloggable;
     private final boolean blockItem;
     private final boolean allowIntangible;
@@ -310,20 +310,20 @@ public enum BlockType implements IBlockType {
     private final ConTexMode minCTMode;
     private final ShapeGenerator shapeGen;
 
-    BlockType(boolean canOcclude, boolean specialTile, boolean waterloggable, boolean blockItem, boolean allowIntangible, boolean doubleBlock, boolean supportsOverlays, @Nullable ConTexMode minCTMode, Outline outline) {
-        this(canOcclude, specialTile, waterloggable, blockItem, allowIntangible, doubleBlock, supportsOverlays, minCTMode, outline, ShapeGenerator.EMPTY);
+    BlockType(boolean canOcclude, boolean specialBlockEntity, boolean waterloggable, boolean blockItem, boolean allowIntangible, boolean doubleBlock, boolean supportsOverlays, @Nullable ConTexMode minCTMode, Outline outline) {
+        this(canOcclude, specialBlockEntity, waterloggable, blockItem, allowIntangible, doubleBlock, supportsOverlays, minCTMode, outline, ShapeGenerator.EMPTY);
     }
 
-    BlockType(boolean canOcclude, boolean specialTile, boolean waterloggable, boolean blockItem, boolean allowIntangible, boolean doubleBlock, boolean supportsOverlays, @Nullable ConTexMode minCTMode, Outline outline, VoxelShape shape) {
-        this(canOcclude, specialTile, waterloggable, blockItem, allowIntangible, doubleBlock, supportsOverlays, minCTMode, outline, ShapeGenerator.singleShape(shape, null));
+    BlockType(boolean canOcclude, boolean specialBlockEntity, boolean waterloggable, boolean blockItem, boolean allowIntangible, boolean doubleBlock, boolean supportsOverlays, @Nullable ConTexMode minCTMode, Outline outline, VoxelShape shape) {
+        this(canOcclude, specialBlockEntity, waterloggable, blockItem, allowIntangible, doubleBlock, supportsOverlays, minCTMode, outline, ShapeGenerator.singleShape(shape, null));
         Preconditions.checkArgument(!waterloggable || !Shapes.joinUnoptimized(shape, Shapes.block(), BooleanOp.NOT_SAME).isEmpty(), "Blocks with full cube shape can't be waterloggable");
     }
 
-    BlockType(boolean canOcclude, boolean specialTile, boolean waterloggable, boolean blockItem, boolean allowIntangible, boolean doubleBlock, boolean supportsOverlays, @Nullable ConTexMode minCTMode, Outline outline, ShapeGenerator shapeGen) {
+    BlockType(boolean canOcclude, boolean specialBlockEntity, boolean waterloggable, boolean blockItem, boolean allowIntangible, boolean doubleBlock, boolean supportsOverlays, @Nullable ConTexMode minCTMode, Outline outline, ShapeGenerator shapeGen) {
         this.canOcclude = canOcclude;
         this.specialOutline = outline != Outline.SIMPLE;
         this.modelBasedOutline = outline == Outline.MODEL;
-        this.specialTile = specialTile;
+        this.specialBlockEntity = specialBlockEntity;
         this.waterloggable = waterloggable;
         this.blockItem = blockItem;
         this.allowIntangible = allowIntangible;
@@ -379,8 +379,8 @@ public enum BlockType implements IBlockType {
     }
 
     @Override
-    public boolean hasSpecialTile() {
-        return specialTile;
+    public boolean hasSpecialBlockEntity() {
+        return specialBlockEntity;
     }
 
     @Override

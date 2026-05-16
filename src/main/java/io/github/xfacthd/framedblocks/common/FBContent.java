@@ -878,7 +878,7 @@ public final class FBContent {
 
     private static BlockType[] getDefaultEntityBlockTypes(boolean _double) {
         return Arrays.stream(BlockType.values())
-                .filter(type -> !type.hasSpecialTile() && (type.isDoubleBlock() == _double))
+                .filter(type -> !type.hasSpecialBlockEntity() && (type.isDoubleBlock() == _double))
                 .toArray(BlockType[]::new);
     }
 
