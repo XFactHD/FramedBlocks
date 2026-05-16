@@ -59,8 +59,8 @@ public final class EventHandler {
     }
 
     public static void onTagsUpdated(TagsUpdatedEvent event) {
-        boolean client = event.getUpdateCause() == TagsUpdatedEvent.UpdateCause.CLIENT_PACKET_RECEIVED;
-        BlockOverlayCache.get(client).update(event.getLookupProvider());
+        boolean client = event instanceof TagsUpdatedEvent.ClientPacketReceived;
+        BlockOverlayCache.get(client).update(event.getRegistries());
     }
 
     private EventHandler() { }
