@@ -6,6 +6,6 @@
     }
   ],
   "parent": "amendments:block/hanging_flower_pot_rope",
-  "fallback": "framedblocks:builtin/empty",
+  "fallback": "minecraft:builtin/missing",
   "loader": "framedblocks:fallback"
 }

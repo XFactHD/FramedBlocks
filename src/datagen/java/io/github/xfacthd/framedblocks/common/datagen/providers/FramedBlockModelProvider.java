@@ -14,7 +14,6 @@ import io.github.xfacthd.framedblocks.client.model.geometry.rail.FramedFancyRail
 import io.github.xfacthd.framedblocks.client.model.item.FramedBlockItemModel;
 import io.github.xfacthd.framedblocks.client.model.item.TankItemModel;
 import io.github.xfacthd.framedblocks.client.model.item.modelprovider.FenceBlockItemModelProvider;
-import io.github.xfacthd.framedblocks.client.model.loader.fallback.FallbackLoader;
 import io.github.xfacthd.framedblocks.client.model.loader.fallback.FallbackLoaderBuilder;
 import io.github.xfacthd.framedblocks.client.render.block.FramedBannerRenderer;
 import io.github.xfacthd.framedblocks.client.render.block.FramedChestRenderer;
@@ -38,6 +37,7 @@ import net.minecraft.client.data.models.model.TextureMapping;
 import net.minecraft.client.data.models.model.TextureSlot;
 import net.minecraft.client.renderer.block.dispatch.VariantMutator;
 import net.minecraft.client.renderer.item.ItemModel;
+import net.minecraft.client.resources.model.cuboid.MissingCuboidModel;
 import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.core.Direction;
 import net.minecraft.data.PackOutput;
@@ -738,7 +738,7 @@ public final class FramedBlockModelProvider extends AbstractFramedBlockModelProv
                 .parent(AmendmentsCompat.HANGING_MODEL_LOCATION)
                 .customLoader(FallbackLoaderBuilder::new, builder ->
                         builder.addCondition(NeoForgeConditions.modLoaded(AmendmentsCompat.MOD_ID))
-                                .setFallback(FallbackLoader.EMPTY_FALLBACK)
+                                .setFallback(MissingCuboidModel.LOCATION)
                 )
                 .build()
                 .create(FramedFlowerPotGeometry.HANGING_MODEL_LOCATION, new TextureMapping(), blockModels.modelOutput);

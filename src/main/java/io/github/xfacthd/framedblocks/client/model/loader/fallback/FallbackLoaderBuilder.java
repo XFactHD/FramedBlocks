@@ -3,7 +3,6 @@ package io.github.xfacthd.framedblocks.client.model.loader.fallback;
 import com.google.common.base.Preconditions;
 import com.google.gson.JsonObject;
 import com.mojang.serialization.JsonOps;
-import net.minecraft.client.resources.model.cuboid.MissingCuboidModel;
 import net.minecraft.resources.Identifier;
 import net.neoforged.neoforge.client.model.generators.template.CustomLoaderBuilder;
 import net.neoforged.neoforge.common.conditions.ConditionalOps;
@@ -30,10 +29,6 @@ public final class FallbackLoaderBuilder extends CustomLoaderBuilder {
 
     public FallbackLoaderBuilder setFallback(Identifier fallback) {
         Preconditions.checkNotNull(fallback, "Fallback must not be null");
-        Preconditions.checkArgument(
-                !fallback.equals(MissingCuboidModel.LOCATION),
-                "Cannot use minecraft:builtin/missing as fallback model"
-        );
         this.fallback = fallback;
         return this;
     }
