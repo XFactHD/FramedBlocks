@@ -91,10 +91,19 @@ public class FramedBoardBlock extends FramedBlock {
 
     @Override
     public IFramedBlockItem createBlockItem(Item.Properties props) {
-        return new FramedSpecialBlockItem.Single(this, props) {
+        return new FramedSpecialBlockItem.Single(this, true, props) {
             @Override
-            protected @Nullable BlockState getReplacementState(BlockPlaceContext ctx, BlockState originalState) {
-                return FramedBoardBlock.this.getStateForPlacement(ctx);
+            protected @Nullable BlockState getReplacementState(BlockPlaceContext ctx, BlockState originalState, @Nullable BlockState manualState) {
+                if (manualState == null) {
+                    return FramedBoardBlock.this.getStateForPlacement(ctx);
+                }
+
+                int originalFaces = originalState.getValue(PropertyHolder.FACES);
+                int combinedFaces = originalFaces | manualState.getValue(PropertyHolder.FACES);
+                if (combinedFaces != originalFaces) {
+                    return originalState.setValue(PropertyHolder.FACES, combinedFaces);
+                }
+                return null;
             }
         };
     }

@@ -57,6 +57,10 @@ public interface IFramedBlockItem {
         return getStateCycleSpec().canCycle() && InternalAPI.INSTANCE.isStateCyclingActive(player, (BlockItem) this);
     }
 
+    static boolean isStateCyclingActive(ItemStack stack, Player player) {
+        return stack.getItem() instanceof IFramedBlockItem item && item.isStateCyclingActive(player);
+    }
+
     @ApiStatus.NonExtendable
     default InteractionResult handlePlace(BlockPlaceContext context, Function<BlockPlaceContext, InteractionResult> superHandler) {
         InteractionResult result = superHandler.apply(context);

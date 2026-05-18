@@ -58,6 +58,12 @@ public class FramedLayeredCubeBlock extends FramedBlock {
         if (layers >= 8 || !useContext.getItemInHand().is(this.asItem())) {
             return false;
         }
+        if (useContext.getPlayer() != null && useContext.getPlayer().isShiftKeyDown()) {
+            return false;
+        }
+        if (IFramedBlockItem.isStateCyclingActive(useContext.getItemInHand(), useContext.getPlayer())) {
+            return false;
+        }
         if (!useContext.getItemInHand().getOrDefault(FBContent.DC_TYPE_CAMO_LIST, CamoList.EMPTY).isEmpty()) {
             return false;
         }
@@ -70,9 +76,9 @@ public class FramedLayeredCubeBlock extends FramedBlock {
 
     @Override
     public IFramedBlockItem createBlockItem(Item.Properties props) {
-        return new FramedSpecialBlockItem.Single(this, props) {
+        return new FramedSpecialBlockItem.Single(this, false, props) {
             @Override
-            protected @Nullable BlockState getReplacementState(BlockPlaceContext ctx, BlockState originalState) {
+            protected @Nullable BlockState getReplacementState(BlockPlaceContext ctx, BlockState originalState, @Nullable BlockState manualState) {
                 return FramedLayeredCubeBlock.this.getStateForPlacement(ctx);
             }
         };

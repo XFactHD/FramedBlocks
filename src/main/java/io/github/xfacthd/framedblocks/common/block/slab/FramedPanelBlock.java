@@ -48,6 +48,9 @@ public class FramedPanelBlock extends FramedBlock {
             if (!ctx.replacingClickedOnBlock()) {
                 return true;
             }
+            if (IFramedBlockItem.isStateCyclingActive(ctx.getItemInHand(), ctx.getPlayer())) {
+                return false;
+            }
 
             Direction innerFace = state.getValue(FramedProperties.FACING_HOR).getOpposite();
             return ctx.getClickedFace() == innerFace || MathUtils.fractionInDir(ctx.getClickLocation(), innerFace) > .5D;
@@ -57,9 +60,9 @@ public class FramedPanelBlock extends FramedBlock {
 
     @Override
     public IFramedBlockItem createBlockItem(Item.Properties props) {
-        return new FramedSpecialBlockItem(this, true, props) {
+        return new FramedSpecialBlockItem(this, true, false, props) {
             @Override
-            protected BlockState getReplacementState(BlockPlaceContext ctx, BlockState originalState) {
+            protected BlockState getReplacementState(BlockPlaceContext ctx, BlockState originalState, @Nullable BlockState manualState) {
                 Direction facing = originalState.getValue(FramedProperties.FACING_HOR);
                 return FBContent.BLOCK_FRAMED_DOUBLE_PANEL.value()
                         .defaultBlockState()

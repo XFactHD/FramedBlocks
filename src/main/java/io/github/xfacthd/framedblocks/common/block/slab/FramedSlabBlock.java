@@ -49,6 +49,9 @@ public class FramedSlabBlock extends FramedBlock {
             if (!ctx.replacingClickedOnBlock()) {
                 return true;
             }
+            if (IFramedBlockItem.isStateCyclingActive(ctx.getItemInHand(), ctx.getPlayer())) {
+                return false;
+            }
 
             boolean top = state.getValue(FramedProperties.TOP);
             Direction side = ctx.getClickedFace();
@@ -62,9 +65,9 @@ public class FramedSlabBlock extends FramedBlock {
 
     @Override
     public IFramedBlockItem createBlockItem(Item.Properties props) {
-        return new FramedSpecialBlockItem(this, true, props) {
+        return new FramedSpecialBlockItem(this, true, false, props) {
             @Override
-            protected BlockState getReplacementState(BlockPlaceContext ctx, BlockState originalState) {
+            protected BlockState getReplacementState(BlockPlaceContext ctx, BlockState originalState, @Nullable BlockState manualState) {
                 return FBContent.BLOCK_FRAMED_DOUBLE_SLAB.value().defaultBlockState();
             }
 
