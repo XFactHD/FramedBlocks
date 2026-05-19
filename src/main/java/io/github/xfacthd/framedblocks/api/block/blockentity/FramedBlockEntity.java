@@ -26,6 +26,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.SectionPos;
 import net.minecraft.core.component.DataComponentGetter;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.TypedDataComponent;
@@ -92,8 +93,11 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
     protected static final int FLAG_INTANGIBLE = 1 << 1;
     protected static final int FLAG_REINFORCED = 1 << 2;
     protected static final int FLAG_EMISSIVE = 1 << 3;
+    private static final int NEIGHBOR_MASK_ALL = 0b00111111;
+    private static final int NEIGHBOR_MASK_NONE = 0b00000000;
 
     private final CullState cullState = new CullState();
+    private final int sectionNeighborMask;
     private StateCache stateCache;
     private CamoContainer<?, ?> camoContainer = EmptyCamoContainer.EMPTY;
     @Nullable
@@ -107,6 +111,7 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
 
     public FramedBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
+        this.sectionNeighborMask = computeSectionNeighborMask(pos);
         this.stateCache = state.framedblocks$getCache();
     }
 
@@ -496,17 +501,24 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
 
     @Override
     public final void updateCulling(boolean neighbors, boolean rerender) {
+        updateCulling(neighbors ? NEIGHBOR_MASK_ALL : NEIGHBOR_MASK_NONE, rerender, true);
+    }
+
+    private void updateCulling(int neighborMask, boolean rerender, boolean updateModelData) {
         boolean changed = false;
         for (Direction dir : DIRECTIONS) {
             BlockState state = getBlockState();
             changed |= updateCulling(dir, state, false);
-            if (neighbors && level().getBlockEntity(worldPosition.relative(dir)) instanceof IFramedBlockEntity be) {
+            boolean neighbor = (neighborMask & (1 << dir.ordinal())) != 0;
+            if (neighbor && level().getBlockEntity(worldPosition.relative(dir)) instanceof IFramedBlockEntity be) {
                 be.unwrap().updateCulling(dir.getOpposite(), be.getBlockState(), true);
             }
         }
 
         if (changed) {
-            requestModelDataUpdate();
+            if (updateModelData) {
+                requestModelDataUpdate();
+            }
             if (rerender) {
                 level().sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
             }
@@ -962,10 +974,34 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
     @Override
     public final ModelData getModelData() {
         if (cullStateDirty) {
-            updateCulling(false, false);
+            updateCulling(sectionNeighborMask, false, false);
             cullStateDirty = false;
         }
         return getModelData(true, getBlockState());
+    }
+
+    /// Computes the mask of directions towards neighbors in adjacent chunk sections
+    private static int computeSectionNeighborMask(BlockPos pos) {
+        int x = SectionPos.sectionRelative(pos.getX());
+        int y = SectionPos.sectionRelative(pos.getY());
+        int z = SectionPos.sectionRelative(pos.getZ());
+        int mask = 0;
+        if (x == 0) {
+            mask |= 1 << Direction.WEST.ordinal();
+        } else if (x == SectionPos.SECTION_MAX_INDEX) {
+            mask |= 1 << Direction.EAST.ordinal();
+        }
+        if (y == 0) {
+            mask |= 1 << Direction.DOWN.ordinal();
+        } else if (y == SectionPos.SECTION_MAX_INDEX) {
+            mask |= 1 << Direction.UP.ordinal();
+        }
+        if (z == 0) {
+            mask |= 1 << Direction.NORTH.ordinal();
+        } else if (z == SectionPos.SECTION_MAX_INDEX) {
+            mask |= 1 << Direction.SOUTH.ordinal();
+        }
+        return mask;
     }
 
     /**
