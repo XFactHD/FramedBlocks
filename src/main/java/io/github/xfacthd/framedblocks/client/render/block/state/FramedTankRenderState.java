@@ -8,5 +8,8 @@ public final class FramedTankRenderState extends BlockEntityRenderState {
     @UnknownNullability
     public FluidModel fluidModel;
     public int fluidAmount;
+    public boolean lighterThanAir;
+    public boolean gaseous;
     public int tint;
+    public int fluidLightEmission;
 }

@@ -12,6 +12,8 @@ import net.minecraft.client.renderer.special.SpecialModelRenderer;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.client.fluid.FluidTintSource;
+import net.neoforged.neoforge.common.Tags;
+import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.SimpleFluidContent;
 import org.joml.Vector3fc;
 import org.jspecify.annotations.Nullable;
@@ -31,8 +33,12 @@ public final class TankItemRenderer implements SpecialModelRenderer<SimpleFluidC
 
         FluidModel fluidModel = ModelUtils.getFluidModel(content.getFluid().defaultFluidState());
         FluidTintSource tintSource = fluidModel.fluidTintSource();
-        int tint = tintSource != null ? tintSource.colorAsStack(content.copy()) : -1;
-        FramedTankRenderer.submitContents(poseStack, collector, fluidModel, content.getAmount(), tint, light);
+        FluidStack fluidStack = content.copy();
+        int tint = tintSource != null ? tintSource.colorAsStack(fluidStack) : -1;
+        boolean lighterThanAir = content.getFluidType().isLighterThanAir();
+        boolean gaseous = content.is(Tags.Fluids.GASEOUS);
+        int fluidLight = content.getFluid().getFluidType().getLightLevel(fluidStack);
+        FramedTankRenderer.submitContents(poseStack, collector, fluidModel, content.getAmount(), lighterThanAir, gaseous, tint, light, fluidLight);
     }
 
     @Override
