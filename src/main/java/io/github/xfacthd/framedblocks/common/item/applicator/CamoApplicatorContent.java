@@ -59,7 +59,7 @@ public record CamoApplicatorContent(CamoEntry[] camoEntries, int[] modifierStack
     public int findFirstNonEmptyCamoSlotAfter(int slot) {
         int newSlot = (slot + 1) % CAMO_COUNT;
         while (newSlot != slot) {
-            if (hasCamoStackInSlot(slot)) {
+            if (hasCamoStackInSlot(newSlot)) {
                 return newSlot;
             }
             newSlot = (newSlot + 1) % CAMO_COUNT;
