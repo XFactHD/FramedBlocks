@@ -9,7 +9,7 @@ import io.github.xfacthd.framedblocks.client.model.loader.fallback.FallbackLoade
 import io.github.xfacthd.framedblocks.client.render.item.CamoApplicatorRenderer;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.compat.ae2.AppliedEnergisticsCompat;
-import io.github.xfacthd.framedblocks.common.datagen.GeneratorHandler;
+import io.github.xfacthd.framedblocks.common.datagen.dummy.DummyObjects;
 import net.minecraft.client.data.models.BlockModelGenerators;
 import net.minecraft.client.data.models.ItemModelGenerators;
 import net.minecraft.client.data.models.model.ItemModelUtils;
@@ -23,7 +23,6 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.common.conditions.ModLoadedCondition;
 
-import java.util.Objects;
 import java.util.stream.Stream;
 
 public final class FramedItemModelProvider extends AbstractFramedItemModelProvider {
@@ -56,7 +55,7 @@ public final class FramedItemModelProvider extends AbstractFramedItemModelProvid
         itemModels.generateFlatItem(FBContent.ITEM_GLOW_PASTE.value(), ModelTemplates.FLAT_ITEM);
 
         Material patternTexture = new Material(Utils.id(AppliedEnergisticsCompat.MOD_ID, "item/crafting_pattern"));
-        Item patternItem = Objects.requireNonNull(GeneratorHandler.framingSawPattern).asItem();
+        Item patternItem = DummyObjects.ITEM_FRAMING_SAW_PATTERN.value();
         itemModels.itemModelOutput.accept(patternItem, ItemModelUtils.plainModel(
                 ModelTemplates.FLAT_ITEM
                         .extend()

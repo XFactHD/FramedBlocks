@@ -52,7 +52,7 @@ import io.github.xfacthd.framedblocks.common.data.property.HorizontalRotation;
 import io.github.xfacthd.framedblocks.common.data.property.NullableDirection;
 import io.github.xfacthd.framedblocks.common.data.property.SlopeType;
 import io.github.xfacthd.framedblocks.common.data.property.StairsType;
-import io.github.xfacthd.framedblocks.common.datagen.GeneratorHandler;
+import io.github.xfacthd.framedblocks.common.datagen.dummy.DummyObjects;
 import io.github.xfacthd.framedblocks.common.item.FramedAxeItem;
 import io.github.xfacthd.framedblocks.common.item.FramedBlueprintItem;
 import io.github.xfacthd.framedblocks.common.item.FramedWrenchItem;
@@ -385,7 +385,7 @@ public final class FramedLanguageProvider extends LanguageProvider {
         add(FBContent.ITEM_FRAMED_REINFORCEMENT.value(), "Framed Reinforcement");
         add(FBContent.ITEM_PHANTOM_PASTE.value(), "Phantom Paste");
         add(FBContent.ITEM_GLOW_PASTE.value(), "Glow Paste");
-        add(Objects.requireNonNull(GeneratorHandler.framingSawPattern).value(), "Framing Saw Pattern");
+        add(DummyObjects.ITEM_FRAMING_SAW_PATTERN.value(), "Framing Saw Pattern");
     }
 
     private void addSpecialTranslations() {

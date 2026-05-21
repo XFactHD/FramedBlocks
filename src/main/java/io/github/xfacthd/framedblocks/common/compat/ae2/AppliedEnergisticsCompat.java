@@ -8,6 +8,7 @@ import io.github.xfacthd.framedblocks.api.util.registration.DeferredDataComponen
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.util.registration.DeferredDataComponentTypeRegister;
 import net.minecraft.core.Holder;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.IEventBus;
@@ -22,7 +23,7 @@ import org.jspecify.annotations.Nullable;
 
 public final class AppliedEnergisticsCompat {
     public static final String MOD_ID = "ae2";
-    public static final String SAW_PATTERN_ID = "framing_saw_pattern";
+    public static final Identifier SAW_PATTERN_ID = Utils.id("framing_saw_pattern");
     private static boolean loaded = false;
 
     public static void init(IEventBus modBus) {
@@ -69,7 +70,7 @@ public final class AppliedEnergisticsCompat {
         private static final DeferredRegister<AttachmentType<?>> ATTACHMENTS = DeferredRegister.create(NeoForgeRegistries.ATTACHMENT_TYPES, FramedConstants.MOD_ID);
         private static final DeferredDataComponentTypeRegister DATA_COMPONENTS = DeferredDataComponentTypeRegister.create(FramedConstants.MOD_ID);
 
-        static final Holder<Item> ITEM_FRAMING_SAW_PATTERN = ITEMS.registerItem(SAW_PATTERN_ID, props ->
+        static final Holder<Item> ITEM_FRAMING_SAW_PATTERN = ITEMS.registerItem(SAW_PATTERN_ID.getPath(), props ->
                 PatternDetailsHelper.encodedPatternItemBuilder(FramingSawPatternDetails::new)
                         .invalidPatternTooltip(FramingSawPatternDetails::makeInvalidPatternTooltip)
                         .build(props)
