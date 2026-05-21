@@ -24,6 +24,18 @@ public final class PoweredFramingSawGhostIngredientHandler implements IGhostIngr
     }
 
     @Override
+    public <I> boolean quickMove(PoweredFramingSawScreen screen, ITypedIngredient<I> ingredient) {
+        if (ingredient.getType() == VanillaTypes.ITEM_STACK) {
+            ItemStack stack = ingredient.getItemStack().orElseThrow();
+            if (FramingSawRecipeCache.get(true).getMaterialValue(stack.getItem()) > 0) {
+                screen.selectRecipe(stack);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
     public void onComplete() { }
 
     private record SawTarget(PoweredFramingSawScreen screen, Rect2i area) implements Target<ItemStack> {
