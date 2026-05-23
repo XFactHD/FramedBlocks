@@ -24,7 +24,7 @@ import org.slf4j.Logger;
 public final class KeyMappings {
     private static final Logger LOGGER = LogUtils.getLogger();
     public static final KeyMapping.Category KEY_CATEGORY = new KeyMapping.Category(Utils.id("main"));
-    public static final Lazy<KeyMapping> UPDATE_CULLING = makeKeyMapping("update_cull", GLFW.GLFW_KEY_F9);
+    public static final Lazy<KeyMapping> UPDATE_CULLING = makeKeyMapping("update_cull", -1);
     public static final Lazy<KeyMapping> WIPE_CACHE = makeKeyMapping("wipe_cache", -1);
     public static final Lazy<KeyMapping> TOGGLE_STATE_CYCLE = makeKeyMapping("toggle_state_cycle", GLFW.GLFW_KEY_Y);
     public static final Lazy<KeyMapping> UNLOCK_STATE_CYCLE = makeKeyMapping("unlock_state_cycle", GLFW.GLFW_KEY_LEFT_CONTROL);
