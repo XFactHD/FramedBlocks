@@ -3,6 +3,7 @@ package xfacthd.framedblocks.api.camo;
 import net.minecraft.core.*;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.flag.FeatureFlagSet;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeManager;
@@ -70,11 +71,36 @@ final class CamoResolvingLevelReader implements LevelReader
         return wrapped.getBlockEntity(pos);
     }
 
+    @Override
+    public ChunkAccess getChunk(BlockPos pos)
+    {
+        return wrapped.getChunk(pos);
+    }
+
+    @Override
+    public ChunkAccess getChunk(int chunkX, int chunkZ)
+    {
+        return wrapped.getChunk(chunkX, chunkZ);
+    }
+
+    @Override
+    public ChunkAccess getChunk(int chunkX, int chunkZ, ChunkStatus chunkStatus)
+    {
+        return wrapped.getChunk(chunkX, chunkZ, chunkStatus);
+    }
+
     @Nullable
     @Override
     public ChunkAccess getChunk(int x, int z, ChunkStatus status, boolean required)
     {
         return wrapped.getChunk(x, z, status, required);
+    }
+
+    @Override
+    @Nullable
+    public BlockGetter getChunkForCollisions(int chunkX, int chunkZ)
+    {
+        return wrapped.getChunkForCollisions(chunkX, chunkZ);
     }
 
     @Override
