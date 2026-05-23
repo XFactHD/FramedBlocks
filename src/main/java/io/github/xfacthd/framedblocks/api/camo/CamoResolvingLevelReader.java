@@ -10,6 +10,7 @@ import net.minecraft.core.RegistryAccess;
 import net.minecraft.world.attribute.EnvironmentAttributeReader;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.flag.FeatureFlagSet;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeManager;
@@ -66,8 +67,28 @@ final class CamoResolvingLevelReader implements LevelReader {
     }
 
     @Override
+    public ChunkAccess getChunk(BlockPos pos) {
+        return wrapped.getChunk(pos);
+    }
+
+    @Override
+    public ChunkAccess getChunk(int chunkX, int chunkZ) {
+        return wrapped.getChunk(chunkX, chunkZ);
+    }
+
+    @Override
+    public ChunkAccess getChunk(int chunkX, int chunkZ, ChunkStatus status) {
+        return wrapped.getChunk(chunkX, chunkZ, status);
+    }
+
+    @Override
     public @Nullable ChunkAccess getChunk(int x, int z, ChunkStatus status, boolean required) {
         return wrapped.getChunk(x, z, status, required);
+    }
+
+    @Override
+    public @Nullable BlockGetter getChunkForCollisions(int chunkX, int chunkZ) {
+        return wrapped.getChunkForCollisions(chunkX, chunkZ);
     }
 
     @Override
