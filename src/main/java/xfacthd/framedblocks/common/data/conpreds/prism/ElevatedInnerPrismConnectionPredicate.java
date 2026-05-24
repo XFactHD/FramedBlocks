@@ -22,7 +22,7 @@ public final class ElevatedInnerPrismConnectionPredicate implements ConnectionPr
         }
         else if (side.getAxis() == axis)
         {
-            return edge != facing;
+            return edge != null && edge != facing;
         }
         return false;
     }
