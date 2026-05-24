@@ -266,7 +266,19 @@ public final class FramedBlockModel extends AbstractFramedBlockModel
             if (quadTable == null)
             {
                 ModelData ctData = ctCtx != null ? camoData : ModelData.EMPTY;
-                quadTable = buildQuadCache(key.camo(), camoModel, rand, extraData, ctData, renderTypes, reinforce);
+                try
+                {
+                    quadTable = buildQuadCache(key.camo(), camoModel, rand, extraData, ctData, renderTypes, reinforce);
+                }
+                catch (Throwable t)
+                {
+                    throw new RuntimeException(String.format(
+                            Locale.ROOT,
+                            "Encountered an unexpected error while computing cached quads for %s on %s",
+                            key.camo(),
+                            state
+                    ));
+                }
                 quadCache.put(key, quadTable);
             }
             return nullLayer ? quadTable.getAllQuads(side) : quadTable.getQuads(renderType, side);

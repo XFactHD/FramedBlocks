@@ -19,7 +19,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public abstract class AbstractFramedBlockModel extends BakedModelWrapper<BakedModel>
 {
     private final List<BakedModel> defaultItemRenderPass = List.of(this);
-    private final BlockState state;
+    protected final BlockState state;
     private final ItemModelInfo itemModelInfo;
     private final boolean dataRequired;
     private final Map<CamoList, List<BakedModel>> itemModelCache;
