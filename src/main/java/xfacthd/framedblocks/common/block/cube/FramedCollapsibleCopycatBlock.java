@@ -2,7 +2,6 @@ package xfacthd.framedblocks.common.block.cube;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -116,8 +115,7 @@ public class FramedCollapsibleCopycatBlock extends FramedBlock
     {
         super.setPlacedBy(level, pos, state, placer, stack);
 
-        //noinspection ConstantConditions
-        if (!level.isClientSide() && stack.get(DataComponents.BLOCK_ENTITY_DATA) != null)
+        if (!level.isClientSide() && stack.has(FBContent.DC_TYPE_COLLAPSIBLE_COPYCAT_BLOCK_DATA))
         {
             //Properly set face solidity when placed from a stack with BE NBT data
             if (level.getBlockEntity(pos) instanceof FramedCollapsibleCopycatBlockEntity be)
