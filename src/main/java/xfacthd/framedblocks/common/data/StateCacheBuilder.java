@@ -1,6 +1,7 @@
 package xfacthd.framedblocks.common.data;
 
 import com.google.common.base.Stopwatch;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
@@ -37,7 +38,9 @@ public final class StateCacheBuilder
     {
         FramedBlocks.LOGGER.debug("Initializing custom state metadata caches");
         Stopwatch watch = Stopwatch.createStarted();
-        long[] counts = new long[] { 0, 1 }; // +1 for the empty instance
+        long[] stateCount = new long[] { 0 };
+        ObjectOpenHashSet<StateCache> cacheDedup = new ObjectOpenHashSet<>();
+        cacheDedup.add(StateCache.EMPTY);
         BuiltInRegistries.BLOCK.entrySet()
                 .stream()
                 .map(Map.Entry::getValue)
@@ -46,26 +49,16 @@ public final class StateCacheBuilder
                 .map(StateDefinition::getPossibleStates)
                 .forEach(states ->
                 {
-                    Map<StateCache, StateCache> cacheDedup = new HashMap<>();
                     for (BlockState state : states)
                     {
                         StateCache cache = ((IFramedBlock) state.getBlock()).initCache(state);
-                        if (cache.equals(StateCache.EMPTY))
-                        {
-                            ((IStateCacheAccessor) state).framedblocks$initCache(StateCache.EMPTY);
-                        }
-                        else
-                        {
-                            ((IStateCacheAccessor) state).framedblocks$initCache(
-                                    Objects.requireNonNullElse(cacheDedup.putIfAbsent(cache, cache), cache)
-                            );
-                        }
+                        cache = cacheDedup.addOrGet(cache);
+                        ((IStateCacheAccessor) state).framedblocks$initCache(cache);
                     }
-                    counts[0] += states.size();
-                    counts[1] += cacheDedup.size();
+                    stateCount[0] += states.size();
                 });
         watch.stop();
-        FramedBlocks.LOGGER.debug("Initialized {} unique caches for {} states in {}", counts[1], counts[0], watch);
+        FramedBlocks.LOGGER.debug("Initialized {} unique caches for {} states in {}", cacheDedup.size(), stateCount[0], watch);
     }
 
 
