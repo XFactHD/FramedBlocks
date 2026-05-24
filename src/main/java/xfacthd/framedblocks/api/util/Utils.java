@@ -14,6 +14,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.*;
 import net.minecraft.util.Mth;
 import net.minecraft.util.StringRepresentable;
+import net.minecraft.util.Unit;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.*;
@@ -97,6 +98,9 @@ public final class Utils
     );
     public static final DeferredDataComponentType<FrameConfig> DC_TYPE_FRAME_CONFIG = DeferredDataComponentType.createDataComponent(
             Utils.rl("frame_config")
+    );
+    public static final DeferredDataComponentType<Unit> DC_TYPE_RETAIN_CAMO = DeferredDataComponentType.createDataComponent(
+            Utils.rl("retain_camo")
     );
 
     public static Vec3 fraction(Vec3 vec)

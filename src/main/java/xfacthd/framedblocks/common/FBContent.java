@@ -10,6 +10,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.util.Unit;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.*;
@@ -409,6 +410,10 @@ public final class FBContent
             "tank_contents",
             builder -> builder.persistent(SimpleFluidContent.CODEC).networkSynchronized(SimpleFluidContent.STREAM_CODEC)
     );
+    public static final DeferredDataComponentType<Unit> DC_TYPE_RETAIN_CAMO = DATA_COMPONENTS.registerComponentType(
+            "retain_camo",
+            builder -> builder.persistent(Unit.CODEC).networkSynchronized(StreamCodec.unit(Unit.INSTANCE))
+    );
     // endregion
 
     // region Items
@@ -417,6 +422,7 @@ public final class FBContent
     public static final Holder<Item> ITEM_FRAMED_BLUEPRINT = registerToolItem(FramedBlueprintItem::new, FramedToolType.BLUEPRINT);
     public static final Holder<Item> ITEM_FRAMED_KEY = registerToolItem(FramedToolItem::new, FramedToolType.KEY);
     public static final Holder<Item> ITEM_FRAMED_SCREWDRIVER = registerToolItem(FramedToolItem::new, FramedToolType.SCREWDRIVER);
+    public static final Holder<Item> ITEM_FRAMED_AXE = registerToolItem(FramedAxeItem::new, FramedToolType.AXE);
     public static final Holder<Item> ITEM_FRAMED_REINFORCEMENT = ITEMS.register("framed_reinforcement", () ->
             new Item(new Item.Properties())
     );

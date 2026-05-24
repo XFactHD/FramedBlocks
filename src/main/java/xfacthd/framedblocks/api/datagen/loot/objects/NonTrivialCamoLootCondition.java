@@ -25,6 +25,10 @@ public final class NonTrivialCamoLootCondition implements LootItemCondition
     @Override
     public boolean test(LootContext ctx)
     {
+        if (ctx.getParam(LootContextParams.TOOL).has(Utils.DC_TYPE_RETAIN_CAMO))
+        {
+            return true;
+        }
         if (ctx.getParamOrNull(LootContextParams.BLOCK_ENTITY) instanceof FramedBlockEntity be)
         {
             return !be.canTriviallyDropAllCamos();

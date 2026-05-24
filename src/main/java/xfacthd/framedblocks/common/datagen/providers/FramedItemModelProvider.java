@@ -27,6 +27,7 @@ public final class FramedItemModelProvider extends ItemModelProvider
         handheldItem(FBContent.ITEM_FRAMED_WRENCH, "cutout");
         handheldItem(FBContent.ITEM_FRAMED_KEY, "cutout");
         handheldItem(FBContent.ITEM_FRAMED_SCREWDRIVER, "cutout");
+        handheldItem(FBContent.ITEM_FRAMED_AXE, "cutout");
 
         simpleItem(FBContent.ITEM_FRAMED_REINFORCEMENT, "cutout");
         simpleItem(FBContent.ITEM_PHANTOM_PASTE, "cutout");

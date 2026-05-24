@@ -1563,6 +1563,15 @@ public final class FramedRecipeProvider extends RecipeProvider
                 .unlockedBy(FBContent.BLOCK_FRAMED_CUBE)
                 .save(consumer);
 
+        shapedRecipe(RecipeCategory.TOOLS, FBContent.ITEM_FRAMED_AXE.value())
+                .pattern("II")
+                .pattern("IC")
+                .pattern(" C")
+                .define('I', Tags.Items.INGOTS_IRON)
+                .define('C', FBContent.BLOCK_FRAMED_CUBE.value())
+                .unlockedBy(FBContent.BLOCK_FRAMED_CUBE)
+                .save(consumer);
+
         shapedRecipe(RecipeCategory.MISC, FBContent.ITEM_FRAMED_REINFORCEMENT.value(), 16)
                 .pattern("OSO")
                 .pattern("SFS")

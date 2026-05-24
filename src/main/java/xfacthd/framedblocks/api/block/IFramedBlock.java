@@ -213,7 +213,9 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension
     {
         if (builder.getOptionalParameter(LootContextParams.BLOCK_ENTITY) instanceof FramedBlockEntity be)
         {
-            be.addAdditionalDrops(drops, ConfigView.Server.INSTANCE.shouldConsumeCamoItem());
+            boolean dropCamo = ConfigView.Server.INSTANCE.shouldConsumeCamoItem() &&
+                    !builder.getParameter(LootContextParams.TOOL).has(Utils.DC_TYPE_RETAIN_CAMO);
+            be.addAdditionalDrops(drops, dropCamo);
         }
         return drops;
     }

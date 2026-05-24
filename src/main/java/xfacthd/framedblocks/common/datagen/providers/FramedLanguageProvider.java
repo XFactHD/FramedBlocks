@@ -26,6 +26,7 @@ import xfacthd.framedblocks.common.block.special.PoweredFramingSawBlock;
 import xfacthd.framedblocks.common.blockentity.special.FramedStorageBlockEntity;
 import xfacthd.framedblocks.common.crafting.FramingSawRecipeMatchResult;
 import xfacthd.framedblocks.common.data.property.NullableDirection;
+import xfacthd.framedblocks.common.item.FramedAxeItem;
 import xfacthd.framedblocks.common.item.FramedBlueprintItem;
 import xfacthd.framedblocks.common.blockentity.special.FramedChestBlockEntity;
 import xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
@@ -300,6 +301,7 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(FBContent.ITEM_FRAMED_BLUEPRINT.value(), "Framed Blueprint");
         add(FBContent.ITEM_FRAMED_KEY.value(), "Framed Key");
         add(FBContent.ITEM_FRAMED_SCREWDRIVER.value(), "Framed Screwdriver");
+        add(FBContent.ITEM_FRAMED_AXE.value(), "Framed Axe");
         add(FBContent.ITEM_FRAMED_REINFORCEMENT.value(), "Framed Reinforcement");
         add(FBContent.ITEM_PHANTOM_PASTE.value(), "Phantom Paste");
         add("item.framedblocks.framing_saw_pattern", "Framing Saw Pattern");
@@ -410,6 +412,7 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(FramedTankBlock.TANK_CONTENTS, "Stored Fluid: %s");
         add(FramedTankBlock.EMPTY_FLUID, "Empty");
         add(FramedSlopeSlabBlock.PLACE_UPSIDE_DOWN, "Hold sneak key to place upside down");
+        add(FramedAxeItem.TOOLTIP_RETAIN_CAMO, "Framed blocks broken with this Axe keep their camo instead of dropping it separately");
     }
 
     private void addOverlayTranslations()
