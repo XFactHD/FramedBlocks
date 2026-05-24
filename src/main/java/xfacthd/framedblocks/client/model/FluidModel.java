@@ -2,7 +2,7 @@ package xfacthd.framedblocks.client.model;
 
 import com.google.common.base.Preconditions;
 import com.google.common.base.Suppliers;
-import com.mojang.math.Transformation;
+import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
@@ -23,6 +23,7 @@ import net.neoforged.neoforge.client.model.*;
 import net.neoforged.neoforge.client.model.data.ModelData;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.util.Utils;
+import xfacthd.framedblocks.common.data.camo.fluid.FluidCamoContent;
 
 import java.util.*;
 import java.util.function.Function;
@@ -30,9 +31,17 @@ import java.util.function.Supplier;
 
 public final class FluidModel implements BakedModel
 {
-    private static final ModelState SIMPLE_STATE = new SimpleModelState(Transformation.identity());
     public static final ModelResourceLocation BARE_MODEL = ModelResourceLocation.standalone(Utils.rl("fluid/bare"));
     public static final ModelResourceLocation BARE_MODEL_SINGLE = ModelResourceLocation.standalone(Utils.rl("fluid/bare_single"));
+    private static final ModelState[] ROTATIONS = Util.make(new ModelState[6], arr ->
+    {
+        arr[Direction.DOWN.ordinal()] = BlockModelRotation.X0_Y0;
+        arr[Direction.UP.ordinal()] = BlockModelRotation.X180_Y0;
+        arr[Direction.NORTH.ordinal()] = BlockModelRotation.X270_Y0;
+        arr[Direction.SOUTH.ordinal()] = BlockModelRotation.X90_Y0;
+        arr[Direction.WEST.ordinal()] = BlockModelRotation.X90_Y90;
+        arr[Direction.EAST.ordinal()] = BlockModelRotation.X90_Y270;
+    });
     @SuppressWarnings("deprecation")
     private static final Function<ResourceLocation, TextureAtlasSprite> SPRITE_GETTER = (loc ->
             Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(loc)
@@ -136,21 +145,22 @@ public final class FluidModel implements BakedModel
 
 
 
-    public static FluidModel create(Fluid fluid)
+    public static FluidModel create(FluidCamoContent fluidCamo)
     {
         ModelBakery modelBakery = Minecraft.getInstance().getModelManager().getModelBakery();
+        Fluid fluid = fluidCamo.getFluid();
 
         // Use dummy extensions for empty fluid to prevent crashes due to null textures
         IClientFluidTypeExtensions props = getFluidTypeExtensions(fluid);
         ResourceLocation stillTexture = Preconditions.checkNotNull(
                 props.getStillTexture(),
                 "Fluid %s returned null from IClientFluidTypeExtensions#getStillTexture()",
-                fluid
+                fluidCamo
         );
         ResourceLocation flowingTexture = Preconditions.checkNotNull(
                 props.getFlowingTexture(),
                 "Fluid %s returned null from IClientFluidTypeExtensions#getFlowingTexture()",
-                fluid
+                fluidCamo
         );
 
         boolean singleTexture = flowingTexture.equals(stillTexture);
@@ -164,8 +174,8 @@ public final class FluidModel implements BakedModel
         );
         Function<Material, TextureAtlasSprite> spriteGetter = matToSprite(stillTexture, flowingTexture);
         ModelBakery.ModelBakerImpl baker = modelBakery.new ModelBakerImpl((modelLoc, material) -> spriteGetter.apply(material), modelName);
-        BakedModel model = bareModel.bake(baker, spriteGetter, SIMPLE_STATE);
-        Preconditions.checkNotNull(model, "Failed to bake fluid model for fluid %s", fluid);
+        BakedModel model = bareModel.bake(baker, spriteGetter, ROTATIONS[fluidCamo.getFlowDirection().ordinal()]);
+        Preconditions.checkNotNull(model, "Failed to bake fluid model for fluid %s", fluidCamo);
 
         Map<Direction, List<BakedQuad>> quads = new EnumMap<>(Direction.class);
         BlockState defState = fluid.defaultFluidState().createLegacyBlock();

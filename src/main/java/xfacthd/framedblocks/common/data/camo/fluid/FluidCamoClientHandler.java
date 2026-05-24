@@ -6,7 +6,6 @@ import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.client.ChunkRenderTypeSet;
 import net.neoforged.neoforge.client.model.data.ModelData;
 import xfacthd.framedblocks.api.camo.CamoClientHandler;
@@ -19,7 +18,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public final class FluidCamoClientHandler extends CamoClientHandler<FluidCamoContent>
 {
     public static final CamoClientHandler<FluidCamoContent> INSTANCE = new FluidCamoClientHandler();
-    private static final Map<Fluid, BakedModel> FLUID_MODEL_CACHE = new ConcurrentHashMap<>();
+    private static final Map<FluidCamoContent, BakedModel> FLUID_MODEL_CACHE = new ConcurrentHashMap<>();
 
     private FluidCamoClientHandler() { }
 
@@ -32,7 +31,7 @@ public final class FluidCamoClientHandler extends CamoClientHandler<FluidCamoCon
     @Override
     public BakedModel getOrCreateModel(FluidCamoContent camo)
     {
-        return FLUID_MODEL_CACHE.computeIfAbsent(camo.getFluid(), FluidModel::create);
+        return FLUID_MODEL_CACHE.computeIfAbsent(camo, FluidModel::create);
     }
 
     @Override

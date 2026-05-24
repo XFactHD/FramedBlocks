@@ -1,7 +1,9 @@
 package xfacthd.framedblocks.common.data.camo.fluid;
 
 import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
@@ -27,23 +29,32 @@ import xfacthd.framedblocks.common.config.ServerConfig;
 
 public final class FluidCamoContainerFactory extends CamoContainerFactory<FluidCamoContainer>
 {
-    private static final MapCodec<FluidCamoContainer> CODEC = BuiltInRegistries.FLUID.byNameCodec()
-            .xmap(FluidCamoContainer::new, FluidCamoContainer::getFluid).fieldOf("fluid");
-    private static final StreamCodec<RegistryFriendlyByteBuf, FluidCamoContainer> STREAM_CODEC = ByteBufCodecs.registry(Registries.FLUID)
-            .map(FluidCamoContainer::new, FluidCamoContainer::getFluid);
+    private static final MapCodec<FluidCamoContainer> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
+            BuiltInRegistries.FLUID.byNameCodec().fieldOf("fluid").forGetter(FluidCamoContainer::getFluid),
+            Direction.CODEC.optionalFieldOf("flow_dir", Direction.DOWN).forGetter(FluidCamoContainer::getFlowDirection)
+    ).apply(inst, FluidCamoContainer::new));
+    private static final StreamCodec<RegistryFriendlyByteBuf, FluidCamoContainer> STREAM_CODEC = StreamCodec.composite(
+            ByteBufCodecs.registry(Registries.FLUID),
+            FluidCamoContainer::getFluid,
+            Direction.STREAM_CODEC,
+            FluidCamoContainer::getFlowDirection,
+            FluidCamoContainer::new
+    );
 
     @Override
     protected void writeToNetwork(CompoundTag tag, FluidCamoContainer container)
     {
         Fluid fluid = container.getFluid();
         tag.putInt("fluid", BuiltInRegistries.FLUID.getId(fluid));
+        tag.putInt("flow_dir", container.getFlowDirection().ordinal());
     }
 
     @Override
     protected FluidCamoContainer readFromNetwork(CompoundTag tag)
     {
         Fluid fluid = BuiltInRegistries.FLUID.byId(tag.getInt("fluid"));
-        return new FluidCamoContainer(fluid);
+        Direction facing = FluidCamoContainer.DIRECTIONS[tag.getInt("flow_dir")];
+        return new FluidCamoContainer(fluid, facing);
     }
 
     @Override
@@ -84,7 +95,7 @@ public final class FluidCamoContainerFactory extends CamoContainerFactory<FluidC
                 }
             }
 
-            return new FluidCamoContainer(fluid.getFluid());
+            return new FluidCamoContainer(fluid.getFluid(), Direction.DOWN);
         }
         return null;
     }

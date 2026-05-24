@@ -22,15 +22,22 @@ import xfacthd.framedblocks.common.particle.FluidParticleOptions;
 public final class FluidCamoContent extends CamoContent<FluidCamoContent>
 {
     private final Fluid fluid;
+    private final Direction flowDirection;
 
-    public FluidCamoContent(Fluid fluid)
+    public FluidCamoContent(Fluid fluid, Direction flowDirection)
     {
         this.fluid = fluid;
+        this.flowDirection = flowDirection;
     }
 
     public Fluid getFluid()
     {
         return fluid;
+    }
+
+    public Direction getFlowDirection()
+    {
+        return flowDirection;
     }
 
     @Override
@@ -216,7 +223,7 @@ public final class FluidCamoContent extends CamoContent<FluidCamoContent>
     @Override
     public int hashCode()
     {
-        return fluid.hashCode();
+        return fluid.hashCode() * 31 + flowDirection.hashCode();
     }
 
     @Override
@@ -224,7 +231,7 @@ public final class FluidCamoContent extends CamoContent<FluidCamoContent>
     {
         if (obj == this) return true;
         if (obj == null || obj.getClass() != FluidCamoContent.class) return false;
-        return fluid == ((FluidCamoContent) obj).fluid;
+        return fluid == ((FluidCamoContent) obj).fluid && flowDirection == ((FluidCamoContent) obj).flowDirection;
     }
 
     @Override
