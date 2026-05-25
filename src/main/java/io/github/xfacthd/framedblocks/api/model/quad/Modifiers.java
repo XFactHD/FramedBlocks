@@ -92,7 +92,7 @@ public final class Modifiers {
 
     private static boolean cut(ExtMutableQuad quad, Direction cutEdge, float lengthOne, float lengthTwo) {
         Direction quadDir = quad.direction();
-        Preconditions.checkArgument(quadDir.getAxis() != cutEdge.getAxis(), "Cut edge must be perpendicular to quad direction");
+        Preconditions.checkArgument(quadDir.getAxis() != cutEdge.getAxis(), "Expected cut edge perpendicular to quad direction, got quad dir: %s, cut edge: %s", quadDir, cutEdge);
 
         CuttingConfig config = ModifierConfigs.getCuttingConfig(quadDir, cutEdge);
         boolean positive = DirUtils.isPositive(cutEdge);
@@ -170,7 +170,7 @@ public final class Modifiers {
     public static QuadModifier.Modifier cutTopBottom(float minX, float minZ, float maxX, float maxZ) {
         return quad -> {
             Direction quadDir = quad.direction();
-            Preconditions.checkArgument(DirUtils.isY(quadDir), "Quad direction must be vertical");
+            Preconditions.checkArgument(DirUtils.isY(quadDir), "Expected vertical quad direction, got %s", quadDir);
 
             return cut(quad, Direction.WEST, 1F - minX, 1F - minX) &&
                    cut(quad, Direction.EAST, maxX, maxX) &&
@@ -189,7 +189,7 @@ public final class Modifiers {
     public static QuadModifier.Modifier cutSide(float minXZ, float minY, float maxXZ, float maxY) {
         return quad -> {
             Direction quadDir = quad.direction();
-            Preconditions.checkArgument(!DirUtils.isY(quadDir), "Quad direction must be horizontal");
+            Preconditions.checkArgument(!DirUtils.isY(quadDir), "Expected horizontal quad direction, got %s", quadDir);
 
             boolean rightPositive = DirUtils.isPositive(quadDir.getClockWise());
             float leftXZ = rightPositive ? (1F - minXZ) : maxXZ;
@@ -211,8 +211,8 @@ public final class Modifiers {
     public static QuadModifier.Modifier cutSide(Direction cutDir, float lengthCW, float lengthCCW) {
         return quad -> {
             Direction quadDir = quad.direction();
-            Preconditions.checkArgument(!DirUtils.isY(quadDir), "Quad direction must be horizontal");
-            Preconditions.checkArgument(quadDir.getAxis() != cutDir.getAxis(), "Cut direction must be perpendicular to the quad direction");
+            Preconditions.checkArgument(!DirUtils.isY(quadDir), "Expected horizontal quad direction, got %s", quadDir);
+            Preconditions.checkArgument(quadDir.getAxis() != cutDir.getAxis(), "Expected cut edge perpendicular to quad direction, got quad dir: %s, cut edge: %s", quadDir, cutDir);
 
             if (DirUtils.isY(cutDir)) {
                 boolean down = cutDir == Direction.DOWN;
@@ -239,7 +239,7 @@ public final class Modifiers {
     public static QuadModifier.Modifier cutPrismTriangle(boolean up, boolean back) {
         return quad -> {
             Direction quadDir = quad.direction();
-            Preconditions.checkArgument(!DirUtils.isY(quadDir), "Quad direction must not be on the Y axis");
+            Preconditions.checkArgument(!DirUtils.isY(quadDir), "Expected horizontal quad direction, got %s", quadDir);
 
             boolean leftCut = cut(quad, quadDir.getCounterClockWise(), up ? .5F : 1, up ? 1 : .5F);
             boolean rightCut = cut(quad, quadDir.getClockWise(), up ? .5F : 1, up ? 1 : .5F);
@@ -266,10 +266,10 @@ public final class Modifiers {
      * @param back Whether the tip should tilt forward or backward
      */
     public static QuadModifier.Modifier cutPrismTriangle(Direction cutDir, boolean back) {
-        Preconditions.checkArgument(!DirUtils.isY(cutDir), "Cut direction must be horizontal");
+        Preconditions.checkArgument(!DirUtils.isY(cutDir), "Expected horizontal cut direction, got %s", cutDir);
         return quad -> {
             Direction quadDir = quad.direction();
-            Preconditions.checkArgument(DirUtils.isY(quadDir), "Quad direction must be on the Y axis");
+            Preconditions.checkArgument(DirUtils.isY(quadDir), "Expected vertical quad direction, got %s", quadDir);
 
             boolean leftCut = cut(quad, cutDir.getCounterClockWise(), .5F, 1);
             boolean rightCut = cut(quad, cutDir.getClockWise(), 1, .5F);
@@ -308,7 +308,7 @@ public final class Modifiers {
     public static QuadModifier.Modifier cutSmallTriangle(Direction cutDir) {
         return quad -> {
             Direction quadDir = quad.direction();
-            Preconditions.checkArgument(!DirUtils.isY(quadDir) || !DirUtils.isY(cutDir), "Cut direction cannot be along the Y axis for quads pointing along the Y axis");
+            Preconditions.checkArgument(!DirUtils.isY(quadDir) || !DirUtils.isY(cutDir), "Expected horizontal cut dir for vertical quad, got quad dir: %s, cut dir: %s", quadDir, cutDir);
 
             if (!cut(quad, cutDir, .5F, .5F)) {
                 return false;
@@ -404,8 +404,8 @@ public final class Modifiers {
         return quad -> {
             Direction dir = quad.direction();
             boolean top = dir == Direction.UP;
-            Preconditions.checkArgument(DirUtils.isY(dir), "Quad direction must be on the Y axis");
-            Preconditions.checkArgument(!DirUtils.isY(edge), "Edge direction must be horizontal");
+            Preconditions.checkArgument(DirUtils.isY(dir), "Expected vertical quad direction, got %s", dir);
+            Preconditions.checkArgument(!DirUtils.isY(edge), "Expected horizontal edge, got %s", edge);
 
             Direction.Axis axis = edge.getClockWise().getAxis();
             Vector3f origin = VERTICAL_ORIGINS[edge.getOpposite().ordinal() - 2 + (top ? 0 : 4)];
@@ -471,7 +471,7 @@ public final class Modifiers {
      * @implNote This does not create the same shape for all vertices when displacing a single one, this is not fixable without extreme effort
      */
     public static QuadModifier.Modifier setPosition(float[] posTarget) {
-        Preconditions.checkArgument(posTarget.length == 4, "Target position array must contain 4 elements!");
+        Preconditions.checkArgument(posTarget.length == 4, "Target position array must contain 4 elements, got %s!", posTarget.length);
 
         return quad -> {
             Direction dir = quad.direction();
