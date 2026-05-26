@@ -23,8 +23,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.util.Util;
 import net.neoforged.neoforge.common.util.Lazy;
 import net.neoforged.neoforge.transfer.resource.Resource;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 import java.util.Objects;
@@ -68,18 +66,18 @@ public final class ResourceCubeModel<R extends Resource, C extends ResourceCamoC
         ModelBakery.ModelBakerImpl baker = modelBakery.new ModelBakerImpl(RuntimeMaterialBaker.INSTANCE, INTERNER.get(), missingModels);
 
         ResourceCamoContentClientHandler.ResourceModelSpec modelSpec = clientHandler.getModelSpec(camo);
-        Material stillMaterialRaw = unbakeMaterial(modelSpec.stillMaterial());
-        Material flowingMaterialRaw = unbakeMaterial(modelSpec.flowingMaterial());
+        Material stillMaterial = modelSpec.stillMaterial();
+        Material flowingMaterial = modelSpec.flowingMaterial();
         Direction orientation = Objects.requireNonNullElse(modelSpec.orientation(), Direction.DOWN);
 
         Identifier bareModelId;
         Map<String, Material> textures;
-        if (flowingMaterialRaw == null || flowingMaterialRaw.sprite().equals(stillMaterialRaw.sprite())) {
+        if (flowingMaterial == null || flowingMaterial.sprite().equals(stillMaterial.sprite())) {
             bareModelId = modelSpec.tinted() ? MODEL_BARE_SINGLE_TINTED : MODEL_BARE_SINGLE;
-            textures = Map.of("all", stillMaterialRaw, "particle", stillMaterialRaw);
+            textures = Map.of("all", stillMaterial, "particle", stillMaterial);
         } else {
             bareModelId = modelSpec.tinted() ? MODEL_BARE_TINTED : MODEL_BARE;
-            textures = Map.of("end", stillMaterialRaw, "side", flowingMaterialRaw, "particle", stillMaterialRaw);
+            textures = Map.of("end", stillMaterial, "side", flowingMaterial, "particle", stillMaterial);
         }
         ResolvedModel bareModel = Objects.requireNonNull(baker.getModel(bareModelId), "Bare fluid model not loaded!");
 
@@ -90,21 +88,13 @@ public final class ResourceCubeModel<R extends Resource, C extends ResourceCamoC
                 bareModel,
                 bareModel.getTopAdditionalProperties()
         );
-
-        return new SingleVariant(new SimpleModelWrapper(fluidQuads, false, modelSpec.stillMaterial()));
+        Material.Baked particleMaterial = RuntimeMaterialBaker.INSTANCE.getMaterial(stillMaterial);
+        return new SingleVariant(new SimpleModelWrapper(fluidQuads, false, particleMaterial));
     }
 
     @Override
     public void clearCache() {
         modelCache.clear();
-    }
-
-    @Contract("!null->!null")
-    private static @Nullable Material unbakeMaterial(Material.@Nullable Baked material) {
-        if (material == null) {
-            return null;
-        }
-        return new Material(material.sprite().contents().name(), material.forceTranslucent());
     }
 
     public static void clearInterner() {

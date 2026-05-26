@@ -7,6 +7,7 @@ import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.core.Direction;
 import net.neoforged.neoforge.transfer.resource.Resource;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.Nullable;
 
 public abstract class ResourceCamoContentClientHandler<R extends Resource, C extends ResourceCamoContent<R, C>> extends CamoContentClientHandler<C> {
@@ -26,7 +27,19 @@ public abstract class ResourceCamoContentClientHandler<R extends Resource, C ext
     /// @param flowingMaterial The texture to use for the horizontal faces or null if the resource only has one texture
     /// @param tinted          Whether the resource is tinted
     /// @param orientation     The orientation of the model if the resource camo is orientable, otherwise `null`
-    public record ResourceModelSpec(Material.Baked stillMaterial, Material.@Nullable Baked flowingMaterial, boolean tinted, @Nullable Direction orientation) { }
+    public record ResourceModelSpec(Material stillMaterial, @Nullable Material flowingMaterial, boolean tinted, @Nullable Direction orientation) {
+        public ResourceModelSpec(Material.Baked stillMaterial, Material.@Nullable Baked flowingMaterial, boolean tinted, @Nullable Direction orientation) {
+            this(unbakeMaterial(stillMaterial), unbakeMaterial(flowingMaterial), tinted, orientation);
+        }
+
+        @Contract("!null->!null")
+        private static @Nullable Material unbakeMaterial(Material.@Nullable Baked material) {
+            if (material != null) {
+                return new Material(material.sprite().contents().name(), material.forceTranslucent());
+            }
+            return null;
+        }
+    }
 
     @ApiStatus.Internal
     public interface ResourceModelBaker<R extends Resource, C extends ResourceCamoContent<R, C>> {
