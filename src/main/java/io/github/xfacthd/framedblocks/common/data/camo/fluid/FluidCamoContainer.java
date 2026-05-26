@@ -1,5 +1,6 @@
 package io.github.xfacthd.framedblocks.common.data.camo.fluid;
 
+import io.github.xfacthd.framedblocks.api.block.item.placement.ValueOrders;
 import io.github.xfacthd.framedblocks.api.camo.CamoContainerFactory;
 import io.github.xfacthd.framedblocks.api.camo.resource.ResourceCamoContainer;
 import io.github.xfacthd.framedblocks.common.FBContent;
@@ -10,8 +11,6 @@ import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.transfer.fluid.FluidResource;
 
 public final class FluidCamoContainer extends ResourceCamoContainer<FluidResource, FluidCamoContent, FluidCamoContainer> {
-    private static final Direction[] DIRECTIONS = Direction.values();
-
     public FluidCamoContainer(FluidResource fluid, Direction flowDirection) {
         super(new FluidCamoContent(fluid, flowDirection));
     }
@@ -31,8 +30,8 @@ public final class FluidCamoContainer extends ResourceCamoContainer<FluidResourc
 
     @Override
     public FluidCamoContainer rotateCamo() {
-        int nextIdx = (getFlowDirection().ordinal() + 1) % DIRECTIONS.length;
-        return new FluidCamoContainer(getResource(), DIRECTIONS[nextIdx]);
+        int nextIdx = (ValueOrders.FACING.indexOf(getFlowDirection()) + 1) % ValueOrders.FACING.size();
+        return new FluidCamoContainer(getResource(), ValueOrders.FACING.get(nextIdx));
     }
 
     @Override
