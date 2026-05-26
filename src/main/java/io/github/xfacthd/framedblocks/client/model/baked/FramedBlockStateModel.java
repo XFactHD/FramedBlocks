@@ -274,8 +274,13 @@ public final class FramedBlockStateModel extends AbstractFramedBlockStateModel i
         PartConsumerImpl partConsumer = new PartConsumerImpl(parts, cullMask, defaultAO, camoEmissive, forceEmissive);
         boolean xformAll = geometry.transformAllQuads();
 
-        QuadListModifier modifier = (quadMap, quads, _) -> {
+        QuadListModifier modifier = (quadMap, quads, side) -> {
             for (BakedQuad quad : quads) {
+                if (quad.direction() != side) {
+                    // Discard quads whose normal dir does not match their cull-face, they will crash downstream quad modifiers and
+                    // are usually inward facing and therefore unusable.
+                    continue;
+                }
                 geometry.transformQuad(quadMap, quad, fbData, cacheKeyUserData);
             }
             quads.clear();
