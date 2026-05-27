@@ -237,6 +237,7 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu> im
             scrollOffset = Mth.clamp(scrollOffset, 0, 1);
             firstIndex = calculateFirstIndex(hidden);
         } else if (idx == -1) {
+            scrollOffset = 0;
             firstIndex = 0;
         }
     }
@@ -254,19 +255,20 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu> im
             return;
         }
 
-        int x = leftPos + RECIPES_X;
-        int y = topPos + RECIPES_Y;
-        int last = firstIndex + RECIPE_COUNT;
+        int minX = leftPos + RECIPES_X;
+        int maxX = minX + (RECIPE_COLS * RECIPE_WIDTH);
+        int minY = topPos + RECIPES_Y;
+        int maxY = minY + (RECIPE_ROWS * RECIPE_HEIGHT);
 
-        for (int idx = firstIndex; idx < last && idx < filteredRecipes.size(); idx++) {
-            int relIdx = idx - firstIndex;
-            int recX = x + relIdx % RECIPE_COLS * RECIPE_WIDTH;
-            int recY = y + relIdx / RECIPE_COLS * RECIPE_HEIGHT;
-            if (mouseX >= recX && mouseX < recX + RECIPE_WIDTH && mouseY >= recY && mouseY < recY + RECIPE_HEIGHT) {
+        if (mouseX >= minX && mouseX < maxX && mouseY >= minY && mouseY < maxY) {
+            int col = (mouseX - minX) / RECIPE_WIDTH;
+            int row = (mouseY - minY) / RECIPE_HEIGHT;
+            int idx = firstIndex + row * RECIPE_COLS + col;
+
+            if (idx >= 0 && idx < filteredRecipes.size()) {
                 FramingSawMenu.FramedRecipeHolder recipe = filteredRecipes.get(idx);
                 ItemStack result = recipe.getRecipe().getResultStack();
                 renderItemTooltip(graphics, mouseX, mouseY, result, recipe);
-                break;
             }
         }
     }
@@ -362,42 +364,37 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu> im
             setFocused(null);
         }
 
-        int x = leftPos + RECIPES_X;
-        int y = topPos + RECIPES_Y;
-        int lastIdx = firstIndex + RECIPE_COUNT;
+        int minX = leftPos + RECIPES_X;
+        int maxX = minX + (RECIPE_COLS * RECIPE_WIDTH);
+        int minY = topPos + RECIPES_Y;
+        int maxY = minY + (RECIPE_ROWS * RECIPE_HEIGHT);
 
-        for (int idx = firstIndex; idx < lastIdx; ++idx) {
-            int relIdx = idx - firstIndex;
-            double recRelX = event.x() - (double)(x + relIdx % RECIPE_COLS * RECIPE_WIDTH);
-            double recRelY = event.y() - (double)(y + relIdx / RECIPE_COLS * RECIPE_HEIGHT);
-            if (recRelX < 0 || recRelY < 0 || recRelX > RECIPE_WIDTH || recRelY > RECIPE_HEIGHT) {
-                continue;
-            }
-
-            if (hasEffectiveSearchQuery) {
-                if (idx < 0 || idx >= filteredRecipes.size()) {
-                    break;
+        if (event.x() >= minX && event.x() < maxX && event.y() >= minY && event.y() < maxY) {
+            int col = (int) ((event.x() - minX) / RECIPE_WIDTH);
+            int row = (int) ((event.y() - minY) / RECIPE_HEIGHT);
+            int idx = firstIndex + row * RECIPE_COLS + col;
+            if (idx >= 0 && idx < filteredRecipes.size()) {
+                if (hasEffectiveSearchQuery) {
+                    RecipeHolder<FramingSawRecipe> recipe = filteredRecipes.get(idx).toVanilla();
+                    idx = cache.getRecipes().indexOf(recipe);
+                    if (idx == -1) {
+                        return false;
+                    }
                 }
-
-                RecipeHolder<FramingSawRecipe> recipe = filteredRecipes.get(idx).toVanilla();
-                idx = cache.getRecipes().indexOf(recipe);
-                if (idx == -1) {
-                    break;
+                //noinspection ConstantConditions
+                if (menu.clickMenuButton(minecraft.player, idx)) {
+                    minecraft.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_STONECUTTER_SELECT_RECIPE, 1.0F));
+                    ClientPacketDistributor.sendToServer(new ServerboundSelectFramingSawRecipePayload(menu.containerId, idx));
+                    return true;
                 }
             }
-
-            //noinspection ConstantConditions
-            if (menu.clickMenuButton(minecraft.player, idx)) {
-                minecraft.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_STONECUTTER_SELECT_RECIPE, 1.0F));
-                ClientPacketDistributor.sendToServer(new ServerboundSelectFramingSawRecipePayload(menu.containerId, idx));
-                return true;
-            }
+            return false;
         }
 
         if (isScrollBarActive()) {
-            x = leftPos + SCROLL_BAR_X;
-            y = topPos + SCROLL_BAR_Y;
-            if (event.x() >= (double) x && event.x() < (double) (x + SCROLL_BTN_WIDTH) && event.y() >= (double) y && event.y() < (double) (y + SCROLL_BAR_HEIGHT)) {
+            minX = leftPos + SCROLL_BAR_X;
+            minY = topPos + SCROLL_BAR_Y;
+            if (event.x() >= (double) minX && event.x() < (double) (minX + SCROLL_BTN_WIDTH) && event.y() >= (double) minY && event.y() < (double) (minY + SCROLL_BAR_HEIGHT)) {
                 scrolling = true;
             }
         }
@@ -485,6 +482,8 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu> im
         // If the query is not "effective" then the selected recipe must be in the list
         if (!hasEffectiveSearchQuery || filteredRecipes.contains(menu.getRecipes().get(menu.getSelectedRecipeIndex()))) {
             tryScrollToRecipe(menu.getSelectedRecipeIndex());
+        } else {
+            tryScrollToRecipe(-1);
         }
     }
 
