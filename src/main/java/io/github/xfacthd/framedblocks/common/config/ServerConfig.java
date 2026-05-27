@@ -106,7 +106,7 @@ public final class ServerConfig {
                 .comment("How many ticks the Powered Framing Saw takes per crafting operation")
                 .translation(translate(KEY_POWERED_SAW_RECIPE_DURATION))
                 .worldRestart()
-                .defineInRange(KEY_POWERED_SAW_RECIPE_DURATION, 30, 5, 200);
+                .defineInRange(KEY_POWERED_SAW_RECIPE_DURATION, 5, 5, 200);
         builder.pop();
 
         SPEC = builder.build();
