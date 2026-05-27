@@ -24,6 +24,7 @@ import io.github.xfacthd.framedblocks.client.screen.saw.PoweredFramingSawScreen;
 import io.github.xfacthd.framedblocks.client.screen.overlay.impl.*;
 import io.github.xfacthd.framedblocks.client.screen.saw.SawRecipeFailurePrinter;
 import io.github.xfacthd.framedblocks.client.screen.widget.PaintRollerClientTooltipComponent;
+import io.github.xfacthd.framedblocks.client.screen.widget.SawCamoModeButton;
 import io.github.xfacthd.framedblocks.client.util.KeyMappings;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.block.cube.FramedOneWayWindowBlock;
@@ -497,6 +498,8 @@ public final class FramedLanguageProvider extends LanguageProvider {
         add(FramingSawRecipeMatchResult.INSUFFICIENT_ADDITIVE_0.translation(), "Insufficient amount of additive ingredient present in the first slot");
         add(FramingSawRecipeMatchResult.INSUFFICIENT_ADDITIVE_1.translation(), "Insufficient amount of additive ingredient present in the second slot");
         add(FramingSawRecipeMatchResult.INSUFFICIENT_ADDITIVE_2.translation(), "Insufficient amount of additive ingredient present in the third slot");
+        add(SawCamoModeButton.TOOLTIP_RAW, "Results are shown without a camo");
+        add(SawCamoModeButton.TOOLTIP_CAMO, "Results are shown with an example camo");
 
         add(CamoApplicatorMenu.TITLE, "Camo Applicator");
         add(CamoApplicatorScreen.MODE_BTN_TITLE, "Mode");

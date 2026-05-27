@@ -45,9 +45,9 @@ public class FramingSawWithEncoderScreen extends FramingSawScreen {
     private static final Identifier TAB_ICON = Utils.id("minecraft", "advancements/tab_left_middle");
     private static final Identifier TAB_SELECTED_ICON = Utils.id("minecraft", "advancements/tab_left_middle_selected");
     private static final WidgetSprites ENCODE_BTN_SPRITES = new WidgetSprites(
-            Utils.id("button_encode"),
-            Utils.id("button_encode_disabled"),
-            Utils.id("button_encode_focused")
+            Utils.id("framing_saw/button_encode"),
+            Utils.id("framing_saw/button_encode_disabled"),
+            Utils.id("framing_saw/button_encode_focused")
     );
     public static final int TAB_WIDTH = 32;
     public static final int TAB_HEIGHT = 28;
@@ -157,9 +157,9 @@ public class FramingSawWithEncoderScreen extends FramingSawScreen {
     @Override
     protected boolean drawInputStackHint(GuiGraphicsExtractor graphics, ItemStack input) {
         if (!super.drawInputStackHint(graphics, input) && encoding) {
-            graphics.fakeItem(input, leftPos + 20, topPos + 28);
+            graphics.fakeItem(input, leftPos + 20, topPos + 22);
             int count = Optionull.mapOrDefault(encoderCalculation, FramingSawRecipeCalculation::getInputCount, 1);
-            drawItemCount(graphics, count, leftPos + 20, topPos + 28);
+            drawItemCount(graphics, count, leftPos + 20, topPos + 22);
         }
         return true;
     }

@@ -65,10 +65,10 @@ public class FramingSawMenu extends AbstractContainerMenu implements IFramingSaw
 
         this.level = inv.player.level();
         this.levelAccess = levelAccess;
-        this.inputSlot = addSlot(new CraftingSlot(this, inputContainer, SLOT_INPUT, 20, 28));
+        this.inputSlot = addSlot(new CraftingSlot(this, inputContainer, SLOT_INPUT, 20, 22));
         this.additiveSlots = new CraftingSlot[FramingSawRecipe.MAX_ADDITIVE_COUNT];
         for (int i = 0; i < additiveSlots.length; i++) {
-            int y = 64 + (i * 18);
+            int y = 58 + (i * 18);
             additiveSlots[i] = addSlot(new CraftingSlot(this, inputContainer, SLOT_ADDITIVE_FIRST + i, 20, y));
         }
         this.resultSlot = addSlot(new ResultSlot(this, resultContainer, 0, 223, 64));
@@ -76,7 +76,7 @@ public class FramingSawMenu extends AbstractContainerMenu implements IFramingSaw
         this.lastAdditives = new ItemStack[FramingSawRecipe.MAX_ADDITIVE_COUNT];
         Arrays.fill(lastAdditives, ItemStack.EMPTY);
 
-        FramedUtils.addPlayerInvSlots(this::addSlot, inv, 48, 151);
+        FramedUtils.addPlayerInvSlots(this::addSlot, inv, 48, 158);
 
         addDataSlot(selectedRecipeIdx);
 

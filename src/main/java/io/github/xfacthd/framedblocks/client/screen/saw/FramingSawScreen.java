@@ -1,8 +1,12 @@
 package io.github.xfacthd.framedblocks.client.screen.saw;
 
+import io.github.xfacthd.framedblocks.api.camo.CamoList;
+import io.github.xfacthd.framedblocks.api.camo.block.SimpleBlockCamoContainer;
 import io.github.xfacthd.framedblocks.api.util.ClientUtils;
+import io.github.xfacthd.framedblocks.api.util.FramedConstants;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.client.screen.widget.BlockPreviewTooltipComponent;
+import io.github.xfacthd.framedblocks.client.screen.widget.SawCamoModeButton;
 import io.github.xfacthd.framedblocks.client.screen.widget.SearchEditBox;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.compat.ae2.AppliedEnergisticsCompat;
@@ -14,6 +18,7 @@ import io.github.xfacthd.framedblocks.common.menu.FramingSawMenu;
 import io.github.xfacthd.framedblocks.common.net.payload.serverbound.ServerboundSelectFramingSawRecipePayload;
 import io.github.xfacthd.framedblocks.common.util.CachingIngredientResolver;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.input.KeyEvent;
@@ -36,6 +41,7 @@ import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeInput;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import org.jetbrains.annotations.UnknownNullability;
 import org.jspecify.annotations.Nullable;
@@ -54,8 +60,13 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu> im
             .withStyle(style -> style.withShadowColor(ARGB.scaleRGB(0xFFFFFFFF, .25F)));
     private static final Identifier BACKGROUND = Utils.id("textures/gui/framing_saw.png");
     public static final Identifier WARNING_ICON = Utils.id("neoforge", "textures/gui/experimental_warning.png");
+    private static final Identifier SPRITE_RECIPE = Utils.id("framing_saw/recipe");
+    private static final Identifier SPRITE_RECIPE_HOVERED = Utils.id("framing_saw/recipe_highlighted");
+    private static final Identifier SPRITE_RECIPE_SELECTED = Utils.id("framing_saw/recipe_selected");
+    private static final Identifier SPRITE_SCROLLER = Utils.id("framing_saw/scroller");
+    private static final Identifier SPRITE_SCROLLER_DISABLED = Utils.id("framing_saw/scroller_disabled");
     private static final int IMAGE_WIDTH = 256;
-    private static final int IMAGE_HEIGHT = 233;
+    private static final int IMAGE_HEIGHT = 240;
     private static final int RECIPES_X = 48;
     private static final int RECIPES_Y = 22;
     private static final int RECIPE_ROWS = 6;
@@ -67,10 +78,11 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu> im
     private static final int SCROLL_BAR_Y = 22;
     private static final int SCROLL_BTN_WIDTH = 12;
     private static final int SCROLL_BTN_HEIGHT = 15;
-    private static final int SCROLL_BTN_TEX_X = RECIPE_WIDTH * 3;
     private static final int SCROLL_BAR_HEIGHT = 108;
     private static final int WARNING_X = 20;
-    private static final int WARNING_Y = 46;
+    private static final int WARNING_Y = 41;
+    private static final int CAMO_MODE_X = 19;
+    private static final int CAMO_MODE_Y = 113;
     private static final int SEARCH_WIDTH = 120;
     private static final int SEARCH_HEIGHT = 14;
     private static final int SEARCH_X = IMAGE_WIDTH - SEARCH_WIDTH - 6;
@@ -80,21 +92,27 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu> im
     protected final ItemStack cubeStack = new ItemStack(FBContent.BLOCK_FRAMED_CUBE.value());
     private final List<FramingSawMenu.FramedRecipeHolder> filteredRecipes = new ArrayList<>();
     protected final CachingIngredientResolver.Multi additiveResolver;
+    private final CamoList dummyCamos;
     @UnknownNullability
     private SearchEditBox searchBox = null;
     private int firstIndex = 0;
     private boolean scrolling = false;
     private float scrollOffset = 0F;
     private boolean hasEffectiveSearchQuery = false;
+    private boolean showResultsWithCamo = false;
 
     protected FramingSawScreen(FramingSawMenu menu, Inventory inv, Component title) {
         super(menu, inv, title, IMAGE_WIDTH, IMAGE_HEIGHT);
         this.titleLabelY -= 1;
         this.inventoryLabelX = 47;
-        this.inventoryLabelY = 139;
+        this.inventoryLabelY = 147;
         this.filteredRecipes.addAll(menu.getRecipes());
         Level level = Objects.requireNonNull(minecraft.level);
         this.additiveResolver = new CachingIngredientResolver.Multi(level, FramingSawRecipe.MAX_ADDITIVE_COUNT);
+        this.dummyCamos = CamoList.of(
+                new SimpleBlockCamoContainer(Blocks.POLISHED_GRANITE.defaultBlockState(), FBContent.FACTORY_BLOCK.get()),
+                new SimpleBlockCamoContainer(Blocks.POLISHED_DIORITE.defaultBlockState(), FBContent.FACTORY_BLOCK.get())
+        );
     }
 
     @Override
@@ -108,6 +126,14 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu> im
                 font, searchX, searchY, SEARCH_WIDTH, SEARCH_HEIGHT, MSG_HINT_SEARCH, searchHandler, searchBox
         ));
         searchBox.setMaxLength(50);
+
+        addRenderableWidget(new SawCamoModeButton(
+                minecraft,
+                leftPos + CAMO_MODE_X,
+                topPos + CAMO_MODE_Y,
+                this::onToggleCamoMode,
+                () -> showResultsWithCamo
+        ));
     }
 
     @Override
@@ -116,8 +142,8 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu> im
 
         graphics.blit(RenderPipelines.GUI_TEXTURED, getBackground(), leftPos, topPos, 0, 0, imageWidth, imageHeight, 256, 256);
         int offset = (int) ((SCROLL_BAR_HEIGHT - SCROLL_BTN_HEIGHT) * scrollOffset);
-        int scrollU = SCROLL_BTN_TEX_X + (isScrollBarActive() ? 0 : SCROLL_BTN_WIDTH);
-        graphics.blit(RenderPipelines.GUI_TEXTURED, BACKGROUND, leftPos + SCROLL_BAR_X, topPos + SCROLL_BAR_Y + offset, scrollU, imageHeight, SCROLL_BTN_WIDTH, SCROLL_BTN_HEIGHT, 256, 256);
+        Identifier scroller = isScrollBarActive() ? SPRITE_SCROLLER : SPRITE_SCROLLER_DISABLED;
+        graphics.blitSprite(RenderPipelines.GUI_TEXTURED, scroller, leftPos + SCROLL_BAR_X, topPos + SCROLL_BAR_Y + offset, SCROLL_BTN_WIDTH, SCROLL_BTN_HEIGHT);
 
         ItemStack input = getInputStack();
         if (!input.isEmpty() && cache.containsAdditive(input.getItem())) {
@@ -143,10 +169,15 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu> im
             List<FramingSawRecipeAdditive> additives = recipe.getAdditives();
             for (int i = 0; i < additives.size(); i++) {
                 ItemStack additive = getAdditiveStack(i);
-                int y = topPos + 64 + (18 * i);
+                int y = topPos + 58 + (18 * i);
                 drawAdditiveStackHint(graphics, i, additive, additives, y);
             }
         }
+
+        int toggleX = leftPos + CAMO_MODE_X;
+        int toggleY = topPos + CAMO_MODE_Y;
+        Identifier camoToggleSprite = showResultsWithCamo ? Utils.id("minecraft", "widget/cross_button") : Identifier.withDefaultNamespace("widget/button");
+        graphics.blitSprite(RenderPipelines.GUI_TEXTURED, camoToggleSprite, toggleX, toggleY, 18, 18);
     }
 
     protected Identifier getBackground() {
@@ -174,7 +205,7 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu> im
 
     protected boolean drawInputStackHint(GuiGraphicsExtractor graphics, ItemStack input) {
         if (input.isEmpty()) {
-            ClientUtils.renderTransparentFakeItem(graphics, cubeStack, leftPos + 20, topPos + 28);
+            ClientUtils.renderTransparentFakeItem(graphics, cubeStack, leftPos + 20, topPos + 22);
             return true;
         }
         return false;
@@ -254,7 +285,7 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu> im
         }
         if (recipeHolder != null) {
             TrackingItemStackRenderState renderState = new TrackingItemStackRenderState();
-            minecraft.getItemModelResolver().updateForTopItem(renderState, stack, ItemDisplayContext.FIXED, null, null, 0);
+            minecraft.getItemModelResolver().updateForTopItem(renderState, getResultRenderStack(stack), ItemDisplayContext.FIXED, null, null, 0);
             if (renderState.usesBlockLight()) {
                 tooltip = Optional.of(new BlockPreviewTooltipComponent(renderState));
             }
@@ -280,12 +311,12 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu> im
             int recX = x + relIdx % RECIPE_COLS * RECIPE_WIDTH;
             int recY = y + relIdx / RECIPE_COLS * RECIPE_HEIGHT;
 
-            int u = 0;
+            Identifier sprite = SPRITE_RECIPE;
             boolean hovered = false;
             if (idx == selIdx) {
-                u += RECIPE_WIDTH;
+                sprite = SPRITE_RECIPE_SELECTED;
             } else if (mouseX >= recX && mouseY >= recY && mouseX < recX + RECIPE_WIDTH && mouseY < recY + RECIPE_HEIGHT) {
-                u += (RECIPE_WIDTH * 2);
+                sprite = SPRITE_RECIPE_HOVERED;
                 hovered = true;
             }
 
@@ -293,7 +324,7 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu> im
             if (!hovered && displayRecipeErrors() && !filteredRecipes.get(idx).getMatchResult().success()) {
                 color = 0xFFE54C4C;
             }
-            graphics.blit(RenderPipelines.GUI_TEXTURED, BACKGROUND, recX, recY, u, imageHeight, RECIPE_WIDTH, RECIPE_HEIGHT, 256, 256, color);
+            graphics.blitSprite(RenderPipelines.GUI_TEXTURED, sprite, recX, recY, RECIPE_WIDTH, RECIPE_HEIGHT, color);
         }
     }
 
@@ -303,10 +334,18 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu> im
             int x = pLeft + relIdx % RECIPE_COLS * RECIPE_WIDTH + 1;
             int y = pTop + relIdx / RECIPE_COLS * RECIPE_HEIGHT + 1;
 
-            ItemStack stack = filteredRecipes.get(idx).getRecipe().getResultStack();
+            ItemStack stack = getResultRenderStack(filteredRecipes.get(idx).getRecipe().getResultStack());
             graphics.item(stack, x, y, x * y * imageWidth);
             graphics.itemDecorations(font, stack, x, y);
         }
+    }
+
+    private ItemStack getResultRenderStack(ItemStack stack) {
+        if (showResultsWithCamo) {
+            stack = stack.copy();
+            stack.set(FramedConstants.Objects.DC_TYPE_CAMO_LIST, dummyCamos);
+        }
+        return stack;
     }
 
     @Override
@@ -447,6 +486,10 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu> im
         if (!hasEffectiveSearchQuery || filteredRecipes.contains(menu.getRecipes().get(menu.getSelectedRecipeIndex()))) {
             tryScrollToRecipe(menu.getSelectedRecipeIndex());
         }
+    }
+
+    private void onToggleCamoMode(Button btn) {
+        showResultsWithCamo = !showResultsWithCamo;
     }
 
     private boolean isScrollBarActive() {
