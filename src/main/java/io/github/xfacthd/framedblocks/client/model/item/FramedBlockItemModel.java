@@ -3,6 +3,7 @@ package io.github.xfacthd.framedblocks.client.model.item;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Suppliers;
 import com.mojang.datafixers.util.Either;
+import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.MapCodec;
@@ -60,12 +61,15 @@ import org.joml.Matrix4f;
 import org.joml.Matrix4fc;
 import org.joml.Vector3fc;
 import org.jspecify.annotations.Nullable;
+import org.slf4j.Logger;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -73,6 +77,8 @@ public final class FramedBlockItemModel extends AbstractFramedBlockItemModel {
     private static final RandomSource RANDOM = RandomSource.create();
     private static final Direction[] DIRECTIONS = Arrays.copyOf(Direction.values(), 7);
     private static final Identifier ERROR_MODEL_LOCATION = Utils.id("item/error");
+    private static final Logger LOGGER = LogUtils.getLogger();
+    private static final Set<Object> ERRORED_MODELS = new HashSet<>();
 
     private final Map<Object, ModelEntry> itemModelCache = new Object2ObjectOpenHashMap<>();
     private final BlockState state;
@@ -111,6 +117,9 @@ public final class FramedBlockItemModel extends AbstractFramedBlockItemModel {
         BlockStateModel model = modelSupplier.get();
         ItemModelInfo itemModelInfo;
         if (!(model instanceof AbstractFramedBlockStateModel blockModel) || (itemModelInfo = blockModel.getItemModelInfo()) == null) {
+            if (ERRORED_MODELS.add(model)) {
+                LOGGER.error("Encountered unsupported BlockStateModel while computing item model for {}, expected AbstractFramedBlockModel, got {}", stack.getItem(), model.getClass());
+            }
             errorModel.update(renderState, stack, resolver, ctx, level, owner, seed);
             return;
         }
@@ -122,7 +131,10 @@ public final class FramedBlockItemModel extends AbstractFramedBlockItemModel {
         ModelEntry modelEntry;
         try {
             modelEntry = getOrCreateModelEntry(stack, camos, overlay, itemModelInfo);
-        } catch (Throwable ignored) {
+        } catch (Throwable t) {
+            if (ERRORED_MODELS.add(this)) {
+                LOGGER.error("Encountered an error while computing item model for {}", stack.getItem(), t);
+            }
             errorModel.update(renderState, stack, resolver, ctx, level, owner, seed);
             return;
         }
