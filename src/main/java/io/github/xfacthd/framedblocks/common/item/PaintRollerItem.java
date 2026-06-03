@@ -1,6 +1,6 @@
 package io.github.xfacthd.framedblocks.common.item;
 
-import io.github.xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
+import io.github.xfacthd.framedblocks.api.block.blockentity.IFramedBlockEntity;
 import io.github.xfacthd.framedblocks.api.block.overlay.BlockOverlay;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.common.FBContent;
@@ -60,7 +60,7 @@ public final class PaintRollerItem extends FramedToolItem {
     @Override
     public InteractionResult onItemUseFirst(ItemStack stack, UseOnContext context) {
         Level level = context.getLevel();
-        if (level.getBlockEntity(context.getClickedPos()) instanceof FramedBlockEntity be) {
+        if (level.getBlockEntity(context.getClickedPos()) instanceof IFramedBlockEntity be) {
             PaintRollerContents storage = PaintRollerContents.get(stack);
             boolean removeOverlay = !storage.hasOverlay();
 
