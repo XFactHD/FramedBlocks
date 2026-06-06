@@ -362,7 +362,7 @@
   "config.framedblocks.server.consumption": "Consumption",
   "config.framedblocks.server.consumption.tooltip": "The amount of power the Powered Framing Saw consumes per tick while crafting\n Default: 50\n Range: 1 ~ 32767",
   "config.framedblocks.server.craftingDuration": "Crafting Duration",
-  "config.framedblocks.server.craftingDuration.tooltip": "How many ticks the Powered Framing Saw takes per crafting operation\n Default: 30\n Range: 5 ~ 200",
+  "config.framedblocks.server.craftingDuration.tooltip": "How many ticks the Powered Framing Saw takes per crafting operation\n Default: 5\n Range: 5 ~ 200",
   "config.framedblocks.server.enableIntangibleFeature": "Enable intangibility feature",
   "config.framedblocks.server.enableIntangibleFeature.tooltip": "Enables the intangbility feature. Disabling this also prevents moving through blocks that are already marked as intangible",
   "config.framedblocks.server.energyCapacity": "Energy Capacity",
