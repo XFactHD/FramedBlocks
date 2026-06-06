@@ -8,9 +8,6 @@ import io.github.xfacthd.framedblocks.api.camo.CamoContainer;
 import io.github.xfacthd.framedblocks.api.camo.CamoContainerHelper;
 import io.github.xfacthd.framedblocks.api.camo.CamoList;
 import io.github.xfacthd.framedblocks.api.camo.empty.EmptyCamoContainer;
-import io.github.xfacthd.framedblocks.api.model.data.AbstractFramedBlockData;
-import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
-import io.github.xfacthd.framedblocks.api.model.data.FramedDoubleBlockData;
 import io.github.xfacthd.framedblocks.api.util.ColorUtils;
 import io.github.xfacthd.framedblocks.api.util.FramedConstants;
 import io.github.xfacthd.framedblocks.api.util.ValueMerger;
@@ -49,7 +46,6 @@ public class FramedDoubleBlockEntity extends FramedBlockEntity {
     private static final ValueMerger<Integer> BEACON_MULT_MERGER = new ValueMerger<>(ARGB::average);
     private static final ValueMerger<Integer> FLAMMABILITY_MERGER = new ValueMerger<>(i -> i == -1, Math::min);
 
-    private final CullState cullState = new CullState();
     private CamoContainer<?, ?> camoContainer = EmptyCamoContainer.EMPTY;
 
     public FramedDoubleBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
@@ -275,14 +271,6 @@ public class FramedDoubleBlockEntity extends FramedBlockEntity {
     }
 
     @Override
-    boolean updateCulling(Direction side, BlockState state, boolean rerender) {
-        DoubleBlockParts parts = getStateCache().getParts();
-        boolean changed = super.updateCulling(side, parts.stateOne(), rerender);
-        changed |= updateCulling(cullState, parts.stateTwo(), side, rerender);
-        return changed;
-    }
-
-    @Override
     protected boolean needsModelDataUpdateAfterStateChange(BlockState oldState) {
         if (super.needsModelDataUpdateAfterStateChange(oldState)) {
             return true;
@@ -325,24 +313,6 @@ public class FramedDoubleBlockEntity extends FramedBlockEntity {
     protected void readFromDataPacket(NetworkValueInput input) {
         super.readFromDataPacket(input);
         camoContainer = input.readCamo(CAMO_TWO_NBT_KEY, true);
-    }
-
-    /*
-     * Model data
-     */
-
-    @Override
-    final AbstractFramedBlockData computeBlockData(BlockState state, boolean includeCullInfo, boolean cullNullFace) {
-        DoubleBlockStateCache stateCache = getBlock().getCache(state);
-        FramedBlockData modelDataOne = (FramedBlockData) super.computeBlockData(state, includeCullInfo, canCullNullFace(stateCache, false));
-        byte cullMask = cullState.computeMask(includeCullInfo, canCullNullFace(stateCache, true));
-        FramedBlockData modelDataTwo = makeBlockData(state, camoContainer, cullMask, true);
-        return new FramedDoubleBlockData(stateCache.getParts(), modelDataOne, modelDataTwo);
-    }
-
-    private boolean canCullNullFace(DoubleBlockStateCache stateCache, boolean secondPart) {
-        // Cull-ability of one part checks against the solidity of the other part's camo
-        return stateCache.mayCullNullFace(secondPart) && getCamo(!secondPart).getContent().isSolid();
     }
 
     /*

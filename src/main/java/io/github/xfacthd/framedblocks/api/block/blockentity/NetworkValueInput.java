@@ -3,8 +3,6 @@ package io.github.xfacthd.framedblocks.api.block.blockentity;
 import io.github.xfacthd.framedblocks.api.camo.CamoContainer;
 import io.github.xfacthd.framedblocks.api.camo.CamoContainerHelper;
 import io.github.xfacthd.framedblocks.api.util.serdes.DelegateValueInput;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 
 public final class NetworkValueInput extends DelegateValueInput {
@@ -47,7 +45,7 @@ public final class NetworkValueInput extends DelegateValueInput {
 
     private void finishUpdateTag() {
         if (needCullingUpdate) {
-            blockEntity.markCullStateDirty();
+            blockEntity.clientData.markCullStateDirty();
         }
         blockEntity.requestModelDataUpdate();
     }
@@ -61,9 +59,7 @@ public final class NetworkValueInput extends DelegateValueInput {
         }
         if (needRenderUpdate) {
             blockEntity.requestModelDataUpdate();
-
-            BlockState state = blockEntity.getBlockState();
-            blockEntity.level().sendBlockUpdated(blockEntity.getBlockPos(), state, state, Block.UPDATE_ALL);
+            blockEntity.clientData.markSectionRangeDirty();
         }
     }
 

@@ -7,7 +7,6 @@ import io.github.xfacthd.framedblocks.api.block.IBlockType;
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.api.block.cache.StateCache;
 import io.github.xfacthd.framedblocks.api.block.overlay.BlockOverlay;
-import io.github.xfacthd.framedblocks.api.block.render.CullingHelper;
 import io.github.xfacthd.framedblocks.api.blueprint.BlueprintData;
 import io.github.xfacthd.framedblocks.api.camo.CamoContainer;
 import io.github.xfacthd.framedblocks.api.camo.CamoContainerFactory;
@@ -16,9 +15,6 @@ import io.github.xfacthd.framedblocks.api.camo.CamoList;
 import io.github.xfacthd.framedblocks.api.camo.applicator.CamoApplicator;
 import io.github.xfacthd.framedblocks.api.camo.empty.EmptyCamoContainer;
 import io.github.xfacthd.framedblocks.api.component.FrameConfig;
-import io.github.xfacthd.framedblocks.api.model.data.AbstractFramedBlockData;
-import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
-import io.github.xfacthd.framedblocks.api.model.data.ModelDataEntry;
 import io.github.xfacthd.framedblocks.api.util.ConfigView;
 import io.github.xfacthd.framedblocks.api.util.FramedConstants;
 import io.github.xfacthd.framedblocks.api.util.Utils;
@@ -26,7 +22,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.SectionPos;
 import net.minecraft.core.component.DataComponentGetter;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.TypedDataComponent;
@@ -82,22 +77,17 @@ import java.util.function.Consumer;
 public non-sealed class FramedBlockEntity extends BlockEntity implements IFramedBlockEntity {
     private static final Logger LOGGER = LogUtils.getLogger();
     public static final String CAMO_NBT_KEY = "camo";
-    public static final String CAMO_DIR_NBT_KEY = "camo_dir";
     public static final String OVERLAY_NBT_KEY = "overlay";
     /**
      * {@link InteractionResult} marker instance to consume the interaction and communicate a failed camo interaction
      */
     public static final InteractionResult CONSUME_CAMO_FAILED = new InteractionResult.Success(InteractionResult.SwingSource.NONE, new InteractionResult.ItemContext(true, null));
-    private static final Direction[] DIRECTIONS = Direction.values();
     protected static final int FLAG_GLOWING = 1;
     protected static final int FLAG_INTANGIBLE = 1 << 1;
     protected static final int FLAG_REINFORCED = 1 << 2;
     protected static final int FLAG_EMISSIVE = 1 << 3;
-    private static final int NEIGHBOR_MASK_ALL = 0b00111111;
-    private static final int NEIGHBOR_MASK_NONE = 0b00000000;
 
-    private final CullState cullState = new CullState();
-    private final int sectionNeighborMask;
+    final ClientData<?> clientData;
     private StateCache stateCache;
     private CamoContainer<?, ?> camoContainer = EmptyCamoContainer.EMPTY;
     @Nullable
@@ -107,11 +97,10 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
     private boolean reinforced = false;
     private boolean emissive = false;
     private boolean forceLightUpdate = false;
-    private boolean cullStateDirty = false;
 
     public FramedBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
-        this.sectionNeighborMask = computeSectionNeighborMask(pos);
+        this.clientData = ClientData.create(this);
         this.stateCache = state.framedblocks$getCache();
     }
 
@@ -495,52 +484,9 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
         return changed;
     }
 
-    void markCullStateDirty() {
-        cullStateDirty = true;
-    }
-
     @Override
     public final void updateCulling(boolean neighbors, boolean rerender) {
-        updateCulling(neighbors ? NEIGHBOR_MASK_ALL : NEIGHBOR_MASK_NONE, rerender, true);
-    }
-
-    private void updateCulling(int neighborMask, boolean rerender, boolean updateModelData) {
-        boolean changed = false;
-        for (Direction dir : DIRECTIONS) {
-            BlockState state = getBlockState();
-            changed |= updateCulling(dir, state, false);
-            boolean neighbor = (neighborMask & (1 << dir.ordinal())) != 0;
-            if (neighbor && level().getBlockEntity(worldPosition.relative(dir)) instanceof IFramedBlockEntity be) {
-                be.unwrap().updateCulling(dir.getOpposite(), be.getBlockState(), true);
-            }
-        }
-
-        if (changed) {
-            if (updateModelData) {
-                requestModelDataUpdate();
-            }
-            if (rerender) {
-                level().sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
-            }
-        }
-    }
-
-    boolean updateCulling(Direction side, BlockState state, boolean rerender) {
-        return updateCulling(cullState, state, side, rerender);
-    }
-
-    final boolean updateCulling(CullState culledFaces, BlockState testState, Direction side, boolean rerender) {
-        boolean wasHidden = culledFaces.get(side);
-        boolean hidden = CullingHelper.isSideHidden(level(), worldPosition, testState, side);
-        if (wasHidden != hidden) {
-            culledFaces.set(side, hidden);
-            requestModelDataUpdate();
-            if (rerender) {
-                level().sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
-            }
-            return true;
-        }
-        return false;
+        clientData.updateCulling(neighbors, rerender);
     }
 
     @Override
@@ -862,6 +808,16 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
     }
 
     @Override
+    public final void requestModelDataUpdate() {
+        requestModelDataUpdateDirect();
+        clientData.notifyUpdateRequested();
+    }
+
+    final void requestModelDataUpdateDirect() {
+        super.requestModelDataUpdate();
+    }
+
+    @Override
     public void setBlockState(BlockState state) {
         BlockState oldState = getBlockState();
         super.setBlockState(state);
@@ -973,35 +929,7 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
 
     @Override
     public final ModelData getModelData() {
-        if (cullStateDirty) {
-            updateCulling(sectionNeighborMask, false, false);
-            cullStateDirty = false;
-        }
-        return getModelData(true, getBlockState());
-    }
-
-    /// Computes the mask of directions towards neighbors in adjacent chunk sections
-    private static int computeSectionNeighborMask(BlockPos pos) {
-        int x = SectionPos.sectionRelative(pos.getX());
-        int y = SectionPos.sectionRelative(pos.getY());
-        int z = SectionPos.sectionRelative(pos.getZ());
-        int mask = 0;
-        if (x == 0) {
-            mask |= 1 << Direction.WEST.ordinal();
-        } else if (x == SectionPos.SECTION_MAX_INDEX) {
-            mask |= 1 << Direction.EAST.ordinal();
-        }
-        if (y == 0) {
-            mask |= 1 << Direction.DOWN.ordinal();
-        } else if (y == SectionPos.SECTION_MAX_INDEX) {
-            mask |= 1 << Direction.UP.ordinal();
-        }
-        if (z == 0) {
-            mask |= 1 << Direction.NORTH.ordinal();
-        } else if (z == SectionPos.SECTION_MAX_INDEX) {
-            mask |= 1 << Direction.SOUTH.ordinal();
-        }
-        return mask;
+        return clientData.getModelData();
     }
 
     /**
@@ -1010,26 +938,7 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
      */
     @Override
     public final ModelData getModelData(boolean includeCullInfo, BlockState state) {
-        AbstractFramedBlockData modelData = computeBlockData(state, includeCullInfo, false);
-        ModelData.Builder builder = ModelData.builder().with(AbstractFramedBlockData.PROPERTY, modelData);
-        attachAdditionalModelData(builder);
-        return builder.build();
-    }
-
-    /**
-     * @param state           The {@link BlockState} with which the model data is used for rendering (usually {@link #getBlockState()})
-     * @param includeCullInfo Whether culling data should be included
-     * @param cullNullFace    Whether "uncullable" faces should be culled
-     */
-    AbstractFramedBlockData computeBlockData(BlockState state, boolean includeCullInfo, boolean cullNullFace) {
-        return makeBlockData(state, camoContainer, cullState.computeMask(includeCullInfo, cullNullFace), false);
-    }
-
-    final FramedBlockData makeBlockData(BlockState state, CamoContainer<?, ?> camo, byte cullMask, boolean secondPart) {
-        // The view-blocking value is never resolved from the second part, no point in computing it twice
-        TriState viewBlocking = secondPart ? TriState.DEFAULT : Utils.toTriState(state.isSuffocating(level(), worldPosition));
-        ModelDataEntry<?> queryData = camo.computeQueryData(level(), worldPosition);
-        return new FramedBlockData(state, camo, cullMask, secondPart, reinforced, emissive, viewBlocking, overlay, queryData);
+        return clientData.getModelData(includeCullInfo, state);
     }
 
     protected void attachAdditionalModelData(ModelData.Builder builder) { }
@@ -1085,7 +994,6 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
     @Override
     public void removeComponentsFromTag(ValueOutput valueOutput) {
         valueOutput.discard(CAMO_NBT_KEY);
-        valueOutput.discard(CAMO_DIR_NBT_KEY);
         valueOutput.discard(OVERLAY_NBT_KEY);
         valueOutput.discard("glowing");
         valueOutput.discard("intangible");
@@ -1179,32 +1087,5 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
         }
         forceLightUpdate |= camo.getContent().getLightEmission() > 0;
         return camo;
-    }
-
-    static final class CullState {
-        private byte mask = 0;
-
-        private void set(Direction side, boolean occluded) {
-            if (occluded) {
-                mask |= (byte) (1 << side.ordinal());
-            } else {
-                mask &= (byte) ~(1 << side.ordinal());
-            }
-        }
-
-        private boolean get(Direction side) {
-            return (mask & (1 << side.ordinal())) != 0;
-        }
-
-        byte computeMask(boolean includeCullInfo, boolean cullNullFace) {
-            byte mask = 0;
-            if (includeCullInfo) {
-                mask = this.mask;
-            }
-            if (cullNullFace) {
-                mask |= 0b01000000;
-            }
-            return mask;
-        }
     }
 }

@@ -13,21 +13,20 @@ import net.minecraft.world.level.block.state.BlockState;
 /**
  * Helpers for checking whether an {@link IFramedBlock}'s side is occluded by the neighboring block or it occludes
  * a neighboring non-framed block.
- * These helpers must not be used outside the server and client thread, otherwise the {@link IFramedBlockEntity}
- * lookups will fail due to safeguards in vanilla code.
  */
 public final class CullingHelper {
     /**
      * Test whether the given {@link IFramedBlock} is occluded on the given side by the neighboring block
      * and their camos either match or the camo of the occluding block is solid
      *
-     * @param level The level the block is in
-     * @param pos The position of the block
-     * @param state The state of the block
-     * @param side The side being tested for occlusion
+     * @param level       The level the block is in
+     * @param pos         The position of the block
+     * @param state       The state of the block
+     * @param blockEntity The block entity of the block
+     * @param side        The side being tested for occlusion
      * @return true if the given block is occluded on the given side
      */
-    public static boolean isSideHidden(BlockGetter level, BlockPos pos, BlockState state, Direction side) {
+    public static boolean isSideHidden(BlockGetter level, BlockPos pos, BlockState state, IFramedBlockEntity blockEntity, Direction side) {
         BlockPos adjPos = pos.relative(side);
         BlockState adjState = level.getBlockState(adjPos);
 
@@ -48,11 +47,7 @@ public final class CullingHelper {
         boolean fullFace = state.framedblocks$getCache().isFullFace(side);
         if (!adjFramed || fullFace || !ConfigView.Client.INSTANCE.detailedCullingEnabled()) {
             if (fullFace && (!adjFramed || adjState.framedblocks$getCache().isFullFace(side.getOpposite()))) {
-                if (!(level.getBlockEntity(pos) instanceof IFramedBlockEntity be)) {
-                    return false;
-                }
-
-                CamoContent<?> camoContent = be.getCamo(side, null).getContent();
+                CamoContent<?> camoContent = blockEntity.getCamo(side, null).getContent();
                 if (adjFramed) {
                     if (!(level.getBlockEntity(adjPos) instanceof IFramedBlockEntity adjBe)) {
                         return false;
