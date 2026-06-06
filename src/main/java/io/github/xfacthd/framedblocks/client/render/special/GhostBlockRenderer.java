@@ -23,7 +23,6 @@ import io.github.xfacthd.framedblocks.api.util.FramedConstants;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.client.render.util.GhostVertexConsumer;
 import io.github.xfacthd.framedblocks.common.config.ClientConfig;
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.CrashReport;
 import net.minecraft.CrashReportCategory;
 import net.minecraft.ReportedException;
@@ -32,12 +31,10 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.block.BlockQuadOutput;
 import net.minecraft.client.renderer.block.ModelBlockRenderer;
 import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
-import net.minecraft.client.renderer.block.dispatch.BlockStateModelPart;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.state.level.LevelRenderState;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
-import net.minecraft.util.RandomSource;
 import net.minecraft.util.context.ContextKey;
 import net.minecraft.util.profiling.Profiler;
 import net.minecraft.util.profiling.ProfilerFiller;
@@ -70,12 +67,10 @@ import java.util.OptionalInt;
 
 @SuppressWarnings("ConstantConditions")
 public final class GhostBlockRenderer {
-    private static final RandomSource RANDOM = RandomSource.create();
     private static final Map<Item, GhostRenderBehaviour> RENDER_BEHAVIOURS = new IdentityHashMap<>();
     private static final GhostRenderBehaviour DEFAULT_BEHAVIOUR = new GhostRenderBehaviour() {};
     private static final String DEBUG_NAME = FramedConstants.MOD_ID + "_ghost_block";
     private static final float SCALE = 1.0001F;
-    private static final List<BlockStateModelPart> PART_SCRATCH_LIST = new ObjectArrayList<>();
     private static final ByteBufferBuilder BUFFER_BUILDER = new ByteBufferBuilder(RenderType.TRANSIENT_BUFFER_SIZE);
     private static final ContextKey<List<GhostRenderState>> DATA_KEY = new ContextKey<>(Utils.id("placement_preview"));
 
@@ -257,9 +252,7 @@ public final class GhostBlockRenderer {
         poseStack.translate(offset.x + .5, offset.y + .5, offset.z + .5);
         poseStack.scale(SCALE, SCALE, SCALE); // Scale up very slightly to avoid z-fighting with replaceable blocks like snow layers
         poseStack.translate(-.5F, -.5F, -.5F);
-        model.collectParts(renderState, pos, state, RANDOM, PART_SCRATCH_LIST);
         blockRenderer.tesselateBlock(output, 0, 0, 0, renderState, pos, state, model, 0);
-        PART_SCRATCH_LIST.clear();
         poseStack.popPose();
         profiler.pop(); //render
     }
