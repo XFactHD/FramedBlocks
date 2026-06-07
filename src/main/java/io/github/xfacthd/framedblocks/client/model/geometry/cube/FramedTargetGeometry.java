@@ -4,7 +4,7 @@ import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
 import io.github.xfacthd.framedblocks.api.model.data.QuadMapBuilder;
 import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.geometry.PartConsumer;
-import io.github.xfacthd.framedblocks.api.model.item.ItemModelInfo;
+import io.github.xfacthd.framedblocks.api.model.item.ItemModelDataProvider;
 import io.github.xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.common.FBContent;
@@ -25,7 +25,7 @@ public class FramedTargetGeometry extends Geometry {
     public static final Identifier OVERLAY_LOCATION = Utils.id("block/target_overlay");
     public static final String OVERLAY_KEY = "overlay";
     public static final int OVERLAY_TINT_IDX = 0;
-    private static final ItemModelInfo ITEM_MODEL_INFO = new TargetItemModelInfo();
+    public static final ItemModelDataProvider ITEM_MODEL_DATA_PROVIDER = new TargetItemModelDataProvider();
 
     private final BlockState state;
     private final BlockStateModel overlayModel;
@@ -48,17 +48,7 @@ public class FramedTargetGeometry extends Geometry {
         consumer.acceptAll(overlayModel, level, pos, random, state, false, false, true, null, null);
     }
 
-    @Override
-    public ItemModelInfo getItemModelInfo() {
-        return ITEM_MODEL_INFO;
-    }
-
-    private static final class TargetItemModelInfo implements ItemModelInfo {
-        @Override
-        public boolean isDataRequired() {
-            return true;
-        }
-
+    private static final class TargetItemModelDataProvider implements ItemModelDataProvider {
         @Override
         public @Nullable Object computeCacheKey(ItemStack stack) {
             return stack.get(FBContent.DC_TYPE_TARGET_COLOR);

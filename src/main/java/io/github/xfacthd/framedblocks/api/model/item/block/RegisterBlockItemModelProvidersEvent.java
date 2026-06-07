@@ -15,7 +15,7 @@ public final class RegisterBlockItemModelProvidersEvent extends Event implements
         this.registrar = registrar;
     }
 
-    public void register(Identifier id, BlockItemModelProvider tintProvider) {
-        registrar.accept(id, tintProvider);
+    public void register(Identifier id, BlockItemModelProvider modelProvider) {
+        registrar.accept(id, modelProvider);
     }
 }

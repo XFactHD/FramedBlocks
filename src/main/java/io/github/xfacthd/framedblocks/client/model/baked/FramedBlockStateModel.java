@@ -72,7 +72,7 @@ public final class FramedBlockStateModel extends AbstractFramedBlockStateModel i
     private final ReinforcementModel reinforcement;
 
     public FramedBlockStateModel(GeometryFactory.Context ctx, Geometry geometry, ReinforcementModel reinforcement, boolean standaloneWithCt) {
-        super(ctx.baseModel(), ctx.state(), geometry.getItemModelInfo());
+        super(ctx.baseModel(), ctx.state());
         this.state = ctx.state();
         this.geometry = geometry;
         IBlockType type = ((IFramedBlock) state.getBlock()).getBlockType();

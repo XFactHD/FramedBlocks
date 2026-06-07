@@ -1,8 +1,6 @@
 package io.github.xfacthd.framedblocks.api.model;
 
-import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.api.block.overlay.BlockOverlay;
-import io.github.xfacthd.framedblocks.api.model.item.ItemModelInfo;
 import net.minecraft.client.renderer.block.BlockAndTintGetter;
 import net.minecraft.client.renderer.block.dispatch.BlockStateModelPart;
 import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
@@ -11,20 +9,15 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.client.model.DelegateBlockStateModel;
-import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
 public abstract class AbstractFramedBlockStateModel extends DelegateBlockStateModel {
     private final BlockState state;
-    @Nullable
-    private final ItemModelInfo itemModelInfo;
 
-    protected AbstractFramedBlockStateModel(BlockStateModel baseModel, BlockState state, ItemModelInfo itemModelInfo) {
+    protected AbstractFramedBlockStateModel(BlockStateModel baseModel, BlockState state) {
         super(baseModel);
         this.state = state;
-        boolean isItemModel = state.getBlock() instanceof IFramedBlock block && block.getItemModelSource() == state;
-        this.itemModelInfo = isItemModel ? itemModelInfo : null;
     }
 
     /// Collect the [BlockStateModelPart]s making up this model in the given level context.
@@ -63,9 +56,5 @@ public abstract class AbstractFramedBlockStateModel extends DelegateBlockStateMo
 
     public BlockStateModel getBaseModel() {
         return delegate;
-    }
-
-    public @Nullable ItemModelInfo getItemModelInfo() {
-        return itemModelInfo;
     }
 }

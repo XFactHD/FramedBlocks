@@ -1,7 +1,6 @@
 package io.github.xfacthd.framedblocks.client.model.baked;
 
 import io.github.xfacthd.framedblocks.api.model.AbstractFramedBlockStateModel;
-import io.github.xfacthd.framedblocks.api.model.item.ItemModelInfo;
 import io.github.xfacthd.framedblocks.api.model.util.ModelUtils;
 import net.minecraft.client.renderer.block.BlockAndTintGetter;
 import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
@@ -19,7 +18,7 @@ public final class CopyingFramedBlockStateModel extends AbstractFramedBlockState
     private final Supplier<AbstractFramedBlockStateModel> srcModel;
 
     public CopyingFramedBlockStateModel(BlockStateModel baseModel, BlockState srcState) {
-        super(baseModel, srcState, ItemModelInfo.DEFAULT);
+        super(baseModel, srcState);
         this.srcModel = Lazy.of(() -> ModelUtils.getFramedBlockModel(srcState));
     }
 

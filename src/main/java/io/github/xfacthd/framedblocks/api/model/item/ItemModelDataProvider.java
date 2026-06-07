@@ -11,26 +11,16 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.model.data.ModelData;
 import org.jspecify.annotations.Nullable;
 
-public interface ItemModelInfo {
-    ItemModelInfo DEFAULT = new ItemModelInfo() {};
+public interface ItemModelDataProvider {
+    ItemModelDataProvider DEFAULT = new ItemModelDataProvider() {};
+    ItemModelDataProvider DOUBLE_BLOCK = new DoubleBlockItemModelDataProvider();
 
-    /**
-     * {@return whether the associated item model requires data even when no camos are present}
-     */
-    default boolean isDataRequired() {
-        return false;
-    }
-
-    /**
-     * {@return the {@link ModelData} containing the camos from the item data in the format required for the associated item's model}
-     */
+    /// {@return the {@link ModelData} containing the camos from the item data in the format required for the associated item's model}
     default ModelData buildItemModelData(BlockState state, CamoList camos, @Nullable Holder<BlockOverlay> overlay) {
         return ModelData.of(AbstractFramedBlockData.PROPERTY, new FramedBlockData(state, camos.getCamo(0), false, overlay));
     }
 
-    /**
-     * {@return additional data needed to correctly cache item model geometry}
-     */
+    /// {@return additional data needed to correctly cache item model geometry}
     default @Nullable Object computeCacheKey(ItemStack stack) {
         return null;
     }

@@ -4,7 +4,6 @@ import io.github.xfacthd.framedblocks.api.block.blockentity.IFramedBlockEntity;
 import io.github.xfacthd.framedblocks.api.camo.CamoContent;
 import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
 import io.github.xfacthd.framedblocks.api.model.data.QuadMapBuilder;
-import io.github.xfacthd.framedblocks.api.model.item.ItemModelInfo;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
 import io.github.xfacthd.framedblocks.api.predicate.fullface.FullFacePredicate;
 import io.github.xfacthd.framedblocks.api.util.ConfigView;
@@ -173,12 +172,5 @@ public abstract class Geometry {
             return DefaultAO.ENABLE;
         }
         return DefaultAO.DEFAULT;
-    }
-
-    /**
-     * {@return the {@link ItemModelInfo} to use for controlling item model geometry caching}
-     */
-    public ItemModelInfo getItemModelInfo() {
-        return ItemModelInfo.DEFAULT;
     }
 }

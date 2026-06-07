@@ -1,7 +1,6 @@
 package io.github.xfacthd.framedblocks.client.model.baked;
 
 import io.github.xfacthd.framedblocks.api.model.AbstractFramedBlockStateModel;
-import io.github.xfacthd.framedblocks.api.model.item.ItemModelInfo;
 import net.minecraft.client.renderer.block.BlockAndTintGetter;
 import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
 import net.minecraft.client.renderer.block.dispatch.BlockStateModelPart;
@@ -13,7 +12,7 @@ import java.util.List;
 
 public final class EmptyFramedBlockStateModel extends AbstractFramedBlockStateModel {
     public EmptyFramedBlockStateModel(BlockStateModel baseModel, BlockState state) {
-        super(baseModel, state, ItemModelInfo.DEFAULT);
+        super(baseModel, state);
     }
 
     @Override

@@ -13,9 +13,8 @@ import io.github.xfacthd.framedblocks.api.block.overlay.BlockOverlay;
 import io.github.xfacthd.framedblocks.api.camo.CamoContainer;
 import io.github.xfacthd.framedblocks.api.camo.CamoContainerHelper;
 import io.github.xfacthd.framedblocks.api.camo.CamoList;
-import io.github.xfacthd.framedblocks.api.model.AbstractFramedBlockStateModel;
 import io.github.xfacthd.framedblocks.api.model.item.AbstractFramedBlockItemModel;
-import io.github.xfacthd.framedblocks.api.model.item.ItemModelInfo;
+import io.github.xfacthd.framedblocks.api.model.item.ItemModelDataProvider;
 import io.github.xfacthd.framedblocks.api.model.item.block.BlockItemModelProvider;
 import io.github.xfacthd.framedblocks.api.model.util.ModelUtils;
 import io.github.xfacthd.framedblocks.api.model.util.TintUtils;
@@ -69,6 +68,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -84,22 +84,28 @@ public final class FramedBlockItemModel extends AbstractFramedBlockItemModel {
     private final BlockState state;
     private final Supplier<BlockStateModel> modelSupplier;
     private final ItemTransforms itemTransforms;
+    private final boolean requiresData;
+    private final ItemModelDataProvider dataProvider;
     private final ItemModel errorModel;
     private final Supplier<Vector3fc[]> extents;
     private final List<BlockStateModelPart> partScratchList = new ObjectArrayList<>();
 
-    private FramedBlockItemModel(BlockState state, Supplier<BlockStateModel> modelSupplier, ItemTransforms itemTransforms, ItemModel errorModel) {
+    private FramedBlockItemModel(
+            BlockState state,
+            Supplier<BlockStateModel> modelSupplier,
+            ItemTransforms itemTransforms,
+            boolean requiresData,
+            ItemModelDataProvider dataProvider,
+            ItemModel errorModel
+    ) {
         this.state = state;
         this.modelSupplier = Lazy.of(modelSupplier);
         this.itemTransforms = itemTransforms;
+        this.requiresData = requiresData;
+        this.dataProvider = dataProvider;
         this.errorModel = errorModel;
         this.extents = Suppliers.memoize(() -> {
-            BlockStateModel model = this.modelSupplier.get();
-            ItemModelInfo modelInfo = ItemModelInfo.DEFAULT;
-            if (model instanceof AbstractFramedBlockStateModel blockModel) {
-                modelInfo = Objects.requireNonNullElse(blockModel.getItemModelInfo(), ItemModelInfo.DEFAULT);
-            }
-            ModelEntry modelEntry = getOrCreateModelEntry(ItemStack.EMPTY, CamoList.EMPTY, null, modelInfo);
+            ModelEntry modelEntry = getOrCreateModelEntry(ItemStack.EMPTY, CamoList.EMPTY, null);
             return CuboidItemModelWrapper.computeExtents(modelEntry.quads);
         });
     }
@@ -114,23 +120,13 @@ public final class FramedBlockItemModel extends AbstractFramedBlockItemModel {
             @Nullable ItemOwner owner,
             int seed
     ) {
-        BlockStateModel model = modelSupplier.get();
-        ItemModelInfo itemModelInfo;
-        if (!(model instanceof AbstractFramedBlockStateModel blockModel) || (itemModelInfo = blockModel.getItemModelInfo()) == null) {
-            if (ERRORED_MODELS.add(model)) {
-                LOGGER.error("Encountered unsupported BlockStateModel while computing item model for {}, expected AbstractFramedBlockModel, got {}", stack.getItem(), model.getClass());
-            }
-            errorModel.update(renderState, stack, resolver, ctx, level, owner, seed);
-            return;
-        }
-
         boolean showCamo = ConfigView.Client.INSTANCE.shouldRenderItemModelsWithCamo();
         CamoList camos = showCamo ? stack.getOrDefault(FramedConstants.Objects.DC_TYPE_CAMO_LIST, CamoList.EMPTY) : CamoList.EMPTY;
         Holder<BlockOverlay> overlay = showCamo ? stack.get(FramedConstants.Objects.DC_TYPE_BLOCK_OVERLAY) : null;
 
         ModelEntry modelEntry;
         try {
-            modelEntry = getOrCreateModelEntry(stack, camos, overlay, itemModelInfo);
+            modelEntry = getOrCreateModelEntry(stack, camos, overlay);
         } catch (Throwable t) {
             if (ERRORED_MODELS.add(this)) {
                 LOGGER.error("Encountered an error while computing item model for {}", stack.getItem(), t);
@@ -162,13 +158,13 @@ public final class FramedBlockItemModel extends AbstractFramedBlockItemModel {
         }
     }
 
-    private ModelEntry getOrCreateModelEntry(ItemStack stack, CamoList camos, @Nullable Holder<BlockOverlay> overlay, ItemModelInfo itemModelInfo) {
-        Object userData = itemModelInfo.computeCacheKey(stack);
+    private ModelEntry getOrCreateModelEntry(ItemStack stack, CamoList camos, @Nullable Holder<BlockOverlay> overlay) {
+        Object userData = dataProvider.computeCacheKey(stack);
         Object cacheKey = userData != null || overlay != null ? new CompoundCacheKey(camos, overlay, userData) : camos;
         ModelEntry modelEntry = itemModelCache.get(cacheKey);
         if (modelEntry == null) {
             BlockStateModel model = modelSupplier.get();
-            ModelData data = itemModelInfo.isDataRequired() || !camos.isEmpty() ? itemModelInfo.buildItemModelData(state, camos, overlay) : ModelData.EMPTY;
+            ModelData data = requiresData || !camos.isEmpty() ? dataProvider.buildItemModelData(state, camos, overlay) : ModelData.EMPTY;
             BlockAndTintGetter level = new FreestandingBlockRenderFakeLevel.Simple(state, data);
 
             ArrayList<BakedQuad> allQuads = new ArrayList<>();
@@ -195,7 +191,7 @@ public final class FramedBlockItemModel extends AbstractFramedBlockItemModel {
             if (overlay != null && overlay.value().tintSource() != null) {
                 tints.add(TintUtils.getOverlayDefaultTint(overlay.value()));
             }
-            itemModelInfo.appendTintValues(stack, tints);
+            dataProvider.appendTintValues(stack, tints);
 
             ModelRenderProperties renderProps = new ModelRenderProperties(true, model.particleMaterial(level, BlockPos.ZERO, state), itemTransforms);
             modelEntry = new ModelEntry(allQuads, renderProps, camos, tints.isEmpty() ? IntLists.emptyList() : tints, overlay, userData, animated);
@@ -225,7 +221,13 @@ public final class FramedBlockItemModel extends AbstractFramedBlockItemModel {
             boolean animated
     ) { }
 
-    public record Unbaked(Block block, BlockItemModelProvider modelProvider, Either<Identifier, ItemTransforms> modelOrXform) implements ItemModel.Unbaked {
+    public record Unbaked(
+            Block block,
+            BlockItemModelProvider modelProvider,
+            Either<Identifier, ItemTransforms> modelOrXform,
+            boolean requiresData,
+            Optional<ItemModelDataProvider> dataProvider
+    ) implements ItemModel.Unbaked {
         public static final Identifier ID = Utils.id("block");
         public static final MapCodec<FramedBlockItemModel.Unbaked> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
                 BuiltInRegistries.BLOCK.byNameCodec().fieldOf("block").validate(FramedBlockItemModel.Unbaked::validateBlock).forGetter(FramedBlockItemModel.Unbaked::block),
@@ -233,7 +235,9 @@ public final class FramedBlockItemModel extends AbstractFramedBlockItemModel {
                 Codec.mapEither(
                         Identifier.CODEC.fieldOf("base_model"),
                         ItemTransformsCodec.XFORMS_CODEC.fieldOf("transforms")
-                ).forGetter(Unbaked::modelOrXform)
+                ).forGetter(Unbaked::modelOrXform),
+                Codec.BOOL.optionalFieldOf("requires_data", false).forGetter(Unbaked::requiresData),
+                ItemModelDataProviders.CODEC.optionalFieldOf("data_provider").forGetter(Unbaked::dataProvider)
         ).apply(inst, FramedBlockItemModel.Unbaked::new));
         private static final ModelBaker.SharedOperationKey<ItemModel> ERROR_MODEL_KEY = ModelUtils.makeSharedOpsKey(baker -> {
             ResolvedModel model = baker.getModel(ERROR_MODEL_LOCATION);
@@ -256,7 +260,8 @@ public final class FramedBlockItemModel extends AbstractFramedBlockItemModel {
                     Function.identity()
             );
             ItemModel errorModel = context.blockModelBaker().compute(ERROR_MODEL_KEY);
-            return new FramedBlockItemModel(state, modelSupplier, transforms, errorModel);
+            ItemModelDataProvider dataProvider = this.dataProvider.orElseGet(this::getDefaultDataProvider);
+            return new FramedBlockItemModel(state, modelSupplier, transforms, requiresData, dataProvider, errorModel);
         }
 
         @Override
@@ -268,6 +273,14 @@ public final class FramedBlockItemModel extends AbstractFramedBlockItemModel {
         @Override
         public MapCodec<Unbaked> type() {
             return CODEC;
+        }
+
+        private ItemModelDataProvider getDefaultDataProvider() {
+            if (((IFramedBlock) block).getBlockType().isDoubleBlock()) {
+                return ItemModelDataProvider.DOUBLE_BLOCK;
+            } else {
+                return ItemModelDataProvider.DEFAULT;
+            }
         }
 
         private static DataResult<Block> validateBlock(Block block) {

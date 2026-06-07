@@ -2,8 +2,10 @@ package io.github.xfacthd.framedblocks.api.datagen.models;
 
 import com.google.common.base.Preconditions;
 import com.mojang.datafixers.util.Either;
+import io.github.xfacthd.framedblocks.api.block.IBlockType;
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.api.internal.InternalClientAPI;
+import io.github.xfacthd.framedblocks.api.model.item.ItemModelDataProvider;
 import io.github.xfacthd.framedblocks.api.model.item.block.BlockItemModelProvider;
 import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
 import net.minecraft.client.renderer.item.ItemModel;
@@ -11,9 +13,11 @@ import net.minecraft.client.resources.model.cuboid.ItemTransforms;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
+import net.neoforged.neoforge.model.data.ModelData;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.UnaryOperator;
 
 @SuppressWarnings({ "unused", "UnusedReturnValue" })
@@ -26,6 +30,8 @@ public final class FramedItemModelBuilder {
     private Identifier itemBaseModel;
     @Nullable
     private ItemTransforms transforms;
+    private boolean requiresData;
+    private Optional<ItemModelDataProvider> dataProvider = Optional.empty();
 
     FramedItemModelBuilder(Holder<Block> block) {
         Preconditions.checkArgument(
@@ -69,6 +75,22 @@ public final class FramedItemModelBuilder {
         return this;
     }
 
+    /// Indicates that the block model used by this item model requires [ModelData] even if no camo is present.
+    public FramedItemModelBuilder requiresData() {
+        requiresData = true;
+        return this;
+    }
+
+    /// Specify the [ItemModelDataProvider] to use for computing additional data relevant to caching of the item model geometry
+    /// and for computing non-camo tint values.
+    ///
+    /// If unspecified, item models will use [ItemModelDataProvider#DOUBLE_BLOCK] if [IBlockType#isDoubleBlock()] returns `true`
+    /// and [ItemModelDataProvider#DEFAULT] if it returns `false`.
+    public FramedItemModelBuilder dataProvider(ItemModelDataProvider dataProvider) {
+        this.dataProvider = Optional.of(dataProvider);
+        return this;
+    }
+
     public ItemModel.Unbaked build() {
         Either<Identifier, ItemTransforms> modelOrXform;
         if (transforms != null) {
@@ -76,6 +98,6 @@ public final class FramedItemModelBuilder {
         } else {
             modelOrXform = Either.left(Objects.requireNonNullElse(itemBaseModel, DEFAULT_BASE_MODEL));
         }
-        return InternalClientAPI.INSTANCE.createFramedBlockItemModel(block.value(), modelProvider, modelOrXform);
+        return InternalClientAPI.INSTANCE.createFramedBlockItemModel(block.value(), modelProvider, modelOrXform, requiresData, dataProvider);
     }
 }

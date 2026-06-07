@@ -11,9 +11,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.model.data.ModelData;
 import org.jspecify.annotations.Nullable;
 
-public class DoubleBlockItemModelInfo implements ItemModelInfo {
-    public static final DoubleBlockItemModelInfo INSTANCE = new DoubleBlockItemModelInfo();
-
+public class DoubleBlockItemModelDataProvider implements ItemModelDataProvider {
     @Override
     public final ModelData buildItemModelData(BlockState state, CamoList camos, @Nullable Holder<BlockOverlay> overlay) {
         AbstractFramedBlockData fbData = new FramedDoubleBlockData(

@@ -6,7 +6,7 @@ import io.github.xfacthd.framedblocks.api.camo.resource.ResourceCamoContentClien
 import io.github.xfacthd.framedblocks.api.model.CachingModel;
 import io.github.xfacthd.framedblocks.api.model.ExtendedBlockStateModelPart;
 import io.github.xfacthd.framedblocks.api.model.data.QuadMapBuilder;
-import io.github.xfacthd.framedblocks.api.model.item.ItemModelInfo;
+import io.github.xfacthd.framedblocks.api.model.item.ItemModelDataProvider;
 import io.github.xfacthd.framedblocks.api.model.item.block.BlockItemModelProvider;
 import io.github.xfacthd.framedblocks.api.model.standalone.StandaloneModelFactory;
 import io.github.xfacthd.framedblocks.api.model.standalone.StandaloneWrapperKey;
@@ -44,7 +44,7 @@ public interface InternalClientAPI {
 
     void registerModelWrapper(Holder<Block> block, GeometryFactory geometryFactory, StateMerger stateMerger);
 
-    void registerDoubleModelWrapper(Holder<Block> block, ItemModelInfo itemModelInfo, StateMerger stateMerger);
+    void registerDoubleModelWrapper(Holder<Block> block, StateMerger stateMerger);
 
     void registerSpecialModelWrapper(Holder<Block> block, ModelFactory modelFactory, StateMerger stateMerger);
 
@@ -63,7 +63,13 @@ public interface InternalClientAPI {
 
     void enqueueClientTask(int delay, Runnable task);
 
-    ItemModel.Unbaked createFramedBlockItemModel(Block block, BlockItemModelProvider modelProvider, Either<Identifier, ItemTransforms> modelOrXform);
+    ItemModel.Unbaked createFramedBlockItemModel(
+            Block block,
+            BlockItemModelProvider modelProvider,
+            Either<Identifier, ItemTransforms> modelOrXform,
+            boolean requiresData,
+            Optional<ItemModelDataProvider> dataProvider
+    );
 
     ExtendedBlockStateModelPart makeBlockModelPart(QuadMapBuilder quadMap, TriState partAO, Material.Baked particleMaterial, @Nullable BlockState shaderState);
 

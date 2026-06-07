@@ -7,7 +7,6 @@ import io.github.xfacthd.framedblocks.api.block.IFramedDoubleBlock;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockParts;
 import io.github.xfacthd.framedblocks.api.internal.InternalClientAPI;
 import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
-import io.github.xfacthd.framedblocks.api.model.item.ItemModelInfo;
 import io.github.xfacthd.framedblocks.api.model.standalone.StandaloneModelFactory;
 import io.github.xfacthd.framedblocks.api.model.standalone.StandaloneWrapperKey;
 import io.github.xfacthd.framedblocks.api.model.wrapping.statemerger.StateMerger;
@@ -75,11 +74,10 @@ public final class WrapHelper {
      * will re-use the existing wrapped model.
      *
      * @param block             The block whose models to wrap (must implement {@link IFramedDoubleBlock})
-     * @param itemModelInfo     The {@link ItemModelInfo} to use for controlling item model geometry caching
      * @param ignoredProps      The state properties to ignore during wrapping
      */
-    public static void wrapDouble(Holder<Block> block, ItemModelInfo itemModelInfo, Set<Property<?>> ignoredProps) {
-        wrapDouble(block, itemModelInfo, StateMerger.ignoring(ignoredProps));
+    public static void wrapDouble(Holder<Block> block, Set<Property<?>> ignoredProps) {
+        wrapDouble(block, StateMerger.ignoring(ignoredProps));
     }
 
     /**
@@ -90,11 +88,10 @@ public final class WrapHelper {
      * existing wrapped model.
      *
      * @param block             The block whose models to wrap (must implement {@link IFramedDoubleBlock})
-     * @param itemModelInfo     The {@link ItemModelInfo} to use for controlling item model geometry caching
      * @param stateMerger       The {@link StateMerger} to use for merging visually redundant states during wrapping
      */
-    public static void wrapDouble(Holder<Block> block, ItemModelInfo itemModelInfo, StateMerger stateMerger) {
-        InternalClientAPI.INSTANCE.registerDoubleModelWrapper(block, itemModelInfo, stateMerger);
+    public static void wrapDouble(Holder<Block> block, StateMerger stateMerger) {
+        InternalClientAPI.INSTANCE.registerDoubleModelWrapper(block, stateMerger);
     }
 
     /**

@@ -11,7 +11,7 @@ import io.github.xfacthd.framedblocks.api.model.AbstractFramedBlockStateModel;
 import io.github.xfacthd.framedblocks.api.model.CachingModel;
 import io.github.xfacthd.framedblocks.api.model.ExtendedBlockStateModelPart;
 import io.github.xfacthd.framedblocks.api.model.data.QuadMapBuilder;
-import io.github.xfacthd.framedblocks.api.model.item.ItemModelInfo;
+import io.github.xfacthd.framedblocks.api.model.item.ItemModelDataProvider;
 import io.github.xfacthd.framedblocks.api.model.item.block.BlockItemModelProvider;
 import io.github.xfacthd.framedblocks.api.model.standalone.StandaloneModelFactory;
 import io.github.xfacthd.framedblocks.api.model.standalone.StandaloneWrapperKey;
@@ -72,9 +72,9 @@ public final class InternalClientApiImpl implements InternalClientAPI {
     }
 
     @Override
-    public void registerDoubleModelWrapper(Holder<Block> block, ItemModelInfo itemModelInfo, StateMerger stateMerger) {
+    public void registerDoubleModelWrapper(Holder<Block> block, StateMerger stateMerger) {
         Preconditions.checkArgument(block.value() instanceof IFramedDoubleBlock, "Cannot register double model wrapper for non-IFramedDoubleBlock");
-        registerSpecialModelWrapper(block, ctx -> new UnbakedFramedDoubleBlockStateModel(ctx, itemModelInfo), stateMerger);
+        registerSpecialModelWrapper(block, UnbakedFramedDoubleBlockStateModel::new, stateMerger);
     }
 
     @Override
@@ -116,8 +116,14 @@ public final class InternalClientApiImpl implements InternalClientAPI {
     }
 
     @Override
-    public ItemModel.Unbaked createFramedBlockItemModel(Block block, BlockItemModelProvider modelProvider, Either<Identifier, ItemTransforms> modelOrXform) {
-        return new FramedBlockItemModel.Unbaked(block, modelProvider, modelOrXform);
+    public ItemModel.Unbaked createFramedBlockItemModel(
+            Block block,
+            BlockItemModelProvider modelProvider,
+            Either<Identifier, ItemTransforms> modelOrXform,
+            boolean requiresData,
+            Optional<ItemModelDataProvider> dataProvider
+    ) {
+        return new FramedBlockItemModel.Unbaked(block, modelProvider, modelOrXform, requiresData, dataProvider);
     }
 
     @Override

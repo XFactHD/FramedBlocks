@@ -2,6 +2,8 @@
   "model": {
     "type": "framedblocks:block",
     "base_model": "framedblocks:block/framed_cube",
-    "block": "framedblocks:framed_target"
+    "block": "framedblocks:framed_target",
+    "data_provider": "framedblocks:target",
+    "requires_data": true
   }
 }

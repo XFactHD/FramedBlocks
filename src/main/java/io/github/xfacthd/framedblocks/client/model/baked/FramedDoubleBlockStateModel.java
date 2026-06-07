@@ -9,7 +9,6 @@ import io.github.xfacthd.framedblocks.api.model.AbstractFramedBlockStateModel;
 import io.github.xfacthd.framedblocks.api.model.data.AbstractFramedBlockData;
 import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
 import io.github.xfacthd.framedblocks.api.model.data.FramedDoubleBlockData;
-import io.github.xfacthd.framedblocks.api.model.item.ItemModelInfo;
 import io.github.xfacthd.framedblocks.api.model.util.ModelUtils;
 import io.github.xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
 import io.github.xfacthd.framedblocks.api.render.fakelevel.FreestandingBlockRenderFakeLevel;
@@ -31,8 +30,8 @@ public final class FramedDoubleBlockStateModel extends AbstractFramedBlockStateM
     @Nullable
     private PartModels models = null;
 
-    public FramedDoubleBlockStateModel(GeometryFactory.Context ctx, ItemModelInfo itemModelInfo) {
-        super(ctx.baseModel(), ctx.state(), itemModelInfo);
+    public FramedDoubleBlockStateModel(GeometryFactory.Context ctx) {
+        super(ctx.baseModel(), ctx.state());
         BlockState state = ctx.state();
         DoubleBlockStateCache cache = ((IFramedDoubleBlock) state.getBlock()).getCache(state);
         this.parts = cache.getParts();

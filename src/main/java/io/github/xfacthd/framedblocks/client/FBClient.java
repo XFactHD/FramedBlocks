@@ -5,8 +5,8 @@ import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.api.block.IFramedDoubleBlock;
 import io.github.xfacthd.framedblocks.api.block.render.FramedClientBlockExtensions;
 import io.github.xfacthd.framedblocks.api.block.render.FramedClientDoubleBlockExtensions;
-import io.github.xfacthd.framedblocks.api.model.item.DoubleBlockItemModelInfo;
-import io.github.xfacthd.framedblocks.api.model.item.ItemModelInfo;
+import io.github.xfacthd.framedblocks.api.model.item.ItemModelDataProvider;
+import io.github.xfacthd.framedblocks.api.model.item.RegisterItemModelDataProvidersEvent;
 import io.github.xfacthd.framedblocks.api.model.item.block.BlockItemModelProvider;
 import io.github.xfacthd.framedblocks.api.model.item.block.RegisterBlockItemModelProvidersEvent;
 import io.github.xfacthd.framedblocks.api.model.util.ModelUtils;
@@ -40,6 +40,7 @@ import io.github.xfacthd.framedblocks.client.model.geometry.stairs.*;
 import io.github.xfacthd.framedblocks.client.model.geometry.torch.*;
 import io.github.xfacthd.framedblocks.client.model.item.BlockItemModelProviders;
 import io.github.xfacthd.framedblocks.client.model.item.FramedBlockItemModel;
+import io.github.xfacthd.framedblocks.client.model.item.ItemModelDataProviders;
 import io.github.xfacthd.framedblocks.client.model.item.PaintRollerItemModel;
 import io.github.xfacthd.framedblocks.client.model.item.TankItemModel;
 import io.github.xfacthd.framedblocks.client.model.item.modelprovider.FenceBlockItemModelProvider;
@@ -129,6 +130,7 @@ public final class FBClient {
         modBus.addListener(FBClient::onAttachDebugRenderers);
         modBus.addListener(FBClient::onRegisterRenderers);
         modBus.addListener(FBClient::onRegisterBlockItemModelProviders);
+        modBus.addListener(FBClient::onRegisterItemModelDataProviders);
         modBus.addListener(FBClient::onRegisterGuiLayers);
         modBus.addListener(FBClient::onRegisterBlockInteractOverlays);
         modBus.addListener(FBClient::onGeometryLoaderRegister);
@@ -213,6 +215,14 @@ public final class FBClient {
         event.register(Utils.id("fence"), FenceBlockItemModelProvider.INSTANCE);
     }
 
+    private static void onRegisterItemModelDataProviders(RegisterItemModelDataProvidersEvent event) {
+        event.register(Utils.id("default"), ItemModelDataProvider.DEFAULT);
+        event.register(Utils.id("double_block"), ItemModelDataProvider.DOUBLE_BLOCK);
+        event.register(Utils.id("target"), FramedTargetGeometry.ITEM_MODEL_DATA_PROVIDER);
+        event.register(Utils.id("adjustable_double_block_standard"), AdjustableDoubleBlockItemModelDataProvider.STANDARD);
+        event.register(Utils.id("adjustable_double_block_copycat"), AdjustableDoubleBlockItemModelDataProvider.COPYCAT);
+    }
+
     private static void onRegisterGuiLayers(RegisterGuiLayersEvent event) {
         BlockInteractOverlayLayer.init();
 
@@ -274,15 +284,15 @@ public final class FBClient {
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_SLOPE_EDGE_PANEL, FramedSlopeEdgePanelGeometry::new, WrapHelper.DEFAULT_MERGER);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_SLAB, FramedSlabGeometry::new, WrapHelper.DEFAULT_MERGER);
         wrapDoubleModel(FBContent.BLOCK_FRAMED_DOUBLE_SLAB, WrapHelper.DEFAULT_MERGER);
-        wrapDoubleModel(FBContent.BLOCK_FRAMED_ADJ_DOUBLE_SLAB, AdjustableDoubleBlockItemModelInfo.STANDARD, WrapHelper.DEFAULT_MERGER);
-        wrapDoubleModel(FBContent.BLOCK_FRAMED_ADJ_DOUBLE_COPYCAT_SLAB, AdjustableDoubleBlockItemModelInfo.COPYCAT, WrapHelper.DEFAULT_MERGER);
+        wrapDoubleModel(FBContent.BLOCK_FRAMED_ADJ_DOUBLE_SLAB, WrapHelper.DEFAULT_MERGER);
+        wrapDoubleModel(FBContent.BLOCK_FRAMED_ADJ_DOUBLE_COPYCAT_SLAB, WrapHelper.DEFAULT_MERGER);
         wrapDoubleModel(FBContent.BLOCK_FRAMED_DIVIDED_SLAB, WrapHelper.DEFAULT_MERGER);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_SLAB_EDGE, FramedSlabEdgeGeometry::new, WrapHelper.DEFAULT_MERGER);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_SLAB_CORNER, FramedSlabCornerGeometry::new, WrapHelper.DEFAULT_MERGER);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_PANEL, FramedPanelGeometry::new, WrapHelper.DEFAULT_MERGER);
         wrapDoubleModel(FBContent.BLOCK_FRAMED_DOUBLE_PANEL, WrapHelper.DEFAULT_MERGER);
-        wrapDoubleModel(FBContent.BLOCK_FRAMED_ADJ_DOUBLE_PANEL, AdjustableDoubleBlockItemModelInfo.STANDARD, WrapHelper.DEFAULT_MERGER);
-        wrapDoubleModel(FBContent.BLOCK_FRAMED_ADJ_DOUBLE_COPYCAT_PANEL, AdjustableDoubleBlockItemModelInfo.COPYCAT, WrapHelper.DEFAULT_MERGER);
+        wrapDoubleModel(FBContent.BLOCK_FRAMED_ADJ_DOUBLE_PANEL, WrapHelper.DEFAULT_MERGER);
+        wrapDoubleModel(FBContent.BLOCK_FRAMED_ADJ_DOUBLE_COPYCAT_PANEL, WrapHelper.DEFAULT_MERGER);
         wrapDoubleModel(FBContent.BLOCK_FRAMED_DIVIDED_PANEL_HOR, WrapHelper.DEFAULT_MERGER);
         wrapDoubleModel(FBContent.BLOCK_FRAMED_DIVIDED_PANEL_VERT, WrapHelper.DEFAULT_MERGER);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_CORNER_PILLAR, FramedCornerPillarGeometry::new, WrapHelper.DEFAULT_MERGER);
@@ -530,6 +540,7 @@ public final class FBClient {
         BlockOutlineRenderer.init();
         GhostBlockRenderer.init();
         BlockItemModelProviders.init();
+        ItemModelDataProviders.init();
     }
 
     private static void onRegisterSpriteSources(RegisterSpriteSourcesEvent event) {
@@ -569,10 +580,6 @@ public final class FBClient {
     }
 
     private static void wrapDoubleModel(Holder<Block> block, @SuppressWarnings("SameParameterValue") StateMerger stateMerger) {
-        wrapDoubleModel(block, DoubleBlockItemModelInfo.INSTANCE, stateMerger);
-    }
-
-    private static void wrapDoubleModel(Holder<Block> block, ItemModelInfo itemModelInfo, StateMerger stateMerger) {
-        WrapHelper.wrapDouble(block, itemModelInfo, stateMerger);
+        WrapHelper.wrapDouble(block, stateMerger);
     }
 }

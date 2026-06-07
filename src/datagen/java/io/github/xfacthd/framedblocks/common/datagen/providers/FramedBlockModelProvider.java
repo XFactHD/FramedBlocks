@@ -11,6 +11,7 @@ import io.github.xfacthd.framedblocks.client.model.geometry.cube.FramedMarkedCub
 import io.github.xfacthd.framedblocks.client.model.geometry.cube.FramedTargetGeometry;
 import io.github.xfacthd.framedblocks.client.model.geometry.interactive.FramedFlowerPotGeometry;
 import io.github.xfacthd.framedblocks.client.model.geometry.rail.FramedFancyRailGeometry;
+import io.github.xfacthd.framedblocks.client.model.geometry.slab.AdjustableDoubleBlockItemModelDataProvider;
 import io.github.xfacthd.framedblocks.client.model.item.FramedBlockItemModel;
 import io.github.xfacthd.framedblocks.client.model.item.TankItemModel;
 import io.github.xfacthd.framedblocks.client.model.item.modelprovider.FenceBlockItemModelProvider;
@@ -117,15 +118,15 @@ public final class FramedBlockModelProvider extends AbstractFramedBlockModelProv
         simpleFramedBlockWithItem(blockModels, FBContent.BLOCK_FRAMED_SLOPE_EDGE_PANEL, cube, builder -> builder.itemBaseModel(THIN_BLOCK_LOC));
         simpleFramedBlockWithItem(blockModels, FBContent.BLOCK_FRAMED_SLAB, cube);
         simpleFramedBlockWithItem(blockModels, FBContent.BLOCK_FRAMED_DOUBLE_SLAB, cube);
-        simpleFramedBlockWithItem(blockModels, FBContent.BLOCK_FRAMED_ADJ_DOUBLE_SLAB, cube);
-        simpleFramedBlockWithItem(blockModels, FBContent.BLOCK_FRAMED_ADJ_DOUBLE_COPYCAT_SLAB, cube);
+        simpleFramedBlockWithItem(blockModels, FBContent.BLOCK_FRAMED_ADJ_DOUBLE_SLAB, cube, builder -> builder.requiresData().dataProvider(AdjustableDoubleBlockItemModelDataProvider.STANDARD));
+        simpleFramedBlockWithItem(blockModels, FBContent.BLOCK_FRAMED_ADJ_DOUBLE_COPYCAT_SLAB, cube, builder -> builder.requiresData().dataProvider(AdjustableDoubleBlockItemModelDataProvider.COPYCAT));
         simpleFramedBlockWithItem(blockModels, FBContent.BLOCK_FRAMED_DIVIDED_SLAB, cube);
         simpleFramedBlockWithItem(blockModels, FBContent.BLOCK_FRAMED_SLAB_EDGE, cube);
         simpleFramedBlockWithItem(blockModels, FBContent.BLOCK_FRAMED_SLAB_CORNER, cube, builder -> builder.itemBaseModel(THIN_BLOCK_LOC));
         simpleFramedBlockWithItem(blockModels, FBContent.BLOCK_FRAMED_PANEL, cube);
         simpleFramedBlockWithItem(blockModels, FBContent.BLOCK_FRAMED_DOUBLE_PANEL, cube);
-        simpleFramedBlockWithItem(blockModels, FBContent.BLOCK_FRAMED_ADJ_DOUBLE_PANEL, cube);
-        simpleFramedBlockWithItem(blockModels, FBContent.BLOCK_FRAMED_ADJ_DOUBLE_COPYCAT_PANEL, cube);
+        simpleFramedBlockWithItem(blockModels, FBContent.BLOCK_FRAMED_ADJ_DOUBLE_PANEL, cube, builder -> builder.requiresData().dataProvider(AdjustableDoubleBlockItemModelDataProvider.STANDARD));
+        simpleFramedBlockWithItem(blockModels, FBContent.BLOCK_FRAMED_ADJ_DOUBLE_COPYCAT_PANEL, cube, builder -> builder.requiresData().dataProvider(AdjustableDoubleBlockItemModelDataProvider.COPYCAT));
         simpleFramedBlockWithItem(blockModels, FBContent.BLOCK_FRAMED_DIVIDED_PANEL_HOR, cube);
         simpleFramedBlockWithItem(blockModels, FBContent.BLOCK_FRAMED_DIVIDED_PANEL_VERT, cube);
         simpleFramedBlockWithItem(blockModels, FBContent.BLOCK_FRAMED_CORNER_PILLAR, cube);
@@ -775,8 +776,10 @@ public final class FramedBlockModelProvider extends AbstractFramedBlockModelProv
     }
 
     private void registerFramedTarget(BlockModelGenerators blockModels, Identifier cube) {
-        simpleFramedBlockWithItem(blockModels, FBContent.BLOCK_FRAMED_TARGET, cube)
-                .addAuxModel(FramedTargetGeometry.OVERLAY_KEY, singleVariant(FramedTargetGeometry.OVERLAY_LOCATION));
+        simpleFramedBlockWithItem(blockModels, FBContent.BLOCK_FRAMED_TARGET, cube, builder -> builder
+                .requiresData()
+                .dataProvider(FramedTargetGeometry.ITEM_MODEL_DATA_PROVIDER)
+        ).addAuxModel(FramedTargetGeometry.OVERLAY_KEY, singleVariant(FramedTargetGeometry.OVERLAY_LOCATION));
 
         makeOverlayCube(blockModels, FramedTargetGeometry.OVERLAY_LOCATION, new Material(FramedTargetGeometry.OVERLAY_LOCATION), builder ->
                 builder.element(elem -> elem
