@@ -9,6 +9,8 @@ import net.minecraft.core.component.DataComponentGetter;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -78,6 +80,11 @@ public final class FramedChiseledBookshelfBlockEntity extends ChiseledBookShelfB
     @Override
     public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
         return delegate.getUpdateTag(registries, super::getUpdateTag);
+    }
+
+    @Override
+    public Packet<ClientGamePacketListener> getUpdatePacket() {
+        return delegate.getUpdatePacket();
     }
 
     @Override
