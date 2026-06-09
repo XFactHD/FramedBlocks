@@ -27,7 +27,7 @@ public abstract class AbstractUnbakedFramedBlockStateModel implements BlockState
     private final Map<String, SingleVariant.Unbaked> auxModels;
     private final Object bakingLock = new Object();
     @Nullable
-    private volatile BlockStateModel cachedBakingResult = null;
+    private volatile AbstractFramedBlockStateModel cachedBakingResult = null;
 
     protected AbstractUnbakedFramedBlockStateModel(ModelFactory.Context ctx) {
         this.state = ctx.state();
@@ -36,10 +36,10 @@ public abstract class AbstractUnbakedFramedBlockStateModel implements BlockState
         this.auxModels = ctx.auxModels();
     }
 
-    protected abstract BlockStateModel bakeCached(GeometryFactory.Context context, ModelBaker baker);
+    protected abstract AbstractFramedBlockStateModel bakeCached(GeometryFactory.Context context, ModelBaker baker);
 
     @Override
-    public final BlockStateModel bake(BlockState ignoredState, ModelBaker baker) {
+    public final AbstractFramedBlockStateModel bake(BlockState ignoredState, ModelBaker baker) {
         // This cannot be converted to ModelBaker.SharedOperationKey due to the wrapped model potentially also using that
         if (cachedBakingResult == null) {
             synchronized (bakingLock) {
