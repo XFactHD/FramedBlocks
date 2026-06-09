@@ -18,23 +18,28 @@ import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.common.util.Lazy;
 import net.neoforged.neoforge.model.data.ModelData;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 public final class FramedDoubleBlockStateModel extends AbstractFramedBlockStateModel {
     private final BlockAndTintGetter dummyLevel;
     private final DoubleBlockTopInteractionMode particleMode;
     private final DoubleBlockParts parts;
-    @Nullable
-    private PartModels models = null;
+    private final Supplier<PartModels> partModels;
 
     public FramedDoubleBlockStateModel(GeometryFactory.Context ctx) {
         super(ctx.baseModel(), ctx.state());
         BlockState state = ctx.state();
         DoubleBlockStateCache cache = ((IFramedDoubleBlock) state.getBlock()).getCache(state);
         this.parts = cache.getParts();
+        this.partModels = Lazy.of(() -> new PartModels(
+                ModelUtils.getFramedBlockModel(parts.stateOne()),
+                ModelUtils.getFramedBlockModel(parts.stateTwo())
+        ));
         ModelData dummyData = ModelData.of(AbstractFramedBlockData.PROPERTY, new FramedDoubleBlockData(
                 parts,
                 new FramedBlockData(state, EmptyCamoContainer.EMPTY, false, null),
@@ -52,7 +57,7 @@ public final class FramedDoubleBlockStateModel extends AbstractFramedBlockStateM
             pos = BlockPos.ZERO;
         }
 
-        PartModels models = getModels();
+        PartModels models = partModels.get();
         miscTintOffset = models.modelOne.collectParts(level, pos, parts.stateOne(), random, outParts, miscTintOffset);
         miscTintOffset = models.modelTwo.collectParts(level, pos, parts.stateTwo(), random, outParts, miscTintOffset);
         return miscTintOffset;
@@ -83,18 +88,7 @@ public final class FramedDoubleBlockStateModel extends AbstractFramedBlockStateM
 
     @Override
     public int materialFlags(BlockAndTintGetter level, BlockPos pos, BlockState state) {
-        PartModels models = getModels();
-        return models.modelOne.materialFlags(level, pos, state) | models.modelTwo.materialFlags(level, pos, state);
-    }
-
-    private PartModels getModels() {
-        if (models == null) {
-            models = new PartModels(
-                    ModelUtils.getFramedBlockModel(parts.stateOne()),
-                    ModelUtils.getFramedBlockModel(parts.stateTwo())
-            );
-        }
-        return models;
+        return partModels.get().materialFlags(parts, level, pos);
     }
 
     /**
@@ -111,12 +105,19 @@ public final class FramedDoubleBlockStateModel extends AbstractFramedBlockStateM
         if (data != null) {
             FramedBlockData fbData = data.unwrap(secondary);
             if (!fbData.getCamoContent().isEmpty()) {
-                AbstractFramedBlockStateModel model = secondary ? getModels().modelTwo : getModels().modelOne;
-                return model.particleMaterial(level, pos, state);
+                return partModels.get().getPart(secondary).particleMaterial(level, pos, state);
             }
         }
         return null;
     }
 
-    private record PartModels(AbstractFramedBlockStateModel modelOne, AbstractFramedBlockStateModel modelTwo) { }
+    private record PartModels(AbstractFramedBlockStateModel modelOne, AbstractFramedBlockStateModel modelTwo) {
+        AbstractFramedBlockStateModel getPart(boolean second) {
+            return second ? modelTwo : modelOne;
+        }
+
+        int materialFlags(DoubleBlockParts parts, BlockAndTintGetter level, BlockPos pos) {
+            return modelOne.materialFlags(level, pos, parts.stateOne()) | modelTwo.materialFlags(level, pos, parts.stateTwo());
+        }
+    }
 }
