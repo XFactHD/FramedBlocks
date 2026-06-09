@@ -1,5 +1,6 @@
 package io.github.xfacthd.framedblocks.api.model.util;
 
+import com.mojang.logging.LogUtils;
 import io.github.xfacthd.framedblocks.api.internal.InternalClientAPI;
 import io.github.xfacthd.framedblocks.api.model.AbstractFramedBlockStateModel;
 import io.github.xfacthd.framedblocks.api.model.ExtendedBlockStateModelPart;
@@ -31,6 +32,7 @@ import net.neoforged.neoforge.client.model.standalone.UnbakedStandaloneModel;
 import net.neoforged.neoforge.common.util.Lazy;
 import org.joml.Vector3fc;
 import org.jspecify.annotations.Nullable;
+import org.slf4j.Logger;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -39,6 +41,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 public final class ModelUtils {
+    private static final Logger LOGGER = LogUtils.getLogger();
     public static final ModelBaker.SharedOperationKey<BlockStateModel> MISSING_MODEL_KEY = makeSharedOpsKey(
             baker -> new SingleVariant(baker.missingBlockModelPart())
     );
@@ -103,6 +106,7 @@ public final class ModelUtils {
         if (model instanceof AbstractFramedBlockStateModel framedModel) {
             return framedModel;
         }
+        LOGGER.error("Could not resolve AbstractFramedBlockStateModel for {}, using fallback path, expect visual issues", state);
         return new DelegateFramedBlockStateModel(model, state);
     }
 
