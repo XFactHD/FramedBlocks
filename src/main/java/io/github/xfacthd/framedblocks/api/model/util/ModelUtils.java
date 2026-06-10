@@ -106,7 +106,7 @@ public final class ModelUtils {
         if (model instanceof AbstractFramedBlockStateModel framedModel) {
             return framedModel;
         }
-        LOGGER.error("Could not resolve AbstractFramedBlockStateModel for {}, using fallback path, expect visual issues", state);
+        LOGGER.error("Could not resolve AbstractFramedBlockStateModel for {}, got {} instead. Using fallback path, expect visual issues", state, model.getClass());
         return new DelegateFramedBlockStateModel(model, state);
     }
 
