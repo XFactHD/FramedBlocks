@@ -78,6 +78,7 @@ public sealed class QuadModifier permits QuadModifierPool.LeakDetectingQuadModif
      * @return a new {@code QuadModifier} with a deep-copy of the current data or an empty,
      * failed modifier if this modifier previously failed
      */
+    @CheckReturnValue
     public QuadModifier derive() {
         ensureValid();
         if (failed) {
