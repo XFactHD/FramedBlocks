@@ -147,13 +147,11 @@ public class FramedFenceGateGeometry extends Geometry {
             botMod.apply(Modifiers.setPosition(2F/16F))
                     .export(quadMap, null);
 
-            mod.apply(Modifiers.cut(Direction.UP, 12F/16F - yOff))
+            QuadModifier vertMod = mod.apply(Modifiers.cut(Direction.UP, 12F/16F - yOff))
                     .apply(Modifiers.cut(Direction.DOWN, 7F/16F + yOff))
-                    .apply(Modifiers.cut(dir.getOpposite(), 3F/16F))
-                    .derive()
-                    .export(quadMap, null);
-
-            mod.apply(Modifiers.setPosition(2F/16F))
+                    .apply(Modifiers.cut(dir.getOpposite(), 3F/16F));
+            vertMod.derive().export(quadMap, null);
+            vertMod.apply(Modifiers.setPosition(2F/16F))
                     .export(quadMap, null);
         } else if (DirUtils.isY(quadDir)) {
             boolean up = quadDir == Direction.UP;
