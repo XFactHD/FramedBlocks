@@ -486,7 +486,9 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
 
     @Override
     public final void updateCulling(boolean neighbors, boolean rerender) {
-        clientData.updateCulling(neighbors, rerender);
+        if (Utils.CLIENT_DIST) {
+            clientData.updateCulling(neighbors, rerender);
+        }
     }
 
     @Override
