@@ -131,7 +131,7 @@ public class FramedItemFrameRenderer implements BlockEntityRenderer<FramedItemFr
     }
 
     private static void extractNameTag(FramedItemFrameBlockEntity blockEntity, FramedItemFrameRenderState renderState, ItemStack stack) {
-        if (!Minecraft.renderNames() || !stack.has(DataComponents.CUSTOM_NAME)) {
+        if (Minecraft.getInstance().gui.hud.isHidden() || !stack.has(DataComponents.CUSTOM_NAME)) {
             return;
         }
         if (!(Minecraft.getInstance().hitResult instanceof BlockHitResult hitResult)) {
@@ -141,7 +141,7 @@ public class FramedItemFrameRenderer implements BlockEntityRenderer<FramedItemFr
             return;
         }
 
-        Camera camera = Minecraft.getInstance().gameRenderer.getMainCamera();
+        Camera camera = Minecraft.getInstance().gameRenderer.mainCamera();
         double dist = camera.position().distanceToSqr(hitResult.getLocation());
         if (dist <= MAX_NAMETAG_DIST_SQR) {
             renderState.nameTag = stack.getHoverName();
@@ -163,7 +163,7 @@ public class FramedItemFrameRenderer implements BlockEntityRenderer<FramedItemFr
         poseStack.pushPose();
         poseStack.translate(dx, .75F, dz);
 
-        submitNodeCollector.submitNameTag(poseStack, Vec3.ZERO, 0, nameTag, true, renderState.lightCoords, renderState.distanceToCameraSq, camera);
+        submitNodeCollector.submitNameTag(poseStack, Vec3.ZERO, 0, nameTag, true, renderState.lightCoords, camera);
 
         poseStack.popPose();
     }

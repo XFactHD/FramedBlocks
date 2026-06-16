@@ -22,7 +22,7 @@ public final class ClientNetworkHandler {
     private static void handleOpenSignScreen(ClientboundOpenSignScreenPayload payload, IPayloadContext ctx) {
         //noinspection ConstantConditions
         if (Minecraft.getInstance().level.getBlockEntity(payload.pos()) instanceof FramedSignBlockEntity be) {
-            Minecraft.getInstance().setScreen(switch (be.getBlockState().getBlock()) {
+            Minecraft.getInstance().gui.setScreen(switch (be.getBlockState().getBlock()) {
                 case FramedStandingSignBlock _ -> FramedSignScreen.standing(be, payload.frontText());
                 case FramedWallSignBlock _ -> FramedSignScreen.wall(be, payload.frontText());
                 case FramedCeilingHangingSignBlock _, FramedWallHangingSignBlock _ -> FramedSignScreen.hanging(be, payload.frontText());

@@ -14,7 +14,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import net.minecraft.util.Util;
 import net.minecraft.world.level.block.SignBlock;
-import org.joml.Vector3f;
+import org.joml.Vector3fc;
 
 public final class FramedSignScreen extends AbstractSignEditScreen {
     private static final Component TITLE_NORMAL = Component.translatable("sign.edit");
@@ -41,7 +41,7 @@ public final class FramedSignScreen extends AbstractSignEditScreen {
     private final int signBottomY;
     private final float signScale;
     private final float signYOffset;
-    private final Vector3f signTextScale;
+    private final Vector3fc signTextScale;
 
     private FramedSignScreen(
             FramedSignBlockEntity sign,
@@ -51,7 +51,7 @@ public final class FramedSignScreen extends AbstractSignEditScreen {
             int signBottomY,
             float signScale,
             float signYOffset,
-            Vector3f signTextScale
+            Vector3fc signTextScale
     ) {
         super(sign, isFrontText, Minecraft.getInstance().isTextFilteringEnabled(), title);
         this.signBlock = (SignBlock) sign.getBlockState().getBlock();
@@ -80,12 +80,12 @@ public final class FramedSignScreen extends AbstractSignEditScreen {
     }
 
     @Override
-    public Vector3f getSignTextScale() {
+    public Vector3fc getSignTextScale() {
         return signTextScale;
     }
 
     private static FramedSignScreen normal(FramedSignBlockEntity sign, boolean isFrontText, int signTopY, int signBottomY) {
-        return new FramedSignScreen(sign, isFrontText, TITLE_NORMAL, signTopY, signBottomY, SignEditScreen.MAGIC_SCALE_NUMBER * 1.5F, 90, SignEditScreen.TEXT_SCALE);
+        return new FramedSignScreen(sign, isFrontText, TITLE_NORMAL, signTopY, signBottomY, 62.5F * 1.5F, 90, SignEditScreen.TEXT_SCALE);
     }
 
     public static FramedSignScreen standing(FramedSignBlockEntity sign, boolean isFrontText) {
@@ -97,6 +97,6 @@ public final class FramedSignScreen extends AbstractSignEditScreen {
     }
 
     public static FramedSignScreen hanging(FramedSignBlockEntity sign, boolean isFrontText) {
-        return new FramedSignScreen(sign, isFrontText, TITLE_HANGING, 70, 147, SignEditScreen.MAGIC_SCALE_NUMBER * 1.15F, 125, HangingSignEditScreen.TEXT_SCALE);
+        return new FramedSignScreen(sign, isFrontText, TITLE_HANGING, 70, 147, 62.5F * 1.15F, 125, HangingSignEditScreen.TEXT_SCALE);
     }
 }

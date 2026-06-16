@@ -6,9 +6,7 @@ import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.client.gui.render.pip.PictureInPictureRenderer;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.SubmitNodeCollector;
-import net.minecraft.client.renderer.feature.FeatureRenderDispatcher;
 import net.minecraft.client.renderer.item.TrackingItemStackRenderState;
 import net.minecraft.client.renderer.state.gui.pip.PictureInPictureRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
@@ -19,29 +17,20 @@ import org.jspecify.annotations.Nullable;
 public final class SpinningItemPictureInPictureRenderer extends PictureInPictureRenderer<SpinningItemPictureInPictureRenderer.RenderState> {
     private static final Quaternionf ROT_22_5_XP = Axis.XP.rotationDegrees(22.5F);
 
-    private final SubmitNodeCollector submitNodeCollector;
-    private final FeatureRenderDispatcher featureRenderDispatcher;
     @Nullable
     private Object lastModelIdentity = null;
     private int lastRotY = 0;
 
-    public SpinningItemPictureInPictureRenderer(MultiBufferSource.BufferSource bufferSource) {
-        super(bufferSource);
-        this.submitNodeCollector = Minecraft.getInstance().gameRenderer.getSubmitNodeStorage();
-        this.featureRenderDispatcher = Minecraft.getInstance().gameRenderer.getFeatureRenderDispatcher();
-    }
-
     @Override
-    protected void renderToTexture(RenderState state, PoseStack poseStack) {
+    protected void renderToTexture(RenderState state, PoseStack poseStack, SubmitNodeCollector submitNodeCollector) {
         TrackingItemStackRenderState renderState = state.renderState;
 
         poseStack.scale(1, -1, -1);
         poseStack.mulPose(ROT_22_5_XP);
         poseStack.mulPose(Axis.YP.rotationDegrees(state.rotY));
 
-        Minecraft.getInstance().gameRenderer.getLighting().setupFor(Lighting.Entry.ITEMS_FLAT);
+        Minecraft.getInstance().gameRenderer.lighting().setupFor(Lighting.Entry.ITEMS_FLAT);
         renderState.submit(poseStack, submitNodeCollector, LightCoordsUtil.FULL_BRIGHT, OverlayTexture.NO_OVERLAY, 0);
-        featureRenderDispatcher.renderAllFeatures();
 
         lastModelIdentity = renderState.getModelIdentity();
         lastRotY = state.rotY;

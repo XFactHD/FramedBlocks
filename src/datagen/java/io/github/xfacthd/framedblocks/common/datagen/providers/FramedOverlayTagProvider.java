@@ -4,15 +4,14 @@ import io.github.xfacthd.framedblocks.api.block.overlay.BlockOverlay;
 import io.github.xfacthd.framedblocks.api.util.FramedConstants;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
-import net.minecraft.data.tags.KeyTagProvider;
 import net.minecraft.data.tags.TagAppender;
-import net.minecraft.resources.ResourceKey;
+import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.tags.TagBuilder;
 import net.minecraft.world.item.DyeColor;
 
 import java.util.concurrent.CompletableFuture;
 
-public final class FramedOverlayTagProvider extends KeyTagProvider<BlockOverlay> {
+public final class FramedOverlayTagProvider extends TagsProvider<BlockOverlay> {
     public FramedOverlayTagProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
         super(output, FramedConstants.Registries.BLOCK_OVERLAY_REGISTRY_KEY, registries, FramedConstants.MOD_ID);
     }
@@ -20,7 +19,7 @@ public final class FramedOverlayTagProvider extends KeyTagProvider<BlockOverlay>
     @Override
     protected void addTags(HolderLookup.Provider registries) {
         TagBuilder builder = getOrCreateRawBuilder(FramedConstants.Tags.OVERLAY_ORDER);
-        TagAppender<ResourceKey<BlockOverlay>, BlockOverlay> appender = TagAppender.forBuilder(builder);
+        TagAppender<BlockOverlay> appender = TagAppender.forBuilder(builder);
 
         appender.add(FramedBlockOverlayProvider.key("grass"))
                 .add(FramedBlockOverlayProvider.key("podzol"))

@@ -30,7 +30,7 @@ public class FramedTankBlockEntity extends FramedBlockEntity {
     }
 
     public InteractionResult handleTankInteraction(Player player, InteractionHand hand) {
-        if (FluidUtil.interactWithFluidHandler(player, hand, worldPosition, fluidHandler)) {
+        if (FluidUtil.interactWithFluidHandler(player, hand, worldPosition, fluidHandler, null)) {
             return InteractionResult.SUCCESS;
         }
         return InteractionResult.TRY_WITH_EMPTY_HAND;

@@ -3,9 +3,14 @@ package io.github.xfacthd.framedblocks.common.datagen.providers;
 import io.github.xfacthd.framedblocks.api.util.FramedConstants;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.common.FBContent;
+import io.github.xfacthd.framedblocks.common.datagen.util.ObjectTagAppender;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
+import net.minecraft.tags.BlockItemTags;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.data.ItemTagsProvider;
 
@@ -23,12 +28,12 @@ public final class FramedItemTagProvider extends ItemTagsProvider {
 
     @Override
     protected void addTags(HolderLookup.Provider provider) {
-        tag(ItemTags.SLABS).add(FBContent.BLOCK_FRAMED_SLAB.value().asItem());
-        tag(ItemTags.STAIRS).add(FBContent.BLOCK_FRAMED_STAIRS.value().asItem());
+        tag(BlockItemTags.SLABS.item()).add(FBContent.BLOCK_FRAMED_SLAB.value().asItem());
+        tag(BlockItemTags.STAIRS.item()).add(FBContent.BLOCK_FRAMED_STAIRS.value().asItem());
         tag(ItemTags.WALLS).add(FBContent.BLOCK_FRAMED_WALL.value().asItem());
-        tag(ItemTags.FENCES).add(FBContent.BLOCK_FRAMED_FENCE.value().asItem());
-        tag(ItemTags.DOORS).add(FBContent.BLOCK_FRAMED_DOOR.value().asItem(), FBContent.BLOCK_FRAMED_IRON_DOOR.value().asItem());
-        tag(ItemTags.TRAPDOORS).add(FBContent.BLOCK_FRAMED_TRAP_DOOR.value().asItem(), FBContent.BLOCK_FRAMED_IRON_TRAP_DOOR.value().asItem());
+        tag(BlockItemTags.FENCES.item()).add(FBContent.BLOCK_FRAMED_FENCE.value().asItem());
+        tag(BlockItemTags.DOORS.item()).add(FBContent.BLOCK_FRAMED_DOOR.value().asItem(), FBContent.BLOCK_FRAMED_IRON_DOOR.value().asItem());
+        tag(BlockItemTags.TRAPDOORS.item()).add(FBContent.BLOCK_FRAMED_TRAP_DOOR.value().asItem(), FBContent.BLOCK_FRAMED_IRON_TRAP_DOOR.value().asItem());
         tag(ItemTags.SIGNS).add(FBContent.BLOCK_FRAMED_SIGN.value().asItem());
         tag(ItemTags.HANGING_SIGNS).add(FBContent.BLOCK_FRAMED_HANGING_SIGN.value().asItem());
         tag(Tags.Items.CHESTS).add(FBContent.BLOCK_FRAMED_CHEST.value().asItem());
@@ -48,5 +53,10 @@ public final class FramedItemTagProvider extends ItemTagsProvider {
                 .addOptionalElement(Utils.id("mekanism", "configurator"));
 
         tag(FramedConstants.Tags.CRAFTING_BLOCKED_FLUID_CONTAINERS);
+    }
+
+    @Override
+    protected ObjectTagAppender<Item> tag(TagKey<Item> tag) {
+        return new ObjectTagAppender<>(super.tag(tag), BuiltInRegistries.ITEM);
     }
 }

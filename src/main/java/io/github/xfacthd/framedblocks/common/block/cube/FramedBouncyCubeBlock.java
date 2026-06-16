@@ -33,7 +33,7 @@ import java.util.List;
 
 public class FramedBouncyCubeBlock extends SlimeBlock implements IFramedBlockInternal {
     public FramedBouncyCubeBlock(Properties props) {
-        super(IFramedBlock.applyDefaultProperties(props, BlockType.FRAMED_BOUNCY_CUBE).friction(.8F));
+        super(IFramedBlock.applyDefaultProperties(props, BlockType.FRAMED_BOUNCY_CUBE).friction(.8F).bounceRestitution(1.0F));
         BlockUtils.configureStandardProperties(this);
     }
 

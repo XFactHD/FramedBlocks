@@ -772,6 +772,15 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
     }
 
     @Override
+    public float getCamoBounceRestitution(Entity entity) {
+        return getCamoBounceRestitution(camoContainer, entity);
+    }
+
+    final float getCamoBounceRestitution(CamoContainer<?, ?> camo, Entity entity) {
+        return camo.getContent().getBounceRestitution(level(), worldPosition, entity);
+    }
+
+    @Override
     public final void applyStructureRotation(Mirror mirror, Rotation rotation) {
         applyExternalRotation(mirror, rotation, RotationSource.STRUCTURE);
     }

@@ -17,8 +17,8 @@ import net.minecraft.util.TriState;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.BlockAndLightGetter;
 import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.EmptyBlockGetter;
 import net.minecraft.world.level.Explosion;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -86,7 +86,8 @@ public final class BlockCamoContent extends CamoContent<BlockCamoContent> implem
 
     @Override
     public boolean isEmissive() {
-        return state.emissiveRendering(EmptyBlockGetter.INSTANCE, BlockPos.ZERO);
+        // TODO: undo when level-awareness is reintroduced
+        return state.emissiveRendering(/*EmptyBlockGetter.INSTANCE, BlockPos.ZERO*/);
     }
 
     @Override
@@ -133,6 +134,11 @@ public final class BlockCamoContent extends CamoContent<BlockCamoContent> implem
     @Override
     public boolean canOcclude() {
         return state.canOcclude();
+    }
+
+    @Override
+    public float getBounceRestitution(Level level, BlockPos pos, Entity entity) {
+        return state.getBounceRestitution(level, pos, entity);
     }
 
     @Override

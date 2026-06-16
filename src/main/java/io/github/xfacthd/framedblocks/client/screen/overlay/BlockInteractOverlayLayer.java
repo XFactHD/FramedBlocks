@@ -30,7 +30,7 @@ public final class BlockInteractOverlayLayer implements GuiLayer {
     @Override
     public void render(GuiGraphicsExtractor graphics, DeltaTracker delta) {
         Player player = Objects.requireNonNull(Minecraft.getInstance().player);
-        if (player.isSpectator() || Minecraft.getInstance().options.hideGui) {
+        if (player.isSpectator() || Minecraft.getInstance().gui.hud.isHidden()) {
             return;
         }
 

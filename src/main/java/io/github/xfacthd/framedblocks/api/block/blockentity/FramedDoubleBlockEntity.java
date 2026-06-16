@@ -174,6 +174,19 @@ public class FramedDoubleBlockEntity extends FramedBlockEntity {
     }
 
     @Override
+    public float getCamoBounceRestitution(Entity entity) {
+        return switch (getStateCache().getTopInteractionMode()) {
+            case FIRST -> super.getCamoBounceRestitution(entity);
+            case SECOND -> getCamoBounceRestitution(camoContainer, entity);
+            case BOTH -> {
+                float bounceOne = super.getCamoBounceRestitution(entity);
+                float bounceTwo = getCamoBounceRestitution(camoContainer, entity);
+                yield (bounceOne + bounceTwo) / 2F;
+            }
+        };
+    }
+
+    @Override
     protected boolean isCamoSolid() {
         return super.isCamoSolid() && camoContainer.getContent().isSolid();
     }

@@ -14,7 +14,7 @@ import io.github.xfacthd.framedblocks.api.util.Utils;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import it.unimi.dsi.fastutil.ints.IntSet;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.LevelRenderer;
+import net.minecraft.client.renderer.extract.LevelExtractor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
@@ -327,26 +327,26 @@ abstract sealed class ClientData<T extends FramedBlockEntity> {
         /// Marks all sections for re-rendering which could be affected by a change in the calling block.
         /// If `includeCenter` is `true` then `neighborMask` must be the block's full [sectionNeighborMask].
         private static void setSectionsDirty(long centerSection, int neighborMask, boolean includeCenter, boolean includeDiagonals) {
-            LevelRenderer levelRenderer = Minecraft.getInstance().levelRenderer;
+            LevelExtractor levelExtractor = Minecraft.getInstance().levelExtractor;
             int centerX = SectionPos.x(centerSection);
             int centerY = SectionPos.y(centerSection);
             int centerZ = SectionPos.z(centerSection);
 
             if (includeCenter) {
-                setSectionDirty(levelRenderer, centerX, centerY, centerZ);
+                setSectionDirty(levelExtractor, centerX, centerY, centerZ);
             }
             if (neighborMask != 0) {
                 if (includeDiagonals) {
                     neighborMask |= MARKER_INCLUDE_DIAGONALS;
                 }
                 for (Neighbor neighbor : NEIGHBORS_BY_MASK[neighborMask]) {
-                    neighbor.setDirty(levelRenderer, centerX, centerY, centerZ);
+                    neighbor.setDirty(levelExtractor, centerX, centerY, centerZ);
                 }
             }
         }
 
-        private static void setSectionDirty(LevelRenderer levelRenderer, int sectionX, int sectionY, int sectionZ) {
-            levelRenderer.setSectionDirty(sectionX, sectionY, sectionZ);
+        private static void setSectionDirty(LevelExtractor levelExtractor, int sectionX, int sectionY, int sectionZ) {
+            levelExtractor.setSectionDirty(sectionX, sectionY, sectionZ);
         }
 
         private record Neighbor(int diffX, int diffY, int diffZ, int dirMask) {
@@ -361,8 +361,8 @@ abstract sealed class ClientData<T extends FramedBlockEntity> {
                 this(diffX, diffY, diffZ, MARKER_INCLUDE_DIAGONALS | (1 << dirOne.ordinal()) | (1 << dirTwo.ordinal()));
             }
 
-            private void setDirty(LevelRenderer levelRenderer, int centerX, int centerY, int centerZ) {
-                setSectionDirty(levelRenderer, centerX + diffX, centerY + diffY, centerZ + diffZ);
+            private void setDirty(LevelExtractor levelExtractor, int centerX, int centerY, int centerZ) {
+                setSectionDirty(levelExtractor, centerX + diffX, centerY + diffY, centerZ + diffZ);
             }
         }
 

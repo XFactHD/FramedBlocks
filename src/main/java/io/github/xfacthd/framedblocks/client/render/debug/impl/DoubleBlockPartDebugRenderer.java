@@ -62,7 +62,6 @@ public class DoubleBlockPartDebugRenderer implements BlockDebugRenderer<FramedDo
         BlockDisplayContext context = new FramedBlockDisplayContext(level, be.getBlockPos(), state, modelData);
         Minecraft.getInstance().getBlockModelResolver().update(partRenderState, partState, context);
 
-        renderState.haveGlowingEntities = true;
         renderState.setRenderData(DATA_KEY, partRenderState);
     }
 

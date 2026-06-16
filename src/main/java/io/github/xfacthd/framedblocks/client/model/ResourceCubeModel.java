@@ -17,6 +17,7 @@ import net.minecraft.client.resources.model.ResolvedModel;
 import net.minecraft.client.resources.model.SimpleModelWrapper;
 import net.minecraft.client.resources.model.geometry.QuadCollection;
 import net.minecraft.client.resources.model.sprite.Material;
+import net.minecraft.client.resources.model.sprite.MaterialBaker;
 import net.minecraft.client.resources.model.sprite.TextureSlots;
 import net.minecraft.resources.Identifier;
 import net.minecraft.core.Direction;
@@ -63,7 +64,8 @@ public final class ResourceCubeModel<R extends Resource, C extends ResourceCamoC
         ModelBakery modelBakery = modelManager.getModelBakery();
 
         ModelBakery.MissingModels missingModels = modelManager.framedblocks$getMissingModels();
-        ModelBakery.ModelBakerImpl baker = modelBakery.new ModelBakerImpl(RuntimeMaterialBaker.INSTANCE, INTERNER.get(), missingModels);
+        MaterialBaker materialBaker = RuntimeMaterialBaker.getInstance();
+        ModelBakery.ModelBakerImpl baker = modelBakery.new ModelBakerImpl(materialBaker, INTERNER.get(), missingModels);
 
         ResourceCamoContentClientHandler.ResourceModelSpec modelSpec = clientHandler.getModelSpec(camo);
         Material stillMaterial = modelSpec.stillMaterial();
@@ -88,7 +90,7 @@ public final class ResourceCubeModel<R extends Resource, C extends ResourceCamoC
                 bareModel,
                 bareModel.getTopAdditionalProperties()
         );
-        Material.Baked particleMaterial = RuntimeMaterialBaker.INSTANCE.getMaterial(stillMaterial);
+        Material.Baked particleMaterial = materialBaker.get(stillMaterial, () -> "");
         return new SingleVariant(new SimpleModelWrapper(fluidQuads, false, particleMaterial));
     }
 

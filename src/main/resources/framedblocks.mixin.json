@@ -13,7 +13,7 @@
     "client": [
         "client.AccessorModelManager",
         "client.AccessorMultiPlayerGameMode",
-        "client.MixinLevelRenderer"
+        "client.MixinLevelExtractor"
     ],
     "injectors": {
         "defaultRequire": 1

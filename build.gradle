@@ -219,7 +219,7 @@ dependencies {
 
     compileOnly("mezz.jei:jei-${jei_mc_version}-common-api:${jei_version}")
     compileOnly("mezz.jei:jei-${jei_mc_version}-neoforge-api:${jei_version}")
-    localRuntime("mezz.jei:jei-${jei_mc_version}-neoforge:${jei_version}")
+    //localRuntime("mezz.jei:jei-${jei_mc_version}-neoforge:${jei_version}")
 
     compileOnly("dev.emi:emi-neoforge:${emi_version}+${emi_mc_version}:api")
     //localRuntime("dev.emi:emi-neoforge:${emi_version}+${emi_mc_version}")
@@ -238,7 +238,7 @@ dependencies {
     //localRuntime("org.appliedenergistics:appliedenergistics2:${ae2_version}")
 
     compileOnly("curse.maven:jade-324717:${jade_coord}")
-    localRuntime("curse.maven:jade-324717:${jade_coord}")
+    //localRuntime("curse.maven:jade-324717:${jade_coord}")
 
     compileOnly("curse.maven:atlasviewer-633577:${atlasviewer_coord}")
     localRuntime("curse.maven:atlasviewer-633577:${atlasviewer_coord}")

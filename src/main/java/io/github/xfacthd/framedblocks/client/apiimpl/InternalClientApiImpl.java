@@ -163,7 +163,7 @@ public final class InternalClientApiImpl implements InternalClientAPI {
 
     @Override
     public MaterialLookup getRuntimeMaterialLookup() {
-        return RuntimeMaterialBaker.INSTANCE;
+        return RuntimeMaterialBaker.getInstance();
     }
 
     @Override

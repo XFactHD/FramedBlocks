@@ -13,8 +13,8 @@ import io.github.xfacthd.framedblocks.client.render.util.FramedPipelineModifiers
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.client.gui.render.pip.PictureInPictureRenderer;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.SubmitNodeCollector;
+import net.minecraft.client.renderer.SubmitNodeStorage;
 import net.minecraft.client.renderer.block.BlockAndTintGetter;
 import net.minecraft.client.renderer.block.model.BlockDisplayContext;
 import net.minecraft.client.renderer.feature.FeatureRenderDispatcher;
@@ -30,29 +30,26 @@ import java.util.function.Consumer;
 
 public final class BlockPictureInPictureRenderer extends PictureInPictureRenderer<BlockPictureInPictureRenderer.RenderState> {
     private final FeatureRenderDispatcher featureRenderDispatcher;
-    private final SubmitNodeCollector collector;
     private RenderConfig lastConfig = RenderConfig.DEFAULT;
     @Nullable
     private BlockState lastSignState;
     private BlockPos lastSignPos = BlockPos.ZERO;
     private FramedBlockData lastBlockData = FramedBlockData.EMPTY;
 
-    public BlockPictureInPictureRenderer(MultiBufferSource.BufferSource bufferSource) {
-        super(bufferSource);
-        this.featureRenderDispatcher = Minecraft.getInstance().gameRenderer.getFeatureRenderDispatcher();
-        this.collector = featureRenderDispatcher.getSubmitNodeStorage();
+    public BlockPictureInPictureRenderer() {
+        this.featureRenderDispatcher = Minecraft.getInstance().gameRenderer.featureRenderDispatcher();
     }
 
     @Override
-    protected void renderToTexture(RenderState renderState, PoseStack poseStack) {
+    protected void renderToTexture(RenderState renderState, PoseStack poseStack, SubmitNodeCollector submitNodeCollector) {
         RenderConfig config = renderState.config;
         config.poseTransform.accept(poseStack);
 
-        Minecraft.getInstance().gameRenderer.getLighting().setupFor(config.lighting);
-        renderState.modelRenderState.submitMultiLayer(poseStack, collector, LightCoordsUtil.FULL_BRIGHT, OverlayTexture.NO_OVERLAY, 0);
+        Minecraft.getInstance().gameRenderer.lighting().setupFor(config.lighting);
+        renderState.modelRenderState.submitMultiLayer(poseStack, submitNodeCollector, LightCoordsUtil.FULL_BRIGHT, OverlayTexture.NO_OVERLAY, 0);
         RenderSystem.pushPipelineModifier(FramedPipelineModifiers.FORCE_ENTITY_SOLID);
-        featureRenderDispatcher.renderAllFeatures();
-        bufferSource.endBatch();
+        // TODO: this is stupid, there needs to be a better way
+        featureRenderDispatcher.renderAllFeatures((SubmitNodeStorage) submitNodeCollector);
         RenderSystem.popPipelineModifier();
 
         lastConfig = config;

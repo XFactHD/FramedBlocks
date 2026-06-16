@@ -53,9 +53,8 @@ import io.github.xfacthd.framedblocks.client.model.wrapping.ModelWrappingManager
 import io.github.xfacthd.framedblocks.client.net.ClientNetworkHandler;
 import io.github.xfacthd.framedblocks.client.render.block.FramedBannerRenderer;
 import io.github.xfacthd.framedblocks.client.render.block.FramedChestRenderer;
-import io.github.xfacthd.framedblocks.client.render.block.FramedHangingSignRenderer;
 import io.github.xfacthd.framedblocks.client.render.block.FramedItemFrameRenderer;
-import io.github.xfacthd.framedblocks.client.render.block.FramedSignRenderer;
+import io.github.xfacthd.framedblocks.client.render.block.FramedStandingSignRenderer;
 import io.github.xfacthd.framedblocks.client.render.block.FramedTankRenderer;
 import io.github.xfacthd.framedblocks.client.render.debug.FramedBlockDebugRenderer;
 import io.github.xfacthd.framedblocks.client.render.debug.impl.CollapsibleBlockDebugRenderer;
@@ -69,6 +68,7 @@ import io.github.xfacthd.framedblocks.client.render.particle.BlockOverlayParticl
 import io.github.xfacthd.framedblocks.client.render.particle.FluidSpriteParticle;
 import io.github.xfacthd.framedblocks.client.render.special.BlockOutlineRenderer;
 import io.github.xfacthd.framedblocks.client.render.special.CollapsibleBlockIndicatorRenderer;
+import io.github.xfacthd.framedblocks.client.render.special.GhostBlockFeatureRenderer;
 import io.github.xfacthd.framedblocks.client.render.special.GhostBlockRenderer;
 import io.github.xfacthd.framedblocks.client.render.util.AnimationSplitterSource;
 import io.github.xfacthd.framedblocks.client.render.util.AreaMaskSource;
@@ -103,6 +103,7 @@ import io.github.xfacthd.framedblocks.common.block.interactive.pressureplate.Fra
 import io.github.xfacthd.framedblocks.common.block.sign.FramedStandingSignBlock;
 import io.github.xfacthd.framedblocks.common.block.stairs.standard.FramedStairsBlock;
 import io.github.xfacthd.framedblocks.common.data.component.PaintRollerContents;
+import net.minecraft.client.renderer.blockentity.HangingSignRenderer;
 import net.minecraft.client.renderer.blockentity.ShelfRenderer;
 import net.minecraft.core.Holder;
 import net.minecraft.world.level.block.Block;
@@ -153,6 +154,7 @@ public final class FBClient {
         modBus.addListener(ModelWrappingManager::onRegisterStandaloneModels);
         modBus.addListener(FramedPipelineModifiers::onRegisterModifiers);
 
+        NeoForge.EVENT_BUS.addListener(FBClient::onRegisterFeatureRenderers);
         NeoForge.EVENT_BUS.addListener(ClientTaskQueue::onClientTick);
         NeoForge.EVENT_BUS.addListener(BlockOutlineRenderer::onRenderBlockHighlight);
         NeoForge.EVENT_BUS.addListener(KeyMappings::onClientTick);
@@ -201,8 +203,8 @@ public final class FBClient {
     }
 
     private static void onRegisterRenderers(EntityRenderersEvent.RegisterRenderers event) {
-        event.registerBlockEntityRenderer(FBContent.BE_TYPE_FRAMED_SIGN.value(), FramedSignRenderer::new);
-        event.registerBlockEntityRenderer(FBContent.BE_TYPE_FRAMED_HANGING_SIGN.value(), FramedHangingSignRenderer::new);
+        event.registerBlockEntityRenderer(FBContent.BE_TYPE_FRAMED_SIGN.value(), FramedStandingSignRenderer::new);
+        event.registerBlockEntityRenderer(FBContent.BE_TYPE_FRAMED_HANGING_SIGN.value(), HangingSignRenderer::new);
         event.registerBlockEntityRenderer(FBContent.BE_TYPE_FRAMED_CHEST.value(), FramedChestRenderer::new);
         event.registerBlockEntityRenderer(FBContent.BE_TYPE_FRAMED_ITEM_FRAME.value(), FramedItemFrameRenderer::new);
         event.registerBlockEntityRenderer(FBContent.BE_TYPE_FRAMED_TANK.value(), FramedTankRenderer::new);
@@ -531,7 +533,7 @@ public final class FBClient {
 
     private static void onRegisterReloadListener(AddClientReloadListenersEvent event) {
         event.addListener(BlockInteractOverlayLayer.LISTENER_ID, BlockInteractOverlayLayer.RELOAD_LISTENER);
-        event.addListener(RuntimeMaterialBaker.LISTENER_ID, RuntimeMaterialBaker.INSTANCE);
+        event.addListener(RuntimeMaterialBaker.LISTENER_ID, RuntimeMaterialBaker::reload);
     }
 
     private static void onInitClientRegistries(InitializeClientRegistriesEvent event) {
@@ -577,6 +579,10 @@ public final class FBClient {
     private static void onRegisterPictureInPictureRenderers(RegisterPictureInPictureRenderersEvent event) {
         event.register(BlockPictureInPictureRenderer.RenderState.class, BlockPictureInPictureRenderer::new);
         event.register(SpinningItemPictureInPictureRenderer.RenderState.class, SpinningItemPictureInPictureRenderer::new);
+    }
+
+    private static void onRegisterFeatureRenderers(RegisterFeatureRenderersEvent event) {
+        event.register(GhostBlockFeatureRenderer.TYPE, new GhostBlockFeatureRenderer());
     }
 
     private static void wrapDoubleModel(Holder<Block> block, @SuppressWarnings("SameParameterValue") StateMerger stateMerger) {

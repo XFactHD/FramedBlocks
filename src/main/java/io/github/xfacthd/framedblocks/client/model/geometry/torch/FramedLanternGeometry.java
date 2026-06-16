@@ -174,6 +174,6 @@ public class FramedLanternGeometry extends Geometry {
     }
 
     public static FramedLanternGeometry copper(GeometryFactory.Context ctx) {
-        return new FramedLanternGeometry(ctx, true, Blocks.COPPER_LANTERN.unaffected().defaultBlockState());
+        return new FramedLanternGeometry(ctx, true, Blocks.COPPER_LANTERN.weathering().unaffected().defaultBlockState());
     }
 }

@@ -3,12 +3,12 @@ package io.github.xfacthd.framedblocks.client.render.special;
 import io.github.xfacthd.framedblocks.api.render.Quaternions;
 import io.github.xfacthd.framedblocks.api.render.outline.OutlineRenderer;
 import io.github.xfacthd.framedblocks.api.util.MathUtils;
-import io.github.xfacthd.framedblocks.client.render.util.FramedRenderTypes;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.blockentity.special.FramedCollapsibleBlockEntity;
 import io.github.xfacthd.framedblocks.common.data.collapsible.HammerTarget;
 import io.github.xfacthd.framedblocks.common.data.collapsible.TargetCalculator;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.ARGB;
@@ -19,6 +19,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.client.event.ExtractBlockOutlineRenderStateEvent;
+import net.neoforged.neoforge.client.submit.RenderPhaseKeys;
 
 import java.util.Objects;
 
@@ -50,26 +51,24 @@ public final class CollapsibleBlockIndicatorRenderer {
         Vec3 offset = Vec3.atLowerCornerOf(pos).subtract(event.getCamera().position());
         float[] vY = TargetCalculator.getVertexHeights(be, be.getCollapsedFace());
 
-        event.addCustomRenderer((_, buffer, poseStack, translucentPass, _) -> {
-            if (translucentPass) {
-                poseStack.pushPose();
-                poseStack.translate(offset.x + .5, offset.y + .5, offset.z + .5);
-                if (target.face() == Direction.DOWN) {
-                    poseStack.mulPose(Quaternions.XP_180);
-                } else if (target.face() != Direction.UP) {
-                    poseStack.mulPose(OutlineRenderer.YN_DIR[target.face().get2DDataValue()]);
-                    poseStack.mulPose(Quaternions.XP_90);
-                }
-                poseStack.translate(-.5, -.5, -.5);
+        event.addCustomRenderer((_, submitNodeCollector, poseStack, _) -> {
+            poseStack.pushPose();
+            poseStack.translate(offset.x + .5, offset.y + .5, offset.z + .5);
+            if (target.face() == Direction.DOWN) {
+                poseStack.mulPose(Quaternions.XP_180);
+            } else if (target.face() != Direction.UP) {
+                poseStack.mulPose(OutlineRenderer.YN_DIR[target.face().get2DDataValue()]);
+                poseStack.mulPose(Quaternions.XP_90);
+            }
+            poseStack.translate(-.5, -.5, -.5);
 
-                OutlineRenderer.LineDrawer drawer = new BlockOutlineRenderer.DefaultLineDrawer(
-                        poseStack.last(), buffer.getBuffer(FramedRenderTypes.LINES_NO_DEPTH), LINE_COLOR
-                );
+            float lineWidth = Minecraft.getInstance().gameRenderer.gameRenderState().windowRenderState.appropriateLineWidth;
+            BlockOutlineRenderer.submitLineDraw(submitNodeCollector, poseStack, RenderTypes.lines(), LINE_COLOR, lineWidth, RenderPhaseKeys.ALWAYS_ON_TOP, drawer -> {
                 drawSectionOverlay(drawer, vY);
                 drawCornerMarkers(drawer, target.face(), target.pos(), vY);
+            });
 
-                poseStack.popPose();
-            }
+            poseStack.popPose();
             return false;
         });
     }

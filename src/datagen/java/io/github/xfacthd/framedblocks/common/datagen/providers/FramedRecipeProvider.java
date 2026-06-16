@@ -1601,7 +1601,7 @@ public final class FramedRecipeProvider extends AbstractFramedRecipeProvider {
                 .pattern("WFW")
                 .pattern(" NN")
                 .pattern(" I ")
-                .define('W', Items.WHITE_WOOL)
+                .define('W', Items.WOOL.white())
                 .define('F', FBContent.BLOCK_FRAMED_CUBE.value())
                 .define('N', Tags.Items.NUGGETS_IRON)
                 .define('I', Tags.Items.INGOTS_IRON)

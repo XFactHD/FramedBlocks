@@ -276,6 +276,12 @@ public non-sealed interface DelegatingFramedBlockEntity extends IFramedBlockEnti
     }
 
     @Override
+    @ApiStatus.NonExtendable
+    default float getCamoBounceRestitution(Entity entity) {
+        return unwrap().getCamoBounceRestitution(entity);
+    }
+
+    @Override
     @MustBeInvokedByOverriders
     default void applyStructureRotation(Mirror mirror, Rotation rotation) {
         unwrap().applyStructureRotation(mirror, rotation);

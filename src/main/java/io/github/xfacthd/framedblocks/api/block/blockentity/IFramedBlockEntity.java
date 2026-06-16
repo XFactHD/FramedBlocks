@@ -102,6 +102,8 @@ public sealed interface IFramedBlockEntity extends IBlockEntityExtension permits
 
     boolean canEntityDestroyCamo(Entity entity);
 
+    float getCamoBounceRestitution(Entity entity);
+
     void applyWrenchRotation(Rotation rotation, boolean stateChanged);
 
     IFramedBlock getBlock();

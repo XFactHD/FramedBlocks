@@ -6,6 +6,7 @@ import net.minecraft.client.resources.model.cuboid.ItemTransform;
 import net.minecraft.client.resources.model.cuboid.ItemTransforms;
 import net.minecraft.world.item.ItemDisplayContext;
 import org.joml.Vector3f;
+import org.joml.Vector3fc;
 
 import java.util.EnumMap;
 import java.util.Map;
@@ -78,10 +79,10 @@ public final class ItemTransformsBuilder {
     public static final class TransformBuilder {
         private static final float MAX_TRANSLATION = ItemTransform.Deserializer.MAX_TRANSLATION * 16F;
 
-        private Vector3f rotation = ItemTransform.Deserializer.DEFAULT_ROTATION;
-        private Vector3f translation = ItemTransform.Deserializer.DEFAULT_TRANSLATION;
-        private Vector3f scale = ItemTransform.Deserializer.DEFAULT_SCALE;
-        private Vector3f rightRotation = ItemTransform.Deserializer.DEFAULT_ROTATION;
+        private Vector3fc rotation = ItemTransform.Deserializer.DEFAULT_ROTATION;
+        private Vector3fc translation = ItemTransform.Deserializer.DEFAULT_TRANSLATION;
+        private Vector3fc scale = ItemTransform.Deserializer.DEFAULT_SCALE;
+        private Vector3fc rightRotation = ItemTransform.Deserializer.DEFAULT_ROTATION;
 
         public TransformBuilder rotation(float x, float y, float z) {
             this.rotation = new Vector3f(x, y, z);

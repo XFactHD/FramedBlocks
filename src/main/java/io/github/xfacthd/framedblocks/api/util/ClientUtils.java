@@ -57,8 +57,8 @@ public final class ClientUtils {
     public static RenderType getEntityRenderType(ChunkSectionLayer chunkLayer) {
         return switch (chunkLayer) {
             case SOLID -> NeoForgeRenderTypes.SOLID_BLOCK_SHEET;
-            case CUTOUT -> Sheets.cutoutBlockSheet();
-            case TRANSLUCENT -> Sheets.translucentBlockSheet();
+            case CUTOUT -> Sheets.cutoutBlockItemSheet();
+            case TRANSLUCENT -> Sheets.translucentBlockItemSheet();
         };
     }
 

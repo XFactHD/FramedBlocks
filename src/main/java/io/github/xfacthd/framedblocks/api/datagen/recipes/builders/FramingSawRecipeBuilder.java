@@ -2,7 +2,7 @@ package io.github.xfacthd.framedblocks.api.datagen.recipes.builders;
 
 import com.google.common.base.Preconditions;
 import io.github.xfacthd.framedblocks.api.internal.InternalAPI;
-import net.minecraft.advancements.Criterion;
+import net.minecraft.advancements.triggers.Criterion;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.recipes.RecipeBuilder;

@@ -6,7 +6,6 @@ import io.github.xfacthd.framedblocks.common.particle.FluidParticleOptions;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleProvider;
-import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.util.LightCoordsUtil;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.material.Fluid;
@@ -29,7 +28,7 @@ public final class FluidSpriteParticle extends BlockAtlasSpriteParticle {
     @Override
     @SuppressWarnings("deprecation")
     protected int getLightCoords(float partialTick) {
-        int light = level.hasChunkAt(pos) ? LevelRenderer.getLightCoords(level, pos) : 0;
+        int light = level.hasChunkAt(pos) ? LightCoordsUtil.getLightCoords(level, pos) : 0;
         int block = Math.max(brightness, LightCoordsUtil.block(light));
         return LightCoordsUtil.pack(block, LightCoordsUtil.sky(light));
     }

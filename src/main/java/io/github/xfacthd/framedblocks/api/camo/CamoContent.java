@@ -10,6 +10,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.BlockAndLightGetter;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Explosion;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -128,6 +129,10 @@ public abstract class CamoContent<C extends CamoContent<C>> {
      * @see BlockBehaviour.BlockStateBase#canOcclude()
      */
     public abstract boolean canOcclude();
+
+    /// {@return how strongly the entity is launched upwards after falling onto a block with this camo}
+    /// @see IBlockStateExtension#getBounceRestitution(Level, BlockPos, Entity)
+    public abstract float getBounceRestitution(Level level, BlockPos pos, Entity entity);
 
     /**
      * {@return the {@link BlockState} representation for use in plant sustainability and other non-visual checks

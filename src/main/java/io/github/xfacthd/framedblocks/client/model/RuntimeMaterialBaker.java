@@ -5,7 +5,6 @@ import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.client.util.CacheCleaner;
 import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
 import net.minecraft.client.renderer.texture.SpriteLoader;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.ModelDebugName;
 import net.minecraft.client.resources.model.sprite.AtlasManager;
 import net.minecraft.client.resources.model.sprite.Material;
@@ -13,32 +12,26 @@ import net.minecraft.client.resources.model.sprite.MaterialBaker;
 import net.minecraft.data.AtlasIds;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.PreparableReloadListener;
-import net.neoforged.neoforge.common.util.Lazy;
 import org.jspecify.annotations.Nullable;
 
-import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executor;
-import java.util.function.Function;
 
-public final class RuntimeMaterialBaker implements MaterialBaker, MaterialLookup, PreparableReloadListener {
-    private static final Material MISSING_MATERIAL = new Material(MissingTextureAtlasSprite.getLocation());
+public final class RuntimeMaterialBaker extends MaterialBaker implements MaterialLookup {
     public static final Identifier LISTENER_ID = Utils.id("runtime_material_baker");
-    public static final RuntimeMaterialBaker INSTANCE = new RuntimeMaterialBaker();
-
-    private static final Map<Material, Material.Baked> BAKED_MATERIALS = new ConcurrentHashMap<>();
-    private static final Lazy<Material.Baked> BAKED_MISSING_MATERIAL = Lazy.of(() -> bake(MISSING_MATERIAL, false));
-    private static final Function<Material, Material.Baked> BAKER = material -> bake(material, true);
     @Nullable
-    private static Function<Identifier, TextureAtlasSprite> spriteLookup = null;
+    private static RuntimeMaterialBaker instance;
 
-    private RuntimeMaterialBaker() { }
+    private final SpriteLoader.Preparations blockAtlas;
 
-    public static TextureAtlasSprite getSprite(Identifier id) {
-        Objects.requireNonNull(spriteLookup, "RuntimeMaterialBaker not ready!");
-        return spriteLookup.apply(id);
+    public static RuntimeMaterialBaker getInstance() {
+        return Objects.requireNonNull(instance, "RuntimeMaterialBaker not ready!");
+    }
+
+    private RuntimeMaterialBaker(SpriteLoader.Preparations blockAtlas) {
+        super(blockAtlas.missing());
+        this.blockAtlas = blockAtlas;
     }
 
     @Override
@@ -47,25 +40,32 @@ public final class RuntimeMaterialBaker implements MaterialBaker, MaterialLookup
     }
 
     @Override
-    public Material.Baked get(Material material, ModelDebugName modelName) {
-        return BAKED_MATERIALS.computeIfAbsent(material, BAKER);
+    public Material.Baked get(Material material, ModelDebugName name) {
+        if (!material.sprite().equals(MissingTextureAtlasSprite.getLocation())) {
+            Material.Baked baked = bakedMaterials.computeIfAbsent(material, bakerFunction);
+            if (baked != null) {
+                return baked;
+            }
+        }
+        return replacementForMissingMaterial(material);
+    }
+
+    @Override
+    protected Material.@Nullable Baked bake(Material material) {
+        return bakeForAtlas(material, blockAtlas);
     }
 
     @Override
     public Material.Baked reportMissingReference(String ref, ModelDebugName modelName) {
-        return BAKED_MISSING_MATERIAL.get();
+        return missingSprite;
     }
 
-    private static Material.Baked bake(Material material, boolean fallbackToMissing) {
-        TextureAtlasSprite sprite = getSprite(material.sprite());
-        if (fallbackToMissing && sprite == BAKED_MISSING_MATERIAL.get().sprite()) {
-            return BAKED_MISSING_MATERIAL.get();
-        }
-        return new Material.Baked(sprite, material.forceTranslucent());
-    }
-
-    @Override
-    public CompletableFuture<Void> reload(SharedState currentReload, Executor taskExecutor, PreparationBarrier preparationBarrier, Executor reloadExecutor) {
+    public static CompletableFuture<Void> reload(
+            PreparableReloadListener.SharedState currentReload,
+            @SuppressWarnings("unused") Executor taskExecutor,
+            PreparableReloadListener.PreparationBarrier preparationBarrier,
+            Executor reloadExecutor
+    ) {
         return currentReload.get(AtlasManager.PENDING_STITCH)
                 .get(AtlasIds.BLOCKS)
                 .thenCompose(preparationBarrier::wait)
@@ -73,21 +73,12 @@ public final class RuntimeMaterialBaker implements MaterialBaker, MaterialLookup
     }
 
     public static void clear(CacheCleaner.Reason reason) {
-        if (reason == CacheCleaner.Reason.MANUAL) {
-            clear();
+        if (reason == CacheCleaner.Reason.MANUAL && instance != null) {
+            instance.bakedMaterials.clear();
         }
     }
 
     private static void reload(SpriteLoader.Preparations atlas) {
-        clear();
-
-        Map<Identifier, TextureAtlasSprite> sprites = atlas.regions();
-        TextureAtlasSprite missingSprite = atlas.missing();
-        spriteLookup = id -> sprites.getOrDefault(id, missingSprite);
-    }
-
-    private static void clear() {
-        BAKED_MATERIALS.clear();
-        BAKED_MISSING_MATERIAL.invalidate();
+        instance = new RuntimeMaterialBaker(atlas);
     }
 }

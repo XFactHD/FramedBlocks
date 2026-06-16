@@ -1,7 +1,6 @@
 package io.github.xfacthd.framedblocks.client.render.special;
 
 import com.mojang.blaze3d.pipeline.RenderPipeline;
-import com.mojang.blaze3d.pipeline.RenderTarget;
 import com.mojang.blaze3d.systems.RenderPass;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.textures.AddressMode;
@@ -10,6 +9,8 @@ import io.github.xfacthd.framedblocks.api.util.ClientUtils;
 import io.github.xfacthd.framedblocks.common.config.ClientConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.client.renderer.feature.FeatureFrameContext;
+import net.minecraft.client.renderer.rendertype.OutputTarget;
 
 abstract sealed class GhostBlockRenderConfig {
     private static final GhostBlockRenderConfig DEFAULT = new Default();
@@ -19,29 +20,25 @@ abstract sealed class GhostBlockRenderConfig {
         return ClientConfig.VIEW.useAltGhostRenderer() ? FALLBACK : DEFAULT;
     }
 
-    void setupSamplers(RenderPass renderPass) {
+    void setupSamplers(FeatureFrameContext context, RenderPass renderPass) {
         renderPass.bindTexture(
                 "Sampler0",
-                Minecraft.getInstance().getTextureManager().getTexture(ClientUtils.BLOCK_ATLAS).getTextureView(),
+                context.textureManager().getTexture(ClientUtils.BLOCK_ATLAS).getTextureView(),
                 RenderSystem.getSamplerCache().getSampler(AddressMode.CLAMP_TO_EDGE, AddressMode.CLAMP_TO_EDGE, FilterMode.LINEAR, FilterMode.NEAREST, true)
         );
         renderPass.bindTexture(
                 "Sampler2",
-                Minecraft.getInstance().gameRenderer.lightmap(),
+                context.lightmap(),
                 RenderSystem.getSamplerCache().getClampToEdge(FilterMode.LINEAR)
         );
     }
 
     abstract RenderPipeline getPipeline();
 
-    abstract RenderTarget getRenderTarget();
+    abstract OutputTarget getOutputTarget();
 
     private static final class Default extends GhostBlockRenderConfig {
-        @Override
-        void setupSamplers(RenderPass renderPass) {
-            super.setupSamplers(renderPass);
-            renderPass.bindTexture("Sampler1", null, null);
-        }
+        private static final OutputTarget PARTICLE = new OutputTarget("particle_target", () -> Minecraft.getInstance().levelRenderer.particlesTarget());
 
         @Override
         RenderPipeline getPipeline() {
@@ -49,16 +46,15 @@ abstract sealed class GhostBlockRenderConfig {
         }
 
         @Override
-        RenderTarget getRenderTarget() {
-            RenderTarget particlesTarget = Minecraft.getInstance().levelRenderer.getParticlesTarget();
-            return particlesTarget != null ? particlesTarget : Minecraft.getInstance().getMainRenderTarget();
+        OutputTarget getOutputTarget() {
+            return PARTICLE;
         }
     }
 
     private static final class Fallback extends GhostBlockRenderConfig {
         @Override
-        void setupSamplers(RenderPass renderPass) {
-            super.setupSamplers(renderPass);
+        void setupSamplers(FeatureFrameContext context, RenderPass renderPass) {
+            super.setupSamplers(context, renderPass);
             renderPass.bindTexture(
                     "Sampler1",
                     Minecraft.getInstance().gameRenderer.overlayTexture().getTextureView(),
@@ -72,9 +68,8 @@ abstract sealed class GhostBlockRenderConfig {
         }
 
         @Override
-        RenderTarget getRenderTarget() {
-            RenderTarget itemEntityTarget = Minecraft.getInstance().levelRenderer.getItemEntityTarget();
-            return itemEntityTarget != null ? itemEntityTarget : Minecraft.getInstance().getMainRenderTarget();
+        OutputTarget getOutputTarget() {
+            return OutputTarget.ITEM_ENTITY_TARGET;
         }
     }
 }

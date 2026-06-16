@@ -7,7 +7,6 @@ import io.github.xfacthd.framedblocks.client.model.RuntimeMaterialBaker;
 import io.github.xfacthd.framedblocks.client.model.wrapping.ModelWrappingManager;
 import io.github.xfacthd.framedblocks.client.util.CacheCleaner;
 import net.minecraft.client.renderer.texture.SpriteContents;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.Identifier;
@@ -106,8 +105,7 @@ final class BlockOverlayMetaCache {
     }
 
     private static Material.Baked getMaterial(Identifier texture) {
-        TextureAtlasSprite sprite = RuntimeMaterialBaker.getSprite(texture);
-        return new Material.Baked(sprite, sprite.transparency().hasTranslucent());
+        return RuntimeMaterialBaker.getInstance().getMaterial(new Material(texture));
     }
 
     @Contract("_,false->!null")

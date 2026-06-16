@@ -17,7 +17,7 @@ public final class RecipeTransferErrorTransferNotImplemented implements IRecipeT
 
     @Override
     public void showError(GuiGraphicsExtractor graphics, int mouseX, int mouseY, IRecipeSlotsView recipeSlotsView, int recipeX, int recipeY) {
-        Screen screen = Minecraft.getInstance().screen;
+        Screen screen = Minecraft.getInstance().gui.screen();
         if (screen != null) {
             graphics.setTooltipForNextFrame(
                     Minecraft.getInstance().font,

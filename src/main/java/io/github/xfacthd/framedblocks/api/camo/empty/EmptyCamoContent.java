@@ -14,6 +14,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.BlockAndLightGetter;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Explosion;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
@@ -115,6 +116,11 @@ public final class EmptyCamoContent extends CamoContent<EmptyCamoContent> {
     @Override
     public boolean canOcclude() {
         return false;
+    }
+
+    @Override
+    public float getBounceRestitution(Level level, BlockPos pos, Entity entity) {
+        return 0F;
     }
 
     @Override

@@ -74,7 +74,7 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension {
                 .instrument(NoteBlockInstrument.BASS)
                 .strength(2F)
                 .sound(SoundType.WOOD)
-                .emissiveRendering(FramedBlockInternals::isEmissiveRendering)
+                //.emissiveRendering(FramedBlockInternals::isEmissiveRendering) // FIXME: this predicate needs to have level context reintroduced
                 .isViewBlocking(FramedBlockInternals::isViewBlocking)
                 .isSuffocating(FramedBlockInternals::isSuffocating);
 
@@ -504,6 +504,15 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension {
             return false;
         }
         return IBlockExtension.super.canEntityDestroy(state, level, pos, entity);
+    }
+
+    @Override
+    default float getBounceRestitution(Level level, BlockPos pos, BlockState blockState, Entity entity) {
+        float bounceRestitution = 0F;
+        if (level.getBlockEntity(pos) instanceof IFramedBlockEntity be) {
+            bounceRestitution = be.getCamoBounceRestitution(entity);
+        }
+        return Math.max(IBlockExtension.super.getBounceRestitution(level, pos, blockState, entity), bounceRestitution);
     }
 
     /// Create a new [BlockEntity] for this block. BEs returned from this method must implement [IFramedBlockEntity]

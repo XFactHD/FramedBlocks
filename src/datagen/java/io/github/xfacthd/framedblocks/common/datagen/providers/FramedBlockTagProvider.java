@@ -5,11 +5,13 @@ import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.api.util.FramedConstants;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.common.FBContent;
+import io.github.xfacthd.framedblocks.common.datagen.util.ObjectTagAppender;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
-import net.minecraft.data.tags.TagAppender;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -63,16 +65,7 @@ public final class FramedBlockTagProvider extends BlockTagsProvider {
                 Tags.Blocks.GLASS_BLOCKS,
                 BlockTags.ICE,
                 BlockTags.LEAVES
-        ).add(
-                Blocks.COPPER_GRATE,
-                Blocks.EXPOSED_COPPER_GRATE,
-                Blocks.WEATHERED_COPPER_GRATE,
-                Blocks.OXIDIZED_COPPER_GRATE,
-                Blocks.WAXED_COPPER_GRATE,
-                Blocks.WAXED_EXPOSED_COPPER_GRATE,
-                Blocks.WAXED_WEATHERED_COPPER_GRATE,
-                Blocks.WAXED_OXIDIZED_COPPER_GRATE
-        );
+        ).addAll(Blocks.COPPER_GRATE.asList());
 
         getOrCreateRawBuilder(FramedConstants.Tags.FRAMEABLE)
                 .addOptionalElement(Utils.id("create", "oak_window"))
@@ -114,7 +107,7 @@ public final class FramedBlockTagProvider extends BlockTagsProvider {
         tag(FramedConstants.Tags.NON_OCCLUDEABLE)
                 .addTag(BlockTags.LEAVES);
 
-        TagAppender<Block, Block> fullGroupTag = tag(FramedConstants.Tags.GROUP_FULL_CUBE);
+        ObjectTagAppender<Block> fullGroupTag = tag(FramedConstants.Tags.GROUP_FULL_CUBE);
         FBContent.getRegisteredBlocks()
                 .stream()
                 .map(Holder::value)
@@ -142,7 +135,7 @@ public final class FramedBlockTagProvider extends BlockTagsProvider {
         pickaxeBlocks.add(FBContent.BLOCK_FRAMING_SAW.value());
         pickaxeBlocks.add(FBContent.BLOCK_POWERED_FRAMING_SAW.value());
 
-        TagAppender<Block, Block> axeTag = tag(BlockTags.MINEABLE_WITH_AXE);
+        ObjectTagAppender<Block> axeTag = tag(BlockTags.MINEABLE_WITH_AXE);
         FBContent.getRegisteredBlocks()
                 .stream()
                 .map(Holder::value)
@@ -154,6 +147,11 @@ public final class FramedBlockTagProvider extends BlockTagsProvider {
         tag(BlockTags.MINEABLE_WITH_PICKAXE).add(pickaxeBlocks.toArray(Block[]::new));
 
         tag(BlockTags.create(Utils.id("diagonalwindows", "non_diagonal_panes"))).add(FBContent.BLOCK_FRAMED_BARS.value());
+    }
+
+    @Override
+    protected ObjectTagAppender<Block> tag(TagKey<Block> tag) {
+        return new ObjectTagAppender<>(super.tag(tag), BuiltInRegistries.BLOCK);
     }
 
     @Override

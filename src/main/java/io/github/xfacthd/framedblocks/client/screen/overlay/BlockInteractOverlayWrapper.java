@@ -4,8 +4,8 @@ import io.github.xfacthd.framedblocks.api.screen.overlay.BlockInteractOverlay;
 import io.github.xfacthd.framedblocks.api.screen.overlay.OverlayDisplayMode;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.Hud;
 import net.minecraft.client.gui.screens.inventory.tooltip.TooltipRenderUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -92,7 +92,7 @@ final class BlockInteractOverlayWrapper {
             updateTextWidth(font);
         }
 
-        Gui gui = Minecraft.getInstance().gui;
+        Hud hud = Minecraft.getInstance().gui.hud;
         int lineHeight = font.lineHeight + LINE_DIST;
         int count = lines.size();
         int contentHeight = count * lineHeight - LINE_DIST;
@@ -100,7 +100,7 @@ final class BlockInteractOverlayWrapper {
         int width = textWidth + tex.width() + PADDING;
         int height = Math.max(contentHeight, tex.height());
         int minY = screenHeight / 2 + tex.height() / 2;
-        int maxY = screenHeight - Math.min(gui.leftHeight, gui.rightHeight);
+        int maxY = screenHeight - Math.min(hud.leftHeight, hud.rightHeight);
         int x = centerX - (width / 2);
         int y = Math.max(screenHeight - DEFAULT_Y_OFF - height, minY + TOOLTIP_MARGIN);
         if (y + height > maxY - TOOLTIP_MARGIN) {

@@ -1,6 +1,7 @@
 package io.github.xfacthd.framedblocks.common.compat.atlasviewer;
 
 import com.mojang.logging.LogUtils;
+import io.github.xfacthd.atlasviewer.client.api.RegisterSpriteSourceDetailsEvent;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.client.render.util.AnimationSplitterSource;
 import io.github.xfacthd.framedblocks.client.render.util.AreaMaskSource;
@@ -9,7 +10,6 @@ import net.minecraft.network.chat.Component;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModList;
 import org.slf4j.Logger;
-import xfacthd.atlasviewer.client.api.RegisterSpriteSourceDetailsEvent;
 
 public final class AtlasViewerCompat {
     private static final Logger LOGGER = LogUtils.getLogger();
