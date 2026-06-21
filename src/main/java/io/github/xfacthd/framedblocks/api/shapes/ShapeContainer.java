@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
 
-public sealed interface ShapeContainer permits EmptyShapeContainer, SingleShapeContainer, MapBackedShapeContainer {
-    ShapeContainer EMPTY = EmptyShapeContainer.INSTANCE;
+public sealed interface ShapeContainer permits SingleShapeContainer, MapBackedShapeContainer {
+    ShapeContainer EMPTY = new SingleShapeContainer();
 
     VoxelShape get(BlockState state);
 

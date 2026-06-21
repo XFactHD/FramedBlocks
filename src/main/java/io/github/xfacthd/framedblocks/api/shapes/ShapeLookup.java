@@ -5,8 +5,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public sealed interface ShapeLookup permits EmptyShapeLookup, SingleShapeLookup, MapBackedShapeLookup, ReloadableShapeLookup {
-    ShapeLookup EMPTY = EmptyShapeLookup.INSTANCE;
+public sealed interface ShapeLookup permits SingleShapeLookup, MapBackedShapeLookup, ReloadableShapeLookup {
+    ShapeLookup EMPTY = new SingleShapeLookup();
 
     VoxelShape getShape(BlockState state);
 

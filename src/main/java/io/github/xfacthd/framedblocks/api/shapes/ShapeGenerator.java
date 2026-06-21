@@ -7,7 +7,7 @@ import org.jspecify.annotations.Nullable;
 import java.util.List;
 
 public interface ShapeGenerator {
-    ShapeGenerator EMPTY = _ -> EmptyShapeContainer.INSTANCE;
+    ShapeGenerator EMPTY = _ -> ShapeContainer.EMPTY;
 
     ShapeContainer generatePrimary(List<BlockState> states);
 
