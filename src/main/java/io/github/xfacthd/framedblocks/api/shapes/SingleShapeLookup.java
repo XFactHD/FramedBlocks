@@ -1,6 +1,7 @@
 package io.github.xfacthd.framedblocks.api.shapes;
 
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jspecify.annotations.Nullable;
 
@@ -13,6 +14,12 @@ final class SingleShapeLookup implements ShapeLookup {
         this.shape = shapes.getShape();
         this.occlusionShape = occlusionShapes != null ? occlusionShapes.getShape() : shape;
         this.occludesBeaconBeam = ShapeUtils.occludesBeaconBeam(shape);
+    }
+
+    SingleShapeLookup() {
+        this.shape = Shapes.empty();
+        this.occlusionShape = Shapes.empty();
+        this.occludesBeaconBeam = false;
     }
 
     @Override

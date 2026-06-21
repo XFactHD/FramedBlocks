@@ -1,6 +1,7 @@
 package io.github.xfacthd.framedblocks.api.shapes;
 
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jspecify.annotations.Nullable;
 
@@ -16,6 +17,11 @@ final class SingleShapeContainer implements ShapeContainer {
         this.shape = shape;
     }
 
+    SingleShapeContainer() {
+        this.states = List.of();
+        this.shape = Shapes.empty();
+    }
+
     @Override
     public VoxelShape get(BlockState state) {
         return shape;
@@ -23,7 +29,7 @@ final class SingleShapeContainer implements ShapeContainer {
 
     @Override
     public boolean isEmpty() {
-        return false;
+        return this == EMPTY;
     }
 
     @Override

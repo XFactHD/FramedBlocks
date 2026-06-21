@@ -22,7 +22,7 @@ public final class ReloadableShapeLookup implements ShapeLookup {
         ShapeContainer shapes = generator.generatePrimary(states);
         ShapeContainer occlusionShapes = generator.generateOcclusion(states);
         return switch (shapes) {
-            case EmptyShapeContainer ignored -> {
+            case SingleShapeContainer single when single == SingleShapeContainer.EMPTY -> {
                 if (occlusionShapes != SingleShapeContainer.EMPTY) {
                     throw new IllegalStateException("Cannot use non-empty occlusion shape container with empty primary shape container");
                 }
