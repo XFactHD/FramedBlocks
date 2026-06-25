@@ -127,7 +127,7 @@ public final class CamoApplicatorImpl implements CamoApplicator {
                     }
                 }
                 if (amount > inserted) {
-                    invWrapper.placeItemBackInInventory(getResource(), amount - inserted, transaction);
+                    invWrapper.placeItemBackInInventory(resource, amount - inserted, transaction);
                 }
                 // Any leftover is dropped, so the full amount can always be accepted
                 return amount;
