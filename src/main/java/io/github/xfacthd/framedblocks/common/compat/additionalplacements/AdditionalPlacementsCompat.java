@@ -27,11 +27,10 @@ public final class AdditionalPlacementsCompat {
     private static final class GuardedAccess {
         public static void init() {
             Registration.addRegistration(new RegistrationInitializer() {
-                // FIXME: RL->ID
-                //@Override
-                //public void addGlobalBlacklisters(Consumer<IBlockBlacklister<Block>> register) {
-                //    register.accept((block, _) -> block instanceof IFramedBlock);
-                //}
+                @Override
+                public void addGlobalBlacklisters(Consumer<IBlockBlacklister<Block>> register) {
+                    register.accept((block, _) -> block instanceof IFramedBlock);
+                }
             });
         }
     }
