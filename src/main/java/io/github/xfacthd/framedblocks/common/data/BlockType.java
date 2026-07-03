@@ -431,7 +431,7 @@ public enum BlockType implements IBlockType {
     @Override
     public int compareTo(IBlockType other) {
         if (!(other instanceof BlockType type)) {
-            return 1;
+            return -1;
         }
         return compareTo(type);
     }
