@@ -5,7 +5,6 @@ import io.github.xfacthd.framedblocks.api.camo.resource.ResourceCamoContent;
 import io.github.xfacthd.framedblocks.api.camo.resource.ResourceCamoContentClientHandler;
 import io.github.xfacthd.framedblocks.api.model.CachingModel;
 import io.github.xfacthd.framedblocks.api.util.Utils;
-import io.github.xfacthd.framedblocks.client.util.CacheCleaner;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.dispatch.BlockModelRotation;
 import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
@@ -51,7 +50,7 @@ public final class ResourceCubeModel<R extends Resource, C extends ResourceCamoC
 
     public ResourceCubeModel(ResourceCamoContentClientHandler<R, C> clientHandler) {
         this.clientHandler = clientHandler;
-        CacheCleaner.registerLoadedCachingModel(this);
+        CachingModel.registerPersistent(this);
     }
 
     @Override

@@ -13,9 +13,23 @@ public interface CachingModel {
     ///
     /// Models registered through this method will not have [#clearCache()] called on
     /// them after a resource reload.
+    /// This method must only be used for models which are discarded during a
+    /// resource reload.
     ///
     /// @param model The model to register
     static void register(CachingModel model) {
         InternalClientAPI.INSTANCE.registerLoadedCachingModel(model);
+    }
+
+    /// Register the provided model for cache cleanup.
+    ///
+    /// Models registered through this method will have [#clearCache()] called on
+    /// them after a resource reload.
+    /// This method must only be used for models which persist through a resource
+    /// reload.
+    ///
+    /// @param model The model to register
+    static void registerPersistent(CachingModel model) {
+        InternalClientAPI.INSTANCE.registerPersistentCachingModel(model);
     }
 }

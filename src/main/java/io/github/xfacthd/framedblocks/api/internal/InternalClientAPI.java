@@ -87,6 +87,8 @@ public interface InternalClientAPI {
 
     void registerLoadedCachingModel(CachingModel model);
 
+    void registerPersistentCachingModel(CachingModel model);
+
     <R extends Resource, C extends ResourceCamoContent<R, C>> ResourceCamoContentClientHandler.ResourceModelBaker<R, C> createResourceModelBaker(
             ResourceCamoContentClientHandler<R, C> clientHandler
     );
