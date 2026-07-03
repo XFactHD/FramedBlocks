@@ -172,6 +172,11 @@ public final class InternalClientApiImpl implements InternalClientAPI {
     }
 
     @Override
+    public void registerPersistentCachingModel(CachingModel model) {
+        CacheCleaner.registerPersistentCachingModel(model);
+    }
+
+    @Override
     public <R extends Resource, C extends ResourceCamoContent<R, C>> ResourceCamoContentClientHandler.ResourceModelBaker<R, C> createResourceModelBaker(
             ResourceCamoContentClientHandler<R, C> clientHandler
     ) {
