@@ -60,6 +60,8 @@ import net.neoforged.neoforge.common.world.AuxiliaryLightManager;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.Nullable;
 
+import java.util.function.UnaryOperator;
+
 /// Top-level interface providing all generic block functionality of framed blocks.
 /// Must be implemented by all framed blocks.
 public interface IFramedBlock extends EntityBlock, IBlockExtension {
@@ -77,6 +79,17 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension {
     /// @param type  The type of the block the properties will be used for
     /// @return the modified block properties
     static Block.Properties applyDefaultProperties(BlockBehaviour.Properties props, IBlockType type) {
+        return applyDefaultProperties(props, type, UnaryOperator.identity());
+    }
+
+    /// Apply the default block properties to the given properties of the given block type
+    /// and apply the given modifier to the resulting properties.
+    ///
+    /// @param props         The properties to modify
+    /// @param type          The type of the block the properties will be used for
+    /// @param propsModifier The modifier to apply after setting the default properties
+    /// @return the modified block properties
+    static Block.Properties applyDefaultProperties(BlockBehaviour.Properties props, IBlockType type, UnaryOperator<BlockBehaviour.Properties> propsModifier) {
         props.mapColor(MapColor.WOOD)
                 .ignitedByLava()
                 .instrument(NoteBlockInstrument.BASS)
@@ -90,7 +103,7 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension {
             props.noOcclusion();
         }
 
-        return props;
+        return propsModifier.apply(props);
     }
 
     /// Create a [BlockItem] for this block. Must extend [BlockItem] and [IFramedBlockItem].
