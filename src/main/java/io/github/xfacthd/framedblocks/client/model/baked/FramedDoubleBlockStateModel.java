@@ -33,7 +33,6 @@ public final class FramedDoubleBlockStateModel extends AbstractFramedBlockStateM
 
     public FramedDoubleBlockStateModel(GeometryFactory.Context ctx) {
         super(ctx.baseModel(), ctx.state());
-        BlockState state = ctx.state();
         DoubleBlockStateCache cache = ((IFramedDoubleBlock) state.getBlock()).getCache(state);
         this.parts = cache.getParts();
         this.partModels = Lazy.of(() -> new PartModels(
