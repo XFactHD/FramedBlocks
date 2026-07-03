@@ -14,6 +14,8 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.transfer.access.ItemAccess;
 
+/// Camo container implementation for serialization and networking of the empty camo.
+/// Application and removal of the empty camo is forbidden and will throw an exception.
 public final class EmptyCamoContainerFactory extends CamoContainerFactory<EmptyCamoContainer> {
     private static final MapCodec<EmptyCamoContainer> CODEC = MapCodec.unit(EmptyCamoContainer.EMPTY);
     private static final StreamCodec<ByteBuf, EmptyCamoContainer> STREAM_CODEC = StreamCodec.unit(EmptyCamoContainer.EMPTY);

@@ -12,6 +12,7 @@ import net.minecraft.world.level.ItemLike;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.Nullable;
 
+/// Extended shaped recipe builder with support for auto-generated criterion names in recipe advancements.
 public class ExtShapedRecipeBuilder extends ShapedRecipeBuilder implements AutoUnlockNameBuilder<ExtShapedRecipeBuilder> {
     private final RecipeProvider provider;
 

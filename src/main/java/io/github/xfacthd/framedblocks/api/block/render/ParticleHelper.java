@@ -25,7 +25,17 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
+/// Various helpers for spawning particles on framed blocks.
 public final class ParticleHelper {
+    /// Spawn particles when an entity falls onto a framed block.
+    ///
+    /// @param camo    The camo applied to the top face of the block
+    /// @param overlay The block overlay applied to the block
+    /// @param state   The state of the block
+    /// @param level   The level which the block is in
+    /// @param pos     The position of the block
+    /// @param entity  The entity which fell onto the block
+    /// @param count   How many particles should be spawned
     public static void spawnLandingParticles(
             CamoContainer<?, ?> camo,
             @Nullable Holder<BlockOverlay> overlay,
@@ -42,6 +52,13 @@ public final class ParticleHelper {
         spawnLandingParticles(camo.getContent(), level, pos, entity, count);
     }
 
+    /// Spawn particles when an entity falls onto a framed block.
+    ///
+    /// @param camo    The camo applied to the top face of the block
+    /// @param level   The level the block is in
+    /// @param pos     The position of the block
+    /// @param entity  The entity which fell onto the block
+    /// @param count   How many particles should be spawned
     public static void spawnLandingParticles(CamoContent<?> camo, ServerLevel level, BlockPos pos, LivingEntity entity, int count) {
         spawnLandingParticles(camo.makeRunningLandingParticles(pos), level, pos, entity, count);
     }
@@ -62,6 +79,14 @@ public final class ParticleHelper {
         level.sendParticles(options, x, y, z, count, 0D, 0D, 0D, 0.15D);
     }
 
+    /// Spawn particles when an entity sprints across a framed block.
+    ///
+    /// @param camo    The camo applied to the framed block
+    /// @param overlay The block overlay applied to the framed block
+    /// @param state   The state of the block
+    /// @param level   The level the block is in
+    /// @param pos     The position of the block
+    /// @param entity  The entity sprinting across the block
     public static void spawnRunningParticles(
             CamoContainer<?, ?> camo,
             @Nullable Holder<BlockOverlay> overlay,
@@ -77,6 +102,12 @@ public final class ParticleHelper {
         spawnRunningParticles(camo.getContent(), level, pos, entity);
     }
 
+    /// Spawn particles when an entity sprints across a framed block.
+    ///
+    /// @param camo    The camo applied to the framed block
+    /// @param level   The level the block is in
+    /// @param pos     The position of the block
+    /// @param entity  The entity sprinting across the block
     public static void spawnRunningParticles(CamoContent<?> camo, Level level, BlockPos pos, Entity entity) {
         spawnRunningParticles(camo.makeRunningLandingParticles(pos), level, pos, entity);
     }
@@ -98,6 +129,13 @@ public final class ParticleHelper {
     }
 
     public static final class Client {
+        /// Spawn particles when a player hits a framed block.
+        ///
+        /// @param state   The state of the block
+        /// @param target  The position the block was hit at
+        /// @param camo    The camo applied to the block
+        /// @param overlay The block overlay applied to the block
+        /// @param engine  The particle engine to use for spawning the particles
         @SuppressWarnings({ "rawtypes", "unchecked" })
         public static void addHitEffects(BlockState state, Level level, BlockHitResult target, CamoContent<?> camo, @Nullable Holder<BlockOverlay> overlay, ParticleEngine engine) {
             ClientLevel clientLevel = (ClientLevel) level;
@@ -132,6 +170,14 @@ public final class ParticleHelper {
             }
         }
 
+        /// Spawn particles when a player breaks a framed block.
+        ///
+        /// @param state   The state of the block
+        /// @param level   The level the block is in
+        /// @param pos     The position of the block
+        /// @param camo    The camo applied to the block
+        /// @param overlay The block overlay applied to the block
+        /// @param engine  The particle engine to use for spawning the particles
         @SuppressWarnings({ "rawtypes", "unchecked" })
         public static void addDestroyEffects(BlockState state, Level level, BlockPos pos, CamoContent<?> camo, @Nullable Holder<BlockOverlay> overlay, ParticleEngine engine) {
             CamoContentClientHandler handler = camo.getClientHandler();

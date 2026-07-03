@@ -2,9 +2,7 @@ package io.github.xfacthd.framedblocks.common.data.skippreds;
 
 import net.minecraft.core.Direction;
 
-/**
- * Indicates in which direction the corner above the baseline points
- */
+/// Indicates in which direction the corner above the baseline points.
 public enum TriangleDir {
     NULL(Direction.UP, Direction.UP),
 
@@ -40,10 +38,8 @@ public enum TriangleDir {
         return fromDirections(cardOne.getOpposite(), cardTwo.getOpposite());
     }
 
-    /**
-     * {@return true if both {@code TriangleDir}s are not {@link TriangleDir#NULL} and the other
-     * {@code TriangleDir} has the same edge directions}
-     */
+    /// {@return true if both {@code TriangleDir}s are not {@link TriangleDir#NULL} and the other
+    ///  {@code TriangleDir} has the same edge directions}
     public boolean isEqualTo(TriangleDir other) {
         return this != NULL && this == other;
     }

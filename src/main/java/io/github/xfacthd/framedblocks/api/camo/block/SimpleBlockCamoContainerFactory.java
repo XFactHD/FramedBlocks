@@ -16,13 +16,10 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.transfer.access.ItemAccess;
-import org.jspecify.annotations.Nullable;
 
-/**
- * Basic block camo container factory for simple camos based on only a {@link BlockState} which only need minimal
- * context to be applied and removed. Camos using this factory must be trivially droppable (i.e. they must not require
- * consumption of an item during removal or any player or level context for dropping)
- */
+/// Basic camo container factory implementation for simple block-based camos which hold only a [BlockState] and only need minimal
+/// context to be applied and removed. Camos using this factory must be trivially droppable (i.e. they must not require
+/// consumption of an item during removal or any player or level context for dropping).
 public abstract class SimpleBlockCamoContainerFactory extends AbstractBlockCamoContainerFactory<SimpleBlockCamoContainer> {
     public static final Component MSG_BLOCK_ENTITY = Utils.translate("msg", "camo.block_entity");
     public static final Component MSG_NON_SOLID = Utils.translate("msg", "camo.non_solid");
@@ -39,7 +36,7 @@ public abstract class SimpleBlockCamoContainerFactory extends AbstractBlockCamoC
     }
 
     @Override
-    public @Nullable BlockCamoCraftingHandler getCraftingHandler() {
+    public BlockCamoCraftingHandler getCraftingHandler() {
         return craftingHandler;
     }
 

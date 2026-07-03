@@ -1,8 +1,6 @@
 package io.github.xfacthd.framedblocks.common.data.skippreds;
 
-/**
- * Indicates the normal and two outer edges of each section of a face with two diagonally located quarter-block sized sections
- */
+/// Indicates the normal and two outer edges of each section of a face with two diagonally located quarter-block sized sections.
 public enum DiagCornerDir {
     NULL(CornerDir.UP_NORTH_EAST, CornerDir.UP_NORTH_EAST),
 
@@ -32,10 +30,8 @@ public enum DiagCornerDir {
         this.dirTwo = dirTwo;
     }
 
-    /**
-     * {@return true if both {@code DiagCornerDir}s are not {@link DiagCornerDir#NULL} and the other {@code DiagCornerDir}
-     * has the same edge directions and the opposite normal direction}
-     */
+    /// {@return true if both {@code DiagCornerDir}s are not {@link DiagCornerDir#NULL} and the other {@code DiagCornerDir}
+    ///  has the same edge directions and the opposite normal direction}
     public boolean isEqualTo(DiagCornerDir other) {
         return this != NULL && dirOne.isEqualTo(other.dirOne) && dirTwo.isEqualTo(other.dirTwo);
     }

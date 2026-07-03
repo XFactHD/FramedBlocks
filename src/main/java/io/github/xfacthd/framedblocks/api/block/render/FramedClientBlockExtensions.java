@@ -25,6 +25,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 
+/// Base [IClientBlockExtensions] required on all framed blocks.
 public class FramedClientBlockExtensions implements IClientBlockExtensions {
     public static final FramedClientBlockExtensions INSTANCE = new FramedClientBlockExtensions();
 
@@ -40,6 +41,14 @@ public class FramedClientBlockExtensions implements IClientBlockExtensions {
         return suppressed;
     }
 
+    /// Spawn particles when the block is hit by a player and the effect is not suppressed by intangibility.
+    ///
+    /// @param state  The state of the block
+    /// @param level  The level the block is in
+    /// @param hit    The exact location the block was hit at
+    /// @param be     The BE of the block that was hit
+    /// @param engine The particle engine to use for spawning particles
+    /// @return whether vanilla particle spawning should be suppressed
     protected boolean addHitEffectsUnsuppressed(BlockState state, Level level, BlockHitResult hit, IFramedBlockEntity be, ParticleEngine engine) {
         ParticleHelper.Client.addHitEffects(state, level, hit, be.getCamo().getContent(), be.getOverlay(), engine);
         return true;
@@ -54,6 +63,14 @@ public class FramedClientBlockExtensions implements IClientBlockExtensions {
         return suppressed;
     }
 
+    /// Spawn particles when the block is destroyed by a player and the effect is not suppressed by intangibility.
+    ///
+    /// @param state  The state of the block
+    /// @param level  The level the block is in
+    /// @param pos    The position of the block
+    /// @param be     The BE of the block that was hit
+    /// @param engine The particle engine to use for spawning particles
+    /// @return whether vanilla particle spawning should be suppressed
     protected boolean addDestroyEffectsUnsuppressed(BlockState state, Level level, BlockPos pos, IFramedBlockEntity be, ParticleEngine engine) {
         ParticleHelper.Client.addDestroyEffects(state, level, pos, be.getCamo().getContent(), be.getOverlay(), engine);
         return true;
@@ -77,6 +94,11 @@ public class FramedClientBlockExtensions implements IClientBlockExtensions {
         return false;
     }
 
+    /// {@return whether particles for the given block are suppressed by intangibility}
+    ///
+    /// @param state The state of the block
+    /// @param level The level the block is in
+    /// @param pos   The position of the block
     protected static boolean suppressParticles(BlockState state, Level level, BlockPos pos) {
         if (state.getBlock() instanceof IFramedBlock block && block.getBlockType().allowMakingIntangible()) {
             return block.isIntangible(state, level, pos, null);
@@ -104,5 +126,12 @@ public class FramedClientBlockExtensions implements IClientBlockExtensions {
         CamoContainerHelper.Client.collectTintValues(data.unwrap(false).getCamoContainer(), level, pos, tintValues);
     }
 
+    /// Collect tint value used by additional non-camo geometry of the given block.
+    ///
+    /// @param state      The state of the block
+    /// @param level      The level the block is in
+    /// @param pos        The position of the block
+    /// @param modelData  The model data provided by the BE of the block
+    /// @param tintValues The list to append the tint values to
     protected void collectAdditionalTintValues(BlockState state, BlockAndTintGetter level, BlockPos pos, ModelData modelData, IntList tintValues) { }
 }

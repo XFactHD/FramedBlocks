@@ -7,6 +7,7 @@ import net.minecraft.world.level.block.Block;
 
 import java.util.stream.Stream;
 
+/// Base item model provider implementation.
 public abstract class AbstractFramedItemModelProvider extends ModelProvider {
     protected AbstractFramedItemModelProvider(PackOutput output, String modId) {
         super(output, modId);

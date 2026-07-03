@@ -10,9 +10,13 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.function.Function;
 
+/// Indicates which camo "slot" and double block part is accesible for a given side and edge of the block.
 public enum CamoGetter {
+    /// No single camo and block part can be resolved from the side and edge.
     NONE(_ -> EmptyCamoContainer.EMPTY, _ -> FramedBlockData.EMPTY, _ -> null),
+    /// The first camo and block part can be resolved from the side and edge.
     FIRST(FramedDoubleBlockEntity::getCamo, data -> data.unwrap(false), DoubleBlockParts::stateOne),
+    /// The second camo and block part can be resolved from the side and edge.
     SECOND(FramedDoubleBlockEntity::getCamoTwo, data -> data.unwrap(true), DoubleBlockParts::stateTwo),
     ;
 
@@ -30,18 +34,31 @@ public enum CamoGetter {
         this.partGetter = partGetter;
     }
 
+    /// {@return the given BE's camo in the slot resolved by this camo getter}
+    ///
+    /// @param be The BE to resolve the camo from
     public CamoContainer<?, ?> getCamo(FramedDoubleBlockEntity be) {
         return entityCamoGetter.apply(be);
     }
 
+    /// {@return the given block data's camo in the slot resolved by this camo getter}
+    ///
+    /// @param data The block data to resolve the camo from
     public CamoContainer<?, ?> getCamo(AbstractFramedBlockData data) {
         return modelDataUnwrapper.apply(data).getCamoContainer();
     }
 
+    /// {@return the block part for the slot resolved by this camo getter}
+    ///
+    /// @param parts The block parts to resolve the part from
     public @Nullable BlockState getComponent(DoubleBlockParts parts) {
         return partGetter.apply(parts);
     }
 
+    /// {@return the camo getter referred to by the given flags}
+    ///
+    /// @param first  Whether the first camo should be resolvable
+    /// @param second Whether the second camo should be resolvable
     public static CamoGetter get(boolean first, boolean second) {
         if (first && second) {
             throw new IllegalArgumentException("Only first or second may be true");

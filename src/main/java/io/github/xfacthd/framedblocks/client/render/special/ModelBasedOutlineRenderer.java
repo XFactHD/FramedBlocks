@@ -36,10 +36,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
 
-/**
- * An {@link OutlineRenderer} which derives the lines from the block's geometry instead of requiring them
- * to be manually specified for the individual block.
- */
+/// An [OutlineRenderer] which derives the lines from the block's geometry instead of requiring them
+/// to be manually specified for the individual block.
 public final class ModelBasedOutlineRenderer implements SimpleOutlineRenderer {
     private static final List<ModelBasedOutlineRenderer> RENDERERS = new ArrayList<>();
     private static final @Nullable Direction[] DIRECTIONS = Arrays.copyOf(Direction.values(), 7);

@@ -22,6 +22,7 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.MapColor;
 import org.jspecify.annotations.Nullable;
 
+/// Camo content implementation representing the absence of a camo.
 public final class EmptyCamoContent extends CamoContent<EmptyCamoContent> {
     public static final EmptyCamoContent EMPTY = new EmptyCamoContent();
 

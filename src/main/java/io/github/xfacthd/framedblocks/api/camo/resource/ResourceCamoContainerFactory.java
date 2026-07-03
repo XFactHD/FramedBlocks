@@ -16,15 +16,16 @@ import net.neoforged.neoforge.transfer.resource.Resource;
 import net.neoforged.neoforge.transfer.transaction.Transaction;
 import org.jspecify.annotations.Nullable;
 
+/// Base implementation of a camo container factory for [Resource]-based camos.
 public abstract class ResourceCamoContainerFactory<R extends Resource, C extends ResourceCamoContent<R, C>, T extends ResourceCamoContainer<R, C, T>> extends CamoContainerFactory<T> {
     protected final ItemCapability<ResourceHandler<R>, ItemAccess> itemCapability;
     protected final int resourceAmount;
     protected final ResourceCamoCraftingHandler<R, C, T> craftingHandler;
 
-    protected ResourceCamoContainerFactory(ItemCapability<ResourceHandler<R>, ItemAccess> itemCapability, int resourceAmount, TagKey<Item> craftingBlockContainers) {
+    protected ResourceCamoContainerFactory(ItemCapability<ResourceHandler<R>, ItemAccess> itemCapability, int resourceAmount, TagKey<Item> craftingBlockedContainers) {
         this.itemCapability = itemCapability;
         this.resourceAmount = resourceAmount;
-        this.craftingHandler = new ResourceCamoCraftingHandler<>(this, craftingBlockContainers);
+        this.craftingHandler = new ResourceCamoCraftingHandler<>(this, craftingBlockedContainers);
     }
 
     @Override
@@ -88,6 +89,11 @@ public abstract class ResourceCamoContainerFactory<R extends Resource, C extends
         return true;
     }
 
+    /// Check whether the given [Resource] is valid for the given [ResourceHandler].
+    ///
+    /// @param handler  The resource handler to check against
+    /// @param resource The resource to check with, must be non-empty
+    /// @return whether the resource is valid for the handler
     protected final boolean isValidForHandler(ResourceHandler<R> handler, R resource) {
         for (int tank = 0; tank < handler.size(); tank++) {
             if (!handler.isValid(tank, resource)) {
@@ -117,8 +123,17 @@ public abstract class ResourceCamoContainerFactory<R extends Resource, C extends
         return isValidResource(container.getResource(), null);
     }
 
+    /// {@return a new camo container from the given resource}
+    ///
+    /// @param resource The resource to store in the camo container
     protected abstract T createContainer(R resource);
 
+    /// Validate that the given resource is a valid camo.
+    /// The provided player is `null` if the validation was not triggered by a player interaction.
+    ///
+    /// @param resource The resource stored in the camo container to validate
+    /// @param player   The player interacting with the framed block, if available
+    /// @return true to keep the camo, false to discard it
     protected abstract boolean isValidResource(R resource, @Nullable Player player);
 
     @Override

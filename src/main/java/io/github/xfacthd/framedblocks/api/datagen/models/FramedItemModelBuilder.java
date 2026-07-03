@@ -20,6 +20,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.UnaryOperator;
 
+/// Builder for dynamic, camo-aware item models for framed blocks.
 @SuppressWarnings({ "unused", "UnusedReturnValue" })
 public final class FramedItemModelBuilder {
     private static final Identifier DEFAULT_BASE_MODEL = AbstractFramedBlockModelProvider.FRAMED_CUBE_MODEL;
@@ -45,21 +46,28 @@ public final class FramedItemModelBuilder {
         this.block = block;
     }
 
-    /**
-     * Specify the {@link BlockItemModelProvider} to use for retrieving the {@link BlockStateModel} which the
-     * item model will be based on.
-     * <p>
-     * Allows using dedicated block models with camo awareness when the item model looks different to all variants
-     * of the actual block model.
-     */
+    /// Specify the [BlockItemModelProvider] to use for retrieving the [BlockStateModel] which the
+    /// item model will be based on. If unspecified, defaults to using the model of the state
+    /// given by [IFramedBlock#getItemModelSource()].
+    ///
+    /// Allows using dedicated block models with camo awareness when the item model looks different to all variants
+    /// of the actual block model.
+    ///
+    /// @param modelProvider The model provider
+    /// @return this builder
     public FramedItemModelBuilder modelProvider(BlockItemModelProvider modelProvider) {
         this.modelProvider = modelProvider;
         return this;
     }
 
-    /**
-     * Specify the model from which the {@link ItemTransforms} should be pulled
-     */
+    /// Specify the model from which the [ItemTransforms] should be pulled.
+    /// Cannot be combined with [#transforms(UnaryOperator)].
+    ///
+    /// If neither a base model nor embedded item transforms are specified, the
+    /// Framed Cube model is used as the base model.
+    ///
+    /// @param itemBaseModel The transform source model
+    /// @return this builder
     public FramedItemModelBuilder itemBaseModel(Identifier itemBaseModel) {
         Preconditions.checkState(this.itemBaseModel == null, "Item base model already specified");
         Preconditions.checkState(this.transforms == null, "Item base model cannot be combined with embedded transforms");
@@ -67,7 +75,11 @@ public final class FramedItemModelBuilder {
         return this;
     }
 
-    /// Specify [ItemTransforms] to embed in the client item file
+    /// Specify [ItemTransforms] to embed in the client item file.
+    /// Cannot be combined with [#itemBaseModel(Identifier)].
+    ///
+    /// @param builderOperator The transform builder
+    /// @return this builder
     public FramedItemModelBuilder transforms(UnaryOperator<ItemTransformsBuilder> builderOperator) {
         Preconditions.checkState(this.transforms == null, "Item transforms already specified");
         Preconditions.checkState(this.itemBaseModel == null, "Embedded transforms cannot be combined with an item base model");
@@ -76,6 +88,8 @@ public final class FramedItemModelBuilder {
     }
 
     /// Indicates that the block model used by this item model requires [ModelData] even if no camo is present.
+    ///
+    /// @return this builder
     public FramedItemModelBuilder requiresData() {
         requiresData = true;
         return this;
@@ -86,11 +100,16 @@ public final class FramedItemModelBuilder {
     ///
     /// If unspecified, item models will use [ItemModelDataProvider#DOUBLE_BLOCK] if [IBlockType#isDoubleBlock()] returns `true`
     /// and [ItemModelDataProvider#DEFAULT] if it returns `false`.
+    ///
+    /// @param dataProvider The item model data provider
+    /// @return this builder
     public FramedItemModelBuilder dataProvider(ItemModelDataProvider dataProvider) {
         this.dataProvider = Optional.of(dataProvider);
         return this;
     }
 
+    /// {@return the unbaked item model}
+    @SuppressWarnings("NullableProblems")
     public ItemModel.Unbaked build() {
         Either<Identifier, ItemTransforms> modelOrXform;
         if (transforms != null) {

@@ -20,14 +20,20 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.function.Consumer;
 
+/// Base [BlockItem] implementation for framed blocks.
 public class FramedBlockItem extends BlockItem implements IFramedBlockItem {
     private final StateCycleSpec cycleSpec;
     private final boolean customEmptyPlaceSound;
 
+    /// @param block The block placed by this block item
+    /// @param props The item properties of this block item
     public FramedBlockItem(Block block, Properties props) {
         this(block, props, false);
     }
 
+    /// @param block                 The block placed by this block item
+    /// @param props                 The item properties of this block item
+    /// @param customEmptyPlaceSound Whether the block's default placement sound should be played when no camo is applied
     public FramedBlockItem(Block block, Properties props, boolean customEmptyPlaceSound) {
         Preconditions.checkArgument(block instanceof IFramedBlock);
         super(block, props);

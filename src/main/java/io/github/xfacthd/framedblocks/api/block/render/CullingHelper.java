@@ -10,22 +10,18 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.state.BlockState;
 
-/**
- * Helpers for checking whether an {@link IFramedBlock}'s side is occluded by the neighboring block or it occludes
- * a neighboring non-framed block.
- */
+/// Helpers for checking whether an [IFramedBlock]'s side is occluded by the neighboring block or it occludes
+/// a neighboring non-framed block.
 public final class CullingHelper {
-    /**
-     * Test whether the given {@link IFramedBlock} is occluded on the given side by the neighboring block
-     * and their camos either match or the camo of the occluding block is solid
-     *
-     * @param level       The level the block is in
-     * @param pos         The position of the block
-     * @param state       The state of the block
-     * @param blockEntity The block entity of the block
-     * @param side        The side being tested for occlusion
-     * @return true if the given block is occluded on the given side
-     */
+    /// Test whether the given [IFramedBlock] is occluded on the given side by the neighboring block
+    /// and their camos either match or the camo of the occluding block is solid.
+    ///
+    /// @param level       The level the block is in
+    /// @param pos         The position of the block
+    /// @param state       The state of the block
+    /// @param blockEntity The block entity of the block
+    /// @param side        The side being tested for occlusion
+    /// @return true if the given block is occluded on the given side
     public static boolean isSideHidden(BlockGetter level, BlockPos pos, BlockState state, IFramedBlockEntity blockEntity, Direction side) {
         BlockPos adjPos = pos.relative(side);
         BlockState adjState = level.getBlockState(adjPos);
@@ -77,16 +73,15 @@ public final class CullingHelper {
         return false;
     }
 
-    /**
-     * Test whether the given {@link IFramedBlock} occludes the neighboring non-{@link IFramedBlock} on the given side
-     * @param block The occluding block
-     * @param level The level the blocks are in
-     * @param pos The position of the occluding block
-     * @param state The occluding block
-     * @param adjState The block being occluded
-     * @param side The side of the occluding block which is occluding the neighboring block
-     * @return true if the given side of this block occludes the neighboring block
-     */
+    /// Test whether the given [IFramedBlock] occludes the neighboring non-[IFramedBlock] on the given side
+    ///
+    /// @param block    The occluding block
+    /// @param level    The level the blocks are in
+    /// @param pos      The position of the occluding block
+    /// @param state    The occluding block
+    /// @param adjState The block being occluded
+    /// @param side     The side of the occluding block which is occluding the neighboring block
+    /// @return true if the given side of this block occludes the neighboring block
     public static boolean hidesNeighborFace(
             IFramedBlock block, BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side
     ) {

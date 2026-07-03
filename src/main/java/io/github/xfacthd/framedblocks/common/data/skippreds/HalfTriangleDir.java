@@ -2,10 +2,8 @@ package io.github.xfacthd.framedblocks.common.data.skippreds;
 
 import net.minecraft.core.Direction;
 
-/**
- * Indicates in which direction the corner above the baseline points and whether the long edge
- * is on the outer edge of the block
- */
+/// Indicates in which direction the corner above the baseline points and whether the long edge
+/// is on the outer edge of the block.
 public enum HalfTriangleDir {
     NULL(Direction.UP, Direction.UP, false),
 
@@ -88,10 +86,8 @@ public enum HalfTriangleDir {
         return fromDirections(longEdge.getOpposite(), shortEdge.getOpposite(), !outerEdge);
     }
 
-    /**
-     * {@return true if both {@code HalfTriangleDir}s are not {@link HalfTriangleDir#NULL} and the other
-     * {@code HalfTriangleDir} has the same edge directions and the same connection to the outer edge}
-     */
+    /// {@return true if both {@code HalfTriangleDir}s are not {@link HalfTriangleDir#NULL} and the other
+    ///  {@code HalfTriangleDir} has the same edge directions and the same connection to the outer edge}
     public boolean isEqualTo(HalfTriangleDir other) {
         return this != NULL && this == other;
     }

@@ -3,6 +3,7 @@ package io.github.xfacthd.framedblocks.api.camo;
 import io.github.xfacthd.framedblocks.api.camo.empty.EmptyCamoContent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.util.TriState;
@@ -19,171 +20,194 @@ import net.minecraft.world.level.material.MapColor;
 import net.neoforged.neoforge.common.extensions.IBlockStateExtension;
 import org.jspecify.annotations.Nullable;
 
+/// Base class for camo contents, holding the primary object backing the camo (i.e. blockstate, fluid, etc.) as well as
+/// any additional metadata needed to determine the model of the camo. Additional data stored in this content must be
+/// immutable and either be singletons or properly implement [Object#hashCode()] and [Object#equals(Object)] to make it
+/// eligible for use in [data components][DataComponentType].
 public abstract class CamoContent<C extends CamoContent<C>> {
-    /**
-     * {@return whether this camo propagates skylight downwards}
-     * @see BlockBehaviour.BlockStateBase#propagatesSkylightDown()
-     */
+    /// {@return whether this camo propagates skylight downwards}
+    ///
+    /// @see BlockBehaviour.BlockStateBase#propagatesSkylightDown()
     public abstract boolean propagatesSkylightDown();
 
-    /**
-     * {@return the explosion resistance of this camo}
-     * @see IBlockStateExtension#getExplosionResistance(BlockGetter, BlockPos, Explosion)
-     */
+    /// {@return the explosion resistance of this camo}
+    ///
+    /// @param level     The level the owning framed block is in
+    /// @param pos       The position of the owning framed block
+    /// @param explosion The explosion hitting the owning framed block
+    /// @see IBlockStateExtension#getExplosionResistance(BlockGetter, BlockPos, Explosion)
     public abstract float getExplosionResistance(BlockGetter level, BlockPos pos, Explosion explosion);
 
-    /**
-     * {@return whether this camo is flammable on the given side}
-     * @see IBlockStateExtension#isFlammable(BlockGetter, BlockPos, Direction)
-     */
+    /// {@return whether this camo is flammable on the given side}
+    ///
+    /// @param level The level the owning framed block is in
+    /// @param pos   The position of the owning framed block
+    /// @param face  The side of the owning framed block being checked
+    /// @see IBlockStateExtension#isFlammable(BlockGetter, BlockPos, Direction)
     public abstract boolean isFlammable(BlockGetter level, BlockPos pos, Direction face);
 
-    /**
-     * {@return how likely this camo is to catch fire on the given side}
-     * @see IBlockStateExtension#getFlammability(BlockGetter, BlockPos, Direction)
-     */
+    /// {@return how likely this camo is to catch fire on the given side}
+    ///
+    /// @param level The level the owning framed block is in
+    /// @param pos   The position of the owning framed block
+    /// @param face  The side of the owning framed block being checked
+    /// @see IBlockStateExtension#getFlammability(BlockGetter, BlockPos, Direction)
     public abstract int getFlammability(BlockGetter level, BlockPos pos, Direction face);
 
-    /**
-     * {@return how fast fire should spread when this camo is burning on the given side}
-     * @see IBlockStateExtension#getFireSpreadSpeed(BlockGetter, BlockPos, Direction)
-     */
+    /// {@return how fast fire should spread when this camo is burning on the given side}
+    ///
+    /// @param level The level the owning framed block is in
+    /// @param pos   The position of the owning framed block
+    /// @param face  The side of the owning framed block being checked
+    /// @see IBlockStateExtension#getFireSpreadSpeed(BlockGetter, BlockPos, Direction)
     public abstract int getFireSpreadSpeed(BlockGetter level, BlockPos pos, Direction face);
 
-    /**
-     * {@return whether the given side of this camo can catch fire from lava}
-     * @apiNote This does not imply that the fire will destroy the block
-     * @see IBlockStateExtension#ignitedByLava(BlockGetter, BlockPos, Direction)
-     */
+    /// {@return whether the given side of this camo can catch fire from lava}
+    ///
+    /// @param level The level the owning framed block is in
+    /// @param pos   The position of the owning framed block
+    /// @param face  The side of the owning framed block being checked
+    /// @apiNote This does not imply that the fire will destroy the block
+    /// @see IBlockStateExtension#ignitedByLava(BlockGetter, BlockPos, Direction)
     public abstract boolean isIgnitedByLava(BlockGetter level, BlockPos pos, Direction face);
 
-    /**
-     * {@return the shade brightness of this camo}
-     * @see BlockBehaviour.BlockStateBase#getShadeBrightness(BlockGetter, BlockPos)
-     */
+    /// {@return the shade brightness of this camo}
+    ///
+    /// @param level      The level the owning framed block is in
+    /// @param pos        The position of the owning framed block
+    /// @param frameShade The shade brightness of the owning framed block without a camo applied
+    /// @see BlockBehaviour.BlockStateBase#getShadeBrightness(BlockGetter, BlockPos)
     public abstract float getShadeBrightness(BlockGetter level, BlockPos pos, float frameShade);
 
-    /**
-     * {@return the amount of light emitted by this camo}
-     * @see IBlockStateExtension#getLightEmission(BlockGetter, BlockPos)
-     */
+    /// {@return the amount of light emitted by this camo}
+    ///
+    /// @see IBlockStateExtension#getLightEmission(BlockGetter, BlockPos)
     public abstract int getLightEmission();
 
-    /**
-     * {@return whether this camo is emissive}
-     * @see BlockBehaviour.BlockStateBase#emissiveRendering(BlockGetter, BlockPos)
-     */
+    /// {@return whether this camo is emissive}
+    ///
+    /// @see BlockBehaviour.BlockStateBase#emissiveRendering(BlockGetter, BlockPos)
     public abstract boolean isEmissive();
 
-    /**
-     * {@return the sound type of this camo}
-     * @see IBlockStateExtension#getSoundType(LevelReader, BlockPos, Entity)
-     */
+    /// {@return the sound type of this camo}
+    ///
+    /// @see IBlockStateExtension#getSoundType(LevelReader, BlockPos, Entity)
     public abstract SoundType getSoundType();
 
-    /**
-     * {@return whether fluids rendered next to this camo should display a fluid overlay}
-     * @see IBlockStateExtension#shouldDisplayFluidOverlay(BlockAndLightGetter, BlockPos, FluidState)
-     */
+    /// {@return whether fluids rendered next to this camo should display a fluid overlay}
+    ///
+    /// @param level The level the owning framed block is in
+    /// @param pos   The position of the owning framed block
+    /// @param fluid The fluid touching the owning framed block
+    /// @see IBlockStateExtension#shouldDisplayFluidOverlay(BlockAndLightGetter, BlockPos, FluidState)
     public abstract boolean shouldDisplayFluidOverlay(BlockAndLightGetter level, BlockPos pos, FluidState fluid);
 
-    /**
-     * {@return the slipperiness of this camo}
-     * @see IBlockStateExtension#getFriction(LevelReader, BlockPos, Entity)
-     */
+    /// {@return the slipperiness of this camo}
+    ///
+    /// @param level         The level the owning framed block is in
+    /// @param pos           The position of the owning framed block
+    /// @param entity        The entity moving over the owning framed block
+    /// @param frameFriction The friction of the owning framed block without a camo applied
+    /// @see IBlockStateExtension#getFriction(LevelReader, BlockPos, Entity)
     public abstract float getFriction(LevelReader level, BlockPos pos, @Nullable Entity entity, float frameFriction);
 
-    /**
-     * {@return whether this camo can sustain the given plan on the given side}
-     * @see IBlockStateExtension#canSustainPlant(BlockGetter, BlockPos, Direction, BlockState)
-     */
+    /// {@return whether this camo can sustain the given plan on the given side}
+    ///
+    /// @param level The level the owning framed block is in
+    /// @param pos   The position of the owning framed block
+    /// @param side  The side of the owning framed block the plant is on
+    /// @param plant The plant checking for sustainability
+    /// @see IBlockStateExtension#canSustainPlant(BlockGetter, BlockPos, Direction, BlockState)
     public abstract TriState canSustainPlant(BlockGetter level, BlockPos pos, Direction side, BlockState plant);
 
-    /**
-     * {@return whether this camo can be destroyed by the given entity}
-     * @see IBlockStateExtension#canEntityDestroy(BlockGetter, BlockPos, Entity)
-     */
+    /// {@return whether this camo can be destroyed by the given entity}
+    ///
+    /// @param level  The level the owning framed block is in
+    /// @param pos    The position of the owning framed block
+    /// @param entity The entity attempting to destroy the owning framed block
+    /// @see IBlockStateExtension#canEntityDestroy(BlockGetter, BlockPos, Entity)
     public abstract boolean canEntityDestroy(BlockGetter level, BlockPos pos, Entity entity);
 
-    /**
-     * {@return the {@link MapColor} of this camo}
-     * @see BlockBehaviour.BlockStateBase#getMapColor(BlockGetter, BlockPos)
-     */
+    /// {@return the {@link MapColor} of this camo}
+    ///
+    /// @param level The level the owning framed block is in
+    /// @param pos   The position of the owning framed block
+    /// @see BlockBehaviour.BlockStateBase#getMapColor(BlockGetter, BlockPos)
     public abstract @Nullable MapColor getMapColor(BlockGetter level, BlockPos pos);
 
-    /**
-     * {@return the beacon color multiplier of this camo}
-     * @see IBlockStateExtension#getBeaconColorMultiplier(LevelReader, BlockPos, BlockPos)
-     */
+    /// {@return the beacon color multiplier of this camo}
+    ///
+    /// @param level     The level the owning framed block is in
+    /// @param pos       The position of the owning framed block
+    /// @param beaconPos The position of the beacon from which the beam originates
+    /// @see IBlockStateExtension#getBeaconColorMultiplier(LevelReader, BlockPos, BlockPos)
     public abstract @Nullable Integer getBeaconColorMultiplier(LevelReader level, BlockPos pos, BlockPos beaconPos);
 
-    /**
-     * {@return whether this camo is fully solid}
-     * @see BlockBehaviour.BlockStateBase#isSolidRender()
-     */
+    /// {@return whether this camo is fully solid}
+    ///
+    /// @see BlockBehaviour.BlockStateBase#isSolidRender()
     public abstract boolean isSolid();
 
-    /**
-     * {@return whether this camo can occlude other blocks}
-     * @see BlockBehaviour.BlockStateBase#canOcclude()
-     */
+    /// {@return whether this camo can occlude other blocks}
+    ///
+    /// @see BlockBehaviour.BlockStateBase#canOcclude()
     public abstract boolean canOcclude();
 
-    /**
-     * {@return the {@link BlockState} representation for use in plant sustainability and other non-visual checks
-     * if any is available such as for blocks or fluids with an associated block}
-     */
+    /// {@return the {@link BlockState} representation for use in plant sustainability and other non-visual checks
+    ///  if any is available such as for blocks or fluids with an associated block}
     public abstract BlockState getAsBlockState();
 
-    /**
-     * {@return the underlying {@link BlockState} for use with the appearance API or air if this container holds a
-     * non-block camo such as a fluid}
-     */
+    /// {@return the underlying {@link BlockState} for use with the appearance API or air if this container holds a
+    ///  non-block camo such as a fluid}
     public abstract BlockState getAppearanceState();
 
-    /**
-     * {@return whether this camo can be occluded by the given adjacent non-framed block at the given adjacent position}
-     */
+    /// {@return whether this camo can be occluded by the given adjacent non-framed block at the given adjacent position}
+    ///
+    /// @param adjState The state of the occluding block
+    /// @param level    The level the owning framed block is in
+    /// @param pos      The position of the owning framed block
+    /// @param adjPos   The position of the occluding block
+    /// @param side     The side of the owning framed block being occluded
     public abstract boolean isOccludedBy(BlockState adjState, BlockGetter level, BlockPos pos, BlockPos adjPos, Direction side);
 
-    /**
-     * {@return whether this camo can be occluded by the given camo applied to an adjacent framed block at the given
-     * adjacent position}
-     */
+    /// {@return whether this camo can be occluded by the given camo applied to an adjacent framed block at the given adjacent position}
+    ///
+    /// @param adjCamo The camo held by the occluding framed block
+    /// @param level   The level the owning framed block is in
+    /// @param pos     The position of the owning framed block
+    /// @param adjPos  The position of the occluding framed block
+    /// @param side    The side of the owning framed block being occluded
     public abstract boolean isOccludedBy(CamoContent<?> adjCamo, BlockGetter level, BlockPos pos, BlockPos adjPos, Direction side);
 
-    /**
-     * {@return whether this camo occludes the given adjacent non-framed block at the given adjacent position}
-     */
+    /// {@return whether this camo occludes the given adjacent non-framed block at the given adjacent position}
+    ///
+    /// @param adjState The state of the block being occluded
+    /// @param level    The level the owning framed block is in
+    /// @param pos      The position of the owning framed block
+    /// @param adjPos   The position of the block being occluded
+    /// @param side     The side of the owning framed block which occludes the adjacent block
     public abstract boolean occludes(BlockState adjState, BlockGetter level, BlockPos pos, BlockPos adjPos, Direction side);
 
-    /**
-     * {@return {@link ParticleOptions} to be spawned when an entity runs over or lands on a block with this camo}
-     */
+    /// {@return {@link ParticleOptions} to be spawned when an entity runs over or lands on a block with this camo}
+    ///
+    /// @param pos The position of the owning framed block
     public abstract ParticleOptions makeRunningLandingParticles(BlockPos pos);
 
-    /**
-     * {@return the registry ID of this camo}
-     */
+    /// {@return the registry ID of this camo}
     public abstract String getCamoId();
 
-    /**
-     * {@return the name of this camo to be displayed in tooltips}
-     */
+    /// {@return the name of this camo to be displayed in tooltips}
     public abstract MutableComponent getCamoName();
 
-    /**
-     * {@return whether this content represents a non-existent camo}
-     */
+    /// {@return whether this content represents a non-existent camo}
     public final boolean isEmpty() {
         return this == EmptyCamoContent.EMPTY;
     }
 
-    /**
-     * {@return the {@link CamoContentClientHandler} for this camo content}
-     * @apiNote This method must not be called on the server
-     * @implNote This method must return a constant value
-     */
+    /// {@return the {@link CamoContentClientHandler} for this camo content}
+    ///
+    /// @apiNote This method must not be called on the server
+    /// @implNote This method must return a constant value
     public abstract CamoContentClientHandler<C> getClientHandler();
 
     @Override

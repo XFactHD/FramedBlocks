@@ -27,9 +27,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.Half;
 import net.minecraft.world.level.block.state.properties.StairsShape;
 
-/**
- This class is machine-generated, any manual changes to this class will be overwritten.
- */
+/// This class is machine-generated, any manual changes to this class will be overwritten.
 @CullTest(BlockType.FRAMED_HALF_BOARD)
 public final class HalfBoardSkipPredicate implements SideSkipPredicate {
     @Override

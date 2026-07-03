@@ -26,16 +26,14 @@ import java.util.Locale;
 import java.util.Optional;
 import java.util.Set;
 
-/**
- * Describes an additional overlay that can be applied on top of a framed block's camo.
- *
- * @param solidTexture The texture ID to apply to faces marked as full coverage via {@code solidFaces}
- * @param edgeTexture  The texture ID to apply to edges adjacent to full faces (top edge of the texture is assumed up/north)
- * @param solidFace    The {@link SolidFace} to which the full texture should be applied
- * @param tintSource   The {@link Block} to pull the tint color from, if applicable
- * @param sourceItem   The {@link Item} to use for applying this overlay
- * @param translucent  Whether the overlay has translucent pixels
- */
+/// Describes an additional overlay that can be applied on top of a framed block's camo.
+///
+/// @param solidTexture The texture ID to apply to faces marked as full coverage via `solidFaces`
+/// @param edgeTexture  The texture ID to apply to edges adjacent to full faces (top edge of the texture is assumed up/north)
+/// @param solidFace    The [SolidFace] to which the full texture should be applied
+/// @param tintSource   The [Block] to pull the tint color from, if applicable
+/// @param sourceItem   The [Item] to use for applying this overlay
+/// @param translucent  Whether the overlay has translucent pixels
 public record BlockOverlay(
         Identifier solidTexture,
         @Nullable Identifier edgeTexture,
@@ -68,6 +66,10 @@ public record BlockOverlay(
         this(solidTexture, edgeTexture.orElse(null), solidFace, tintSource.orElse(null), sourceItem, translucent);
     }
 
+    /// Whether the given side uses the solid texture of this overlay on the given state.
+    ///
+    /// @param state The state to check against
+    /// @param side  The side to check with
     public boolean isSideSolid(BlockState state, Direction side) {
         if (solidFace.dynamic) {
             return solidFace.getDynamicDirections(state).contains(side);
@@ -93,14 +95,23 @@ public record BlockOverlay(
         return System.identityHashCode(this);
     }
 
+    /// {@return the translated name of the given overlay}
+    ///
+    /// @param overlay The overlay to get the name for
     public static Component getName(Holder<BlockOverlay> overlay) {
         return Component.translatable(getDescriptionId(overlay));
     }
 
+    /// {@return the translation key of the given overlay}
+    ///
+    /// @param overlay The overlay to get the translation key for
     public static String getDescriptionId(Holder<BlockOverlay> overlay) {
         return Util.makeDescriptionId("block_overlay", Utils.getKeyOrThrow(overlay).identifier());
     }
 
+    /// {@return a builder for an overlay in the given namespace}
+    ///
+    /// @param namespace The namespace which the overlay will be generated in
     public static BlockOverlayBuilder builder(String namespace) {
         return new BlockOverlayBuilder(namespace);
     }
@@ -112,12 +123,20 @@ public record BlockOverlay(
         return DataResult.success(overlay);
     }
 
+    /// Indicates which faces of a block will have the solid texture of the overlay applied.
     public enum SolidFace implements StringRepresentable {
+        /// The solid texture applies to all faces.
         ALL(Set.of(Direction.values())),
+        /// The solid texture only applies to the top face.
         TOP(Set.of(Direction.UP)),
+        /// The solid texture only applies to the bottom face.
         BOTTOM(Set.of(Direction.DOWN)),
+        /// The solid texture applies to all horizontal faces.
         HORIZONTAL(HORIZONTAL_DIRECTIONS),
+        /// The solid texture applies to the top and bottom faces.
         VERTICAL(Set.of(Direction.UP, Direction.DOWN)),
+        /// The solid texture applies to the faces surrounding the orientation axis of the block
+        /// if it implements [AxisOverlayCarrier], otherwise it applies to all horizontal faces.
         AXIS_TUBE(HORIZONTAL) {
             @Override
             public Set<Direction> getDynamicDirections(BlockState state) {
@@ -127,6 +146,8 @@ public record BlockOverlay(
                 return Set.of();
             }
         },
+        /// The solid texture applies to the faces at either end of the orientation axis of the block
+        /// if it implements [AxisOverlayCarrier], otherwise it applies to the top and bottom faces.
         AXIS_CAPS(VERTICAL) {
             @Override
             public Set<Direction> getDynamicDirections(BlockState state) {
@@ -154,14 +175,20 @@ public record BlockOverlay(
             this.dynamic = true;
         }
 
+        /// {@return the faces the solid texture will apply to on the given state}
+        /// May only be called if [#isDynamic()] returns `true`.
+        ///
+        /// @param state The state to compute the faces for
         public Set<Direction> getDynamicDirections(BlockState state) {
             throw new UnsupportedOperationException();
         }
 
+        /// {@return the faces the solid texture will apply to}
         public Set<Direction> getDirections() {
             return directions;
         }
 
+        /// {@return whether the solid faces are dependent on the block the overlay is applied to}
         public boolean isDynamic() {
             return dynamic;
         }

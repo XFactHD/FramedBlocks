@@ -32,13 +32,21 @@ import org.jspecify.annotations.Nullable;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+/// Required super-interface of all [BlockItem]s of framed blocks.
 public interface IFramedBlockItem {
+    /// The header line displayed above the property list of the selected placement state when manual state cycling is active
     Component HEADER_SELECTED_STATE = Utils.translate("label", "state_cycling.selected_state").withStyle(style -> style.withColor(0xFFE0E0E0));
 
     /// Returns the [StateCycleSpec] to use for cycling through the states of the block(s) placed by this item.
     /// The return value of this method must be constant.
     StateCycleSpec getStateCycleSpec();
 
+    /// Compute the placement state of this [BlockItem] in the given context, taking manual state cycling into account.
+    /// Must be called from [BlockItem#getPlacementState(BlockPlaceContext)].
+    ///
+    /// @param context      The context used for placing the block
+    /// @param superHandler A reference to the block item's [BlockItem#getPlacementState(BlockPlaceContext)] method
+    /// @return the placement state or null if placement is not possible
     @ApiStatus.NonExtendable
     default @Nullable BlockState getPlacementState(BlockPlaceContext context, Function<BlockPlaceContext, @Nullable BlockState> superHandler) {
         if (context.getPlayer() != null && isStateCyclingActive(context.getPlayer())) {
@@ -52,15 +60,27 @@ public interface IFramedBlockItem {
         return superHandler.apply(context);
     }
 
+    /// {@return whether the player has enabled manual state cycling for this block item}
+    ///
+    /// @param player The player to check against
     @ApiStatus.NonExtendable
     default boolean isStateCyclingActive(Player player) {
         return getStateCycleSpec().canCycle() && InternalAPI.INSTANCE.isStateCyclingActive(player, (BlockItem) this);
     }
 
+    /// {@return whether the player has enabled manual state cycling for the given stack's item}
+    ///
+    /// @param stack  The stack whose item to check
+    /// @param player The player to check against
     static boolean isStateCyclingActive(ItemStack stack, Player player) {
         return stack.getItem() instanceof IFramedBlockItem item && item.isStateCyclingActive(player);
     }
 
+    /// Handle placement of this item's block. Must be called from [BlockItem#place(BlockPlaceContext)].
+    ///
+    /// @param context      The context to use for placing the block
+    /// @param superHandler A reference to the block item's [BlockItem#place(BlockPlaceContext)] method
+    /// @return the result of the placement attempt
     @ApiStatus.NonExtendable
     default InteractionResult handlePlace(BlockPlaceContext context, Function<BlockPlaceContext, InteractionResult> superHandler) {
         InteractionResult result = superHandler.apply(context);
@@ -70,6 +90,7 @@ public interface IFramedBlockItem {
         return result;
     }
 
+    ///
     @ApiStatus.OverrideOnly
     default void playPlaceSound(BlockPlaceContext context) {
         Level level = context.getLevel();
@@ -87,9 +108,9 @@ public interface IFramedBlockItem {
                 SoundUtils.playPlaceSound(context, soundTwo, false);
             }
         }
-
     }
 
+    /// {@return whether this item should use the block's default placement sound instead of the camo sound when no camo is applied}
     default boolean useCustomEmptyPlaceSound() {
         return false;
     }
@@ -102,6 +123,14 @@ public interface IFramedBlockItem {
         return camo.getSoundType();
     }
 
+    /// Override the block's default placement sound to latte replace it with the placement sound of one or more camos.
+    ///
+    /// @param state       The state that was placed
+    /// @param level       The level the state was placed in
+    /// @param pos         The position the state was placed at
+    /// @param player      The player who placed the block
+    /// @param superGetter A reference to the block item's [BlockItem#getPlaceSound(BlockState, Level, BlockPos, Player)] method
+    /// @return the sound event to be played via vanilla code
     @ApiStatus.NonExtendable
     default SoundEvent getCamoPlaceSound(BlockState state, Level level, BlockPos pos, Player player, PlaceSoundGetter superGetter) {
         if (level.getBlockEntity(pos) instanceof IFramedBlockEntity) {
@@ -111,6 +140,12 @@ public interface IFramedBlockItem {
         return superGetter.get(state, level, pos, player);
     }
 
+    /// Append the camos stored on the given stack of this item and the selected placement state (if manual
+    /// state cycling is enabled for this item) to the tooltip.
+    ///
+    /// @param stack    The stack for which the tooltip is being displayed
+    /// @param ctx      The context to use for computing the tooltip lines
+    /// @param appender The appender to pass the tooltip lines to
     @ApiStatus.NonExtendable
     default void appendDefaultHoverText(ItemStack stack, Item.TooltipContext ctx, Consumer<Component> appender) {
         CamoPrinter.printCamoList(appender, stack.get(FramedConstants.Objects.DC_TYPE_CAMO_LIST), false);
@@ -122,7 +157,15 @@ public interface IFramedBlockItem {
         }
     }
 
+    /// Functional interface representing a reference to [BlockItem#getPlaceSound(BlockState, Level, BlockPos, Player)].
+    @FunctionalInterface
     interface PlaceSoundGetter {
+        /// {@return the placement sound of the given block}
+        ///
+        /// @param state  The state that was placed
+        /// @param level  The level the state was placed in
+        /// @param pos    The position the state was placed at
+        /// @param player The player who placed the block
         SoundEvent get(BlockState state, Level level, BlockPos pos, Player player);
     }
 }

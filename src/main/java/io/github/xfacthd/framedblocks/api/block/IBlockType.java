@@ -1,6 +1,8 @@
 package io.github.xfacthd.framedblocks.api.block;
 
+import io.github.xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedDoubleBlockEntity;
+import io.github.xfacthd.framedblocks.api.block.overlay.BlockOverlay;
 import io.github.xfacthd.framedblocks.api.block.render.FramedClientBlockExtensions;
 import io.github.xfacthd.framedblocks.api.block.render.NullCullPredicate;
 import io.github.xfacthd.framedblocks.api.predicate.contex.ConTexMode;
@@ -8,78 +10,93 @@ import io.github.xfacthd.framedblocks.api.predicate.contex.ConnectionPredicate;
 import io.github.xfacthd.framedblocks.api.predicate.cull.SideSkipPredicate;
 import io.github.xfacthd.framedblocks.api.predicate.fullface.FullFacePredicate;
 import io.github.xfacthd.framedblocks.api.predicate.overlay.BlockOverlayPredicate;
+import io.github.xfacthd.framedblocks.api.render.outline.OutlineRenderer;
 import io.github.xfacthd.framedblocks.api.shapes.ShapeGenerator;
 import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import org.jetbrains.annotations.ApiStatus;
 
+/// Describes a type of framed block.
 public interface IBlockType {
+    /// {@return whether this block can occlude when an {@linkplain BlockState#isSolidRender() opaque} camo is applied to it}
     boolean canOccludeWithSolidCamo();
 
+    /// {@return whether this block uses an {@link OutlineRenderer} to render a non-vanilla block selection outline}
     boolean hasSpecialOutline();
 
+    /// {@return the {@link FullFacePredicate} determining which faces of a given state of this block are considered full
+    /// (cover the entire surface at the outer perimeter of the block volume)}
     @ApiStatus.OverrideOnly
     FullFacePredicate getFullFacePredicate();
 
+    /// {@return the {@link SideSkipPredicate} to use for computing occlusion of this block against adjacent framed blocks}
     SideSkipPredicate getSideSkipPredicate();
 
+    /// {@return the {@link ConnectionPredicate} determining which edges of faces of a given state of this block allow connected textures}
     @ApiStatus.OverrideOnly
     ConnectionPredicate getConnectionPredicate();
 
+    /// {@return the {@link BlockOverlayPredicate} determining which faces and edges thereof support {@link BlockOverlay}s}
     @ApiStatus.OverrideOnly
     BlockOverlayPredicate getBlockOverlayPredicate();
 
-    /// Returns the [NullCullPredicate] used to decide whether "uncullable" faces of a double block's part may
-    /// be culled if the other part's camo is solid.
+    /// {@return the {@link NullCullPredicate} determining whether "uncullable" faces of a double block's given part may
+    /// be culled if the other part's camo is solid.}
     ///
     /// Only relevant for blocks returning `true` from [#isDoubleBlock()].
     @ApiStatus.OverrideOnly
     NullCullPredicate getNullCullPredicate();
 
+    /// {@return the {@link ShapeGenerator} to use for computing this block's general shapes and, optionally, separate occlusion shapes}
     ShapeGenerator getShapeGenerator();
 
+    /// {@return whether this block has a non-base BE (i.e. {@link FramedBlockEntity} and {@link FramedDoubleBlockEntity}
+    /// for single- and double-blocks respectively)}
+    ///
+    /// Primarily intended automatic registration.
     boolean hasSpecialBlockEntity();
 
+    /// {@return whether this block has a dedicated block item}
+    ///
+    /// Primarily intended for automatic registration and creative tab population.
     boolean hasBlockItem();
 
+    /// {@return whether this block supports waterlogging}
     boolean supportsWaterLogging();
 
+    /// {@return whether this block supports connected textures and other level/pos-dependent camo model behavior}
     boolean supportsConnectedTextures();
 
-    /**
-     * {@return the minimum {@link ConTexMode } required for this block to react to texture connections}
-     */
+    /// {@return the minimum {@link ConTexMode} required for this block to react to texture connections}
     ConTexMode getMinimumConTexMode();
 
-    /**
-     * @implNote If this method returns true, then the associated block register an instance of {@link FramedClientBlockExtensions}
-     * in {@link RegisterClientExtensionsEvent} to avoid crashing when the block is hit while it can be passed through
-     */
+    /// {@return whether this block can be made intangible when the feature is enabled in the config}
+    ///
+    /// @implNote If this method returns `true`, then the associated block must register an instance of [FramedClientBlockExtensions]
+    /// in [RegisterClientExtensionsEvent] to avoid crashing when the block is hit while it can be passed through.
     boolean allowMakingIntangible();
 
-    /**
-     * @return true if this type represents a block that combines two models into one and allows those to have separate
-     * camos applied.
-     *
-     * @apiNote if a block's type returns true from this method, its {@link Block} must implement {@link IFramedDoubleBlock}
-     * and its {@link BlockEntity} must extend {@link FramedDoubleBlockEntity}. The {@link BlockStateModel} is not required
-     * to extend or implement any specific class
-     */
+    /// {@return whether this block combines two models into one and allows those to have separate camos applied.}
+    ///
+    /// @implNote if a block's type returns `true` from this method, its [Block] must implement [IFramedDoubleBlock]
+    /// and its [BlockEntity] must extend [FramedDoubleBlockEntity]. The [BlockStateModel] is not required
+    /// to extend or implement any specific class.
     default boolean isDoubleBlock() {
         return false;
     }
 
-    /**
-     * {@return whether this block can consume two camo items in the camo application recipe}
-     */
+    /// {@return whether this block can consume two camo items in the camo application recipe}
     default boolean consumesTwoCamosInCamoApplicationRecipe() {
         return isDoubleBlock();
     }
 
+    /// {@return whether this block supports {@link BlockOverlay}s}
     boolean supportsBlockOverlays();
 
+    /// {@return the name of this type (usually the path of the block's registry ID)}
     String getName();
 
     int compareTo(IBlockType other);

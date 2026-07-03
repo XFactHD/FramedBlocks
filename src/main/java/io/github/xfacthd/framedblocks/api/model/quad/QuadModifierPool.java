@@ -21,7 +21,7 @@ final class QuadModifierPool {
         if (modifier == null) {
             if (CHECK_FOR_LEAKS) {
                 LeakDetector leakDetector = new LeakDetector();
-                modifier = new LeakDetectingQuadModifier(false, leakDetector);
+                modifier = new LeakDetectingQuadModifier(leakDetector);
                 // noinspection DataFlowIssue
                 CLEANER.register(modifier, leakDetector);
             } else {
@@ -44,8 +44,8 @@ final class QuadModifierPool {
     static final class LeakDetectingQuadModifier extends QuadModifier {
         private final LeakDetector leakDetector;
 
-        private LeakDetectingQuadModifier(boolean failed, LeakDetector leakDetector) {
-            super(failed);
+        private LeakDetectingQuadModifier(LeakDetector leakDetector) {
+            super(false);
             this.leakDetector = leakDetector;
         }
     }

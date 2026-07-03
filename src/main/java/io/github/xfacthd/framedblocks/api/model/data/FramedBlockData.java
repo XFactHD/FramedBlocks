@@ -16,6 +16,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 
+/// Primary model data object for single-camo blocks and the individual parts of double-camo blocks.
 public final class FramedBlockData extends AbstractFramedBlockData {
     public static final FramedBlockData EMPTY = new FramedBlockData();
     private static final int FULL_FACE_INVERSION_MASK = 0b1111111;
@@ -36,10 +37,23 @@ public final class FramedBlockData extends AbstractFramedBlockData {
     private final ModelDataEntry<?> queryData;
     private final int postCamoTintIndexOffset;
 
-    public FramedBlockData(@Nullable BlockState outerState, CamoContainer<?, ?> camoContent, boolean secondPart, @Nullable Holder<BlockOverlay> overlay) {
-        this(outerState, camoContent, (byte) 0, secondPart, false, false, TriState.DEFAULT, overlay, null);
+    /// @param outerState    The framed block's state to get the correct overlay predicate on double blocks
+    /// @param camoContainer The camo applied to the framed block or part thereof
+    /// @param secondPart    Whether this data is for the first or second part of a double block (`false` for single-camo blocks)
+    /// @param overlay       The block overlay applied to the framed block
+    public FramedBlockData(@Nullable BlockState outerState, CamoContainer<?, ?> camoContainer, boolean secondPart, @Nullable Holder<BlockOverlay> overlay) {
+        this(outerState, camoContainer, (byte) 0, secondPart, false, false, TriState.DEFAULT, overlay, null);
     }
 
+    /// @param outerState    The framed block's state to get the correct overlay predicate on double blocks
+    /// @param camoContainer The camo applied to the framed block or part thereof
+    /// @param cullMask      The mask of occluded faces of the framed block or part thereof
+    /// @param secondPart    Whether this data is for the first or second part of a double block (`false` for single-camo blocks)
+    /// @param reinforced    Whether the framed block is reinforced
+    /// @param emissive      Whether the framed block is emissive (fullbright)
+    /// @param viewBlocking  Whether the framed block is view-blocking or [TriState#DEFAULT] if unknown
+    /// @param overlay       The block overlay applied to the framed block
+    /// @param queryData     An additional model data entry to attach to the level used for quering the camo model's part
     public FramedBlockData(
             @Nullable BlockState outerState,
             CamoContainer<?, ?> camoContainer,
@@ -78,42 +92,49 @@ public final class FramedBlockData extends AbstractFramedBlockData {
         this.postCamoTintIndexOffset = 0;
     }
 
+    /// {@return the framed block's state for overlay predicate lookup}
     public @Nullable BlockState getOuterState() {
         return outerState;
     }
 
+    /// {@return the camo container applied to the framed block or part thereof}
     public CamoContainer<?, ?> getCamoContainer() {
         return camoContainer;
     }
 
+    /// {@return the camo content applied to the framed block or part thereof}
     public CamoContent<?> getCamoContent() {
         return camoContent;
     }
 
+    /// {@return whether the given side is occluded on the framed block or part thereof}
+    ///
+    /// @param side The side to query
     public boolean isSideHidden(Direction side) {
         return (cullMask & (1 << side.ordinal())) != 0;
     }
 
+    /// {@return whether this data refers to the first or second part of a double block or `false` for single-camo blocks}
     public boolean isSecondPart() {
         return (flags & FLAG_SECOND_PART) != 0;
     }
 
+    /// {@return whether the framed block is reinforced}
     public boolean isReinforced() {
         return (flags & FLAG_REINFORCED) != 0;
     }
 
+    /// {@return whether the framed block is emissive (fullbright)}
     public boolean isEmissive() {
         return (flags & FLAG_EMISSIVE) != 0;
     }
 
-    /**
-     * Computes a bit mask of visible faces according to the occlusion state stored in this {@code FramedBlockData}
-     * and the full-face info stored in the provided {@link StateCache}
-     *
-     * @param stateCache The {@link StateCache} to pull the full-face info from
-     * @param forCached Whether the mask should be computed for the cached path ({@link StateCache#isFullFace(Direction)}
-     *                  returns false) or the uncached path ({@link StateCache#isFullFace(Direction)} returns true)
-     */
+    /// Computes a bit mask of visible faces according to the occlusion state stored in this data
+    /// and the full-face info stored in the provided [StateCache].
+    ///
+    /// @param stateCache The state cache to pull the full-face info from
+    /// @param forCached  Whether the mask should be computed for the cached path ([StateCache#isFullFace(Direction)]
+    ///                   returns false) or the uncached path ([StateCache#isFullFace(Direction)] returns true)
     public int computeFaceMask(StateCache stateCache, boolean forCached) {
         int mask = stateCache.getFullFaceMask();
         if (forCached) {
@@ -152,6 +173,7 @@ public final class FramedBlockData extends AbstractFramedBlockData {
         return overlay;
     }
 
+    /// {@return the additional model data entry to attach to the level used for quering the camo model's part}
     public @Nullable ModelDataEntry<?> getQueryData() {
         return queryData;
     }

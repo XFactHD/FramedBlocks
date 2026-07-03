@@ -81,28 +81,22 @@ public enum HorizontalRotation implements StringRepresentable, Printable {
         return this == UP || this == DOWN;
     }
 
-    /**
-     * Returns true if the {@link Direction} this rotation resolves to with the given {@code dir} is the
-     * same as the {@code Direction} the given {@code adjRot} resolves to with the given {@code adjDir}
-     *
-     * @param dir    The {@code Direction} of the block with this rotation
-     * @param adjRot The rotation of the adjacent block
-     * @param adjDir The {@code Direction} of the block with the {@code adjRot} rotation
-     */
+    /// Returns true if the [Direction] this rotation resolves to with the given `dir` is the
+    /// same as the `Direction` the given `adjRot` resolves to with the given `adjDir`.
+    ///
+    /// @param dir    The `Direction` of the block with this rotation
+    /// @param adjRot The rotation of the adjacent block
+    /// @param adjDir The `Direction` of the block with the `adjRot` rotation
     public boolean isSameDir(Direction dir, HorizontalRotation adjRot, Direction adjDir) {
         return withFacing(dir) == adjRot.withFacing(adjDir);
     }
 
-    /**
-     * {@return a {@link VoxelShape} of the half of the block represented by this rotation}
-     */
+    /// {@return a {@link VoxelShape} of the half of the block represented by this rotation}
     public VoxelShape getSlabShape() {
         return slabShape;
     }
 
-    /**
-     * {@return a {@link VoxelShape} of the quarter of the block represented by this rotation}
-     */
+    /// {@return a {@link VoxelShape} of the quarter of the block represented by this rotation}
     public VoxelShape getCornerShape() {
         return cornerShape;
     }
@@ -121,10 +115,8 @@ public enum HorizontalRotation implements StringRepresentable, Printable {
         return displayName.copy().withStyle(defaultColor);
     }
 
-    /**
-     * @param facing The view direction from which the rotation is determined, must not be on the Y axis
-     * @param dir    The direction to rotate towards, must be perpendicular to facing
-     */
+    /// @param facing The view direction from which the rotation is determined, must not be on the Y axis
+    /// @param dir    The direction to rotate towards, must be perpendicular to facing
     public static HorizontalRotation fromDirection(Direction facing, Direction dir) {
         Preconditions.checkArgument(!DirUtils.isY(facing), "View direction must not be on the Y axis");
         Preconditions.checkArgument(facing.getAxis() != dir.getAxis(), "Directions must be perpendicular");

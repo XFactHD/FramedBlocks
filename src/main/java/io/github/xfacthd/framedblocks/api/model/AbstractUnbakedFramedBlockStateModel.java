@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+/// Base class for unbaked blockstate models with wrapping capabilities.
 public abstract class AbstractUnbakedFramedBlockStateModel implements BlockStateModel.UnbakedRoot {
     private static final Logger LOGGER = LogUtils.getLogger();
 
@@ -29,6 +30,7 @@ public abstract class AbstractUnbakedFramedBlockStateModel implements BlockState
     @Nullable
     private volatile AbstractFramedBlockStateModel cachedBakingResult = null;
 
+    /// @param ctx The context this model is being constructed in
     protected AbstractUnbakedFramedBlockStateModel(ModelFactory.Context ctx) {
         this.state = ctx.state();
         this.baseModel = ctx.baseModel();
@@ -36,6 +38,11 @@ public abstract class AbstractUnbakedFramedBlockStateModel implements BlockState
         this.auxModels = ctx.auxModels();
     }
 
+    /// {@return the baked blockstate model for the given context}
+    /// This method is called at most once, regardless of how many blockstates use this model.
+    ///
+    /// @param context The context the model is being baked in
+    /// @param baker   The baker the model is being baked with
     protected abstract AbstractFramedBlockStateModel bakeCached(GeometryFactory.Context context, ModelBaker baker);
 
     @Override
@@ -78,6 +85,9 @@ public abstract class AbstractUnbakedFramedBlockStateModel implements BlockState
         resolveSpecialDependencies(resolver);
     }
 
+    /// Resolve additional model dependencies.
+    ///
+    /// @param resolver The resolver to mark dependencies with
     protected void resolveSpecialDependencies(Resolver resolver) {}
 
     private record AuxModelProviderImpl(BlockState state, Map<String, BlockStateModel> auxModels, BlockStateModel missingModel) implements AuxModelProvider {

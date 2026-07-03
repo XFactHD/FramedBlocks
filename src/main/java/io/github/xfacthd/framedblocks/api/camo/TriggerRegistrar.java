@@ -6,34 +6,33 @@ import net.minecraft.world.item.ItemStack;
 
 import java.util.function.Predicate;
 
+/// Registrar for camo application and removal items/predicates for a camo container.
 public interface TriggerRegistrar {
-    /**
-     * Default predicate for removal of block camos. Should be preferred over specifically using the hammer for mod compatibility
-     */
+    /// Default predicate for removal of block camos. Should be preferred over specifically using the hammer for mod compatibility.
     Predicate<ItemStack> DEFAULT_REMOVAL = stack -> stack.is(FramedConstants.Objects.FRAMED_HAMMER) || stack.canPerformAction(FramedConstants.ItemAbilities.ACTION_WRENCH_EMPTY);
 
-    /**
-     * Register the given {@link Item} as a valid applicator for the {@link CamoContainerFactory}
-     * this registrar is given to
-     */
+    /// Register the given item as a valid applicator for the camo container factory
+    /// this registrar is given to.
+    ///
+    /// @param item The item to register
     void registerApplicationItem(Item item);
 
-    /**
-     * Register the given {@link Predicate} to dynamically check whether the {@link ItemStack} held by the player
-     * is a valid applicator for {@link CamoContainerFactory} this registrar is given to
-     */
+    /// Register the given predicate to dynamically check whether the stack held by the player
+    /// is a valid applicator for the camo container factory this registrar is given to.
+    ///
+    /// @param predicate The predicate to register
     void registerApplicationPredicate(Predicate<ItemStack> predicate);
 
-    /**
-     * Register the given {@link Item} as a valid removal tool for the {@link CamoContainer}s produced by
-     * the {@link CamoContainerFactory} this registrar is given to
-     */
+    /// Register the given item as a valid removal tool for the camo containers produced by
+    /// the camo container factory this registrar is given to.
+    ///
+    /// @param item The item to register
     void registerRemovalItem(Item item);
 
-    /**
-     * Register the given {@link Predicate} to dynamically check whether the {@link ItemStack} held by the player
-     * is a valid removal tool for the {@link CamoContainer}s produced by the {@link CamoContainerFactory} this
-     * registrar is given to
-     */
+    /// Register the given predicate to dynamically check whether the stack held by the player
+    /// is a valid removal tool for the camo containers produced by the camo container factory this
+    /// registrar is given to.
+    ///
+    /// @param predicate The predicate to register
     void registerRemovalPredicate(Predicate<ItemStack> predicate);
 }

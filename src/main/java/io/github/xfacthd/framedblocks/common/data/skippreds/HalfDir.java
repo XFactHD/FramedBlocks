@@ -2,9 +2,7 @@ package io.github.xfacthd.framedblocks.common.data.skippreds;
 
 import net.minecraft.core.Direction;
 
-/**
- * Indicates the normal and outer edge of a half-block sized face
- */
+/// Indicates the normal and outer edge of a half-block sized face.
 public enum HalfDir {
     NULL(Direction.UP, Direction.UP),
 
@@ -62,18 +60,14 @@ public enum HalfDir {
         return fromDirections(normal.getOpposite(), edge);
     }
 
-    /**
-     * {@return true if both {@code HalfDir}s are not {@link HalfDir#NULL} and the other {@code HalfDir}
-     * has the same edge direction and the opposite normal direction}
-     */
+    /// {@return true if both {@code HalfDir}s are not {@link HalfDir#NULL} and the other {@code HalfDir}
+    ///  has the same edge direction and the opposite normal direction}
     public boolean isEqualTo(HalfDir other) {
         return this != NULL && getOppositeNormal() == other;
     }
 
-    /**
-     * {@return true if both {@code HalfDir}s are not {@link HalfDir#NULL} and the other {@code HalfDir}
-     * has the same normal direction and the opposite edge direction}
-     */
+    /// {@return true if both {@code HalfDir}s are not {@link HalfDir#NULL} and the other {@code HalfDir}
+    ///  has the same normal direction and the opposite edge direction}
     public boolean isEqualToOppositeEdge(HalfDir other) {
         return this != NULL && getOppositeEdge() == other;
     }

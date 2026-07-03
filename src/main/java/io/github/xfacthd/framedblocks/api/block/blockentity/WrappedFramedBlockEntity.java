@@ -13,6 +13,8 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+/// Extended [FramedBlockEntity] implementation for wrapping on "foreign" BEs to avoid
+/// having to re-implement their functionality on top of [FramedBlockEntity].
 public final class WrappedFramedBlockEntity extends FramedBlockEntity {
     private boolean suppressLoad = false;
     private boolean suppressSave = false;
@@ -36,6 +38,12 @@ public final class WrappedFramedBlockEntity extends FramedBlockEntity {
         super.onLoadInternal();
     }
 
+    /// Serialize this BE and its owning BE to a [CompoundTag] for initial chunk sync while protecting this BE
+    /// against having its disk format written to the update tag.
+    ///
+    /// @param registries     The registries used for serialization
+    /// @param superTagWriter A reference to the owning BE's [#getUpdateTag(HolderLookup.Provider)] method
+    /// @return The final update tag
     public CompoundTag getUpdateTag(HolderLookup.Provider registries, Function<HolderLookup.Provider, CompoundTag> superTagWriter) {
         suppressSave = true;
         CompoundTag tag = superTagWriter.apply(registries);
@@ -43,6 +51,11 @@ public final class WrappedFramedBlockEntity extends FramedBlockEntity {
         return appendUpdateTag(tag, registries);
     }
 
+    /// Deserialize this BE and its owning BE from the given update tag [ValueInput] while
+    /// protecting this BE against trying to read its disk format from the update tag.
+    ///
+    /// @param input          The update tag to read from
+    /// @param superTagReader A reference to the owning BE's [#handleUpdateTag(ValueInput)]
     public void handleUpdateTag(ValueInput input, Consumer<ValueInput> superTagReader) {
         suppressLoad = true;
         superTagReader.accept(input);
@@ -50,6 +63,12 @@ public final class WrappedFramedBlockEntity extends FramedBlockEntity {
         handleUpdateTag(input);
     }
 
+    /// Deserialize this BE and its owning BE from the given update packet [ValueInput] while
+    /// protecting this BE against trying to read its disk format from the update tag.
+    ///
+    /// @param con            The network connection of the local player
+    /// @param input          The update tag to read from
+    /// @param superTagReader A reference to the owning BE's [#onDataPacket(Connection, ValueInput)]
     public void onDataPacket(Connection con, ValueInput input, BiConsumer<Connection, ValueInput> superTagReader) {
         suppressLoad = true;
         superTagReader.accept(con, input);
@@ -65,6 +84,9 @@ public final class WrappedFramedBlockEntity extends FramedBlockEntity {
         super.applyImplicitComponents(getter);
     }
 
+    /// Deserialize this BE from disk while protecting it against calls from network packet serialization.
+    ///
+    /// @param valueInput The input to read from
     @Override
     public void loadAdditionalInternal(ValueInput valueInput) {
         // Ensure loadAdditional() called from handleUpdateTag() in the wrapping BE does not attempt a "from-disk load" from a network tag
@@ -73,6 +95,9 @@ public final class WrappedFramedBlockEntity extends FramedBlockEntity {
         }
     }
 
+    /// Serialize this BE to disk while protecting it against calls from network packet serialization.
+    ///
+    /// @param valueOutput The output to write to
     @Override
     public void saveAdditionalInternal(ValueOutput valueOutput) {
         // Ensure saveAdditional() called from getUpdateTag() in the wrapping BE does not attempt a "to-disk save" into a network tag

@@ -12,17 +12,31 @@ import net.minecraft.world.level.ItemLike;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.ApiStatus;
 
+/// Super-interface for recipe builders with the ability to generate recipe advancements
+/// with criterion names auto-generated from the item or tag used as the trigger.
 public interface AutoUnlockNameBuilder<T extends RecipeBuilder> extends RecipeBuilder {
+    /// Generate a recipe advancement with the specified item as the trigger.
+    ///
+    /// @param triggerItem The item to use as the advancement trigger
+    /// @return this builder
     @SuppressWarnings("unchecked")
     default T unlockedBy(Holder<? extends ItemLike> triggerItem) {
         String name = buildCriterionName(Utils.getKeyOrThrow(triggerItem).identifier());
         return (T) unlockedBy(name, provider().has(triggerItem.value()));
     }
 
+    /// Generate a recipe advancement with the specified item as the trigger.
+    ///
+    /// @param triggerItem The item to use as the advancement trigger
+    /// @return this builder
     default T unlockedBy(Item triggerItem) {
         return unlockedBy(BuiltInRegistries.ITEM.wrapAsHolder(triggerItem));
     }
 
+    /// Generate a recipe advancement with the specified item tag as the trigger.
+    ///
+    /// @param triggerTag The item tag to use as the advancement trigger
+    /// @return this builder
     @SuppressWarnings("unchecked")
     default T unlockedBy(TagKey<Item> triggerTag) {
         String name = buildCriterionName(triggerTag.location());

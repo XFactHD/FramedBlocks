@@ -2,6 +2,7 @@ package io.github.xfacthd.framedblocks.api.block;
 
 import com.google.common.base.Preconditions;
 import io.github.xfacthd.framedblocks.api.block.blockentity.FrameModifier;
+import io.github.xfacthd.framedblocks.api.block.blockentity.FramedDoubleBlockEntity;
 import io.github.xfacthd.framedblocks.api.block.blockentity.IFramedBlockEntity;
 import io.github.xfacthd.framedblocks.api.block.overlay.BlockOverlay;
 import io.github.xfacthd.framedblocks.api.camo.CamoContainer;
@@ -29,20 +30,22 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.Set;
 
+/// Various helpers for creating framed blocks and handling in-world modifications to them.
 public final class BlockUtils {
+    /// Set of blockstate properties every framed block is required to have.
     public static final Set<Property<?>> REQUIRED_STATE_PROPERTIES = Set.of(
             FramedProperties.GLOWING,
             FramedProperties.PROPAGATES_SKYLIGHT
     );
     private static final FrameModifier[] MODIFIERS = FrameModifier.values();
 
-    /**
-     * Adds the {@link Property}s which are required to be present on all blocks implementing {@link IFramedBlock}
-     * and properties that depend on the {@link IBlockType}'s configuration to the given {@link StateDefinition.Builder}
-     *
-     * @apiNote This method must only be used by blocks which return a constant value from {@link IFramedBlock#getBlockType()}
-     *          or initialize the returned field before the super constructor.
-     */
+    /// Adds the [Property]s which are required to be present on all blocks implementing [IFramedBlock]
+    /// and properties that depend on the [IBlockType]'s configuration to the given [StateDefinition.Builder]
+    ///
+    /// @param block   The block to add the properties to
+    /// @param builder The state definition builder for the block
+    /// @apiNote This method must only be used by blocks which return a constant value from [IFramedBlock#getBlockType()]
+    ///          or initialize the returned field before the super constructor.
     public static <T extends Block & IFramedBlock> void addStandardProperties(T block, StateDefinition.Builder<Block, BlockState> builder) {
         REQUIRED_STATE_PROPERTIES.forEach(builder::add);
 
@@ -67,11 +70,9 @@ public final class BlockUtils {
         }
     }
 
-    /**
-     * Configures the default {@link BlockState} of the given {@link IFramedBlock}
-     *
-     * @param block The block to configure the default state for
-     */
+    /// Configures the default [BlockState] of the given [IFramedBlock].
+    ///
+    /// @param block The block to configure the default state for
     public static <T extends Block & IFramedBlock> void configureStandardProperties(T block) {
         BlockState state = block.defaultBlockState()
                 .setValue(FramedProperties.GLOWING, false)
@@ -91,14 +92,12 @@ public final class BlockUtils {
         ((InvokerBlock) block).framedblocks$callRegisterDefaultState(state);
     }
 
-    /**
-     * Copies all standard {@link Property}s between two {@link BlockState}s of the same {@link IFramedBlock}
-     *
-     * @param block The block owning the two states
-     * @param from The state to copy the properties from
-     * @param to The state to apply the properties to
-     * @param copyWaterlogging Whether the {@link BlockStateProperties#WATERLOGGED} property should be copied
-     */
+    /// Copies all standard [Property]s between two [BlockState]s of the same [IFramedBlock].
+    ///
+    /// @param block            The block owning the two states
+    /// @param from             The state to copy the properties from
+    /// @param to               The state to apply the properties to
+    /// @param copyWaterlogging Whether the [BlockStateProperties#WATERLOGGED] property should be copied
     public static <T extends Block & IFramedBlock> BlockState copyStandardProperties(T block, BlockState from, BlockState to, boolean copyWaterlogging) {
         Preconditions.checkArgument(from.getBlock() == block, "The provided states must be owned by the provided block");
 
@@ -114,27 +113,24 @@ public final class BlockUtils {
         return to;
     }
 
-    /**
-     * Check whether the given {@link StateDefinition.Builder} contains the given {@link Property}
-     *
-     * @param builder The builder to check
-     * @param property The property to check for
-     * @return whether the builder contains the property
-     */
+    /// Check whether the given [StateDefinition.Builder] contains the given [Property].
+    ///
+    /// @param builder  The builder to check
+    /// @param property The property to check for
+    /// @return whether the builder contains the property
     public static boolean hasProperty(StateDefinition.Builder<Block, BlockState> builder, Property<?> property) {
         return builder.framedblocks$hasProperty(property);
     }
 
-    /**
-     * Removes the given {@link Property} from the given {@link StateDefinition.Builder}
-     *
-     * @param builder The builder to remove the property from
-     * @param property The property to remove, if present
-     */
+    /// Removes the given [Property] from the given [StateDefinition.Builder].
+    ///
+    /// @param builder The builder to remove the property from
+    /// @param property The property to remove, if present
     public static void removeProperty(StateDefinition.Builder<Block, BlockState> builder, Property<?> property) {
         builder.framedblocks$removeProperty(property);
     }
 
+    /// Create a [BlockEntityTicker] for
     @SuppressWarnings("unchecked")
     public static <E extends BlockEntity, A extends BlockEntity> @Nullable BlockEntityTicker<A> createBlockEntityTicker(
             BlockEntityType<A> type, BlockEntityType<E> actualType, BlockEntityTicker<? super E> ticker
@@ -142,31 +138,46 @@ public final class BlockUtils {
         return actualType == type ? (BlockEntityTicker<A>) ticker : null;
     }
 
+    /// Rotate the [horizontal facing property][FramedProperties#FACING_HOR] of the given state by the given rotation.
+    ///
+    /// @param state    The state to rotate
+    /// @param rotation The rotation to apply to the state
+    /// @return the new state with its horizontal rotation adjusted
     public static BlockState rotate(BlockState state, Rotation rotation) {
         return rotate(state, FramedProperties.FACING_HOR, rotation);
     }
 
+    /// Rotate the given direction property of the given state by the given rotation.
+    ///
+    /// The given direction property must support at least all four horizontal directions.
+    ///
+    /// @param state    The state to rotate
+    /// @param property The direction property to rotate on the state
+    /// @param rotation The rotation to apply to the state
+    /// @return the new state with its horizontal rotation adjusted
     public static BlockState rotate(BlockState state, EnumProperty<Direction> property, Rotation rotation) {
         return state.setValue(property, rotation.rotate(state.getValue(property)));
     }
 
-    /**
-     * Mirrors a block that is oriented towards a face of the block space.
-     * @param state The {@link BlockState} to mirror
-     * @param mirror The {@link Mirror} to apply to the state
-     * @apiNote The given state must have the {@link FramedProperties#FACING_HOR} property
-     */
+    /// Mirror the [horizontal facing property][FramedProperties#FACING_HOR] of the given state of a block
+    /// that is oriented towards a face of the block space.
+    ///
+    /// @param state  The state to mirror
+    /// @param mirror The mirroring to apply to the state
+    /// @return the mirrored state
     public static BlockState mirrorFaceBlock(BlockState state, Mirror mirror) {
         return mirrorFaceBlock(state, FramedProperties.FACING_HOR, mirror);
     }
 
-    /**
-     * Mirrors a block that is oriented towards a face of the block space
-     * @param state The {@link BlockState} to mirror
-     * @param property The {@link EnumProperty < Direction >} that should be mirrored on the given state
-     * @param mirror The {@link Mirror} to apply to the state
-     * @apiNote The given property must support at least all four cardinal directions
-     */
+    /// Mirror the given direction property of the given state of a block
+    /// that is oriented towards a face of the block space.
+    ///
+    /// The given direction property must support at least all four horizontal directions.
+    ///
+    /// @param state    The state to mirror
+    /// @param property The direction property to mirror on the state
+    /// @param mirror   The mirroring to apply to the state
+    /// @return the mirrored state
     public static BlockState mirrorFaceBlock(BlockState state, EnumProperty<Direction> property, Mirror mirror) {
         if (mirror == Mirror.NONE) {
             return state;
@@ -180,23 +191,25 @@ public final class BlockUtils {
         return state;
     }
 
-    /**
-     * Mirrors a block that is oriented into a corner of the block space.
-     * @param state The {@link BlockState} to mirror
-     * @param mirror The {@link Mirror} to apply to the state
-     * @apiNote The given state must have the {@link FramedProperties#FACING_HOR} property
-     */
+    /// Mirrors the [horizontal facing property][FramedProperties#FACING_HOR] of the given state of a block
+    /// that is oriented into a corner of the block space.
+    ///
+    /// @param state  The state to mirror
+    /// @param mirror The mirroring to apply to the state
+    /// @return the mirrored state
     public static BlockState mirrorCornerBlock(BlockState state, Mirror mirror) {
         return mirrorCornerBlock(state, FramedProperties.FACING_HOR, mirror);
     }
 
-    /**
-     * Mirrors a block that is oriented into a corner of the block space
-     * @param state The {@link BlockState} to mirror
-     * @param property The {@link EnumProperty<Direction>} that should be mirrored on the given state
-     * @param mirror The {@link Mirror} to apply to the state
-     * @apiNote The given property must support at least all four cardinal directions
-     */
+    /// Mirrors the given direction property of the given state of a block
+    /// that is oriented into a corner of the block space.
+    ///
+    /// The given direction property must support at least all four horizontal directions.
+    ///
+    /// @param state    The state to mirror
+    /// @param property The direction property to mirror on the state
+    /// @param mirror   The mirroring to apply to the state
+    /// @return the mirrored state
     public static BlockState mirrorCornerBlock(BlockState state, EnumProperty<Direction> property, Mirror mirror) {
         if (mirror == Mirror.NONE) {
             return state;
@@ -227,6 +240,19 @@ public final class BlockUtils {
         return state.setValue(property, dir);
     }
 
+    /// Wrap an action which modifies a block in the world such that its BE is replaced in a copy operation that
+    /// copies the data from the old BE to the new BE.
+    ///
+    /// Primarily intended for block placements which replace an existing framed block (i.e. combining two framed
+    /// slabs into a double slab in-world) instead of placing a new one in an empty block space.
+    ///
+    /// @param level       The level the block is in
+    /// @param pos         The position of the block
+    /// @param player      The player triggering the action
+    /// @param stack       The item used in the interaction triggering the action
+    /// @param mirrorCamos Whether the camos should be switched if the
+    /// @param consumeItem Whether the held item should be consumed
+    /// @param action      The action to perform
     public static void wrapInStateCopy(
             LevelAccessor level,
             BlockPos pos,

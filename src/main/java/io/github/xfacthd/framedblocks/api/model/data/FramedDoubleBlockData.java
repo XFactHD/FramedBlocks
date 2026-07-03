@@ -10,6 +10,7 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jspecify.annotations.Nullable;
 
+/// Primary model data object for double-camo blocks.
 public final class FramedDoubleBlockData extends AbstractFramedBlockData {
     private final BlockState partStateOne;
     private final BlockState partStateTwo;
@@ -17,6 +18,9 @@ public final class FramedDoubleBlockData extends AbstractFramedBlockData {
     private final FramedBlockData dataTwo;
     private final int postCamoTintIndexOffset;
 
+    /// @param parts   The part states of the framed block
+    /// @param dataOne The block data of the first part
+    /// @param dataTwo The block data of the second part
     public FramedDoubleBlockData(DoubleBlockParts parts, FramedBlockData dataOne, FramedBlockData dataTwo) {
         this.partStateOne = parts.stateOne();
         this.partStateTwo = parts.stateTwo();

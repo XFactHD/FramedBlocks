@@ -40,6 +40,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.function.Consumer;
 
+/// Extended [IFramedBlockEntity] implementation for blocks with two camos.
 public class FramedDoubleBlockEntity extends FramedBlockEntity {
     public static final String CAMO_TWO_NBT_KEY = "camo_two";
     private static final ValueMerger<MapColor> MAP_COLOR_MERGER = new ValueMerger<>(ColorUtils::average);
@@ -87,6 +88,7 @@ public class FramedDoubleBlockEntity extends FramedBlockEntity {
         return secondary ? camoContainer : getCamo();
     }
 
+    /// {@return the second camo applied to this block}
     public final CamoContainer<?, ?> getCamoTwo() {
         return camoContainer;
     }
@@ -291,10 +293,15 @@ public class FramedDoubleBlockEntity extends FramedBlockEntity {
      * Debug rendering
      */
 
+    /// {@return the parts making up this double block}
     public final DoubleBlockParts getParts() {
         return getStateCache().getParts();
     }
 
+    /// {@return whether the given raycast result by the given player points at the second part}
+    ///
+    /// @param hit    The exact position the player is looking at on this block
+    /// @param player The player looking at this block
     public final boolean debugHitSecondary(BlockHitResult hit, Player player) {
         return hitSecondary(hit, player);
     }

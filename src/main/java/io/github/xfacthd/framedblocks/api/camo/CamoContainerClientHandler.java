@@ -5,8 +5,9 @@ import net.minecraft.client.renderer.block.BlockAndTintGetter;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemStack;
 
+/// Handles computation of client-only data for a camo container (i.e. tint values).
 public abstract class CamoContainerClientHandler<C extends CamoContent<C>, T extends CamoContainer<C, T>> {
-    /// Return the amount of tint layers the provided camo has
+    /// {@return the amount of tint layers the provided camo has}
     public abstract int getTintCount(T camo);
 
     /// Collect the tint values of the provided camo when rendered as part of a block.

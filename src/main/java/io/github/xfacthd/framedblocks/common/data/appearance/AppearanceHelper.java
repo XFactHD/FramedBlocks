@@ -167,10 +167,8 @@ public final class AppearanceHelper {
         return cfgMode.atleast(targetMode) && targetMode.atleast(typeMode);
     }
 
-    /**
-     * Determine the preferred edge from the difference between the two given positions. Fixes the edge case of diagonal
-     * checks failing on double blocks due to an edge covering both parts being selected
-     */
+    /// Determine the preferred edge from the difference between the two given positions. Fixes the edge case of diagonal
+    /// checks failing on double blocks due to an edge covering both parts being selected.
     private static @Nullable Direction findPreferredEdge(BlockPos pos, @Nullable BlockPos queryPos, Direction side, boolean doubleBlock, StateCache stateCache) {
         if (queryPos == null) {
             return null;
@@ -184,9 +182,7 @@ public final class AppearanceHelper {
         return findFirstSuitableDirectionFromOffset(pos, queryPos, side, null, (_, _, _) -> true);
     }
 
-    /**
-     * Determine the first direction from the difference between the two given positions which matches the given predicate
-     */
+    /// Determine the first direction from the difference between the two given positions which matches the given predicate.
     private static <T> @Nullable Direction findFirstSuitableDirectionFromOffset(BlockPos pos, BlockPos queryPos, Direction side, @Nullable T context, EdgePredicate<T> pred) {
         if (pos.equals(queryPos)) {
             return null;
@@ -226,16 +222,13 @@ public final class AppearanceHelper {
         return null;
     }
 
-    /**
-     * Determine the actual query state depending on whether it's a framed block, its CT support if it is and whether
-     * it's a double block
-     * <ul>
-     *     <li>Non-null, non-AIR => connectable block</li>
-     *     <li>Non-null, AIR => framed block without CT support</li>
-     *     <li>Null => Double framed block, can't determine connecting component, won't connect to other double blocks,
-     *     or neighbor state is actually air, in which case full-face and full-edge camos need to be returned</li>
-     * </ul>
-     */
+    /// Determine the actual query state depending on whether it's a framed block, its CT support if it is and whether
+    /// it's a double block:
+    ///
+    ///   - Non-null, non-AIR => connectable block
+    ///   - Non-null, AIR => framed block without CT support
+    ///   - Null => Double framed block, can't determine connecting component, won't connect to other double blocks,
+    ///     or neighbor state is actually air, in which case full-face and full-edge camos need to be returned
     private static @Nullable BlockState findApplicableNeighbor(BlockGetter level, @Nullable BlockPos queryPos, @Nullable BlockState queryState) {
         if (queryState == null) {
             if (queryPos == null) {
@@ -253,10 +246,8 @@ public final class AppearanceHelper {
         return queryState.isAir() ? null : queryState;
     }
 
-    /**
-     * Check that the querying block is either not a framed block or can be connected to from the given edge
-     * of the given side
-     */
+    /// Check that the querying block is either not a framed block or can be connected to from the given edge
+    /// of the given side.
     private static boolean isNotFramedOrCanConnectFullEdgeTo(
             BlockPos pos, @Nullable BlockPos queryPos, @Nullable BlockState queryState, Direction side, @Nullable Direction edge
     ) {

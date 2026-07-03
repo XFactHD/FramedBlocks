@@ -15,6 +15,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
 
+/// Holds value printers for various common types.
 public final class ValuePrinters {
     private static final Map<Class<?>, ValuePrinter<?>> PRINTERS = new Reference2ObjectOpenHashMap<>();
 
@@ -29,6 +30,9 @@ public final class ValuePrinters {
     public static final ValuePrinter<RailShape> RAIL_SHAPE = registerEnum(RailShape.class);
     public static final ValuePrinter<DoorHingeSide> HINGE_SIDE = registerEnum(DoorHingeSide.class);
 
+    /// {@return the built-in value printer for the given type or null if none is registered}
+    ///
+    /// @param valueClass The type to get the printer for
     @SuppressWarnings("unchecked")
     public static <T> @Nullable ValuePrinter<T> find(Class<T> valueClass) {
         ValuePrinter<?> printer = PRINTERS.get(valueClass);
@@ -41,11 +45,19 @@ public final class ValuePrinters {
         return null;
     }
 
+    /// {@return a value printer for the given enum type, creating one if no built-in one is applicable}
+    /// The returned printer, if newly created, uses translation keys in the format `value.framedblocks.snake_case_class_name.value_serialized_name`.
+    ///
+    /// @param valueClass The type to create the printer for
     public static <T extends Enum<T> & StringRepresentable> ValuePrinter<T> createForEnum(Class<T> valueClass) {
         ValuePrinter<T> printer = find(valueClass);
         return printer != null ? printer : createForEnum(valueClass, getDefaultEnumPrefix(valueClass));
     }
 
+    /// {@return a value printer for the given enum type, creating one if no built-in one is applicable}
+    /// The returned printer uses translation keys in the format `value.framedblocks.prefix.value_serialized_name`.
+    ///
+    /// @param valueClass The type to create the printer for
     public static <T extends Enum<T> & StringRepresentable> ValuePrinter<T> createForEnum(Class<T> valueClass, String prefix) {
         return createForEnumRaw(valueClass, prefix);
     }
@@ -59,11 +71,7 @@ public final class ValuePrinters {
     }
 
     private static <T extends Enum<T> & StringRepresentable> ValuePrinter<T> registerEnum(Class<T> valueClass) {
-        return register(valueClass, createForEnumRaw(valueClass));
-    }
-
-    private static <T extends Enum<T> & StringRepresentable> ValuePrinter<T> createForEnumRaw(Class<T> valueClass) {
-        return createForEnumRaw(valueClass, getDefaultEnumPrefix(valueClass));
+        return register(valueClass, createForEnumRaw(valueClass, getDefaultEnumPrefix(valueClass)));
     }
 
     private static <T extends Enum<T> & StringRepresentable> ValuePrinter<T> createForEnumRaw(Class<T> valueClass, String prefix) {

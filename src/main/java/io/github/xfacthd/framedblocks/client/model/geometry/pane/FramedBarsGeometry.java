@@ -79,12 +79,10 @@ public class FramedBarsGeometry extends FramedPaneGeometry {
         return true;
     }
 
-    /**
-     * @param perpNeg Connection state in the negative direction perpendicular to the quad
-     * @param perpPos Connection state in the positive direction perpendicular to the quad
-     * @param parNeg Connection state in the negative direction in the same plane as the quad
-     * @param parPos Connection state in the positive direction in the same plane as the quad
-     */
+    /// @param perpNeg Connection state in the negative direction perpendicular to the quad
+    /// @param perpPos Connection state in the positive direction perpendicular to the quad
+    /// @param parNeg  Connection state in the negative direction in the same plane as the quad
+    /// @param parPos  Connection state in the positive direction in the same plane as the quad
     private static void createCenterPillarQuad(QuadMapBuilder quadMap, BakedQuad quad, boolean perpNeg, boolean perpPos, boolean parNeg, boolean parPos) {
         if (perpNeg && perpPos && !parNeg && !parPos) {
             return;

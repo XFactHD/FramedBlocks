@@ -2,9 +2,7 @@ package io.github.xfacthd.framedblocks.common.data.skippreds;
 
 import net.minecraft.core.Direction;
 
-/**
- * Indicates in which direction the corner above the baseline points and whether the said corner is offset to the block center
- */
+/// Indicates in which direction the corner above the baseline points and whether the said corner is offset to the block center.
 public enum QuarterTriangleDir {
     NULL(Direction.UP, Direction.UP, false),
 
@@ -57,10 +55,8 @@ public enum QuarterTriangleDir {
         return fromDirections(cardOne.getOpposite(), cardTwo.getOpposite(), offset);
     }
 
-    /**
-     * {@return true if both {@code TriangleDir}s are not {@link QuarterTriangleDir#NULL} and the other
-     * {@code TriangleDir} has the same edge directions}
-     */
+    /// {@return true if both {@code TriangleDir}s are not {@link QuarterTriangleDir#NULL} and the other
+    ///  {@code TriangleDir} has the same edge directions}
     public boolean isEqualTo(QuarterTriangleDir other) {
         return this != NULL && this == other;
     }

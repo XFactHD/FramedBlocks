@@ -15,6 +15,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import java.util.ArrayList;
 import java.util.List;
 
+/// Base implementation of [SchematicRequirementRegistries.BlockEntityRequirement] informing Create's Schematicannon
+/// of additional items required for copying camos applied to a framed block and any items required for a specific
+/// framed block-
 public class FramedBlockEntityItemRequirement implements SchematicRequirementRegistries.BlockEntityRequirement {
     public static final FramedBlockEntityItemRequirement INSTANCE = new FramedBlockEntityItemRequirement();
     private static final FrameModifier[] MODIFIERS = FrameModifier.values();
@@ -50,16 +53,29 @@ public class FramedBlockEntityItemRequirement implements SchematicRequirementReg
         return ItemRequirement.NONE;
     }
 
+    /// Append additional non-camo item requirements.
+    ///
+    /// @param blockEntity  The BE being copied
+    /// @param requirements The list of requirements to append to
     protected void collectAdditionalRequirements(IFramedBlockEntity blockEntity, List<ItemRequirement.StackRequirement> requirements) { }
 
+    /// {@return a requirement consuming the given item}
+    ///
+    /// @param item The item to consume
     protected static ItemRequirement.StackRequirement consume(ItemLike item) {
         return consume(new ItemStack(item));
     }
 
+    /// {@return a requirement consuming the given stack}
+    ///
+    /// @param stack The stack to consume
     protected static ItemRequirement.StackRequirement consume(ItemStack stack) {
         return new ItemRequirement.StackRequirement(stack, ItemRequirement.ItemUseType.CONSUME);
     }
 
+    /// {@return a requirement consuming the given stack with strict NBT matching}
+    ///
+    /// @param stack The stack to consume
     protected static ItemRequirement.StackRequirement consumeStrict(ItemStack stack) {
         return new ItemRequirement.StrictNbtStackRequirement(stack, ItemRequirement.ItemUseType.CONSUME);
     }

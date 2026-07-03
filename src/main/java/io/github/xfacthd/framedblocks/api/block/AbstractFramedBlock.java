@@ -34,6 +34,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
+/// Base implementation of a single-camo [IFramedBlock].
 public abstract class AbstractFramedBlock extends Block implements IFramedBlock, SimpleWaterloggedBlock {
     private final IBlockType blockType;
     protected final ShapeLookup shapes;
@@ -149,10 +150,6 @@ public abstract class AbstractFramedBlock extends Block implements IFramedBlock,
         return super.getDrops(state, getCamoDrops(builder));
     }
 
-    /**
-     * Return true if the given {@link BlockState} occludes the full area of the beacon beam and
-     * can therefore tint the beam
-     */
     @Override
     public boolean doesBlockOccludeBeaconBeam(BlockState state, LevelReader level, BlockPos pos) {
         return shapes.occludesBeaconBeam(state);
@@ -168,6 +165,7 @@ public abstract class AbstractFramedBlock extends Block implements IFramedBlock,
         return blockType;
     }
 
+    /// {@return whether this block can be waterlogged}
     protected final boolean isWaterLoggable() {
         return blockType.supportsWaterLogging();
     }

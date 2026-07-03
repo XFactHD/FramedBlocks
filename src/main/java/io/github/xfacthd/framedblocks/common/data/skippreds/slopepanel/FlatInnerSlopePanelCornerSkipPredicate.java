@@ -27,9 +27,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.Half;
 import net.minecraft.world.level.block.state.properties.StairsShape;
 
-/**
- This class is machine-generated, any manual changes to this class will be overwritten.
- */
+/// This class is machine-generated, any manual changes to this class will be overwritten.
 @CullTest(BlockType.FRAMED_FLAT_INNER_SLOPE_PANEL_CORNER)
 public final class FlatInnerSlopePanelCornerSkipPredicate implements SideSkipPredicate {
     @Override

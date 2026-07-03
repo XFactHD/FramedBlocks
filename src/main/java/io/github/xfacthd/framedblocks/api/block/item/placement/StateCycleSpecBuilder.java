@@ -23,6 +23,7 @@ import java.util.SequencedMap;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 
+/// Builder for a [StateCycleSpec] of a single [Block].
 public final class StateCycleSpecBuilder {
     private final Block block;
     private final SequencedMap<Property<?>, PropertySpec<?>> properties = new LinkedHashMap<>();

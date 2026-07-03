@@ -3,6 +3,7 @@ package io.github.xfacthd.framedblocks.api.camo.block.rotator;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Property;
 
+/// Camo rotator capable of cycling through one property of a given block.
 public final class SinglePropertyBlockCamoRotator implements BlockCamoRotator {
     private final Property<?> property;
 

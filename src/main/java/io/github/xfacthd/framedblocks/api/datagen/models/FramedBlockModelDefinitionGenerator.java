@@ -3,6 +3,8 @@ package io.github.xfacthd.framedblocks.api.datagen.models;
 import com.mojang.datafixers.util.Either;
 import io.github.xfacthd.framedblocks.api.internal.InternalClientAPI;
 import io.github.xfacthd.framedblocks.api.model.standalone.StandaloneWrapperKey;
+import io.github.xfacthd.framedblocks.api.model.wrapping.AuxModelProvider;
+import io.github.xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
 import net.minecraft.client.data.models.blockstates.BlockModelDefinitionGenerator;
 import net.minecraft.client.renderer.block.dispatch.BlockStateModelDispatcher;
 import net.minecraft.client.renderer.block.dispatch.SingleVariant;
@@ -12,6 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+/// Builder for blockstate files to take over model baking with the wrapping behavior registered for the respective block.
 @SuppressWarnings("UnusedReturnValue")
 public final class FramedBlockModelDefinitionGenerator implements BlockModelDefinitionGenerator {
     private final Block block;
@@ -31,6 +34,12 @@ public final class FramedBlockModelDefinitionGenerator implements BlockModelDefi
         this.wrapperKey = wrapperKey;
     }
 
+    /// Add an auxiliary model to be loaded and baked, accessible through the [AuxModelProvider] provided
+    /// by [GeometryFactory.Context#auxModels()].
+    ///
+    /// @param key   The key to use for lookup during geometry construction
+    /// @param model The model to load
+    /// @return this builder
     public FramedBlockModelDefinitionGenerator addAuxModel(String key, SingleVariant.Unbaked model) {
         auxModels.put(key, model);
         return this;

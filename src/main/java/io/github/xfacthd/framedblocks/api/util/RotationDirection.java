@@ -8,8 +8,11 @@ import net.minecraft.world.level.block.state.properties.Property;
 
 import java.util.List;
 
+/// Represents the rotation direction of a wrench.
 public enum RotationDirection {
+    /// Rotate clockwise (forward).
     CLOCKWISE(Rotation.CLOCKWISE_90),
+    /// Rotate counterclockwise (backward).
     COUNTERCLOCKWISE(Rotation.COUNTERCLOCKWISE_90);
 
     private final Rotation vanillaRotation;
@@ -18,10 +21,12 @@ public enum RotationDirection {
         this.vanillaRotation = vanillaRotation;
     }
 
+    /// {@return the vanilla rotation represented by this rotation direction}
     public Rotation toVanillaRotation() {
         return vanillaRotation;
     }
 
+    /// {@return the opposite of this rotation direction}
     public RotationDirection getOpposite() {
         return switch (this) {
             case CLOCKWISE -> COUNTERCLOCKWISE;
@@ -29,6 +34,10 @@ public enum RotationDirection {
         };
     }
 
+    /// Cycle the given property on the given state in the direction indicated by this rotation direction.
+    ///
+    /// @param state    The state to cycle the property on
+    /// @param property The property to cycle
     public <T extends Comparable<T>> BlockState cycle(BlockState state, Property<T> property) {
         return switch (this) {
             case CLOCKWISE -> state.cycle(property);
@@ -41,6 +50,10 @@ public enum RotationDirection {
         };
     }
 
+    /// Rotate the [BlockStateProperties#ROTATION_16] property on the given state by one in the
+    /// direction indicated by this rotation direction.
+    ///
+    /// @param state The state to cycle the property on
     public BlockState rotateRot16(BlockState state) {
         int offset = switch (this) {
             case CLOCKWISE -> 1;
@@ -50,6 +63,9 @@ public enum RotationDirection {
         return state.setValue(BlockStateProperties.ROTATION_16, (rotation + offset) % 16);
     }
 
+    /// {@return the rotation direction for the player's crouch state}
+    ///
+    /// @param sneaking Whether the player is crouching
     public static RotationDirection of(boolean sneaking) {
         return sneaking ? COUNTERCLOCKWISE : CLOCKWISE;
     }

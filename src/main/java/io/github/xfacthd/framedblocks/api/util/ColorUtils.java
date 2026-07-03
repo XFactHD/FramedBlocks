@@ -7,20 +7,23 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.stream.IntStream;
 
+/// Provides various helpers for handling colors.
 public final class ColorUtils {
     private static final MapColor[] CLOSEST_AVG_MAP_COLORS = computeClosestAverageMapColors();
 
-    /**
-     * Get the average {@link MapColor} of the two provided {@link MapColor}s
-     */
+    /// {@return the average of the two provided map colors}
+    ///
+    /// @param colOne The first map color
+    /// @param colTwo The second map color
     public static MapColor average(MapColor colOne, MapColor colTwo) {
         return CLOSEST_AVG_MAP_COLORS[avgIndex(colOne, colTwo)];
     }
 
-    /** Compute the squared distance between the two provided RGB colors
-     <p>
-     <a href="https://github.com/PlatinPython/RGBBlocks/blob/1.21.1/src/main/java/platinpython/rgbblocks/util/Color.java#L161-L166">Adapted from RGBBlocks</a>
-     */
+    /// {@return the squared distance between the two provided RGB colors}
+    ///
+    /// @param colOne The first color
+    /// @param colTwo The second color
+    /// [Adapted from RGBBlocks](https://github.com/PlatinPython/RGBBlocks/blob/1.21.1/src/main/java/platinpython/rgbblocks/util/Color.java#L161-L166)
     public static int distanceSquare(int colOne, int colTwo) {
         int dr = ARGB.red(colTwo) - ARGB.red(colOne);
         int dg = ARGB.green(colTwo) - ARGB.green(colOne);

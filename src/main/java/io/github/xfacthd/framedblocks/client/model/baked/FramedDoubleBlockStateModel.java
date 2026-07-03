@@ -91,10 +91,8 @@ public final class FramedDoubleBlockStateModel extends AbstractFramedBlockStateM
         return partModels.get().materialFlags(parts, level, pos);
     }
 
-    /**
-     * Returns the camo-dependent particle texture of the side given by {@code key} when the camo is not air,
-     * else returns the basic "framed block" sprite
-     */
+    /// Returns the camo-dependent particle texture of the side given by `key` when the camo is not air,
+    /// else returns the basic "framed block" sprite
     @SuppressWarnings("deprecation")
     private Material.Baked getMaterialOrDefault(BlockAndTintGetter level, BlockPos pos, BlockState state, @Nullable AbstractFramedBlockData data, boolean secondary) {
         Material.Baked material = getMaterial(level, pos, state, data, secondary);

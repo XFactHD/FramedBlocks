@@ -13,6 +13,7 @@ import net.minecraft.world.level.ItemLike;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.Nullable;
 
+/// Extended shapeless recipe builder with support for auto-generated criterion names in recipe advancements.
 public class ExtShapelessRecipeBuilder extends ShapelessRecipeBuilder implements AutoUnlockNameBuilder<ExtShapelessRecipeBuilder> {
     private final RecipeProvider provider;
 

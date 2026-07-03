@@ -13,7 +13,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.model.data.ModelData;
 import org.jspecify.annotations.Nullable;
 
+/// Base implementation of a ghost render behavior for framed blocks with two camos.
 public interface DoubleBlockGhostRenderBehaviour extends GhostRenderBehaviour {
+    /// Default instance for double blocks with no further special behavior.
     DoubleBlockGhostRenderBehaviour INSTANCE = new DoubleBlockGhostRenderBehaviour() {};
 
     @Override
