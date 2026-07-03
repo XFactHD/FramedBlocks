@@ -7,6 +7,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.lighting.LevelLightEngine;
 import net.neoforged.neoforge.model.data.ModelData;
 
+/// Freestanding implementation of a block render fake level for use in contexts where a real
+/// level is either unavailable or is intentionally not used. Anchored at (0,0,0) by default.
 public non-sealed interface FreestandingBlockRenderFakeLevel extends BlockRenderFakeLevel {
     @Override
     default BlockPos pos() {
@@ -38,5 +40,9 @@ public non-sealed interface FreestandingBlockRenderFakeLevel extends BlockRender
         return pos().getY();
     }
 
+    /// Simple implementation of a freestanding fake level.
+    ///
+    /// @param state     The blockstate to provide at the anchor position
+    /// @param modelData The model data to provide at the anchor position
     record Simple(BlockState state, ModelData modelData) implements FreestandingBlockRenderFakeLevel { }
 }

@@ -35,18 +35,18 @@ public class FramedFancyPoweredRailSlopeBlock extends FramedPoweredRailSlopeBloc
 
     @Override
     public @Nullable BlockState runOcclusionTestAndGetLookupState(
-            SideSkipPredicate pred, BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side
+            SideSkipPredicate predicate, BlockGetter level, BlockPos pos, BlockState occludedState, BlockState occludingState, Direction side
     ) {
-        DoubleBlockParts partStates = getCache(adjState).getParts();
-        return super.runOcclusionTestAndGetLookupState(pred, level, pos, state, partStates.stateOne(), side);
+        DoubleBlockParts partStates = getCache(occludingState).getParts();
+        return super.runOcclusionTestAndGetLookupState(predicate, level, pos, occludedState, partStates.stateOne(), side);
     }
 
     @Override
     public @Nullable BlockState getComponentBySkipPredicate(
-            BlockGetter level, BlockPos pos, BlockState state, BlockState neighborState, Direction side
+            BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side
     ) {
         BlockState slopeState = getCache(state).getParts().stateOne();
-        if (IFramedDoubleBlock.testComponent(level, pos, slopeState, neighborState, side)) {
+        if (IFramedDoubleBlock.testComponent(level, pos, slopeState, adjState, side)) {
             return slopeState;
         }
         return null;

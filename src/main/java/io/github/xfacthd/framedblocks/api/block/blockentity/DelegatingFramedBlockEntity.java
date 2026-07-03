@@ -44,32 +44,30 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-/**
- * Delegating implementation of {@link IFramedBlockEntity} to allow extending BEs from vanilla or other mods and
- * attach FramedBlocks behavior to them by storing a {@link WrappedFramedBlockEntity}.
- * <p>
- * BEs implementing this interface must override the following methods and delegate them to the {@link WrappedFramedBlockEntity}:
- * <ul>
- *     <li>{@link BlockEntity#setRemoved()}</li>
- *     <li>{@link BlockEntity#clearRemoved()}</li>
- *     <li>{@link BlockEntity#setLevel(Level)}</li>
- *     <li>{@link BlockEntity#setBlockState(BlockState)}</li>
- *     <li>{@link BlockEntity#getUpdateTag(HolderLookup.Provider)} via {@link WrappedFramedBlockEntity#getUpdateTag(HolderLookup.Provider, Function)}</li>
- *     <li>{@link IBlockEntityExtension#handleUpdateTag(ValueInput)} via {@link WrappedFramedBlockEntity#handleUpdateTag(ValueInput, Consumer)}</li>
- *     <li>{@link IBlockEntityExtension#onDataPacket(Connection, ValueInput)} via {@link WrappedFramedBlockEntity#onDataPacket(Connection, ValueInput, BiConsumer)}</li>
- *     <li>{@link IBlockEntityExtension#getModelData()}</li>
- *     <li>{@link IBlockEntityExtension#onLoad()} via {@link WrappedFramedBlockEntity#onLoadInternal()} before calling the super method</li>
- *     <li>{@link IBlockEntityExtension#applyStructureRotation(Mirror, Rotation)} if the BE implementing this interface already overrides it</li>
- *     <li>{@link BlockEntity#collectImplicitComponents(DataComponentMap.Builder)} via {@link WrappedFramedBlockEntity#collectImplicitComponentsForDelegate(DataComponentMap.Builder)}</li>
- *     <li>{@link BlockEntity#applyImplicitComponents(DataComponentGetter)} via {@link WrappedFramedBlockEntity#applyImplicitComponentsForDelegate(DataComponentGetter)}</li>
- *     <li>{@link BlockEntity#removeComponentsFromTag(ValueOutput)}</li>
- *     <li>{@link BlockEntity#loadAdditional(ValueInput)} via {@link WrappedFramedBlockEntity#loadAdditionalInternal(ValueInput)}</li>
- *     <li>{@link BlockEntity#saveAdditional(ValueOutput)} via {@link WrappedFramedBlockEntity#saveAdditionalInternal(ValueOutput)}</li>
- * </ul>
- * If the BE being extended to implement this interface does not already override {@link BlockEntity#getUpdatePacket()} to return a non-null value,
- * then it has to be overridden to return {@link WrappedFramedBlockEntity#getUpdatePacket()} and {@link IBlockEntityExtension#onDataPacket(Connection, ValueInput)}
- * has to be overridden to only delegate to {@link WrappedFramedBlockEntity#onDataPacket(Connection, ValueInput)} without a super call.
- */
+/// Delegating implementation of [IFramedBlockEntity] to allow extending BEs from vanilla or other mods and
+/// attach FramedBlocks behavior to them by storing a [WrappedFramedBlockEntity].
+///
+/// BEs implementing this interface must override the following methods and delegate them to the [WrappedFramedBlockEntity]:
+///
+/// - [BlockEntity#setRemoved()]
+/// - [BlockEntity#clearRemoved()]
+/// - [BlockEntity#setLevel(Level)]
+/// - [BlockEntity#setBlockState(BlockState)]
+/// - [BlockEntity#getUpdateTag(HolderLookup.Provider)] via [WrappedFramedBlockEntity#getUpdateTag(HolderLookup.Provider, Function)]
+/// - [IBlockEntityExtension#handleUpdateTag(ValueInput)] via [WrappedFramedBlockEntity#handleUpdateTag(ValueInput, Consumer)]
+/// - [IBlockEntityExtension#onDataPacket(Connection, ValueInput)] via [WrappedFramedBlockEntity#onDataPacket(Connection, ValueInput, BiConsumer)]
+/// - [IBlockEntityExtension#getModelData()]
+/// - [IBlockEntityExtension#onLoad()] via [WrappedFramedBlockEntity#onLoadInternal()] before calling the super method
+/// - [IBlockEntityExtension#applyStructureRotation(Mirror, Rotation)] if the BE implementing this interface already overrides it
+/// - [BlockEntity#collectImplicitComponents(DataComponentMap.Builder)] via [WrappedFramedBlockEntity#collectImplicitComponentsForDelegate(DataComponentMap.Builder)]
+/// - [BlockEntity#applyImplicitComponents(DataComponentGetter)] via [WrappedFramedBlockEntity#applyImplicitComponentsForDelegate(DataComponentGetter)]
+/// - [BlockEntity#removeComponentsFromTag(ValueOutput)]
+/// - [BlockEntity#loadAdditional(ValueInput)] via [WrappedFramedBlockEntity#loadAdditionalInternal(ValueInput)]
+/// - [BlockEntity#saveAdditional(ValueOutput)] via [WrappedFramedBlockEntity#saveAdditionalInternal(ValueOutput)]
+///
+/// If the BE being extended to implement this interface does not already override [BlockEntity#getUpdatePacket()] to return a non-null value,
+/// then it has to be overridden to return [WrappedFramedBlockEntity#getUpdatePacket()] and [IBlockEntityExtension#onDataPacket(Connection, ValueInput)]
+/// has to be overridden to only delegate to [WrappedFramedBlockEntity#onDataPacket(Connection, ValueInput)] without a super call.
 @SuppressWarnings("deprecation")
 public non-sealed interface DelegatingFramedBlockEntity extends IFramedBlockEntity {
     @Override

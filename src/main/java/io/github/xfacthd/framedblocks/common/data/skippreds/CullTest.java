@@ -10,9 +10,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 public @interface CullTest {
-    /**
-     * The type(s) using this test
-     */
+    /// The type(s) using this test.
     BlockType[] value();
 
     boolean noSelfTest() default false;
@@ -20,14 +18,10 @@ public @interface CullTest {
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.METHOD)
     @interface TestTarget {
-        /**
-         * The type(s) tested against
-         */
+        /// The type(s) tested against.
         BlockType[] value();
 
-        /**
-         * Indicate that this test intentionally does not have a reverse test
-         */
+        /// Indicate that this test intentionally does not have a reverse test.
         boolean oneWay() default false;
     }
 }

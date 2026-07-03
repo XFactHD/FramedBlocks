@@ -127,11 +127,7 @@ public final class BlockOutlineRenderer {
 
     public static void init() {
         ModLoader.postEvent(new RegisterOutlineRenderersEvent((type, renderer) -> {
-            Preconditions.checkArgument(
-                    type.hasSpecialOutline(),
-                    "IBlockType %s doesn't return true from IBlockType#hasSpecialOutline()",
-                    type
-            );
+            Preconditions.checkArgument(type.hasSpecialOutline(), "IBlockType %s returns false from IBlockType#hasSpecialOutline()", type);
             OUTLINE_RENDERERS.put(type, renderer);
         }));
     }

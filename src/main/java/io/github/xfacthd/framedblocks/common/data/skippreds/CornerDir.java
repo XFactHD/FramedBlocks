@@ -2,9 +2,7 @@ package io.github.xfacthd.framedblocks.common.data.skippreds;
 
 import net.minecraft.core.Direction;
 
-/**
- * Indicates the normal and two outer edges of a quarter-block sized face
- */
+/// Indicates the normal and two outer edges of a quarter-block sized face.
 public enum CornerDir {
     NULL(Direction.UP, Direction.UP, Direction.UP),
 
@@ -57,10 +55,8 @@ public enum CornerDir {
         return fromDirections(normal.getOpposite(), edgeOne, edgeTwo);
     }
 
-    /**
-     * {@return true if both {@code CornerDir}s are not {@link CornerDir#NULL} and the other {@code CornerDir}
-     * has the same edge directions and the opposite normal direction}
-     */
+    /// {@return true if both {@code CornerDir}s are not {@link CornerDir#NULL} and the other {@code CornerDir}
+    ///  has the same edge directions and the opposite normal direction}
     public boolean isEqualTo(CornerDir other) {
         return this != NULL && getOppositeNormal() == other;
     }

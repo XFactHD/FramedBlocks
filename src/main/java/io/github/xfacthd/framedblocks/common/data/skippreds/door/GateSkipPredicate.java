@@ -12,9 +12,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DoorHingeSide;
 import net.minecraft.world.level.block.state.properties.Half;
 
-/**
- This class is machine-generated, any manual changes to this class will be overwritten.
- */
+/// This class is machine-generated, any manual changes to this class will be overwritten.
 @CullTest({
         BlockType.FRAMED_GATE,
         BlockType.FRAMED_IRON_GATE

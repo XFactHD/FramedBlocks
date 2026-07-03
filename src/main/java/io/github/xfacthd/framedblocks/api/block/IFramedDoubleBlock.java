@@ -28,19 +28,42 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.Nullable;
 
+/// Top-level interface providing all generic block functionality of framed blocks with two camos.
+/// Must be implemented by all two-camo framed blocks.
 public interface IFramedDoubleBlock extends IFramedBlock {
     @Override
     FramedDoubleBlockEntity newBlockEntity(BlockPos pos, BlockState state);
 
+    /// Compute the part states making up this double block.
+    ///
+    /// @param state The state of this block
+    /// @return the parts making up this block
     @ApiStatus.OverrideOnly
     DoubleBlockParts calculateParts(BlockState state);
 
+    /// Compute which camos need to be taken into account for interaction with the top face of this block.
+    ///
+    /// @param state The state of this block
+    /// @return the top interaction mode
     @ApiStatus.OverrideOnly
     DoubleBlockTopInteractionMode calculateTopInteractionMode(BlockState state);
 
+    /// Compute which camos need to be taken into account to determine whether the given side of this block
+    /// is solid (covers the full face at the outer perimeter of the block and has a fully opaque camo).
+    ///
+    /// @param state The state of this block
+    /// @param side  The side of this block
+    /// @return the solidity check for the given side
     @ApiStatus.OverrideOnly
     SolidityCheck calculateSolidityCheck(BlockState state, Direction side);
 
+    /// Compute which unique camo is accessible at the given edge of the given side of this block or
+    /// on the full face if edge is `null`.
+    ///
+    /// @param state The state of this block
+    /// @param side  The side of this block
+    /// @param edge  The edge of the side or null for the full face
+    /// @return the camo getter for the given side and edge
     @ApiStatus.OverrideOnly
     CamoGetter calculateCamoGetter(BlockState state, Direction side, @Nullable Direction edge);
 
@@ -56,13 +79,13 @@ public interface IFramedDoubleBlock extends IFramedBlock {
 
     @Override
     default @Nullable BlockState runOcclusionTestAndGetLookupState(
-            SideSkipPredicate pred, BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side
+            SideSkipPredicate predicate, BlockGetter level, BlockPos pos, BlockState occludedState, BlockState occludingState, Direction side
     ) {
-        DoubleBlockParts partStates = getCache(adjState).getParts();
-        if (pred.test(level, pos, state, partStates.stateOne(), side)) {
+        DoubleBlockParts partStates = getCache(occludingState).getParts();
+        if (predicate.test(level, pos, occludedState, partStates.stateOne(), side)) {
             return partStates.stateOne();
         }
-        if (pred.test(level, pos, state, partStates.stateTwo(), side)) {
+        if (predicate.test(level, pos, occludedState, partStates.stateTwo(), side)) {
             return partStates.stateTwo();
         }
         return null;
@@ -78,23 +101,31 @@ public interface IFramedDoubleBlock extends IFramedBlock {
 
     @Override
     default @Nullable BlockState getComponentBySkipPredicate(
-            BlockGetter level, BlockPos pos, BlockState state, BlockState neighborState, Direction side
+            BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side
     ) {
         DoubleBlockParts parts = getCache(state).getParts();
         BlockState compA = parts.stateOne();
-        if (testComponent(level, pos, compA, neighborState, side)) {
+        if (testComponent(level, pos, compA, adjState, side)) {
             return compA;
         }
         BlockState compB = parts.stateTwo();
-        if (testComponent(level, pos, compB, neighborState, side)) {
+        if (testComponent(level, pos, compB, adjState, side)) {
             return compB;
         }
         return null;
     }
 
-    static boolean testComponent(BlockGetter ctLevel, BlockPos pos, BlockState component, BlockState neighborState, Direction side) {
+    /// Test the given component state against the given neighbor for occlusion.
+    ///
+    /// @param level     The level the blocks are in
+    /// @param pos       The position of the double block
+    /// @param component The component state of the double block
+    /// @param adjState  The adjacent state to test against
+    /// @param side      The side of the component to test for occlusion
+    /// @return whether the given component state can be occluded by the adjacent state
+    static boolean testComponent(BlockGetter level, BlockPos pos, BlockState component, BlockState adjState, Direction side) {
         IFramedBlock block = (IFramedBlock) component.getBlock();
-        return block.getBlockType().getSideSkipPredicate().test(ctLevel, pos, component, neighborState, side);
+        return block.getBlockType().getSideSkipPredicate().test(level, pos, component, adjState, side);
     }
 
     @Override
@@ -102,8 +133,12 @@ public interface IFramedDoubleBlock extends IFramedBlock {
         if (level.getBlockEntity(pos) instanceof FramedDoubleBlockEntity be) {
             Holder<BlockOverlay> overlay = be.getOverlay();
             DoubleBlockTopInteractionMode mode = getCache(state).getTopInteractionMode();
-            if (mode.applyFirst()) ParticleHelper.spawnRunningParticles(be.getCamo(), overlay, state, level, pos, entity);
-            if (mode.applySecond()) ParticleHelper.spawnRunningParticles(be.getCamoTwo(), overlay, state, level, pos, entity);
+            if (mode.applyFirst()) {
+                ParticleHelper.spawnRunningParticles(be.getCamo(), overlay, state, level, pos, entity);
+            }
+            if (mode.applySecond()) {
+                ParticleHelper.spawnRunningParticles(be.getCamoTwo(), overlay, state, level, pos, entity);
+            }
             return true;
         }
         return false;
@@ -114,8 +149,12 @@ public interface IFramedDoubleBlock extends IFramedBlock {
         if (level.getBlockEntity(pos) instanceof FramedDoubleBlockEntity be) {
             Holder<BlockOverlay> overlay = be.getOverlay();
             DoubleBlockTopInteractionMode mode = getCache(state).getTopInteractionMode();
-            if (mode.applyFirst()) ParticleHelper.spawnLandingParticles(be.getCamo(), overlay, state, level, pos, entity, count);
-            if (mode.applySecond()) ParticleHelper.spawnLandingParticles(be.getCamoTwo(), overlay, state, level, pos, entity, count);
+            if (mode.applyFirst()) {
+                ParticleHelper.spawnLandingParticles(be.getCamo(), overlay, state, level, pos, entity, count);
+            }
+            if (mode.applySecond()) {
+                ParticleHelper.spawnLandingParticles(be.getCamoTwo(), overlay, state, level, pos, entity, count);
+            }
             return true;
         }
         return false;

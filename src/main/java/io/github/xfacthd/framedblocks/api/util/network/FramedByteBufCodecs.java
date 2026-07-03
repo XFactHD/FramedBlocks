@@ -10,7 +10,13 @@ import net.minecraft.network.codec.StreamCodec;
 
 import java.util.function.IntFunction;
 
+/// Holds various factory methods for stream codecs.
 public final class FramedByteBufCodecs {
+    /// {@return a stream codec for arrays up to the given size of the type handled by the given stream codec}
+    ///
+    /// @param wrapped      The stream codec of the array element type
+    /// @param arrayFactory A function creating the array to deserialize into
+    /// @param maxSize      The maximum size of the array
     public static <B extends ByteBuf, V> StreamCodec<B, V[]> array(StreamCodec<? super B, V> wrapped, IntFunction<V[]> arrayFactory, int maxSize) {
         return new StreamCodec<>() {
             @Override
@@ -33,10 +39,17 @@ public final class FramedByteBufCodecs {
         };
     }
 
+    /// {@return a stream codec for long collections of the type created by the given factory}
+    ///
+    /// @param collectionFactory A function creating the collection to deserialize into
     public static <B extends ByteBuf, C extends LongCollection> StreamCodec<B, C> longCollection(IntFunction<C> collectionFactory) {
         return longCollection(collectionFactory, Integer.MAX_VALUE);
     }
 
+    /// {@return a stream codec for long collections up to the given size of the type created by the given factory}
+    ///
+    /// @param collectionFactory A function creating the collection to deserialize into
+    /// @param maxSize           The maximum size of the collection
     public static <B extends ByteBuf, C extends LongCollection> StreamCodec<B, C> longCollection(IntFunction<C> collectionFactory, int maxSize) {
         return new StreamCodec<>() {
             @Override
@@ -57,6 +70,9 @@ public final class FramedByteBufCodecs {
         };
     }
 
+    /// {@return a stream codec for int arrays of exactly the given size}
+    ///
+    /// @param size The size of the array
     public static StreamCodec<ByteBuf, int[]> fixedIntArray(int size) {
         return new StreamCodec<>() {
             @Override

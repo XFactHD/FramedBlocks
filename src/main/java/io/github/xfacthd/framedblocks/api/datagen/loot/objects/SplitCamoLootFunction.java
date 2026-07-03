@@ -15,6 +15,9 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
 import java.util.List;
 
+/// Loot function splitting a single camo entry off of the camo list from the BE to drop camos split over the dropped
+/// framed block items of blocks dropping as multiple items of a different type (i.e. Framed Double Slabs dropping as
+/// two Framed Slabs, each holding one of the two camos).
 public final class SplitCamoLootFunction extends LootItemConditionalFunction {
     public static final MapCodec<SplitCamoLootFunction> MAP_CODEC = RecordCodecBuilder.mapCodec(inst -> commonFields(inst).and(
             Codec.intRange(0, Integer.MAX_VALUE).fieldOf("camo_index").forGetter(func -> func.camoIndex)
@@ -44,10 +47,14 @@ public final class SplitCamoLootFunction extends LootItemConditionalFunction {
         return MAP_CODEC;
     }
 
+    /// {@return a builder for a function splitting off the camo at the given index}
+    ///
+    /// @param camoIndex The camo index to split off
     public static SplitCamoLootFunction.Builder split(int camoIndex) {
         return new Builder(camoIndex);
     }
 
+    /// Builder for split camo loot functions.
     public static final class Builder extends LootItemConditionalFunction.Builder<Builder> {
         private final int camoIndex;
 

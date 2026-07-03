@@ -52,9 +52,7 @@ public final class SkipPredicateGeneratorImpl {
             
             %s
             
-            /**
-             This class is machine-generated, any manual changes to this class will be overwritten.
-             */
+            /// This class is machine-generated, any manual changes to this class will be overwritten.
             @CullTest(%s)
             public final class %sSkipPredicate implements SideSkipPredicate {%s
                 @Override

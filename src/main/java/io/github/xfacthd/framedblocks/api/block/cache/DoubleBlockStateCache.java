@@ -16,6 +16,7 @@ import org.jspecify.annotations.Nullable;
 import java.util.Arrays;
 import java.util.Objects;
 
+/// Extended [StateCache] for constant metadata on double blocks.
 public class DoubleBlockStateCache extends StateCache {
     private final DoubleBlockTopInteractionMode topInteractionMode;
     private final DoubleBlockParts parts;
@@ -59,18 +60,27 @@ public class DoubleBlockStateCache extends StateCache {
         this.mayCullNullFacePartTwo = nullCullPredicate.testPartTwo(state);
     }
 
+    /// {@return which camos need to be taken account for interactions with this block's top face}
     public final DoubleBlockTopInteractionMode getTopInteractionMode() {
         return topInteractionMode;
     }
 
+    /// {@return the underlying parts making up this double block}
     public final DoubleBlockParts getParts() {
         return parts;
     }
 
+    /// {@return which camos control the solidity of the given face}
+    ///
+    /// @param side The side to query
     public final SolidityCheck getSolidityCheck(Direction side) {
         return solidityChecks[side.ordinal()];
     }
 
+    /// {@return the camo getter for the given edge of the given side}
+    ///
+    /// @param side The side to query
+    /// @param edge The edge to query or null to get the camo getter for the entire face
     public final CamoGetter getCamoGetter(Direction side, @Nullable Direction edge) {
         return camoGetters[side.ordinal() * DIR_COUNT_N + DirUtils.maskNullDirection(edge)];
     }
@@ -88,12 +98,15 @@ public class DoubleBlockStateCache extends StateCache {
         return super.supportsEdgeOverlay(side, edge, false, nullCullFace, unaligned);
     }
 
+    /// {@return whether "uncullable" quads of the given part can be culled if the other part has an opaque camo}
+    ///
+    /// @param secondPart The part whose null-face cullability to query
     public final boolean mayCullNullFace(boolean secondPart) {
         return secondPart ? mayCullNullFacePartTwo : mayCullNullFacePartOne;
     }
 
     @Override
-    public boolean equals(Object other) {
+    public boolean equals(@Nullable Object other) {
         if (!super.equals(other)) {
             return false;
         }

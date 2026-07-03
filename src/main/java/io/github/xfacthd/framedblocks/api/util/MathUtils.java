@@ -5,7 +5,11 @@ import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
 
+/// Provides various helpers for math operations.
 public final class MathUtils {
+    /// {@return the fractional part of the given vector}
+    ///
+    /// @param vec The vector whose fraction to compute
     public static Vec3 fraction(Vec3 vec) {
         return new Vec3(
                 vec.x() - Math.floor(vec.x()),
@@ -14,9 +18,10 @@ public final class MathUtils {
         );
     }
 
-    /**
-     * Calculate how far into the block the coordinate of the given direction's axis points in the given direction
-     */
+    /// {@return how far into the block the coordinate of the given direction's axis points in the given direction}
+    ///
+    /// @param vec The vector whose depth to calculate
+    /// @param dir The direction along which to calculate the depth
     public static double fractionInDir(Vec3 vec, Direction dir) {
         double coord = switch (dir.getAxis()) {
             case X -> vec.x;
@@ -27,40 +32,38 @@ public final class MathUtils {
         return DirUtils.isPositive(dir) ? coord : (1D - coord);
     }
 
-    /**
-     * Check if the left hand value is lower than the right hand value.
-     * If the difference between the two values is smaller than {@code 1.0E-5F},
-     * the result will be {@code false}
-     * @return Returns true when the left hand value is lower than the right hand value,
-     *         accounting for floating point precision issues
-     */
+    /// Check whether the left hand value is lower than the right hand value.
+    /// If the difference between the two values is smaller than [Mth#EPSILON],
+    /// the result will be `false`.
+    ///
+    /// @return Returns true when the left hand value is lower than the right hand value,
+    ///         accounting for floating point precision issues
     public static boolean isLower(float lhs, float rhs) {
         return !Mth.equal(lhs, rhs) && lhs < rhs;
     }
 
-    /**
-     * Check if the left hand value is higher than the right hand value.
-     * If the difference between the two values is smaller than {@code 1.0E-5F},
-     * the result will be {@code false}
-     * @return Returns true when the left hand value is higher than the right hand value,
-     *         accounting for floating point precision issues
-     */
+    /// Check if the left hand value is higher than the right hand value.
+    /// If the difference between the two values is smaller than [Mth#EPSILON],
+    /// the result will be `false`.
+    ///
+    /// @return Returns true when the left hand value is higher than the right hand value,
+    ///         accounting for floating point precision issues
     public static boolean isHigher(float lhs, float rhs) {
         return !Mth.equal(lhs, rhs) && lhs > rhs;
     }
 
-    /**
-     * {@return the least common multiple of the two input values}
-     */
+    /// {@return the least common multiple of the two input values}
+    ///
+    /// @param a The first input value
+    /// @param b The second input value
     public static long lcm(int a, int b) {
         return (long) a * (long) (b / IntMath.gcd(a, b));
     }
 
-    /// Returns whether the bit at `index` in the provided `bitset` is set to `1`.
+    /// {@return whether the bit at `index` in the provided `bitset` is set to `1`}
     ///
     /// @param bitset The bitset to read from
     /// @param index  The bit index to read
-    /// @return Whether the bit is set
     public static boolean readBit(int bitset, int index) {
         return (bitset & (1 << index)) != 0;
     }
@@ -81,6 +84,11 @@ public final class MathUtils {
         return bitset;
     }
 
+    /// Swaps the int values at the given indices in the given array.
+    ///
+    /// @param arr      The array to modify
+    /// @param indexOne The index of the first value
+    /// @param indexTwo The index of the second value
     public static void swap(int[] arr, int indexOne, int indexTwo) {
         int temp = arr[indexOne];
         arr[indexOne] = arr[indexTwo];

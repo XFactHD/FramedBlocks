@@ -63,24 +63,28 @@ import net.minecraft.world.phys.shapes.EntityCollisionContext;
 import net.neoforged.neoforge.common.ItemAbilities;
 import net.neoforged.neoforge.common.world.AuxiliaryLightManager;
 import net.neoforged.neoforge.model.data.ModelData;
+import net.neoforged.neoforge.model.data.ModelProperty;
 import net.neoforged.neoforge.transfer.access.ItemAccess;
 import net.neoforged.neoforge.transfer.item.ItemResource;
+import org.intellij.lang.annotations.MagicConstant;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-@SuppressWarnings("deprecation")
+/// Base [IFramedBlockEntity] implementation. Holds all general non-camo metadata and one camo.
 public non-sealed class FramedBlockEntity extends BlockEntity implements IFramedBlockEntity {
     private static final Logger LOGGER = LogUtils.getLogger();
     public static final String CAMO_NBT_KEY = "camo";
     public static final String OVERLAY_NBT_KEY = "overlay";
-    /**
-     * {@link InteractionResult} marker instance to consume the interaction and communicate a failed camo interaction
-     */
+    /// [InteractionResult] marker instance to consume the interaction and communicate a failed camo interaction. Must be compared by reference.
     public static final InteractionResult CONSUME_CAMO_FAILED = new InteractionResult.Success(InteractionResult.SwingSource.NONE, new InteractionResult.ItemContext(true, null));
     protected static final int FLAG_GLOWING = 1;
     protected static final int FLAG_INTANGIBLE = 1 << 1;
@@ -339,29 +343,21 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
         return InteractionResult.SUCCESS;
     }
 
-    /**
-     * Check which part of a double block was hit if this is a double block
-     * @param hit The result of the raycast against this block
-     * @param player The player from which the raycast originated
-     */
+    /// Check which part of a double block was hit if this is a double block
+    /// @param hit The result of the raycast against this block
+    /// @param player The player from which the raycast originated
     protected final boolean hitSecondary(BlockHitResult hit, Player player) {
         return hitSecondary(hit, player.getLookAngle(), player.getEyePosition());
     }
 
-    /**
-     * Check which part of a double block was hit if this is a double block
-     * @param hit The result of the raycast against this block
-     * @param lookVec The look vector used for the raycast (usually {@link Player#getLookAngle()})
-     * @param eyePos The eye position from which the raycast originated (usually {@link Player#getEyePosition()})
-     */
+    /// Check which part of a double block was hit if this is a double block
+    /// @param hit The result of the raycast against this block
+    /// @param lookVec The look vector used for the raycast (usually [Player#getLookAngle()])
+    /// @param eyePos The eye position from which the raycast originated (usually [Player#getEyePosition()])
     protected boolean hitSecondary(BlockHitResult hit, Vec3 lookVec, Vec3 eyePos) {
         return false;
     }
 
-    /**
-     * Update the camo of this block. Whether the primary or secondary camo will be replaced depends
-     * on the given {@link BlockHitResult} and {@link Player}
-     */
     @Override
     public final void setCamo(CamoContainer<?, ?> camo, BlockHitResult hit, Player player) {
         setCamo(camo, hitSecondary(hit, player));
@@ -391,44 +387,29 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
         camoContainer = camo;
     }
 
-    /**
-     * Returns the camo for the given {@link BlockState}. Used for cases where different double blocks
-     * with the same underlying shape(s) don't use the same side to return the camo for a given "sub-state".
-     */
     @Override
     public CamoContainer<?, ?> getCamo(BlockState state) {
         return camoContainer;
     }
 
-    /**
-     * Returns the camo for the given edge of the given side or for the full face if a null edge is provided
-     */
     @Override
     public CamoContainer<?, ?> getCamo(Direction side, @Nullable Direction edge) {
         return camoContainer;
     }
 
-    /**
-     * Used to return a different camo depending on the exact interaction location
-     * @param hit The result of the raycast against this block
-     * @param player The player from which the raycast originated
-     */
     @Override
     public final CamoContainer<?, ?> getCamo(BlockHitResult hit, Player player) {
         return getCamo(hitSecondary(hit, player));
     }
 
-    /**
-     * Used to return a different camo depending on the exact interaction location
-     * @param hit The result of the raycast against this block
-     * @param lookVec The look vector used for the raycast (usually {@link Player#getLookAngle()})
-     * @param eyePos The eye position from which the raycast originated (usually {@link Player#getEyePosition()})
-     */
     @Override
     public final CamoContainer<?, ?> getCamo(BlockHitResult hit, Vec3 lookVec, Vec3 eyePos) {
         return getCamo(hitSecondary(hit, lookVec, eyePos));
     }
 
+    /// {@return the camo applied to the "slot" indicated by the given `secondary` flag}
+    ///
+    /// @param secondary Whether the first or second camo should be returned
     CamoContainer<?, ?> getCamo(boolean secondary) {
         return camoContainer;
     }
@@ -438,14 +419,22 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
         return camoContainer;
     }
 
+    /// {@return whether all camos applied to this block are solid}
     protected boolean isCamoSolid() {
         return camoContainer.getContent().isSolid();
     }
 
+    /// {@return whether all camos applied to this block propagate skylight}
     protected boolean doesCamoPropagateSkylightDown() {
         return camoContainer.getContent().propagatesSkylightDown();
     }
 
+    /// Update the camo-based [BlockState] properties of this block.
+    ///
+    /// @param updateSolid    Whether to update solidity ([FramedProperties#SOLID])
+    /// @param updateLight    Whether to update light emission ([FramedProperties#GLOWING])
+    /// @param updateSkylight Whether to update skylight propagation ([FramedProperties#PROPAGATES_SKYLIGHT])
+    /// @return Whether any property changed
     protected final boolean updateDynamicStates(boolean updateSolid, boolean updateLight, boolean updateSkylight) {
         BlockState state = getBlockState();
         boolean changed = false;
@@ -492,6 +481,7 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public float getCamoExplosionResistance(Explosion explosion) {
         float camoRes = camoContainer.getContent().getExplosionResistance(level(), worldPosition, explosion);
         if (reinforced) {
@@ -572,6 +562,7 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
         return glowing;
     }
 
+    /// {@return the light value emitted by this block based on camos and the [#glowing] flag}
     protected int getLightValue() {
         int baseLight = glowing ? ConfigView.Server.INSTANCE.getGlowstoneLightLevel() : 0;
         return Math.max(baseLight, camoContainer.getContent().getLightEmission());
@@ -590,14 +581,6 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
         }
     }
 
-    /**
-     * Returns whether this block is marked as intangible.
-     * <p>
-     * If this method returns {@code true}, an entity interacting with this block may still behave as if it
-     * returned {@code false} depending on the context.
-     *
-     * @return whether this block is marked as intangible
-     */
     @Override
     public final boolean isMarkedIntangible() {
         return intangible;
@@ -626,9 +609,9 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
         return true;
     }
 
-    /**
-     * {@return whether any of the camos applied to this block can be removed with the given item}
-     */
+    /// {@return whether any of the camos applied to this block can be removed with the given item}
+    ///
+    /// @param stack The item attempted to be used for camo removal
     protected boolean isValidRemovalToolForAnyCamo(ItemStack stack) {
         return CamoContainerHelper.isValidRemovalTool(camoContainer, stack);
     }
@@ -663,6 +646,7 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
         return emissive;
     }
 
+    /// Update the "published" dynamic light emission value.
     final void doLightUpdate() {
         AuxiliaryLightManager lightManager = level().getAuxLightManager(worldPosition);
         if (lightManager != null) {
@@ -684,31 +668,26 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
         return Objects.requireNonNull(level, "BlockEntity#level accessed before it was set");
     }
 
+    /// Mark the owning chunk for saving without triggering a comparator update.
     protected final void setChangedWithoutSignalUpdate() {
         level().blockEntityChanged(worldPosition);
     }
 
+    /// {@return the [StateCache] associated with the current [BlockState] of this BE}
     protected StateCache getStateCache() {
         return stateCache;
     }
 
+    /// {@return whether a camo can automatically be applied to this block during placement from a suitable item or a Camo applicator in the player's off-hand}
     protected boolean canAutoApplyCamoOnPlacement() {
         return true;
     }
 
-    /**
-     * {@return whether all camos applied to this block can be trivially converted to {@link ItemStack}s for dropping}
-     */
     @Override
     public boolean canTriviallyDropAllCamos() {
         return camoContainer.canTriviallyConvertToItemStack();
     }
 
-    /**
-     * Add additional drops to the list of items being dropped
-     * @param drops The list of items being dropped
-     * @param dropCamo Whether the camo item should be dropped
-     */
     @Override
     public void addAdditionalDrops(Consumer<ItemStack> drops, boolean dropCamo) {
         if (dropCamo && canTriviallyDropAllCamos()) {
@@ -795,6 +774,11 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
         }
     }
 
+    /// React to this block being rotated by the given [RotationSource].
+    ///
+    /// @param mirror   The mirror applied to this block
+    /// @param rotation The rotation applied to this block
+    /// @param source   The source triggering the rotation
     protected boolean applyExternalRotation(Mirror mirror, Rotation rotation, RotationSource source) {
         CamoContainer<?, ?> prevCamo = camoContainer;
         camoContainer = camoContainer.adjustForCarrierRotation(mirror, rotation);
@@ -829,6 +813,7 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public void setBlockState(BlockState state) {
         BlockState oldState = getBlockState();
         super.setBlockState(state);
@@ -838,6 +823,7 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
         }
     }
 
+    /// {@return whether a model data update should be triggered after changing the [BlockState] from the provided one}
     protected boolean needsModelDataUpdateAfterStateChange(BlockState oldState) {
         return false;
     }
@@ -877,12 +863,18 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
         NetworkValueInput.handleUpdatePacket(this, valueInput);
     }
 
+    /// Serialize this BE for network synchronization.
+    ///
+    /// @param valueOutput The output to write the BE data into
     protected void writeToDataPacket(ValueOutput valueOutput) {
         CamoContainerHelper.writeToNetwork(valueOutput.child(CAMO_NBT_KEY), camoContainer);
         valueOutput.storeNullable(OVERLAY_NBT_KEY, BlockOverlay.CODEC, overlay);
         valueOutput.putByte("flags", writeFlags());
     }
 
+    /// Deserialize this BE from a network packet.
+    ///
+    /// @param input The input to read the BE data from
     protected void readFromDataPacket(NetworkValueInput input) {
         camoContainer = input.readCamo(CAMO_NBT_KEY, false);
 
@@ -930,7 +922,12 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
         return flags;
     }
 
-    protected static boolean readFlag(byte flags, int flag) {
+    /// Read the given flag bit from the packed flags.
+    ///
+    /// @param flags The packed flags
+    /// @param flag  The flag blit to read
+    /// @return Whether the given flag bit is set
+    protected static boolean readFlag(byte flags, @StateFlag int flag) {
         return (flags & flag) != 0;
     }
 
@@ -943,15 +940,12 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
         return clientData.getModelData();
     }
 
-    /**
-     * @param includeCullInfo Whether culling data should be included
-     * @param state           The {@link BlockState} with which the model data is used for rendering (usually {@link #getBlockState()})
-     */
     @Override
     public final ModelData getModelData(boolean includeCullInfo, BlockState state) {
         return clientData.getModelData(includeCullInfo, state);
     }
 
+    /// Attach additional [ModelProperty]s to the given builder for non-camo data required by this block's model.
     protected void attachAdditionalModelData(ModelData.Builder builder) { }
 
     /*
@@ -977,6 +971,10 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
         return CamoList.of(camoContainer);
     }
 
+    /// Append additional data to the given [BlueprintData].
+    ///
+    /// @param blueprintData The data to attach to
+    /// @return the modified data
     protected BlueprintData appendCustomBlueprintData(BlueprintData blueprintData) {
         return blueprintData;
     }
@@ -996,6 +994,9 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
         setCamo(blueprintData.camos().getCamo(0), false);
     }
 
+    /// Apply the custom data from the [BlueprintData] applied to this block.
+    ///
+    /// @param auxData The additional data read from the [BlueprintData]
     protected void applyCustomDataFromBlueprint(TypedDataComponent<?> auxData) { }
 
     /*
@@ -1003,6 +1004,7 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
      */
 
     @Override
+    @SuppressWarnings("deprecation")
     public void removeComponentsFromTag(ValueOutput valueOutput) {
         valueOutput.discard(CAMO_NBT_KEY);
         valueOutput.discard(OVERLAY_NBT_KEY);
@@ -1025,10 +1027,16 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
         }
     }
 
+    /// Collect all camos applied to this block.
+    ///
+    /// @param builder The builder to add the components to
     protected void collectCamoComponents(DataComponentMap.Builder builder) {
         builder.set(FramedConstants.Objects.DC_TYPE_CAMO_LIST, CamoList.of(camoContainer));
     }
 
+    /// Collect additional non-camo data components.
+    ///
+    /// @param builder The builder to add the components to
     protected void collectMiscComponents(DataComponentMap.Builder builder) { }
 
     @Override
@@ -1040,10 +1048,16 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
         overlay = input.get(FramedConstants.Objects.DC_TYPE_BLOCK_OVERLAY);
     }
 
+    /// Apply camos from a stack's data components.
+    ///
+    /// @param input The input to read the components from
     protected void applyCamoComponents(DataComponentGetter input) {
         setCamo(input.getOrDefault(FramedConstants.Objects.DC_TYPE_CAMO_LIST, CamoList.EMPTY).getCamo(0), false);
     }
 
+    /// Apply additional non-camo data components from a stack.
+    ///
+    /// @param input The input to read the components from
     protected void applyMiscComponents(DataComponentGetter input) { }
 
     /*
@@ -1099,4 +1113,9 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
         forceLightUpdate |= camo.getContent().getLightEmission() > 0;
         return camo;
     }
+
+    @Retention(RetentionPolicy.CLASS)
+    @Target({ ElementType.FIELD, ElementType.PARAMETER, ElementType.LOCAL_VARIABLE, ElementType.METHOD, ElementType.TYPE_USE})
+    @MagicConstant(intValues = { FLAG_GLOWING, FLAG_INTANGIBLE, FLAG_REINFORCED, FLAG_EMISSIVE })
+    public @interface StateFlag {}
 }

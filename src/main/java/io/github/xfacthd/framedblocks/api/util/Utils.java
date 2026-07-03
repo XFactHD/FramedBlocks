@@ -42,19 +42,38 @@ import java.util.List;
 import java.util.ServiceLoader;
 import java.util.Set;
 
+/// Provides various generic helpers.
 public final class Utils {
     private static final Identifier RL_TEMPLATE = Utils.id(FramedConstants.MOD_ID, "");
+    /// Indicates whether the game is running in a production environment.
     public static final boolean PRODUCTION = FMLEnvironment.isProduction();
+    /// Indicates whether the game is running on the physical client.
     public static final boolean CLIENT_DIST = FMLEnvironment.getDist().isClient();
 
+    /// Returns a text component with a translation key in the format `[prefix.]framedblocks[.postfix]`
+    /// and the given formatting arguments.
+    ///
+    /// @param prefix    The prefix to prepend the translation key with
+    /// @param postfix   The postfix to append to the translation key
+    /// @param arguments The formatting arguments to insert into the translated text
+    /// @return a translatable text component
     public static MutableComponent translate(@Nullable String prefix, @Nullable String postfix, Object... arguments) {
         return Component.translatable(translationKey(prefix, postfix), arguments);
     }
 
+    /// Returns a text component with a translation key in the format `[prefix.]framedblocks[.postfix]`.
+    ///
+    /// @param prefix    The prefix to prepend the translation key with
+    /// @param postfix   The postfix to append to the translation key
+    /// @return a translatable text component
     public static MutableComponent translate(@Nullable String prefix, @Nullable String postfix) {
         return Component.translatable(translationKey(prefix, postfix));
     }
 
+    /// {@return a translation key in the format `[prefix.]framedblocks[.postfix]`}
+    ///
+    /// @param prefix  The prefix to prepend the translation key with
+    /// @param postfix The postfix to append to the translation key
     public static String translationKey(@Nullable String prefix, @Nullable String postfix) {
         String key = "";
         if (prefix != null) {
@@ -67,10 +86,23 @@ public final class Utils {
         return key;
     }
 
+    /// {@return a translation key for a config entry of the given type and config key}
+    ///
+    /// @param type The type of the enclosing config
+    /// @param key  The key of the config entry
     public static String translateConfig(String type, String key) {
         return translationKey("config", type + "." + key);
     }
 
+    /// Build an array of text components indexed by the enum's ordinal in the format
+    /// `prefix.framedblocks.postfix.value_serialized_name` and apply the given
+    /// format modifiers to it.
+    ///
+    /// @param prefix     The prefix to prepend the translation keys with
+    /// @param postfix    The postfix to insert between mod ID and the value name
+    /// @param values     The enum values to translate
+    /// @param formatting The format modifiers to apply to the text components
+    /// @return the text components of the enum values
     public static <T extends Enum<T> & StringRepresentable> Component[] buildEnumTranslations(
             String prefix, String postfix, T[] values, ChatFormatting... formatting
     ) {
@@ -80,6 +112,13 @@ public final class Utils {
                 .toArray(Component[]::new);
     }
 
+    /// Build an array of text components indexed by the enum's ordinal with the enum value translations
+    /// inserted as a format argument into the translation of the given key.
+    ///
+    /// @param key               The translation accepting a formatting argument
+    /// @param values            The enum values to bind
+    /// @param valueTranslations The translations of the enum values
+    /// @return the text components of the bound enum value translations
     public static <T extends Enum<T>> Component[] bindEnumTranslation(
             String key, T[] values, Component[] valueTranslations
     ) {
@@ -93,11 +132,18 @@ public final class Utils {
         return components;
     }
 
+    /// {@return a user-displayable representation of the given tag key}
+    ///
+    /// @param tag The tag to translate
     public static MutableComponent translateTag(TagKey<?> tag) {
         String key = Tags.getTagTranslationKey(tag);
         return Component.translatableWithFallback(key, "#" + tag.location());
     }
 
+    /// {@return an immutable list containing the content of the two given lists}
+    ///
+    /// @param listOne The first list
+    /// @param listTwo The second list
     public static <T> List<T> concat(List<T> listOne, List<T> listTwo) {
         if (listOne.isEmpty()) {
             return listTwo;
@@ -112,6 +158,10 @@ public final class Utils {
         return List.copyOf(list);
     }
 
+    /// {@return an immutable set containing the content of the two given set}
+    ///
+    /// @param setOne The first list
+    /// @param setTwo The second list
     public static <T> Set<T> concat(Set<T> setOne, Set<T> setTwo) {
         if (setOne.isEmpty()) {
             return setTwo;
@@ -126,10 +176,12 @@ public final class Utils {
         return Set.copyOf(set);
     }
 
-    /**
-     * Copy all elements from the source list to the destination list
-     * (Significantly faster than {@link ArrayList#addAll(Collection)} in benchmarks)
-     */
+    /// Copy all elements from the source list to the destination list.
+    /// (Significantly faster than [ArrayList#addAll(Collection)] in benchmarks).
+    ///
+    /// @param src  The list to copy from
+    /// @param dest The list to copy into
+    /// @return the destination list
     @SuppressWarnings({ "UseBulkOperation", "ForLoopReplaceableByForEach" })
     public static <T> ArrayList<T> copyAll(List<T> src, ArrayList<T> dest) {
         if (src.isEmpty()) {
@@ -143,48 +195,74 @@ public final class Utils {
         return dest;
     }
 
+    /// {@return a block tag key of the given name in the `framedblocks` namespace}
+    ///
+    /// @param name The name of the tag
     public static TagKey<Block> blockTag(String name) {
         return blockTag(FramedConstants.MOD_ID, name);
     }
 
+    /// {@return a block tag key of the given name in the given namespace}
+    ///
+    /// @param modid the namespace of the tag
+    /// @param name The name of the tag
     public static TagKey<Block> blockTag(String modid, String name) {
         return BlockTags.create(Utils.id(modid, name));
     }
 
+    /// {@return an item tag key of the given name in the `framedblocks` namespace}
+    ///
+    /// @param name The name of the tag
     public static TagKey<Item> itemTag(String name) {
         return itemTag(FramedConstants.MOD_ID, name);
     }
 
+    /// {@return an item tag key of the given name in the given namespace}
+    ///
+    /// @param modid the namespace of the tag
+    /// @param name The name of the tag
     public static TagKey<Item> itemTag(String modid, String name) {
         return ItemTags.create(Utils.id(modid, name));
     }
 
+    /// {@return an identifier with the given path in the `framedblocks` namespace}
+    ///
+    /// @param path The path of the identifier
     public static Identifier id(String path) {
         return RL_TEMPLATE.withPath(path);
     }
 
+    /// {@return an identifier with the given path in the given namespace}
+    ///
+    /// @param namespace The namespace of the identifier
+    /// @param path      The path of the identifier
     public static Identifier id(String namespace, String path) {
         return Identifier.fromNamespaceAndPath(namespace, path);
     }
 
+    /// {@return a payload type with the given path in the `framedblocks` namespace}
+    ///
+    /// @param path The path of the payload type
     public static <T extends CustomPacketPayload> CustomPacketPayload.Type<T> payloadType(String path) {
         return new CustomPacketPayload.Type<>(id(path));
     }
 
+    /// {@return the resource key of the given holder if available, else throws an exception}
+    ///
+    /// @param holder The holder whose key to resolve
     public static <T> ResourceKey<T> getKeyOrThrow(Holder<T> holder) {
         return holder.unwrapKey().orElseThrow(
                 () -> new IllegalArgumentException("Direct holders and unbound reference holders are not supported")
         );
     }
 
-    /**
-     * Place the given {@link ItemStack} in the given {@link Player}'s inventory or drop it if it doesn't fit if the
-     * player is in survival or place it in the player's inventory if the player is in creative mode and doesn't
-     * already have the item
-     *
-     * @param player The player to give the stack to
-     * @param stack The stack to give to the player
-     */
+    /// Add the given stack to the given player's inventory.
+    /// If the player is in survival mode and the item does not fit in the inventory, then it is dropped instead.
+    /// If the player is in creative mode, then the item is only added if the player doesn't already have it
+    /// and there is space in the inventory, otherwise the item is destroyed.
+    ///
+    /// @param player The player to give the stack to
+    /// @param stack  The stack to give to the player
     public static void giveToPlayer(Player player, ItemStack stack) {
         if (stack.isEmpty()) {
             return;
@@ -200,6 +278,11 @@ public final class Utils {
         }
     }
 
+    /// Drop the contents of the given item resource handler into the level.
+    ///
+    /// @param level       The level to drop the items in
+    /// @param pos         The position to drop the items around
+    /// @param itemHandler The resource handler whose contents to drop
     public static void dropItemResourceHandlerContents(Level level, BlockPos pos, ItemStacksResourceHandler itemHandler) {
         for (int i = 0; i < itemHandler.size(); i++) {
             int count = itemHandler.getAmountAsInt(i);
@@ -210,12 +293,20 @@ public final class Utils {
         }
     }
 
+    /// Clear all slots of the given item resource handler.
+    ///
+    /// @param itemHandler The resource handler to clear
     public static void clearItemResourceHandler(ItemStacksResourceHandler itemHandler) {
         for (int i = 0; i < itemHandler.size(); i++) {
             itemHandler.set(i, ItemResource.EMPTY, 0);
         }
     }
 
+    /// Extract one item from the given access and return whether the extraction succeeded.
+    ///
+    /// @param access The item access to extract from
+    /// @param commit Whether the transaction should be commited
+    /// @return whether the extraction succeeded
     public static boolean extractOneFromItemAccess(ItemAccess access, boolean commit) {
         try (Transaction tx = Transaction.openRoot()) {
             if (access.extract(access.getResource(), 1, tx) == 1) {
@@ -228,14 +319,24 @@ public final class Utils {
         }
     }
 
+    /// {@return whether the given stack is a wrench that can be used to rotate framed blocks}
+    ///
+    /// @param stack The stack to check
     public static boolean isWrenchRotationTool(ItemStack stack) {
         return stack.canPerformAction(FramedConstants.ItemAbilities.ACTION_WRENCH_ROTATE) || (stack.is(FramedConstants.Tags.TOOL_WRENCH) && !stack.is(FramedConstants.Tags.COMPLEX_WRENCH));
     }
 
+    /// {@return wether the given stack is a configuration tool that can be used to rotate camos}
+    ///
+    /// @param stack The stack to check
     public static boolean isConfigurationTool(ItemStack stack) {
         return stack.is(FramedConstants.Objects.FRAMED_SCREWDRIVER) || stack.canPerformAction(FramedConstants.ItemAbilities.ACTION_WRENCH_CONFIGURE);
     }
 
+    /// Format the given stack for display in an exception message or crash report.
+    ///
+    /// @param stack The stack to format
+    /// @return the text representation of the stack
     public static String formatItemStack(ItemStack stack) {
         if (stack.isEmpty()) {
             return "~~EMPTY~~";
@@ -249,6 +350,10 @@ public final class Utils {
         return result + "]";
     }
 
+    /// Format the given hit result for display in an exception message or crash report.
+    ///
+    /// @param hitResult The hit result to format
+    /// @return the text representation of the hit result
     public static String formatHitResult(@Nullable HitResult hitResult) {
         if (hitResult == null) {
             return "~~NULL~~";
@@ -267,6 +372,9 @@ public final class Utils {
         return result.toString();
     }
 
+    /// {@return the tristate representation of the given boolean}
+    ///
+    /// @param value The boolean to convert
     public static TriState toTriState(boolean value) {
         return value ? TriState.TRUE : TriState.FALSE;
     }

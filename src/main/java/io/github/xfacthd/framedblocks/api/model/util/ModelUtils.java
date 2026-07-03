@@ -40,26 +40,27 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+/// Provides various helpers for working with models.
 public final class ModelUtils {
     private static final Logger LOGGER = LogUtils.getLogger();
+    /// Shared operations key for creating a blockstate model of the missing cube model.
     public static final ModelBaker.SharedOperationKey<BlockStateModel> MISSING_MODEL_KEY = makeSharedOpsKey(
             baker -> new SingleVariant(baker.missingBlockModelPart())
     );
 
-    /**
-     * Maps a coordinate 'coordTo' between the given coordinates 'coord1' and 'coord2'
-     * onto the UV range they occupy as given by the values at 'uv1' and 'uv2' in the 'uv'
-     * array, calculates the target UV coordinate corresponding to the value of 'coordTo'
-     * and places it at 'uvTo' in the 'uv' array
-     * @param quad The {@link ExtMutableQuad} being operated on
-     * @param coord1 The first coordinate
-     * @param coord2 The second coordinate
-     * @param coordTo The target coordinate, must lie between coord1 and coord2
-     * @param uv1 The first UV texture coordinate
-     * @param uv2 The second UV texture coordinate
-     * @param uvTo The target UV texture coordinate
-     * @param vAxis Whether the modification should happen on the V axis or the U axis
-     */
+    /// Maps a coordinate 'coordTo' between the given coordinates 'coord1' and 'coord2'
+    /// onto the UV range they occupy as given by the values at 'uv1' and 'uv2',
+    /// calculates the target UV coordinate corresponding to the value of 'coordTo'
+    /// and stores it at 'uvTo' index.
+    ///
+    /// @param quad    The mutable quad being operated on
+    /// @param coord1  The first coordinate
+    /// @param coord2  The second coordinate
+    /// @param coordTo The target coordinate, must lie between coord1 and coord2
+    /// @param uv1     The first UV texture coordinate index
+    /// @param uv2     The second UV texture coordinate index
+    /// @param uvTo    The target UV texture coordinate index
+    /// @param vAxis   Whether the modification should happen on the V axis or the U axis
     public static void remapUV(
             ExtMutableQuad quad,
             float coord1,
@@ -92,15 +93,26 @@ public final class ModelUtils {
         }
     }
 
+    /// {@return whether the UVs of the given quad are rotated}
+    ///
+    /// @param data The quad to check
     public static boolean isQuadRotated(ExtMutableQuad data) {
         return (Mth.equal(data.uvComponent(0, 1), data.uvComponent(1, 1)) || Mth.equal(data.uvComponent(3, 1), data.uvComponent(2, 1))) &&
                (Mth.equal(data.uvComponent(1, 0), data.uvComponent(2, 0)) || Mth.equal(data.uvComponent(0, 0), data.uvComponent(3, 0)));
     }
 
+    /// {@return the blockstate model associated with the given blockstate}
+    ///
+    /// @param state The state to get the model for
     public static BlockStateModel getModel(BlockState state) {
         return Minecraft.getInstance().getModelManager().getBlockStateModelSet().get(state);
     }
 
+    /// Returns the framed blockstate model associated with the given blockstate or a wrapper
+    /// of the state's model if said model is not a framed blockstate model.
+    ///
+    /// @param state The state to get the model for
+    /// @return the framed blockstate model for the given state
     public static AbstractFramedBlockStateModel getFramedBlockModel(BlockState state) {
         BlockStateModel model = getModel(state);
         if (model instanceof AbstractFramedBlockStateModel framedModel) {
@@ -110,27 +122,35 @@ public final class ModelUtils {
         return new DelegateFramedBlockStateModel(model, state);
     }
 
+    /// {@return the fluid model associated with the given fluidstate}
+    ///
+    /// @param state The fluidstate to get the model for
     public static FluidModel getFluidModel(FluidState state) {
         return Minecraft.getInstance().getModelManager().getFluidStateModelSet().get(state);
     }
 
+    /// {@return a memoized supplier of the blockstate model associated with the given blockstate}
+    ///
+    /// @param state The state to get the model for
     public static Supplier<BlockStateModel> getModelDeferred(BlockState state) {
         return Lazy.of(() -> getModel(state));
     }
 
+    @Deprecated(forRemoval = true)
     public static ExtendedBlockStateModelPart makeModelPart(QuadMapBuilder quadMap, TriState partAO, Material.Baked particleMaterial, @Nullable BlockState shaderState) {
         return InternalClientAPI.INSTANCE.makeBlockModelPart(quadMap, partAO, particleMaterial, shaderState);
     }
 
-    /**
-     * Guess the cull-face of quads returned by {@link BlockStateModelPart#getQuads(Direction)}
-     * with a {@code null} side (i.e. supposedly uncullable quads) and filter them to return the ones applicable to the given
-     * {@link Direction} and touching the block edge. This fixes blocks becoming invisible when mods forget to specify
-     * cull-faces in their models
-     * <p>
-     * Heavily based on <a href="https://github.com/embeddedt/embeddium/blob/72ba934b27fa35856a0a64f3aa6c867592b2e54f/src/main/java/me/jellysquid/mods/sodium/client/model/quad/properties/ModelQuadFlags.java#L41-L115">Embeddium's quad flag calculation</a>,
-     * licensed under LGPL v3
-     */
+    /// Guess the actual cull-face of quads returned by [BlockStateModelPart#getQuads(Direction)] with a `null` cullface
+    /// (i.e. supposedly uncullable quads) and filter them to return the ones applicable to the given cullface and touching
+    /// the block volume's edge. This fixes blocks becoming invisible when mods forget to specify cull-faces in their models.
+    ///
+    /// Heavily based on [Embeddium's quad flag calculation](https://github.com/embeddedt/embeddium/blob/72ba934b27fa35856a0a64f3aa6c867592b2e54f/src/main/java/me/jellysquid/mods/sodium/client/model/quad/properties/ModelQuadFlags.java#L41-L115),
+    /// licensed under LGPL v3.
+    ///
+    /// @param modelPart The model part to retrieve the quads from
+    /// @param side      The cullface to filter for
+    /// @return filtered quads applicable to the given cullface
     @SuppressWarnings("ForLoopReplaceableByForEach")
     public static List<BakedQuad> getFilteredNullQuads(BlockStateModelPart modelPart, Direction side) {
         List<BakedQuad> nullQuads = modelPart.getQuads(null);
@@ -182,6 +202,9 @@ public final class ModelUtils {
         return quadsOut != null ? quadsOut : Collections.emptyList();
     }
 
+    /// {@return a shared operation key using the given function for its computation}
+    ///
+    /// @param operation The operation to perform
     @SuppressWarnings({ "Convert2Lambda", "Anonymous2MethodRef" })
     public static <T> ModelBaker.SharedOperationKey<T> makeSharedOpsKey(Function<ModelBaker, T> operation) {
         return new ModelBaker.SharedOperationKey<>() {
@@ -192,13 +215,11 @@ public final class ModelUtils {
         };
     }
 
-    /**
-     * Register the provided model for loading without baking it. Useful for models whose unbaked representation is
-     * later retrieved and baked on-the-fly.
-     *
-     * @param event The registration event
-     * @param model The model to register
-     */
+    /// Register the provided model for loading without baking it. Useful for models whose unbaked representation is
+    /// later retrieved and baked on-the-fly.
+    ///
+    /// @param event The registration event
+    /// @param model The model to register
     public static void registerStandaloneForLoading(ModelEvent.RegisterStandalone event, Identifier model) {
         event.register(new StandaloneModelKey<>(model::toString), new UnbakedStandaloneModel<Unit>() {
             @Override
@@ -213,7 +234,7 @@ public final class ModelUtils {
         });
     }
 
-    /// Returns the provided model's geometry key, filtering out keys that are the queried model and therefore don't need to be included in the cache key
+    /// {@return the provided model's geometry key, filtering out keys that are the queried model and therefore don't need to be included in the cache key}
     ///
     /// @param model  The model to query
     /// @param level  The level to query the model with

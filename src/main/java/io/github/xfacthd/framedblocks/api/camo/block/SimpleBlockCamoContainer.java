@@ -3,6 +3,8 @@ package io.github.xfacthd.framedblocks.api.camo.block;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jspecify.annotations.Nullable;
 
+/// Basic camo container implementation for simple block-based camos which hold only a [BlockState] and only need minimal
+/// context to be applied and removed.
 public final class SimpleBlockCamoContainer extends AbstractBlockCamoContainer<SimpleBlockCamoContainer> {
     private final SimpleBlockCamoContainerFactory factory;
 

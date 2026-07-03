@@ -1,93 +1,66 @@
 package io.github.xfacthd.framedblocks.api.util;
 
 import io.github.xfacthd.framedblocks.api.predicate.contex.ConTexMode;
-import net.minecraft.client.renderer.rendertype.RenderType;
 import org.jetbrains.annotations.ApiStatus;
 
+/// Provides access to most config values from the config types used by FramedBlocks.
 @SuppressWarnings("unused")
 public final class ConfigView {
+    /// Provides access to the values of the server config.
     @ApiStatus.NonExtendable
     public interface Server {
         Server INSTANCE = Utils.loadService(ConfigView.Server.class);
 
-        /**
-         * If true, blocks with {@code BlockEntities} can be placed in Framed blocks
-         */
+        /// {@return whether blocks with BEs can be used as camos}
         boolean allowBlockEntities();
 
-        /**
-         * If true, certain blocks can be made intangible
-         */
+        /// {@return whether framed blocks can be made intangible}
         boolean enableIntangibility();
 
-        /**
-         * If true, the One-Way Window is owned by the player who placed it and can only be configured by said player
-         */
+        /// {@return whether the One-Way Window is owned by the player who placed it and can only be configured by said player}
         boolean isOneWayWindowOwnable();
 
-        /**
-         * {@return true if the camo item should be consumed on application and dropped on removal of the camo}
-         */
+        /// {@return whether the camo item should be consumed on application and dropped on removal of the camo}
         boolean shouldConsumeCamoItem();
 
-        /**
-         * {@return the light value to use when glowstone is applied to a block}
-         */
+        /// {@return the light value to use when glowstone is applied to a block}
         int getGlowstoneLightLevel();
 
-        /**
-         * Returns the current value of the {@code fireproofBlocks} setting in the common config
-         */
+        /// {@return whether framed blocks are immune to fire and lava regardless of their camo}
         boolean areBlocksFireproof();
     }
 
+    /// Provides access to the values of the client config.
     @ApiStatus.NonExtendable
     public interface Client {
         Client INSTANCE = Utils.loadService(ConfigView.Client.class);
 
-        /**
-         * If true, a placement preview will be rendered while holding a framed block
-         */
+        /// {@return whether a placement preview will be rendered while holding a framed block}
         boolean showGhostBlocks();
 
-        /**
-         * If true, an alternative {@link RenderType} is used for the placement preview in an attempt to improve
-         * compatibility with certain shaders
-         */
+        /// {@return whether an alternative render type should be used for the placement preview in an attempt to improve compatibility with certain shaders}
         boolean useAltGhostRenderer();
 
-        /**
-         * If true, custom shape-adapted selection boxes are drawn, otherwise the collision box is drawn
-         */
+        /// {@return whether custom shape-adapted selection boxes are drawn instead of the collision box}
         boolean useFancySelectionBoxes();
 
-        /**
-         * If true, all faces should be checked for interaction with neighboring blocks for culling purposes,
-         * else only full faces should be checked against neighboring blocks
-         */
+        /// {@return whether all faces should be checked for interaction with neighboring blocks for culling purposes instead of only full faces}
         boolean detailedCullingEnabled();
 
-        /**
-         * Returns the currently configured {@link ConTexMode}
-         */
+        /// {@return the detail level of connected textures support}
         ConTexMode getConTexMode();
 
-        /**
-         * Returns the verbosity of messages displayed when a block cannot be used as a camo
-         */
+        /// {@return the verbosity of messages displayed when a block cannot be used as a camo}
         CamoMessageVerbosity getCamoMessageVerbosity();
 
-        /**
-         * Returns whether ambient occlusion should be forced on framed blocks which glow through applied glowstone dust
-         */
+        /// {@return whether ambient occlusion should be forced on framed blocks which glow through applied glowstone dust}
         boolean shouldForceAmbientOcclusionOnGlowingBlocks();
 
-        /**
-         * Returns whether item models of framed blocks should render with the camo stored on the stack, if present
-         */
+        /// {@return whether item models of framed blocks should render with the camo stored on the stack, if present}
         boolean shouldRenderItemModelsWithCamo();
     }
 
+    /// Provides access to the values of the dev-tools client config.
     @ApiStatus.NonExtendable
     public interface DevTools {
         DevTools INSTANCE = Utils.loadService(DevTools.class);

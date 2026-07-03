@@ -39,10 +39,8 @@ final class QuadMapImpl extends QuadMap implements QuadMapBuilderInternal {
         return (ArrayList<BakedQuad>) quads[idx];
     }
 
-    /**
-     * Forcefully insert an existing list into this map. Must only be used if the list for the provided side
-     * is known to never be retrieved via {@link #getOrCreate(Direction)} after this operation!
-     */
+    /// Forcefully insert an existing list into this map. Must only be used if the list for the provided side
+    /// is known to never be retrieved via [#getOrCreate(Direction)] after this operation!
     @Override
     public void set(@Nullable Direction side, List<BakedQuad> list) {
         quads[DirUtils.maskNullDirection(side)] = list;

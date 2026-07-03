@@ -31,6 +31,17 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+/// Describes a framed block being copied by a Framed Blueprint.
+///
+/// @param block      The block being copied
+/// @param camos      The camos applied to the copied block
+/// @param overlay    The block overlay applied to the copied block
+/// @param glowing    Whether the copied block has the light emission modifier
+/// @param intangible Whether the copied block has the intangibibility modifier
+/// @param reinforced Whether the copied block has the reinforcement modifier
+/// @param emissive   Whether the copied block has the emissivity (fullbright) modifier
+/// @param blockState The blockstate properties being copied exactly
+/// @param customData Additional data copied from the block's BE
 public record BlueprintData(
         Block block,
         CamoList camos,
@@ -90,10 +101,18 @@ public record BlueprintData(
     public static final Component TRUE = MoreCommonComponents.TRUE;
     public static final Component CANT_COPY = Utils.translate("desc", "blueprint_cant_copy").withStyle(ChatFormatting.RED);
 
+    /// {@return the custom data value if it's present and matches the given type, otherwise the given default}
+    ///
+    /// @param type     The expected type of the custom data
+    /// @param _default The default value to return of custom data is absent or the type does not match
     public <T> T getCustomDataOrDefault(Supplier<DataComponentType<T>> type, T _default) {
         return getCustomDataOrDefault(type.get(), _default);
     }
 
+    /// {@return the custom data value if it's present and matches the given type, otherwise the given default}
+    ///
+    /// @param type     The expected type of the custom data
+    /// @param _default The default value to return of custom data is absent or the type does not match
     @SuppressWarnings("unchecked")
     public <T> T getCustomDataOrDefault(DataComponentType<T> type, T _default) {
         if (customData.isPresent() && customData.get().type() == type) {
@@ -102,18 +121,33 @@ public record BlueprintData(
         return _default;
     }
 
+    /// {@return whether this blueprint data is empty}
     public boolean isEmpty() {
         return block.defaultBlockState().isAir();
     }
 
+    /// Create a copy of this blueprint data with the given blockstate properties to copy.
+    ///
+    /// @param newBlockState The new properties to copy
+    /// @return the new blueprint data
     public BlueprintData withBlockState(BlockItemStateProperties newBlockState) {
         return new BlueprintData(block, camos, overlay, glowing, intangible, reinforced, emissive, newBlockState, customData);
     }
 
+    /// Create a copy of this blueprint data with the given custom data.
+    ///
+    /// @param type The component type of the custom data
+    /// @param data The value of the custom data
+    /// @return the new blueprint data
     public <T> BlueprintData withCustomData(Supplier<DataComponentType<T>> type, T data) {
         return withCustomData(type.get(), data);
     }
 
+    /// Create a copy of this blueprint data with the given custom data.
+    ///
+    /// @param type The component type of the custom data
+    /// @param data The value of the custom data
+    /// @return the new blueprint data
     public <T> BlueprintData withCustomData(DataComponentType<T> type, T data) {
         return new BlueprintData(block, camos, overlay, glowing, intangible, reinforced, emissive, blockState, Optional.of(new TypedDataComponent<>(type, data)));
     }

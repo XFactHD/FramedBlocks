@@ -11,6 +11,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.model.data.ModelData;
 import org.jspecify.annotations.Nullable;
 
+/// Base item model data provider implementation for framed blocks with two camos.
 public class DoubleBlockItemModelDataProvider implements ItemModelDataProvider {
     @Override
     public final ModelData buildItemModelData(BlockState state, CamoList camos, @Nullable Holder<BlockOverlay> overlay) {
@@ -25,5 +26,9 @@ public class DoubleBlockItemModelDataProvider implements ItemModelDataProvider {
         return builder.build();
     }
 
+    /// Append additional non-camo data to the model data used for querying the blockstate model.
+    ///
+    /// @param builder The model data builder to append to
+    /// @param state   The blockstate used for resolving the blockstate model backing the item model
     protected void appendItemModelData(ModelData.Builder builder, BlockState state) { }
 }

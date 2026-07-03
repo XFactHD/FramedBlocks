@@ -5,13 +5,12 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.CardinalLighting;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.ColorResolver;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.lighting.LevelLightEngine;
 import net.neoforged.neoforge.common.world.AuxiliaryLightManager;
-import net.neoforged.neoforge.model.data.ModelData;
 import org.jspecify.annotations.Nullable;
 
-/// Delegating [BlockAndTintGetter] providing access to a single [BlockState] and associated [ModelData].
+/// Delegating implementation of a block render fake level for use in contexts where a real
+/// level is available for accessing thread-safe data.
 public non-sealed interface DelegatingBlockRenderFakeLevel extends BlockRenderFakeLevel {
     /// Returns the real client level, if available, to delegate lookups of thread-safe data to
     BlockAndTintGetter realLevel();

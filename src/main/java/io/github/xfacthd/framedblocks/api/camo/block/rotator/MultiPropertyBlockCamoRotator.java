@@ -6,6 +6,7 @@ import net.minecraft.world.level.block.state.properties.Property;
 
 import java.util.List;
 
+/// Camo rotator capable of cycling through multiple properties of a given block.
 public final class MultiPropertyBlockCamoRotator implements BlockCamoRotator {
     private final BlockState defaultState;
     private final Property<?>[] properties;

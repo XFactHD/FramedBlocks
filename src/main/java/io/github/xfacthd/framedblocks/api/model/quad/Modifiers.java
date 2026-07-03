@@ -11,6 +11,7 @@ import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 
+/// Provides factory methods for various quad modification operations.
 public final class Modifiers {
     private static final QuadModifier.Modifier NOOP_MODIFIER = _ -> true;
     private static final float SCALE_ROTATION_45 = 1.0F / (float) Math.cos(Math.PI / 4D) - 1.0F;
@@ -31,27 +32,26 @@ public final class Modifiers {
             new Vector3f(1F, 1F, 1F)  //East,  top left corner
     };
 
+    /// {@return a no-op modifier}
     public static QuadModifier.Modifier noop() {
         return NOOP_MODIFIER;
     }
 
-    /**
-     * Cut the quad such that the provided cut edge is {@code length} away from the opposite edge's block bound.
-     *
-     * @param cutEdge The edge of the quad to move
-     * @param length  The target length from the starting edge
-     */
+    /// Cut the quad such that the provided cut edge is `length` away from the opposite edge's block bound.
+    ///
+    /// @param cutEdge The edge of the quad to move
+    /// @param length  The target length from the starting edge
+    /// @return a quad modifier for cutting a quad
     public static QuadModifier.Modifier cut(Direction cutEdge, float length) {
         return cut(cutEdge, length, length);
     }
 
-    /**
-     * Cut the quad such that both edges of the quad specified by the provided cut axis are {@code length} away
-     * from the opposite edge's block bound.
-     *
-     * @param cutAxis The direction towards the cut edge
-     * @param length  The target length from the starting edge
-     */
+    /// Cut the quad such that both edges of the quad specified by the provided cut axis are `length` away
+    /// from the opposite edge's block bound.
+    ///
+    /// @param cutAxis The direction towards the cut edge
+    /// @param length  The target length from the starting edge
+    /// @return a quad modifier for cutting a quad
     public static QuadModifier.Modifier cut(Direction.Axis cutAxis, float length) {
         if (Mth.equal(length, 1F)) {
             return NOOP_MODIFIER;
@@ -59,30 +59,22 @@ public final class Modifiers {
         return quad -> cut(quad, cutAxis.getNegative(), length, length) && cut(quad, cutAxis.getPositive(), length, length);
     }
 
-    /**
-     * Cut the quad such that the two corners of the provided cut edge are {@code lengthOne} and {@code lengthTwo}
-     * away from the opposite edge's block bound.
-     * <p>
-     * The lengths are assigned to the corners as follows:
-     * <ul>
-     *     <li>
-     *         For vertical-facing quads, {@code lengthOne} is the corner clockwise from the cut edge and
-     *         {@code lengthTwo} is the corner counterclockwise from the cut edge as observed from the top down
-     *     </li>
-     *     <li>
-     *         For vertical-facing cut edges on horizontal-facing quads, {@code lengthOne} is the corner clockwise from
-     *         the quad's normal dir and {@code lengthTwo} is the corner counterclockwise from the quad's normal dir
-     *     </li>
-     *     <li>
-     *         For horizontal-facing cut edges on horizontal-facing quads, {@code lengthOne} is the top corner and
-     *         {@code lengthTwo} is the bottom corner
-     *     </li>
-     * </ul>
-     *
-     * @param cutEdge   The edge of the quad to move
-     * @param lengthOne The length on the first corner of the specified edge
-     * @param lengthTwo The length on the second corner of the specified edge
-     */
+    /// Cut the quad such that the two corners of the provided cut edge are `lengthOne` and `lengthTwo`
+    /// away from the opposite edge's block bound.
+    ///
+    /// The lengths are assigned to the corners as follows:
+    ///
+    ///   - For vertical-facing quads, `lengthOne` is the corner clockwise from the cut edge and
+    ///     `lengthTwo` is the corner counterclockwise from the cut edge as observed from the top down
+    ///   - For vertical-facing cut edges on horizontal-facing quads, `lengthOne` is the corner clockwise from
+    ///     the quad's normal dir and `lengthTwo` is the corner counterclockwise from the quad's normal dir
+    ///   - For horizontal-facing cut edges on horizontal-facing quads, `lengthOne` is the top corner and
+    ///     `lengthTwo` is the bottom corner
+    ///
+    /// @param cutEdge   The edge of the quad to move
+    /// @param lengthOne The length on the first corner of the specified edge
+    /// @param lengthTwo The length on the second corner of the specified edge
+    /// @return a quad modifier for cutting a quad
     public static QuadModifier.Modifier cut(Direction cutEdge, float lengthOne, float lengthTwo) {
         if (Mth.equal(lengthOne, 1F) && Mth.equal(lengthTwo, 1F)) {
             return NOOP_MODIFIER;
@@ -160,13 +152,13 @@ public final class Modifiers {
         return true;
     }
 
-    /**
-     * Cuts a vertical facing quad to the dimensions given by the min and max coordinates
-     * @param minX Minimum X coordinate
-     * @param minZ Minimum Z coordinate
-     * @param maxX Maximum X coordinate
-     * @param maxZ Maximum Z coordinate
-     */
+    /// Cuts a vertical facing quad to the dimensions given by the min and max coordinates
+    ///
+    /// @param minX Minimum X coordinate
+    /// @param minZ Minimum Z coordinate
+    /// @param maxX Maximum X coordinate
+    /// @param maxZ Maximum Z coordinate
+    /// @return a quad modifier for cutting a vertical quad
     public static QuadModifier.Modifier cutTopBottom(float minX, float minZ, float maxX, float maxZ) {
         return quad -> {
             Direction quadDir = quad.direction();
@@ -179,13 +171,13 @@ public final class Modifiers {
         };
     }
 
-    /**
-     * Creates a horizontal facing quad cut to the dimensions given by the min and max coordinates
-     * @param minXZ Minimum X or Z coordinate, depending on the quad's facing
-     * @param minY Minimum Y coordinate
-     * @param maxXZ Maximum X or Z coordinate, depending on the quad's facing
-     * @param maxY Maximum Y coordinate
-     */
+    /// Creates a horizontal facing quad cut to the dimensions given by the min and max coordinates
+    ///
+    /// @param minXZ Minimum X or Z coordinate, depending on the quad's facing
+    /// @param minY  Minimum Y coordinate
+    /// @param maxXZ Maximum X or Z coordinate, depending on the quad's facing
+    /// @param maxY  Maximum Y coordinate
+    /// @return a quad modifier for cutting a horizontal quad
     public static QuadModifier.Modifier cutSide(float minXZ, float minY, float maxXZ, float maxY) {
         return quad -> {
             Direction quadDir = quad.direction();
@@ -202,12 +194,12 @@ public final class Modifiers {
         };
     }
 
-    /**
-     * Cuts the quad pointing horizontally at the edge given by {@code cutDir}
-     * @param cutDir The direction towards the cut edge
-     * @param lengthCW The target length of the right corner (cut direction rotated clockwise) from the starting edge
-     * @param lengthCCW The target length of the left corner (cut direction rotated counter-clockwise) from the starting edge
-     */
+    /// Cuts the quad pointing horizontally at the edge given by `cutDir`
+    ///
+    /// @param cutDir    The direction towards the cut edge
+    /// @param lengthCW  The target length of the right corner (cut direction rotated clockwise) from the starting edge
+    /// @param lengthCCW The target length of the left corner (cut direction rotated counter-clockwise) from the starting edge
+    /// @return a quad modifier for cutting a horizontal quad
     public static QuadModifier.Modifier cutSide(Direction cutDir, float lengthCW, float lengthCCW) {
         return quad -> {
             Direction quadDir = quad.direction();
@@ -230,12 +222,12 @@ public final class Modifiers {
         };
     }
 
-    /**
-     * Cuts a triangle quad with the tip centered horizontally and pointing up or down from a horizontal quad.
-     * The quad will have the right edge pushed back and the tip tilted to the top or bottom left corner
-     * @param up Whether the tip should point up or down
-     * @param back Whether the tip should tilt forward or backward
-     */
+    /// Cuts a triangle quad with the tip centered horizontally and pointing up or down from a horizontal quad.
+    /// The quad will have the right edge pushed back and the tip tilted to the top or bottom left corner.
+    ///
+    /// @param up   Whether the tip should point up or down
+    /// @param back Whether the tip should tilt forward or backward
+    /// @return a quad modifier for cutting a horizontal quad into a prims triangle
     public static QuadModifier.Modifier cutPrismTriangle(boolean up, boolean back) {
         return quad -> {
             Direction quadDir = quad.direction();
@@ -259,12 +251,12 @@ public final class Modifiers {
         };
     }
 
-    /**
-     * Cuts a triangle quad with the tip centered horizontally and pointing up or down from a vertical quad.
-     * The quad will have the right edge pushed back and the tip tilted to the top or bottom left corner
-     * @param cutDir The direction the triangle should point in the unrotated position
-     * @param back Whether the tip should tilt forward or backward
-     */
+    /// Cuts a triangle quad with the tip centered horizontally and pointing up or down from a vertical quad.
+    /// The quad will have the right edge pushed back and the tip tilted to the top or bottom left corner.
+    ///
+    /// @param cutDir The direction the triangle should point in the unrotated position
+    /// @param back   Whether the tip should tilt forward or backward
+    /// @return a quad modifier for cutting a vertical quad into a prims triangle
     public static QuadModifier.Modifier cutPrismTriangle(Direction cutDir, boolean back) {
         Preconditions.checkArgument(!DirUtils.isY(cutDir), "Expected horizontal cut direction, got %s", cutDir);
         return quad -> {
@@ -301,10 +293,10 @@ public final class Modifiers {
         };
     }
 
-    /**
-     * Cuts a triangle quad with the tip centered on the base edge and half a block above it
-     * @param cutDir The direction the triangle should point
-     */
+    /// Cuts a triangle quad with the tip centered on the base edge and half a block above it
+    ///
+    /// @param cutDir The direction the triangle should point
+    /// @return a quad modifier for cutting a quad into a small triangle
     public static QuadModifier.Modifier cutSmallTriangle(Direction cutDir) {
         return quad -> {
             Direction quadDir = quad.direction();
@@ -340,12 +332,12 @@ public final class Modifiers {
             new Vector3f(1, 0, 0)
     };
 
-    /**
-     * Rotates the quad's edge given by {@code rightEdge}) backwards by the given angle and rescales the quad
-     * on the appropriate axis
-     * @param rightEdge Whether the right or left edge should be rotated back
-     * @param angle The amount the edge should be rotated by
-     */
+    /// Rotates the quad's edge given by `rightEdge`) backwards by the given angle and rescales the quad
+    /// on the appropriate axis.
+    ///
+    /// @param rightEdge Whether the right or left edge should be rotated back
+    /// @param angle     The amount the edge should be rotated by
+    /// @return a quad modifier for rotating a quad into a horizontal slope
     public static QuadModifier.Modifier makeHorizontalSlope(boolean rightEdge, float angle) {
         return quad -> {
             Direction dir = quad.direction();
@@ -374,12 +366,12 @@ public final class Modifiers {
             new Vector3f(1, 0, 0),
     };
 
-    /**
-     * Rotates the quad's edge given by {@code rightEdge}) backwards by the given angle and rescales the quad
-     * on the appropriate axis
-     * @param topEdge Whether the top or bottom edge should be rotated back
-     * @param angle The amount the edge should be rotated by
-     */
+    /// Rotates the quad's edge given by `topEdge`) backwards by the given angle and rescales the quad
+    /// on the appropriate axis.
+    ///
+    /// @param topEdge Whether the top or bottom edge should be rotated back
+    /// @param angle   The amount the edge should be rotated by
+    /// @return a quad modifier for rotating a quad into a vertical slope
     public static QuadModifier.Modifier makeVerticalSlope(boolean topEdge, float angle) {
         return quad -> {
             Direction dir = quad.direction();
@@ -394,12 +386,12 @@ public final class Modifiers {
         };
     }
 
-    /**
-     * Rotates the quad's edge pointed towards by {@code edge} downwards by the given angle and rescales the quad
-     * on the appropriate axis
-     * @param edge The direction towards the edge that should be rotated downwards
-     * @param angle The amount the edge should be rotated by
-     */
+    /// Rotates the quad's edge pointed towards by `edge` downwards by the given angle and rescales the quad
+    /// on the appropriate axis.
+    ///
+    /// @param edge  The direction towards the edge that should be rotated downwards
+    /// @param angle The amount the edge should be rotated by
+    /// @return a quad modifier for rotating a quad into a vertical slope
     public static QuadModifier.Modifier makeVerticalSlope(Direction edge, float angle) {
         return quad -> {
             Direction dir = quad.direction();
@@ -417,11 +409,11 @@ public final class Modifiers {
         };
     }
 
-    /**
-     * Offsets the quad by the given amount in the given direction
-     * @param dir The direction to offset the quad in
-     * @param amount The amount the quad should be offset by
-     */
+    /// Offsets the quad by the given amount in the given direction.
+    ///
+    /// @param dir    The direction to offset the quad in
+    /// @param amount The amount the quad should be offset by
+    /// @return a quad modifier for offseting a quad
     public static QuadModifier.Modifier offset(Direction dir, float amount) {
         if (Mth.equal(amount, 0F)) {
             return NOOP_MODIFIER;
@@ -443,10 +435,10 @@ public final class Modifiers {
 
     }
 
-    /**
-     * Moves the quad to the given value in the quad's facing direction
-     * @param posTarget The target position in the quad's facing direction
-     */
+    /// Moves the quad to the given position in the quad's normal direction.
+    ///
+    /// @param posTarget The target position in the quad's normal direction
+    /// @return a quad modifier for setting a quad's position along its normal direction
     public static QuadModifier.Modifier setPosition(float posTarget) {
         if (Mth.equal(posTarget, 1F)) {
             return NOOP_MODIFIER;
@@ -464,12 +456,12 @@ public final class Modifiers {
         };
     }
 
-    /**
-     * Moves the individual vertices of the quad to the given values in the quad's facing direction. Vertices which are
-     * not on the outer corners of the block face will have their position interpolated between the given target positions
-     * @param posTarget The target positions in the quad's facing direction
-     * @implNote This does not create the same shape for all vertices when displacing a single one, this is not fixable without extreme effort
-     */
+    /// Moves the individual vertices of the quad to the given positions in the quad's normal direction. Vertices which are
+    /// not on the outer corners of the block face will have their position interpolated between the given target positions.
+    ///
+    /// @param posTarget The target positions in the quad's normal direction
+    /// @return a quad modifier for setting a quad's position along its normal direction
+    /// @implNote This does not create the same shape for all vertices when displacing a single one, this is not fixable without extreme effort
     public static QuadModifier.Modifier setPosition(float[] posTarget) {
         Preconditions.checkArgument(posTarget.length == 4, "Target position array must contain 4 elements, got %s!", posTarget.length);
 
@@ -496,34 +488,34 @@ public final class Modifiers {
         };
     }
 
-    /**
-     * Rotates the quad on the given axis around the block center
-     * @param axis The axis to rotate around
-     * @param angle The angle of rotation in degrees
-     * @param rescale Whether the quad should be rescaled or retain its dimensions
-     */
+    /// Rotates the quad on the given axis around the block center.
+    ///
+    /// @param axis    The axis to rotate around
+    /// @param angle   The angle of rotation in degrees
+    /// @param rescale Whether the quad should be rescaled or retain its dimensions
+    /// @return a quad modifier for rotating a quad around the block volume's center
     public static QuadModifier.Modifier rotateCentered(Direction.Axis axis, float angle, boolean rescale) {
         return rotate(axis, CENTER, angle, rescale);
     }
 
-    /**
-     * Rotates the quad on the given axis around the block center
-     * @param axis The axis to rotate around
-     * @param angle The angle of rotation in degrees
-     * @param rescale Whether the quad should be rescaled or retain its dimensions
-     * @param scaleMult Modifier for the scale vector, can be used to inhibit scaling on selected axis
-     */
+    /// Rotates the quad on the given axis around the block center.
+    ///
+    /// @param axis      The axis to rotate around
+    /// @param angle     The angle of rotation in degrees
+    /// @param rescale   Whether the quad should be rescaled or retain its dimensions
+    /// @param scaleMult Modifier for the scale vector, can be used to inhibit scaling on selected axis
+    /// @return a quad modifier for rotating a quad around the block volume's center
     public static QuadModifier.Modifier rotateCentered(Direction.Axis axis, float angle, boolean rescale, Vector3f scaleMult) {
         return rotate(axis, CENTER, angle, rescale, scaleMult);
     }
 
-    /**
-     * Rotates the quad on the given axis around the given origin
-     * @param axis The axis to rotate around
-     * @param origin The point to rotate around
-     * @param angle The angle of rotation in degrees
-     * @param rescale Whether the quad should be rescaled or retain its dimensions
-     */
+    /// Rotates the quad on the given axis around the given origin.
+    ///
+    /// @param axis    The axis to rotate around
+    /// @param origin  The point to rotate around
+    /// @param angle   The angle of rotation in degrees
+    /// @param rescale Whether the quad should be rescaled or retain its dimensions
+    /// @return a quad modifier for rotating a quad around the given origin
     public static QuadModifier.Modifier rotate(Direction.Axis axis, Vector3f origin, float angle, boolean rescale) {
         return quad -> {
             rotate(quad, axis, origin, angle, rescale);
@@ -535,14 +527,14 @@ public final class Modifiers {
         rotate(quad, axis, origin, angle, rescale, ONE);
     }
 
-    /**
-     * Rotates the quad on the given axis around the given origin
-     * @param axis The axis to rotate around
-     * @param origin The point to rotate around
-     * @param angle The angle of rotation in degrees
-     * @param rescale Whether the quad should be rescaled or retain its dimensions
-     * @param scaleMult Modifier for the scale vector, can be used to inhibit scaling on selected axes
-     */
+    /// Rotates the quad on the given axis around the given origin.
+    ///
+    /// @param axis      The axis to rotate around
+    /// @param origin    The point to rotate around
+    /// @param angle     The angle of rotation in degrees
+    /// @param rescale   Whether the quad should be rescaled or retain its dimensions
+    /// @param scaleMult Modifier for the scale vector, can be used to inhibit scaling on selected axes
+    /// @return a quad modifier for rotating a quad around the given origin
     public static QuadModifier.Modifier rotate(Direction.Axis axis, Vector3f origin, float angle, boolean rescale, Vector3f scaleMult) {
         return quad -> {
             rotate(quad, axis, origin, angle, rescale, scaleMult);
@@ -607,6 +599,11 @@ public final class Modifiers {
         }
     }
 
+    /// Scales the quad by the given factor around the given origin.
+    ///
+    /// @param factor The scale factor to apply to the quad
+    /// @param origin The origin to scale around
+    /// @return a quad modifier for scaling a quad
     public static QuadModifier.Modifier scaleFace(float factor, Vector3f origin) {
         return quad -> {
             Vector3f scaleVec = switch (quad.direction().getAxis()) {
@@ -636,6 +633,11 @@ public final class Modifiers {
         };
     }
 
+    /// Sets the light emission of the quad to the given value.
+    ///
+    /// @param emission     The light emission value to apply to the quad
+    /// @param increaseOnly Whether the light emission may only increase or also decrease
+    /// @return a quad modifier for setting a quad's light emission
     public static QuadModifier.Modifier setLightEmission(int emission, boolean increaseOnly) {
         return quad -> {
             int finalEmission = emission;

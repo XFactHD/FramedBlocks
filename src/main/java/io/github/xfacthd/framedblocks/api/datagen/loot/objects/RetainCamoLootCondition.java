@@ -7,6 +7,7 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
+/// Loot condition determining whether the camo is retained on the dropped framed block.
 public final class RetainCamoLootCondition implements LootItemCondition {
     public static final RetainCamoLootCondition INSTANCE = new RetainCamoLootCondition();
     public static final MapCodec<RetainCamoLootCondition> MAP_CODEC = MapCodec.unit(INSTANCE);

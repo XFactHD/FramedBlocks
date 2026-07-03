@@ -13,9 +13,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.state.BlockState;
 
-/**
- This class is machine-generated, any manual changes to this class will be overwritten.
- */
+/// This class is machine-generated, any manual changes to this class will be overwritten.
 @CullTest(BlockType.FRAMED_CORNER_STRIP)
 public final class CornerStripSkipPredicate implements SideSkipPredicate {
     @Override

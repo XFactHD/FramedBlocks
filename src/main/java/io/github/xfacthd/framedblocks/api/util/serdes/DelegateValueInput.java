@@ -9,6 +9,7 @@ import net.neoforged.neoforge.common.util.ValueIOSerializable;
 import java.util.Optional;
 import java.util.Set;
 
+/// A value input that delegates all calls to the wrapped value input.
 public abstract class DelegateValueInput implements ValueInput {
     protected final ValueInput delegate;
 

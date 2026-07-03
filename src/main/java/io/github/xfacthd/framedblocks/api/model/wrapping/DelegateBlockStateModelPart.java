@@ -10,7 +10,9 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
+/// An extended blockstate model part that delegates all calls to another model part.
 public interface DelegateBlockStateModelPart extends ExtendedBlockStateModelPart {
+    /// {@return the wrapped blockstate model part}
     ExtendedBlockStateModelPart wrapped();
 
     @Override

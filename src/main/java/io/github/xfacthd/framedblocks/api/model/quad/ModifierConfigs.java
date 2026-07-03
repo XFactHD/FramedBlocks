@@ -57,9 +57,7 @@ final class ModifierConfigs {
         );
     }
 
-    /**
-     * {@return the coordinate axis index along the axis of the cutting direction}
-     */
+    /// {@return the coordinate axis index along the axis of the cutting direction}
     private static int getForwardCoord(Direction.Axis quadAxis, Direction.Axis cutAxis) {
         return switch (quadAxis) {
             case X -> switch (cutAxis) {
@@ -80,9 +78,7 @@ final class ModifierConfigs {
         };
     }
 
-    /**
-     * {@return the coordinate axis index parallel to the cutting edge}
-     */
+    /// {@return the coordinate axis index parallel to the cutting edge}
     private static int getParallelCoord(Direction.Axis quadAxis, Direction.Axis cutAxis) {
         return switch (quadAxis) {
             case X -> switch (cutAxis) {
@@ -103,9 +99,7 @@ final class ModifierConfigs {
         };
     }
 
-    /**
-     * {@return the vertex pair at the cutting edge which represents the vertices that get moved by the cutting operation}
-     */
+    /// {@return the vertex pair at the cutting edge which represents the vertices that get moved by the cutting operation}
     private static CuttingConfig.VertPair getCutEdgeVertPair(Direction quadDir, Direction cutEdge) {
         return switch (quadDir) {
             case DOWN -> switch (cutEdge) {
@@ -153,9 +147,7 @@ final class ModifierConfigs {
         };
     }
 
-    /**
-     * {@return the vertex pair opposite the cutting edge which represents the vertices against which the cutting target is checked}
-     */
+    /// {@return the vertex pair opposite the cutting edge which represents the vertices against which the cutting target is checked}
     private static CuttingConfig.VertPair getCheckEdgeVertPair(Direction quadDir, Direction cutEdge) {
         return switch (quadDir) {
             case DOWN -> switch (cutEdge) {

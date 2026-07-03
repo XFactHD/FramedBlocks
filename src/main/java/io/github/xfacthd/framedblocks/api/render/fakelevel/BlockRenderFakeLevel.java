@@ -11,14 +11,15 @@ import net.minecraft.world.level.material.FluidState;
 import net.neoforged.neoforge.model.data.ModelData;
 import org.jspecify.annotations.Nullable;
 
+/// Root interface of fake levels used for rendering block models outside of chunk geometry.
 public sealed interface BlockRenderFakeLevel extends BlockAndTintGetter permits DelegatingBlockRenderFakeLevel, FreestandingBlockRenderFakeLevel {
-    /// Returns the [BlockPos] at which the [BlockState] and [ModelData] should "appear"
+    /// {@return the anchor position at which the state and model data should "appear"}
     BlockPos pos();
 
-    /// Returns the [BlockState] to provide
+    /// {@return the blockstate to provide at the anchor position}
     BlockState state();
 
-    /// Returns the [ModelData] to provide
+    /// {@return the model data to provide at the anchor position}
     ModelData modelData();
 
     @Override

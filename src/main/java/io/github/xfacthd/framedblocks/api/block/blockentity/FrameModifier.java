@@ -20,7 +20,9 @@ import java.util.Locale;
 import java.util.function.IntFunction;
 import java.util.function.Supplier;
 
+/// Represents modifiers which can be applied to any framed block.
 public enum FrameModifier implements StringRepresentable {
+    /// Makes the framed block emit light
     GLOWING(
             IFramedBlockEntity::isGlowing,
             IFramedBlockEntity::setGlowing,
@@ -28,6 +30,7 @@ public enum FrameModifier implements StringRepresentable {
             () -> ItemResource.of(Items.GLOWSTONE_DUST),
             BlueprintCopyBehaviour::getGlowstoneCount
     ),
+    /// Makes the framed block intangible (removes collision)
     INTANGIBLE(
             IFramedBlockEntity::isMarkedIntangible,
             IFramedBlockEntity::setIntangible,
@@ -35,6 +38,7 @@ public enum FrameModifier implements StringRepresentable {
             () -> ItemResource.of(FramedConstants.Objects.PHANTOM_PASTE),
             BlueprintCopyBehaviour::getIntangibleCount
     ),
+    /// Makes the framed block immune to fire, most explosions and certain mobs (i.e. the Ender Dragon)
     REINFORCED(
             IFramedBlockEntity::isReinforced,
             IFramedBlockEntity::setReinforced,
@@ -42,6 +46,7 @@ public enum FrameModifier implements StringRepresentable {
             () -> ItemResource.of(FramedConstants.Objects.FRAMED_REINFORCEMENT),
             BlueprintCopyBehaviour::getReinforcementCount
     ),
+    /// Makes the framed block appear emissive (i.e. fullbright)
     EMISSIVE(
             IFramedBlockEntity::isEmissive,
             IFramedBlockEntity::setEmissive,
@@ -71,34 +76,57 @@ public enum FrameModifier implements StringRepresentable {
         this.blueprintReader = blueprintReader;
     }
 
+    /// {@return whether this modifier is active on the given [IFramedBlockEntity]}
+    ///
+    /// @param be The BE to check against
     public boolean isActive(IFramedBlockEntity be) {
         return flagGetter.getFlag(be);
     }
 
+    /// Set the state of this modifier on the given [IFramedBlockEntity].
+    ///
+    /// @param be     The BE to adjust this modifier's state on
+    /// @param active The target state of this modifier
     public void setActive(IFramedBlockEntity be, boolean active) {
         flagSetter.setFlag(be, active);
     }
 
+    /// {@return whether this modifier can be applied with the given [ItemResource]}
+    ///
+    /// @param resource The resource to test against
     public boolean matches(ItemResource resource) {
         return itemPredicate.test(resource);
     }
 
+    /// {@return whether this modifier can be applied with the given [ItemStack]}
+    ///
+    /// @param stack The stack to test against
     public boolean matches(ItemStack stack) {
         return itemPredicate.test(stack);
     }
 
+    /// {@return the default [ItemResource] to use for applying this modifier}
     public ItemResource getDefaultResource() {
         return defaultResourceProvider.get();
     }
 
+    /// {@return the default [ItemStack] to use for applying this modifier}
     public ItemStack getDefaultStack() {
         return defaultResourceProvider.get().toStack();
     }
 
+    /// {@return the default [ItemStack] with the given count to use for applying this modifier}
+    ///
+    /// @param count The stack size of the resulting stack
     public ItemStack getDefaultStack(int count) {
         return defaultResourceProvider.get().toStack(count);
     }
 
+    /// Collect the stack of items of this modifier, if any, required to apply the given [BlueprintData] to a block.
+    ///
+    /// @param behaviour The copy behavior of the block to be placed by the blueprint
+    /// @param data      The blueprint data to apply to the block
+    /// @param output    The list of stacks to add the stack to
     public void collectForBlueprint(BlueprintCopyBehaviour behaviour, BlueprintData data, List<ItemStack> output) {
         int count = blueprintReader.getCount(behaviour, data);
         if (count > 0) {
@@ -111,14 +139,23 @@ public enum FrameModifier implements StringRepresentable {
         return name;
     }
 
+    /// {@return whether the given {@link ItemResource} {@linkplain #matches(ItemResource) matches} any modifier}
+    ///
+    /// @param resource The resource to test against
     public static boolean matchesAny(ItemResource resource) {
         return findMatching(resource) != null;
     }
 
+    /// {@return whether the given {@link ItemStack} {@linkplain #matches(ItemStack) matches} any modifier}
+    ///
+    /// @param stack The stack to test against
     public static boolean matchesAny(ItemStack stack) {
         return findMatching(stack) != null;
     }
 
+    /// {@return the modifier, if any, matching the given [ItemResource]}
+    ///
+    /// @param resource The resource to test against
     public static @Nullable FrameModifier findMatching(ItemResource resource) {
         for (FrameModifier modifier : MODIFIERS) {
             if (modifier.itemPredicate.test(resource)) {
@@ -128,6 +165,9 @@ public enum FrameModifier implements StringRepresentable {
         return null;
     }
 
+    /// {@return the modifier, if any, matching the given [ItemStack]}
+    ///
+    /// @param stack The stack to test against
     public static @Nullable FrameModifier findMatching(ItemStack stack) {
         for (FrameModifier modifier : MODIFIERS) {
             if (modifier.itemPredicate.test(stack)) {

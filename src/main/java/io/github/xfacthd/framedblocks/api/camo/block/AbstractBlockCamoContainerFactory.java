@@ -17,6 +17,7 @@ import net.neoforged.neoforge.transfer.transaction.Transaction;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.Nullable;
 
+/// Base implementation of a camo container factory for block-based camos.
 public abstract class AbstractBlockCamoContainerFactory<T extends AbstractBlockCamoContainer<T>> extends CamoContainerFactory<T> {
     @Override
     public final @Nullable T applyCamo(Level level, BlockPos pos, Player player, ItemAccess itemAccess) {
@@ -59,9 +60,13 @@ public abstract class AbstractBlockCamoContainerFactory<T extends AbstractBlockC
         return isValidBlock(container.getState(), EmptyBlockGetter.INSTANCE, BlockPos.ZERO, null);
     }
 
-    /**
-     * {@return the {@linkplain BlockState camo state} resulting from the stack in the given {@link ItemAccess} and context}
-     */
+    /// Compute the camo state resulting from the stack in the given item access and context.
+    ///
+    /// @param level      The level containing the target framed block
+    /// @param pos        The position of the target framed block
+    /// @param player     The player interacting with the framed block
+    /// @param itemAccess The item access to read the camo source item from
+    /// @return the camo state or null if the item cannot be converted to a camo
     protected @Nullable BlockState getStateFromItemStack(Level level, BlockPos pos, Player player, ItemAccess itemAccess) {
         if (itemAccess.getResource().getItem() instanceof BlockItem item) {
             return item.getBlock().defaultBlockState();
@@ -69,25 +74,38 @@ public abstract class AbstractBlockCamoContainerFactory<T extends AbstractBlockC
         return null;
     }
 
-    /**
-     * {@return a new camo container from the given {@linkplain BlockState camo state} and context}
-     */
+    /// {@return a new camo container from the given {@linkplain BlockState camo state} and context}
+    ///
+    /// @param camoState  The camo state to store in the camo container
+    /// @param level      The level containing the target framed block
+    /// @param pos        The position of the target framed block
+    /// @param player     The player interacting with the framed block
+    /// @param itemAccess The item access to read the camo source item from
     protected abstract T createContainer(BlockState camoState, Level level, BlockPos pos, Player player, ItemAccess itemAccess);
 
-    /**
-     * {@return a copy of the given camo container with the given new {@linkplain BlockState camo state}}
-     */
+    /// {@return a copy of the given camo container with the given new {@linkplain BlockState camo state}}
+    ///
+    /// @param original     The original camo container
+    /// @param newCamoState The new camo state to use as replacement
     protected abstract T copyContainerWithState(T original, BlockState newCamoState);
 
-    /**
-     * {@return a new {@link ItemStack} to be given to the player when removing the camo with the given stack in hand}
-     */
+    /// {@return a new {@link ItemStack} to be given to the player when removing the camo with the given stack in hand}
+    ///
+    /// @param level      The level containing the target framed block
+    /// @param pos        The position of the target framed block
+    /// @param player     The player interacting with the framed block
+    /// @param itemAccess The item access to read the camo removal item from
+    /// @param container  The camo container being removed
     protected abstract ItemStack createItemStack(Level level, BlockPos pos, Player player, ItemAccess itemAccess, T container);
 
-    /**
-     * Validate that the given {@linkplain BlockState camo state} is a valid camo
-     * @return true to keep the camo, false to discard it
-     */
+    /// Validate that the given [camo state][BlockState] is a valid camo.
+    /// The provided player is `null` if the validation was not triggered by a player interaction.
+    ///
+    /// @param camoState The camo state stored in the container to validate
+    /// @param level     The level containing the target framed block
+    /// @param pos       The position of the target framed block
+    /// @param player    The player interacting with the framed block, if available
+    /// @return true to keep the camo, false to discard it
     protected abstract boolean isValidBlock(BlockState camoState, BlockGetter level, BlockPos pos, @Nullable Player player);
 
     @ApiStatus.Internal

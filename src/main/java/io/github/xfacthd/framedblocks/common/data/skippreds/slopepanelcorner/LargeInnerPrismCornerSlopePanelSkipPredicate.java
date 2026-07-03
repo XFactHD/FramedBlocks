@@ -17,9 +17,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.state.BlockState;
 
-/**
- This class is machine-generated, any manual changes to this class will be overwritten.
- */
+/// This class is machine-generated, any manual changes to this class will be overwritten.
 @CullTest(BlockType.FRAMED_LARGE_INNER_PRISM_CORNER_SLOPE_PANEL)
 public final class LargeInnerPrismCornerSlopePanelSkipPredicate implements SideSkipPredicate {
     @Override

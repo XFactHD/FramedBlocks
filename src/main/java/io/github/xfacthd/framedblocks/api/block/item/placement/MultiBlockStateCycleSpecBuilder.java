@@ -7,15 +7,17 @@ import net.minecraft.world.level.block.Block;
 import java.util.SequencedMap;
 import java.util.function.UnaryOperator;
 
+/// Builder for a [StateCycleSpec] for an item with multiple blocks.
 public final class MultiBlockStateCycleSpecBuilder {
     private final SequencedMap<Block, StateCycleSpecBuilder> entries = new Reference2ObjectLinkedOpenHashMap<>();
 
     MultiBlockStateCycleSpecBuilder() {}
 
-    /// Add a spec builder for the provided block
+    /// Add a spec builder for the provided block.
     ///
     /// @param block   The block to create a spec builder for
     /// @param builder A lambda configuring the created spec builder
+    /// @return this builder
     public MultiBlockStateCycleSpecBuilder add(Block block, UnaryOperator<StateCycleSpecBuilder> builder) {
         if (entries.containsKey(block)) {
             throw new IllegalStateException("Duplicate entry for " + block);
@@ -24,6 +26,7 @@ public final class MultiBlockStateCycleSpecBuilder {
         return this;
     }
 
+    /// {@return the built cycle spec}
     public StateCycleSpec build() {
         return InternalAPI.INSTANCE.buildMultiBlockStateCycleSpec(entries, StateCycleSpecBuilder::assemble);
     }

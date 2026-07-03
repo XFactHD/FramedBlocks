@@ -11,6 +11,7 @@ import net.minecraft.world.level.block.Rotation;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import org.jspecify.annotations.Nullable;
 
+/// Camo container implementation representing the absence of a camo.
 public final class EmptyCamoContainer extends CamoContainer<EmptyCamoContent, EmptyCamoContainer> {
     public static final EmptyCamoContainer EMPTY = new EmptyCamoContainer();
     public static final MutableComponent CAMO_NAME = Utils.translate("desc", "camo.empty").withStyle(ChatFormatting.ITALIC);

@@ -12,20 +12,34 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/// Specifies the names of one or more blockstate properties to be cycled when a camo of the block this prototype
+/// is built with is rotated with the Framed Screwdriver.
+///
+/// @param properties The names of the properties to be cycled
+/// @see FramedDataMaps#blockCamoRotators()
 public record BlockCamoRotatorPrototype(List<String> properties) {
     public static final Codec<BlockCamoRotatorPrototype> CODEC = ExtraCodecs.compactListCodec(Codec.STRING, Codec.STRING.listOf(1, Integer.MAX_VALUE))
             .xmap(BlockCamoRotatorPrototype::new, BlockCamoRotatorPrototype::properties);
 
+    /// Construct a prototype for a rotator cycling a single property.
+    ///
+    /// @param property The name of the property to be cycled
     public BlockCamoRotatorPrototype(String property) {
         this(List.of(property));
     }
 
+    /// {@return whether this rotator prototype is applicable to the given block}
+    ///
+    /// @param block The block to check against
     public boolean isApplicableTo(Block block) {
         return properties.stream()
                 .map(block.getStateDefinition()::getProperty)
                 .noneMatch(Objects::isNull);
     }
 
+    /// {@return a built camo rotator from this prototype for the given block}
+    ///
+    /// @param block The block to build the rotator for
     public BlockCamoRotator build(Block block) {
         List<Property<?>> resolvedProperties = new ArrayList<>(properties.size());
         for (String property : properties) {

@@ -18,6 +18,7 @@ import java.util.Spliterator;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
+/// A list of camo containers.
 public final class CamoList implements Iterable<CamoContainer<?, ?>> {
     public static final Codec<CamoList> CODEC = CamoContainerHelper.CODEC.listOf().xmap(CamoList::of, list -> List.of(list.getCamosForSerialization()));
     public static final StreamCodec<RegistryFriendlyByteBuf, CamoList> STREAM_CODEC = FramedByteBufCodecs.<RegistryFriendlyByteBuf, CamoContainer<?, ?>>array(
@@ -41,6 +42,9 @@ public final class CamoList implements Iterable<CamoContainer<?, ?>> {
         this.size = to - from;
     }
 
+    /// {@return the camo at the given index or an empty camo if the index is out of bounds}
+    ///
+    /// @param index The index to read
     public CamoContainer<?, ?> getCamo(int index) {
         if (size > index) {
             return camos[offset + index];
@@ -48,10 +52,12 @@ public final class CamoList implements Iterable<CamoContainer<?, ?>> {
         return EmptyCamoContainer.EMPTY;
     }
 
+    /// {@return whether this list is empty}
     public boolean isEmpty() {
         return size == 0;
     }
 
+    /// {@return whether this list is empty or contains only empty camos}
     public boolean isEmptyOrContentsEmpty() {
         int end = offset + size;
         for (int i = offset; i < end; i++) {
@@ -62,6 +68,9 @@ public final class CamoList implements Iterable<CamoContainer<?, ?>> {
         return true;
     }
 
+    /// {@return a new list containing the camos from this and the given list}
+    ///
+    /// @param other The list to concatenate with this list
     public CamoList concat(CamoList other) {
         if (isEmpty()) {
             return other;
@@ -94,10 +103,12 @@ public final class CamoList implements Iterable<CamoContainer<?, ?>> {
         }
     }
 
+    /// {@return a stream of the camos in this list}
     public Stream<CamoContainer<?, ?>> stream() {
         return Arrays.stream(camos, offset, offset + size);
     }
 
+    /// {@return a new list with the elements from this list in reversed order}
     public CamoList reversed() {
         return switch (size) {
             case 0 -> EMPTY;
@@ -106,6 +117,10 @@ public final class CamoList implements Iterable<CamoContainer<?, ?>> {
         };
     }
 
+    /// {@return a mutable view of the given index range in this list}
+    ///
+    /// @param fromIndex The start index of the view, inclusive
+    /// @param toIndex   The end index of the view, exclusive
     public CamoList subList(int fromIndex, int toIndex) {
         if (fromIndex < 0 || fromIndex > toIndex) {
             throw new IllegalArgumentException("Invalid indizes");
@@ -116,6 +131,7 @@ public final class CamoList implements Iterable<CamoContainer<?, ?>> {
         return new CamoList(camos, fromIndex + offset, Math.min(toIndex, size) + offset);
     }
 
+    /// {@return the size of this list}
     public int size() {
         return size;
     }
@@ -162,18 +178,30 @@ public final class CamoList implements Iterable<CamoContainer<?, ?>> {
         return camos;
     }
 
+    /// {@return a new camo list holding the given camo}
+    ///
+    /// @param camo The camo to store in the list
     public static CamoList of(CamoContainer<?, ?> camo) {
         return camo.isEmpty() ? EMPTY : new CamoList(new CamoContainer[] { camo });
     }
 
+    /// {@return a new camo list holding the given camos}
+    ///
+    /// @param camos The camos to store in the list
     public static CamoList of(CamoContainer<?, ?>... camos) {
         return camos.length == 0 ? EMPTY : new CamoList(Arrays.copyOf(camos, camos.length));
     }
 
+    /// {@return a new camo list holding the given list of camos}
+    ///
+    /// @param camos The list of camos to store in the list
     public static CamoList of(List<CamoContainer<?, ?>> camos) {
         return camos.isEmpty() ? EMPTY : new CamoList(camos.toArray(CamoContainer[]::new));
     }
 
+    /// {@return the camo list stored on the given stack or an empty list if absent}
+    ///
+    /// @param stack The stack to query
     public static CamoList get(ItemStack stack) {
         return stack.getOrDefault(FramedConstants.Objects.DC_TYPE_CAMO_LIST, EMPTY);
     }

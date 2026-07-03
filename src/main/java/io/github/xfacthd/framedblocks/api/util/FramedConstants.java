@@ -19,11 +19,16 @@ import net.neoforged.neoforge.common.ItemAbility;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredItem;
 
+/// Holds various constants relevant to FramedBlocks.
 public final class FramedConstants {
+    /// The mod ID of FramedBlocks.
     public static final String MOD_ID = "framedblocks";
 
+    /// Holds the keys of custom registries created by FramedBlocks.
     public static final class Registries {
+        /// The camo container factory registry (static).
         public static final ResourceKey<Registry<CamoContainerFactory<?>>> CAMO_CONTAINER_FACTORY_REGISTRY_KEY = registry("camo_container");
+        /// The block overlay registry (datapack).
         public static final ResourceKey<Registry<BlockOverlay>> BLOCK_OVERLAY_REGISTRY_KEY = registry("block_overlay");
 
         private static <T> ResourceKey<Registry<T>> registry(String name) {
@@ -33,6 +38,7 @@ public final class FramedConstants {
         private Registries() { }
     }
 
+    /// Holds holders of various registry objects created by FramedBlocks.
     public static final class Objects {
         public static final Holder<Block> FRAMED_CUBE = DeferredBlock.createBlock(Utils.id("framed_cube"));
 
@@ -48,28 +54,34 @@ public final class FramedConstants {
         public static final DeferredDataComponentType<FrameConfig> DC_TYPE_FRAME_CONFIG = DeferredDataComponentType.createDataComponent(Utils.id("frame_config"));
         public static final DeferredDataComponentType<Holder<BlockOverlay>> DC_TYPE_BLOCK_OVERLAY = DeferredDataComponentType.createDataComponent(Utils.id("block_overlay"));
         public static final DeferredDataComponentType<WrenchRotationMode> DC_TYPE_WRENCH_MODE = DeferredDataComponentType.createDataComponent(Utils.id("wrench_mode"));
-        /// If present on an item, breaking a framed block with it will unconditionally retain the camo on the dropped item instead of dropping it separately
+        /// If present on an item, breaking a framed block with it will unconditionally retain the camo on the dropped item instead of dropping it separately.
         public static final DeferredDataComponentType<Unit> DC_TYPE_RETAIN_CAMO = DeferredDataComponentType.createDataComponent(Utils.id("retain_camo"));
 
         private Objects() { }
     }
 
+    /// Holds various tag keys used by FramedBlocks.
     public static final class Tags {
+        /// Contains blocks which should be accepted as block camos but whose compatibility cannot be determined automatically.
         public static final TagKey<Block> FRAMEABLE = Utils.blockTag("frameable");
+        /// Contains blocks which pass automatic camo applicability checks but must not be used as camo.
         public static final TagKey<Block> BLOCK_BLACKLIST = Utils.blockTag("blacklisted");
-        /// Allow other mods to whitelist their BEs, circumventing the config setting
+        /// Allow other mods to whitelist their BEs, circumventing the config setting.
         public static final TagKey<Block> BE_WHITELIST = Utils.blockTag("blockentity_whitelisted");
-        /// Blocks tagged with this will not be occluded by framed blocks using them as camo, both as camo and directly placed
+        /// Blocks tagged with this will not be occluded by framed blocks using them as camo, both as camo and directly placed.
         public static final TagKey<Block> NON_OCCLUDEABLE = Utils.blockTag("non_occludeable");
-        /// Group tag containing all full-cube blocks excluding ones that can deviate from that via player interaction
+        /// Group tag containing all full-cube blocks excluding ones that can deviate from that via player interaction.
         public static final TagKey<Block> GROUP_FULL_CUBE = Utils.blockTag("group/full");
 
+        /// Contains fluids which must not be used as camo.
         public static final TagKey<Fluid> FLUID_BLACKLIST = FluidTags.create(Utils.id("blacklisted"));
+        /// Contains items which should act like wrenches to rotate framed blocks.
         public static final TagKey<Item> TOOL_WRENCH = Utils.itemTag("c", "tools/wrench");
+        /// Contains items which should act like wrenches to rotate framed blocks but can be switched to non-rotation modes.
         public static final TagKey<Item> COMPLEX_WRENCH = Utils.itemTag("complex_wrench");
-        /// Allow other mods to add items that temporarily disable intangibility to allow interaction with the targeted block
+        /// Allow other mods to add items that temporarily disable intangibility to allow interaction with the targeted block.
         public static final TagKey<Item> DISABLE_INTANGIBLE = Utils.itemTag("disable_intangible");
-        /// Items tagged with this cannot be used as fluid containers in fluid camo application via crafting
+        /// Items tagged with this cannot be used as fluid containers in fluid camo application via crafting.
         public static final TagKey<Item> CRAFTING_BLOCKED_FLUID_CONTAINERS = Utils.itemTag("crafting_blocked_fluid_containers");
 
         /// Specifies the order in which [BlockOverlay]s are listed in the Paint Roller screen
@@ -78,12 +90,13 @@ public final class FramedConstants {
         private Tags() { }
     }
 
+    /// Holds various item abilities used by FramedBlocks.
     public static final class ItemAbilities {
-        /// Provided by tools for rotating blocks
+        /// Provided by tools for rotating blocks.
         public static final ItemAbility ACTION_WRENCH_ROTATE = ItemAbility.get("wrench_rotate");
-        /// Provided by tools for emptying items out of blocks (respected for removal of standard block camos)
+        /// Provided by tools for emptying items out of blocks (respected for removal of standard block camos).
         public static final ItemAbility ACTION_WRENCH_EMPTY = ItemAbility.get("wrench_empty");
-        /// Providing by tools for configuring blocks (respected for camo rotation)
+        /// Providing by tools for configuring blocks (respected for camo rotation).
         public static final ItemAbility ACTION_WRENCH_CONFIGURE = ItemAbility.get("wrench_configure");
 
         private ItemAbilities() { }

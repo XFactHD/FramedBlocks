@@ -24,9 +24,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.Half;
 import net.minecraft.world.level.block.state.properties.StairsShape;
 
-/**
- This class is machine-generated, any manual changes to this class will be overwritten.
- */
+/// This class is machine-generated, any manual changes to this class will be overwritten.
 @CullTest(BlockType.FRAMED_ELEVATED_INNER_CORNER_SLOPE_EDGE)
 public final class ElevatedInnerCornerSlopeEdgeSkipPredicate implements SideSkipPredicate {
     @Override

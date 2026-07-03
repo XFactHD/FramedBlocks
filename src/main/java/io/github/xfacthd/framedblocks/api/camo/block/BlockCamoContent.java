@@ -30,6 +30,7 @@ import org.jspecify.annotations.Nullable;
 import java.util.List;
 import java.util.function.Function;
 
+/// Camo content implementation for block-based camos.
 public final class BlockCamoContent extends CamoContent<BlockCamoContent> implements BlockTintSourceCache {
     private final BlockState state;
     @Nullable
@@ -39,6 +40,7 @@ public final class BlockCamoContent extends CamoContent<BlockCamoContent> implem
         this.state = state;
     }
 
+    /// {@return the block state stored in this camo content}
     public BlockState getState() {
         return state;
     }

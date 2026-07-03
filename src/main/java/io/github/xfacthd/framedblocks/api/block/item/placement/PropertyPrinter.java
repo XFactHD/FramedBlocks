@@ -8,6 +8,7 @@ import net.minecraft.world.level.block.state.properties.Property;
 
 import java.util.function.BiConsumer;
 
+/// A printer to convert the value of a [Property] to a label-value component pair for display in a tooltip.
 public interface PropertyPrinter<T extends Comparable<T>> {
     /// Print the provided value to the provided output
     ///
@@ -42,6 +43,7 @@ public interface PropertyPrinter<T extends Comparable<T>> {
         return (value, output, defaultValueColor) -> output.accept(label, valuePrinter.printStyled(value, defaultValueColor));
     }
 
+    /// Consumer for label-value pairs of a printed [Property].
     interface LineOutput extends BiConsumer<String, Component> {
         /// Output the provided label-value pair.
         ///

@@ -8,19 +8,28 @@ import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemStack;
 
+/// Handles computation of client-only data for a camo content (i.e. tint values, particles and tint values).
 public abstract class CamoContentClientHandler<T extends CamoContent<T>> {
-    /**
-     * {@return the {@link BlockStateModel} to be rendered for the given {@link CamoContent}}
-     * @implNote this method must be backed by a cache
-     */
+    /// {@return the {@link BlockStateModel} to be rendered for the given {@link CamoContent}}
+    ///
+    /// @param camo The camo to query the model for
+    /// @implNote this method must be backed by a cache
     public abstract BlockStateModel getOrCreateModel(T camo);
 
-    /**
-     * {@return a {@link Particle} to be spawned when a block with the given {@link CamoContent} is punched or broken}
-     */
+    /// {@return a {@link Particle} to be spawned when a block with the given {@link CamoContent} is punched or broken}
+    ///
+    /// @param level The level the owning framed block is in
+    /// @param x     The X coordinate to spawn the particle at
+    /// @param y     The Y coordinate to spawn the particle at
+    /// @param z     The Z coordinate to spawn the particle at
+    /// @param sx    The speed along the X axis to apply to the particle
+    /// @param sy    The speed along the Y axis to apply to the particle
+    /// @param sz    The speed along the Z axis to apply to the particle
+    /// @param camo  The camo to create the particle for
+    /// @param pos   The position of the owning framed block
     public abstract Particle makeHitDestroyParticle(ClientLevel level, double x, double y, double z, double sx, double sy, double sz, T camo, BlockPos pos);
 
-    /// Return the amount of tint layers the provided camo has
+    /// {@return the amount of tint layers the provided camo has}
     ///
     /// @param camo The camo whose tint layer count is being queried
     public abstract int getTintCount(T camo);
@@ -44,7 +53,7 @@ public abstract class CamoContentClientHandler<T extends CamoContent<T>> {
     /// @param tintList The list to append the tint values to
     public abstract void collectTintValues(T camo, ItemStack stack, IntList tintList);
 
-    /// Return the tint value to use for the particle texture
+    /// {@return the tint value to use for the particle texture of the camo}
     ///
     /// @param camo The camo whose particle tint value is being queried
     public abstract int getParticleTintValue(T camo);

@@ -11,11 +11,14 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 
 import java.util.Set;
 
+/// Base implementation of [SafeNbtWriterRegistry.SafeNbtWriter] to clean up NBT tags of copied
+/// framed blocks, removing unsuitable data such as uncopyable camos.
 public class FramedBlockSafeNbtWriter implements SafeNbtWriterRegistry.SafeNbtWriter {
     public static final FramedBlockSafeNbtWriter INSTANCE = new FramedBlockSafeNbtWriter();
 
     private final Set<String> keysToClean;
 
+    /// @param keysToClean Additional NBT keys to remove from the root tag
     public FramedBlockSafeNbtWriter(String... keysToClean) {
         this.keysToClean = Set.of(keysToClean);
     }
@@ -43,5 +46,9 @@ public class FramedBlockSafeNbtWriter implements SafeNbtWriterRegistry.SafeNbtWr
         }
     }
 
+    /// Clean up custom tags in the serialized data.
+    ///
+    /// @param fbe The BE being copied
+    /// @param tag The serialized data from the BE
     protected void cleanupTag(IFramedBlockEntity fbe, CompoundTag tag) { }
 }

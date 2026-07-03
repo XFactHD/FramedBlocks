@@ -7,11 +7,13 @@ import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jspecify.annotations.Nullable;
 
+/// Base implementation of a camo container for block-based camos.
 public abstract class AbstractBlockCamoContainer<T extends AbstractBlockCamoContainer<T>> extends CamoContainer<BlockCamoContent, T> {
     protected AbstractBlockCamoContainer(BlockState state) {
         super(new BlockCamoContent(state));
     }
 
+    /// {@return the block state stored in this camo container}
     public final BlockState getState() {
         return content.getState();
     }
@@ -37,11 +39,10 @@ public abstract class AbstractBlockCamoContainer<T extends AbstractBlockCamoCont
         return state != newState ? copyWithState(newState) : (T) this;
     }
 
-    /**
-     * {@return a copy of this camo container with the camo state replaced by the given state}
-     * To be used when a mod does a similar action to {@link CamoContainer#rotateCamo()} through external means
-     * such as custom item interactions.
-     */
+    /// {@return a copy of this camo container with the camo state replaced by the given state}
+    ///
+    /// To be used when a mod does a similar action to [CamoContainer#rotateCamo()] through external means
+    /// such as custom item interactions.
     @SuppressWarnings("unchecked")
     public final T copyWithState(BlockState state) {
         return getFactory().copyContainerWithState((T) this, state);

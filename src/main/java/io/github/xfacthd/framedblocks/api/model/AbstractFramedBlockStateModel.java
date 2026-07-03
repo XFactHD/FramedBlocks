@@ -12,9 +12,12 @@ import net.neoforged.neoforge.client.model.DelegateBlockStateModel;
 
 import java.util.List;
 
+/// Base class for custom blockstate models for framed blocks.
 public abstract class AbstractFramedBlockStateModel extends DelegateBlockStateModel {
     private final BlockState state;
 
+    /// @param baseModel The original model of the blockstate
+    /// @param state     The blockstate this model is assigned to
     protected AbstractFramedBlockStateModel(BlockStateModel baseModel, BlockState state) {
         super(baseModel);
         this.state = state;
@@ -54,6 +57,7 @@ public abstract class AbstractFramedBlockStateModel extends DelegateBlockStateMo
         return materialFlags(BlockAndTintGetter.EMPTY, BlockPos.ZERO, state);
     }
 
+    /// {@return the original model of the blockstate this model belongs to}
     public BlockStateModel getBaseModel() {
         return delegate;
     }

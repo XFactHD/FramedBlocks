@@ -14,10 +14,13 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.Locale;
 
+/// Base crafting handler implementation for [Resource]-based camos.
 public class ResourceCamoCraftingHandler<R extends Resource, C extends ResourceCamoContent<R, C>, T extends ResourceCamoContainer<R, C, T>> implements CamoCraftingHandler<T> {
     protected final ResourceCamoContainerFactory<R, C, T> factory;
     protected final TagKey<Item> blockedContainers;
 
+    /// @param factory           The camo container factory to use for creating the camo containers during crafting
+    /// @param blockedContainers Tag of items which can store this type of resource but must not be accepted as crafting ingredients
     public ResourceCamoCraftingHandler(ResourceCamoContainerFactory<R, C, T> factory, TagKey<Item> blockedContainers) {
         this.factory = factory;
         this.blockedContainers = blockedContainers;
