@@ -62,7 +62,7 @@ public sealed interface IFramedBlockEntity extends IBlockEntityExtension permits
     /// @param secondary Whether the first or second camo "slot" should be modified
     void setCamo(CamoContainer<?, ?> camo, boolean secondary);
 
-    /// Returns the camo applied to the camo "slot" related to the given "substate"
+    /// {@return the camo applied to the camo "slot" related to the given "substate"}
     CamoContainer<?, ?> getCamo(BlockState state);
 
     /// Returns the camo for the given edge of the given side or for the full face if a `null` edge is provided.
@@ -70,17 +70,18 @@ public sealed interface IFramedBlockEntity extends IBlockEntityExtension permits
     ///
     /// @param side The block's side to retrieve the camo for
     /// @param edge The side's edge to retrieve the camo for or `null` for the full face
+    /// @return the camo applied to the given edge of the given side
     CamoContainer<?, ?> getCamo(Direction side, @Nullable Direction edge);
 
-    /// Returns the camo the given [BlockHitResult] points at based on the given player's
-    /// eye position and look vector.
+    /// {@return the camo the given {@link BlockHitResult} points at based on the given player's
+    /// eye position and look vector}
     ///
     /// @param hit    The result of the raycast against this block
     /// @param player The player from which the raycast originated
     CamoContainer<?, ?> getCamo(BlockHitResult hit, Player player);
 
-    /// Returns the camo the given [BlockHitResult] points at based on the given
-    /// eye position and look vector.
+    /// {@return the camo the given {@link BlockHitResult} points at based on the given
+    /// eye position and look vector}
     ///
     /// @param hit     The result of the raycast against this block
     /// @param lookVec The look vector used for the raycast (usually [Player#getLookAngle()])
