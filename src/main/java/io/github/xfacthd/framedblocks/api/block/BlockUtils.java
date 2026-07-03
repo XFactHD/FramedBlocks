@@ -110,6 +110,12 @@ public final class BlockUtils {
         if (copyWaterlogging && block.getBlockType().supportsWaterLogging()) {
             to = Block.copyProperty(from, to, BlockStateProperties.WATERLOGGED);
         }
+        if (block instanceof ShapeLockableBlock) {
+            to = Block.copyProperty(from, to, FramedProperties.STATE_LOCKED);
+        }
+        if (block instanceof SlopeToggleBlock) {
+            to = Block.copyProperty(from, to, FramedProperties.ALT_SLOPE);
+        }
         return to;
     }
 
