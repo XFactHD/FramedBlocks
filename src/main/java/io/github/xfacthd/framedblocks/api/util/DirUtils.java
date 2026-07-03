@@ -126,6 +126,9 @@ public final class DirUtils {
     ///   +---+---+
     ///       S
     /// ```
+    /// @param face   The face the player is looking at
+    /// @param hitVec The exact hit position on the face
+    /// @return the clockwise edge of the quadrant the player is looking at
     public static Direction getDirByCorner(Direction face, Vec3 hitVec) {
         hitVec = MathUtils.fraction(hitVec);
 
@@ -156,7 +159,23 @@ public final class DirUtils {
         }
     }
 
-    /// {@return the axis perpendicular to both provided axis}
+    /// {@return whether the given hit location is on the given faces center square specified by the given radius}
+    ///
+    /// @param face   The face the player is looking at
+    /// @param hitVec The exact hit position on the face
+    /// @param radius The radius of the square to check against
+    public static boolean isFaceCenter(Direction face, Vec3 hitVec, double radius) {
+        Set<Direction.Axis> perpAxes = getPerpendicularAxes(face.getAxis());
+        for (Direction.Axis axis : perpAxes) {
+            double frac = MathUtils.fractionInDir(hitVec, axis.getPositive());
+            if (Math.abs(frac - .5) > radius) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /// {@return the axis perpendicular to both provided axes}
     /// The given axis must be perpendicular to each other.
     ///
     /// @param axisOne The first axis
@@ -165,6 +184,13 @@ public final class DirUtils {
         Preconditions.checkArgument(axisOne != axisTwo, "Provided axis must be perpendicular");
         int idx = Lookups.makePerpAxisIndex(axisOne, axisTwo);
         return Objects.requireNonNull(Lookups.PERP_AXIS[idx]);
+    }
+
+    /// {@return the axes perpendicular to the given axis}
+    ///
+    /// @param axis The original axis
+    public static Set<Direction.Axis> getPerpendicularAxes(Direction.Axis axis) {
+        return Lookups.PERP_AXES[axis.ordinal()];
     }
 
     /// {@return the set of directions surrounding the given axis}
