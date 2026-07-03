@@ -7,6 +7,7 @@ import net.minecraft.client.resources.model.cuboid.ItemTransforms;
 import net.minecraft.world.item.ItemDisplayContext;
 import org.joml.Vector3f;
 import org.joml.Vector3fc;
+import org.jspecify.annotations.Nullable;
 
 import java.util.EnumMap;
 import java.util.Map;
@@ -33,6 +34,7 @@ public final class ItemTransformsBuilder {
     /// @param operator A function to build the transforms
     /// @return this builder
     public ItemTransformsBuilder thirdPersonLeftHand(UnaryOperator<TransformBuilder> operator) {
+        assertNotSet(this.thirdPersonLeftHand, "thirdperson_lefthand");
         this.thirdPersonLeftHand = operator.apply(new TransformBuilder()).build();
         return this;
     }
@@ -42,6 +44,7 @@ public final class ItemTransformsBuilder {
     /// @param operator A function to build the transforms
     /// @return this builder
     public ItemTransformsBuilder thirdPersonRightHand(UnaryOperator<TransformBuilder> operator) {
+        assertNotSet(this.thirdPersonRightHand, "thirdperson_righthand");
         this.thirdPersonRightHand = operator.apply(new TransformBuilder()).build();
         return this;
     }
@@ -51,6 +54,7 @@ public final class ItemTransformsBuilder {
     /// @param operator A function to build the transforms
     /// @return this builder
     public ItemTransformsBuilder firstPersonLeftHand(UnaryOperator<TransformBuilder> operator) {
+        assertNotSet(this.firstPersonLeftHand, "firstperson_lefthand");
         this.firstPersonLeftHand = operator.apply(new TransformBuilder()).build();
         return this;
     }
@@ -60,6 +64,7 @@ public final class ItemTransformsBuilder {
     /// @param operator A function to build the transforms
     /// @return this builder
     public ItemTransformsBuilder firstPersonRightHand(UnaryOperator<TransformBuilder> operator) {
+        assertNotSet(this.firstPersonRightHand, "firstperson_righthand");
         this.firstPersonRightHand = operator.apply(new TransformBuilder()).build();
         return this;
     }
@@ -69,6 +74,7 @@ public final class ItemTransformsBuilder {
     /// @param operator A function to build the transforms
     /// @return this builder
     public ItemTransformsBuilder head(UnaryOperator<TransformBuilder> operator) {
+        assertNotSet(this.head, "head");
         this.head = operator.apply(new TransformBuilder()).build();
         return this;
     }
@@ -78,6 +84,7 @@ public final class ItemTransformsBuilder {
     /// @param operator A function to build the transforms
     /// @return this builder
     public ItemTransformsBuilder gui(UnaryOperator<TransformBuilder> operator) {
+        assertNotSet(this.gui, "gui");
         this.gui = operator.apply(new TransformBuilder()).build();
         return this;
     }
@@ -87,6 +94,7 @@ public final class ItemTransformsBuilder {
     /// @param operator A function to build the transforms
     /// @return this builder
     public ItemTransformsBuilder ground(UnaryOperator<TransformBuilder> operator) {
+        assertNotSet(this.ground, "ground");
         this.ground = operator.apply(new TransformBuilder()).build();
         return this;
     }
@@ -96,6 +104,7 @@ public final class ItemTransformsBuilder {
     /// @param operator A function to build the transforms
     /// @return this builder
     public ItemTransformsBuilder fixed(UnaryOperator<TransformBuilder> operator) {
+        assertNotSet(this.fixed, "fixed");
         this.fixed = operator.apply(new TransformBuilder()).build();
         return this;
     }
@@ -105,13 +114,33 @@ public final class ItemTransformsBuilder {
     /// @param operator A function to build the transforms
     /// @return this builder
     public ItemTransformsBuilder fixedFromBottom(UnaryOperator<TransformBuilder> operator) {
+        assertNotSet(this.fixedFromBottom, "on_shelf");
         this.fixedFromBottom = operator.apply(new TransformBuilder()).build();
+        return this;
+    }
+
+    /// Specify transforms for the given non-vanilla perspective.
+    ///
+    /// @param context  The perspective to set the transforms for
+    /// @param operator A function to build the transforms
+    /// @return this builder
+    public ItemTransformsBuilder custom(ItemDisplayContext context, UnaryOperator<TransformBuilder> operator) {
+        Preconditions.checkArgument(context.isModded(), "Display context %s is not a modded context", context);
+        ItemTransform prev = moddedTransforms.putIfAbsent(context, operator.apply(new TransformBuilder()).build());
+        assertNotSet(prev, context.getSerializedName());
         return this;
     }
 
     /// {@return the built item transforms}
     public ItemTransforms build() {
-        return new ItemTransforms(thirdPersonLeftHand, thirdPersonRightHand, firstPersonLeftHand, firstPersonRightHand, head, gui, ground, fixed, fixedFromBottom, ImmutableMap.of());
+        ImmutableMap<ItemDisplayContext, ItemTransform> modded = ImmutableMap.copyOf(moddedTransforms);
+        return new ItemTransforms(thirdPersonLeftHand, thirdPersonRightHand, firstPersonLeftHand, firstPersonRightHand, head, gui, ground, fixed, fixedFromBottom, modded);
+    }
+
+    private static void assertNotSet(@Nullable ItemTransform xform, String name) {
+        if (xform != null && !ItemTransform.NO_TRANSFORM.equals(xform)) {
+            throw new IllegalStateException("Duplicate declaration of transform for '" + name + "' perspective");
+        }
     }
 
     /// Builder for the transforms of a specific perspective.
