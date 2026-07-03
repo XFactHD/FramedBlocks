@@ -250,7 +250,7 @@ public final class BlockUtils {
     /// @param pos         The position of the block
     /// @param player      The player triggering the action
     /// @param stack       The item used in the interaction triggering the action
-    /// @param mirrorCamos Whether the camos should be switched if the
+    /// @param mirrorCamos Whether the camos should be switched if the target BE is a two-camo block
     /// @param consumeItem Whether the held item should be consumed
     /// @param action      The action to perform
     public static void wrapInStateCopy(
@@ -258,16 +258,20 @@ public final class BlockUtils {
             BlockPos pos,
             Player player,
             ItemStack stack,
-            boolean writeToCamoTwo,
+            boolean mirrorCamos,
             boolean consumeItem,
             Runnable action
     ) {
-        CamoContainer<?, ?> camo = EmptyCamoContainer.EMPTY;
+        CamoContainer<?, ?> camoOne = EmptyCamoContainer.EMPTY;
+        CamoContainer<?, ?> camoTwo = EmptyCamoContainer.EMPTY;
         Holder<BlockOverlay> overlay = null;
         boolean[] modifiers = new boolean[MODIFIERS.length];
 
         if (level.getBlockEntity(pos) instanceof IFramedBlockEntity be) {
-            camo = be.getCamo();
+            camoOne = be.getCamo();
+            if (be instanceof FramedDoubleBlockEntity dbe) {
+                camoTwo = dbe.getCamoTwo();
+            }
             overlay = be.getOverlay();
             for (FrameModifier modifier : MODIFIERS) {
                 modifiers[modifier.ordinal()] = modifier.isActive(be);
@@ -282,7 +286,12 @@ public final class BlockUtils {
         }
 
         if (level.getBlockEntity(pos) instanceof IFramedBlockEntity be) {
-            be.setCamo(camo, writeToCamoTwo);
+            be.setCamo(camoOne, mirrorCamos);
+            if (be instanceof FramedDoubleBlockEntity dbe) {
+                dbe.setCamo(camoTwo, !mirrorCamos);
+            } else if (mirrorCamos) {
+                throw new IllegalArgumentException("Cannot mirror camos on single-camo target BEs: " + be.getType());
+            }
             be.setOverlay(overlay);
             for (FrameModifier modifier : MODIFIERS) {
                 modifier.setActive(be, modifiers[modifier.ordinal()]);
