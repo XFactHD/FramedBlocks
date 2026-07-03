@@ -14,7 +14,7 @@ import java.util.List;
 
 /// Base class for custom blockstate models for framed blocks.
 public abstract class AbstractFramedBlockStateModel extends DelegateBlockStateModel {
-    private final BlockState state;
+    protected final BlockState state;
 
     /// @param baseModel The original model of the blockstate
     /// @param state     The blockstate this model is assigned to

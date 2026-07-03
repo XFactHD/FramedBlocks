@@ -59,7 +59,6 @@ public final class FramedBlockStateModel extends AbstractFramedBlockStateModel i
     private static final BlockStateModel[] NO_CAMO_MODELS = new BlockStateModel[NO_CAMO_CONTENTS.length];
 
     private final Map<Object, PartCacheEntry> partCache = new ConcurrentHashMap<>();
-    private final BlockState state;
     private final Geometry geometry;
     private final boolean supportsCt;
     private final ConTexMode minCtMode;
@@ -73,7 +72,6 @@ public final class FramedBlockStateModel extends AbstractFramedBlockStateModel i
 
     public FramedBlockStateModel(GeometryFactory.Context ctx, Geometry geometry, ReinforcementModel reinforcement, boolean standaloneWithCt) {
         super(ctx.baseModel(), ctx.state());
-        this.state = ctx.state();
         this.geometry = geometry;
         IBlockType type = ((IFramedBlock) state.getBlock()).getBlockType();
         this.supportsCt = type.supportsConnectedTextures() || standaloneWithCt;
