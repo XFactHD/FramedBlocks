@@ -62,7 +62,11 @@ public class FramedBoardBlock extends FramedBlock {
                     BlockState prevState = level.getBlockState(pos);
                     if (prevState.is(this)) {
                         if (modCtx.replacingClickedOnBlock()) {
-                            face = DirUtils.getDirByCross(face, modCtx.getClickLocation());
+                            if (DirUtils.isFaceCenter(face, modCtx.getClickLocation(), 2D/16D)) {
+                                face = face.getOpposite();
+                            } else {
+                                face = DirUtils.getDirByCross(face, modCtx.getClickLocation());
+                            }
                         }
                         return isFacePresent(prevState, face) ? null : setFacePresent(prevState, face, true);
                     }

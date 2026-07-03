@@ -4,10 +4,12 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.Rotation;
 import org.jspecify.annotations.Nullable;
 
+import java.util.EnumSet;
 import java.util.Set;
 
 final class Lookups {
     static final Direction.@Nullable Axis[] PERP_AXIS = buildPerpAxisMapping();
+    static final Set<Direction.Axis>[] PERP_AXES = buildPerpAxesMapping();
     static final @Nullable Direction[] NORMALS = makeNormalMapping();
     static final Set<Direction>[] AXIS_TUBE_FACES = makeAxisTubeFaceMapping();
     static final Set<Direction>[] AXIS_CAP_FACES = makeAxisCapFaceMapping();
@@ -38,6 +40,15 @@ final class Lookups {
         mapping[makePerpAxisIndex(Direction.Axis.X, Direction.Axis.Y)] = mapping[makePerpAxisIndex(Direction.Axis.Y, Direction.Axis.X)] = Direction.Axis.Z;
         mapping[makePerpAxisIndex(Direction.Axis.X, Direction.Axis.Z)] = mapping[makePerpAxisIndex(Direction.Axis.Z, Direction.Axis.X)] = Direction.Axis.Y;
         mapping[makePerpAxisIndex(Direction.Axis.Y, Direction.Axis.Z)] = mapping[makePerpAxisIndex(Direction.Axis.Z, Direction.Axis.Y)] = Direction.Axis.X;
+        return mapping;
+    }
+
+    @SuppressWarnings("unchecked")
+    private static Set<Direction.Axis>[] buildPerpAxesMapping() {
+        Set<Direction.Axis>[] mapping = new Set[3];
+        mapping[Direction.Axis.X.ordinal()] = Set.copyOf(EnumSet.complementOf(EnumSet.of(Direction.Axis.X)));
+        mapping[Direction.Axis.Y.ordinal()] = Set.copyOf(EnumSet.complementOf(EnumSet.of(Direction.Axis.Y)));
+        mapping[Direction.Axis.Z.ordinal()] = Set.copyOf(EnumSet.complementOf(EnumSet.of(Direction.Axis.Z)));
         return mapping;
     }
 
