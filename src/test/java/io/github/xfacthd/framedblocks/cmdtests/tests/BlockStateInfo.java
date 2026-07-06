@@ -41,6 +41,7 @@ public final class BlockStateInfo {
                 .header("State lock")
                 .header("Ignored properties");
 
+        long totalPlaceableBlocks = 0;
         long totalDoubleBlocks = 0;
         long totalBlocksWithOverlays = 0;
         long totalStates = 0;
@@ -76,6 +77,9 @@ public final class BlockStateInfo {
 
             totalStates += stateCount;
             totalModelStates += modelStateCount;
+            if (type.hasBlockItem()) {
+                totalPlaceableBlocks++;
+            }
             if (type.isDoubleBlock()) {
                 totalDoubleBlocks++;
             }
@@ -88,6 +92,7 @@ public final class BlockStateInfo {
 
         String dump = table.print() +
                 "\nBlock count: " + TYPES.length +
+                "\\\n↳ With item: " + totalPlaceableBlocks +
                 "\\\n↳ With two camos: " + totalDoubleBlocks +
                 "\\\n↳ With BlockOverlays: " + totalBlocksWithOverlays +
                 "\\\nTotal states: " + totalStates +
