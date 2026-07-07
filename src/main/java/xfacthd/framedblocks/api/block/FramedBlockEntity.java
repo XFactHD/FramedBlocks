@@ -7,6 +7,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -665,14 +666,21 @@ public class FramedBlockEntity extends BlockEntity
 
             this.glowing = glowing;
 
-            if (oldLight != getLightValue())
-            {
-                doLightUpdate();
-            }
+            boolean stateChanged = updateDynamicStates(false, true, false);
+            boolean lightChanged = oldLight != getLightValue();
 
             setChanged();
-            //noinspection ConstantConditions
-            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
+            if (lightChanged || stateChanged)
+            {
+                doLightUpdate();
+                scheduleLightUpdate();
+            }
+
+            if (!stateChanged)
+            {
+                //noinspection ConstantConditions
+                level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
+            }
         }
     }
 
@@ -753,6 +761,21 @@ public class FramedBlockEntity extends BlockEntity
     {
         //noinspection ConstantConditions
         level.getChunkSource().getLightEngine().checkBlock(worldPosition);
+    }
+
+    protected final void scheduleLightUpdate()
+    {
+        if (level instanceof ServerLevel serverLevel)
+        {
+            serverLevel.getServer().execute(() ->
+            {
+                if (!isRemoved() && level != null && level.hasChunkAt(worldPosition))
+                {
+                    doLightUpdate();
+                    level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
+                }
+            });
+        }
     }
 
     public IFramedBlock getBlock()
@@ -862,9 +885,19 @@ public class FramedBlockEntity extends BlockEntity
     public void onLoad()
     {
         //noinspection ConstantConditions
-        if (!level.isClientSide() && recheckStates)
+        if (!level.isClientSide())
         {
-            checkCamoSolid();
+            boolean stateMatchesLight = getBlockState().getValue(FramedProperties.GLOWING) == (getLightValue() > 0);
+            if (recheckStates || !stateMatchesLight)
+            {
+                checkCamoSolid();
+            }
+
+            if (getLightValue() > 0 || getBlockState().getValue(FramedProperties.GLOWING))
+            {
+                doLightUpdate();
+                scheduleLightUpdate();
+            }
         }
         super.onLoad();
     }

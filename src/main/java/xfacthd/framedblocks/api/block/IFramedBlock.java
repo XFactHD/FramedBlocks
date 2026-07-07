@@ -12,6 +12,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
@@ -66,6 +67,8 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock
                 .instrument(NoteBlockInstrument.BASS)
                 .strength(2F)
                 .sound(SoundType.WOOD)
+                .lightLevel(IFramedBlock::getFramedBlockStateLightEmission)
+                .isValidSpawn(IFramedBlock::isValidSpawnOnFramedBlock)
                 .isViewBlocking(IFramedBlock::isBlockSuffocating)
                 .isSuffocating(IFramedBlock::isBlockSuffocating);
 
@@ -80,6 +83,29 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock
     private static boolean isBlockSuffocating(BlockState state, BlockGetter level, BlockPos pos)
     {
         return ((IFramedBlock) state.getBlock()).isSuffocating(state, level, pos);
+    }
+
+    private static int getFramedBlockStateLightEmission(BlockState state)
+    {
+        // The light engine and section caches may query the vanilla state light value without
+        // access to the block entity. Persisting the glowstone emission in the BlockState keeps
+        // glowing framed blocks real server-side light sources across chunk reloads. Exact
+        // camo light values are still handled by the dynamic getLightEmission override below
+        // whenever the block entity is available.
+        return Utils.tryGetValue(state, FramedProperties.GLOWING, false)
+                ? FramedBlocksAPI.getInstance().getGlowstoneLightLevel()
+                : 0;
+    }
+
+    private static boolean isValidSpawnOnFramedBlock(
+            BlockState state, BlockGetter level, BlockPos pos, EntityType<?> entityType
+    )
+    {
+        if (Utils.tryGetValue(state, FramedProperties.GLOWING, false))
+        {
+            return false;
+        }
+        return state.isFaceSturdy(level, pos, Direction.UP);
     }
 
     default BlockItem createBlockItem()
@@ -186,7 +212,11 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock
         {
             return be.getLightValue();
         }
-        return 0;
+
+        // During chunk loading/light rebuilds, the light engine can ask for this value before the
+        // block entity is available. GLOWING is saved in the BlockState, so use the configured
+        // glowstone light level as a safe fallback instead of returning 0 and leaving the chunk dark.
+        return FramedBlocksAPI.getInstance().getGlowstoneLightLevel();
     }
 
     default boolean playBreakSound(BlockState state, Level level, BlockPos pos)
