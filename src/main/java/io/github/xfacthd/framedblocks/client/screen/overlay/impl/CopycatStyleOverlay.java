@@ -1,6 +1,6 @@
 package io.github.xfacthd.framedblocks.client.screen.overlay.impl;
 
-import io.github.xfacthd.framedblocks.api.block.FramedProperties;
+import io.github.xfacthd.framedblocks.api.block.CopycatStyleBlock;
 import io.github.xfacthd.framedblocks.api.screen.overlay.BlockInteractOverlay;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.common.FBContent;
@@ -35,11 +35,11 @@ public final class CopycatStyleOverlay extends BlockInteractOverlay {
 
     @Override
     public boolean isValidTarget(Target target) {
-        return target.state().hasProperty(FramedProperties.COPYCAT_STYLE);
+        return target.state().getBlock() instanceof CopycatStyleBlock.StateDependent;
     }
 
     @Override
     public boolean getState(Target target) {
-        return target.state().getValue(FramedProperties.COPYCAT_STYLE);
+        return ((CopycatStyleBlock) target.state().getBlock()).isCopycatStyle(target.state());
     }
 }

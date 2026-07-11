@@ -1,6 +1,7 @@
 package io.github.xfacthd.framedblocks.common.block.pillar;
 
 import io.github.xfacthd.framedblocks.api.block.BlockUtils;
+import io.github.xfacthd.framedblocks.api.block.CopycatStyleBlock;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.item.placement.PropertyLabels;
 import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
@@ -35,7 +36,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
-public class FramedLightningRodBlock extends LightningRodBlock implements IFramedBlockInternal {
+public class FramedLightningRodBlock extends LightningRodBlock implements IFramedBlockInternal, CopycatStyleBlock.StateDependent {
     public FramedLightningRodBlock(Properties props) {
         super(props);
         BlockUtils.configureStandardProperties(this);

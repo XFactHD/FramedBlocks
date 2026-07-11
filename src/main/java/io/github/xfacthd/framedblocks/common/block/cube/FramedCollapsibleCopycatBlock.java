@@ -1,5 +1,6 @@
 package io.github.xfacthd.framedblocks.common.block.cube;
 
+import io.github.xfacthd.framedblocks.api.block.CopycatStyleBlock;
 import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
@@ -32,7 +33,7 @@ import org.jspecify.annotations.Nullable;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class FramedCollapsibleCopycatBlock extends FramedBlock {
+public class FramedCollapsibleCopycatBlock extends FramedBlock implements CopycatStyleBlock.Always {
     private static final int UP = Direction.UP.ordinal();
     private static final int DOWN = Direction.DOWN.ordinal();
     private static final int NORTH = Direction.NORTH.ordinal();
