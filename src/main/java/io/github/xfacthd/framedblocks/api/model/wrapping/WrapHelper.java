@@ -9,6 +9,7 @@ import io.github.xfacthd.framedblocks.api.internal.InternalClientAPI;
 import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.standalone.StandaloneModelFactory;
 import io.github.xfacthd.framedblocks.api.model.standalone.StandaloneWrapperKey;
+import io.github.xfacthd.framedblocks.api.model.template.GeometryTemplateSpec;
 import io.github.xfacthd.framedblocks.api.model.wrapping.statemerger.StateMerger;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import net.minecraft.client.renderer.block.model.BlockModel;
@@ -61,6 +62,32 @@ public final class WrapHelper {
     /// @param stateMerger     The [StateMerger] to use for merging visually redundant states during wrapping
     public static void wrap(Holder<Block> block, GeometryFactory geometryFactory, StateMerger stateMerger) {
         InternalClientAPI.INSTANCE.registerModelWrapper(block, geometryFactory, stateMerger);
+    }
+
+    /// Wrap the models of all states of the given block with models generated from [Geometry]s created from
+    /// the given [GeometryTemplateSpec].
+    ///
+    /// States which match an already wrapped state after resetting the given ignored properties to default values
+    /// will re-use the existing wrapped model.
+    ///
+    /// @param block        The block whose models to wrap (must implement [IFramedBlock])
+    /// @param templateSpec The [GeometryTemplateSpec] to generate the wrapping models with
+    /// @param ignoredProps The state properties to ignore during wrapping
+    public static void wrap(Holder<Block> block, GeometryTemplateSpec templateSpec, Set<Property<?>> ignoredProps) {
+        wrap(block, templateSpec, StateMerger.ignoring(ignoredProps));
+    }
+
+    /// Wrap the models of all states of the given block with models generated from [Geometry]s created from
+    /// the given [GeometryTemplateSpec].
+    ///
+    /// States which match an already wrapped state after applying the given [StateMerger] will re-use the
+    /// existing wrapped model.
+    ///
+    /// @param block        The block whose models to wrap (must implement [IFramedBlock])
+    /// @param templateSpec The [GeometryTemplateSpec] to generate the wrapping models with
+    /// @param stateMerger  The [StateMerger] to use for merging visually redundant states during wrapping
+    public static void wrap(Holder<Block> block, GeometryTemplateSpec templateSpec, StateMerger stateMerger) {
+        InternalClientAPI.INSTANCE.registerTemplatedModelWrapper(block, templateSpec, stateMerger);
     }
 
     /// Wrap the models of all states of the given block with double block models using the [DoubleBlockParts]
@@ -180,6 +207,25 @@ public final class WrapHelper {
             StateMerger stateMerger
     ) {
         InternalClientAPI.INSTANCE.registerStandaloneModelWrapper(wrapperKey, geometryFactory, modelFactory, stateMerger);
+    }
+
+    /// Wrap the models loaded from the definition file of the given wrapper key with models generated from [Geometry]s created from
+    /// the given [GeometryTemplateSpec].
+    ///
+    /// States which match an already wrapped state after applying the given [StateMerger] will re-use the
+    /// existing wrapped model.
+    ///
+    /// @param wrapperKey   The wrapper key whose models to wrap
+    /// @param templateSpec The [GeometryTemplateSpec] to generate the wrapping models with
+    /// @param modelFactory The model factory to use for constructing the standalone model from the wrapped blockstate models
+    /// @param stateMerger  The [StateMerger] to use for merging visually redundant states during wrapping
+    public static <T> void wrapStandalone(
+            StandaloneWrapperKey<T> wrapperKey,
+            GeometryTemplateSpec templateSpec,
+            StandaloneModelFactory<T> modelFactory,
+            StateMerger stateMerger
+    ) {
+        InternalClientAPI.INSTANCE.registerTemplatedStandaloneModelWrapper(wrapperKey, templateSpec, modelFactory, stateMerger);
     }
 
     /// Replace the block model used for rendering the given block in dynamic contexts (i.e. BERs, Jade tooltip, etc.).
