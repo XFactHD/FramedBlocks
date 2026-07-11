@@ -7,6 +7,7 @@ import io.github.xfacthd.framedblocks.api.model.standalone.StandaloneWrapperKey;
 import io.github.xfacthd.framedblocks.api.model.wrapping.RegisterModelWrappersEvent;
 import io.github.xfacthd.framedblocks.api.model.wrapping.statemerger.StateMerger;
 import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.client.model.template.GeometryTemplateSpecImpl;
 import io.github.xfacthd.framedblocks.client.model.unbaked.UnbakedStandaloneFramedBlockModel;
 import io.github.xfacthd.framedblocks.common.config.DevToolsConfig;
 import io.github.xfacthd.framedblocks.common.util.MarkdownTable;
@@ -61,6 +62,11 @@ public final class ModelWrappingManager {
 
         stopwatch.stop();
         LOGGER.debug("Registered model wrappers for {} blocks in {}", HANDLERS.size(), stopwatch);
+
+        stopwatch = Stopwatch.createStarted();
+        int specCount = GeometryTemplateSpecImpl.resolveAll();
+        stopwatch.stop();
+        LOGGER.debug("Prepared {} GeometryTemplateSpec entries for {} blocks in {}", specCount, GeometryTemplateSpecImpl.getBlockCount(), stopwatch);
     }
 
     public static void onRegisterStandaloneModels(ModelEvent.RegisterStandalone event) {

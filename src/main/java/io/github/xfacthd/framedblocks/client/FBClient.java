@@ -48,6 +48,7 @@ import io.github.xfacthd.framedblocks.client.model.item.property.BlueprintProper
 import io.github.xfacthd.framedblocks.client.model.loader.fallback.FallbackLoader;
 import io.github.xfacthd.framedblocks.client.model.special.FramedBannerFlagModel;
 import io.github.xfacthd.framedblocks.client.model.special.FramedChestLidModel;
+import io.github.xfacthd.framedblocks.client.model.template.GeometryTemplateManager;
 import io.github.xfacthd.framedblocks.client.model.unbaked.FramedBlockModelDefinition;
 import io.github.xfacthd.framedblocks.client.model.wrapping.ModelWrappingManager;
 import io.github.xfacthd.framedblocks.client.net.ClientNetworkHandler;
@@ -534,6 +535,7 @@ public final class FBClient {
     private static void onRegisterReloadListener(AddClientReloadListenersEvent event) {
         event.addListener(BlockInteractOverlayLayer.LISTENER_ID, BlockInteractOverlayLayer.RELOAD_LISTENER);
         event.addListener(RuntimeMaterialBaker.LISTENER_ID, RuntimeMaterialBaker::reload);
+        event.addListener(GeometryTemplateManager.LISTENER_ID, new GeometryTemplateManager());
     }
 
     private static void onInitClientRegistries(InitializeClientRegistriesEvent event) {

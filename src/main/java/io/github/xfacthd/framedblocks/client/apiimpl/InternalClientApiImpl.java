@@ -6,6 +6,7 @@ import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.api.block.IFramedDoubleBlock;
 import io.github.xfacthd.framedblocks.api.camo.resource.ResourceCamoContent;
 import io.github.xfacthd.framedblocks.api.camo.resource.ResourceCamoContentClientHandler;
+import io.github.xfacthd.framedblocks.api.datagen.templates.GeometryTemplateBuilder;
 import io.github.xfacthd.framedblocks.api.internal.InternalClientAPI;
 import io.github.xfacthd.framedblocks.api.model.AbstractFramedBlockStateModel;
 import io.github.xfacthd.framedblocks.api.model.CachingModel;
@@ -15,6 +16,7 @@ import io.github.xfacthd.framedblocks.api.model.item.ItemModelDataProvider;
 import io.github.xfacthd.framedblocks.api.model.item.block.BlockItemModelProvider;
 import io.github.xfacthd.framedblocks.api.model.standalone.StandaloneModelFactory;
 import io.github.xfacthd.framedblocks.api.model.standalone.StandaloneWrapperKey;
+import io.github.xfacthd.framedblocks.api.model.template.GeometryTemplateSpec;
 import io.github.xfacthd.framedblocks.api.model.util.ModelUtils;
 import io.github.xfacthd.framedblocks.api.model.wrapping.AuxModelProvider;
 import io.github.xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
@@ -24,11 +26,14 @@ import io.github.xfacthd.framedblocks.api.model.wrapping.statemerger.StateMerger
 import io.github.xfacthd.framedblocks.api.render.outline.OutlineRenderer;
 import io.github.xfacthd.framedblocks.client.model.FramedBlockStateModelPart;
 import io.github.xfacthd.framedblocks.client.model.ResourceCubeModel;
+import io.github.xfacthd.framedblocks.client.model.template.GeometryTemplateBuilderImpl;
+import io.github.xfacthd.framedblocks.client.model.template.GeometryTemplateManager;
 import io.github.xfacthd.framedblocks.client.model.quadmap.QuadMapBuilderInternal;
 import io.github.xfacthd.framedblocks.client.model.ReinforcementModel;
 import io.github.xfacthd.framedblocks.client.model.RuntimeMaterialBaker;
 import io.github.xfacthd.framedblocks.client.model.baked.FramedBlockStateModel;
 import io.github.xfacthd.framedblocks.client.model.item.FramedBlockItemModel;
+import io.github.xfacthd.framedblocks.client.model.template.GeometryTemplateSpecImpl;
 import io.github.xfacthd.framedblocks.client.model.unbaked.FramedBlockModelDefinition;
 import io.github.xfacthd.framedblocks.client.model.unbaked.UnbakedCopyingFramedBlockStateModel;
 import io.github.xfacthd.framedblocks.client.model.unbaked.UnbakedEmptyFramedBlockStateModel;
@@ -59,6 +64,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -69,6 +75,11 @@ public final class InternalClientApiImpl implements InternalClientAPI {
     public void registerModelWrapper(Holder<Block> block, GeometryFactory geometryFactory, StateMerger stateMerger) {
         Preconditions.checkArgument(block.value() instanceof IFramedBlock, "Cannot register model wrapper for non-IFramedBlock");
         registerSpecialModelWrapper(block, ctx -> new UnbakedFramedBlockStateModel(ctx, geometryFactory, false), stateMerger);
+    }
+
+    @Override
+    public void registerTemplatedModelWrapper(Holder<Block> block, GeometryTemplateSpec templateSpec, StateMerger stateMerger) {
+        registerModelWrapper(block, GeometryTemplateManager.createTemplatedGeometryFactory(templateSpec), stateMerger);
     }
 
     @Override
@@ -106,8 +117,28 @@ public final class InternalClientApiImpl implements InternalClientAPI {
     }
 
     @Override
+    public <T> void registerTemplatedStandaloneModelWrapper(
+            StandaloneWrapperKey<T> wrapperKey,
+            GeometryTemplateSpec templateSpec,
+            StandaloneModelFactory<T> modelFactory,
+            StateMerger stateMerger
+    ) {
+        registerStandaloneModelWrapper(wrapperKey, GeometryTemplateManager.createTemplatedGeometryFactory(templateSpec), modelFactory, stateMerger);
+    }
+
+    @Override
     public void overrideBlockModelFactory(Holder<Block> block, Function<BlockState, BlockModel.Unbaked> blockModelFactory) {
         ModelWrappingManager.getHandler(block.value()).overrideBlockModelFactory(blockModelFactory);
+    }
+
+    @Override
+    public GeometryTemplateSpec createGeometryTemplateSpec(Holder<Block> block, BiConsumer<BlockState, GeometryTemplateSpec.SpecEntryBuilder> builderOperator) {
+        return GeometryTemplateSpecImpl.createImpl(block, builderOperator);
+    }
+
+    @Override
+    public GeometryTemplateBuilder createGeometryTemplateBuilder() {
+        return new GeometryTemplateBuilderImpl();
     }
 
     @Override

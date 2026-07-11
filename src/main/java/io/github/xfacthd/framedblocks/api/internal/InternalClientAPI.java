@@ -3,6 +3,7 @@ package io.github.xfacthd.framedblocks.api.internal;
 import com.mojang.datafixers.util.Either;
 import io.github.xfacthd.framedblocks.api.camo.resource.ResourceCamoContent;
 import io.github.xfacthd.framedblocks.api.camo.resource.ResourceCamoContentClientHandler;
+import io.github.xfacthd.framedblocks.api.datagen.templates.GeometryTemplateBuilder;
 import io.github.xfacthd.framedblocks.api.model.CachingModel;
 import io.github.xfacthd.framedblocks.api.model.ExtendedBlockStateModelPart;
 import io.github.xfacthd.framedblocks.api.model.data.QuadMapBuilder;
@@ -10,6 +11,7 @@ import io.github.xfacthd.framedblocks.api.model.item.ItemModelDataProvider;
 import io.github.xfacthd.framedblocks.api.model.item.block.BlockItemModelProvider;
 import io.github.xfacthd.framedblocks.api.model.standalone.StandaloneModelFactory;
 import io.github.xfacthd.framedblocks.api.model.standalone.StandaloneWrapperKey;
+import io.github.xfacthd.framedblocks.api.model.template.GeometryTemplateSpec;
 import io.github.xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
 import io.github.xfacthd.framedblocks.api.model.wrapping.MaterialLookup;
 import io.github.xfacthd.framedblocks.api.model.wrapping.ModelFactory;
@@ -35,6 +37,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -43,6 +46,8 @@ public interface InternalClientAPI {
     InternalClientAPI INSTANCE = Utils.loadService(InternalClientAPI.class);
 
     void registerModelWrapper(Holder<Block> block, GeometryFactory geometryFactory, StateMerger stateMerger);
+
+    void registerTemplatedModelWrapper(Holder<Block> block, GeometryTemplateSpec templateSpec, StateMerger stateMerger);
 
     void registerDoubleModelWrapper(Holder<Block> block, StateMerger stateMerger);
 
@@ -59,7 +64,18 @@ public interface InternalClientAPI {
             StateMerger stateMerger
     );
 
+    <T> void registerTemplatedStandaloneModelWrapper(
+            StandaloneWrapperKey<T> wrapperKey,
+            GeometryTemplateSpec templateSpec,
+            StandaloneModelFactory<T> modelFactory,
+            StateMerger stateMerger
+    );
+
     void overrideBlockModelFactory(Holder<Block> block, Function<BlockState, BlockModel.Unbaked> blockModelFactory);
+
+    GeometryTemplateSpec createGeometryTemplateSpec(Holder<Block> block, BiConsumer<BlockState, GeometryTemplateSpec.SpecEntryBuilder> builderOperator);
+
+    GeometryTemplateBuilder createGeometryTemplateBuilder();
 
     void enqueueClientTask(int delay, Runnable task);
 
