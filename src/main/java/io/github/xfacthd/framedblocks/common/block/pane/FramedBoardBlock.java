@@ -122,11 +122,17 @@ public class FramedBoardBlock extends FramedBlock {
         }
         mask |= mask << 4;
         mask = Integer.rotateRight(mask, 4 - rotation.ordinal());
+        int faces = state.getValue(PropertyHolder.FACES);
         for (Direction side : HOR_DIRECTIONS) {
             boolean set = (mask & (1 << side.get2DDataValue())) != 0;
-            state = setFacePresent(state, side, set);
+            int sideMask = 1 << side.ordinal();
+            if (set) {
+                faces |= sideMask;
+            } else {
+                faces &= ~sideMask;
+            }
         }
-        return state;
+        return state.setValue(PropertyHolder.FACES, faces);
     }
 
     @Override
