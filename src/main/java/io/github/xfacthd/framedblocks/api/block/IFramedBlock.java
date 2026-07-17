@@ -389,7 +389,13 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension {
     /// @param player The player interacting with this block
     /// @return whether the interaction succeeded
     default boolean handleBlockLeftClick(BlockState state, Level level, BlockPos pos, Player player) {
-        return this instanceof SlopeToggleBlock && SlopeToggleBlock.toggleAltSlope(state, level, pos, player);
+        if (this instanceof SlopeToggleBlock) {
+            return SlopeToggleBlock.toggleAltSlope(state, level, pos, player);
+        }
+        if (this instanceof CopycatStyleBlock.StateDependent block) {
+            return block.toggleCopycatStyle(state, level, pos, player);
+        }
+        return false;
     }
 
     /// {@return whether this block is intangible in the given context}

@@ -3,6 +3,7 @@ package io.github.xfacthd.framedblocks.cmdtests.tests;
 import com.google.common.base.Stopwatch;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.context.CommandContext;
+import io.github.xfacthd.framedblocks.api.block.CopycatStyleBlock;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.ShapeLockableBlock;
 import io.github.xfacthd.framedblocks.client.model.wrapping.ModelWrappingHandler;
@@ -39,11 +40,13 @@ public final class BlockStateInfo {
                 .header("Skylight")
                 .header("Waterlogging")
                 .header("State lock")
+                .header("Copycat")
                 .header("Ignored properties");
 
         long totalPlaceableBlocks = 0;
         long totalDoubleBlocks = 0;
         long totalBlocksWithOverlays = 0;
+        long totalBlocksWithCopycat = 0;
         long totalStates = 0;
         long totalModelStates = 0;
         long totalStatesWithOverlays = 0;
@@ -61,6 +64,11 @@ public final class BlockStateInfo {
             String skylight = checkBooleanProperty(block, FramedProperties.PROPAGATES_SKYLIGHT);
             String waterlogging = type.supportsWaterLogging() ? checkBooleanProperty(block, BlockStateProperties.WATERLOGGED) : "-";
             String stateLock = block instanceof ShapeLockableBlock ? checkBooleanProperty(block, FramedProperties.STATE_LOCKED) : "-";
+            String copycat = switch (block) {
+                case CopycatStyleBlock.Always _ -> "always";
+                case CopycatStyleBlock.StateDependent _ -> "state";
+                default -> "-";
+            };
             String ignoredProperties = printIgnoredProperties(wrapper, block);
 
             table.cell(name)
@@ -72,6 +80,7 @@ public final class BlockStateInfo {
                     .cell(skylight)
                     .cell(waterlogging)
                     .cell(stateLock)
+                    .cell(copycat)
                     .cell(ignoredProperties)
                     .newRow();
 
@@ -88,6 +97,9 @@ public final class BlockStateInfo {
                 totalStatesWithOverlays += stateCount;
                 totalModelStatesWithOverlays += modelStateCount;
             }
+            if (block instanceof CopycatStyleBlock) {
+                totalBlocksWithCopycat++;
+            }
         }
 
         String dump = table.print() +
@@ -95,6 +107,7 @@ public final class BlockStateInfo {
                 "\\\n↳ With item: " + totalPlaceableBlocks +
                 "\\\n↳ With two camos: " + totalDoubleBlocks +
                 "\\\n↳ With BlockOverlays: " + totalBlocksWithOverlays +
+                "\\\n↳ With copycat: " + totalBlocksWithCopycat +
                 "\\\nTotal states: " + totalStates +
                 "\\\n↳ With BlockOverlays: " + totalStatesWithOverlays +
                 "\\\nTotal model states: " + totalModelStates +

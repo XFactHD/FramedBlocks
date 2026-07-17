@@ -2,11 +2,9 @@ package io.github.xfacthd.framedblocks.common.block.pillar;
 
 import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.CopycatStyleBlock;
-import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.item.placement.PropertyLabels;
 import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
-import io.github.xfacthd.framedblocks.api.util.FramedConstants;
 import io.github.xfacthd.framedblocks.api.util.RotationDirection;
 import io.github.xfacthd.framedblocks.common.block.IFramedBlockInternal;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
@@ -40,32 +38,17 @@ public class FramedLightningRodBlock extends LightningRodBlock implements IFrame
     public FramedLightningRodBlock(Properties props) {
         super(props);
         BlockUtils.configureStandardProperties(this);
-        registerDefaultState(defaultBlockState().setValue(FramedProperties.COPYCAT_STYLE, false));
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
         BlockUtils.addStandardProperties(this, builder);
-        builder.add(FramedProperties.COPYCAT_STYLE);
     }
 
     @Override
     protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         return handleUse(state, level, pos, player, hand, hit);
-    }
-
-    @Override
-    public boolean handleBlockLeftClick(BlockState state, Level level, BlockPos pos, Player player) {
-        ItemStack stack = player.getMainHandItem();
-        if (stack.is(FramedConstants.Objects.FRAMED_HAMMER.value())) {
-            if (!level.isClientSide()) {
-                state = state.setValue(FramedProperties.COPYCAT_STYLE, !state.getValue(FramedProperties.COPYCAT_STYLE));
-                level.setBlock(pos, state, Block.UPDATE_ALL);
-            }
-            return true;
-        }
-        return false;
     }
 
     @Override
