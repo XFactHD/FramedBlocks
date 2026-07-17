@@ -68,6 +68,10 @@ public final class BlockUtils {
         if (block instanceof SlopeToggleBlock) {
             builder.add(FramedProperties.ALT_SLOPE);
         }
+
+        if (block instanceof CopycatStyleBlock.StateDependent) {
+            builder.add(FramedProperties.COPYCAT_STYLE);
+        }
     }
 
     /// Configures the default [BlockState] of the given [IFramedBlock].
@@ -88,6 +92,9 @@ public final class BlockUtils {
         }
         if (block instanceof SlopeToggleBlock) {
             state = state.setValue(FramedProperties.ALT_SLOPE, false);
+        }
+        if (block instanceof CopycatStyleBlock.StateDependent) {
+            state = state.setValue(FramedProperties.COPYCAT_STYLE, false);
         }
         ((InvokerBlock) block).framedblocks$callRegisterDefaultState(state);
     }
@@ -115,6 +122,9 @@ public final class BlockUtils {
         }
         if (block instanceof SlopeToggleBlock) {
             to = Block.copyProperty(from, to, FramedProperties.ALT_SLOPE);
+        }
+        if (block instanceof CopycatStyleBlock.StateDependent) {
+            to = Block.copyProperty(from, to, FramedProperties.COPYCAT_STYLE);
         }
         return to;
     }
