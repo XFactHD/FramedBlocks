@@ -284,10 +284,7 @@ record TemplatedGeometryFactory(GeometryTemplateSpecImpl specGetter) implements 
         }
 
         Vector3f newVec = new Vector3f(vec).add(-8F, -8F, -8F);
-        rotation.permutation().permuteVector(newVec);
-        newVec.x = newVec.x * (rotation.inverts(Direction.Axis.X) ? -1F : 1F);
-        newVec.y = newVec.y * (rotation.inverts(Direction.Axis.Y) ? -1F : 1F);
-        newVec.z = newVec.z * (rotation.inverts(Direction.Axis.Z) ? -1F : 1F);
+        rotation.transformation().transform(newVec);
         return newVec.add(8F, 8F, 8F);
     }
 
