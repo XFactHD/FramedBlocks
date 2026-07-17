@@ -59,6 +59,21 @@ public final class Modifiers {
         return quad -> cut(quad, cutAxis.getNegative(), length, length) && cut(quad, cutAxis.getPositive(), length, length);
     }
 
+    /// Cut the quad along the given cut axis such that the relevant negative edge of the quad is `lengthNeg` away from
+    /// the positive edge's block bound and the relevant positive edge of the quad is `lengthPos` away from the
+    /// negative edge's block bound.
+    ///
+    /// @param cutAxis   The axis containing both cut edges
+    /// @param lengthNeg The target length towards the negative edge
+    /// @param lengthPos The target length towards the positive edge
+    /// @return a quad modifier for cutting a quad
+    public static QuadModifier.Modifier cut(Direction.Axis cutAxis, float lengthNeg, float lengthPos) {
+        if (Mth.equal(lengthNeg, 1F) && Mth.equal(lengthPos, 1F)) {
+            return NOOP_MODIFIER;
+        }
+        return quad -> cut(quad, cutAxis.getNegative(), lengthNeg, lengthNeg) && cut(quad, cutAxis.getPositive(), lengthPos, lengthPos);
+    }
+
     /// Cut the quad such that the two corners of the provided cut edge are `lengthOne` and `lengthTwo`
     /// away from the opposite edge's block bound.
     ///
@@ -220,6 +235,56 @@ public final class Modifiers {
                 return cut(quad, cutDir, lenTop, lenBottom);
             }
         };
+    }
+
+    /// Cuts the quad to half the width between the given offsets and offsets it by the offset of the opposite edge
+    /// such that the edge opposite the cut dir is pulled towards the center.
+    ///
+    /// @param cutDir The direction towards the cut edge
+    /// @param offNeg The offset of the negative edge along the axis given by the cut dir
+    /// @param offPos The offset of the positive edge along the axis given by the cut dir
+    /// @return a quad modifier for cutting a part of a "copycat" face
+    public static QuadModifier.Modifier cutCopycat(Direction cutDir, float offNeg, float offPos) {
+        float cutLen = computeCopycatCutLength(cutDir, offNeg, offPos);
+        float offset = DirUtils.isPositive(cutDir) ? offNeg : offPos;
+        return quad -> {
+            if (cut(quad, cutDir, cutLen, cutLen)) {
+                offset(quad, cutDir, offset);
+                return true;
+            }
+            return false;
+        };
+    }
+
+    /// Cuts the quad to half the width between each pair of offsets and offsets it by the offset of the opposite edge of each cut dir
+    /// such that the edges opposite the cut dirs are pulled towards the center.
+    ///
+    /// @param cutDirOne The direction towards the first cut edge
+    /// @param cutDirTwo The direction towards the second cut edge
+    /// @param offNegOne The offset of the negative edge along the axis given by the first cut dir
+    /// @param offPosOne The offset of the positive edge along the axis given by the first cut dir
+    /// @param offNegTwo The offset of the negative edge along the axis given by the second cut dir
+    /// @param offPosTwo The offset of the positive edge along the axis given by the second cut dir
+    /// @return a quad modifier for cutting a part of a "copycat" face
+    public static QuadModifier.Modifier cutCopycat(Direction cutDirOne, Direction cutDirTwo, float offNegOne, float offPosOne, float offNegTwo, float offPosTwo) {
+        float cutLenOne = computeCopycatCutLength(cutDirOne, offNegOne, offPosOne);
+        float cutLenTwo = computeCopycatCutLength(cutDirTwo, offNegTwo, offPosTwo);
+        float offsetOne = DirUtils.isPositive(cutDirOne) ? offNegOne : offPosOne;
+        float offsetTwo = DirUtils.isPositive(cutDirTwo) ? offNegTwo : offPosTwo;
+        return quad -> {
+            if (cut(quad, cutDirOne, cutLenOne, cutLenOne) && cut(quad, cutDirTwo, cutLenTwo, cutLenTwo)) {
+                offset(quad, cutDirOne, offsetOne);
+                offset(quad, cutDirTwo, offsetTwo);
+                return true;
+            }
+            return false;
+        };
+    }
+
+    private static float computeCopycatCutLength(Direction cutDir, float offNeg, float offPos) {
+        boolean ceil = (offNeg > offPos) ^ DirUtils.isPositive(cutDir);
+        float halfLen = (1F - offNeg - offPos) / 2F * 16F;
+        return (ceil ? Mth.ceil(halfLen) : Mth.floor(halfLen)) / 16F;
     }
 
     /// Cuts a triangle quad with the tip centered horizontally and pointing up or down from a horizontal quad.

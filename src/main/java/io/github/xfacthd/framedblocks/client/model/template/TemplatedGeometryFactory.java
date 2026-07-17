@@ -91,6 +91,7 @@ record TemplatedGeometryFactory(GeometryTemplateSpecImpl specGetter) implements 
             BiConsumer<Direction, QuadSpec> specAppender
     ) {
         List<QuadModifier.Modifier> modifiers = new ArrayList<>();
+        List<EdgeCut> edges = new ArrayList<>();
         for (Direction edge : DirUtils.getAxisTubeFaces(normal.getAxis())) {
             float width = length(edge, from, to);
             if (Mth.equal(width, 1F)) {
@@ -99,8 +100,9 @@ record TemplatedGeometryFactory(GeometryTemplateSpecImpl specGetter) implements 
             if (Mth.equal(width, 0F)) {
                 return;
             }
-            modifiers.add(Modifiers.cut(edge, width));
+            edges.add(new EdgeCut(edge, width));
         }
+        createStandardCuts(modifiers, edges, normal);
         float depth = length(normal, from, to);
         if (!Mth.equal(depth, 1F)) {
             modifiers.add(Modifiers.setPosition(depth));
@@ -111,6 +113,61 @@ record TemplatedGeometryFactory(GeometryTemplateSpecImpl specGetter) implements 
             cullFace = postModifiers.transformCullFace(normal, cullFace);
         }
         specAppender.accept(normal, new QuadSpec(modifiers, cullFace));
+    }
+
+    private static void createStandardCuts(List<QuadModifier.Modifier> modifiers, List<EdgeCut> edges, Direction normal) {
+        if (edges.size() == 1) {
+            EdgeCut cut = edges.getFirst();
+            modifiers.add(Modifiers.cut(cut.edge, cut.length));
+            return;
+        }
+
+        if (edges.size() == 2) {
+            EdgeCut cutOne = edges.getFirst();
+            EdgeCut cutTwo = edges.getLast();
+
+            if (cutOne.edge == cutTwo.edge.getOpposite()) {
+                if (Mth.equal(cutOne.length, cutTwo.length)) {
+                    modifiers.add(Modifiers.cut(cutOne.edge.getAxis(), cutOne.length));
+                } else {
+                    boolean onePos = DirUtils.isPositive(cutOne.edge);
+                    float lenNeg = onePos ? cutTwo.length : cutOne.length;
+                    float lenPos = onePos ? cutOne.length : cutTwo.length;
+                    modifiers.add(Modifiers.cut(cutOne.edge.getAxis(), lenNeg, lenPos));
+                }
+                return;
+            }
+        }
+
+        if (DirUtils.isY(normal)) {
+            float minX = 0F;
+            float minZ = 0F;
+            float maxX = 1F;
+            float maxZ = 1F;
+            for (EdgeCut cut : edges) {
+                switch (cut.edge) {
+                    case NORTH -> minZ = 1F - cut.length;
+                    case SOUTH -> maxZ = cut.length;
+                    case WEST -> minX = 1F - cut.length;
+                    case EAST -> maxX = cut.length;
+                }
+            }
+            modifiers.add(Modifiers.cutTopBottom(minX, minZ, maxX, maxZ));
+        } else {
+            float minXZ = 0F;
+            float minY = 0F;
+            float maxXZ = 1F;
+            float maxY = 1F;
+            for (EdgeCut cut : edges) {
+                switch (cut.edge) {
+                    case DOWN -> minY = 1F - cut.length;
+                    case UP -> maxY = cut.length;
+                    case NORTH, WEST -> minXZ = 1F - cut.length;
+                    case SOUTH, EAST -> maxXZ = cut.length;
+                }
+            }
+            modifiers.add(Modifiers.cutSide(minXZ, minY, maxXZ, maxY));
+        }
     }
 
     private static void extractCopycatFace(
@@ -133,32 +190,29 @@ record TemplatedGeometryFactory(GeometryTemplateSpecImpl specGetter) implements 
             edgeOffsets.put(edge, 1F - width);
         }
 
-        float depth = length(normal, from, to);
-        List<QuadModifier.Modifier> initialModifiers = new ArrayList<>();
-        if (!Mth.equal(depth, 1F)) {
-            initialModifiers.add(Modifiers.setPosition(depth));
-        }
-
         List<List<QuadModifier.Modifier>> modifierStacks = new ArrayList<>();
         Iterator<Direction.Axis> perpAxes = DirUtils.getPerpendicularAxes(normal.getAxis()).iterator();
 
         Direction.Axis axisOne = perpAxes.next();
+        Direction.Axis axisTwo = perpAxes.next();
+
         float offOneNeg = edgeOffsets.getOrDefault(axisOne.getNegative(), 0F);
         float offOnePos = edgeOffsets.getOrDefault(axisOne.getPositive(), 0F);
-        if (offOneNeg > 0 || offOnePos > 0) {
-            createCopycatCuts(modifierStacks, initialModifiers, axisOne, offOneNeg, offOnePos, true);
-        } else {
-            modifierStacks.add(initialModifiers);
-        }
-
-        Direction.Axis axisTwo = perpAxes.next();
         float offTwoNeg = edgeOffsets.getOrDefault(axisTwo.getNegative(), 0F);
         float offTwoPos = edgeOffsets.getOrDefault(axisTwo.getPositive(), 0F);
-        if (offTwoNeg > 0 || offTwoPos > 0) {
-            int prevSize = modifierStacks.size();
-            for (int i = 0; i < prevSize; i++) {
-                createCopycatCuts(modifierStacks, modifierStacks.get(i), axisTwo, offTwoNeg, offTwoPos, false);
-            }
+
+        if (Mth.equal(offOneNeg, 0F) && Mth.equal(offOnePos, 0F)) {
+            createCopycatCuts(modifierStacks, axisTwo, offTwoNeg, offTwoPos);
+        } else if (Mth.equal(offTwoNeg, 0F) && Mth.equal(offTwoPos, 0F)) {
+            createCopycatCuts(modifierStacks, axisOne, offOneNeg, offOnePos);
+        } else {
+            createCopycatCuts(modifierStacks, axisOne, axisTwo, offOneNeg, offOnePos, offTwoNeg, offTwoPos);
+        }
+
+        QuadModifier.Modifier depthMod = null;
+        float depth = length(normal, from, to);
+        if (!Mth.equal(depth, 1F)) {
+            depthMod = Modifiers.setPosition(depth);
         }
 
         List<QuadModifier.Modifier> postModList = List.of();
@@ -168,7 +222,11 @@ record TemplatedGeometryFactory(GeometryTemplateSpecImpl specGetter) implements 
             postModifiers.collectPostModifiers(normal, cullable, postModList::add);
             cullFace = postModifiers.transformCullFace(normal, cullFace);
         }
+
         for (List<QuadModifier.Modifier> modifiers : modifierStacks) {
+            if (depthMod != null) {
+                modifiers.add(depthMod);
+            }
             if (!postModList.isEmpty()) {
                 modifiers.addAll(postModList);
             }
@@ -176,26 +234,30 @@ record TemplatedGeometryFactory(GeometryTemplateSpecImpl specGetter) implements 
         }
     }
 
+    private static void createCopycatCuts(List<List<QuadModifier.Modifier>> modifierStacks, Direction.Axis axis, float offNeg, float offPos) {
+        appendModifierStack(modifierStacks, Modifiers.cutCopycat(axis.getNegative(), offNeg, offPos));
+        appendModifierStack(modifierStacks, Modifiers.cutCopycat(axis.getPositive(), offNeg, offPos));
+    }
+
     private static void createCopycatCuts(
             List<List<QuadModifier.Modifier>> modifierStacks,
-            List<QuadModifier.Modifier> baseModifiers,
-            Direction.Axis axis,
-            float offsetNeg,
-            float offsetPos,
-            boolean addSecond
+            Direction.Axis axisOne,
+            Direction.Axis axisTwo,
+            float offNegOne,
+            float offPosOne,
+            float offNegTwo,
+            float offPosTwo
     ) {
-        float halfLen = (1F - offsetNeg - offsetPos) / 2F;
+        appendModifierStack(modifierStacks, Modifiers.cutCopycat(axisOne.getNegative(), axisTwo.getNegative(), offNegOne, offPosOne, offNegTwo, offPosTwo));
+        appendModifierStack(modifierStacks, Modifiers.cutCopycat(axisOne.getNegative(), axisTwo.getPositive(), offNegOne, offPosOne, offNegTwo, offPosTwo));
+        appendModifierStack(modifierStacks, Modifiers.cutCopycat(axisOne.getPositive(), axisTwo.getNegative(), offNegOne, offPosOne, offNegTwo, offPosTwo));
+        appendModifierStack(modifierStacks, Modifiers.cutCopycat(axisOne.getPositive(), axisTwo.getPositive(), offNegOne, offPosOne, offNegTwo, offPosTwo));
+    }
 
-        List<QuadModifier.Modifier> modsNeg = new ArrayList<>(baseModifiers);
-        modsNeg.add(Modifiers.cut(axis.getPositive(), halfLen));
-        modsNeg.add(Modifiers.offset(axis.getPositive(), offsetNeg));
-        modifierStacks.add(modsNeg);
-
-        baseModifiers.add(Modifiers.cut(axis.getNegative(), halfLen));
-        baseModifiers.add(Modifiers.offset(axis.getNegative(), offsetPos));
-        if (addSecond) {
-            modifierStacks.add(baseModifiers);
-        }
+    private static void appendModifierStack(List<List<QuadModifier.Modifier>> modifierStacks, QuadModifier.Modifier modifier) {
+        ArrayList<QuadModifier.Modifier> modifiers = new ArrayList<>();
+        modifiers.add(modifier);
+        modifierStacks.add(modifiers);
     }
 
     private static float length(Direction dir, Vector3fc from, Vector3fc to) {
@@ -228,4 +290,6 @@ record TemplatedGeometryFactory(GeometryTemplateSpecImpl specGetter) implements 
         newVec.z = newVec.z * (rotation.inverts(Direction.Axis.Z) ? -1F : 1F);
         return newVec.add(8F, 8F, 8F);
     }
+
+    private record EdgeCut(Direction edge, float length) { }
 }
