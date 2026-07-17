@@ -11,7 +11,7 @@ import io.github.xfacthd.framedblocks.client.model.geometry.cube.FramedMarkedCub
 import io.github.xfacthd.framedblocks.client.model.geometry.cube.FramedTargetGeometry;
 import io.github.xfacthd.framedblocks.client.model.geometry.interactive.FramedFlowerPotGeometry;
 import io.github.xfacthd.framedblocks.client.model.geometry.rail.FramedFancyRailGeometry;
-import io.github.xfacthd.framedblocks.client.model.geometry.slab.AdjustableDoubleBlockItemModelDataProvider;
+import io.github.xfacthd.framedblocks.client.model.item.dataprovider.AdjustableDoubleBlockItemModelDataProvider;
 import io.github.xfacthd.framedblocks.client.model.item.FramedBlockItemModel;
 import io.github.xfacthd.framedblocks.client.model.item.TankItemModel;
 import io.github.xfacthd.framedblocks.client.model.item.modelprovider.FenceBlockItemModelProvider;

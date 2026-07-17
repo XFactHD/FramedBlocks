@@ -1,0 +1,24 @@
+{
+  "elements": [
+    {
+      "faces": {
+        "down": false,
+        "east": false,
+        "north": true,
+        "south": false,
+        "up": false,
+        "west": false
+      },
+      "from": [
+        4.0,
+        4.0,
+        0.0
+      ],
+      "to": [
+        12.0,
+        12.0,
+        8.0
+      ]
+    }
+  ]
+}

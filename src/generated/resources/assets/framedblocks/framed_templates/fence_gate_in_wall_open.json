@@ -1,0 +1,304 @@
+{
+  "elements": [
+    {
+      "faces": {
+        "down": false,
+        "east": false,
+        "south": false,
+        "up": false,
+        "west": true
+      },
+      "from": [
+        0.0,
+        2.0,
+        7.0
+      ],
+      "to": [
+        2.0,
+        13.0,
+        9.0
+      ]
+    },
+    {
+      "faces": {
+        "down": false,
+        "east": true,
+        "south": false,
+        "up": false,
+        "west": false
+      },
+      "from": [
+        14.0,
+        2.0,
+        7.0
+      ],
+      "to": [
+        16.0,
+        13.0,
+        9.0
+      ]
+    },
+    {
+      "faces": {
+        "north": false
+      },
+      "from": [
+        0.0,
+        2.0,
+        7.0
+      ],
+      "to": [
+        2.0,
+        3.0,
+        7.0
+      ]
+    },
+    {
+      "faces": {
+        "north": false
+      },
+      "from": [
+        14.0,
+        2.0,
+        7.0
+      ],
+      "to": [
+        16.0,
+        3.0,
+        7.0
+      ]
+    },
+    {
+      "faces": {
+        "north": false
+      },
+      "from": [
+        0.0,
+        6.0,
+        7.0
+      ],
+      "to": [
+        2.0,
+        9.0,
+        7.0
+      ]
+    },
+    {
+      "faces": {
+        "north": false
+      },
+      "from": [
+        14.0,
+        6.0,
+        7.0
+      ],
+      "to": [
+        16.0,
+        9.0,
+        7.0
+      ]
+    },
+    {
+      "faces": {
+        "north": false
+      },
+      "from": [
+        0.0,
+        12.0,
+        7.0
+      ],
+      "to": [
+        2.0,
+        13.0,
+        7.0
+      ]
+    },
+    {
+      "faces": {
+        "north": false
+      },
+      "from": [
+        14.0,
+        12.0,
+        7.0
+      ],
+      "to": [
+        16.0,
+        13.0,
+        7.0
+      ]
+    },
+    {
+      "faces": {
+        "down": false,
+        "east": false,
+        "north": false,
+        "south": false,
+        "west": true
+      },
+      "from": [
+        0.0,
+        3.0,
+        1.0
+      ],
+      "to": [
+        2.0,
+        6.0,
+        7.0
+      ]
+    },
+    {
+      "faces": {
+        "east": false,
+        "north": false,
+        "south": false,
+        "up": false,
+        "west": true
+      },
+      "from": [
+        0.0,
+        9.0,
+        1.0
+      ],
+      "to": [
+        2.0,
+        12.0,
+        7.0
+      ]
+    },
+    {
+      "faces": {
+        "down": false,
+        "east": true,
+        "north": false,
+        "south": false,
+        "west": false
+      },
+      "from": [
+        14.0,
+        3.0,
+        1.0
+      ],
+      "to": [
+        16.0,
+        6.0,
+        7.0
+      ]
+    },
+    {
+      "faces": {
+        "east": true,
+        "north": false,
+        "south": false,
+        "up": false,
+        "west": false
+      },
+      "from": [
+        14.0,
+        9.0,
+        1.0
+      ],
+      "to": [
+        16.0,
+        12.0,
+        7.0
+      ]
+    },
+    {
+      "faces": {
+        "east": false,
+        "north": false,
+        "south": false,
+        "west": true
+      },
+      "from": [
+        0.0,
+        6.0,
+        1.0
+      ],
+      "to": [
+        2.0,
+        9.0,
+        3.0
+      ]
+    },
+    {
+      "faces": {
+        "east": true,
+        "north": false,
+        "south": false,
+        "west": false
+      },
+      "from": [
+        14.0,
+        6.0,
+        1.0
+      ],
+      "to": [
+        16.0,
+        9.0,
+        3.0
+      ]
+    },
+    {
+      "faces": {
+        "up": false
+      },
+      "from": [
+        0.0,
+        6.0,
+        3.0
+      ],
+      "to": [
+        2.0,
+        6.0,
+        7.0
+      ]
+    },
+    {
+      "faces": {
+        "down": false
+      },
+      "from": [
+        0.0,
+        9.0,
+        3.0
+      ],
+      "to": [
+        2.0,
+        9.0,
+        7.0
+      ]
+    },
+    {
+      "faces": {
+        "up": false
+      },
+      "from": [
+        14.0,
+        6.0,
+        3.0
+      ],
+      "to": [
+        16.0,
+        6.0,
+        7.0
+      ]
+    },
+    {
+      "faces": {
+        "down": false
+      },
+      "from": [
+        14.0,
+        9.0,
+        3.0
+      ],
+      "to": [
+        16.0,
+        9.0,
+        7.0
+      ]
+    }
+  ]
+}

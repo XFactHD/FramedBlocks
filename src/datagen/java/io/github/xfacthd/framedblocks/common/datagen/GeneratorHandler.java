@@ -29,6 +29,7 @@ public final class GeneratorHandler {
         event.createProvider(FramedBlockModelProvider::new);
         event.createProvider(FramedItemModelProvider::new);
         event.createProvider(FramedLanguageProvider::new);
+        event.createProvider(FramedTemplateProvider::new);
 
         event.createProvider(FramedLootTableProvider::new);
         event.createProvider(FramedRecipeProvider.Runner::new);
