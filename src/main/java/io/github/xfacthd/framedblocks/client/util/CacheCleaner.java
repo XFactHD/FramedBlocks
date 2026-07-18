@@ -6,7 +6,6 @@ import io.github.xfacthd.framedblocks.client.model.RuntimeMaterialBaker;
 import io.github.xfacthd.framedblocks.client.model.overlaygen.BlockOverlayGenerator;
 import io.github.xfacthd.framedblocks.client.model.overlaygen.OverlayQuadGenerator;
 import io.github.xfacthd.framedblocks.client.model.template.GeometryTemplateSpecImpl;
-import io.github.xfacthd.framedblocks.client.render.special.ModelBasedOutlineRenderer;
 import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
 
 import java.util.Collections;
@@ -44,7 +43,6 @@ public final class CacheCleaner {
 
         ResourceCubeModel.clearInterner();
         RuntimeMaterialBaker.clear(reason);
-        ModelBasedOutlineRenderer.clearCaches();
         OverlayQuadGenerator.clearCaches();
         BlockOverlayGenerator.clearCaches(reason);
         GeometryTemplateSpecImpl.reset(reason);
