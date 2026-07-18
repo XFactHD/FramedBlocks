@@ -1,10 +1,12 @@
 package io.github.xfacthd.framedblocks.client.render.special;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import io.github.xfacthd.framedblocks.api.model.CachingModel;
 import io.github.xfacthd.framedblocks.api.model.util.ModelUtils;
 import io.github.xfacthd.framedblocks.api.model.wrapping.statemerger.StateMerger;
 import io.github.xfacthd.framedblocks.api.render.outline.OutlineRenderer;
 import io.github.xfacthd.framedblocks.api.render.outline.SimpleOutlineRenderer;
+import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.client.model.wrapping.ModelWrappingManager;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
@@ -27,7 +29,6 @@ import org.joml.Vector3f;
 import org.joml.Vector3fc;
 import org.jspecify.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.IdentityHashMap;
@@ -38,8 +39,7 @@ import java.util.function.Consumer;
 
 /// An [OutlineRenderer] which derives the lines from the block's geometry instead of requiring them
 /// to be manually specified for the individual block.
-public final class ModelBasedOutlineRenderer implements SimpleOutlineRenderer {
-    private static final List<ModelBasedOutlineRenderer> RENDERERS = new ArrayList<>();
+public final class ModelBasedOutlineRenderer implements SimpleOutlineRenderer, CachingModel {
     private static final @Nullable Direction[] DIRECTIONS = Arrays.copyOf(Direction.values(), 7);
     private static final RandomSource RANDOM = RandomSource.createThreadLocalInstance();
     private static final List<BlockStateModelPart> SCRATCH_LIST = new ObjectArrayList<>();
@@ -49,7 +49,9 @@ public final class ModelBasedOutlineRenderer implements SimpleOutlineRenderer {
 
     public ModelBasedOutlineRenderer(Block block) {
         this.stateMerger = ModelWrappingManager.tryGetStateMerger(block);
-        RENDERERS.add(this);
+        if (!Utils.PRODUCTION) {
+            CachingModel.registerPersistent(this);
+        }
     }
 
     @Override
@@ -64,8 +66,9 @@ public final class ModelBasedOutlineRenderer implements SimpleOutlineRenderer {
     @Override
     public void rotateMatrix(PoseStack poseStack, BlockState state) { }
 
-    public static void clearCaches() {
-        RENDERERS.forEach(renderer -> renderer.cachedVertices.clear());
+    @Override
+    public void clearCache() {
+        cachedVertices.clear();
     }
 
     private static float[] computeVertices(BlockState state) {
