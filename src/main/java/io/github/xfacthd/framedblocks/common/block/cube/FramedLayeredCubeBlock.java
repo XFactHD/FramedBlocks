@@ -1,6 +1,7 @@
 package io.github.xfacthd.framedblocks.common.block.cube;
 
 import io.github.xfacthd.framedblocks.api.block.BlockUtils;
+import io.github.xfacthd.framedblocks.api.block.CopycatStyleBlock;
 import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
 import io.github.xfacthd.framedblocks.api.block.item.IFramedBlockItem;
 import io.github.xfacthd.framedblocks.api.block.item.placement.PropertyLabels;
@@ -24,7 +25,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import org.jspecify.annotations.Nullable;
 
-public class FramedLayeredCubeBlock extends FramedBlock {
+public class FramedLayeredCubeBlock extends FramedBlock implements CopycatStyleBlock.StateDependent {
     public FramedLayeredCubeBlock(Properties props) {
         super(BlockType.FRAMED_LAYERED_CUBE, props);
         registerDefaultState(defaultBlockState().setValue(BlockStateProperties.FACING, Direction.UP));

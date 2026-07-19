@@ -1,6 +1,7 @@
 package io.github.xfacthd.framedblocks.common.block.interactive.pressureplate;
 
 import io.github.xfacthd.framedblocks.api.block.BlockUtils;
+import io.github.xfacthd.framedblocks.api.block.CopycatStyleBlock;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
@@ -31,7 +32,7 @@ import org.jspecify.annotations.Nullable;
 import java.util.List;
 import java.util.Map;
 
-public class FramedPressurePlateBlock extends PressurePlateBlock implements IFramedBlockInternal {
+public class FramedPressurePlateBlock extends PressurePlateBlock implements IFramedBlockInternal, CopycatStyleBlock.StateDependent {
     private static final Map<BlockType, BlockType> WATERLOGGING_SWITCH = Map.of(
             BlockType.FRAMED_PRESSURE_PLATE, BlockType.FRAMED_WATERLOGGABLE_PRESSURE_PLATE,
             BlockType.FRAMED_WATERLOGGABLE_PRESSURE_PLATE, BlockType.FRAMED_PRESSURE_PLATE,
@@ -83,16 +84,17 @@ public class FramedPressurePlateBlock extends PressurePlateBlock implements IFra
 
     @Override
     public boolean handleBlockLeftClick(BlockState state, Level level, BlockPos pos, Player player) {
-        if (player.getMainHandItem().is(FBContent.ITEM_FRAMED_HAMMER.value())) {
+        if (player.getMainHandItem().is(FBContent.ITEM_FRAMED_WRENCH.value())) {
             if (!level.isClientSide()) {
                 BlockUtils.wrapInStateCopy(level, pos, player, ItemStack.EMPTY, false, false, () -> {
                     BlockState newState = getCounterpart().defaultBlockState();
+                    newState = copyProperty(state, newState, FramedProperties.COPYCAT_STYLE);
                     level.setBlockAndUpdate(pos, newState);
                 });
             }
             return true;
         }
-        return false;
+        return IFramedBlockInternal.super.handleBlockLeftClick(state, level, pos, player);
     }
 
     @Override

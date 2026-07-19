@@ -1,5 +1,6 @@
 package io.github.xfacthd.framedblocks.common.block.slab;
 
+import io.github.xfacthd.framedblocks.api.block.CopycatStyleBlock;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
 import io.github.xfacthd.framedblocks.api.block.item.placement.PropertyLabels;
@@ -18,7 +19,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import org.jspecify.annotations.Nullable;
 
-public class FramedCenteredPanelBlock extends FramedBlock {
+public class FramedCenteredPanelBlock extends FramedBlock implements CopycatStyleBlock.StateDependent {
     public FramedCenteredPanelBlock(Properties props) {
         super(BlockType.FRAMED_CENTERED_PANEL, props);
     }

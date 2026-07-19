@@ -1,5 +1,6 @@
 package io.github.xfacthd.framedblocks.common.block.slab;
 
+import io.github.xfacthd.framedblocks.api.block.CopycatStyleBlock;
 import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
 import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
@@ -8,7 +9,7 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jspecify.annotations.Nullable;
 
-public class FramedCenteredSlabBlock extends FramedBlock {
+public class FramedCenteredSlabBlock extends FramedBlock implements CopycatStyleBlock.StateDependent {
     public FramedCenteredSlabBlock(Properties props) {
         super(BlockType.FRAMED_CENTERED_SLAB, props);
     }

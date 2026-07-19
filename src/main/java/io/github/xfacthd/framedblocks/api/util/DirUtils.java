@@ -47,6 +47,13 @@ public final class DirUtils {
         return dir.getAxis() == Direction.Axis.Z;
     }
 
+    /// {@return whether the given direction is horizontal}
+    ///
+    /// @param dir The direction to check
+    public static boolean isHorizontal(Direction dir) {
+        return !isY(dir);
+    }
+
     /// {@return the direction represented by the given normal vector or `null` if the normal is not axis-aligned}
     ///
     /// @param x The X component, must be -1<x<1

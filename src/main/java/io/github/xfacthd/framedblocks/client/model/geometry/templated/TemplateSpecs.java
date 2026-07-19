@@ -2,6 +2,7 @@ package io.github.xfacthd.framedblocks.client.model.geometry.templated;
 
 import com.mojang.math.Quadrant;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
+import io.github.xfacthd.framedblocks.api.model.template.CopycatPredicate;
 import io.github.xfacthd.framedblocks.api.model.template.GeometryTemplateSpec;
 import io.github.xfacthd.framedblocks.api.model.template.SourceType;
 import io.github.xfacthd.framedblocks.api.model.template.TemplateOverlayProvider;
@@ -30,7 +31,7 @@ import net.minecraft.world.level.block.state.properties.StairsShape;
 import java.util.function.UnaryOperator;
 
 public final class TemplateSpecs {
-    public static final GeometryTemplateSpec SLAB = TemplateUtils.createTopBottomSpec(FBContent.BLOCK_FRAMED_SLAB, SourceType.MODEL, TemplateIds.SLAB_MODEL);
+    public static final GeometryTemplateSpec SLAB = TemplateUtils.createTopBottomSpec(FBContent.BLOCK_FRAMED_SLAB, SourceType.MODEL, TemplateIds.SLAB_MODEL, CopycatPredicate.HORIZONTAL);
     public static final GeometryTemplateSpec SLAB_EDGE = TemplateUtils.createTopBottomHorFacingSpec(FBContent.BLOCK_FRAMED_SLAB_EDGE, SourceType.TEMPLATE, TemplateIds.SLAB_EDGE);
     public static final GeometryTemplateSpec SLAB_CORNER = TemplateUtils.createTopBottomHorFacingSpec(FBContent.BLOCK_FRAMED_SLAB_CORNER, SourceType.TEMPLATE, TemplateIds.SLAB_CORNER);
     public static final GeometryTemplateSpec PANEL = panel();
@@ -72,8 +73,8 @@ public final class TemplateSpecs {
     public static final GeometryTemplateSpec IRON_GATE = door(FBContent.BLOCK_FRAMED_IRON_GATE, true);
     public static final GeometryTemplateSpec BOOKSHELF = bookshelf();
     public static final GeometryTemplateSpec CHISELED_BOOKSHELF = chiseledBookshelf();
-    public static final GeometryTemplateSpec CENTERED_SLAB = TemplateUtils.createUnitSpec(FBContent.BLOCK_FRAMED_CENTERED_SLAB, SourceType.TEMPLATE, TemplateIds.CENTERED_SLAB);
-    public static final GeometryTemplateSpec CENTERED_PANEL = TemplateUtils.createFacingSpec(FBContent.BLOCK_FRAMED_CENTERED_PANEL, FramedProperties.FACING_NE, SourceType.TEMPLATE, TemplateIds.CENTERED_PANEL);
+    public static final GeometryTemplateSpec CENTERED_SLAB = TemplateUtils.createUnitSpec(FBContent.BLOCK_FRAMED_CENTERED_SLAB, SourceType.TEMPLATE, TemplateIds.CENTERED_SLAB, CopycatPredicate.HORIZONTAL);
+    public static final GeometryTemplateSpec CENTERED_PANEL = centeredPanel();
     public static final GeometryTemplateSpec MASONRY_CORNER_SEGMENT = masonryCornerSegment();
     public static final GeometryTemplateSpec CHECKERED_CUBE_SEGMENT = checkeredCubeSegment();
     public static final GeometryTemplateSpec CHECKERED_SLAB_SEGMENT = checkeredSlabSegment();
@@ -89,6 +90,7 @@ public final class TemplateSpecs {
         return GeometryTemplateSpec.create(FBContent.BLOCK_FRAMED_PANEL, (state, builder) ->
                 builder.addSourceFile(SourceType.MODEL, TemplateIds.SLAB_MODEL, xform -> xform.rotationX(Quadrant.R270))
                         .transform(TemplateUtils.applyHorizontalRotation(state, false))
+                        .copycatPredicate(CopycatPredicate.ofNotAxis(state.getValue(FramedProperties.FACING_HOR).getAxis()))
         );
     }
 
@@ -226,7 +228,8 @@ public final class TemplateSpecs {
             if (overlay != null) {
                 builder.overlay(overlay);
             }
-            builder.useBaseModel(!state.is(FBContent.BLOCK_FRAMED_PRESSURE_PLATE));
+            builder.useBaseModel(!state.is(FBContent.BLOCK_FRAMED_PRESSURE_PLATE))
+                    .copycatPredicate(CopycatPredicate.VERTICAL);
         });
     }
 
@@ -255,10 +258,15 @@ public final class TemplateSpecs {
                         case WALL -> Quadrant.R90;
                         case CEILING -> Quadrant.R180;
                     })
-                    .rotationY(TemplateUtils.getHorizontalQuadrant(state, FramedProperties.FACING_HOR, attachFace == AttachFace.CEILING))
+                    .rotationY(TemplateUtils.getHorizontalQuadrant(state, attachFace == AttachFace.CEILING))
             );
             if (stone) {
                 builder.useBaseModel(true).overlay(StoneButtonOverlayProvider.factory(state, large));
+            }
+            if (attachFace == AttachFace.WALL) {
+                builder.copycatPredicate(CopycatPredicate.ofAxis(state.getValue(FramedProperties.FACING_HOR).getAxis()));
+            } else {
+                builder.copycatPredicate(CopycatPredicate.VERTICAL);
             }
         });
     }
@@ -268,6 +276,7 @@ public final class TemplateSpecs {
                 builder.addSourceFile(SourceType.TEMPLATE, TemplateIds.WALL_SIGN)
                         .transform(TemplateUtils.applyHorizontalRotation(state, false))
                         .solidNoCamoModel(true)
+                        .copycatPredicate(CopycatPredicate.ofAxis(state.getValue(FramedProperties.FACING_HOR).getAxis()))
         );
     }
 
@@ -390,6 +399,15 @@ public final class TemplateSpecs {
         );
     }
 
+    private static GeometryTemplateSpec centeredPanel() {
+        return GeometryTemplateSpec.create(FBContent.BLOCK_FRAMED_CENTERED_PANEL, (state, builder) ->
+                builder.addSourceFile(SourceType.TEMPLATE, TemplateIds.CENTERED_PANEL).transform(xform ->
+                        xform.rotationX(TemplateUtils.getVerticalQuadrant(state, FramedProperties.FACING_NE, false))
+                                .rotationY(TemplateUtils.getHorizontalQuadrant(state, FramedProperties.FACING_NE, false))
+                ).copycatPredicate(CopycatPredicate.ofNotAxis(state.getValue(FramedProperties.FACING_NE).getAxis()))
+        );
+    }
+
     private static GeometryTemplateSpec masonryCornerSegment() {
         return GeometryTemplateSpec.create(FBContent.BLOCK_FRAMED_MASONRY_CORNER_SEGMENT, (state, builder) ->
                 builder.addSourceFile(SourceType.TEMPLATE, TemplateIds.MASONRY_CORNER_SEGMENT)
@@ -470,7 +488,7 @@ public final class TemplateSpecs {
                         default -> Quadrant.R90;
                     })
                     .rotationY(TemplateUtils.getHorizontalQuadrant(facing))
-            );
+            ).copycatPredicate(CopycatPredicate.ofNotAxis(facing.getAxis()));
         });
     }
 

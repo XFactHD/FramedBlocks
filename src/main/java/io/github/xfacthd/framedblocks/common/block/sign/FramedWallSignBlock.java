@@ -1,6 +1,7 @@
 package io.github.xfacthd.framedblocks.common.block.sign;
 
 import io.github.xfacthd.framedblocks.api.block.BlockUtils;
+import io.github.xfacthd.framedblocks.api.block.CopycatStyleBlock;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
@@ -40,7 +41,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
-public final class FramedWallSignBlock extends WallSignBlock implements IFramedBlockInternal {
+public final class FramedWallSignBlock extends WallSignBlock implements IFramedBlockInternal, CopycatStyleBlock.StateDependent {
     public FramedWallSignBlock(Properties properties) {
         super(WoodType.OAK, IFramedBlock.applyDefaultProperties(properties, BlockType.FRAMED_WALL_SIGN)
                 .forceSolidOn()

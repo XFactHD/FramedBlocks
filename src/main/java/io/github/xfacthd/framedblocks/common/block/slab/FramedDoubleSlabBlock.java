@@ -1,5 +1,6 @@
 package io.github.xfacthd.framedblocks.common.block.slab;
 
+import io.github.xfacthd.framedblocks.api.block.CopycatStyleBlock;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.CamoGetter;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockParts;
@@ -17,7 +18,7 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jspecify.annotations.Nullable;
 
-public class FramedDoubleSlabBlock extends FramedDoubleBlock {
+public class FramedDoubleSlabBlock extends FramedDoubleBlock implements CopycatStyleBlock.StateDependent {
     public FramedDoubleSlabBlock(Properties props) {
         super(BlockType.FRAMED_DOUBLE_SLAB, props);
     }
@@ -32,7 +33,9 @@ public class FramedDoubleSlabBlock extends FramedDoubleBlock {
 
     @Override
     public DoubleBlockParts calculateParts(BlockState state) {
-        BlockState defState = FBContent.BLOCK_FRAMED_SLAB.value().defaultBlockState();
+        BlockState defState = FBContent.BLOCK_FRAMED_SLAB.value()
+                .defaultBlockState()
+                .setValue(FramedProperties.COPYCAT_STYLE, isCopycatStyle(state));
         return new DoubleBlockParts(
                 defState.setValue(FramedProperties.TOP, false),
                 defState.setValue(FramedProperties.TOP, true)

@@ -9,6 +9,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
+import org.jspecify.annotations.Nullable;
 
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
@@ -22,7 +23,23 @@ public final class TemplateUtils {
     /// @param file  The source file to use for the block
     /// @return a new template spec
     public static GeometryTemplateSpec createUnitSpec(Holder<Block> block, SourceType type, Identifier file) {
-        return GeometryTemplateSpec.create(block, (_, builder) -> builder.addSourceFile(type, file));
+        return createUnitSpec(block, type, file, null);
+    }
+
+    /// Create a "unit" template spec with a single source file for the given block.
+    ///
+    /// @param block            The block to create the spec for
+    /// @param type             The type of the source file
+    /// @param file             The source file to use for the block
+    /// @param copycatPredicate The copycat predicate to use for the block
+    /// @return a new template spec
+    public static GeometryTemplateSpec createUnitSpec(Holder<Block> block, SourceType type, Identifier file, @Nullable CopycatPredicate copycatPredicate) {
+        return GeometryTemplateSpec.create(block, (_, builder) -> {
+            builder.addSourceFile(type, file);
+            if (copycatPredicate != null) {
+                builder.copycatPredicate(copycatPredicate);
+            }
+        });
     }
 
     /// Create a template spec for the given block residing in the top or bottom half of the block.
@@ -33,10 +50,25 @@ public final class TemplateUtils {
     /// @param file  The source file to use for the block
     /// @return a new template spec
     public static GeometryTemplateSpec createTopBottomSpec(Holder<Block> block, SourceType type, Identifier file) {
+        return createTopBottomSpec(block, type, file, null);
+    }
+
+    /// Create a template spec for the given block residing in the top or bottom half of the block.
+    /// The given source file must be the bottom half and is mirrored for the top half.
+    ///
+    /// @param block            The block to create the spec for
+    /// @param type             The type of the source file
+    /// @param file             The source file to use for the block
+    /// @param copycatPredicate The copycat predicate to use for the block
+    /// @return a new template spec
+    public static GeometryTemplateSpec createTopBottomSpec(Holder<Block> block, SourceType type, Identifier file, @Nullable CopycatPredicate copycatPredicate) {
         return GeometryTemplateSpec.create(block, (state, builder) -> {
             builder.addSourceFile(type, file);
             if (state.getValue(FramedProperties.TOP)) {
                 builder.transform(xform -> xform.mirrorY(true));
+            }
+            if (copycatPredicate != null) {
+                builder.copycatPredicate(copycatPredicate);
             }
         });
     }
