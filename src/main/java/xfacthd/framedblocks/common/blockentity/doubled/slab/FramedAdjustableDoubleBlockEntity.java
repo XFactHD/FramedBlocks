@@ -54,7 +54,7 @@ public class FramedAdjustableDoubleBlockEntity extends FramedDoubleBlockEntity i
         if (face == facing) return true;
 
         int y = (int)(Utils.fractionInDir(hit.getLocation(), facing) * 16F);
-        return y > firstHeight;
+        return y >= firstHeight;
     }
 
     public boolean handleDeform(Player player)
