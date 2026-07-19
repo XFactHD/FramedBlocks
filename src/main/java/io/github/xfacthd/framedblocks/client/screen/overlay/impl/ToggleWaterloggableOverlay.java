@@ -33,7 +33,7 @@ public final class ToggleWaterloggableOverlay extends BlockInteractOverlay {
 
     @Override
     public boolean isValidTool(Player player, ItemStack stack) {
-        return stack.is(FBContent.ITEM_FRAMED_HAMMER.value());
+        return stack.is(FBContent.ITEM_FRAMED_WRENCH.value());
     }
 
     @Override

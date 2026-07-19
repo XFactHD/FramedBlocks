@@ -1,5 +1,6 @@
 package io.github.xfacthd.framedblocks.common.block.slab;
 
+import io.github.xfacthd.framedblocks.api.block.CopycatStyleBlock;
 import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
 import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
 import io.github.xfacthd.framedblocks.api.util.DirUtils;
@@ -14,7 +15,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import org.jspecify.annotations.Nullable;
 
-public class FramedCheckeredCubeSegmentBlock extends FramedBlock {
+public class FramedCheckeredCubeSegmentBlock extends FramedBlock implements CopycatStyleBlock.StateDependent {
     public FramedCheckeredCubeSegmentBlock(Properties props) {
         super(BlockType.FRAMED_CHECKERED_CUBE_SEGMENT, props);
         registerDefaultState(defaultBlockState().setValue(PropertyHolder.SECOND, false));

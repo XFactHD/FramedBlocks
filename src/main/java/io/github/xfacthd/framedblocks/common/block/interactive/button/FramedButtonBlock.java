@@ -1,6 +1,7 @@
 package io.github.xfacthd.framedblocks.common.block.interactive.button;
 
 import io.github.xfacthd.framedblocks.api.block.BlockUtils;
+import io.github.xfacthd.framedblocks.api.block.CopycatStyleBlock;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
@@ -37,7 +38,7 @@ import org.jspecify.annotations.Nullable;
 import java.util.List;
 import java.util.Set;
 
-public class FramedButtonBlock extends ButtonBlock implements IFramedBlockInternal {
+public class FramedButtonBlock extends ButtonBlock implements IFramedBlockInternal, CopycatStyleBlock.StateDependent {
     public static final ButtonStateMerger STATE_MERGER = new ButtonStateMerger();
 
     private final BlockType type;

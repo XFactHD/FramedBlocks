@@ -1,6 +1,7 @@
 package io.github.xfacthd.framedblocks.common.block.pillar;
 
 import io.github.xfacthd.framedblocks.api.block.BlockUtils;
+import io.github.xfacthd.framedblocks.api.block.CopycatStyleBlock;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
 import io.github.xfacthd.framedblocks.api.block.item.placement.PropertyLabels;
@@ -18,7 +19,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import org.jspecify.annotations.Nullable;
 
-public class FramedCornerPillarBlock extends FramedBlock {
+public class FramedCornerPillarBlock extends FramedBlock implements CopycatStyleBlock.StateDependent {
     public FramedCornerPillarBlock(Properties props) {
         super(BlockType.FRAMED_CORNER_PILLAR, props);
     }

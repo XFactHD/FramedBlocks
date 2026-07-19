@@ -1,6 +1,7 @@
 package io.github.xfacthd.framedblocks.common.block.slab;
 
 import io.github.xfacthd.framedblocks.api.block.BlockUtils;
+import io.github.xfacthd.framedblocks.api.block.CopycatStyleBlock;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
 import io.github.xfacthd.framedblocks.api.block.item.placement.PropertyLabels;
@@ -22,7 +23,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import org.jspecify.annotations.Nullable;
 
-public class FramedSlabEdgeBlock extends FramedBlock {
+public class FramedSlabEdgeBlock extends FramedBlock implements CopycatStyleBlock.StateDependent {
     public FramedSlabEdgeBlock(Properties props) {
         super(BlockType.FRAMED_SLAB_EDGE, props);
         registerDefaultState(defaultBlockState().setValue(FramedProperties.TOP, false));

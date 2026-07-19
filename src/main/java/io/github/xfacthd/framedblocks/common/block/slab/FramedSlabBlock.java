@@ -1,5 +1,6 @@
 package io.github.xfacthd.framedblocks.common.block.slab;
 
+import io.github.xfacthd.framedblocks.api.block.CopycatStyleBlock;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
 import io.github.xfacthd.framedblocks.api.block.item.IFramedBlockItem;
@@ -23,7 +24,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import org.jspecify.annotations.Nullable;
 
-public class FramedSlabBlock extends FramedBlock {
+public class FramedSlabBlock extends FramedBlock implements CopycatStyleBlock.StateDependent {
     public FramedSlabBlock(Properties props) {
         super(BlockType.FRAMED_SLAB, props);
         registerDefaultState(defaultBlockState().setValue(FramedProperties.TOP, false));

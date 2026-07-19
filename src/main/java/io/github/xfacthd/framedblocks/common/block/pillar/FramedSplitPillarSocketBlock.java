@@ -1,5 +1,6 @@
 package io.github.xfacthd.framedblocks.common.block.pillar;
 
+import io.github.xfacthd.framedblocks.api.block.CopycatStyleBlock;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedDoubleBlockEntity;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.CamoGetter;
@@ -16,7 +17,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.jspecify.annotations.Nullable;
 
-public class FramedSplitPillarSocketBlock extends FramedPillarSocketBlock implements IFramedDoubleBlockInternal {
+public class FramedSplitPillarSocketBlock extends FramedPillarSocketBlock implements IFramedDoubleBlockInternal, CopycatStyleBlock.StateDependent {
     public FramedSplitPillarSocketBlock(Properties props) {
         super(BlockType.FRAMED_SPLIT_PILLAR_SOCKET, props);
     }
@@ -39,11 +40,13 @@ public class FramedSplitPillarSocketBlock extends FramedPillarSocketBlock implem
                     .defaultBlockState()
                     .setValue(FramedProperties.FACING_HOR, facing);
         }
+        boolean copycatStyle = isCopycatStyle(state);
         return new DoubleBlockParts(
-                stateOne,
+                stateOne.setValue(FramedProperties.COPYCAT_STYLE, copycatStyle),
                 FBContent.BLOCK_FRAMED_HALF_PILLAR.value()
                         .defaultBlockState()
                         .setValue(BlockStateProperties.FACING, facing.getOpposite())
+                        .setValue(FramedProperties.COPYCAT_STYLE, copycatStyle)
         );
     }
 

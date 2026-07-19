@@ -1,5 +1,6 @@
 package io.github.xfacthd.framedblocks.common.block.pillar;
 
+import io.github.xfacthd.framedblocks.api.block.CopycatStyleBlock;
 import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
 import io.github.xfacthd.framedblocks.api.block.item.placement.PropertyLabels;
 import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
@@ -20,7 +21,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.jspecify.annotations.Nullable;
 
-public class FramedPillarBlock extends FramedBlock implements PillarLikeBlock, AxisOverlayCarrier {
+public class FramedPillarBlock extends FramedBlock implements PillarLikeBlock, AxisOverlayCarrier, CopycatStyleBlock.StateDependent {
     private final PillarConnection pillarConnection;
 
     public FramedPillarBlock(BlockType blockType, Properties props) {

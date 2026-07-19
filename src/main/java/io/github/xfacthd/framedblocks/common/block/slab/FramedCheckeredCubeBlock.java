@@ -1,5 +1,7 @@
 package io.github.xfacthd.framedblocks.common.block.slab;
 
+import io.github.xfacthd.framedblocks.api.block.CopycatStyleBlock;
+import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.CamoGetter;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockParts;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockTopInteractionMode;
@@ -20,7 +22,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import org.jspecify.annotations.Nullable;
 
-public class FramedCheckeredCubeBlock extends FramedDoubleBlock {
+public class FramedCheckeredCubeBlock extends FramedDoubleBlock implements CopycatStyleBlock.StateDependent {
     public FramedCheckeredCubeBlock(Properties props) {
         super(BlockType.FRAMED_CHECKERED_CUBE, props);
         registerDefaultState(defaultBlockState().setValue(PropertyHolder.ALT_TYPE, false));
@@ -49,7 +51,9 @@ public class FramedCheckeredCubeBlock extends FramedDoubleBlock {
 
     @Override
     public DoubleBlockParts calculateParts(BlockState state) {
-        BlockState segmentState = FBContent.BLOCK_FRAMED_CHECKERED_CUBE_SEGMENT.value().defaultBlockState();
+        BlockState segmentState = FBContent.BLOCK_FRAMED_CHECKERED_CUBE_SEGMENT.value()
+                .defaultBlockState()
+                .setValue(FramedProperties.COPYCAT_STYLE, isCopycatStyle(state));
         boolean inverted = state.getValue(PropertyHolder.ALT_TYPE);
         return new DoubleBlockParts(
                 segmentState.setValue(PropertyHolder.SECOND, inverted),
