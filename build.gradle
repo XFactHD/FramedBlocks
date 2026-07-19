@@ -163,17 +163,6 @@ repositories {
     exclusiveContent {
         forRepository {
             maven {
-                name = 'TerraformersMC maven'
-                url = 'https://maven.terraformersmc.com/'
-            }
-        }
-        filter {
-            includeGroup('dev.emi')
-        }
-    }
-    exclusiveContent {
-        forRepository {
-            maven {
                 name = 'ResourcefulBees maven'
                 url = 'https://maven.resourcefulbees.com/repository/maven-public/'
             }
@@ -221,9 +210,6 @@ dependencies {
     compileOnly("mezz.jei:jei-${jei_mc_version}-neoforge-api:${jei_version}")
     localRuntime("mezz.jei:jei-${jei_mc_version}-neoforge:${jei_version}")
 
-    compileOnly("dev.emi:emi-neoforge:${emi_version}+${emi_mc_version}:api")
-    //localRuntime("dev.emi:emi-neoforge:${emi_version}+${emi_mc_version}")
-
     compileOnly("com.simibubi.create:create-${create_mc_version}:${create_version}-${create_build_number}") { transitive = false }
     compileOnly("net.createmod.ponder:Ponder-NeoForge-${create_mc_version}:${ponder_version}")
     // Only needed when Create and Ponder are switched to implementation
@@ -258,7 +244,6 @@ tasks.withType(ProcessResources).configureEach {
             neoforge_version_range: neoforge_version_range,
             mod_version: mod_version,
             jei_version: jei_version,
-            emi_version: emi_version,
             diag_blocks_version: diag_blocks_version,
             buildinggadgets_version: buildinggadgets_version,
             atlasviewer_version: atlasviewer_version,

@@ -11,12 +11,8 @@ license="LGPL v3"
     authors="XFactHD"
     description='''Fancy building blocks'''
 
-
-
 [[mixins]]
     config="framedblocks.mixin.json"
-
-
 
 [[dependencies.framedblocks]]
     modId="neoforge"
@@ -57,13 +53,6 @@ license="LGPL v3"
     modId="diagonalblocks"
     type="optional"
     versionRange="[${diag_blocks_version},)"
-    ordering="NONE"
-    side="BOTH"
-
-[[dependencies.framedblocks]]
-    modId="emi"
-    type="optional"
-    versionRange="[${emi_version},)"
     ordering="NONE"
     side="BOTH"
 
