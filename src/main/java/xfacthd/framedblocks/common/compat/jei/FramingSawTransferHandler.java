@@ -75,19 +75,17 @@ public abstract sealed class FramingSawTransferHandler<C extends AbstractContain
         }
         if (idx != -1 && menu.isValidRecipeIndex(idx))
         {
-            //TODO: https://github.com/mezz/JustEnoughItems/issues/3146
-            //IRecipeTransferError error = wrappedHandler.transferRecipe(menu, recipe, recipeSlots, player, maxTransfer, doTransfer);
-            //if (error != null)
-            //{
-            //    return error;
-            //}
+            IRecipeTransferError error = wrappedHandler.transferRecipe(menu, recipe, recipeSlots, player, maxTransfer, doTransfer);
+            if (error != null)
+            {
+                return error;
+            }
 
             if (doTransfer && menu.clickMenuButton(player, idx))
             {
                 PacketDistributor.sendToServer(new ServerboundSelectFramingSawRecipePayload(menu.containerId, idx));
             }
-            // TODO: return null instead of "transfer not implemented" when the suggestion is implemented
-            return new RecipeTransferErrorTransferNotImplemented();
+            return null;
         }
         return transferHelper.createUserErrorWithTooltip(JeiConstants.MSG_INVALID_RECIPE);
     }
