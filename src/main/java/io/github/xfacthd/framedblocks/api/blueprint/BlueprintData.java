@@ -57,12 +57,12 @@ public record BlueprintData(
             .dispatch(TypedDataComponent::type, BlueprintData::makeCustomDataValueCodec);
     public static final Codec<BlueprintData> CODEC = RecordCodecBuilder.create(inst -> inst.group(
             BuiltInRegistries.BLOCK.byNameCodec().fieldOf("block").forGetter(BlueprintData::block),
-            CamoList.CODEC.fieldOf("camos").forGetter(BlueprintData::camos),
+            CamoList.CODEC.optionalFieldOf("camos", CamoList.EMPTY).forGetter(BlueprintData::camos),
             BlockOverlay.CODEC.optionalFieldOf("overlay").forGetter(BlueprintData::overlay),
-            Codec.BOOL.fieldOf("glowing").forGetter(BlueprintData::glowing),
-            Codec.BOOL.fieldOf("intangible").forGetter(BlueprintData::intangible),
-            Codec.BOOL.fieldOf("reinforced").forGetter(BlueprintData::reinforced),
-            Codec.BOOL.fieldOf("emissive").forGetter(BlueprintData::emissive),
+            Codec.BOOL.optionalFieldOf("glowing", false).forGetter(BlueprintData::glowing),
+            Codec.BOOL.optionalFieldOf("intangible", false).forGetter(BlueprintData::intangible),
+            Codec.BOOL.optionalFieldOf("reinforced", false).forGetter(BlueprintData::reinforced),
+            Codec.BOOL.optionalFieldOf("emissive", false).forGetter(BlueprintData::emissive),
             BlockItemStateProperties.CODEC.optionalFieldOf("blockstate", BlockItemStateProperties.EMPTY).forGetter(BlueprintData::blockState),
             CUSTOM_DATA_CODEC.optionalFieldOf("custom_data").forGetter(BlueprintData::customData)
     ).apply(inst, BlueprintData::new));
