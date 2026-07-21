@@ -220,10 +220,6 @@ public final class FramedBlockStateModel extends AbstractFramedBlockStateModel i
         return localMiscTintOffset;
     }
 
-    static boolean isSideHidden(int cullMask, @Nullable Direction side) {
-        return side != null && (cullMask & (1 << side.ordinal())) == 0;
-    }
-
     private static Object createCacheKey(
             FramedBlockData fbData,
             CamoContent<?> camo,

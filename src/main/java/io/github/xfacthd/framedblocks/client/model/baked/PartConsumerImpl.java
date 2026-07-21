@@ -119,42 +119,23 @@ final class PartConsumerImpl implements PartConsumer {
         boolean forceEmissive = this.forceEmissive;
         boolean emissive = forceEmissive || (camoPart && this.camoEmissive);
         boolean moveTintIndex = tintIndexOffset > 0;
-        boolean hasListModifier = modifier != null;
         boolean hasPostModifiers = emissive || moveTintIndex || forcedOpaque;
         boolean countTintIndices = this.countTintIndices;
-        boolean canInsertDirect = !(hasListModifier || hasPostModifiers || countTintIndices);
+        boolean canInsertDirect = !(modifier != null || hasPostModifiers || countTintIndices);
         boolean hasAnyQuads = false;
-        for (Direction side : DIRECTIONS_WITH_NULL) {
-            boolean nullSide = side == null;
-            if (nullSide && !includeNull) {
-                continue;
-            }
-            if (!nullSide && cullNonNull && FramedBlockStateModel.isSideHidden(cullMask, side)) {
+        for (Direction side : DIRECTIONS) {
+            if (cullNonNull && isSideHidden(cullMask, side)) {
                 continue;
             }
 
             List<BakedQuad> srcQuads = part.getQuads(side);
-            if (!nullSide && srcQuads.isEmpty() && reclaimFromNull) {
+            if (srcQuads.isEmpty() && reclaimFromNull) {
                 srcQuads = ModelUtils.getFilteredNullQuads(part, side);
             }
-            if (srcQuads.isEmpty()) {
-                continue;
-            }
-            if (canInsertDirect) {
-                quadMap.set(side, srcQuads);
-                hasAnyQuads = true;
-                continue;
-            }
-            if (hasListModifier) {
-                ArrayList<BakedQuad> quads = new ArrayList<>(srcQuads);
-                modifier.modify(quadMap, quads, side);
-                // Copy to final destination at the end in case the modifier wants to iterate or clear the list
-                Utils.copyAll(quads, quadMap.getOrCreate(side));
-                hasAnyQuads |= !quadMap.isEmpty();
-            } else {
-                Utils.copyAll(srcQuads, quadMap.getOrCreate(side));
-                hasAnyQuads = true;
-            }
+            hasAnyQuads |= acceptQuads(quadMap, srcQuads, side, canInsertDirect, modifier);
+        }
+        if (includeNull) {
+            hasAnyQuads |= acceptQuads(quadMap, part.getQuads(null), null, canInsertDirect, modifier);
         }
         if (!hasAnyQuads) {
             return;
@@ -185,6 +166,26 @@ final class PartConsumerImpl implements PartConsumer {
         destParts.add(new FramedBlockStateModelPart(quadMap.build(), defaultAO.apply(part.ambientOcclusion()), part.particleMaterial(), shaderState));
     }
 
+    private static boolean acceptQuads(QuadMapBuilderInternal quadMap, List<BakedQuad> srcQuads, @Nullable Direction side, boolean canInsertDirect, @Nullable QuadListModifier modifier) {
+        if (srcQuads.isEmpty()) {
+            return false;
+        }
+        if (canInsertDirect) {
+            quadMap.set(side, srcQuads);
+            return true;
+        }
+        if (modifier != null) {
+            ArrayList<BakedQuad> quads = new ArrayList<>(srcQuads);
+            modifier.modify(quadMap, quads, side);
+            // Copy to final destination at the end in case the modifier wants to iterate or clear the list
+            Utils.copyAll(quads, quadMap.getOrCreate(side));
+            return !quadMap.isEmpty();
+        } else {
+            Utils.copyAll(srcQuads, quadMap.getOrCreate(side));
+            return true;
+        }
+    }
+
     void setTintIndexOffset(int tintIndexOffset) {
         this.tintIndexOffset = tintIndexOffset;
         this.maxTintIndex = tintIndexOffset - 1;
@@ -206,21 +207,25 @@ final class PartConsumerImpl implements PartConsumer {
         int lightEmission = emissive ? LightEngine.MAX_LEVEL : materialInfo.lightEmission();
         boolean ao = !forceEmissive && materialInfo.ambientOcclusion();
         if (layer != materialInfo.layer() || tintIndex != materialInfo.tintIndex() || shade != materialInfo.shade() || lightEmission != materialInfo.lightEmission() || ao != materialInfo.ambientOcclusion()) {
-            materialInfo = new BakedQuad.MaterialInfo(materialInfo.sprite(), layer, materialInfo.itemRenderType(), tintIndex, shade, lightEmission, ao);
+            return new BakedQuad(
+                    quad.position0(),
+                    quad.position1(),
+                    quad.position2(),
+                    quad.position3(),
+                    quad.packedUV0(),
+                    quad.packedUV1(),
+                    quad.packedUV2(),
+                    quad.packedUV3(),
+                    quad.direction(),
+                    new BakedQuad.MaterialInfo(materialInfo.sprite(), layer, materialInfo.itemRenderType(), tintIndex, shade, lightEmission, ao),
+                    quad.bakedNormals(),
+                    quad.bakedColors()
+            );
         }
-        return new BakedQuad(
-                quad.position0(),
-                quad.position1(),
-                quad.position2(),
-                quad.position3(),
-                quad.packedUV0(),
-                quad.packedUV1(),
-                quad.packedUV2(),
-                quad.packedUV3(),
-                quad.direction(),
-                materialInfo,
-                quad.bakedNormals(),
-                quad.bakedColors()
-        );
+        return quad;
+    }
+
+    private static boolean isSideHidden(int cullMask, @Nullable Direction side) {
+        return side != null && (cullMask & (1 << side.ordinal())) == 0;
     }
 }
