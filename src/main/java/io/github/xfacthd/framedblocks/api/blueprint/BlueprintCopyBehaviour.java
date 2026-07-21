@@ -1,8 +1,10 @@
 package io.github.xfacthd.framedblocks.api.blueprint;
 
+import io.github.xfacthd.framedblocks.api.block.CopycatStyleBlock;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.api.block.ShapeLockableBlock;
+import io.github.xfacthd.framedblocks.api.block.SlopeToggleBlock;
 import io.github.xfacthd.framedblocks.api.block.blockentity.IFramedBlockEntity;
 import io.github.xfacthd.framedblocks.api.camo.CamoList;
 import net.minecraft.core.BlockPos;
@@ -42,17 +44,18 @@ public interface BlueprintCopyBehaviour {
     ///
     /// @param state The state of the block being copied
     default Set<Property<?>> getPropertiesToCopy(BlockState state) {
-        Set<Property<?>> properties = Set.of();
-        if (state.hasProperty(FramedProperties.ALT_SLOPE)) {
-            properties = Set.of(FramedProperties.ALT_SLOPE);
+        Set<Property<?>> properties = new HashSet<>();
+        if (state.getBlock() instanceof SlopeToggleBlock && state.getValue(FramedProperties.ALT_SLOPE)) {
+            properties.add(FramedProperties.ALT_SLOPE);
         }
         if (state.getBlock() instanceof ShapeLockableBlock lockable && lockable.isLocked(state)) {
-            properties = new HashSet<>(properties);
             properties.addAll(lockable.getPropertiesToCopy());
             properties.add(FramedProperties.STATE_LOCKED);
-            properties = Set.copyOf(properties);
         }
-        return properties;
+        if (state.getBlock() instanceof CopycatStyleBlock.StateDependent block && block.isCopycatStyle(state)) {
+            properties.add(FramedProperties.COPYCAT_STYLE);
+        }
+        return Set.copyOf(properties);
     }
 
     /// {@return the camos for which items need to be consumed to place the block}
