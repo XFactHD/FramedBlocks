@@ -23,7 +23,6 @@ public final class ValuePrinters {
     public static final ValuePrinter<Integer> INTEGER = register(Integer.class, ValuePrinters::printInteger);
     public static final ValuePrinter<Direction> DIRECTION = register(Direction.class, ValuePrinter.of(MoreCommonComponents::direction));
     public static final ValuePrinter<Direction.Axis> AXIS = register(Direction.Axis.class, ValuePrinter.of(MoreCommonComponents::axis));
-    public static final ValuePrinter<Direction> DIR_AXIS = (dir, defaultColor) -> AXIS.printStyled(dir.getAxis(), defaultColor);
     public static final ValuePrinter<Half> HALF = registerEnum(Half.class);
     public static final ValuePrinter<Boolean> HALF_BOOL = (top, defaultColor) -> HALF.printStyled(top ? Half.TOP : Half.BOTTOM, defaultColor);
     public static final ValuePrinter<StairsShape> STAIRS_SHAPE = registerEnum(StairsShape.class);

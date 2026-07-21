@@ -17,7 +17,7 @@ import io.github.xfacthd.framedblocks.api.model.data.ModelDataEntry;
 import io.github.xfacthd.framedblocks.api.model.geometry.DefaultAO;
 import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.geometry.QuadListModifier;
-import io.github.xfacthd.framedblocks.api.model.wrapping.DelegateBlockStateModelPart;
+import io.github.xfacthd.framedblocks.api.model.DelegateBlockStateModelPart;
 import io.github.xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
 import io.github.xfacthd.framedblocks.api.predicate.contex.ConTexMode;
 import io.github.xfacthd.framedblocks.api.util.DirUtils;

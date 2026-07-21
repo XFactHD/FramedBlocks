@@ -9,6 +9,7 @@ import net.minecraft.client.gui.Hud;
 import net.minecraft.client.gui.screens.inventory.tooltip.TooltipRenderUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -25,12 +26,12 @@ final class BlockInteractOverlayWrapper {
     private static final int PADDING = 10;
     private static final int DEFAULT_Y_OFF = 80;
 
-    private final String name;
+    private final Identifier name;
     private final BlockInteractOverlay overlay;
     private int textWidth = 0;
     boolean textWidthValid = false;
 
-    BlockInteractOverlayWrapper(String name, BlockInteractOverlay overlay) {
+    BlockInteractOverlayWrapper(Identifier name, BlockInteractOverlay overlay) {
         this.name = name;
         this.overlay = overlay;
     }
@@ -130,7 +131,7 @@ final class BlockInteractOverlayWrapper {
         textWidthValid = true;
     }
 
-    String getName() {
+    Identifier getName() {
         return name;
     }
 

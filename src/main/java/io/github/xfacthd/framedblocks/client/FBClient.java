@@ -234,17 +234,17 @@ public final class FBClient {
     }
 
     private static void onRegisterBlockInteractOverlays(RegisterBlockInteractOverlaysEvent event) {
-        event.register("state_lock", new StateLockOverlay());
-        event.register("toggle_waterloggable", new ToggleWaterloggableOverlay());
-        event.register("toggle_alt_slope", new ToggleAltSlopeOverlay());
-        event.register("reinforcement", new ReinforcementOverlay());
-        event.register("prism_offset", new PrismOffsetOverlay());
-        event.register("split_line", new SplitLineOverlay());
-        event.register("one_way_window", new OneWayWindowOverlay());
-        event.register("frame_background", new FrameBackgroundOverlay());
-        event.register("camo_rotation", new CamoRotationOverlay());
-        event.register("trapdoor_texture_rotation", new TrapdoorTextureRotationOverlay());
-        event.register("copycat_style", new CopycatStyleOverlay());
+        event.register(Utils.id("state_lock"), new StateLockOverlay());
+        event.register(Utils.id("toggle_waterloggable"), new ToggleWaterloggableOverlay());
+        event.register(Utils.id("toggle_alt_slope"), new ToggleAltSlopeOverlay());
+        event.register(Utils.id("reinforcement"), new ReinforcementOverlay());
+        event.register(Utils.id("prism_offset"), new PrismOffsetOverlay());
+        event.register(Utils.id("split_line"), new SplitLineOverlay());
+        event.register(Utils.id("one_way_window"), new OneWayWindowOverlay());
+        event.register(Utils.id("frame_background"), new FrameBackgroundOverlay());
+        event.register(Utils.id("camo_rotation"), new CamoRotationOverlay());
+        event.register(Utils.id("trapdoor_texture_rotation"), new TrapdoorTextureRotationOverlay());
+        event.register(Utils.id("copycat_style"), new CopycatStyleOverlay());
     }
 
     private static void onGeometryLoaderRegister(ModelEvent.RegisterLoaders event) {

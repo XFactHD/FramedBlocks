@@ -4,6 +4,7 @@ import io.github.xfacthd.framedblocks.api.model.AbstractUnbakedFramedBlockStateM
 import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
 import net.minecraft.client.renderer.block.dispatch.SingleVariant;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.Map;
 
@@ -23,5 +24,8 @@ public interface ModelFactory {
     /// @param state     The blockstate for which the model is being instantiated
     /// @param baseModel The original model of the blockstate
     /// @param auxModels The auxiliary models specified in the blockstate file
-    record Context(BlockState state, BlockStateModel.UnbakedRoot baseModel, Map<String, SingleVariant.Unbaked> auxModels) { }
+    record Context(BlockState state, BlockStateModel.UnbakedRoot baseModel, Map<String, SingleVariant.Unbaked> auxModels) {
+        @ApiStatus.Internal
+        public Context {}
+    }
 }

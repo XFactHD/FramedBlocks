@@ -402,9 +402,12 @@ public final class TemplateSpecs {
     private static GeometryTemplateSpec centeredPanel() {
         return GeometryTemplateSpec.create(FBContent.BLOCK_FRAMED_CENTERED_PANEL, (state, builder) ->
                 builder.addSourceFile(SourceType.TEMPLATE, TemplateIds.CENTERED_PANEL).transform(xform ->
-                        xform.rotationX(TemplateUtils.getVerticalQuadrant(state, FramedProperties.FACING_NE, false))
-                                .rotationY(TemplateUtils.getHorizontalQuadrant(state, FramedProperties.FACING_NE, false))
-                ).copycatPredicate(CopycatPredicate.ofNotAxis(state.getValue(FramedProperties.FACING_NE).getAxis()))
+                        xform.rotationY(switch (state.getValue(BlockStateProperties.HORIZONTAL_AXIS)) {
+                            case X -> Quadrant.R90;
+                            case Z -> Quadrant.R0;
+                            case Y -> throw new IllegalArgumentException("Invalid axis");
+                        })
+                ).copycatPredicate(CopycatPredicate.ofNotAxis(state.getValue(BlockStateProperties.HORIZONTAL_AXIS)))
         );
     }
 

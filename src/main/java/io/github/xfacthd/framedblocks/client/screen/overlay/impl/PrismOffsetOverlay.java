@@ -1,10 +1,10 @@
 package io.github.xfacthd.framedblocks.client.screen.overlay.impl;
 
-import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.screen.overlay.BlockInteractOverlay;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.config.ClientConfig;
+import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
@@ -34,11 +34,11 @@ public final class PrismOffsetOverlay extends BlockInteractOverlay {
 
     @Override
     public boolean isValidTarget(Target target) {
-        return target.state().hasProperty(FramedProperties.OFFSET);
+        return target.state().hasProperty(PropertyHolder.OFFSET);
     }
 
     @Override
     public boolean getState(Target target) {
-        return target.state().getValue(FramedProperties.OFFSET);
+        return target.state().getValue(PropertyHolder.OFFSET);
     }
 }

@@ -6,8 +6,6 @@ import io.github.xfacthd.framedblocks.api.camo.resource.ResourceCamoContent;
 import io.github.xfacthd.framedblocks.api.camo.resource.ResourceCamoContentClientHandler;
 import io.github.xfacthd.framedblocks.api.datagen.templates.GeometryTemplateBuilder;
 import io.github.xfacthd.framedblocks.api.model.CachingModel;
-import io.github.xfacthd.framedblocks.api.model.ExtendedBlockStateModelPart;
-import io.github.xfacthd.framedblocks.api.model.data.QuadMapBuilder;
 import io.github.xfacthd.framedblocks.api.model.item.ItemModelDataProvider;
 import io.github.xfacthd.framedblocks.api.model.item.block.BlockItemModelProvider;
 import io.github.xfacthd.framedblocks.api.model.standalone.StandaloneModelFactory;
@@ -28,16 +26,13 @@ import net.minecraft.client.renderer.block.model.BlockModel;
 import net.minecraft.client.renderer.item.ItemModel;
 import net.minecraft.client.resources.model.ModelBaker;
 import net.minecraft.client.resources.model.cuboid.ItemTransforms;
-import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.Identifier;
-import net.minecraft.util.TriState;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.transfer.resource.Resource;
 import org.jetbrains.annotations.ApiStatus;
-import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
 import java.util.Optional;
@@ -90,8 +85,6 @@ public interface InternalClientAPI {
             boolean requiresData,
             Optional<ItemModelDataProvider> dataProvider
     );
-
-    ExtendedBlockStateModelPart makeBlockModelPart(QuadMapBuilder quadMap, TriState partAO, Material.Baked particleMaterial, @Nullable BlockState shaderState);
 
     BlockStateModelDispatcher createFramedBlockDefinition(
             Either<BlockStateModelDispatcher, SingleVariant.Unbaked> wrapped,

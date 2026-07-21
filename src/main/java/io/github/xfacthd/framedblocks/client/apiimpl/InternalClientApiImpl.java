@@ -11,8 +11,6 @@ import io.github.xfacthd.framedblocks.api.datagen.templates.GeometryTemplateBuil
 import io.github.xfacthd.framedblocks.api.internal.InternalClientAPI;
 import io.github.xfacthd.framedblocks.api.model.AbstractFramedBlockStateModel;
 import io.github.xfacthd.framedblocks.api.model.CachingModel;
-import io.github.xfacthd.framedblocks.api.model.ExtendedBlockStateModelPart;
-import io.github.xfacthd.framedblocks.api.model.data.QuadMapBuilder;
 import io.github.xfacthd.framedblocks.api.model.item.ItemModelDataProvider;
 import io.github.xfacthd.framedblocks.api.model.item.block.BlockItemModelProvider;
 import io.github.xfacthd.framedblocks.api.model.standalone.StandaloneModelFactory;
@@ -25,11 +23,9 @@ import io.github.xfacthd.framedblocks.api.model.wrapping.ModelFactory;
 import io.github.xfacthd.framedblocks.api.model.wrapping.MaterialLookup;
 import io.github.xfacthd.framedblocks.api.model.wrapping.statemerger.StateMerger;
 import io.github.xfacthd.framedblocks.api.render.outline.OutlineRenderer;
-import io.github.xfacthd.framedblocks.client.model.FramedBlockStateModelPart;
 import io.github.xfacthd.framedblocks.client.model.ResourceCubeModel;
 import io.github.xfacthd.framedblocks.client.model.template.GeometryTemplateBuilderImpl;
 import io.github.xfacthd.framedblocks.client.model.template.GeometryTemplateManager;
-import io.github.xfacthd.framedblocks.client.model.quadmap.QuadMapBuilderInternal;
 import io.github.xfacthd.framedblocks.client.model.ReinforcementModel;
 import io.github.xfacthd.framedblocks.client.model.RuntimeMaterialBaker;
 import io.github.xfacthd.framedblocks.client.model.baked.FramedBlockStateModel;
@@ -58,16 +54,12 @@ import net.minecraft.client.renderer.item.ItemModel;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.ModelBaker;
 import net.minecraft.client.resources.model.cuboid.ItemTransforms;
-import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.Identifier;
-import net.minecraft.util.TriState;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.transfer.resource.Resource;
-import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
 import java.util.Optional;
@@ -76,8 +68,6 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 public final class InternalClientApiImpl implements InternalClientAPI {
-    private static final BlockState AIR = Blocks.AIR.defaultBlockState();
-
     @Override
     public void registerModelWrapper(Holder<Block> block, GeometryFactory geometryFactory, StateMerger stateMerger) {
         Preconditions.checkArgument(block.value() instanceof IFramedBlock, "Cannot register model wrapper for non-IFramedBlock");
@@ -162,14 +152,6 @@ public final class InternalClientApiImpl implements InternalClientAPI {
             Optional<ItemModelDataProvider> dataProvider
     ) {
         return new FramedBlockItemModel.Unbaked(block, modelProvider, modelOrXform, requiresData, dataProvider);
-    }
-
-    @Override
-    public ExtendedBlockStateModelPart makeBlockModelPart(QuadMapBuilder quadMap, TriState partAO, Material.Baked particleMaterial, @Nullable BlockState shaderState) {
-        if (shaderState == AIR) {
-            shaderState = null;
-        }
-        return new FramedBlockStateModelPart(((QuadMapBuilderInternal) quadMap).build(), partAO, particleMaterial, shaderState);
     }
 
     @Override

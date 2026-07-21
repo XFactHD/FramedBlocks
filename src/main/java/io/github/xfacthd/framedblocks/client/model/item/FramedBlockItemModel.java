@@ -1,7 +1,6 @@
 package io.github.xfacthd.framedblocks.client.model.item;
 
 import com.google.common.base.Preconditions;
-import com.google.common.base.Suppliers;
 import com.mojang.datafixers.util.Either;
 import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Codec;
@@ -13,7 +12,7 @@ import io.github.xfacthd.framedblocks.api.block.overlay.BlockOverlay;
 import io.github.xfacthd.framedblocks.api.camo.CamoContainer;
 import io.github.xfacthd.framedblocks.api.camo.CamoContainerHelper;
 import io.github.xfacthd.framedblocks.api.camo.CamoList;
-import io.github.xfacthd.framedblocks.api.model.item.AbstractFramedBlockItemModel;
+import io.github.xfacthd.framedblocks.api.model.CachingModel;
 import io.github.xfacthd.framedblocks.api.model.item.ItemModelDataProvider;
 import io.github.xfacthd.framedblocks.api.model.item.block.BlockItemModelProvider;
 import io.github.xfacthd.framedblocks.api.model.util.ModelUtils;
@@ -73,7 +72,7 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-public final class FramedBlockItemModel extends AbstractFramedBlockItemModel {
+public final class FramedBlockItemModel implements ItemModel, CachingModel {
     private static final RandomSource RANDOM = RandomSource.create();
     private static final Direction[] DIRECTIONS = Arrays.copyOf(Direction.values(), 7);
     private static final Identifier ERROR_MODEL_LOCATION = Utils.id("item/error");
@@ -104,10 +103,11 @@ public final class FramedBlockItemModel extends AbstractFramedBlockItemModel {
         this.requiresData = requiresData;
         this.dataProvider = dataProvider;
         this.errorModel = errorModel;
-        this.extents = Suppliers.memoize(() -> {
+        this.extents = Lazy.of(() -> {
             ModelEntry modelEntry = getOrCreateModelEntry(ItemStack.EMPTY, CamoList.EMPTY, null);
             return CuboidItemModelWrapper.computeExtents(modelEntry.quads);
         });
+        CachingModel.register(this);
     }
 
     @Override

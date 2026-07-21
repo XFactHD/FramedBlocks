@@ -1,6 +1,5 @@
-package io.github.xfacthd.framedblocks.api.model.wrapping;
+package io.github.xfacthd.framedblocks.api.model;
 
-import io.github.xfacthd.framedblocks.api.model.ExtendedBlockStateModelPart;
 import net.minecraft.client.resources.model.geometry.BakedQuad;
 import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.core.Direction;

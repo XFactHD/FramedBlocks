@@ -71,7 +71,7 @@ public class FramedSmallPrismSlopePanelCornerWallGeometry extends Geometry {
         this.rotDirOne = rot.withFacing(dir);
         this.rotDirTwo = rot.rotate(Rotation.COUNTERCLOCKWISE_90).withFacing(dir);
         this.altSlope = ctx.state().getValue(FramedProperties.ALT_SLOPE);
-        this.offset = ctx.state().getValue(FramedProperties.OFFSET);
+        this.offset = ctx.state().getValue(PropertyHolder.OFFSET);
         this.flipSideTris = rot == HorizontalRotation.DOWN || rot == HorizontalRotation.LEFT;
         this.flipPrismTri = rot == HorizontalRotation.LEFT || rot == (altSlope ? HorizontalRotation.DOWN : HorizontalRotation.UP);
         this.flipPrismTriOpp = rot == HorizontalRotation.RIGHT || rot == HorizontalRotation.DOWN;

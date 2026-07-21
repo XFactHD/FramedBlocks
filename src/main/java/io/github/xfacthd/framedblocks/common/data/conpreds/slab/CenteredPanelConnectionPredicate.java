@@ -1,9 +1,9 @@
 package io.github.xfacthd.framedblocks.common.data.conpreds.slab;
 
-import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.predicate.contex.ConnectionPredicate;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.jspecify.annotations.Nullable;
 
 public final class CenteredPanelConnectionPredicate implements ConnectionPredicate {
@@ -14,7 +14,7 @@ public final class CenteredPanelConnectionPredicate implements ConnectionPredica
 
     @Override
     public boolean canConnectDetailed(BlockState state, Direction side, Direction edge) {
-        Direction dir = state.getValue(FramedProperties.FACING_NE);
-        return side.getAxis() == dir.getAxis() || edge.getAxis() != dir.getAxis();
+        Direction.Axis axis = state.getValue(BlockStateProperties.HORIZONTAL_AXIS);
+        return side.getAxis() == axis || edge.getAxis() != axis;
     }
 }

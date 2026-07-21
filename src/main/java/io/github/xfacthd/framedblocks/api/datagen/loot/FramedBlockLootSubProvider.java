@@ -33,7 +33,7 @@ public abstract class FramedBlockLootSubProvider extends BlockLootSubProvider {
     /// Generate a loot table dropping the given block with camo.
     ///
     /// @param block The block to generate the table for
-    protected void dropSelfWithCamo(Block block) {
+    protected final void dropSelfWithCamo(Block block) {
         dropWithCamo(block, block);
     }
 
@@ -41,7 +41,7 @@ public abstract class FramedBlockLootSubProvider extends BlockLootSubProvider {
     ///
     /// @param block        The block to generate the table for
     /// @param itemModifier A consumer receiving the item-to-drop for further modification
-    protected void dropSelfWithCamo(Block block, Consumer<LootPoolSingletonContainer.Builder<?>> itemModifier) {
+    protected final void dropSelfWithCamo(Block block, Consumer<LootPoolSingletonContainer.Builder<?>> itemModifier) {
         dropWithCamo(block, block, itemModifier);
     }
 
@@ -49,8 +49,20 @@ public abstract class FramedBlockLootSubProvider extends BlockLootSubProvider {
     ///
     /// @param block The block to generate the table for
     /// @param drop  The block whose item to drop
-    protected void dropOtherWithCamo(Block block, Block drop) {
-        dropWithCamo(block, drop);
+    protected final void dropWithCamo(Block block, Block drop) {
+        dropWithCamo(block, drop, _ -> {});
+    }
+
+    /// Generate a loot table dropping the given block with camo as the item of the given other block.
+    ///
+    /// @param block        The block to generate the table for
+    /// @param drop         The block whose item to drop
+    /// @param itemModifier A consumer receiving the item-to-drop for further modification
+    protected final void dropWithCamo(Block block, Block drop, Consumer<LootPoolSingletonContainer.Builder<?>> itemModifier) {
+        add(block, funcBlock -> LootTable.lootTable()
+                .withPool(createDropWithCamoPool(funcBlock, drop, itemModifier))
+                .withPool(createDynamicDropPool(block))
+        );
     }
 
     /// Generate a loot table dropping the given block with camo as multiple items of the given other block,
@@ -60,7 +72,7 @@ public abstract class FramedBlockLootSubProvider extends BlockLootSubProvider {
     /// @param drop  The block whose item to drop
     /// @param count The amount of items to drop
     @SuppressWarnings("SameParameterValue")
-    protected void dropMultipleWithCamo(Block block, Block drop, int count) {
+    protected final void dropMultipleWithCamo(Block block, Block drop, int count) {
         add(block, _ -> {
             LootTable.Builder table = LootTable.lootTable();
             for (int i = 0; i < count; i++) {
@@ -85,26 +97,6 @@ public abstract class FramedBlockLootSubProvider extends BlockLootSubProvider {
                                 .hasProperty(DoorBlock.HALF, DoubleBlockHalf.LOWER)
                         )
         ));
-    }
-
-    /// Generate a loot table dropping the given block with camo as the item of the given other block.
-    ///
-    /// @param block The block to generate the table for
-    /// @param drop  The block whose item to drop
-    protected final void dropWithCamo(Block block, Block drop) {
-        dropWithCamo(block, drop, _ -> {});
-    }
-
-    /// Generate a loot table dropping the given block with camo as the item of the given other block.
-    ///
-    /// @param block        The block to generate the table for
-    /// @param drop         The block whose item to drop
-    /// @param itemModifier A consumer receiving the item-to-drop for further modification
-    protected final void dropWithCamo(Block block, Block drop, Consumer<LootPoolSingletonContainer.Builder<?>> itemModifier) {
-        add(block, funcBlock -> LootTable.lootTable()
-                .withPool(createDropWithCamoPool(funcBlock, drop, itemModifier))
-                .withPool(createDynamicDropPool(block))
-        );
     }
 
     /// Create a loot pool handling the drop of the framed block item, including "retained" camo

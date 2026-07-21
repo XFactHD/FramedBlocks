@@ -58,7 +58,7 @@ public abstract class AbstractFramedBlockStateModel extends DelegateBlockStateMo
     }
 
     /// {@return the original model of the blockstate this model belongs to}
-    public BlockStateModel getBaseModel() {
+    public final BlockStateModel getBaseModel() {
         return delegate;
     }
 }

@@ -1,10 +1,10 @@
 package io.github.xfacthd.framedblocks.common.data.shapes.slab;
 
-import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.shapes.ShapeContainer;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import java.util.IdentityHashMap;
@@ -18,8 +18,8 @@ public final class CenteredPanelShapes {
 
         Map<BlockState, VoxelShape> map = new IdentityHashMap<>(states.size());
         for (BlockState state : states) {
-            Direction dir = state.getValue(FramedProperties.FACING_NE);
-            map.put(state, dir == Direction.NORTH ? shapeNorth : shapeEast);
+            Direction.Axis axis = state.getValue(BlockStateProperties.HORIZONTAL_AXIS);
+            map.put(state, axis == Direction.Axis.Z ? shapeNorth : shapeEast);
         }
         return ShapeContainer.of(map);
     }

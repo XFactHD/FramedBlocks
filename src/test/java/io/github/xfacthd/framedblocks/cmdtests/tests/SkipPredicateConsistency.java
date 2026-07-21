@@ -8,6 +8,7 @@ import io.github.xfacthd.framedblocks.api.predicate.cull.SideSkipPredicate;
 import io.github.xfacthd.framedblocks.cmdtests.SpecialTestCommand;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
+import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import io.github.xfacthd.framedblocks.selftest.tests.SkipPredicatePresenceConsistency;
 import io.github.xfacthd.framedblocks.util.AsyncTypeTest;
 import net.minecraft.ChatFormatting;
@@ -42,7 +43,7 @@ public final class SkipPredicateConsistency {
     private static final BlockPos CENTER = new BlockPos(1, 1, 1);
     private static final Set<Property<?>> IGNORED_PROPERTIES = Stream.of(
             WrapHelper.IGNORED_PROPS,
-            Set.of(BlockStateProperties.POWERED, FramedProperties.ALT_SLOPE, FramedProperties.OFFSET)
+            Set.of(BlockStateProperties.POWERED, FramedProperties.ALT_SLOPE, PropertyHolder.OFFSET)
     ).flatMap(Set::stream).collect(Collectors.toSet());
 
     public static void testSkipPredicates(

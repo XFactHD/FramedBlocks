@@ -9,12 +9,9 @@ import net.minecraft.world.level.block.state.properties.EnumProperty;
 public final class FramedProperties {
     /// Blocks with this property can be oriented in all four horizontal directions.
     public static final EnumProperty<Direction> FACING_HOR = BlockStateProperties.HORIZONTAL_FACING;
-    /// Blocks with this property can be oriented in either north or east direction.
-    public static final EnumProperty<Direction> FACING_NE = EnumProperty.create("facing", Direction.class, dir -> dir == Direction.NORTH || dir == Direction.EAST);
 
     /// Indicates whether the block occupies the top or bottom half of the block space (currently misused to mean upside-down orientation on some blocks).
     public static final BooleanProperty TOP = BooleanProperty.create("top");
-    public static final BooleanProperty OFFSET = BooleanProperty.create("offset");
     /// Indicates whether a part of the block oriented along the X axis is present.
     public static final BooleanProperty X_AXIS = BooleanProperty.create("x_axis");
     /// Indicates whether a part of the block oriented along the Y axis is present.

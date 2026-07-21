@@ -7,6 +7,7 @@ import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
 import io.github.xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
+import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import net.minecraft.client.resources.model.geometry.BakedQuad;
 import net.minecraft.core.Direction;
 import org.jspecify.annotations.Nullable;
@@ -20,7 +21,7 @@ public class FramedPrismCornerGeometry extends Geometry {
     public FramedPrismCornerGeometry(GeometryFactory.Context ctx) {
         this.dir = ctx.state().getValue(FramedProperties.FACING_HOR);
         this.top = ctx.state().getValue(FramedProperties.TOP);
-        this.offset = ctx.state().getValue(FramedProperties.OFFSET);
+        this.offset = ctx.state().getValue(PropertyHolder.OFFSET);
         this.altSlope = ctx.state().getValue(FramedProperties.ALT_SLOPE);
     }
 

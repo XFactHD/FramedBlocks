@@ -214,7 +214,7 @@ public final class ItemTransformsBuilder {
         }
 
         /// {@return the built item transform entry}
-        public ItemTransform build() {
+        private ItemTransform build() {
             return new ItemTransform(rotation, translation, scale, rightRotation);
         }
     }

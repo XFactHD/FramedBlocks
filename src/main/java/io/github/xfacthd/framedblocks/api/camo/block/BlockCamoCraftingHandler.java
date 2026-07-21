@@ -7,7 +7,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.EmptyBlockGetter;
 import net.minecraft.world.level.block.state.BlockState;
 
-public final class BlockCamoCraftingHandler implements CamoCraftingHandler<SimpleBlockCamoContainer> {
+final class BlockCamoCraftingHandler implements CamoCraftingHandler<SimpleBlockCamoContainer> {
     private final SimpleBlockCamoContainerFactory factory;
 
     public BlockCamoCraftingHandler(SimpleBlockCamoContainerFactory factory) {

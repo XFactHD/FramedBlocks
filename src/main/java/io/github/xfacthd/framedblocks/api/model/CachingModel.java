@@ -7,7 +7,7 @@ public interface CachingModel {
     /// Override this method to implement clearing of the cache on a given model.
     ///
     /// Implementations of this method must not trigger [registration][#register(CachingModel)] of a model for cleanup.
-    default void clearCache() { }
+    void clearCache();
 
     /// Register the provided model for cache cleanup.
     ///

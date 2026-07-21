@@ -35,7 +35,7 @@ public final class BlockInteractOverlayLayer implements GuiLayer {
         }
 
         OverlayDisplayMode cfgMode = ClientConfig.VIEW.getMaxOverlayMode();
-        String renderedOverlay = null;
+        Identifier renderedOverlay = null;
         for (BlockInteractOverlayWrapper overlay : OVERLAYS) {
             if (overlay.render(graphics, player, cfgMode)) {
                 if (Utils.PRODUCTION) {
@@ -53,9 +53,9 @@ public final class BlockInteractOverlayLayer implements GuiLayer {
     }
 
     public static void init() {
-        Map<String, BlockInteractOverlay> overlays = new HashMap<>();
+        Map<Identifier, BlockInteractOverlay> overlays = new HashMap<>();
         ModLoader.postEvent(new RegisterBlockInteractOverlaysEvent((name, overlay) -> {
-            BlockInteractOverlay prevOverlay = overlays.put(name, overlay);
+            BlockInteractOverlay prevOverlay = overlays.putIfAbsent(name, overlay);
             if (prevOverlay != null) {
                 throw new IllegalStateException(String.format(
                         Locale.ROOT, "Duplicate overlay registration for name: %s (old: %s, new: %s)", name, prevOverlay, overlay

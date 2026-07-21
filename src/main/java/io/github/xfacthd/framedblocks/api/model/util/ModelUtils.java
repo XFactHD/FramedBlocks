@@ -1,10 +1,7 @@
 package io.github.xfacthd.framedblocks.api.model.util;
 
 import com.mojang.logging.LogUtils;
-import io.github.xfacthd.framedblocks.api.internal.InternalClientAPI;
 import io.github.xfacthd.framedblocks.api.model.AbstractFramedBlockStateModel;
-import io.github.xfacthd.framedblocks.api.model.ExtendedBlockStateModelPart;
-import io.github.xfacthd.framedblocks.api.model.data.QuadMapBuilder;
 import io.github.xfacthd.framedblocks.api.model.quad.ExtMutableQuad;
 import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import net.minecraft.client.Minecraft;
@@ -16,13 +13,11 @@ import net.minecraft.client.renderer.block.dispatch.SingleVariant;
 import net.minecraft.client.resources.model.ModelBaker;
 import net.minecraft.client.resources.model.ModelDebugName;
 import net.minecraft.client.resources.model.geometry.BakedQuad;
-import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
-import net.minecraft.util.TriState;
 import net.minecraft.util.Unit;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
@@ -93,14 +88,6 @@ public final class ModelUtils {
         }
     }
 
-    /// {@return whether the UVs of the given quad are rotated}
-    ///
-    /// @param data The quad to check
-    public static boolean isQuadRotated(ExtMutableQuad data) {
-        return (Mth.equal(data.uvComponent(0, 1), data.uvComponent(1, 1)) || Mth.equal(data.uvComponent(3, 1), data.uvComponent(2, 1))) &&
-               (Mth.equal(data.uvComponent(1, 0), data.uvComponent(2, 0)) || Mth.equal(data.uvComponent(0, 0), data.uvComponent(3, 0)));
-    }
-
     /// {@return the blockstate model associated with the given blockstate}
     ///
     /// @param state The state to get the model for
@@ -134,11 +121,6 @@ public final class ModelUtils {
     /// @param state The state to get the model for
     public static Supplier<BlockStateModel> getModelDeferred(BlockState state) {
         return Lazy.of(() -> getModel(state));
-    }
-
-    @Deprecated(forRemoval = true)
-    public static ExtendedBlockStateModelPart makeModelPart(QuadMapBuilder quadMap, TriState partAO, Material.Baked particleMaterial, @Nullable BlockState shaderState) {
-        return InternalClientAPI.INSTANCE.makeBlockModelPart(quadMap, partAO, particleMaterial, shaderState);
     }
 
     /// Guess the actual cull-face of quads returned by [BlockStateModelPart#getQuads(Direction)] with a `null` cullface
