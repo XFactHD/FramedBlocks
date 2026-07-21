@@ -29,6 +29,14 @@ public final class BlueprintBehaviours {
                 )
         );
         event.register(new TubeCopyBehaviour(), FBContent.BLOCK_FRAMED_TUBE);
+        event.register(
+                new LanternCopyBehaviour(),
+                List.of(
+                        FBContent.BLOCK_FRAMED_LANTERN,
+                        FBContent.BLOCK_FRAMED_SOUL_LANTERN,
+                        FBContent.BLOCK_FRAMED_COPPER_LANTERN
+                )
+        );
     }
 
     private BlueprintBehaviours() { }
