@@ -50,7 +50,7 @@ public class FramedClientBlockExtensions implements IClientBlockExtensions {
     /// @param engine The particle engine to use for spawning particles
     /// @return whether vanilla particle spawning should be suppressed
     protected boolean addHitEffectsUnsuppressed(BlockState state, Level level, BlockHitResult hit, IFramedBlockEntity be, ParticleEngine engine) {
-        ParticleHelper.Client.addHitEffects(state, level, hit, be.getCamo().getContent(), be.getOverlay(), engine);
+        ParticleHelper.Client.addHitEffects(state, level, hit, be.getCamo(), be.getOverlay(), engine);
         return true;
     }
 
@@ -72,7 +72,7 @@ public class FramedClientBlockExtensions implements IClientBlockExtensions {
     /// @param engine The particle engine to use for spawning particles
     /// @return whether vanilla particle spawning should be suppressed
     protected boolean addDestroyEffectsUnsuppressed(BlockState state, Level level, BlockPos pos, IFramedBlockEntity be, ParticleEngine engine) {
-        ParticleHelper.Client.addDestroyEffects(state, level, pos, be.getCamo().getContent(), be.getOverlay(), engine);
+        ParticleHelper.Client.addDestroyEffects(state, level, pos, be.getCamo(), be.getOverlay(), engine);
         return true;
     }
 

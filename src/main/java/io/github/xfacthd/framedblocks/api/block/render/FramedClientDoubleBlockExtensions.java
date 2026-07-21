@@ -33,8 +33,8 @@ public final class FramedClientDoubleBlockExtensions extends FramedClientBlockEx
         boolean suppressed = suppressParticles(state, level, hit.getBlockPos());
         if (!suppressed && level.getBlockEntity(hit.getBlockPos()) instanceof FramedDoubleBlockEntity be) {
             Holder<BlockOverlay> overlay = be.getOverlay();
-            ParticleHelper.Client.addHitEffects(state, level, hit, be.getCamo().getContent(), overlay, engine);
-            ParticleHelper.Client.addHitEffects(state, level, hit, be.getCamoTwo().getContent(), overlay, engine);
+            ParticleHelper.Client.addHitEffects(state, level, hit, be.getCamo(), overlay, engine);
+            ParticleHelper.Client.addHitEffects(state, level, hit, be.getCamoTwo(), overlay, engine);
             return true;
         }
         return suppressed;
@@ -45,8 +45,8 @@ public final class FramedClientDoubleBlockExtensions extends FramedClientBlockEx
         boolean suppressed = suppressParticles(state, level, pos);
         if (!suppressed && level.getBlockEntity(pos) instanceof FramedDoubleBlockEntity be) {
             Holder<BlockOverlay> overlay = be.getOverlay();
-            ParticleHelper.Client.addDestroyEffects(state, level, pos, be.getCamo().getContent(), overlay, engine);
-            ParticleHelper.Client.addDestroyEffects(state, level, pos, be.getCamoTwo().getContent(), overlay, engine);
+            ParticleHelper.Client.addDestroyEffects(state, level, pos, be.getCamo(), overlay, engine);
+            ParticleHelper.Client.addDestroyEffects(state, level, pos, be.getCamoTwo(), overlay, engine);
             return true;
         }
         return suppressed;

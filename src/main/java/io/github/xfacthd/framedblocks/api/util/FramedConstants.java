@@ -5,7 +5,9 @@ import io.github.xfacthd.framedblocks.api.camo.CamoContainerFactory;
 import io.github.xfacthd.framedblocks.api.camo.CamoList;
 import io.github.xfacthd.framedblocks.api.component.FrameConfig;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
+import io.github.xfacthd.framedblocks.api.render.particle.CamoParticleOptions;
 import io.github.xfacthd.framedblocks.api.util.registration.DeferredDataComponentType;
+import io.github.xfacthd.framedblocks.api.util.registration.DeferredParticleType;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
@@ -56,6 +58,8 @@ public final class FramedConstants {
         public static final DeferredDataComponentType<WrenchRotationMode> DC_TYPE_WRENCH_MODE = DeferredDataComponentType.createDataComponent(Utils.id("wrench_mode"));
         /// If present on an item, breaking a framed block with it will unconditionally retain the camo on the dropped item instead of dropping it separately.
         public static final DeferredDataComponentType<Unit> DC_TYPE_RETAIN_CAMO = DeferredDataComponentType.createDataComponent(Utils.id("retain_camo"));
+
+        public static final DeferredParticleType<CamoParticleOptions> PARTICLE_TYPE_CAMO = DeferredParticleType.createParticleType(Utils.id("camo"));
 
         private Objects() { }
     }

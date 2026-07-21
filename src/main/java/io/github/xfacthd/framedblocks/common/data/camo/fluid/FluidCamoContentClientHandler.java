@@ -3,6 +3,7 @@ package io.github.xfacthd.framedblocks.common.data.camo.fluid;
 import io.github.xfacthd.framedblocks.api.camo.CamoContentClientHandler;
 import io.github.xfacthd.framedblocks.api.camo.resource.ResourceCamoContentClientHandler;
 import io.github.xfacthd.framedblocks.api.model.util.ModelUtils;
+import io.github.xfacthd.framedblocks.api.model.util.TintUtils;
 import io.github.xfacthd.framedblocks.client.render.particle.FluidSpriteParticle;
 import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -30,8 +31,8 @@ public final class FluidCamoContentClientHandler extends ResourceCamoContentClie
     }
 
     @Override
-    public Particle makeHitDestroyParticle(ClientLevel level, double x, double y, double z, double sx, double sy, double sz, FluidCamoContent camo, BlockPos pos) {
-        return new FluidSpriteParticle(level, x, y, z, sx, sy, sz, camo.getFluid());
+    public Particle createParticle(ClientLevel level, double x, double y, double z, double sx, double sy, double sz, BlockPos pos, FluidCamoContent camo, int tintColor) {
+        return new FluidSpriteParticle(level, x, y, z, sx, sy, sz, pos, camo.getFluid(), tintColor);
     }
 
     @Override
@@ -59,7 +60,12 @@ public final class FluidCamoContentClientHandler extends ResourceCamoContentClie
     }
 
     @Override
-    public int getParticleTintValue(FluidCamoContent camo) {
+    public int getParticleTintValue(FluidCamoContent camo, BlockAndTintGetter level, BlockPos pos) {
+        return TintUtils.getFluidColor(level, pos, camo.getFluid().defaultFluidState());
+    }
+
+    @Override
+    public int getDefaultTintValue(FluidCamoContent camo) {
         FluidState fluidState = camo.getFluid().defaultFluidState();
         FluidTintSource tintSource = ModelUtils.getFluidModel(fluidState).fluidTintSource();
         return tintSource != null ? tintSource.color(fluidState) : -1;

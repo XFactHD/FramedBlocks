@@ -16,18 +16,19 @@ public abstract class CamoContentClientHandler<T extends CamoContent<T>> {
     /// @implNote this method must be backed by a cache
     public abstract BlockStateModel getOrCreateModel(T camo);
 
-    /// {@return a {@link Particle} to be spawned when a block with the given {@link CamoContent} is punched or broken}
+    /// {@return a {@link Particle} to be spawned when a block with the given {@link CamoContent} is run over, fallen onto, punched or broken}
     ///
-    /// @param level The level the owning framed block is in
-    /// @param x     The X coordinate to spawn the particle at
-    /// @param y     The Y coordinate to spawn the particle at
-    /// @param z     The Z coordinate to spawn the particle at
-    /// @param sx    The speed along the X axis to apply to the particle
-    /// @param sy    The speed along the Y axis to apply to the particle
-    /// @param sz    The speed along the Z axis to apply to the particle
-    /// @param camo  The camo to create the particle for
-    /// @param pos   The position of the owning framed block
-    public abstract Particle makeHitDestroyParticle(ClientLevel level, double x, double y, double z, double sx, double sy, double sz, T camo, BlockPos pos);
+    /// @param level     The level the owning framed block is in
+    /// @param x         The X coordinate to spawn the particle at
+    /// @param y         The Y coordinate to spawn the particle at
+    /// @param z         The Z coordinate to spawn the particle at
+    /// @param sx        The speed along the X axis to apply to the particle
+    /// @param sy        The speed along the Y axis to apply to the particle
+    /// @param sz        The speed along the Z axis to apply to the particle
+    /// @param pos       The position of the owning framed block
+    /// @param camo      The camo to create the particle for
+    /// @param tintColor The tint color to apply to the particle
+    public abstract Particle createParticle(ClientLevel level, double x, double y, double z, double sx, double sy, double sz, BlockPos pos, T camo, int tintColor);
 
     /// {@return the amount of tint layers the provided camo has}
     ///
@@ -55,6 +56,13 @@ public abstract class CamoContentClientHandler<T extends CamoContent<T>> {
 
     /// {@return the tint value to use for the particle texture of the camo}
     ///
-    /// @param camo The camo whose particle tint value is being queried
-    public abstract int getParticleTintValue(T camo);
+    /// @param camo  The camo whose particle tint value is being queried
+    /// @param level The level in which the camo is being rendered
+    /// @param pos   The position at which the camo is being rendered
+    public abstract int getParticleTintValue(T camo, BlockAndTintGetter level, BlockPos pos);
+
+    /// {@return the default tint value of the camo to use when no further context is available}
+    ///
+    /// @param camo The camo whose default tint value is being queried
+    public abstract int getDefaultTintValue(T camo);
 }

@@ -4,7 +4,6 @@ import io.github.xfacthd.framedblocks.api.camo.empty.EmptyCamoContent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponentType;
-import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.util.TriState;
 import net.minecraft.world.entity.Entity;
@@ -196,11 +195,6 @@ public abstract class CamoContent<C extends CamoContent<C>> {
     /// @param adjPos   The position of the block being occluded
     /// @param side     The side of the owning framed block which occludes the adjacent block
     public abstract boolean occludes(BlockState adjState, BlockGetter level, BlockPos pos, BlockPos adjPos, Direction side);
-
-    /// {@return {@link ParticleOptions} to be spawned when an entity runs over or lands on a block with this camo}
-    ///
-    /// @param pos The position of the owning framed block
-    public abstract ParticleOptions makeRunningLandingParticles(BlockPos pos);
 
     /// {@return the registry ID of this camo}
     public abstract String getCamoId();

@@ -5,9 +5,6 @@ import io.github.xfacthd.framedblocks.api.camo.CamoContentClientHandler;
 import io.github.xfacthd.framedblocks.api.camo.CamoContent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.particles.BlockParticleOption;
-import net.minecraft.core.particles.ParticleOptions;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.util.TriState;
 import net.minecraft.world.entity.Entity;
@@ -147,11 +144,6 @@ public final class EmptyCamoContent extends CamoContent<EmptyCamoContent> {
     @Override
     public boolean occludes(BlockState adjState, BlockGetter level, BlockPos pos, BlockPos adjPos, Direction side) {
         return false;
-    }
-
-    @Override
-    public ParticleOptions makeRunningLandingParticles(BlockPos pos) {
-        return new BlockParticleOption(ParticleTypes.BLOCK, FramedBlocksAPI.INSTANCE.getDefaultModelState());
     }
 
     @Override

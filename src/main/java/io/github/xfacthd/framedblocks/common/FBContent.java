@@ -15,6 +15,7 @@ import io.github.xfacthd.framedblocks.api.component.FrameConfig;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.datagen.loot.objects.RetainCamoLootCondition;
 import io.github.xfacthd.framedblocks.api.datagen.loot.objects.SplitCamoLootFunction;
+import io.github.xfacthd.framedblocks.api.render.particle.CamoParticleOptions;
 import io.github.xfacthd.framedblocks.api.util.FramedConstants;
 import io.github.xfacthd.framedblocks.api.util.registration.*;
 import io.github.xfacthd.framedblocks.common.block.cube.*;
@@ -79,7 +80,6 @@ import io.github.xfacthd.framedblocks.common.menu.FramingSawMenu;
 import io.github.xfacthd.framedblocks.common.menu.PaintRollerMenu;
 import io.github.xfacthd.framedblocks.common.menu.PoweredFramingSawMenu;
 import io.github.xfacthd.framedblocks.common.particle.BlockOverlayParticleOptions;
-import io.github.xfacthd.framedblocks.common.particle.FluidParticleOptions;
 import io.github.xfacthd.framedblocks.common.util.FramedCreativeTab;
 import io.github.xfacthd.framedblocks.common.util.registration.*;
 import net.minecraft.core.Holder;
@@ -765,8 +765,8 @@ public final class FBContent {
     // endregion
 
     // region ParticleTypes
-    public static final DeferredParticleType<FluidParticleOptions> FLUID_PARTICLE = PARTICLE_TYPES.registerParticleType(
-            "fluid", false, FluidParticleOptions.CODEC, FluidParticleOptions.STREAM_CODEC
+    public static final DeferredParticleType<CamoParticleOptions> CAMO_PARTICLE = PARTICLE_TYPES.registerParticleType(
+            "camo", false, CamoParticleOptions.CODEC, CamoParticleOptions.STREAM_CODEC
     );
     public static final DeferredParticleType<BlockOverlayParticleOptions> BLOCK_OVERLAY_PARTICLE = PARTICLE_TYPES.registerParticleType(
             "block_overlay", false, BlockOverlayParticleOptions.CODEC, BlockOverlayParticleOptions.STREAM_CODEC

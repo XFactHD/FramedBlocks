@@ -3,7 +3,8 @@ package io.github.xfacthd.framedblocks.common.block.cube;
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
 import io.github.xfacthd.framedblocks.api.block.render.ParticleHelper;
-import io.github.xfacthd.framedblocks.api.camo.block.BlockCamoContent;
+import io.github.xfacthd.framedblocks.api.camo.CamoContainer;
+import io.github.xfacthd.framedblocks.api.camo.block.SimpleBlockCamoContainer;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.api.util.Utils;
@@ -35,10 +36,13 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.neoforged.neoforge.common.util.Lazy;
 import org.jspecify.annotations.Nullable;
 
 public class FramedOneWayWindowBlock extends FramedBlock {
-    public static final BlockCamoContent GLASS_DUMMY_CAMO = new BlockCamoContent(Blocks.TINTED_GLASS.defaultBlockState());
+    public static final Lazy<CamoContainer<?, ?>> GLASS_DUMMY_CAMO = Lazy.of(() -> new SimpleBlockCamoContainer(
+            Blocks.TINTED_GLASS.defaultBlockState(), FBContent.FACTORY_BLOCK.value()
+    ));
     public static final String LABEL_WINDOW_FACE = Utils.translationKey("label", "state_cycling.property.one_way_window.window_face");
 
     public FramedOneWayWindowBlock(Properties props) {
@@ -99,7 +103,7 @@ public class FramedOneWayWindowBlock extends FramedBlock {
     @Override
     public boolean addRunningEffects(BlockState state, Level level, BlockPos pos, Entity entity) {
         if (state.getValue(PropertyHolder.NULLABLE_FACE) == NullableDirection.UP) {
-            ParticleHelper.spawnRunningParticles(GLASS_DUMMY_CAMO, level, pos, entity);
+            ParticleHelper.spawnRunningParticles(GLASS_DUMMY_CAMO.get(), level, pos, entity);
             return true;
         }
         return super.addRunningEffects(state, level, pos, entity);
@@ -108,7 +112,7 @@ public class FramedOneWayWindowBlock extends FramedBlock {
     @Override
     public boolean addLandingEffects(BlockState state, ServerLevel level, BlockPos pos, BlockState sameState, LivingEntity entity, int count) {
         if (state.getValue(PropertyHolder.NULLABLE_FACE) == NullableDirection.UP) {
-            ParticleHelper.spawnLandingParticles(GLASS_DUMMY_CAMO, level, pos, entity, count);
+            ParticleHelper.spawnLandingParticles(GLASS_DUMMY_CAMO.get(), level, pos, entity, count);
             return true;
         }
         return super.addLandingEffects(state, level, pos, sameState, entity, count);

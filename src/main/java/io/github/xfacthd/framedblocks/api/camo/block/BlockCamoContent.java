@@ -8,9 +8,6 @@ import io.github.xfacthd.framedblocks.api.util.FramedConstants;
 import net.minecraft.client.color.block.BlockTintSource;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.particles.BlockParticleOption;
-import net.minecraft.core.particles.ParticleOptions;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.util.TriState;
@@ -181,11 +178,6 @@ public final class BlockCamoContent extends CamoContent<BlockCamoContent> implem
             return !adjState.is(FramedConstants.Tags.NON_OCCLUDEABLE);
         }
         return adjState.skipRendering(state, side.getOpposite());
-    }
-
-    @Override
-    public ParticleOptions makeRunningLandingParticles(BlockPos pos) {
-        return new BlockParticleOption(ParticleTypes.BLOCK, state);
     }
 
     @Override

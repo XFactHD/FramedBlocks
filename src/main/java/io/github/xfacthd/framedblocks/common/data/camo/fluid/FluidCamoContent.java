@@ -4,10 +4,8 @@ import io.github.xfacthd.framedblocks.api.camo.CamoContentClientHandler;
 import io.github.xfacthd.framedblocks.api.camo.CamoContainerHelper;
 import io.github.xfacthd.framedblocks.api.camo.CamoContent;
 import io.github.xfacthd.framedblocks.api.camo.resource.ResourceCamoContent;
-import io.github.xfacthd.framedblocks.common.particle.FluidParticleOptions;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.util.TriState;
 import net.minecraft.world.entity.Entity;
@@ -161,11 +159,6 @@ public final class FluidCamoContent extends ResourceCamoContent<FluidResource, F
     @Override
     public boolean occludes(BlockState adjState, BlockGetter level, BlockPos pos, BlockPos adjPos, Direction side) {
         return false;
-    }
-
-    @Override
-    public ParticleOptions makeRunningLandingParticles(BlockPos pos) {
-        return new FluidParticleOptions(getFluid());
     }
 
     @Override

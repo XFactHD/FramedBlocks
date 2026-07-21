@@ -29,6 +29,18 @@ public abstract class CamoContainerClientHandler<C extends CamoContent<C>, T ext
     /// @param tintList The list to append the tint values to
     public abstract void collectTintValues(T camo, ItemStack stack, IntList tintList);
 
+    /// {@return the tint value to use for the particle texture of the camo}
+    ///
+    /// @param camo  The camo whose particle tint value is being queried
+    /// @param level The level in which the camo is being rendered
+    /// @param pos   The position at which the camo is being rendered
+    public abstract int getParticleTintValue(T camo, BlockAndTintGetter level, BlockPos pos);
+
+    /// {@return the default tint value of the camo to use when no further context is available}
+    ///
+    /// @param camo The camo whose default tint value is being queried
+    public abstract int getDefaultTintValue(T camo);
+
     static final class Default<C extends CamoContent<C>, T extends CamoContainer<C, T>> extends CamoContainerClientHandler<C, T> {
         static final CamoContainerClientHandler<?, ?> INSTANCE = new Default<>();
 
@@ -48,6 +60,18 @@ public abstract class CamoContainerClientHandler<C extends CamoContent<C>, T ext
         public void collectTintValues(T camo, ItemStack stack, IntList tintList) {
             C content = camo.getContent();
             content.getClientHandler().collectTintValues(content, stack, tintList);
+        }
+
+        @Override
+        public int getParticleTintValue(T camo, BlockAndTintGetter level, BlockPos pos) {
+            C content = camo.getContent();
+            return content.getClientHandler().getParticleTintValue(content, level, pos);
+        }
+
+        @Override
+        public int getDefaultTintValue(T camo) {
+            C content = camo.getContent();
+            return content.getClientHandler().getDefaultTintValue(content);
         }
     }
 }

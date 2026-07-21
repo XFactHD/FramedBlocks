@@ -1,6 +1,7 @@
 package io.github.xfacthd.framedblocks.api.internal;
 
 import com.mojang.datafixers.util.Either;
+import io.github.xfacthd.framedblocks.api.block.overlay.BlockOverlay;
 import io.github.xfacthd.framedblocks.api.camo.resource.ResourceCamoContent;
 import io.github.xfacthd.framedblocks.api.camo.resource.ResourceCamoContentClientHandler;
 import io.github.xfacthd.framedblocks.api.datagen.templates.GeometryTemplateBuilder;
@@ -18,6 +19,8 @@ import io.github.xfacthd.framedblocks.api.model.wrapping.ModelFactory;
 import io.github.xfacthd.framedblocks.api.model.wrapping.statemerger.StateMerger;
 import io.github.xfacthd.framedblocks.api.render.outline.OutlineRenderer;
 import io.github.xfacthd.framedblocks.api.util.Utils;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
 import net.minecraft.client.renderer.block.dispatch.BlockStateModelDispatcher;
 import net.minecraft.client.renderer.block.dispatch.SingleVariant;
@@ -26,6 +29,7 @@ import net.minecraft.client.renderer.item.ItemModel;
 import net.minecraft.client.resources.model.ModelBaker;
 import net.minecraft.client.resources.model.cuboid.ItemTransforms;
 import net.minecraft.client.resources.model.sprite.Material;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.TriState;
@@ -108,4 +112,8 @@ public interface InternalClientAPI {
     <R extends Resource, C extends ResourceCamoContent<R, C>> ResourceCamoContentClientHandler.ResourceModelBaker<R, C> createResourceModelBaker(
             ResourceCamoContentClientHandler<R, C> clientHandler
     );
+
+    Particle createBlockBreakParticle(ClientLevel level, double x, double y, double z, double sx, double sy, double sz, BlockPos pos, BlockState state, int tintColor);
+
+    Particle createBlockOverlayParticle(ClientLevel level, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed, BlockPos pos, BlockOverlay overlay);
 }

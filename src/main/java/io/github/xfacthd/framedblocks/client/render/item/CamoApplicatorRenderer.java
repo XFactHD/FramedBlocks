@@ -3,6 +3,8 @@ package io.github.xfacthd.framedblocks.client.render.item;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import com.mojang.serialization.MapCodec;
+import io.github.xfacthd.framedblocks.api.camo.CamoContainer;
+import io.github.xfacthd.framedblocks.api.camo.CamoContainerClientHandler;
 import io.github.xfacthd.framedblocks.api.camo.CamoContent;
 import io.github.xfacthd.framedblocks.api.camo.CamoContentClientHandler;
 import io.github.xfacthd.framedblocks.api.util.ClientUtils;
@@ -98,11 +100,13 @@ public final class CamoApplicatorRenderer implements SpecialModelRenderer<CamoAp
             return dummyIcon.get();
         }
 
-        CamoContent content = dummyContent.content();
-        CamoContentClientHandler clientHandler = content.getClientHandler();
+        CamoContainer container = dummyContent.content();
+        CamoContent content = container.getContent();
+        CamoContainerClientHandler containerHandler = container.getClientHandler();
+        CamoContentClientHandler contentHandler = content.getClientHandler();
         return new CamoIcon(
-                clientHandler.getOrCreateModel(content).particleMaterial(),
-                clientHandler.getParticleTintValue(content)
+                contentHandler.getOrCreateModel(content).particleMaterial(),
+                containerHandler.getDefaultTintValue(container)
         );
     }
 

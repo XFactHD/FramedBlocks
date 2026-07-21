@@ -24,7 +24,7 @@ final class EmptyCamoContentClientHandler extends CamoContentClientHandler<Empty
     }
 
     @Override
-    public Particle makeHitDestroyParticle(ClientLevel level, double x, double y, double z, double sx, double sy, double sz, EmptyCamoContent camo, BlockPos pos) {
+    public Particle createParticle(ClientLevel level, double x, double y, double z, double sx, double sy, double sz, BlockPos pos, EmptyCamoContent camo, int tintColor) {
         BlockState state = FramedBlocksAPI.INSTANCE.getDefaultModelState();
         return new TerrainParticle(level, x, y, z, 0.0D, 0.0D, 0.0D, state, pos);
     }
@@ -41,7 +41,12 @@ final class EmptyCamoContentClientHandler extends CamoContentClientHandler<Empty
     public void collectTintValues(EmptyCamoContent camo, ItemStack stack, IntList tintList) { }
 
     @Override
-    public int getParticleTintValue(EmptyCamoContent camo) {
+    public int getParticleTintValue(EmptyCamoContent camo, BlockAndTintGetter level, BlockPos pos) {
+        return -1;
+    }
+
+    @Override
+    public int getDefaultTintValue(EmptyCamoContent camo) {
         return -1;
     }
 }

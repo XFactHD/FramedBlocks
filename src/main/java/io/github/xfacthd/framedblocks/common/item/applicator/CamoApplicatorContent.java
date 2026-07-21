@@ -3,10 +3,10 @@ package io.github.xfacthd.framedblocks.common.item.applicator;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.xfacthd.framedblocks.api.block.blockentity.FrameModifier;
+import io.github.xfacthd.framedblocks.api.camo.CamoContainer;
 import io.github.xfacthd.framedblocks.api.camo.CamoContainerFactory;
-import io.github.xfacthd.framedblocks.api.camo.CamoContent;
 import io.github.xfacthd.framedblocks.api.camo.CamoCraftingHandler;
-import io.github.xfacthd.framedblocks.api.camo.empty.EmptyCamoContent;
+import io.github.xfacthd.framedblocks.api.camo.empty.EmptyCamoContainer;
 import io.github.xfacthd.framedblocks.api.util.network.FramedByteBufCodecs;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.data.camo.CamoContainerFactories;
@@ -201,7 +201,7 @@ public record CamoApplicatorContent(CamoEntry[] camoEntries, int[] modifierStack
             if (craftingHandler == null || !craftingHandler.canApply(stack, false)) {
                 return DummyContent.UNKNOWN;
             }
-            return DummyContent.of(craftingHandler.apply(stack, false).getContent());
+            return DummyContent.of(craftingHandler.apply(stack, false));
         }
 
         @Override
@@ -225,16 +225,16 @@ public record CamoApplicatorContent(CamoEntry[] camoEntries, int[] modifierStack
             return stack.toString();
         }
 
-        public record DummyContent(@Nullable CamoContent<?> content) {
-            public static final DummyContent EMPTY = new DummyContent(EmptyCamoContent.EMPTY);
+        public record DummyContent(@Nullable CamoContainer<?, ?> content) {
+            public static final DummyContent EMPTY = new DummyContent(EmptyCamoContainer.EMPTY);
             public static final DummyContent UNKNOWN = new DummyContent(null);
 
             @Override
-            public CamoContent<?> content() {
+            public CamoContainer<?, ?> content() {
                 return Objects.requireNonNull(content, "Cannot resolve content of DummyContent.UNKNOWN");
             }
 
-            public static DummyContent of(CamoContent<?> content) {
+            public static DummyContent of(CamoContainer<?, ?> content) {
                 return content.isEmpty() ? EMPTY : new DummyContent(content);
             }
         }

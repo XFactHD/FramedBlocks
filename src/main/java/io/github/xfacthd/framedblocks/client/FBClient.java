@@ -65,8 +65,8 @@ import io.github.xfacthd.framedblocks.client.render.debug.impl.QuadWindingDebugR
 import io.github.xfacthd.framedblocks.client.render.item.BannerItemRenderer;
 import io.github.xfacthd.framedblocks.client.render.item.CamoApplicatorRenderer;
 import io.github.xfacthd.framedblocks.client.render.item.TankItemRenderer;
-import io.github.xfacthd.framedblocks.client.render.particle.BlockOverlayParticle;
-import io.github.xfacthd.framedblocks.client.render.particle.FluidSpriteParticle;
+import io.github.xfacthd.framedblocks.client.render.particle.BlockOverlayParticleProvider;
+import io.github.xfacthd.framedblocks.client.render.particle.CamoParticleProvider;
 import io.github.xfacthd.framedblocks.client.render.special.BlockOutlineRenderer;
 import io.github.xfacthd.framedblocks.client.render.special.CollapsibleBlockIndicatorRenderer;
 import io.github.xfacthd.framedblocks.client.render.special.GhostBlockFeatureRenderer;
@@ -553,8 +553,8 @@ public final class FBClient {
     }
 
     private static void onRegisterParticleProviders(RegisterParticleProvidersEvent event) {
-        event.registerSpecial(FBContent.FLUID_PARTICLE.get(), new FluidSpriteParticle.Provider());
-        event.registerSpecial(FBContent.BLOCK_OVERLAY_PARTICLE.value(), new BlockOverlayParticle.Provider());
+        event.registerSpecial(FBContent.CAMO_PARTICLE.value(), new CamoParticleProvider());
+        event.registerSpecial(FBContent.BLOCK_OVERLAY_PARTICLE.value(), new BlockOverlayParticleProvider());
     }
 
     private static void onRegisterClientExtensions(RegisterClientExtensionsEvent event) {

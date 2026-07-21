@@ -7,7 +7,7 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.Identifier;
 
-public abstract class BlockAtlasSpriteParticle extends SingleQuadParticle {
+public class BlockAtlasSpriteParticle extends SingleQuadParticle {
     private final SingleQuadParticle.Layer layer;
     protected final BlockPos pos;
     private final float uo;
@@ -21,9 +21,11 @@ public abstract class BlockAtlasSpriteParticle extends SingleQuadParticle {
             double xSpeed,
             double ySpeed,
             double zSpeed,
-            Identifier sprite
+            BlockPos pos,
+            Identifier sprite,
+            int tintColor
     ) {
-        this(level, x, y, z, xSpeed, ySpeed, zSpeed, ClientUtils.getBlockSprite(sprite));
+        this(level, x, y, z, xSpeed, ySpeed, zSpeed, pos, ClientUtils.getBlockSprite(sprite), tintColor);
     }
 
     public BlockAtlasSpriteParticle(
@@ -34,14 +36,19 @@ public abstract class BlockAtlasSpriteParticle extends SingleQuadParticle {
             double xSpeed,
             double ySpeed,
             double zSpeed,
-            TextureAtlasSprite sprite
+            BlockPos pos,
+            TextureAtlasSprite sprite,
+            int tintColor
     ) {
         super(level, x, y, z, xSpeed, ySpeed, zSpeed, sprite);
-        this.pos = BlockPos.containing(x, y, z);
+        this.pos = pos;
         this.gravity = 1F;
         this.quadSize /= 2F;
         this.uo = random.nextFloat() * 3F;
         this.vo = random.nextFloat() * 3F;
+        this.rCol = .6F * (float) (tintColor >> 16 & 0xFF) / 255F;
+        this.gCol = .6F * (float) (tintColor >> 8 & 0xFF) / 255F;
+        this.bCol = .6F * (float) (tintColor & 0xFF) / 255F;
         this.layer = SingleQuadParticle.Layer.bySprite(this.sprite);
     }
 

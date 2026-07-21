@@ -1,10 +1,12 @@
 package io.github.xfacthd.framedblocks.api.block.render;
 
 import io.github.xfacthd.framedblocks.api.block.overlay.BlockOverlay;
+import io.github.xfacthd.framedblocks.api.camo.CamoContainerClientHandler;
 import io.github.xfacthd.framedblocks.api.camo.CamoContentClientHandler;
 import io.github.xfacthd.framedblocks.api.camo.CamoContainer;
 import io.github.xfacthd.framedblocks.api.camo.CamoContent;
-import io.github.xfacthd.framedblocks.client.render.particle.BlockOverlayParticle;
+import io.github.xfacthd.framedblocks.api.internal.InternalClientAPI;
+import io.github.xfacthd.framedblocks.api.render.particle.CamoParticleOptions;
 import io.github.xfacthd.framedblocks.common.particle.BlockOverlayParticleOptions;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.ParticleEngine;
@@ -49,7 +51,7 @@ public final class ParticleHelper {
             spawnLandingParticles(new BlockOverlayParticleOptions(overlay), level, pos, entity, count);
             return;
         }
-        spawnLandingParticles(camo.getContent(), level, pos, entity, count);
+        spawnLandingParticles(camo, level, pos, entity, count);
     }
 
     /// Spawn particles when an entity falls onto a framed block.
@@ -59,8 +61,8 @@ public final class ParticleHelper {
     /// @param pos     The position of the block
     /// @param entity  The entity which fell onto the block
     /// @param count   How many particles should be spawned
-    public static void spawnLandingParticles(CamoContent<?> camo, ServerLevel level, BlockPos pos, LivingEntity entity, int count) {
-        spawnLandingParticles(camo.makeRunningLandingParticles(pos), level, pos, entity, count);
+    public static void spawnLandingParticles(CamoContainer<?, ?> camo, ServerLevel level, BlockPos pos, LivingEntity entity, int count) {
+        spawnLandingParticles(new CamoParticleOptions(camo), level, pos, entity, count);
     }
 
     private static void spawnLandingParticles(ParticleOptions options, ServerLevel level, BlockPos pos, LivingEntity entity, int count) {
@@ -99,7 +101,7 @@ public final class ParticleHelper {
             spawnRunningParticles(new BlockOverlayParticleOptions(overlay), level, pos, entity);
             return;
         }
-        spawnRunningParticles(camo.getContent(), level, pos, entity);
+        spawnRunningParticles(camo, level, pos, entity);
     }
 
     /// Spawn particles when an entity sprints across a framed block.
@@ -108,8 +110,8 @@ public final class ParticleHelper {
     /// @param level   The level the block is in
     /// @param pos     The position of the block
     /// @param entity  The entity sprinting across the block
-    public static void spawnRunningParticles(CamoContent<?> camo, Level level, BlockPos pos, Entity entity) {
-        spawnRunningParticles(camo.makeRunningLandingParticles(pos), level, pos, entity);
+    public static void spawnRunningParticles(CamoContainer<?, ?> camo, Level level, BlockPos pos, Entity entity) {
+        spawnRunningParticles(new CamoParticleOptions(camo), level, pos, entity);
     }
 
     private static void spawnRunningParticles(ParticleOptions options, Level level, BlockPos pos, Entity entity) {
@@ -137,7 +139,7 @@ public final class ParticleHelper {
         /// @param overlay The block overlay applied to the block
         /// @param engine  The particle engine to use for spawning the particles
         @SuppressWarnings({ "rawtypes", "unchecked" })
-        public static void addHitEffects(BlockState state, Level level, BlockHitResult target, CamoContent<?> camo, @Nullable Holder<BlockOverlay> overlay, ParticleEngine engine) {
+        public static void addHitEffects(BlockState state, Level level, BlockHitResult target, CamoContainer<?, ?> camo, @Nullable Holder<BlockOverlay> overlay, ParticleEngine engine) {
             ClientLevel clientLevel = (ClientLevel) level;
             BlockPos pos = target.getBlockPos();
             Direction side = target.getDirection();
@@ -160,13 +162,16 @@ public final class ParticleHelper {
                 case EAST ->  x = bx + aabb.maxX + 0.1D;
             }
 
-            CamoContentClientHandler handler = camo.getClientHandler();
-            engine.add(handler.makeHitDestroyParticle(clientLevel, x, y, z, 0.0D, 0.0D, 0.0D, camo, pos)
+            CamoContent<?> content = camo.getContent();
+            CamoContainerClientHandler containerHandler = camo.getClientHandler();
+            CamoContentClientHandler contentHandler = content.getClientHandler();
+            int tintColor = containerHandler.getParticleTintValue(camo, clientLevel, pos);
+            engine.add(contentHandler.createParticle(clientLevel, x, y, z, 0.0D, 0.0D, 0.0D, pos, content, tintColor)
                     .setPower(0.2F)
                     .scale(0.6F)
             );
             if (overlay != null) {
-                engine.add(new BlockOverlayParticle(clientLevel, x, y, z, 0.0D, 0.0D, 0.0D, overlay.value()));
+                engine.add(InternalClientAPI.INSTANCE.createBlockOverlayParticle(clientLevel, x, y, z, 0.0D, 0.0D, 0.0D, pos, overlay.value()));
             }
         }
 
@@ -179,9 +184,12 @@ public final class ParticleHelper {
         /// @param overlay The block overlay applied to the block
         /// @param engine  The particle engine to use for spawning the particles
         @SuppressWarnings({ "rawtypes", "unchecked" })
-        public static void addDestroyEffects(BlockState state, Level level, BlockPos pos, CamoContent<?> camo, @Nullable Holder<BlockOverlay> overlay, ParticleEngine engine) {
-            CamoContentClientHandler handler = camo.getClientHandler();
+        public static void addDestroyEffects(BlockState state, Level level, BlockPos pos, CamoContainer<?, ?> camo, @Nullable Holder<BlockOverlay> overlay, ParticleEngine engine) {
+            CamoContent<?> content = camo.getContent();
+            CamoContainerClientHandler containerHandler = camo.getClientHandler();
+            CamoContentClientHandler contentHandler = content.getClientHandler();
             ClientLevel clientLevel = (ClientLevel) level;
+            int tintColor = containerHandler.getParticleTintValue(camo, clientLevel, pos);
 
             List<AABB> boxes = state.getShape(level, pos).toAabbs();
             double countMult = 1D / boxes.size();
@@ -205,9 +213,9 @@ public final class ParticleHelper {
                             double sx = offX - 0.5D;
                             double sy = offY - 0.5D;
                             double sz = offZ - 0.5D;
-                            engine.add(handler.makeHitDestroyParticle(clientLevel, x, y, z, sx, sy, sz, camo, pos));
+                            engine.add(contentHandler.createParticle(clientLevel, x, y, z, sx, sy, sz, pos, content, tintColor));
                             if (overlay != null) {
-                                engine.add(new BlockOverlayParticle(clientLevel, x, y, z, sx, sy, sz, overlay.value()));
+                                engine.add(InternalClientAPI.INSTANCE.createBlockOverlayParticle(clientLevel, x, y, z, sx, sy, sz, pos, overlay.value()));
                             }
                         }
                     }

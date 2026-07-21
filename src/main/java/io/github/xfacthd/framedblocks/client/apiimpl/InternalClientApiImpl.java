@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import com.mojang.datafixers.util.Either;
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.api.block.IFramedDoubleBlock;
+import io.github.xfacthd.framedblocks.api.block.overlay.BlockOverlay;
 import io.github.xfacthd.framedblocks.api.camo.resource.ResourceCamoContent;
 import io.github.xfacthd.framedblocks.api.camo.resource.ResourceCamoContentClientHandler;
 import io.github.xfacthd.framedblocks.api.datagen.templates.GeometryTemplateBuilder;
@@ -42,17 +43,23 @@ import io.github.xfacthd.framedblocks.client.model.unbaked.UnbakedFramedDoubleBl
 import io.github.xfacthd.framedblocks.client.model.wrapping.ModelWrappingHandler;
 import io.github.xfacthd.framedblocks.client.model.wrapping.ModelWrappingManager;
 import io.github.xfacthd.framedblocks.client.model.wrapping.StandaloneModelWrappingHandler;
+import io.github.xfacthd.framedblocks.client.render.particle.BlockAtlasSpriteParticle;
+import io.github.xfacthd.framedblocks.client.render.particle.BlockOverlayParticleProvider;
 import io.github.xfacthd.framedblocks.client.render.special.ModelBasedOutlineRenderer;
 import io.github.xfacthd.framedblocks.client.util.CacheCleaner;
 import io.github.xfacthd.framedblocks.client.util.ClientTaskQueue;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
 import net.minecraft.client.renderer.block.dispatch.BlockStateModelDispatcher;
 import net.minecraft.client.renderer.block.dispatch.SingleVariant;
 import net.minecraft.client.renderer.block.model.BlockModel;
 import net.minecraft.client.renderer.item.ItemModel;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.ModelBaker;
 import net.minecraft.client.resources.model.cuboid.ItemTransforms;
 import net.minecraft.client.resources.model.sprite.Material;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.TriState;
@@ -212,5 +219,16 @@ public final class InternalClientApiImpl implements InternalClientAPI {
             ResourceCamoContentClientHandler<R, C> clientHandler
     ) {
         return new ResourceCubeModel<>(clientHandler);
+    }
+
+    @Override
+    public Particle createBlockBreakParticle(ClientLevel level, double x, double y, double z, double sx, double sy, double sz, BlockPos pos, BlockState state, int tintColor) {
+        TextureAtlasSprite sprite = ModelUtils.getModel(state).particleMaterial(level, pos, state).sprite();
+        return new BlockAtlasSpriteParticle(level, x, y, z, sx, sy, sz, pos, sprite, tintColor);
+    }
+
+    @Override
+    public Particle createBlockOverlayParticle(ClientLevel level, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed, BlockPos pos, BlockOverlay overlay) {
+        return BlockOverlayParticleProvider.createParticle(level, x, y, z, xSpeed, ySpeed, zSpeed, pos, overlay);
     }
 }
