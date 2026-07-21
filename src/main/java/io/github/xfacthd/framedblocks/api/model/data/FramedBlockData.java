@@ -6,6 +6,7 @@ import io.github.xfacthd.framedblocks.api.camo.CamoContainer;
 import io.github.xfacthd.framedblocks.api.camo.CamoContainerHelper;
 import io.github.xfacthd.framedblocks.api.camo.CamoContent;
 import io.github.xfacthd.framedblocks.api.camo.empty.EmptyCamoContainer;
+import net.minecraft.Optionull;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
@@ -32,7 +33,7 @@ public final class FramedBlockData extends AbstractFramedBlockData {
     private final byte flags;
     private final TriState viewBlocking;
     @Nullable
-    private final Holder<BlockOverlay> overlay;
+    private final BlockOverlay overlay;
     @Nullable
     private final ModelDataEntry<?> queryData;
     private final int postCamoTintIndexOffset;
@@ -75,7 +76,7 @@ public final class FramedBlockData extends AbstractFramedBlockData {
         if (emissive) flags |= FLAG_EMISSIVE;
         this.flags = flags;
         this.viewBlocking = viewBlocking;
-        this.overlay = overlay;
+        this.overlay = Optionull.map(overlay, Holder::value);
         this.queryData = queryData;
         this.postCamoTintIndexOffset = CamoContainerHelper.Client.getTintCount(camoContainer);
     }
@@ -169,7 +170,7 @@ public final class FramedBlockData extends AbstractFramedBlockData {
     }
 
     @Override
-    public @Nullable Holder<BlockOverlay> getBlockOverlay() {
+    public @Nullable BlockOverlay getBlockOverlay() {
         return overlay;
     }
 

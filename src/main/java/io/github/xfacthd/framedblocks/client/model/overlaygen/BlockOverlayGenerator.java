@@ -11,7 +11,6 @@ import net.minecraft.client.renderer.block.dispatch.BlockStateModelPart;
 import net.minecraft.client.resources.model.geometry.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.Direction;
-import net.minecraft.core.Holder;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.lighting.LightEngine;
 import net.neoforged.neoforge.client.model.quad.BakedNormals;
@@ -30,7 +29,7 @@ public final class BlockOverlayGenerator {
 
     public static void generateUncached(
             BlockState state,
-            Holder<BlockOverlay> overlay,
+            BlockOverlay overlay,
             List<BlockStateModelPart> sourceParts,
             List<? super ExtendedBlockStateModelPart> outParts,
             boolean emissive,
@@ -44,7 +43,7 @@ public final class BlockOverlayGenerator {
             @Nullable BlockState outerState,
             BlockState partState,
             boolean secondPart,
-            Holder<BlockOverlay> overlay,
+            BlockOverlay overlay,
             List<? super ExtendedBlockStateModelPart> parts,
             boolean emissive,
             int tintIndex
@@ -56,14 +55,14 @@ public final class BlockOverlayGenerator {
             @Nullable BlockState outerState,
             BlockState partState,
             boolean secondPart,
-            Holder<BlockOverlay> overlay,
+            BlockOverlay overlay,
             List<BlockStateModelPart> sourceParts,
             List<? super ExtendedBlockStateModelPart> outParts,
             boolean emissive,
             boolean fastPath,
             int tintIndex
     ) {
-        BlockOverlayCacheKey key = BlockOverlayCacheKey.compute(outerState, partState, secondPart, overlay.value(), sourceParts, emissive, fastPath, tintIndex);
+        BlockOverlayCacheKey key = BlockOverlayCacheKey.compute(outerState, partState, secondPart, overlay, sourceParts, emissive, fastPath, tintIndex);
         if (key != null) {
             ExtendedBlockStateModelPart part = GEOMETRY_CACHE.get(key);
             if (part == null) {

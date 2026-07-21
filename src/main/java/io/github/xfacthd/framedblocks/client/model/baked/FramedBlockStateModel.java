@@ -36,7 +36,6 @@ import net.minecraft.client.renderer.block.dispatch.BlockStateModelPart;
 import net.minecraft.client.resources.model.geometry.BakedQuad;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.Holder;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.TriState;
 import net.minecraft.world.level.block.state.BlockState;
@@ -116,7 +115,7 @@ public final class FramedBlockStateModel extends AbstractFramedBlockStateModel i
         DefaultAO defaultAO = geometry.computeDefaultAmbientOcclusion(partData, extraData);
         boolean camoEmissive;
         boolean forceEmissive = partData.isEmissive();
-        Holder<BlockOverlay> blockOverlay = partData.getBlockOverlay();
+        BlockOverlay blockOverlay = partData.getBlockOverlay();
         long seed = state.getSeed(pos);
 
         if (empty) {
@@ -149,7 +148,7 @@ public final class FramedBlockStateModel extends AbstractFramedBlockStateModel i
             if (partsOut.size() > prevOutSize) {
                 BlockOverlayGenerator.generateUncached(state, blockOverlay, partsOut.subList(prevOutSize, partsOut.size()), partsOut, forceEmissive, overlayTintOffset);
             }
-            if (blockOverlay.value().tintSource() != null) {
+            if (blockOverlay.tintSource() != null) {
                 localMiscTintOffset++;
             }
         }
@@ -234,7 +233,7 @@ public final class FramedBlockStateModel extends AbstractFramedBlockStateModel i
             int overlayTintOffset,
             int miscTintOffset
     ) {
-        Holder<BlockOverlay> overlay = fbData.getBlockOverlay();
+        BlockOverlay overlay = fbData.getBlockOverlay();
         Object queryData = Optionull.map(fbData.getQueryData(), ModelDataEntry::data);
         boolean secondPart = fbData.isSecondPart();
         boolean emissive = fbData.isEmissive();
@@ -291,7 +290,7 @@ public final class FramedBlockStateModel extends AbstractFramedBlockStateModel i
             BlockStateModelPart srcPart = reinforcement.getFiltered(xformAll ? 0b00111111 : cullMask, defaultAO.apply(TriState.DEFAULT));
             partConsumer.accept(srcPart, ReinforcementModel.SHADER_STATE, false, true, !xformAll, ReinforcementModel.SHADER_STATE, modifier);
         }
-        Holder<BlockOverlay> overlay = fbData.getBlockOverlay();
+        BlockOverlay overlay = fbData.getBlockOverlay();
         if (!parts.isEmpty() && overlay != null) {
             BlockOverlayGenerator.generateCached(fbData.getOuterState(), state, secondPart, overlay, parts, forceEmissive, overlayTintOffset);
         }
@@ -379,8 +378,8 @@ public final class FramedBlockStateModel extends AbstractFramedBlockStateModel i
         } else if (useBaseModel) {
             flags |= geometry.getBaseModel(delegate, blockData.isSecondPart()).materialFlags(level, pos, state);
         }
-        Holder<BlockOverlay> overlay = blockData.getBlockOverlay();
-        if (overlay != null && overlay.value().translucent()) {
+        BlockOverlay overlay = blockData.getBlockOverlay();
+        if (overlay != null && overlay.translucent()) {
             flags |= BakedQuad.FLAG_TRANSLUCENT;
         }
         return flags | geometry.getMaterialFlags(level, pos, modelData, blockData);
@@ -404,7 +403,7 @@ public final class FramedBlockStateModel extends AbstractFramedBlockStateModel i
     private record CompoundPartCacheKey(
             @Nullable BlockState outerState,
             CamoContent<?> camo,
-            @Nullable Holder<BlockOverlay> overlay,
+            @Nullable BlockOverlay overlay,
             @Nullable Object ctContext,
             @Nullable Object queryData,
             boolean secondPart,

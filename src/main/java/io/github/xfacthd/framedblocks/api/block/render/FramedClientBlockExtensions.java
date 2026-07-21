@@ -14,7 +14,6 @@ import net.minecraft.client.renderer.block.BlockAndTintGetter;
 import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.Holder;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
@@ -113,9 +112,9 @@ public class FramedClientBlockExtensions implements IClientBlockExtensions {
         if (data != null) {
             collectCamoTintValues(data, level, pos, tintValues);
 
-            Holder<BlockOverlay> overlay = data.getBlockOverlay();
+            BlockOverlay overlay = data.getBlockOverlay();
             TintSource tintSource;
-            if (overlay != null && (tintSource = overlay.value().tintSource()) != null) {
+            if (overlay != null && (tintSource = overlay.tintSource()) != null) {
                 tintValues.add(TintUtils.getOverlayTintSource(tintSource).colorInWorld(tintSource.defaultBlockState(), level, pos));
             }
         }

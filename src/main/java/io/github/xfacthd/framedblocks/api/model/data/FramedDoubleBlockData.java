@@ -4,7 +4,6 @@ import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockParts;
 import io.github.xfacthd.framedblocks.api.block.overlay.BlockOverlay;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Holder;
 import net.minecraft.util.TriState;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.state.BlockState;
@@ -67,7 +66,7 @@ public final class FramedDoubleBlockData extends AbstractFramedBlockData {
     }
 
     @Override
-    public @Nullable Holder<BlockOverlay> getBlockOverlay() {
+    public @Nullable BlockOverlay getBlockOverlay() {
         return dataOne.getBlockOverlay();
     }
 

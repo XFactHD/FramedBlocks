@@ -2,7 +2,6 @@ package io.github.xfacthd.framedblocks.api.model.data;
 
 import io.github.xfacthd.framedblocks.api.block.overlay.BlockOverlay;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Holder;
 import net.minecraft.util.TriState;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -44,7 +43,7 @@ public abstract sealed class AbstractFramedBlockData permits FramedBlockData, Fr
     public abstract TriState isViewBlocking();
 
     /// {@return the block overlay applied to the framed block}
-    public abstract @Nullable Holder<BlockOverlay> getBlockOverlay();
+    public abstract @Nullable BlockOverlay getBlockOverlay();
 
     /// {@return the offset to apply to tint indices in camo quads of the specified part}
     ///
