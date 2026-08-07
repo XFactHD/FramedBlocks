@@ -7,5 +7,5 @@
   ],
   "parent": "amendments:block/hanging_flower_pot_rope",
   "fallback": "minecraft:builtin/missing",
-  "loader": "framedblocks:fallback"
+  "loader": "neoforge:conditional"
 }

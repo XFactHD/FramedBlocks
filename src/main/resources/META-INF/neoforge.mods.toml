@@ -6,8 +6,7 @@ license="LGPL v3"
     version="${mod_version}"
     displayName="FramedBlocks"
     displayURL="https://www.curseforge.com/minecraft/mc-mods/framedblocks"
-    logoFile="logo.png"
-    logoBlur=false
+    iconFile="icon.png"
     authors="XFactHD"
     description='''Fancy building blocks'''
 

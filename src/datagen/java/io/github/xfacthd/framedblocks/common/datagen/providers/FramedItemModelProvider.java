@@ -5,7 +5,6 @@ import io.github.xfacthd.framedblocks.api.util.FramedConstants;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.client.model.item.PaintRollerItemModel;
 import io.github.xfacthd.framedblocks.client.model.item.property.BlueprintProperty;
-import io.github.xfacthd.framedblocks.client.model.loader.fallback.FallbackLoaderBuilder;
 import io.github.xfacthd.framedblocks.client.render.item.CamoApplicatorRenderer;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.compat.ae2.AppliedEnergisticsCompat;
@@ -21,6 +20,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
+import net.neoforged.neoforge.client.model.generators.loaders.ConditionalModelBuilder;
 import net.neoforged.neoforge.common.conditions.ModLoadedCondition;
 
 import java.util.stream.Stream;
@@ -59,7 +59,7 @@ public final class FramedItemModelProvider extends AbstractFramedItemModelProvid
         itemModels.itemModelOutput.accept(patternItem, ItemModelUtils.plainModel(
                 ModelTemplates.FLAT_ITEM
                         .extend()
-                        .customLoader(FallbackLoaderBuilder::new, loader ->
+                        .customLoader(ConditionalModelBuilder::new, loader ->
                                 loader.addCondition(new ModLoadedCondition(AppliedEnergisticsCompat.MOD_ID))
                                         // Random fallback to avoid texture reference errors when AE2 is not present
                                         .setFallback(mcLocation("item/paper"))

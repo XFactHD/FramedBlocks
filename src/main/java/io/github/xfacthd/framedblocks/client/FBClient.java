@@ -45,7 +45,6 @@ import io.github.xfacthd.framedblocks.client.model.item.TankItemModel;
 import io.github.xfacthd.framedblocks.client.model.item.dataprovider.AdjustableDoubleBlockItemModelDataProvider;
 import io.github.xfacthd.framedblocks.client.model.item.modelprovider.FenceBlockItemModelProvider;
 import io.github.xfacthd.framedblocks.client.model.item.property.BlueprintProperty;
-import io.github.xfacthd.framedblocks.client.model.loader.fallback.FallbackLoader;
 import io.github.xfacthd.framedblocks.client.model.special.FramedBannerFlagModel;
 import io.github.xfacthd.framedblocks.client.model.special.FramedChestLidModel;
 import io.github.xfacthd.framedblocks.client.model.template.GeometryTemplateManager;
@@ -135,7 +134,6 @@ public final class FBClient {
         modBus.addListener(FBClient::onRegisterItemModelDataProviders);
         modBus.addListener(FBClient::onRegisterGuiLayers);
         modBus.addListener(FBClient::onRegisterBlockInteractOverlays);
-        modBus.addListener(FBClient::onGeometryLoaderRegister);
         modBus.addListener(FBClient::onRegisterModelWrappers);
         modBus.addListener(FBClient::onBlockStateModelRegister);
         modBus.addListener(FBClient::onRegisterStandaloneModels);
@@ -245,10 +243,6 @@ public final class FBClient {
         event.register(Utils.id("camo_rotation"), new CamoRotationOverlay());
         event.register(Utils.id("trapdoor_texture_rotation"), new TrapdoorTextureRotationOverlay());
         event.register(Utils.id("copycat_style"), new CopycatStyleOverlay());
-    }
-
-    private static void onGeometryLoaderRegister(ModelEvent.RegisterLoaders event) {
-        event.register(FallbackLoader.ID, new FallbackLoader());
     }
 
     private static void onRegisterModelWrappers(RegisterModelWrappersEvent event) {

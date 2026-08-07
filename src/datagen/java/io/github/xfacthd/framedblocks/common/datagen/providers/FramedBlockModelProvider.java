@@ -15,7 +15,6 @@ import io.github.xfacthd.framedblocks.client.model.item.dataprovider.AdjustableD
 import io.github.xfacthd.framedblocks.client.model.item.FramedBlockItemModel;
 import io.github.xfacthd.framedblocks.client.model.item.TankItemModel;
 import io.github.xfacthd.framedblocks.client.model.item.modelprovider.FenceBlockItemModelProvider;
-import io.github.xfacthd.framedblocks.client.model.loader.fallback.FallbackLoaderBuilder;
 import io.github.xfacthd.framedblocks.client.render.block.FramedBannerRenderer;
 import io.github.xfacthd.framedblocks.client.render.block.FramedChestRenderer;
 import io.github.xfacthd.framedblocks.client.render.item.BannerItemRenderer;
@@ -52,6 +51,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.ChestType;
 import net.minecraft.world.level.block.state.properties.RailShape;
+import net.neoforged.neoforge.client.model.generators.loaders.ConditionalModelBuilder;
 import net.neoforged.neoforge.client.model.generators.template.ExtendedModelTemplateBuilder;
 import net.neoforged.neoforge.common.conditions.NeoForgeConditions;
 import org.jspecify.annotations.Nullable;
@@ -737,7 +737,7 @@ public final class FramedBlockModelProvider extends AbstractFramedBlockModelProv
 
         ExtendedModelTemplateBuilder.builder()
                 .parent(AmendmentsCompat.HANGING_MODEL_LOCATION)
-                .customLoader(FallbackLoaderBuilder::new, builder ->
+                .customLoader(ConditionalModelBuilder::new, builder ->
                         builder.addCondition(NeoForgeConditions.modLoaded(AmendmentsCompat.MOD_ID))
                                 .setFallback(MissingCuboidModel.LOCATION)
                 )
