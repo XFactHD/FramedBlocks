@@ -1,6 +1,5 @@
 {
   "type": "minecraft:crafting_shaped",
-  "category": "misc",
   "key": {
     "F": "framedblocks:framed_cube",
     "O": "#c:obsidians",

@@ -84,6 +84,7 @@ public final class ObjectTagAppender<T> implements TagAppender<T> {
     @Override
     @SafeVarargs
     public final ObjectTagAppender<T> addTags(TagKey<T>... values) {
+        parent.addTags(values);
         return this;
     }
 

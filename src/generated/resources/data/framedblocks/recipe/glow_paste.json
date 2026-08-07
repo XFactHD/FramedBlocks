@@ -1,6 +1,5 @@
 {
   "type": "minecraft:crafting_shaped",
-  "category": "misc",
   "key": {
     "G": "#c:dusts/glowstone",
     "S": "#c:slime_balls"
