@@ -3,6 +3,7 @@ package io.github.xfacthd.framedblocks.client.screen;
 import com.mojang.blaze3d.platform.InputConstants;
 import io.github.xfacthd.framedblocks.api.block.blockentity.FrameModifier;
 import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.client.screen.widget.IndicatorButton;
 import io.github.xfacthd.framedblocks.common.item.applicator.CamoApplicatorConfig;
 import io.github.xfacthd.framedblocks.common.item.applicator.CamoApplicatorContent;
 import io.github.xfacthd.framedblocks.common.menu.CamoApplicatorMenu;
@@ -12,7 +13,6 @@ import io.github.xfacthd.framedblocks.common.net.payload.serverbound.Serverbound
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
-import net.minecraft.client.gui.components.Checkbox;
 import net.minecraft.client.gui.components.CycleButton;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -52,7 +52,7 @@ public final class CamoApplicatorScreen extends AbstractContainerScreen<CamoAppl
     public static final int CFG_TAB_WIDTH_CLOSED = 28;
     public static final int CFG_TAB_HEIGHT_CLOSED = 28;
     public static final int CFG_TAB_WIDTH_OPEN = 105;
-    public static final int CFG_TAB_HEIGHT_OPEN = 155;
+    public static final int CFG_TAB_HEIGHT_OPEN = 145;
     private static final int CFG_BTN_X = WIDTH - 2;
     private static final int CFG_BTN_Y = 2;
     private static final int CFG_BTN_SIZE = 24;
@@ -64,7 +64,7 @@ public final class CamoApplicatorScreen extends AbstractContainerScreen<CamoAppl
     private static final int MODE_BTN_Y = 41;
     private static final int MODE_BTN_WIDTH = 90;
     private static final int MOD_BTN_TOP_Y = 77;
-    private static final int MOD_BTN_DIST = 18;
+    private static final int MOD_BTN_DIST = 16;
     private static final int MOD_BAR_WIDTH = 6;
     private static final int MOD_BAR_HEIGHT = 64;
     private static final int MOD_BAR_DIST = 13;
@@ -89,7 +89,7 @@ public final class CamoApplicatorScreen extends AbstractContainerScreen<CamoAppl
 
     @UnknownNullability
     private CycleButton<CamoApplicatorConfig.Mode> modeCycleButton;
-    private final Checkbox[] modCheckboxes = new Checkbox[MODIFIERS.length];
+    private final IndicatorButton[] modCheckboxes = new IndicatorButton[MODIFIERS.length];
     private boolean configOpen = false;
 
     public CamoApplicatorScreen(CamoApplicatorMenu menu, Inventory inventory, Component title) {
@@ -112,13 +112,26 @@ public final class CamoApplicatorScreen extends AbstractContainerScreen<CamoAppl
         for (FrameModifier modifier : MODIFIERS) {
             int i = modifier.ordinal();
             modCheckboxes[i] = addRenderableWidget(
-                    Checkbox.builder(MODIFIER_SPECS[i].tooltip.copy().setStyle(Style.EMPTY.withShadowColor(0)).withColor(0xFF404040), font)
-                            .pos(leftPos + CFG_CONTENT_X, topPos + MOD_BTN_TOP_Y + MOD_BTN_DIST * i)
-                            .selected(menu.isModifierActive(modifier))
-                            .onValueChange((_, active) -> configureModifier(modifier, active))
-                            .build()
+                    new IndicatorButton(
+                            leftPos + CFG_CONTENT_X,
+                            topPos + MOD_BTN_TOP_Y + MOD_BTN_DIST * i,
+                            MODIFIER_SPECS[i].tooltip.copy().setStyle(Style.EMPTY.withShadowColor(0)).withColor(0xFF404040),
+                            menu.isModifierActive(modifier),
+                            state -> configureModifier(modifier, state)
+                    )
             );
             modCheckboxes[i].visible = configOpen;
+        }
+    }
+
+    @Override
+    protected void repositionElements() {
+        modeCycleButton.setPosition(leftPos + CFG_CONTENT_X, topPos + MODE_BTN_Y);
+        for (int i = 0; i < modCheckboxes.length; i++) {
+            modCheckboxes[i].setPosition(
+                    leftPos + CFG_CONTENT_X,
+                    topPos + MOD_BTN_TOP_Y + MOD_BTN_DIST * i
+            );
         }
     }
 
