@@ -1116,6 +1116,10 @@ final class SkipPredicateGeneratorData {
         public boolean hasOneWayTestAgainst(Type type) {
             return oneWayTests.containsKey(type.type);
         }
+
+        public boolean hasDynamicProperties() {
+            return properties.stream().map(Property::specialPropLookup).filter(Objects::nonNull).anyMatch(SpecialPropLookup::dynamic);
+        }
     }
 
     record Property(String typeName, String name, String propHolder, String propName, PropType type, @Nullable SpecialPropLookup specialPropLookup, boolean earlyExit) {
@@ -1132,6 +1136,10 @@ final class SkipPredicateGeneratorData {
         }
 
         Property withPropLookup(String classFqn, String varName, String method) {
+            return withPropLookup(classFqn, varName, method, false);
+        }
+
+        Property withPropLookup(String classFqn, String varName, String method, boolean dynamic) {
             String importLine = classFqn.replace("/", ".");
             int dollarIdx = importLine.indexOf('$');
             if (dollarIdx != -1) {
@@ -1139,7 +1147,7 @@ final class SkipPredicateGeneratorData {
             }
             int lastSlash = classFqn.lastIndexOf("/");
             String varType = classFqn.substring(lastSlash + 1).replace("$", ".");
-            return new Property(typeName, name, propHolder, propName, type, new SpecialPropLookup(importLine, varType, varName, method), false);
+            return new Property(typeName, name, propHolder, propName, type, new SpecialPropLookup(importLine, varType, varName, method, dynamic), false);
         }
 
         Property withEarlyExit() {
@@ -1151,7 +1159,7 @@ final class SkipPredicateGeneratorData {
         }
     }
 
-    record SpecialPropLookup(String classImport, String varType, String varName, String method) { }
+    record SpecialPropLookup(String classImport, String varType, String varName, String method, boolean dynamic) { }
 
     enum PropType {
         PRIMITIVE,
