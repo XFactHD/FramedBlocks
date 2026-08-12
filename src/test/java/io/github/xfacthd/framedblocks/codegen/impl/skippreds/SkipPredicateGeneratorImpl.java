@@ -83,10 +83,12 @@ public final class SkipPredicateGeneratorImpl {
     private static final String PRE_FILTER_SPECIAL_LOOKUP_VAR_TEMPLATE = "        %s %s = (%s) state.getBlock();";
     private static final String PRE_FILTER_PROP_LOOKUP_TEMPLATE = "        %s %s = state.getValue(%s.%s);";
     private static final String PRE_FILTER_SPECIAL_PROP_LOOKUP_TEMPLATE = "        %s %s = %s.%s(state);";
+    private static final String PRE_FILTER_DYNAMIC_PROP_LOOKUP_TEMPLATE = "        %s %s = %s.%s(level, pos, state);";
     private static final String SPECIAL_LOOKUP_VAR_TEMPLATE = "            %s %s = (%s) state.getBlock();";
     private static final String SPECIAL_LOOKUP_INLINE_TEMPLATE = "((%s) state.getBlock())";
     private static final String PROP_LOOKUP_TEMPLATE = "            %s %s = state.getValue(%s.%s);";
     private static final String SPECIAL_PROP_LOOKUP_TEMPLATE = "            %s %s = %s.%s(state);";
+    private static final String DYNAMIC_PROP_LOOKUP_TEMPLATE = "            %s %s = %s.%s(level, pos, state);";
     private static final String TEST_CASE_TEMPLATE = """
                             case %s -> testAgainst%s(
                                     %sside
@@ -104,6 +106,7 @@ public final class SkipPredicateGeneratorImpl {
     private static final String TEST_MTH_SPECIAL_LOOKUP_INLINE_TEMPLATE = "((%s) adjState.getBlock())";
     private static final String TEST_MTH_PROP_LOOKUP_TEMPLATE = "        %s adj%s = adjState.getValue(%s.%s);";
     private static final String TEST_MTH_SPECIAL_PROP_LOOKUP_TEMPLATE = "        %s adj%s = %s.%s(adjState);";
+    private static final String TEST_MTH_DYNAMIC_PROP_LOOKUP_TEMPLATE = "        %s adj%s = %s.%s(level, adjPos, adjState);";
     private static final String DIR_TEST_TEMPLATE_FIRST = "return %s.get%sDir(%s).isEqualTo(%s.get%sDir(%s))";
     private static final String DIR_TEST_TEMPLATE_OTHER = "       %s.get%sDir(%s).isEqualTo(%s.get%sDir(%s))";
     private static final String BOOLEAN_DIR_TEST_TEMPLATE_FIRST = "return (%s.is%sDir(%s) && %s.is%sDir(%s))";
@@ -309,7 +312,8 @@ public final class SkipPredicateGeneratorImpl {
                 if (!specialLookupVarsFoundTwice.contains(ifaceVarName)) {
                     callTarget = location.lookupInlineTemplate.formatted(lookup.varType());
                 }
-                lookupLine = location.specialLookupTemplate.formatted(
+                String lookupTemplate = lookup.dynamic() ? location.dynamicLookupTemplate : location.specialLookupTemplate;
+                lookupLine = lookupTemplate.formatted(
                         prop.typeName(),
                         varName,
                         callTarget,
@@ -346,7 +350,7 @@ public final class SkipPredicateGeneratorImpl {
         boolean hasSpecialSelfTest = sourceType.hasSpecialTests();
         Set<Property> selfProps = propsByTestTarget.get(sourceType);
         if (selfProps != null) {
-            String selfPropArgsList = buildTestCaseArgList(sourceType, selfProps, hasSpecialSelfTest, hasSpecialSelfTest || !noPropsTypes.contains(sourceType));
+            String selfPropArgsList = buildTestCaseArgList(sourceType, sourceType, selfProps, hasSpecialSelfTest, hasSpecialSelfTest || !noPropsTypes.contains(sourceType));
             builder.append(buildTestCase(sourceType, selfPropArgsList, sourceTestDirsByType.get(sourceType)));
         }
         for (Type type : targetTypes) {
@@ -356,14 +360,14 @@ public final class SkipPredicateGeneratorImpl {
             }
 
             boolean hasSpecialTest = sourceType.hasOneWayTestAgainst(type);
-            String propArgsList = buildTestCaseArgList(sourceType, props, hasSpecialTest, hasSpecialTest || !noPropsTypes.contains(type));
+            String propArgsList = buildTestCaseArgList(sourceType, type, props, hasSpecialTest, hasSpecialTest || !noPropsTypes.contains(type));
             builder.append(buildTestCase(type, propArgsList, sourceTestDirsByType.get(type)));
         }
         return builder.toString().stripTrailing();
     }
 
-    private static String buildTestCaseArgList(Type type, Set<Property> usedProps, boolean needsState, boolean needAdjState) {
-        String args = type.properties()
+    private static String buildTestCaseArgList(Type sourceType, Type targetType, Set<Property> usedProps, boolean needsState, boolean needAdjState) {
+        String args = sourceType.properties()
                 .stream()
                 .filter(usedProps::contains)
                 .map(Property::name)
@@ -373,6 +377,9 @@ public final class SkipPredicateGeneratorImpl {
         }
         if (needsState) {
             args = "state, " + args;
+        }
+        if (targetType.hasDynamicProperties()) {
+            args += "level, pos.relative(side), ";
         }
         if (needAdjState) {
             args += "adjState, ";
@@ -415,6 +422,9 @@ public final class SkipPredicateGeneratorImpl {
             if (hasSpecialSelfTest) {
                 selfPropParamsList = "BlockState state, " + selfPropParamsList;
             }
+            if (sourceType.hasDynamicProperties()) {
+                selfPropParamsList += "BlockGetter level, BlockPos adjPos, ";
+            }
             if (!noPropsTypes.contains(sourceType) || hasSpecialSelfTest) {
                 selfPropParamsList += "BlockState adjState, ";
             }
@@ -446,6 +456,9 @@ public final class SkipPredicateGeneratorImpl {
             boolean isOneWayTest = sourceType.hasOneWayTestAgainst(type);
             if (isOneWayTest) {
                 propParamsList = "BlockState state, " + propParamsList;
+            }
+            if (type.hasDynamicProperties()) {
+                propParamsList += "BlockGetter level, BlockPos adjPos, ";
             }
             if (!noPropsTypes.contains(type) || isOneWayTest) {
                 propParamsList += "BlockState adjState, ";
@@ -678,19 +691,22 @@ public final class SkipPredicateGeneratorImpl {
                 PRE_FILTER_SPECIAL_LOOKUP_VAR_TEMPLATE,
                 SPECIAL_LOOKUP_INLINE_TEMPLATE,
                 PRE_FILTER_PROP_LOOKUP_TEMPLATE,
-                PRE_FILTER_SPECIAL_PROP_LOOKUP_TEMPLATE
+                PRE_FILTER_SPECIAL_PROP_LOOKUP_TEMPLATE,
+                PRE_FILTER_DYNAMIC_PROP_LOOKUP_TEMPLATE
         ),
         MAIN(
                 SPECIAL_LOOKUP_VAR_TEMPLATE,
                 SPECIAL_LOOKUP_INLINE_TEMPLATE,
                 PROP_LOOKUP_TEMPLATE,
-                SPECIAL_PROP_LOOKUP_TEMPLATE
+                SPECIAL_PROP_LOOKUP_TEMPLATE,
+                DYNAMIC_PROP_LOOKUP_TEMPLATE
         ),
         TEST_METHOD(
                 TEST_MTH_SPECIAL_LOOKUP_VAR_TEMPLATE,
                 TEST_MTH_SPECIAL_LOOKUP_INLINE_TEMPLATE,
                 TEST_MTH_PROP_LOOKUP_TEMPLATE,
-                TEST_MTH_SPECIAL_PROP_LOOKUP_TEMPLATE
+                TEST_MTH_SPECIAL_PROP_LOOKUP_TEMPLATE,
+                TEST_MTH_DYNAMIC_PROP_LOOKUP_TEMPLATE
         ),
         ;
 
@@ -698,12 +714,14 @@ public final class SkipPredicateGeneratorImpl {
         private final String lookupInlineTemplate;
         private final String lookupTemplate;
         private final String specialLookupTemplate;
+        private final String dynamicLookupTemplate;
 
-        PropertyLookupLocation(String lookupVarTemplate, String lookupInlineTemplate, String lookupTemplate, String specialLookupTemplate) {
+        PropertyLookupLocation(String lookupVarTemplate, String lookupInlineTemplate, String lookupTemplate, String specialLookupTemplate, String dynamicLookupTemplate) {
             this.lookupVarTemplate = lookupVarTemplate;
             this.lookupInlineTemplate = lookupInlineTemplate;
             this.lookupTemplate = lookupTemplate;
             this.specialLookupTemplate = specialLookupTemplate;
+            this.dynamicLookupTemplate = dynamicLookupTemplate;
         }
     }
 
