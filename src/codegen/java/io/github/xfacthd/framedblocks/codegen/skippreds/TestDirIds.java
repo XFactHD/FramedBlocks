@@ -1,4 +1,4 @@
-package io.github.xfacthd.framedblocks.codegen.impl.skippreds;
+package io.github.xfacthd.framedblocks.codegen.skippreds;
 
 final class TestDirIds {
     /// Left/right face of a Slope angled up or down

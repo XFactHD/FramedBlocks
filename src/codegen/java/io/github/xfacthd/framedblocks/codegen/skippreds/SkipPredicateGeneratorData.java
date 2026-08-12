@@ -1,4 +1,4 @@
-package io.github.xfacthd.framedblocks.codegen.impl.skippreds;
+package io.github.xfacthd.framedblocks.codegen.skippreds;
 
 import org.jspecify.annotations.Nullable;
 
