@@ -1147,7 +1147,7 @@ final class SkipPredicateGeneratorData {
             }
             int lastSlash = classFqn.lastIndexOf("/");
             String varType = classFqn.substring(lastSlash + 1).replace("$", ".");
-            return new Property(typeName, name, propHolder, propName, type, new SpecialPropLookup(importLine, varType, varName, method, dynamic), false);
+            return new Property(typeName, name, propHolder, propName, type, new SpecialPropLookup(importLine, varType, varName, method, dynamic), earlyExit);
         }
 
         Property withEarlyExit() {
