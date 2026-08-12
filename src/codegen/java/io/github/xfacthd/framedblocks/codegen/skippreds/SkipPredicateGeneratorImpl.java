@@ -1,9 +1,9 @@
-package io.github.xfacthd.framedblocks.codegen.impl.skippreds;
+package io.github.xfacthd.framedblocks.codegen.skippreds;
 
-import io.github.xfacthd.framedblocks.codegen.impl.skippreds.SkipPredicateGeneratorData.Property;
-import io.github.xfacthd.framedblocks.codegen.impl.skippreds.SkipPredicateGeneratorData.SpecialPropLookup;
-import io.github.xfacthd.framedblocks.codegen.impl.skippreds.SkipPredicateGeneratorData.TestDir;
-import io.github.xfacthd.framedblocks.codegen.impl.skippreds.SkipPredicateGeneratorData.Type;
+import io.github.xfacthd.framedblocks.codegen.skippreds.SkipPredicateGeneratorData.Property;
+import io.github.xfacthd.framedblocks.codegen.skippreds.SkipPredicateGeneratorData.SpecialPropLookup;
+import io.github.xfacthd.framedblocks.codegen.skippreds.SkipPredicateGeneratorData.TestDir;
+import io.github.xfacthd.framedblocks.codegen.skippreds.SkipPredicateGeneratorData.Type;
 import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.Nullable;
 

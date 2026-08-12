@@ -34,6 +34,12 @@ sourceSets {
             srcDir "src/test/resources"
         }
     }
+
+    codegen {
+        java {
+            srcDir "src/codegen/java"
+        }
+    }
 }
 
 neoForge {
@@ -98,6 +104,7 @@ neoForge {
 
     addModdingDependenciesTo(project.sourceSets.datagen)
     addModdingDependenciesTo(project.sourceSets.test)
+    addModdingDependenciesTo(project.sourceSets.codegen)
 }
 
 repositories {

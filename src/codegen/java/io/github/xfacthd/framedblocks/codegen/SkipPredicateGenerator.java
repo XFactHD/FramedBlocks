@@ -1,6 +1,6 @@
 package io.github.xfacthd.framedblocks.codegen;
 
-import io.github.xfacthd.framedblocks.codegen.impl.skippreds.SkipPredicateGeneratorImpl;
+import io.github.xfacthd.framedblocks.codegen.skippreds.SkipPredicateGeneratorImpl;
 
 public final class SkipPredicateGenerator {
     static void main() {
