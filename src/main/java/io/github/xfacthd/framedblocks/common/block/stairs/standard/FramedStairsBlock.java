@@ -8,16 +8,14 @@ import io.github.xfacthd.framedblocks.api.block.item.placement.PropertyLabels;
 import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
 import io.github.xfacthd.framedblocks.api.block.item.placement.ValueOrders;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
-import io.github.xfacthd.framedblocks.api.model.wrapping.WrapHelper;
 import io.github.xfacthd.framedblocks.api.model.wrapping.statemerger.StateMerger;
+import io.github.xfacthd.framedblocks.api.model.wrapping.statemerger.StateMergers;
 import io.github.xfacthd.framedblocks.api.util.RotationDirection;
-import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.block.IFramedBlockInternal;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.Holder;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.TriState;
 import net.minecraft.world.InteractionHand;
@@ -47,7 +45,7 @@ import java.util.List;
 import java.util.Set;
 
 public class FramedStairsBlock extends StairBlock implements IFramedBlockInternal, ShapeLockableBlock {
-    public static final StateMerger STATE_MERGER = new StairStateMerger();
+    public static final StateMerger STATE_MERGER = StateMergers.compound(StateMergers.DEFAULT, new StairStateMerger());
 
     private final BlockType type;
 
@@ -189,10 +187,13 @@ public class FramedStairsBlock extends StairBlock implements IFramedBlockInterna
         return defaultBlockState().setValue(FACING, Direction.SOUTH);
     }
 
-    private static final class StairStateMerger implements StateMerger {
+    private static final class StairStateMerger extends StateMerger {
+        private StairStateMerger() {
+            super(Set.of(SHAPE));
+        }
+
         @Override
         public BlockState apply(BlockState state) {
-            state = WrapHelper.DEFAULT_MERGER.apply(state);
             StairsShape shape = state.getValue(SHAPE);
             if (shape == StairsShape.INNER_RIGHT) {
                 state = state.setValue(SHAPE, StairsShape.INNER_LEFT)
@@ -202,14 +203,6 @@ public class FramedStairsBlock extends StairBlock implements IFramedBlockInterna
                         .setValue(FACING, state.getValue(FACING).getClockWise());
             }
             return state;
-        }
-
-        @Override
-        public Set<Property<?>> getHandledProperties(Holder<Block> block) {
-            return Utils.concat(
-                    WrapHelper.DEFAULT_MERGER.getHandledProperties(block),
-                    Set.of(SHAPE)
-            );
         }
     }
 }

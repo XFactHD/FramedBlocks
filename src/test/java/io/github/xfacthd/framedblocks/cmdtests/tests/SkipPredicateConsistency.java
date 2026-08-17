@@ -3,7 +3,7 @@ package io.github.xfacthd.framedblocks.cmdtests.tests;
 import com.mojang.brigadier.context.CommandContext;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.cache.StateCache;
-import io.github.xfacthd.framedblocks.api.model.wrapping.WrapHelper;
+import io.github.xfacthd.framedblocks.api.model.wrapping.statemerger.StateMergers;
 import io.github.xfacthd.framedblocks.api.predicate.cull.SideSkipPredicate;
 import io.github.xfacthd.framedblocks.cmdtests.SpecialTestCommand;
 import io.github.xfacthd.framedblocks.common.FBContent;
@@ -42,7 +42,7 @@ public final class SkipPredicateConsistency {
     private static final String RESULT_MSG = MSG_PREFIX + "Tested %,d combinations in %dms. ";
     private static final BlockPos CENTER = new BlockPos(1, 1, 1);
     private static final Set<Property<?>> IGNORED_PROPERTIES = Stream.of(
-            WrapHelper.IGNORED_PROPS,
+            StateMergers.IGNORED_PROPS,
             Set.of(BlockStateProperties.POWERED, FramedProperties.ALT_SLOPE, PropertyHolder.OFFSET)
     ).flatMap(Set::stream).collect(Collectors.toSet());
 

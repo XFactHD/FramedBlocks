@@ -7,11 +7,10 @@ import io.github.xfacthd.framedblocks.api.block.item.IFramedBlockItem;
 import io.github.xfacthd.framedblocks.api.block.item.placement.PropertyLabels;
 import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
-import io.github.xfacthd.framedblocks.api.model.wrapping.WrapHelper;
 import io.github.xfacthd.framedblocks.api.model.wrapping.statemerger.StateMerger;
+import io.github.xfacthd.framedblocks.api.model.wrapping.statemerger.StateMergers;
 import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.api.util.RotationDirection;
-import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.block.IFramedBlockInternal;
 import io.github.xfacthd.framedblocks.common.blockentity.special.FramedSignBlockEntity;
@@ -20,7 +19,6 @@ import io.github.xfacthd.framedblocks.common.item.block.FramedSignItem;
 import io.github.xfacthd.framedblocks.common.net.payload.clientbound.ClientboundOpenSignScreenPayload;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.TriState;
@@ -42,7 +40,6 @@ import net.minecraft.world.level.block.entity.SignBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.block.state.properties.WoodType;
 import net.minecraft.world.level.redstone.Orientation;
 import net.minecraft.world.level.storage.loot.LootParams;
@@ -54,6 +51,8 @@ import java.util.List;
 import java.util.Set;
 
 public final class FramedStandingSignBlock extends StandingSignBlock implements IFramedBlockInternal {
+    public static final StateMerger STATE_MERGER = StateMergers.compound(StateMergers.DEFAULT, new RotatingSignStateMerger());
+
     public FramedStandingSignBlock(Properties properties) {
         super(WoodType.OAK, IFramedBlock.applyDefaultProperties(properties, BlockType.FRAMED_SIGN)
                 .forceSolidOn()
@@ -171,27 +170,18 @@ public final class FramedStandingSignBlock extends StandingSignBlock implements 
         return defaultBlockState();
     }
 
-    public static final class RotatingSignStateMerger implements StateMerger {
-        public static final RotatingSignStateMerger INSTANCE = new RotatingSignStateMerger();
-
-        private RotatingSignStateMerger() { }
+    private static final class RotatingSignStateMerger extends StateMerger {
+        private RotatingSignStateMerger() {
+            super(Set.of(BlockStateProperties.ROTATION_16));
+        }
 
         @Override
         public BlockState apply(BlockState state) {
-            state = WrapHelper.DEFAULT_MERGER.apply(state);
             int rot = state.getValue(BlockStateProperties.ROTATION_16);
             if (rot > 7) {
                 state = state.setValue(BlockStateProperties.ROTATION_16, rot - 8);
             }
             return state;
-        }
-
-        @Override
-        public Set<Property<?>> getHandledProperties(Holder<Block> block) {
-            return Utils.concat(
-                    WrapHelper.DEFAULT_MERGER.getHandledProperties(block),
-                    Set.of(BlockStateProperties.ROTATION_16)
-            );
         }
     }
 }

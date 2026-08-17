@@ -126,7 +126,7 @@ public final class BlockStateInfo {
     @SuppressWarnings("deprecation")
     private static String printIgnoredProperties(ModelWrappingHandler wrapper, Block block) {
         return wrapper.getStateMerger()
-                .getHandledProperties(block.builtInRegistryHolder())
+                .getHandledProperties()
                 .stream()
                 .filter(block.defaultBlockState()::hasProperty)
                 .map(Property::getName)

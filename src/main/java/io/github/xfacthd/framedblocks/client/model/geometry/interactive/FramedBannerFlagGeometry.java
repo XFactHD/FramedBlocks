@@ -7,8 +7,8 @@ import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
 import io.github.xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
-import io.github.xfacthd.framedblocks.api.model.wrapping.WrapHelper;
 import io.github.xfacthd.framedblocks.api.model.wrapping.statemerger.StateMerger;
+import io.github.xfacthd.framedblocks.api.model.wrapping.statemerger.StateMergers;
 import net.minecraft.client.resources.model.geometry.BakedQuad;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Util;
@@ -20,9 +20,9 @@ import java.util.Set;
 
 public final class FramedBannerFlagGeometry extends Geometry {
     public static final StateMerger STATE_MERGER = Util.make(() -> {
-        Set<Property<?>> properties = new HashSet<>(WrapHelper.IGNORED_PROPS);
+        Set<Property<?>> properties = new HashSet<>(StateMergers.IGNORED_PROPS);
         properties.remove(FramedProperties.GLOWING);
-        return StateMerger.ignoring(properties);
+        return StateMergers.ignoring(properties);
     });
 
     private final Direction dir;

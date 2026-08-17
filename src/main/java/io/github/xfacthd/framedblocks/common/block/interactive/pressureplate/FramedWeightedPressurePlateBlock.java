@@ -5,14 +5,12 @@ import io.github.xfacthd.framedblocks.api.block.CopycatStyleBlock;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
-import io.github.xfacthd.framedblocks.api.model.wrapping.WrapHelper;
 import io.github.xfacthd.framedblocks.api.model.wrapping.statemerger.StateMerger;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.model.wrapping.statemerger.StateMergers;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.block.IFramedBlockInternal;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Holder;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
@@ -26,7 +24,6 @@ import net.minecraft.world.level.block.WeightedPressurePlateBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockSetType;
-import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jspecify.annotations.Nullable;
@@ -36,7 +33,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class FramedWeightedPressurePlateBlock extends WeightedPressurePlateBlock implements IFramedBlockInternal, CopycatStyleBlock.StateDependent {
-    public static final WeightedStateMerger STATE_MERGER = new WeightedStateMerger();
+    public static final StateMerger STATE_MERGER = StateMergers.compound(StateMergers.DEFAULT, new WeightedStateMerger());
     private static final Map<BlockType, BlockType> WATERLOGGING_SWITCH = Map.of(
             BlockType.FRAMED_GOLD_PRESSURE_PLATE, BlockType.FRAMED_WATERLOGGABLE_GOLD_PRESSURE_PLATE,
             BlockType.FRAMED_WATERLOGGABLE_GOLD_PRESSURE_PLATE, BlockType.FRAMED_GOLD_PRESSURE_PLATE,
@@ -178,22 +175,17 @@ public class FramedWeightedPressurePlateBlock extends WeightedPressurePlateBlock
         );
     }
 
-    public static final class WeightedStateMerger implements StateMerger {
+    private static final class WeightedStateMerger extends StateMerger {
+        private WeightedStateMerger() {
+            super(Set.of(WeightedPressurePlateBlock.POWER));
+        }
+
         @Override
         public BlockState apply(BlockState state) {
-            state = WrapHelper.DEFAULT_MERGER.apply(state);
             if (state.getValue(WeightedPressurePlateBlock.POWER) > 1) {
                 state = state.setValue(WeightedPressurePlateBlock.POWER, 1);
             }
             return state;
-        }
-
-        @Override
-        public Set<Property<?>> getHandledProperties(Holder<Block> block) {
-            return Utils.concat(
-                    WrapHelper.DEFAULT_MERGER.getHandledProperties(block),
-                    Set.of(WeightedPressurePlateBlock.POWER)
-            );
         }
     }
 }

@@ -6,6 +6,7 @@ import io.github.xfacthd.framedblocks.api.model.AbstractFramedBlockStateModel;
 import io.github.xfacthd.framedblocks.api.model.standalone.StandaloneWrapperKey;
 import io.github.xfacthd.framedblocks.api.model.wrapping.RegisterModelWrappersEvent;
 import io.github.xfacthd.framedblocks.api.model.wrapping.statemerger.StateMerger;
+import io.github.xfacthd.framedblocks.api.model.wrapping.statemerger.StateMergers;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.client.model.template.GeometryTemplateSpecImpl;
 import io.github.xfacthd.framedblocks.client.model.unbaked.UnbakedStandaloneFramedBlockModel;
@@ -36,14 +37,12 @@ public final class ModelWrappingManager {
     private static final Logger LOGGER = LogUtils.getLogger();
     private static final Map<Block, ModelWrappingHandler> HANDLERS = new IdentityHashMap<>();
     private static final Map<StandaloneWrapperKey<?>, StandaloneModelWrappingHandler<?>> STANDALONE_HANDLERS = new IdentityHashMap<>();
-    private static boolean locked = true;
     @Nullable
     private static MarkdownTable stateMergerDebugOutput;
 
     public static void fireRegistration() {
         Stopwatch stopwatch = Stopwatch.createStarted();
 
-        locked = false;
         boolean debugLogging = DevToolsConfig.VIEW.isStateMergerDebugLoggingEnabled();
         if (debugLogging) {
             LOGGER.info("=============== Model Wrapper Registration Start ===============");
@@ -52,13 +51,12 @@ public final class ModelWrappingManager {
             stateMergerDebugOutput.header("Unhandled properties");
             stateMergerDebugOutput.header("Handled or ignored properties");
         }
-        ModLoader.postEvent(new RegisterModelWrappersEvent());
+        ModLoader.postEvent(new RegisterModelWrappersEvent(new ModelWrapperRegistrarImpl()));
         if (debugLogging) {
             LOGGER.info("StateMerger Debug Info\n{}", stateMergerDebugOutput.print().stripTrailing());
             LOGGER.info("=============== Model Wrapper Registration End =================");
             stateMergerDebugOutput = null;
         }
-        locked = true;
 
         stopwatch.stop();
         LOGGER.debug("Registered model wrappers for {} blocks in {}", HANDLERS.size(), stopwatch);
@@ -79,11 +77,7 @@ public final class ModelWrappingManager {
         HANDLERS.values().forEach(handler -> handler.registerBlockModelFactory(event));
     }
 
-    public static void register(Holder<Block> block, ModelWrappingHandler handler) {
-        if (locked) {
-            throw new IllegalStateException("ModelWrappingHandler registration is locked");
-        }
-
+    static void register(Holder<Block> block, ModelWrappingHandler handler) {
         ModelWrappingHandler oldHandler = HANDLERS.put(block.value(), handler);
         if (oldHandler != null) {
             throw new IllegalStateException("ModelWrappingHandler for '" + block + "' already registered");
@@ -92,11 +86,7 @@ public final class ModelWrappingManager {
         debugStateMerger(block, handler.getStateMerger());
     }
 
-    public static void register(StandaloneWrapperKey<?> wrapperKey, StandaloneModelWrappingHandler<?> handler) {
-        if (locked) {
-            throw new IllegalStateException("ModelWrappingHandler registration is locked");
-        }
-
+    static void register(StandaloneWrapperKey<?> wrapperKey, StandaloneModelWrappingHandler<?> handler) {
         StandaloneModelWrappingHandler<?> oldHandler = STANDALONE_HANDLERS.put(wrapperKey, handler);
         if (oldHandler != null) {
             throw new IllegalStateException("ModelWrappingHandler for wrapper key '" + wrapperKey + "' already registered");
@@ -121,7 +111,7 @@ public final class ModelWrappingManager {
         }
 
         LOGGER.error("No ModelWrappingHandler registered for block {}, falling back to passthrough StateMerger", block);
-        return StateMerger.PASSTHROUGH;
+        return StateMergers.PASSTHROUGH;
     }
 
     @SuppressWarnings("unchecked")
@@ -198,7 +188,7 @@ public final class ModelWrappingManager {
         }
 
         Set<Property<?>> props = new HashSet<>(block.value().getStateDefinition().getProperties());
-        Set<Property<?>> ignoredProps = stateMerger.getHandledProperties(block);
+        Set<Property<?>> ignoredProps = stateMerger.getHandledProperties();
 
         props.removeAll(ignoredProps);
 

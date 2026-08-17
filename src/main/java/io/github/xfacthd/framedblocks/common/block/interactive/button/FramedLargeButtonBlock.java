@@ -1,27 +1,23 @@
 package io.github.xfacthd.framedblocks.common.block.interactive.button;
 
-import io.github.xfacthd.framedblocks.api.model.wrapping.WrapHelper;
 import io.github.xfacthd.framedblocks.api.model.wrapping.statemerger.StateMerger;
+import io.github.xfacthd.framedblocks.api.model.wrapping.statemerger.StateMergers;
 import io.github.xfacthd.framedblocks.api.shapes.ShapeUtils;
-import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.Holder;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelReader;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.AttachFace;
 import net.minecraft.world.level.block.state.properties.BlockSetType;
-import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import java.util.Set;
 
 public class FramedLargeButtonBlock extends FramedButtonBlock {
-    public static final LargeButtonStateMerger LARGE_STATE_MERGER = new LargeButtonStateMerger();
+    public static final StateMerger LARGE_STATE_MERGER = StateMergers.compound(StateMergers.DEFAULT, new LargeButtonStateMerger());
     private static final VoxelShape SHAPE_BOTTOM = box(1, 0, 1, 15, 2, 15);
     private static final VoxelShape SHAPE_BOTTOM_PRESSED = box(1, 0, 1, 15, 1, 15);
     private static final VoxelShape SHAPE_TOP = box(1, 14, 1, 15, 16, 15);
@@ -79,26 +75,18 @@ public class FramedLargeButtonBlock extends FramedButtonBlock {
         );
     }
 
-    public static final class LargeButtonStateMerger implements StateMerger {
-        private LargeButtonStateMerger() { }
+    private static final class LargeButtonStateMerger extends StateMerger {
+        private LargeButtonStateMerger() {
+            super(Set.of(FramedLargeButtonBlock.FACING));
+        }
 
         @Override
         public BlockState apply(BlockState state) {
-            state = WrapHelper.DEFAULT_MERGER.apply(state);
-
             AttachFace face = state.getValue(FramedLargeButtonBlock.FACE);
             if (face != AttachFace.WALL) {
                 state = state.setValue(FramedLargeButtonBlock.FACING, Direction.NORTH);
             }
             return state;
-        }
-
-        @Override
-        public Set<Property<?>> getHandledProperties(Holder<Block> block) {
-            return Utils.concat(
-                    WrapHelper.DEFAULT_MERGER.getHandledProperties(block),
-                    Set.of(FramedLargeButtonBlock.FACING)
-            );
         }
     }
 }

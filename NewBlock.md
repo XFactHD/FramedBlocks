@@ -36,7 +36,7 @@
 - Create a model wrapper which handles the geometry of the block
   - For single-camo blocks, extend `Geometry` and implement `Geometry#transformQuad()` to transform the provided quads as necessary (see `QuadModifier` and `Modifiers`)
   - For double-camo blocks, register a double block wrapper
-  - Register the wrapper via `WrapHelper` in `RegisterModelWrappersEvent`
+  - Register the wrapper in `RegisterModelWrappersEvent`
   - Create the blockstate file via `AbstractFramedBlockModelProvider#simpleFramedBlock()`, `AbstractFramedBlockModelProvider#simpleFramedBlockWithItem()`, `AbstractFramedBlockModelProvider#framedVariant()` or `AbstractFramedBlockModelProvider#framedMultiPart()`
   - Create the "client item" file via `AbstractFramedBlockModelProvider#simpleFramedBlockWithItem()` or `AbstractFramedBlockModelProvider#framedBlockItemModel()`
 - If the block has sloped edges, register an `OutlineRenderer` in `RegisterOutlineRenderersEvent`

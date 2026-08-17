@@ -5,7 +5,7 @@ import fuzs.diagonalblocks.api.v2.block.type.DiagonalBlockType;
 import fuzs.diagonalblocks.api.v2.block.type.DiagonalBlockTypes;
 import io.github.xfacthd.framedblocks.api.block.render.FramedClientBlockExtensions;
 import io.github.xfacthd.framedblocks.api.model.wrapping.RegisterModelWrappersEvent;
-import io.github.xfacthd.framedblocks.api.model.wrapping.WrapHelper;
+import io.github.xfacthd.framedblocks.api.model.wrapping.statemerger.StateMergers;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.block.pane.FramedPaneBlock;
@@ -101,10 +101,10 @@ public final class DiagonalBlocksCompat {
 
         private static void onRegisterModelWrappers(RegisterModelWrappersEvent event) {
             GuardedAccess.getBlock(DiagonalBlockTypes.FENCE, FBContent.BLOCK_FRAMED_FENCE).ifPresent(
-                    holder -> WrapHelper.wrap(holder, FramedDiagonalFenceGeometry::new, WrapHelper.DEFAULT_MERGER)
+                    holder -> event.wrapSingle(holder, FramedDiagonalFenceGeometry::new, StateMergers.DEFAULT)
             );
             GuardedAccess.getBlock(DiagonalBlockTypes.WINDOW, FBContent.BLOCK_FRAMED_PANE).ifPresent(
-                    holder -> WrapHelper.wrap(holder, FramedDiagonalPaneGeometry::new, WrapHelper.DEFAULT_MERGER)
+                    holder -> event.wrapSingle(holder, FramedDiagonalPaneGeometry::new, StateMergers.DEFAULT)
             );
         }
 

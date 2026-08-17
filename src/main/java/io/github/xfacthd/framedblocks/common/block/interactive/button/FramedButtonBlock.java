@@ -5,15 +5,13 @@ import io.github.xfacthd.framedblocks.api.block.CopycatStyleBlock;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
-import io.github.xfacthd.framedblocks.api.model.wrapping.WrapHelper;
 import io.github.xfacthd.framedblocks.api.model.wrapping.statemerger.StateMerger;
+import io.github.xfacthd.framedblocks.api.model.wrapping.statemerger.StateMergers;
 import io.github.xfacthd.framedblocks.api.util.RotationDirection;
-import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.common.block.IFramedBlockInternal;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.Holder;
 import net.minecraft.util.TriState;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -29,7 +27,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.AttachFace;
 import net.minecraft.world.level.block.state.properties.BlockSetType;
-import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.BlockHitResult;
@@ -39,7 +36,7 @@ import java.util.List;
 import java.util.Set;
 
 public class FramedButtonBlock extends ButtonBlock implements IFramedBlockInternal, CopycatStyleBlock.StateDependent {
-    public static final ButtonStateMerger STATE_MERGER = new ButtonStateMerger();
+    public static final StateMerger STATE_MERGER = StateMergers.compound(StateMergers.DEFAULT, new ButtonStateMerger());
 
     private final BlockType type;
     private final float jadeScale;
@@ -154,13 +151,13 @@ public class FramedButtonBlock extends ButtonBlock implements IFramedBlockIntern
         );
     }
 
-    public static final class ButtonStateMerger implements StateMerger {
-        private ButtonStateMerger() { }
+    private static final class ButtonStateMerger extends StateMerger {
+        private ButtonStateMerger() {
+            super(Set.of(FramedLargeButtonBlock.FACING));
+        }
 
         @Override
         public BlockState apply(BlockState state) {
-            state = WrapHelper.DEFAULT_MERGER.apply(state);
-
             AttachFace face = state.getValue(FACE);
             if (face != AttachFace.WALL) {
                 Direction dir = state.getValue(FACING);
@@ -169,14 +166,6 @@ public class FramedButtonBlock extends ButtonBlock implements IFramedBlockIntern
                 }
             }
             return state;
-        }
-
-        @Override
-        public Set<Property<?>> getHandledProperties(Holder<Block> block) {
-            return Utils.concat(
-                    WrapHelper.DEFAULT_MERGER.getHandledProperties(block),
-                    Set.of(FramedLargeButtonBlock.FACING)
-            );
         }
     }
 }

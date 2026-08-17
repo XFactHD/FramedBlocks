@@ -6,14 +6,12 @@ import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.api.block.item.placement.PropertyLabels;
 import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
-import io.github.xfacthd.framedblocks.api.model.wrapping.WrapHelper;
 import io.github.xfacthd.framedblocks.api.model.wrapping.statemerger.StateMerger;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.model.wrapping.statemerger.StateMergers;
 import io.github.xfacthd.framedblocks.common.block.IFramedBlockInternal;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.Holder;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.TriState;
 import net.minecraft.world.InteractionHand;
@@ -29,7 +27,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.FenceGateBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.block.state.properties.WoodType;
 import net.minecraft.world.level.redstone.Orientation;
 import net.minecraft.world.level.storage.loot.LootParams;
@@ -40,6 +37,8 @@ import java.util.List;
 import java.util.Set;
 
 public class FramedFenceGateBlock extends FenceGateBlock implements IFramedBlockInternal {
+    public static final StateMerger STATE_MERGER = StateMergers.compound(StateMergers.POWERED, new FenceGateStateMerger());
+
     public FramedFenceGateBlock(Properties props) {
         super(WoodType.OAK, IFramedBlock.applyDefaultProperties(props, BlockType.FRAMED_FENCE_GATE));
         BlockUtils.configureStandardProperties(this);
@@ -139,14 +138,13 @@ public class FramedFenceGateBlock extends FenceGateBlock implements IFramedBlock
         return defaultBlockState();
     }
 
-    public static final class FenceGateStateMerger implements StateMerger {
-        public static final FenceGateStateMerger INSTANCE = new FenceGateStateMerger();
-
-        private FenceGateStateMerger() { }
+    private static final class FenceGateStateMerger extends StateMerger {
+        private FenceGateStateMerger() {
+            super(Set.of(FACING));
+        }
 
         @Override
         public BlockState apply(BlockState state) {
-            state = WrapHelper.POWERED_MERGER.apply(state);
             if (!state.getValue(OPEN)) {
                 Direction dir = state.getValue(FACING);
                 if (dir == Direction.SOUTH || dir == Direction.WEST) {
@@ -154,14 +152,6 @@ public class FramedFenceGateBlock extends FenceGateBlock implements IFramedBlock
                 }
             }
             return state;
-        }
-
-        @Override
-        public Set<Property<?>> getHandledProperties(Holder<Block> block) {
-            return Utils.concat(
-                    WrapHelper.POWERED_MERGER.getHandledProperties(block),
-                    Set.of(FACING)
-            );
         }
     }
 }

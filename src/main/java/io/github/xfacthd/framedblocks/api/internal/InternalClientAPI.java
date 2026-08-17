@@ -8,13 +8,10 @@ import io.github.xfacthd.framedblocks.api.datagen.templates.GeometryTemplateBuil
 import io.github.xfacthd.framedblocks.api.model.CachingModel;
 import io.github.xfacthd.framedblocks.api.model.item.ItemModelDataProvider;
 import io.github.xfacthd.framedblocks.api.model.item.block.BlockItemModelProvider;
-import io.github.xfacthd.framedblocks.api.model.standalone.StandaloneModelFactory;
 import io.github.xfacthd.framedblocks.api.model.standalone.StandaloneWrapperKey;
 import io.github.xfacthd.framedblocks.api.model.template.GeometryTemplateSpec;
 import io.github.xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
 import io.github.xfacthd.framedblocks.api.model.wrapping.MaterialLookup;
-import io.github.xfacthd.framedblocks.api.model.wrapping.ModelFactory;
-import io.github.xfacthd.framedblocks.api.model.wrapping.statemerger.StateMerger;
 import io.github.xfacthd.framedblocks.api.render.outline.OutlineRenderer;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -22,7 +19,6 @@ import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
 import net.minecraft.client.renderer.block.dispatch.BlockStateModelDispatcher;
 import net.minecraft.client.renderer.block.dispatch.SingleVariant;
-import net.minecraft.client.renderer.block.model.BlockModel;
 import net.minecraft.client.renderer.item.ItemModel;
 import net.minecraft.client.resources.model.ModelBaker;
 import net.minecraft.client.resources.model.cuboid.ItemTransforms;
@@ -37,40 +33,11 @@ import org.jetbrains.annotations.ApiStatus;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.BiConsumer;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 @ApiStatus.Internal
 public interface InternalClientAPI {
     InternalClientAPI INSTANCE = Utils.loadService(InternalClientAPI.class);
-
-    void registerModelWrapper(Holder<Block> block, GeometryFactory geometryFactory, StateMerger stateMerger);
-
-    void registerTemplatedModelWrapper(Holder<Block> block, GeometryTemplateSpec templateSpec, StateMerger stateMerger);
-
-    void registerDoubleModelWrapper(Holder<Block> block, StateMerger stateMerger);
-
-    void registerSpecialModelWrapper(Holder<Block> block, ModelFactory modelFactory, StateMerger stateMerger);
-
-    void registerCopyingModelWrapper(Holder<Block> block, Holder<Block> srcBlock, StateMerger stateMerger);
-
-    void registerEmptyModelWrapper(Holder<Block> block);
-
-    <T> void registerStandaloneModelWrapper(
-            StandaloneWrapperKey<T> wrapperKey,
-            GeometryFactory blockGeometryFactory,
-            StandaloneModelFactory<T> modelFactory,
-            StateMerger stateMerger
-    );
-
-    <T> void registerTemplatedStandaloneModelWrapper(
-            StandaloneWrapperKey<T> wrapperKey,
-            GeometryTemplateSpec templateSpec,
-            StandaloneModelFactory<T> modelFactory,
-            StateMerger stateMerger
-    );
-
-    void overrideBlockModelFactory(Holder<Block> block, Function<BlockState, BlockModel.Unbaked> blockModelFactory);
 
     GeometryTemplateSpec createGeometryTemplateSpec(Holder<Block> block, BiConsumer<BlockState, GeometryTemplateSpec.SpecEntryBuilder> builderOperator);
 

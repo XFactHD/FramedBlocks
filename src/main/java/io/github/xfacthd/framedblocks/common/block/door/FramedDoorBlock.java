@@ -7,15 +7,13 @@ import io.github.xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import io.github.xfacthd.framedblocks.api.block.item.placement.PropertyLabels;
 import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
-import io.github.xfacthd.framedblocks.api.model.wrapping.WrapHelper;
 import io.github.xfacthd.framedblocks.api.model.wrapping.statemerger.StateMerger;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.model.wrapping.statemerger.StateMergers;
 import io.github.xfacthd.framedblocks.common.block.IFramedBlockInternal;
 import io.github.xfacthd.framedblocks.common.blockentity.special.FramedDoorBlockEntity;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.Holder;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.TriState;
 import net.minecraft.world.InteractionHand;
@@ -34,7 +32,6 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockSetType;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DoorHingeSide;
-import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.redstone.Orientation;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.BlockHitResult;
@@ -46,6 +43,8 @@ import java.util.List;
 import java.util.Set;
 
 public class FramedDoorBlock extends DoorBlock implements IFramedBlockInternal {
+    public static final StateMerger STATE_MERGER = StateMergers.compound(StateMergers.POWERED, new DoorStateMerger());
+
     private final BlockType type;
 
     private FramedDoorBlock(BlockType type, BlockSetType blockSet, Properties props) {
@@ -198,14 +197,13 @@ public class FramedDoorBlock extends DoorBlock implements IFramedBlockInternal {
         );
     }
 
-    public static final class DoorStateMerger implements StateMerger {
-        public static final DoorStateMerger INSTANCE = new DoorStateMerger();
-
-        private DoorStateMerger() { }
+    private static final class DoorStateMerger extends StateMerger {
+        private DoorStateMerger() {
+            super(Set.of(BlockStateProperties.OPEN, BlockStateProperties.DOOR_HINGE));
+        }
 
         @Override
         public BlockState apply(BlockState state) {
-            state = WrapHelper.POWERED_MERGER.apply(state);
             if (state.getValue(BlockStateProperties.OPEN)) {
                 Direction dir = state.getValue(BlockStateProperties.HORIZONTAL_FACING);
                 DoorHingeSide hinge = state.getValue(BlockStateProperties.DOOR_HINGE);
@@ -221,14 +219,6 @@ public class FramedDoorBlock extends DoorBlock implements IFramedBlockInternal {
                         .setValue(BlockStateProperties.DOOR_HINGE, newHinge);
             }
             return state;
-        }
-
-        @Override
-        public Set<Property<?>> getHandledProperties(Holder<Block> block) {
-            return Utils.concat(
-                    WrapHelper.POWERED_MERGER.getHandledProperties(block),
-                    Set.of(BlockStateProperties.OPEN, BlockStateProperties.DOOR_HINGE)
-            );
         }
     }
 }

@@ -5,15 +5,13 @@ import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
 import io.github.xfacthd.framedblocks.api.block.item.placement.PropertyLabels;
 import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
-import io.github.xfacthd.framedblocks.api.model.wrapping.WrapHelper;
 import io.github.xfacthd.framedblocks.api.model.wrapping.statemerger.StateMerger;
+import io.github.xfacthd.framedblocks.api.model.wrapping.statemerger.StateMergers;
 import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.api.util.RotationDirection;
-import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.api.util.text.ValuePrinters;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
-import net.minecraft.core.Holder;
 import net.minecraft.util.TriState;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.Block;
@@ -22,13 +20,14 @@ import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.block.state.properties.RotationSegment;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Set;
 
 public class FramedMiniCubeBlock extends FramedBlock {
+    public static final StateMerger STATE_MERGER = StateMergers.compound(StateMergers.DEFAULT, new MiniCubeStateMerger());
+
     public FramedMiniCubeBlock(Properties props) {
         super(BlockType.FRAMED_MINI_CUBE, props);
         registerDefaultState(defaultBlockState().setValue(FramedProperties.TOP, false));
@@ -94,27 +93,18 @@ public class FramedMiniCubeBlock extends FramedBlock {
         return defaultBlockState();
     }
 
-    public static final class MiniCubeStateMerger implements StateMerger {
-        public static final MiniCubeStateMerger INSTANCE = new MiniCubeStateMerger();
-
-        private MiniCubeStateMerger() { }
+    private static final class MiniCubeStateMerger extends StateMerger {
+        private MiniCubeStateMerger() {
+            super(Set.of(BlockStateProperties.ROTATION_16));
+        }
 
         @Override
         public BlockState apply(BlockState state) {
-            state = WrapHelper.DEFAULT_MERGER.apply(state);
             int rot = state.getValue(BlockStateProperties.ROTATION_16);
             if (rot > 3) {
                 state = state.setValue(BlockStateProperties.ROTATION_16, rot % 4);
             }
             return state;
-        }
-
-        @Override
-        public Set<Property<?>> getHandledProperties(Holder<Block> block) {
-            return Utils.concat(
-                    WrapHelper.DEFAULT_MERGER.getHandledProperties(block),
-                    Set.of(BlockStateProperties.ROTATION_16)
-            );
         }
     }
 }
