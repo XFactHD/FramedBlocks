@@ -16,11 +16,9 @@ import io.github.xfacthd.framedblocks.api.render.outline.OutlineRenderer;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
-import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
 import net.minecraft.client.renderer.block.dispatch.BlockStateModelDispatcher;
 import net.minecraft.client.renderer.block.dispatch.SingleVariant;
 import net.minecraft.client.renderer.item.ItemModel;
-import net.minecraft.client.resources.model.ModelBaker;
 import net.minecraft.client.resources.model.cuboid.ItemTransforms;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -29,11 +27,11 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.transfer.resource.Resource;
 import org.jetbrains.annotations.ApiStatus;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.BiConsumer;
-import java.util.function.Supplier;
 
 @ApiStatus.Internal
 public interface InternalClientAPI {
@@ -59,7 +57,7 @@ public interface InternalClientAPI {
             Optional<StandaloneWrapperKey<?>> wrapperKey
     );
 
-    Supplier<BlockStateModel> createBlockItemModelProviderForGeometry(BlockState state, BlockState srcState, GeometryFactory geometry, ModelBaker baker);
+    BlockItemModelProvider createBlockItemModelProviderForGeometry(@Nullable BlockState srcState, GeometryFactory geometry);
 
     OutlineRenderer<?> createModelBasedOutlineRenderer(Block block);
 

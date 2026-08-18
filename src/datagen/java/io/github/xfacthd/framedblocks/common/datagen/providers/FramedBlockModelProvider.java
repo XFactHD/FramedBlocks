@@ -14,7 +14,7 @@ import io.github.xfacthd.framedblocks.client.model.geometry.rail.FramedFancyRail
 import io.github.xfacthd.framedblocks.client.model.item.dataprovider.AdjustableDoubleBlockItemModelDataProvider;
 import io.github.xfacthd.framedblocks.client.model.item.FramedBlockItemModel;
 import io.github.xfacthd.framedblocks.client.model.item.TankItemModel;
-import io.github.xfacthd.framedblocks.client.model.item.modelprovider.FenceBlockItemModelProvider;
+import io.github.xfacthd.framedblocks.client.model.item.modelprovider.FenceItemGeometry;
 import io.github.xfacthd.framedblocks.client.render.block.FramedBannerRenderer;
 import io.github.xfacthd.framedblocks.client.render.block.FramedChestRenderer;
 import io.github.xfacthd.framedblocks.client.render.item.BannerItemRenderer;
@@ -379,7 +379,7 @@ public final class FramedBlockModelProvider extends AbstractFramedBlockModelProv
 
     private void registerFramedFence(BlockModelGenerators blockModels, Identifier cube) {
         simpleFramedBlockWithItem(blockModels, FBContent.BLOCK_FRAMED_FENCE, cube, builder ->
-                builder.modelProvider(FenceBlockItemModelProvider.INSTANCE)
+                builder.modelProvider(FenceItemGeometry.PROVIDER)
                         .itemBaseModel(mcLocation("block/fence_inventory"))
         );
     }

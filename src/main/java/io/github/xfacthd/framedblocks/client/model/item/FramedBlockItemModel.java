@@ -254,12 +254,10 @@ public final class FramedBlockItemModel implements ItemModel, CachingModel {
         @Override
         public FramedBlockItemModel bake(BakingContext context, Matrix4fc transformation) {
             BlockState state = Objects.requireNonNull(((IFramedBlock) block).getItemModelSource());
-            Supplier<BlockStateModel> modelSupplier = modelProvider.create(state, context.blockModelBaker());
-            ItemTransforms transforms = modelOrXform.map(
-                    model -> context.blockModelBaker().getModel(model).getTopTransforms(),
-                    Function.identity()
-            );
-            ItemModel errorModel = context.blockModelBaker().compute(ERROR_MODEL_KEY);
+            ModelBaker baker = context.blockModelBaker();
+            Supplier<BlockStateModel> modelSupplier = () -> modelProvider.create(state, baker);
+            ItemTransforms transforms = modelOrXform.map(model -> baker.getModel(model).getTopTransforms(), Function.identity());
+            ItemModel errorModel = baker.compute(ERROR_MODEL_KEY);
             ItemModelDataProvider dataProvider = this.dataProvider.orElseGet(this::getDefaultDataProvider);
             return new FramedBlockItemModel(state, modelSupplier, transforms, requiresData, dataProvider, errorModel);
         }

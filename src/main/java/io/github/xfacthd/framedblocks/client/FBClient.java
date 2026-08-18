@@ -42,7 +42,7 @@ import io.github.xfacthd.framedblocks.client.model.item.ItemModelDataProviders;
 import io.github.xfacthd.framedblocks.client.model.item.PaintRollerItemModel;
 import io.github.xfacthd.framedblocks.client.model.item.TankItemModel;
 import io.github.xfacthd.framedblocks.client.model.item.dataprovider.AdjustableDoubleBlockItemModelDataProvider;
-import io.github.xfacthd.framedblocks.client.model.item.modelprovider.FenceBlockItemModelProvider;
+import io.github.xfacthd.framedblocks.client.model.item.modelprovider.FenceItemGeometry;
 import io.github.xfacthd.framedblocks.client.model.item.property.BlueprintProperty;
 import io.github.xfacthd.framedblocks.client.model.special.FramedBannerFlagModel;
 import io.github.xfacthd.framedblocks.client.model.special.FramedChestLidModel;
@@ -211,7 +211,7 @@ public final class FBClient {
 
     private static void onRegisterBlockItemModelProviders(RegisterBlockItemModelProvidersEvent event) {
         event.register(Utils.id("default"), BlockItemModelProvider.DEFAULT);
-        event.register(Utils.id("fence"), FenceBlockItemModelProvider.INSTANCE);
+        event.register(Utils.id("fence"), FenceItemGeometry.PROVIDER);
     }
 
     private static void onRegisterItemModelDataProviders(RegisterItemModelDataProvidersEvent event) {
