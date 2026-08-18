@@ -5,6 +5,7 @@ import io.github.xfacthd.framedblocks.api.block.item.IFramedBlockItem;
 import io.github.xfacthd.framedblocks.api.block.item.placement.PropertyLabels;
 import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
 import io.github.xfacthd.framedblocks.api.block.item.placement.ValueOrders;
+import io.github.xfacthd.framedblocks.api.blueprint.BlueprintBlockPlaceContext;
 import io.github.xfacthd.framedblocks.api.camo.CamoList;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.util.DirUtils;
@@ -78,6 +79,9 @@ public class FramedBoardBlock extends FramedBlock {
 
     @Override
     protected boolean canBeReplaced(BlockState state, BlockPlaceContext ctx) {
+        if (ctx instanceof BlueprintBlockPlaceContext) {
+            return false;
+        }
         if (ctx.getPlayer() != null && !ctx.getPlayer().isShiftKeyDown() && ctx.getItemInHand().is(asItem())) {
             if (!ctx.getItemInHand().getOrDefault(FBContent.DC_TYPE_CAMO_LIST, CamoList.EMPTY).isEmpty()) {
                 return false;

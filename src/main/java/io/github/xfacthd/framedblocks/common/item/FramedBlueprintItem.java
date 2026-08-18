@@ -3,6 +3,7 @@ package io.github.xfacthd.framedblocks.common.item;
 import com.google.common.base.Preconditions;
 import io.github.xfacthd.framedblocks.api.block.blockentity.FrameModifier;
 import io.github.xfacthd.framedblocks.api.block.blockentity.IFramedBlockEntity;
+import io.github.xfacthd.framedblocks.api.blueprint.BlueprintBlockPlaceContext;
 import io.github.xfacthd.framedblocks.api.blueprint.BlueprintCopyBehaviour;
 import io.github.xfacthd.framedblocks.api.blueprint.BlueprintData;
 import io.github.xfacthd.framedblocks.api.blueprint.RegisterBlueprintCopyBehavioursEvent;
@@ -35,7 +36,6 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Property;
-import net.minecraft.world.phys.BlockHitResult;
 import net.neoforged.fml.ModLoader;
 
 import java.util.ArrayList;
@@ -187,16 +187,10 @@ public class FramedBlueprintItem extends FramedToolItem {
         ItemStack dummyStack = new ItemStack(item, 1);
         dummyStack.set(DataComponents.BLOCK_STATE, data.blockState());
 
-        UseOnContext placeContext = new UseOnContext(
-                context.getLevel(),
-                context.getPlayer(),
-                context.getHand(),
-                dummyStack,
-                new BlockHitResult(context.getClickLocation(), context.getClickedFace(), context.getClickedPos(), context.isInside())
-        );
+        BlockPlaceContext placeContext = new BlueprintBlockPlaceContext(context, dummyStack, data);
         //Needs to happen before placing to make sure we really get the target pos, especially in case of replacing stuff like grass
-        BlockPos pos = new BlockPlaceContext(placeContext).getClickedPos();
-        InteractionResult result = item.useOn(placeContext);
+        BlockPos pos = placeContext.getClickedPos();
+        InteractionResult result = item.place(placeContext);
 
         if (!context.getLevel().isClientSide() && result.consumesAction()) {
             if (context.getLevel().getBlockEntity(pos) instanceof IFramedBlockEntity be) {
