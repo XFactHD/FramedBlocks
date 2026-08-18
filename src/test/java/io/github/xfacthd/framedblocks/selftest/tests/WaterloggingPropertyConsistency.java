@@ -12,7 +12,7 @@ public final class WaterloggingPropertyConsistency {
         reporter.startTest("waterlogging property");
 
         blocks.forEach(block -> {
-            boolean onType = ((IFramedBlock) block).getBlockType().supportsWaterLogging();
+            boolean onType = ((IFramedBlock) block).getBlockType().isWaterloggable();
             boolean onBlock = block.defaultBlockState().hasProperty(BlockStateProperties.WATERLOGGED);
             if (onType != onBlock) {
                 reporter.warn("Block '{}' has inconsistent waterlogging configuration", block);

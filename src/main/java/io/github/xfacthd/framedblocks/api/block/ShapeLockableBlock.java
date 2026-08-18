@@ -92,7 +92,7 @@ public interface ShapeLockableBlock extends IFramedBlock {
         if (!state.getValue(FramedProperties.STATE_LOCKED)) {
             return updateShape.handle(state, level, tickAccess, pos, side, adjPos, adjState, random);
         }
-        if (getBlockType().supportsWaterLogging() && state.getValue(BlockStateProperties.WATERLOGGED)) {
+        if (getBlockType().isWaterloggable() && state.getValue(BlockStateProperties.WATERLOGGED)) {
             tickAccess.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
         }
         return state;

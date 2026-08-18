@@ -54,7 +54,7 @@ public final class BlockUtils {
         }
 
         boolean hasWaterlogging = hasProperty(builder, BlockStateProperties.WATERLOGGED);
-        boolean needsWaterlogging = block.getBlockType().supportsWaterLogging();
+        boolean needsWaterlogging = block.getBlockType().isWaterloggable();
         if (needsWaterlogging && !hasWaterlogging) {
             builder.add(BlockStateProperties.WATERLOGGED);
         } else if (!needsWaterlogging && hasWaterlogging) {
@@ -84,7 +84,7 @@ public final class BlockUtils {
         if (block.getBlockType().canOccludeWithSolidCamo()) {
             state = state.setValue(FramedProperties.SOLID, false);
         }
-        if (block.getBlockType().supportsWaterLogging()) {
+        if (block.getBlockType().isWaterloggable()) {
             state = state.setValue(BlockStateProperties.WATERLOGGED, false);
         }
         if (block instanceof ShapeLockableBlock) {
@@ -114,7 +114,7 @@ public final class BlockUtils {
         if (block.getBlockType().canOccludeWithSolidCamo()) {
             to = Block.copyProperty(from, to, FramedProperties.SOLID);
         }
-        if (copyWaterlogging && block.getBlockType().supportsWaterLogging()) {
+        if (copyWaterlogging && block.getBlockType().isWaterloggable()) {
             to = Block.copyProperty(from, to, BlockStateProperties.WATERLOGGED);
         }
         if (block instanceof ShapeLockableBlock) {

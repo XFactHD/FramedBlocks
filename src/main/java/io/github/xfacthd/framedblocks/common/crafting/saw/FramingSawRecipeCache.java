@@ -1,12 +1,10 @@
 package io.github.xfacthd.framedblocks.common.crafting.saw;
 
 import io.github.xfacthd.framedblocks.api.block.IBlockType;
-import io.github.xfacthd.framedblocks.api.util.FramedConstants;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import it.unimi.dsi.fastutil.objects.Reference2IntMap;
 import it.unimi.dsi.fastutil.objects.Reference2IntOpenHashMap;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.ReloadableServerResources;
 import net.minecraft.server.packs.resources.ResourceManager;
@@ -132,25 +130,7 @@ public final class FramingSawRecipeCache {
     private static int sortRecipes(RecipeHolder<FramingSawRecipe> holder1, RecipeHolder<FramingSawRecipe> holder2) {
         FramingSawRecipe r1 = holder1.value();
         FramingSawRecipe r2 = holder2.value();
-        return sortRecipes(r1.getResult(), r2.getResult(), r1.getResultType(), r2.getResultType());
-    }
-
-    public static int sortRecipes(ItemStackTemplate resultOne, ItemStackTemplate resultTwo, IBlockType typeOne, IBlockType typeTwo) {
-        String ns1 = BuiltInRegistries.ITEM.getKey(resultOne.item().value()).getNamespace();
-        String ns2 = BuiltInRegistries.ITEM.getKey(resultTwo.item().value()).getNamespace();
-
-        if (!ns1.equals(ns2)) {
-            if (ns1.equals(FramedConstants.MOD_ID)) {
-                return -1;
-            }
-            if (ns2.equals(FramedConstants.MOD_ID)) {
-                return 1;
-            }
-            return ns1.compareTo(ns2);
-        }
-
-        // Assume that items from the same namespace use the same IBlockType implementation and are therefore comparable
-        return typeOne.compareTo(typeTwo);
+        return IBlockType.compare(r1.getResultType(), r2.getResultType());
     }
 
     private record Reloader(ReloadableServerResources serverResources) implements ResourceManagerReloadListener {

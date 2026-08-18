@@ -12,7 +12,9 @@ import io.github.xfacthd.framedblocks.api.predicate.fullface.FullFacePredicate;
 import io.github.xfacthd.framedblocks.api.predicate.overlay.BlockOverlayPredicate;
 import io.github.xfacthd.framedblocks.api.render.outline.OutlineRenderer;
 import io.github.xfacthd.framedblocks.api.shapes.ShapeGenerator;
+import io.github.xfacthd.framedblocks.api.util.FramedConstants;
 import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -20,6 +22,8 @@ import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsE
 import org.jetbrains.annotations.ApiStatus;
 
 /// Describes a type of framed block.
+///
+/// This interface must be implemented on an enum with one implementation per namespace.
 public interface IBlockType {
     /// {@return whether this block can occlude when an {@linkplain BlockState#isSolidRender() opaque} camo is applied to it}
     boolean canOccludeWithSolidCamo();
@@ -64,8 +68,8 @@ public interface IBlockType {
     /// Primarily intended for automatic registration and creative tab population.
     boolean hasBlockItem();
 
-    /// {@return whether this block supports waterlogging}
-    boolean supportsWaterLogging();
+    /// {@return whether this block can be waterlogged}
+    boolean isWaterloggable();
 
     /// {@return whether this block supports connected textures and other level/pos-dependent camo model behavior}
     boolean supportsConnectedTextures();
@@ -84,9 +88,7 @@ public interface IBlockType {
     /// @implNote if a block's type returns `true` from this method, its [Block] must implement [IFramedDoubleBlock]
     /// and its [BlockEntity] must extend [FramedDoubleBlockEntity]. The [BlockStateModel] is not required
     /// to extend or implement any specific class.
-    default boolean isDoubleBlock() {
-        return false;
-    }
+    boolean isDoubleBlock();
 
     /// {@return whether this block can consume two camo items in the camo application recipe}
     default boolean consumesTwoCamosInCamoApplicationRecipe() {
@@ -97,7 +99,30 @@ public interface IBlockType {
     boolean supportsBlockOverlays();
 
     /// {@return the name of this type (usually the path of the block's registry ID)}
-    String getName();
+    Identifier getName();
 
-    int compareTo(IBlockType other);
+    /// Compare the two given block types against each other.
+    /// The two types are first compared by their namespace and then by their
+    /// [Comparable#compareTo(Object)] implementation.
+    ///
+    /// @param typeOne The first type to compare
+    /// @param typeTwo The second type to compare
+    /// @return the comparison result according to the rules of [Comparable#compareTo(Object)]
+    @SuppressWarnings("unchecked")
+    static <T extends Enum<T>> int compare(IBlockType typeOne, IBlockType typeTwo) {
+        String namespaceOne = typeOne.getName().getNamespace();
+        String namespaceTwo = typeTwo.getName().getNamespace();
+
+        if (!namespaceOne.equals(namespaceTwo)) {
+            if (namespaceOne.equals(FramedConstants.MOD_ID)) {
+                return -1;
+            }
+            if (namespaceTwo.equals(FramedConstants.MOD_ID)) {
+                return 1;
+            }
+            return namespaceOne.compareTo(namespaceTwo);
+        }
+
+        return ((T) typeOne).compareTo((T) typeTwo);
+    }
 }

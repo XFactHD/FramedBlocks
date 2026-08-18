@@ -62,7 +62,7 @@ public final class BlockStateInfo {
             String solid = type.canOccludeWithSolidCamo() ? checkBooleanProperty(block, FramedProperties.SOLID) : "-";
             String glowing = checkBooleanProperty(block, FramedProperties.GLOWING);
             String skylight = checkBooleanProperty(block, FramedProperties.PROPAGATES_SKYLIGHT);
-            String waterlogging = type.supportsWaterLogging() ? checkBooleanProperty(block, BlockStateProperties.WATERLOGGED) : "-";
+            String waterlogging = type.isWaterloggable() ? checkBooleanProperty(block, BlockStateProperties.WATERLOGGED) : "-";
             String stateLock = block instanceof ShapeLockableBlock ? checkBooleanProperty(block, FramedProperties.STATE_LOCKED) : "-";
             String copycat = switch (block) {
                 case CopycatStyleBlock.Always _ -> "always";

@@ -891,7 +891,7 @@ public final class FBContent {
     private static <T extends Block & IFramedBlock> Holder<Block> registerBlock(
             Function<BlockBehaviour.Properties, T> blockFactory, BlockType type
     ) {
-        Holder<Block> result = BLOCKS.registerBlock(type.getName(), props -> {
+        Holder<Block> result = BLOCKS.registerBlock(type.getName().getPath(), props -> {
             T block;
             try {
                 block = blockFactory.apply(props);
@@ -904,7 +904,7 @@ public final class FBContent {
         BLOCKS_BY_TYPE.put(type, result);
 
         if (type.hasBlockItem()) {
-            ITEMS.registerItem(type.getName(), props -> {
+            ITEMS.registerItem(type.getName().getPath(), props -> {
                 IFramedBlock block = (IFramedBlock) result.value();
                 return (BlockItem) block.createBlockItem(props.useBlockDescriptionPrefix());
             });
@@ -935,7 +935,7 @@ public final class FBContent {
     private static <T extends BlockEntity & IFramedBlockEntity> DeferredBlockEntity<T> registerBlockEntity(
             BlockEntityType.BlockEntitySupplier<T> factory, boolean opOnlyNbt, BlockType... types
     ) {
-        return registerBlockEntity(types[0].getName(), factory, opOnlyNbt, types);
+        return registerBlockEntity(types[0].getName().getPath(), factory, opOnlyNbt, types);
     }
 
     private static <T extends BlockEntity & IFramedBlockEntity> DeferredBlockEntity<T> registerBlockEntity(

@@ -167,6 +167,6 @@ public abstract class AbstractFramedBlock extends Block implements IFramedBlock,
 
     /// {@return whether this block can be waterlogged}
     protected final boolean isWaterLoggable() {
-        return blockType.supportsWaterLogging();
+        return blockType.isWaterloggable();
     }
 }

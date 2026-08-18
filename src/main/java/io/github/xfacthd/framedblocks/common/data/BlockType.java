@@ -10,6 +10,7 @@ import io.github.xfacthd.framedblocks.api.predicate.fullface.FullFacePredicate;
 import io.github.xfacthd.framedblocks.api.predicate.overlay.BlockOverlayPredicate;
 import io.github.xfacthd.framedblocks.api.shapes.CommonShapes;
 import io.github.xfacthd.framedblocks.api.shapes.ShapeGenerator;
+import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.common.data.conpreds.ConnectionPredicates;
 import io.github.xfacthd.framedblocks.common.data.facepreds.FullFacePredicates;
 import io.github.xfacthd.framedblocks.common.data.overlaypreds.BlockOverlayPredicates;
@@ -30,6 +31,7 @@ import io.github.xfacthd.framedblocks.common.data.shapes.slopeslab.*;
 import io.github.xfacthd.framedblocks.common.data.shapes.stairs.standard.*;
 import io.github.xfacthd.framedblocks.common.data.shapes.stairs.vertical.*;
 import io.github.xfacthd.framedblocks.common.data.skippreds.SideSkipPredicates;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -296,7 +298,7 @@ public enum BlockType implements IBlockType {
     FRAMED_WALL_BANNER                              (false,  true, false, false, false, false, false, null,                 Outline.SIMPLE, WallBannerShapes::generate),
     ;
 
-    private final String name = toString().toLowerCase(Locale.ROOT);
+    private final Identifier name = Utils.id(toString().toLowerCase(Locale.ROOT));
     private final boolean canOcclude;
     private final boolean specialOutline;
     private final boolean modelBasedOutline;
@@ -389,7 +391,7 @@ public enum BlockType implements IBlockType {
     }
 
     @Override
-    public boolean supportsWaterLogging() {
+    public boolean isWaterloggable() {
         return waterloggable;
     }
 
@@ -424,16 +426,8 @@ public enum BlockType implements IBlockType {
     }
 
     @Override
-    public String getName() {
+    public Identifier getName() {
         return name;
-    }
-
-    @Override
-    public int compareTo(IBlockType other) {
-        if (!(other instanceof BlockType type)) {
-            return -1;
-        }
-        return compareTo(type);
     }
 
     private enum Outline {
