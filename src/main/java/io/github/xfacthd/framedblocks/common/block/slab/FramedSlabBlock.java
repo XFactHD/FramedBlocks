@@ -6,6 +6,7 @@ import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
 import io.github.xfacthd.framedblocks.api.block.item.IFramedBlockItem;
 import io.github.xfacthd.framedblocks.api.block.item.placement.PropertyLabels;
 import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
+import io.github.xfacthd.framedblocks.api.blueprint.BlueprintBlockPlaceContext;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.util.MathUtils;
 import io.github.xfacthd.framedblocks.api.util.RotationDirection;
@@ -46,6 +47,9 @@ public class FramedSlabBlock extends FramedBlock implements CopycatStyleBlock.St
 
     @Override
     protected boolean canBeReplaced(BlockState state, BlockPlaceContext ctx) {
+        if (ctx instanceof BlueprintBlockPlaceContext) {
+            return false;
+        }
         if (ctx.getPlayer() != null && !ctx.getPlayer().isShiftKeyDown() && ctx.getItemInHand().is(asItem())) {
             if (!ctx.replacingClickedOnBlock()) {
                 return true;

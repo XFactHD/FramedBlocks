@@ -3,6 +3,7 @@ package io.github.xfacthd.framedblocks.common.item.block;
 import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedDoubleBlockEntity;
 import io.github.xfacthd.framedblocks.api.block.item.FramedBlockItem;
+import io.github.xfacthd.framedblocks.api.blueprint.BlueprintBlockPlaceContext;
 import io.github.xfacthd.framedblocks.api.camo.CamoContainer;
 import io.github.xfacthd.framedblocks.api.camo.CamoList;
 import io.github.xfacthd.framedblocks.api.camo.empty.EmptyCamoContainer;
@@ -37,6 +38,10 @@ public abstract class FramedSpecialBlockItem extends FramedBlockItem {
     }
 
     private ReplaceResult tryReplace(BlockPlaceContext ctx) {
+        if (ctx instanceof BlueprintBlockPlaceContext) {
+            return ReplaceResult.PASS;
+        }
+
         Level level = ctx.getLevel();
         BlockPos pos = ctx.getClickedPos();
         BlockState originalState = level.getBlockState(pos);

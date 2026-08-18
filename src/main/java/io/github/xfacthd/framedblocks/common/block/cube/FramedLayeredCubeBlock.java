@@ -6,6 +6,7 @@ import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
 import io.github.xfacthd.framedblocks.api.block.item.IFramedBlockItem;
 import io.github.xfacthd.framedblocks.api.block.item.placement.PropertyLabels;
 import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
+import io.github.xfacthd.framedblocks.api.blueprint.BlueprintBlockPlaceContext;
 import io.github.xfacthd.framedblocks.api.camo.CamoList;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.util.RotationDirection;
@@ -55,6 +56,9 @@ public class FramedLayeredCubeBlock extends FramedBlock implements CopycatStyleB
 
     @Override
     protected boolean canBeReplaced(BlockState state, BlockPlaceContext useContext) {
+        if (useContext instanceof BlueprintBlockPlaceContext) {
+            return false;
+        }
         int layers = state.getValue(BlockStateProperties.LAYERS);
         if (layers >= 8 || !useContext.getItemInHand().is(this.asItem())) {
             return false;
