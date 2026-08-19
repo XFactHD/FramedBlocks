@@ -38,7 +38,6 @@ import net.minecraft.core.Holder;
 import net.minecraft.util.context.ContextKey;
 import net.minecraft.util.profiling.Profiler;
 import net.minecraft.util.profiling.ProfilerFiller;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -57,6 +56,7 @@ import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.joml.Vector3fc;
 import org.joml.Vector4f;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.IdentityHashMap;
@@ -129,7 +129,7 @@ public final class GhostBlockRenderer {
         profiler.pop(); //may_render
 
         profiler.push("make_context");
-        BlockPlaceContext context = new BlockPlaceContext(mc().player, InteractionHand.MAIN_HAND, stack, hit);
+        BlockPlaceContext context = behaviour.buildPlaceContext(mc().player, stack, proxiedStack, hit);
         BlockState hitState = mc().level.getBlockState(hit.getBlockPos());
         profiler.pop(); //make_context
 
@@ -150,7 +150,7 @@ public final class GhostBlockRenderer {
             ProfilerFiller profiler,
             GhostRenderBehaviour behaviour,
             ItemStack stack,
-            ItemStack proxiedStack,
+            @Nullable ItemStack proxiedStack,
             BlockHitResult hit,
             BlockPlaceContext context,
             BlockState hitState,
