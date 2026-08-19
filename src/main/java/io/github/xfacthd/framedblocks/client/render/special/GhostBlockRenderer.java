@@ -22,7 +22,6 @@ import net.minecraft.core.Holder;
 import net.minecraft.util.context.ContextKey;
 import net.minecraft.util.profiling.Profiler;
 import net.minecraft.util.profiling.ProfilerFiller;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -112,7 +111,7 @@ public final class GhostBlockRenderer {
         profiler.pop(); //may_render
 
         profiler.push("make_context");
-        BlockPlaceContext context = new BlockPlaceContext(player, InteractionHand.MAIN_HAND, stack, hit);
+        BlockPlaceContext context = behaviour.buildPlaceContext(player, stack, proxiedStack, hit);
         ClientLevel level = Objects.requireNonNull(minecraft.level);
         BlockState hitState = level.getBlockState(hit.getBlockPos());
         profiler.pop(); //make_context

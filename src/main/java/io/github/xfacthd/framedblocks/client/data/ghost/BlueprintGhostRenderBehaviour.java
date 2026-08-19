@@ -1,6 +1,7 @@
 package io.github.xfacthd.framedblocks.client.data.ghost;
 
 import io.github.xfacthd.framedblocks.api.block.overlay.BlockOverlay;
+import io.github.xfacthd.framedblocks.api.blueprint.BlueprintBlockPlaceContext;
 import io.github.xfacthd.framedblocks.api.blueprint.BlueprintData;
 import io.github.xfacthd.framedblocks.api.camo.CamoList;
 import io.github.xfacthd.framedblocks.api.ghost.GhostRenderBehaviour;
@@ -9,6 +10,7 @@ import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.item.FramedBlueprintItem;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.BlockItemStateProperties;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -38,6 +40,16 @@ public final class BlueprintGhostRenderBehaviour implements GhostRenderBehaviour
     @Override
     public int getPassCount(ItemStack stack, @Nullable ItemStack proxiedStack) {
         return proxiedStack != null ? proxyBehaviour(proxiedStack).getPassCount(proxiedStack, null) : 0;
+    }
+
+    @Override
+    public BlockPlaceContext buildPlaceContext(Player player, ItemStack stack, @Nullable ItemStack proxiedStack, BlockHitResult hit) {
+        BlockPlaceContext context = GhostRenderBehaviour.super.buildPlaceContext(player, stack, proxiedStack, hit);
+        if (proxiedStack != null) {
+            BlueprintData blueprintData = stack.getOrDefault(FBContent.DC_TYPE_BLUEPRINT_DATA, BlueprintData.EMPTY);
+            return new BlueprintBlockPlaceContext(context, proxiedStack, blueprintData);
+        }
+        return context;
     }
 
     @Override

@@ -11,6 +11,7 @@ import io.github.xfacthd.framedblocks.mixin.InvokerBlockItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
@@ -60,6 +61,16 @@ public interface GhostRenderBehaviour {
     /// @param proxiedStack The proxied stack as returned from [#getProxiedStack(ItemStack)]
     default int getPassCount(ItemStack stack, @Nullable ItemStack proxiedStack) {
         return 1;
+    }
+
+    /// {@return the place context to use for determining the rendered ghost state}
+    ///
+    /// @param player       The player holding the item for which the ghost is being rendered
+    /// @param stack        The stack in the players main hand
+    /// @param proxiedStack The proxied stack as returned from [#getProxiedStack(ItemStack)]
+    /// @param hit          The [BlockHitResult] from [Minecraft#hitResult]
+    default BlockPlaceContext buildPlaceContext(Player player, ItemStack stack, @Nullable ItemStack proxiedStack, BlockHitResult hit) {
+        return new BlockPlaceContext(player, InteractionHand.MAIN_HAND, stack, hit);
     }
 
     /// {@return the blockstate to render or null if no fitting state can be determined for the given context}
