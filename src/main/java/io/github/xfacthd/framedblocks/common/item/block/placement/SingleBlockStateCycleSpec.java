@@ -89,7 +89,11 @@ public record SingleBlockStateCycleSpec(
         BlockState initialState = firstState;
         if (placementState != null) {
             for (PropertySpec<?> property : properties) {
-                initialState = property.copyValue(placementState, initialState);
+                if (property.isValidValue(placementState)) {
+                    initialState = property.copyValue(placementState, initialState);
+                } else {
+                    initialState = property.setInitial(initialState);
+                }
             }
         }
         return initialState;
