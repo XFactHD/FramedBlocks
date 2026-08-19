@@ -273,9 +273,10 @@ public class FramedCollapsibleBlockEntity extends FramedBlockEntity implements C
                 setVertexOffset(i, offsets[i]);
             }
         }
-        if (source == RotationSource.STRUCTURE || packedOffsets != prevOffsets) {
-            super.applyExternalRotation(mirror, rotation, source);
-            return true;
+        boolean offsetsChanged = packedOffsets != prevOffsets;
+        if (source == RotationSource.STRUCTURE || offsetsChanged) {
+            boolean camoChanged = super.applyExternalRotation(mirror, rotation, source);
+            return offsetsChanged || camoChanged;
         }
         return false;
     }

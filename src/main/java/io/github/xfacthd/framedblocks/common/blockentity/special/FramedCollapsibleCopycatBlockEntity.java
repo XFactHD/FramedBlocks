@@ -127,9 +127,10 @@ public class FramedCollapsibleCopycatBlockEntity extends FramedBlockEntity imple
                 setFaceOffset(rotation.rotate(dir), horOffsets[dir.get2DDataValue()]);
             }
         }
-        if (source == RotationSource.STRUCTURE || (packedOffsets != prevOffsets)) {
-            super.applyExternalRotation(mirror, rotation, source);
-            return true;
+        boolean offsetsChanged = packedOffsets != prevOffsets;
+        if (source == RotationSource.STRUCTURE || offsetsChanged) {
+            boolean camoChanged = super.applyExternalRotation(mirror, rotation, source);
+            return offsetsChanged || camoChanged;
         }
         return false;
     }
