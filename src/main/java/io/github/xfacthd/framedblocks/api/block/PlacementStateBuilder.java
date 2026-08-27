@@ -8,6 +8,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.Vec3;
@@ -49,6 +50,18 @@ public class PlacementStateBuilder<T extends PlacementStateBuilder<T>> {
     /// @param ctx   The context used to place the block
     public static PlacementStateBuilder<?> of(Block block, @Nullable BlockState state, BlockPlaceContext ctx) {
         return new PlacementStateBuilder<>(block, state, ctx);
+    }
+
+    /// Set the given property to the given value.
+    ///
+    /// @param property The property to set
+    /// @param value    The value to set the property to
+    /// @return this builder
+    public final <V extends Comparable<V>> T with(Property<V> property, V value) {
+        if (state != null) {
+            state = state.setValue(property, value);
+        }
+        return self();
     }
 
     /// Set the state's [FramedProperties#FACING_HOR] property to the player's horizontal looking direction.
