@@ -6,4 +6,8 @@ import net.minecraft.world.level.block.state.BlockState;
 ///
 /// @param stateOne The first part's state
 /// @param stateTwo The second part's state
-public record DoubleBlockParts(BlockState stateOne, BlockState stateTwo) { }
+public record DoubleBlockParts(BlockState stateOne, BlockState stateTwo) {
+    public BlockState get(boolean second) {
+        return second ? stateTwo : stateOne;
+    }
+}

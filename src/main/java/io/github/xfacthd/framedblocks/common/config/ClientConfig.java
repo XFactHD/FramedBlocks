@@ -33,6 +33,7 @@ public final class ClientConfig {
     private static final String KEY_USE_ALTERNATIVES_IN_SAW_JEI_TRANSFER = "useAlternativesInFramingSawJeiTransfer";
     private static final String KEY_USE_ALTERNATIVES_IN_POWERED_SAW_JEI_TRANSFER = "useAlternativesInPoweredFramingSawJeiTransfer";
     private static final String KEY_TRANSFER_ITEMS_IN_POWERED_SAW_JEI_TRANSFER = "transferItemsInPoweredFramingSawJeiTransfer";
+    private static final String KEY_DOUBLE_BLOCK_PART_INDICATOR_ENABLED = "doubleBlockPartIndicatorEnabled";
     private static final String KEY_MAX_OVERLAY_MODE = "maxOverlayMode";
     private static final String KEY_STATE_LOCK_MODE = "stateLockMode";
     private static final String KEY_TOGGLE_WATERLOG_MODE = "toggleWaterlogMode";
@@ -72,6 +73,7 @@ public final class ClientConfig {
     public static final ModConfigSpec.BooleanValue USE_ALTERNATIVES_IN_SAW_JEI_TRANSFER_VALUE;
     public static final ModConfigSpec.BooleanValue USE_ALTERNATIVES_IN_POWERED_SAW_JEI_TRANSFER_VALUE;
     public static final ModConfigSpec.BooleanValue TRANSFER_ITEMS_IN_POWERED_SAW_JEI_TRANSFER_VALUE;
+    public static final ModConfigSpec.BooleanValue DOUBLE_BLOCK_PART_INDICATOR_ENABLED_VALUE;
 
     public static final ModConfigSpec.EnumValue<OverlayDisplayMode> MAX_OVERLAY_MODE_VALUE;
     public static final ModConfigSpec.EnumValue<OverlayDisplayMode> STATE_LOCK_MODE_VALUE;
@@ -103,6 +105,7 @@ public final class ClientConfig {
     private static boolean useAlternativesInSawJeiTransfer = false;
     private static boolean useAlternativesInPoweredSawJeiTransfer = false;
     private static boolean transferItemsInPoweredSawJeiTransfer = false;
+    private static boolean doubleBlockPartIndicatorEnabled = false;
 
     private static OverlayDisplayMode maxOverlayMode = OverlayDisplayMode.DETAILED_ALWAYS;
     private static OverlayDisplayMode stateLockMode = OverlayDisplayMode.DETAILED_ALWAYS;
@@ -225,6 +228,10 @@ public final class ClientConfig {
                 .comment("Controls whether JEI recipe transfers in the Powered Framing Saw transfer items or only configure the recipe")
                 .translation(translate(KEY_TRANSFER_ITEMS_IN_POWERED_SAW_JEI_TRANSFER))
                 .define(KEY_TRANSFER_ITEMS_IN_POWERED_SAW_JEI_TRANSFER, true);
+        DOUBLE_BLOCK_PART_INDICATOR_ENABLED_VALUE = builder
+                .comment("If true, double blocks will show an outline indicating which part is being targeted when looking at them")
+                .translation(translate(KEY_DOUBLE_BLOCK_PART_INDICATOR_ENABLED))
+                .define(KEY_DOUBLE_BLOCK_PART_INDICATOR_ENABLED, false);
         builder.pop();
 
         builder.translation(TRANSLATION_CATEGORY_OVERLAY).push("overlay");
@@ -320,6 +327,7 @@ public final class ClientConfig {
             useAlternativesInSawJeiTransfer = USE_ALTERNATIVES_IN_SAW_JEI_TRANSFER_VALUE.get();
             useAlternativesInPoweredSawJeiTransfer = USE_ALTERNATIVES_IN_POWERED_SAW_JEI_TRANSFER_VALUE.get();
             transferItemsInPoweredSawJeiTransfer = TRANSFER_ITEMS_IN_POWERED_SAW_JEI_TRANSFER_VALUE.get();
+            doubleBlockPartIndicatorEnabled = DOUBLE_BLOCK_PART_INDICATOR_ENABLED_VALUE.get();
 
             maxOverlayMode = MAX_OVERLAY_MODE_VALUE.get();
             stateLockMode = STATE_LOCK_MODE_VALUE.get();
@@ -422,6 +430,11 @@ public final class ClientConfig {
         @Override
         public boolean transferItemsInPoweredSawJeiTransfer() {
             return transferItemsInPoweredSawJeiTransfer;
+        }
+
+        @Override
+        public boolean isDoubleBlockPartIndicatorEnabled() {
+            return doubleBlockPartIndicatorEnabled;
         }
 
         @Override

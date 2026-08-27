@@ -58,7 +58,6 @@ import io.github.xfacthd.framedblocks.client.render.block.FramedTankRenderer;
 import io.github.xfacthd.framedblocks.client.render.debug.FramedBlockDebugRenderer;
 import io.github.xfacthd.framedblocks.client.render.debug.impl.CollapsibleBlockDebugRenderer;
 import io.github.xfacthd.framedblocks.client.render.debug.impl.ConnectionPredicateDebugRenderer;
-import io.github.xfacthd.framedblocks.client.render.debug.impl.DoubleBlockPartDebugRenderer;
 import io.github.xfacthd.framedblocks.client.render.debug.impl.QuadWindingDebugRenderer;
 import io.github.xfacthd.framedblocks.client.render.item.BannerItemRenderer;
 import io.github.xfacthd.framedblocks.client.render.item.CamoApplicatorRenderer;
@@ -67,6 +66,7 @@ import io.github.xfacthd.framedblocks.client.render.particle.BlockOverlayParticl
 import io.github.xfacthd.framedblocks.client.render.particle.CamoParticleProvider;
 import io.github.xfacthd.framedblocks.client.render.special.BlockOutlineRenderer;
 import io.github.xfacthd.framedblocks.client.render.special.CollapsibleBlockIndicatorRenderer;
+import io.github.xfacthd.framedblocks.client.render.special.DoubleBlockPartIndicatorRenderer;
 import io.github.xfacthd.framedblocks.client.render.special.GhostBlockFeatureRenderer;
 import io.github.xfacthd.framedblocks.client.render.special.GhostBlockRenderer;
 import io.github.xfacthd.framedblocks.client.render.util.AnimationSplitterSource;
@@ -158,6 +158,8 @@ public final class FBClient {
         NeoForge.EVENT_BUS.addListener(ClientEventHandler::onClientDisconnect);
         NeoForge.EVENT_BUS.addListener(ClientEventHandler::onScrollInput);
         NeoForge.EVENT_BUS.addListener(EventPriority.LOW, true, CollapsibleBlockIndicatorRenderer::onRenderBlockHighlight);
+        NeoForge.EVENT_BUS.addListener(DoubleBlockPartIndicatorRenderer::onExtractRenderState);
+        NeoForge.EVENT_BUS.addListener(DoubleBlockPartIndicatorRenderer::onSubmitCustomGeometry);
 
         container.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
     }
@@ -194,7 +196,6 @@ public final class FBClient {
     private static void onAttachDebugRenderers(AttachDebugRenderersEvent event) {
         FBContent.getBlockEntities().forEach(type -> event.attach(type.value(), ConnectionPredicateDebugRenderer.INSTANCE));
         FBContent.getBlockEntities().forEach(type -> event.attach(type.value(), QuadWindingDebugRenderer.INSTANCE));
-        FBContent.getDoubleBlockEntities().forEach(type -> event.attach(type.value(), DoubleBlockPartDebugRenderer.INSTANCE));
 
         event.attach(FBContent.BE_TYPE_FRAMED_COLLAPSIBLE_BLOCK.value(), CollapsibleBlockDebugRenderer.INSTANCE);
     }

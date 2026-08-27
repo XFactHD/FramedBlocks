@@ -1,12 +1,8 @@
 package io.github.xfacthd.framedblocks.api.render.debug;
 
-import io.github.xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
-import io.github.xfacthd.framedblocks.api.block.blockentity.FramedDoubleBlockEntity;
 import io.github.xfacthd.framedblocks.api.block.blockentity.IFramedBlockEntity;
 import io.github.xfacthd.framedblocks.api.predicate.contex.ConnectionPredicate;
 import io.github.xfacthd.framedblocks.api.util.Utils;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.ApiStatus;
 
 /// Provides access to the built-in debug renderers.
@@ -20,7 +16,4 @@ public interface DebugRenderers {
 
     /// {@return the debug renderer for quad winding}
     BlockDebugRenderer<IFramedBlockEntity> quadWinding();
-
-    /// {@return the debug renderer for {@link FramedBlockEntity#hitSecondary(BlockHitResult, Vec3, Vec3)}}
-    BlockDebugRenderer<FramedDoubleBlockEntity> doubleBlockPart();
 }

@@ -18,7 +18,6 @@ public final class DevToolsConfig {
     @Nullable
     private static final ModConfigSpec SPEC;
 
-    private static final String KEY_DOUBLE_BLOCK_PART_DEBUG = "doubleBlockPartDebug";
     private static final String KEY_CONNECTION_DEBUG = "connectionDebug";
     private static final String KEY_QUAD_WINDING_DEBUG = "quadWindingDebug";
     private static final String KEY_STATE_MERGER_DEBUG = "stateMergerDebug";
@@ -26,7 +25,6 @@ public final class DevToolsConfig {
     private static final String KEY_OCCLUSION_SHAPE_DEBUG = "occlusionShapeDebug";
     private static final String KEY_COLLAPSIBLE_BLOCK_DEBUG = "collapsibleBlockDebug";
 
-    public static final ModConfigSpec.@Nullable BooleanValue DOUBLE_BLOCK_PART_DEBUG_VALUE;
     public static final ModConfigSpec.@Nullable BooleanValue CONNECTION_DEBUG_VALUE;
     public static final ModConfigSpec.@Nullable BooleanValue QUAD_WINDING_DEBUG_VALUE;
     public static final ModConfigSpec.@Nullable BooleanValue STATE_MERGER_DEBUG_VALUE;
@@ -34,7 +32,6 @@ public final class DevToolsConfig {
     public static final ModConfigSpec.@Nullable BooleanValue OCCLUSION_SHAPE_DEBUG_VALUE;
     public static final ModConfigSpec.@Nullable BooleanValue COLLAPSIBLE_BLOCK_DEBUG_VALUE;
 
-    private static boolean doubleBlockPartDebug = false;
     private static boolean connectionDebug = false;
     private static boolean quadWindingDebug = false;
     private static boolean stateMergerDebug = false;
@@ -54,7 +51,6 @@ public final class DevToolsConfig {
     static {
         if (Utils.PRODUCTION) {
             SPEC = null;
-            DOUBLE_BLOCK_PART_DEBUG_VALUE = null;
             CONNECTION_DEBUG_VALUE = null;
             QUAD_WINDING_DEBUG_VALUE = null;
             STATE_MERGER_DEBUG_VALUE = null;
@@ -64,13 +60,6 @@ public final class DevToolsConfig {
         } else {
             ModConfigSpec.Builder builder = new ModConfigSpec.Builder();
 
-            DOUBLE_BLOCK_PART_DEBUG_VALUE = builder
-                    .comment(
-                            "Enable double-block part debug renderer for testing whether FramedBlockEntity#hitSecondary() is correctly implemented.",
-                            "Only applies to FramedBlocks blocks, add-on blocks are not handled by this."
-                    )
-                    .translation(translate(KEY_DOUBLE_BLOCK_PART_DEBUG))
-                    .define(KEY_DOUBLE_BLOCK_PART_DEBUG, false);
             CONNECTION_DEBUG_VALUE = builder
                     .comment(
                             "Enable debug renderer for testing ConnectionPredicates.",
@@ -132,7 +121,6 @@ public final class DevToolsConfig {
 
     private static void onConfigReloaded(ModConfigEvent event) {
         if (event.getConfig().getType() == ModConfig.Type.CLIENT && event.getConfig().getSpec() == SPEC) {
-            doubleBlockPartDebug = Objects.requireNonNull(DOUBLE_BLOCK_PART_DEBUG_VALUE).get();
             connectionDebug = Objects.requireNonNull(CONNECTION_DEBUG_VALUE).get();
             quadWindingDebug = Objects.requireNonNull(QUAD_WINDING_DEBUG_VALUE).get();
             stateMergerDebug = Objects.requireNonNull(STATE_MERGER_DEBUG_VALUE).get();
@@ -147,11 +135,6 @@ public final class DevToolsConfig {
 
     public static final class ViewImpl implements ExtConfigView.DevTools {
         private static final boolean IN_DEV = !Utils.PRODUCTION;
-
-        @Override
-        public boolean isDoubleBlockPartHitDebugRendererEnabled() {
-            return IN_DEV && doubleBlockPartDebug;
-        }
 
         @Override
         public boolean isConnectionDebugRendererEnabled() {
