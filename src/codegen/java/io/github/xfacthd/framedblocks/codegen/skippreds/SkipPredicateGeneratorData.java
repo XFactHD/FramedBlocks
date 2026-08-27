@@ -432,7 +432,7 @@ final class SkipPredicateGeneratorData {
                     .props(Property.vanilla("Direction.Axis", "axis", "AXIS", PropType.PRIMITIVE).withEarlyExit())
                     .dirs(new TestDir("boolean", "Post", null, TestDirIds.POST_HOR, TestDirIds.POST_VERT)),
             entry("FRAMED_COLLAPSIBLE_BLOCK", "misc"),
-            entry("FRAMED_COLLAPSIBLE_COPYCAT_BLOCK", "misc"),
+            entry("FRAMED_COLLAPSIBLE_CUBE", "misc"),
             entry("FRAMED_BOUNCY_CUBE", IGNORED_PKG),
             entry("FRAMED_REDSTONE_BLOCK", IGNORED_PKG),
             entry("FRAMED_PRISM", "prism")

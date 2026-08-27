@@ -1,12 +1,13 @@
 package io.github.xfacthd.framedblocks.common.datagen.providers;
 
+import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.datagen.models.AbstractFramedBlockModelProvider;
 import io.github.xfacthd.framedblocks.api.datagen.models.ItemTransformsBuilder;
 import io.github.xfacthd.framedblocks.api.util.ClientUtils;
 import io.github.xfacthd.framedblocks.api.util.FramedConstants;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.client.model.geometry.cube.FramedCollapsibleBlockGeometry;
-import io.github.xfacthd.framedblocks.client.model.geometry.cube.FramedCollapsibleCopycatBlockGeometry;
+import io.github.xfacthd.framedblocks.client.model.geometry.cube.FramedCollapsibleCubeGeometry;
 import io.github.xfacthd.framedblocks.client.model.geometry.cube.FramedMarkedCubeGeometry;
 import io.github.xfacthd.framedblocks.client.model.geometry.cube.FramedTargetGeometry;
 import io.github.xfacthd.framedblocks.client.model.geometry.interactive.FramedFlowerPotGeometry;
@@ -118,15 +119,13 @@ public final class FramedBlockModelProvider extends AbstractFramedBlockModelProv
         simpleFramedBlockWithItem(blockModels, FBContent.BLOCK_FRAMED_SLOPE_EDGE_PANEL, cube, builder -> builder.itemBaseModel(THIN_BLOCK_LOC));
         simpleFramedBlockWithItem(blockModels, FBContent.BLOCK_FRAMED_SLAB, cube);
         simpleFramedBlockWithItem(blockModels, FBContent.BLOCK_FRAMED_DOUBLE_SLAB, cube);
-        simpleFramedBlockWithItem(blockModels, FBContent.BLOCK_FRAMED_ADJ_DOUBLE_SLAB, cube, builder -> builder.requiresData().dataProvider(AdjustableDoubleBlockItemModelDataProvider.STANDARD));
-        simpleFramedBlockWithItem(blockModels, FBContent.BLOCK_FRAMED_ADJ_DOUBLE_COPYCAT_SLAB, cube, builder -> builder.requiresData().dataProvider(AdjustableDoubleBlockItemModelDataProvider.COPYCAT));
+        simpleFramedBlockWithItem(blockModels, FBContent.BLOCK_FRAMED_ADJ_DOUBLE_SLAB, cube, builder -> builder.requiresData().dataProvider(AdjustableDoubleBlockItemModelDataProvider.INSTANCE));
         simpleFramedBlockWithItem(blockModels, FBContent.BLOCK_FRAMED_DIVIDED_SLAB, cube);
         simpleFramedBlockWithItem(blockModels, FBContent.BLOCK_FRAMED_SLAB_EDGE, cube);
         simpleFramedBlockWithItem(blockModels, FBContent.BLOCK_FRAMED_SLAB_CORNER, cube, builder -> builder.itemBaseModel(THIN_BLOCK_LOC));
         simpleFramedBlockWithItem(blockModels, FBContent.BLOCK_FRAMED_PANEL, cube);
         simpleFramedBlockWithItem(blockModels, FBContent.BLOCK_FRAMED_DOUBLE_PANEL, cube);
-        simpleFramedBlockWithItem(blockModels, FBContent.BLOCK_FRAMED_ADJ_DOUBLE_PANEL, cube, builder -> builder.requiresData().dataProvider(AdjustableDoubleBlockItemModelDataProvider.STANDARD));
-        simpleFramedBlockWithItem(blockModels, FBContent.BLOCK_FRAMED_ADJ_DOUBLE_COPYCAT_PANEL, cube, builder -> builder.requiresData().dataProvider(AdjustableDoubleBlockItemModelDataProvider.COPYCAT));
+        simpleFramedBlockWithItem(blockModels, FBContent.BLOCK_FRAMED_ADJ_DOUBLE_PANEL, cube, builder -> builder.requiresData().dataProvider(AdjustableDoubleBlockItemModelDataProvider.INSTANCE));
         simpleFramedBlockWithItem(blockModels, FBContent.BLOCK_FRAMED_DIVIDED_PANEL_HOR, cube);
         simpleFramedBlockWithItem(blockModels, FBContent.BLOCK_FRAMED_DIVIDED_PANEL_VERT, cube);
         simpleFramedBlockWithItem(blockModels, FBContent.BLOCK_FRAMED_CORNER_PILLAR, cube);
@@ -314,7 +313,7 @@ public final class FramedBlockModelProvider extends AbstractFramedBlockModelProv
         registerFramedPaneBlock(blockModels, cube);
         registerFramedFlowerPotBlock(blockModels, cube);
         registerFramedCollapsibleBlock(blockModels);
-        registerFramedCollapsibleCopycatBlock(blockModels);
+        registerFramedCollapsibleCube(blockModels);
         registerFramedBouncyBlock(blockModels);
         registerFramedRedstoneBlock(blockModels);
         registerFramedTarget(blockModels, cube);
@@ -752,11 +751,15 @@ public final class FramedBlockModelProvider extends AbstractFramedBlockModelProv
                 .addAuxModel(FramedCollapsibleBlockGeometry.ALT_BASE_MODEL_KEY, singleVariant(altCube));
     }
 
-    private void registerFramedCollapsibleCopycatBlock(BlockModelGenerators blockModels) {
-        Identifier block = makeUnderlayedCube(blockModels, FBContent.BLOCK_FRAMED_COLLAPSIBLE_COPYCAT_BLOCK, TEXTURE, mcMaterial("block/copper_block"), _ -> {});
-        Identifier altCube = makeUnderlayedCube(blockModels, FBContent.BLOCK_FRAMED_COLLAPSIBLE_COPYCAT_BLOCK, TEXTURE_ALT, mcMaterial("block/copper_block"), builder -> builder.suffix("_alt"));
-        simpleFramedBlockWithItem(blockModels, FBContent.BLOCK_FRAMED_COLLAPSIBLE_COPYCAT_BLOCK, block)
-                .addAuxModel(FramedCollapsibleCopycatBlockGeometry.ALT_BASE_MODEL_KEY, singleVariant(altCube));
+    private void registerFramedCollapsibleCube(BlockModelGenerators blockModels) {
+        Identifier defaultBlock = makeUnderlayedCube(blockModels, FBContent.BLOCK_FRAMED_COLLAPSIBLE_CUBE, TEXTURE, mcMaterial("block/copper_block"), builder -> builder.suffix("_default"));
+        Identifier copycatBlock = makeUnderlayedCube(blockModels, FBContent.BLOCK_FRAMED_COLLAPSIBLE_CUBE, TEXTURE, mcMaterial("block/cut_copper"), builder -> builder.suffix("_copycat"));
+        Identifier defaultAltCube = makeUnderlayedCube(blockModels, FBContent.BLOCK_FRAMED_COLLAPSIBLE_CUBE, TEXTURE_ALT, mcMaterial("block/copper_block"), builder -> builder.suffix("_alt_default"));
+        Identifier copycatAltCube = makeUnderlayedCube(blockModels, FBContent.BLOCK_FRAMED_COLLAPSIBLE_CUBE, TEXTURE_ALT, mcMaterial("block/cut_copper"), builder -> builder.suffix("_alt_copycat"));
+        framedVariant(blockModels, FBContent.BLOCK_FRAMED_COLLAPSIBLE_CUBE, boolVariant(FramedProperties.COPYCAT_STYLE, defaultBlock, copycatBlock))
+                .addAuxModel(FramedCollapsibleCubeGeometry.DEFAULT_ALT_BASE_MODEL_KEY, singleVariant(defaultAltCube))
+                .addAuxModel(FramedCollapsibleCubeGeometry.COPYCAT_ALT_BASE_MODEL_KEY, singleVariant(copycatAltCube));
+        framedBlockItemModel(blockModels, FBContent.BLOCK_FRAMED_COLLAPSIBLE_CUBE);
     }
 
     private void registerFramedBouncyBlock(BlockModelGenerators blockModels) {

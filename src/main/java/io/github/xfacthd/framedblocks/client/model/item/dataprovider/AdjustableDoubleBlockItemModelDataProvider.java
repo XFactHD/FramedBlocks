@@ -7,21 +7,12 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.model.data.ModelData;
 
 public final class AdjustableDoubleBlockItemModelDataProvider extends DoubleBlockItemModelDataProvider {
-    public static final AdjustableDoubleBlockItemModelDataProvider STANDARD = new AdjustableDoubleBlockItemModelDataProvider(
-            FramedAdjustableDoubleBlockEntity::getPackedOffsetsStandard
-    );
-    public static final AdjustableDoubleBlockItemModelDataProvider COPYCAT = new AdjustableDoubleBlockItemModelDataProvider(
-            FramedAdjustableDoubleBlockEntity::getPackedOffsetsCopycat
-    );
+    public static final AdjustableDoubleBlockItemModelDataProvider INSTANCE = new AdjustableDoubleBlockItemModelDataProvider();
 
-    private final FramedAdjustableDoubleBlockEntity.OffsetPacker offsetPacker;
-
-    private AdjustableDoubleBlockItemModelDataProvider(FramedAdjustableDoubleBlockEntity.OffsetPacker offsetPacker) {
-        this.offsetPacker = offsetPacker;
-    }
+    private AdjustableDoubleBlockItemModelDataProvider() { }
 
     @Override
     protected void appendItemModelData(ModelData.Builder builder, BlockState state) {
-        builder.with(PackedCollapsibleBlockOffsets.PROPERTY, offsetPacker.packDouble(state, FramedAdjustableDoubleBlockEntity.CENTER_PART_HEIGHT));
+        builder.with(PackedCollapsibleBlockOffsets.PROPERTY, FramedAdjustableDoubleBlockEntity.packDoubleOffsets(state, FramedAdjustableDoubleBlockEntity.CENTER_PART_HEIGHT));
     }
 }

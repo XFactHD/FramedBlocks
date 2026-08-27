@@ -40,14 +40,12 @@ public final class BlockOverlayPredicates extends BlockTypeMap<BlockOverlayPredi
         put(BlockType.FRAMED_SLAB, BlockOverlayPredicate.ALWAYS);
         put(BlockType.FRAMED_DOUBLE_SLAB, BlockOverlayPredicate.NEVER);
         put(BlockType.FRAMED_ADJ_DOUBLE_SLAB, BlockOverlayPredicate.NEVER);
-        put(BlockType.FRAMED_ADJ_DOUBLE_COPYCAT_SLAB, BlockOverlayPredicate.NEVER);
         put(BlockType.FRAMED_DIVIDED_SLAB, BlockOverlayPredicate.DOUBLE_PANEL);
         put(BlockType.FRAMED_SLAB_EDGE, BlockOverlayPredicate.ALWAYS);
         put(BlockType.FRAMED_SLAB_CORNER, BlockOverlayPredicate.ALWAYS);
         put(BlockType.FRAMED_PANEL, BlockOverlayPredicate.ALWAYS);
         put(BlockType.FRAMED_DOUBLE_PANEL, BlockOverlayPredicate.NEVER);
         put(BlockType.FRAMED_ADJ_DOUBLE_PANEL, BlockOverlayPredicate.NEVER);
-        put(BlockType.FRAMED_ADJ_DOUBLE_COPYCAT_PANEL, BlockOverlayPredicate.NEVER);
         put(BlockType.FRAMED_DIVIDED_PANEL_HORIZONTAL, BlockOverlayPredicate.DOUBLE_SLAB);
         put(BlockType.FRAMED_DIVIDED_PANEL_VERTICAL, new DividedPanelVerticalBlockOverlayPredicate());
         put(BlockType.FRAMED_CORNER_PILLAR, BlockOverlayPredicate.ALWAYS);
@@ -130,7 +128,7 @@ public final class BlockOverlayPredicates extends BlockTypeMap<BlockOverlayPredi
         put(BlockType.FRAMED_SPLIT_PILLAR_SOCKET, new SplitPillarSocketBlockOverlayPredicate());
         put(BlockType.FRAMED_POST, BlockOverlayPredicate.ALWAYS);
         put(BlockType.FRAMED_COLLAPSIBLE_BLOCK, BlockOverlayPredicate.ALWAYS);
-        put(BlockType.FRAMED_COLLAPSIBLE_COPYCAT_BLOCK, BlockOverlayPredicate.ALWAYS);
+        put(BlockType.FRAMED_COLLAPSIBLE_CUBE, BlockOverlayPredicate.ALWAYS);
         put(BlockType.FRAMED_BOUNCY_CUBE, BlockOverlayPredicate.ALWAYS);
         put(BlockType.FRAMED_REDSTONE_BLOCK, BlockOverlayPredicate.ALWAYS);
         put(BlockType.FRAMED_PRISM, BlockOverlayPredicate.ALWAYS);

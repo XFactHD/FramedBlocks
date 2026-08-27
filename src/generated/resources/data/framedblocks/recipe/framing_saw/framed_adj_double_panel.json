@@ -1,6 +1,12 @@
 {
   "type": "framedblocks:frame",
-  "material": 12288,
+  "additives": [
+    {
+      "count": 1,
+      "ingredient": "#c:ingots/copper"
+    }
+  ],
+  "material": 6144,
   "result": {
     "id": "framedblocks:framed_adj_double_panel"
   }

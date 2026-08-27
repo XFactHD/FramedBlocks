@@ -27,7 +27,7 @@
               "function": "minecraft:explosion_decay"
             }
           ],
-          "name": "framedblocks:framed_collapsible_copycat_block"
+          "name": "framedblocks:framed_collapsible_cube"
         }
       ],
       "rolls": 1.0
@@ -52,5 +52,5 @@
       "rolls": 1.0
     }
   ],
-  "random_sequence": "framedblocks:blocks/framed_collapsible_copycat_block"
+  "random_sequence": "framedblocks:blocks/framed_collapsible_cube"
 }

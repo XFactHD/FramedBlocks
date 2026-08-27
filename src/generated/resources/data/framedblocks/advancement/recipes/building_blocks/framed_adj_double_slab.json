@@ -1,11 +1,11 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "hasFramedCollapsibleBlock": {
+    "hasFramedCollapsibleCube": {
       "conditions": {
         "items": [
           {
-            "items": "framedblocks:framed_collapsible_block"
+            "items": "framedblocks:framed_collapsible_cube"
           }
         ]
       },
@@ -21,7 +21,7 @@
   "requirements": [
     [
       "has_the_recipe",
-      "hasFramedCollapsibleBlock"
+      "hasFramedCollapsibleCube"
     ]
   ],
   "rewards": {

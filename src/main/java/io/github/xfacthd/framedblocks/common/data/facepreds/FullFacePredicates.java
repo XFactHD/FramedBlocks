@@ -58,14 +58,12 @@ public final class FullFacePredicates extends BlockTypeMap<FullFacePredicate> {
         put(BlockType.FRAMED_SLAB, FullFacePredicate.TOP);
         put(BlockType.FRAMED_DOUBLE_SLAB, FullFacePredicate.Y_AXIS);
         put(BlockType.FRAMED_ADJ_DOUBLE_SLAB, FullFacePredicate.Y_AXIS);
-        put(BlockType.FRAMED_ADJ_DOUBLE_COPYCAT_SLAB, FullFacePredicate.Y_AXIS);
         put(BlockType.FRAMED_DIVIDED_SLAB, FullFacePredicate.FALSE);
         put(BlockType.FRAMED_SLAB_EDGE, FullFacePredicate.FALSE);
         put(BlockType.FRAMED_SLAB_CORNER, FullFacePredicate.FALSE);
         put(BlockType.FRAMED_PANEL, FullFacePredicate.HOR_DIR);
         put(BlockType.FRAMED_DOUBLE_PANEL, FullFacePredicate.HOR_DIR_AXIS);
         put(BlockType.FRAMED_ADJ_DOUBLE_PANEL, FullFacePredicate.HOR_DIR_AXIS);
-        put(BlockType.FRAMED_ADJ_DOUBLE_COPYCAT_PANEL, FullFacePredicate.HOR_DIR_AXIS);
         put(BlockType.FRAMED_DIVIDED_PANEL_HORIZONTAL, FullFacePredicate.FALSE);
         put(BlockType.FRAMED_DIVIDED_PANEL_VERTICAL, FullFacePredicate.FALSE);
         put(BlockType.FRAMED_CORNER_PILLAR, FullFacePredicate.FALSE);
@@ -161,7 +159,7 @@ public final class FullFacePredicates extends BlockTypeMap<FullFacePredicate> {
         put(BlockType.FRAMED_SPLIT_PILLAR_SOCKET, FullFacePredicate.DIR);
         put(BlockType.FRAMED_POST, FullFacePredicate.FALSE);
         put(BlockType.FRAMED_COLLAPSIBLE_BLOCK, new CollapsibleBlockFullFacePredicate());
-        put(BlockType.FRAMED_COLLAPSIBLE_COPYCAT_BLOCK, new CollapsibleCopycatBlockFullFacePredicate());
+        put(BlockType.FRAMED_COLLAPSIBLE_CUBE, new CollapsibleCubeFullFacePredicate());
         put(BlockType.FRAMED_BOUNCY_CUBE, FullFacePredicate.TRUE);
         put(BlockType.FRAMED_REDSTONE_BLOCK, FullFacePredicate.TRUE);
         put(BlockType.FRAMED_PRISM, new PrismFullFacePredicate());

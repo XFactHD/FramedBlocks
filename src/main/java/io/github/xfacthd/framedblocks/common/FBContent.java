@@ -177,15 +177,13 @@ public final class FBContent {
     public static final Holder<Block> BLOCK_FRAMED_SLOPE_EDGE_PANEL = registerBlock(FramedSlopeEdgePanelBlock::new, BlockType.FRAMED_SLOPE_EDGE_PANEL);
     public static final Holder<Block> BLOCK_FRAMED_SLAB = registerBlock(FramedSlabBlock::new, BlockType.FRAMED_SLAB);
     public static final Holder<Block> BLOCK_FRAMED_DOUBLE_SLAB = registerBlock(FramedDoubleSlabBlock::new, BlockType.FRAMED_DOUBLE_SLAB);
-    public static final Holder<Block> BLOCK_FRAMED_ADJ_DOUBLE_SLAB = registerBlock(FramedAdjustableDoubleSlabBlock::standard, BlockType.FRAMED_ADJ_DOUBLE_SLAB);
-    public static final Holder<Block> BLOCK_FRAMED_ADJ_DOUBLE_COPYCAT_SLAB = registerBlock(FramedAdjustableDoubleSlabBlock::copycat, BlockType.FRAMED_ADJ_DOUBLE_COPYCAT_SLAB);
+    public static final Holder<Block> BLOCK_FRAMED_ADJ_DOUBLE_SLAB = registerBlock(FramedAdjustableDoubleSlabBlock::new, BlockType.FRAMED_ADJ_DOUBLE_SLAB);
     public static final Holder<Block> BLOCK_FRAMED_DIVIDED_SLAB = registerBlock(FramedDividedSlabBlock::new, BlockType.FRAMED_DIVIDED_SLAB);
     public static final Holder<Block> BLOCK_FRAMED_SLAB_EDGE = registerBlock(FramedSlabEdgeBlock::new, BlockType.FRAMED_SLAB_EDGE);
     public static final Holder<Block> BLOCK_FRAMED_SLAB_CORNER = registerBlock(FramedSlabCornerBlock::new, BlockType.FRAMED_SLAB_CORNER);
     public static final Holder<Block> BLOCK_FRAMED_PANEL = registerBlock(FramedPanelBlock::new, BlockType.FRAMED_PANEL);
     public static final Holder<Block> BLOCK_FRAMED_DOUBLE_PANEL = registerBlock(FramedDoublePanelBlock::new, BlockType.FRAMED_DOUBLE_PANEL);
-    public static final Holder<Block> BLOCK_FRAMED_ADJ_DOUBLE_PANEL = registerBlock(FramedAdjustableDoublePanelBlock::standard, BlockType.FRAMED_ADJ_DOUBLE_PANEL);
-    public static final Holder<Block> BLOCK_FRAMED_ADJ_DOUBLE_COPYCAT_PANEL = registerBlock(FramedAdjustableDoublePanelBlock::copycat, BlockType.FRAMED_ADJ_DOUBLE_COPYCAT_PANEL);
+    public static final Holder<Block> BLOCK_FRAMED_ADJ_DOUBLE_PANEL = registerBlock(FramedAdjustableDoublePanelBlock::new, BlockType.FRAMED_ADJ_DOUBLE_PANEL);
     public static final Holder<Block> BLOCK_FRAMED_DIVIDED_PANEL_HOR = registerBlock(FramedDividedPanelBlock::new, BlockType.FRAMED_DIVIDED_PANEL_HORIZONTAL);
     public static final Holder<Block> BLOCK_FRAMED_DIVIDED_PANEL_VERT = registerBlock(FramedDividedPanelBlock::new, BlockType.FRAMED_DIVIDED_PANEL_VERTICAL);
     public static final Holder<Block> BLOCK_FRAMED_CORNER_PILLAR = registerBlock(FramedCornerPillarBlock::new, BlockType.FRAMED_CORNER_PILLAR);
@@ -281,7 +279,7 @@ public final class FBContent {
     public static final Holder<Block> BLOCK_FRAMED_SPLIT_PILLAR_SOCKET = registerBlock(FramedSplitPillarSocketBlock::new, BlockType.FRAMED_SPLIT_PILLAR_SOCKET);
     public static final Holder<Block> BLOCK_FRAMED_POST = registerBlock(FramedPillarBlock::new, BlockType.FRAMED_POST);
     public static final Holder<Block> BLOCK_FRAMED_COLLAPSIBLE_BLOCK = registerBlock(FramedCollapsibleBlock::new, BlockType.FRAMED_COLLAPSIBLE_BLOCK);
-    public static final Holder<Block> BLOCK_FRAMED_COLLAPSIBLE_COPYCAT_BLOCK = registerBlock(FramedCollapsibleCopycatBlock::new, BlockType.FRAMED_COLLAPSIBLE_COPYCAT_BLOCK);
+    public static final Holder<Block> BLOCK_FRAMED_COLLAPSIBLE_CUBE = registerBlock(FramedCollapsibleCubeBlock::new, BlockType.FRAMED_COLLAPSIBLE_CUBE);
     public static final Holder<Block> BLOCK_FRAMED_BOUNCY_CUBE = registerBlock(FramedBouncyCubeBlock::new, BlockType.FRAMED_BOUNCY_CUBE);
     public static final Holder<Block> BLOCK_FRAMED_REDSTONE_BLOCK = registerBlock(FramedRedstoneBlock::new, BlockType.FRAMED_REDSTONE_BLOCK);
     public static final Holder<Block> BLOCK_FRAMED_PRISM = registerBlock(FramedPrismBlock::new, BlockType.FRAMED_PRISM);
@@ -418,8 +416,8 @@ public final class FBContent {
     public static final DeferredDataComponentType<CollapsibleBlockData> DC_TYPE_COLLAPSIBLE_BLOCK_DATA = DATA_COMPONENTS.registerSimpleComponentType(
             "collapsible_block", CollapsibleBlockData.CODEC, CollapsibleBlockData.STREAM_CODEC
     );
-    public static final DeferredDataComponentType<CollapsibleCopycatBlockData> DC_TYPE_COLLAPSIBLE_COPYCAT_BLOCK_DATA = DATA_COMPONENTS.registerSimpleComponentType(
-            "collapsible_copycat_block", CollapsibleCopycatBlockData.CODEC, CollapsibleCopycatBlockData.STREAM_CODEC
+    public static final DeferredDataComponentType<CollapsibleCubeData> DC_TYPE_COLLAPSIBLE_CUBE_DATA = DATA_COMPONENTS.registerSimpleComponentType(
+            "collapsible_cube", CollapsibleCubeData.CODEC, CollapsibleCubeData.STREAM_CODEC
     );
     public static final DeferredDataComponentType<PottedFlower> DC_TYPE_POTTED_FLOWER = DATA_COMPONENTS.registerSimpleComponentType(
             "potted_flower", PottedFlower.CODEC, PottedFlower.STREAM_CODEC
@@ -513,12 +511,8 @@ public final class FBContent {
             BlockType.FRAMED_ELEV_DOUBLE_INNER_CORNER_SLOPE_EDGE
     );
     public static final Holder<BlockEntityType<?>> BE_TYPE_FRAMED_ADJ_DOUBLE_BLOCK = registerBlockEntity(
-            FramedAdjustableDoubleBlockEntity::standard,
+            FramedAdjustableDoubleBlockEntity::new,
             BlockType.FRAMED_ADJ_DOUBLE_SLAB, BlockType.FRAMED_ADJ_DOUBLE_PANEL
-    );
-    public static final Holder<BlockEntityType<?>> BE_TYPE_FRAMED_ADJ_DOUBLE_COPYCAT_BLOCK = registerBlockEntity(
-            FramedAdjustableDoubleBlockEntity::copycat,
-            BlockType.FRAMED_ADJ_DOUBLE_COPYCAT_SLAB, BlockType.FRAMED_ADJ_DOUBLE_COPYCAT_PANEL
     );
     public static final Holder<BlockEntityType<?>> BE_TYPE_FRAMED_SLOPED_DOUBLE_STAIRS = registerBlockEntity(
             FramedSlopedDoubleStairsBlockEntity::new,
@@ -585,9 +579,9 @@ public final class FBContent {
             FramedCollapsibleBlockEntity::new,
             BlockType.FRAMED_COLLAPSIBLE_BLOCK
     );
-    public static final Holder<BlockEntityType<?>> BE_TYPE_FRAMED_COLLAPSIBLE_COPYCAT_BLOCK = registerBlockEntity(
-            FramedCollapsibleCopycatBlockEntity::new,
-            BlockType.FRAMED_COLLAPSIBLE_COPYCAT_BLOCK
+    public static final Holder<BlockEntityType<?>> BE_TYPE_FRAMED_COLLAPSIBLE_CUBE = registerBlockEntity(
+            FramedCollapsibleCubeBlockEntity::new,
+            BlockType.FRAMED_COLLAPSIBLE_CUBE
     );
     public static final Holder<BlockEntityType<?>> BE_TYPE_FRAMED_ELEVATED_DOUBLE_PRISM = registerBlockEntity(
             FramedElevatedDoublePrismBlockEntity::new,

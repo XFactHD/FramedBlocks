@@ -2,6 +2,6 @@
   "model": {
     "type": "framedblocks:block",
     "base_model": "framedblocks:block/framed_cube",
-    "block": "framedblocks:framed_collapsible_copycat_block"
+    "block": "framedblocks:framed_collapsible_cube"
   }
 }

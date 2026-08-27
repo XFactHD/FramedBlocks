@@ -154,10 +154,6 @@ public final class FramingSawRecipeProvider extends AbstractFramingSawRecipeProv
                 .save(output);
 
         sawRecipe(FBContent.BLOCK_FRAMED_ADJ_DOUBLE_SLAB)
-                .material(CUBE_MATERIAL_VALUE * 2)
-                .save(output);
-
-        sawRecipe(FBContent.BLOCK_FRAMED_ADJ_DOUBLE_COPYCAT_SLAB)
                 .material(CUBE_MATERIAL_VALUE)
                 .additive(additive(Tags.Items.INGOTS_COPPER))
                 .save(output);
@@ -183,10 +179,6 @@ public final class FramingSawRecipeProvider extends AbstractFramingSawRecipeProv
                 .save(output);
 
         sawRecipe(FBContent.BLOCK_FRAMED_ADJ_DOUBLE_PANEL)
-                .material(CUBE_MATERIAL_VALUE * 2)
-                .save(output);
-
-        sawRecipe(FBContent.BLOCK_FRAMED_ADJ_DOUBLE_COPYCAT_PANEL)
                 .material(CUBE_MATERIAL_VALUE)
                 .additive(additive(Tags.Items.INGOTS_COPPER))
                 .save(output);
@@ -572,7 +564,7 @@ public final class FramingSawRecipeProvider extends AbstractFramingSawRecipeProv
                 .material(CUBE_MATERIAL_VALUE * 2)
                 .save(output);
 
-        sawRecipe(FBContent.BLOCK_FRAMED_COLLAPSIBLE_COPYCAT_BLOCK)
+        sawRecipe(FBContent.BLOCK_FRAMED_COLLAPSIBLE_CUBE)
                 .material(CUBE_MATERIAL_VALUE)
                 .additive(additive(Tags.Items.INGOTS_COPPER))
                 .save(output);

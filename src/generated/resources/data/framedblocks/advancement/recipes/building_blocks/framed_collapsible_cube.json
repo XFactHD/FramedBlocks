@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "framedblocks:framed_collapsible_copycat_block"
+        "recipe": "framedblocks:framed_collapsible_cube"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -26,7 +26,7 @@
   ],
   "rewards": {
     "recipes": [
-      "framedblocks:framed_collapsible_copycat_block"
+      "framedblocks:framed_collapsible_cube"
     ]
   }
 }

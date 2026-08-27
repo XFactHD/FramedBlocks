@@ -36,6 +36,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.neoforged.neoforge.client.model.generators.template.ExtendedModelTemplateBuilder;
 import net.neoforged.neoforge.common.util.TransformationHelper;
 
@@ -377,6 +378,19 @@ public abstract class AbstractFramedBlockModelProvider extends ModelProvider {
                 );
         consumer.accept(builder);
         builder.build().create(name, TextureMapping.singleSlot(TextureSlot.ALL, texture), blockModels.modelOutput);
+    }
+
+    /// {@return a function creating a multi-variant generator switching between the two given models depending on the given property}
+    ///
+    /// @param property The property to use for selecting the model
+    /// @param ifFalse  The model to apply when the property is false
+    /// @param ifTrue   The model to apply when the property is true
+    protected static Function<MultiVariantGenerator.Empty, MultiVariantGenerator> boolVariant(BooleanProperty property, Identifier ifFalse, Identifier ifTrue) {
+        return variant -> variant.with(
+                PropertyDispatch.initial(property)
+                        .select(false, BlockModelGenerators.plainVariant(ifFalse))
+                        .select(true, BlockModelGenerators.plainVariant(ifTrue))
+        );
     }
 
     /// {@return a variant mutator applying rotation in 90 degree increments based on the given 16-step rotation}

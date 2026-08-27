@@ -7,7 +7,7 @@ import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
-import io.github.xfacthd.framedblocks.common.blockentity.special.FramedCollapsibleCopycatBlockEntity;
+import io.github.xfacthd.framedblocks.common.blockentity.special.FramedCollapsibleCubeBlockEntity;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import net.minecraft.core.BlockPos;
@@ -33,7 +33,7 @@ import org.jspecify.annotations.Nullable;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class FramedCollapsibleCopycatBlock extends FramedBlock implements CopycatStyleBlock.Always {
+public class FramedCollapsibleCubeBlock extends FramedBlock implements CopycatStyleBlock.StateDependent {
     private static final int UP = Direction.UP.ordinal();
     private static final int DOWN = Direction.DOWN.ordinal();
     private static final int NORTH = Direction.NORTH.ordinal();
@@ -43,8 +43,8 @@ public class FramedCollapsibleCopycatBlock extends FramedBlock implements Copyca
     private static final Map<Integer, VoxelShape> SHAPE_CACHE = new ConcurrentHashMap<>();
     public static final int ALL_SOLID = 0b00111111;
 
-    public FramedCollapsibleCopycatBlock(Properties props) {
-        super(BlockType.FRAMED_COLLAPSIBLE_COPYCAT_BLOCK, props.dynamicShape());
+    public FramedCollapsibleCubeBlock(Properties props) {
+        super(BlockType.FRAMED_COLLAPSIBLE_CUBE, props.dynamicShape());
         registerDefaultState(defaultBlockState().setValue(PropertyHolder.SOLID_FACES, ALL_SOLID));
     }
 
@@ -62,14 +62,14 @@ public class FramedCollapsibleCopycatBlock extends FramedBlock implements Copyca
     @Override
     public boolean handleBlockLeftClick(BlockState state, Level level, BlockPos pos, Player player) {
         if (player.getMainHandItem().getItem() == FBContent.ITEM_FRAMED_HAMMER.value()) {
-            if (level.getBlockEntity(pos) instanceof FramedCollapsibleCopycatBlockEntity be) {
+            if (level.getBlockEntity(pos) instanceof FramedCollapsibleCubeBlockEntity be) {
                 if (!level.isClientSide()) {
                     be.handleDeform(player);
                 }
                 return true;
             }
         }
-        return false;
+        return super.handleBlockLeftClick(state, level, pos, player);
     }
 
     @Override
@@ -79,9 +79,9 @@ public class FramedCollapsibleCopycatBlock extends FramedBlock implements Copyca
         }
 
         int solid = state.getValue(PropertyHolder.SOLID_FACES);
-        if (solid != ALL_SOLID && level.getBlockEntity(pos) instanceof FramedCollapsibleCopycatBlockEntity be) {
+        if (solid != ALL_SOLID && level.getBlockEntity(pos) instanceof FramedCollapsibleCubeBlockEntity be) {
             return SHAPE_CACHE.computeIfAbsent(be.getPackedOffsets(state), key -> {
-                byte[] offsets = FramedCollapsibleCopycatBlockEntity.unpackOffsets(key);
+                byte[] offsets = FramedCollapsibleCubeBlockEntity.unpackOffsets(key);
                 return box(
                         offsets[WEST],
                         offsets[DOWN],
@@ -104,9 +104,9 @@ public class FramedCollapsibleCopycatBlock extends FramedBlock implements Copyca
     public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
         super.setPlacedBy(level, pos, state, placer, stack);
 
-        if (!level.isClientSide() && stack.has(FBContent.DC_TYPE_COLLAPSIBLE_COPYCAT_BLOCK_DATA)) {
+        if (!level.isClientSide() && stack.has(FBContent.DC_TYPE_COLLAPSIBLE_CUBE_DATA)) {
             //Properly set face solidity when placed from a stack with BE NBT data
-            if (level.getBlockEntity(pos) instanceof FramedCollapsibleCopycatBlockEntity be) {
+            if (level.getBlockEntity(pos) instanceof FramedCollapsibleCubeBlockEntity be) {
                 be.updateFaceSolidity();
             }
         }
@@ -115,7 +115,7 @@ public class FramedCollapsibleCopycatBlock extends FramedBlock implements Copyca
     @Override
     protected BlockState rotate(BlockState state, Rotation rotation) {
         int solidFaces = state.getValue(PropertyHolder.SOLID_FACES);
-        solidFaces = FramedCollapsibleCopycatBlockEntity.rotateSolidFaces(solidFaces, rotation);
+        solidFaces = FramedCollapsibleCubeBlockEntity.rotateSolidFaces(solidFaces, rotation);
         return state.setValue(PropertyHolder.SOLID_FACES, solidFaces);
     }
 
@@ -126,7 +126,7 @@ public class FramedCollapsibleCopycatBlock extends FramedBlock implements Copyca
         }
 
         int solidFaces = state.getValue(PropertyHolder.SOLID_FACES);
-        solidFaces = FramedCollapsibleCopycatBlockEntity.mirrorSolidFaces(solidFaces, mirror);
+        solidFaces = FramedCollapsibleCubeBlockEntity.mirrorSolidFaces(solidFaces, mirror);
         return state.setValue(PropertyHolder.SOLID_FACES, solidFaces);
     }
 
@@ -137,7 +137,7 @@ public class FramedCollapsibleCopycatBlock extends FramedBlock implements Copyca
 
     @Override
     public boolean doesBlockOccludeBeaconBeam(BlockState state, LevelReader level, BlockPos pos) {
-        if (level.getBlockEntity(pos) instanceof FramedCollapsibleCopycatBlockEntity be) {
+        if (level.getBlockEntity(pos) instanceof FramedCollapsibleCubeBlockEntity be) {
             return be.doesOccludeBeaconBeam();
         }
         return false;
@@ -145,7 +145,7 @@ public class FramedCollapsibleCopycatBlock extends FramedBlock implements Copyca
 
     @Override
     public FramedBlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return new FramedCollapsibleCopycatBlockEntity(pos, state);
+        return new FramedCollapsibleCubeBlockEntity(pos, state);
     }
 
     @Override

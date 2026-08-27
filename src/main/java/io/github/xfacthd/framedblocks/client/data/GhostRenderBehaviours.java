@@ -28,7 +28,7 @@ public final class GhostRenderBehaviours {
         event.registerBlocks(new SlabGhostRenderBehaviour(), FBContent.BLOCK_FRAMED_SLAB.value());
         event.registerBlocks(new PanelGhostRenderBehaviour(), FBContent.BLOCK_FRAMED_PANEL.value());
         event.registerBlock(new CollapsibleBlockGhostRenderBehaviour(), FBContent.BLOCK_FRAMED_COLLAPSIBLE_BLOCK);
-        event.registerBlock(new CollapsibleCopycatBlockGhostRenderBehaviour(), FBContent.BLOCK_FRAMED_COLLAPSIBLE_COPYCAT_BLOCK);
+        event.registerBlock(new CollapsibleCubeGhostRenderBehaviour(), FBContent.BLOCK_FRAMED_COLLAPSIBLE_CUBE);
         event.registerItems(
                 RailSlopeGhostRenderBehaviour.INSTANCE,
                 Items.RAIL,
@@ -44,13 +44,9 @@ public final class GhostRenderBehaviours {
         ));
         event.registerItem(new BlueprintGhostRenderBehaviour(), FBContent.ITEM_FRAMED_BLUEPRINT);
         event.registerBlock(new FlowerPotGhostRenderBehaviour(), FBContent.BLOCK_FRAMED_FLOWER_POT);
-        event.registerBlocks(AdjustableDoubleBlockGhostRenderBehaviour.standard(), List.of(
+        event.registerBlocks(new AdjustableDoubleBlockGhostRenderBehaviour(), List.of(
                 FBContent.BLOCK_FRAMED_ADJ_DOUBLE_SLAB,
                 FBContent.BLOCK_FRAMED_ADJ_DOUBLE_PANEL
-        ));
-        event.registerBlocks(AdjustableDoubleBlockGhostRenderBehaviour.copycat(), List.of(
-                FBContent.BLOCK_FRAMED_ADJ_DOUBLE_COPYCAT_SLAB,
-                FBContent.BLOCK_FRAMED_ADJ_DOUBLE_COPYCAT_PANEL
         ));
         event.registerBlock(new BoardGhostRenderBehaviour(), FBContent.BLOCK_FRAMED_BOARD);
         event.registerBlock(new LayeredCubeGhostRenderBehaviour(), FBContent.BLOCK_FRAMED_LAYERED_CUBE);

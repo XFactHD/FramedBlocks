@@ -1,7 +1,5 @@
 {
   "block.framedblocks.framed_activator_rail_slope": "Framed Activator Rail Slope",
-  "block.framedblocks.framed_adj_double_copycat_panel": "Framed Adjustable Double Copycat Panel",
-  "block.framedblocks.framed_adj_double_copycat_slab": "Framed Adjustable Double Copycat Slab",
   "block.framedblocks.framed_adj_double_panel": "Framed Adjustable Double Panel",
   "block.framedblocks.framed_adj_double_slab": "Framed Adjustable Double Slab",
   "block.framedblocks.framed_banner": "Framed Banner",
@@ -22,7 +20,7 @@
   "block.framedblocks.framed_chest": "Framed Chest",
   "block.framedblocks.framed_chiseled_bookshelf": "Framed Chiseled Bookshelf",
   "block.framedblocks.framed_collapsible_block": "Framed Collapsible Block",
-  "block.framedblocks.framed_collapsible_copycat_block": "Framed Collapsible Copycat Block",
+  "block.framedblocks.framed_collapsible_cube": "Framed Collapsible Cube",
   "block.framedblocks.framed_compound_slope_panel": "Framed Compound Slope Panel",
   "block.framedblocks.framed_compound_slope_slab": "Framed Compound Slope Slab",
   "block.framedblocks.framed_copper_lantern": "Framed Copper Lantern",

@@ -1,9 +1,0 @@
-{
-  "model": {
-    "type": "framedblocks:block",
-    "base_model": "framedblocks:block/framed_cube",
-    "block": "framedblocks:framed_adj_double_copycat_panel",
-    "data_provider": "framedblocks:adjustable_double_block_copycat",
-    "requires_data": true
-  }
-}

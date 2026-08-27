@@ -61,14 +61,12 @@ public final class ConnectionPredicates extends BlockTypeMap<ConnectionPredicate
         put(BlockType.FRAMED_SLAB, new SlabConnectionPredicate());
         put(BlockType.FRAMED_DOUBLE_SLAB, DoubleSlabConnectionPredicate.INSTANCE);
         put(BlockType.FRAMED_ADJ_DOUBLE_SLAB, DoubleSlabConnectionPredicate.INSTANCE);
-        put(BlockType.FRAMED_ADJ_DOUBLE_COPYCAT_SLAB, DoubleSlabConnectionPredicate.INSTANCE);
         put(BlockType.FRAMED_DIVIDED_SLAB, new DividedSlabConnectionPredicate());
         put(BlockType.FRAMED_SLAB_EDGE, new SlabEdgeConnectionPredicate());
         put(BlockType.FRAMED_SLAB_CORNER, new SlabCornerConnectionPredicate());
         put(BlockType.FRAMED_PANEL, new PanelConnectionPredicate());
         put(BlockType.FRAMED_DOUBLE_PANEL, DoublePanelConnectionPredicate.INSTANCE);
         put(BlockType.FRAMED_ADJ_DOUBLE_PANEL, DoublePanelConnectionPredicate.INSTANCE);
-        put(BlockType.FRAMED_ADJ_DOUBLE_COPYCAT_PANEL, DoublePanelConnectionPredicate.INSTANCE);
         put(BlockType.FRAMED_DIVIDED_PANEL_HORIZONTAL, new DividedPanelHorizontalConnectionPredicate());
         put(BlockType.FRAMED_DIVIDED_PANEL_VERTICAL, new DividedPanelVerticalConnectionPredicate());
         put(BlockType.FRAMED_CORNER_PILLAR, new CornerPillarConnectionPredicate());
@@ -131,7 +129,7 @@ public final class ConnectionPredicates extends BlockTypeMap<ConnectionPredicate
         put(BlockType.FRAMED_SPLIT_PILLAR_SOCKET, new SplitPillarSocketConnectionPredicate());
         put(BlockType.FRAMED_POST, PillarConnectionPredicate.INSTANCE);
         put(BlockType.FRAMED_COLLAPSIBLE_BLOCK, new CollapsibleBlockConnectionPredicate());
-        put(BlockType.FRAMED_COLLAPSIBLE_COPYCAT_BLOCK, new CollapsibleCopycatConnectionPredicate());
+        put(BlockType.FRAMED_COLLAPSIBLE_CUBE, new CollapsibleCubeConnectionPredicate());
         put(BlockType.FRAMED_BOUNCY_CUBE, ConnectionPredicate.FULL_EDGE);
         put(BlockType.FRAMED_REDSTONE_BLOCK, ConnectionPredicate.FULL_EDGE);
         put(BlockType.FRAMED_PRISM, new PrismConnectionPredicate());

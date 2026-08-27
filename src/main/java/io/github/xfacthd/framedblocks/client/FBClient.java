@@ -218,8 +218,7 @@ public final class FBClient {
         event.register(Utils.id("default"), ItemModelDataProvider.DEFAULT);
         event.register(Utils.id("double_block"), ItemModelDataProvider.DOUBLE_BLOCK);
         event.register(Utils.id("target"), FramedTargetGeometry.ITEM_MODEL_DATA_PROVIDER);
-        event.register(Utils.id("adjustable_double_block_standard"), AdjustableDoubleBlockItemModelDataProvider.STANDARD);
-        event.register(Utils.id("adjustable_double_block_copycat"), AdjustableDoubleBlockItemModelDataProvider.COPYCAT);
+        event.register(Utils.id("adjustable_double_block"), AdjustableDoubleBlockItemModelDataProvider.INSTANCE);
     }
 
     private static void onRegisterGuiLayers(RegisterGuiLayersEvent event) {
@@ -280,14 +279,12 @@ public final class FBClient {
         event.wrapSingle(FBContent.BLOCK_FRAMED_SLAB, TemplateSpecs.SLAB, StateMergers.DEFAULT);
         event.wrapDouble(FBContent.BLOCK_FRAMED_DOUBLE_SLAB, StateMergers.DEFAULT);
         event.wrapDouble(FBContent.BLOCK_FRAMED_ADJ_DOUBLE_SLAB, StateMergers.DEFAULT);
-        event.wrapDouble(FBContent.BLOCK_FRAMED_ADJ_DOUBLE_COPYCAT_SLAB, StateMergers.DEFAULT);
         event.wrapDouble(FBContent.BLOCK_FRAMED_DIVIDED_SLAB, StateMergers.DEFAULT);
         event.wrapSingle(FBContent.BLOCK_FRAMED_SLAB_EDGE, TemplateSpecs.SLAB_EDGE, StateMergers.DEFAULT);
         event.wrapSingle(FBContent.BLOCK_FRAMED_SLAB_CORNER, TemplateSpecs.SLAB_CORNER, StateMergers.DEFAULT);
         event.wrapSingle(FBContent.BLOCK_FRAMED_PANEL, TemplateSpecs.PANEL, StateMergers.DEFAULT);
         event.wrapDouble(FBContent.BLOCK_FRAMED_DOUBLE_PANEL, StateMergers.DEFAULT);
         event.wrapDouble(FBContent.BLOCK_FRAMED_ADJ_DOUBLE_PANEL, StateMergers.DEFAULT);
-        event.wrapDouble(FBContent.BLOCK_FRAMED_ADJ_DOUBLE_COPYCAT_PANEL, StateMergers.DEFAULT);
         event.wrapDouble(FBContent.BLOCK_FRAMED_DIVIDED_PANEL_HOR, StateMergers.DEFAULT);
         event.wrapDouble(FBContent.BLOCK_FRAMED_DIVIDED_PANEL_VERT, StateMergers.DEFAULT);
         event.wrapSingle(FBContent.BLOCK_FRAMED_CORNER_PILLAR, TemplateSpecs.CORNER_PILLAR, StateMergers.DEFAULT);
@@ -383,7 +380,7 @@ public final class FBClient {
         event.wrapDouble(FBContent.BLOCK_FRAMED_SPLIT_PILLAR_SOCKET, StateMergers.DEFAULT);
         event.wrapSingle(FBContent.BLOCK_FRAMED_POST, TemplateSpecs.POST, StateMergers.DEFAULT);
         event.wrapSingle(FBContent.BLOCK_FRAMED_COLLAPSIBLE_BLOCK, FramedCollapsibleBlockGeometry::new, StateMergers.DEFAULT);
-        event.wrapSingle(FBContent.BLOCK_FRAMED_COLLAPSIBLE_COPYCAT_BLOCK, FramedCollapsibleCopycatBlockGeometry::new, StateMergers.DEFAULT);
+        event.wrapSingle(FBContent.BLOCK_FRAMED_COLLAPSIBLE_CUBE, FramedCollapsibleCubeGeometry::new, StateMergers.DEFAULT);
         event.wrapSingle(FBContent.BLOCK_FRAMED_BOUNCY_CUBE, FramedMarkedCubeGeometry::slime, StateMergers.DEFAULT);
         event.wrapSingle(FBContent.BLOCK_FRAMED_REDSTONE_BLOCK, FramedMarkedCubeGeometry::redstone, StateMergers.DEFAULT);
         event.wrapSingle(FBContent.BLOCK_FRAMED_PRISM, FramedPrismGeometry::new, StateMergers.DEFAULT);

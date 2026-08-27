@@ -1,7 +1,7 @@
 package io.github.xfacthd.framedblocks.common.data.skippreds.misc;
 
 import io.github.xfacthd.framedblocks.api.predicate.cull.SideSkipPredicate;
-import io.github.xfacthd.framedblocks.common.blockentity.special.CollapsibleCopycatBlockEntity;
+import io.github.xfacthd.framedblocks.common.blockentity.special.CollapsibleCubeBlockEntity;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import io.github.xfacthd.framedblocks.common.data.skippreds.CullTest;
@@ -10,12 +10,12 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.state.BlockState;
 
-@CullTest(BlockType.FRAMED_COLLAPSIBLE_COPYCAT_BLOCK)
+@CullTest(BlockType.FRAMED_COLLAPSIBLE_CUBE)
 public final class CollapsibleCopycatBlockSkipPredicate implements SideSkipPredicate {
     private static final Direction[] DIRECTIONS = Direction.values();
 
     @Override
-    @CullTest.TestTarget(BlockType.FRAMED_COLLAPSIBLE_COPYCAT_BLOCK)
+    @CullTest.TestTarget(BlockType.FRAMED_COLLAPSIBLE_CUBE)
     public boolean test(BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side) {
         if (adjState.getBlock() == state.getBlock()) {
             int solid = state.getValue(PropertyHolder.SOLID_FACES);
@@ -28,10 +28,10 @@ public final class CollapsibleCopycatBlockSkipPredicate implements SideSkipPredi
                 return false;
             }
 
-            if (!(level.getBlockEntity(pos) instanceof CollapsibleCopycatBlockEntity be)) {
+            if (!(level.getBlockEntity(pos) instanceof CollapsibleCubeBlockEntity be)) {
                 return false;
             }
-            if (!(level.getBlockEntity(pos.relative(side)) instanceof CollapsibleCopycatBlockEntity adjBe)) {
+            if (!(level.getBlockEntity(pos.relative(side)) instanceof CollapsibleCubeBlockEntity adjBe)) {
                 return false;
             }
 

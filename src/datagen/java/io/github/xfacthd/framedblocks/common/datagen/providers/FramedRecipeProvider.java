@@ -189,14 +189,8 @@ public final class FramedRecipeProvider extends AbstractFramedRecipeProvider {
 
         shapedBuildingBlock(FBContent.BLOCK_FRAMED_ADJ_DOUBLE_SLAB.value(), 2)
                 .pattern("FF")
-                .define('F', FBContent.BLOCK_FRAMED_COLLAPSIBLE_BLOCK.value())
-                .unlockedBy(FBContent.BLOCK_FRAMED_COLLAPSIBLE_BLOCK)
-                .save(output);
-
-        shapedBuildingBlock(FBContent.BLOCK_FRAMED_ADJ_DOUBLE_COPYCAT_SLAB.value(), 2)
-                .pattern("FF")
-                .define('F', FBContent.BLOCK_FRAMED_COLLAPSIBLE_COPYCAT_BLOCK.value())
-                .unlockedBy(FBContent.BLOCK_FRAMED_COLLAPSIBLE_COPYCAT_BLOCK)
+                .define('F', FBContent.BLOCK_FRAMED_COLLAPSIBLE_CUBE.value())
+                .unlockedBy(FBContent.BLOCK_FRAMED_COLLAPSIBLE_CUBE)
                 .save(output);
 
         shapedBuildingBlock(FBContent.BLOCK_FRAMED_DIVIDED_SLAB.value())
@@ -235,15 +229,8 @@ public final class FramedRecipeProvider extends AbstractFramedRecipeProvider {
         shapedBuildingBlock(FBContent.BLOCK_FRAMED_ADJ_DOUBLE_PANEL.value(), 2)
                 .pattern("F")
                 .pattern("F")
-                .define('F', FBContent.BLOCK_FRAMED_COLLAPSIBLE_BLOCK.value())
-                .unlockedBy(FBContent.BLOCK_FRAMED_COLLAPSIBLE_BLOCK)
-                .save(output);
-
-        shapedBuildingBlock(FBContent.BLOCK_FRAMED_ADJ_DOUBLE_COPYCAT_PANEL.value(), 2)
-                .pattern("F")
-                .pattern("F")
-                .define('F', FBContent.BLOCK_FRAMED_COLLAPSIBLE_COPYCAT_BLOCK.value())
-                .unlockedBy(FBContent.BLOCK_FRAMED_COLLAPSIBLE_COPYCAT_BLOCK)
+                .define('F', FBContent.BLOCK_FRAMED_COLLAPSIBLE_CUBE.value())
+                .unlockedBy(FBContent.BLOCK_FRAMED_COLLAPSIBLE_CUBE)
                 .save(output);
 
         shapedBuildingBlock(FBContent.BLOCK_FRAMED_DIVIDED_PANEL_HOR.value())
@@ -856,7 +843,7 @@ public final class FramedRecipeProvider extends AbstractFramedRecipeProvider {
                 .unlockedBy(FBContent.BLOCK_FRAMED_CUBE)
                 .save(output);
 
-        shapedBuildingBlock(FBContent.BLOCK_FRAMED_COLLAPSIBLE_COPYCAT_BLOCK.value(), 4)
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_COLLAPSIBLE_CUBE.value(), 4)
                 .pattern("FCF")
                 .pattern("C C")
                 .pattern("FCF")

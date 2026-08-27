@@ -3,7 +3,7 @@
     "type": "framedblocks:block",
     "base_model": "framedblocks:block/framed_cube",
     "block": "framedblocks:framed_adj_double_panel",
-    "data_provider": "framedblocks:adjustable_double_block_standard",
+    "data_provider": "framedblocks:adjustable_double_block",
     "requires_data": true
   }
 }

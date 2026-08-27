@@ -14,7 +14,7 @@ public final class BlueprintBehaviours {
         event.register(new DoorCopyBehaviour(), List.of(FBContent.BLOCK_FRAMED_DOOR, FBContent.BLOCK_FRAMED_IRON_DOOR));
         event.register(new ChestCopyBehaviour(), FBContent.BLOCK_FRAMED_CHEST);
         event.register(new CollapsibleBlockCopyBehaviour(), FBContent.BLOCK_FRAMED_COLLAPSIBLE_BLOCK);
-        event.register(new CollapsibleCopycatBlockCopyBehaviour(), FBContent.BLOCK_FRAMED_COLLAPSIBLE_COPYCAT_BLOCK);
+        event.register(new CollapsibleCubeCopyBehaviour(), FBContent.BLOCK_FRAMED_COLLAPSIBLE_CUBE);
         event.register(new FlowerPotCopyBehaviour(), FBContent.BLOCK_FRAMED_FLOWER_POT);
         event.register(
                 new DummyDataHandlingCopyBehaviour<>(
@@ -23,9 +23,7 @@ public final class BlueprintBehaviours {
                 ),
                 List.of(
                         FBContent.BLOCK_FRAMED_ADJ_DOUBLE_SLAB,
-                        FBContent.BLOCK_FRAMED_ADJ_DOUBLE_COPYCAT_SLAB,
-                        FBContent.BLOCK_FRAMED_ADJ_DOUBLE_PANEL,
-                        FBContent.BLOCK_FRAMED_ADJ_DOUBLE_COPYCAT_PANEL
+                        FBContent.BLOCK_FRAMED_ADJ_DOUBLE_PANEL
                 )
         );
         event.register(new TubeCopyBehaviour(), FBContent.BLOCK_FRAMED_TUBE);

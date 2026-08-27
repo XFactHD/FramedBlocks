@@ -4,13 +4,11 @@ import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.CamoGetter;
-import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockParts;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockTopInteractionMode;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.SolidityCheck;
 import io.github.xfacthd.framedblocks.api.block.item.placement.PropertyLabels;
 import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
-import io.github.xfacthd.framedblocks.common.blockentity.doubled.slab.FramedAdjustableDoubleBlockEntity;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import net.minecraft.core.Direction;
 import net.minecraft.util.TriState;
@@ -18,21 +16,13 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import org.jspecify.annotations.Nullable;
 
-import java.util.function.Function;
-
 public class FramedAdjustableDoublePanelBlock extends FramedAdjustableDoubleBlock {
-    private FramedAdjustableDoublePanelBlock(
-            BlockType type,
-            Properties props,
-            Function<BlockState, DoubleBlockParts> partsBuilder,
-            BlockEntityType.BlockEntitySupplier<FramedAdjustableDoubleBlockEntity> beSupplier
-    ) {
-        super(type, props, state -> state.getValue(FramedProperties.FACING_HOR), partsBuilder, beSupplier);
+    public FramedAdjustableDoublePanelBlock(BlockType type, Properties props) {
+        super(type, props, state -> state.getValue(FramedProperties.FACING_HOR));
     }
 
     @Override
@@ -103,23 +93,5 @@ public class FramedAdjustableDoublePanelBlock extends FramedAdjustableDoubleBloc
         return StateCycleSpec.builder(this)
                 .property(FramedProperties.FACING_HOR, PropertyLabels.FACING)
                 .build();
-    }
-
-    public static FramedAdjustableDoublePanelBlock standard(Properties props) {
-        return new FramedAdjustableDoublePanelBlock(
-                BlockType.FRAMED_ADJ_DOUBLE_PANEL,
-                props,
-                FramedAdjustableDoubleBlock::makeStandardParts,
-                FramedAdjustableDoubleBlockEntity::standard
-        );
-    }
-
-    public static FramedAdjustableDoublePanelBlock copycat(Properties props) {
-        return new FramedAdjustableDoublePanelBlock(
-                BlockType.FRAMED_ADJ_DOUBLE_COPYCAT_PANEL,
-                props,
-                FramedAdjustableDoubleBlock::makeCopycatParts,
-                FramedAdjustableDoubleBlockEntity::copycat
-        );
     }
 }

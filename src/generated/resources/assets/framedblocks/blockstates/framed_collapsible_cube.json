@@ -1,0 +1,19 @@
+{
+  "neoforge:definition_type": "framedblocks:wrapper",
+  "aux_models": {
+    "alt_base": {
+      "model": "framedblocks:block/framed_collapsible_cube_alt_default"
+    },
+    "alt_copycat": {
+      "model": "framedblocks:block/framed_collapsible_cube_alt_copycat"
+    }
+  },
+  "variants": {
+    "copycat_style=false": {
+      "model": "framedblocks:block/framed_collapsible_cube_default"
+    },
+    "copycat_style=true": {
+      "model": "framedblocks:block/framed_collapsible_cube_copycat"
+    }
+  }
+}

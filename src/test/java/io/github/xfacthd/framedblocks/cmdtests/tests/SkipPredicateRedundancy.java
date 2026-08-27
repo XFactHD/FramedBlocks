@@ -36,7 +36,7 @@ public final class SkipPredicateRedundancy {
     // Set of blocks which are known to appear redundant when tested against themselves
     private static final Set<BlockType> IGNORED_SELF_TESTS = EnumSet.of(
             BlockType.FRAMED_COLLAPSIBLE_BLOCK,
-            BlockType.FRAMED_COLLAPSIBLE_COPYCAT_BLOCK
+            BlockType.FRAMED_COLLAPSIBLE_CUBE
     );
 
     public static void testSkipPredicates(

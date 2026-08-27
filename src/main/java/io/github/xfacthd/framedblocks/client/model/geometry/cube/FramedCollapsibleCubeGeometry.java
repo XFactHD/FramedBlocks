@@ -1,5 +1,6 @@
 package io.github.xfacthd.framedblocks.client.model.geometry.cube;
 
+import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
 import io.github.xfacthd.framedblocks.api.model.data.QuadMapBuilder;
 import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
@@ -8,7 +9,7 @@ import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
 import io.github.xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
 import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.common.blockentity.PackedCollapsibleBlockOffsets;
-import io.github.xfacthd.framedblocks.common.blockentity.special.FramedCollapsibleCopycatBlockEntity;
+import io.github.xfacthd.framedblocks.common.blockentity.special.FramedCollapsibleCubeBlockEntity;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import net.minecraft.client.renderer.block.BlockAndTintGetter;
 import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
@@ -25,17 +26,20 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class FramedCollapsibleCopycatBlockGeometry extends Geometry {
-    public static final String ALT_BASE_MODEL_KEY = "alt_base";
+public class FramedCollapsibleCubeGeometry extends Geometry {
+    public static final String DEFAULT_ALT_BASE_MODEL_KEY = "alt_base";
+    public static final String COPYCAT_ALT_BASE_MODEL_KEY = "alt_copycat";
 
     private final BlockState state;
+    private final boolean copycat;
     private final int solidFaces;
     private final BlockStateModel altBaseModel;
 
-    public FramedCollapsibleCopycatBlockGeometry(GeometryFactory.Context ctx) {
+    public FramedCollapsibleCubeGeometry(GeometryFactory.Context ctx) {
         this.state = ctx.state();
+        this.copycat = ctx.state().getValue(FramedProperties.COPYCAT_STYLE);
         this.solidFaces = ctx.state().getValue(PropertyHolder.SOLID_FACES);
-        this.altBaseModel = ctx.auxModels().getModel(ALT_BASE_MODEL_KEY);
+        this.altBaseModel = ctx.auxModels().getModel(copycat ? COPYCAT_ALT_BASE_MODEL_KEY : DEFAULT_ALT_BASE_MODEL_KEY);
     }
 
     @Override
@@ -47,7 +51,7 @@ public class FramedCollapsibleCopycatBlockGeometry extends Geometry {
             return;
         }
 
-        byte[] offsets = FramedCollapsibleCopycatBlockEntity.unpackOffsets(packedOffsets);
+        byte[] offsets = FramedCollapsibleCubeBlockEntity.unpackOffsets(packedOffsets);
         boolean solid = (solidFaces & (1 << quadDir.ordinal())) != 0;
         List<QuadModifier> mods = new ArrayList<>(2);
 
@@ -75,17 +79,21 @@ public class FramedCollapsibleCopycatBlockGeometry extends Geometry {
             }
 
             mods.add(baseModifier);
-        } else if (fullOne) {
-            mods.add(baseModifier.derive().apply(Modifiers.cutCopycat(axisTwo.getNegative(), offTwoNeg, offTwoPos)));
-            mods.add(baseModifier         .apply(Modifiers.cutCopycat(axisTwo.getPositive(), offTwoNeg, offTwoPos)));
-        } else if (fullTwo) {
-            mods.add(baseModifier.derive().apply(Modifiers.cutCopycat(axisOne.getNegative(), offOneNeg, offOnePos)));
-            mods.add(baseModifier         .apply(Modifiers.cutCopycat(axisOne.getPositive(), offOneNeg, offOnePos)));
+        } else if (copycat) {
+            if (fullOne) {
+                mods.add(baseModifier.derive().apply(Modifiers.cutCopycat(axisTwo.getNegative(), offTwoNeg, offTwoPos)));
+                mods.add(baseModifier         .apply(Modifiers.cutCopycat(axisTwo.getPositive(), offTwoNeg, offTwoPos)));
+            } else if (fullTwo) {
+                mods.add(baseModifier.derive().apply(Modifiers.cutCopycat(axisOne.getNegative(), offOneNeg, offOnePos)));
+                mods.add(baseModifier         .apply(Modifiers.cutCopycat(axisOne.getPositive(), offOneNeg, offOnePos)));
+            } else {
+                mods.add(baseModifier.derive().apply(Modifiers.cutCopycat(axisOne.getNegative(), axisTwo.getNegative(), offOneNeg, offOnePos, offTwoNeg, offTwoPos)));
+                mods.add(baseModifier.derive().apply(Modifiers.cutCopycat(axisOne.getNegative(), axisTwo.getPositive(), offOneNeg, offOnePos, offTwoNeg, offTwoPos)));
+                mods.add(baseModifier.derive().apply(Modifiers.cutCopycat(axisOne.getPositive(), axisTwo.getNegative(), offOneNeg, offOnePos, offTwoNeg, offTwoPos)));
+                mods.add(baseModifier         .apply(Modifiers.cutCopycat(axisOne.getPositive(), axisTwo.getPositive(), offOneNeg, offOnePos, offTwoNeg, offTwoPos)));
+            }
         } else {
-            mods.add(baseModifier.derive().apply(Modifiers.cutCopycat(axisOne.getNegative(), axisTwo.getNegative(), offOneNeg, offOnePos, offTwoNeg, offTwoPos)));
-            mods.add(baseModifier.derive().apply(Modifiers.cutCopycat(axisOne.getNegative(), axisTwo.getPositive(), offOneNeg, offOnePos, offTwoNeg, offTwoPos)));
-            mods.add(baseModifier.derive().apply(Modifiers.cutCopycat(axisOne.getPositive(), axisTwo.getNegative(), offOneNeg, offOnePos, offTwoNeg, offTwoPos)));
-            mods.add(baseModifier         .apply(Modifiers.cutCopycat(axisOne.getPositive(), axisTwo.getPositive(), offOneNeg, offOnePos, offTwoNeg, offTwoPos)));
+            mods.add(baseModifier.apply(Modifiers.cut(axisOne, 1F - offOneNeg, 1F - offOnePos)).apply(Modifiers.cut(axisTwo, 1F - offTwoNeg, 1F - offTwoPos)));
         }
 
         Direction cullFace = solid ? quadDir : null;

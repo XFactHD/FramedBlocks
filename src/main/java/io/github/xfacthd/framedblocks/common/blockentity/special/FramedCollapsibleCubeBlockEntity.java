@@ -9,7 +9,7 @@ import io.github.xfacthd.framedblocks.api.util.MathUtils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.blockentity.PackedCollapsibleBlockOffsets;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
-import io.github.xfacthd.framedblocks.common.data.component.CollapsibleCopycatBlockData;
+import io.github.xfacthd.framedblocks.common.data.component.CollapsibleCubeData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponentGetter;
@@ -26,7 +26,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.neoforged.neoforge.model.data.ModelData;
 
-public class FramedCollapsibleCopycatBlockEntity extends FramedBlockEntity implements CollapsibleCopycatBlockEntity {
+public class FramedCollapsibleCubeBlockEntity extends FramedBlockEntity implements CollapsibleCubeBlockEntity {
     private static final Direction[] DIRECTIONS = Direction.values();
     private static final Direction[] HORIZONTAL_DIRECTIONS = Direction.Plane.HORIZONTAL.stream().toArray(Direction[]::new);
     private static final int MAX_OFFSET_BEACON_OCCLUSION = 5;
@@ -34,8 +34,8 @@ public class FramedCollapsibleCopycatBlockEntity extends FramedBlockEntity imple
     private int packedOffsets = 0;
     private boolean occludesBeacon = true;
 
-    public FramedCollapsibleCopycatBlockEntity(BlockPos pos, BlockState state) {
-        super(FBContent.BE_TYPE_FRAMED_COLLAPSIBLE_COPYCAT_BLOCK.value(), pos, state);
+    public FramedCollapsibleCubeBlockEntity(BlockPos pos, BlockState state) {
+        super(FBContent.BE_TYPE_FRAMED_COLLAPSIBLE_CUBE.value(), pos, state);
     }
 
     public void handleDeform(Player player) {
@@ -164,12 +164,12 @@ public class FramedCollapsibleCopycatBlockEntity extends FramedBlockEntity imple
 
     @Override
     protected BlueprintData appendCustomBlueprintData(BlueprintData blueprintData) {
-        return blueprintData.withCustomData(FBContent.DC_TYPE_COLLAPSIBLE_COPYCAT_BLOCK_DATA, new CollapsibleCopycatBlockData(packedOffsets));
+        return blueprintData.withCustomData(FBContent.DC_TYPE_COLLAPSIBLE_CUBE_DATA, new CollapsibleCubeData(packedOffsets));
     }
 
     @Override
     protected void applyCustomDataFromBlueprint(TypedDataComponent<?> auxData) {
-        if (auxData.value() instanceof CollapsibleCopycatBlockData(int offsets)) {
+        if (auxData.value() instanceof CollapsibleCubeData(int offsets)) {
             packedOffsets = offsets;
         }
     }
@@ -182,12 +182,12 @@ public class FramedCollapsibleCopycatBlockEntity extends FramedBlockEntity imple
 
     @Override
     protected void collectMiscComponents(DataComponentMap.Builder builder) {
-        builder.set(FBContent.DC_TYPE_COLLAPSIBLE_COPYCAT_BLOCK_DATA, new CollapsibleCopycatBlockData(packedOffsets));
+        builder.set(FBContent.DC_TYPE_COLLAPSIBLE_CUBE_DATA, new CollapsibleCubeData(packedOffsets));
     }
 
     @Override
     protected void applyMiscComponents(DataComponentGetter input) {
-        CollapsibleCopycatBlockData blockData = input.get(FBContent.DC_TYPE_COLLAPSIBLE_COPYCAT_BLOCK_DATA);
+        CollapsibleCubeData blockData = input.get(FBContent.DC_TYPE_COLLAPSIBLE_CUBE_DATA);
         if (blockData != null) {
             packedOffsets = blockData.offsets();
             updateFaceSolidity();
