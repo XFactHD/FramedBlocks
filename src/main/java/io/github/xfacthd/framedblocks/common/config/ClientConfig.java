@@ -25,7 +25,6 @@ public final class ClientConfig {
     private static final String KEY_CAMO_MESSAGE_VERBOSITY = "camoMessageVerbosity";
     private static final String KEY_FORCE_AO_ON_GLOWING_BLOCKS = "forceAoOnGlowingBlocks";
     private static final String KEY_RENDER_ITEM_MODELS_WITH_CAMO = "renderItemModelsWithCamo";
-    private static final String KEY_SHOW_ALL_RECIPE_PERMUTATIONS_IN_EMI = "showAllRecipePermutationsInEmi";
     private static final String KEY_SOLID_FRAME_MODE = "solidFrameMode";
     private static final String KEY_SHOW_BUTTON_PLATE_OVERLAY = "showButtonPlateTypeOverlay";
     private static final String KEY_SHOW_SPECIAL_CUBE_OVERLAY = "showSpecialCubeTypeOverlay";
@@ -63,7 +62,6 @@ public final class ClientConfig {
     public static final ModConfigSpec.EnumValue<CamoMessageVerbosity> CAMO_MESSAGE_VERBOSITY_VALUE;
     public static final ModConfigSpec.BooleanValue FORCE_AO_ON_GLOWING_BLOCKS_VALUE;
     public static final ModConfigSpec.BooleanValue RENDER_ITEM_MODELS_WITH_CAMO_VALUE;
-    public static final ModConfigSpec.BooleanValue SHOW_ALL_RECIPE_PERMUTATIONS_IN_EMI_VALUE;
     public static final ModConfigSpec.EnumValue<SolidFrameMode> SOLID_FRAME_MODE_VALUE;
     public static final ModConfigSpec.BooleanValue SHOW_BUTTON_PLATE_OVERLAY_VALUE;
     public static final ModConfigSpec.BooleanValue SHOW_SPECIAL_CUBE_OVERLAY_VALUE;
@@ -93,7 +91,6 @@ public final class ClientConfig {
     private static CamoMessageVerbosity camoMessageVerbosity = CamoMessageVerbosity.DEFAULT;
     private static boolean forceAoOnGlowingBlocks = false;
     private static boolean renderItemModelsWithCamo = false;
-    private static boolean showAllRecipePermutationsInEmi = false;
     private static SolidFrameMode solidFrameMode = SolidFrameMode.DEFAULT;
     private static boolean showButtonPlateOverlay = false;
     private static boolean showSpecialCubeOverlay = false;
@@ -178,12 +175,6 @@ public final class ClientConfig {
                 )
                 .translation(translate(KEY_RENDER_ITEM_MODELS_WITH_CAMO))
                 .define(KEY_RENDER_ITEM_MODELS_WITH_CAMO, true);
-        SHOW_ALL_RECIPE_PERMUTATIONS_IN_EMI_VALUE = builder
-                .comment("If true, all possible recipes of the Framing Saw will be added to EMI, else only the permutations using the Framed Cube will be added.")
-                .comment("This setting only has an effect when EMI is installed.")
-                .translation(translate(KEY_SHOW_ALL_RECIPE_PERMUTATIONS_IN_EMI))
-                .worldRestart()
-                .define(KEY_SHOW_ALL_RECIPE_PERMUTATIONS_IN_EMI, true);
         SOLID_FRAME_MODE_VALUE = builder
                 .comment(
                         "Configures in which cases a framed block without a camo gets a solid model",
@@ -307,7 +298,6 @@ public final class ClientConfig {
             camoMessageVerbosity = CAMO_MESSAGE_VERBOSITY_VALUE.get();
             forceAoOnGlowingBlocks = FORCE_AO_ON_GLOWING_BLOCKS_VALUE.get();
             renderItemModelsWithCamo = RENDER_ITEM_MODELS_WITH_CAMO_VALUE.get();
-            showAllRecipePermutationsInEmi = SHOW_ALL_RECIPE_PERMUTATIONS_IN_EMI_VALUE.get();
             solidFrameMode = SOLID_FRAME_MODE_VALUE.get();
             showButtonPlateOverlay = SHOW_BUTTON_PLATE_OVERLAY_VALUE.get();
             showSpecialCubeOverlay = SHOW_SPECIAL_CUBE_OVERLAY_VALUE.get();
@@ -376,11 +366,6 @@ public final class ClientConfig {
         @Override
         public boolean shouldRenderItemModelsWithCamo() {
             return renderItemModelsWithCamo;
-        }
-
-        @Override
-        public boolean showAllRecipePermutationsInEmi() {
-            return showAllRecipePermutationsInEmi;
         }
 
         @Override

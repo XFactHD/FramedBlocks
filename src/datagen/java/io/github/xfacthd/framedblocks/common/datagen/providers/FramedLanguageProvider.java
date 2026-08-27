@@ -763,7 +763,6 @@ public final class FramedLanguageProvider extends LanguageProvider {
         addConfigValue(ClientConfig.CAMO_MESSAGE_VERBOSITY_VALUE, "Disallowed camo message verbosity");
         addConfigValue(ClientConfig.FORCE_AO_ON_GLOWING_BLOCKS_VALUE, "Force ambient occlusion on glowing framed blocks");
         addConfigValue(ClientConfig.RENDER_ITEM_MODELS_WITH_CAMO_VALUE, "Render item models with camo");
-        addConfigValue(ClientConfig.SHOW_ALL_RECIPE_PERMUTATIONS_IN_EMI_VALUE, "Show all Framing Saw recipe permutations in EMI");
         addConfigValue(ClientConfig.SOLID_FRAME_MODE_VALUE, "Solid frame mode");
         addConfigValue(ClientConfig.SHOW_BUTTON_PLATE_OVERLAY_VALUE, "Show button and pressure plate type overlay");
         addConfigValue(ClientConfig.SHOW_SPECIAL_CUBE_OVERLAY_VALUE, "Show special cube type overlay");

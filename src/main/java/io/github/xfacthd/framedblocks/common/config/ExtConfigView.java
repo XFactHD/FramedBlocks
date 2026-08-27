@@ -21,9 +21,6 @@ public final class ExtConfigView {
     public interface Client extends ConfigView.Client {
         int getGhostRenderOpacity();
 
-        /// If true, all recipe permutations will be added to EMI, otherwise only cube->any variants will be added.
-        boolean showAllRecipePermutationsInEmi();
-
         SolidFrameMode getSolidFrameMode();
 
         boolean showButtonPlateOverlay();
