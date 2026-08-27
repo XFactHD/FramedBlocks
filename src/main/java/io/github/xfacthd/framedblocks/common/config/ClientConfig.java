@@ -31,6 +31,7 @@ public final class ClientConfig {
     private static final String KEY_SHOW_SPECIAL_CUBE_OVERLAY = "showSpecialCubeTypeOverlay";
     private static final String KEY_RENDER_CAMO_IN_JADE = "renderCamoInJade";
     private static final String KEY_SHOW_CAMO_CRAFTING_IN_JEI = "showCamoCraftingInJei";
+    private static final String KEY_DOUBLE_BLOCK_PART_INDICATOR_ENABLED = "doubleBlockPartIndicatorEnabled";
     private static final String KEY_MAX_OVERLAY_MODE = "maxOverlayMode";
     private static final String KEY_STATE_LOCK_MODE = "stateLockMode";
     private static final String KEY_TOGGLE_WATERLOG_MODE = "toggleWaterlogMode";
@@ -68,6 +69,7 @@ public final class ClientConfig {
     public static final ModConfigSpec.BooleanValue SHOW_SPECIAL_CUBE_OVERLAY_VALUE;
     public static final ModConfigSpec.BooleanValue RENDER_CAMO_IN_JADE_VALUE;
     public static final ModConfigSpec.BooleanValue SHOW_CAMO_CRAFTING_IN_JEI_VALUE;
+    public static final ModConfigSpec.BooleanValue DOUBLE_BLOCK_PART_INDICATOR_ENABLED_VALUE;
 
     public static final ModConfigSpec.EnumValue<OverlayDisplayMode> MAX_OVERLAY_MODE_VALUE;
     public static final ModConfigSpec.EnumValue<OverlayDisplayMode> STATE_LOCK_MODE_VALUE;
@@ -97,6 +99,7 @@ public final class ClientConfig {
     private static boolean showSpecialCubeOverlay = false;
     private static boolean renderCamoInJade = false;
     private static boolean showCamoCraftingInJei = false;
+    private static boolean doubleBlockPartIndicatorEnabled = false;
 
     private static OverlayDisplayMode maxOverlayMode = OverlayDisplayMode.DETAILED_ALWAYS;
     private static OverlayDisplayMode stateLockMode = OverlayDisplayMode.DETAILED_ALWAYS;
@@ -213,6 +216,10 @@ public final class ClientConfig {
                 .translation(translate(KEY_SHOW_CAMO_CRAFTING_IN_JEI))
                 .worldRestart()
                 .define(KEY_SHOW_CAMO_CRAFTING_IN_JEI, true);
+        DOUBLE_BLOCK_PART_INDICATOR_ENABLED_VALUE = builder
+                .comment("If true, double blocks will show an outline indicating which part is being targeted when looking at them")
+                .translation(translate(KEY_DOUBLE_BLOCK_PART_INDICATOR_ENABLED))
+                .define(KEY_DOUBLE_BLOCK_PART_INDICATOR_ENABLED, false);
         builder.pop();
 
         builder.translation(TRANSLATION_CATEGORY_OVERLAY).push("overlay");
@@ -306,6 +313,7 @@ public final class ClientConfig {
             showSpecialCubeOverlay = SHOW_SPECIAL_CUBE_OVERLAY_VALUE.get();
             renderCamoInJade = RENDER_CAMO_IN_JADE_VALUE.get();
             showCamoCraftingInJei = SHOW_CAMO_CRAFTING_IN_JEI_VALUE.get();
+            doubleBlockPartIndicatorEnabled = DOUBLE_BLOCK_PART_INDICATOR_ENABLED_VALUE.get();
 
             maxOverlayMode = MAX_OVERLAY_MODE_VALUE.get();
             stateLockMode = STATE_LOCK_MODE_VALUE.get();
@@ -398,6 +406,11 @@ public final class ClientConfig {
         @Override
         public boolean showCamoCraftingInJei() {
             return showCamoCraftingInJei;
+        }
+
+        @Override
+        public boolean isDoubleBlockPartIndicatorEnabled() {
+            return doubleBlockPartIndicatorEnabled;
         }
 
         @Override

@@ -769,6 +769,7 @@ public final class FramedLanguageProvider extends LanguageProvider {
         addConfigValue(ClientConfig.SHOW_SPECIAL_CUBE_OVERLAY_VALUE, "Show special cube type overlay");
         addConfigValue(ClientConfig.RENDER_CAMO_IN_JADE_VALUE, "Render camo in Jade overlay");
         addConfigValue(ClientConfig.SHOW_CAMO_CRAFTING_IN_JEI_VALUE, "Show camo application recipes in JEI");
+        addConfigValue(ClientConfig.DOUBLE_BLOCK_PART_INDICATOR_ENABLED_VALUE, "Show double-block part indicator");
         addConfigValue(ClientConfig.MAX_OVERLAY_MODE_VALUE, "Max overlay display mode");
         addConfigValue(ClientConfig.STATE_LOCK_MODE_VALUE, "State lock overlay: Display mode");
         addConfigValue(ClientConfig.TOGGLE_WATERLOG_MODE_VALUE, "Toggle waterloggable overlay: Display mode");
@@ -784,7 +785,6 @@ public final class FramedLanguageProvider extends LanguageProvider {
 
         add("framedblocks.configuration.section.framedblocks.devtools.toml", "Dev Tools Settings");
         add("framedblocks.configuration.section.framedblocks.devtools.toml.title", "FramedBlocks Dev Tools Configuration");
-        addConfigValue(DevToolsConfig.DOUBLE_BLOCK_PART_DEBUG_VALUE, "Double-block part debug");
         addConfigValue(DevToolsConfig.CONNECTION_DEBUG_VALUE, "ConnectionPredicate debug");
         addConfigValue(DevToolsConfig.QUAD_WINDING_DEBUG_VALUE, "Quad-winding debug");
         addConfigValue(DevToolsConfig.STATE_MERGER_DEBUG_VALUE, "StateMerger debug");

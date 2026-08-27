@@ -859,15 +859,6 @@ public final class FBContent {
         return BLOCK_ENTITIES_BY_TYPE.values().stream();
     }
 
-    @SuppressWarnings("unchecked")
-    public static Stream<DeferredBlockEntity<? extends FramedDoubleBlockEntity>> getDoubleBlockEntities() {
-        return BLOCK_ENTITIES_BY_TYPE.entrySet()
-                .stream()
-                .filter(entry -> entry.getKey().isDoubleBlock())
-                .map(Map.Entry::getValue)
-                .map(holder -> (DeferredBlockEntity<? extends FramedDoubleBlockEntity>) holder);
-    }
-
     public static BlockEntityType.BlockEntitySupplier<FramedBlockEntity> getDefaultBlockEntityFactory() {
         return (pos, state) -> new FramedBlockEntity(BE_TYPE_FRAMED_BLOCK.value(), pos, state);
     }

@@ -22,5 +22,8 @@ public interface DebugRenderers {
     BlockDebugRenderer<IFramedBlockEntity> quadWinding();
 
     /// {@return the debug renderer for {@link FramedBlockEntity#hitSecondary(BlockHitResult, Vec3, Vec3)}}
+    ///
+    /// @deprecated Promoted to user-facing feature
+    @Deprecated(forRemoval = true, since = "26.1")
     BlockDebugRenderer<FramedDoubleBlockEntity> doubleBlockPart();
 }

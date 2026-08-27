@@ -20,6 +20,7 @@ public final class DebugRenderersImpl implements DebugRenderers {
     }
 
     @Override
+    @SuppressWarnings("removal")
     public BlockDebugRenderer<FramedDoubleBlockEntity> doubleBlockPart() {
         return DoubleBlockPartDebugRenderer.INSTANCE;
     }

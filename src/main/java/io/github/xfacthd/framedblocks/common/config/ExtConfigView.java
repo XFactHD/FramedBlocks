@@ -34,6 +34,8 @@ public final class ExtConfigView {
 
         boolean showCamoCraftingInJei();
 
+        boolean isDoubleBlockPartIndicatorEnabled();
+
         OverlayDisplayMode getMaxOverlayMode();
 
         OverlayDisplayMode getStateLockMode();
@@ -60,8 +62,6 @@ public final class ExtConfigView {
     }
 
     public interface DevTools extends ConfigView.DevTools {
-        boolean isDoubleBlockPartHitDebugRendererEnabled();
-
         boolean isConnectionDebugRendererEnabled();
 
         boolean isQuadWindingDebugRendererEnabled();
