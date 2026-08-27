@@ -77,7 +77,7 @@ public class FramedWeightedPressurePlateBlock extends WeightedPressurePlateBlock
 
     @Override
     public boolean handleBlockLeftClick(BlockState state, Level level, BlockPos pos, Player player) {
-        if (player.getMainHandItem().is(FBContent.ITEM_FRAMED_WRENCH.value())) {
+        if (player.getMainHandItem().is(FBContent.ITEM_FRAMED_HAMMER.value())) {
             if (!level.isClientSide()) {
                 BlockUtils.wrapInStateCopy(level, pos, player, ItemStack.EMPTY, false, false, () -> {
                     BlockState newState = getCounterpart().defaultBlockState();
