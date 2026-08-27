@@ -11,7 +11,6 @@ import org.jetbrains.annotations.ApiStatus;
 
 /// Indicates that the implementing block uses copycat-style quad cutting.
 public sealed interface CopycatStyleBlock {
-
     /// {@return whether the given state uses copycat-style quad cutting}
     ///
     /// @param state The blockstate to check
@@ -33,7 +32,7 @@ public sealed interface CopycatStyleBlock {
         /// @return whether the copycat-style state was toggled
         default boolean toggleCopycatStyle(BlockState state, Level level, BlockPos pos, Player player) {
             ItemStack stack = player.getMainHandItem();
-            if (stack.is(FramedConstants.Objects.FRAMED_HAMMER.value())) {
+            if (stack.is(FramedConstants.Objects.FRAMED_WRENCH.value())) {
                 if (!level.isClientSide()) {
                     state = state.setValue(FramedProperties.COPYCAT_STYLE, !state.getValue(FramedProperties.COPYCAT_STYLE));
                     level.setBlock(pos, state, Block.UPDATE_ALL);

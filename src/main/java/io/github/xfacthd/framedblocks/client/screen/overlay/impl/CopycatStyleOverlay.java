@@ -30,7 +30,7 @@ public final class CopycatStyleOverlay extends BlockInteractOverlay {
 
     @Override
     public boolean isValidTool(Player player, ItemStack stack) {
-        return stack.getItem() == FBContent.ITEM_FRAMED_HAMMER.value();
+        return stack.getItem() == FBContent.ITEM_FRAMED_WRENCH.value();
     }
 
     @Override
