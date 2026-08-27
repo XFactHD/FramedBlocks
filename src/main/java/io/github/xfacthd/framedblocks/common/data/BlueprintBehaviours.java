@@ -28,6 +28,7 @@ public final class BlueprintBehaviours {
                         FBContent.BLOCK_FRAMED_ADJ_DOUBLE_COPYCAT_PANEL
                 )
         );
+        event.register(new BoardCopyBehaviour(), FBContent.BLOCK_FRAMED_BOARD);
         event.register(new TubeCopyBehaviour(), FBContent.BLOCK_FRAMED_TUBE);
         event.register(
                 new LanternCopyBehaviour(),
