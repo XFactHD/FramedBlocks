@@ -38,6 +38,7 @@ public final class SelfTest {
         JadeRenderStateErrors.checkJadeRenderStateErrors(reporter, blocks);
         BlockEntityPresence.checkBlockEntityTypePresent(reporter, blocks);
         DoubleBlockPartModelStateConsistency.checkBlockPartConsistency(reporter, blocks);
+        BlueprintCopiedProperties.checkHandlesDefaultProperties(reporter, blocks);
 
         reporter.finish();
     }
