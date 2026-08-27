@@ -44,6 +44,7 @@ public interface BlueprintCopyBehaviour {
     ///
     /// @param state The state of the block being copied
     default Set<Property<?>> getPropertiesToCopy(BlockState state) {
+        // Must be kept in sync with BlueprintCopiedProperties self-test
         Set<Property<?>> properties = new HashSet<>();
         if (state.getBlock() instanceof SlopeToggleBlock && state.getValue(FramedProperties.ALT_SLOPE)) {
             properties.add(FramedProperties.ALT_SLOPE);
