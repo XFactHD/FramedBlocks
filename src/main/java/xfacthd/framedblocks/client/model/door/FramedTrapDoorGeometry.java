@@ -78,7 +78,7 @@ public class FramedTrapDoorGeometry extends Geometry
             Direction topFace = top ? Direction.UP : Direction.DOWN;
             if (quadDir == topFace.getOpposite())
             {
-                Direction exportDir = open ? dir.getOpposite() : quadDir;
+                Direction exportDir = open ? dir.getOpposite() : null;
                 QuadModifier.of(quad)
                         .apply(Modifiers.setPosition(DEPTH))
                         .applyIf(Modifiers.rotate(rotAxis, rotOrigin, rotAngle, false), open)
