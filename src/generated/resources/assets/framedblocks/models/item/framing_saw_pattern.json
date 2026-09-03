@@ -6,8 +6,8 @@
     }
   ],
   "parent": "minecraft:item/generated",
-  "fallback": "minecraft:item/paper",
-  "loader": "framedblocks:fallback",
+  "fallback": "minecraft:builtin/missing",
+  "loader": "neoforge:conditional",
   "textures": {
     "layer0": "ae2:item/crafting_pattern"
   }
