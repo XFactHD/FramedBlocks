@@ -261,7 +261,8 @@ final class SkipPredicateGeneratorData
                     .props(Property.vanilla("boolean", "up", "UP", PropType.PRIMITIVE))
                     .dirs(
                             new TestDir(null, "WallArm", List.of(), "wall_arm"),
-                            new TestDir("boolean", "Pillar", null, "pillar_vert")
+                            new TestDir(null, "WallProfile", List.of("up"), "wall_profile"),
+                            new TestDir("boolean", "Pillar", null, "pillar_vert").withExcludedTypes("FRAMED_WALL")
                     ),
             entry("FRAMED_FENCE", "pillar")
                     .dirs(
