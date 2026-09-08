@@ -51,7 +51,8 @@ public final class CornerStripSkipPredicate implements SideSkipPredicate
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         SlopeType adjType = adjState.getValue(PropertyHolder.SLOPE_TYPE);
 
-        return PaneDirs.CornerStrip.getHalfDir(dir, type, side).isEqualTo(PaneDirs.CornerStrip.getHalfDir(adjDir, adjType, side.getOpposite()));
+        return PaneDirs.CornerStrip.getHalfDir(dir, type, side).isEqualTo(PaneDirs.CornerStrip.getHalfDir(adjDir, adjType, side.getOpposite())) ||
+               PaneDirs.CornerStrip.getCornerDir(dir, type, side).isEqualTo(PaneDirs.CornerStrip.getCornerDir(adjDir, adjType, side.getOpposite()));
     }
 
     @CullTest.TestTarget(BlockType.FRAMED_FLOOR_BOARD)
