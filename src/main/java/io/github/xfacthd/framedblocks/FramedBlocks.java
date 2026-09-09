@@ -3,7 +3,6 @@ package io.github.xfacthd.framedblocks;
 import io.github.xfacthd.framedblocks.api.util.FramedConstants;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.common.FBContent;
-import io.github.xfacthd.framedblocks.common.block.interactive.FramedFlowerPotBlock;
 import io.github.xfacthd.framedblocks.common.capability.CapabilitySetup;
 import io.github.xfacthd.framedblocks.common.compat.CompatHandler;
 import io.github.xfacthd.framedblocks.common.config.ClientConfig;
@@ -90,7 +89,6 @@ public final class FramedBlocks {
         FramedBlueprintItem.init();
         CompatHandler.commonSetup();
         CamoContainerFactories.registerCamoFactories();
-        FramedFlowerPotBlock.initPotMapping();
         ItemValidator.validate();
     }
 
