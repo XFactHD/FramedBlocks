@@ -1,41 +1,42 @@
 package io.github.xfacthd.framedblocks.client.data.ghost;
 
-import io.github.xfacthd.framedblocks.api.ghost.GhostRenderBehaviour;
+import io.github.xfacthd.framedblocks.api.ghost.SimpleGhostRenderBehaviour;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.Unit;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jspecify.annotations.Nullable;
 
-public final class FancyRailGhostRenderBehaviour implements GhostRenderBehaviour {
+public final class FancyRailGhostRenderBehaviour implements SimpleGhostRenderBehaviour {
     @Override
-    public boolean mayRender(ItemStack stack, @Nullable ItemStack proxiedStack) {
-        return RailSlopeGhostRenderBehaviour.INSTANCE.mayRender(stack, proxiedStack) ||
-                GhostRenderBehaviour.super.mayRender(stack, proxiedStack);
+    public boolean mayRender(ItemStack stack, Unit context) {
+        return RailSlopeGhostRenderBehaviour.INSTANCE.mayRender(stack, context) ||
+                SimpleGhostRenderBehaviour.super.mayRender(stack, context);
     }
 
     @Override
     public @Nullable BlockState getRenderState(
             ItemStack stack,
-            @Nullable ItemStack proxiedStack,
+            Unit context,
             BlockHitResult hit,
             BlockPlaceContext ctx,
             BlockState hitState,
             int renderPass
     ) {
-        BlockState state = RailSlopeGhostRenderBehaviour.INSTANCE.getRenderState(stack, proxiedStack, hit, ctx, hitState, renderPass);
+        BlockState state = RailSlopeGhostRenderBehaviour.INSTANCE.getRenderState(stack, context, hit, ctx, hitState, renderPass);
         if (state != null) {
             return state;
         }
-        return GhostRenderBehaviour.super.getRenderState(stack, proxiedStack, hit, ctx, hitState, renderPass);
+        return SimpleGhostRenderBehaviour.super.getRenderState(stack, context, hit, ctx, hitState, renderPass);
     }
 
     @Override
     public BlockPos getRenderPos(
             ItemStack stack,
-            @Nullable ItemStack proxiedStack,
+            Unit context,
             BlockHitResult hit,
             BlockPlaceContext ctx,
             BlockState hitState,
@@ -43,15 +44,15 @@ public final class FancyRailGhostRenderBehaviour implements GhostRenderBehaviour
             int renderPass
     ) {
         if (hitState.getBlock() == FBContent.BLOCK_FRAMED_SLOPE.value()) {
-            return RailSlopeGhostRenderBehaviour.INSTANCE.getRenderPos(stack, proxiedStack, hit, ctx, hitState, defaultPos, renderPass);
+            return RailSlopeGhostRenderBehaviour.INSTANCE.getRenderPos(stack, context, hit, ctx, hitState, defaultPos, renderPass);
         }
-        return GhostRenderBehaviour.super.getRenderPos(stack, proxiedStack, hit, ctx, hitState, defaultPos, renderPass);
+        return SimpleGhostRenderBehaviour.super.getRenderPos(stack, context, hit, ctx, hitState, defaultPos, renderPass);
     }
 
     @Override
     public boolean canRenderAt(
             ItemStack stack,
-            @Nullable ItemStack proxiedStack,
+            Unit context,
             BlockHitResult hit,
             BlockPlaceContext ctx,
             BlockState hitState,
@@ -59,8 +60,8 @@ public final class FancyRailGhostRenderBehaviour implements GhostRenderBehaviour
             BlockPos renderPos
     ) {
         if (renderPos.equals(hit.getBlockPos())) {
-            return RailSlopeGhostRenderBehaviour.INSTANCE.canRenderAt(stack, proxiedStack, hit, ctx, hitState, renderState, renderPos);
+            return RailSlopeGhostRenderBehaviour.INSTANCE.canRenderAt(stack, context, hit, ctx, hitState, renderState, renderPos);
         }
-        return GhostRenderBehaviour.super.canRenderAt(stack, proxiedStack, hit, ctx, hitState, renderState, renderPos);
+        return SimpleGhostRenderBehaviour.super.canRenderAt(stack, context, hit, ctx, hitState, renderState, renderPos);
     }
 }

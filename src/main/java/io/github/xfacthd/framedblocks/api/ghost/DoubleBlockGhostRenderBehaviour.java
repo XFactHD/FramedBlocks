@@ -7,6 +7,7 @@ import io.github.xfacthd.framedblocks.api.model.data.AbstractFramedBlockData;
 import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
 import io.github.xfacthd.framedblocks.api.model.data.FramedDoubleBlockData;
 import net.minecraft.core.Holder;
+import net.minecraft.util.Unit;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.state.BlockState;
@@ -14,14 +15,14 @@ import net.neoforged.neoforge.model.data.ModelData;
 import org.jspecify.annotations.Nullable;
 
 /// Base implementation of a ghost render behavior for framed blocks with two camos.
-public interface DoubleBlockGhostRenderBehaviour extends GhostRenderBehaviour {
+public interface DoubleBlockGhostRenderBehaviour extends SimpleGhostRenderBehaviour {
     /// Default instance for double blocks with no further special behavior.
     DoubleBlockGhostRenderBehaviour INSTANCE = new DoubleBlockGhostRenderBehaviour() {};
 
     @Override
     default ModelData buildModelData(
             ItemStack stack,
-            @Nullable ItemStack proxiedStack,
+            Unit context,
             BlockPlaceContext ctx,
             BlockState renderState,
             int renderPass,

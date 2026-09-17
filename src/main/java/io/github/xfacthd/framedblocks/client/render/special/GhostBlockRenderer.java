@@ -6,6 +6,7 @@ import io.github.xfacthd.framedblocks.api.block.overlay.BlockOverlay;
 import io.github.xfacthd.framedblocks.api.camo.CamoList;
 import io.github.xfacthd.framedblocks.api.ghost.GhostRenderBehaviour;
 import io.github.xfacthd.framedblocks.api.ghost.RegisterGhostRenderBehavioursEvent;
+import io.github.xfacthd.framedblocks.api.ghost.SimpleGhostRenderBehaviour;
 import io.github.xfacthd.framedblocks.api.render.fakelevel.DelegatingBlockRenderFakeLevel;
 import io.github.xfacthd.framedblocks.api.util.FramedConstants;
 import io.github.xfacthd.framedblocks.api.util.Utils;
@@ -39,7 +40,6 @@ import net.neoforged.neoforge.client.submit.RenderPhaseKeys;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.model.data.ModelData;
 import org.joml.Vector3fc;
-import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.IdentityHashMap;
@@ -48,8 +48,8 @@ import java.util.Map;
 import java.util.Objects;
 
 public final class GhostBlockRenderer {
-    private static final Map<Item, GhostRenderBehaviour> RENDER_BEHAVIOURS = new IdentityHashMap<>();
-    private static final GhostRenderBehaviour DEFAULT_BEHAVIOUR = new GhostRenderBehaviour() {};
+    private static final Map<Item, GhostRenderBehaviour<?>> RENDER_BEHAVIOURS = new IdentityHashMap<>();
+    private static final GhostRenderBehaviour<?> DEFAULT_BEHAVIOUR = new SimpleGhostRenderBehaviour() {};
     static final String DEBUG_NAME = FramedConstants.MOD_ID + "_ghost_block";
     private static final float SCALE = 1.0001F;
     private static final ContextKey<List<GhostRenderState>> DATA_KEY = new ContextKey<>(Utils.id("placement_preview"));
@@ -82,7 +82,7 @@ public final class GhostBlockRenderer {
         }
     }
 
-    private static void tryExtractGhostBlock(LevelRenderState renderState, ProfilerFiller profiler) {
+    private static <C> void tryExtractGhostBlock(LevelRenderState renderState, ProfilerFiller profiler) {
         Minecraft minecraft = Minecraft.getInstance();
         Player player = Objects.requireNonNull(minecraft.player);
         if (player.isSpectator()) {
@@ -97,29 +97,33 @@ public final class GhostBlockRenderer {
             return;
         }
 
-        GhostRenderBehaviour behaviour = RENDER_BEHAVIOURS.getOrDefault(stack.getItem(), DEFAULT_BEHAVIOUR);
+        GhostRenderBehaviour<C> behaviour = getBehaviour(stack.getItem());
 
-        profiler.push("get_stack");
-        ItemStack proxiedStack = behaviour.getProxiedStack(stack);
-        profiler.pop(); //get_stack
+        profiler.push("get_render_context");
+        C context = behaviour.getRenderContext(stack);
+        if (context == null) {
+            profiler.pop(); //get_render_context
+            return;
+        }
+        profiler.pop(); //get_render_context
 
         profiler.push("may_render");
-        if (!behaviour.mayRender(stack, proxiedStack)) {
+        if (!behaviour.mayRender(stack, context)) {
             profiler.pop(); //may_render
             return;
         }
         profiler.pop(); //may_render
 
         profiler.push("make_context");
-        BlockPlaceContext context = behaviour.buildPlaceContext(player, stack, proxiedStack, hit);
+        BlockPlaceContext placeContext = behaviour.buildPlaceContext(player, stack, context, hit);
         ClientLevel level = Objects.requireNonNull(minecraft.level);
         BlockState hitState = level.getBlockState(hit.getBlockPos());
         profiler.pop(); //make_context
 
-        int passCount = behaviour.getPassCount(stack, proxiedStack);
+        int passCount = behaviour.getPassCount(stack, context);
         List<GhostRenderState> renderStates = new ArrayList<>(passCount);
         for (int pass = 0; pass < passCount; pass++) {
-            if (!extractGhostBlock(renderStates, profiler, level, behaviour, stack, proxiedStack, hit, context, hitState, pass)) {
+            if (!extractGhostBlock(renderStates, profiler, level, behaviour, stack, context, hit, placeContext, hitState, pass)) {
                 break;
             }
         }
@@ -128,49 +132,49 @@ public final class GhostBlockRenderer {
         }
     }
 
-    private static boolean extractGhostBlock(
+    private static <C> boolean extractGhostBlock(
             List<GhostRenderState> renderStates,
             ProfilerFiller profiler,
             ClientLevel level,
-            GhostRenderBehaviour behaviour,
+            GhostRenderBehaviour<C> behaviour,
             ItemStack stack,
-            @Nullable ItemStack proxiedStack,
+            C context,
             BlockHitResult hit,
-            BlockPlaceContext context,
+            BlockPlaceContext placeContext,
             BlockState hitState,
             int renderPass
     ) {
         profiler.push("get_state");
-        BlockState renderState = behaviour.getRenderState(stack, proxiedStack, hit, context, hitState, renderPass);
+        BlockState renderState = behaviour.getRenderState(stack, context, hit, placeContext, hitState, renderPass);
         profiler.pop(); //get_state
         if (renderState == null) {
             return true;
         }
 
         profiler.push("get_pos");
-        BlockPos renderPos = behaviour.getRenderPos(stack, proxiedStack, hit, context, hitState, context.getClickedPos(), renderPass);
+        BlockPos renderPos = behaviour.getRenderPos(stack, context, hit, placeContext, hitState, placeContext.getClickedPos(), renderPass);
         profiler.popPush("can_render"); //get_pos
-        if (renderPass == 0 && !behaviour.canRenderAt(stack, proxiedStack, hit, context, hitState, renderState, renderPos)) {
+        if (renderPass == 0 && !behaviour.canRenderAt(stack, context, hit, placeContext, hitState, renderState, renderPos)) {
             profiler.pop(); //can_render
             return false;
         }
         profiler.pop(); //can_render
 
         profiler.push("get_camo");
-        CamoList camo = behaviour.readCamo(stack, proxiedStack, renderPass);
-        camo = behaviour.postProcessCamo(stack, proxiedStack, context, renderState, renderPass, camo);
+        CamoList camo = behaviour.readCamo(stack, context, renderPass);
+        camo = behaviour.postProcessCamo(stack, context, placeContext, renderState, renderPass, camo);
         profiler.popPush("get_overlay"); // get_camo
-        Holder<BlockOverlay> overlay = behaviour.readBlockOverlay(stack, proxiedStack, renderPass);
+        Holder<BlockOverlay> overlay = behaviour.readBlockOverlay(stack, context, renderPass);
         profiler.popPush("build_modeldata"); //get_overlay
-        ModelData modelData = behaviour.buildModelData(stack, proxiedStack, context, renderState, renderPass, camo, overlay);
+        ModelData modelData = behaviour.buildModelData(stack, context, placeContext, renderState, renderPass, camo, overlay);
         profiler.pop(); //get_camo
 
         profiler.push("append_modeldata");
-        modelData = behaviour.appendModelData(stack, proxiedStack, context, renderState, renderPass, modelData);
+        modelData = behaviour.appendModelData(stack, context, placeContext, renderState, renderPass, modelData);
         profiler.pop(); //append_modeldata
 
         profiler.push("get_render_offset");
-        Vector3fc renderOffset = behaviour.getRenderOffset(stack, proxiedStack, context, renderState, renderPass, modelData);
+        Vector3fc renderOffset = behaviour.getRenderOffset(stack, context, placeContext, renderState, renderPass, modelData);
         profiler.pop(); //get_render_offset
 
         renderStates.add(new GhostRenderState(level, renderPos, renderState, renderOffset, modelData));
@@ -234,8 +238,9 @@ public final class GhostBlockRenderer {
         NeoForge.EVENT_BUS.addListener(GhostBlockRenderer::onSubmitCustomGeometry);
     }
 
-    public static GhostRenderBehaviour getBehaviour(Item item) {
-        return RENDER_BEHAVIOURS.getOrDefault(item, DEFAULT_BEHAVIOUR);
+    @SuppressWarnings("unchecked")
+    public static <C> GhostRenderBehaviour<C> getBehaviour(Item item) {
+        return (GhostRenderBehaviour<C>) RENDER_BEHAVIOURS.getOrDefault(item, DEFAULT_BEHAVIOUR);
     }
 
     record GhostRenderState(

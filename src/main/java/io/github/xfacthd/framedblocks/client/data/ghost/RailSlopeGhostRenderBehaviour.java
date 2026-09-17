@@ -1,10 +1,11 @@
 package io.github.xfacthd.framedblocks.client.data.ghost;
 
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
-import io.github.xfacthd.framedblocks.api.ghost.GhostRenderBehaviour;
+import io.github.xfacthd.framedblocks.api.ghost.SimpleGhostRenderBehaviour;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.util.FramedUtils;
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.Unit;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -14,13 +15,13 @@ import net.minecraft.world.level.block.state.properties.RailShape;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jspecify.annotations.Nullable;
 
-public final class RailSlopeGhostRenderBehaviour implements GhostRenderBehaviour {
+public final class RailSlopeGhostRenderBehaviour implements SimpleGhostRenderBehaviour {
     public static final RailSlopeGhostRenderBehaviour INSTANCE = new RailSlopeGhostRenderBehaviour();
 
     private RailSlopeGhostRenderBehaviour() { }
 
     @Override
-    public boolean mayRender(ItemStack stack, @Nullable ItemStack proxiedStack) {
+    public boolean mayRender(ItemStack stack, Unit context) {
         return FramedUtils.isRailItem(stack.getItem());
     }
 
@@ -28,7 +29,7 @@ public final class RailSlopeGhostRenderBehaviour implements GhostRenderBehaviour
     @SuppressWarnings("deprecation")
     public @Nullable BlockState getRenderState(
             ItemStack stack,
-            @Nullable ItemStack proxiedStack,
+            Unit context,
             BlockHitResult hit,
             BlockPlaceContext ctx,
             BlockState hitState,
@@ -47,7 +48,7 @@ public final class RailSlopeGhostRenderBehaviour implements GhostRenderBehaviour
     @Override
     public BlockPos getRenderPos(
             ItemStack stack,
-            @Nullable ItemStack proxiedStack,
+            Unit context,
             BlockHitResult hit,
             BlockPlaceContext ctx,
             BlockState hitState,
@@ -60,7 +61,7 @@ public final class RailSlopeGhostRenderBehaviour implements GhostRenderBehaviour
     @Override
     public boolean canRenderAt(
             ItemStack stack,
-            @Nullable ItemStack proxiedStack,
+            Unit context,
             BlockHitResult hit,
             BlockPlaceContext ctx,
             BlockState hitState,

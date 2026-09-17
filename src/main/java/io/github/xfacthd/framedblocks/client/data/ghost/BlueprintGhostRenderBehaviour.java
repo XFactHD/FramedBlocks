@@ -20,52 +20,45 @@ import net.neoforged.neoforge.model.data.ModelData;
 import org.joml.Vector3fc;
 import org.jspecify.annotations.Nullable;
 
-public final class BlueprintGhostRenderBehaviour implements GhostRenderBehaviour {
+public final class BlueprintGhostRenderBehaviour implements GhostRenderBehaviour<BlueprintGhostRenderBehaviour.Context> {
     @Override
-    public @Nullable ItemStack getProxiedStack(ItemStack stack) {
+    public @Nullable Context getRenderContext(ItemStack stack) {
         BlueprintData blueprintData = stack.getOrDefault(FBContent.DC_TYPE_BLUEPRINT_DATA, BlueprintData.EMPTY);
         if (!blueprintData.isEmpty()) {
             ItemStack proxied = new ItemStack(blueprintData.block());
             FramedBlueprintItem.getBehaviour(blueprintData.block()).attachDataToDummyRenderStack(proxied, blueprintData);
-            return proxied;
+            return Context.create(proxied, blueprintData);
         }
         return null;
     }
 
     @Override
-    public boolean mayRender(ItemStack stack, @Nullable ItemStack proxiedStack) {
-        return proxiedStack != null && proxyBehaviour(proxiedStack).mayRender(proxiedStack, null);
+    public boolean mayRender(ItemStack stack, Context context) {
+        return context.proxiedBehaviour.mayRender(context.stack, context.proxyContext);
     }
 
     @Override
-    public int getPassCount(ItemStack stack, @Nullable ItemStack proxiedStack) {
-        return proxiedStack != null ? proxyBehaviour(proxiedStack).getPassCount(proxiedStack, null) : 0;
+    public int getPassCount(ItemStack stack, Context context) {
+        return context.proxiedBehaviour.getPassCount(context.stack, context.proxyContext);
     }
 
     @Override
-    public BlockPlaceContext buildPlaceContext(Player player, ItemStack stack, @Nullable ItemStack proxiedStack, BlockHitResult hit) {
-        BlockPlaceContext context = GhostRenderBehaviour.super.buildPlaceContext(player, stack, proxiedStack, hit);
-        if (proxiedStack != null) {
-            BlueprintData blueprintData = stack.getOrDefault(FBContent.DC_TYPE_BLUEPRINT_DATA, BlueprintData.EMPTY);
-            return new BlueprintBlockPlaceContext(context, proxiedStack, blueprintData);
-        }
-        return context;
+    public BlockPlaceContext buildPlaceContext(Player player, ItemStack stack, Context context, BlockHitResult hit) {
+        BlockPlaceContext placeContext = GhostRenderBehaviour.super.buildPlaceContext(player, stack, context, hit);
+        return new BlueprintBlockPlaceContext(placeContext, context.stack, context.blueprintData);
     }
 
     @Override
     public @Nullable BlockState getRenderState(
             ItemStack stack,
-            @Nullable ItemStack proxiedStack,
+            Context context,
             BlockHitResult hit,
             BlockPlaceContext ctx,
             BlockState hitState,
             int renderPass
     ) {
-        if (proxiedStack == null) {
-            return null;
-        }
-        BlockState state = proxyBehaviour(proxiedStack).getRenderState(proxiedStack, null, hit, ctx, hitState, renderPass);
-        BlockItemStateProperties stateProps = stack.getOrDefault(FBContent.DC_TYPE_BLUEPRINT_DATA, BlueprintData.EMPTY).blockState();
+        BlockState state = context.proxiedBehaviour.getRenderState(context.stack, context.proxyContext, hit, ctx, hitState, renderPass);
+        BlockItemStateProperties stateProps = context.blueprintData.blockState();
         if (state != null && !stateProps.isEmpty()) {
             state = stateProps.apply(state);
         }
@@ -75,118 +68,93 @@ public final class BlueprintGhostRenderBehaviour implements GhostRenderBehaviour
     @Override
     public BlockPos getRenderPos(
             ItemStack stack,
-            @Nullable ItemStack proxiedStack,
+            Context context,
             BlockHitResult hit,
             BlockPlaceContext ctx,
             BlockState hitState,
             BlockPos defaultPos,
             int renderPass
     ) {
-        if (proxiedStack == null) {
-            return defaultPos;
-        }
-        return proxyBehaviour(proxiedStack).getRenderPos(proxiedStack, null, hit, ctx, hitState, defaultPos, renderPass);
+        return context.proxiedBehaviour.getRenderPos(context.stack, context.proxyContext, hit, ctx, hitState, defaultPos, renderPass);
     }
 
     @Override
     public boolean canRenderAt(
             ItemStack stack,
-            @Nullable ItemStack proxiedStack,
+            Context context,
             BlockHitResult hit,
             BlockPlaceContext ctx,
             BlockState hitState,
             BlockState renderState,
             BlockPos renderPos
     ) {
-        if (proxiedStack == null) {
-            return false;
-        }
-        return proxyBehaviour(proxiedStack).canRenderAt(proxiedStack, null, hit, ctx, hitState, renderState, renderPos);
+        return context.proxiedBehaviour.canRenderAt(context.stack, context.proxyContext, hit, ctx, hitState, renderState, renderPos);
     }
 
     @Override
-    public CamoList readCamo(ItemStack stack, @Nullable ItemStack proxiedStack, int renderPass) {
-        if (proxiedStack == null) {
-            return CamoList.EMPTY;
-        }
-
-        BlueprintData blueprintData = stack.getOrDefault(FBContent.DC_TYPE_BLUEPRINT_DATA, BlueprintData.EMPTY);
-        if (!blueprintData.isEmpty()) {
-            return FramedBlueprintItem.getCamoContainers(blueprintData);
-        }
-        return CamoList.EMPTY;
+    public CamoList readCamo(ItemStack stack, Context context, int renderPass) {
+        return FramedBlueprintItem.getCamoContainers(context.blueprintData);
     }
 
     @Override
     public CamoList postProcessCamo(
             ItemStack stack,
-            @Nullable ItemStack proxiedStack,
+            Context context,
             BlockPlaceContext ctx,
             BlockState renderState,
             int renderPass,
             CamoList camo
     ) {
-        if (proxiedStack == null) {
-            return CamoList.EMPTY;
-        }
-        return proxyBehaviour(proxiedStack).postProcessCamo(proxiedStack, null, ctx, renderState, renderPass, camo);
+        return context.proxiedBehaviour.postProcessCamo(context.stack, context.proxyContext, ctx, renderState, renderPass, camo);
     }
 
     @Override
-    public @Nullable Holder<BlockOverlay> readBlockOverlay(ItemStack stack, @Nullable ItemStack proxiedStack, int renderPass) {
-        if (proxiedStack == null) {
-            return null;
-        }
-        return proxyBehaviour(proxiedStack).readBlockOverlay(stack, proxiedStack, renderPass);
+    public @Nullable Holder<BlockOverlay> readBlockOverlay(ItemStack stack, Context context, int renderPass) {
+        return context.blueprintData.overlay().orElse(null);
     }
 
     @Override
     public ModelData buildModelData(
             ItemStack stack,
-            @Nullable ItemStack proxiedStack,
+            Context context,
             BlockPlaceContext ctx,
             BlockState renderState,
             int renderPass,
             CamoList camo,
             @Nullable Holder<BlockOverlay> overlay
     ) {
-        if (proxiedStack == null) {
-            return ModelData.EMPTY;
-        }
-        return proxyBehaviour(proxiedStack).buildModelData(stack, proxiedStack, ctx, renderState, renderPass, camo, overlay);
+        return context.proxiedBehaviour.buildModelData(context.stack, context.proxyContext, ctx, renderState, renderPass, camo, overlay);
     }
 
     @Override
     public ModelData appendModelData(
             ItemStack stack,
-            @Nullable ItemStack proxiedStack,
+            Context context,
             BlockPlaceContext ctx,
             BlockState renderState,
             int renderPass,
             ModelData data
     ) {
-        if (proxiedStack == null) {
-            return data;
-        }
-        return proxyBehaviour(proxiedStack).appendModelData(proxiedStack, null, ctx, renderState, renderPass, data);
+        return context.proxiedBehaviour.appendModelData(context.stack, context.proxyContext, ctx, renderState, renderPass, data);
     }
 
     @Override
     public Vector3fc getRenderOffset(
             ItemStack stack,
-            @Nullable ItemStack proxiedStack,
+            Context context,
             BlockPlaceContext ctx,
             BlockState renderState,
             int renderPass,
             ModelData data
     ) {
-        if (proxiedStack == null) {
-            return OFFSET_ZERO;
-        }
-        return proxyBehaviour(proxiedStack).getRenderOffset(proxiedStack, null, ctx, renderState, renderPass, data);
+        return context.proxiedBehaviour.getRenderOffset(context.stack, context.proxyContext, ctx, renderState, renderPass, data);
     }
 
-    private static GhostRenderBehaviour proxyBehaviour(ItemStack proxiedStack) {
-        return GhostBlockRenderer.getBehaviour(proxiedStack.getItem());
+    public record Context(ItemStack stack, BlueprintData blueprintData, GhostRenderBehaviour<Object> proxiedBehaviour, Object proxyContext) {
+        private static @Nullable Context create(ItemStack stack, BlueprintData blueprintData) {
+            GhostRenderBehaviour<Object> behaviour = GhostBlockRenderer.getBehaviour(stack.getItem());
+            Object context = behaviour.getRenderContext(stack);
+            return context != null ? new Context(stack, blueprintData, behaviour, context) : null;
+        }
     }
 }

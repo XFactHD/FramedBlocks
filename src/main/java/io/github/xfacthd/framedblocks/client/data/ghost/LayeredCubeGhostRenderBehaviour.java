@@ -1,8 +1,9 @@
 package io.github.xfacthd.framedblocks.client.data.ghost;
 
-import io.github.xfacthd.framedblocks.api.ghost.GhostRenderBehaviour;
+import io.github.xfacthd.framedblocks.api.ghost.SimpleGhostRenderBehaviour;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import net.minecraft.core.Direction;
+import net.minecraft.util.Unit;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.state.BlockState;
@@ -13,12 +14,12 @@ import org.joml.Vector3f;
 import org.joml.Vector3fc;
 import org.jspecify.annotations.Nullable;
 
-public final class LayeredCubeGhostRenderBehaviour implements GhostRenderBehaviour {
+public final class LayeredCubeGhostRenderBehaviour implements SimpleGhostRenderBehaviour {
     private static final float LAYER_HEIGHT = 1F/8F;
 
     @Override
-    public @Nullable BlockState getRenderState(ItemStack stack, @Nullable ItemStack proxiedStack, BlockHitResult hit, BlockPlaceContext ctx, BlockState hitState, int renderPass) {
-        BlockState state = GhostRenderBehaviour.super.getRenderState(stack, proxiedStack, hit, ctx, hitState, renderPass);
+    public @Nullable BlockState getRenderState(ItemStack stack, Unit context, BlockHitResult hit, BlockPlaceContext ctx, BlockState hitState, int renderPass) {
+        BlockState state = SimpleGhostRenderBehaviour.super.getRenderState(stack, context, hit, ctx, hitState, renderPass);
         if (state != null) {
             state = state.setValue(BlockStateProperties.LAYERS, 1);
         }
@@ -28,7 +29,7 @@ public final class LayeredCubeGhostRenderBehaviour implements GhostRenderBehavio
     @Override
     public Vector3fc getRenderOffset(
             ItemStack stack,
-            @Nullable ItemStack proxiedStack,
+            Unit context,
             BlockPlaceContext ctx,
             BlockState renderState,
             int renderPass,
