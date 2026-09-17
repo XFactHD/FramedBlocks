@@ -34,7 +34,7 @@ public final class FramedBannerRenderState extends BlockEntityRenderState {
         ) {
             submitMultiLayer(poseStack, collector, lightCoords, overlayCoords, outlineColor);
             if (breakProgress != null && modelParts != null) {
-                collector.submitBreakingBlockModel(poseStack, modelParts, breakProgress.progress());
+                collector.submitBreakingBlockModel(poseStack, modelParts, breakProgress.progress(), hasTranslucency);
             }
         }
     }

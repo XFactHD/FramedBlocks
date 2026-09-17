@@ -1,11 +1,11 @@
 plugins {
     id 'java-library'
     id 'maven-publish'
-    id 'net.neoforged.moddev' version '2.0.144'
+    id 'net.neoforged.moddev' version '2.0.147'
 }
 
 version = mod_version
-group = 'xfacthd.framedblocks'
+group = 'io.github.xfacthd.framedblocks'
 
 base {
     archivesName = 'FramedBlocks'

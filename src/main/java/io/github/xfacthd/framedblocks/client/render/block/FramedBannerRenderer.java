@@ -147,12 +147,15 @@ public final class FramedBannerRenderer implements BlockEntityRenderer<FramedBan
     ) {
         poseStack.pushPose();
         poseStack.mulPose(bannerTransform);
-        collector.submitModel(bannerModel, Unit.INSTANCE, poseStack, lightCoords, overlayCoords, -1, Sheets.BANNER_BASE, sprites, outlineColor, breakProgress);
+        collector.submitModel(bannerModel, Unit.INSTANCE, poseStack, lightCoords, overlayCoords, -1, Sheets.BANNER_BASE, sprites, outlineColor);
+        if (breakProgress != null) {
+            collector.submitCrumblingOverlay(bannerModel, Unit.INSTANCE, poseStack, Sheets.BANNER_BASE.renderType(bannerModel.renderType()), lightCoords, overlayCoords, -1, breakProgress);
+        }
         poseStack.popPose();
 
         poseStack.pushPose();
         poseStack.mulPose(flagTransform);
-        poseStack.mulPose(Axis.XP.rotation((-0.0125F + 0.01F * Mth.cos(Math.PI * 2 * swing)) * (float) Math.PI));
+        poseStack.rotate(Axis.XP, (-0.0125F + 0.01F * Mth.cos(Math.PI * 2 * swing)) * (float) Math.PI);
         modelRenderState.submitMultiLayer(poseStack, collector, lightCoords, overlayCoords, outlineColor);
         poseStack.popPose();
     }
@@ -224,7 +227,7 @@ public final class FramedBannerRenderer implements BlockEntityRenderer<FramedBan
         PoseStack poseStack = new PoseStack();
 
         poseStack.translate(.5, 0, .5);
-        poseStack.mulPose(Axis.YN.rotationDegrees(angle));
+        poseStack.rotateDegrees(Axis.YN, angle);
         poseStack.translate(0, yOffPreScale, -.5F);
         poseStack.scale(SCALE, SCALE, SCALE);
         poseStack.translate(-.5F, yOffPostScale, zOffPostScale);

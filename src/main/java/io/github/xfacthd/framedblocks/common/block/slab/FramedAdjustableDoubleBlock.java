@@ -14,6 +14,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.function.Function;
@@ -50,7 +51,7 @@ public abstract class FramedAdjustableDoubleBlock extends FramedDoubleBlock impl
     public DoubleBlockParts calculateParts(BlockState state) {
         Direction facing = ((FramedAdjustableDoubleBlock) state.getBlock()).getFacing(state);
         BlockState defState = FBContent.BLOCK_FRAMED_COLLAPSIBLE_CUBE.value().defaultBlockState();
-        defState = copyProperty(state, defState, FramedProperties.COPYCAT_STYLE);
+        defState = BlockBehaviour.BlockStateBase.copyProperty(state, defState, FramedProperties.COPYCAT_STYLE);
         int solidFirst = ~(1 << facing.ordinal()) & FramedCollapsibleCubeBlock.ALL_SOLID;
         int solidSecond = ~(1 << facing.getOpposite().ordinal()) & FramedCollapsibleCubeBlock.ALL_SOLID;
         return new DoubleBlockParts(

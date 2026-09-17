@@ -8,17 +8,17 @@ import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import io.github.xfacthd.framedblocks.common.data.property.NullableDirection;
 import net.minecraft.client.particle.ParticleEngine;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.BlockHitResult;
 
 public final class OneWayWindowClientBlockExtensions extends FramedClientBlockExtensions {
     @Override
-    protected boolean addHitEffectsUnsuppressed(BlockState state, Level level, BlockHitResult hit, IFramedBlockEntity be, ParticleEngine engine) {
+    protected boolean addHitEffectsUnsuppressed(BlockState state, Level level, BlockPos pos, Direction face, IFramedBlockEntity be, ParticleEngine engine) {
         if (state.getValue(PropertyHolder.NULLABLE_FACE) != NullableDirection.NONE) {
-            ParticleHelper.Client.addHitEffects(state, level, hit, FramedOneWayWindowBlock.GLASS_DUMMY_CAMO.get(), null, engine);
+            ParticleHelper.Client.addHitEffects(state, level, pos, face, FramedOneWayWindowBlock.GLASS_DUMMY_CAMO.get(), null, engine);
         }
-        return super.addHitEffectsUnsuppressed(state, level, hit, be, engine);
+        return super.addHitEffectsUnsuppressed(state, level, pos, face, be, engine);
     }
 
     @Override

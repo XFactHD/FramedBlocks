@@ -65,7 +65,7 @@ public final class OverlayQuadGenerator {
         quad.setSprite(material, transparency);
         quad.setDirection(face);
         quad.setAmbientOcclusion(!emissive);
-        quad.setShade(!emissive);
+        quad.setShadeOverride(emissive ? Direction.UP : null);
         quad.setTintIndex(tintIndex);
         if (emissive) {
             quad.setLightEmission(LightEngine.MAX_LEVEL);

@@ -3,9 +3,11 @@ package io.github.xfacthd.framedblocks.api.block;
 import io.github.xfacthd.framedblocks.api.model.data.AbstractFramedBlockData;
 import io.github.xfacthd.framedblocks.api.util.ConfigView;
 import net.minecraft.core.BlockPos;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.TriState;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 
 final class FramedBlockInternals {
     static boolean isEmissiveRendering(@SuppressWarnings("unused") BlockState state, BlockGetter level, BlockPos pos) {
@@ -13,7 +15,7 @@ final class FramedBlockInternals {
         return fbData != null && fbData.isCamoEmissive();
     }
 
-    static boolean isViewBlocking(BlockState state, BlockGetter level, BlockPos pos) {
+    static boolean isViewBlocking(BlockState state, BlockGetter level, BlockPos pos, @SuppressWarnings("unused") AABB nearPlaneBox) {
         AbstractFramedBlockData fbData = level.getModelData(pos).get(AbstractFramedBlockData.PROPERTY);
         TriState viewBlocking;
         if (fbData != null && (viewBlocking = fbData.isViewBlocking()) != TriState.DEFAULT) {
@@ -34,10 +36,9 @@ final class FramedBlockInternals {
         return true;
     }
 
-    @SuppressWarnings("deprecation")
     private static boolean isSuffocatingDefault(BlockState state, BlockGetter level, BlockPos pos) {
         // Copy of the default suffocation check
-        return state.blocksMotion() && state.isCollisionShapeFullBlock(level, pos);
+        return state.is(BlockTags.CAUSES_SUFFOCATION) && state.isCollisionShapeFullBlock(level, pos);
     }
 
     private FramedBlockInternals() { }

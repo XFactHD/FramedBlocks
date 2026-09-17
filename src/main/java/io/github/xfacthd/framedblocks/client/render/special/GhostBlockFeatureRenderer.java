@@ -1,13 +1,12 @@
 package io.github.xfacthd.framedblocks.client.render.special;
 
-import com.mojang.blaze3d.buffers.GpuBufferSlice;
-import com.mojang.blaze3d.pipeline.RenderPipeline;
-import com.mojang.blaze3d.pipeline.RenderTarget;
-import com.mojang.blaze3d.systems.RenderPass;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.blaze3d.vertex.VertexSorting;
+import com.mojang.renderpearl.api.buffers.GpuBufferSlice;
+import com.mojang.renderpearl.api.commands.RenderPass;
+import com.mojang.renderpearl.api.pipeline.RenderPipeline;
 import io.github.xfacthd.framedblocks.client.render.util.GhostVertexConsumer;
 import io.github.xfacthd.framedblocks.common.config.ClientConfig;
 import net.minecraft.client.color.block.BlockColors;
@@ -19,14 +18,13 @@ import net.minecraft.client.renderer.feature.FeatureFrameContext;
 import net.minecraft.client.renderer.feature.FeatureRenderer;
 import net.minecraft.client.renderer.feature.FeatureRendererType;
 import net.minecraft.client.renderer.feature.submit.TranslucentSubmit;
+import net.minecraft.client.renderer.oit.OitStage;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
-import java.util.OptionalDouble;
 
 // TODO: move ghost render infrastructure to library
 public final class GhostBlockFeatureRenderer implements FeatureRenderer<GhostBlockFeatureRenderer.Submit> {
@@ -47,7 +45,7 @@ public final class GhostBlockFeatureRenderer implements FeatureRenderer<GhostBlo
         ModelBlockRenderer blockRenderer = rendererCache.get(context.options().ambientOcclusion, context.blockColors());
 
         GhostBlockRenderConfig config = GhostBlockRenderConfig.get();
-        RenderPipeline pipeline = config.getPipeline();
+        RenderPipeline pipeline = config.getPipeline(null);
         StagedVertexBuffer.Draw draw = context.stagedVertexBuffer().appendDraw(
                 Objects.requireNonNull(pipeline.getVertexFormatBinding(0)),
                 pipeline.getPrimitiveTopology(),
@@ -79,7 +77,7 @@ public final class GhostBlockFeatureRenderer implements FeatureRenderer<GhostBlo
     }
 
     @Override
-    public void executeGroup(FeatureFrameContext context, int groupIndex, List<Submit> submits, boolean strictlyOrdered) {
+    public void executeGroup(FeatureFrameContext context, @Nullable OitStage oitStage, RenderPass renderPass, int groupIndex, List<Submit> submits, boolean strictlyOrdered) {
         Group group = groups.get(groupIndex);
         GhostBlockRenderConfig config = group.renderConfig;
         StagedVertexBuffer.ExecuteInfo executeInfo = context.stagedVertexBuffer().getExecuteInfo(group.draw);
@@ -87,22 +85,13 @@ public final class GhostBlockFeatureRenderer implements FeatureRenderer<GhostBlo
             return;
         }
 
-        RenderTarget target = config.getOutputTarget().getRenderTarget();
-        try (RenderPass renderPass = RenderSystem.getDevice().createCommandEncoder().createRenderPass(
-                () -> GhostBlockRenderer.DEBUG_NAME,
-                Objects.requireNonNull(target.getColorTextureView()),
-                Optional.empty(),
-                target.getDepthTextureView(),
-                OptionalDouble.empty()
-        )) {
-            renderPass.setPipeline(config.getPipeline());
-            RenderSystem.bindDefaultUniforms(renderPass);
-            renderPass.setUniform("DynamicTransforms", Objects.requireNonNull(dynamicTransforms));
-            renderPass.setVertexBuffer(0, executeInfo.vertexBuffer().slice());
-            renderPass.setIndexBuffer(executeInfo.indexBuffer(), executeInfo.indexType());
-            config.setupSamplers(context, renderPass);
-            renderPass.drawIndexed(executeInfo.indexCount(), 1, executeInfo.firstIndex(), executeInfo.baseVertex(), 0);
-        }
+        renderPass.setPipeline(RenderSystem.getCompiledPipeline(config.getPipeline(oitStage)));
+        RenderSystem.bindDefaultUniforms(renderPass);
+        renderPass.setUniform("DynamicTransforms", Objects.requireNonNull(dynamicTransforms));
+        renderPass.setVertexBuffer(0, executeInfo.vertexBuffer().slice());
+        renderPass.setIndexBuffer(executeInfo.indexBuffer(), executeInfo.indexType());
+        config.setupSamplers(context, renderPass);
+        renderPass.drawIndexed(executeInfo.indexCount(), 1, executeInfo.firstIndex(), executeInfo.baseVertex(), 0);
     }
 
     @Override

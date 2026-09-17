@@ -6,14 +6,13 @@ import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.crafting.camo.CamoApplicationRecipe;
 import io.github.xfacthd.framedblocks.common.crafting.rotation.ShapeRotationRecipeBuilder;
+import net.minecraft.advancements.Advancement;
 import net.minecraft.core.Holder;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeOutput;
-import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.data.recipes.SpecialRecipeBuilder;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Items;
@@ -23,11 +22,9 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.common.Tags;
 
-import java.util.concurrent.CompletableFuture;
-
 public final class FramedRecipeProvider extends AbstractFramedRecipeProvider {
-    private FramedRecipeProvider(HolderLookup.Provider registries, RecipeOutput output) {
-        super(registries, output);
+    public FramedRecipeProvider(BootstrapContext<Recipe<?>> recipeOutput, BootstrapContext<Advancement> advancementOutput) {
+        super(recipeOutput, advancementOutput);
     }
 
     @Override
@@ -1673,14 +1670,14 @@ public final class FramedRecipeProvider extends AbstractFramedRecipeProvider {
         String secondName = Utils.getKeyOrThrow(second).identifier().getPath();
 
         String name = firstName + "_rotate_to_" + secondName;
-        new ShapeRotationRecipeBuilder(this, itemRegistry, second.value())
+        new ShapeRotationRecipeBuilder(this, items, second.value())
                 .tool(tag(FramedConstants.Tags.TOOL_WRENCH))
                 .block(first.value())
                 .unlockedBy(first)
                 .save(consumer, key(name));
 
         name = secondName + "_rotate_to_" + firstName;
-        new ShapeRotationRecipeBuilder(this, itemRegistry, first.value())
+        new ShapeRotationRecipeBuilder(this, items, first.value())
                 .tool(tag(FramedConstants.Tags.TOOL_WRENCH))
                 .block(second.value())
                 .unlockedBy(second)
@@ -1689,21 +1686,5 @@ public final class FramedRecipeProvider extends AbstractFramedRecipeProvider {
 
     private static ResourceKey<Recipe<?>> key(String name) {
         return ResourceKey.create(Registries.RECIPE, Utils.id(name));
-    }
-
-    public static final class Runner extends RecipeProvider.Runner {
-        public Runner(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
-            super(output, registries);
-        }
-
-        @Override
-        protected RecipeProvider createRecipeProvider(HolderLookup.Provider registries, RecipeOutput output) {
-            return new FramedRecipeProvider(registries, output);
-        }
-
-        @Override
-        public String getName() {
-            return "FramedBlocks Recipes";
-        }
     }
 }

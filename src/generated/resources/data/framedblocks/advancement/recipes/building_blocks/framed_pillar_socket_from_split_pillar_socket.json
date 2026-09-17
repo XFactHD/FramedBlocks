@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "framedblocks:framed_pillar_socket_from_split_pillar_socket"
+        "recipes": "framedblocks:framed_pillar_socket_from_split_pillar_socket"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

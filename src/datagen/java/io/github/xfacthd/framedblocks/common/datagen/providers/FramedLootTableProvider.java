@@ -6,9 +6,8 @@ import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.data.loot.BoardAdditionalItemCountNumberProvider;
 import io.github.xfacthd.framedblocks.common.data.loot.LayeredCubeAdditionalItemCountNumberProvider;
 import net.minecraft.core.Holder;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.data.PackOutput;
 import net.minecraft.data.loot.LootTableProvider;
+import net.minecraft.data.loot.LootTableSubProvider;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -17,23 +16,22 @@ import net.minecraft.world.level.storage.loot.functions.CopyComponentsFunction;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
-import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProviders;
 
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
-public final class FramedLootTableProvider extends LootTableProvider {
-    public FramedLootTableProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> providerFuture) {
-        super(output, Set.of(), List.of(
+public final class FramedLootTableProvider {
+    public static LootTableProvider create() {
+        return new LootTableProvider(Set.of(), List.of(
                 new LootTableProvider.SubProviderEntry(BlockLootTable::new, LootContextParamSets.BLOCK)
-        ), providerFuture);
+        ));
     }
 
     private static class BlockLootTable extends FramedBlockLootSubProvider {
-        public BlockLootTable(HolderLookup.Provider lookupProvider) {
-            super(lookupProvider);
+        public BlockLootTable(LootTableSubProvider.Context context) {
+            super(context);
         }
 
         @Override
@@ -67,11 +65,11 @@ public final class FramedLootTableProvider extends LootTableProvider {
                             .withPool(applyExplosionCondition(
                                     FBContent.BLOCK_FRAMED_BOARD.value(),
                                     LootPool.lootPool()
-                                            .setRolls(ConstantValue.exactly(1.0F))
+                                            .setRolls(ContextIntProviders.exactly(1))
                                             .add(applyExplosionDecay(
                                                     FBContent.BLOCK_FRAMED_BOARD.value(),
                                                     LootItem.lootTableItem(FBContent.BLOCK_FRAMED_BOARD.value())
-                                            ).apply(SetItemCountFunction.setCount(BoardAdditionalItemCountNumberProvider.INSTANCE)))
+                                            ).apply(SetItemCountFunction.setCount(Holder.direct(new BoardAdditionalItemCountNumberProvider()))))
                             ))
                             .withPool(createDynamicDropPool(FBContent.BLOCK_FRAMED_BOARD.value()))
             );
@@ -88,11 +86,11 @@ public final class FramedLootTableProvider extends LootTableProvider {
                             .withPool(applyExplosionCondition(
                                     FBContent.BLOCK_FRAMED_LAYERED_CUBE.value(),
                                     LootPool.lootPool()
-                                            .setRolls(ConstantValue.exactly(1.0F))
+                                            .setRolls(ContextIntProviders.exactly(1))
                                             .add(applyExplosionDecay(
                                                     FBContent.BLOCK_FRAMED_LAYERED_CUBE.value(),
                                                     LootItem.lootTableItem(FBContent.BLOCK_FRAMED_LAYERED_CUBE.value())
-                                            ).apply(SetItemCountFunction.setCount(LayeredCubeAdditionalItemCountNumberProvider.INSTANCE)))
+                                            ).apply(SetItemCountFunction.setCount(Holder.direct(new LayeredCubeAdditionalItemCountNumberProvider()))))
                             ))
                             .withPool(createDynamicDropPool(FBContent.BLOCK_FRAMED_LAYERED_CUBE.value()))
             );
@@ -114,4 +112,6 @@ public final class FramedLootTableProvider extends LootTableProvider {
             dropSelf(FBContent.BLOCK_POWERED_FRAMING_SAW.value());
         }
     }
+
+    private FramedLootTableProvider() { }
 }

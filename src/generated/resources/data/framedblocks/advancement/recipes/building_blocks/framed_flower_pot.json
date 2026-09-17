@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "framedblocks:framed_flower_pot"
+        "recipes": "framedblocks:framed_flower_pot"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "framedblocks:framed_extended_slope_panel_rotate_to_framed_elevated_slope_slab"
+        "recipes": "framedblocks:framed_extended_slope_panel_rotate_to_framed_elevated_slope_slab"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

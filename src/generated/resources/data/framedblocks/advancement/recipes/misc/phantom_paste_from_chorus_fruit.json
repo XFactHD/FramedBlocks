@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "framedblocks:phantom_paste_from_chorus_fruit"
+        "recipes": "framedblocks:phantom_paste_from_chorus_fruit"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

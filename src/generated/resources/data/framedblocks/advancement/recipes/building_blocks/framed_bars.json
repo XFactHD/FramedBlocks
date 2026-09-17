@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "framedblocks:framed_bars"
+        "recipes": "framedblocks:framed_bars"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

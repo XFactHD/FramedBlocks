@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "framedblocks:framed_elevated_inner_sloped_prism"
+        "recipes": "framedblocks:framed_elevated_inner_sloped_prism"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

@@ -57,16 +57,16 @@ public class FramedItemFrameRenderer implements BlockEntityRenderer<FramedItemFr
         boolean vert = DirUtils.isY(dir);
         float yRot = vert ? 0 : dir.toYRot();
         if (vert) {
-            poseStack.mulPose(Axis.XP.rotationDegrees(-90F * dir.getAxisDirection().getStep()));
+            poseStack.rotateDegrees(Axis.XP, -90F * dir.getAxisDirection().getStep());
         }
-        poseStack.mulPose(Axis.YP.rotationDegrees(180.0F - yRot));
+        poseStack.rotateDegrees(Axis.YP, 180.0F - yRot);
 
         poseStack.translate(0.0D, 0.0D, ITEM_Z_OFF);
         float itemRotation = renderState.mapId != null ? (renderState.rotation % 4 * 2) : renderState.rotation;
-        poseStack.mulPose(Axis.ZP.rotationDegrees(itemRotation * 360.0F / 8.0F));
+        poseStack.rotateDegrees(Axis.ZP, itemRotation * 360.0F / 8.0F);
 
         if (renderState.mapId != null) {
-            poseStack.mulPose(Axis.ZP.rotationDegrees(180.0F));
+            poseStack.rotateDegrees(Axis.ZP, 180.0F);
 
             poseStack.scale(MAP_SCALE, MAP_SCALE, MAP_SCALE);
             poseStack.translate(-64.0D, -64.0D, -1.0D);

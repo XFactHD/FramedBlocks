@@ -1,13 +1,14 @@
 package io.github.xfacthd.framedblocks.api.datagen.recipes;
 
 import io.github.xfacthd.framedblocks.api.datagen.recipes.builders.FramingSawRecipeBuilder;
+import net.minecraft.advancements.Advancement;
 import net.minecraft.core.Holder;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.ItemLike;
 
 /// Base recipe provider implementation providing factory methods for Framing Saw recipe builders.
@@ -15,8 +16,8 @@ public abstract class AbstractFramingSawRecipeProvider extends RecipeProvider {
     /// The material value of a single Framed Cube.
     public static final int CUBE_MATERIAL_VALUE = 6144; // Empirically determined value
 
-    protected AbstractFramingSawRecipeProvider(HolderLookup.Provider registries, RecipeOutput output) {
-        super(registries, output);
+    protected AbstractFramingSawRecipeProvider(BootstrapContext<Recipe<?>> recipeOutput, BootstrapContext<Advancement> advancementOutput) {
+        super(recipeOutput, advancementOutput);
     }
 
     /// {@return a framing saw recipe builder with one of the given result}

@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "framedblocks:powered_framing_saw"
+        "recipes": "framedblocks:powered_framing_saw"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

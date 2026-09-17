@@ -171,7 +171,7 @@ public final class BlockOverlayGenerator {
                 quad.setDirection(face);
                 quad.setSprite(spriteInfo.material(), spriteInfo.transparency());
                 quad.setAmbientOcclusion(!emissive);
-                quad.setShade(!emissive);
+                quad.setShadeOverride(emissive ? Direction.UP : null);
                 quad.setTintIndex(tintIndex);
                 if (emissive) {
                     quad.setLightEmission(LightEngine.MAX_LEVEL);

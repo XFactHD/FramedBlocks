@@ -7,13 +7,14 @@ import io.github.xfacthd.framedblocks.api.camo.CamoContainer;
 import io.github.xfacthd.framedblocks.api.camo.CamoList;
 import io.github.xfacthd.framedblocks.api.camo.empty.EmptyCamoContainer;
 import io.github.xfacthd.framedblocks.api.util.FramedConstants;
+import net.minecraft.core.Holder;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
-import java.util.List;
+import java.util.Optional;
 
 /// Loot function splitting a single camo entry off of the camo list from the BE to drop camos split over the dropped
 /// framed block items of blocks dropping as multiple items of a different type (i.e. Framed Double Slabs dropping as
@@ -25,8 +26,8 @@ public final class SplitCamoLootFunction extends LootItemConditionalFunction {
 
     private final int camoIndex;
 
-    private SplitCamoLootFunction(List<LootItemCondition> conditions, int camoIndex) {
-        super(conditions);
+    private SplitCamoLootFunction(Optional<Holder<LootItemCondition>> condition, int camoIndex) {
+        super(condition);
         this.camoIndex = camoIndex;
     }
 
@@ -69,7 +70,7 @@ public final class SplitCamoLootFunction extends LootItemConditionalFunction {
 
         @Override
         public LootItemFunction build() {
-            return new SplitCamoLootFunction(getConditions(), camoIndex);
+            return new SplitCamoLootFunction(getCondition(), camoIndex);
         }
     }
 }

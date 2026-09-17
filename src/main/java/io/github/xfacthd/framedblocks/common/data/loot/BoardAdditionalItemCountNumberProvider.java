@@ -5,23 +5,23 @@ import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.ValidationContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
-import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProvider;
 
-public final class BoardAdditionalItemCountNumberProvider implements NumberProvider {
-    public static final BoardAdditionalItemCountNumberProvider INSTANCE = new BoardAdditionalItemCountNumberProvider();
-
-    private BoardAdditionalItemCountNumberProvider() { }
-
+public final class BoardAdditionalItemCountNumberProvider implements ContextIntProvider {
     @Override
-    public float getFloat(LootContext ctx) {
-        BlockState state = ctx.getParameter(LootContextParams.BLOCK_STATE);
-        if (state.hasProperty(PropertyHolder.FACES)) {
+    public int getIntUnsafe(LootContext ctx) {
+        BlockState state = ctx.getOptional(LootContextParams.BLOCK_STATE);
+        if (state != null && state.hasProperty(PropertyHolder.FACES)) {
             int faces = state.getValue(PropertyHolder.FACES);
             return Integer.bitCount(faces) - 1;
         }
         return 0;
     }
+
+    @Override
+    public void validate(ValidationContext context) { }
 
     @Override
     public MapCodec<BoardAdditionalItemCountNumberProvider> codec() {

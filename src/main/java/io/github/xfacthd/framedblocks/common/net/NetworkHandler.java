@@ -1,5 +1,6 @@
 package io.github.xfacthd.framedblocks.common.net;
 
+import io.github.xfacthd.framedblocks.common.net.payload.clientbound.ClientboundChestClosedPayload;
 import io.github.xfacthd.framedblocks.common.net.payload.clientbound.ClientboundCullingUpdatePayload;
 import io.github.xfacthd.framedblocks.common.net.payload.clientbound.ClientboundOpenSignScreenPayload;
 import io.github.xfacthd.framedblocks.common.net.payload.serverbound.ServerboundCamoApplicatorConfigureModifierPayload;
@@ -25,6 +26,10 @@ public final class NetworkHandler {
                 .playToClient(
                         ClientboundCullingUpdatePayload.TYPE,
                         ClientboundCullingUpdatePayload.CODEC
+                )
+                .playToClient(
+                        ClientboundChestClosedPayload.TYPE,
+                        ClientboundChestClosedPayload.STREAM_CODEC
                 )
                 .playToServer(
                         ServerboundSelectFramingSawRecipePayload.TYPE,

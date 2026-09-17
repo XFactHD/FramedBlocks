@@ -37,7 +37,7 @@ public class FramedWallTorchBlock extends WallTorchBlock implements IFramedBlock
     private FramedWallTorchBlock(BlockType type, SimpleParticleType particle, Properties props) {
         this.type = type;
         super(particle, props
-                .pushReaction(PushReaction.DESTROY)
+                .pushReaction(PushReaction.POPPED)
                 .noCollision()
                 .strength(0.5F)
                 .sound(SoundType.WOOD)

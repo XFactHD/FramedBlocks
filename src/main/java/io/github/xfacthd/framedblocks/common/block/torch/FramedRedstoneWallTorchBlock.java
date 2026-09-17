@@ -32,12 +32,11 @@ import java.util.List;
 
 public class FramedRedstoneWallTorchBlock extends RedstoneWallTorchBlock implements IFramedBlockInternal {
     public FramedRedstoneWallTorchBlock(Properties props) {
-        super(props.pushReaction(PushReaction.DESTROY)
+        super(props.pushReaction(PushReaction.POPPED)
                 .noCollision()
                 .instabreak()
                 .sound(SoundType.WOOD)
                 .lightLevel(state -> state.getValue(BlockStateProperties.LIT) ? 7 : 0)
-                .pushReaction(PushReaction.DESTROY)
         );
         BlockUtils.configureStandardProperties(this);
     }

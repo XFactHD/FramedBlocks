@@ -40,7 +40,7 @@ public class FramedLanternBlock extends LanternBlock implements IFramedBlockInte
                 .strength(3.5F)
                 .sound(SoundType.LANTERN)
                 .lightLevel(type == BlockType.FRAMED_SOUL_LANTERN ? (_ -> 10) : (_ -> 15))
-                .pushReaction(PushReaction.DESTROY)
+                .pushReaction(PushReaction.POPPED)
         );
         BlockUtils.configureStandardProperties(this);
     }

@@ -71,7 +71,7 @@ public final class TemplateIds {
         }
         return layers;
     });
-    static final Identifier DIRT_PATH = Utils.id("minecraft", "block/dirt_path");
+    static final Identifier DIRT_PATH = Utils.id("minecraft", "block/template_cube_bottom_top_indented");
     static final Identifier SHELF_BODY = Utils.id("minecraft", "block/template_shelf_body");
     static final Identifier SHELF_UNPOWERED = Utils.id("minecraft", "block/template_shelf_unpowered");
 

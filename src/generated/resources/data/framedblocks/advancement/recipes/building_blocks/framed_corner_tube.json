@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "framedblocks:framed_corner_tube"
+        "recipes": "framedblocks:framed_corner_tube"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

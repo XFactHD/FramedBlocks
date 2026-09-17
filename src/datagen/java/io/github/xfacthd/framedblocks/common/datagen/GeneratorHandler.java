@@ -4,6 +4,8 @@ import io.github.xfacthd.framedblocks.api.util.FramedConstants;
 import io.github.xfacthd.framedblocks.common.datagen.dummy.DummyObjects;
 import io.github.xfacthd.framedblocks.common.datagen.providers.*;
 import net.minecraft.core.RegistrySetBuilder;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.data.recipes.RecipeProvider;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
@@ -20,9 +22,15 @@ public final class GeneratorHandler {
     }
 
     private static void onGatherData(GatherDataEvent.Client event) {
-        event.createDatapackRegistryObjects(
+        event.createWorldRegistryObjects(
                 new RegistrySetBuilder()
                         .add(FramedConstants.Registries.BLOCK_OVERLAY_REGISTRY_KEY, FramedBlockOverlayProvider::buildBlockOverlayEntries)
+        );
+        event.createReloadableRegistryObjects(
+                new RegistrySetBuilder()
+                        .add(Registries.LOOT_TABLE, FramedLootTableProvider.create())
+                        .add(RecipeProvider.asBootstrap(FramedRecipeProvider::new))
+                        .add(RecipeProvider.asBootstrap(FramingSawRecipeProvider::new))
         );
 
         event.createProvider(FramedSpriteSourceProvider::new);
@@ -31,9 +39,6 @@ public final class GeneratorHandler {
         event.createProvider(FramedLanguageProvider::new);
         event.createProvider(FramedTemplateProvider::new);
 
-        event.createProvider(FramedLootTableProvider::new);
-        event.createProvider(FramedRecipeProvider.Runner::new);
-        event.createProvider(FramingSawRecipeProvider.Runner::new);
         event.createProvider(FramedBlockTagProvider::new);
         event.createProvider(FramedItemTagProvider::new);
         event.createProvider(FramedDataMapProvider::new);

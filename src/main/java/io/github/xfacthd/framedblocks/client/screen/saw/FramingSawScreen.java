@@ -375,8 +375,8 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu> im
             int idx = firstIndex + row * RECIPE_COLS + col;
             if (idx >= 0 && idx < filteredRecipes.size()) {
                 if (hasEffectiveSearchQuery) {
-                    RecipeHolder<FramingSawRecipe> recipe = filteredRecipes.get(idx).toVanilla();
-                    idx = cache.getRecipes().indexOf(recipe);
+                    FramingSawRecipe recipe = filteredRecipes.get(idx).getRecipe();
+                    idx = cache.getRecipeIndex(recipe);
                     if (idx == -1) {
                         return false;
                     }

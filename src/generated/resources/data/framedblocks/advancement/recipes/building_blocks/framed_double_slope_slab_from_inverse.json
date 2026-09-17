@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "framedblocks:framed_double_slope_slab_from_inverse"
+        "recipes": "framedblocks:framed_double_slope_slab_from_inverse"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

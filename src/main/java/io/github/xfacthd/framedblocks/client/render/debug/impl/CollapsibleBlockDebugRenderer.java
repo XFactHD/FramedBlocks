@@ -3,9 +3,7 @@ package io.github.xfacthd.framedblocks.client.render.debug.impl;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import io.github.xfacthd.framedblocks.api.render.Quaternions;
 import io.github.xfacthd.framedblocks.api.render.debug.BlockDebugRenderer;
-import io.github.xfacthd.framedblocks.api.render.outline.OutlineRenderer;
 import io.github.xfacthd.framedblocks.api.util.Triangle;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.client.render.util.FramedRenderTypes;
@@ -61,10 +59,10 @@ public final class CollapsibleBlockDebugRenderer implements BlockDebugRenderer<F
 
             poseStack.translate(.5, .5, .5);
             if (face == Direction.DOWN) {
-                poseStack.mulPose(Quaternions.XP_180);
+                poseStack.rotateDegrees(Axis.XP, 180);
             } else if (face != Direction.UP) {
-                poseStack.mulPose(OutlineRenderer.YN_DIR[face.get2DDataValue()]);
-                poseStack.mulPose(Quaternions.XP_90);
+                poseStack.rotateDegrees(Axis.YN, face.toYRot());
+                poseStack.rotateDegrees(Axis.XP, 90);
             }
             poseStack.translate(-.5, -.5, -.5);
 
@@ -105,7 +103,7 @@ public final class CollapsibleBlockDebugRenderer implements BlockDebugRenderer<F
     private static void submitText(SubmitNodeCollector collector, PoseStack poseStack, float x, float z, float y, float xOff, float scale, String text, int color) {
         poseStack.pushPose();
         poseStack.translate(x, y, z);
-        poseStack.mulPose(Axis.XP.rotationDegrees(90));
+        poseStack.rotateDegrees(Axis.XP, 90);
         poseStack.scale(1F / scale, 1F / scale, 1F / scale);
 
         collector.submitText(

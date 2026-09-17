@@ -1,6 +1,5 @@
 package io.github.xfacthd.framedblocks.common.block.rail.vanillaslope;
 
-import com.mojang.serialization.MapCodec;
 import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
@@ -221,11 +220,6 @@ public class FramedRailSlopeBlock<BE extends FramedBlockEntity> extends BaseRail
     @Override
     public BlockType getBlockType() {
         return type;
-    }
-
-    @Override
-    protected MapCodec<? extends BaseRailBlock> codec() {
-        throw new UnsupportedOperationException("NO");
     }
 
     @Override

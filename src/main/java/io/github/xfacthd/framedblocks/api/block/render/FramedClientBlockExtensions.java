@@ -16,13 +16,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.HitResult;
 import net.neoforged.neoforge.client.extensions.common.IClientBlockExtensions;
 import net.neoforged.neoforge.model.data.ModelData;
-import org.jspecify.annotations.Nullable;
-
-import java.util.Objects;
 
 /// Base [IClientBlockExtensions] required on all framed blocks.
 public class FramedClientBlockExtensions implements IClientBlockExtensions {
@@ -31,11 +26,10 @@ public class FramedClientBlockExtensions implements IClientBlockExtensions {
     protected FramedClientBlockExtensions() { }
 
     @Override
-    public boolean addHitEffects(BlockState state, Level level, @Nullable HitResult target, ParticleEngine engine) {
-        BlockHitResult hit = (BlockHitResult) Objects.requireNonNull(target);
-        boolean suppressed = suppressParticles(state, level, hit.getBlockPos());
-        if (!suppressed && level.getBlockEntity(hit.getBlockPos()) instanceof IFramedBlockEntity be) {
-            return addHitEffectsUnsuppressed(state, level, hit, be, engine);
+    public boolean addHitEffects(BlockState state, Level level, BlockPos pos, Direction face, ParticleEngine engine) {
+        boolean suppressed = suppressParticles(state, level, pos);
+        if (!suppressed && level.getBlockEntity(pos) instanceof IFramedBlockEntity be) {
+            return addHitEffectsUnsuppressed(state, level, pos, face, be, engine);
         }
         return suppressed;
     }
@@ -44,12 +38,13 @@ public class FramedClientBlockExtensions implements IClientBlockExtensions {
     ///
     /// @param state  The state of the block
     /// @param level  The level the block is in
-    /// @param hit    The exact location the block was hit at
+    /// @param pos    The position of the block
+    /// @param face   The face on which the block has hit
     /// @param be     The BE of the block that was hit
     /// @param engine The particle engine to use for spawning particles
     /// @return whether vanilla particle spawning should be suppressed
-    protected boolean addHitEffectsUnsuppressed(BlockState state, Level level, BlockHitResult hit, IFramedBlockEntity be, ParticleEngine engine) {
-        ParticleHelper.Client.addHitEffects(state, level, hit, be.getCamo(), be.getOverlay(), engine);
+    protected boolean addHitEffectsUnsuppressed(BlockState state, Level level, BlockPos pos, Direction face, IFramedBlockEntity be, ParticleEngine engine) {
+        ParticleHelper.Client.addHitEffects(state, level, pos, face, be.getCamo(), be.getOverlay(), engine);
         return true;
     }
 

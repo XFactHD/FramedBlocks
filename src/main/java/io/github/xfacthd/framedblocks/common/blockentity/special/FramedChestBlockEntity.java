@@ -7,9 +7,11 @@ import io.github.xfacthd.framedblocks.common.block.cube.FramedChestBlock;
 import io.github.xfacthd.framedblocks.common.capability.item.IStorageBlockItemResourceHandler;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import io.github.xfacthd.framedblocks.common.data.property.ChestState;
+import io.github.xfacthd.framedblocks.common.net.payload.clientbound.ClientboundChestClosedPayload;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -17,15 +19,18 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.ChestType;
+import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.transfer.ResourceHandlerUtil;
 import org.jspecify.annotations.Nullable;
 
 public class FramedChestBlockEntity extends FramedStorageBlockEntity {
     public static final Component TITLE = Utils.translate("title", "framed_chest");
+    public static final int ANIM_DURATION = 10;
 
     private int openCount = 0;
     private long closeStart = 0;
@@ -39,9 +44,10 @@ public class FramedChestBlockEntity extends FramedStorageBlockEntity {
     }
 
     public static void tick(Level level, BlockPos pos, BlockState state, FramedChestBlockEntity tile) {
-        if (!level.isClientSide() && (level.getGameTime() - tile.closeStart) >= 10 && state.getValue(PropertyHolder.CHEST_STATE) == ChestState.CLOSING) {
+        if (level instanceof ServerLevel serverLevel && (level.getGameTime() - tile.closeStart) >= ANIM_DURATION && state.getValue(PropertyHolder.CHEST_STATE) == ChestState.CLOSING) {
             tile.closeStart = 0;
             level.setBlockAndUpdate(pos, state.setValue(PropertyHolder.CHEST_STATE, ChestState.CLOSED));
+            PacketDistributor.sendToPlayersTrackingChunk(serverLevel, ChunkPos.containing(pos), new ClientboundChestClosedPayload(pos));
         }
     }
 
@@ -95,7 +101,7 @@ public class FramedChestBlockEntity extends FramedStorageBlockEntity {
         if (lastChangeTime == 0 || state != lastState) {
             if ((lastState == ChestState.CLOSING && state == ChestState.OPENING) || (lastState == ChestState.OPENING && state == ChestState.CLOSING)) {
                 long diff = level().getGameTime() - lastChangeTime;
-                lastChangeTime = level().getGameTime() - (diff < 10 ? 10 - diff : 0);
+                lastChangeTime = level().getGameTime() - (diff < ANIM_DURATION ? ANIM_DURATION - diff : 0);
             } else {
                 lastChangeTime = level().getGameTime();
             }

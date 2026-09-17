@@ -1,6 +1,5 @@
 package io.github.xfacthd.framedblocks.common.block.pillar;
 
-import com.mojang.serialization.MapCodec;
 import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.api.block.item.placement.PropertyLabels;
@@ -131,10 +130,5 @@ public class FramedChainBlock extends ChainBlock implements IFramedBlockInternal
     @Override
     public BlockState getJadeRenderState(BlockState state) {
         return defaultBlockState();
-    }
-
-    @Override
-    public MapCodec<FramedChainBlock> codec() {
-        throw new UnsupportedOperationException();
     }
 }

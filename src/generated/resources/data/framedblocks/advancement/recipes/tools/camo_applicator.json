@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "framedblocks:camo_applicator"
+        "recipes": "framedblocks:camo_applicator"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

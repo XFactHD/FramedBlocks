@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "framedblocks:phantom_paste_from_phantom_membrane"
+        "recipes": "framedblocks:phantom_paste_from_phantom_membrane"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

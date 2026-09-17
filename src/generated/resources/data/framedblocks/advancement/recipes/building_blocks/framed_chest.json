@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "framedblocks:framed_chest"
+        "recipes": "framedblocks:framed_chest"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

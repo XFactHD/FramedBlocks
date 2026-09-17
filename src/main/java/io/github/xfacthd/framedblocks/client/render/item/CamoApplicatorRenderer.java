@@ -70,7 +70,7 @@ public final class CamoApplicatorRenderer implements SpecialModelRenderer<CamoAp
             poseStack.pushPose();
 
             poseStack.translate(.5, .5, .5);
-            poseStack.mulPose(Axis.YP.rotationDegrees(90F * i));
+            poseStack.rotateDegrees(Axis.YP, 90F * i);
 
             submitNodeCollector.submitCustomGeometry(poseStack, renderType, (pose, buffer) -> {
                 buffer.addVertex(pose, -2.5F/16F,  4.5F/16F, 3.55F/16F).setColor(camoIcon.tint).setUv(u0, v0).setOverlay(overlay).setLight(light).setNormal(pose, 0, 0, 1);

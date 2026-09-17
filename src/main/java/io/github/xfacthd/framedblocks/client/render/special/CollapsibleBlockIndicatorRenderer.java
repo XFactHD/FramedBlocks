@@ -1,6 +1,6 @@
 package io.github.xfacthd.framedblocks.client.render.special;
 
-import io.github.xfacthd.framedblocks.api.render.Quaternions;
+import com.mojang.math.Axis;
 import io.github.xfacthd.framedblocks.api.render.outline.OutlineRenderer;
 import io.github.xfacthd.framedblocks.api.util.MathUtils;
 import io.github.xfacthd.framedblocks.common.FBContent;
@@ -55,15 +55,15 @@ public final class CollapsibleBlockIndicatorRenderer {
             poseStack.pushPose();
             poseStack.translate(offset.x + .5, offset.y + .5, offset.z + .5);
             if (target.face() == Direction.DOWN) {
-                poseStack.mulPose(Quaternions.XP_180);
+                poseStack.rotateDegrees(Axis.XP, 180);
             } else if (target.face() != Direction.UP) {
-                poseStack.mulPose(OutlineRenderer.YN_DIR[target.face().get2DDataValue()]);
-                poseStack.mulPose(Quaternions.XP_90);
+                poseStack.rotateDegrees(Axis.YN, target.face().toYRot());
+                poseStack.rotateDegrees(Axis.XP, 90);
             }
             poseStack.translate(-.5, -.5, -.5);
 
             float lineWidth = Minecraft.getInstance().gameRenderer.gameRenderState().windowRenderState.appropriateLineWidth;
-            BlockOutlineRenderer.submitLineDraw(submitNodeCollector, poseStack, RenderTypes.lines(), LINE_COLOR, lineWidth, RenderPhaseKeys.ALWAYS_ON_TOP, drawer -> {
+            BlockOutlineRenderer.submitLineDraw(submitNodeCollector, poseStack, RenderTypes.linesTranslucent(), LINE_COLOR, lineWidth, RenderPhaseKeys.ALWAYS_ON_TOP, drawer -> {
                 drawSectionOverlay(drawer, vY);
                 drawCornerMarkers(drawer, target.face(), target.pos(), vY);
             });

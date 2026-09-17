@@ -7,7 +7,6 @@ import io.github.xfacthd.framedblocks.api.block.blockentity.IFramedBlockEntity;
 import io.github.xfacthd.framedblocks.api.block.cache.DoubleBlockStateCache;
 import io.github.xfacthd.framedblocks.api.block.cache.StateCache;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.CamoGetter;
-import io.github.xfacthd.framedblocks.api.render.Quaternions;
 import io.github.xfacthd.framedblocks.api.render.debug.BlockDebugRenderer;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.client.render.util.FramedRenderTypes;
@@ -44,15 +43,15 @@ public class ConnectionPredicateDebugRenderer implements BlockDebugRenderer<IFra
         StateCache cache = data.cache;
         switch (face) {
             case UP -> {
-                poseStack.mulPose(Quaternions.XN_90);
+                poseStack.rotateDegrees(Axis.XN, 90F);
                 submitIndicators(collector, poseStack, cache, face, Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST);
             }
             case DOWN -> {
-                poseStack.mulPose(Quaternions.XP_90);
+                poseStack.rotateDegrees(Axis.XP, 90F);
                 submitIndicators(collector, poseStack, cache, face, Direction.SOUTH, Direction.NORTH, Direction.EAST, Direction.WEST);
             }
             default -> {
-                poseStack.mulPose(Axis.YN.rotationDegrees(face.toYRot()));
+                poseStack.rotateDegrees(Axis.YN, face.toYRot());
                 submitIndicators(collector, poseStack, cache, face, Direction.UP, Direction.DOWN, face.getCounterClockWise(), face.getClockWise());
             }
         }

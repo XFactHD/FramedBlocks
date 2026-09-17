@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "framedblocks:framed_fancy_detector_rail"
+        "recipes": "framedblocks:framed_fancy_detector_rail"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

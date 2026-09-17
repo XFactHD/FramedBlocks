@@ -4,15 +4,12 @@ import com.google.common.base.Preconditions;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
-import io.github.xfacthd.framedblocks.api.render.Quaternions;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Unit;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.ApiStatus;
-import org.joml.Quaternionf;
-import org.joml.Quaternionfc;
 import org.jspecify.annotations.Nullable;
 
 /// Provide custom outline rendering for blocks with non-axis-aligned edges such as slopes.
@@ -22,11 +19,6 @@ import org.jspecify.annotations.Nullable;
 /// Must be registered in [RegisterOutlineRenderersEvent].
 public interface OutlineRenderer<T> {
     OutlineRenderer<Unit> NO_OP = new NoopOutlineRenderer();
-
-    /// Array of quaternions for rotating around the Y axis according to the horizontal direction.
-    ///
-    /// Must be indexed with [Direction#get2DDataValue()].
-    Quaternionfc[] YN_DIR = makeQuaternionArray();
 
     /// Extract additional data required for rendering which is not available from just the blockstate.
     ///
@@ -55,7 +47,7 @@ public interface OutlineRenderer<T> {
     default void rotateMatrix(PoseStack poseStack, BlockState state) {
         Direction dir = getRotationDir(state);
         Preconditions.checkState(dir.getAxis().isHorizontal(), "Rotation direction must be horizontal");
-        poseStack.mulPose(YN_DIR[dir.get2DDataValue()]);
+        poseStack.rotateDegrees(Axis.YN, dir.toYRot());
     }
 
     /// Mirrors the pose stack around the horizontal plane.
@@ -64,18 +56,10 @@ public interface OutlineRenderer<T> {
     /// @param rotY90 Whether the pose stack needs to be rotated -90 degrees around the y-axis,
     ///               needed for un-symmetric shapes like corners
     static void mirrorHorizontally(PoseStack pstack, boolean rotY90) {
-        pstack.mulPose(Quaternions.ZP_180);
+        pstack.rotateDegrees(Axis.ZP, 180F);
         if (rotY90) {
-            pstack.mulPose(Quaternions.YN_90);
+            pstack.rotateDegrees(Axis.YN, 90);
         }
-    }
-
-    private static Quaternionf[] makeQuaternionArray() {
-        Quaternionf[] array = new Quaternionf[4];
-        for (Direction dir : Direction.Plane.HORIZONTAL) {
-            array[dir.get2DDataValue()] = Axis.YN.rotationDegrees(dir.toYRot());
-        }
-        return array;
     }
 
     /// Base interface of the line drawer to submit line segments of the block outline to.

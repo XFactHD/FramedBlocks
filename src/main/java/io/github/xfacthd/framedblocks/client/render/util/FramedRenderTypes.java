@@ -1,8 +1,8 @@
 package io.github.xfacthd.framedblocks.client.render.util;
 
 import io.github.xfacthd.framedblocks.api.util.ClientUtils;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
-import net.minecraft.client.renderer.rendertype.OutputTarget;
 import net.minecraft.client.renderer.rendertype.RenderSetup;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.neoforged.fml.ModList;
@@ -12,6 +12,7 @@ public final class FramedRenderTypes {
     public static final RenderType DEBUG_QUADS_DEPTH = RenderType.create(
             "debug_quads_depth",
             RenderSetup.builder(FramedRenderPipelines.DEBUG_QUADS_DEPTH)
+                    .setOitPipelines(RenderPipelines.OIT_DEBUG_QUADS)
                     .sortOnUpload()
                     .createRenderSetup()
     );
@@ -38,8 +39,8 @@ public final class FramedRenderTypes {
     public static final RenderType BLOCK_ENTITY_TRANSLUCENT_CULL_ITEM_TARGET_NO_SHADE = RenderType.create(
             "entity_translucent_cull_item_target_no_shade",
             RenderSetup.builder(FramedRenderPipelines.ENTITY_TRANSLUCENT_CULL_NO_SHADE)
+                    .setOitPipelines(FramedRenderPipelines.OIT_ENTITY_CULL_NO_SHADE)
                     .withTexture("Sampler0", ClientUtils.BLOCK_ATLAS)
-                    .setOutputTarget(OutputTarget.ITEM_ENTITY_TARGET)
                     .useLightmap()
                     .useOverlay()
                     .affectsCrumbling()

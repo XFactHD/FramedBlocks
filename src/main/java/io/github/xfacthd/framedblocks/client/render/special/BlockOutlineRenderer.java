@@ -114,9 +114,11 @@ public final class BlockOutlineRenderer {
         RenderPhaseKey<SubmitNode> phase = translucent ? RenderPhaseKeys.AFTER_TERRAIN : RenderPhaseKeys.SHAPE_OUTLINES;
         if (highContrast) {
             submitLineDraw(submitNodeCollector, poseStack, RenderTypes.secondaryBlockOutline(), CommonColors.BLACK, 7F, phase, renderer);
-            submitLineDraw(submitNodeCollector, poseStack, RenderTypes.lines(), CommonColors.HIGH_CONTRAST_DIAMOND, lineWidth, phase, renderer);
+            submitLineDraw(submitNodeCollector, poseStack, RenderTypes.linesDepthBias(), CommonColors.HIGH_CONTRAST_DIAMOND, lineWidth, phase, renderer);
+        } else if (Minecraft.getInstance().gameRenderer.useImprovedTransparency()) {
+            submitLineDraw(submitNodeCollector, poseStack, RenderTypes.linesTranslucentNoDepthWrite(), DEFAULT_LINE_COLOR, lineWidth, phase, renderer);
         } else {
-            submitLineDraw(submitNodeCollector, poseStack, RenderTypes.lines(), DEFAULT_LINE_COLOR, lineWidth, phase, renderer);
+            submitLineDraw(submitNodeCollector, poseStack, RenderTypes.linesTranslucent(), DEFAULT_LINE_COLOR, lineWidth, phase, renderer);
         }
     }
 

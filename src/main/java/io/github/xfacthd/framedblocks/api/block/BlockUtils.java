@@ -21,6 +21,7 @@ import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -109,22 +110,22 @@ public final class BlockUtils {
         Preconditions.checkArgument(from.getBlock() == block, "The provided states must be owned by the provided block");
 
         for (Property<?> property : REQUIRED_STATE_PROPERTIES) {
-            to = Block.copyProperty(from, to, property);
+            to = BlockBehaviour.BlockStateBase.copyProperty(from, to, property);
         }
         if (block.getBlockType().canOccludeWithSolidCamo()) {
-            to = Block.copyProperty(from, to, FramedProperties.SOLID);
+            to = BlockBehaviour.BlockStateBase.copyProperty(from, to, FramedProperties.SOLID);
         }
         if (copyWaterlogging && block.getBlockType().isWaterloggable()) {
-            to = Block.copyProperty(from, to, BlockStateProperties.WATERLOGGED);
+            to = BlockBehaviour.BlockStateBase.copyProperty(from, to, BlockStateProperties.WATERLOGGED);
         }
         if (block instanceof ShapeLockableBlock) {
-            to = Block.copyProperty(from, to, FramedProperties.STATE_LOCKED);
+            to = BlockBehaviour.BlockStateBase.copyProperty(from, to, FramedProperties.STATE_LOCKED);
         }
         if (block instanceof SlopeToggleBlock) {
-            to = Block.copyProperty(from, to, FramedProperties.ALT_SLOPE);
+            to = BlockBehaviour.BlockStateBase.copyProperty(from, to, FramedProperties.ALT_SLOPE);
         }
         if (block instanceof CopycatStyleBlock.StateDependent) {
-            to = Block.copyProperty(from, to, FramedProperties.COPYCAT_STYLE);
+            to = BlockBehaviour.BlockStateBase.copyProperty(from, to, FramedProperties.COPYCAT_STYLE);
         }
         return to;
     }

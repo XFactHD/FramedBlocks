@@ -16,11 +16,6 @@ import net.minecraft.core.Holder;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.HitResult;
-import org.jspecify.annotations.Nullable;
-
-import java.util.Objects;
 
 public final class FramedClientDoubleBlockExtensions extends FramedClientBlockExtensions {
     public static final FramedClientDoubleBlockExtensions INSTANCE = new FramedClientDoubleBlockExtensions();
@@ -28,13 +23,12 @@ public final class FramedClientDoubleBlockExtensions extends FramedClientBlockEx
     private FramedClientDoubleBlockExtensions() { }
 
     @Override
-    public boolean addHitEffects(BlockState state, Level level, @Nullable HitResult target, ParticleEngine engine) {
-        BlockHitResult hit = (BlockHitResult) Objects.requireNonNull(target);
-        boolean suppressed = suppressParticles(state, level, hit.getBlockPos());
-        if (!suppressed && level.getBlockEntity(hit.getBlockPos()) instanceof FramedDoubleBlockEntity be) {
+    public boolean addHitEffects(BlockState state, Level level, BlockPos pos, Direction face, ParticleEngine engine) {
+        boolean suppressed = suppressParticles(state, level, pos);
+        if (!suppressed && level.getBlockEntity(pos) instanceof FramedDoubleBlockEntity be) {
             Holder<BlockOverlay> overlay = be.getOverlay();
-            ParticleHelper.Client.addHitEffects(state, level, hit, be.getCamo(), overlay, engine);
-            ParticleHelper.Client.addHitEffects(state, level, hit, be.getCamoTwo(), overlay, engine);
+            ParticleHelper.Client.addHitEffects(state, level, pos, face, be.getCamo(), overlay, engine);
+            ParticleHelper.Client.addHitEffects(state, level, pos, face, be.getCamoTwo(), overlay, engine);
             return true;
         }
         return suppressed;

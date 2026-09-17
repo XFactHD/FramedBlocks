@@ -203,10 +203,16 @@ final class PartConsumerImpl implements PartConsumer {
         BakedQuad.MaterialInfo materialInfo = quad.materialInfo();
         ChunkSectionLayer layer = forceOpaque ? ChunkSectionLayer.SOLID : materialInfo.layer();
         int tintIndex = materialInfo.isTinted() ? materialInfo.tintIndex() + tintIndexOffset : materialInfo.tintIndex();
-        boolean shade = !forceEmissive && materialInfo.shade();
+        Direction prevShadeOverride = materialInfo.shadeDirectionOverride();
+        Direction shadeOverride;
+        if (prevShadeOverride != null || !forceEmissive) {
+            shadeOverride = prevShadeOverride;
+        } else {
+            shadeOverride = Direction.UP;
+        }
         int lightEmission = emissive ? LightEngine.MAX_LEVEL : materialInfo.lightEmission();
         boolean ao = !forceEmissive && materialInfo.ambientOcclusion();
-        if (layer != materialInfo.layer() || tintIndex != materialInfo.tintIndex() || shade != materialInfo.shade() || lightEmission != materialInfo.lightEmission() || ao != materialInfo.ambientOcclusion()) {
+        if (layer != materialInfo.layer() || tintIndex != materialInfo.tintIndex() || shadeOverride != prevShadeOverride || lightEmission != materialInfo.lightEmission() || ao != materialInfo.ambientOcclusion()) {
             return new BakedQuad(
                     quad.position0(),
                     quad.position1(),
@@ -217,7 +223,7 @@ final class PartConsumerImpl implements PartConsumer {
                     quad.packedUV2(),
                     quad.packedUV3(),
                     quad.direction(),
-                    new BakedQuad.MaterialInfo(materialInfo.sprite(), layer, materialInfo.itemRenderType(), tintIndex, shade, lightEmission, ao),
+                    new BakedQuad.MaterialInfo(materialInfo.sprite(), layer, materialInfo.itemRenderType(), materialInfo.itemGlintRenderType(), materialInfo.itemGlintSpecialRenderType(), tintIndex, shadeOverride, lightEmission, ao),
                     quad.bakedNormals(),
                     quad.bakedColors()
             );

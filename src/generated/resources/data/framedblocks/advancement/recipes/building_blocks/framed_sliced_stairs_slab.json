@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "framedblocks:framed_sliced_stairs_slab"
+        "recipes": "framedblocks:framed_sliced_stairs_slab"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "framedblocks:framed_double_half_slope"
+        "recipes": "framedblocks:framed_double_half_slope"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

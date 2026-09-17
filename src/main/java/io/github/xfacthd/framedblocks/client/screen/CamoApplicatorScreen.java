@@ -32,7 +32,6 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import net.neoforged.neoforge.common.util.Lazy;
 import org.jetbrains.annotations.UnknownNullability;
-import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -85,7 +84,9 @@ public final class CamoApplicatorScreen extends AbstractContainerScreen<CamoAppl
         }
         return specs;
     });
-    private static final InputConstants.Key KEY_SELECT_SLOT = InputConstants.getKey(new KeyEvent(GLFW.GLFW_KEY_S, -1, 0));
+    @InputConstants.Value
+    private static final int KEYCODE_SELECT_SLOT = InputConstants.KEY_S;
+    private static final InputConstants.Key KEY_SELECT_SLOT = InputConstants.getKey(new KeyEvent(KEYCODE_SELECT_SLOT, -1, 0));
 
     @UnknownNullability
     private CycleButton<CamoApplicatorConfig.Mode> modeCycleButton;
@@ -253,7 +254,7 @@ public final class CamoApplicatorScreen extends AbstractContainerScreen<CamoAppl
 
     @Override
     public boolean keyPressed(KeyEvent event) {
-        if (hoveredSlot != null && hoveredSlot.index < CamoApplicatorContent.CAMO_COUNT && event.key() == GLFW.GLFW_KEY_S) {
+        if (hoveredSlot != null && hoveredSlot.index < CamoApplicatorContent.CAMO_COUNT && event.key() == KEYCODE_SELECT_SLOT) {
             setSelectedSlot(hoveredSlot.index);
             return true;
         }

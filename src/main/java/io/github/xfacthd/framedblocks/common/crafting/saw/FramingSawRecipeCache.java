@@ -33,10 +33,15 @@ public final class FramingSawRecipeCache {
 
     private final List<RecipeHolder<FramingSawRecipe>> recipes = new ArrayList<>();
     private final List<RecipeHolder<FramingSawRecipe>> recipesView = Collections.unmodifiableList(recipes);
+    private final Reference2IntMap<FramingSawRecipe> recipeIndices = new Reference2IntOpenHashMap<>();
     private final Map<Item, RecipeHolder<FramingSawRecipe>> recipesByResult = new IdentityHashMap<>();
     private final Map<Item, RecipeHolder<FramingSawRecipe>> recipesWithAdditives = new IdentityHashMap<>();
     private final Reference2IntMap<Item> materialValues = new Reference2IntOpenHashMap<>();
     private boolean recipesPopulated = false;
+
+    private FramingSawRecipeCache() {
+        this.recipeIndices.defaultReturnValue(-1);
+    }
 
     private void update(RecipeMap recipeMap) {
         clear();
@@ -54,8 +59,12 @@ public final class FramingSawRecipeCache {
         // Remove disabled recipes after extracting material values
         recipes.removeIf(h -> h.value().isDisabled());
 
+        int[] indexCounter = new int[1];
         recipes.forEach(holder -> {
             FramingSawRecipe recipe = holder.value();
+
+            recipeIndices.put(recipe, indexCounter[0]);
+            indexCounter[0]++;
 
             ItemStackTemplate result = recipe.getResult();
             recipesByResult.put(result.item().value(), holder);
@@ -71,6 +80,7 @@ public final class FramingSawRecipeCache {
     public void clear() {
         recipesPopulated = false;
         recipes.clear();
+        recipeIndices.clear();
         recipesByResult.clear();
         recipesWithAdditives.clear();
         materialValues.clear();
@@ -82,6 +92,10 @@ public final class FramingSawRecipeCache {
 
     public List<RecipeHolder<FramingSawRecipe>> getRecipes() {
         return recipesView;
+    }
+
+    public int getRecipeIndex(FramingSawRecipe recipe) {
+        return recipeIndices.getInt(recipe);
     }
 
     public @Nullable RecipeHolder<FramingSawRecipe> findRecipeFor(ItemStack result) {

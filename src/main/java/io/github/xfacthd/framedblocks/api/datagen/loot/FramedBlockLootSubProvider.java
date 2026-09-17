@@ -5,8 +5,8 @@ import io.github.xfacthd.framedblocks.api.datagen.loot.objects.RetainCamoLootCon
 import io.github.xfacthd.framedblocks.api.datagen.loot.objects.SplitCamoLootFunction;
 import io.github.xfacthd.framedblocks.api.util.FramedConstants;
 import net.minecraft.advancements.predicates.StatePropertiesPredicate;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.data.loot.BlockLootSubProvider;
+import net.minecraft.data.loot.LootTableSubProvider;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.DoorBlock;
@@ -15,19 +15,19 @@ import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.DynamicLoot;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
-import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer;
+import net.minecraft.world.level.storage.loot.entries.UniformContainerBase;
 import net.minecraft.world.level.storage.loot.functions.CopyComponentsFunction;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
-import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePropertyCondition;
-import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
+import net.minecraft.world.level.storage.loot.predicates.MatchBlock;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProviders;
 
 import java.util.Set;
 import java.util.function.Consumer;
 
 /// Base block loot provider implementation providing helpers for loot tables with support for dropping camos.
 public abstract class FramedBlockLootSubProvider extends BlockLootSubProvider {
-    protected FramedBlockLootSubProvider(HolderLookup.Provider lookupProvider) {
-        super(Set.of(), FeatureFlags.VANILLA_SET, lookupProvider);
+    protected FramedBlockLootSubProvider(LootTableSubProvider.Context context) {
+        super(Set.of(), FeatureFlags.VANILLA_SET, context);
     }
 
     /// Generate a loot table dropping the given block with camo.
@@ -41,7 +41,7 @@ public abstract class FramedBlockLootSubProvider extends BlockLootSubProvider {
     ///
     /// @param block        The block to generate the table for
     /// @param itemModifier A consumer receiving the item-to-drop for further modification
-    protected final void dropSelfWithCamo(Block block, Consumer<LootPoolSingletonContainer.Builder<?>> itemModifier) {
+    protected final void dropSelfWithCamo(Block block, Consumer<UniformContainerBase.Builder<?>> itemModifier) {
         dropWithCamo(block, block, itemModifier);
     }
 
@@ -58,7 +58,7 @@ public abstract class FramedBlockLootSubProvider extends BlockLootSubProvider {
     /// @param block        The block to generate the table for
     /// @param drop         The block whose item to drop
     /// @param itemModifier A consumer receiving the item-to-drop for further modification
-    protected final void dropWithCamo(Block block, Block drop, Consumer<LootPoolSingletonContainer.Builder<?>> itemModifier) {
+    protected final void dropWithCamo(Block block, Block drop, Consumer<UniformContainerBase.Builder<?>> itemModifier) {
         add(block, funcBlock -> LootTable.lootTable()
                 .withPool(createDropWithCamoPool(funcBlock, drop, itemModifier))
                 .withPool(createDynamicDropPool(block))
@@ -90,12 +90,7 @@ public abstract class FramedBlockLootSubProvider extends BlockLootSubProvider {
     /// @param block The block to generate the table for
     protected final void dropDoorWithCamo(Block block) {
         dropWithCamo(block, block, builder -> builder.when(
-                LootItemBlockStatePropertyCondition
-                        .hasBlockStateProperties(block)
-                        .setProperties(StatePropertiesPredicate.Builder
-                                .properties()
-                                .hasProperty(DoorBlock.HALF, DoubleBlockHalf.LOWER)
-                        )
+                MatchBlock.blockMatches(this.blocks, block, StatePropertiesPredicate.Builder.properties().hasProperty(DoorBlock.HALF, DoubleBlockHalf.LOWER))
         ));
     }
 
@@ -113,15 +108,15 @@ public abstract class FramedBlockLootSubProvider extends BlockLootSubProvider {
     /// @param block        The block to generate the table for
     /// @param drop         The block whose item to drop
     /// @param itemModifier A consumer receiving the item-to-drop for further modification
-    protected final LootPool.Builder createDropWithCamoPool(Block block, Block drop, Consumer<LootPoolSingletonContainer.Builder<?>> itemModifier) {
-        LootPoolSingletonContainer.Builder<?> tableItem = LootItem.lootTableItem(drop)
+    protected final LootPool.Builder createDropWithCamoPool(Block block, Block drop, Consumer<UniformContainerBase.Builder<?>> itemModifier) {
+        UniformContainerBase.Builder<?> tableItem = LootItem.lootTableItem(drop)
                 .apply(CopyComponentsFunction.copyComponentsFromBlockEntity(LootContextParams.BLOCK_ENTITY)
                         .include(FramedConstants.Objects.DC_TYPE_CAMO_LIST.value())
                         .when(RetainCamoLootCondition.BUILDER)
                 );
         itemModifier.accept(tableItem);
         return applyExplosionCondition(block, LootPool.lootPool()
-                .setRolls(ConstantValue.exactly(1))
+                .setRolls(ContextIntProviders.exactly(1))
                 .add(applyExplosionDecay(block, tableItem))
         );
     }
@@ -131,7 +126,7 @@ public abstract class FramedBlockLootSubProvider extends BlockLootSubProvider {
     /// @param block The block to generate the pool for
     protected final LootPool.Builder createDynamicDropPool(Block block) {
         return applyExplosionCondition(block, LootPool.lootPool()
-                .setRolls(ConstantValue.exactly(1.0F))
+                .setRolls(ContextIntProviders.exactly(1))
                 .add(applyExplosionDecay(block, DynamicLoot.dynamicEntry(IFramedBlock.DYNAMIC_DROPS)))
         );
     }

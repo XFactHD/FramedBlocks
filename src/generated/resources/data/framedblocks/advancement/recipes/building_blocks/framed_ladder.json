@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "framedblocks:framed_ladder"
+        "recipes": "framedblocks:framed_ladder"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

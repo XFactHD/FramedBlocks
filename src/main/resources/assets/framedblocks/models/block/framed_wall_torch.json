@@ -8,7 +8,7 @@
 		{
 			"from": [-1, 11.5, 7],
 			"to": [1, 13.5, 9],
-			"shade": false,
+			"shade_direction_override": "up",
 			"rotation": {"angle": -22.5, "axis": "z", "origin": [0, 3.5, 8]},
 			"faces": {
 				"north": {"uv": [7, 6, 9, 8], "texture": "#top"},

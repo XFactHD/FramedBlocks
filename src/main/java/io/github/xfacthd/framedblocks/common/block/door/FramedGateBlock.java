@@ -41,7 +41,7 @@ public class FramedGateBlock extends FramedBlock {
     private final SoundEvent openSound;
 
     private FramedGateBlock(BlockType blockType, Properties props, SoundEvent closeSound, SoundEvent openSound) {
-        super(blockType, props.pushReaction(PushReaction.DESTROY));
+        super(blockType, props.pushReaction(PushReaction.POPPED));
         this.closeSound = closeSound;
         this.openSound = openSound;
         registerDefaultState(defaultBlockState()

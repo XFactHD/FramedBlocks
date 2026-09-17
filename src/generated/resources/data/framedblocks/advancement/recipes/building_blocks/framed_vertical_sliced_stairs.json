@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "framedblocks:framed_vertical_sliced_stairs"
+        "recipes": "framedblocks:framed_vertical_sliced_stairs"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

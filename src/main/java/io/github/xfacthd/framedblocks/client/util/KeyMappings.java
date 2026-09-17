@@ -1,5 +1,6 @@
 package io.github.xfacthd.framedblocks.client.util;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.logging.LogUtils;
 import io.github.xfacthd.framedblocks.api.block.blockentity.IFramedBlockEntity;
 import io.github.xfacthd.framedblocks.api.block.item.IFramedBlockItem;
@@ -18,16 +19,15 @@ import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import net.neoforged.neoforge.common.util.Lazy;
-import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 
 public final class KeyMappings {
     private static final Logger LOGGER = LogUtils.getLogger();
     public static final KeyMapping.Category KEY_CATEGORY = new KeyMapping.Category(Utils.id("main"));
-    public static final Lazy<KeyMapping> UPDATE_CULLING = makeKeyMapping("update_cull", -1);
-    public static final Lazy<KeyMapping> WIPE_CACHE = makeKeyMapping("wipe_cache", -1);
-    public static final Lazy<KeyMapping> TOGGLE_STATE_CYCLE = makeKeyMapping("toggle_state_cycle", GLFW.GLFW_KEY_Y);
-    public static final Lazy<KeyMapping> UNLOCK_STATE_CYCLE = makeKeyMapping("unlock_state_cycle", GLFW.GLFW_KEY_LEFT_CONTROL);
+    public static final Lazy<KeyMapping> UPDATE_CULLING = makeKeyMapping("update_cull", 0);
+    public static final Lazy<KeyMapping> WIPE_CACHE = makeKeyMapping("wipe_cache", 0);
+    public static final Lazy<KeyMapping> TOGGLE_STATE_CYCLE = makeKeyMapping("toggle_state_cycle", InputConstants.KEY_Y);
+    public static final Lazy<KeyMapping> UNLOCK_STATE_CYCLE = makeKeyMapping("unlock_state_cycle", InputConstants.KEY_LCONTROL);
 
     private static Lazy<KeyMapping> makeKeyMapping(String name, int key) {
         return Lazy.of(() -> new KeyMapping(FramedConstants.MOD_ID + ".key." + name, key, KEY_CATEGORY));

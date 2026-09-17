@@ -96,7 +96,7 @@ public class PoweredFramingSawMenu extends AbstractContainerMenu implements IFra
         progressSlot.set(blockEntity.getProgress());
         RecipeHolder<FramingSawRecipe> recipe = blockEntity.getSelectedRecipe();
         if (!Objects.equals(lastRecipe, recipe)) {
-            recipeIdxSlot.set(recipe == null ? -1 : cache.getRecipes().indexOf(recipe));
+            recipeIdxSlot.set(recipe == null ? -1 : cache.getRecipeIndex(recipe.value()));
             handleRecipeChange(recipe);
         }
         FramingSawRecipeMatchResult matchResult = blockEntity.getMatchResult();

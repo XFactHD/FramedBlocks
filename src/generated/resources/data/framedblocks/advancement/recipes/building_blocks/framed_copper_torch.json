@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "framedblocks:framed_copper_torch"
+        "recipes": "framedblocks:framed_copper_torch"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

@@ -11,7 +11,7 @@ public final class FramedPipelineModifiers {
 
     public static void onRegisterModifiers(RegisterPipelineModifiersEvent event) {
         event.register(FORCE_ENTITY_SOLID, (pipeline, name) -> {
-            if (pipeline == RenderPipelines.ENTITY_SOLID) {
+            if (pipeline == RenderPipelines.ENTITY_SOLID || pipeline == RenderPipelines.ENTITY_SOLID_Z_OFFSET_FORWARD) {
                 return pipeline.toBuilder()
                         .withLocation(name)
                         .withFragmentShader(Utils.id("core/entity_forced_solid"))

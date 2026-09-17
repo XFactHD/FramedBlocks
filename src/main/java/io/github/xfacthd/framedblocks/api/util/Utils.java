@@ -13,6 +13,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
+import net.minecraft.util.Prediction;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.util.TriState;
 import net.minecraft.world.Containers;
@@ -271,7 +272,7 @@ public final class Utils {
         boolean creative = player.hasInfiniteMaterials();
         if (!creative) {
             if (!player.getInventory().add(stack)) {
-                player.drop(stack, false);
+                player.drop(stack, false, Prediction.SERVER_ONLY);
             }
         } else if (!player.getInventory().contains(stack)) {
             player.getInventory().add(stack);

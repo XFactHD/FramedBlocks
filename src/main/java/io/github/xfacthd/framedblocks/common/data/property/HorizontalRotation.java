@@ -1,7 +1,7 @@
 package io.github.xfacthd.framedblocks.common.data.property;
 
 import com.google.common.base.Preconditions;
-import io.github.xfacthd.framedblocks.api.render.Quaternions;
+import com.mojang.math.Axis;
 import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.api.util.MathUtils;
 import io.github.xfacthd.framedblocks.api.util.RotationDirection;
@@ -17,6 +17,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.joml.Quaternionf;
 import org.joml.Quaternionfc;
 
 import java.util.List;
@@ -24,10 +25,10 @@ import java.util.Locale;
 import java.util.function.Function;
 
 public enum HorizontalRotation implements StringRepresentable, Printable {
-    UP   (_ -> Direction.UP,   Shapes.box( 0, .5, 0,  1,  1, 1), Shapes.box( 0, .5, 0, .5,  1, 1), Quaternions.ONE),
-    DOWN (_ -> Direction.DOWN, Shapes.box( 0,  0, 0,  1, .5, 1), Shapes.box(.5,  0, 0,  1, .5, 1), Quaternions.ZP_180),
-    RIGHT(Direction::getClockWise,        Shapes.box(.5,  0, 0,  1,  1, 1), Shapes.box(.5, .5, 0,  1,  1, 1), Quaternions.ZP_90),
-    LEFT (Direction::getCounterClockWise, Shapes.box( 0,  0, 0, .5,  1, 1), Shapes.box( 0,  0, 0, .5, .5, 1), Quaternions.ZN_90);
+    UP   (_ -> Direction.UP,   Shapes.box( 0, .5, 0,  1,  1, 1), Shapes.box( 0, .5, 0, .5,  1, 1), new Quaternionf()),
+    DOWN (_ -> Direction.DOWN, Shapes.box( 0,  0, 0,  1, .5, 1), Shapes.box(.5,  0, 0,  1, .5, 1), Axis.ZP.rotationDegrees(180)),
+    RIGHT(Direction::getClockWise,        Shapes.box(.5,  0, 0,  1,  1, 1), Shapes.box(.5, .5, 0,  1,  1, 1), Axis.ZP.rotationDegrees(90)),
+    LEFT (Direction::getCounterClockWise, Shapes.box( 0,  0, 0, .5,  1, 1), Shapes.box( 0,  0, 0, .5, .5, 1), Axis.ZN.rotationDegrees(90));
 
     public static final List<HorizontalRotation> CYCLE_ORDER = List.of(UP, RIGHT, DOWN, LEFT);
 

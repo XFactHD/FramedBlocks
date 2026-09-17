@@ -14,10 +14,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.client.gui.render.pip.PictureInPictureRenderer;
 import net.minecraft.client.renderer.SubmitNodeCollector;
-import net.minecraft.client.renderer.SubmitNodeStorage;
 import net.minecraft.client.renderer.block.BlockAndTintGetter;
 import net.minecraft.client.renderer.block.model.BlockDisplayContext;
 import net.minecraft.client.renderer.feature.FeatureRenderDispatcher;
+import net.minecraft.client.renderer.state.gui.GuiRenderState;
 import net.minecraft.client.renderer.state.gui.pip.PictureInPictureRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
@@ -29,16 +29,11 @@ import org.jspecify.annotations.Nullable;
 import java.util.function.Consumer;
 
 public final class BlockPictureInPictureRenderer extends PictureInPictureRenderer<BlockPictureInPictureRenderer.RenderState> {
-    private final FeatureRenderDispatcher featureRenderDispatcher;
     private RenderConfig lastConfig = RenderConfig.DEFAULT;
     @Nullable
     private BlockState lastSignState;
     private BlockPos lastSignPos = BlockPos.ZERO;
     private FramedBlockData lastBlockData = FramedBlockData.EMPTY;
-
-    public BlockPictureInPictureRenderer() {
-        this.featureRenderDispatcher = Minecraft.getInstance().gameRenderer.featureRenderDispatcher();
-    }
 
     @Override
     protected void renderToTexture(RenderState renderState, PoseStack poseStack, SubmitNodeCollector submitNodeCollector) {
@@ -47,15 +42,18 @@ public final class BlockPictureInPictureRenderer extends PictureInPictureRendere
 
         Minecraft.getInstance().gameRenderer.lighting().setupFor(config.lighting);
         renderState.modelRenderState.submitMultiLayer(poseStack, submitNodeCollector, LightCoordsUtil.FULL_BRIGHT, OverlayTexture.NO_OVERLAY, 0);
-        RenderSystem.pushPipelineModifier(FramedPipelineModifiers.FORCE_ENTITY_SOLID);
-        // TODO: this is stupid, there needs to be a better way
-        featureRenderDispatcher.renderAllFeatures((SubmitNodeStorage) submitNodeCollector);
-        RenderSystem.popPipelineModifier();
 
         lastConfig = config;
         lastSignState = renderState.state;
         lastSignPos = renderState.pos;
         lastBlockData = renderState.blockData;
+    }
+
+    @Override
+    public void prepare(RenderState renderState, GuiRenderState guiRenderState, FeatureRenderDispatcher featureRenderDispatcher, int guiScale) {
+        RenderSystem.pushPipelineModifier(FramedPipelineModifiers.FORCE_ENTITY_SOLID);
+        super.prepare(renderState, guiRenderState, featureRenderDispatcher, guiScale);
+        RenderSystem.popPipelineModifier();
     }
 
     @Override

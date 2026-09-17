@@ -20,7 +20,7 @@ import net.minecraft.client.resources.model.cuboid.CuboidFace;
 import net.minecraft.client.resources.model.cuboid.CuboidModelElement;
 import net.minecraft.client.resources.model.cuboid.FaceBakery;
 import net.minecraft.client.resources.model.geometry.BakedQuad;
-import net.minecraft.client.resources.model.geometry.QuadCollection;
+import net.minecraft.client.resources.model.geometry.ItemQuads;
 import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.Identifier;
@@ -31,6 +31,7 @@ import org.joml.Matrix4fc;
 import org.joml.Vector3f;
 import org.jspecify.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -44,7 +45,7 @@ public final class PaintRollerItemModel implements ItemModel {
     private final ModelRenderProperties properties;
     private final Matrix4fc transformation;
     private final ModelBaker baker;
-    private final Map<BlockOverlay, QuadCollection> rollerQuads = new Reference2ObjectOpenHashMap<>();
+    private final Map<BlockOverlay, OverlayQuads> rollerQuads = new Reference2ObjectOpenHashMap<>();
 
     public PaintRollerItemModel(ItemModel baseModel, ModelRenderProperties properties, Matrix4fc transformation, ModelBaker baker) {
         this.baseModel = baseModel;
@@ -70,9 +71,9 @@ public final class PaintRollerItemModel implements ItemModel {
             BlockOverlay overlay = Objects.requireNonNull(contents.overlay()).value();
             ItemStackRenderState.LayerRenderState layer = output.newLayer();
 
-            QuadCollection quads = rollerQuads.computeIfAbsent(overlay, this::bakeRollerOverlayQuads);
-            layer.prepareQuadList().addAll(quads.getAll());
-            if (quads.hasMaterialFlag(BakedQuad.FLAG_ANIMATED)) {
+            OverlayQuads quads = rollerQuads.computeIfAbsent(overlay, this::bakeRollerOverlayQuads);
+            layer.setQuads(quads.quads);
+            if (quads.animated) {
                 output.setAnimated();
             }
 
@@ -88,12 +89,13 @@ public final class PaintRollerItemModel implements ItemModel {
         }
     }
 
-    private QuadCollection bakeRollerOverlayQuads(BlockOverlay overlay) {
-        QuadCollection.Builder builder = new QuadCollection.Builder();
+    private OverlayQuads bakeRollerOverlayQuads(BlockOverlay overlay) {
+        List<BakedQuad> quads = new ArrayList<>();
         CuboidModelElement element = overlay.tintSource() != null ? ELEMENT_TINTED : ELEMENT_UNTINTED;
         Material.Baked material = baker.materials().get(new Material(overlay.solidTexture(), overlay.translucent()), () -> "");
+        boolean translucent = false;
         for (Map.Entry<Direction, CuboidFace> entry : element.faces().entrySet()) {
-            builder.addUnculledFace(FaceBakery.bakeQuad(
+            BakedQuad quad = FaceBakery.bakeQuad(
                     baker,
                     element.from(),
                     element.to(),
@@ -102,11 +104,15 @@ public final class PaintRollerItemModel implements ItemModel {
                     entry.getKey(),
                     BlockModelRotation.IDENTITY,
                     element.rotation(),
-                    true,
+                    null,
                     0
-            ));
+            );
+            quads.add(quad);
+            if ((quad.materialInfo().flags() & BakedQuad.FLAG_TRANSLUCENT) != 0) {
+                translucent = true;
+            }
         }
-        return builder.build();
+        return new OverlayQuads(new ItemQuads(quads, translucent ? List.of() : quads, translucent ? quads : List.of()), material.sprite().isAnimated());
     }
 
     private static CuboidModelElement makeCuboidElement(boolean tinted) {
@@ -123,6 +129,8 @@ public final class PaintRollerItemModel implements ItemModel {
                 )
         );
     }
+
+    private record OverlayQuads(ItemQuads quads, boolean animated) { }
 
     public record Unbaked(Identifier model) implements ItemModel.Unbaked {
         public static final Identifier ID = Utils.id("paint_roller");

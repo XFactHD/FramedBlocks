@@ -99,7 +99,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProvider;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.common.crafting.IngredientType;
 import net.neoforged.neoforge.fluids.SimpleFluidContent;
@@ -133,7 +133,7 @@ public final class FBContent {
     private static final DeferredParticleTypeRegister PARTICLE_TYPES = DeferredParticleTypeRegister.create(FramedConstants.MOD_ID);
     private static final DeferredMapCodecRegister<LootItemCondition> LOOT_CONDITIONS = mapCodecRegister(Registries.LOOT_CONDITION_TYPE);
     private static final DeferredMapCodecRegister<LootItemFunction> LOOT_FUNCTIONS = mapCodecRegister(Registries.LOOT_FUNCTION_TYPE);
-    private static final DeferredMapCodecRegister<NumberProvider> LOOT_NUMBER_PROVIDERS = mapCodecRegister(Registries.LOOT_NUMBER_PROVIDER_TYPE);
+    private static final DeferredMapCodecRegister<ContextIntProvider> CONTEXT_INT_PROVIDERS = mapCodecRegister(Registries.CONTEXT_INT_PROVIDER_TYPE);
     private static final DeferredAttachmentTypeRegister ATTACHMENT_TYPES = DeferredAttachmentTypeRegister.create(FramedConstants.MOD_ID);
     private static final DeferredRegister<CamoContainerFactory<?>> CAMO_CONTAINER_FACTORIES = register(FramedConstants.Registries.CAMO_CONTAINER_FACTORY_REGISTRY_KEY);
 
@@ -780,11 +780,11 @@ public final class FBContent {
     // endregion
 
     // region LootNumberProviderTypes
-    public static final DeferredMapCodec<BoardAdditionalItemCountNumberProvider> BOARD_ADDITIONAL_ITEM_COUNT_NUMBER_PROVIDER = LOOT_NUMBER_PROVIDERS.registerCodec(
-            "board", MapCodec.unit(BoardAdditionalItemCountNumberProvider.INSTANCE)
+    public static final DeferredMapCodec<BoardAdditionalItemCountNumberProvider> BOARD_ADDITIONAL_ITEM_COUNT_NUMBER_PROVIDER = CONTEXT_INT_PROVIDERS.registerCodec(
+            "board", MapCodec.unit(BoardAdditionalItemCountNumberProvider::new)
     );
-    public static final DeferredMapCodec<LayeredCubeAdditionalItemCountNumberProvider> LAYERED_CUBE_ADDITIONAL_ITEM_COUNT_NUMBER_PROVIDER = LOOT_NUMBER_PROVIDERS.registerCodec(
-            "layered_cube", MapCodec.unit(LayeredCubeAdditionalItemCountNumberProvider.INSTANCE)
+    public static final DeferredMapCodec<LayeredCubeAdditionalItemCountNumberProvider> LAYERED_CUBE_ADDITIONAL_ITEM_COUNT_NUMBER_PROVIDER = CONTEXT_INT_PROVIDERS.registerCodec(
+            "layered_cube", MapCodec.unit(LayeredCubeAdditionalItemCountNumberProvider::new)
     );
     // endregion
 
@@ -828,7 +828,7 @@ public final class FBContent {
         PARTICLE_TYPES.register(modBus);
         LOOT_CONDITIONS.register(modBus);
         LOOT_FUNCTIONS.register(modBus);
-        LOOT_NUMBER_PROVIDERS.register(modBus);
+        CONTEXT_INT_PROVIDERS.register(modBus);
         CAMO_CONTAINER_FACTORIES.register(modBus);
         ATTACHMENT_TYPES.register(modBus);
     }

@@ -30,6 +30,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.util.ProblemReporter;
 import net.minecraft.util.TriState;
 import net.minecraft.world.InteractionHand;
@@ -60,7 +61,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.EntityCollisionContext;
-import net.neoforged.neoforge.common.ItemAbilities;
 import net.neoforged.neoforge.common.world.AuxiliaryLightManager;
 import net.neoforged.neoforge.model.data.ModelData;
 import net.neoforged.neoforge.model.data.ModelProperty;
@@ -215,7 +215,7 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
         if (reinforced && stack.isCorrectToolForDrops(Blocks.OBSIDIAN.defaultBlockState())) {
             return removeReinforcement(player, stack, hand);
         }
-        if (emissive && stack.canPerformAction(ItemAbilities.AXE_SCRAPE)) {
+        if (emissive && stack.is(ItemTags.AXES)) {
             return removeEmissivity(player);
         }
         return InteractionResult.PASS;

@@ -2,7 +2,6 @@ package io.github.xfacthd.framedblocks.client.screen;
 
 import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.math.Axis;
-import io.github.xfacthd.framedblocks.api.render.Quaternions;
 import io.github.xfacthd.framedblocks.client.screen.pip.BlockPictureInPictureRenderer;
 import io.github.xfacthd.framedblocks.common.blockentity.special.FramedSignBlockEntity;
 import net.minecraft.client.Minecraft;
@@ -14,6 +13,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import net.minecraft.util.Util;
 import net.minecraft.world.level.block.SignBlock;
+import net.minecraft.world.level.block.entity.SignTextSlot;
 import org.joml.Vector3fc;
 
 public final class FramedSignScreen extends AbstractSignEditScreen {
@@ -25,8 +25,8 @@ public final class FramedSignScreen extends AbstractSignEditScreen {
             float yRot = 22.5F * i;
             transforms[i] = new BlockPictureInPictureRenderer.RenderConfig(
                     poseStack -> {
-                        poseStack.mulPose(Axis.YN.rotationDegrees(yRot));
-                        poseStack.mulPose(Quaternions.ZP_180);
+                        poseStack.rotateDegrees(Axis.YN, yRot);
+                        poseStack.rotateDegrees(Axis.ZP, 180F);
                         poseStack.translate(-.5, -.55, -.5);
                     },
                     Lighting.Entry.ITEMS_FLAT,
@@ -45,7 +45,7 @@ public final class FramedSignScreen extends AbstractSignEditScreen {
 
     private FramedSignScreen(
             FramedSignBlockEntity sign,
-            boolean isFrontText,
+            SignTextSlot textSlot,
             Component title,
             int signTopY,
             int signBottomY,
@@ -53,7 +53,7 @@ public final class FramedSignScreen extends AbstractSignEditScreen {
             float signYOffset,
             Vector3fc signTextScale
     ) {
-        super(sign, isFrontText, Minecraft.getInstance().isTextFilteringEnabled(), title);
+        super(sign, textSlot, Minecraft.getInstance().isTextFilteringEnabled(), title);
         this.signBlock = (SignBlock) sign.getBlockState().getBlock();
         this.signTopY = signTopY;
         this.signBottomY = signBottomY;
@@ -84,19 +84,19 @@ public final class FramedSignScreen extends AbstractSignEditScreen {
         return signTextScale;
     }
 
-    private static FramedSignScreen normal(FramedSignBlockEntity sign, boolean isFrontText, int signTopY, int signBottomY) {
-        return new FramedSignScreen(sign, isFrontText, TITLE_NORMAL, signTopY, signBottomY, 62.5F * 1.5F, 90, SignEditScreen.TEXT_SCALE);
+    private static FramedSignScreen normal(FramedSignBlockEntity sign, SignTextSlot textSlot, int signTopY, int signBottomY) {
+        return new FramedSignScreen(sign, textSlot, TITLE_NORMAL, signTopY, signBottomY, 62.5F * 1.5F, 90, SignEditScreen.TEXT_SCALE);
     }
 
-    public static FramedSignScreen standing(FramedSignBlockEntity sign, boolean isFrontText) {
-        return normal(sign, isFrontText, 66, 170);
+    public static FramedSignScreen standing(FramedSignBlockEntity sign, SignTextSlot textSlot) {
+        return normal(sign, textSlot, 66, 170);
     }
 
-    public static FramedSignScreen wall(FramedSignBlockEntity sign, boolean isFrontText) {
-        return normal(sign, isFrontText, 65, 139);
+    public static FramedSignScreen wall(FramedSignBlockEntity sign, SignTextSlot textSlot) {
+        return normal(sign, textSlot, 65, 139);
     }
 
-    public static FramedSignScreen hanging(FramedSignBlockEntity sign, boolean isFrontText) {
-        return new FramedSignScreen(sign, isFrontText, TITLE_HANGING, 70, 147, 62.5F * 1.15F, 125, HangingSignEditScreen.TEXT_SCALE);
+    public static FramedSignScreen hanging(FramedSignBlockEntity sign, SignTextSlot textSlot) {
+        return new FramedSignScreen(sign, textSlot, TITLE_HANGING, 70, 147, 62.5F * 1.15F, 125, HangingSignEditScreen.TEXT_SCALE);
     }
 }

@@ -16,6 +16,9 @@ import io.github.xfacthd.framedblocks.common.blockentity.special.FramedChestBloc
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import io.github.xfacthd.framedblocks.common.data.property.ChestState;
 import io.github.xfacthd.framedblocks.common.data.property.LatchType;
+import it.unimi.dsi.fastutil.longs.Long2LongLinkedOpenHashMap;
+import it.unimi.dsi.fastutil.longs.Long2LongMap;
+import it.unimi.dsi.fastutil.objects.ObjectIterator;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.block.model.BlockDisplayContext;
@@ -26,6 +29,7 @@ import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.SectionPos;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
@@ -41,6 +45,7 @@ import java.util.Objects;
 public final class FramedChestRenderer implements BlockEntityRenderer<FramedChestBlockEntity, FramedChestRenderState> {
     private static final Identifier BLOCKSTATE_LOC = Utils.id("framed_chest_lid");
     public static final StandaloneWrapperKey<FramedChestLidModel> WRAPPER_KEY = new StandaloneWrapperKey<>(FBContent.BLOCK_FRAMED_CHEST, BLOCKSTATE_LOC);
+    private static final Long2LongMap CLOSED_CHESTS = new Long2LongLinkedOpenHashMap();
 
     @Nullable
     private final FramedChestLidModel lidModel;
@@ -58,7 +63,7 @@ public final class FramedChestRenderer implements BlockEntityRenderer<FramedChes
         float xOff = renderState.rotOriginX;
         float zOff = renderState.rotOriginZ;
         poseStack.translate(xOff, 9F/16F, zOff);
-        poseStack.mulPose(renderState.lidAngle);
+        poseStack.rotateDegrees(renderState.lidHingeAxis, renderState.lidAngle);
         poseStack.translate(-xOff, -9F/16F, -zOff);
 
         renderState.modelRenderState.submitMultiLayer(poseStack, submitNodeCollector, renderState.lightCoords, OverlayTexture.NO_OVERLAY, 0);
@@ -94,17 +99,21 @@ public final class FramedChestRenderer implements BlockEntityRenderer<FramedChes
         var result = FramedChestBlock.combine(blockEntity, true);
         ChestState chestState = result.apply(FramedChestBlock.STATE_COMBINER);
         long lastChange = result.apply(FramedChestBlock.OPENNESS_COMBINER).orElse(0L);
-        float angle = calculateAngle(level, chestState, dir, lastChange, partialTick);
-        renderState.lidAngle = DirUtils.isX(dir) ? Axis.ZP.rotationDegrees(angle) : Axis.XN.rotationDegrees(angle);
+        renderState.lidHingeAxis = DirUtils.isX(dir) ? Axis.ZP : Axis.XN;
+        renderState.lidAngle = calculateAngle(level, chestState, dir, lastChange, partialTick);
 
         renderState.rotOriginX = DirUtils.isX(dir) ? (DirUtils.isPositive(dir) ? 1F/16F : 15F/16F) : 0;
         renderState.rotOriginZ = DirUtils.isZ(dir) ? (DirUtils.isPositive(dir) ? 1F/16F : 15F/16F) : 0;
     }
 
     private static float calculateAngle(Level level, ChestState chestState, Direction dir, long lastChange, float partialTicks) {
+        if (chestState == ChestState.CLOSED) {
+            return 0F;
+        }
+
         float diff = (float) (level.getGameTime() - lastChange) + partialTicks;
 
-        float factor = Mth.lerp(diff / 10F, 0, 1);
+        float factor = Mth.lerp(diff / FramedChestBlockEntity.ANIM_DURATION, 0, 1);
         if (chestState == ChestState.CLOSING) {
             factor = 1F - factor;
         }
@@ -127,12 +136,32 @@ public final class FramedChestRenderer implements BlockEntityRenderer<FramedChes
         }
 
         ChestState state = FramedChestBlock.combine(be, true).apply(FramedChestBlock.STATE_COMBINER);
-        return state != ChestState.CLOSED && BlockEntityRenderer.super.shouldRender(be, camera);
+        if (state == ChestState.CLOSED && !CLOSED_CHESTS.containsKey(be.getBlockPos().asLong())) {
+            return false;
+        }
+        return BlockEntityRenderer.super.shouldRender(be, camera);
     }
 
     @Override
     public AABB getRenderBoundingBox(FramedChestBlockEntity blockEntity) {
         BlockPos pos = blockEntity.getBlockPos();
         return new AABB(pos.getX() - .25, pos.getY() + .5625, pos.getZ() - .25, pos.getX() + 1.25, pos.getY() + 1.5, pos.getZ() + 1.25);
+    }
+
+    public static void addClosedChest(BlockPos pos, long createTimeNano) {
+        CLOSED_CHESTS.put(pos.asLong(), createTimeNano);
+    }
+
+    public static void removeClosedChests(long sectionPos, long compileStartNano) {
+        ObjectIterator<Long2LongMap.Entry> iterator = CLOSED_CHESTS.long2LongEntrySet().iterator();
+        while (iterator.hasNext()) {
+            Long2LongMap.Entry entry = iterator.next();
+            if (entry.getLongValue() > compileStartNano) {
+                break;
+            }
+            if (SectionPos.blockToSection(entry.getLongKey()) == sectionPos) {
+                iterator.remove();
+            }
+        }
     }
 }

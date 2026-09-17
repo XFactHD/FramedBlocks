@@ -2,7 +2,6 @@ package io.github.xfacthd.framedblocks.client.data.outline;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import io.github.xfacthd.framedblocks.api.render.Quaternions;
 import io.github.xfacthd.framedblocks.api.render.outline.OutlineRenderer;
 import io.github.xfacthd.framedblocks.common.blockentity.special.FramedCollapsibleBlockEntity;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
@@ -11,25 +10,22 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import org.joml.Quaternionf;
 import org.jspecify.annotations.Nullable;
 
 public final class CollapsibleBlockOutlineRenderer implements OutlineRenderer<CollapsibleBlockOutlineRenderer.OutlineData> {
-    private static final Quaternionf ROTATION = Axis.YN.rotationDegrees(180);
-
     @Override
     public void rotateMatrix(PoseStack poseStack, BlockState state) {
-        poseStack.mulPose(ROTATION);
+        poseStack.rotateDegrees(Axis.YN, 180);
 
         NullableDirection face = state.getValue(PropertyHolder.NULLABLE_FACE);
         if (face != NullableDirection.NONE) {
             Direction faceDir = face.toDirection().getOpposite();
 
             if (faceDir == Direction.UP) {
-                poseStack.mulPose(Quaternions.XP_180);
+                poseStack.rotateDegrees(Axis.XP, 180);
             } else if (faceDir != Direction.DOWN) {
-                poseStack.mulPose(OutlineRenderer.YN_DIR[faceDir.getOpposite().get2DDataValue()]);
-                poseStack.mulPose(Quaternions.XN_90);
+                poseStack.rotateDegrees(Axis.YN, faceDir.getOpposite().toYRot());
+                poseStack.rotateDegrees(Axis.XN, 90);
             }
         }
     }

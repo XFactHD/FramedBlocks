@@ -11,11 +11,9 @@ import net.minecraft.client.renderer.item.TrackingItemStackRenderState;
 import net.minecraft.client.renderer.state.gui.pip.PictureInPictureRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.LightCoordsUtil;
-import org.joml.Quaternionf;
 import org.jspecify.annotations.Nullable;
 
 public final class SpinningItemPictureInPictureRenderer extends PictureInPictureRenderer<SpinningItemPictureInPictureRenderer.RenderState> {
-    private static final Quaternionf ROT_22_5_XP = Axis.XP.rotationDegrees(22.5F);
 
     @Nullable
     private Object lastModelIdentity = null;
@@ -26,8 +24,8 @@ public final class SpinningItemPictureInPictureRenderer extends PictureInPicture
         TrackingItemStackRenderState renderState = state.renderState;
 
         poseStack.scale(1, -1, -1);
-        poseStack.mulPose(ROT_22_5_XP);
-        poseStack.mulPose(Axis.YP.rotationDegrees(state.rotY));
+        poseStack.rotateDegrees(Axis.XP, 22.5F);
+        poseStack.rotateDegrees(Axis.YP, state.rotY);
 
         Minecraft.getInstance().gameRenderer.lighting().setupFor(Lighting.Entry.ITEMS_FLAT);
         renderState.submit(poseStack, submitNodeCollector, LightCoordsUtil.FULL_BRIGHT, OverlayTexture.NO_OVERLAY, 0);

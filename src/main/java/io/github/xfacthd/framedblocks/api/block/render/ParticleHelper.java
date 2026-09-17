@@ -21,7 +21,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.Nullable;
 
@@ -134,15 +133,14 @@ public final class ParticleHelper {
         /// Spawn particles when a player hits a framed block.
         ///
         /// @param state   The state of the block
-        /// @param target  The position the block was hit at
+        /// @param pos    The position of the block
+        /// @param side   The face on which the block has hit
         /// @param camo    The camo applied to the block
         /// @param overlay The block overlay applied to the block
         /// @param engine  The particle engine to use for spawning the particles
         @SuppressWarnings({ "rawtypes", "unchecked" })
-        public static void addHitEffects(BlockState state, Level level, BlockHitResult target, CamoContainer<?, ?> camo, @Nullable Holder<BlockOverlay> overlay, ParticleEngine engine) {
+        public static void addHitEffects(BlockState state, Level level, BlockPos pos, Direction side, CamoContainer<?, ?> camo, @Nullable Holder<BlockOverlay> overlay, ParticleEngine engine) {
             ClientLevel clientLevel = (ClientLevel) level;
-            BlockPos pos = target.getBlockPos();
-            Direction side = target.getDirection();
 
             double bx = pos.getX();
             double by = pos.getY();

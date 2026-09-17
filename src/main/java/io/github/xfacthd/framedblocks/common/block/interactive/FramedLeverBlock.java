@@ -31,7 +31,7 @@ import java.util.List;
 
 public class FramedLeverBlock extends LeverBlock implements IFramedBlockInternal {
     public FramedLeverBlock(Properties props) {
-        super(props.pushReaction(PushReaction.DESTROY)
+        super(props.pushReaction(PushReaction.POPPED)
                 .noCollision()
                 .strength(.5F)
                 .noOcclusion()

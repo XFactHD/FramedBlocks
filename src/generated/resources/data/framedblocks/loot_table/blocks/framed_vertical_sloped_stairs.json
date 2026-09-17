@@ -2,54 +2,46 @@
   "type": "minecraft:block",
   "pools": [
     {
-      "conditions": [
-        {
-          "condition": "minecraft:survives_explosion"
-        }
-      ],
+      "condition": {
+        "type": "minecraft:survives_explosion"
+      },
       "entries": [
         {
           "type": "minecraft:item",
-          "functions": [
+          "modifier": [
             {
-              "conditions": [
-                {
-                  "condition": "framedblocks:retain_camo"
-                }
-              ],
-              "function": "minecraft:copy_components",
+              "type": "minecraft:copy_components",
+              "condition": {
+                "type": "framedblocks:retain_camo"
+              },
               "include": [
                 "framedblocks:camo_list"
               ],
               "source": "block_entity"
             },
             {
-              "function": "minecraft:explosion_decay"
+              "type": "minecraft:explosion_decay"
             }
           ],
           "name": "framedblocks:framed_vertical_sloped_stairs"
         }
       ],
-      "rolls": 1.0
+      "rolls": 1
     },
     {
-      "conditions": [
-        {
-          "condition": "minecraft:survives_explosion"
-        }
-      ],
+      "condition": {
+        "type": "minecraft:survives_explosion"
+      },
       "entries": [
         {
           "type": "minecraft:dynamic",
-          "functions": [
-            {
-              "function": "minecraft:explosion_decay"
-            }
-          ],
+          "modifier": {
+            "type": "minecraft:explosion_decay"
+          },
           "name": "framedblocks:dynamic_drops"
         }
       ],
-      "rolls": 1.0
+      "rolls": 1
     }
   ],
   "random_sequence": "framedblocks:blocks/framed_vertical_sloped_stairs"

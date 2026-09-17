@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "framedblocks:framed_lantern"
+        "recipes": "framedblocks:framed_lantern"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

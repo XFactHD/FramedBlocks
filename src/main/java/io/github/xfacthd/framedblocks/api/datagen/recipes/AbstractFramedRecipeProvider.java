@@ -2,22 +2,17 @@ package io.github.xfacthd.framedblocks.api.datagen.recipes;
 
 import io.github.xfacthd.framedblocks.api.datagen.recipes.builders.ExtShapedRecipeBuilder;
 import io.github.xfacthd.framedblocks.api.datagen.recipes.builders.ExtShapelessRecipeBuilder;
-import net.minecraft.core.HolderGetter;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.core.registries.Registries;
+import net.minecraft.advancements.Advancement;
 import net.minecraft.data.recipes.RecipeCategory;
-import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
-import net.minecraft.world.item.Item;
+import net.minecraft.data.worldgen.BootstrapContext;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.ItemLike;
 
 /// Base recipe provider implementation providing factory methods for extended crafting table recipe builders.
 public abstract class AbstractFramedRecipeProvider extends RecipeProvider {
-    protected final HolderGetter<Item> itemRegistry;
-
-    protected AbstractFramedRecipeProvider(HolderLookup.Provider registries, RecipeOutput output) {
-        super(registries, output);
-        this.itemRegistry = registries.lookupOrThrow(Registries.ITEM);
+    protected AbstractFramedRecipeProvider(BootstrapContext<Recipe<?>> recipeOutput, BootstrapContext<Advancement> advancementOutput) {
+        super(recipeOutput, advancementOutput);
     }
 
     /// Creates a shaped recipe builder with one of the given output in the `building blocks` category.
@@ -57,7 +52,7 @@ public abstract class AbstractFramedRecipeProvider extends RecipeProvider {
     /// @param count    The amount of the recipe result
     /// @return a new shaped recipe builder
     protected final ExtShapedRecipeBuilder shapedRecipe(RecipeCategory category, ItemLike output, int count) {
-        return new ExtShapedRecipeBuilder(this, itemRegistry, category, output, count);
+        return new ExtShapedRecipeBuilder(this, items, category, output, count);
     }
 
     /// Creates a shapeless recipe builder with one of the given output in the `building blocks` category.
@@ -97,6 +92,6 @@ public abstract class AbstractFramedRecipeProvider extends RecipeProvider {
     /// @param count    The amount of the recipe result
     /// @return a new shapeless recipe builder
     protected final ExtShapelessRecipeBuilder shapelessRecipe(RecipeCategory category, ItemLike output, int count) {
-        return new ExtShapelessRecipeBuilder(this, itemRegistry, category, output, count);
+        return new ExtShapelessRecipeBuilder(this, items, category, output, count);
     }
 }

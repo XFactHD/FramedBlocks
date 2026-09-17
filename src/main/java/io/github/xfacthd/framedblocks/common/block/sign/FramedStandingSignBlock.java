@@ -15,7 +15,7 @@ import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.block.IFramedBlockInternal;
 import io.github.xfacthd.framedblocks.common.blockentity.special.FramedSignBlockEntity;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
-import io.github.xfacthd.framedblocks.common.item.block.FramedSignItem;
+import io.github.xfacthd.framedblocks.common.item.block.FramedStandingAndWallBlockItem;
 import io.github.xfacthd.framedblocks.common.net.payload.clientbound.ClientboundOpenSignScreenPayload;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -37,6 +37,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.SignBlockEntity;
+import net.minecraft.world.level.block.entity.SignTextSlot;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -117,9 +118,9 @@ public final class FramedStandingSignBlock extends StandingSignBlock implements 
     }
 
     @Override
-    public void openTextEdit(Player player, SignBlockEntity signEntity, boolean isFrontText) {
+    public void openTextEdit(Player player, SignBlockEntity signEntity, SignTextSlot slot) {
         signEntity.setAllowedPlayerEditor(player.getUUID());
-        PacketDistributor.sendToPlayer((ServerPlayer) player, new ClientboundOpenSignScreenPayload(signEntity.getBlockPos(), isFrontText));
+        PacketDistributor.sendToPlayer((ServerPlayer) player, new ClientboundOpenSignScreenPayload(signEntity.getBlockPos(), slot));
     }
 
     @Override
@@ -145,7 +146,7 @@ public final class FramedStandingSignBlock extends StandingSignBlock implements 
 
     @Override
     public IFramedBlockItem createBlockItem(Item.Properties props) {
-        return new FramedSignItem(props);
+        return new FramedStandingAndWallBlockItem(this, FBContent.BLOCK_FRAMED_WALL_SIGN.value(), Direction.DOWN, props.stacksTo(16).signText());
     }
 
     @Override

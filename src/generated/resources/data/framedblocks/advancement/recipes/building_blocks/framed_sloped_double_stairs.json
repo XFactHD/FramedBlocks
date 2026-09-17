@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "framedblocks:framed_sloped_double_stairs"
+        "recipes": "framedblocks:framed_sloped_double_stairs"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

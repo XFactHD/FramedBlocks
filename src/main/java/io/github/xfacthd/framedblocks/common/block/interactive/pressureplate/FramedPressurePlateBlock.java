@@ -88,7 +88,7 @@ public class FramedPressurePlateBlock extends PressurePlateBlock implements IFra
             if (!level.isClientSide()) {
                 BlockUtils.wrapInStateCopy(level, pos, player, ItemStack.EMPTY, false, false, () -> {
                     BlockState newState = getCounterpart().defaultBlockState();
-                    newState = copyProperty(state, newState, FramedProperties.COPYCAT_STYLE);
+                    newState = BlockStateBase.copyProperty(state, newState, FramedProperties.COPYCAT_STYLE);
                     level.setBlockAndUpdate(pos, newState);
                 });
             }

@@ -30,7 +30,7 @@ public final class RuntimeMaterialBaker extends MaterialBaker implements Materia
     }
 
     private RuntimeMaterialBaker(SpriteLoader.Preparations blockAtlas) {
-        super(blockAtlas.missing());
+        super(blockAtlas, blockAtlas);
         this.blockAtlas = blockAtlas;
     }
 

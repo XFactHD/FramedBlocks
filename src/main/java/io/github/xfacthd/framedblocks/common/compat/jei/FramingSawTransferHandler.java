@@ -8,6 +8,7 @@ import io.github.xfacthd.framedblocks.common.menu.IFramingSawMenu;
 import io.github.xfacthd.framedblocks.common.menu.PoweredFramingSawMenu;
 import io.github.xfacthd.framedblocks.common.net.payload.serverbound.ServerboundSelectFramingSawRecipePayload;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
+import mezz.jei.api.recipe.transfer.IRecipeTransferContext;
 import mezz.jei.api.recipe.transfer.IRecipeTransferError;
 import mezz.jei.api.recipe.transfer.IRecipeTransferHandler;
 import mezz.jei.api.recipe.transfer.IRecipeTransferHandlerHelper;
@@ -16,16 +17,12 @@ import mezz.jei.api.recipe.types.IRecipeType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
-import net.minecraft.world.item.crafting.RecipeHolder;
 import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import org.jspecify.annotations.Nullable;
 
-import java.util.List;
 import java.util.Optional;
 
-public abstract sealed class FramingSawTransferHandler<C extends AbstractContainerMenu & IFramingSawMenu>
-        implements IRecipeTransferHandler<C, FramingSawRecipe>
-        permits FramingSawTransferHandler.FramingSaw, FramingSawTransferHandler.PoweredFramingSaw {
+public abstract sealed class FramingSawTransferHandler<C extends AbstractContainerMenu & IFramingSawMenu> implements IRecipeTransferHandler<C, FramingSawRecipe> {
     private final IRecipeTransferHandlerHelper transferHelper;
     private final IRecipeTransferInfo<C, FramingSawRecipe> transferInfo;
     private final IRecipeTransferHandler<C, FramingSawRecipe> wrappedHandler;
@@ -60,22 +57,22 @@ public abstract sealed class FramingSawTransferHandler<C extends AbstractContain
     }
 
     @Override
+    @SuppressWarnings("removal")
     public @Nullable IRecipeTransferError transferRecipe(C menu, FramingSawRecipe recipe, IRecipeSlotsView recipeSlots, Player player, boolean maxTransfer, boolean doTransfer) {
-        int idx = -1;
-        List<RecipeHolder<FramingSawRecipe>> recipes = FramingSawRecipeCache.get(true).getRecipes();
-        for (int i = 0; i < recipes.size(); i++) {
-            if (recipes.get(i).value() == recipe) {
-                idx = i;
-                break;
-            }
-        }
+        return null;
+    }
+
+    @Override
+    public @Nullable IRecipeTransferError transferRecipe(IRecipeTransferContext<FramingSawRecipe, C> context, boolean doTransfer) {
+        int idx = FramingSawRecipeCache.get(true).getRecipeIndex(context.getRecipe());
+        C menu = context.getContainer();
         if (idx != -1 && menu.isValidRecipeIndex(idx)) {
-            IRecipeTransferError error = wrappedHandler.transferRecipe(menu, recipe, recipeSlots, player, maxTransfer, doTransfer);
+            IRecipeTransferError error = wrappedHandler.transferRecipe(context, doTransfer);
             if (error != null) {
                 return error;
             }
 
-            if (doTransfer && menu.clickMenuButton(player, idx)) {
+            if (doTransfer && menu.clickMenuButton(context.getPlayer(), idx)) {
                 ClientPacketDistributor.sendToServer(new ServerboundSelectFramingSawRecipePayload(menu.containerId, idx));
             }
             return null;

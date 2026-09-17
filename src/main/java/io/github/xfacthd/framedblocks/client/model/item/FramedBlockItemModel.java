@@ -40,6 +40,7 @@ import net.minecraft.client.renderer.item.ItemStackRenderState;
 import net.minecraft.client.renderer.item.ModelRenderProperties;
 import net.minecraft.client.resources.model.ModelBaker;
 import net.minecraft.client.resources.model.ResolvedModel;
+import net.minecraft.client.resources.model.geometry.ItemQuads;
 import net.minecraft.client.resources.model.geometry.QuadCollection;
 import net.minecraft.client.resources.model.sprite.TextureSlots;
 import net.minecraft.core.BlockPos;
@@ -105,7 +106,7 @@ public final class FramedBlockItemModel implements ItemModel, CachingModel {
         this.errorModel = errorModel;
         this.extents = Lazy.of(() -> {
             ModelEntry modelEntry = getOrCreateModelEntry(ItemStack.EMPTY, CamoList.EMPTY, null);
-            return CuboidItemModelWrapper.computeExtents(modelEntry.quads);
+            return CuboidItemModelWrapper.computeExtents(modelEntry.quads.all());
         });
         CachingModel.register(this);
     }
@@ -151,7 +152,7 @@ public final class FramedBlockItemModel implements ItemModel, CachingModel {
 
         ItemStackRenderState.LayerRenderState layer = renderState.newLayer();
         layer.setExtents(extents);
-        layer.prepareQuadList().addAll(modelEntry.quads);
+        layer.setQuads(modelEntry.quads);
         modelEntry.properties.applyToLayer(layer, ctx);
         if (!modelEntry.tints.isEmpty()) {
             layer.tintLayers().addAll(modelEntry.tints);
@@ -168,6 +169,8 @@ public final class FramedBlockItemModel implements ItemModel, CachingModel {
             BlockAndTintGetter level = new FreestandingBlockRenderFakeLevel.Simple(state, data);
 
             ArrayList<BakedQuad> allQuads = new ArrayList<>();
+            ArrayList<BakedQuad> solidQuads = new ArrayList<>();
+            ArrayList<BakedQuad> translucentQuads = new ArrayList<>();
             boolean animated = false;
 
             RANDOM.setSeed(42);
@@ -175,8 +178,15 @@ public final class FramedBlockItemModel implements ItemModel, CachingModel {
             for (BlockStateModelPart modelPart : partScratchList) {
                 animated |= (modelPart.materialFlags() & BakedQuad.FLAG_ANIMATED) != 0;
                 for (Direction face : DIRECTIONS) {
-                    RANDOM.setSeed(42);
-                    Utils.copyAll(modelPart.getQuads(face), allQuads);
+                    List<BakedQuad> faceQuads = modelPart.getQuads(face);
+                    Utils.copyAll(faceQuads, allQuads);
+                    for (BakedQuad quad : faceQuads) {
+                        if (quad.materialInfo().itemRenderType().hasBlending()) {
+                            translucentQuads.add(quad);
+                        } else {
+                            solidQuads.add(quad);
+                        }
+                    }
                 }
             }
             partScratchList.clear();
@@ -193,8 +203,9 @@ public final class FramedBlockItemModel implements ItemModel, CachingModel {
             }
             dataProvider.appendTintValues(stack, tints);
 
+            ItemQuads itemQuads = new ItemQuads(allQuads, translucentQuads.isEmpty() ? allQuads : solidQuads, solidQuads.isEmpty() ? allQuads : translucentQuads);
             ModelRenderProperties renderProps = new ModelRenderProperties(true, model.particleMaterial(level, BlockPos.ZERO, state), itemTransforms);
-            modelEntry = new ModelEntry(allQuads, renderProps, camos, tints.isEmpty() ? IntLists.emptyList() : tints, overlay, userData, animated);
+            modelEntry = new ModelEntry(itemQuads, renderProps, camos, tints.isEmpty() ? IntLists.emptyList() : tints, overlay, userData, animated);
             itemModelCache.put(cacheKey, modelEntry);
         }
         return modelEntry;
@@ -212,7 +223,7 @@ public final class FramedBlockItemModel implements ItemModel, CachingModel {
     private record CompoundCacheKey(CamoList camos, @Nullable Holder<BlockOverlay> overlay, @Nullable Object userData) { }
 
     private record ModelEntry(
-            List<BakedQuad> quads,
+            ItemQuads quads,
             ModelRenderProperties properties,
             CamoList camos,
             IntList tints,

@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "framedblocks:framed_flat_elev_inner_double_slope_slab_corner"
+        "recipes": "framedblocks:framed_flat_elev_inner_double_slope_slab_corner"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

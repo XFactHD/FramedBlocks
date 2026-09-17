@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "framedblocks:framed_inner_corner_slope"
+        "recipes": "framedblocks:framed_inner_corner_slope"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

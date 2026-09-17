@@ -30,6 +30,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.SignBlockEntity;
+import net.minecraft.world.level.block.entity.SignTextSlot;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.WoodType;
@@ -106,9 +107,9 @@ public final class FramedWallSignBlock extends WallSignBlock implements IFramedB
     }
 
     @Override
-    public void openTextEdit(Player player, SignBlockEntity signEntity, boolean isFrontText) {
+    public void openTextEdit(Player player, SignBlockEntity signEntity, SignTextSlot slot) {
         signEntity.setAllowedPlayerEditor(player.getUUID());
-        PacketDistributor.sendToPlayer((ServerPlayer) player, new ClientboundOpenSignScreenPayload(signEntity.getBlockPos(), isFrontText));
+        PacketDistributor.sendToPlayer((ServerPlayer) player, new ClientboundOpenSignScreenPayload(signEntity.getBlockPos(), slot));
     }
 
     @Override
