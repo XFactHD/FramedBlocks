@@ -7,6 +7,7 @@ import io.github.xfacthd.framedblocks.api.block.item.IFramedBlockItem;
 import io.github.xfacthd.framedblocks.api.block.item.placement.PropertyLabels;
 import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
 import io.github.xfacthd.framedblocks.api.blueprint.BlueprintBlockPlaceContext;
+import io.github.xfacthd.framedblocks.api.compat.jade.JadeDisplayConfig;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.util.MathUtils;
 import io.github.xfacthd.framedblocks.api.util.RotationDirection;
@@ -112,7 +113,7 @@ public class FramedSlabBlock extends FramedBlock implements CopycatStyleBlock.St
     }
 
     @Override
-    public BlockState getJadeRenderState(BlockState state) {
-        return defaultBlockState();
+    public JadeDisplayConfig getJadeDisplayConfig() {
+        return JadeDisplayConfig.defaultState(this);
     }
 }

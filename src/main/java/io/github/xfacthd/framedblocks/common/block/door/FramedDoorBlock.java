@@ -6,6 +6,7 @@ import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import io.github.xfacthd.framedblocks.api.block.item.placement.PropertyLabels;
 import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
+import io.github.xfacthd.framedblocks.api.compat.jade.JadeDisplayConfig;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.model.wrapping.statemerger.StateMerger;
 import io.github.xfacthd.framedblocks.api.model.wrapping.statemerger.StateMergers;
@@ -171,13 +172,8 @@ public class FramedDoorBlock extends DoorBlock implements IFramedBlockInternal {
     }
 
     @Override
-    public boolean shouldRenderAsBlockInJadeTooltip() {
-        return false;
-    }
-
-    @Override
-    public BlockState getJadeRenderState(BlockState state) {
-        return state;
+    public JadeDisplayConfig getJadeDisplayConfig() {
+        return JadeDisplayConfig.asItem(this);
     }
 
     public static FramedDoorBlock wood(Properties props) {

@@ -4,6 +4,7 @@ import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.CopycatStyleBlock;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
+import io.github.xfacthd.framedblocks.api.compat.jade.JadeDisplayConfig;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.model.wrapping.statemerger.StateMerger;
 import io.github.xfacthd.framedblocks.api.model.wrapping.statemerger.StateMergers;
@@ -50,7 +51,7 @@ public class FramedButtonBlock extends ButtonBlock implements IFramedBlockIntern
                 .sound(SoundType.WOOD)
                 .noOcclusion()
         );
-        this.jadeScale = (type == BlockType.FRAMED_BUTTON || type == BlockType.FRAMED_STONE_BUTTON) ? 2F : 1F;
+        this.jadeScale = (type == BlockType.FRAMED_BUTTON || type == BlockType.FRAMED_STONE_BUTTON) ? 1.75F : 1F;
         BlockUtils.configureStandardProperties(this);
     }
 
@@ -119,18 +120,11 @@ public class FramedButtonBlock extends ButtonBlock implements IFramedBlockIntern
     }
 
     @Override
-    public Class<? extends Block> getJadeTargetClass() {
-        return FramedButtonBlock.class;
-    }
-
-    @Override
-    public BlockState getJadeRenderState(BlockState state) {
-        return defaultBlockState().setValue(FACE, AttachFace.FLOOR);
-    }
-
-    @Override
-    public float getJadeRenderScale(BlockState state) {
-        return jadeScale;
+    public JadeDisplayConfig getJadeDisplayConfig() {
+        return JadeDisplayConfig.fixedState(this, defaultBlockState().setValue(FACE, AttachFace.FLOOR))
+                .withTargetClass(FramedButtonBlock.class)
+                .withScale(jadeScale)
+                .withOffset(0F, .4F, 0F);
     }
 
     public static FramedButtonBlock wood(Properties props) {

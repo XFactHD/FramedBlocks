@@ -9,6 +9,7 @@ import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockTopIntera
 import io.github.xfacthd.framedblocks.api.block.doubleblock.SolidityCheck;
 import io.github.xfacthd.framedblocks.api.block.item.placement.PropertyLabels;
 import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
+import io.github.xfacthd.framedblocks.api.compat.jade.JadeDisplayConfig;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.util.RotationDirection;
 import io.github.xfacthd.framedblocks.api.util.text.ValuePrinters;
@@ -138,7 +139,7 @@ public class FramedMasonryCornerBlock extends FramedDoubleBlock {
     }
 
     @Override
-    public BlockState getJadeRenderState(BlockState state) {
-        return defaultBlockState();
+    public JadeDisplayConfig getJadeDisplayConfig() {
+        return JadeDisplayConfig.defaultState(this);
     }
 }

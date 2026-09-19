@@ -6,6 +6,7 @@ import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.api.block.item.IFramedBlockItem;
 import io.github.xfacthd.framedblocks.api.block.item.placement.PropertyLabels;
 import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
+import io.github.xfacthd.framedblocks.api.compat.jade.JadeDisplayConfig;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.api.util.RotationDirection;
@@ -161,7 +162,7 @@ public final class FramedCeilingHangingSignBlock extends CeilingHangingSignBlock
     }
 
     @Override
-    public BlockState getJadeRenderState(BlockState state) {
-        return defaultBlockState();
+    public JadeDisplayConfig getJadeDisplayConfig() {
+        return JadeDisplayConfig.defaultState(this);
     }
 }

@@ -11,6 +11,7 @@ import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockParts;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockTopInteractionMode;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.SolidityCheck;
 import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
+import io.github.xfacthd.framedblocks.api.compat.jade.JadeDisplayConfig;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.util.RotationDirection;
 import io.github.xfacthd.framedblocks.common.FBContent;
@@ -141,8 +142,8 @@ public class FramedVerticalDoubleHalfSlopeBlock extends FramedDoubleBlock implem
     }
 
     @Override
-    public BlockState getJadeRenderState(BlockState state) {
-        return ((IFramedBlock) FBContent.BLOCK_FRAMED_DOUBLE_HALF_SLOPE.value()).getJadeRenderState(state);
+    public JadeDisplayConfig getJadeDisplayConfig() {
+        return ((IFramedBlock) FBContent.BLOCK_FRAMED_DOUBLE_HALF_SLOPE.value()).getJadeDisplayConfig().withTargetClass(this);
     }
 
     @Override

@@ -75,9 +75,4 @@ public final class FramedBannerBlock extends AbstractFramedBannerBlock {
                 .property(BlockStateProperties.ROTATION_16, PropertyLabels.ROTATION)
                 .build();
     }
-
-    @Override
-    public BlockState getJadeRenderState(BlockState state) {
-        return defaultBlockState();
-    }
 }

@@ -35,7 +35,7 @@ public final class SelfTest {
         DoubleBlockCamoConnectionConsistency.checkConnectionConsistency(reporter, blocks);
         DoubleBlockSolidSideConsistency.checkSolidSideConsistency(reporter, blocks);
         RotateMirrorErrors.checkRotateMirrorErrors(reporter, blocks);
-        JadeRenderStateErrors.checkJadeRenderStateErrors(reporter, blocks);
+        JadeRenderStateErrors.checkJadeDisplayConfigErrors(reporter, blocks);
         BlockEntityPresence.checkBlockEntityTypePresent(reporter, blocks);
         DoubleBlockPartModelStateConsistency.checkBlockPartConsistency(reporter, blocks);
         BlueprintCopiedProperties.checkHandlesDefaultProperties(reporter, blocks);

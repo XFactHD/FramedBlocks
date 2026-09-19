@@ -6,6 +6,7 @@ import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
 import io.github.xfacthd.framedblocks.api.block.SlopeToggleBlock;
 import io.github.xfacthd.framedblocks.api.block.item.placement.PropertyLabels;
 import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
+import io.github.xfacthd.framedblocks.api.compat.jade.JadeDisplayConfig;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.api.util.RotationDirection;
@@ -104,7 +105,7 @@ public class FramedVerticalSlopedStairsBlock extends FramedBlock implements Slop
     }
 
     @Override
-    public BlockState getJadeRenderState(BlockState state) {
-        return getItemModelSource();
+    public JadeDisplayConfig getJadeDisplayConfig() {
+        return JadeDisplayConfig.fixedState(this, getItemModelSource());
     }
 }

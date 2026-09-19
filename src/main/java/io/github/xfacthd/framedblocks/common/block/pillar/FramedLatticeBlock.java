@@ -4,6 +4,7 @@ import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
 import io.github.xfacthd.framedblocks.api.block.ShapeLockableBlock;
 import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
+import io.github.xfacthd.framedblocks.api.compat.jade.JadeDisplayConfig;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.api.util.RotationDirection;
@@ -174,11 +175,12 @@ public class FramedLatticeBlock extends FramedBlock implements PillarLikeBlock, 
     }
 
     @Override
-    public BlockState getJadeRenderState(BlockState state) {
-        return defaultBlockState()
+    public JadeDisplayConfig getJadeDisplayConfig() {
+        BlockState state = defaultBlockState()
                 .setValue(FramedProperties.X_AXIS, true)
                 .setValue(FramedProperties.Y_AXIS, true)
                 .setValue(FramedProperties.Z_AXIS, true);
+        return JadeDisplayConfig.fixedState(this, state);
     }
 
     @Override

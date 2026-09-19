@@ -5,6 +5,7 @@ import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
 import io.github.xfacthd.framedblocks.api.block.render.ParticleHelper;
 import io.github.xfacthd.framedblocks.api.camo.CamoContainer;
 import io.github.xfacthd.framedblocks.api.camo.block.SimpleBlockCamoContainer;
+import io.github.xfacthd.framedblocks.api.compat.jade.JadeDisplayConfig;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.api.util.Utils;
@@ -174,8 +175,8 @@ public class FramedOneWayWindowBlock extends FramedBlock {
     }
 
     @Override
-    public BlockState getJadeRenderState(BlockState state) {
-        return state.setValue(PropertyHolder.NULLABLE_FACE, NullableDirection.EAST);
+    public JadeDisplayConfig getJadeDisplayConfig() {
+        return JadeDisplayConfig.fixedState(this, defaultBlockState().setValue(PropertyHolder.NULLABLE_FACE, NullableDirection.EAST));
     }
 
     public static boolean isOwnedBy(BlockGetter level, BlockPos pos, Player player) {

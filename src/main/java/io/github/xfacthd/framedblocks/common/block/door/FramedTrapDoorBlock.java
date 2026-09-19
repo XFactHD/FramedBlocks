@@ -5,6 +5,7 @@ import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.api.block.item.placement.PropertyLabels;
 import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
+import io.github.xfacthd.framedblocks.api.compat.jade.JadeDisplayConfig;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.util.FramedConstants;
 import io.github.xfacthd.framedblocks.common.block.IFramedBlockInternal;
@@ -165,8 +166,8 @@ public class FramedTrapDoorBlock extends TrapDoorBlock implements IFramedBlockIn
     }
 
     @Override
-    public BlockState getJadeRenderState(BlockState state) {
-        return defaultBlockState();
+    public JadeDisplayConfig getJadeDisplayConfig() {
+        return JadeDisplayConfig.defaultState(this);
     }
 
     public static FramedTrapDoorBlock wood(Properties props) {

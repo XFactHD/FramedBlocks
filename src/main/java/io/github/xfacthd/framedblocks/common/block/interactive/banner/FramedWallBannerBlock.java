@@ -72,9 +72,4 @@ public final class FramedWallBannerBlock extends AbstractFramedBannerBlock {
     public TriState shouldNotifyBlockEntityOfWrenchRotation(WrenchRotationMode mode, BlockState oldState, BlockState newState) {
         return TriState.DEFAULT;
     }
-
-    @Override
-    public BlockState getJadeRenderState(BlockState state) {
-        return defaultBlockState();
-    }
 }

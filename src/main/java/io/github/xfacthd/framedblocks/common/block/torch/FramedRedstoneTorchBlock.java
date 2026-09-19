@@ -4,6 +4,7 @@ import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.item.IFramedBlockItem;
 import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
+import io.github.xfacthd.framedblocks.api.compat.jade.JadeDisplayConfig;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.block.IFramedBlockInternal;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
@@ -105,12 +106,9 @@ public class FramedRedstoneTorchBlock extends RedstoneTorchBlock implements IFra
     }
 
     @Override
-    public BlockState getJadeRenderState(BlockState state) {
-        return defaultBlockState();
-    }
-
-    @Override
-    public float getJadeRenderScale(BlockState state) {
-        return 2F;
+    public JadeDisplayConfig getJadeDisplayConfig() {
+        return JadeDisplayConfig.defaultState(this)
+                .withScale(1.55F)
+                .withOffset(0F, .2F, 0F);
     }
 }

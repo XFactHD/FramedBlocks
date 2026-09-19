@@ -5,6 +5,7 @@ import io.github.xfacthd.framedblocks.api.block.CopycatStyleBlock;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
+import io.github.xfacthd.framedblocks.api.compat.jade.JadeDisplayConfig;
 import io.github.xfacthd.framedblocks.api.model.wrapping.statemerger.StateMerger;
 import io.github.xfacthd.framedblocks.api.model.wrapping.statemerger.StateMergers;
 import io.github.xfacthd.framedblocks.common.FBContent;
@@ -120,13 +121,8 @@ public class FramedWeightedPressurePlateBlock extends WeightedPressurePlateBlock
     }
 
     @Override
-    public Class<? extends Block> getJadeTargetClass() {
-        return FramedWeightedPressurePlateBlock.class;
-    }
-
-    @Override
-    public BlockState getJadeRenderState(BlockState state) {
-        return defaultBlockState();
+    public JadeDisplayConfig getJadeDisplayConfig() {
+        return JadeDisplayConfig.defaultState(this).withTargetClass(FramedWeightedPressurePlateBlock.class);
     }
 
     public static FramedWeightedPressurePlateBlock gold(Properties props) {

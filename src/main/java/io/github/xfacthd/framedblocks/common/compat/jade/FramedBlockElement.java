@@ -2,8 +2,8 @@ package io.github.xfacthd.framedblocks.common.compat.jade;
 
 import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.math.Axis;
-import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.api.block.blockentity.IFramedBlockEntity;
+import io.github.xfacthd.framedblocks.api.compat.jade.JadeDisplayConfig;
 import io.github.xfacthd.framedblocks.client.screen.pip.BlockPictureInPictureRenderer;
 import io.github.xfacthd.framedblocks.common.config.ClientConfig;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -11,6 +11,7 @@ import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.client.resources.model.cuboid.ItemTransform;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 import org.joml.Quaternionfc;
 import org.joml.Vector3f;
 import org.jspecify.annotations.Nullable;
@@ -29,18 +30,18 @@ final class FramedBlockElement extends Element {
     private final BlockPictureInPictureRenderer.RenderConfig config;
     private final float scale;
 
-    FramedBlockElement(BlockState state, IFramedBlockEntity blockEntity) {
+    FramedBlockElement(JadeDisplayConfig displayConfig, BlockState blockState, IFramedBlockEntity blockEntity) {
         this.width = SIZE;
         this.height = SIZE;
-        IFramedBlock block = (IFramedBlock) state.getBlock();
-        this.state = block.getJadeRenderState(state);
+        this.state = displayConfig.getDisplayState(blockState);
         this.blockEntity = blockEntity;
-        this.scale = block.getJadeRenderScale(this.state);
+        this.scale = displayConfig.scale();
+        Vec3 offset = displayConfig.offset();
         this.config = new BlockPictureInPictureRenderer.RenderConfig(
                 poseStack -> {
                     poseStack.scale(RENDER_SIZE * scale, -RENDER_SIZE * scale, -RENDER_SIZE * scale);
                     DEFAULT_TRANSFORM.apply(false, poseStack.last());
-                    poseStack.translate(.5, .5, .5);
+                    poseStack.translate(.5 + offset.x, .5 + offset.y, .5 + offset.z);
                     poseStack.last().normal().rotate(LIGHT_FIX_ROT);
                     poseStack.translate(-.5, -.5, -.5);
                 },

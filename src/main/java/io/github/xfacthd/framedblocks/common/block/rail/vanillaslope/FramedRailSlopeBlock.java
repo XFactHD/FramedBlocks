@@ -9,6 +9,7 @@ import io.github.xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedDoubleBlockEntity;
 import io.github.xfacthd.framedblocks.api.block.item.placement.PropertyLabels;
 import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
+import io.github.xfacthd.framedblocks.api.compat.jade.JadeDisplayConfig;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.shapes.ShapeLookup;
 import io.github.xfacthd.framedblocks.api.util.DirUtils;
@@ -242,13 +243,9 @@ public class FramedRailSlopeBlock<BE extends FramedBlockEntity> extends BaseRail
     }
 
     @Override
-    public Class<? extends Block> getJadeTargetClass() {
-        return FramedRailSlopeBlock.class;
-    }
-
-    @Override
-    public BlockState getJadeRenderState(BlockState state) {
-        return getItemModelSource();
+    public JadeDisplayConfig getJadeDisplayConfig() {
+        return JadeDisplayConfig.fixedState(this, getItemModelSource())
+                .withTargetClass(FramedRailSlopeBlock.class);
     }
 
     public static FramedRailSlopeBlock<FramedBlockEntity> normal(Properties props) {

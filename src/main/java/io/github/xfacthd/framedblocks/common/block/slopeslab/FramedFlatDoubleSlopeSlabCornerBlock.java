@@ -11,6 +11,7 @@ import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockTopIntera
 import io.github.xfacthd.framedblocks.api.block.doubleblock.SolidityCheck;
 import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
 import io.github.xfacthd.framedblocks.api.block.render.NullCullPredicate;
+import io.github.xfacthd.framedblocks.api.compat.jade.JadeDisplayConfig;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.util.RotationDirection;
 import io.github.xfacthd.framedblocks.common.FBContent;
@@ -166,7 +167,7 @@ public class FramedFlatDoubleSlopeSlabCornerBlock extends FramedDoubleBlock impl
     }
 
     @Override
-    public BlockState getJadeRenderState(BlockState state) {
-        return getItemModelSource();
+    public JadeDisplayConfig getJadeDisplayConfig() {
+        return JadeDisplayConfig.fixedState(this, getItemModelSource());
     }
 }

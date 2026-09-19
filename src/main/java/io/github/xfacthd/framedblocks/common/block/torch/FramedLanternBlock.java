@@ -4,6 +4,7 @@ import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
+import io.github.xfacthd.framedblocks.api.compat.jade.JadeDisplayConfig;
 import io.github.xfacthd.framedblocks.api.util.FramedConstants;
 import io.github.xfacthd.framedblocks.common.block.IFramedBlockInternal;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
@@ -112,7 +113,9 @@ public class FramedLanternBlock extends LanternBlock implements IFramedBlockInte
     }
 
     @Override
-    public BlockState getJadeRenderState(BlockState state) {
-        return defaultBlockState();
+    public JadeDisplayConfig getJadeDisplayConfig() {
+        return JadeDisplayConfig.defaultState(this)
+                .withScale(1.4F)
+                .withOffset(0F, .2F, 0F);
     }
 }

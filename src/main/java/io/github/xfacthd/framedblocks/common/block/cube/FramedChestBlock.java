@@ -6,6 +6,7 @@ import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import io.github.xfacthd.framedblocks.api.block.item.placement.PropertyLabels;
 import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
+import io.github.xfacthd.framedblocks.api.compat.jade.JadeDisplayConfig;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.util.FramedConstants;
 import io.github.xfacthd.framedblocks.api.util.RotationDirection;
@@ -293,8 +294,8 @@ public class FramedChestBlock extends FramedStorageBlock {
     }
 
     @Override
-    public BlockState getJadeRenderState(BlockState state) {
-        return defaultBlockState().setValue(PropertyHolder.LATCH_TYPE, state.getValue(PropertyHolder.LATCH_TYPE));
+    public JadeDisplayConfig getJadeDisplayConfig() {
+        return JadeDisplayConfig.dynamicState(this, state -> defaultBlockState().setValue(PropertyHolder.LATCH_TYPE, state.getValue(PropertyHolder.LATCH_TYPE)));
     }
 
     public static DoubleBlockCombiner.NeighborCombineResult<? extends FramedChestBlockEntity> combine(FramedChestBlockEntity be, boolean override) {

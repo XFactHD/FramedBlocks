@@ -4,6 +4,7 @@ import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.SlopeToggleBlock;
 import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
+import io.github.xfacthd.framedblocks.api.compat.jade.JadeDisplayConfig;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.util.RotationDirection;
 import io.github.xfacthd.framedblocks.common.block.ExtPlacementStateBuilder;
@@ -81,7 +82,7 @@ public class FramedThreewayCornerSlopeEdgeBlock extends FramedBlock implements S
     }
 
     @Override
-    public BlockState getJadeRenderState(BlockState state) {
-        return getItemModelSource();
+    public JadeDisplayConfig getJadeDisplayConfig() {
+        return JadeDisplayConfig.fixedState(this, getItemModelSource());
     }
 }

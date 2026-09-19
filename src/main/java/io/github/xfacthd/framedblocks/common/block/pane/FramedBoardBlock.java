@@ -7,6 +7,7 @@ import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
 import io.github.xfacthd.framedblocks.api.block.item.placement.ValueOrders;
 import io.github.xfacthd.framedblocks.api.blueprint.BlueprintBlockPlaceContext;
 import io.github.xfacthd.framedblocks.api.camo.CamoList;
+import io.github.xfacthd.framedblocks.api.compat.jade.JadeDisplayConfig;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.api.util.MathUtils;
@@ -174,8 +175,8 @@ public class FramedBoardBlock extends FramedBlock {
     }
 
     @Override
-    public BlockState getJadeRenderState(BlockState state) {
-        return defaultBlockState();
+    public JadeDisplayConfig getJadeDisplayConfig() {
+        return JadeDisplayConfig.defaultState(this);
     }
 
     public static boolean isFacePresent(BlockState state, Direction side) {

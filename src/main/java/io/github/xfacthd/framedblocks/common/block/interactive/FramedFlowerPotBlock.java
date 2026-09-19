@@ -2,6 +2,7 @@ package io.github.xfacthd.framedblocks.common.block.interactive;
 
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
+import io.github.xfacthd.framedblocks.api.compat.jade.JadeDisplayConfig;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
 import io.github.xfacthd.framedblocks.common.blockentity.special.FramedFlowerPotBlockEntity;
@@ -140,8 +141,8 @@ public class FramedFlowerPotBlock extends FramedBlock {
     }
 
     @Override
-    public BlockState getJadeRenderState(BlockState state) {
-        return state;
+    public JadeDisplayConfig getJadeDisplayConfig() {
+        return JadeDisplayConfig.defaultState(this);
     }
 
     public static BlockState getFlowerPotState(Block flower) {

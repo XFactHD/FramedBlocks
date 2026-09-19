@@ -2,6 +2,7 @@ package io.github.xfacthd.framedblocks.common.block.pane;
 
 import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
 import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
+import io.github.xfacthd.framedblocks.api.compat.jade.JadeDisplayConfig;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -29,7 +30,7 @@ public class FramedHorizontalPaneBlock extends FramedBlock {
     }
 
     @Override
-    public BlockState getJadeRenderState(BlockState state) {
-        return state;
+    public JadeDisplayConfig getJadeDisplayConfig() {
+        return JadeDisplayConfig.defaultState(this);
     }
 }

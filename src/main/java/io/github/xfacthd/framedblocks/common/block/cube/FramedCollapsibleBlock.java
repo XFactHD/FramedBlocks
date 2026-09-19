@@ -3,6 +3,7 @@ package io.github.xfacthd.framedblocks.common.block.cube;
 import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
+import io.github.xfacthd.framedblocks.api.compat.jade.JadeDisplayConfig;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.shapes.ShapeUtils;
 import io.github.xfacthd.framedblocks.api.util.DirUtils;
@@ -134,8 +135,8 @@ public class FramedCollapsibleBlock extends FramedBlock {
     }
 
     @Override
-    public BlockState getJadeRenderState(BlockState state) {
-        return state;
+    public JadeDisplayConfig getJadeDisplayConfig() {
+        return JadeDisplayConfig.worldState(this);
     }
 
     @SuppressWarnings("SuspiciousNameCombination")

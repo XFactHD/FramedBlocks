@@ -5,6 +5,7 @@ import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
+import io.github.xfacthd.framedblocks.api.compat.jade.JadeDisplayConfig;
 import io.github.xfacthd.framedblocks.common.block.IFramedBlockInternal;
 import io.github.xfacthd.framedblocks.common.blockentity.special.FramedTargetBlockEntity;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
@@ -159,7 +160,7 @@ public class FramedTargetBlock extends TargetBlock implements IFramedBlockIntern
     }
 
     @Override
-    public BlockState getJadeRenderState(BlockState state) {
-        return state;
+    public JadeDisplayConfig getJadeDisplayConfig() {
+        return JadeDisplayConfig.defaultState(this);
     }
 }

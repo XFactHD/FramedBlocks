@@ -1,5 +1,6 @@
 package io.github.xfacthd.framedblocks.common.block.interactive.banner;
 
+import io.github.xfacthd.framedblocks.api.compat.jade.JadeDisplayConfig;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
 import io.github.xfacthd.framedblocks.common.blockentity.special.FramedBannerBlockEntity;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
@@ -64,7 +65,7 @@ abstract class AbstractFramedBannerBlock extends FramedBlock {
     }
 
     @Override
-    public boolean shouldRenderAsBlockInJadeTooltip() {
-        return false;
+    public JadeDisplayConfig getJadeDisplayConfig() {
+        return JadeDisplayConfig.asItem(this);
     }
 }

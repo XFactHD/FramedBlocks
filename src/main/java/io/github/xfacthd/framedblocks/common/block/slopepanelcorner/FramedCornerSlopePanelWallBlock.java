@@ -5,6 +5,7 @@ import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.api.block.SlopeToggleBlock;
 import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
+import io.github.xfacthd.framedblocks.api.compat.jade.JadeDisplayConfig;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.util.RotationDirection;
 import io.github.xfacthd.framedblocks.common.FBContent;
@@ -109,7 +110,7 @@ public class FramedCornerSlopePanelWallBlock extends FramedBlock implements Slop
     }
 
     @Override
-    public BlockState getJadeRenderState(BlockState state) {
-        return ((IFramedBlock) nonWallBlock.value()).getJadeRenderState(state);
+    public JadeDisplayConfig getJadeDisplayConfig() {
+        return ((IFramedBlock) nonWallBlock.value()).getJadeDisplayConfig().withTargetClass(this);
     }
 }

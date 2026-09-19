@@ -10,6 +10,7 @@ import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
 import io.github.xfacthd.framedblocks.api.camo.CamoContainer;
 import io.github.xfacthd.framedblocks.api.camo.CamoList;
 import io.github.xfacthd.framedblocks.api.camo.empty.EmptyCamoContainer;
+import io.github.xfacthd.framedblocks.api.compat.jade.JadeDisplayConfig;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.util.RotationDirection;
 import io.github.xfacthd.framedblocks.common.FBContent;
@@ -156,8 +157,8 @@ public class FramedSlopeBlock extends FramedBlock implements SlopeBlock, SlopeTo
     }
 
     @Override
-    public BlockState getJadeRenderState(BlockState state) {
-        return getItemModelSource();
+    public JadeDisplayConfig getJadeDisplayConfig() {
+        return JadeDisplayConfig.fixedState(this, getItemModelSource());
     }
 
     @Override

@@ -8,6 +8,7 @@ import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockParts;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockTopInteractionMode;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.SolidityCheck;
 import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
+import io.github.xfacthd.framedblocks.api.compat.jade.JadeDisplayConfig;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.api.util.RotationDirection;
@@ -105,7 +106,7 @@ public class FramedCheckeredSlabBlock extends FramedDoubleBlock implements Copyc
     }
 
     @Override
-    public BlockState getJadeRenderState(BlockState state) {
-        return defaultBlockState();
+    public JadeDisplayConfig getJadeDisplayConfig() {
+        return JadeDisplayConfig.defaultState(this);
     }
 }

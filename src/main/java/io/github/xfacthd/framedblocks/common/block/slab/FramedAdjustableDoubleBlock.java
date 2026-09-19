@@ -4,6 +4,7 @@ import io.github.xfacthd.framedblocks.api.block.CopycatStyleBlock;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedDoubleBlockEntity;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockParts;
+import io.github.xfacthd.framedblocks.api.compat.jade.JadeDisplayConfig;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.block.FramedDoubleBlock;
 import io.github.xfacthd.framedblocks.common.block.cube.FramedCollapsibleCubeBlock;
@@ -43,8 +44,8 @@ public abstract class FramedAdjustableDoubleBlock extends FramedDoubleBlock impl
     }
 
     @Override
-    public BlockState getJadeRenderState(BlockState state) {
-        return defaultBlockState();
+    public JadeDisplayConfig getJadeDisplayConfig() {
+        return JadeDisplayConfig.defaultState(this);
     }
 
     @Override

@@ -10,6 +10,7 @@ import io.github.xfacthd.framedblocks.api.block.render.ParticleHelper;
 import io.github.xfacthd.framedblocks.api.camo.CamoContainer;
 import io.github.xfacthd.framedblocks.api.camo.CamoContent;
 import io.github.xfacthd.framedblocks.api.camo.empty.EmptyCamoContainer;
+import io.github.xfacthd.framedblocks.api.compat.jade.JadeDisplayConfig;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.internal.InternalAPI;
 import io.github.xfacthd.framedblocks.api.model.data.AbstractFramedBlockData;
@@ -644,28 +645,6 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension {
     /// {@return the state whose block model to reuse for the item or null if the loaded item model should be used}
     @Nullable BlockState getItemModelSource();
 
-    /// {@return the class under which this block should be registered to the Jade BlockComponentProvider to prevent
-    ///  duplicate provider attachment for blocks which extend a class that is instantiated for other blocks}
-    ///
-    /// @apiNote This is only relevant for blocks which do not extend [AbstractFramedBlock]
-    default Class<? extends Block> getJadeTargetClass() {
-        return ((Block) this).getClass();
-    }
-
-    /// {@return whether this block should be rendered as a block or as the item on the Jade tooltip}
-    default boolean shouldRenderAsBlockInJadeTooltip() {
-        return true;
-    }
-
-    /// {@return the state which should be drawn on the Jade tooltip for the given in-world state}
-    ///
-    /// @param state The in-world state being looked at
-    BlockState getJadeRenderState(BlockState state);
-
-    /// {@return the scale value at which this block should be drawn on the Jade tooltip}
-    ///
-    /// @param state The in-world state being looked at
-    default float getJadeRenderScale(BlockState state) {
-        return 1F;
-    }
+    /// {@return how this block should be drawn on the Jade tooltip}
+    JadeDisplayConfig getJadeDisplayConfig();
 }

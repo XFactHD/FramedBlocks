@@ -30,9 +30,4 @@ public class FramedPrismSlopePanelCornerWallBlock extends FramedCornerSlopePanel
         }
         return super.handleBlockLeftClick(state, level, pos, player);
     }
-
-    @Override
-    public BlockState getJadeRenderState(BlockState state) {
-        return super.getJadeRenderState(state).setValue(PropertyHolder.OFFSET, state.getValue(PropertyHolder.OFFSET));
-    }
 }

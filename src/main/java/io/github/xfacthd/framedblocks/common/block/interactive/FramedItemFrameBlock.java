@@ -6,6 +6,7 @@ import io.github.xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import io.github.xfacthd.framedblocks.api.block.item.FramedBlockItem;
 import io.github.xfacthd.framedblocks.api.block.item.IFramedBlockItem;
 import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
+import io.github.xfacthd.framedblocks.api.compat.jade.JadeDisplayConfig;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.util.RotationDirection;
 import io.github.xfacthd.framedblocks.common.FBContent;
@@ -213,12 +214,9 @@ public class FramedItemFrameBlock extends FramedBlock {
     }
 
     @Override
-    public BlockState getJadeRenderState(BlockState state) {
-        return state.setValue(BlockStateProperties.FACING, Direction.SOUTH);
-    }
-
-    @Override
-    public float getJadeRenderScale(BlockState state) {
-        return 1.3F;
+    public JadeDisplayConfig getJadeDisplayConfig() {
+        return JadeDisplayConfig.dynamicState(this, state -> state.setValue(BlockStateProperties.FACING, Direction.SOUTH))
+                .withScale(1.25F)
+                .withOffset(-.3F, -.3F, 0F);
     }
 }

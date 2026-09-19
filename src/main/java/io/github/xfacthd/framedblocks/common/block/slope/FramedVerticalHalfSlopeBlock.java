@@ -6,6 +6,7 @@ import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
 import io.github.xfacthd.framedblocks.api.block.SlopeToggleBlock;
 import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
+import io.github.xfacthd.framedblocks.api.compat.jade.JadeDisplayConfig;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.util.RotationDirection;
 import io.github.xfacthd.framedblocks.common.FBContent;
@@ -75,8 +76,8 @@ public class FramedVerticalHalfSlopeBlock extends FramedBlock implements SlopeTo
     }
 
     @Override
-    public BlockState getJadeRenderState(BlockState state) {
-        return ((IFramedBlock) FBContent.BLOCK_FRAMED_HALF_SLOPE.value()).getJadeRenderState(state);
+    public JadeDisplayConfig getJadeDisplayConfig() {
+        return ((IFramedBlock) FBContent.BLOCK_FRAMED_HALF_SLOPE.value()).getJadeDisplayConfig().withTargetClass(this);
     }
 
     @Override

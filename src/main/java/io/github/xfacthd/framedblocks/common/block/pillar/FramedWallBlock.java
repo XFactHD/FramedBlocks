@@ -5,6 +5,7 @@ import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.api.block.ShapeLockableBlock;
 import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
+import io.github.xfacthd.framedblocks.api.compat.jade.JadeDisplayConfig;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.shapes.ShapeLookup;
 import io.github.xfacthd.framedblocks.api.util.DirUtils;
@@ -158,8 +159,8 @@ public class FramedWallBlock extends WallBlock implements IFramedBlockInternal, 
     }
 
     @Override
-    public BlockState getJadeRenderState(BlockState state) {
-        return defaultBlockState().setValue(EAST, WallSide.LOW).setValue(WEST, WallSide.LOW);
+    public JadeDisplayConfig getJadeDisplayConfig() {
+        return JadeDisplayConfig.fixedState(this, defaultBlockState().setValue(EAST, WallSide.LOW).setValue(WEST, WallSide.LOW));
     }
 
     @Override

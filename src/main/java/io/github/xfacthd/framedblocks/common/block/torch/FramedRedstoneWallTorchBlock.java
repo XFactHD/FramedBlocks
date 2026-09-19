@@ -4,6 +4,7 @@ import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
+import io.github.xfacthd.framedblocks.api.compat.jade.JadeDisplayConfig;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.util.RotationDirection;
 import io.github.xfacthd.framedblocks.common.FBContent;
@@ -100,12 +101,7 @@ public class FramedRedstoneWallTorchBlock extends RedstoneWallTorchBlock impleme
     }
 
     @Override
-    public BlockState getJadeRenderState(BlockState state) {
-        return ((IFramedBlock) FBContent.BLOCK_FRAMED_REDSTONE_TORCH.value()).getJadeRenderState(state);
-    }
-
-    @Override
-    public float getJadeRenderScale(BlockState state) {
-        return ((IFramedBlock) FBContent.BLOCK_FRAMED_REDSTONE_TORCH.value()).getJadeRenderScale(state);
+    public JadeDisplayConfig getJadeDisplayConfig() {
+        return ((IFramedBlock) FBContent.BLOCK_FRAMED_REDSTONE_TORCH.value()).getJadeDisplayConfig().withTargetClass(this);
     }
 }

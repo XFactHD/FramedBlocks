@@ -44,11 +44,6 @@ public class FramedPrismCornerBlock extends FramedThreewayCornerBlock implements
     }
 
     @Override
-    public BlockState getJadeRenderState(BlockState state) {
-        return super.getJadeRenderState(state).setValue(PropertyHolder.OFFSET, state.getValue(PropertyHolder.OFFSET));
-    }
-
-    @Override
     public boolean isOffsetOnOddPos() {
         return offsetOnOddPos;
     }

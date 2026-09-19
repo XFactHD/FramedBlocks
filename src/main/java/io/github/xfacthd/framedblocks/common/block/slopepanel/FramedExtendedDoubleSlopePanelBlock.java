@@ -9,6 +9,7 @@ import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockParts;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockTopInteractionMode;
 import io.github.xfacthd.framedblocks.api.block.doubleblock.SolidityCheck;
 import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
+import io.github.xfacthd.framedblocks.api.compat.jade.JadeDisplayConfig;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.util.RotationDirection;
 import io.github.xfacthd.framedblocks.common.FBContent;
@@ -158,7 +159,7 @@ public class FramedExtendedDoubleSlopePanelBlock extends FramedDoubleBlock imple
     }
 
     @Override
-    public BlockState getJadeRenderState(BlockState state) {
-        return getItemModelSource();
+    public JadeDisplayConfig getJadeDisplayConfig() {
+        return JadeDisplayConfig.fixedState(this, getItemModelSource());
     }
 }

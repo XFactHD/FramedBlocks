@@ -6,6 +6,7 @@ import io.github.xfacthd.framedblocks.api.block.PlacementStateBuilder;
 import io.github.xfacthd.framedblocks.api.block.SlopeToggleBlock;
 import io.github.xfacthd.framedblocks.api.block.item.placement.PropertyLabels;
 import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
+import io.github.xfacthd.framedblocks.api.compat.jade.JadeDisplayConfig;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
@@ -67,7 +68,7 @@ public class FramedCompoundSlopeSlabBlock extends FramedBlock implements SlopeTo
     }
 
     @Override
-    public BlockState getJadeRenderState(BlockState state) {
-        return defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
+    public JadeDisplayConfig getJadeDisplayConfig() {
+        return JadeDisplayConfig.fixedState(this, defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.SOUTH));
     }
 }

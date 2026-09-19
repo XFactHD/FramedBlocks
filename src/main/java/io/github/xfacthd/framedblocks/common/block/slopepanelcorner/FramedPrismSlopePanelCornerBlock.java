@@ -37,9 +37,4 @@ public class FramedPrismSlopePanelCornerBlock extends FramedCornerSlopePanelBloc
     public BlockState getItemModelSource() {
         return defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
     }
-
-    @Override
-    public BlockState getJadeRenderState(BlockState state) {
-        return super.getJadeRenderState(state).setValue(PropertyHolder.OFFSET, state.getValue(PropertyHolder.OFFSET));
-    }
 }

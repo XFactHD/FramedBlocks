@@ -1,6 +1,7 @@
 package io.github.xfacthd.framedblocks.common.block.cube;
 
 import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
+import io.github.xfacthd.framedblocks.api.compat.jade.JadeDisplayConfig;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -21,7 +22,7 @@ public class FramedBookshelfBlock extends FramedBlock {
     }
 
     @Override
-    public BlockState getJadeRenderState(BlockState state) {
-        return state;
+    public JadeDisplayConfig getJadeDisplayConfig() {
+        return JadeDisplayConfig.defaultState(this);
     }
 }

@@ -10,6 +10,7 @@ import io.github.xfacthd.framedblocks.api.block.doubleblock.DoubleBlockTopIntera
 import io.github.xfacthd.framedblocks.api.block.doubleblock.SolidityCheck;
 import io.github.xfacthd.framedblocks.api.block.item.placement.PropertyLabels;
 import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
+import io.github.xfacthd.framedblocks.api.compat.jade.JadeDisplayConfig;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.block.FramedDoubleBlock;
@@ -114,7 +115,7 @@ public class FramedInverseDoubleSlopeSlabBlock extends FramedDoubleBlock impleme
     }
 
     @Override
-    public BlockState getJadeRenderState(BlockState state) {
-        return defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
+    public JadeDisplayConfig getJadeDisplayConfig() {
+        return JadeDisplayConfig.fixedState(this, defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.SOUTH));
     }
 }

@@ -4,6 +4,7 @@ import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedDoubleBlockEntity;
 import io.github.xfacthd.framedblocks.api.block.blockentity.IFramedBlockEntity;
 import io.github.xfacthd.framedblocks.api.camo.CamoContainer;
+import io.github.xfacthd.framedblocks.api.compat.jade.JadeDisplayConfig;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
@@ -26,14 +27,14 @@ final class FramedBlockComponentProvider implements IBlockComponentProvider {
         if (!(accessor.getBlockState().getBlock() instanceof IFramedBlock block)) {
             return null;
         }
-        if (!block.shouldRenderAsBlockInJadeTooltip()) {
+        JadeDisplayConfig displayConfig = FramedJadePlugin.getDisplayConfig(block);
+        if (!displayConfig.renderAsBlock()) {
             return null;
         }
         if (!(accessor.getBlockEntity() instanceof IFramedBlockEntity blockEntity)) {
             return null;
         }
-
-        return new FramedBlockElement(accessor.getBlockState(), blockEntity);
+        return new FramedBlockElement(displayConfig, accessor.getBlockState(), blockEntity);
     }
 
     @Override

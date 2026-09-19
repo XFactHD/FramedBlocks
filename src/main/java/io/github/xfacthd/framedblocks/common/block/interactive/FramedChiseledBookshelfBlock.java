@@ -5,6 +5,7 @@ import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.api.block.item.placement.PropertyLabels;
 import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
+import io.github.xfacthd.framedblocks.api.compat.jade.JadeDisplayConfig;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.common.block.IFramedBlockInternal;
 import io.github.xfacthd.framedblocks.common.blockentity.special.FramedChiseledBookshelfBlockEntity;
@@ -152,7 +153,7 @@ public final class FramedChiseledBookshelfBlock extends ChiseledBookShelfBlock i
     }
 
     @Override
-    public BlockState getJadeRenderState(BlockState state) {
-        return state.setValue(FramedProperties.FACING_HOR, Direction.NORTH);
+    public JadeDisplayConfig getJadeDisplayConfig() {
+        return JadeDisplayConfig.dynamicState(this, state -> state.setValue(FACING, Direction.NORTH));
     }
 }

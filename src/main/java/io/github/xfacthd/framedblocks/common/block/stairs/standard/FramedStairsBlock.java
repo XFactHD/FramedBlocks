@@ -7,6 +7,7 @@ import io.github.xfacthd.framedblocks.api.block.ShapeLockableBlock;
 import io.github.xfacthd.framedblocks.api.block.item.placement.PropertyLabels;
 import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
 import io.github.xfacthd.framedblocks.api.block.item.placement.ValueOrders;
+import io.github.xfacthd.framedblocks.api.compat.jade.JadeDisplayConfig;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.model.wrapping.statemerger.StateMerger;
 import io.github.xfacthd.framedblocks.api.model.wrapping.statemerger.StateMergers;
@@ -178,13 +179,9 @@ public class FramedStairsBlock extends StairBlock implements IFramedBlockInterna
     }
 
     @Override
-    public Class<? extends Block> getJadeTargetClass() {
-        return FramedStairsBlock.class;
-    }
-
-    @Override
-    public BlockState getJadeRenderState(BlockState state) {
-        return defaultBlockState().setValue(FACING, Direction.SOUTH);
+    public JadeDisplayConfig getJadeDisplayConfig() {
+        return JadeDisplayConfig.fixedState(this, getItemModelSource())
+                .withTargetClass(FramedStairsBlock.class);
     }
 
     private static final class StairStateMerger extends StateMerger {
