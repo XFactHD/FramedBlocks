@@ -70,8 +70,6 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.PackOutput;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.ComponentContents;
-import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.state.properties.DoorHingeSide;
@@ -792,29 +790,16 @@ public final class FramedLanguageProvider extends LanguageProvider {
     }
 
     private void add(Component key, String value) {
-        ComponentContents contents = key.getContents();
-        if (contents instanceof TranslatableContents translatable) {
-            add(translatable.getKey(), value);
-        } else {
-            add(key.getString(), value);
-        }
+        addTranslatableComponent(key, value);
     }
 
     private void add(Printable printable, String value) {
         add(printable.print(ChatFormatting.RESET), value);
     }
 
-    private void addConfigCategory(String key, String catValue, String catButtonValue, String catTooltipValue) {
-        add(key, catValue);
-        add(key + ".button", catButtonValue);
-        add(key + ".tooltip", catTooltipValue);
-    }
-
-    private void addConfigValue(ModConfigSpec.@UnknownNullability ConfigValue<?> configValue, String value) {
-        Objects.requireNonNull(configValue);
-        String translationKey = Objects.requireNonNull(configValue.getSpec().getTranslationKey());
-        add(translationKey, value);
-        add(translationKey + ".tooltip", Objects.requireNonNull(configValue.getSpec().getComment()));
+    @Override
+    public void addConfigValue(ModConfigSpec.@UnknownNullability ConfigValue<?> configValue, String value) {
+        super.addConfigValue(configValue, value);
     }
 
     private void addBlockOverlay(String id, String name) {
