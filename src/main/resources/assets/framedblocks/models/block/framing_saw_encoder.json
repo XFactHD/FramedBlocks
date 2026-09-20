@@ -1,5 +1,5 @@
 {
-	"loader": "neoforged:conditional",
+	"loader": "neoforge:conditional",
 	"fallback": "framedblocks:block/framing_saw",
 	"neoforge:conditions": [
 		{
