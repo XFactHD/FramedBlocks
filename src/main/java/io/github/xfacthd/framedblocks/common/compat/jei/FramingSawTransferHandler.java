@@ -123,7 +123,8 @@ public abstract sealed class FramingSawTransferHandler<C extends AbstractContain
             if (slot == materialSlot) {
                 candidateSlots.add(transferHelper.copyWithIngredients(slot, candidate.materials()));
             } else if (slot.getRole() == RecipeIngredientRole.INPUT) {
-                int count = candidate.calculation().getAdditiveCount(additiveIndex++);
+                int count = candidate.calculation().getAdditiveCount(additiveIndex);
+                additiveIndex++;
                 candidateSlots.add(copyWithCount(slot, count));
             } else {
                 candidateSlots.add(slot);
