@@ -162,6 +162,7 @@ public abstract sealed class FramingSawTransferHandler<C extends AbstractContain
     private static boolean isMaterial(ItemStack stack, FramingSawRecipeCache cache) {
         return !stack.isEmpty() &&
                cache.getMaterialValue(stack.getItem()) > 0 &&
+               !cache.containsAdditive(stack.getItem()) &&
                stack.getOrDefault(FBContent.DC_TYPE_CAMO_LIST, CamoList.EMPTY).isEmptyOrContentsEmpty();
     }
 
