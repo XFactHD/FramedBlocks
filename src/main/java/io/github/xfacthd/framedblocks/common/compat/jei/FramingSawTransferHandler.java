@@ -134,7 +134,7 @@ public abstract sealed class FramingSawTransferHandler<C extends AbstractContain
 
     private IRecipeSlotView copyWithCount(IRecipeSlotView slot, int count) {
         List<ItemStack> ingredients = slot.getItemStacks()
-                .map(stack -> copyWithCount(stack, count))
+                .map(stack -> stack.copyWithCount(count))
                 .toList();
         return ingredients.isEmpty() ? slot : transferHelper.copyWithIngredients(slot, ingredients);
     }
@@ -165,12 +165,6 @@ public abstract sealed class FramingSawTransferHandler<C extends AbstractContain
                stack.getOrDefault(FBContent.DC_TYPE_CAMO_LIST, CamoList.EMPTY).isEmptyOrContentsEmpty();
     }
 
-    private static ItemStack copyWithCount(ItemStack stack, int count) {
-        ItemStack copy = stack.copy();
-        copy.setCount(count);
-        return copy;
-    }
-
     private record MaterialCandidate(List<ItemStack> materials, FramingSawRecipeCalculation calculation) {
         private static Optional<MaterialCandidate> create(FramingSawRecipe recipe, List<ItemStack> availableMaterials) {
             FramingSawRecipeCalculation calculation = recipe.makeCraftingCalculation(
@@ -184,7 +178,7 @@ public abstract sealed class FramingSawTransferHandler<C extends AbstractContain
             int inputCount = calculation.getInputCount();
             List<ItemStack> materials = availableMaterials.stream()
                     .filter(stack -> inputCount <= stack.getMaxStackSize())
-                    .map(stack -> copyWithCount(stack, inputCount))
+                    .map(stack -> stack.copyWithCount(inputCount))
                     .toList();
             return materials.isEmpty() ? Optional.empty() : Optional.of(new MaterialCandidate(materials, calculation));
         }
