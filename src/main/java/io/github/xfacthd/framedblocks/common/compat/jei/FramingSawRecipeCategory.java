@@ -36,6 +36,8 @@ import java.util.List;
 import java.util.Objects;
 
 public final class FramingSawRecipeCategory implements IRecipeCategory<FramingSawRecipe> {
+    static final String MATERIAL_SLOT_NAME = "input";
+
     private static final Identifier BACKGROUND = Utils.id("textures/gui/framing_saw_jei.png");
     private static final int WIDTH = 118;
     private static final int HEIGHT = 41;
@@ -85,7 +87,7 @@ public final class FramingSawRecipeCategory implements IRecipeCategory<FramingSa
         FramingSawRecipeCache cache = FramingSawRecipeCache.get(true);
         List<FramingSawRecipeAdditive> additives = recipe.getAdditives();
 
-        IRecipeSlotBuilder inputSlot = builder.addSlot(RecipeIngredientRole.INPUT, 19, 1).setSlotName("input");
+        IRecipeSlotBuilder inputSlot = builder.addSlot(RecipeIngredientRole.INPUT, 19, 1).setSlotName(MATERIAL_SLOT_NAME);
         IRecipeSlotBuilder[] additiveSlots = null;
         if (!additives.isEmpty()) {
             additiveSlots = new IRecipeSlotBuilder[additives.size()];
@@ -171,7 +173,7 @@ public final class FramingSawRecipeCategory implements IRecipeCategory<FramingSa
     public void draw(FramingSawRecipe recipe, IRecipeSlotsView slots, GuiGraphicsExtractor graphics, double mouseX, double mouseY) {
         background.draw(graphics);
 
-        ItemStack input = slots.findSlotByName("input")
+        ItemStack input = slots.findSlotByName(MATERIAL_SLOT_NAME)
                 .orElseThrow()
                 .getDisplayedItemStack()
                 .orElseThrow();
@@ -188,7 +190,7 @@ public final class FramingSawRecipeCategory implements IRecipeCategory<FramingSa
     @Override
     public void getTooltip(ITooltipBuilder tooltip, FramingSawRecipe recipe, IRecipeSlotsView slots, double mouseX, double mouseY) {
         if (mouseX >= WARNING_X && mouseY >= WARNING_Y && mouseX <= (WARNING_X + WARNING_DRAW_SIZE) && mouseY <= (WARNING_Y + WARNING_DRAW_SIZE)) {
-            ItemStack input = slots.findSlotByName("input")
+            ItemStack input = slots.findSlotByName(MATERIAL_SLOT_NAME)
                     .orElseThrow()
                     .getDisplayedItemStack()
                     .orElse(ItemStack.EMPTY);
