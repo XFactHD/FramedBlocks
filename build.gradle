@@ -164,6 +164,7 @@ repositories {
         filter {
             includeGroup('org.embeddedt')
             includeGroup('mezz.jei')
+            includeGroup('net.mezzdev.config')
             includeGroup('com.blamejared.searchables')
         }
     }
