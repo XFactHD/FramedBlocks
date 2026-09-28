@@ -2,13 +2,17 @@ package io.github.xfacthd.framedblocks.common.compat.jei;
 
 import io.github.xfacthd.framedblocks.api.camo.CamoList;
 import io.github.xfacthd.framedblocks.common.FBContent;
+import io.github.xfacthd.framedblocks.common.compat.ae2.AppliedEnergisticsCompat;
+import io.github.xfacthd.framedblocks.common.config.ClientConfig;
 import io.github.xfacthd.framedblocks.common.crafting.saw.FramingSawRecipe;
 import io.github.xfacthd.framedblocks.common.crafting.saw.FramingSawRecipeCache;
 import io.github.xfacthd.framedblocks.common.crafting.saw.FramingSawRecipeCalculation;
 import io.github.xfacthd.framedblocks.common.menu.FramingSawMenu;
+import io.github.xfacthd.framedblocks.common.menu.FramingSawWithEncoderMenu;
 import io.github.xfacthd.framedblocks.common.menu.IFramingSawMenu;
 import io.github.xfacthd.framedblocks.common.menu.PoweredFramingSawMenu;
 import io.github.xfacthd.framedblocks.common.net.payload.serverbound.ServerboundSelectFramingSawRecipePayload;
+import mezz.jei.api.gui.builder.ITooltipBuilder;
 import mezz.jei.api.gui.ingredient.IRecipeSlotView;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.recipe.RecipeIngredientRole;
@@ -34,12 +38,10 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-/**
- * Adapts the recipe shown by JEI to the materials the player actually has.
- * The framing saw accepts many materials for one recipe, but JEI's basic transfer handler only sees the material
- * in the displayed recipe. Each material can also change the required material and additive counts, so this handler
- * groups available materials by material value and gives the basic handler one recalculated layout per value.
- */
+/// Adapts the recipe shown by JEI to the materials the player actually has.
+/// The framing saw accepts many materials for one recipe, but JEI's basic transfer handler only sees the material
+/// in the displayed recipe. Each material can also change the required material and additive counts, so this handler
+/// groups available materials by material value and gives the basic handler one recalculated layout per value.
 public abstract sealed class FramingSawTransferHandler<C extends AbstractContainerMenu & IFramingSawMenu> implements IRecipeTransferHandler<C, FramingSawRecipe> {
     private final IRecipeTransferHandlerHelper transferHelper;
     private final IRecipeTransferInfo<C, FramingSawRecipe> transferInfo;
@@ -88,21 +90,25 @@ public abstract sealed class FramingSawTransferHandler<C extends AbstractContain
             return transferHelper.createUserErrorWithTooltip(JeiCompat.MSG_INVALID_RECIPE);
         }
 
-        List<IRecipeSlotsView> inputAlternatives = getRecipeInputAlternatives(context);
-        IRecipeTransferError error = transferHelper.transferRecipeWithInputAlternatives(
-                basicHandler,
-                context,
-                inputAlternatives,
-                doTransfer
-        );
-        if (error != null) {
+        IRecipeTransferError error = transferRecipeInputs(context, doTransfer);
+        if (error != null && error.getType() != IRecipeTransferError.Type.COSMETIC) {
             return error;
         }
 
         if (doTransfer && menu.clickMenuButton(context.getPlayer(), idx)) {
             ClientPacketDistributor.sendToServer(new ServerboundSelectFramingSawRecipePayload(menu.containerId, idx));
         }
-        return null;
+        return error;
+    }
+
+    protected @Nullable IRecipeTransferError transferRecipeInputs(IRecipeTransferContext<FramingSawRecipe, C> context, boolean doTransfer) {
+        List<IRecipeSlotsView> inputAlternatives = useAlternativeInputs() ? getRecipeInputAlternatives(context) : List.of();
+        return transferHelper.transferRecipeWithInputAlternatives(
+                basicHandler,
+                context,
+                inputAlternatives,
+                doTransfer
+        );
     }
 
     private List<IRecipeSlotsView> getRecipeInputAlternatives(IRecipeTransferContext<FramingSawRecipe, C> context) {
@@ -167,6 +173,8 @@ public abstract sealed class FramingSawTransferHandler<C extends AbstractContain
                stack.getOrDefault(FBContent.DC_TYPE_CAMO_LIST, CamoList.EMPTY).isEmptyOrContentsEmpty();
     }
 
+    protected abstract boolean useAlternativeInputs();
+
     private record MaterialCandidate(List<ItemStack> materials, FramingSawRecipeCalculation calculation) {
         private static Optional<MaterialCandidate> create(FramingSawRecipe recipe, List<ItemStack> availableMaterials) {
             FramingSawRecipeCalculation calculation = recipe.makeCraftingCalculation(
@@ -188,13 +196,54 @@ public abstract sealed class FramingSawTransferHandler<C extends AbstractContain
 
     public static final class FramingSaw extends FramingSawTransferHandler<FramingSawMenu> {
         public FramingSaw(IRecipeTransferHandlerHelper transferHelper) {
-            super(transferHelper, FramingSawMenu.class, FBContent.MENU_TYPE_FRAMING_SAW.get());
+            boolean ae2 = AppliedEnergisticsCompat.isLoaded();
+            super(transferHelper, ae2 ? FramingSawWithEncoderMenu.class : FramingSawMenu.class, FBContent.MENU_TYPE_FRAMING_SAW.get());
+        }
+
+        @Override
+        protected @Nullable IRecipeTransferError transferRecipeInputs(IRecipeTransferContext<FramingSawRecipe, FramingSawMenu> context, boolean doTransfer) {
+            return context.getContainer().isCraftingEnabled() ? super.transferRecipeInputs(context, doTransfer) : null;
+        }
+
+        @Override
+        protected boolean useAlternativeInputs() {
+            return ClientConfig.VIEW.useAlternativesInSawJeiTransfer();
         }
     }
 
     public static final class PoweredFramingSaw extends FramingSawTransferHandler<PoweredFramingSawMenu> {
         public PoweredFramingSaw(IRecipeTransferHandlerHelper transferHelper) {
             super(transferHelper, PoweredFramingSawMenu.class, FBContent.MENU_TYPE_POWERED_FRAMING_SAW.get());
+        }
+
+        @Override
+        protected @Nullable IRecipeTransferError transferRecipeInputs(IRecipeTransferContext<FramingSawRecipe, PoweredFramingSawMenu> context, boolean doTransfer) {
+            if (!ClientConfig.VIEW.transferItemsInPoweredSawJeiTransfer()) {
+                return null;
+            }
+            IRecipeTransferError error = super.transferRecipeInputs(context, doTransfer);
+            if (error != null && error.getMissingCountHint() != -1) {
+                return new SetRecipeOnlyRecipeTransferError();
+            }
+            return error;
+        }
+
+        @Override
+        protected boolean useAlternativeInputs() {
+            return ClientConfig.VIEW.useAlternativesInPoweredSawJeiTransfer();
+        }
+    }
+
+    /// Indicates that only the recipe ghost slot of the Powered Framing Saw will be configured but no items transferred.
+    private static final class SetRecipeOnlyRecipeTransferError implements IRecipeTransferError {
+        @Override
+        public Type getType() {
+            return Type.COSMETIC;
+        }
+
+        @Override
+        public void getTooltip(ITooltipBuilder tooltip) {
+            tooltip.add(JeiCompat.MSG_ONLY_SELECT_RECIPE);
         }
     }
 }

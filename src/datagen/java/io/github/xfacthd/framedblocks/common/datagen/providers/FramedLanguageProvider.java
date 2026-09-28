@@ -401,7 +401,7 @@ public final class FramedLanguageProvider extends LanguageProvider {
         add(EmptyCamoContainer.CAMO_NAME, "Empty");
 
         add(JeiCompat.MSG_INVALID_RECIPE, "Invalid recipe");
-        add(JeiCompat.MSG_TRANSFER_NOT_IMPLEMENTED, "Transfer not implemented, no items will be transferred");
+        add(JeiCompat.MSG_ONLY_SELECT_RECIPE, "Missing resources, only the result will be configured");
         add(JeiCompat.MSG_SUPPORTS_MOST_CAMOS, "Supports most items that can be used to apply camos by block interaction");
 
         add(AtlasViewerCompat.LABEL_TEXTURE, "Texture");
@@ -768,6 +768,9 @@ public final class FramedLanguageProvider extends LanguageProvider {
         addConfigValue(ClientConfig.SHOW_SPECIAL_CUBE_OVERLAY_VALUE, "Show special cube type overlay");
         addConfigValue(ClientConfig.RENDER_CAMO_IN_JADE_VALUE, "Render camo in Jade overlay");
         addConfigValue(ClientConfig.SHOW_CAMO_CRAFTING_IN_JEI_VALUE, "Show camo application recipes in JEI");
+        addConfigValue(ClientConfig.USE_ALTERNATIVES_IN_SAW_JEI_TRANSFER_VALUE, "Use alternative inputs in JEI recipe tranfers in the Framing Saw");
+        addConfigValue(ClientConfig.USE_ALTERNATIVES_IN_POWERED_SAW_JEI_TRANSFER_VALUE, "Use alternative inputs in JEI recipe tranfers in the Powered Framing Saw");
+        addConfigValue(ClientConfig.TRANSFER_ITEMS_IN_POWERED_SAW_JEI_TRANSFER_VALUE, "Transfer items in JEI recipe transfers in the Powered Framing Saw");
         addConfigValue(ClientConfig.DOUBLE_BLOCK_PART_INDICATOR_ENABLED_VALUE, "Show double-block part indicator");
         addConfigValue(ClientConfig.MAX_OVERLAY_MODE_VALUE, "Max overlay display mode");
         addConfigValue(ClientConfig.STATE_LOCK_MODE_VALUE, "State lock overlay: Display mode");

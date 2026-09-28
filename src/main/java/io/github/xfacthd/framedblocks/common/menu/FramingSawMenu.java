@@ -243,7 +243,7 @@ public class FramingSawMenu extends AbstractContainerMenu implements IFramingSaw
         return idx >= 0 && idx < recipes.size();
     }
 
-    protected boolean isCraftingEnabled() {
+    public boolean isCraftingEnabled() {
         return true;
     }
 

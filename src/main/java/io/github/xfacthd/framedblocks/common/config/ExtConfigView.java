@@ -31,6 +31,12 @@ public final class ExtConfigView {
 
         boolean showCamoCraftingInJei();
 
+        boolean useAlternativesInSawJeiTransfer();
+
+        boolean useAlternativesInPoweredSawJeiTransfer();
+
+        boolean transferItemsInPoweredSawJeiTransfer();
+
         boolean isDoubleBlockPartIndicatorEnabled();
 
         OverlayDisplayMode getMaxOverlayMode();

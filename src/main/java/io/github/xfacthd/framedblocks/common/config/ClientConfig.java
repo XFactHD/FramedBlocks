@@ -30,6 +30,9 @@ public final class ClientConfig {
     private static final String KEY_SHOW_SPECIAL_CUBE_OVERLAY = "showSpecialCubeTypeOverlay";
     private static final String KEY_RENDER_CAMO_IN_JADE = "renderCamoInJade";
     private static final String KEY_SHOW_CAMO_CRAFTING_IN_JEI = "showCamoCraftingInJei";
+    private static final String KEY_USE_ALTERNATIVES_IN_SAW_JEI_TRANSFER = "useAlternativesInFramingSawJeiTransfer";
+    private static final String KEY_USE_ALTERNATIVES_IN_POWERED_SAW_JEI_TRANSFER = "useAlternativesInPoweredFramingSawJeiTransfer";
+    private static final String KEY_TRANSFER_ITEMS_IN_POWERED_SAW_JEI_TRANSFER = "transferItemsInPoweredFramingSawJeiTransfer";
     private static final String KEY_DOUBLE_BLOCK_PART_INDICATOR_ENABLED = "doubleBlockPartIndicatorEnabled";
     private static final String KEY_MAX_OVERLAY_MODE = "maxOverlayMode";
     private static final String KEY_STATE_LOCK_MODE = "stateLockMode";
@@ -67,6 +70,9 @@ public final class ClientConfig {
     public static final ModConfigSpec.BooleanValue SHOW_SPECIAL_CUBE_OVERLAY_VALUE;
     public static final ModConfigSpec.BooleanValue RENDER_CAMO_IN_JADE_VALUE;
     public static final ModConfigSpec.BooleanValue SHOW_CAMO_CRAFTING_IN_JEI_VALUE;
+    public static final ModConfigSpec.BooleanValue USE_ALTERNATIVES_IN_SAW_JEI_TRANSFER_VALUE;
+    public static final ModConfigSpec.BooleanValue USE_ALTERNATIVES_IN_POWERED_SAW_JEI_TRANSFER_VALUE;
+    public static final ModConfigSpec.BooleanValue TRANSFER_ITEMS_IN_POWERED_SAW_JEI_TRANSFER_VALUE;
     public static final ModConfigSpec.BooleanValue DOUBLE_BLOCK_PART_INDICATOR_ENABLED_VALUE;
 
     public static final ModConfigSpec.EnumValue<OverlayDisplayMode> MAX_OVERLAY_MODE_VALUE;
@@ -96,6 +102,9 @@ public final class ClientConfig {
     private static boolean showSpecialCubeOverlay = false;
     private static boolean renderCamoInJade = false;
     private static boolean showCamoCraftingInJei = false;
+    private static boolean useAlternativesInSawJeiTransfer = false;
+    private static boolean useAlternativesInPoweredSawJeiTransfer = false;
+    private static boolean transferItemsInPoweredSawJeiTransfer = false;
     private static boolean doubleBlockPartIndicatorEnabled = false;
 
     private static OverlayDisplayMode maxOverlayMode = OverlayDisplayMode.DETAILED_ALWAYS;
@@ -207,6 +216,18 @@ public final class ClientConfig {
                 .translation(translate(KEY_SHOW_CAMO_CRAFTING_IN_JEI))
                 .worldRestart()
                 .define(KEY_SHOW_CAMO_CRAFTING_IN_JEI, true);
+        USE_ALTERNATIVES_IN_SAW_JEI_TRANSFER_VALUE = builder
+                .comment("Controls whether JEI recipe transfers in the Framing Saw can use alternative ingredients for the material input if the input shown in the JEI recipe display is unavailable")
+                .translation(translate(KEY_USE_ALTERNATIVES_IN_SAW_JEI_TRANSFER))
+                .define(KEY_USE_ALTERNATIVES_IN_SAW_JEI_TRANSFER, true);
+        USE_ALTERNATIVES_IN_POWERED_SAW_JEI_TRANSFER_VALUE = builder
+                .comment("Controls whether JEI recipe transfers in the Powered Framing Saw recipes can use alternative ingredients for the material input if the input shown in the JEI recipe display is unavailable")
+                .translation(translate(KEY_USE_ALTERNATIVES_IN_POWERED_SAW_JEI_TRANSFER))
+                .define(KEY_USE_ALTERNATIVES_IN_POWERED_SAW_JEI_TRANSFER, false);
+        TRANSFER_ITEMS_IN_POWERED_SAW_JEI_TRANSFER_VALUE = builder
+                .comment("Controls whether JEI recipe transfers in the Powered Framing Saw transfer items or only configure the recipe")
+                .translation(translate(KEY_TRANSFER_ITEMS_IN_POWERED_SAW_JEI_TRANSFER))
+                .define(KEY_TRANSFER_ITEMS_IN_POWERED_SAW_JEI_TRANSFER, true);
         DOUBLE_BLOCK_PART_INDICATOR_ENABLED_VALUE = builder
                 .comment("If true, double blocks will show an outline indicating which part is being targeted when looking at them")
                 .translation(translate(KEY_DOUBLE_BLOCK_PART_INDICATOR_ENABLED))
@@ -303,6 +324,9 @@ public final class ClientConfig {
             showSpecialCubeOverlay = SHOW_SPECIAL_CUBE_OVERLAY_VALUE.get();
             renderCamoInJade = RENDER_CAMO_IN_JADE_VALUE.get();
             showCamoCraftingInJei = SHOW_CAMO_CRAFTING_IN_JEI_VALUE.get();
+            useAlternativesInSawJeiTransfer = USE_ALTERNATIVES_IN_SAW_JEI_TRANSFER_VALUE.get();
+            useAlternativesInPoweredSawJeiTransfer = USE_ALTERNATIVES_IN_POWERED_SAW_JEI_TRANSFER_VALUE.get();
+            transferItemsInPoweredSawJeiTransfer = TRANSFER_ITEMS_IN_POWERED_SAW_JEI_TRANSFER_VALUE.get();
             doubleBlockPartIndicatorEnabled = DOUBLE_BLOCK_PART_INDICATOR_ENABLED_VALUE.get();
 
             maxOverlayMode = MAX_OVERLAY_MODE_VALUE.get();
@@ -391,6 +415,21 @@ public final class ClientConfig {
         @Override
         public boolean showCamoCraftingInJei() {
             return showCamoCraftingInJei;
+        }
+
+        @Override
+        public boolean useAlternativesInSawJeiTransfer() {
+            return useAlternativesInSawJeiTransfer;
+        }
+
+        @Override
+        public boolean useAlternativesInPoweredSawJeiTransfer() {
+            return useAlternativesInPoweredSawJeiTransfer;
+        }
+
+        @Override
+        public boolean transferItemsInPoweredSawJeiTransfer() {
+            return transferItemsInPoweredSawJeiTransfer;
         }
 
         @Override
