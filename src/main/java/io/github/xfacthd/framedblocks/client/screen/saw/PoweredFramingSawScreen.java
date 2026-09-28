@@ -246,7 +246,7 @@ public class PoweredFramingSawScreen extends AbstractContainerScreen<PoweredFram
                 return;
             }
 
-            int id = recipe == null ? -1 : cache.getRecipes().indexOf(recipe);
+            int id = recipe == null ? -1 : cache.getRecipeIndex(recipe.value());
             //noinspection ConstantConditions
             if (menu.clickMenuButton(minecraft.player, id)) {
                 ClientPacketDistributor.sendToServer(new ServerboundSelectFramingSawRecipePayload(menu.containerId, id));
