@@ -124,7 +124,7 @@ public class FramingSawWithEncoderMenu extends FramingSawMenu {
     }
 
     @Override
-    protected boolean isCraftingEnabled() {
+    public boolean isCraftingEnabled() {
         return !isInEncoderMode();
     }
 
