@@ -230,7 +230,7 @@ dependencies {
     compileOnly("org.appliedenergistics:appliedenergistics2:${ae2_version}:api")
     //localRuntime("org.appliedenergistics:appliedenergistics2:${ae2_version}")
 
-    compileOnly("curse.maven:jade-324717:${jade_coord}")
+    compileOnly("curse.maven:jade-324717:${jade_coord}-sources-${jade_sources_coord}")
     localRuntime("curse.maven:jade-324717:${jade_coord}")
 
     compileOnly("curse.maven:atlasviewer-633577:${atlasviewer_coord}")
