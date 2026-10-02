@@ -7,7 +7,7 @@ import io.github.xfacthd.framedblocks.common.capability.CapabilitySetup;
 import io.github.xfacthd.framedblocks.common.compat.CompatHandler;
 import io.github.xfacthd.framedblocks.common.config.ClientConfig;
 import io.github.xfacthd.framedblocks.common.config.DevToolsConfig;
-import io.github.xfacthd.framedblocks.common.config.ServerConfig;
+import io.github.xfacthd.framedblocks.common.config.SyncedConfig;
 import io.github.xfacthd.framedblocks.common.crafting.saw.FramingSawRecipeCache;
 import io.github.xfacthd.framedblocks.common.data.BlueprintBehaviours;
 import io.github.xfacthd.framedblocks.common.data.DataMapsSetup;
@@ -42,7 +42,7 @@ public final class FramedBlocks {
         FBContent.init(modBus);
 
         ClientConfig.init(modBus, modContainer);
-        ServerConfig.init(modBus, modContainer);
+        SyncedConfig.init(modBus, modContainer);
         DevToolsConfig.init(modBus, modContainer);
 
         modBus.addListener(CapabilitySetup::onRegisterCapabilities);
@@ -80,7 +80,7 @@ public final class FramedBlocks {
         CrashReportCallables.registerCrashCallable(
                 "FramedBlocks BlockEntity Warning",
                 FramedBlocks::getBlockEntityWarning,
-                ServerConfig.VIEW::allowBlockEntities
+                SyncedConfig.VIEW::allowBlockEntities
         );
     }
 

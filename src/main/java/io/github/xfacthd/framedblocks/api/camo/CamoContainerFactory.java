@@ -44,7 +44,7 @@ public abstract class CamoContainerFactory<T extends CamoContainer<?, T>> {
     protected abstract T readFromNetwork(ValueInput valueInput);
 
     /// Construct a camo container from the stack accessible via the given [ItemAccess] and consume the
-    /// resources. Must take [ConfigView.Server#shouldConsumeCamoItem()] into account.
+    /// resources. Must take [ConfigView.Synced#shouldConsumeCamoItem()] into account.
     ///
     /// Called on server and client side.
     ///
@@ -56,7 +56,7 @@ public abstract class CamoContainerFactory<T extends CamoContainer<?, T>> {
     public abstract @Nullable T applyCamo(Level level, BlockPos pos, Player player, ItemAccess itemAccess);
 
     /// Remove the camo and refund the resources to the player. Must take
-    /// [ConfigView.Server#shouldConsumeCamoItem()] into account.
+    /// [ConfigView.Synced#shouldConsumeCamoItem()] into account.
     ///
     /// Called on server and client side.
     ///

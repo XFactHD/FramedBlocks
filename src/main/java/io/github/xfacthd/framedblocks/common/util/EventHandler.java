@@ -4,7 +4,7 @@ import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.api.block.blockentity.IFramedBlockEntity;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.client.util.ClientAccess;
-import io.github.xfacthd.framedblocks.common.config.ServerConfig;
+import io.github.xfacthd.framedblocks.common.config.SyncedConfig;
 import io.github.xfacthd.framedblocks.common.crafting.saw.FramingSawRecipeCache;
 import io.github.xfacthd.framedblocks.common.data.dynreg.BlockOverlayCache;
 import net.minecraft.core.BlockPos;
@@ -32,7 +32,7 @@ public final class EventHandler {
                 }
             }
 
-            if (ServerConfig.VIEW.enableIntangibility() && !event.isCanceled() && block.getBlockType().allowMakingIntangible()) {
+            if (SyncedConfig.VIEW.enableIntangibility() && !event.isCanceled() && block.getBlockType().allowMakingIntangible()) {
                 if (level.getBlockEntity(pos) instanceof IFramedBlockEntity be && be.isIntangible(null)) {
                     event.setCanceled(true);
                 }

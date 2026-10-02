@@ -25,7 +25,7 @@ public abstract class AbstractBlockCamoContainerFactory<T extends AbstractBlockC
         if (state != null && !(state.getBlock() instanceof IFramedBlock) && isValidBlock(state, level, pos, player)) {
             try (Transaction tx = Transaction.open(null)) {
                 T container = createContainer(state, level, pos, player, itemAccess);
-                if (!level.isClientSide() && !player.isCreative() && ConfigView.Server.INSTANCE.shouldConsumeCamoItem()) {
+                if (!level.isClientSide() && !player.isCreative() && ConfigView.Synced.INSTANCE.shouldConsumeCamoItem()) {
                     if (itemAccess.extract(itemAccess.getResource(), 1, tx) != 1) {
                         return null;
                     }
@@ -40,7 +40,7 @@ public abstract class AbstractBlockCamoContainerFactory<T extends AbstractBlockC
 
     @Override
     public final boolean removeCamo(Level level, BlockPos pos, Player player, ItemAccess itemAccess, T container) {
-        if (!level.isClientSide() && (player.isCreative() || ConfigView.Server.INSTANCE.shouldConsumeCamoItem())) {
+        if (!level.isClientSide() && (player.isCreative() || ConfigView.Synced.INSTANCE.shouldConsumeCamoItem())) {
             ItemStack result = createItemStack(level, pos, player, itemAccess, container);
             try (Transaction tx = Transaction.open(null)) {
                 if (itemAccess.insert(ItemResource.of(result), result.getCount(), tx) != result.getCount()) {

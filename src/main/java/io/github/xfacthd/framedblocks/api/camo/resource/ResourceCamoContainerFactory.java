@@ -45,7 +45,7 @@ public abstract class ResourceCamoContainerFactory<R extends Resource, C extends
                 continue;
             }
 
-            if (consume && ConfigView.Server.INSTANCE.shouldConsumeCamoItem()) {
+            if (consume && ConfigView.Synced.INSTANCE.shouldConsumeCamoItem()) {
                 try (Transaction tx = Transaction.open(null)) {
                     if (handler.extract(tank, resource, FluidType.BUCKET_VOLUME, tx) != FluidType.BUCKET_VOLUME) {
                         continue;
@@ -76,7 +76,7 @@ public abstract class ResourceCamoContainerFactory<R extends Resource, C extends
         if (!isValidForHandler(handler, resource)) {
             return false;
         }
-        if (!player.isCreative() && ConfigView.Server.INSTANCE.shouldConsumeCamoItem()) {
+        if (!player.isCreative() && ConfigView.Synced.INSTANCE.shouldConsumeCamoItem()) {
             try (Transaction tx = Transaction.open(null)) {
                 if (handler.insert(resource, resourceAmount, tx) != resourceAmount) {
                     return false;

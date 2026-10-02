@@ -222,7 +222,7 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
     }
 
     private boolean canMakeIntangible(ItemResource resource) {
-        if (!ConfigView.Server.INSTANCE.enableIntangibility()) {
+        if (!ConfigView.Synced.INSTANCE.enableIntangibility()) {
             return false;
         }
         return FrameModifier.INTANGIBLE.matches(resource) && getBlockType().allowMakingIntangible();
@@ -564,7 +564,7 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
 
     /// {@return the light value emitted by this block based on camos and the [#glowing] flag}
     protected int getLightValue() {
-        int baseLight = glowing ? ConfigView.Server.INSTANCE.getGlowstoneLightLevel() : 0;
+        int baseLight = glowing ? ConfigView.Synced.INSTANCE.getGlowstoneLightLevel() : 0;
         return Math.max(baseLight, camoContainer.getContent().getLightEmission());
     }
 
@@ -588,7 +588,7 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
 
     @Override
     public final boolean isIntangible(@Nullable CollisionContext ctx) {
-        if (!ConfigView.Server.INSTANCE.enableIntangibility() || !intangible) {
+        if (!ConfigView.Synced.INSTANCE.enableIntangibility() || !intangible) {
             return false;
         }
 

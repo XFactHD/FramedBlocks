@@ -21,7 +21,7 @@ public final class PhantomPasteItem extends Item {
     @Override
     @SuppressWarnings("deprecation")
     public void appendHoverText(ItemStack stack, TooltipContext ctx, TooltipDisplay display, Consumer<Component> lines, TooltipFlag flag) {
-        if (!ConfigView.Server.INSTANCE.enableIntangibility()) {
+        if (!ConfigView.Synced.INSTANCE.enableIntangibility()) {
             lines.accept(FEATURE_DISABLED);
         }
     }

@@ -22,7 +22,7 @@ public interface CamoCraftingHandler<T extends CamoContainer<?, T>> {
     /// a framed block in a crafting recipe.
     ///
     /// @param stack   The [ItemStack] the camo was created from. Must not be modified
-    /// @param consume Whether the camo should be consumed (see [ConfigView.Server#shouldConsumeCamoItem()])
+    /// @param consume Whether the camo should be consumed (see [ConfigView.Synced#shouldConsumeCamoItem()])
     /// @return The stack that should remain in the crafting grid
     ItemStack getRemainder(ItemStack stack, boolean consume);
 }

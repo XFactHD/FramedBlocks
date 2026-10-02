@@ -25,7 +25,7 @@ public final class BlockCamoContainerFactory extends SimpleBlockCamoContainerFac
             displayValidationMessage(player, MSG_BLACKLISTED, CamoMessageVerbosity.DEFAULT);
             return false;
         }
-        if (camoState.hasBlockEntity() && !ConfigView.Server.INSTANCE.allowBlockEntities() && !camoState.is(FramedConstants.Tags.BE_WHITELIST)) {
+        if (camoState.hasBlockEntity() && !ConfigView.Synced.INSTANCE.allowBlockEntities() && !camoState.is(FramedConstants.Tags.BE_WHITELIST)) {
             displayValidationMessage(player, MSG_BLOCK_ENTITY, CamoMessageVerbosity.DEFAULT);
             return false;
         }

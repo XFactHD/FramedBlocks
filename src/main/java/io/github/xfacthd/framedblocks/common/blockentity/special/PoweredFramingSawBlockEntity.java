@@ -5,7 +5,7 @@ import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.capability.energy.EntityAwareEnergyHandler;
 import io.github.xfacthd.framedblocks.common.capability.item.RecipeInputItemResourceHandler;
 import io.github.xfacthd.framedblocks.common.capability.item.MaskingRangedResourceHandler;
-import io.github.xfacthd.framedblocks.common.config.ServerConfig;
+import io.github.xfacthd.framedblocks.common.config.SyncedConfig;
 import io.github.xfacthd.framedblocks.common.crafting.saw.FramingSawRecipe;
 import io.github.xfacthd.framedblocks.common.crafting.saw.FramingSawRecipeAdditive;
 import io.github.xfacthd.framedblocks.common.crafting.saw.FramingSawRecipeCache;
@@ -59,8 +59,8 @@ public class PoweredFramingSawBlockEntity extends BlockEntity {
             MaskingRangedResourceHandler.extractOnly(itemHandler, FramingSawMenu.SLOT_RESULT, FramingSawMenu.SLOT_RESULT + 1)
     );
     private final EntityAwareEnergyHandler energyStorage = new EntityAwareEnergyHandler(
-            ServerConfig.VIEW.getPoweredSawEnergyCapacity(),
-            ServerConfig.VIEW.getPoweredSawMaxInput(),
+            SyncedConfig.VIEW.getPoweredSawEnergyCapacity(),
+            SyncedConfig.VIEW.getPoweredSawMaxInput(),
             0,
             () -> this.needSaving = true
     );
@@ -87,8 +87,8 @@ public class PoweredFramingSawBlockEntity extends BlockEntity {
 
     public PoweredFramingSawBlockEntity(BlockPos pPos, BlockState pBlockState) {
         super(FBContent.BE_TYPE_POWERED_FRAMING_SAW.value(), pPos, pBlockState);
-        this.energyConsumption = ServerConfig.VIEW.getPoweredSawConsumption();
-        this.craftingDuration = ServerConfig.VIEW.getPoweredSawCraftingDuration();
+        this.energyConsumption = SyncedConfig.VIEW.getPoweredSawConsumption();
+        this.craftingDuration = SyncedConfig.VIEW.getPoweredSawCraftingDuration();
     }
 
     public static void tick(Level level, BlockPos pos, BlockState state, PoweredFramingSawBlockEntity be) {

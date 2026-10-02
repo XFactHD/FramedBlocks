@@ -30,7 +30,7 @@ final class FramedBlockInternals {
         }
 
         IFramedBlock block = (IFramedBlock) state.getBlock();
-        if (ConfigView.Server.INSTANCE.enableIntangibility() && block.getBlockType().allowMakingIntangible()) {
+        if (ConfigView.Synced.INSTANCE.enableIntangibility() && block.getBlockType().allowMakingIntangible()) {
             return !block.isIntangible(state, level, pos, null);
         }
         return true;

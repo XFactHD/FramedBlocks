@@ -12,7 +12,7 @@ import io.github.xfacthd.framedblocks.api.camo.CamoContainerHelper;
 import io.github.xfacthd.framedblocks.api.camo.CamoList;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.common.FBContent;
-import io.github.xfacthd.framedblocks.common.config.ServerConfig;
+import io.github.xfacthd.framedblocks.common.config.SyncedConfig;
 import io.github.xfacthd.framedblocks.common.data.FramedToolType;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -237,7 +237,7 @@ public class FramedBlueprintItem extends FramedToolItem {
 
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     private static boolean canCopyAllCamos(CamoList camos) {
-        if (!ServerConfig.VIEW.shouldConsumeCamoItem()) {
+        if (!SyncedConfig.VIEW.shouldConsumeCamoItem()) {
             return true;
         }
 
@@ -248,7 +248,7 @@ public class FramedBlueprintItem extends FramedToolItem {
     private static List<ItemStack> collectMaterials(BlueprintData data, CamoList camos) {
         List<ItemStack> materials = new ArrayList<>();
         materials.add(getBlockItem(data));
-        if (ServerConfig.VIEW.shouldConsumeCamoItem()) {
+        if (SyncedConfig.VIEW.shouldConsumeCamoItem()) {
             materials.addAll(getCamoStacksMerged(camos));
         }
 

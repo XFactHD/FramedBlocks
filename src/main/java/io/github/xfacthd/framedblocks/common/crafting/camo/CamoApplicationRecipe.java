@@ -50,7 +50,7 @@ public final class CamoApplicationRecipe extends CustomRecipe {
             return false;
         }
 
-        boolean consume = ConfigView.Server.INSTANCE.shouldConsumeCamoItem();
+        boolean consume = ConfigView.Synced.INSTANCE.shouldConsumeCamoItem();
 
         ItemStack camoOneStack = input.getItem(0, 1);
         boolean camoOne = false;
@@ -87,7 +87,7 @@ public final class CamoApplicationRecipe extends CustomRecipe {
             return ItemStack.EMPTY;
         }
 
-        boolean consume = ConfigView.Server.INSTANCE.shouldConsumeCamoItem();
+        boolean consume = ConfigView.Synced.INSTANCE.shouldConsumeCamoItem();
         List<CamoContainer<?, ?>> camos = new ArrayList<>(2);
 
         ItemStack camoOneStack = input.getItem(0, 1);
@@ -122,7 +122,7 @@ public final class CamoApplicationRecipe extends CustomRecipe {
             remaining.set(1, input.getItem(1, 0).copy());
         }
 
-        boolean consume = ConfigView.Server.INSTANCE.shouldConsumeCamoItem();
+        boolean consume = ConfigView.Synced.INSTANCE.shouldConsumeCamoItem();
 
         ItemStack camoOneStack = input.getItem(0, 1);
         if (!camoOneStack.isEmpty()) {

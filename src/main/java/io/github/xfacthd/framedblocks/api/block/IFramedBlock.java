@@ -215,7 +215,7 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension {
     /// @return the loot param builder
     default LootParams.Builder getCamoDrops(LootParams.Builder builder) {
         if (builder.getOptionalParameter(LootContextParams.BLOCK_ENTITY) instanceof IFramedBlockEntity be) {
-            boolean dropCamo = ConfigView.Server.INSTANCE.shouldConsumeCamoItem() &&
+            boolean dropCamo = ConfigView.Synced.INSTANCE.shouldConsumeCamoItem() &&
                     !builder.getParameter(LootContextParams.TOOL).has(FramedConstants.Objects.DC_TYPE_RETAIN_CAMO);
             builder.withDynamicDrop(DYNAMIC_DROPS, consumer ->
                     be.addAdditionalDrops(consumer, dropCamo)
@@ -290,7 +290,7 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension {
     /// @param adjPos   The position of the block being occluded
     /// @param adjState The state of the block being occluded
     default boolean canOccludeNeighbor(BlockGetter level, BlockPos pos, BlockState state, BlockPos adjPos, BlockState adjState) {
-        if (!ConfigView.Server.INSTANCE.enableIntangibility()) {
+        if (!ConfigView.Synced.INSTANCE.enableIntangibility()) {
             return true;
         }
         if (adjState.getBlock() instanceof IFramedBlock adjBlock && adjBlock.isIntangible(adjState, level, adjPos, null)) {
@@ -321,7 +321,7 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension {
 
     @Override
     default boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction face) {
-        if (ConfigView.Server.INSTANCE.areBlocksFireproof()) {
+        if (ConfigView.Synced.INSTANCE.areBlocksFireproof()) {
             return false;
         }
 
@@ -333,7 +333,7 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension {
 
     @Override
     default int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction face) {
-        if (ConfigView.Server.INSTANCE.areBlocksFireproof()) {
+        if (ConfigView.Synced.INSTANCE.areBlocksFireproof()) {
             return 0;
         }
 
@@ -348,7 +348,7 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension {
 
     @Override
     default int getFireSpreadSpeed(BlockState state, BlockGetter level, BlockPos pos, Direction face) {
-        if (ConfigView.Server.INSTANCE.areBlocksFireproof()) {
+        if (ConfigView.Synced.INSTANCE.areBlocksFireproof()) {
             return 0;
         }
 
@@ -372,7 +372,7 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension {
 
     @Override
     default boolean ignitedByLava(BlockState state, BlockGetter level, BlockPos pos, Direction side) {
-        if (ConfigView.Server.INSTANCE.areBlocksFireproof()) {
+        if (ConfigView.Synced.INSTANCE.areBlocksFireproof()) {
             return false;
         }
 
@@ -406,7 +406,7 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension {
     /// @param pos   The position of this block
     /// @param ctx   The collision context the intangibility is queried in
     default boolean isIntangible(@SuppressWarnings("unused") BlockState state, BlockGetter level, BlockPos pos, @Nullable CollisionContext ctx) {
-        if (!ConfigView.Server.INSTANCE.enableIntangibility() || !getBlockType().allowMakingIntangible()) {
+        if (!ConfigView.Synced.INSTANCE.enableIntangibility() || !getBlockType().allowMakingIntangible()) {
             return false;
         }
         return level.getBlockEntity(pos) instanceof IFramedBlockEntity be && be.isIntangible(ctx);

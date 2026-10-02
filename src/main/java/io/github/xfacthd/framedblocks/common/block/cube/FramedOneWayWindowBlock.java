@@ -12,7 +12,7 @@ import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
 import io.github.xfacthd.framedblocks.common.blockentity.special.FramedOwnableBlockEntity;
-import io.github.xfacthd.framedblocks.common.config.ServerConfig;
+import io.github.xfacthd.framedblocks.common.config.SyncedConfig;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import io.github.xfacthd.framedblocks.common.data.property.NullableDirection;
@@ -180,7 +180,7 @@ public class FramedOneWayWindowBlock extends FramedBlock {
     }
 
     public static boolean isOwnedBy(BlockGetter level, BlockPos pos, Player player) {
-        if (!ServerConfig.VIEW.isOneWayWindowOwnable()) {
+        if (!SyncedConfig.VIEW.isOneWayWindowOwnable()) {
             return true;
         }
         if (level.getBlockEntity(pos) instanceof FramedOwnableBlockEntity be) {

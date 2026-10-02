@@ -8,8 +8,8 @@ import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.neoforge.common.ModConfigSpec;
 
-public final class ServerConfig {
-    public static final ExtConfigView.Server VIEW = (ExtConfigView.Server) ConfigView.Server.INSTANCE;
+public final class SyncedConfig {
+    public static final ExtConfigView.Synced VIEW = (ExtConfigView.Synced) ConfigView.Synced.INSTANCE;
     private static final ModConfigSpec SPEC;
 
     private static final String KEY_ALLOW_BLOCK_ENTITIES = "allowBlockEntities";
@@ -53,7 +53,7 @@ public final class ServerConfig {
     public static void init(IEventBus modBus, ModContainer modContainer) {
         modBus.addListener((ModConfigEvent.Loading event) -> onConfigReloaded(event));
         modBus.addListener((ModConfigEvent.Reloading event) -> onConfigReloaded(event));
-        modContainer.registerConfig(ModConfig.Type.SERVER, SPEC);
+        modContainer.registerConfig(ModConfig.Type.SYNCED, SPEC);
     }
 
     static {
@@ -113,11 +113,11 @@ public final class ServerConfig {
     }
 
     private static String translate(String key) {
-        return Utils.translateConfig("server", key);
+        return Utils.translateConfig("synced", key);
     }
 
     private static void onConfigReloaded(ModConfigEvent event) {
-        if (event.getConfig().getType() == ModConfig.Type.SERVER && event.getConfig().getSpec() == SPEC) {
+        if (event.getConfig().getType() == ModConfig.Type.SYNCED && event.getConfig().getSpec() == SPEC) {
             allowBlockEntities = ALLOW_BLOCK_ENTITIES_VALUE.get();
             enableIntangibility = ENABLE_INTANGIBILITY_VALUE.get();
             oneWayWindowOwnable = ONE_WAY_WINDOW_OWNABLE_VALUE.get();
@@ -132,9 +132,9 @@ public final class ServerConfig {
         }
     }
 
-    private ServerConfig() { }
+    private SyncedConfig() { }
 
-    public static final class ViewImpl implements ExtConfigView.Server {
+    public static final class ViewImpl implements ExtConfigView.Synced {
         @Override
         public boolean allowBlockEntities() {
             return allowBlockEntities;

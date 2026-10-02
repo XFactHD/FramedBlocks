@@ -8,8 +8,8 @@ import org.jetbrains.annotations.ApiStatus;
 public final class ConfigView {
     /// Provides access to the values of the server config.
     @ApiStatus.NonExtendable
-    public interface Server {
-        Server INSTANCE = Utils.loadService(ConfigView.Server.class);
+    public interface Synced {
+        Synced INSTANCE = Utils.loadService(Synced.class);
 
         /// {@return whether blocks with BEs can be used as camos}
         boolean allowBlockEntities();

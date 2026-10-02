@@ -8,7 +8,7 @@ import org.jspecify.annotations.Nullable;
 import java.util.regex.Pattern;
 
 public final class ExtConfigView {
-    public interface Server extends ConfigView.Server {
+    public interface Synced extends ConfigView.Synced {
         int getPoweredSawEnergyCapacity();
 
         int getPoweredSawMaxInput();

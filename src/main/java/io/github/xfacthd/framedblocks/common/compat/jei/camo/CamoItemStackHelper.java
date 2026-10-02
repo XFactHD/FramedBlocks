@@ -22,7 +22,7 @@ public final class CamoItemStackHelper {
             return null;
         }
         CamoCraftingHandler<?> craftingHandler = factory.getCraftingHandler();
-        if (craftingHandler == null || !craftingHandler.canApply(itemStack, ConfigView.Server.INSTANCE.shouldConsumeCamoItem())) {
+        if (craftingHandler == null || !craftingHandler.canApply(itemStack, ConfigView.Synced.INSTANCE.shouldConsumeCamoItem())) {
             return null;
         }
         return factory;
