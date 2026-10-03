@@ -2,9 +2,6 @@
     "net/minecraft/client/multiplayer/MultiPlayerGameMode": [
         "io/github/xfacthd/framedblocks/client/util/duck/DefaultedAccessorMultiPlayerGameMode"
     ],
-    "net/minecraft/client/resources/model/ModelManager": [
-        "io/github/xfacthd/framedblocks/client/util/duck/DefaultedAccessorModelManager"
-    ],
     "net/minecraft/world/level/block/state/BlockBehaviour$BlockStateBase": [
         "io/github/xfacthd/framedblocks/api/internal/duck/StateCacheAccessor"
     ],

@@ -62,7 +62,7 @@ public final class ResourceCubeModel<R extends Resource, C extends ResourceCamoC
         ModelManager modelManager = Minecraft.getInstance().getModelManager();
         ModelBakery modelBakery = modelManager.getModelBakery();
 
-        ModelBakery.MissingModels missingModels = modelManager.framedblocks$getMissingModels();
+        ModelBakery.MissingModels missingModels = modelManager.getMissingModels();
         MaterialBaker materialBaker = RuntimeMaterialBaker.getInstance();
         ModelBakery.ModelBakerImpl baker = modelBakery.new ModelBakerImpl(materialBaker, INTERNER.get(), missingModels);
 
