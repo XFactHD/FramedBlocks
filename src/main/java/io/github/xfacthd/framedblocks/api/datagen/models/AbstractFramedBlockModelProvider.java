@@ -479,7 +479,7 @@ public abstract class AbstractFramedBlockModelProvider extends ModelProvider {
 
     @Override
     protected final Stream<? extends Holder<Item>> getKnownItems() {
-        return super.getKnownItems().filter(item -> item instanceof BlockItem);
+        return super.getKnownItems().filter(item -> item.value() instanceof BlockItem);
     }
 
     @Override
