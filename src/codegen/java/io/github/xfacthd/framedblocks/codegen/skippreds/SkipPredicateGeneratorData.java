@@ -373,8 +373,7 @@ final class SkipPredicateGeneratorData {
                             new TestDir("HalfDir", "Edge", null, TestDirIds.BOARD_SINGLE_EDGE),
                             new TestDir("CornerDir", "Corner", null, TestDirIds.CORNER_STRIP_CORNER)
                     ),
-            entry("FRAMED_LATTICE_BLOCK", "pillar")
-                    .shortName("Lattice")
+            entry("FRAMED_LATTICE", "pillar")
                     .props(
                             Property.api("boolean", "xAxis", "X_AXIS", PropType.PRIMITIVE)
                                     .withEarlyExit(),

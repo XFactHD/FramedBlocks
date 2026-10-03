@@ -15,7 +15,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
 /// This class is machine-generated, any manual changes to this class will be overwritten.
-@CullTest(BlockType.FRAMED_LATTICE_BLOCK)
+@CullTest(BlockType.FRAMED_LATTICE)
 public final class LatticeSkipPredicate implements SideSkipPredicate {
     @Override
     public boolean test(BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side) {
@@ -28,7 +28,7 @@ public final class LatticeSkipPredicate implements SideSkipPredicate {
 
         if (adjState.getBlock() instanceof IFramedBlock block && block.getBlockType() instanceof BlockType blockType) {
             return switch (blockType) {
-                case FRAMED_LATTICE_BLOCK -> testAgainstLattice(
+                case FRAMED_LATTICE -> testAgainstLattice(
                         xAxis, yAxis, zAxis, adjState, side
                 );
                 case FRAMED_FENCE -> testAgainstFence(
@@ -52,7 +52,7 @@ public final class LatticeSkipPredicate implements SideSkipPredicate {
         return false;
     }
 
-    @CullTest.TestTarget(BlockType.FRAMED_LATTICE_BLOCK)
+    @CullTest.TestTarget(BlockType.FRAMED_LATTICE)
     private static boolean testAgainstLattice(
             boolean xAxis, boolean yAxis, boolean zAxis, BlockState adjState, Direction side
     ) {

@@ -52,12 +52,12 @@ public class FramedLatticeBlock extends FramedBlock implements PillarLikeBlock, 
                 .setValue(FramedProperties.STATE_LOCKED, false)
         );
         this.connectionTest = switch (type) {
-            case FRAMED_LATTICE_BLOCK -> FramedLatticeBlock::canConnectThin;
+            case FRAMED_LATTICE -> FramedLatticeBlock::canConnectThin;
             case FRAMED_THICK_LATTICE -> FramedLatticeBlock::canConnectThick;
             default -> throw new IllegalArgumentException("Unexpected lattice type: " + type);
         };
         this.pillarConnection = switch (type) {
-            case FRAMED_LATTICE_BLOCK -> PillarConnection.POST;
+            case FRAMED_LATTICE -> PillarConnection.POST;
             case FRAMED_THICK_LATTICE -> PillarConnection.PILLAR;
             default -> throw new IllegalArgumentException("Unexpected BlockType in FramedLatticeBlock: " + type);
         };

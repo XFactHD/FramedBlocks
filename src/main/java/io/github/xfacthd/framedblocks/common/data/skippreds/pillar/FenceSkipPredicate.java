@@ -27,7 +27,7 @@ public final class FenceSkipPredicate implements SideSkipPredicate {
                 case FRAMED_FENCE_GATE -> testAgainstFenceGate(
                         state, adjState, side
                 );
-                case FRAMED_LATTICE_BLOCK -> testAgainstLattice(
+                case FRAMED_LATTICE -> testAgainstLattice(
                         adjState, side
                 );
                 case FRAMED_POST -> testAgainstPost(
@@ -63,7 +63,7 @@ public final class FenceSkipPredicate implements SideSkipPredicate {
         return PillarDirs.Fence.testFenceArmToGateDir(state, adjState, side);
     }
 
-    @CullTest.TestTarget(BlockType.FRAMED_LATTICE_BLOCK)
+    @CullTest.TestTarget(BlockType.FRAMED_LATTICE)
     private static boolean testAgainstLattice(
             BlockState adjState, Direction side
     ) {

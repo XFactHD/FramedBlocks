@@ -104,7 +104,7 @@ public final class ElevatedPyramidSlabSkipPredicate implements SideSkipPredicate
                 case FRAMED_HALF_BOARD -> testAgainstHalfBoard(
                         dir, adjState, side
                 );
-                case FRAMED_LATTICE_BLOCK -> testAgainstLattice(
+                case FRAMED_LATTICE -> testAgainstLattice(
                         dir, connection, adjState, side
                 );
                 case FRAMED_THICK_LATTICE -> testAgainstThickLattice(
@@ -376,7 +376,7 @@ public final class ElevatedPyramidSlabSkipPredicate implements SideSkipPredicate
         return SlopeDirs.ElevatedPyramidSlab.getHalfDir(dir, side).isEqualTo(PaneDirs.HalfBoard.getHalfDir(adjCmpDir, side.getOpposite()));
     }
 
-    @CullTest.TestTarget(BlockType.FRAMED_LATTICE_BLOCK)
+    @CullTest.TestTarget(BlockType.FRAMED_LATTICE)
     private static boolean testAgainstLattice(
             Direction dir, PillarConnection connection, BlockState adjState, Direction side
     ) {

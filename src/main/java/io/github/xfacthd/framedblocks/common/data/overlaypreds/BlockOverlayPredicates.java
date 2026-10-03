@@ -106,7 +106,7 @@ public final class BlockOverlayPredicates extends BlockTypeMap<BlockOverlayPredi
         put(BlockType.FRAMED_INNER_CORNER_BOARD, new InnerCornerBoardBlockOverlayPredicate());
         put(BlockType.FRAMED_DOUBLE_CORNER_BOARD, new DoubleCornerBoardBlockOverlayPredicate());
         put(BlockType.FRAMED_CORNER_STRIP, BlockOverlayPredicate.ALWAYS);
-        put(BlockType.FRAMED_LATTICE_BLOCK, BlockOverlayPredicate.ALWAYS);
+        put(BlockType.FRAMED_LATTICE, BlockOverlayPredicate.ALWAYS);
         put(BlockType.FRAMED_THICK_LATTICE, BlockOverlayPredicate.ALWAYS);
         put(BlockType.FRAMED_SECRET_STORAGE, BlockOverlayPredicate.ALWAYS);
         put(BlockType.FRAMED_TANK, BlockOverlayPredicate.ALWAYS);

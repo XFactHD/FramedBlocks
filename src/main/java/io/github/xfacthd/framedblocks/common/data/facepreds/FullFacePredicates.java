@@ -132,7 +132,7 @@ public final class FullFacePredicates extends BlockTypeMap<FullFacePredicate> {
         put(BlockType.FRAMED_INNER_CORNER_BOARD, FullFacePredicate.FALSE);
         put(BlockType.FRAMED_DOUBLE_CORNER_BOARD, FullFacePredicate.FALSE);
         put(BlockType.FRAMED_CORNER_STRIP, FullFacePredicate.FALSE);
-        put(BlockType.FRAMED_LATTICE_BLOCK, FullFacePredicate.FALSE);
+        put(BlockType.FRAMED_LATTICE, FullFacePredicate.FALSE);
         put(BlockType.FRAMED_THICK_LATTICE, FullFacePredicate.FALSE);
         put(BlockType.FRAMED_CHEST, FullFacePredicate.FALSE);
         put(BlockType.FRAMED_SECRET_STORAGE, FullFacePredicate.TRUE);

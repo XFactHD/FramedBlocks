@@ -153,7 +153,7 @@ public enum BlockType implements IBlockType {
     FRAMED_INNER_CORNER_BOARD                       ( true, false,  true,  true,  true, false,  true, ConTexMode.FULL_EDGE, Outline.SIMPLE, BoardShapes::generateInnerCorner),
     FRAMED_DOUBLE_CORNER_BOARD                      ( true, false,  true,  true,  true,  true,  true, ConTexMode.FULL_EDGE, Outline.SIMPLE, BoardShapes::generateDouble),
     FRAMED_CORNER_STRIP                             (false, false,  true,  true,  true, false,  true, ConTexMode.FULL_EDGE, Outline.SIMPLE, CornerStripShapes::generate),
-    FRAMED_LATTICE_BLOCK                            ( true, false,  true,  true,  true, false,  true, ConTexMode.DETAILED,  Outline.SIMPLE, LatticeShapes.THIN),
+    FRAMED_LATTICE                                  ( true, false,  true,  true,  true, false,  true, ConTexMode.DETAILED,  Outline.SIMPLE, LatticeShapes.THIN),
     FRAMED_THICK_LATTICE                            ( true, false,  true,  true,  true, false,  true, ConTexMode.DETAILED,  Outline.SIMPLE, LatticeShapes.THICK),
     FRAMED_CHEST                                    (false,  true,  true,  true, false, false, false, ConTexMode.DETAILED,  Outline.SIMPLE, ChestShapes::generate),
     FRAMED_SECRET_STORAGE                           ( true,  true, false,  true, false, false,  true, ConTexMode.FULL_FACE, Outline.SIMPLE, Shapes.block()),

@@ -252,7 +252,7 @@ public final class FBContent {
     public static final Holder<Block> BLOCK_FRAMED_INNER_CORNER_BOARD = registerBlock(FramedPartialBoardBlock::new, BlockType.FRAMED_INNER_CORNER_BOARD);
     public static final Holder<Block> BLOCK_FRAMED_DOUBLE_CORNER_BOARD = registerBlock(FramedDoubleCornerBoardBlock::new, BlockType.FRAMED_DOUBLE_CORNER_BOARD);
     public static final Holder<Block> BLOCK_FRAMED_CORNER_STRIP = registerBlock(FramedCornerStripBlock::new, BlockType.FRAMED_CORNER_STRIP);
-    public static final Holder<Block> BLOCK_FRAMED_LATTICE = registerBlock(FramedLatticeBlock::new, BlockType.FRAMED_LATTICE_BLOCK);
+    public static final Holder<Block> BLOCK_FRAMED_LATTICE = registerBlock(FramedLatticeBlock::new, BlockType.FRAMED_LATTICE);
     public static final Holder<Block> BLOCK_FRAMED_THICK_LATTICE = registerBlock(FramedLatticeBlock::new, BlockType.FRAMED_THICK_LATTICE);
     public static final Holder<Block> BLOCK_FRAMED_CHEST = registerBlock(FramedChestBlock::new, BlockType.FRAMED_CHEST);
     public static final Holder<Block> BLOCK_FRAMED_SECRET_STORAGE = registerBlock(FramedStorageBlock::new, BlockType.FRAMED_SECRET_STORAGE);

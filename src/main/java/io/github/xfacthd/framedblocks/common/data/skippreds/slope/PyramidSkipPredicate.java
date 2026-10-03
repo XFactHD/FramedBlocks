@@ -33,7 +33,7 @@ public final class PyramidSkipPredicate implements SideSkipPredicate {
                 case FRAMED_FENCE -> testAgainstFence(
                         dir, connection, side
                 );
-                case FRAMED_LATTICE_BLOCK -> testAgainstLattice(
+                case FRAMED_LATTICE -> testAgainstLattice(
                         dir, connection, adjState, side
                 );
                 case FRAMED_THICK_LATTICE -> testAgainstThickLattice(
@@ -72,7 +72,7 @@ public final class PyramidSkipPredicate implements SideSkipPredicate {
         return (SlopeDirs.Pyramid.isPostDir(dir, connection, side) && PillarDirs.Fence.isPostDir(side.getOpposite()));
     }
 
-    @CullTest.TestTarget(BlockType.FRAMED_LATTICE_BLOCK)
+    @CullTest.TestTarget(BlockType.FRAMED_LATTICE)
     private static boolean testAgainstLattice(
             Direction dir, PillarConnection connection, BlockState adjState, Direction side
     ) {

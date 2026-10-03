@@ -97,7 +97,7 @@ public final class SideSkipPredicates extends BlockTypeMap<SideSkipPredicate> {
         put(BlockType.FRAMED_CORNER_BOARD, new CornerBoardSkipPredicate());
         put(BlockType.FRAMED_INNER_CORNER_BOARD, new InnerCornerBoardSkipPredicate());
         put(BlockType.FRAMED_CORNER_STRIP, new CornerStripSkipPredicate());
-        put(BlockType.FRAMED_LATTICE_BLOCK, new LatticeSkipPredicate());
+        put(BlockType.FRAMED_LATTICE, new LatticeSkipPredicate());
         put(BlockType.FRAMED_THICK_LATTICE, new ThickLatticeSkipPredicate());
         put(BlockType.FRAMED_CHEST, new ChestSkipPredicate());
         put(BlockType.FRAMED_SECRET_STORAGE, SideSkipPredicate.FALSE);

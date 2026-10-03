@@ -2,6 +2,6 @@
   "type": "framedblocks:frame",
   "material": 1024,
   "result": {
-    "id": "framedblocks:framed_lattice_block"
+    "id": "framedblocks:framed_lattice"
   }
 }

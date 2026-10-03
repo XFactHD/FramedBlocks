@@ -32,7 +32,7 @@ public final class PostSkipPredicate implements SideSkipPredicate {
                 case FRAMED_FENCE -> testAgainstFence(
                         axis, side
                 );
-                case FRAMED_LATTICE_BLOCK -> testAgainstLattice(
+                case FRAMED_LATTICE -> testAgainstLattice(
                         axis, adjState, side
                 );
                 case FRAMED_PYRAMID -> testAgainstPyramid(
@@ -65,7 +65,7 @@ public final class PostSkipPredicate implements SideSkipPredicate {
         return (PillarDirs.Post.isPostDir(axis, side) && PillarDirs.Fence.isPostDir(side.getOpposite()));
     }
 
-    @CullTest.TestTarget(BlockType.FRAMED_LATTICE_BLOCK)
+    @CullTest.TestTarget(BlockType.FRAMED_LATTICE)
     private static boolean testAgainstLattice(
             Direction.Axis axis, BlockState adjState, Direction side
     ) {

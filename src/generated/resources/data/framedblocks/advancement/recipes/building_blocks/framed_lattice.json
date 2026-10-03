@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipes": "framedblocks:framed_lattice_block"
+        "recipes": "framedblocks:framed_lattice"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -26,7 +26,7 @@
   ],
   "rewards": {
     "recipes": [
-      "framedblocks:framed_lattice_block"
+      "framedblocks:framed_lattice"
     ]
   }
 }

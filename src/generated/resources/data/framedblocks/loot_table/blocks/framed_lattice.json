@@ -23,7 +23,7 @@
               "type": "minecraft:explosion_decay"
             }
           ],
-          "name": "framedblocks:framed_lattice_block"
+          "name": "framedblocks:framed_lattice"
         }
       ],
       "rolls": 1
@@ -44,5 +44,5 @@
       "rolls": 1
     }
   ],
-  "random_sequence": "framedblocks:blocks/framed_lattice_block"
+  "random_sequence": "framedblocks:blocks/framed_lattice"
 }
