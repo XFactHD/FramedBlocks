@@ -39,14 +39,15 @@ public record StoneButtonOverlayProvider(
 
     public static Factory factory(BlockState state, boolean large) {
         AttachFace face = state.getValue(BlockStateProperties.ATTACH_FACE);
-        Direction facing = switch (face) {
-            case FLOOR -> Direction.UP;
-            case WALL -> Direction.DOWN;
-            case CEILING -> state.getValue(BlockStateProperties.HORIZONTAL_FACING);
-        };
         if (large) {
+            Direction facing = switch (face) {
+                case FLOOR -> Direction.DOWN;
+                case WALL -> state.getValue(BlockStateProperties.HORIZONTAL_FACING);
+                case CEILING -> Direction.UP;
+            };
             return LARGE_FACTORIES[facing.ordinal()];
         } else {
+            Direction facing = state.getValue(BlockStateProperties.HORIZONTAL_FACING);
             return SMALL_FACTORIES[smallIndex(face, facing)];
         }
     }
@@ -54,13 +55,13 @@ public record StoneButtonOverlayProvider(
     private static int smallIndex(AttachFace face, Direction facing) {
         return switch (face) {
             case FLOOR -> facing.getAxis().ordinal();
-            case WALL -> facing.get2DDataValue() + 4;
-            case CEILING -> facing.getAxis().ordinal() + 1;
+            case CEILING -> facing.getAxis().ordinal() + 3;
+            case WALL -> facing.get2DDataValue() + 6;
         };
     }
 
     private static Factory[] makeSmallFactories() {
-        Factory[] factories = new Factory[8];
+        Factory[] factories = new Factory[10];
         for (Direction.Axis axis : new Direction.Axis[] { Direction.Axis.X, Direction.Axis.Z }) {
             factories[smallIndex(AttachFace.FLOOR, axis.getPositive())] = makeSmallFactory(Direction.UP, axis);
             factories[smallIndex(AttachFace.CEILING, axis.getPositive())] = makeSmallFactory(Direction.DOWN, axis);
