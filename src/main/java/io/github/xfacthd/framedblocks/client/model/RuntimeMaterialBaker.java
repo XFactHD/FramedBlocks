@@ -3,7 +3,6 @@ package io.github.xfacthd.framedblocks.client.model;
 import io.github.xfacthd.framedblocks.api.model.wrapping.MaterialLookup;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.client.util.CacheCleaner;
-import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
 import net.minecraft.client.renderer.texture.SpriteLoader;
 import net.minecraft.client.resources.model.ModelDebugName;
 import net.minecraft.client.resources.model.sprite.AtlasManager;
@@ -23,36 +22,17 @@ public final class RuntimeMaterialBaker extends MaterialBaker implements Materia
     @Nullable
     private static RuntimeMaterialBaker instance;
 
-    private final SpriteLoader.Preparations blockAtlas;
-
     public static RuntimeMaterialBaker getInstance() {
         return Objects.requireNonNull(instance, "RuntimeMaterialBaker not ready!");
     }
 
-    private RuntimeMaterialBaker(SpriteLoader.Preparations blockAtlas) {
-        super(blockAtlas, blockAtlas);
-        this.blockAtlas = blockAtlas;
+    private RuntimeMaterialBaker(SpriteLoader.Preparations blockAtlas, SpriteLoader.Preparations itemAtlas) {
+        super(blockAtlas, itemAtlas);
     }
 
     @Override
     public Material.Baked getMaterial(Material material) {
         return get(material, () -> "");
-    }
-
-    @Override
-    public Material.Baked get(Material material, ModelDebugName name) {
-        if (!material.sprite().equals(MissingTextureAtlasSprite.getLocation())) {
-            Material.Baked baked = bakedMaterials.computeIfAbsent(material, bakerFunction);
-            if (baked != null) {
-                return baked;
-            }
-        }
-        return replacementForMissingMaterial(material);
-    }
-
-    @Override
-    protected Material.@Nullable Baked bake(Material material) {
-        return bakeForAtlas(material, blockAtlas);
     }
 
     @Override
@@ -66,8 +46,9 @@ public final class RuntimeMaterialBaker extends MaterialBaker implements Materia
             PreparableReloadListener.PreparationBarrier preparationBarrier,
             Executor reloadExecutor
     ) {
-        return currentReload.get(AtlasManager.PENDING_STITCH)
-                .get(AtlasIds.BLOCKS)
+        AtlasManager.PendingStitchResults pending = currentReload.get(AtlasManager.PENDING_STITCH);
+        return pending.get(AtlasIds.BLOCKS)
+                .thenCombine(pending.get(AtlasIds.ITEMS), Preparations::new)
                 .thenCompose(preparationBarrier::wait)
                 .thenAcceptAsync(RuntimeMaterialBaker::reload, reloadExecutor);
     }
@@ -78,7 +59,9 @@ public final class RuntimeMaterialBaker extends MaterialBaker implements Materia
         }
     }
 
-    private static void reload(SpriteLoader.Preparations atlas) {
-        instance = new RuntimeMaterialBaker(atlas);
+    private static void reload(Preparations preparations) {
+        instance = new RuntimeMaterialBaker(preparations.blockAtlas, preparations.itemAtlas);
     }
+
+    private record Preparations(SpriteLoader.Preparations blockAtlas, SpriteLoader.Preparations itemAtlas) { }
 }
