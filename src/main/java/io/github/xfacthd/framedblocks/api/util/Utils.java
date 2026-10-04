@@ -40,6 +40,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.ServiceLoader;
 import java.util.Set;
 
@@ -252,9 +253,7 @@ public final class Utils {
     ///
     /// @param holder The holder whose key to resolve
     public static <T> ResourceKey<T> getKeyOrThrow(Holder<T> holder) {
-        return holder.unwrapKey().orElseThrow(
-                () -> new IllegalArgumentException("Direct holders and unbound reference holders are not supported")
-        );
+        return Objects.requireNonNull(holder.key(), "Direct holders and unbound intrusive reference holders are not supported");
     }
 
     /// Add the given stack to the given player's inventory.
