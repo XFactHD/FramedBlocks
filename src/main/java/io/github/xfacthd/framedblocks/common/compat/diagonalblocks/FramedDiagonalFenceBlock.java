@@ -1,16 +1,18 @@
 package io.github.xfacthd.framedblocks.common.compat.diagonalblocks;
 
-import fuzs.diagonalblocks.api.v2.block.DiagonalBlock;
-import fuzs.diagonalblocks.api.v2.block.DiagonalFenceBlock;
-import fuzs.diagonalblocks.api.v2.block.StarCollisionBlock;
-import fuzs.diagonalblocks.api.v2.util.EightWayDirection;
+import fuzs.diagonalblocks.common.api.v2.block.DiagonalBlock;
+import fuzs.diagonalblocks.common.api.v2.block.DiagonalFenceBlock;
+import fuzs.diagonalblocks.common.api.v2.block.StarCollisionBlock;
+import fuzs.diagonalblocks.common.api.v2.util.EightWayDirection;
 import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
+import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.api.block.ShapeLockableBlock;
 import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.api.util.RotationDirection;
+import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.block.IFramedBlockInternal;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import net.minecraft.core.BlockPos;
@@ -164,6 +166,6 @@ public final class FramedDiagonalFenceBlock extends DiagonalFenceBlock implement
 
     @Override
     public BlockState getJadeRenderState(BlockState state) {
-        return defaultBlockState().setValue(CrossCollisionBlock.EAST, true).setValue(CrossCollisionBlock.WEST, true);
+        return ((IFramedBlock) FBContent.BLOCK_FRAMED_FENCE.value()).getJadeRenderState(state);
     }
 }

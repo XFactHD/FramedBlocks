@@ -1,8 +1,8 @@
 package io.github.xfacthd.framedblocks.common.compat.diagonalblocks;
 
 import com.mojang.logging.LogUtils;
-import fuzs.diagonalblocks.api.v2.block.type.DiagonalBlockType;
-import fuzs.diagonalblocks.api.v2.block.type.DiagonalBlockTypes;
+import fuzs.diagonalblocks.common.api.v2.block.type.DiagonalBlockType;
+import fuzs.diagonalblocks.common.api.v2.block.type.DiagonalBlockTypes;
 import io.github.xfacthd.framedblocks.api.block.render.FramedClientBlockExtensions;
 import io.github.xfacthd.framedblocks.api.model.wrapping.RegisterModelWrappersEvent;
 import io.github.xfacthd.framedblocks.api.model.wrapping.WrapHelper;
