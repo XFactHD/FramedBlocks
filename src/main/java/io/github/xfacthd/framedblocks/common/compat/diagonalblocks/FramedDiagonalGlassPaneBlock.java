@@ -1,11 +1,12 @@
 package io.github.xfacthd.framedblocks.common.compat.diagonalblocks;
 
-import fuzs.diagonalblocks.api.v2.block.DiagonalBlock;
-import fuzs.diagonalblocks.api.v2.block.DiagonalGlassPaneBlock;
-import fuzs.diagonalblocks.api.v2.block.StarCollisionBlock;
-import fuzs.diagonalblocks.api.v2.util.EightWayDirection;
+import fuzs.diagonalblocks.common.api.v2.block.DiagonalBlock;
+import fuzs.diagonalblocks.common.api.v2.block.DiagonalGlassPaneBlock;
+import fuzs.diagonalblocks.common.api.v2.block.StarCollisionBlock;
+import fuzs.diagonalblocks.common.api.v2.util.EightWayDirection;
 import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
+import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.api.block.ShapeLockableBlock;
 import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
 import io.github.xfacthd.framedblocks.api.compat.jade.JadeDisplayConfig;
@@ -28,7 +29,6 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ScheduledTickAccess;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.CrossCollisionBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -189,6 +189,7 @@ public final class FramedDiagonalGlassPaneBlock extends DiagonalGlassPaneBlock i
 
     @Override
     public JadeDisplayConfig getJadeDisplayConfig() {
-        return JadeDisplayConfig.fixedState(this, defaultBlockState().setValue(CrossCollisionBlock.EAST, true).setValue(CrossCollisionBlock.WEST, true));
+        return ((IFramedBlock) FBContent.BLOCK_FRAMED_PANE.value()).getJadeDisplayConfig()
+                .withTargetClass(this);
     }
 }

@@ -1,6 +1,6 @@
 package io.github.xfacthd.framedblocks.common.compat.diagonalblocks;
 
-import fuzs.diagonalblocks.api.v2.block.DiagonalBlock;
+import fuzs.diagonalblocks.common.api.v2.block.DiagonalBlock;
 import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
 import io.github.xfacthd.framedblocks.api.model.data.QuadMapBuilder;
 import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
