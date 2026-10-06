@@ -2,7 +2,7 @@ package io.github.xfacthd.framedblocks.common.config;
 
 import io.github.xfacthd.framedblocks.api.predicate.contex.ConTexMode;
 import io.github.xfacthd.framedblocks.api.screen.overlay.OverlayDisplayMode;
-import io.github.xfacthd.framedblocks.api.util.CamoMessageVerbosity;
+import io.github.xfacthd.framedblocks.api.camo.CamoMessageVerbosity;
 import io.github.xfacthd.framedblocks.api.util.ConfigView;
 import io.github.xfacthd.framedblocks.api.util.text.I18nUtils;
 import io.github.xfacthd.framedblocks.client.model.SolidFrameMode;

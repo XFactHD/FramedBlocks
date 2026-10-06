@@ -3,7 +3,7 @@ package io.github.xfacthd.framedblocks.common.data.camo.block;
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.api.camo.TriggerRegistrar;
 import io.github.xfacthd.framedblocks.api.camo.block.SimpleBlockCamoContainerFactory;
-import io.github.xfacthd.framedblocks.api.util.CamoMessageVerbosity;
+import io.github.xfacthd.framedblocks.api.camo.CamoMessageVerbosity;
 import io.github.xfacthd.framedblocks.api.util.ConfigView;
 import io.github.xfacthd.framedblocks.api.util.FramedConstants;
 import net.minecraft.core.BlockPos;

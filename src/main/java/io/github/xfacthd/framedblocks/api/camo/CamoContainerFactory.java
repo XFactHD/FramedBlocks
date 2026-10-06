@@ -1,7 +1,6 @@
 package io.github.xfacthd.framedblocks.api.camo;
 
 import com.mojang.serialization.MapCodec;
-import io.github.xfacthd.framedblocks.api.util.CamoMessageVerbosity;
 import io.github.xfacthd.framedblocks.api.util.ConfigView;
 import io.github.xfacthd.framedblocks.api.util.text.I18nUtils;
 import net.minecraft.core.BlockPos;

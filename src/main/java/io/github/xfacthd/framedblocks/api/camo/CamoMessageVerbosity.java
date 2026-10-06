@@ -1,4 +1,4 @@
-package io.github.xfacthd.framedblocks.api.util;
+package io.github.xfacthd.framedblocks.api.camo;
 
 /// Indicates the verbosity of camo application failure messages.
 public enum CamoMessageVerbosity {

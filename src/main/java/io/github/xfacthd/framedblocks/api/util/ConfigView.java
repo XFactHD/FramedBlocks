@@ -1,5 +1,6 @@
 package io.github.xfacthd.framedblocks.api.util;
 
+import io.github.xfacthd.framedblocks.api.camo.CamoMessageVerbosity;
 import io.github.xfacthd.framedblocks.api.predicate.contex.ConTexMode;
 import org.jetbrains.annotations.ApiStatus;
 

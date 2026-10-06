@@ -4,7 +4,7 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.xfacthd.framedblocks.api.camo.TriggerRegistrar;
 import io.github.xfacthd.framedblocks.api.camo.resource.ResourceCamoContainerFactory;
-import io.github.xfacthd.framedblocks.api.util.CamoMessageVerbosity;
+import io.github.xfacthd.framedblocks.api.camo.CamoMessageVerbosity;
 import io.github.xfacthd.framedblocks.api.util.FramedConstants;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
