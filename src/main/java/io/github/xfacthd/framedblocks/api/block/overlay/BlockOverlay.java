@@ -5,7 +5,6 @@ import com.mojang.serialization.DataResult;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.api.util.FramedConstants;
-import io.github.xfacthd.framedblocks.api.util.Utils;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -106,7 +105,7 @@ public record BlockOverlay(
     ///
     /// @param overlay The overlay to get the translation key for
     public static String getDescriptionId(Holder<BlockOverlay> overlay) {
-        return Util.makeDescriptionId("block_overlay", Utils.getKeyOrThrow(overlay).identifier());
+        return Util.makeDescriptionId("block_overlay", overlay.key().identifier());
     }
 
     /// {@return a builder for an overlay in the given namespace}

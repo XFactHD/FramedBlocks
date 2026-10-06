@@ -3,12 +3,10 @@ package io.github.xfacthd.framedblocks.api.util;
 import com.google.common.base.Preconditions;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
@@ -40,7 +38,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
 import java.util.ServiceLoader;
 import java.util.Set;
 
@@ -247,13 +244,6 @@ public final class Utils {
     /// @param path The path of the payload type
     public static <T extends CustomPacketPayload> CustomPacketPayload.Type<T> payloadType(String path) {
         return new CustomPacketPayload.Type<>(id(path));
-    }
-
-    /// {@return the resource key of the given holder if available, else throws an exception}
-    ///
-    /// @param holder The holder whose key to resolve
-    public static <T> ResourceKey<T> getKeyOrThrow(Holder<T> holder) {
-        return Objects.requireNonNull(holder.key(), "Direct holders and unbound intrusive reference holders are not supported");
     }
 
     /// Add the given stack to the given player's inventory.

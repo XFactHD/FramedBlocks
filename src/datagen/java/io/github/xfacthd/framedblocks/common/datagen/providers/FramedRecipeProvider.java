@@ -1666,8 +1666,8 @@ public final class FramedRecipeProvider extends AbstractFramedRecipeProvider {
     }
 
     private void makeRotationRecipe(Holder<Block> first, Holder<Block> second, RecipeOutput consumer) {
-        String firstName = Utils.getKeyOrThrow(first).identifier().getPath();
-        String secondName = Utils.getKeyOrThrow(second).identifier().getPath();
+        String firstName = first.key().identifier().getPath();
+        String secondName = second.key().identifier().getPath();
 
         String name = firstName + "_rotate_to_" + secondName;
         new ShapeRotationRecipeBuilder(this, items, second.value())

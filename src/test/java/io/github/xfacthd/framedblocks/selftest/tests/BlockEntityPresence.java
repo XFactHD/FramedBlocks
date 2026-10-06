@@ -2,7 +2,6 @@ package io.github.xfacthd.framedblocks.selftest.tests;
 
 import io.github.xfacthd.framedblocks.api.block.IBlockType;
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
-import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.selftest.SelfTestReporter;
 import net.minecraft.core.Holder;
@@ -32,7 +31,7 @@ public final class BlockEntityPresence {
                 );
             } else if (types.size() > 1) {
                 String typesString = types.stream()
-                        .map(Utils::getKeyOrThrow)
+                        .map(Holder::key)
                         .map(ResourceKey::identifier)
                         .map(Identifier::toString)
                         .collect(Collectors.joining(", "));

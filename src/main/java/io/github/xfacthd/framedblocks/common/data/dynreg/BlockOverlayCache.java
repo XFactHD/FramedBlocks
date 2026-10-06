@@ -2,12 +2,10 @@ package io.github.xfacthd.framedblocks.common.data.dynreg;
 
 import io.github.xfacthd.framedblocks.api.block.overlay.BlockOverlay;
 import io.github.xfacthd.framedblocks.api.util.FramedConstants;
-import io.github.xfacthd.framedblocks.api.util.Utils;
 import it.unimi.dsi.fastutil.objects.Reference2ReferenceOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
@@ -68,9 +66,7 @@ public final class BlockOverlayCache {
             if (idx1 == -1 ^ idx2 == -1) {
                 return Integer.compare(idx2, idx1);
             }
-            ResourceKey<BlockOverlay> key1 = Utils.getKeyOrThrow(o1);
-            ResourceKey<BlockOverlay> key2 = Utils.getKeyOrThrow(o2);
-            return key1.compareTo(key2);
+            return o1.key().compareTo(o2.key());
         });
     }
 

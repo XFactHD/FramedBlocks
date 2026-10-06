@@ -171,8 +171,7 @@ public final class ModelWrappingManager {
     }
 
     private static void debugStateMerger(Holder<Block> block, StateMerger stateMerger) {
-        String blockId = Utils.getKeyOrThrow(block).identifier().toString();
-        debugStateMerger(block, blockId, stateMerger);
+        debugStateMerger(block, block.key().identifier().toString(), stateMerger);
     }
 
     private static void debugStateMerger(Holder<Block> block, String blockId, StateMerger stateMerger) {

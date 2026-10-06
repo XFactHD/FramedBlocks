@@ -54,15 +54,15 @@ public final class DiagonalBlocksCompat {
     private static final class GuardedAccess {
         public static void init(IEventBus modBus) {
             DiagonalBlockTypes.FENCE.registerBlockFactory(
-                    Utils.getKeyOrThrow(FBContent.BLOCK_FRAMED_FENCE).identifier(),
+                    FBContent.BLOCK_FRAMED_FENCE.key().identifier(),
                     _ -> FramedDiagonalFenceBlock::new
             );
             DiagonalBlockTypes.WINDOW.registerBlockFactory(
-                    Utils.getKeyOrThrow(FBContent.BLOCK_FRAMED_PANE).identifier(),
+                    FBContent.BLOCK_FRAMED_PANE.key().identifier(),
                     _ -> FramedDiagonalGlassPaneBlock::new
             );
-            DiagonalBlockTypes.WINDOW.disableBlockFactory(Utils.getKeyOrThrow(FBContent.BLOCK_FRAMED_BARS).identifier());
-            DiagonalBlockTypes.WALL.disableBlockFactory(Utils.getKeyOrThrow(FBContent.BLOCK_FRAMED_WALL).identifier());
+            DiagonalBlockTypes.WINDOW.disableBlockFactory(FBContent.BLOCK_FRAMED_BARS.key().identifier());
+            DiagonalBlockTypes.WALL.disableBlockFactory(FBContent.BLOCK_FRAMED_WALL.key().identifier());
 
             modBus.addListener(GuardedAccess::onBlockEntityTypeAddBlocks);
         }
@@ -85,7 +85,7 @@ public final class DiagonalBlocksCompat {
         }
 
         private static Optional<Holder.Reference<Block>> getBlock(DiagonalBlockType type, Holder<Block> srcBlock) {
-            Identifier srcName = Utils.getKeyOrThrow(srcBlock).identifier();
+            Identifier srcName = srcBlock.key().identifier();
             Identifier destName = type.id(srcName.getNamespace() + "/" + srcName.getPath());
             return BuiltInRegistries.BLOCK.get(ResourceKey.create(Registries.BLOCK, destName));
         }
