@@ -10,7 +10,6 @@ import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
 import io.github.xfacthd.framedblocks.api.model.data.FramedDoubleBlockData;
 import io.github.xfacthd.framedblocks.api.model.data.ModelDataEntry;
 import io.github.xfacthd.framedblocks.api.util.DirUtils;
-import io.github.xfacthd.framedblocks.api.util.Utils;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import it.unimi.dsi.fastutil.ints.IntSet;
 import net.minecraft.client.Minecraft;
@@ -195,7 +194,7 @@ abstract sealed class ClientData<T extends FramedBlockEntity> {
         Holder<BlockOverlay> overlay = blockEntity.getOverlay();
 
         // The view-blocking value is never resolved from the second part, no point in computing it twice
-        TriState viewBlocking = secondPart ? TriState.DEFAULT : Utils.toTriState(state.isSuffocating(level, pos));
+        TriState viewBlocking = secondPart ? TriState.DEFAULT : TriState.from(state.isSuffocating(level, pos));
         ModelDataEntry<?> queryData = camo.computeQueryData(level, pos);
         return new FramedBlockData(state, camo, cullMask, secondPart, reinforced, emissive, viewBlocking, overlay, queryData);
     }

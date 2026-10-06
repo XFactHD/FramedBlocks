@@ -13,7 +13,6 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Prediction;
 import net.minecraft.util.StringRepresentable;
-import net.minecraft.util.TriState;
 import net.minecraft.world.Containers;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -360,13 +359,6 @@ public final class Utils {
             result.append("Entity", entityHit.getEntity());
         }
         return result.toString();
-    }
-
-    /// {@return the tristate representation of the given boolean}
-    ///
-    /// @param value The boolean to convert
-    public static TriState toTriState(boolean value) {
-        return value ? TriState.TRUE : TriState.FALSE;
     }
 
     @ApiStatus.Internal
