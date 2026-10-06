@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import com.mojang.blaze3d.platform.InputConstants;
 import io.github.xfacthd.framedblocks.api.util.ClientUtils;
 import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.text.I18nUtils;
 import io.github.xfacthd.framedblocks.common.compat.ae2.AppliedEnergisticsCompat;
 import io.github.xfacthd.framedblocks.common.crafting.saw.FramingSawRecipe;
 import io.github.xfacthd.framedblocks.common.crafting.saw.FramingSawRecipeAdditive;
@@ -39,8 +40,8 @@ import java.util.List;
 import java.util.Optional;
 
 public class FramingSawWithEncoderScreen extends FramingSawScreen {
-    public static final Component TOOLTIP_TAB_CRAFTING = Utils.translate("tooltip", "framing_saw.mode.crafting");
-    public static final Component TOOLTIP_TAB_PATTERN = Utils.translate("tooltip", "framing_saw.mode.pattern_encode");
+    public static final Component TOOLTIP_TAB_CRAFTING = I18nUtils.translate("tooltip", "framing_saw.mode.crafting");
+    public static final Component TOOLTIP_TAB_PATTERN = I18nUtils.translate("tooltip", "framing_saw.mode.pattern_encode");
     private static final Identifier BACKGROUND_ENCODER = Utils.id("textures/gui/framing_saw_encoder.png");
     private static final Identifier TAB_ICON = Utils.id("minecraft", "advancements/tab_left_middle");
     private static final Identifier TAB_SELECTED_ICON = Utils.id("minecraft", "advancements/tab_left_middle_selected");

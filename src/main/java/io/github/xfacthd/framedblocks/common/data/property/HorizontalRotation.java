@@ -5,7 +5,7 @@ import com.mojang.math.Axis;
 import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.api.util.MathUtils;
 import io.github.xfacthd.framedblocks.api.util.RotationDirection;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.text.I18nUtils;
 import io.github.xfacthd.framedblocks.api.util.text.Printable;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import net.minecraft.ChatFormatting;
@@ -33,7 +33,7 @@ public enum HorizontalRotation implements StringRepresentable, Printable {
     public static final List<HorizontalRotation> CYCLE_ORDER = List.of(UP, RIGHT, DOWN, LEFT);
 
     private final String name = toString().toLowerCase(Locale.ROOT);
-    private final Component displayName = Utils.translate("value", "horizontal_rotation." + name);
+    private final Component displayName = I18nUtils.translate("value", "horizontal_rotation." + name);
     private final Function<Direction, Direction> facingMod;
     private final VoxelShape slabShape;
     private final VoxelShape cornerShape;

@@ -9,7 +9,7 @@ import io.github.xfacthd.framedblocks.api.compat.jade.JadeDisplayConfig;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.api.util.RotationDirection;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.text.I18nUtils;
 import io.github.xfacthd.framedblocks.common.block.IFramedBlockInternal;
 import io.github.xfacthd.framedblocks.common.compat.diagonalblocks.DiagonalBlocksCompat;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
@@ -40,10 +40,10 @@ import java.util.List;
 import java.util.Set;
 
 public class FramedFenceBlock extends FenceBlock implements IFramedBlockInternal, ShapeLockableBlock {
-    public static final String LABEL_NORTH = Utils.translationKey("label", "state_cycling.property.fence.north");
-    public static final String LABEL_EAST = Utils.translationKey("label", "state_cycling.property.fence.east");
-    public static final String LABEL_SOUTH = Utils.translationKey("label", "state_cycling.property.fence.south");
-    public static final String LABEL_WEST = Utils.translationKey("label", "state_cycling.property.fence.west");
+    public static final String LABEL_NORTH = I18nUtils.translationKey("label", "state_cycling.property.fence.north");
+    public static final String LABEL_EAST = I18nUtils.translationKey("label", "state_cycling.property.fence.east");
+    public static final String LABEL_SOUTH = I18nUtils.translationKey("label", "state_cycling.property.fence.south");
+    public static final String LABEL_WEST = I18nUtils.translationKey("label", "state_cycling.property.fence.west");
 
     public FramedFenceBlock(Properties props) {
         super(IFramedBlock.applyDefaultProperties(props, BlockType.FRAMED_FENCE));

@@ -4,6 +4,7 @@ import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.SlopeToggleBlock;
 import io.github.xfacthd.framedblocks.api.screen.overlay.BlockInteractOverlay;
 import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.text.I18nUtils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.config.ClientConfig;
 import net.minecraft.network.chat.Component;
@@ -16,14 +17,14 @@ import net.neoforged.neoforge.common.util.ConcatenatedListView;
 import java.util.List;
 
 public final class ToggleAltSlopeOverlay extends BlockInteractOverlay {
-    public static final String SLOPE_MESSAGE_VERT = Utils.translationKey("tooltip", "alt_slope");
-    public static final String TOGGLE_MESSAGE_VERT = Utils.translationKey("tooltip", "alt_slope.toggle");
-    public static final String SLOPE_MESSAGE_HOR = Utils.translationKey("tooltip", "alt_slope.alt");
-    public static final String TOGGLE_MESSAGE_HOR = Utils.translationKey("tooltip", "alt_slope.alt.toggle");
-    public static final Component SLOPE_VERT_HOR = Utils.translate("tooltip", "alt_slope.vertical.horizontal");
-    public static final Component SLOPE_VERT_VERT = Utils.translate("tooltip", "alt_slope.vertical.vertical");
-    public static final Component SLOPE_HOR_FRONT = Utils.translate("tooltip", "alt_slope.horizontal.front");
-    public static final Component SLOPE_HOR_SIDE = Utils.translate("tooltip", "alt_slope.horizontal.side");
+    public static final String SLOPE_MESSAGE_VERT = I18nUtils.translationKey("tooltip", "alt_slope");
+    public static final String TOGGLE_MESSAGE_VERT = I18nUtils.translationKey("tooltip", "alt_slope.toggle");
+    public static final String SLOPE_MESSAGE_HOR = I18nUtils.translationKey("tooltip", "alt_slope.alt");
+    public static final String TOGGLE_MESSAGE_HOR = I18nUtils.translationKey("tooltip", "alt_slope.alt.toggle");
+    public static final Component SLOPE_VERT_HOR = I18nUtils.translate("tooltip", "alt_slope.vertical.horizontal");
+    public static final Component SLOPE_VERT_VERT = I18nUtils.translate("tooltip", "alt_slope.vertical.vertical");
+    public static final Component SLOPE_HOR_FRONT = I18nUtils.translate("tooltip", "alt_slope.horizontal.front");
+    public static final Component SLOPE_HOR_SIDE = I18nUtils.translate("tooltip", "alt_slope.horizontal.side");
     private static final List<Component> LINES_FALSE = List.of(
             Component.translatable(SLOPE_MESSAGE_VERT, SLOPE_VERT_HOR),
             Component.translatable(TOGGLE_MESSAGE_VERT, SLOPE_VERT_VERT)

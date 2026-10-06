@@ -3,6 +3,7 @@ package io.github.xfacthd.framedblocks.client.screen.overlay.impl;
 import io.github.xfacthd.framedblocks.api.block.CopycatStyleBlock;
 import io.github.xfacthd.framedblocks.api.screen.overlay.BlockInteractOverlay;
 import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.text.I18nUtils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.config.ClientConfig;
 import net.minecraft.network.chat.Component;
@@ -13,10 +14,10 @@ import net.minecraft.world.item.ItemStack;
 import java.util.List;
 
 public final class CopycatStyleOverlay extends BlockInteractOverlay {
-    public static final Component LINE_USE_STANDARD = Utils.translate("tooltip", "copycat_style.use_standard");
-    public static final Component LINE_USE_COPYCAT = Utils.translate("tooltip", "copycat_style.use_copycat");
-    public static final Component LINE_SET_STANDARD = Utils.translate("tooltip", "copycat_style.set_standard");
-    public static final Component LINE_SET_COPYCAT = Utils.translate("tooltip", "copycat_style.set_copycat");
+    public static final Component LINE_USE_STANDARD = I18nUtils.translate("tooltip", "copycat_style.use_standard");
+    public static final Component LINE_USE_COPYCAT = I18nUtils.translate("tooltip", "copycat_style.use_copycat");
+    public static final Component LINE_SET_STANDARD = I18nUtils.translate("tooltip", "copycat_style.set_standard");
+    public static final Component LINE_SET_COPYCAT = I18nUtils.translate("tooltip", "copycat_style.set_copycat");
     private static final List<Component> LINES_FALSE = List.of(LINE_USE_STANDARD, LINE_SET_COPYCAT);
     private static final List<Component> LINES_TRUE = List.of(LINE_USE_COPYCAT, LINE_SET_STANDARD);
 

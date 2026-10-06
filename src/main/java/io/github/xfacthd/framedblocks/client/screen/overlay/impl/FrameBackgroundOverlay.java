@@ -2,6 +2,7 @@ package io.github.xfacthd.framedblocks.client.screen.overlay.impl;
 
 import io.github.xfacthd.framedblocks.api.screen.overlay.BlockInteractOverlay;
 import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.text.I18nUtils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.block.interactive.FramedItemFrameBlock;
 import io.github.xfacthd.framedblocks.common.config.ClientConfig;
@@ -20,10 +21,10 @@ public final class FrameBackgroundOverlay extends BlockInteractOverlay {
     private static final Texture TEXTURE_BG = new Texture(SYMBOL_TEXTURE, 0, 0, 22, 22, 38, 22);
     private static final Texture TEXTURE_CROSS = new Texture(SYMBOL_TEXTURE, 22, 0, 16, 16, 38, 22);
     private static final Texture TEXTURE_LEATHER = new Texture(LEATHER_TEXTURE, 0, 0, 16, 16, 16, 16);
-    public static final Component LINE_USE_CAMO_BG = Utils.translate("tooltip", "frame_bg.use_camo");
-    public static final Component LINE_USE_LEATHER_BG = Utils.translate("tooltip", "frame_bg.use_leather");
-    public static final Component LINE_SET_CAMO_BG = Utils.translate("tooltip", "frame_bg.set_camo");
-    public static final Component LINE_SET_LEATHER_BG = Utils.translate("tooltip", "frame_bg.set_leather");
+    public static final Component LINE_USE_CAMO_BG = I18nUtils.translate("tooltip", "frame_bg.use_camo");
+    public static final Component LINE_USE_LEATHER_BG = I18nUtils.translate("tooltip", "frame_bg.use_leather");
+    public static final Component LINE_SET_CAMO_BG = I18nUtils.translate("tooltip", "frame_bg.set_camo");
+    public static final Component LINE_SET_LEATHER_BG = I18nUtils.translate("tooltip", "frame_bg.set_leather");
     private static final List<Component> LINES_FALSE = List.of(LINE_USE_CAMO_BG, LINE_SET_LEATHER_BG);
     private static final List<Component> LINES_TRUE = List.of(LINE_USE_LEATHER_BG, LINE_SET_CAMO_BG);
 

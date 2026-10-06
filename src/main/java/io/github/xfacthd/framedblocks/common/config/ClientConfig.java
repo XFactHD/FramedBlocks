@@ -4,7 +4,7 @@ import io.github.xfacthd.framedblocks.api.predicate.contex.ConTexMode;
 import io.github.xfacthd.framedblocks.api.screen.overlay.OverlayDisplayMode;
 import io.github.xfacthd.framedblocks.api.util.CamoMessageVerbosity;
 import io.github.xfacthd.framedblocks.api.util.ConfigView;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.text.I18nUtils;
 import io.github.xfacthd.framedblocks.client.model.SolidFrameMode;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
@@ -295,7 +295,7 @@ public final class ClientConfig {
     }
 
     private static String translate(String key) {
-        return Utils.translateConfig("client", key);
+        return I18nUtils.translateConfig("client", key);
     }
 
     private static String[] formatOverlayComments(String overlay) {

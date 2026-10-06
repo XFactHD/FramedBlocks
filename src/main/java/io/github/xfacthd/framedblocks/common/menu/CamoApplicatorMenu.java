@@ -2,7 +2,7 @@ package io.github.xfacthd.framedblocks.common.menu;
 
 import io.github.xfacthd.framedblocks.api.block.blockentity.FrameModifier;
 import io.github.xfacthd.framedblocks.api.camo.CamoContainerHelper;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.text.I18nUtils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.item.applicator.CamoApplicatorConfig;
 import io.github.xfacthd.framedblocks.common.item.applicator.CamoApplicatorContent;
@@ -30,7 +30,7 @@ import java.util.Arrays;
 import java.util.Objects;
 
 public final class CamoApplicatorMenu extends AbstractContainerMenu {
-    public static final Component TITLE = Utils.translate("title", "camo_applicator");
+    public static final Component TITLE = I18nUtils.translate("title", "camo_applicator");
     public static final int CAMO_INV_X = 8;
     public static final int CAMO_INV_Y = 17;
     public static final int CAMO_INV_ROWS_COLS = 4;

@@ -2,7 +2,7 @@ package io.github.xfacthd.framedblocks.common.blockentity.special;
 
 import io.github.xfacthd.framedblocks.api.block.blockentity.DelegatingFramedBlockEntity;
 import io.github.xfacthd.framedblocks.api.block.blockentity.WrappedFramedBlockEntity;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.text.I18nUtils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
@@ -22,7 +22,7 @@ import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.model.data.ModelData;
 
 public final class FramedHopperBlockEntity extends HopperBlockEntity implements DelegatingFramedBlockEntity {
-    public static final Component TITLE = Utils.translate("title", "framed_hopper");
+    public static final Component TITLE = I18nUtils.translate("title", "framed_hopper");
     public static final String COOLDOWN_NBT_KEY = "TransferCooldown";
 
     private final WrappedFramedBlockEntity delegate;

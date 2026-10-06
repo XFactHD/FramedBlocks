@@ -1,6 +1,6 @@
 package io.github.xfacthd.framedblocks.api.camo;
 
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.text.I18nUtils;
 import io.github.xfacthd.framedblocks.api.util.text.MoreCommonComponents;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -12,10 +12,10 @@ import java.util.function.Consumer;
 
 /// Helpers for displaying camos in item tooltips.
 public final class CamoPrinter {
-    public static final MutableComponent BLOCK_NONE = Utils.translate("desc", "camo_tooltip.block.none").withStyle(ChatFormatting.RED);
-    public static final String CAMO_LABEL = Utils.translationKey("desc", "block.stored_camo");
-    public static final String CAMO_LABEL_MULTI = Utils.translationKey("desc", "block.stored_camo_multi");
-    public static final String DOUBLE_CAMO_SEPARATOR_KEY = Utils.translationKey("desc", "camo_tooltip.double_camo_separator");
+    public static final MutableComponent BLOCK_NONE = I18nUtils.translate("desc", "camo_tooltip.block.none").withStyle(ChatFormatting.RED);
+    public static final String CAMO_LABEL = I18nUtils.translationKey("desc", "block.stored_camo");
+    public static final String CAMO_LABEL_MULTI = I18nUtils.translationKey("desc", "block.stored_camo_multi");
+    public static final String DOUBLE_CAMO_SEPARATOR_KEY = I18nUtils.translationKey("desc", "camo_tooltip.double_camo_separator");
     private static final Prefixer DEFAULT_CAMO_PREFIXER = (text, multiple) -> {
         String key = multiple ? CAMO_LABEL_MULTI : CAMO_LABEL;
         return Component.translatable(key, text).withStyle(ChatFormatting.GOLD);

@@ -2,6 +2,7 @@ package io.github.xfacthd.framedblocks.client.screen.overlay.impl;
 
 import io.github.xfacthd.framedblocks.api.screen.overlay.BlockInteractOverlay;
 import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.text.I18nUtils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.config.ClientConfig;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
@@ -13,9 +14,9 @@ import net.minecraft.world.item.ItemStack;
 import java.util.List;
 
 public final class SplitLineOverlay extends BlockInteractOverlay {
-    public static final Component SPLIT_LINE_FALSE = Utils.translate("tooltip", "split_line.false");
-    public static final Component SPLIT_LINE_TRUE = Utils.translate("tooltip", "split_line.true");
-    public static final Component MSG_SWITCH_SPLIT_LINE = Utils.translate("msg", "split_line.switch");
+    public static final Component SPLIT_LINE_FALSE = I18nUtils.translate("tooltip", "split_line.false");
+    public static final Component SPLIT_LINE_TRUE = I18nUtils.translate("tooltip", "split_line.true");
+    public static final Component MSG_SWITCH_SPLIT_LINE = I18nUtils.translate("msg", "split_line.switch");
     private static final List<Component> LINES_FALSE = List.of(SPLIT_LINE_FALSE, MSG_SWITCH_SPLIT_LINE);
     private static final List<Component> LINES_TRUE = List.of(SPLIT_LINE_TRUE, MSG_SWITCH_SPLIT_LINE);
 

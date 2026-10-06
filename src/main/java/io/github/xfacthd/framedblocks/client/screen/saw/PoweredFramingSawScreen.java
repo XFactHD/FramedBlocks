@@ -2,6 +2,7 @@ package io.github.xfacthd.framedblocks.client.screen.saw;
 
 import io.github.xfacthd.framedblocks.api.util.ClientUtils;
 import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.text.I18nUtils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.crafting.saw.FramingSawRecipe;
 import io.github.xfacthd.framedblocks.common.crafting.saw.FramingSawRecipeAdditive;
@@ -38,16 +39,16 @@ import java.util.Optional;
 
 public class PoweredFramingSawScreen extends AbstractContainerScreen<PoweredFramingSawMenu> implements IFramingSawScreen {
     private static final Identifier BACKGROUND = Utils.id("textures/gui/powered_framing_saw.png");
-    public static final Component TITLE_TARGETBLOCK = Utils.translate("title", "powered_saw.target_block");
-    public static final MutableComponent MSG_STATUS = Utils.translate("msg", "powered_saw.status");
-    public static final Component MSG_STATUS_NO_RECIPE = Utils.translate("msg", "powered_saw.status.no_recipe")
+    public static final Component TITLE_TARGETBLOCK = I18nUtils.translate("title", "powered_saw.target_block");
+    public static final MutableComponent MSG_STATUS = I18nUtils.translate("msg", "powered_saw.status");
+    public static final Component MSG_STATUS_NO_RECIPE = I18nUtils.translate("msg", "powered_saw.status.no_recipe")
             .withStyle(Style.EMPTY.withColor(0xDD7700));
-    public static final Component MSG_STATUS_NO_MATCH = Utils.translate("msg", "powered_saw.status.no_match")
+    public static final Component MSG_STATUS_NO_MATCH = I18nUtils.translate("msg", "powered_saw.status.no_match")
             .withStyle(Style.EMPTY.withColor(0xDD0000));
-    public static final Component MSG_STATUS_READY = Utils.translate("msg", "powered_saw.status.ready")
+    public static final Component MSG_STATUS_READY = I18nUtils.translate("msg", "powered_saw.status.ready")
             .withStyle(Style.EMPTY.withColor(0x00DD00));
-    public static final Component TOOLTIP_STATUS_NO_RECIPE = Utils.translate("tooltip", "powered_saw.status.no_recipe");
-    public static final String TOOLTIP_ENERGY = Utils.translationKey("tooltip", "powered_saw.energy");
+    public static final Component TOOLTIP_STATUS_NO_RECIPE = I18nUtils.translate("tooltip", "powered_saw.status.no_recipe");
+    public static final String TOOLTIP_ENERGY = I18nUtils.translationKey("tooltip", "powered_saw.energy");
     private static final int TITLE_TARGETBLOCK_X = 88;
     private static final int TITLE_TARGETBLOCK_Y = 24;
     private static final int TARGET_STACK_X = 92;

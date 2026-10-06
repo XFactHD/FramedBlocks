@@ -5,6 +5,7 @@ import io.github.xfacthd.framedblocks.api.block.overlay.BlockOverlay;
 import io.github.xfacthd.framedblocks.api.model.util.TintUtils;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.api.util.Rect;
+import io.github.xfacthd.framedblocks.api.util.text.I18nUtils;
 import io.github.xfacthd.framedblocks.common.data.dynreg.BlockOverlayCache;
 import io.github.xfacthd.framedblocks.common.menu.PaintRollerMenu;
 import net.minecraft.ChatFormatting;
@@ -42,7 +43,7 @@ public final class PaintRollerScreen extends AbstractContainerScreen<PaintRoller
     private static final int DETAILS_OFF_X = 24;
     private static final int ITEM_OFF_Y = 12;
     private static final int ICON_SIZE = 16;
-    public static final String LABEL_SOURCE_ITEM = Utils.translationKey("label", "paint_roller.source_item");
+    public static final String LABEL_SOURCE_ITEM = I18nUtils.translationKey("label", "paint_roller.source_item");
 
     private final BlockOverlayCache overlayCache = BlockOverlayCache.get(true);
     private final TextureAtlas blockAtlas = minecraft.getAtlasManager().getAtlasOrThrow(AtlasIds.BLOCKS);

@@ -7,7 +7,7 @@ import io.github.xfacthd.framedblocks.api.block.overlay.BlockOverlay;
 import io.github.xfacthd.framedblocks.api.camo.CamoList;
 import io.github.xfacthd.framedblocks.api.camo.CamoPrinter;
 import io.github.xfacthd.framedblocks.api.internal.InternalAPI;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.text.I18nUtils;
 import io.github.xfacthd.framedblocks.api.util.text.MoreCommonComponents;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
@@ -89,17 +89,17 @@ public record BlueprintData(
     );
     public static final BlueprintData EMPTY = new BlueprintData(Blocks.AIR, CamoList.EMPTY, Optional.empty(), false, false, false, false, BlockItemStateProperties.EMPTY, Optional.empty());
     public static final String CONTAINED_BLOCK = "desc.framedblocks.blueprint_block";
-    public static final String STORED_OVERLAY = Utils.translationKey("desc", "blueprint.overlay");
+    public static final String STORED_OVERLAY = I18nUtils.translationKey("desc", "blueprint.overlay");
     public static final String IS_ILLUMINATED = "desc.framedblocks.blueprint_illuminated";
     public static final String IS_INTANGIBLE = "desc.framedblocks.blueprint_intangible";
     public static final String IS_REINFORCED = "desc.framedblocks.blueprint_reinforced";
     public static final String IS_EMISSIVE = "desc.framedblocks.blueprint_emissive";
-    public static final String MISSING_MATERIALS = Utils.translationKey("desc", "blueprint_missing_materials");
-    public static final Component BLOCK_INVALID = Utils.translate("desc", "blueprint_invalid").withStyle(ChatFormatting.RED);
-    public static final Component OVERLAY_NONE = Utils.translate("desc", "blueprint.overlay.none").withStyle(ChatFormatting.RED);
+    public static final String MISSING_MATERIALS = I18nUtils.translationKey("desc", "blueprint_missing_materials");
+    public static final Component BLOCK_INVALID = I18nUtils.translate("desc", "blueprint_invalid").withStyle(ChatFormatting.RED);
+    public static final Component OVERLAY_NONE = I18nUtils.translate("desc", "blueprint.overlay.none").withStyle(ChatFormatting.RED);
     public static final Component FALSE = MoreCommonComponents.FALSE;
     public static final Component TRUE = MoreCommonComponents.TRUE;
-    public static final Component CANT_COPY = Utils.translate("desc", "blueprint_cant_copy").withStyle(ChatFormatting.RED);
+    public static final Component CANT_COPY = I18nUtils.translate("desc", "blueprint_cant_copy").withStyle(ChatFormatting.RED);
 
     /// {@return the custom data value if it's present and matches the given type, otherwise the given default}
     ///

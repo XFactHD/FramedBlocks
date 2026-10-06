@@ -1,7 +1,7 @@
 package io.github.xfacthd.framedblocks.client.screen.saw;
 
 import com.mojang.blaze3d.platform.InputConstants;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.text.I18nUtils;
 import io.github.xfacthd.framedblocks.common.crafting.saw.FramingSawRecipe;
 import io.github.xfacthd.framedblocks.common.crafting.saw.FramingSawRecipeAdditive;
 import io.github.xfacthd.framedblocks.common.crafting.saw.FramingSawRecipeCache;
@@ -19,15 +19,15 @@ import net.minecraft.world.item.ItemStack;
 import java.util.List;
 
 public final class SawRecipeFailurePrinter {
-    public static final String TOOLTIP_HAVE_X_BUT_NEED_Y_ITEM = Utils.translationKey("tooltip", "framing_saw.have_x_but_need_y_item");
-    public static final String TOOLTIP_HAVE_X_BUT_NEED_Y_ITEM_MULTI = Utils.translationKey("tooltip", "framing_saw.have_x_but_need_y_item_multi");
-    public static final String TOOLTIP_HAVE_X_BUT_NEED_Y_TAG = Utils.translationKey("tooltip", "framing_saw.have_x_but_need_y_tag");
-    public static final String TOOLTIP_HAVE_X_BUT_NEED_Y_ITEM_COUNT = Utils.translationKey("tooltip", "framing_saw.have_x_but_need_y_item_count");
-    public static final String TOOLTIP_HAVE_X_BUT_NEED_Y_MATERIAL_COUNT = Utils.translationKey("tooltip", "framing_saw.have_x_but_need_y_material_count");
-    public static final String TOOLTIP_OUTPUT_COUNT = Utils.translationKey("tooltip", "framing_saw.output_count");
-    public static final Component TOOLTIP_HAVE_ITEM_NONE = Utils.translate("tooltip", "framing_saw.have_item_none").withStyle(ChatFormatting.GOLD);
-    public static final String TOOLTIP_PRESS_TO_SHOW = Utils.translationKey("tooltip", "framing_saw.press_to_show");
-    public static final String TOOLTIP_USE_INTERMEDIATE = Utils.translationKey("tooltip", "framing_saw.use_intermediate");
+    public static final String TOOLTIP_HAVE_X_BUT_NEED_Y_ITEM = I18nUtils.translationKey("tooltip", "framing_saw.have_x_but_need_y_item");
+    public static final String TOOLTIP_HAVE_X_BUT_NEED_Y_ITEM_MULTI = I18nUtils.translationKey("tooltip", "framing_saw.have_x_but_need_y_item_multi");
+    public static final String TOOLTIP_HAVE_X_BUT_NEED_Y_TAG = I18nUtils.translationKey("tooltip", "framing_saw.have_x_but_need_y_tag");
+    public static final String TOOLTIP_HAVE_X_BUT_NEED_Y_ITEM_COUNT = I18nUtils.translationKey("tooltip", "framing_saw.have_x_but_need_y_item_count");
+    public static final String TOOLTIP_HAVE_X_BUT_NEED_Y_MATERIAL_COUNT = I18nUtils.translationKey("tooltip", "framing_saw.have_x_but_need_y_material_count");
+    public static final String TOOLTIP_OUTPUT_COUNT = I18nUtils.translationKey("tooltip", "framing_saw.output_count");
+    public static final Component TOOLTIP_HAVE_ITEM_NONE = I18nUtils.translate("tooltip", "framing_saw.have_item_none").withStyle(ChatFormatting.GOLD);
+    public static final String TOOLTIP_PRESS_TO_SHOW = I18nUtils.translationKey("tooltip", "framing_saw.press_to_show");
+    public static final String TOOLTIP_USE_INTERMEDIATE = I18nUtils.translationKey("tooltip", "framing_saw.use_intermediate");
 
     static List<Component> appendRecipeFailure(
             List<Component> components,
@@ -166,7 +166,7 @@ public final class SawRecipeFailurePrinter {
             return Component.translatable(
                     TOOLTIP_HAVE_X_BUT_NEED_Y_TAG,
                     present,
-                    Utils.translateTag(additive.srcTag().orElseThrow()).withStyle(ChatFormatting.GOLD)
+                    I18nUtils.translateTag(additive.srcTag().orElseThrow()).withStyle(ChatFormatting.GOLD)
             );
         }
 

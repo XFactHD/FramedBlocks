@@ -1,7 +1,7 @@
 package io.github.xfacthd.framedblocks.common.item.block;
 
 import io.github.xfacthd.framedblocks.api.block.item.FramedBlockItem;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.text.I18nUtils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -14,8 +14,8 @@ import net.neoforged.neoforge.fluids.SimpleFluidContent;
 import java.util.function.Consumer;
 
 public class FramedTankBlockItem extends FramedBlockItem {
-    public static final String TANK_CONTENTS = Utils.translationKey("desc", "block.fluid_tank.contents");
-    public static final Component EMPTY_FLUID = Utils.translate("desc", "block.fluid_tank.contents.empty").withStyle(ChatFormatting.ITALIC);
+    public static final String TANK_CONTENTS = I18nUtils.translationKey("desc", "block.fluid_tank.contents");
+    public static final Component EMPTY_FLUID = I18nUtils.translate("desc", "block.fluid_tank.contents.empty").withStyle(ChatFormatting.ITALIC);
 
     public FramedTankBlockItem(Block block, Properties props) {
         super(block, props.component(FBContent.DC_TYPE_TANK_CONTENTS, SimpleFluidContent.EMPTY));

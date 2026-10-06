@@ -5,6 +5,7 @@ import io.github.xfacthd.framedblocks.api.block.blockentity.IFramedBlockEntity;
 import io.github.xfacthd.framedblocks.api.screen.overlay.BlockInteractOverlay;
 import io.github.xfacthd.framedblocks.api.util.FramedConstants;
 import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.text.I18nUtils;
 import io.github.xfacthd.framedblocks.common.config.ClientConfig;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -15,10 +16,10 @@ import net.minecraft.world.item.ItemStack;
 import java.util.List;
 
 public final class ReinforcementOverlay extends BlockInteractOverlay {
-    public static final String REINFORCE_MESSAGE = Utils.translationKey("tooltip", "reinforce_state");
-    public static final Component STATE_NOT_REINFORCED = Utils.translate("tooltip", "reinforce_state.false")
+    public static final String REINFORCE_MESSAGE = I18nUtils.translationKey("tooltip", "reinforce_state");
+    public static final Component STATE_NOT_REINFORCED = I18nUtils.translate("tooltip", "reinforce_state.false")
             .withStyle(ChatFormatting.RED);
-    public static final Component STATE_REINFORCED = Utils.translate("tooltip", "reinforce_state.true")
+    public static final Component STATE_REINFORCED = I18nUtils.translate("tooltip", "reinforce_state.true")
             .withStyle(ChatFormatting.GREEN);
     private static final List<Component> LIST_FALSE = List.of(
             Component.translatable(REINFORCE_MESSAGE, STATE_NOT_REINFORCED)

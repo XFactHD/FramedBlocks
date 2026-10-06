@@ -1,6 +1,6 @@
 package io.github.xfacthd.framedblocks.common.crafting.saw;
 
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.text.I18nUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 
@@ -50,7 +50,7 @@ public enum FramingSawRecipeMatchResult {
     FramingSawRecipeMatchResult(boolean success, int additiveSlot) {
         this.success = success;
         this.additiveSlot = additiveSlot;
-        this.translation = Utils.translate(
+        this.translation = I18nUtils.translate(
                 "msg", "frame_crafter.fail." + toString().toLowerCase(Locale.ROOT)
         ).withStyle(success ? ChatFormatting.GREEN : ChatFormatting.RED);
     }

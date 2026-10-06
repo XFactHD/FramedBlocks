@@ -1,7 +1,7 @@
 package io.github.xfacthd.framedblocks.common.item;
 
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.text.I18nUtils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.data.FramedToolType;
 import net.minecraft.ChatFormatting;
@@ -17,8 +17,8 @@ import net.minecraft.world.level.Level;
 import java.util.function.Consumer;
 
 public final class FramedWrenchItem extends FramedToolItem {
-    public static final String LABEL_MODE = Utils.translationKey("label", "framed_wrench.mode");
-    public static final Component LABEL_TOGGLE = Utils.translate("label", "framed_wrench.mode.toggle").withStyle(ChatFormatting.ITALIC);
+    public static final String LABEL_MODE = I18nUtils.translationKey("label", "framed_wrench.mode");
+    public static final Component LABEL_TOGGLE = I18nUtils.translate("label", "framed_wrench.mode.toggle").withStyle(ChatFormatting.ITALIC);
 
     public FramedWrenchItem(FramedToolType type, Properties props) {
         super(type, props.component(FBContent.DC_TYPE_WRENCH_MODE, WrenchRotationMode.PRIMARY));

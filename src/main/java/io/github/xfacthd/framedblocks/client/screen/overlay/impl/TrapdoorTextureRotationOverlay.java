@@ -2,6 +2,7 @@ package io.github.xfacthd.framedblocks.client.screen.overlay.impl;
 
 import io.github.xfacthd.framedblocks.api.screen.overlay.BlockInteractOverlay;
 import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.text.I18nUtils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.block.door.FramedTrapDoorBlock;
 import io.github.xfacthd.framedblocks.common.config.ClientConfig;
@@ -14,9 +15,9 @@ import net.minecraft.world.item.ItemStack;
 import java.util.List;
 
 public final class TrapdoorTextureRotationOverlay extends BlockInteractOverlay {
-    public static final Component ROTATING_FALSE = Utils.translate("tooltip", "trapdoor_texture_rotation.false");
-    public static final Component ROTATING_TRUE = Utils.translate("tooltip", "trapdoor_texture_rotation.true");
-    public static final Component ROTATING_TOGGLE = Utils.translate("tooltip", "trapdoor_texture_rotation.toggle");
+    public static final Component ROTATING_FALSE = I18nUtils.translate("tooltip", "trapdoor_texture_rotation.false");
+    public static final Component ROTATING_TRUE = I18nUtils.translate("tooltip", "trapdoor_texture_rotation.true");
+    public static final Component ROTATING_TOGGLE = I18nUtils.translate("tooltip", "trapdoor_texture_rotation.toggle");
     private static final List<Component> LINES_FALSE = List.of(ROTATING_FALSE, ROTATING_TOGGLE);
     private static final List<Component> LINES_TRUE = List.of(ROTATING_TRUE, ROTATING_TOGGLE);
 

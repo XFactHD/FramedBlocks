@@ -1,7 +1,7 @@
 package io.github.xfacthd.framedblocks.common.item.block;
 
 import io.github.xfacthd.framedblocks.api.block.item.FramedBlockItem;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.text.I18nUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
@@ -12,7 +12,7 @@ import net.minecraft.world.level.block.Block;
 import java.util.function.Consumer;
 
 public class FramedMirroringBlockItem extends FramedBlockItem {
-    public static final Component PLACE_UPSIDE_DOWN = Utils.translate("desc", "slope_slab.place_upside_down")
+    public static final Component PLACE_UPSIDE_DOWN = I18nUtils.translate("desc", "slope_slab.place_upside_down")
             .withStyle(ChatFormatting.ITALIC);
 
     public FramedMirroringBlockItem(Block block, Properties props) {

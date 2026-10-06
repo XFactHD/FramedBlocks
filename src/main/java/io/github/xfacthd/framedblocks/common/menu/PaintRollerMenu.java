@@ -1,6 +1,6 @@
 package io.github.xfacthd.framedblocks.common.menu;
 
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.text.I18nUtils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
@@ -10,7 +10,7 @@ import net.minecraft.world.item.ItemStack;
 import org.jspecify.annotations.Nullable;
 
 public final class PaintRollerMenu extends AbstractContainerMenu {
-    public static final Component TITLE = Utils.translate("title", "paint_roller");
+    public static final Component TITLE = I18nUtils.translate("title", "paint_roller");
 
     private final int hotbarSlot;
     @Nullable

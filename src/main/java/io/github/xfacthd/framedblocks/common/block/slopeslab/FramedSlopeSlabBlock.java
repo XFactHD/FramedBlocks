@@ -10,7 +10,7 @@ import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
 import io.github.xfacthd.framedblocks.api.compat.jade.JadeDisplayConfig;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.util.RotationDirection;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.text.I18nUtils;
 import io.github.xfacthd.framedblocks.api.util.text.ValuePrinter;
 import io.github.xfacthd.framedblocks.api.util.text.ValuePrinters;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
@@ -30,8 +30,8 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import org.jspecify.annotations.Nullable;
 
 public class FramedSlopeSlabBlock extends FramedBlock implements SlopeToggleBlock {
-    public static final Component VALUE_UPRIGHT = Utils.translate("value", "state_cycling.property.slope_slab.orientation.upright");
-    public static final Component VALUE_UPSIDEDOWN = Utils.translate("value", "state_cycling.property.slope_slab.orientation.upside_down");
+    public static final Component VALUE_UPRIGHT = I18nUtils.translate("value", "state_cycling.property.slope_slab.orientation.upright");
+    public static final Component VALUE_UPSIDEDOWN = I18nUtils.translate("value", "state_cycling.property.slope_slab.orientation.upside_down");
     public static final ValuePrinter<Boolean> PRINTER_ORIENTATION = ValuePrinter.of(top -> top ? VALUE_UPSIDEDOWN : VALUE_UPRIGHT);
 
     public FramedSlopeSlabBlock(Properties props) {

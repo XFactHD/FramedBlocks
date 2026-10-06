@@ -2,7 +2,7 @@ package io.github.xfacthd.framedblocks.common.block.special;
 
 import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.text.I18nUtils;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import io.github.xfacthd.framedblocks.common.menu.FramingSawMenu;
 import net.minecraft.core.BlockPos;
@@ -27,7 +27,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class FramingSawBlock extends Block {
-    public static final Component SAW_MENU_TITLE = Utils.translate("title", "framing_saw");
+    public static final Component SAW_MENU_TITLE = I18nUtils.translate("title", "framing_saw");
     protected static final VoxelShape SHAPE = box(0, 0, 0, 16, 9, 16);
 
     public FramingSawBlock(Properties props) {

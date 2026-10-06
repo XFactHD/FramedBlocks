@@ -3,6 +3,7 @@ package io.github.xfacthd.framedblocks.common.compat.atlasviewer;
 import com.mojang.logging.LogUtils;
 import io.github.xfacthd.atlasviewer.client.api.RegisterSpriteSourceDetailsEvent;
 import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.text.I18nUtils;
 import io.github.xfacthd.framedblocks.client.render.util.AnimationSplitterSource;
 import io.github.xfacthd.framedblocks.client.render.util.AreaMaskSource;
 import net.minecraft.ChatFormatting;
@@ -13,14 +14,14 @@ import org.slf4j.Logger;
 
 public final class AtlasViewerCompat {
     private static final Logger LOGGER = LogUtils.getLogger();
-    public static final Component LABEL_TEXTURE = Utils.translate("label", "source_tooltip.anim_splitter.texture");
-    public static final Component LABEL_FRAMES = Utils.translate("label", "source_tooltip.anim_splitter.frames");
-    public static final Component LABEL_MASK_TEXTURE = Utils.translate("label", "source_tooltip.area_mask.texture");
-    public static final Component LABEL_MASK_SPRITE = Utils.translate("label", "source_tooltip.area_mask.sprite");
-    public static final Component LABEL_MASK_AREA = Utils.translate("label", "source_tooltip.area_mask.area");
-    public static final String VALUE_MASK_AREA = Utils.translationKey("value", "source_tooltip.area_mask.area");
-    public static final Component LABEL_MASK_OFFSET = Utils.translate("label", "source_tooltip.area_mask.offset");
-    public static final String VALUE_MASK_OFFSET = Utils.translationKey("value", "source_tooltip.area_mask.offset");
+    public static final Component LABEL_TEXTURE = I18nUtils.translate("label", "source_tooltip.anim_splitter.texture");
+    public static final Component LABEL_FRAMES = I18nUtils.translate("label", "source_tooltip.anim_splitter.frames");
+    public static final Component LABEL_MASK_TEXTURE = I18nUtils.translate("label", "source_tooltip.area_mask.texture");
+    public static final Component LABEL_MASK_SPRITE = I18nUtils.translate("label", "source_tooltip.area_mask.sprite");
+    public static final Component LABEL_MASK_AREA = I18nUtils.translate("label", "source_tooltip.area_mask.area");
+    public static final String VALUE_MASK_AREA = I18nUtils.translationKey("value", "source_tooltip.area_mask.area");
+    public static final Component LABEL_MASK_OFFSET = I18nUtils.translate("label", "source_tooltip.area_mask.offset");
+    public static final String VALUE_MASK_OFFSET = I18nUtils.translationKey("value", "source_tooltip.area_mask.offset");
 
     public static void init(IEventBus modBus) {
         if (ModList.get().isLoaded("atlasviewer")) {

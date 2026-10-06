@@ -1,7 +1,7 @@
 package io.github.xfacthd.framedblocks.client.screen.widget;
 
 import io.github.xfacthd.framedblocks.api.block.overlay.BlockOverlay;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.text.I18nUtils;
 import io.github.xfacthd.framedblocks.common.data.component.PaintRollerContents;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
@@ -13,9 +13,9 @@ import net.minecraft.network.chat.Component;
 import java.util.Objects;
 
 public record PaintRollerClientTooltipComponent(Component typeLine, Component countLine, float fillPercent) implements ClientTooltipComponent {
-    public static final String LABEL_OVERLAY_TYPE = Utils.translationKey("label", "paint_roller.stored.type");
-    public static final String LABEL_OVERLAY_COUNT = Utils.translationKey("label", "paint_roller.stored.count");
-    public static final Component VALUE_OVERLAY_TYPE_NONE = Utils.translate("value", "paint_roller.stored.type.none")
+    public static final String LABEL_OVERLAY_TYPE = I18nUtils.translationKey("label", "paint_roller.stored.type");
+    public static final String LABEL_OVERLAY_COUNT = I18nUtils.translationKey("label", "paint_roller.stored.count");
+    public static final Component VALUE_OVERLAY_TYPE_NONE = I18nUtils.translate("value", "paint_roller.stored.type.none")
             .withStyle(ChatFormatting.WHITE)
             .withStyle(ChatFormatting.ITALIC);
     private static final int LINE_PADDING = 1;

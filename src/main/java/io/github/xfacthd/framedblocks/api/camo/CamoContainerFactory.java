@@ -3,7 +3,7 @@ package io.github.xfacthd.framedblocks.api.camo;
 import com.mojang.serialization.MapCodec;
 import io.github.xfacthd.framedblocks.api.util.CamoMessageVerbosity;
 import io.github.xfacthd.framedblocks.api.util.ConfigView;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.text.I18nUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -25,7 +25,7 @@ import java.util.Optional;
 /// as their application to and removal from framed blocks and interactions with framed blocks
 /// holding a camo of the type handled by this factory.
 public abstract class CamoContainerFactory<T extends CamoContainer<?, T>> {
-    public static final Component MSG_BLACKLISTED = Utils.translate("msg", "camo.blacklisted");
+    public static final Component MSG_BLACKLISTED = I18nUtils.translate("msg", "camo.blacklisted");
 
     /// Save the given the [CamoContainer] to the given [CompoundTag] for sync over the network.
     ///

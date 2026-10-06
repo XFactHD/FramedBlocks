@@ -1,7 +1,7 @@
 package io.github.xfacthd.framedblocks.common.config;
 
 import io.github.xfacthd.framedblocks.api.util.ConfigView;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.text.I18nUtils;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.config.ModConfig;
@@ -113,7 +113,7 @@ public final class SyncedConfig {
     }
 
     private static String translate(String key) {
-        return Utils.translateConfig("synced", key);
+        return I18nUtils.translateConfig("synced", key);
     }
 
     private static void onConfigReloaded(ModConfigEvent event) {

@@ -1,7 +1,7 @@
 package io.github.xfacthd.framedblocks.common.blockentity.special;
 
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.text.I18nUtils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.block.cube.FramedChestBlock;
 import io.github.xfacthd.framedblocks.common.capability.item.IStorageBlockItemResourceHandler;
@@ -29,7 +29,7 @@ import net.neoforged.neoforge.transfer.ResourceHandlerUtil;
 import org.jspecify.annotations.Nullable;
 
 public class FramedChestBlockEntity extends FramedStorageBlockEntity {
-    public static final Component TITLE = Utils.translate("title", "framed_chest");
+    public static final Component TITLE = I18nUtils.translate("title", "framed_chest");
     public static final int ANIM_DURATION = 10;
 
     private int openCount = 0;

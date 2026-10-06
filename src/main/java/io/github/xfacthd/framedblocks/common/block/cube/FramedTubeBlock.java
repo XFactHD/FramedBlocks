@@ -7,7 +7,7 @@ import io.github.xfacthd.framedblocks.api.compat.jade.JadeDisplayConfig;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.util.FramedConstants;
 import io.github.xfacthd.framedblocks.api.util.RotationDirection;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.text.I18nUtils;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
@@ -26,7 +26,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.jspecify.annotations.Nullable;
 
 public class FramedTubeBlock extends FramedBlock {
-    public static final String LABEL_THICK = Utils.translationKey("label", "state_cycling.property.tube.thick");
+    public static final String LABEL_THICK = I18nUtils.translationKey("label", "state_cycling.property.tube.thick");
 
     public FramedTubeBlock(Properties props) {
         super(BlockType.FRAMED_TUBE, props);

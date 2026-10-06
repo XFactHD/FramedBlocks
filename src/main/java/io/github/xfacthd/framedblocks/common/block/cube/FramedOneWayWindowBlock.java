@@ -8,7 +8,7 @@ import io.github.xfacthd.framedblocks.api.camo.block.SimpleBlockCamoContainer;
 import io.github.xfacthd.framedblocks.api.compat.jade.JadeDisplayConfig;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.util.DirUtils;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.text.I18nUtils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
 import io.github.xfacthd.framedblocks.common.blockentity.special.FramedOwnableBlockEntity;
@@ -44,7 +44,7 @@ public class FramedOneWayWindowBlock extends FramedBlock {
     public static final Lazy<CamoContainer<?, ?>> GLASS_DUMMY_CAMO = Lazy.of(() -> new SimpleBlockCamoContainer(
             Blocks.TINTED_GLASS.defaultBlockState(), FBContent.FACTORY_BLOCK.value()
     ));
-    public static final String LABEL_WINDOW_FACE = Utils.translationKey("label", "state_cycling.property.one_way_window.window_face");
+    public static final String LABEL_WINDOW_FACE = I18nUtils.translationKey("label", "state_cycling.property.one_way_window.window_face");
 
     public FramedOneWayWindowBlock(Properties props) {
         super(BlockType.FRAMED_ONE_WAY_WINDOW, props);

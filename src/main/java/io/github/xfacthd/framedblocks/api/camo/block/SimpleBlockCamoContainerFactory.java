@@ -1,7 +1,7 @@
 package io.github.xfacthd.framedblocks.api.camo.block;
 
 import com.mojang.serialization.MapCodec;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.text.I18nUtils;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -21,8 +21,8 @@ import net.neoforged.neoforge.transfer.access.ItemAccess;
 /// context to be applied and removed. Camos using this factory must be trivially droppable (i.e. they must not require
 /// consumption of an item during removal or any player or level context for dropping).
 public abstract class SimpleBlockCamoContainerFactory extends AbstractBlockCamoContainerFactory<SimpleBlockCamoContainer> {
-    public static final Component MSG_BLOCK_ENTITY = Utils.translate("msg", "camo.block_entity");
-    public static final Component MSG_NON_SOLID = Utils.translate("msg", "camo.non_solid");
+    public static final Component MSG_BLOCK_ENTITY = I18nUtils.translate("msg", "camo.block_entity");
+    public static final Component MSG_NON_SOLID = I18nUtils.translate("msg", "camo.non_solid");
 
     private final MapCodec<SimpleBlockCamoContainer> codec = BlockState.CODEC
             .xmap(state -> new SimpleBlockCamoContainer(state, this), SimpleBlockCamoContainer::getState).fieldOf("state");

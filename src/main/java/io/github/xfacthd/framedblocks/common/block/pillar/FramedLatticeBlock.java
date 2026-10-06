@@ -8,7 +8,7 @@ import io.github.xfacthd.framedblocks.api.compat.jade.JadeDisplayConfig;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
 import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.api.util.RotationDirection;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.text.I18nUtils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.block.FramedBlock;
 import io.github.xfacthd.framedblocks.common.block.PillarLikeBlock;
@@ -36,9 +36,9 @@ import java.util.Set;
 import java.util.function.BiPredicate;
 
 public class FramedLatticeBlock extends FramedBlock implements PillarLikeBlock, ShapeLockableBlock {
-    public static final String LABEL_X_AXIS = Utils.translationKey("label", "state_cycling.property.lattice.x_axis");
-    public static final String LABEL_Y_AXIS = Utils.translationKey("label", "state_cycling.property.lattice.y_axis");
-    public static final String LABEL_Z_AXIS = Utils.translationKey("label", "state_cycling.property.lattice.z_axis");
+    public static final String LABEL_X_AXIS = I18nUtils.translationKey("label", "state_cycling.property.lattice.x_axis");
+    public static final String LABEL_Y_AXIS = I18nUtils.translationKey("label", "state_cycling.property.lattice.y_axis");
+    public static final String LABEL_Z_AXIS = I18nUtils.translationKey("label", "state_cycling.property.lattice.z_axis");
 
     private final BiPredicate<Direction, BlockState> connectionTest;
     private final PillarConnection pillarConnection;

@@ -1,6 +1,7 @@
 package io.github.xfacthd.framedblocks.client.screen.widget;
 
 import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.text.I18nUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
@@ -17,8 +18,8 @@ import java.util.function.BooleanSupplier;
 public final class SawCamoModeButton extends Button {
     private static final Identifier FRAME_TEXTURE = Utils.id("block/framed_block");
     private static final Identifier GRANITE_SPRITE = Utils.id("minecraft", "block/polished_granite");
-    public static final Component TOOLTIP_RAW = Utils.translate("tooltip", "framing_saw.camo_mode.raw");
-    public static final Component TOOLTIP_CAMO = Utils.translate("tooltip", "framing_saw.camo_mode.camo");
+    public static final Component TOOLTIP_RAW = I18nUtils.translate("tooltip", "framing_saw.camo_mode.raw");
+    public static final Component TOOLTIP_CAMO = I18nUtils.translate("tooltip", "framing_saw.camo_mode.camo");
     private static final Tooltip BUILT_TOOLTIP_RAW = Tooltip.create(TOOLTIP_RAW);
     private static final Tooltip BUILT_TOOLTIP_CAMO = Tooltip.create(TOOLTIP_CAMO);
 

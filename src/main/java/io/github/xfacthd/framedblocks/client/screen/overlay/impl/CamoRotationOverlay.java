@@ -4,6 +4,7 @@ import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.api.block.blockentity.IFramedBlockEntity;
 import io.github.xfacthd.framedblocks.api.screen.overlay.BlockInteractOverlay;
 import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.text.I18nUtils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.config.ClientConfig;
 import net.minecraft.client.Minecraft;
@@ -17,8 +18,8 @@ import net.minecraft.world.phys.HitResult;
 import java.util.List;
 
 public final class CamoRotationOverlay extends BlockInteractOverlay {
-    public static final Component ROTATEABLE_FALSE = Utils.translate("tooltip", "camo_rotation.false");
-    public static final Component ROTATEABLE_TRUE = Utils.translate("tooltip", "camo_rotation.true");
+    public static final Component ROTATEABLE_FALSE = I18nUtils.translate("tooltip", "camo_rotation.false");
+    public static final Component ROTATEABLE_TRUE = I18nUtils.translate("tooltip", "camo_rotation.true");
 
     private static final Identifier SYMBOL_TEXTURE = Utils.id("textures/overlay/camo_rotation_symbols.png");
     private static final Texture TEXTURE_FALSE = new Texture(SYMBOL_TEXTURE, 0, 0, 22, 22, 44, 22);

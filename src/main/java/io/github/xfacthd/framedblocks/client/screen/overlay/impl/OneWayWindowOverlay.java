@@ -2,6 +2,7 @@ package io.github.xfacthd.framedblocks.client.screen.overlay.impl;
 
 import io.github.xfacthd.framedblocks.api.screen.overlay.BlockInteractOverlay;
 import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.text.I18nUtils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.block.cube.FramedOneWayWindowBlock;
 import io.github.xfacthd.framedblocks.common.config.ClientConfig;
@@ -28,14 +29,14 @@ public final class OneWayWindowOverlay extends BlockInteractOverlay {
     private static final Texture TEXTURE_CROSS = new Texture(SYMBOL_TEXTURE, 22, 0, 15, 15, 37, 38);
     private static final Texture TEXTURE_EYE = new Texture(EYE_TEXTURE, 0, 0, 16, 16, 16, 16);
 
-    public static final String LINE_CURR_FACE = Utils.translationKey("tooltip", "one_way_window.curr_face");
-    public static final String LINE_SET_FACE = Utils.translationKey("tooltip", "one_way_window.set_face");
-    public static final Component LINE_CLEAR_FACE = Utils.translate("tooltip", "one_way_window.clear_face");
-    public static final Component[] DIR_VALUE_LINES = Utils.buildEnumTranslations("tooltip", "one_way_window.dir", Direction.values(), ChatFormatting.GOLD);
-    public static final Component[] FACE_VALUE_LINES = Utils.buildEnumTranslations("tooltip", "one_way_window.face", NullableDirection.values(), ChatFormatting.GOLD);
-    public static final Component[] FACE_VALUE_ABBRS = Utils.buildEnumTranslations("tooltip", "one_way_window.face_abbr", NullableDirection.values());
-    private static final Component[] CURR_FACE_LINES = Utils.bindEnumTranslation(LINE_CURR_FACE, NullableDirection.values(), FACE_VALUE_LINES);
-    private static final Component[] SET_FACE_LINES = Utils.bindEnumTranslation(LINE_SET_FACE, Direction.values(), DIR_VALUE_LINES);
+    public static final String LINE_CURR_FACE = I18nUtils.translationKey("tooltip", "one_way_window.curr_face");
+    public static final String LINE_SET_FACE = I18nUtils.translationKey("tooltip", "one_way_window.set_face");
+    public static final Component LINE_CLEAR_FACE = I18nUtils.translate("tooltip", "one_way_window.clear_face");
+    public static final Component[] DIR_VALUE_LINES = I18nUtils.buildEnumTranslations("tooltip", "one_way_window.dir", Direction.values(), ChatFormatting.GOLD);
+    public static final Component[] FACE_VALUE_LINES = I18nUtils.buildEnumTranslations("tooltip", "one_way_window.face", NullableDirection.values(), ChatFormatting.GOLD);
+    public static final Component[] FACE_VALUE_ABBRS = I18nUtils.buildEnumTranslations("tooltip", "one_way_window.face_abbr", NullableDirection.values());
+    private static final Component[] CURR_FACE_LINES = I18nUtils.bindEnumTranslation(LINE_CURR_FACE, NullableDirection.values(), FACE_VALUE_LINES);
+    private static final Component[] SET_FACE_LINES = I18nUtils.bindEnumTranslation(LINE_SET_FACE, Direction.values(), DIR_VALUE_LINES);
     private static final List<Component> LINES = packLineList();
 
     public OneWayWindowOverlay() {

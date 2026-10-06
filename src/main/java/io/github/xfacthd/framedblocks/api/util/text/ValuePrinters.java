@@ -1,7 +1,6 @@
 package io.github.xfacthd.framedblocks.api.util.text;
 
 import com.google.common.base.CaseFormat;
-import io.github.xfacthd.framedblocks.api.util.Utils;
 import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Direction;
@@ -78,7 +77,7 @@ public final class ValuePrinters {
         Component[] components = new Component[constants.length];
         prefix += ".";
         for (T constant : constants) {
-            components[constant.ordinal()] = Utils.translate("value", prefix + constant.getSerializedName());
+            components[constant.ordinal()] = I18nUtils.translate("value", prefix + constant.getSerializedName());
         }
         return ValuePrinter.of(value -> components[value.ordinal()]);
     }

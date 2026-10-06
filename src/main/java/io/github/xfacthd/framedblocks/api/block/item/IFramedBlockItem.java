@@ -7,9 +7,9 @@ import io.github.xfacthd.framedblocks.api.camo.CamoContent;
 import io.github.xfacthd.framedblocks.api.camo.CamoPrinter;
 import io.github.xfacthd.framedblocks.api.internal.InternalAPI;
 import io.github.xfacthd.framedblocks.api.util.FramedConstants;
-import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.api.util.sound.SoundEventType;
 import io.github.xfacthd.framedblocks.api.util.sound.SoundUtils;
+import io.github.xfacthd.framedblocks.api.util.text.I18nUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvent;
@@ -35,7 +35,7 @@ import java.util.function.Function;
 /// Required super-interface of all [BlockItem]s of framed blocks.
 public interface IFramedBlockItem {
     /// The header line displayed above the property list of the selected placement state when manual state cycling is active
-    Component HEADER_SELECTED_STATE = Utils.translate("label", "state_cycling.selected_state").withStyle(style -> style.withColor(0xFFE0E0E0));
+    Component HEADER_SELECTED_STATE = I18nUtils.translate("label", "state_cycling.selected_state").withStyle(style -> style.withColor(0xFFE0E0E0));
 
     /// Returns the [StateCycleSpec] to use for cycling through the states of the block(s) placed by this item.
     /// The return value of this method must be constant.

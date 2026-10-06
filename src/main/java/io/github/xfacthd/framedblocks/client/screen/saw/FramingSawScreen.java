@@ -5,6 +5,7 @@ import io.github.xfacthd.framedblocks.api.camo.block.SimpleBlockCamoContainer;
 import io.github.xfacthd.framedblocks.api.util.ClientUtils;
 import io.github.xfacthd.framedblocks.api.util.FramedConstants;
 import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.text.I18nUtils;
 import io.github.xfacthd.framedblocks.client.screen.widget.BlockPreviewTooltipComponent;
 import io.github.xfacthd.framedblocks.client.screen.widget.SawCamoModeButton;
 import io.github.xfacthd.framedblocks.client.screen.widget.SearchEditBox;
@@ -54,9 +55,9 @@ import java.util.Optional;
 import java.util.function.Consumer;
 
 public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu> implements IFramingSawScreen {
-    public static final String TOOLTIP_MATERIAL = Utils.translationKey("tooltip", "framing_saw.material");
-    public static final Component TOOLTIP_LOOSE_ADDITIVE = Utils.translate("tooltip", "framing_saw.loose_additive");
-    public static final Component MSG_HINT_SEARCH = Utils.translate("msg", "framing_saw.search")
+    public static final String TOOLTIP_MATERIAL = I18nUtils.translationKey("tooltip", "framing_saw.material");
+    public static final Component TOOLTIP_LOOSE_ADDITIVE = I18nUtils.translate("tooltip", "framing_saw.loose_additive");
+    public static final Component MSG_HINT_SEARCH = I18nUtils.translate("msg", "framing_saw.search")
             .withStyle(style -> style.withShadowColor(ARGB.scaleRGB(0xFFFFFFFF, .25F)));
     private static final Identifier BACKGROUND = Utils.id("textures/gui/framing_saw.png");
     public static final Identifier WARNING_ICON = Utils.id("neoforge", "textures/gui/experimental_warning.png");

@@ -1,6 +1,6 @@
 package io.github.xfacthd.framedblocks.common.data;
 
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.text.I18nUtils;
 import io.github.xfacthd.framedblocks.api.util.text.ValuePrinter;
 import io.github.xfacthd.framedblocks.common.data.property.*;
 import net.minecraft.network.chat.Component;
@@ -46,14 +46,14 @@ public final class PropertyHolder {
     public static final IntegerProperty FACES = IntegerProperty.create("faces", 1, (1 << 6) - 1);
 
     public static final class Labels {
-        public static final String RIGHT = Utils.translationKey("label", "state_cycling.property.right");
+        public static final String RIGHT = I18nUtils.translationKey("label", "state_cycling.property.right");
 
         private Labels() { }
     }
 
     public static final class Printers {
-        public static final Component VALUE_REAR = Utils.translate("value", "state_cycling.property.front.rear");
-        public static final Component VALUE_FRONT = Utils.translate("value", "state_cycling.property.front.front");
+        public static final Component VALUE_REAR = I18nUtils.translate("value", "state_cycling.property.front.rear");
+        public static final Component VALUE_FRONT = I18nUtils.translate("value", "state_cycling.property.front.front");
         public static final ValuePrinter<Boolean> FRONT_PRINTER = ValuePrinter.of(front -> front ? VALUE_FRONT : VALUE_REAR);
 
         private Printers() { }

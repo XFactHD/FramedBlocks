@@ -3,7 +3,7 @@ package io.github.xfacthd.framedblocks.common.item.applicator;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.xfacthd.framedblocks.api.block.blockentity.FrameModifier;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.text.I18nUtils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.ChatFormatting;
@@ -55,17 +55,17 @@ public record CamoApplicatorConfig(
             CamoApplicatorConfig::new
     );
     public static final CamoApplicatorConfig DEFAULT = new CamoApplicatorConfig(Mode.AUTO_INCREMENT, 0, false, false, false, false);
-    public static final String APPLICATOR_MODE = Utils.translationKey("desc", "camo_applicator.mode");
-    public static final String SELECTED_ITEM = Utils.translationKey("desc", "camo_applicator.selected");
-    public static final String SELECTED_ITEM_VALUE = Utils.translationKey("desc", "camo_applicator.selected.value");
-    public static final Component SELECTED_ITEM_EMPTY = Utils.translate("desc", "camo_applicator.selected.empty")
+    public static final String APPLICATOR_MODE = I18nUtils.translationKey("desc", "camo_applicator.mode");
+    public static final String SELECTED_ITEM = I18nUtils.translationKey("desc", "camo_applicator.selected");
+    public static final String SELECTED_ITEM_VALUE = I18nUtils.translationKey("desc", "camo_applicator.selected.value");
+    public static final Component SELECTED_ITEM_EMPTY = I18nUtils.translate("desc", "camo_applicator.selected.empty")
             .withStyle(ChatFormatting.RED, ChatFormatting.ITALIC);
-    public static final String APPLY_GLOWSTONE = Utils.translationKey("desc", "camo_applicator.modifier.glowstone");
-    public static final String APPLY_PHANTOM_PASTE = Utils.translationKey("desc", "camo_applicator.modifier.phantom_paste");
-    public static final String APPLY_REINFORCEMENT = Utils.translationKey("desc", "camo_applicator.modifier.reinforcement");
-    public static final String APPLY_GLOW_PASTE = Utils.translationKey("desc", "camo_applicator.modifier.glow_paste");
-    public static final Component FALSE = Utils.translate("value", "camo_applicator.false").withStyle(ChatFormatting.RED);
-    public static final Component TRUE = Utils.translate("value", "camo_applicator.true").withStyle(ChatFormatting.GREEN);
+    public static final String APPLY_GLOWSTONE = I18nUtils.translationKey("desc", "camo_applicator.modifier.glowstone");
+    public static final String APPLY_PHANTOM_PASTE = I18nUtils.translationKey("desc", "camo_applicator.modifier.phantom_paste");
+    public static final String APPLY_REINFORCEMENT = I18nUtils.translationKey("desc", "camo_applicator.modifier.reinforcement");
+    public static final String APPLY_GLOW_PASTE = I18nUtils.translationKey("desc", "camo_applicator.modifier.glow_paste");
+    public static final Component FALSE = I18nUtils.translate("value", "camo_applicator.false").withStyle(ChatFormatting.RED);
+    public static final Component TRUE = I18nUtils.translate("value", "camo_applicator.true").withStyle(ChatFormatting.GREEN);
 
     @Override
     public void addToTooltip(Item.TooltipContext context, Consumer<Component> appender, TooltipFlag flag, DataComponentGetter componentGetter) {
@@ -137,8 +137,8 @@ public record CamoApplicatorConfig(
         public static final StreamCodec<ByteBuf, Mode> STREAM_CODEC = ByteBufCodecs.idMapper(BY_ID, Mode::ordinal);
 
         private final String name = toString().toLowerCase(Locale.ROOT);
-        private final Component translation = Utils.translate("desc", "camo_applicator.mode." + name).withStyle(ChatFormatting.WHITE);
-        private final Component tooltip = Utils.translate("desc", "camo_applicator.mode." + name + ".tooltip");
+        private final Component translation = I18nUtils.translate("desc", "camo_applicator.mode." + name).withStyle(ChatFormatting.WHITE);
+        private final Component tooltip = I18nUtils.translate("desc", "camo_applicator.mode." + name + ".tooltip");
 
         public Component getTranslation() {
             return translation;

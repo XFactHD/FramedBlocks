@@ -2,6 +2,7 @@ package io.github.xfacthd.framedblocks.client.screen.overlay.impl;
 
 import io.github.xfacthd.framedblocks.api.screen.overlay.BlockInteractOverlay;
 import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.text.I18nUtils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.config.ClientConfig;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
@@ -13,9 +14,9 @@ import net.minecraft.world.item.ItemStack;
 import java.util.List;
 
 public final class PrismOffsetOverlay extends BlockInteractOverlay {
-    public static final Component PRISM_OFFSET_FALSE = Utils.translate("tooltip", "prism_offset.false");
-    public static final Component PRISM_OFFSET_TRUE = Utils.translate("tooltip", "prism_offset.true");
-    public static final Component MSG_SWITCH_OFFSET = Utils.translate("msg", "prism_offset.switch");
+    public static final Component PRISM_OFFSET_FALSE = I18nUtils.translate("tooltip", "prism_offset.false");
+    public static final Component PRISM_OFFSET_TRUE = I18nUtils.translate("tooltip", "prism_offset.true");
+    public static final Component MSG_SWITCH_OFFSET = I18nUtils.translate("msg", "prism_offset.switch");
     private static final List<Component> LINES_FALSE = List.of(PRISM_OFFSET_FALSE, MSG_SWITCH_OFFSET);
     private static final List<Component> LINES_TRUE = List.of(PRISM_OFFSET_TRUE, MSG_SWITCH_OFFSET);
 

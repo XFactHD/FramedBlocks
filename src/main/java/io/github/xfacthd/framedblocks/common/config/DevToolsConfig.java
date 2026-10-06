@@ -2,6 +2,7 @@ package io.github.xfacthd.framedblocks.common.config;
 
 import io.github.xfacthd.framedblocks.api.util.ConfigView;
 import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.text.I18nUtils;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.config.ModConfig;
@@ -116,7 +117,7 @@ public final class DevToolsConfig {
     }
 
     private static String translate(String key) {
-        return Utils.translateConfig("devtools", key);
+        return I18nUtils.translateConfig("devtools", key);
     }
 
     private static void onConfigReloaded(ModConfigEvent event) {

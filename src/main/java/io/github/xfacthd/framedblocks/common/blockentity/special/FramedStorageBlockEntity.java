@@ -2,6 +2,7 @@ package io.github.xfacthd.framedblocks.common.blockentity.special;
 
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.text.I18nUtils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.capability.item.IStorageBlockItemResourceHandler;
 import io.github.xfacthd.framedblocks.common.capability.item.StorageBlockItemResourceHandler;
@@ -24,7 +25,7 @@ import net.neoforged.neoforge.transfer.ResourceHandlerUtil;
 import org.jspecify.annotations.Nullable;
 
 public class FramedStorageBlockEntity extends FramedBlockEntity implements MenuProvider, Nameable, Clearable {
-    public static final Component TITLE = Utils.translate("title", "framed_secret_storage");
+    public static final Component TITLE = I18nUtils.translate("title", "framed_secret_storage");
     public static final int SLOTS = 9 * 3;
     public static final String INVENTORY_NBT_KEY = "inventory";
 

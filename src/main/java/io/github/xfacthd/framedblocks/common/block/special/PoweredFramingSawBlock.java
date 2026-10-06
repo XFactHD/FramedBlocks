@@ -2,7 +2,7 @@ package io.github.xfacthd.framedblocks.common.block.special;
 
 import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.text.I18nUtils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.blockentity.special.PoweredFramingSawBlockEntity;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
@@ -26,7 +26,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jspecify.annotations.Nullable;
 
 public class PoweredFramingSawBlock extends FramingSawBlock implements EntityBlock {
-    public static final Component POWERED_SAW_MENU_TITLE = Utils.translate("title", "powered_framing_saw");
+    public static final Component POWERED_SAW_MENU_TITLE = I18nUtils.translate("title", "powered_framing_saw");
 
     public PoweredFramingSawBlock(Properties props) {
         super(props);

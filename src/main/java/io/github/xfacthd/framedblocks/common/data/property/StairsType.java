@@ -1,6 +1,6 @@
 package io.github.xfacthd.framedblocks.common.data.property;
 
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.text.I18nUtils;
 import io.github.xfacthd.framedblocks.api.util.text.Printable;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -18,7 +18,7 @@ public enum StairsType implements StringRepresentable, Printable {
     BOTTOM_BOTH;
 
     private final String name = toString().toLowerCase(Locale.ENGLISH);
-    private final Component displayName = Utils.translate("value", "stairs_type." + name);
+    private final Component displayName = I18nUtils.translate("value", "stairs_type." + name);
 
     @Override
     public String getSerializedName() {

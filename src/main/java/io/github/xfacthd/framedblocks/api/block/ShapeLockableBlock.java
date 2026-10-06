@@ -1,7 +1,7 @@
 package io.github.xfacthd.framedblocks.api.block;
 
 import io.github.xfacthd.framedblocks.api.util.FramedConstants;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.text.I18nUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -29,9 +29,9 @@ import java.util.Set;
 /// [#updateShapeLockable(BlockState, LevelReader, ScheduledTickAccess, BlockPos, Direction, BlockPos, BlockState, RandomSource, UpdateShapeHandler)]
 /// from [Block#updateShape(BlockState, LevelReader, ScheduledTickAccess, BlockPos, Direction, BlockPos, BlockState, RandomSource)].
 public interface ShapeLockableBlock extends IFramedBlock {
-    String LOCK_MESSAGE = Utils.translationKey("msg", "lock_state");
-    Component STATE_LOCKED = Utils.translate("msg", "lock_state.locked").withStyle(ChatFormatting.RED);
-    Component STATE_UNLOCKED = Utils.translate("msg", "lock_state.unlocked").withStyle(ChatFormatting.GREEN);
+    String LOCK_MESSAGE = I18nUtils.translationKey("msg", "lock_state");
+    Component STATE_LOCKED = I18nUtils.translate("msg", "lock_state.locked").withStyle(ChatFormatting.RED);
+    Component STATE_UNLOCKED = I18nUtils.translate("msg", "lock_state.unlocked").withStyle(ChatFormatting.GREEN);
 
     /// {@return whether the given state of this block is state-locked}
     ///

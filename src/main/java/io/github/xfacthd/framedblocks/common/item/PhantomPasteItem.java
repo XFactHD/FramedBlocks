@@ -1,7 +1,7 @@
 package io.github.xfacthd.framedblocks.common.item;
 
 import io.github.xfacthd.framedblocks.api.util.ConfigView;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.text.I18nUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.CommonColors;
 import net.minecraft.world.item.Item;
@@ -12,7 +12,7 @@ import net.minecraft.world.item.component.TooltipDisplay;
 import java.util.function.Consumer;
 
 public final class PhantomPasteItem extends Item {
-    public static final Component FEATURE_DISABLED = Utils.translate("msg", "feature.intangibility.disabled").withColor(CommonColors.SOFT_RED);
+    public static final Component FEATURE_DISABLED = I18nUtils.translate("msg", "feature.intangibility.disabled").withColor(CommonColors.SOFT_RED);
 
     public PhantomPasteItem(Properties props) {
         super(props);

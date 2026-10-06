@@ -5,7 +5,7 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.xfacthd.framedblocks.api.block.item.IFramedBlockItem;
 import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.text.I18nUtils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.util.FramedUtils;
 import io.github.xfacthd.framedblocks.mixin.InvokerBlockItem;
@@ -46,8 +46,8 @@ public final class PlacementStateCycleStorage {
             .xmap(PlacementStateCycleStorage::new, storage -> storage.states);
     private static final StreamCodec<RegistryFriendlyByteBuf, BlockItem> ITEM_STREAM_CODEC = ByteBufCodecs.registry(Registries.ITEM)
             .map(FramedUtils.assertSubType(BlockItem.class), Function.identity());
-    public static final Component MSG_ENABLED = Utils.translate("msg", "state_cycling.enabled");
-    public static final Component MSG_DISABLED = Utils.translate("msg", "state_cycling.disabled");
+    public static final Component MSG_ENABLED = I18nUtils.translate("msg", "state_cycling.enabled");
+    public static final Component MSG_DISABLED = I18nUtils.translate("msg", "state_cycling.disabled");
 
     private final Reference2ObjectMap<BlockItem, CycleState> states;
     private final ReferenceSet<BlockItem> modified = new ReferenceOpenHashSet<>();

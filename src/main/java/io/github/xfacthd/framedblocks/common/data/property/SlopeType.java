@@ -1,7 +1,7 @@
 package io.github.xfacthd.framedblocks.common.data.property;
 
 import io.github.xfacthd.framedblocks.api.block.SlopeToggleBlock;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.text.I18nUtils;
 import io.github.xfacthd.framedblocks.api.util.text.Printable;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -15,7 +15,7 @@ public enum SlopeType implements StringRepresentable, Printable {
     TOP(SlopeToggleBlock.SlopeOrientation.VERTICAL);
 
     private final String name = toString().toLowerCase(Locale.ROOT);
-    private final Component displayName = Utils.translate("value", "slope_type." + name);
+    private final Component displayName = I18nUtils.translate("value", "slope_type." + name);
     private final SlopeToggleBlock.SlopeOrientation orientation;
 
     SlopeType(SlopeToggleBlock.SlopeOrientation orientation) {

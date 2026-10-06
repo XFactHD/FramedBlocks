@@ -3,6 +3,7 @@ package io.github.xfacthd.framedblocks.client.screen;
 import com.mojang.blaze3d.platform.InputConstants;
 import io.github.xfacthd.framedblocks.api.block.blockentity.FrameModifier;
 import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.text.I18nUtils;
 import io.github.xfacthd.framedblocks.client.screen.widget.IndicatorButton;
 import io.github.xfacthd.framedblocks.common.item.applicator.CamoApplicatorConfig;
 import io.github.xfacthd.framedblocks.common.item.applicator.CamoApplicatorContent;
@@ -70,13 +71,13 @@ public final class CamoApplicatorScreen extends AbstractContainerScreen<CamoAppl
     private static final int MOD_BAR_LAST_X = 139;
     private static final int MOD_BAR_X = MOD_BAR_LAST_X - (MODIFIERS.length - 1) * MOD_BAR_DIST;
     private static final int MOD_BAR_Y = 26;
-    public static final Component MODE_BTN_TITLE = Utils.translate("btn", "camo_applicator.mode");
-    public static final String TOOLTIP_SELECT_SLOT = Utils.translationKey("tooltip", "camo_applicator.select");
-    public static final String TOOLTIP_MODIFIER_AMOUNT = Utils.translationKey("tooltip", "camo_applicator.modifier.amount");
-    public static final String TOOLTIP_MODIFIER_ACTIVE = Utils.translationKey("tooltip", "camo_applicator.modifier.active");
-    public static final Component LABEL_CFG_HEADER = Utils.translate("label", "camo_applicator.config");
-    public static final Component LABEL_CFG_MODE = Utils.translate("label", "camo_applicator.config.mode");
-    public static final Component LABEL_CFG_MODIFIERS = Utils.translate("label", "camo_applicator.config.modifiers");
+    public static final Component MODE_BTN_TITLE = I18nUtils.translate("btn", "camo_applicator.mode");
+    public static final String TOOLTIP_SELECT_SLOT = I18nUtils.translationKey("tooltip", "camo_applicator.select");
+    public static final String TOOLTIP_MODIFIER_AMOUNT = I18nUtils.translationKey("tooltip", "camo_applicator.modifier.amount");
+    public static final String TOOLTIP_MODIFIER_ACTIVE = I18nUtils.translationKey("tooltip", "camo_applicator.modifier.active");
+    public static final Component LABEL_CFG_HEADER = I18nUtils.translate("label", "camo_applicator.config");
+    public static final Component LABEL_CFG_MODE = I18nUtils.translate("label", "camo_applicator.config.mode");
+    public static final Component LABEL_CFG_MODIFIERS = I18nUtils.translate("label", "camo_applicator.config.modifiers");
     public static final ModifierSpec[] MODIFIER_SPECS = Util.make(() -> {
         ModifierSpec[] specs = new ModifierSpec[MODIFIERS.length];
         for (FrameModifier modifier : MODIFIERS) {
@@ -292,7 +293,7 @@ public final class CamoApplicatorScreen extends AbstractContainerScreen<CamoAppl
     public record ModifierSpec(Identifier barTexture, Component tooltip, Lazy<ItemStack> lazyDummyStack) {
         static ModifierSpec of(FrameModifier modifier) {
             Identifier barTexture = Utils.id("camo_applicator/modifier_" + modifier.getSerializedName());
-            Component tooltip = Utils.translate("tooltip", "camo_applicator.modifier.type." + modifier.getSerializedName());
+            Component tooltip = I18nUtils.translate("tooltip", "camo_applicator.modifier.type." + modifier.getSerializedName());
             Lazy<ItemStack> lazyDummyStack = Lazy.of(modifier::getDefaultStack);
             return new ModifierSpec(barTexture, tooltip, lazyDummyStack);
         }

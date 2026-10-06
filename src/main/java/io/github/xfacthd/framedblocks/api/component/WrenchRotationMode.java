@@ -2,7 +2,7 @@ package io.github.xfacthd.framedblocks.api.component;
 
 import com.mojang.serialization.Codec;
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.text.I18nUtils;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -29,7 +29,7 @@ public enum WrenchRotationMode implements StringRepresentable {
     public static final StreamCodec<ByteBuf, WrenchRotationMode> STREAM_CODEC = ByteBufCodecs.idMapper(BY_ID, WrenchRotationMode::ordinal);
 
     private final String name = toString().toLowerCase(Locale.ROOT);
-    private final Component translatedName = Utils.translate("desc", "framed_wrench.mode." + name);
+    private final Component translatedName = I18nUtils.translate("desc", "framed_wrench.mode." + name);
 
     /// {@return the translated name of this mode for display in tooltips}
     public Component getTranslatedName() {

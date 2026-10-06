@@ -1,7 +1,7 @@
 package io.github.xfacthd.framedblocks.common.item;
 
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.text.I18nUtils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.data.FramedToolType;
 import net.minecraft.ChatFormatting;
@@ -24,7 +24,7 @@ import java.util.function.Consumer;
 public final class FramedAxeItem extends FramedToolItem {
     private static final int DURABILITY = 1200; // Close to diamond tools
     private static final float BREAK_SPEED = 12F; // Identical to gold tools
-    public static final Component TOOLTIP_RETAIN_CAMO = Utils.translate("desc", "framed_axe.retain_camo")
+    public static final Component TOOLTIP_RETAIN_CAMO = I18nUtils.translate("desc", "framed_axe.retain_camo")
             .withStyle(ChatFormatting.ITALIC);
 
     public FramedAxeItem(FramedToolType type, Properties props) {

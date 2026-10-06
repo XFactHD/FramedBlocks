@@ -2,6 +2,7 @@ package io.github.xfacthd.framedblocks.client.screen.overlay.impl;
 
 import io.github.xfacthd.framedblocks.api.screen.overlay.BlockInteractOverlay;
 import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.text.I18nUtils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.block.interactive.pressureplate.FramedPressurePlateBlock;
 import io.github.xfacthd.framedblocks.common.block.interactive.pressureplate.FramedWeightedPressurePlateBlock;
@@ -16,10 +17,10 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import java.util.List;
 
 public final class ToggleWaterloggableOverlay extends BlockInteractOverlay {
-    public static final Component MSG_IS_WATERLOGGABLE = Utils.translate("tooltip", "is_waterloggable.true");
-    public static final Component MSG_IS_NOT_WATERLOGGABLE = Utils.translate("tooltip", "is_waterloggable.false");
-    public static final Component MSG_MAKE_WATERLOGGABLE = Utils.translate("tooltip", "make_waterloggable.true");
-    public static final Component MSG_MAKE_NOT_WATERLOGGABLE = Utils.translate("tooltip", "make_waterloggable.false");
+    public static final Component MSG_IS_WATERLOGGABLE = I18nUtils.translate("tooltip", "is_waterloggable.true");
+    public static final Component MSG_IS_NOT_WATERLOGGABLE = I18nUtils.translate("tooltip", "is_waterloggable.false");
+    public static final Component MSG_MAKE_WATERLOGGABLE = I18nUtils.translate("tooltip", "make_waterloggable.true");
+    public static final Component MSG_MAKE_NOT_WATERLOGGABLE = I18nUtils.translate("tooltip", "make_waterloggable.false");
     private static final List<Component> LINES_FALSE = List.of(MSG_IS_NOT_WATERLOGGABLE, MSG_MAKE_WATERLOGGABLE);
     private static final List<Component> LINES_TRUE = List.of(MSG_IS_WATERLOGGABLE, MSG_MAKE_NOT_WATERLOGGABLE);
 

@@ -2,7 +2,7 @@ package io.github.xfacthd.framedblocks.common.data.property;
 
 import com.mojang.serialization.Codec;
 import io.github.xfacthd.framedblocks.api.block.item.placement.ValueOrders;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.text.I18nUtils;
 import io.github.xfacthd.framedblocks.api.util.text.MoreCommonComponents;
 import io.github.xfacthd.framedblocks.api.util.text.Printable;
 import io.netty.buffer.ByteBuf;
@@ -42,7 +42,7 @@ public enum NullableDirection implements StringRepresentable, Printable {
         values.sort(Comparator.comparingInt(dir -> dir == NONE ? 0 : ValueOrders.FACING.indexOf(dir.toDirection()) + 1));
         return List.copyOf(values);
     });
-    public static final Component VALUE_NONE = Utils.translate("value", "nullable_direction.none");
+    public static final Component VALUE_NONE = I18nUtils.translate("value", "nullable_direction.none");
 
     @Nullable
     private final Direction dir;

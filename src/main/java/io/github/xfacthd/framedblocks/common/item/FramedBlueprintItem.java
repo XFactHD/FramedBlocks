@@ -10,7 +10,7 @@ import io.github.xfacthd.framedblocks.api.blueprint.RegisterBlueprintCopyBehavio
 import io.github.xfacthd.framedblocks.api.camo.CamoContainer;
 import io.github.xfacthd.framedblocks.api.camo.CamoContainerHelper;
 import io.github.xfacthd.framedblocks.api.camo.CamoList;
-import io.github.xfacthd.framedblocks.api.util.Utils;
+import io.github.xfacthd.framedblocks.api.util.text.I18nUtils;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.config.SyncedConfig;
 import io.github.xfacthd.framedblocks.common.data.FramedToolType;
@@ -46,7 +46,7 @@ import java.util.Set;
 import java.util.function.Consumer;
 
 public class FramedBlueprintItem extends FramedToolItem {
-    public static final Component CANT_PLACE_FLUID_CAMO = Utils.translate("desc", "blueprint_cant_place_fluid_camo").withStyle(ChatFormatting.RED);
+    public static final Component CANT_PLACE_FLUID_CAMO = I18nUtils.translate("desc", "blueprint_cant_place_fluid_camo").withStyle(ChatFormatting.RED);
     private static final String MATERIAL_LIST_PREFIX = "\n  - ";
     private static final FrameModifier[] MODIFIERS = FrameModifier.values();
 
