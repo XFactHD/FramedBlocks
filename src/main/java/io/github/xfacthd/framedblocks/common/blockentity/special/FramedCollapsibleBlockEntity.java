@@ -244,7 +244,7 @@ public class FramedCollapsibleBlockEntity extends FramedBlockEntity implements C
                     mirrorAxis = DirUtils.getMirrorAxis(mirror);
                     perpAxis = DirUtils.getPerpendicularAxis(mirrorAxis, Direction.Axis.Y);
                 } else {
-                    NullableDirection unmirrored = nullableDir.rotate(DirUtils.getOppositeRotation(rotation)).mirror(mirror);
+                    NullableDirection unmirrored = nullableDir.rotate(rotation.getInverse()).mirror(mirror);
                     face = unmirrored.toDirection();
                     mirrorAxis = face.getClockWise().getAxis();
                     perpAxis = Direction.Axis.Y;
@@ -260,7 +260,7 @@ public class FramedCollapsibleBlockEntity extends FramedBlockEntity implements C
 
             if (DirUtils.isY(dir) && rotation != Rotation.NONE) {
                 if (dir == Direction.UP) {
-                    rotation = DirUtils.getOppositeRotation(rotation);
+                    rotation = rotation.getInverse();
                 }
                 int[] offsetsCopy = Arrays.copyOf(offsets, offsets.length);
                 for (Direction horDir : HORIZONTAL_DIRECTIONS) {
