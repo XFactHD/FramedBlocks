@@ -1,0 +1,10 @@
+{
+  "remove": [
+    "framedblocks:framed_waterloggable_pressure_plate",
+    "framedblocks:framed_waterloggable_stone_pressure_plate",
+    "framedblocks:framed_waterloggable_obsidian_pressure_plate",
+    "framedblocks:framed_waterloggable_gold_pressure_plate",
+    "framedblocks:framed_waterloggable_iron_pressure_plate"
+  ],
+  "values": []
+}

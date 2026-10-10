@@ -28,7 +28,6 @@ public final class FramedBlockTagProvider extends BlockTagsProvider {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     protected void addTags(HolderLookup.Provider provider) {
         tag(BlockTags.SLABS).add(FBContent.BLOCK_FRAMED_SLAB.value());
         tag(BlockTags.STAIRS).add(FBContent.BLOCK_FRAMED_STAIRS.value());
@@ -145,6 +144,45 @@ public final class FramedBlockTagProvider extends BlockTagsProvider {
                 .forEach(axeTag::add);
 
         tag(BlockTags.MINEABLE_WITH_PICKAXE).add(pickaxeBlocks.toArray(Block[]::new));
+
+        Set<Block> nonMotionBlockingBlocks = Set.of(
+                FBContent.BLOCK_FRAMED_FANCY_RAIL.value(),
+                FBContent.BLOCK_FRAMED_FANCY_POWERED_RAIL.value(),
+                FBContent.BLOCK_FRAMED_FANCY_ACTIVATOR_RAIL.value(),
+                FBContent.BLOCK_FRAMED_FANCY_DETECTOR_RAIL.value(),
+                FBContent.BLOCK_FRAMED_TORCH.value(),
+                FBContent.BLOCK_FRAMED_WALL_TORCH.value(),
+                FBContent.BLOCK_FRAMED_SOUL_TORCH.value(),
+                FBContent.BLOCK_FRAMED_SOUL_WALL_TORCH.value(),
+                FBContent.BLOCK_FRAMED_COPPER_TORCH.value(),
+                FBContent.BLOCK_FRAMED_COPPER_WALL_TORCH.value(),
+                FBContent.BLOCK_FRAMED_REDSTONE_TORCH.value(),
+                FBContent.BLOCK_FRAMED_REDSTONE_WALL_TORCH.value(),
+                FBContent.BLOCK_FRAMED_SIGN.value(),
+                FBContent.BLOCK_FRAMED_WALL_SIGN.value(),
+                FBContent.BLOCK_FRAMED_LADDER.value(),
+                FBContent.BLOCK_FRAMED_LEVER.value(),
+                FBContent.BLOCK_FRAMED_BUTTON.value(),
+                FBContent.BLOCK_FRAMED_STONE_BUTTON.value(),
+                FBContent.BLOCK_FRAMED_LARGE_BUTTON.value(),
+                FBContent.BLOCK_FRAMED_LARGE_STONE_BUTTON.value(),
+                FBContent.BLOCK_FRAMED_FLOWER_POT.value(),
+                FBContent.BLOCK_FRAMED_MINI_CUBE.value(),
+                FBContent.BLOCK_FRAMED_CORNER_STRIP.value()
+        );
+        ObjectTagAppender<Block> motionBlockingTag = tag(BlockTags.BLOCKS_MOTION_NO_LEAVES);
+        FBContent.getRegisteredBlocks()
+                .stream()
+                .map(Holder::value)
+                .filter(b -> !nonMotionBlockingBlocks.contains(b))
+                .forEach(motionBlockingTag::add);
+
+        tag(BlockTags.BLOCKS_FLUID_FLOW)
+                .remove(FBContent.BLOCK_FRAMED_WATERLOGGABLE_PRESSURE_PLATE.key())
+                .remove(FBContent.BLOCK_FRAMED_WATERLOGGABLE_STONE_PRESSURE_PLATE.key())
+                .remove(FBContent.BLOCK_FRAMED_WATERLOGGABLE_OBSIDIAN_PRESSURE_PLATE.key())
+                .remove(FBContent.BLOCK_FRAMED_WATERLOGGABLE_GOLD_PRESSURE_PLATE.key())
+                .remove(FBContent.BLOCK_FRAMED_WATERLOGGABLE_IRON_PRESSURE_PLATE.key());
 
         tag(BlockTags.create(Utils.id("diagonalwindows", "non_diagonal_panes"))).add(FBContent.BLOCK_FRAMED_BARS.value());
     }
