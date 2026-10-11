@@ -84,6 +84,7 @@ public final class TankFluidHandler implements IFluidHandler
             int toDrain = Math.min(maxDrain, fluid.getAmount());
             if (toDrain > 0)
             {
+                FluidStack drained = fluid.copyWithAmount(toDrain);
                 if (action.execute())
                 {
                     if (toDrain == fluid.getAmount())
@@ -96,7 +97,7 @@ public final class TankFluidHandler implements IFluidHandler
                     }
                     onContentsChanged();
                 }
-                return fluid.copyWithAmount(toDrain);
+                return drained;
             }
         }
         return FluidStack.EMPTY;
