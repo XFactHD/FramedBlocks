@@ -5,16 +5,18 @@ import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.api.util.FramedConstants;
 import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.github.xfacthd.framedblocks.common.FBContent;
-import io.github.xfacthd.framedblocks.common.datagen.util.ObjectTagAppender;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
+import net.minecraft.data.tags.BlockItemTagAppender;
+import net.minecraft.data.tags.TagAppender;
+import net.minecraft.references.BlockItemId;
+import net.minecraft.references.BlockItemIds;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.data.BlockTagsProvider;
 
@@ -29,76 +31,50 @@ public final class FramedBlockTagProvider extends BlockTagsProvider {
 
     @Override
     protected void addTags(HolderLookup.Provider provider) {
-        tag(BlockTags.SLABS).add(FBContent.BLOCK_FRAMED_SLAB.value());
-        tag(BlockTags.STAIRS).add(FBContent.BLOCK_FRAMED_STAIRS.value());
-        tag(BlockTags.WALLS).add(FBContent.BLOCK_FRAMED_WALL.value());
-        tag(BlockTags.FENCES).add(FBContent.BLOCK_FRAMED_FENCE.value());
-        tag(BlockTags.DOORS).add(FBContent.BLOCK_FRAMED_DOOR.value(), FBContent.BLOCK_FRAMED_IRON_DOOR.value());
-        tag(BlockTags.TRAPDOORS).add(FBContent.BLOCK_FRAMED_TRAP_DOOR.value(), FBContent.BLOCK_FRAMED_IRON_TRAP_DOOR.value());
-        tag(BlockTags.CLIMBABLE).add(FBContent.BLOCK_FRAMED_LADDER.value());
-        tag(BlockTags.STANDING_SIGNS).add(FBContent.BLOCK_FRAMED_SIGN.value());
-        tag(BlockTags.WALL_SIGNS).add(FBContent.BLOCK_FRAMED_WALL_SIGN.value());
-        tag(BlockTags.CEILING_HANGING_SIGNS).add(FBContent.BLOCK_FRAMED_HANGING_SIGN.value());
-        tag(BlockTags.WALL_HANGING_SIGNS).add(FBContent.BLOCK_FRAMED_WALL_HANGING_SIGN.value());
-        tag(Tags.Blocks.CHESTS).add(FBContent.BLOCK_FRAMED_CHEST.value());
-        tag(BlockTags.RAILS).add(
-                FBContent.BLOCK_FRAMED_RAIL_SLOPE.value(),
-                FBContent.BLOCK_FRAMED_POWERED_RAIL_SLOPE.value(),
-                FBContent.BLOCK_FRAMED_DETECTOR_RAIL_SLOPE.value(),
-                FBContent.BLOCK_FRAMED_ACTIVATOR_RAIL_SLOPE.value(),
-                FBContent.BLOCK_FRAMED_FANCY_RAIL.value(),
-                FBContent.BLOCK_FRAMED_FANCY_POWERED_RAIL.value(),
-                FBContent.BLOCK_FRAMED_FANCY_DETECTOR_RAIL.value(),
-                FBContent.BLOCK_FRAMED_FANCY_ACTIVATOR_RAIL.value(),
-                FBContent.BLOCK_FRAMED_FANCY_RAIL_SLOPE.value(),
-                FBContent.BLOCK_FRAMED_FANCY_POWERED_RAIL_SLOPE.value(),
-                FBContent.BLOCK_FRAMED_FANCY_DETECTOR_RAIL_SLOPE.value(),
-                FBContent.BLOCK_FRAMED_FANCY_ACTIVATOR_RAIL_SLOPE.value()
-        );
-        tag(BlockTags.ENCHANTMENT_POWER_PROVIDER).add(FBContent.BLOCK_FRAMED_BOOKSHELF.value());
-        tag(Tags.Blocks.BOOKSHELVES).add(FBContent.BLOCK_FRAMED_BOOKSHELF.value());
-        tag(BlockTags.LIGHTNING_RODS).add(FBContent.BLOCK_FRAMED_LIGHTNING_ROD.value());
-        tag(BlockTags.WOODEN_SHELVES).add(FBContent.BLOCK_FRAMED_SHELF.value());
+        FramedBlockItemTagProvider.blocks(this::tag).run();
 
-        tag(FramedConstants.Tags.FRAMEABLE).addTags(
-                Tags.Blocks.GLASS_BLOCKS,
-                BlockTags.ICE,
-                BlockTags.LEAVES
-        ).addAll(Blocks.COPPER_GRATE.asList());
+        tag(BlockTags.CLIMBABLE).add(FBContent.BLOCK_FRAMED_LADDER.key());
+        tag(BlockTags.WALL_SIGNS).add(FBContent.BLOCK_FRAMED_WALL_SIGN.key());
+        tag(BlockTags.WALL_HANGING_SIGNS).add(FBContent.BLOCK_FRAMED_WALL_HANGING_SIGN.key());
+        tag(BlockTags.ENCHANTMENT_POWER_PROVIDER).add(FBContent.BLOCK_FRAMED_BOOKSHELF.key());
 
-        getOrCreateRawBuilder(FramedConstants.Tags.FRAMEABLE)
-                .addOptionalElement(Utils.id("create", "oak_window"))
-                .addOptionalElement(Utils.id("create", "spruce_window"))
-                .addOptionalElement(Utils.id("create", "birch_window"))
-                .addOptionalElement(Utils.id("create", "jungle_window"))
-                .addOptionalElement(Utils.id("create", "acacia_window"))
-                .addOptionalElement(Utils.id("create", "dark_oak_window"))
-                .addOptionalElement(Utils.id("create", "crimson_window"))
-                .addOptionalElement(Utils.id("create", "warped_window"))
-                .addOptionalElement(Utils.id("create", "ornate_iron_window"))
-                .addOptionalTag(Utils.id("chipped", "glass"))
-                .addOptionalTag(Utils.id("chipped", "white_stained_glass"))
-                .addOptionalTag(Utils.id("chipped", "orange_stained_glass"))
-                .addOptionalTag(Utils.id("chipped", "magenta_stained_glass"))
-                .addOptionalTag(Utils.id("chipped", "light_blue_stained_glass"))
-                .addOptionalTag(Utils.id("chipped", "yellow_stained_glass"))
-                .addOptionalTag(Utils.id("chipped", "lime_stained_glass"))
-                .addOptionalTag(Utils.id("chipped", "pink_stained_glass"))
-                .addOptionalTag(Utils.id("chipped", "gray_stained_glass"))
-                .addOptionalTag(Utils.id("chipped", "light_gray_stained_glass"))
-                .addOptionalTag(Utils.id("chipped", "cyan_stained_glass"))
-                .addOptionalTag(Utils.id("chipped", "purple_stained_glass"))
-                .addOptionalTag(Utils.id("chipped", "blue_stained_glass"))
-                .addOptionalTag(Utils.id("chipped", "brown_stained_glass"))
-                .addOptionalTag(Utils.id("chipped", "green_stained_glass"))
-                .addOptionalTag(Utils.id("chipped", "red_stained_glass"))
-                .addOptionalTag(Utils.id("chipped", "black_stained_glass"))
-                .addOptionalTag(Utils.id("c", "hardened_glass"));
+        tag(FramedConstants.Tags.FRAMEABLE)
+                .addTag(Tags.Blocks.GLASS_BLOCKS)
+                .addTag(BlockTags.ICE)
+                .addTag(BlockTags.LEAVES)
+                .addAll(BlockItemIds.COPPER_GRATE.map(BlockItemId::block))
+                .addOptional(key("create", "oak_window"))
+                .addOptional(key("create", "spruce_window"))
+                .addOptional(key("create", "birch_window"))
+                .addOptional(key("create", "jungle_window"))
+                .addOptional(key("create", "acacia_window"))
+                .addOptional(key("create", "dark_oak_window"))
+                .addOptional(key("create", "crimson_window"))
+                .addOptional(key("create", "warped_window"))
+                .addOptional(key("create", "ornate_iron_window"))
+                .addOptionalTag(Utils.blockTag("chipped", "glass"))
+                .addOptionalTag(Utils.blockTag("chipped", "white_stained_glass"))
+                .addOptionalTag(Utils.blockTag("chipped", "orange_stained_glass"))
+                .addOptionalTag(Utils.blockTag("chipped", "magenta_stained_glass"))
+                .addOptionalTag(Utils.blockTag("chipped", "light_blue_stained_glass"))
+                .addOptionalTag(Utils.blockTag("chipped", "yellow_stained_glass"))
+                .addOptionalTag(Utils.blockTag("chipped", "lime_stained_glass"))
+                .addOptionalTag(Utils.blockTag("chipped", "pink_stained_glass"))
+                .addOptionalTag(Utils.blockTag("chipped", "gray_stained_glass"))
+                .addOptionalTag(Utils.blockTag("chipped", "light_gray_stained_glass"))
+                .addOptionalTag(Utils.blockTag("chipped", "cyan_stained_glass"))
+                .addOptionalTag(Utils.blockTag("chipped", "purple_stained_glass"))
+                .addOptionalTag(Utils.blockTag("chipped", "blue_stained_glass"))
+                .addOptionalTag(Utils.blockTag("chipped", "brown_stained_glass"))
+                .addOptionalTag(Utils.blockTag("chipped", "green_stained_glass"))
+                .addOptionalTag(Utils.blockTag("chipped", "red_stained_glass"))
+                .addOptionalTag(Utils.blockTag("chipped", "black_stained_glass"))
+                .addOptionalTag(Utils.blockTag("c", "hardened_glass"));
 
         tag(FramedConstants.Tags.BLOCK_BLACKLIST).add(
-                Blocks.PISTON,
-                Blocks.STICKY_PISTON,
-                Blocks.COMPOSTER
+                BlockItemIds.PISTON.block(),
+                BlockItemIds.STICKY_PISTON.block(),
+                BlockItemIds.COMPOSTER.block()
         );
 
         tag(FramedConstants.Tags.BE_WHITELIST);
@@ -106,74 +82,71 @@ public final class FramedBlockTagProvider extends BlockTagsProvider {
         tag(FramedConstants.Tags.NON_OCCLUDEABLE)
                 .addTag(BlockTags.LEAVES);
 
-        ObjectTagAppender<Block> fullGroupTag = tag(FramedConstants.Tags.GROUP_FULL_CUBE);
-        FBContent.getRegisteredBlocks()
-                .stream()
-                .map(Holder::value)
-                .filter(b -> !b.hasDynamicShape())
-                .map(Block::defaultBlockState)
-                .filter(state -> state.hasProperty(FramedProperties.SOLID))
-                .map(state -> state.setValue(FramedProperties.SOLID, true))
-                .filter(BlockBehaviour.BlockStateBase::isSolidRender)
-                .map(BlockBehaviour.BlockStateBase::getBlock)
-                .forEach(fullGroupTag::add);
+        TagAppender<Block> fullGroupTag = tag(FramedConstants.Tags.GROUP_FULL_CUBE);
+        for (Holder<Block> block : FBContent.getRegisteredBlocks()) {
+            BlockState state = block.value().defaultBlockState();
+            if (!state.getBlock().hasDynamicShape() && state.hasProperty(FramedProperties.SOLID) && state.setValue(FramedProperties.SOLID, true).isSolidRender()) {
+                fullGroupTag.add(block.key());
+            }
+        }
         // Special cases which are not captured by the checks above
-        fullGroupTag.add(FBContent.BLOCK_FRAMED_ONE_WAY_WINDOW.value());
+        fullGroupTag.add(FBContent.BLOCK_FRAMED_ONE_WAY_WINDOW.key());
 
-        Set<Block> noToolBlocks = Set.of(
-                FBContent.BLOCK_FRAMED_ITEM_FRAME.value(),
-                FBContent.BLOCK_FRAMED_GLOWING_ITEM_FRAME.value()
+        Set<ResourceKey<Block>> noToolBlocks = Set.of(
+                FBContent.BLOCK_FRAMED_ITEM_FRAME.key(),
+                FBContent.BLOCK_FRAMED_GLOWING_ITEM_FRAME.key()
         );
 
-        Set<Block> pickaxeBlocks = new LinkedHashSet<>();
+        Set<ResourceKey<Block>> pickaxeBlocks = new LinkedHashSet<>();
 
-        pickaxeBlocks.add(FBContent.BLOCK_FRAMED_IRON_DOOR.value());
-        pickaxeBlocks.add(FBContent.BLOCK_FRAMED_IRON_TRAP_DOOR.value());
-        pickaxeBlocks.add(FBContent.BLOCK_FRAMED_IRON_GATE.value());
-        pickaxeBlocks.add(FBContent.BLOCK_FRAMED_LIGHTNING_ROD.value());
-        pickaxeBlocks.add(FBContent.BLOCK_FRAMING_SAW.value());
-        pickaxeBlocks.add(FBContent.BLOCK_POWERED_FRAMING_SAW.value());
+        pickaxeBlocks.add(FBContent.BLOCK_FRAMED_IRON_DOOR.key());
+        pickaxeBlocks.add(FBContent.BLOCK_FRAMED_IRON_TRAP_DOOR.key());
+        pickaxeBlocks.add(FBContent.BLOCK_FRAMED_IRON_GATE.key());
+        pickaxeBlocks.add(FBContent.BLOCK_FRAMED_LIGHTNING_ROD.key());
+        pickaxeBlocks.add(FBContent.BLOCK_FRAMING_SAW.key());
+        pickaxeBlocks.add(FBContent.BLOCK_POWERED_FRAMING_SAW.key());
 
-        ObjectTagAppender<Block> axeTag = tag(BlockTags.MINEABLE_WITH_AXE);
+        TagAppender<Block> axeTag = tag(BlockTags.MINEABLE_WITH_AXE);
         FBContent.getRegisteredBlocks()
                 .stream()
-                .map(Holder::value)
-                .filter(b -> b instanceof IFramedBlock)
+                .filter(b -> b.value() instanceof IFramedBlock)
+                .map(Holder::key)
                 .filter(b -> !noToolBlocks.contains(b))
                 .filter(b -> !pickaxeBlocks.contains(b))
                 .forEach(axeTag::add);
 
-        tag(BlockTags.MINEABLE_WITH_PICKAXE).add(pickaxeBlocks.toArray(Block[]::new));
+        TagAppender<Block> pickaxeTag = tag(BlockTags.MINEABLE_WITH_PICKAXE);
+        pickaxeBlocks.forEach(pickaxeTag::add);
 
-        Set<Block> nonMotionBlockingBlocks = Set.of(
-                FBContent.BLOCK_FRAMED_FANCY_RAIL.value(),
-                FBContent.BLOCK_FRAMED_FANCY_POWERED_RAIL.value(),
-                FBContent.BLOCK_FRAMED_FANCY_ACTIVATOR_RAIL.value(),
-                FBContent.BLOCK_FRAMED_FANCY_DETECTOR_RAIL.value(),
-                FBContent.BLOCK_FRAMED_TORCH.value(),
-                FBContent.BLOCK_FRAMED_WALL_TORCH.value(),
-                FBContent.BLOCK_FRAMED_SOUL_TORCH.value(),
-                FBContent.BLOCK_FRAMED_SOUL_WALL_TORCH.value(),
-                FBContent.BLOCK_FRAMED_COPPER_TORCH.value(),
-                FBContent.BLOCK_FRAMED_COPPER_WALL_TORCH.value(),
-                FBContent.BLOCK_FRAMED_REDSTONE_TORCH.value(),
-                FBContent.BLOCK_FRAMED_REDSTONE_WALL_TORCH.value(),
-                FBContent.BLOCK_FRAMED_SIGN.value(),
-                FBContent.BLOCK_FRAMED_WALL_SIGN.value(),
-                FBContent.BLOCK_FRAMED_LADDER.value(),
-                FBContent.BLOCK_FRAMED_LEVER.value(),
-                FBContent.BLOCK_FRAMED_BUTTON.value(),
-                FBContent.BLOCK_FRAMED_STONE_BUTTON.value(),
-                FBContent.BLOCK_FRAMED_LARGE_BUTTON.value(),
-                FBContent.BLOCK_FRAMED_LARGE_STONE_BUTTON.value(),
-                FBContent.BLOCK_FRAMED_FLOWER_POT.value(),
-                FBContent.BLOCK_FRAMED_MINI_CUBE.value(),
-                FBContent.BLOCK_FRAMED_CORNER_STRIP.value()
+        Set<ResourceKey<Block>> nonMotionBlockingBlocks = Set.of(
+                FBContent.BLOCK_FRAMED_FANCY_RAIL.key(),
+                FBContent.BLOCK_FRAMED_FANCY_POWERED_RAIL.key(),
+                FBContent.BLOCK_FRAMED_FANCY_ACTIVATOR_RAIL.key(),
+                FBContent.BLOCK_FRAMED_FANCY_DETECTOR_RAIL.key(),
+                FBContent.BLOCK_FRAMED_TORCH.key(),
+                FBContent.BLOCK_FRAMED_WALL_TORCH.key(),
+                FBContent.BLOCK_FRAMED_SOUL_TORCH.key(),
+                FBContent.BLOCK_FRAMED_SOUL_WALL_TORCH.key(),
+                FBContent.BLOCK_FRAMED_COPPER_TORCH.key(),
+                FBContent.BLOCK_FRAMED_COPPER_WALL_TORCH.key(),
+                FBContent.BLOCK_FRAMED_REDSTONE_TORCH.key(),
+                FBContent.BLOCK_FRAMED_REDSTONE_WALL_TORCH.key(),
+                FBContent.BLOCK_FRAMED_SIGN.key(),
+                FBContent.BLOCK_FRAMED_WALL_SIGN.key(),
+                FBContent.BLOCK_FRAMED_LADDER.key(),
+                FBContent.BLOCK_FRAMED_LEVER.key(),
+                FBContent.BLOCK_FRAMED_BUTTON.key(),
+                FBContent.BLOCK_FRAMED_STONE_BUTTON.key(),
+                FBContent.BLOCK_FRAMED_LARGE_BUTTON.key(),
+                FBContent.BLOCK_FRAMED_LARGE_STONE_BUTTON.key(),
+                FBContent.BLOCK_FRAMED_FLOWER_POT.key(),
+                FBContent.BLOCK_FRAMED_MINI_CUBE.key(),
+                FBContent.BLOCK_FRAMED_CORNER_STRIP.key()
         );
-        ObjectTagAppender<Block> motionBlockingTag = tag(BlockTags.BLOCKS_MOTION_NO_LEAVES);
+        TagAppender<Block> motionBlockingTag = tag(BlockTags.BLOCKS_MOTION_NO_LEAVES);
         FBContent.getRegisteredBlocks()
                 .stream()
-                .map(Holder::value)
+                .map(Holder::key)
                 .filter(b -> !nonMotionBlockingBlocks.contains(b))
                 .forEach(motionBlockingTag::add);
 
@@ -184,12 +157,22 @@ public final class FramedBlockTagProvider extends BlockTagsProvider {
                 .remove(FBContent.BLOCK_FRAMED_WATERLOGGABLE_GOLD_PRESSURE_PLATE.key())
                 .remove(FBContent.BLOCK_FRAMED_WATERLOGGABLE_IRON_PRESSURE_PLATE.key());
 
-        tag(BlockTags.create(Utils.id("diagonalwindows", "non_diagonal_panes"))).add(FBContent.BLOCK_FRAMED_BARS.value());
+        tag(Utils.blockTag("diagonalwindows", "non_diagonal_panes")).add(FBContent.BLOCK_FRAMED_BARS.key());
+    }
+
+    @SuppressWarnings("SameParameterValue")
+    private ResourceKey<Block> key(String modId, String path) {
+        return ResourceKey.create(registryKey, Utils.id(modId, path));
     }
 
     @Override
-    protected ObjectTagAppender<Block> tag(TagKey<Block> tag) {
-        return new ObjectTagAppender<>(super.tag(tag), BuiltInRegistries.BLOCK);
+    protected BlockItemTagAppender<Block> tag(TagKey<Block> tag) {
+        return new BlockItemTagAppender<>(super.tag(tag)) {
+            @Override
+            protected ResourceKey<Block> convertElement(BlockItemId element) {
+                return element.block();
+            }
+        };
     }
 
     @Override
