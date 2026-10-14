@@ -1,4 +1,4 @@
-package io.github.xfacthd.framedblocks.common.datagen.providers;
+package io.github.xfacthd.framedblocks.common.datagen.providers.recipe;
 
 import io.github.xfacthd.framedblocks.api.datagen.recipes.AbstractFramingSawRecipeProvider;
 import io.github.xfacthd.framedblocks.common.FBContent;

@@ -1,4 +1,4 @@
-package io.github.xfacthd.framedblocks.common.datagen.providers;
+package io.github.xfacthd.framedblocks.common.datagen.providers.model;
 
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.datagen.models.AbstractFramedBlockModelProvider;
@@ -24,6 +24,7 @@ import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.compat.amendments.AmendmentsCompat;
 import io.github.xfacthd.framedblocks.common.data.PropertyHolder;
 import io.github.xfacthd.framedblocks.common.data.property.ChainType;
+import io.github.xfacthd.framedblocks.common.datagen.providers.FramedSpriteSourceProvider;
 import net.minecraft.client.data.models.BlockModelGenerators;
 import net.minecraft.client.data.models.ItemModelGenerators;
 import net.minecraft.client.data.models.MultiVariant;

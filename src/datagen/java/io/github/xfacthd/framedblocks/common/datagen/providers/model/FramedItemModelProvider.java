@@ -1,4 +1,4 @@
-package io.github.xfacthd.framedblocks.common.datagen.providers;
+package io.github.xfacthd.framedblocks.common.datagen.providers.model;
 
 import io.github.xfacthd.framedblocks.api.datagen.models.AbstractFramedItemModelProvider;
 import io.github.xfacthd.framedblocks.api.util.FramedConstants;

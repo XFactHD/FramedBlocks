@@ -1,4 +1,4 @@
-package io.github.xfacthd.framedblocks.common.datagen.providers;
+package io.github.xfacthd.framedblocks.common.datagen.providers.registry;
 
 import io.github.xfacthd.framedblocks.api.block.overlay.BlockOverlay;
 import io.github.xfacthd.framedblocks.api.block.overlay.BlockOverlayBuilder;
@@ -77,7 +77,7 @@ public final class FramedBlockOverlayProvider {
         context.register(key(name), operator.apply(builder, name).build());
     }
 
-    static ResourceKey<BlockOverlay> key(String name) {
+    private static ResourceKey<BlockOverlay> key(String name) {
         return ResourceKey.create(FramedConstants.Registries.BLOCK_OVERLAY_REGISTRY_KEY, Utils.id(name));
     }
 

@@ -1,4 +1,4 @@
-package io.github.xfacthd.framedblocks.common.datagen.providers;
+package io.github.xfacthd.framedblocks.common.datagen.providers.tag;
 
 import io.github.xfacthd.framedblocks.api.util.FramedConstants;
 import io.github.xfacthd.framedblocks.api.util.Utils;

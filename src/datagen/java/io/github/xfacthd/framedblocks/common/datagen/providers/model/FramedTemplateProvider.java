@@ -1,4 +1,4 @@
-package io.github.xfacthd.framedblocks.common.datagen.providers;
+package io.github.xfacthd.framedblocks.common.datagen.providers.model;
 
 import io.github.xfacthd.framedblocks.api.datagen.templates.AbstractFramedTemplateProvider;
 import io.github.xfacthd.framedblocks.api.datagen.templates.GeometryTemplateBuilder;
