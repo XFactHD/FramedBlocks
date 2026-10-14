@@ -140,18 +140,6 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension {
         return state.framedblocks$getCache();
     }
 
-    /// Try applying a camo from the player's off-hand to this block immediately after placement.
-    ///
-    /// @param level  The level this block is in
-    /// @param pos    The position of this block
-    /// @param placer The entity which placed this block
-    /// @param stack  The stack this block was placed with
-    default void tryApplyCamoImmediately(Level level, BlockPos pos, @Nullable LivingEntity placer, ItemStack stack) {
-        if (!level.isClientSide() && placer instanceof Player player && player.getMainHandItem() == stack && level.getBlockEntity(pos) instanceof IFramedBlockEntity be) {
-            be.tryApplyCamoImmediately(player);
-        }
-    }
-
     /// Handle right-click interactions with this block. Automatically handles shape locking, wrench rotation,
     /// camo application/removal and modifier application/removal.
     ///

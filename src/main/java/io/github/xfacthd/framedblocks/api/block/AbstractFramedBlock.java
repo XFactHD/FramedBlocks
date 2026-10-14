@@ -58,11 +58,6 @@ public abstract class AbstractFramedBlock extends Block implements IFramedBlock,
     }
 
     @Override
-    public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
-        tryApplyCamoImmediately(level, pos, placer, stack);
-    }
-
-    @Override
     protected BlockState updateShape(
             BlockState state,
             LevelReader level,

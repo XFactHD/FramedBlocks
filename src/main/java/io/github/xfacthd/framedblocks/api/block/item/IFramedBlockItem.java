@@ -14,6 +14,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
@@ -26,6 +27,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
+import net.neoforged.neoforge.common.extensions.BlockItemExtension;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.Nullable;
 
@@ -33,7 +35,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 /// Required super-interface of all [BlockItem]s of framed blocks.
-public interface IFramedBlockItem {
+public interface IFramedBlockItem extends BlockItemExtension {
     /// The header line displayed above the property list of the selected placement state when manual state cycling is active
     Component HEADER_SELECTED_STATE = I18nUtils.translate("label", "state_cycling.selected_state").withStyle(style -> style.withColor(0xFFE0E0E0));
 
@@ -88,6 +90,22 @@ public interface IFramedBlockItem {
             playPlaceSound(context);
         }
         return result;
+    }
+
+    @Override
+    default void onBlockPlacedBy(BlockPlaceContext context, Level level, BlockPos pos, BlockState state, @Nullable Player placer, ItemStack stack) {
+        tryApplyCamoImmediately(context, level, pos, placer);
+    }
+
+    /// Try applying a camo from the player's off-hand immediately after the block has been placed by this item.
+    ///
+    /// @param level  The level the block is in
+    /// @param pos    The position of the block
+    /// @param placer The player who placed the block
+    static void tryApplyCamoImmediately(BlockPlaceContext context, Level level, BlockPos pos, @Nullable Player placer) {
+        if (!level.isClientSide() && placer != null && context.getHand() == InteractionHand.MAIN_HAND && level.getBlockEntity(pos) instanceof IFramedBlockEntity be) {
+            be.tryApplyCamoImmediately(placer);
+        }
     }
 
     ///

@@ -4,6 +4,8 @@ import io.github.xfacthd.framedblocks.api.block.BlockUtils;
 import io.github.xfacthd.framedblocks.api.block.FramedProperties;
 import io.github.xfacthd.framedblocks.api.block.IFramedBlock;
 import io.github.xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
+import io.github.xfacthd.framedblocks.api.block.item.FramedBlockItem;
+import io.github.xfacthd.framedblocks.api.block.item.IFramedBlockItem;
 import io.github.xfacthd.framedblocks.api.block.item.placement.PropertyLabels;
 import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
 import io.github.xfacthd.framedblocks.api.compat.jade.JadeDisplayConfig;
@@ -19,9 +21,10 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.util.TriState;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
@@ -63,17 +66,6 @@ public class FramedDoorBlock extends DoorBlock implements IFramedBlockInternal {
     @Override
     protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         return handleUse(state, level, pos, player, hand, hit);
-    }
-
-    @Override
-    public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
-        super.setPlacedBy(level, pos, state, placer, stack);
-        if (level.getBlockEntity(pos.above()) instanceof FramedDoorBlockEntity be) {
-            be.applyComponentsFromItemStack(stack);
-        }
-
-        tryApplyCamoImmediately(level, pos, placer, stack);
-        tryApplyCamoImmediately(level, pos.above(), placer, stack); //Apply to upper half as well
     }
 
     @Override
@@ -141,6 +133,22 @@ public class FramedDoorBlock extends DoorBlock implements IFramedBlockInternal {
     @Override
     public BlockType getBlockType() {
         return type;
+    }
+
+    @Override
+    public IFramedBlockItem createBlockItem(Item.Properties props) {
+        return new FramedBlockItem(this, props) {
+            @Override
+            public void onBlockPlacedBy(BlockPlaceContext context, Level level, BlockPos pos, BlockState state, @Nullable Player placer, ItemStack stack) {
+                super.onBlockPlacedBy(context, level, pos, state, placer, stack);
+
+                // Perform component application and immediate camo application for the upper half
+                if (level.getBlockEntity(pos.above()) instanceof FramedDoorBlockEntity be) {
+                    be.applyComponentsFromItemStack(stack);
+                }
+                IFramedBlockItem.tryApplyCamoImmediately(context, level, pos.above(), placer);
+            }
+        };
     }
 
     @Override
