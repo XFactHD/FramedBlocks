@@ -15,7 +15,9 @@ import io.github.xfacthd.framedblocks.common.compat.diagonalblocks.DiagonalBlock
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
+import net.minecraft.util.TriState;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -25,7 +27,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ScheduledTickAccess;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.CrossCollisionBlock;
 import net.minecraft.world.level.block.FenceBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -87,11 +88,29 @@ public class FramedFenceBlock extends FenceBlock implements IFramedBlockInternal
     @Override
     public boolean connectsTo(BlockState adjState, boolean sideSolid, Direction adjSide) {
         if (!DirUtils.isY(adjSide) && DiagonalBlocksCompat.isFramedFence(adjState) && adjState.getValue(FramedProperties.STATE_LOCKED)) {
-            if (!adjState.getValue(CrossCollisionBlock.PROPERTY_BY_DIRECTION.get(adjSide))) {
+            if (!adjState.getValue(PROPERTY_BY_DIRECTION.get(adjSide))) {
                 return false;
             }
         }
+        // Allow connecting to both wooden and non-wooden fences
+        if (adjState.is(BlockTags.FENCES)) {
+            return true;
+        }
         return super.connectsTo(adjState, sideSolid, adjSide);
+    }
+
+    @Override
+    public TriState canBeConnectedTo(BlockState state, Direction side, Block adjacentBlock) {
+        if (!DirUtils.isY(side) && state.getValue(FramedProperties.STATE_LOCKED)) {
+            if (!state.getValue(PROPERTY_BY_DIRECTION.get(side))) {
+                return TriState.FALSE;
+            }
+        }
+        // Allow connecting to both wooden and non-wooden fences
+        if (adjacentBlock.defaultBlockState().is(BlockTags.FENCES)) {
+            return TriState.TRUE;
+        }
+        return TriState.FALSE;
     }
 
     @Override

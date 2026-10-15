@@ -7,6 +7,7 @@ import io.github.xfacthd.framedblocks.api.block.ShapeLockableBlock;
 import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
 import io.github.xfacthd.framedblocks.api.compat.jade.JadeDisplayConfig;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.api.util.RotationDirection;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.block.IFramedBlockInternal;
@@ -15,6 +16,7 @@ import io.github.xfacthd.framedblocks.common.data.BlockType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
+import net.minecraft.util.TriState;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -82,17 +84,25 @@ public class FramedPaneBlock extends IronBarsBlock implements IFramedBlockIntern
         return DiagonalBlocksCompat.isFramedPane(state);
     }
 
-    /*@Override // TODO: Missing side context
-    public boolean attachsTo(BlockState adjState, boolean sideSolid) {
-        Direction adjSide = null;
-        if (adjSide != null && !DirUtils.isY(adjSide) && DiagonalBlocksCompat.isFramedPane(adjState) && adjState.getValue(FramedProperties.STATE_LOCKED)) {
-            BooleanProperty prop = CrossCollisionBlock.PROPERTY_BY_DIRECTION.get(adjSide);
-            if (!adjState.getValue(prop)) {
+    @Override
+    public boolean attachesTo(BlockState adjState, boolean sideSolid, Direction adjSide) {
+        if (!DirUtils.isY(adjSide) && DiagonalBlocksCompat.isFramedPane(adjState) && adjState.getValue(FramedProperties.STATE_LOCKED)) {
+            if (!adjState.getValue(PROPERTY_BY_DIRECTION.get(adjSide))) {
                 return false;
             }
         }
-        return super.attachsTo(adjState, sideSolid);
-    }*/
+        return super.attachesTo(adjState, sideSolid, adjSide);
+    }
+
+    @Override
+    public TriState canBeConnectedTo(BlockState state, Direction side, Block adjacentBlock) {
+        if (!DirUtils.isY(side) && state.getValue(FramedProperties.STATE_LOCKED)) {
+            if (!state.getValue(PROPERTY_BY_DIRECTION.get(side))) {
+                return TriState.FALSE;
+            }
+        }
+        return TriState.DEFAULT;
+    }
 
     @Override
     protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, @Nullable Orientation orientation, boolean isMoving) {

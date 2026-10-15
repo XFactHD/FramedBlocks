@@ -15,6 +15,7 @@ import io.github.xfacthd.framedblocks.common.data.BlockType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
+import net.minecraft.util.TriState;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -89,6 +90,17 @@ public class FramedWallBlock extends WallBlock implements IFramedBlockInternal, 
             }
         }
         return super.connectsTo(adjState, sideSolid, adjSide);
+    }
+
+    @Override
+    public TriState canBeConnectedTo(BlockState state, Direction side, Block adjacentBlock) {
+        if (!DirUtils.isY(side) && state.getValue(FramedProperties.STATE_LOCKED)) {
+            EnumProperty<WallSide> prop = PROPERTY_BY_DIRECTION.get(side);
+            if (state.getValue(prop) == WallSide.NONE) {
+                return TriState.FALSE;
+            }
+        }
+        return TriState.DEFAULT;
     }
 
     @Override

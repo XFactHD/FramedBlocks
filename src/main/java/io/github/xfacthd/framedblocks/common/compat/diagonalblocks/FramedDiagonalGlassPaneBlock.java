@@ -11,6 +11,7 @@ import io.github.xfacthd.framedblocks.api.block.ShapeLockableBlock;
 import io.github.xfacthd.framedblocks.api.block.item.placement.StateCycleSpec;
 import io.github.xfacthd.framedblocks.api.compat.jade.JadeDisplayConfig;
 import io.github.xfacthd.framedblocks.api.component.WrenchRotationMode;
+import io.github.xfacthd.framedblocks.api.util.DirUtils;
 import io.github.xfacthd.framedblocks.api.util.RotationDirection;
 import io.github.xfacthd.framedblocks.common.FBContent;
 import io.github.xfacthd.framedblocks.common.block.IFramedBlockInternal;
@@ -18,6 +19,7 @@ import io.github.xfacthd.framedblocks.common.data.BlockType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
+import net.minecraft.util.TriState;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -28,10 +30,10 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ScheduledTickAccess;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.CrossCollisionBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.redstone.Orientation;
 import net.minecraft.world.level.storage.loot.LootParams;
@@ -84,17 +86,25 @@ public final class FramedDiagonalGlassPaneBlock extends DiagonalGlassPaneBlock i
         return DiagonalBlocksCompat.isFramedPane(state);
     }
 
-    /*@Override // TODO: Missing side context
-    public boolean attachsTo(BlockState adjState, boolean sideSolid)  {
-        Direction adjSide = null;
-        if (adjSide != null && !DirUtils.isY(adjSide) && DiagonalBlocksCompat.isFramedPane(adjState) && adjState.getValue(FramedProperties.STATE_LOCKED)) {
-            BooleanProperty prop = CrossCollisionBlock.PROPERTY_BY_DIRECTION.get(adjSide);
-            if (!adjState.getValue(prop)) {
+    @Override
+    public boolean attachesTo(BlockState adjState, boolean sideSolid, Direction adjSide) {
+        if (!DirUtils.isY(adjSide) && DiagonalBlocksCompat.isFramedPane(adjState) && adjState.getValue(FramedProperties.STATE_LOCKED)) {
+            if (!adjState.getValue(CrossCollisionBlock.PROPERTY_BY_DIRECTION.get(adjSide))) {
                 return false;
             }
         }
-        return super.attachsTo(adjState, sideSolid);
-    }*/
+        return super.attachesTo(adjState, sideSolid, adjSide);
+    }
+
+    @Override
+    public TriState canBeConnectedTo(BlockState state, Direction side, Block adjacentBlock) {
+        if (!DirUtils.isY(side) && state.getValue(FramedProperties.STATE_LOCKED)) {
+            if (!state.getValue(CrossCollisionBlock.PROPERTY_BY_DIRECTION.get(side))) {
+                return TriState.FALSE;
+            }
+        }
+        return TriState.DEFAULT;
+    }
 
     @Override
     public @Nullable BlockState updateIndirectNeighborDiagonalProperty(BlockState state, LevelAccessor level, BlockPos pos, EightWayDirection dir) {
@@ -107,8 +117,7 @@ public final class FramedDiagonalGlassPaneBlock extends DiagonalGlassPaneBlock i
     @Override
     public boolean attachesDiagonallyTo(BlockState adjState, EightWayDirection adjDir) {
         if (adjState.getBlock() == this && adjState.getValue(FramedProperties.STATE_LOCKED)) {
-            BooleanProperty prop = StarCollisionBlock.PROPERTY_BY_DIRECTION.get(adjDir);
-            if (!adjState.getValue(prop)) {
+            if (!adjState.getValue(StarCollisionBlock.PROPERTY_BY_DIRECTION.get(adjDir))) {
                 return false;
             }
         }

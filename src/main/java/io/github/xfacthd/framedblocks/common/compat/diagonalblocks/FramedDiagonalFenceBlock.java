@@ -18,7 +18,9 @@ import io.github.xfacthd.framedblocks.common.block.IFramedBlockInternal;
 import io.github.xfacthd.framedblocks.common.data.BlockType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
+import net.minecraft.util.TriState;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -92,7 +94,25 @@ public final class FramedDiagonalFenceBlock extends DiagonalFenceBlock implement
                 return false;
             }
         }
+        // Allow connecting to both wooden and non-wooden fences
+        if (adjState.is(BlockTags.FENCES)) {
+            return true;
+        }
         return super.connectsTo(adjState, sideSolid, adjSide);
+    }
+
+    @Override
+    public TriState canBeConnectedTo(BlockState state, Direction side, Block adjacentBlock) {
+        if (!DirUtils.isY(side) && state.getValue(FramedProperties.STATE_LOCKED)) {
+            if (!state.getValue(CrossCollisionBlock.PROPERTY_BY_DIRECTION.get(side))) {
+                return TriState.FALSE;
+            }
+        }
+        // Allow connecting to both wooden and non-wooden fences
+        if (adjacentBlock.defaultBlockState().is(BlockTags.FENCES)) {
+            return TriState.TRUE;
+        }
+        return TriState.FALSE;
     }
 
     @Override
