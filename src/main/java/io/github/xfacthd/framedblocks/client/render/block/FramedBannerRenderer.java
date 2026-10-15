@@ -22,7 +22,6 @@ import net.minecraft.client.model.object.banner.BannerModel;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.block.BlockAndTintGetter;
-import net.minecraft.client.renderer.block.BlockModelRenderState;
 import net.minecraft.client.renderer.block.model.BlockDisplayContext;
 import net.minecraft.client.renderer.block.model.BlockModel;
 import net.minecraft.client.renderer.blockentity.BannerRenderer;
@@ -124,7 +123,7 @@ public final class FramedBannerRenderer implements BlockEntityRenderer<FramedBan
             flagTransform = FLAG_TRANSFORMS.wallTransformation(facing);
         }
 
-        BlockModelRenderState modelRenderState = new BlockModelRenderState();
+        FramedBannerRenderState.ModelRenderState modelRenderState = new FramedBannerRenderState.ModelRenderState();
         ModelData modelData = ModelData.of(AbstractFramedBlockData.PROPERTY, new FramedBlockData(state, camo, false, null));
         BlockDisplayContext context = new FramedBannerFlagModel.DisplayContext(BlockAndTintGetter.EMPTY, BlockPos.ZERO, modelData);
         blockModel.update(modelRenderState, state, context, 42L);
@@ -135,7 +134,7 @@ public final class FramedBannerRenderer implements BlockEntityRenderer<FramedBan
     private void submitInternal(
             BannerModel bannerModel,
             Transformation bannerTransform,
-            BlockModelRenderState modelRenderState,
+            FramedBannerRenderState.ModelRenderState modelRenderState,
             Matrix4fc flagTransform,
             float swing,
             PoseStack poseStack,
@@ -149,7 +148,7 @@ public final class FramedBannerRenderer implements BlockEntityRenderer<FramedBan
         poseStack.mulPose(bannerTransform);
         collector.submitModel(bannerModel, Unit.INSTANCE, poseStack, lightCoords, overlayCoords, -1, Sheets.BANNER_BASE, sprites, outlineColor);
         if (breakProgress != null) {
-            collector.submitCrumblingOverlay(bannerModel, Unit.INSTANCE, poseStack, Sheets.BANNER_BASE.renderType(bannerModel.renderType()), lightCoords, overlayCoords, -1, breakProgress);
+            collector.order(1).submitCrumblingOverlay(bannerModel, Unit.INSTANCE, poseStack, Sheets.BANNER_BASE.renderType(bannerModel.renderType()), lightCoords, overlayCoords, -1, breakProgress);
         }
         poseStack.popPose();
 
@@ -157,6 +156,9 @@ public final class FramedBannerRenderer implements BlockEntityRenderer<FramedBan
         poseStack.mulPose(flagTransform);
         poseStack.rotate(Axis.XP, (-0.0125F + 0.01F * Mth.cos(Math.PI * 2 * swing)) * (float) Math.PI);
         modelRenderState.submitMultiLayer(poseStack, collector, lightCoords, overlayCoords, outlineColor);
+        if (breakProgress != null) {
+            modelRenderState.submitCrumblingOverlay(poseStack, collector.order(1), breakProgress);
+        }
         poseStack.popPose();
     }
 
