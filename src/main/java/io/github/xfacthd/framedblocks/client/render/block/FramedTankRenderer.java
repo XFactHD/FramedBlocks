@@ -118,7 +118,6 @@ public class FramedTankRenderer implements BlockEntityRenderer<FramedTankBlockEn
         int finalLight = LightCoordsUtil.lightCoordsWithEmission(light, fluidLight);
         boolean sameTex = stillTex == flowTex;
 
-        // FIXME: translucent fluids (regardless of no-shade) break outlines with Improved Translucency and break translucent chunk geometry without Improved Translucency
         RenderType bufferType = FramedRenderTypes.getEntityRenderType(gaseous ? ChunkSectionLayer.TRANSLUCENT : fluidModel.layer(), fluidLight > 0);
         collector.submitCustomGeometry(poseStack, bufferType, (pose, consumer) -> {
             float minY;
