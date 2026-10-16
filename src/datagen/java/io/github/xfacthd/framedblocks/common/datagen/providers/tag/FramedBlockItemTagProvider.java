@@ -29,9 +29,8 @@ final class FramedBlockItemTagProvider extends BlockItemTagsProvider {
         tag(BlockItemTags.TRAPDOORS).add(id(FBContent.BLOCK_FRAMED_TRAP_DOOR), id(FBContent.BLOCK_FRAMED_IRON_TRAP_DOOR));
         tag(BlockItemTags.SIGNS).add(id(FBContent.BLOCK_FRAMED_SIGN));
         tag(BlockItemTags.HANGING_SIGNS).add(id(FBContent.BLOCK_FRAMED_HANGING_SIGN));
-        // TODO: replace with existing IDs when #3642 is merged
-        tag(new BlockItemTagId(Tags.Blocks.CHESTS, Tags.Items.CHESTS)).add(id(FBContent.BLOCK_FRAMED_CHEST));
-        tag(new BlockItemTagId(Tags.Blocks.BOOKSHELVES, Tags.Items.BOOKSHELVES)).add(id(FBContent.BLOCK_FRAMED_BOOKSHELF));
+        tag(Tags.BlockItems.CHESTS).add(id(FBContent.BLOCK_FRAMED_CHEST));
+        tag(Tags.BlockItems.BOOKSHELVES).add(id(FBContent.BLOCK_FRAMED_BOOKSHELF));
         tag(BlockItemTags.RAILS).add(
                 id(FBContent.BLOCK_FRAMED_RAIL_SLOPE),
                 id(FBContent.BLOCK_FRAMED_POWERED_RAIL_SLOPE),
