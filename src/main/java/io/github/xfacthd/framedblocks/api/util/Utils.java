@@ -17,7 +17,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
-import net.neoforged.fml.loading.FMLEnvironment;
+import net.neoforged.fml.loading.FMLLoader;
 import net.neoforged.neoforge.transfer.access.ItemAccess;
 import net.neoforged.neoforge.transfer.item.ItemResource;
 import net.neoforged.neoforge.transfer.item.ItemStacksResourceHandler;
@@ -37,9 +37,9 @@ import java.util.Set;
 public final class Utils {
     private static final Identifier RL_TEMPLATE = Utils.id(FramedConstants.MOD_ID, "");
     /// Indicates whether the game is running in a production environment.
-    public static final boolean PRODUCTION = FMLEnvironment.isProduction();
+    public static final boolean PRODUCTION;
     /// Indicates whether the game is running on the physical client.
-    public static final boolean CLIENT_DIST = FMLEnvironment.getDist().isClient();
+    public static final boolean CLIENT_DIST;
 
     /// {@return an immutable list containing the content of the two given lists}
     ///
@@ -269,6 +269,13 @@ public final class Utils {
         return ServiceLoader.load(clazz, Utils.class.getClassLoader())
                 .findFirst()
                 .orElseThrow(() -> new NullPointerException("Failed to load service for " + clazz.getName()));
+    }
+
+    static {
+        // Assume dev client when no loader is present
+        FMLLoader loader = FMLLoader.getCurrentOrNull();
+        PRODUCTION = loader != null && loader.isProduction();
+        CLIENT_DIST = loader == null || loader.getDist().isClient();
     }
 
     private Utils() { }
