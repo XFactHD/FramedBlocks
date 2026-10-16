@@ -24,6 +24,7 @@ run_server
 run_gametest
 .cache
 libs
+logs/
 
 # Files from Forge MDK
 forge*changelog.txt
