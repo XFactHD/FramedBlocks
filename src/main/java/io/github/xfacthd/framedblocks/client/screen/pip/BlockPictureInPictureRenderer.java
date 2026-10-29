@@ -157,7 +157,7 @@ public final class BlockPictureInPictureRenderer extends PictureInPictureRendere
         public static final RenderConfig DEFAULT = new RenderConfig(_ -> {}, Lighting.Entry.ITEMS_3D, true);
 
         @Override
-        public boolean equals(Object obj) {
+        public boolean equals(@Nullable Object obj) {
             return obj == this;
         }
 

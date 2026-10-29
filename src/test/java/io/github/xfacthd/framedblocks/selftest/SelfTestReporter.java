@@ -62,7 +62,7 @@ public final class SelfTestReporter {
         lines.forEach(entry -> SelfTest.LOGGER.atLevel(entry.logLevel).log(entry.text, entry.params));
     }
 
-    private record Entry(Level logLevel, String text, Object... params) { }
+    private record Entry(Level logLevel, String text, @Nullable Object... params) { }
 
     private enum State {
         ROOT(0),

@@ -111,7 +111,7 @@ public record CamoApplicatorContent(CamoEntry[] camoEntries, int[] modifierStack
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(@Nullable Object obj) {
         if (obj == this) {
             return true;
         }

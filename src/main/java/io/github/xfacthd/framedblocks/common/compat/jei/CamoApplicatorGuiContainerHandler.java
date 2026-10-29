@@ -6,7 +6,7 @@ import net.minecraft.client.renderer.Rect2i;
 
 import java.util.List;
 
-public final class CamoApplicatorGuiContainerHandler implements IGuiContainerHandler<CamoApplicatorScreen> {
+final class CamoApplicatorGuiContainerHandler implements IGuiContainerHandler<CamoApplicatorScreen> {
     @Override
     public List<Rect2i> getGuiExtraAreas(CamoApplicatorScreen screen) {
         boolean open = screen.isConfigOpen();

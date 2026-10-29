@@ -10,7 +10,7 @@ import net.minecraft.world.item.ItemStack;
 
 import java.util.List;
 
-public final class PoweredFramingSawGhostIngredientHandler implements IGhostIngredientHandler<PoweredFramingSawScreen> {
+final class PoweredFramingSawGhostIngredientHandler implements IGhostIngredientHandler<PoweredFramingSawScreen> {
     @Override
     @SuppressWarnings("unchecked")
     public <I> List<Target<I>> getTargetsTyped(PoweredFramingSawScreen screen, ITypedIngredient<I> ingredient, boolean doStart) {

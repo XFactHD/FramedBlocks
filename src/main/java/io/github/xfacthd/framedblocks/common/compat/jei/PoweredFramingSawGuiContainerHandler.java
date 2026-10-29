@@ -21,7 +21,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
-public final class PoweredFramingSawGuiContainerHandler implements IGuiContainerHandler<PoweredFramingSawScreen> {
+final class PoweredFramingSawGuiContainerHandler implements IGuiContainerHandler<PoweredFramingSawScreen> {
     private final IIngredientManager ingredientManager;
 
     public PoweredFramingSawGuiContainerHandler(IIngredientManager ingredientManager) {

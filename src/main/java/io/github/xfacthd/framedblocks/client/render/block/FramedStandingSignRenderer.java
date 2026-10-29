@@ -22,6 +22,7 @@ import org.joml.Vector3fc;
 import org.jspecify.annotations.Nullable;
 
 public final class FramedStandingSignRenderer extends AbstractSignRenderer<StandingSignRenderState> {
+    // Z offset is larger than in StandingSignRenderer to accommodate slightly higher model thickness
     private static final Vector3fc TEXT_OFFSET = new Vector3f(0.0F, 0.33333334F, 0.066666667F);
     private static final WallAndGroundTransformations<SignRenderState.SignTransformations> TRANSFORMATIONS = new WallAndGroundTransformations<>(
             FramedStandingSignRenderer::createWallTransformation, FramedStandingSignRenderer::createGroundTransformation, 16

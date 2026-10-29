@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.Unique;
 import java.util.Objects;
 
 @Mixin(BlockBehaviour.BlockStateBase.class)
-public abstract class MixinBlockStateBase implements StateCacheAccessor {
+abstract class MixinBlockStateBase implements StateCacheAccessor {
     @Unique
     @Nullable
     private StateCache framedblocks$cache = null;

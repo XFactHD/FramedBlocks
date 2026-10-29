@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import java.util.Map;
 
 @Mixin(StateDefinition.Builder.class)
-public class MixinStateDefinitionBuilder implements StateDefinitionBuilderAccessor {
+abstract class MixinStateDefinitionBuilder implements StateDefinitionBuilderAccessor {
     @Shadow
     @Final
     private Map<String, Property<?>> properties;

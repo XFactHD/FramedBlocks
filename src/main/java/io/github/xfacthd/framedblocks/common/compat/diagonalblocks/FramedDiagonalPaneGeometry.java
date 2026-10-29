@@ -14,7 +14,7 @@ import net.minecraft.core.Direction;
 import org.joml.Vector3f;
 import org.jspecify.annotations.Nullable;
 
-class FramedDiagonalPaneGeometry extends FramedPaneGeometry {
+final class FramedDiagonalPaneGeometry extends FramedPaneGeometry {
     private final boolean northEast;
     private final boolean southEast;
     private final boolean northWest;
@@ -79,7 +79,7 @@ class FramedDiagonalPaneGeometry extends FramedPaneGeometry {
         return !noPillar;
     }
 
-    protected static void createDiagonalTopBottomEdgeQuad(QuadMapBuilder quadMap, BakedQuad quad, Direction dir, boolean noPillar) {
+    private static void createDiagonalTopBottomEdgeQuad(QuadMapBuilder quadMap, BakedQuad quad, Direction dir, boolean noPillar) {
         Preconditions.checkArgument(!DirUtils.isY(dir), String.format("Invalid direction: %s!", dir));
 
         QuadModifier.of(quad)
@@ -89,7 +89,7 @@ class FramedDiagonalPaneGeometry extends FramedPaneGeometry {
                 .export(quadMap, null);
     }
 
-    protected static void createDiagonalSideEdgeQuad(QuadMapBuilder quadMap, BakedQuad quad) {
+    private static void createDiagonalSideEdgeQuad(QuadMapBuilder quadMap, BakedQuad quad) {
         Direction quadDir = quad.direction();
         QuadModifier.of(quad)
                 .apply(Modifiers.cut(quadDir.getClockWise().getAxis(), 9F / 16F))
@@ -105,7 +105,7 @@ class FramedDiagonalPaneGeometry extends FramedPaneGeometry {
                 .export(quadMap, null);
     }
 
-    protected boolean isDiagonalSideNotInset(Direction face) {
+    private boolean isDiagonalSideNotInset(Direction face) {
         return switch (face) {
             case NORTH -> northEast;
             case EAST -> southEast;

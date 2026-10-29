@@ -10,6 +10,7 @@ import it.unimi.dsi.fastutil.objects.ObjectSpliterators;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.Iterator;
@@ -137,7 +138,7 @@ public final class CamoList implements Iterable<CamoContainer<?, ?>> {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(@Nullable Object obj) {
         return this == obj || (obj instanceof CamoList otherList && Arrays.equals(
                 camos, offset, offset + size,
                 otherList.camos, otherList.offset, otherList.offset + otherList.size

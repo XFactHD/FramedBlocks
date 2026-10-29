@@ -42,7 +42,7 @@ public class FramedBoardGeometry extends Geometry {
                     .apply(Modifiers.setPosition(DEPTH));
             for (Direction edge : EDGES[quadDir.getAxis().ordinal()]) {
                 if (hasFace(edge)) {
-                    modifier.apply(Modifiers.cut(edge, 1F - DEPTH));
+                    modifier = modifier.apply(Modifiers.cut(edge, 1F - DEPTH));
                 }
             }
             modifier.export(quadMap, null);
@@ -61,10 +61,10 @@ public class FramedBoardGeometry extends Geometry {
                     Direction cornerOne = edges[i - 1];
                     Direction cornerTwo = edges[(i + 1) % 4];
                     if (hasFace(cornerOne)) {
-                        modifier.apply(Modifiers.cut(cornerOne, 1F - DEPTH));
+                        modifier = modifier.apply(Modifiers.cut(cornerOne, 1F - DEPTH));
                     }
                     if (hasFace(cornerTwo)) {
-                        modifier.apply(Modifiers.cut(cornerTwo, 1F - DEPTH));
+                        modifier = modifier.apply(Modifiers.cut(cornerTwo, 1F - DEPTH));
                     }
                 }
                 modifier.export(quadMap, quadDir);

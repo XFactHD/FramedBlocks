@@ -73,7 +73,7 @@ public final class MarkdownTable {
             if (!alignRight) {
                 out.append(":");
             }
-            out.append("-".repeat(targetLen + 1));
+            out.repeat("-", targetLen + 1);
             if (alignRight) {
                 out.append(":");
             }
@@ -103,11 +103,11 @@ public final class MarkdownTable {
             out.append(cell);
         } else {
             if (alignRight) {
-                out.append(" ".repeat(diff));
+                out.repeat(" ", diff);
             }
             out.append(cell);
             if (!alignRight) {
-                out.append(" ".repeat(diff));
+                out.repeat(" ", diff);
             }
         }
 

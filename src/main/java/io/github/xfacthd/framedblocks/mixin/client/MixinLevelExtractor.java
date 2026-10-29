@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(LevelExtractor.class)
-public class MixinLevelExtractor {
+abstract class MixinLevelExtractor {
     @Shadow
     @Final
     private Minecraft minecraft;

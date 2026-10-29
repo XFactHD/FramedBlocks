@@ -341,14 +341,8 @@ public class FramingSawMenu extends AbstractContainerMenu implements IFramingSaw
         }
 
         @Override
-        public boolean equals(Object obj) {
-            if (obj == this) {
-                return true;
-            }
-            if (obj != null && obj.getClass() == this.getClass()) {
-                return vanillaHolder.id().equals(((FramedRecipeHolder) obj).vanillaHolder.id());
-            }
-            return false;
+        public boolean equals(@Nullable Object obj) {
+            return obj == this || (obj instanceof FramedRecipeHolder other && vanillaHolder.id().equals(other.vanillaHolder.id()));
         }
 
         @Override

@@ -20,13 +20,7 @@ public final class SimpleBlockCamoContainer extends AbstractBlockCamoContainer<S
 
     @Override
     public boolean equals(@Nullable Object obj) {
-        if (obj == this) {
-            return true;
-        }
-        if (!(obj instanceof SimpleBlockCamoContainer other)) {
-            return false;
-        }
-        return content.equals(other.content) && factory == other.factory;
+        return obj == this || (obj instanceof SimpleBlockCamoContainer other && content.equals(other.content) && factory == other.factory);
     }
 
     @Override

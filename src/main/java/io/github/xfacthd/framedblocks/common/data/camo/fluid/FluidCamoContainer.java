@@ -9,6 +9,7 @@ import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.transfer.fluid.FluidResource;
+import org.jspecify.annotations.Nullable;
 
 public final class FluidCamoContainer extends ResourceCamoContainer<FluidResource, FluidCamoContent, FluidCamoContainer> {
     public FluidCamoContainer(FluidResource fluid, Direction flowDirection) {
@@ -47,11 +48,8 @@ public final class FluidCamoContainer extends ResourceCamoContainer<FluidResourc
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (obj == this) {
-            return true;
-        }
-        return obj instanceof FluidCamoContainer fluidContainer && content.equals(fluidContainer.content);
+    public boolean equals(@Nullable Object obj) {
+        return obj == this || (obj instanceof FluidCamoContainer fluidContainer && content.equals(fluidContainer.content));
     }
 
     @Override

@@ -46,7 +46,7 @@ import org.jspecify.annotations.Nullable;
 import java.util.List;
 import java.util.Set;
 
-public final class FramedDiagonalGlassPaneBlock extends DiagonalGlassPaneBlock implements IFramedBlockInternal, ShapeLockableBlock {
+final class FramedDiagonalGlassPaneBlock extends DiagonalGlassPaneBlock implements IFramedBlockInternal, ShapeLockableBlock {
     public FramedDiagonalGlassPaneBlock(BlockBehaviour.Properties props) {
         super(props);
         BlockUtils.configureStandardProperties(this);

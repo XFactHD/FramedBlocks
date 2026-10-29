@@ -44,7 +44,7 @@ public final class EmptyCamoContainer extends CamoContainer<EmptyCamoContent, Em
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(@Nullable Object obj) {
         return obj == this;
     }
 

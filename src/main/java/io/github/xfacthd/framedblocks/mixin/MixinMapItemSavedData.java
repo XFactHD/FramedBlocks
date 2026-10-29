@@ -37,7 +37,7 @@ import java.util.function.Function;
 
 @Mixin(MapItemSavedData.class)
 @SuppressWarnings("MethodMayBeStatic")
-public abstract class MixinMapItemSavedData implements FramedMap.MarkerRemover {
+abstract class MixinMapItemSavedData implements FramedMap.MarkerRemover {
     @Unique
     private final Map<String, FramedMap> framedblocks$frameMarkers = new HashMap<>();
 

@@ -15,7 +15,7 @@ import org.joml.Vector3f;
 import org.jspecify.annotations.Nullable;
 
 // TODO: replace with templated geometry
-class FramedDiagonalFenceGeometry extends Geometry {
+final class FramedDiagonalFenceGeometry extends Geometry {
     private final boolean north;
     private final boolean east;
     private final boolean south;

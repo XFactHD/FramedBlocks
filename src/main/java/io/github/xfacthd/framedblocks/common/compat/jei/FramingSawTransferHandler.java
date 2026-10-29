@@ -42,7 +42,7 @@ import java.util.stream.Stream;
 /// The framing saw accepts many materials for one recipe, but JEI's basic transfer handler only sees the material
 /// in the displayed recipe. Each material can also change the required material and additive counts, so this handler
 /// groups available materials by material value and gives the basic handler one recalculated layout per value.
-public abstract sealed class FramingSawTransferHandler<C extends AbstractContainerMenu & IFramingSawMenu> implements IRecipeTransferHandler<C, FramingSawRecipe> {
+abstract sealed class FramingSawTransferHandler<C extends AbstractContainerMenu & IFramingSawMenu> implements IRecipeTransferHandler<C, FramingSawRecipe> {
     private final IRecipeTransferHandlerHelper transferHelper;
     private final IRecipeTransferInfo<C, FramingSawRecipe> transferInfo;
     private final IRecipeTransferHandler<C, FramingSawRecipe> basicHandler;

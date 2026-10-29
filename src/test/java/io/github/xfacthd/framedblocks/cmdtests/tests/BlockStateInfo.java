@@ -123,7 +123,6 @@ public final class BlockStateInfo {
         return Command.SINGLE_SUCCESS;
     }
 
-    @SuppressWarnings("deprecation")
     private static String printIgnoredProperties(ModelWrappingHandler wrapper, Block block) {
         return wrapper.getStateMerger()
                 .getHandledProperties()

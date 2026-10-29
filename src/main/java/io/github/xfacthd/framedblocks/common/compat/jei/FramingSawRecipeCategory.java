@@ -35,7 +35,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public final class FramingSawRecipeCategory implements IRecipeCategory<FramingSawRecipe> {
+final class FramingSawRecipeCategory implements IRecipeCategory<FramingSawRecipe> {
     static final String MATERIAL_SLOT_NAME = "input";
 
     private static final Identifier BACKGROUND = Utils.id("textures/gui/framing_saw_jei.png");

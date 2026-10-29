@@ -110,7 +110,7 @@ public abstract class CamoContainer<C extends CamoContent<C>, T extends CamoCont
     public abstract int hashCode();
 
     @Override
-    public abstract boolean equals(Object obj);
+    public abstract boolean equals(@Nullable Object obj);
 
     /// {@return the [CamoContainerFactory] used to load and save this container}
     public abstract CamoContainerFactory<T> getFactory();

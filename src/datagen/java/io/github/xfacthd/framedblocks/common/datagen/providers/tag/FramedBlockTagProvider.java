@@ -39,7 +39,7 @@ public final class FramedBlockTagProvider extends BlockTagsProvider {
         tag(BlockTags.ENCHANTMENT_POWER_PROVIDER).add(FBContent.BLOCK_FRAMED_BOOKSHELF.key());
 
         tag(FramedConstants.Tags.FRAMEABLE)
-                .addTag(Tags.Blocks.GLASS_BLOCKS)
+                .addTag(Tags.BlockItems.GLASS_BLOCKS.block())
                 .addTag(BlockTags.ICE)
                 .addTag(BlockTags.LEAVES)
                 .addAll(BlockItemIds.COPPER_GRATE.map(BlockItemId::block))

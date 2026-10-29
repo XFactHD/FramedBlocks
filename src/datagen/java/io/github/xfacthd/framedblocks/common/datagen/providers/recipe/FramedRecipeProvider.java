@@ -478,7 +478,7 @@ public final class FramedRecipeProvider extends AbstractFramedRecipeProvider {
                 .pattern("FF")
                 .pattern("SS")
                 .define('F', FBContent.BLOCK_FRAMED_CUBE.value())
-                .define('S', Tags.Items.STONES)
+                .define('S', Tags.BlockItems.STONES.item())
                 .unlockedBy(FBContent.BLOCK_FRAMED_CUBE)
                 .save(output);
 
@@ -486,7 +486,7 @@ public final class FramedRecipeProvider extends AbstractFramedRecipeProvider {
                 .pattern("FF")
                 .pattern("OO")
                 .define('F', FBContent.BLOCK_FRAMED_CUBE.value())
-                .define('O', Tags.Items.OBSIDIANS)
+                .define('O', Tags.BlockItems.OBSIDIANS.item())
                 .unlockedBy(FBContent.BLOCK_FRAMED_CUBE)
                 .save(output);
 
@@ -522,7 +522,7 @@ public final class FramedRecipeProvider extends AbstractFramedRecipeProvider {
 
         shapelessBuildingBlock(FBContent.BLOCK_FRAMED_STONE_BUTTON.value())
                 .requires(FBContent.BLOCK_FRAMED_CUBE.value())
-                .requires(Tags.Items.STONES)
+                .requires(Tags.BlockItems.STONES.item())
                 .unlockedBy(FBContent.BLOCK_FRAMED_CUBE)
                 .save(output);
 
@@ -645,7 +645,7 @@ public final class FramedRecipeProvider extends AbstractFramedRecipeProvider {
                 .pattern("GBG")
                 .pattern("FGF")
                 .define('F', FBContent.BLOCK_FRAMED_CUBE.value())
-                .define('G', Tags.Items.GLASS_BLOCKS_CHEAP)
+                .define('G', Tags.BlockItems.GLASS_BLOCKS_CHEAP.item())
                 .define('B', Items.BUCKET)
                 .unlockedBy(Items.BUCKET)
                 .save(output);
@@ -1576,8 +1576,8 @@ public final class FramedRecipeProvider extends AbstractFramedRecipeProvider {
                 .pattern("ICI")
                 .define('I', Tags.Items.INGOTS_IRON)
                 .define('H', FBContent.ITEM_FRAMED_HAMMER.value())
-                .define('R', Tags.Items.STORAGE_BLOCKS_REDSTONE)
-                .define('C', Tags.Items.CHESTS_WOODEN)
+                .define('R', Tags.BlockItems.STORAGE_BLOCKS_REDSTONE.item())
+                .define('C', Tags.BlockItems.CHESTS_WOODEN.item())
                 .unlockedBy(FBContent.ITEM_FRAMED_HAMMER)
                 .save(output);
 
@@ -1596,7 +1596,7 @@ public final class FramedRecipeProvider extends AbstractFramedRecipeProvider {
                 .pattern("OSO")
                 .pattern("SFS")
                 .pattern("OSO")
-                .define('O', Tags.Items.OBSIDIANS)
+                .define('O', Tags.BlockItems.OBSIDIANS.item())
                 .define('S', Items.STICK)
                 .define('F', FBContent.BLOCK_FRAMED_CUBE.value())
                 .unlockedBy(FBContent.BLOCK_FRAMED_CUBE)

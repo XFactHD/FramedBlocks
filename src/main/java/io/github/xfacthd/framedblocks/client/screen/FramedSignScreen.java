@@ -93,7 +93,7 @@ public final class FramedSignScreen extends AbstractSignEditScreen {
     }
 
     public static FramedSignScreen wall(FramedSignBlockEntity sign, SignTextSlot textSlot) {
-        return normal(sign, textSlot, 65, 139);
+        return normal(sign, textSlot, 50, 124);
     }
 
     public static FramedSignScreen hanging(FramedSignBlockEntity sign, SignTextSlot textSlot) {

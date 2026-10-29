@@ -18,7 +18,7 @@ public abstract class StateMerger implements UnaryOperator<BlockState> {
     @Override
     public abstract BlockState apply(BlockState state);
 
-    /// {@return the properties }
+    /// {@return the properties this state merger operates on}
     public final Set<Property<?>> getHandledProperties() {
         return handledProperties;
     }

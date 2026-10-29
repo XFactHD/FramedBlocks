@@ -545,7 +545,7 @@ public final class Modifiers {
             for (int i = 0; i < 4; i++) {
                 float x0 = invLerpX ? (1F - quad.positionComponent(i, lerpXIdx)) : quad.positionComponent(i, lerpXIdx);
                 float z0 = invLerpZ ? (1F - quad.positionComponent(i, lerpZIdx)) : quad.positionComponent(i, lerpZIdx);
-                float target = (float) Mth.lerp2(x0, z0, posTarget[0], posTarget[3], posTarget[1], posTarget[2]);
+                float target = Mth.lerp2(x0, z0, posTarget[0], posTarget[3], posTarget[1], posTarget[2]);
                 quad.setPositionComponent(i, idx, positive ? target : (1F - target));
             }
 

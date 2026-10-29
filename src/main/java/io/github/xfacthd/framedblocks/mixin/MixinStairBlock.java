@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin(StairBlock.class)
-public class MixinStairBlock {
+abstract class MixinStairBlock {
     @WrapOperation(
             method = "<init>",
             at = @At(

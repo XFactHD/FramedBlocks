@@ -24,7 +24,7 @@ public interface BlockOverlayPredicate {
     /// {@return whether the given side of the given part supports edge overlay quads at the given edge}
     ///
     /// The result of this method is only used for surfaces with a null cull-face or where the specified edge is not
-    /// at the block volume's edge. The `nullCullFace` and `unaligned` parameterts will never both be `false`.
+    /// at the block volume's edge. The `nullCullFace` and `unaligned` parameters will never both be `false`.
     ///
     /// @param state        The state of the block being checked
     /// @param side         The side on which the edge overlay is placed

@@ -16,7 +16,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
-public final class FramingSawGhostIngredientHandler implements IGhostIngredientHandler<FramingSawWithEncoderScreen> {
+final class FramingSawGhostIngredientHandler implements IGhostIngredientHandler<FramingSawWithEncoderScreen> {
     @Override
     @SuppressWarnings("unchecked")
     public <I> List<Target<I>> getTargetsTyped(FramingSawWithEncoderScreen screen, ITypedIngredient<I> ingredient, boolean doStart) {

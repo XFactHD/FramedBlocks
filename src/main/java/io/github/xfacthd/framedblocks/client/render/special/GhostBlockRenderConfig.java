@@ -36,11 +36,7 @@ abstract sealed class GhostBlockRenderConfig {
 
     abstract RenderPipeline getPipeline(@Nullable OitStage oitStage);
 
-    //abstract OutputTarget getOutputTarget();
-
     private static final class Default extends GhostBlockRenderConfig {
-        //private static final OutputTarget PARTICLE = new OutputTarget("particle_target", () -> Minecraft.getInstance().levelRenderer.particlesTarget());
-
         @Override
         RenderPipeline getPipeline(@Nullable OitStage oitStage) {
             if (oitStage != null) {
@@ -48,11 +44,6 @@ abstract sealed class GhostBlockRenderConfig {
             }
             return RenderPipelines.TRANSLUCENT_BLOCK;
         }
-
-        //@Override
-        //OutputTarget getOutputTarget() {
-        //    return PARTICLE;
-        //}
     }
 
     private static final class Fallback extends GhostBlockRenderConfig {
@@ -73,10 +64,5 @@ abstract sealed class GhostBlockRenderConfig {
             }
             return RenderPipelines.ITEM_TRANSLUCENT;
         }
-
-        //@Override
-        //OutputTarget getOutputTarget() {
-        //    return OutputTarget.ITEM_ENTITY_TARGET;
-        //}
     }
 }

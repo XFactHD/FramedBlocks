@@ -5,7 +5,7 @@ import net.minecraft.client.renderer.Rect2i;
 
 import java.util.List;
 
-public final class FramingSawWithEncoderGuiContainerHandler extends FramingSawGuiContainerHandler<FramingSawWithEncoderScreen> {
+final class FramingSawWithEncoderGuiContainerHandler extends FramingSawGuiContainerHandler<FramingSawWithEncoderScreen> {
     @Override
     public List<Rect2i> getGuiExtraAreas(FramingSawWithEncoderScreen screen) {
         if (screen.getMenu().isInEncoderMode()) {

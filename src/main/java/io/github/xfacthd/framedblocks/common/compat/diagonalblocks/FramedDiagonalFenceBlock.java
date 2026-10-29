@@ -45,7 +45,7 @@ import org.jspecify.annotations.Nullable;
 import java.util.List;
 import java.util.Set;
 
-public final class FramedDiagonalFenceBlock extends DiagonalFenceBlock implements IFramedBlockInternal, ShapeLockableBlock {
+final class FramedDiagonalFenceBlock extends DiagonalFenceBlock implements IFramedBlockInternal, ShapeLockableBlock {
     public FramedDiagonalFenceBlock(BlockBehaviour.Properties props) {
         super(props);
         BlockUtils.configureStandardProperties(this);

@@ -16,8 +16,6 @@ public final class StateMergers {
     /// Set of properties that all blocks should ignore when wrapping models.
     public static final Set<Property<?>> IGNORED_PROPS = Utils.concat(BlockUtils.REQUIRED_STATE_PROPERTIES, Set.of(
             FramedProperties.SOLID,
-            FramedProperties.PROPAGATES_SKYLIGHT,
-            FramedProperties.GLOWING,
             BlockStateProperties.WATERLOGGED,
             FramedProperties.STATE_LOCKED
     ));

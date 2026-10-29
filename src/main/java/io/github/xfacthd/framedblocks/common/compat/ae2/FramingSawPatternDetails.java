@@ -94,8 +94,8 @@ final class FramingSawPatternDetails implements IPatternDetails {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        return obj != null && obj.getClass() == getClass() && ((FramingSawPatternDetails) obj).definition.equals(definition);
+    public boolean equals(@Nullable Object obj) {
+        return obj == this || (obj instanceof FramingSawPatternDetails other && other.definition.equals(definition));
     }
 
     public static void encode(ItemStack stack, ItemStack input, ItemStack[] additives, ItemStack output) {

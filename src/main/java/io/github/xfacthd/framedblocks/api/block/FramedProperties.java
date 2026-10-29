@@ -32,6 +32,7 @@ public final class FramedProperties {
     public static final BooleanProperty ALT_SLOPE = BooleanProperty.create("alt_slope");
     /// Indicates whether the block's model is uses copycat-style quad cutting (texture edges moved inwards)
     /// or standard quad cutting (texture edges cut off).
+    /// @see CopycatStyleBlock
     public static final BooleanProperty COPYCAT_STYLE = BooleanProperty.create("copycat_style");
 
     private FramedProperties() { }

@@ -321,12 +321,12 @@ public final class FramingSawRecipeProvider extends AbstractFramingSawRecipeProv
 
         sawRecipe(FBContent.BLOCK_FRAMED_STONE_PRESSURE_PLATE)
                 .material(CUBE_MATERIAL_VALUE / 4)
-                .additive(additive(Tags.Items.STONES))
+                .additive(additive(Tags.BlockItems.STONES.item()))
                 .save(output);
 
         sawRecipe(FBContent.BLOCK_FRAMED_OBSIDIAN_PRESSURE_PLATE)
                 .material(CUBE_MATERIAL_VALUE / 4)
-                .additive(additive(Tags.Items.OBSIDIANS))
+                .additive(additive(Tags.BlockItems.OBSIDIANS.item()))
                 .save(output);
 
         sawRecipe(FBContent.BLOCK_FRAMED_GOLD_PRESSURE_PLATE)
@@ -349,7 +349,7 @@ public final class FramingSawRecipeProvider extends AbstractFramingSawRecipeProv
 
         sawRecipe(FBContent.BLOCK_FRAMED_STONE_BUTTON)
                 .material(CUBE_MATERIAL_VALUE / 8)
-                .additive(additive(Tags.Items.STONES))
+                .additive(additive(Tags.BlockItems.STONES.item()))
                 .save(output);
 
         sawRecipe(FBContent.BLOCK_FRAMED_LARGE_BUTTON)
@@ -358,12 +358,12 @@ public final class FramingSawRecipeProvider extends AbstractFramingSawRecipeProv
 
         sawRecipe(FBContent.BLOCK_FRAMED_LARGE_STONE_BUTTON)
                 .material(CUBE_MATERIAL_VALUE / 4)
-                .additive(additive(Tags.Items.STONES))
+                .additive(additive(Tags.BlockItems.STONES.item()))
                 .save(output);
 
         sawRecipe(FBContent.BLOCK_FRAMED_LEVER)
                 .material(CUBE_MATERIAL_VALUE / 4)
-                .additive(additive(Tags.Items.COBBLESTONES))
+                .additive(additive(Tags.BlockItems.COBBLESTONES.item()))
                 .save(output);
 
         sawRecipe(FBContent.BLOCK_FRAMED_SIGN)
@@ -448,7 +448,7 @@ public final class FramingSawRecipeProvider extends AbstractFramingSawRecipeProv
 
         sawRecipe(FBContent.BLOCK_FRAMED_TANK)
                 .material(CUBE_MATERIAL_VALUE * 4)
-                .additive(additive(Tags.Items.GLASS_BLOCKS_CHEAP, 4))
+                .additive(additive(Tags.BlockItems.GLASS_BLOCKS_CHEAP.item(), 4))
                 .additive(additive(Items.BUCKET))
                 .save(output);
 
@@ -922,7 +922,7 @@ public final class FramingSawRecipeProvider extends AbstractFramingSawRecipeProv
 
         sawRecipe(FBContent.BLOCK_FRAMED_HOPPER)
                 .material(CUBE_MATERIAL_VALUE)
-                .additive(additive(Tags.Items.CHESTS))
+                .additive(additive(Tags.BlockItems.CHESTS.item()))
                 .save(output);
 
         sawRecipe(FBContent.BLOCK_FRAMED_LAYERED_CUBE)
