@@ -4,20 +4,27 @@ import io.github.xfacthd.framedblocks.api.blueprint.BlueprintCopyBehaviour;
 import io.github.xfacthd.framedblocks.api.blueprint.BlueprintData;
 import io.github.xfacthd.framedblocks.api.util.FramedConstants;
 import io.github.xfacthd.framedblocks.api.util.ItemPredicate;
+import io.github.xfacthd.framedblocks.api.util.Utils;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.util.ByIdMap;
 import net.minecraft.util.StringRepresentable;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Blocks;
+import net.neoforged.neoforge.common.ItemAbilities;
 import net.neoforged.neoforge.common.Tags;
+import net.neoforged.neoforge.transfer.access.ItemAccess;
 import net.neoforged.neoforge.transfer.item.ItemResource;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 import java.util.Locale;
 import java.util.function.IntFunction;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 /// Represents modifiers which can be applied to any framed block.
@@ -27,32 +34,40 @@ public enum FrameModifier implements StringRepresentable {
             IFramedBlockEntity::isGlowing,
             IFramedBlockEntity::setGlowing,
             ItemPredicate.ofTag(Tags.Items.DUSTS_GLOWSTONE),
+            stack -> stack.is(Items.BRUSH),
             () -> ItemResource.of(Items.GLOWSTONE_DUST),
-            BlueprintCopyBehaviour::getGlowstoneCount
+            BlueprintCopyBehaviour::getGlowstoneCount,
+            FrameModifierInteractionHandler.DEFAULT
     ),
     /// Makes the framed block intangible (removes collision)
     INTANGIBLE(
             IFramedBlockEntity::isMarkedIntangible,
             IFramedBlockEntity::setIntangible,
             ItemPredicate.ofItem(FramedConstants.Objects.PHANTOM_PASTE),
+            Utils::isConfigurationTool,
             () -> ItemResource.of(FramedConstants.Objects.PHANTOM_PASTE),
-            BlueprintCopyBehaviour::getIntangibleCount
+            BlueprintCopyBehaviour::getIntangibleCount,
+            new FrameModifierInteractionHandler.Intangibility()
     ),
     /// Makes the framed block immune to fire, most explosions and certain mobs (i.e. the Ender Dragon)
     REINFORCED(
             IFramedBlockEntity::isReinforced,
             IFramedBlockEntity::setReinforced,
             ItemPredicate.ofItem(FramedConstants.Objects.FRAMED_REINFORCEMENT),
+            stack -> stack.isCorrectToolForDrops(Blocks.OBSIDIAN.defaultBlockState()),
             () -> ItemResource.of(FramedConstants.Objects.FRAMED_REINFORCEMENT),
-            BlueprintCopyBehaviour::getReinforcementCount
+            BlueprintCopyBehaviour::getReinforcementCount,
+            new FrameModifierInteractionHandler.Reinforcement()
     ),
     /// Makes the framed block appear emissive (i.e. fullbright)
     EMISSIVE(
             IFramedBlockEntity::isEmissive,
             IFramedBlockEntity::setEmissive,
             ItemPredicate.ofItem(FramedConstants.Objects.GLOW_PASTE),
+            stack -> stack.canPerformAction(ItemAbilities.AXE_SCRAPE),
             () -> ItemResource.of(FramedConstants.Objects.GLOW_PASTE),
-            BlueprintCopyBehaviour::getEmissiveCount
+            BlueprintCopyBehaviour::getEmissiveCount,
+            FrameModifierInteractionHandler.DEFAULT
     ),
     ;
 
@@ -65,15 +80,27 @@ public enum FrameModifier implements StringRepresentable {
     private final FlagGetter flagGetter;
     private final FlagSetter flagSetter;
     private final ItemPredicate itemPredicate;
+    private final Predicate<ItemStack> removalPredicate;
     private final Supplier<ItemResource> defaultResourceProvider;
     private final BlueprintReader blueprintReader;
+    private final FrameModifierInteractionHandler interactionHandler;
 
-    FrameModifier(FlagGetter flagGetter, FlagSetter flagSetter, ItemPredicate itemPredicate, Supplier<ItemResource> defaultResourceProvider, BlueprintReader blueprintReader) {
+    FrameModifier(
+            FlagGetter flagGetter,
+            FlagSetter flagSetter,
+            ItemPredicate itemPredicate,
+            Predicate<ItemStack> removalPredicate,
+            Supplier<ItemResource> defaultResourceProvider,
+            BlueprintReader blueprintReader,
+            FrameModifierInteractionHandler interactionHandler
+    ) {
         this.flagGetter = flagGetter;
         this.flagSetter = flagSetter;
         this.itemPredicate = itemPredicate;
+        this.removalPredicate = removalPredicate;
         this.defaultResourceProvider = defaultResourceProvider;
         this.blueprintReader = blueprintReader;
+        this.interactionHandler = interactionHandler;
     }
 
     /// {@return whether this modifier is active on the given [IFramedBlockEntity]}
@@ -132,6 +159,14 @@ public enum FrameModifier implements StringRepresentable {
         if (count > 0) {
             output.add(getDefaultStack(count));
         }
+    }
+
+    boolean tryApply(FramedBlockEntity blockEntity, ItemAccess itemAccess, ItemResource resource) {
+        return !isActive(blockEntity) && matches(resource) && interactionHandler.apply(blockEntity, this, itemAccess, resource);
+    }
+
+    boolean tryRemove(FramedBlockEntity blockEntity, ItemStack stack, Player player, InteractionHand hand) {
+        return isActive(blockEntity) && removalPredicate.test(stack) && interactionHandler.remove(blockEntity, this, stack, player, hand);
     }
 
     @Override

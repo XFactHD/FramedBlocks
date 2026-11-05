@@ -37,7 +37,6 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.component.BlockItemStateProperties;
 import net.minecraft.world.level.BlockAndLightGetter;
 import net.minecraft.world.level.BlockGetter;
@@ -60,7 +59,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.EntityCollisionContext;
-import net.neoforged.neoforge.common.ItemAbilities;
 import net.neoforged.neoforge.common.world.AuxiliaryLightManager;
 import net.neoforged.neoforge.model.data.ModelData;
 import net.neoforged.neoforge.model.data.ModelProperty;
@@ -90,6 +88,7 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
     protected static final int FLAG_INTANGIBLE = 1 << 1;
     protected static final int FLAG_REINFORCED = 1 << 2;
     protected static final int FLAG_EMISSIVE = 1 << 3;
+    private static final FrameModifier[] MODIFIERS = FrameModifier.values();
 
     final ClientData<?> clientData;
     private StateCache stateCache;
@@ -190,42 +189,21 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
 
     private InteractionResult tryApplyModifier(ItemAccess itemAccess) {
         ItemResource resource = itemAccess.getResource();
-        if (!glowing && FrameModifier.GLOWING.matches(resource)) {
-            return applyGlowstone(itemAccess);
-        }
-        if (!intangible && canMakeIntangible(resource)) {
-            return applyIntangibility(itemAccess);
-        }
-        if (!reinforced && FrameModifier.REINFORCED.matches(resource)) {
-            return applyReinforcement(itemAccess);
-        }
-        if (!emissive && FrameModifier.EMISSIVE.matches(resource)) {
-            return applyEmissivity(itemAccess);
+        for (FrameModifier modifier : MODIFIERS) {
+            if (modifier.tryApply(this, itemAccess, resource)) {
+                return InteractionResult.SUCCESS;
+            }
         }
         return InteractionResult.PASS;
     }
 
     private InteractionResult tryRemoveModifier(Player player, ItemStack stack, InteractionHand hand) {
-        if (glowing && stack.is(Items.BRUSH)) {
-            return removeGlowstone(player);
-        }
-        if (intangible && player.isShiftKeyDown() && Utils.isConfigurationTool(stack)) {
-            return removeIntangibility(player);
-        }
-        if (reinforced && stack.isCorrectToolForDrops(Blocks.OBSIDIAN.defaultBlockState())) {
-            return removeReinforcement(player, stack, hand);
-        }
-        if (emissive && stack.canPerformAction(ItemAbilities.AXE_SCRAPE)) {
-            return removeEmissivity(player);
+        for (FrameModifier modifier : MODIFIERS) {
+            if (modifier.tryRemove(this, stack, player, hand)) {
+                return InteractionResult.SUCCESS;
+            }
         }
         return InteractionResult.PASS;
-    }
-
-    private boolean canMakeIntangible(ItemResource resource) {
-        if (!ConfigView.Server.INSTANCE.enableIntangibility()) {
-            return false;
-        }
-        return FrameModifier.INTANGIBLE.matches(resource) && getBlockType().allowMakingIntangible();
     }
 
     private InteractionResult setCamo(Player player, ItemAccess itemAccess, CamoContainerFactory<?> factory, boolean secondary) {
@@ -261,86 +239,6 @@ public non-sealed class FramedBlockEntity extends BlockEntity implements IFramed
             return InteractionResult.SUCCESS;
         }
         return InteractionResult.FAIL;
-    }
-
-    private InteractionResult applyGlowstone(ItemAccess itemAccess) {
-        if (!Utils.extractOneFromItemAccess(itemAccess, !level().isClientSide())) {
-            return InteractionResult.FAIL;
-        }
-        if (!level().isClientSide()) {
-            setGlowing(true);
-        }
-        return InteractionResult.SUCCESS;
-    }
-
-    private InteractionResult removeGlowstone(Player player) {
-        if (!level().isClientSide()) {
-            setGlowing(false);
-
-            Utils.giveToPlayer(player, FrameModifier.GLOWING.getDefaultStack());
-        }
-        return InteractionResult.SUCCESS;
-    }
-
-    private InteractionResult applyIntangibility(ItemAccess itemAccess) {
-        if (!Utils.extractOneFromItemAccess(itemAccess, !level().isClientSide())) {
-            return InteractionResult.FAIL;
-        }
-        if (!level().isClientSide()) {
-            setIntangible(true);
-        }
-        return InteractionResult.SUCCESS;
-    }
-
-    private InteractionResult removeIntangibility(Player player) {
-        if (!level().isClientSide()) {
-            setIntangible(false);
-
-            Utils.giveToPlayer(player, FrameModifier.INTANGIBLE.getDefaultStack());
-        }
-        return InteractionResult.SUCCESS;
-    }
-
-    private InteractionResult applyReinforcement(ItemAccess itemAccess) {
-        if (!Utils.extractOneFromItemAccess(itemAccess, !level().isClientSide())) {
-            return InteractionResult.FAIL;
-        }
-        if (!level().isClientSide()) {
-            setReinforced(true);
-        }
-        return InteractionResult.SUCCESS;
-    }
-
-    private InteractionResult removeReinforcement(Player player, ItemStack stack, InteractionHand hand) {
-        if (!level().isClientSide()) {
-            setReinforced(false);
-
-            if (!player.isCreative()) {
-                stack.hurtAndBreak(1, player, hand.asEquipmentSlot());
-            }
-
-            Utils.giveToPlayer(player, FrameModifier.REINFORCED.getDefaultStack());
-        }
-        return InteractionResult.SUCCESS;
-    }
-
-    private InteractionResult applyEmissivity(ItemAccess itemAccess) {
-        if (!Utils.extractOneFromItemAccess(itemAccess, !level().isClientSide())) {
-            return InteractionResult.FAIL;
-        }
-        if (!level().isClientSide()) {
-            setEmissive(true);
-        }
-        return InteractionResult.SUCCESS;
-    }
-
-    private InteractionResult removeEmissivity(Player player) {
-        if (!level().isClientSide()) {
-            setEmissive(false);
-
-            Utils.giveToPlayer(player, FrameModifier.EMISSIVE.getDefaultStack());
-        }
-        return InteractionResult.SUCCESS;
     }
 
     /// Check which part of a double block was hit if this is a double block
