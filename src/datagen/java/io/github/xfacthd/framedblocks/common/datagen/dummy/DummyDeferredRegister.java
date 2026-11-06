@@ -1,8 +1,10 @@
 package io.github.xfacthd.framedblocks.common.datagen.dummy;
 
-import io.github.xfacthd.framedblocks.api.util.FramedConstants;
 import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.bus.api.IEventBus;
@@ -10,37 +12,50 @@ import net.neoforged.fml.ModList;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 /// [DeferredRegister] wrapper for registering datagen-only dummy objects in the absence of the compat mod required to create the real object.
 final class DummyDeferredRegister<T> {
-    private final DeferredRegister<T> register;
-    private final Function<String, Holder<T>> registrar;
+    private final Map<String, DeferredRegister<T>> registers = new HashMap<>();
+    private final ResourceKey<? extends Registry<T>> registryName;
+    private final Function<String, DeferredRegister<T>> registerFactory;
+    private final BiFunction<DeferredRegister<T>, String, Holder<T>> registrar;
 
     static DummyDeferredRegister<Block> blocks() {
-        DeferredRegister.Blocks blocks = DeferredRegister.createBlocks(FramedConstants.MOD_ID);
-        return new DummyDeferredRegister<>(blocks, blocks::registerSimpleBlock);
+        return new DummyDeferredRegister<>(Registries.BLOCK, DeferredRegister::createBlocks, (reg, name) ->
+                ((DeferredRegister.Blocks) reg).registerSimpleBlock(name)
+        );
     }
 
     static DummyDeferredRegister<Item> items() {
-        DeferredRegister.Items items = DeferredRegister.createItems(FramedConstants.MOD_ID);
-        return new DummyDeferredRegister<>(items, items::registerSimpleItem);
+        return new DummyDeferredRegister<>(Registries.ITEM, DeferredRegister::createItems, (reg, name) ->
+                ((DeferredRegister.Items) reg).registerSimpleItem(name)
+        );
     }
 
-    private DummyDeferredRegister(DeferredRegister<T> register, Function<String, Holder<T>> registrar) {
-        this.register = register;
+    private DummyDeferredRegister(
+            ResourceKey<? extends Registry<T>> registryName,
+            Function<String, DeferredRegister<T>> registerFactory,
+            BiFunction<DeferredRegister<T>, String, Holder<T>> registrar
+    ) {
+        this.registryName = registryName;
+        this.registerFactory = registerFactory;
         this.registrar = registrar;
     }
 
     Holder<T> register(Identifier id, String compatMod) {
         if (ModList.get().isLoaded(compatMod)) {
-            return DeferredHolder.create(register.getRegistryName(), id);
+            return DeferredHolder.create(registryName, id);
         } else {
-            return registrar.apply(id.getPath());
+            DeferredRegister<T> register = registers.computeIfAbsent(id.getNamespace(), registerFactory);
+            return registrar.apply(register, id.getPath());
         }
     }
 
     void register(IEventBus modBus) {
-        register.register(modBus);
+        registers.values().forEach(reg -> reg.register(modBus));
     }
 }
