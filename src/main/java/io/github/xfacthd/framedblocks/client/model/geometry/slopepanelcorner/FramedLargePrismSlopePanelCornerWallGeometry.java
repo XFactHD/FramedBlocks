@@ -123,6 +123,8 @@ public class FramedLargePrismSlopePanelCornerWallGeometry extends Geometry {
                 .apply(Modifiers.cut(rotDirTwo.getOpposite(), flipPrismTriOpp ? 1 : .75F, flipPrismTriOpp ? .75F : 1))
                 .apply(Modifiers.rotate(rotDirTwo.getAxis(), rotTiltOrigin, tiltAngle, true))
                 .apply(Modifiers.rotate(dir.getAxis(), rotTiltOrigin, rotAngle, true))
+                .apply(Modifiers.offset(rotDirOne, 1.25F))
+                .apply(Modifiers.offset(rotDirTwo, .25F))
                 .export(quadMap, null);
     }
 
