@@ -54,9 +54,6 @@ public final class ConfigView {
         /// {@return the verbosity of messages displayed when a block cannot be used as a camo}
         CamoMessageVerbosity getCamoMessageVerbosity();
 
-        /// {@return whether ambient occlusion should be forced on framed blocks which glow through applied glowstone dust}
-        boolean shouldForceAmbientOcclusionOnGlowingBlocks();
-
         /// {@return whether item models of framed blocks should render with the camo stored on the stack, if present}
         boolean shouldRenderItemModelsWithCamo();
     }

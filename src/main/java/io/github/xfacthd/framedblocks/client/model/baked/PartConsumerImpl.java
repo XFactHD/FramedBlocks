@@ -2,7 +2,6 @@ package io.github.xfacthd.framedblocks.client.model.baked;
 
 import com.google.common.base.Preconditions;
 import io.github.xfacthd.framedblocks.api.model.ExtendedBlockStateModelPart;
-import io.github.xfacthd.framedblocks.api.model.geometry.DefaultAO;
 import io.github.xfacthd.framedblocks.api.model.geometry.PartConsumer;
 import io.github.xfacthd.framedblocks.api.model.geometry.QuadListModifier;
 import io.github.xfacthd.framedblocks.api.model.util.ModelUtils;
@@ -35,20 +34,16 @@ final class PartConsumerImpl implements PartConsumer {
     private final List<BlockStateModelPart> srcParts = new ObjectArrayList<>();
     private final List<? super ExtendedBlockStateModelPart> destParts;
     private final int cullMask;
-    private final DefaultAO defaultAO;
-    private final boolean camoEmissive;
-    private final boolean forceEmissive;
+    private final ShadingMode shadingMode;
     private final boolean cutoutLeaves;
     private int tintIndexOffset;
     private int maxTintIndex;
     private boolean countTintIndices = false;
 
-    PartConsumerImpl(List<? super ExtendedBlockStateModelPart> destParts, int cullMask, DefaultAO defaultAO, boolean camoEmissive, boolean forceEmissive) {
+    PartConsumerImpl(List<? super ExtendedBlockStateModelPart> destParts, int cullMask, ShadingMode shadingMode) {
         this.destParts = destParts;
         this.cullMask = cullMask;
-        this.defaultAO = defaultAO;
-        this.camoEmissive = camoEmissive;
-        this.forceEmissive = forceEmissive;
+        this.shadingMode = shadingMode;
         this.cutoutLeaves = Minecraft.getInstance().options.cutoutLeaves().get();
     }
 
@@ -116,10 +111,8 @@ final class PartConsumerImpl implements PartConsumer {
 
         QuadMapBuilderInternal quadMap = QuadMapBuilderInternal.create();
         boolean forcedOpaque = camoPart && ModelBlockRenderer.forceOpaque(cutoutLeaves, partState);
-        boolean forceEmissive = this.forceEmissive;
-        boolean emissive = forceEmissive || (camoPart && this.camoEmissive);
         boolean moveTintIndex = tintIndexOffset > 0;
-        boolean hasPostModifiers = emissive || moveTintIndex || forcedOpaque;
+        boolean hasPostModifiers = shadingMode.applyFullbright() || moveTintIndex || forcedOpaque;
         boolean countTintIndices = this.countTintIndices;
         boolean canInsertDirect = !(modifier != null || hasPostModifiers || countTintIndices);
         boolean hasAnyQuads = false;
@@ -146,7 +139,7 @@ final class PartConsumerImpl implements PartConsumer {
                 if (quads != null && !quads.isEmpty()) {
                     //noinspection Java8ListReplaceAll
                     for (int i = 0; i < quads.size(); i++) {
-                        quads.set(i, postProcessQuad(quads.get(i), emissive, forceEmissive, forcedOpaque));
+                        quads.set(i, postProcessQuad(quads.get(i), forcedOpaque));
                     }
                 }
             }
@@ -163,7 +156,7 @@ final class PartConsumerImpl implements PartConsumer {
             }
             this.maxTintIndex = maxTintIndex;
         }
-        destParts.add(new FramedBlockStateModelPart(quadMap.build(), defaultAO.apply(part.ambientOcclusion()), part.particleMaterial(), shaderState));
+        destParts.add(new FramedBlockStateModelPart(quadMap.build(), shadingMode.computeAmbientOcclusion(part.ambientOcclusion()), part.particleMaterial(), shaderState));
     }
 
     private static boolean acceptQuads(QuadMapBuilderInternal quadMap, List<BakedQuad> srcQuads, @Nullable Direction side, boolean canInsertDirect, @Nullable QuadListModifier modifier) {
@@ -199,20 +192,13 @@ final class PartConsumerImpl implements PartConsumer {
         return maxTintIndex;
     }
 
-    private BakedQuad postProcessQuad(BakedQuad quad, boolean emissive, boolean forceEmissive, boolean forceOpaque) {
+    private BakedQuad postProcessQuad(BakedQuad quad, boolean forceOpaque) {
         BakedQuad.MaterialInfo materialInfo = quad.materialInfo();
         ChunkSectionLayer layer = forceOpaque ? ChunkSectionLayer.SOLID : materialInfo.layer();
         int tintIndex = materialInfo.isTinted() ? materialInfo.tintIndex() + tintIndexOffset : materialInfo.tintIndex();
-        Direction prevShadeOverride = materialInfo.shadeDirectionOverride();
-        Direction shadeOverride;
-        if (prevShadeOverride != null || !forceEmissive) {
-            shadeOverride = prevShadeOverride;
-        } else {
-            shadeOverride = Direction.UP;
-        }
-        int lightEmission = emissive ? LightEngine.MAX_LEVEL : materialInfo.lightEmission();
-        boolean ao = !forceEmissive && materialInfo.ambientOcclusion();
-        if (layer != materialInfo.layer() || tintIndex != materialInfo.tintIndex() || shadeOverride != prevShadeOverride || lightEmission != materialInfo.lightEmission() || ao != materialInfo.ambientOcclusion()) {
+        Direction shadeOverride = shadingMode.overrideShadeDirection() ? Direction.UP : materialInfo.shadeDirectionOverride();
+        int lightEmission = shadingMode.applyFullbright() ? LightEngine.MAX_LEVEL : materialInfo.lightEmission();
+        if (layer != materialInfo.layer() || tintIndex != materialInfo.tintIndex() || shadeOverride != materialInfo.shadeDirectionOverride() || lightEmission != materialInfo.lightEmission()) {
             return new BakedQuad(
                     quad.position0(),
                     quad.position1(),
@@ -223,7 +209,17 @@ final class PartConsumerImpl implements PartConsumer {
                     quad.packedUV2(),
                     quad.packedUV3(),
                     quad.direction(),
-                    new BakedQuad.MaterialInfo(materialInfo.sprite(), layer, materialInfo.itemRenderType(), materialInfo.itemGlintRenderType(), materialInfo.itemGlintSpecialRenderType(), tintIndex, shadeOverride, lightEmission, ao),
+                    new BakedQuad.MaterialInfo(
+                            materialInfo.sprite(),
+                            layer,
+                            materialInfo.itemRenderType(),
+                            materialInfo.itemGlintRenderType(),
+                            materialInfo.itemGlintSpecialRenderType(),
+                            tintIndex,
+                            shadeOverride,
+                            lightEmission,
+                            materialInfo.ambientOcclusion()
+                    ),
                     quad.bakedNormals(),
                     quad.bakedColors()
             );

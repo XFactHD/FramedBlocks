@@ -1,11 +1,9 @@
 package io.github.xfacthd.framedblocks.api.model.geometry;
 
-import io.github.xfacthd.framedblocks.api.camo.CamoContent;
 import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
 import io.github.xfacthd.framedblocks.api.model.data.QuadMapBuilder;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
 import io.github.xfacthd.framedblocks.api.predicate.fullface.FullFacePredicate;
-import io.github.xfacthd.framedblocks.api.util.ConfigView;
 import net.minecraft.client.renderer.block.BlockAndTintGetter;
 import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
 import net.minecraft.client.renderer.block.dispatch.BlockStateModelPart;
@@ -14,12 +12,10 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.client.extensions.BlockStateModelPartExtension;
 import net.neoforged.neoforge.model.data.ModelData;
 import org.jspecify.annotations.Nullable;
 
 /// Describes how the geometry of a framed block is built from the quads of the camo's model.
-@SuppressWarnings("MethodMayBeStatic")
 public abstract class Geometry {
     /// Called for each quad of the camo's model for whose side this block's [FullFacePredicate] returns `false`
     /// or all quads if [#transformAllQuads()] returns `true`.
@@ -132,25 +128,5 @@ public abstract class Geometry {
     /// @param blockData The {@link FramedBlockData} holding the block's camo and related metadata
     public int getMaterialFlags(BlockAndTintGetter level, BlockPos pos, ModelData modelData, FramedBlockData blockData) {
         return 0;
-    }
-
-    /// Compute the default AO behavior which is used unless the source [BlockStateModelPart] specifies something else.
-    ///
-    /// @param blockData The primary block data
-    /// @param data      The full model data
-    /// @return the default AO behavior
-    /// @see BlockStateModelPartExtension#ambientOcclusion()
-    public DefaultAO computeDefaultAmbientOcclusion(FramedBlockData blockData, ModelData data) {
-        if (blockData.isEmissive()) {
-            return DefaultAO.FORCE_DISABLE;
-        }
-        CamoContent<?> camoContent = blockData.getCamoContent();
-        if (!camoContent.isEmpty() && (camoContent.getLightEmission() != 0 || camoContent.isEmissive())) {
-            return DefaultAO.DISABLE;
-        }
-        if (ConfigView.Client.INSTANCE.shouldForceAmbientOcclusionOnGlowingBlocks()) {
-            return DefaultAO.ENABLE;
-        }
-        return DefaultAO.DEFAULT;
     }
 }

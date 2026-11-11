@@ -757,7 +757,6 @@ public final class FramedLanguageProvider extends LanguageProvider {
         addConfigValue(ClientConfig.DETAILED_CULLING_VALUE, "Detailed culling");
         addConfigValue(ClientConfig.CON_TEX_MODE_VALUE, "Connected textures mode");
         addConfigValue(ClientConfig.CAMO_MESSAGE_VERBOSITY_VALUE, "Disallowed camo message verbosity");
-        addConfigValue(ClientConfig.FORCE_AO_ON_GLOWING_BLOCKS_VALUE, "Force ambient occlusion on glowing framed blocks");
         addConfigValue(ClientConfig.RENDER_ITEM_MODELS_WITH_CAMO_VALUE, "Render item models with camo");
         addConfigValue(ClientConfig.SOLID_FRAME_MODE_VALUE, "Solid frame mode");
         addConfigValue(ClientConfig.SHOW_BUTTON_PLATE_OVERLAY_VALUE, "Show button and pressure plate type overlay");

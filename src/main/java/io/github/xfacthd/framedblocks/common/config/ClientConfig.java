@@ -23,7 +23,6 @@ public final class ClientConfig {
     private static final String KEY_DETAILED_CULLING = "detailedCulling";
     private static final String KEY_CON_TEX_MODE = "conTexMode";
     private static final String KEY_CAMO_MESSAGE_VERBOSITY = "camoMessageVerbosity";
-    private static final String KEY_FORCE_AO_ON_GLOWING_BLOCKS = "forceAoOnGlowingBlocks";
     private static final String KEY_RENDER_ITEM_MODELS_WITH_CAMO = "renderItemModelsWithCamo";
     private static final String KEY_SOLID_FRAME_MODE = "solidFrameMode";
     private static final String KEY_SHOW_BUTTON_PLATE_OVERLAY = "showButtonPlateTypeOverlay";
@@ -63,7 +62,6 @@ public final class ClientConfig {
     public static final ModConfigSpec.BooleanValue DETAILED_CULLING_VALUE;
     public static final ModConfigSpec.EnumValue<ConTexMode> CON_TEX_MODE_VALUE;
     public static final ModConfigSpec.EnumValue<CamoMessageVerbosity> CAMO_MESSAGE_VERBOSITY_VALUE;
-    public static final ModConfigSpec.BooleanValue FORCE_AO_ON_GLOWING_BLOCKS_VALUE;
     public static final ModConfigSpec.BooleanValue RENDER_ITEM_MODELS_WITH_CAMO_VALUE;
     public static final ModConfigSpec.EnumValue<SolidFrameMode> SOLID_FRAME_MODE_VALUE;
     public static final ModConfigSpec.BooleanValue SHOW_BUTTON_PLATE_OVERLAY_VALUE;
@@ -95,7 +93,6 @@ public final class ClientConfig {
     private static boolean detailedCulling = false;
     private static ConTexMode conTexMode = ConTexMode.DETAILED;
     private static CamoMessageVerbosity camoMessageVerbosity = CamoMessageVerbosity.DEFAULT;
-    private static boolean forceAoOnGlowingBlocks = false;
     private static boolean renderItemModelsWithCamo = false;
     private static SolidFrameMode solidFrameMode = SolidFrameMode.DEFAULT;
     private static boolean showButtonPlateOverlay = false;
@@ -170,13 +167,6 @@ public final class ClientConfig {
                 )
                 .translation(translate(KEY_CAMO_MESSAGE_VERBOSITY))
                 .defineEnum(KEY_CAMO_MESSAGE_VERBOSITY, CamoMessageVerbosity.DEFAULT);
-        FORCE_AO_ON_GLOWING_BLOCKS_VALUE = builder
-                .comment(
-                        "If true, ambient occlusion is applied to framed blocks which glow from applied glowstone dust.",
-                        "If false, the vanilla behavior of disabling AO for light-emitting blocks is used."
-                )
-                .translation(translate(KEY_FORCE_AO_ON_GLOWING_BLOCKS))
-                .define(KEY_FORCE_AO_ON_GLOWING_BLOCKS, true);
         RENDER_ITEM_MODELS_WITH_CAMO_VALUE = builder
                 .comment(
                         "If true, item models will be rendered with their camo, if present.",
@@ -317,7 +307,6 @@ public final class ClientConfig {
             detailedCulling = DETAILED_CULLING_VALUE.get();
             conTexMode = CON_TEX_MODE_VALUE.get();
             camoMessageVerbosity = CAMO_MESSAGE_VERBOSITY_VALUE.get();
-            forceAoOnGlowingBlocks = FORCE_AO_ON_GLOWING_BLOCKS_VALUE.get();
             renderItemModelsWithCamo = RENDER_ITEM_MODELS_WITH_CAMO_VALUE.get();
             solidFrameMode = SOLID_FRAME_MODE_VALUE.get();
             showButtonPlateOverlay = SHOW_BUTTON_PLATE_OVERLAY_VALUE.get();
@@ -380,11 +369,6 @@ public final class ClientConfig {
         @Override
         public CamoMessageVerbosity getCamoMessageVerbosity() {
             return camoMessageVerbosity;
-        }
-
-        @Override
-        public boolean shouldForceAmbientOcclusionOnGlowingBlocks() {
-            return forceAoOnGlowingBlocks;
         }
 
         @Override

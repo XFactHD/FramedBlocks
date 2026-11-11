@@ -14,7 +14,6 @@ import io.github.xfacthd.framedblocks.api.model.ExtendedBlockStateModelPart;
 import io.github.xfacthd.framedblocks.api.model.data.AbstractFramedBlockData;
 import io.github.xfacthd.framedblocks.api.model.data.FramedBlockData;
 import io.github.xfacthd.framedblocks.api.model.data.ModelDataEntry;
-import io.github.xfacthd.framedblocks.api.model.geometry.DefaultAO;
 import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.geometry.QuadListModifier;
 import io.github.xfacthd.framedblocks.api.model.DelegateBlockStateModelPart;
@@ -112,9 +111,7 @@ public final class FramedBlockStateModel extends AbstractFramedBlockStateModel i
         ConTexMode cfgCtMode = ConTexMode.NONE;
         boolean mayUseCt = !empty && supportsCt && (cfgCtMode = ClientConfig.VIEW.getConTexMode()) != ConTexMode.NONE;
         boolean reinforce = empty && useBaseModel && partData.isReinforced();
-        DefaultAO defaultAO = geometry.computeDefaultAmbientOcclusion(partData, extraData);
-        boolean camoEmissive;
-        boolean forceEmissive = partData.isEmissive();
+        ShadingMode shadingMode = computeShadingMode(partData);
         BlockOverlay blockOverlay = partData.getBlockOverlay();
         long seed = state.getSeed(pos);
 
@@ -124,19 +121,17 @@ public final class FramedBlockStateModel extends AbstractFramedBlockStateModel i
             camoModel = useBaseModel ? geometry.getBaseModel(delegate, partData.isSecondPart()) : NO_CAMO_MODELS[noCamoIdx];
             camoTintOffset = 0;
             overlayTintOffset = 0;
-            camoEmissive = false;
         } else {
             camoModel = CamoContainerHelper.Client.getOrCreateModel(camoContent);
             camoTintOffset = blockData.getCamoTintIndexOffset(partData.isSecondPart());
             overlayTintOffset = blockData.getPostCamoTintIndexOffset();
-            camoEmissive = camoContent.isEmissive();
         }
         localMiscTintOffset = overlayTintOffset;
 
         PartConsumerImpl partConsumer = null;
         int uncachedFaceMask = partData.computeFaceMask(stateCache, false);
         if (uncachedFaceMask != 0 || uncachedAdditionalParts) {
-            partConsumer = new PartConsumerImpl(partsOut, uncachedFaceMask, defaultAO, camoEmissive, forceEmissive);
+            partConsumer = new PartConsumerImpl(partsOut, uncachedFaceMask, shadingMode);
         }
         int prevOutSize = partsOut.size();
         if (uncachedFaceMask != 0) {
@@ -146,7 +141,7 @@ public final class FramedBlockStateModel extends AbstractFramedBlockStateModel i
         }
         if (blockOverlay != null) {
             if (partsOut.size() > prevOutSize) {
-                BlockOverlayGenerator.generateUncached(state, blockOverlay, partsOut.subList(prevOutSize, partsOut.size()), partsOut, forceEmissive, overlayTintOffset);
+                BlockOverlayGenerator.generateUncached(state, blockOverlay, partsOut.subList(prevOutSize, partsOut.size()), partsOut, partData.isEmissive(), overlayTintOffset);
             }
             if (blockOverlay.tintSource() != null) {
                 localMiscTintOffset++;
@@ -179,8 +174,7 @@ public final class FramedBlockStateModel extends AbstractFramedBlockStateModel i
                             camoContent,
                             userKeyData,
                             reinforce,
-                            camoEmissive,
-                            defaultAO,
+                            shadingMode,
                             ctCtx != null,
                             camoTintOffset,
                             overlayTintOffset,
@@ -214,7 +208,7 @@ public final class FramedBlockStateModel extends AbstractFramedBlockStateModel i
             partConsumer.setCountTintIndices(false);
         }
         if (reinforce && uncachedFaceMask != 0) {
-            BlockStateModelPart reinforcementPart = reinforcement.getFiltered(uncachedFaceMask, defaultAO.apply(TriState.DEFAULT));
+            BlockStateModelPart reinforcementPart = reinforcement.getFiltered(uncachedFaceMask, shadingMode.computeAmbientOcclusion(TriState.DEFAULT));
             partConsumer.accept(reinforcementPart, ReinforcementModel.SHADER_STATE, false, false, true, ReinforcementModel.SHADER_STATE, null);
         }
         return localMiscTintOffset;
@@ -253,18 +247,16 @@ public final class FramedBlockStateModel extends AbstractFramedBlockStateModel i
             CamoContent<?> camo,
             @Nullable Object cacheKeyUserData,
             boolean reinforce,
-            boolean camoEmissive,
-            DefaultAO defaultAO,
+            ShadingMode shadingMode,
             boolean supportDynamicCamoGeometry,
             int camoTintOffset,
             int overlayTintOffset,
             int miscTintOffset
     ) {
         ObjectList<ExtendedBlockStateModelPart> parts = new ObjectArrayList<>();
-        boolean forceEmissive = fbData.isEmissive();
         boolean secondPart = fbData.isSecondPart();
         int cullMask = DEFAULT_DATA.computeFaceMask(stateCache, true);
-        PartConsumerImpl partConsumer = new PartConsumerImpl(parts, cullMask, defaultAO, camoEmissive, forceEmissive);
+        PartConsumerImpl partConsumer = new PartConsumerImpl(parts, cullMask, shadingMode);
         boolean xformAll = geometry.transformAllQuads();
 
         QuadListModifier modifier = (quadMap, quads, side) -> {
@@ -283,12 +275,12 @@ public final class FramedBlockStateModel extends AbstractFramedBlockStateModel i
         partConsumer.setTintIndexOffset(camoTintOffset);
         collectCamoParts(partConsumer, camoModel, level, pos, random, fbData, camo, !xformAll, modifier, supportDynamicCamoGeometry);
         if (reinforce) {
-            BlockStateModelPart srcPart = reinforcement.getFiltered(xformAll ? 0b00111111 : cullMask, defaultAO.apply(TriState.DEFAULT));
+            BlockStateModelPart srcPart = reinforcement.getFiltered(xformAll ? 0b00111111 : cullMask, shadingMode.computeAmbientOcclusion(TriState.DEFAULT));
             partConsumer.accept(srcPart, ReinforcementModel.SHADER_STATE, false, true, !xformAll, ReinforcementModel.SHADER_STATE, modifier);
         }
         BlockOverlay overlay = fbData.getBlockOverlay();
         if (!parts.isEmpty() && overlay != null) {
-            BlockOverlayGenerator.generateCached(fbData.getOuterState(), state, secondPart, overlay, parts, forceEmissive, overlayTintOffset);
+            BlockOverlayGenerator.generateCached(fbData.getOuterState(), state, secondPart, overlay, parts, fbData.isEmissive(), overlayTintOffset);
         }
         random.setSeed(seed);
         partConsumer.setTintIndexOffset(miscTintOffset);
@@ -298,7 +290,7 @@ public final class FramedBlockStateModel extends AbstractFramedBlockStateModel i
         partConsumer.setCountTintIndices(false);
 
         if (!parts.isEmpty() && geometry.hasGeneratedOverlay(fbData, cacheKeyUserData)) {
-            OverlayModelPartGenerator overlayGenerator = new OverlayModelPartGenerator(parts, forceEmissive, defaultAO.apply(TriState.DEFAULT));
+            OverlayModelPartGenerator overlayGenerator = new OverlayModelPartGenerator(parts, fbData.isEmissive(), shadingMode.computeAmbientOcclusion(TriState.DEFAULT));
             random.setSeed(seed);
             geometry.generateOverlayParts(overlayGenerator, random, cacheKeyUserData);
             overlayGenerator.flush();
@@ -361,6 +353,22 @@ public final class FramedBlockStateModel extends AbstractFramedBlockStateModel i
             contents[i] = new BlockCamoContent(stateOut);
         }
         return contents;
+    }
+
+    private static ShadingMode computeShadingMode(FramedBlockData blockData) {
+        if (blockData.isEmissive()) {
+            return ShadingMode.FORCED_EMISSIVE;
+        }
+        CamoContent<?> camoContent = blockData.getCamoContent();
+        if (!camoContent.isEmpty()) {
+            if (camoContent.isEmissive()) {
+                return ShadingMode.EMISSIVE_CAMO;
+            }
+            if (camoContent.getLightEmission() != 0) {
+                return ShadingMode.GLOWING_CAMO;
+            }
+        }
+        return ShadingMode.DEFAULT;
     }
 
     @Override

@@ -295,8 +295,6 @@
   "config.framedblocks.client.doubleBlockPartIndicatorEnabled.tooltip": "If true, double blocks will show an outline indicating which part is being targeted when looking at them",
   "config.framedblocks.client.fancyHitboxes": "Fancy hitboxes",
   "config.framedblocks.client.fancyHitboxes.tooltip": "Whether certain framed blocks should show fancy hitboxes",
-  "config.framedblocks.client.forceAoOnGlowingBlocks": "Force ambient occlusion on glowing framed blocks",
-  "config.framedblocks.client.forceAoOnGlowingBlocks.tooltip": "If true, ambient occlusion is applied to framed blocks which glow from applied glowstone dust.\nIf false, the vanilla behavior of disabling AO for light-emitting blocks is used.",
   "config.framedblocks.client.ghostRenderOpacity": "Placement preview opacity",
   "config.framedblocks.client.ghostRenderOpacity.tooltip": "Set the opacity of the placement preview. 30 is almost completely transparent, 255 is fully opaque\n Default: 170\n Range: 30 ~ 255",
   "config.framedblocks.client.itemFrameBackgroundMode": "Item Frame Background overlay: Display mode",
