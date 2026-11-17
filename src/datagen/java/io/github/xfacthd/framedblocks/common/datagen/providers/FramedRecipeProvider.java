@@ -319,8 +319,10 @@ public final class FramedRecipeProvider extends AbstractFramedRecipeProvider {
         shapedBuildingBlock(FBContent.BLOCK_FRAMED_SLICED_SLOPED_STAIRS_SLAB.value())
                 .pattern("H")
                 .pattern("S")
+                .pattern("T")
                 .define('S', FBContent.BLOCK_FRAMED_SLAB.value())
                 .define('H', FBContent.BLOCK_FRAMED_HALF_SLOPE.value())
+                .define('T', FBContent.ITEM_FRAMED_HAMMER.value())
                 .unlockedBy(FBContent.BLOCK_FRAMED_SLOPED_STAIRS)
                 .save(output);
 

@@ -3,11 +3,13 @@
   "category": "building",
   "key": {
     "H": "framedblocks:framed_half_slope",
-    "S": "framedblocks:framed_slab"
+    "S": "framedblocks:framed_slab",
+    "T": "framedblocks:framed_hammer"
   },
   "pattern": [
     "H",
-    "S"
+    "S",
+    "T"
   ],
   "result": {
     "id": "framedblocks:framed_sliced_sloped_stairs_slab"
