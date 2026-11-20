@@ -8,6 +8,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
+import java.util.function.Predicate;
 
 final class MapBackedShapeLookup implements ShapeLookup {
     private final Map<BlockState, VoxelShape> shapes;
@@ -46,14 +47,18 @@ final class MapBackedShapeLookup implements ShapeLookup {
 
         boolean[] hasFalse = new boolean[1];
         boolean[] hasTrue = new boolean[1];
+        Predicate<VoxelShape> occludesPredicate = ShapeUtils::occludesBeaconBeam;
         shapes.forEach((state, shape) -> {
-            boolean occludes = encounteredShapes.computeIfAbsent(shape, ShapeUtils::occludesBeaconBeam);
+            boolean occludes = encounteredShapes.computeIfAbsent(shape, occludesPredicate);
             hasFalse[0] |= !occludes;
             hasTrue[0] |= occludes;
             beamColorMasking.put(state, occludes);
         });
-        if (!hasFalse[0]) return _ -> true;
-        if (!hasTrue[0]) return _ -> false;
+
+        if (!hasFalse[0])
+            return _ -> true;
+        if (!hasTrue[0])
+            return _ -> false;
         return beamColorMasking;
     }
 }
