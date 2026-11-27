@@ -96,7 +96,8 @@ public final class BlockOutlineRenderer {
                 poseStack.translate(-.5, -.5, -.5);
 
                 float lineWidth = Minecraft.getInstance().gameRenderer.gameRenderState().windowRenderState.appropriateLineWidth;
-                submitLineDraw(submitNodeCollector, poseStack, highContrast, renderState.isTranslucent(), lineWidth, drawer -> renderer.draw(state, data, drawer));
+                boolean improvedTransparency = Minecraft.getInstance().gameRenderer.useImprovedTransparency();
+                submitLineDraw(submitNodeCollector, poseStack, highContrast, renderState.isTranslucent(), lineWidth, improvedTransparency, drawer -> renderer.draw(state, data, drawer));
 
                 poseStack.popPose();
 
@@ -110,15 +111,14 @@ public final class BlockOutlineRenderer {
         return (OutlineRenderer<Object>) OUTLINE_RENDERERS.get(type);
     }
 
-    private static void submitLineDraw(SubmitNodeCollector submitNodeCollector, PoseStack poseStack, boolean highContrast, boolean translucent, float lineWidth, LineRenderer renderer) {
-        RenderPhaseKey<SubmitNode> phase = translucent ? RenderPhaseKeys.AFTER_TERRAIN : RenderPhaseKeys.SHAPE_OUTLINES;
+    private static void submitLineDraw(SubmitNodeCollector submitNodeCollector, PoseStack poseStack, boolean highContrast, boolean translucent, float lineWidth, boolean improvedTransparency, LineRenderer renderer) {
         if (highContrast) {
-            submitLineDraw(submitNodeCollector, poseStack, RenderTypes.secondaryBlockOutline(), CommonColors.BLACK, 7F, phase, renderer);
-            submitLineDraw(submitNodeCollector, poseStack, RenderTypes.linesDepthBias(), CommonColors.HIGH_CONTRAST_DIAMOND, lineWidth, phase, renderer);
-        } else if (Minecraft.getInstance().gameRenderer.useImprovedTransparency()) {
-            submitLineDraw(submitNodeCollector, poseStack, RenderTypes.linesTranslucentNoDepthWrite(), DEFAULT_LINE_COLOR, lineWidth, phase, renderer);
+            submitLineDraw(submitNodeCollector, poseStack, RenderTypes.secondaryBlockOutline(), CommonColors.BLACK, 7F, RenderPhaseKeys.SOLID, renderer);
+            submitLineDraw(submitNodeCollector, poseStack, RenderTypes.linesDepthBias(), CommonColors.HIGH_CONTRAST_DIAMOND, lineWidth, RenderPhaseKeys.SOLID, renderer);
         } else {
-            submitLineDraw(submitNodeCollector, poseStack, RenderTypes.linesTranslucent(), DEFAULT_LINE_COLOR, lineWidth, phase, renderer);
+            RenderPhaseKey<SubmitNode> phase = translucent ? RenderPhaseKeys.AFTER_TERRAIN : RenderPhaseKeys.SHAPE_OUTLINES;
+            RenderType renderType = improvedTransparency ? RenderTypes.linesTranslucentNoDepthWrite() : RenderTypes.linesTranslucent();
+            submitLineDraw(submitNodeCollector, poseStack, renderType, DEFAULT_LINE_COLOR, lineWidth, phase, renderer);
         }
     }
 
