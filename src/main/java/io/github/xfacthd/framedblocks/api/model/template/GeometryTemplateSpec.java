@@ -81,6 +81,13 @@ public abstract class GeometryTemplateSpec {
         /// @return this builder
         public abstract SpecEntryBuilder postModifiers(PostModifierProvider postModifiers);
 
+        /// Specify a geometry override to provide additional geometry separate from the template or
+        /// replace certain faces of the template entirely.
+        ///
+        /// @param override The geometry override to apply
+        /// @return this builder
+        public abstract SpecEntryBuilder geometryOverride(GeometryOverride override);
+
         /// Specify that the base model should be appended as additional geometry.
         ///
         /// @param includeNull Whether "uncullable" faces from the base model should be included

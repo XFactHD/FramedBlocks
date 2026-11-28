@@ -6,6 +6,7 @@ import io.github.xfacthd.framedblocks.api.block.cache.StateCache;
 import io.github.xfacthd.framedblocks.api.model.geometry.Geometry;
 import io.github.xfacthd.framedblocks.api.model.quad.Modifiers;
 import io.github.xfacthd.framedblocks.api.model.quad.QuadModifier;
+import io.github.xfacthd.framedblocks.api.model.template.GeometryOverride;
 import io.github.xfacthd.framedblocks.api.model.template.PostModifierProvider;
 import io.github.xfacthd.framedblocks.api.model.template.TemplateOverlayProvider;
 import io.github.xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
@@ -50,6 +51,7 @@ record TemplatedGeometryFactory(GeometryTemplateSpecImpl specGetter) implements 
         StateCache stateCache = ctx.state().framedblocks$getCache();
         boolean copycat = CopycatStyleBlock.tryIsCopycatStyle(ctx.state());
         PostModifierProvider postModifiers = geoSpec.postModifiers();
+        GeometryOverride override = geoSpec.override();
         boolean transformAll = false;
         for (SourceFile sourceFile : geoSpec.sourceFiles()) {
             GeometryTemplate template = GeometryTemplateManager.getTemplate(sourceFile.id().id());
@@ -66,6 +68,9 @@ record TemplatedGeometryFactory(GeometryTemplateSpecImpl specGetter) implements 
                         }
                         transformAll = true;
                     }
+                    if (override != null && override.replacesFace(normal, cullable)) {
+                        continue;
+                    }
                     if (copycat && geoSpec.isCopycatFace(normal, cullable)) {
                         extractCopycatFace(from, to, normal, cullable, postModifiers, specAppender);
                     } else {
@@ -73,6 +78,13 @@ record TemplatedGeometryFactory(GeometryTemplateSpecImpl specGetter) implements 
                     }
                 }
             }
+        }
+        if (override != null) {
+            override.collectModifiers((face, cullable, modifierAppender) -> {
+                List<QuadModifier.Modifier> modifiers = new ArrayList<>();
+                modifierAppender.accept(modifiers::add);
+                specAppender.accept(face, new QuadSpec(modifiers, cullable ? face : null));
+            });
         }
 
         Arrays.fill(quadSpecs, NO_SPECS);

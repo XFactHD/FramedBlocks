@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import com.mojang.math.OctahedralGroup;
 import io.github.xfacthd.framedblocks.api.block.CopycatStyleBlock;
 import io.github.xfacthd.framedblocks.api.model.template.CopycatPredicate;
+import io.github.xfacthd.framedblocks.api.model.template.GeometryOverride;
 import io.github.xfacthd.framedblocks.api.model.template.GeometryTemplateSpec;
 import io.github.xfacthd.framedblocks.api.model.template.PostModifierProvider;
 import io.github.xfacthd.framedblocks.api.model.template.SourceType;
@@ -31,6 +32,8 @@ final class GeometryTemplateSpecBuilderImpl extends GeometryTemplateSpec.SpecEnt
     private @Nullable BaseModelAppenderConfig appenderConfig;
     @Nullable
     private PostModifierProvider postModifiers = null;
+    @Nullable
+    private GeometryOverride override = null;
 
     GeometryTemplateSpecBuilderImpl(BlockState state) {
         this.supportsCopycat = state.getBlock() instanceof CopycatStyleBlock;
@@ -91,6 +94,12 @@ final class GeometryTemplateSpecBuilderImpl extends GeometryTemplateSpec.SpecEnt
     }
 
     @Override
+    public GeometryTemplateSpec.SpecEntryBuilder geometryOverride(GeometryOverride override) {
+        this.override = override;
+        return this;
+    }
+
+    @Override
     public GeometryTemplateSpec.SpecEntryBuilder appendBaseModel(boolean includeNull, boolean cullNonNull, @Nullable BlockState shaderState) {
         this.appenderConfig = new BaseModelAppenderConfig(includeNull, cullNonNull, shaderState);
         return this;
@@ -114,6 +123,7 @@ final class GeometryTemplateSpecBuilderImpl extends GeometryTemplateSpec.SpecEnt
                 forceUngeneratedBaseModel,
                 solidNoCamoModel,
                 postModifiers,
+                override,
                 appenderConfig,
                 overlayFactory
         );
