@@ -58,4 +58,15 @@ public sealed interface CopycatStyleBlock {
     static boolean tryIsCopycatStyle(BlockState state) {
         return state.getBlock() instanceof CopycatStyleBlock block && block.isCopycatStyle(state);
     }
+
+    /// {@return the given state with the copycat-style property set to the given value, if applicable}
+    ///
+    /// @param state The state to modify
+    /// @param value The value to set the property to
+    static BlockState trySetCopycatStyle(BlockState state, boolean value) {
+        if (state.getBlock() instanceof CopycatStyleBlock.StateDependent) {
+            state = state.setValue(FramedProperties.COPYCAT_STYLE, value);
+        }
+        return state;
+    }
 }
