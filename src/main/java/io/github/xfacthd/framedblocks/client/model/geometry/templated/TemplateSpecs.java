@@ -311,7 +311,7 @@ public final class TemplateSpecs {
             Quadrant rootRotY = switch (cmpDir.direction()) {
                 case NORTH -> Quadrant.R180;
                 case WEST -> Quadrant.R90;
-                case EAST -> Quadrant.R270;
+                case EAST, UP -> Quadrant.R270;
                 default -> Quadrant.R0;
             };
             builder.addSourceFile(SourceType.TEMPLATE, model, xform -> xform.rotationY(modelRotY))
